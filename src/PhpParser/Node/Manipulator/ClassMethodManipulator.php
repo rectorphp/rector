@@ -7,9 +7,11 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -187,6 +189,29 @@ final class ClassMethodManipulator
         });
     }
 
+    /**
+     * @param string[] $possibleNames
+     */
+    public function addMethodParameterIfMissing(Node $node, string $type, array $possibleNames): string
+    {
+        $classMethodNode = $node->getAttribute(Attribute::METHOD_NODE);
+        if (! $classMethodNode instanceof ClassMethod) {
+            // or null?
+            throw new ShouldNotHappenException();
+        }
+
+        foreach ($classMethodNode->params as $paramNode) {
+            if ($this->nodeTypeResolver->isType($paramNode, $type)) {
+                return $this->nameResolver->resolve($paramNode);
+            }
+        }
+
+        $paramName = $this->resolveName($classMethodNode, $possibleNames);
+        $classMethodNode->params[] = new Param(new Variable($paramName), null, new FullyQualified($type));
+
+        return $paramName;
+    }
+
     private function isMethodInParent(string $class, string $method): bool
     {
         $parentClass = $class;
@@ -213,5 +238,23 @@ final class ClassMethodManipulator
         }
 
         return true;
+    }
+
+    /**
+     * @param string[] $possibleNames
+     */
+    private function resolveName(ClassMethod $classMethod, array $possibleNames): string
+    {
+        foreach ($possibleNames as $possibleName) {
+            foreach ($classMethod->params as $paramNode) {
+                if ($this->nameResolver->isName($paramNode, $possibleName)) {
+                    continue 2;
+                }
+            }
+
+            return $possibleName;
+        }
+
+        throw new ShouldNotHappenException();
     }
 }

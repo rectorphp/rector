@@ -4,7 +4,7 @@ namespace Rector\Php\Tests\Rector\FuncCall\RegexDashEscapeRector\Fixture;
 
 use Nette\Utils\Strings;
 
-class MethodCall
+class UniqueMethodNameCall
 {
     public function run()
     {
@@ -23,7 +23,7 @@ namespace Rector\Php\Tests\Rector\FuncCall\RegexDashEscapeRector\Fixture;
 
 use Nette\Utils\Strings;
 
-class MethodCall
+class UniqueMethodNameCall
 {
     public function run()
     {
