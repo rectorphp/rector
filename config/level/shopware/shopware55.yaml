@@ -1,3 +1,4 @@
+# See https://github.com/shopware/shopware/blob/5.5/UPGRADE-5.5.md
 services:
     Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
         Enlight_View_Default:
