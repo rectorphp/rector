@@ -8,6 +8,10 @@ function getAndSetToMethodCall()
     $someService = $container->someService;
 
     $parameters = $container->parameters;
+
+    if ($container->someService) {
+
+    }
 }
 
 ?>
@@ -22,6 +26,10 @@ function getAndSetToMethodCall()
     $someService = $container->getService('someService');
 
     $parameters = $container->parameters;
+
+    if ($container->getService('someService')) {
+
+    }
 }
 
 ?>
