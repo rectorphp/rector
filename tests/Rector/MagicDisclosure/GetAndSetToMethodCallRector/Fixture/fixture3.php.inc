@@ -10,3 +10,4 @@ class Enlight_View_Default
     }
 }
 ?>
+-----
