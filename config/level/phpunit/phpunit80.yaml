@@ -13,6 +13,10 @@ services:
         'PHPUnit_Framework_MockObject_MockObject': 'PHPUnit\Framework\MockObject\MockObject'
     Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector: ~
 
+    Rector\Rector\Annotation\AnnotationReplacerRector:
+        PHPUnit\Framework\TestCase:
+            scenario: 'test'
+
     Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         PHPUnit\Framework\TestCase:
             setUpBeforeClass: 'void'
