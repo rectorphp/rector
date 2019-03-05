@@ -10,16 +10,3 @@ class Enlight_View_Default
     }
 }
 ?>
------
-<?php
-
-class Enlight_View_Default
-{
-    protected $engine;
-
-    public function __construct($engine)
-    {
-        $this->engine = $engine;
-    }
-}
-?>
