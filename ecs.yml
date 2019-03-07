@@ -54,6 +54,8 @@ parameters:
         - '*utils/ContributorTools/templates/*'
 
     skip:
+        Symplify\CodingStandard\Sniffs\Architecture\DuplicatedClassShortNameSniff: ~
+
         # run manually from time to time - performance demanding + not to bother user with it
         Symplify\CodingStandard\Fixer\Order\PropertyOrderByComplexityFixer: ~
         Symplify\CodingStandard\Fixer\Order\PrivateMethodOrderByUseFixer: ~
