@@ -101,7 +101,7 @@ CODE_SAMPLE
 
         foreach ($classMethod->stmts as $i => $stmt) {
             if ($stmt instanceof Return_ && $stmt->expr !== null) {
-                if ($type === 'array') {
+                if ($type === 'array' && ! $stmt->expr instanceof Array_) {
                     $stmt->expr = new Array_([new ArrayItem($stmt->expr)]);
                 }
 
