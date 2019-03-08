@@ -40,6 +40,15 @@ final class PropertyFetchManipulator
         $this->nameResolver = $nameResolver;
     }
 
+    public function isPropertyToSelf(PropertyFetch $propertyFetch): bool
+    {
+        if (! $propertyFetch->var instanceof Node\Expr\Variable) {
+            return false;
+        }
+
+        return $propertyFetch->var->name === 'this';
+    }
+
     public function isMagicOnType(Node $node, string $type): bool
     {
         if (! $node instanceof PropertyFetch) {
