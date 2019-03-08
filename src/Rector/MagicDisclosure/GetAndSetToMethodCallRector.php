@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\If_;
 use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -82,11 +83,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Assign::class, Node\Stmt\If_::class];
+        return [Assign::class, If_::class];
     }
 
     /**
-     * @param Assign|Node\Stmt\If_ $node
+     * @param Assign|If_ $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -100,10 +101,9 @@ CODE_SAMPLE
             }
         }
 
-        if ($node instanceof Node\Stmt\If_ && $node->cond instanceof PropertyFetch) {
+        if ($node instanceof If_ && $node->cond instanceof PropertyFetch) {
             return $this->processMagicGetOnIf($node);
         }
-
 
         return null;
     }
@@ -165,7 +165,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processMagicGetOnIf(Node\Stmt\If_ $if): ?Node
+    private function processMagicGetOnIf(If_ $if): ?Node
     {
         /** @var PropertyFetch $propertyFetchNode */
         $propertyFetchNode = $if->cond;

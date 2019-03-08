@@ -4,6 +4,7 @@ namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\Type\ObjectType;
@@ -42,7 +43,7 @@ final class PropertyFetchManipulator
 
     public function isPropertyToSelf(PropertyFetch $propertyFetch): bool
     {
-        if (! $propertyFetch->var instanceof Node\Expr\Variable) {
+        if (! $propertyFetch->var instanceof Variable) {
             return false;
         }
 
