@@ -1,0 +1,7 @@
+# see: https://laravel.com/docs/5.7/upgrade
+services:
+    Rector\Rector\Visibility\ChangeMethodVisibilityRector:
+        Illuminate\Routing\Router:
+            addRoute: 'public'
+        Illuminate\Contracts\Auth\Access\Gate:
+            raw: 'public'

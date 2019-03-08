@@ -1,0 +1,15 @@
+# see: https://laravel.com/docs/5.6/upgrade
+services:
+    Rector\Rector\MethodCall\MethodNameReplacerRector:
+        Illuminate\Validation\ValidatesWhenResolvedTrait:
+            validate: 'validateResolved'
+        Illuminate\Contracts\Validation\ValidatesWhenResolved:
+            validate: 'validateResolved'
+
+    Rector\Rector\Visibility\ChangeMethodVisibilityRector:
+        Illuminate\Routing\Router:
+            addRoute: 'public'
+        Illuminate\Contracts\Auth\Access\Gate:
+            raw: 'public'
+        Illuminate\Database\Grammar:
+            getDateFormat: 'public'
