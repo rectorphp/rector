@@ -103,6 +103,11 @@ CODE_SAMPLE
         }
 
         if ($match) {
+            if (isset($match['name'])) {
+                $this->removeByName($node, $position, $match['name']);
+                return;
+            }
+
             // only argument specific value can be removed
             if ($node instanceof ClassMethod || ! isset($node->args[$position])) {
                 return;
@@ -122,5 +127,29 @@ CODE_SAMPLE
         $nodeValue = $this->getValue($arg->value);
 
         return in_array($nodeValue, $values, true);
+    }
+
+    /**
+     * @param ClassMethod|StaticCall|MethodCall $node
+     */
+    private function removeByName(Node $node, int $position, string $name): void
+    {
+        if ($node instanceof MethodCall || $node instanceof StaticCall) {
+            if (isset($node->args[$position])) {
+                if ($this->isName($node->args[$position], $name)) {
+                    unset($node->args[$position]);
+                }
+
+                return;
+            }
+        }
+
+        if (isset($node->params[$position])) {
+            if ($this->isName($node->params[$position], $name)) {
+                unset($node->params[$position]);
+            }
+
+            return;
+        }
     }
 }

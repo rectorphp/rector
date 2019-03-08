@@ -31,7 +31,7 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
         return [
             ContainerBuilder::class => [
                 'compile' => [
-                    [
+                    0 => [
                         'name' => 'isCompiled',
                         'default_value' => false,
                     ],
