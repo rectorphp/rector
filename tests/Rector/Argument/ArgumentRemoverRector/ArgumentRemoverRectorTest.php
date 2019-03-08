@@ -11,7 +11,11 @@ final class ArgumentRemoverRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/fixture2.php.inc',
+            __DIR__ . '/Fixture/remove_in_middle.php.inc',
+        ]);
     }
 
     protected function getRectorClass(): string
@@ -25,13 +29,21 @@ final class ArgumentRemoverRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            Persister::class => ['getSelectJoinColumnSQL' => [4 => null]],
-            Yaml::class => ['parse' => [1 => [
-                'Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS',
-                'hey',
-                55,
-                5.5,
-            ]]],
+            Persister::class => [
+                'getSelectJoinColumnSQL' => [
+                    4 => null
+                ]
+            ],
+            Yaml::class => [
+                'parse' => [
+                    1 => [
+                        'Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS',
+                        'hey',
+                        55,
+                        5.5,
+                    ]
+                ]
+            ],
         ];
     }
 }

@@ -127,6 +127,10 @@ CODE_SAMPLE
             $defaultValue = $parameterConfiguration['default_value'] ?? null;
             $type = $parameterConfiguration['type'] ?? null;
 
+            if ($this->shouldSkipParameter($node, $position, $name)) {
+                continue;
+            }
+
             if ($node instanceof ClassMethod) {
                 $this->addClassMethodParam($node, $name, $defaultValue, $type, $position);
             } else {
@@ -152,5 +156,19 @@ CODE_SAMPLE
         }
 
         $classMethod->params[$position] = $param;
+    }
+
+    /**
+     * @param ClassMethod|MethodCall|StaticCall $node
+     */
+    private function shouldSkipParameter(Node $node, int $position, string $name): bool
+    {
+        if ($node instanceof ClassMethod) {
+            // already added?
+            return isset($node->params[$position]) && $this->isName($node->params[$position], $name);
+        }
+
+        // already added?
+        return isset($node->args[$position]) && $this->isName($node->args[$position], $name);
     }
 }
