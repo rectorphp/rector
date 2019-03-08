@@ -4,8 +4,8 @@ namespace Rector\Tests\Rector\Argument\ArgumentRemoverRector;
 
 use Rector\Rector\Argument\ArgumentRemoverRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Argument\ArgumentRemoverRector\Fixture\RemoveInMiddle;
 use Rector\Tests\Rector\Argument\ArgumentRemoverRector\Source\Persister;
+use Rector\Tests\Rector\Argument\ArgumentRemoverRector\Source\RemoveInTheMiddle;
 use Symfony\Component\Yaml\Yaml;
 
 final class ArgumentRemoverRectorTest extends AbstractRectorTestCase
@@ -40,7 +40,7 @@ final class ArgumentRemoverRectorTest extends AbstractRectorTestCase
                     1 => ['Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS', 'hey', 55, 5.5],
                 ],
             ],
-            RemoveInMiddle::class => [
+            RemoveInTheMiddle::class => [
                 'run' => [
                     1 => [
                         'name' => 'second',

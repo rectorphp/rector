@@ -2,7 +2,9 @@
 
 namespace Rector\Tests\Rector\Argument\ArgumentRemoverRector\Fixture;
 
-final class RemoveInMiddle
+use Rector\Tests\Rector\Argument\ArgumentRemoverRector\Source\RemoveInTheMiddle;
+
+final class RemoveInMiddle extends RemoveInTheMiddle
 {
     public function run($first, $second, $third)
     {
@@ -16,7 +18,9 @@ final class RemoveInMiddle
 
 namespace Rector\Tests\Rector\Argument\ArgumentRemoverRector\Fixture;
 
-final class RemoveInMiddle
+use Rector\Tests\Rector\Argument\ArgumentRemoverRector\Source\RemoveInTheMiddle;
+
+final class RemoveInMiddle extends RemoveInTheMiddle
 {
     public function run($first, $third)
     {

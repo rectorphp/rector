@@ -135,17 +135,15 @@ CODE_SAMPLE
     private function removeByName(Node $node, int $position, string $name): void
     {
         if ($node instanceof MethodCall || $node instanceof StaticCall) {
-            if (isset($node->args[$position])) {
-                if ($this->isName($node->args[$position], $name)) {
-                    unset($node->args[$position]);
-                }
-
-                return;
+            if (isset($node->args[$position]) && $this->isName($node->args[$position], $name)) {
+                unset($node->args[$position]);
             }
+
+            return;
         }
 
-        if (isset($node->params[$position])) {
-            if ($this->isName($node->params[$position], $name)) {
+        if ($node instanceof ClassMethod) {
+            if (isset($node->params[$position]) && $this->isName($node->params[$position], $name)) {
                 unset($node->params[$position]);
             }
 
