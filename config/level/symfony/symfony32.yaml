@@ -4,4 +4,5 @@ services:
         Symfony\Component\DependencyInjection\ContainerBuilder:
             addCompilerPass:
                 2:
-                    priority: 0
+                    name: 'priority'
+                    default_value: 0

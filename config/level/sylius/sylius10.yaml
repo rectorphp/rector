@@ -26,11 +26,13 @@ services:
         Sylius\Component\Mailer\Sender\SenderInterface:
             send:
                 0:
-                    code: '[]'
+                    name: 'code'
+                    default_value: '[]'
         Sylius\Component\Core\Repository\ProductRepositoryInterface:
             findOneBySlug:
                 2:
-                    __unknown__: false
+                    name: '__unknown__'
+                    default_value: false
 
     Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         Sylius\Component\Order\Model\OrderInterface:

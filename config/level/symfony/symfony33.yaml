@@ -5,14 +5,17 @@ services:
         Symfony\Component\DependencyInjection\ContainerBuilder:
             compile:
                 2:
-                    __unknown__: 0
+                    name: '__unknown__'
+                    default_value: 0
             addCompilerPass:
                 2:
-                    priority: 0
+                    name: 'priority'
+                    default_value: 0
         Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph:
             connect:
                 6:
-                    weak: false
+                    name: 'weak'
+                    default_value: false
 
     Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector: ~
 

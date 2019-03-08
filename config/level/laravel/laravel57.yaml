@@ -5,3 +5,16 @@ services:
             addRoute: 'public'
         Illuminate\Contracts\Auth\Access\Gate:
             raw: 'public'
+
+    Rector\Rector\Argument\ArgumentAdderRector:
+        Illuminate\Auth\Middleware\Authenticate:
+            authenticate:
+                name: 'request'
+        Illuminate\Foundation\Auth\ResetsPasswords:
+            sendResetResponse:
+                name: 'request'
+                type: 'Illuminate\Http\Illuminate\Http'
+        Illuminate\Foundation\Auth\SendsPasswordResetEmails:
+            sendResetLinkResponse:
+                name: 'request'
+                type: 'Illuminate\Http\Illuminate\Http'

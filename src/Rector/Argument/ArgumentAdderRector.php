@@ -8,6 +8,8 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Rector\AbstractRector;
@@ -35,7 +37,9 @@ final class ArgumentAdderRector extends AbstractRector
             'SomeExampleClass' => [
                 'someMethod' => [
                     0 => [
+                        'name' => 'someArgument',
                         'default_value' => 'true',
+                        'type' => 'SomeType',
                     ],
                 ],
             ],
@@ -118,20 +122,35 @@ CODE_SAMPLE
      */
     private function processPositionWithDefaultValues(Node $node, array $positionWithDefaultValues): void
     {
-        foreach ($positionWithDefaultValues as $position => $nameToValue) {
-            reset($nameToValue);
-            $name = key($nameToValue);
-            if ($name === null || is_int($name)) {
-                continue;
-            }
-
-            $value = $nameToValue[$name];
+        foreach ($positionWithDefaultValues as $position => $parameterConfiguration) {
+            $name = $parameterConfiguration['name'];
+            $defaultValue = $parameterConfiguration['default_value'] ?? null;
+            $type = $parameterConfiguration['type'] ?? null;
 
             if ($node instanceof ClassMethod) {
-                $node->params[$position] = new Param(new Variable($name), BuilderHelpers::normalizeValue($value));
+                $this->addClassMethodParam($node, $name, $defaultValue, $type, $position);
             } else {
-                $node->args[$position] = new Arg(BuilderHelpers::normalizeValue($value));
+                $arg = new Arg(BuilderHelpers::normalizeValue($defaultValue));
+                $node->args[$position] = $arg;
             }
         }
+    }
+
+    /**
+     * @param mixed $defaultValue
+     */
+    private function addClassMethodParam(
+        ClassMethod $classMethod,
+        string $name,
+        $defaultValue,
+        ?string $type,
+        int $position
+    ): void {
+        $param = new Param(new Variable($name), BuilderHelpers::normalizeValue($defaultValue));
+        if ($type) {
+            $param->type = ctype_upper($type[0]) ? new FullyQualified($type) : new Identifier($type);
+        }
+
+        $classMethod->params[$position] = $param;
     }
 }
