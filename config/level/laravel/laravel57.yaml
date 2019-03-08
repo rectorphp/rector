@@ -18,3 +18,4 @@ services:
             sendResetLinkResponse:
                 name: 'request'
                 type: 'Illuminate\Http\Illuminate\Http'
+    Rector\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector: ~
