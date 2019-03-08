@@ -9,5 +9,3 @@ class Enlight_View_Default
         $this->engine = $engine;
     }
 }
-?>
------
