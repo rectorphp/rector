@@ -5,5 +5,5 @@ services:
         EasyCorp\Bundle\EasyAdminBundle\AdminController: ~
 
     # then rename the "EasyCorp\Bundle\EasyAdminBundle\AdminController" class
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         EasyCorp\Bundle\EasyAdminBundle\AdminController: 'EasyCorp\Bundle\EasyAdminBundle\EasyAdminController'

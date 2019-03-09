@@ -47,7 +47,7 @@ services:
             all:
                 'Zend\Stdlib\PriorityQueue': 'iterable'
 
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         'Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext': 'Sylius\Component\Core\Storage\CartStorageInterface'
         'Sylius\Bundle\CoreBundle\EmailManager\ShipmentEmailManager': 'Sylius\Bundle\AdminBundle\EmailManager\ShipmentEmailManager'
         'Sylius\Bundle\CoreBundle\EmailManager\ShipmentEmailManagerInterface': 'Sylius\Bundle\AdminBundle\EmailManager\ShipmentEmailManagerInterface'

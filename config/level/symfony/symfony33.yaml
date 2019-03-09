@@ -19,7 +19,7 @@ services:
 
     Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector: ~
 
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         # console
         'Symfony\Component\Console\Event\ConsoleExceptionEvent': 'Symfony\Component\Console\Event\ConsoleErrorEvent'
 

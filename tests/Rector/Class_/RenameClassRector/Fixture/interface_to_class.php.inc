@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Class_\ClassReplacerRector\Fixture;
+namespace Rector\Tests\Rector\Class_\RenameClassRector\Fixture;
 
 class InterfaceToClass implements \Countable
 {
@@ -17,7 +17,7 @@ class InterfaceToClass implements \Countable
 -----
 <?php
 
-namespace Rector\Tests\Rector\Class_\ClassReplacerRector\Fixture;
+namespace Rector\Tests\Rector\Class_\RenameClassRector\Fixture;
 
 class InterfaceToClass implements \Countable
 {

@@ -10,5 +10,5 @@ services:
         Illuminate\Database\Eloquent\Relations\Pivot:
             parent: 'pivotParent'
 
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         Illuminate\Translation\LoaderInterface: 'Illuminate\Contracts\Translation\Loader'

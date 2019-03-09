@@ -10,7 +10,7 @@ services:
         Kdyby\RabbitMq\IConsumer:
             process: 'execute'
 
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         # Kdyby → Symfony
         Kdyby\RabbitMq\IConsumer: 'OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface'
         Kdyby\RabbitMq\IProducer: 'OldSound\RabbitMqBundle\RabbitMq\ProducerInterface'

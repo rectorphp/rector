@@ -1,21 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Class_\ClassReplacerRector;
+namespace Rector\Tests\Rector\Class_\RenameClassRector;
 
 use Manual\Twig\TwigFilter;
 use Manual_Twig_Filter;
-use Rector\Rector\Class_\ClassReplacerRector;
+use Rector\Rector\Class_\RenameClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\AbstractManualExtension;
-use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\NewClass;
-use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\NewClassWithoutTypo;
-use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\OldClass;
-use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\OldClassWithTypo;
+use Rector\Tests\Rector\Class_\RenameClassRector\Source\AbstractManualExtension;
+use Rector\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
+use Rector\Tests\Rector\Class_\RenameClassRector\Source\NewClassWithoutTypo;
+use Rector\Tests\Rector\Class_\RenameClassRector\Source\OldClass;
+use Rector\Tests\Rector\Class_\RenameClassRector\Source\OldClassWithTypo;
 
 /**
  * @see https://stackoverflow.com/a/35355700/1348344
  */
-final class ClassReplacerRectorTest extends AbstractRectorTestCase
+final class RenameClassRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -31,7 +31,7 @@ final class ClassReplacerRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return ClassReplacerRector::class;
+        return RenameClassRector::class;
     }
 
     /**

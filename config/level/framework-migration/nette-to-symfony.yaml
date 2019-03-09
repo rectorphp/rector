@@ -13,7 +13,7 @@ services:
         Nette\Application\IPresenter:
             run: Symfony\Component\HttpFoundation\Response
 
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         # run(Request $appRequest) -> run(\Symfony\Component\HttpFoundation\Request $appRequest)
         Nette\Application\Request: Symfony\Component\HttpFoundation\Request
         Nette\Http\Request: Symfony\Component\HttpFoundation\Request

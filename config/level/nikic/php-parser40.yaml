@@ -18,5 +18,5 @@ services:
         'PhpParser\Node\Stmt\Class_':
             'VISIBILITY_MODIFER_MASK': 'VISIBILITY_MODIFIER_MASK'
 
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         'PhpParser\BuilderAbstract': 'PhpParser\Builder'

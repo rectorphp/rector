@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\Tests\Rector\Class_\ClassReplacerRector\Fixture;
+namespace Rector\Tests\Rector\Class_\RenameClassRector\Fixture;
 
 use Manual_Twig_Filter;
 use Manual\Twig\TwigFilter;
-use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\AbstractManualExtension;
+use Rector\Tests\Rector\Class_\RenameClassRector\Source\AbstractManualExtension;
 
 final class ShortUrlExtension extends AbstractManualExtension
 {
@@ -23,11 +23,11 @@ final class ShortUrlExtension extends AbstractManualExtension
 -----
 <?php
 
-namespace Rector\Tests\Rector\Class_\ClassReplacerRector\Fixture;
+namespace Rector\Tests\Rector\Class_\RenameClassRector\Fixture;
 
 use Manual_Twig_Filter;
 use Manual\Twig\TwigFilter;
-use Rector\Tests\Rector\Class_\ClassReplacerRector\Source\AbstractManualExtension;
+use Rector\Tests\Rector\Class_\RenameClassRector\Source\AbstractManualExtension;
 
 final class ShortUrlExtension extends AbstractManualExtension
 {

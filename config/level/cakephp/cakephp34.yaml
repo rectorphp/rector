@@ -240,7 +240,7 @@ services:
         Cake\View\CellTrait:
             cell: 'protected'
 
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         Cake\Database\Schema\Table: 'Cake\Database\Schema\TableSchema'
 
     Rector\Rector\MethodBody\NormalToFluentRector:

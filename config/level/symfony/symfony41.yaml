@@ -21,7 +21,7 @@ services:
             reset: 'clear'
             add: 'addWorkflow'
 
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         # https://github.com/symfony/symfony/commit/07dd09db59e2f2a86a291d00d978169d9059e307
         Symfony\Bundle\FrameworkBundle\DataCollector\RequestDataCollector: 'Symfony\Component\HttpKernel\DataCollector\RequestDataCollector'
         Symfony\Component\Workflow\SupportStrategy\SupportStrategyInterface: 'Symfony\Component\Workflow\SupportStrategy\WorkflowSupportStrategyInterface'

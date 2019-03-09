@@ -4510,15 +4510,15 @@ services:
 
 <br>
 
-### `ClassReplacerRector`
+### `RenameClassRector`
 
-- class: `Rector\Rector\Class_\ClassReplacerRector`
+- class: `Rector\Rector\Class_\RenameClassRector`
 
 Replaces defined classes by new ones.
 
 ```yaml
 services:
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         SomeOldClass: SomeNewClass
 ```
 

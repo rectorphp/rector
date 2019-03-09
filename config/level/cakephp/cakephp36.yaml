@@ -21,7 +21,7 @@ services:
                 'get': 'getValidator'
                 'set': 'setValidator'
 
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         'Cake\Cache\Engine\ApcEngine': 'Cake\Cache\Engine\ApcuEngine'
         'Cake\Network\Exception\BadRequestException': 'Cake\Http\Exception\BadRequestException'
         'Cake\Network\Exception\ConflictException': 'Cake\Http\Exception\ConflictException'

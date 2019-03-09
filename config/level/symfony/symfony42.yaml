@@ -3,7 +3,7 @@ services:
     Rector\Rector\New_\NewToStaticCallRector:
         Symfony\Component\HttpFoundation\Cookie: ['Symfony\Component\HttpFoundation\Cookie', 'create']
 
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         # https://github.com/symfony/symfony/commit/a7e319d9e1316e2e18843f8ce15b67a8693e5bf9
         Symfony\Bundle\FrameworkBundle\Controller\Controller: 'Symfony\Bundle\FrameworkBundle\Controller\AbstractController'
         # https://github.com/symfony/symfony/commit/744bf0e7ac3ecf240d0bf055cc58f881bb0b3ec0
