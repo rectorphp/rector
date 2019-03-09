@@ -27,7 +27,7 @@ services:
                     method: 'getAttribute'
                     arguments: ['here']
 
-    Rector\Rector\Property\PropertyNameReplacerRector:
+    Rector\Rector\Property\RenamePropertyRector:
         Cake\Network\Request:
             _session: 'session'
 

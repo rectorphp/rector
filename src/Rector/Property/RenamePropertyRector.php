@@ -9,7 +9,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class PropertyNameReplacerRector extends AbstractRector
+final class RenamePropertyRector extends AbstractRector
 {
     /**
      * class => [

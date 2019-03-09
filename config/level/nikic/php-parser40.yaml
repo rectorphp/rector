@@ -6,7 +6,7 @@ services:
     Rector\PhpParser\Rector\RemoveNodeRector: ~
     Rector\PhpParser\Rector\UseWithAliasRector: ~
 
-    Rector\Rector\Property\PropertyNameReplacerRector:
+    Rector\Rector\Property\RenamePropertyRector:
         'PhpParser\Node\Stmt\Class_':
             'type': 'flags'
         'PhpParser\Node\Stmt\ClassMethod':

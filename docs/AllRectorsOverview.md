@@ -4057,15 +4057,15 @@ services:
 
 <br>
 
-### `PropertyNameReplacerRector`
+### `RenamePropertyRector`
 
-- class: `Rector\Rector\Property\PropertyNameReplacerRector`
+- class: `Rector\Rector\Property\RenamePropertyRector`
 
 Replaces defined old properties by new ones.
 
 ```yaml
 services:
-    Rector\Rector\Property\PropertyNameReplacerRector:
+    Rector\Rector\Property\RenamePropertyRector:
         $oldToNewPropertyByTypes:
             SomeClass:
                 someOldProperty: someNewProperty

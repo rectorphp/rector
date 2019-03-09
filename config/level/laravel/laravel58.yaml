@@ -11,7 +11,7 @@ services:
             putMany: 'bool'
             forever: 'bool'
 
-    Rector\Rector\Property\PropertyNameReplacerRector:
+    Rector\Rector\Property\RenamePropertyRector:
         Illuminate\Routing\UrlGenerator:
             cachedSchema: 'cachedScheme'
 

@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Property\PropertyNameReplacerRector;
+namespace Rector\Tests\Rector\Property\RenamePropertyRector;
 
-use Rector\Rector\Property\PropertyNameReplacerRector;
+use Rector\Rector\Property\RenamePropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Property\PropertyNameReplacerRector\Source\ClassWithProperties;
+use Rector\Tests\Rector\Property\RenamePropertyRector\Source\ClassWithProperties;
 
-final class PropertyNameReplacerRectorTest extends AbstractRectorTestCase
+final class RenamePropertyRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -15,7 +15,7 @@ final class PropertyNameReplacerRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return PropertyNameReplacerRector::class;
+        return RenamePropertyRector::class;
     }
 
     /**
