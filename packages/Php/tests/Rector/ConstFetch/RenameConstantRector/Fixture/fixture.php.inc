@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\ConstFetch\ConstantReplacerRector\Fixture;
+namespace Rector\Php\Tests\Rector\ConstFetch\RenameConstantRector\Fixture;
 
 final class SomeClass
 {
@@ -14,7 +14,7 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\ConstFetch\ConstantReplacerRector\Fixture;
+namespace Rector\Php\Tests\Rector\ConstFetch\RenameConstantRector\Fixture;
 
 final class SomeClass
 {

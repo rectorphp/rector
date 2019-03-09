@@ -43,7 +43,7 @@ services:
         # Removes "implements IPresenter"
         - Nette\Application\IPresenter
 
-    Rector\Rector\Constant\ClassConstantReplacerRector:
+    Rector\Rector\Constant\RenameClassConstantRector:
         Nette\Http\*Response:
             S100_CONTINUE: Symfony\Component\HttpFoundation\Response::HTTP_CONTINUE
             S101_SWITCHING_PROTOCOLS: Symfony\Component\HttpFoundation\Response::HTTP_SWITCHING_PROTOCOLS

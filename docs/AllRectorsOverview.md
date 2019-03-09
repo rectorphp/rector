@@ -1927,9 +1927,9 @@ Changes unquoted non-existing constants to strings
 
 <br>
 
-### `ConstantReplacerRector`
+### `RenameConstantRector`
 
-- class: `Rector\Php\Rector\ConstFetch\ConstantReplacerRector`
+- class: `Rector\Php\Rector\ConstFetch\RenameConstantRector`
 
 Replace constant by new ones
 
@@ -4485,15 +4485,15 @@ services:
 
 <br>
 
-### `ClassConstantReplacerRector`
+### `RenameClassConstantRector`
 
-- class: `Rector\Rector\Constant\ClassConstantReplacerRector`
+- class: `Rector\Rector\Constant\RenameClassConstantRector`
 
 Replaces defined class constants in their calls.
 
 ```yaml
 services:
-    Rector\Rector\Constant\ClassConstantReplacerRector:
+    Rector\Rector\Constant\RenameClassConstantRector:
         SomeClass:
             OLD_CONSTANT: NEW_CONSTANT
             OTHER_OLD_CONSTANT: 'DifferentClass::NEW_CONSTANT'

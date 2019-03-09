@@ -9,7 +9,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class ConstantReplacerRector extends AbstractRector
+final class RenameConstantRector extends AbstractRector
 {
     /**
      * @var string[]

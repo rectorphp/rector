@@ -10,7 +10,7 @@ services:
     Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector: ~
 
     # general
-    Rector\Rector\Constant\ClassConstantReplacerRector:
+    Rector\Rector\Constant\RenameClassConstantRector:
         # form
         'Symfony\Component\Form\FormEvents':
             'PRE_BIND': 'PRE_SUBMIT'

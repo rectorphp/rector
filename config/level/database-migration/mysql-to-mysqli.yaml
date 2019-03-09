@@ -51,7 +51,7 @@ services:
 
     # http://php.net/manual/en/mysql.constants.php ↓
     # http://php.net/manual/en/mysqli.constants.php
-    Rector\Php\Rector\ConstFetch\ConstantReplacerRector:
+    Rector\Php\Rector\ConstFetch\RenameConstantRector:
         MYSQL_ASSOC: 'MYSQLI_ASSOC'
         MYSQL_NUM: 'MYSQLI_NUM'
         MYSQL_BOTH: 'MYSQLI_BOTH'

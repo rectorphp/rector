@@ -14,7 +14,7 @@ services:
         'PhpParser\Node\Stmt\Property':
             'type': 'flags'
 
-    Rector\Rector\Constant\ClassConstantReplacerRector:
+    Rector\Rector\Constant\RenameClassConstantRector:
         'PhpParser\Node\Stmt\Class_':
             'VISIBILITY_MODIFER_MASK': 'VISIBILITY_MODIFIER_MASK'
 

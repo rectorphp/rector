@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Tests\Rector\ConstFetch\ConstantReplacerRector;
+namespace Rector\Php\Tests\Rector\ConstFetch\RenameConstantRector;
 
-use Rector\Php\Rector\ConstFetch\ConstantReplacerRector;
+use Rector\Php\Rector\ConstFetch\RenameConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ConstantReplacerRectorTest extends AbstractRectorTestCase
+final class RenameConstantRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -14,7 +14,7 @@ final class ConstantReplacerRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return ConstantReplacerRector::class;
+        return RenameConstantRector::class;
     }
 
     /**
