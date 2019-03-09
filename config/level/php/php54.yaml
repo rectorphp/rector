@@ -1,4 +1,4 @@
 services:
-    Rector\Rector\Function_\FunctionReplaceRector:
+    Rector\Rector\Function_\RenameFunctionRector:
         mysqli_param_count: 'mysqli_stmt_param_count'
     Rector\Php\Rector\FuncCall\RemoveReferenceFromCallRector: ~

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Function_\FunctionReplaceRector\Fixture;
+namespace Rector\Tests\Rector\Function_\RenameFunctionRector\Fixture;
 
 class SomeClass
 {
@@ -18,7 +18,7 @@ function a(callable $a) {
 -----
 <?php
 
-namespace Rector\Tests\Rector\Function_\FunctionReplaceRector\Fixture;
+namespace Rector\Tests\Rector\Function_\RenameFunctionRector\Fixture;
 
 class SomeClass
 {

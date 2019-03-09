@@ -21,6 +21,6 @@ services:
     Rector\Php\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector: ~
     Rector\Php\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector: ~
 
-    Rector\Rector\Function_\FunctionReplaceRector:
+    Rector\Rector\Function_\RenameFunctionRector:
         # https://3v4l.org/1s1St
         mktime: 'time'

@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Function_\FunctionReplaceRector;
+namespace Rector\Tests\Rector\Function_\RenameFunctionRector;
 
-use Rector\Rector\Function_\FunctionReplaceRector;
+use Rector\Rector\Function_\RenameFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class FunctionReplaceRectorTest extends AbstractRectorTestCase
+final class RenameFunctionRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -18,7 +18,7 @@ final class FunctionReplaceRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return FunctionReplaceRector::class;
+        return RenameFunctionRector::class;
     }
 
     /**

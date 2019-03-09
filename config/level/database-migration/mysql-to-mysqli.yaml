@@ -14,7 +14,7 @@ services:
         mysql_query: [1, 0]
         mysql_fetch_row: [1, 0]
 
-    Rector\Rector\Function_\FunctionReplaceRector:
+    Rector\Rector\Function_\RenameFunctionRector:
         mysql_affected_rows: 'mysqli_affected_rows'
         mysql_close: 'mysqli_close'
         mysql_data_seek: 'mysqli_data_seek'

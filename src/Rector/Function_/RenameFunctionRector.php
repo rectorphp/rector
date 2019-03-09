@@ -12,7 +12,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class FunctionReplaceRector extends AbstractRector
+final class RenameFunctionRector extends AbstractRector
 {
     /**
      * @var string[]|string[][]
