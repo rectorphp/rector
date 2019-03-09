@@ -5,7 +5,7 @@ namespace Rector\Tests\Rector\MethodCall\StaticMethodNameReplacerRector;
 use Nette\Utils\Html;
 use Rector\Rector\MethodCall\StaticMethodNameReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\MethodCall\MethodNameReplacerRector\Source\FormMacros;
+use Rector\Tests\Rector\MethodCall\RenameMethodRector\Source\FormMacros;
 
 final class StaticMethodNameReplacerRectorTest extends AbstractRectorTestCase
 {

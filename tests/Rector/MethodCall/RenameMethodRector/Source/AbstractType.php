@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Rector\MethodCall\RenameMethodRector\Source;
 
-final class FormMacros
+abstract class AbstractType
 {
 
 }

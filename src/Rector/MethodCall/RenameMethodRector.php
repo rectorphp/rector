@@ -13,7 +13,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class MethodNameReplacerRector extends AbstractRector
+final class RenameMethodRector extends AbstractRector
 {
     /**
      * class => [
