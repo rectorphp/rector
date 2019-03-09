@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         'Twig_LoaderInterface': 'Twig\Loader\LoaderInterface'
         'Twig_Extension_StringLoader': 'Twig\Extension\StringLoaderExtension'
         'Twig_Extension_Optimizer': 'Twig\Extension\OptimizerExtension'

@@ -2,7 +2,7 @@ services:
     # <> → !=
     Rector\Celebrity\Rector\NotEqual\CommonNotEqualRector: ~
 
-    Rector\Rector\Function_\FunctionReplaceRector:
+    Rector\Rector\Function_\RenameFunctionRector:
         split: 'explode'
         join: 'implode'
 

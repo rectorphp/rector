@@ -14,7 +14,7 @@ parameters:
         - "utils/phpstan/generate-paths.php"
         # test files
         - '*packages/NodeTypeResolver/tests/Source/AnotherClass.php'
-        - '*tests/Rector/MethodCall/MethodNameReplacerRector/**/SomeClass.php'
+        - '*tests/Rector/MethodCall/RenameMethodRector/**/SomeClass.php'
         - '*packages/BetterReflection/tests/Reflector/NotLoadedSource/SomeClass.php'
         - 'packages/NodeTypeResolver/tests/PerNodeTypeResolver/VariableTypeResolver/Source/NewClass.php'
         # tests files

@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         # see https://twig.symfony.com/doc/1.x/deprecated.html#filters
         Twig_SimpleFilter: 'Twig_Filter'
         # see https://twig.symfony.com/doc/1.x/deprecated.html#functions

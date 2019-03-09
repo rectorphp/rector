@@ -19,7 +19,7 @@ services:
 
     Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector: ~
 
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         # console
         'Symfony\Component\Console\Event\ConsoleExceptionEvent': 'Symfony\Component\Console\Event\ConsoleErrorEvent'
 
@@ -38,7 +38,7 @@ services:
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\ConfigCachePass': 'Symfony\Component\Config\DependencyInjection\ConfigCachePass'
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\PropertyInfoPass': 'Symfony\Component\PropertyInfo\DependencyInjection\PropertyInfoPass'
 
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         # dependency-injection
         Symfony\Component\DependencyInjection\Container:
             isFrozen: 'isCompiled'

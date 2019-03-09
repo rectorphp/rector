@@ -14,7 +14,7 @@ services:
         mysql_query: [1, 0]
         mysql_fetch_row: [1, 0]
 
-    Rector\Rector\Function_\FunctionReplaceRector:
+    Rector\Rector\Function_\RenameFunctionRector:
         mysql_affected_rows: 'mysqli_affected_rows'
         mysql_close: 'mysqli_close'
         mysql_data_seek: 'mysqli_data_seek'
@@ -51,7 +51,7 @@ services:
 
     # http://php.net/manual/en/mysql.constants.php ↓
     # http://php.net/manual/en/mysqli.constants.php
-    Rector\Php\Rector\ConstFetch\ConstantReplacerRector:
+    Rector\Php\Rector\ConstFetch\RenameConstantRector:
         MYSQL_ASSOC: 'MYSQLI_ASSOC'
         MYSQL_NUM: 'MYSQLI_NUM'
         MYSQL_BOTH: 'MYSQLI_BOTH'

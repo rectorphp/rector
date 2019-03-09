@@ -27,7 +27,7 @@ services:
                     method: 'getAttribute'
                     arguments: ['here']
 
-    Rector\Rector\Property\PropertyNameReplacerRector:
+    Rector\Rector\Property\RenamePropertyRector:
         Cake\Network\Request:
             _session: 'session'
 
@@ -186,7 +186,7 @@ services:
                 set: 'enableAutoLayout'
                 get: 'isAutoLayoutEnabled'
 
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         Cake\Network\Request:
             param: 'getParam'
             data: 'getData'
@@ -240,13 +240,13 @@ services:
         Cake\View\CellTrait:
             cell: 'protected'
 
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         Cake\Database\Schema\Table: 'Cake\Database\Schema\TableSchema'
 
     Rector\Rector\MethodBody\NormalToFluentRector:
         Cake\Network\Response:
             # https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html#adopting-immutable-responses
-            # renames are done by MethodNameReplacerRector above
+            # renames are done by RenameMethodRector above
             - 'withLocation'
             - 'withHeader'
             - 'withLocation'

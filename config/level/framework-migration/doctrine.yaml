@@ -1,3 +1,3 @@
 services:
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         Doctrine\Common\DataFixtures\AbstractFixture: Doctrine\Bundle\FixturesBundle\Fixture

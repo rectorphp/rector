@@ -1,7 +1,7 @@
 # source: https://book.cakephp.org/3.next/en/appendices/3-6-migration-guide.html
 
 services:
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         'Cake\ORM\Table':
             'association': 'getAssociation'
         'Cake\Validation\ValidationSet':
@@ -21,7 +21,7 @@ services:
                 'get': 'getValidator'
                 'set': 'setValidator'
 
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         'Cake\Cache\Engine\ApcEngine': 'Cake\Cache\Engine\ApcuEngine'
         'Cake\Network\Exception\BadRequestException': 'Cake\Http\Exception\BadRequestException'
         'Cake\Network\Exception\ConflictException': 'Cake\Http\Exception\ConflictException'

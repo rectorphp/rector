@@ -22,6 +22,6 @@ services:
             batch: 'GuzzleHttp\Pool\batch'
 
     Rector\Guzzle\Rector\FuncCall\MessageAsArrayRector: ~
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         GuzzleHttp\Message\MessageInterface:
             getHeaderLines: 'getHeaderAsArray'

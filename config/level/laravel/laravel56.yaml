@@ -1,6 +1,6 @@
 # see: https://laravel.com/docs/5.6/upgrade
 services:
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         Illuminate\Validation\ValidatesWhenResolvedTrait:
             validate: 'validateResolved'
         Illuminate\Contracts\Validation\ValidatesWhenResolved:

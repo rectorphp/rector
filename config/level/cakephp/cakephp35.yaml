@@ -1,11 +1,11 @@
 # source: https://book.cakephp.org/3.0/en/appendices/3-5-migration-guide.html
 
 services:
-    Rector\Rector\Class_\ClassReplacerRector:
+    Rector\Rector\Class_\RenameClassRector:
         Cake\Http\Client\CookieCollection: 'Cake\Http\Cookie\CookieCollection'
         Cake\Console\ShellDispatcher: 'Cake\Console\CommandRunner'
 
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         Cake\Database\Schema\TableSchema:
             column: 'getColumn'
             constraint: 'getConstraint'

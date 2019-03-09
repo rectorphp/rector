@@ -1,7 +1,7 @@
 services:
     Rector\Php\Rector\FuncCall\PowToExpRector: ~
 
-    Rector\Rector\Function_\FunctionReplaceRector:
+    Rector\Rector\Function_\RenameFunctionRector:
         mcrypt_generic_end: 'mcrypt_generic_deinit'
         set_socket_blocking: 'stream_set_blocking'
         ocibindbyname: 'oci_bind_by_name'

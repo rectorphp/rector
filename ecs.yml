@@ -81,7 +81,7 @@ parameters:
             # required for exact string match with "\"
             - 'packages/NodeTypeResolver/src/Php/AbstractTypeInfo.php'
             # example in description
-            - 'src/Rector/Annotation/AnnotationReplacerRector.php'
+            - 'src/Rector/Annotation/RenameAnnotationRector.php'
             - 'packages/NetteToSymfony/src/Event/EventInfosFactory.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
@@ -109,7 +109,6 @@ parameters:
             - 'packages/Php/src/EregToPcreTransformer.php'
             # dev
             - 'packages/Php/src/Rector/FunctionLike/*TypeDeclarationRector.php'
-            - 'examples/*'
             - 'packages/Php/src/Rector/If_/IfToSpaceshipRector.php'
 
         Symplify\CodingStandard\Sniffs\ControlStructure\SprintfOverContactSniff:

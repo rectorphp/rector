@@ -63,7 +63,7 @@ E.g. in this case, first will be changed `@expectedException` annotation to meth
 services:
     Rector\PHPUnit\Rector\ExceptionAnnotationRector: ~
 
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         $perClassOldToNewMethods:
                 'PHPUnit\Framework\TestClass':
                     'setExpectedException': 'expectedException'
