@@ -1,4 +1,4 @@
-# All 223 Rectors Overview
+# All 234 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -6,6 +6,7 @@
 ## Projects
 
 - [CakePHP](#cakephp)
+- [Celebrity](#celebrity)
 - [CodeQuality](#codequality)
 - [CodingStyle](#codingstyle)
 - [DeadCode](#deadcode)
@@ -13,6 +14,7 @@
 - [DomainDrivenDesign](#domaindrivendesign)
 - [Guzzle](#guzzle)
 - [Jms](#jms)
+- [Laravel](#laravel)
 - [MysqlToMysqli](#mysqltomysqli)
 - [NetteToSymfony](#nettetosymfony)
 - [PHPStan](#phpstan)
@@ -49,6 +51,65 @@ Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.
 
 <br>
 
+## Celebrity
+
+### `SetTypeToCastRector`
+
+- class: `Rector\Celebrity\Rector\FuncCall\SetTypeToCastRector`
+
+Changes settype() to (type) where possible
+
+```diff
+ class SomeClass
+ {
+-    public function run($foo)
++    public function run(array $items)
+     {
+-        settype($foo, 'string');
++        $foo = (string) $foo;
+
+-        return settype($foo, 'integer');
++        return (int) $foo;
+     }
+ }
+```
+
+<br>
+
+### `CommonNotEqualRector`
+
+- class: `Rector\Celebrity\Rector\NotEqual\CommonNotEqualRector`
+
+Use common != instead of less known <> with same meaning
+
+```diff
+ final class SomeClass
+ {
+     public function run($one, $two)
+     {
+-        return $one <> $two;
++        return $one != $two;
+     }
+ }
+```
+
+<br>
+
+### `LogicalToBooleanRector`
+
+- class: `Rector\Celebrity\Rector\BooleanOp\LogicalToBooleanRector`
+
+Change OR, AND to ||, && with more common understanding
+
+```diff
+-if ($f = false or true) {
++if (($f = false) || true) {
+     return $f;
+ }
+```
+
+<br>
+
 ## CodeQuality
 
 ### `CombinedAssignRector`
@@ -79,6 +140,26 @@ Use ===/!== over ==/!=, it values have the same type
 -         $isDiffernt = $firstValue != $secondValue;
 +         $isSame = $firstValue === $secondValue;
 +         $isDiffernt = $firstValue !== $secondValue;
+     }
+ }
+```
+
+<br>
+
+### `SimplifyDuplicatedTernaryRector`
+
+- class: `Rector\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector`
+
+Remove ternary that duplicated return value of true : false
+
+```diff
+ class SomeClass
+ {
+     public function run(bool $value, string $name)
+     {
+-         $isTrue = $value ? true : false;
++         $isTrue = $value;
+          $isName = $name ? true : false;
      }
  }
 ```
@@ -432,21 +513,6 @@ Simplify `is_array` and `empty` functions combination into a simple identical ch
 
 <br>
 
-### `LogicalOrToBooleanOrRector`
-
-- class: `Rector\CodeQuality\Rector\LogicalOr\LogicalOrToBooleanOrRector`
-
-Change OR to || with more common understanding
-
-```diff
--if ($f = false or true) {
-+if (($f = false) || true) {
-     return $f;
- }
-```
-
-<br>
-
 ### `GetClassToInstanceOfRector`
 
 - class: `Rector\CodeQuality\Rector\Identical\GetClassToInstanceOfRector`
@@ -456,6 +522,27 @@ Changes comparison with get_class to instanceof
 ```diff
 -if (EventsListener::class === get_class($event->job)) { }
 +if ($event->job instanceof EventsListener) { }
+```
+
+<br>
+
+### `SimplifyBoolIdenticalTrueRector`
+
+- class: `Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector`
+
+Symplify bool value compare to true or false
+
+```diff
+ class SomeClass
+ {
+     public function run(bool $value, string $items)
+     {
+-         $match = in_array($value, $items, TRUE) === TRUE;
+-         $match = in_array($value, $items, TRUE) !== FALSE;
++         $match = in_array($value, $items, TRUE);
++         $match = in_array($value, $items, TRUE);
+     }
+ }
 ```
 
 <br>
@@ -504,25 +591,6 @@ Joins concat of 2 strings
      {
 -        $name = 'Hi' . ' Tom';
 +        $name = 'Hi Tom';
-     }
- }
-```
-
-<br>
-
-### `CommonNotEqualRector`
-
-- class: `Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector`
-
-Use common != instead of less known <> with same meaning
-
-```diff
- final class SomeClass
- {
-     public function run($one, $two)
-     {
--        return $one <> $two;
-+        return $one != $two;
      }
  }
 ```
@@ -587,6 +655,27 @@ services:
 
 <br>
 
+### `SymplifyQuoteEscapeRector`
+
+- class: `Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector`
+
+Prefer quote that not inside the string
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-         $name = "\" Tom";
+-         $name = '\' Sara';
++         $name = '" Tom';
++         $name = "' Sara";
+     }
+ }
+```
+
+<br>
+
 ### `RemoveUnusedAliasRector`
 
 - class: `Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector`
@@ -600,29 +689,6 @@ Removes unused use aliases
 -class SomeClass extends BaseKernel
 +class SomeClass extends Kernel
  {
- }
-```
-
-<br>
-
-### `SetTypeToCastRector`
-
-- class: `Rector\CodingStyle\Rector\FuncCall\SetTypeToCastRector`
-
-Changes settype() to (type) where possible
-
-```diff
- class SomeClass
- {
--    public function run($foo)
-+    public function run(array $items)
-     {
--        settype($foo, 'string');
-+        $foo = (string) $foo;
-
--        return settype($foo, 'integer');
-+        return (int) $foo;
-     }
  }
 ```
 
@@ -834,6 +900,23 @@ Remove unused parameter, if not required by interface or parent class
      {
           $this->value = $value;
      }
+ }
+```
+
+<br>
+
+### `RemoveDeadConstructorRector`
+
+- class: `Rector\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector`
+
+Remove empty constructor
+
+```diff
+ class SomeClass
+ {
+-    public function __construct()
+-    {
+-    }
  }
 ```
 
@@ -1073,6 +1156,99 @@ Changes properties with `@JMS\DiExtraBundle\Annotation\Inject` to constructor in
 +    {
 +        $this->entityManager = entityManager;
 +    }
+ }
+```
+
+<br>
+
+## Laravel
+
+### `MinutesToSecondsInCacheRector`
+
+- class: `Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector`
+
+Change minutes argument to seconds in Illuminate\Contracts\Cache\Store and Illuminate\Support\Facades\Cache
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        Illuminate\Support\Facades\Cache::put('key', 'value', 60);
++        Illuminate\Support\Facades\Cache::put('key', 'value', 60 * 60);
+     }
+ }
+```
+
+<br>
+
+### `FacadeStaticCallToConstructorInjectionRector`
+
+- class: `Rector\Laravel\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector`
+
+Move Illuminate\Support\Facades\* static calls to constructor injection
+
+```diff
+ use Illuminate\Support\Facades\Response;
+
+ class ExampleController extends Controller
+ {
++    /**
++     * @var \Illuminate\Contracts\Routing\ResponseFactory
++     */
++    private $responseFactory;
++
++    public function __construct(\Illuminate\Contracts\Routing\ResponseFactory $responseFactory)
++    {
++        $this->responseFactory = $responseFactory;
++    }
++
+     public function store()
+     {
+-        return Response::view('example', ['new_example' => 123]);
++        return $this->responseFactory->view('example', ['new_example' => 123]);
+     }
+ }
+```
+
+<br>
+
+### `Redirect301ToPermanentRedirectRector`
+
+- class: `Rector\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector`
+
+Change "redirect" call with 301 to "permanentRedirect"
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        Illuminate\Routing\Route::redirect('/foo', '/bar', 301);
++        Illuminate\Routing\Route::permanentRedirect('/foo', '/bar');
+     }
+ }
+```
+
+<br>
+
+### `RequestStaticValidateToInjectRector`
+
+- class: `Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector`
+
+Change static validate() method to $request->validate()
+
+```diff
+ use Illuminate\Http\Request;
+
+ class SomeClass
+ {
+-    public function store()
++    public function store(\Illuminate\Http\Request $request)
+     {
+-        $validatedData = Request::validate(['some_attribute' => 'required']);
++        $validatedData = $request->validate(['some_attribute' => 'required']);
+     }
  }
 ```
 
@@ -2097,6 +2273,27 @@ Changes rand, srand and getrandmax by new md_* alternatives.
 
 <br>
 
+### `PregReplaceEModifierRector`
+
+- class: `Rector\Php\Rector\FuncCall\PregReplaceEModifierRector`
+
+The /e modifier is no longer supported, use preg_replace_callback instead 
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $comment = preg_replace('~\b(\w)(\w+)~e', '"$1".strtolower("$2")', $comment);
++        $comment = preg_replace_callback('~\b(\w)(\w+)~', function ($matches) {
++              return($matches[1].strtolower($matches[2]));
++        }, , $comment);
+     }
+ }
+```
+
+<br>
+
 ### `FilterVarToAddSlashesRector`
 
 - class: `Rector\Php\Rector\FuncCall\FilterVarToAddSlashesRector`
@@ -2363,6 +2560,26 @@ Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonExcepti
 -json_decode($json);
 +json_encode($content, JSON_THROW_ON_ERROR
 +json_decode($json, null, null, JSON_THROW_ON_ERROR););
+```
+
+<br>
+
+### `StringifyDefineRector`
+
+- class: `Rector\Php\Rector\FuncCall\StringifyDefineRector`
+
+Make first argument of define() string
+
+```diff
+ class SomeClass
+ {
+     public function run(int $a)
+     {
+-         define(CONSTANT_2, 'value');
++         define('CONSTANT_2', 'value');
+          define('CONSTANT', 'value');
+     }
+ }
 ```
 
 <br>
@@ -3503,15 +3720,15 @@ services:
 
 <br>
 
-### `StaticRenameMethodRector`
+### `RenameStaticMethodRector`
 
-- class: `Rector\Rector\MethodCall\StaticRenameMethodRector`
+- class: `Rector\Rector\MethodCall\RenameStaticMethodRector`
 
 Turns method names to new ones.
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\StaticRenameMethodRector:
+    Rector\Rector\MethodCall\RenameStaticMethodRector:
         SomeClass:
             oldMethod:
                 - AnotherExampleClass
@@ -3527,7 +3744,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\StaticRenameMethodRector:
+    Rector\Rector\MethodCall\RenameStaticMethodRector:
         $oldToNewMethodByClasses:
             SomeClass:
                 oldMethod: newStaticMethod
@@ -3798,7 +4015,9 @@ services:
         SomeExampleClass:
             someMethod:
                 -
+                    name: someArgument
                     default_value: 'true'
+                    type: SomeType
 ```
 
 ↓
@@ -3815,7 +4034,9 @@ services:
         SomeExampleClass:
             someMethod:
                 -
+                    name: someArgument
                     default_value: 'true'
+                    type: SomeType
 ```
 
 ↓
@@ -3884,24 +4105,32 @@ services:
 
 <br>
 
-### `RenameNamespaceRector`
+### `NewToStaticCallRector`
 
-- class: `Rector\Rector\Namespace_\RenameNamespaceRector`
+- class: `Rector\Rector\New_\NewToStaticCallRector`
 
-Replaces old namespace by new one.
+Change new Object to static call
 
 ```yaml
 services:
-    Rector\Rector\Namespace_\RenameNamespaceRector:
-        $oldToNewNamespaces:
-            SomeOldNamespace: SomeNewNamespace
+    Rector\Rector\New_\NewToStaticCallRector:
+        Cookie:
+            -
+                - Cookie
+                - create
 ```
 
 ↓
 
 ```diff
--$someObject = new SomeOldNamespace\SomeClass;
-+$someObject = new SomeNewNamespace\SomeClass;
+ class SomeClass
+ {
+     public function run()
+     {
+-        new Cookie($name);
++        Cookie::create($name);
+     }
+ }
 ```
 
 <br>
@@ -3940,6 +4169,28 @@ services:
 -$someService = new Some_Object;
 +$someService = new Some\Object;
  $someClassToKeep = new Some_Class_To_Keep;
+```
+
+<br>
+
+### `RenameNamespaceRector`
+
+- class: `Rector\Rector\Namespace_\RenameNamespaceRector`
+
+Replaces old namespace by new one.
+
+```yaml
+services:
+    Rector\Rector\Namespace_\RenameNamespaceRector:
+        $oldToNewNamespaces:
+            SomeOldNamespace: SomeNewNamespace
+```
+
+↓
+
+```diff
+-$someObject = new SomeOldNamespace\SomeClass;
++$someObject = new SomeNewNamespace\SomeClass;
 ```
 
 <br>
@@ -3990,15 +4241,15 @@ services:
 
 <br>
 
-### `FunctionReplaceRector`
+### `RenameFunctionRector`
 
-- class: `Rector\Rector\Function_\FunctionReplaceRector`
+- class: `Rector\Rector\Function_\RenameFunctionRector`
 
 Turns defined function call new one.
 
 ```yaml
 services:
-    Rector\Rector\Function_\FunctionReplaceRector:
+    Rector\Rector\Function_\RenameFunctionRector:
         view: Laravel\Templating\render
 ```
 
@@ -4462,29 +4713,6 @@ services:
 
 <br>
 
-### `RenameClassConstantsUseToStringsRector`
-
-- class: `Rector\Rector\Constant\RenameClassConstantsUseToStringsRector`
-
-Replaces constant by value
-
-```yaml
-services:
-    Rector\Rector\Constant\RenameClassConstantsUseToStringsRector:
-        Nette\Configurator:
-            DEVELOPMENT: development
-            PRODUCTION: production
-```
-
-↓
-
-```diff
--$value === Nette\Configurator::DEVELOPMENT
-+$value === "development"
-```
-
-<br>
-
 ### `RenameClassConstantRector`
 
 - class: `Rector\Rector\Constant\RenameClassConstantRector`
@@ -4506,6 +4734,29 @@ services:
 -$value = SomeClass::OTHER_OLD_CONSTANT;
 +$value = SomeClass::NEW_CONSTANT;
 +$value = DifferentClass::NEW_CONSTANT;
+```
+
+<br>
+
+### `RenameClassConstantsUseToStringsRector`
+
+- class: `Rector\Rector\Constant\RenameClassConstantsUseToStringsRector`
+
+Replaces constant by value
+
+```yaml
+services:
+    Rector\Rector\Constant\RenameClassConstantsUseToStringsRector:
+        Nette\Configurator:
+            DEVELOPMENT: development
+            PRODUCTION: production
+```
+
+↓
+
+```diff
+-$value === Nette\Configurator::DEVELOPMENT
++$value === "development"
 ```
 
 <br>
