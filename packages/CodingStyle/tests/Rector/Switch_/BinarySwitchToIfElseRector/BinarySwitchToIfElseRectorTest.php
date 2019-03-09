@@ -9,7 +9,11 @@ final class BinarySwitchToIfElseRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/in_class.php.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/in_class.php.inc',
+            __DIR__ . '/Fixture/if_or.php.inc',
+        ]);
     }
 
     public function getRectorClass(): string

@@ -3,6 +3,7 @@
 namespace Rector\CodingStyle\Rector\Switch_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
@@ -66,11 +67,22 @@ CODE_SAMPLE
             return null;
         }
 
-        $ifNode = new If_(new Equal($node->cond, $firstCase->cond));
-        $ifNode->stmts = $this->removeBreakNodes($firstCase->stmts);
-
         /** @var Case_|null $secondCase */
         $secondCase = array_shift($node->cases);
+
+        // special case with empty first case → ||
+        $isFirstCaseEmpty = $firstCase->stmts === [];
+        if ($isFirstCaseEmpty && $secondCase !== null && $secondCase->cond !== null) {
+            $else = new BooleanOr(new Equal($node->cond, $firstCase->cond), new Equal($node->cond, $secondCase->cond));
+
+            $ifNode = new If_($else);
+            $ifNode->stmts = $this->removeBreakNodes($secondCase->stmts);
+
+            return $ifNode;
+        }
+
+        $ifNode = new If_(new Equal($node->cond, $firstCase->cond));
+        $ifNode->stmts = $this->removeBreakNodes($firstCase->stmts);
 
         // just one condition
         if ($secondCase === null) {
