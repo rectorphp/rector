@@ -145,21 +145,6 @@ final class ClassManipulator
     }
 
     /**
-     * @return ClassMethod[]
-     */
-    public function getMethodsByName(Class_ $classNode): array
-    {
-        $methodsByName = [];
-        foreach ($classNode->stmts as $stmt) {
-            if ($stmt instanceof ClassMethod) {
-                $methodsByName[(string) $stmt->name] = $stmt;
-            }
-        }
-
-        return $methodsByName;
-    }
-
-    /**
      * @param Class_|Trait_ $classLike
      * @return Name[]
      */

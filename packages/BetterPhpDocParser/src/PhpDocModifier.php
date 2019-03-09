@@ -95,13 +95,6 @@ final class PhpDocModifier
         }
     }
 
-    public function removeReturnTagFromPhpDocNode(PhpDocNode $phpDocNode): void
-    {
-        foreach ($phpDocNode->getReturnTagValues() as $returnTagValue) {
-            $this->removeTagFromPhpDocNode($phpDocNode, $returnTagValue);
-        }
-    }
-
     /**
      * @param PhpDocTagNode|PhpDocTagValueNode $phpDocTagOrPhpDocTagValueNode
      */

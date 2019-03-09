@@ -52,7 +52,6 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-    use SomeTrait;
 }
 CODE_SAMPLE
             ),

@@ -50,11 +50,6 @@ final class PhpDocInfo
         $this->originalContent = $originalContent;
     }
 
-    public function isSingleLine(): bool
-    {
-        return substr_count($this->originalContent, PHP_EOL) < 1;
-    }
-
     public function getOriginalContent(): string
     {
         return $this->originalContent;
@@ -76,16 +71,6 @@ final class PhpDocInfo
     public function getTokens(): array
     {
         return $this->tokens;
-    }
-
-    public function getParamTagDescriptionByName(string $name): string
-    {
-        $paramTagValue = $this->getParamTagValueByName($name);
-        if ($paramTagValue) {
-            return $paramTagValue->description;
-        }
-
-        return '';
     }
 
     public function getVarTagValue(): ?AttributeAwareVarTagValueNode

@@ -24,9 +24,7 @@ final class RemoveTraitRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): ?array
     {
         return [
-            '$traitsToRemove' => [
-                TraitToBeRemoved::class
-            ],
+            '$traitsToRemove' => [TraitToBeRemoved::class],
         ];
     }
 }
