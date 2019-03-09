@@ -109,7 +109,6 @@ parameters:
             - 'packages/Php/src/EregToPcreTransformer.php'
             # dev
             - 'packages/Php/src/Rector/FunctionLike/*TypeDeclarationRector.php'
-            - 'examples/*'
             - 'packages/Php/src/Rector/If_/IfToSpaceshipRector.php'
 
         Symplify\CodingStandard\Sniffs\ControlStructure\SprintfOverContactSniff:

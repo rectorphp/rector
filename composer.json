@@ -89,7 +89,6 @@
             "Rector\\PHPStanExtensions\\": "utils/PHPStanExtensions/src"
         },
         "classmap": [
-            "examples",
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
             "packages/Symfony/tests/Rector/FrameworkBundle/ContainerGetToConstructorInjectionRector/Source",
             "packages/NodeTypeResolver/tests/PerNodeTypeResolver/ParamTypeResolver/Source",
