@@ -2277,7 +2277,7 @@ Changes rand, srand and getrandmax by new md_* alternatives.
 
 - class: `Rector\Php\Rector\FuncCall\PregReplaceEModifierRector`
 
-The /e modifier is no longer supported, use preg_replace_callback instead 
+The /e modifier is no longer supported, use preg_replace_callback instead
 
 ```diff
  class SomeClass

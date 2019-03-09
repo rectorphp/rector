@@ -6,7 +6,10 @@ final class SomeSubscriber
 {
     public static function getSubscribedEvents()
     {
-        return ['compiler.post_dump' => 'compile'];
+        return [
+            'compiler.post_dump' => 'compile',
+            'compiler.to_class' => 'compile'
+        ];
     }
 }
 
@@ -20,7 +23,10 @@ final class SomeSubscriber
 {
     public static function getSubscribedEvents()
     {
-        return [\Yet\AnotherClass::CONSTANT => 'compile'];
+        return [
+            \Yet\AnotherClass::CONSTANT => 'compile',
+            \Yet\AnotherClass::class => 'compile'
+        ];
     }
 }
 

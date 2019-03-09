@@ -1,0 +1,4 @@
+# see: https://laravel.com/docs/5.1/upgrade
+services:
+    Rector\Rector\Class_\RenameClassRector:
+        Illuminate\Validation\Validator: 'Illuminate\Contracts\Validation\Validator'

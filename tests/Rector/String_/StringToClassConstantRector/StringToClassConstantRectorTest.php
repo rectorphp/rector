@@ -24,6 +24,7 @@ final class StringToClassConstantRectorTest extends AbstractRectorTestCase
     {
         return [
             'compiler.post_dump' => ['Yet\AnotherClass', 'CONSTANT'],
+            'compiler.to_class' => ['Yet\AnotherClass', 'class'],
         ];
     }
 }
