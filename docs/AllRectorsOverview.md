@@ -3884,15 +3884,15 @@ services:
 
 <br>
 
-### `NamespaceReplacerRector`
+### `RenameNamespaceRector`
 
-- class: `Rector\Rector\Namespace_\NamespaceReplacerRector`
+- class: `Rector\Rector\Namespace_\RenameNamespaceRector`
 
 Replaces old namespace by new one.
 
 ```yaml
 services:
-    Rector\Rector\Namespace_\NamespaceReplacerRector:
+    Rector\Rector\Namespace_\RenameNamespaceRector:
         $oldToNewNamespaces:
             SomeOldNamespace: SomeNewNamespace
 ```

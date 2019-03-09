@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Namespace_\NamespaceReplacerRector;
+namespace Rector\Tests\Rector\Namespace_\RenameNamespaceRector;
 
-use Rector\Rector\Namespace_\NamespaceReplacerRector;
+use Rector\Rector\Namespace_\RenameNamespaceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class NamespaceReplacerRectorTest extends AbstractRectorTestCase
+final class RenameNamespaceRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -20,7 +20,7 @@ final class NamespaceReplacerRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return NamespaceReplacerRector::class;
+        return RenameNamespaceRector::class;
     }
 
     /**

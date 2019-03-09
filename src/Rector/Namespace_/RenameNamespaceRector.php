@@ -14,7 +14,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class NamespaceReplacerRector extends AbstractRector
+final class RenameNamespaceRector extends AbstractRector
 {
     /**
      * @var string[]
