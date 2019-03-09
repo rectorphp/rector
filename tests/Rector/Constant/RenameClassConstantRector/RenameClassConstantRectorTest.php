@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Constant\ClassConstantReplacerRector;
+namespace Rector\Tests\Rector\Constant\RenameClassConstantRector;
 
-use Rector\Rector\Constant\ClassConstantReplacerRector;
+use Rector\Rector\Constant\RenameClassConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Constant\ClassConstantReplacerRector\Source\DifferentClass;
-use Rector\Tests\Rector\Constant\ClassConstantReplacerRector\Source\LocalFormEvents;
+use Rector\Tests\Rector\Constant\RenameClassConstantRector\Source\DifferentClass;
+use Rector\Tests\Rector\Constant\RenameClassConstantRector\Source\LocalFormEvents;
 
-final class ClassConstantReplacerRectorTest extends AbstractRectorTestCase
+final class RenameClassConstantRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -16,7 +16,7 @@ final class ClassConstantReplacerRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return ClassConstantReplacerRector::class;
+        return RenameClassConstantRector::class;
     }
 
     /**

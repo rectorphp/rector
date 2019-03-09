@@ -2,7 +2,7 @@
 
 namespace SomeNamespace;
 
-use Rector\Tests\Rector\Constant\ClassConstantReplacerRector\Source\LocalFormEvents;
+use Rector\Tests\Rector\Constant\RenameClassConstantRector\Source\LocalFormEvents;
 
 class SomeClass
 {
@@ -22,7 +22,7 @@ class SomeClass
 
 namespace SomeNamespace;
 
-use Rector\Tests\Rector\Constant\ClassConstantReplacerRector\Source\LocalFormEvents;
+use Rector\Tests\Rector\Constant\RenameClassConstantRector\Source\LocalFormEvents;
 
 class SomeClass
 {
@@ -31,7 +31,7 @@ class SomeClass
         return [
             LocalFormEvents::PRE_SUBMIT,
             LocalFormEvents::PRE_SUBMIT,
-            \Rector\Tests\Rector\Constant\ClassConstantReplacerRector\Source\DifferentClass::NEW_CONSTANT,
+            \Rector\Tests\Rector\Constant\RenameClassConstantRector\Source\DifferentClass::NEW_CONSTANT,
         ];
     }
 }

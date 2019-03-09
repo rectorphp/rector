@@ -11,7 +11,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class ClassConstantReplacerRector extends AbstractRector
+final class RenameClassConstantRector extends AbstractRector
 {
     /**
      * class => [
