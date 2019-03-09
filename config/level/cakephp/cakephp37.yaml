@@ -1,7 +1,7 @@
 # source: https://book.cakephp.org/3.next/en/appendices/3-7-migration-guide.html
 
 services:
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         Cake\Form\Form:
             'errors': 'getErrors'
         Cake\Validation\Validation:

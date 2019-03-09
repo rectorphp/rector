@@ -38,7 +38,7 @@ services:
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\ConfigCachePass': 'Symfony\Component\Config\DependencyInjection\ConfigCachePass'
         'Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\PropertyInfoPass': 'Symfony\Component\PropertyInfo\DependencyInjection\PropertyInfoPass'
 
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         # dependency-injection
         Symfony\Component\DependencyInjection\Container:
             isFrozen: 'isCompiled'

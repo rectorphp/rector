@@ -25,7 +25,7 @@ services:
         # Nette\Application\IResponse-> Symfony\Component\HttpFoundation\Response
         Nette\Application\IResponse: Symfony\Component\HttpFoundation\Response
 
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         # IPresenter::run() -> IPresenter->__invoke
         Nette\Application\IPresenter:
             run: __invoke

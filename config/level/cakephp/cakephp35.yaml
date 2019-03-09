@@ -5,7 +5,7 @@ services:
         Cake\Http\Client\CookieCollection: 'Cake\Http\Cookie\CookieCollection'
         Cake\Console\ShellDispatcher: 'Cake\Console\CommandRunner'
 
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         Cake\Database\Schema\TableSchema:
             column: 'getColumn'
             constraint: 'getConstraint'

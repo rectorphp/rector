@@ -21,7 +21,7 @@ services:
             'ROUND_HALFUP': 'ROUND_HALF_UP'
             'ROUND_HALFDOWN': 'ROUND_HALF_DOWN'
 
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         # class loader
         'Symfony\Component\ClassLoader\UniversalClassLoader\UniversalClassLoader':
               'registerNamespaces': 'addPrefixes'

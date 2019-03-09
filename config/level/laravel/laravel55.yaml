@@ -1,6 +1,6 @@
 # see: https://laravel.com/docs/5.5/upgrade
 services:
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         Illuminate\Console\Command:
             fire: 'handle'
 

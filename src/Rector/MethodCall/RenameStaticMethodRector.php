@@ -10,7 +10,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class StaticMethodNameReplacerRector extends AbstractRector
+final class RenameStaticMethodRector extends AbstractRector
 {
     /**
      * @var string[][]|string[][][]

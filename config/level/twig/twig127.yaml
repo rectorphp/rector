@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
          'Twig_Node':
              'getLine': 'getTemplateLine'
              'getFilename': 'getTemplateName'

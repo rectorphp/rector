@@ -65,7 +65,7 @@ services:
                     # $context
                     default_value: []
 
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         Symfony\Component\Cache\CacheItem:
             getPreviousTags: 'getMetadata'
         Symfony\Component\Form\AbstractTypeExtension:

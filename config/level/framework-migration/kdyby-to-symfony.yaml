@@ -3,7 +3,7 @@ services:
         Kdyby\Events\Subscriber:
             getSubscribedEvents: 'static'
 
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         # Kdyby → Symfony
         Kdyby\Translation\Translator:
             translate: 'trans'

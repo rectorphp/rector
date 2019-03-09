@@ -11,7 +11,7 @@ services:
     # handles 2nd and 3rd argument of setExpectedException
     Rector\PHPUnit\Rector\DelegateExceptionArgumentsRector: ~
 
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         'PHPUnit\Framework\TestClass':
             'setExpectedException': 'expectedException'
             'setExpectedExceptionRegExp': 'expectedException'

@@ -186,7 +186,7 @@ services:
                 set: 'enableAutoLayout'
                 get: 'isAutoLayoutEnabled'
 
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         Cake\Network\Request:
             param: 'getParam'
             data: 'getData'
@@ -246,7 +246,7 @@ services:
     Rector\Rector\MethodBody\NormalToFluentRector:
         Cake\Network\Response:
             # https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html#adopting-immutable-responses
-            # renames are done by MethodNameReplacerRector above
+            # renames are done by RenameMethodRector above
             - 'withLocation'
             - 'withHeader'
             - 'withLocation'

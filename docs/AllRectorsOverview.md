@@ -3480,15 +3480,15 @@ services:
 
 <br>
 
-### `MethodNameReplacerRector`
+### `RenameMethodRector`
 
-- class: `Rector\Rector\MethodCall\MethodNameReplacerRector`
+- class: `Rector\Rector\MethodCall\RenameMethodRector`
 
 Turns method names to new ones.
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\MethodNameReplacerRector:
+    Rector\Rector\MethodCall\RenameMethodRector:
         SomeExampleClass:
             oldMethod: newMethod
 ```
@@ -3503,15 +3503,15 @@ services:
 
 <br>
 
-### `StaticMethodNameReplacerRector`
+### `StaticRenameMethodRector`
 
-- class: `Rector\Rector\MethodCall\StaticMethodNameReplacerRector`
+- class: `Rector\Rector\MethodCall\StaticRenameMethodRector`
 
 Turns method names to new ones.
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\StaticMethodNameReplacerRector:
+    Rector\Rector\MethodCall\StaticRenameMethodRector:
         SomeClass:
             oldMethod:
                 - AnotherExampleClass
@@ -3527,7 +3527,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\StaticMethodNameReplacerRector:
+    Rector\Rector\MethodCall\StaticRenameMethodRector:
         $oldToNewMethodByClasses:
             SomeClass:
                 oldMethod: newStaticMethod
