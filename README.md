@@ -21,6 +21,8 @@ Rector **instantly upgrades and instantly refactors PHP code of your application
     <img src="/docs/images/space.png" width=20>
     <a href="/config/level/symfony"><img src="/docs/images/symfony.png"></a>
     <img src="/docs/images/space.png" width=20>
+    <a href="/config/level/symfony"><img src="/docs/images/easy-admin.png"></a>
+    <img src="/docs/images/space.png" width=20>
     <a href="/config/level/sylius"><img src="/docs/images/sylius.png"></a>
     <img src="/docs/images/space.png" width=20>
     <a href="/config/level/phpunit"><img src="/docs/images/phpunit.jpg"></a>
