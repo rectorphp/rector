@@ -1,0 +1,23 @@
+# see: https://laravel.com/docs/5.2/upgrade
+services:
+    Rector\Rector\Class_\RenameClassRector:
+        Illuminate\Auth\Access\UnauthorizedException: 'Illuminate\Auth\Access\AuthorizationException'
+        Illuminate\Http\Exception\HttpResponseException: 'Illuminate\Foundation\Validation\ValidationException'
+        Illuminate\Foundation\Composer: 'Illuminate\Support\Composer'
+
+    Rector\Rector\String_\StringToClassConstantRector:
+        artisan.start: ['Illuminate\Console\Events\ArtisanStarting', 'class']
+        auth.attempting: ['Illuminate\Auth\Events\Attempting', 'class']
+        auth.login: ['Illuminate\Auth\Events\Login', 'class']
+        auth.logout: ['Illuminate\Auth\Events\Logout', 'class']
+        cache.missed: ['Illuminate\Cache\Events\CacheMissed', 'class']
+        cache.hit: ['Illuminate\Cache\Events\CacheHit', 'class']
+        cache.write: ['Illuminate\Cache\Events\KeyWritten', 'class']
+        cache.delete: ['Illuminate\Cache\Events\KeyForgotten', 'class']
+        illuminate.query: ['Illuminate\Database\Events\QueryExecuted', 'class']
+        illuminate.queue.before: ['Illuminate\Queue\Events\JobProcessing', 'class']
+        illuminate.queue.after: ['Illuminate\Queue\Events\JobProcessed', 'class']
+        illuminate.queue.failed: ['Illuminate\Queue\Events\JobFailed', 'class']
+        illuminate.queue.stopping: ['Illuminate\Queue\Events\WorkerStopping', 'class']
+        mailer.sending: ['Illuminate\Mail\Events\MessageSending', 'class']
+        router.matched: ['Illuminate\Routing\Events\RouteMatched', 'class']

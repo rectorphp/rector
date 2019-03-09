@@ -1,0 +1,16 @@
+# see: https://laravel.com/docs/5.0/upgrade
+services:
+    Rector\Rector\Class_\RenameClassRector:
+        Illuminate\Cache\CacheManager: 'Illuminate\Contracts\Cache\Repository'
+        # https://stackoverflow.com/a/24949656/1348344
+        Illuminate\Database\Eloquent\SoftDeletingTrait: 'Illuminate\Database\Eloquent\SoftDeletes'
+
+    Rector\Rector\MethodCall\RenameMethodRector:
+        Illuminate\Contracts\Pagination\Paginator:
+            links: 'render'
+            getFrom: 'firstItem'
+            getTo: 'lastItem'
+            getPerPage: 'perPage'
+            getCurrentPage: 'currentPage'
+            getLastPage: 'lastPage'
+            getTotal: 'total'
