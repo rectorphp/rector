@@ -3,14 +3,12 @@
 namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Return_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -93,28 +91,6 @@ final class ClassMethodManipulator
             if (method_exists($implementedInterface, $method)) {
                 return true;
             }
-        }
-
-        return false;
-    }
-
-    public function hasReturnArrayOfArrays(ClassMethod $classMethod): bool
-    {
-        $statements = $classMethod->stmts;
-        if (! $statements) {
-            return false;
-        }
-
-        foreach ($statements as $statement) {
-            if (! $statement instanceof Return_) {
-                continue;
-            }
-
-            if (! $statement->expr instanceof Array_) {
-                return false;
-            }
-
-            return $this->isArrayOfArrays($statement->expr);
         }
 
         return false;
@@ -223,21 +199,6 @@ final class ClassMethodManipulator
         }
 
         return false;
-    }
-
-    private function isArrayOfArrays(Node $node): bool
-    {
-        if (! $node instanceof Array_) {
-            return false;
-        }
-
-        foreach ($node->items as $arrayItem) {
-            if (! $arrayItem->value instanceof Array_) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**

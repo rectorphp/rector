@@ -139,3 +139,5 @@ parameters:
         - '#Call to an undefined method PHPStan\\PhpDocParser\\Ast\\PhpDoc\\(.*?)\:\:getAttribute\(\)#'
         - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$type#'
         - '#Parameter \#1 \$children of class PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocNode constructor expects array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode\>, array<int, PHPStan\\PhpDocParser\\Ast\\Node\> given#'
+        # false positive
+        - '#If condition is always false#'

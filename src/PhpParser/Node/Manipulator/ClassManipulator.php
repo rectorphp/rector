@@ -3,13 +3,16 @@
 namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TraitUse;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\NodeFactory;
@@ -142,27 +145,13 @@ final class ClassManipulator
     }
 
     /**
-     * @return ClassMethod[]
+     * @param Class_|Trait_ $classLike
+     * @return Name[]
      */
-    public function getMethodsByName(Class_ $classNode): array
-    {
-        $methodsByName = [];
-        foreach ($classNode->stmts as $stmt) {
-            if ($stmt instanceof ClassMethod) {
-                $methodsByName[(string) $stmt->name] = $stmt;
-            }
-        }
-
-        return $methodsByName;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getUsedTraits(Class_ $classNode): array
+    public function getUsedTraits(ClassLike $classLike): array
     {
         $usedTraits = [];
-        foreach ($classNode->stmts as $stmt) {
+        foreach ($classLike->stmts as $stmt) {
             if (! $stmt instanceof TraitUse) {
                 continue;
             }
@@ -170,7 +159,7 @@ final class ClassManipulator
             foreach ($stmt->traits as $trait) {
                 $traitName = $this->nameResolver->resolve($trait);
                 if ($traitName !== null) {
-                    $usedTraits[] = $traitName;
+                    $usedTraits[$traitName] = $trait;
                 }
             }
         }

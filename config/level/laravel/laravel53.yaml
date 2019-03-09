@@ -1,0 +1,4 @@
+# see https://laravel.com/docs/5.3/upgrade
+services:
+    Rector\Rector\ClassLike\RemoveTraitRector:
+        - 'Illuminate\Foundation\Auth\Access\AuthorizesResources'

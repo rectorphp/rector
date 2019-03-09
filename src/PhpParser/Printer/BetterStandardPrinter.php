@@ -9,8 +9,10 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\Attribute;
 
@@ -169,5 +171,29 @@ final class BetterStandardPrinter extends Standard
             . ($classMethod->stmts !== null ? $this->nl . '{' . $this->pStmts(
                 $classMethod->stmts
             ) . $this->nl . '}' : ';');
+    }
+
+    /**
+     * Clean class and trait from empty "use x;" for traits causing invalid code
+     */
+    protected function pStmt_Class(Class_ $class): string
+    {
+        $shouldReindex = false;
+
+        foreach ($class->stmts as $key => $stmt) {
+            if ($stmt instanceof TraitUse) {
+                // remove empty ones
+                if (count($stmt->traits) === 0) {
+                    unset($class->stmts[$key]);
+                    $shouldReindex = true;
+                }
+            }
+        }
+
+        if ($shouldReindex) {
+            $class->stmts = array_values($class->stmts);
+        }
+
+        return parent::pStmt_Class($class);
     }
 }
