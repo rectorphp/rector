@@ -12,7 +12,7 @@ use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class AnnotationReplacerRector extends AbstractPHPUnitRector
+final class RenameAnnotationRector extends AbstractPHPUnitRector
 {
     /**
      * @var string[][]

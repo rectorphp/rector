@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Annotation\AnnotationReplacerRector;
+namespace Rector\Tests\Rector\Annotation\RenameAnnotationRector;
 
-use Rector\Rector\Annotation\AnnotationReplacerRector;
+use Rector\Rector\Annotation\RenameAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ScenarioToTestAnnotationRectorTest extends AbstractRectorTestCase
+final class RenameAnnotationRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -14,7 +14,7 @@ final class ScenarioToTestAnnotationRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return AnnotationReplacerRector::class;
+        return RenameAnnotationRector::class;
     }
 
     /**

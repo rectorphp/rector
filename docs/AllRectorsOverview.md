@@ -4431,15 +4431,15 @@ services:
 
 <br>
 
-### `AnnotationReplacerRector`
+### `RenameAnnotationRector`
 
-- class: `Rector\Rector\Annotation\AnnotationReplacerRector`
+- class: `Rector\Rector\Annotation\RenameAnnotationRector`
 
 Turns defined annotations above properties and methods to their new values.
 
 ```yaml
 services:
-    Rector\Rector\Annotation\AnnotationReplacerRector:
+    Rector\Rector\Annotation\RenameAnnotationRector:
         PHPUnit\Framework\TestCase:
             test: scenario
 ```

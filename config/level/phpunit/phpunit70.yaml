@@ -1,4 +1,4 @@
 services:
-    Rector\Rector\Annotation\AnnotationReplacerRector:
+    Rector\Rector\Annotation\RenameAnnotationRector:
         PHPUnit\Framework\TestCase:
             scenario: 'test'
