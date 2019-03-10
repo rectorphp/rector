@@ -25,9 +25,9 @@ final class RequestStaticValidateToInjectRector extends AbstractRector
     private $classMethodManipulator;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $requestClass = 'Illuminate\Http\Request';
+    private $requestTypes = ['Illuminate\Http\Request', 'Request'];
 
     public function __construct(ClassMethodManipulator $classMethodManipulator)
     {
@@ -84,13 +84,13 @@ CODE_SAMPLE
 
         $requestName = $this->classMethodManipulator->addMethodParameterIfMissing(
             $node,
-            $this->requestClass,
+            'Illuminate\Http\Request',
             ['request', 'httpRequest']
         );
 
         $variable = new Variable($requestName);
 
-        $methodName = $node->name;
+        $methodName = $this->getName($node->name);
         if ($node instanceof FuncCall) {
             if (count($node->args) === 0) {
                 return $variable;
@@ -108,7 +108,7 @@ CODE_SAMPLE
     private function shouldSkip(Node $node): bool
     {
         if ($node instanceof StaticCall) {
-            return ! $this->isType($node, $this->requestClass);
+            return ! $this->isTypes($node, $this->requestTypes);
         }
 
         if ($node instanceof FuncCall) {
