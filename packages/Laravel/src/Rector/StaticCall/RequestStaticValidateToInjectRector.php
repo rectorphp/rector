@@ -3,9 +3,12 @@
 namespace Rector\Laravel\Rector\StaticCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -22,9 +25,9 @@ final class RequestStaticValidateToInjectRector extends AbstractRector
     private $classMethodManipulator;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $requestClass = 'Illuminate\Http\Request';
+    private $requestTypes = ['Illuminate\Http\Request', 'Request'];
 
     public function __construct(ClassMethodManipulator $classMethodManipulator)
     {
@@ -67,30 +70,56 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [StaticCall::class];
+        return [StaticCall::class, FuncCall::class];
     }
 
     /**
-     * @param StaticCall $node
+     * @param StaticCall|FuncCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->requestClass)) {
-            return null;
-        }
-
-        if (! $this->isName($node, 'validate')) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
         $requestName = $this->classMethodManipulator->addMethodParameterIfMissing(
             $node,
-            $this->requestClass,
+            'Illuminate\Http\Request',
             ['request', 'httpRequest']
         );
 
         $variable = new Variable($requestName);
 
-        return new MethodCall($variable, $node->name, $node->args);
+        $methodName = $this->getName($node->name);
+        if ($node instanceof FuncCall) {
+            if (count($node->args) === 0) {
+                return $variable;
+            }
+
+            $methodName = 'input';
+        }
+
+        return new MethodCall($variable, $methodName, $node->args);
+    }
+
+    /**
+     * @param StaticCall|FuncCall $node
+     */
+    private function shouldSkip(Node $node): bool
+    {
+        if ($node instanceof StaticCall) {
+            return ! $this->isTypes($node, $this->requestTypes);
+        }
+
+        if ($node instanceof FuncCall) {
+            $class = $node->getAttribute(Attribute::CLASS_NODE);
+            if (! $class instanceof Class_) {
+                return true;
+            }
+
+            return ! $this->isName($node, 'request');
+        }
+
+        return true;
     }
 }
