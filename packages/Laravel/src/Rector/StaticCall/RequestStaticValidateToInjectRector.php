@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
@@ -91,6 +92,10 @@ CODE_SAMPLE
         $variable = new Variable($requestName);
 
         $methodName = $this->getName($node->name);
+        if ($methodName === null) {
+            return null;
+        }
+
         if ($node instanceof FuncCall) {
             if (count($node->args) === 0) {
                 return $variable;
@@ -99,7 +104,7 @@ CODE_SAMPLE
             $methodName = 'input';
         }
 
-        return new MethodCall($variable, $methodName, $node->args);
+        return new MethodCall($variable, new Identifier($methodName), $node->args);
     }
 
     /**
