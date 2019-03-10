@@ -4,14 +4,15 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\NodeScopeResolver as PHPStanNodeScopeResolver;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
-use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
@@ -94,20 +95,26 @@ final class NodeScopeResolver
      */
     private function resolveClassOrInterfaceNode(Node $classOrInterfaceNode, Scope $scope): Scope
     {
+        $className = $this->resolveClassName($classOrInterfaceNode);
+
+        $classReflection = $this->broker->getClass($className);
+
+        return $scope->enterClass($classReflection);
+    }
+
+    /**
+     * @param Class_|Interface_ $classOrInterfaceNode
+     */
+    private function resolveClassName(ClassLike $classOrInterfaceNode): string
+    {
         if (isset($classOrInterfaceNode->namespacedName)) {
-            return $scope->enterClass($this->broker->getClass((string) $classOrInterfaceNode->namespacedName));
+            return (string) $classOrInterfaceNode->namespacedName;
         }
 
-        // possibly anonymous class
-        $anonymousClassReflection = (new PrivatesAccessor())->getPrivateProperty(
-            $this->phpStanNodeScopeResolver,
-            'anonymousClassReflection'
-        );
-
-        if ($anonymousClassReflection) {
-            return $scope->enterAnonymousClass($anonymousClassReflection);
+        if ($classOrInterfaceNode->name === null) {
+            throw new ShouldNotHappenException();
         }
 
-        return $scope;
+        return $classOrInterfaceNode->name->toString();
     }
 }

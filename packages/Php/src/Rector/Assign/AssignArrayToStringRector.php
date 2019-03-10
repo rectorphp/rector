@@ -15,6 +15,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
@@ -26,8 +27,6 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * This depends on the context. We need more real app datas.
- *
  * @see https://3v4l.org/ABDNv
  * @see https://stackoverflow.com/a/41000866/1348344
  */
@@ -139,7 +138,7 @@ CODE_SAMPLE
     private function processProperty(Node $propertyNode): bool
     {
         foreach ($this->emptyStringPropertyNodes as $emptyStringPropertyNode) {
-            if ($this->getName($emptyStringPropertyNode) === $this->getName($propertyNode)) {
+            if ($this->areNamesEqual($emptyStringPropertyNode, $propertyNode)) {
                 $emptyStringPropertyNode->default = new Array_();
 
                 return true;
@@ -187,6 +186,10 @@ CODE_SAMPLE
 
     private function shouldSkipVariable(?Type $staticType): bool
     {
+        if ($staticType instanceof ErrorType) {
+            return false;
+        }
+
         if ($staticType instanceof UnionType) {
             return ! ($staticType->isSuperTypeOf(new ArrayType(new MixedType(), new MixedType()))->yes() &&
                 $staticType->isSuperTypeOf(new ConstantStringType(''))->yes());

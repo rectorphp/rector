@@ -78,7 +78,7 @@ CODE_SAMPLE
             unset($node->stmts[$key]);
         }
 
-        $node->stmts = array_merge($node->stmts, $proccesed);
+        $node->stmts = array_merge($node->stmts, (array) $proccesed);
 
         return $node;
     }
