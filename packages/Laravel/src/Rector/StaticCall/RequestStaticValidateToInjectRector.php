@@ -3,9 +3,12 @@
 namespace Rector\Laravel\Rector\StaticCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -67,19 +70,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [StaticCall::class];
+        return [StaticCall::class, FuncCall::class];
     }
 
     /**
-     * @param StaticCall $node
+     * @param StaticCall|FuncCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->requestClass)) {
-            return null;
-        }
-
-        if (! $this->isName($node, 'validate')) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -91,6 +90,31 @@ CODE_SAMPLE
 
         $variable = new Variable($requestName);
 
+        if ($node instanceof FuncCall) {
+            return $variable;
+        }
+
         return new MethodCall($variable, $node->name, $node->args);
+    }
+
+    /**
+     * @param StaticCall|FuncCall $node
+     */
+    private function shouldSkip(Node $node): bool
+    {
+        if ($node instanceof StaticCall) {
+            return ! $this->isType($node, $this->requestClass);
+        }
+
+        if ($node instanceof FuncCall) {
+            $class = $node->getAttribute(Attribute::CLASS_NODE);
+            if (! $class instanceof Class_) {
+                return true;
+            }
+
+            return ! $this->isName($node, 'request');
+        }
+
+        return true;
     }
 }
