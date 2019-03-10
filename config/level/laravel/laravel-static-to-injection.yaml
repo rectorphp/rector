@@ -8,3 +8,5 @@ services:
 
     Rector\Rector\FuncCall\FunctionToNewRector:
         collect: 'Illuminate\Support\Collection'
+
+    Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector: ~
