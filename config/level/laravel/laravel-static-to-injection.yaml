@@ -5,6 +5,7 @@ imports:
 services:
     Rector\Laravel\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector: ~
     Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector: ~
+    Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector: ~
 
     Rector\Rector\FuncCall\FunctionToNewRector:
         collect: 'Illuminate\Support\Collection'
