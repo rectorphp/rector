@@ -90,11 +90,16 @@ CODE_SAMPLE
 
         $variable = new Variable($requestName);
 
+        $methodName = $node->name;
         if ($node instanceof FuncCall) {
-            return $variable;
+            if (count($node->args) === 0) {
+                return $variable;
+            }
+
+            $methodName = 'input';
         }
 
-        return new MethodCall($variable, $node->name, $node->args);
+        return new MethodCall($variable, $methodName, $node->args);
     }
 
     /**
