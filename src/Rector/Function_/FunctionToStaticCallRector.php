@@ -5,7 +5,6 @@ namespace Rector\Rector\Function_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -19,11 +18,11 @@ final class FunctionToStaticCallRector extends AbstractRector
     private $functionToStaticCall = [];
 
     /**
-     * @param string[] $functionToMethodCall
+     * @param string[] $functionToStaticCall
      */
-    public function __construct(array $functionToMethodCall)
+    public function __construct(array $functionToStaticCall)
     {
-        $this->functionToStaticCall = $functionToMethodCall;
+        $this->functionToStaticCall = $functionToStaticCall;
     }
 
     public function getDefinition(): RectorDefinition
@@ -52,18 +51,16 @@ final class FunctionToStaticCallRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        // anonymous function
-        if (! $node->name instanceof Name) {
-            return null;
+        foreach ($this->functionToStaticCall as $function => $staticCall) {
+            if (! $this->isName($node, $function)) {
+                continue;
+            }
+
+            [$className, $methodName] = $staticCall;
+
+            return new StaticCall(new FullyQualified($className), $methodName, $node->args);
         }
 
-        $functionName = $this->getName($node);
-        if (! isset($this->functionToStaticCall[$functionName])) {
-            return null;
-        }
-
-        [$className, $methodName] = $this->functionToStaticCall[$functionName];
-
-        return new StaticCall(new FullyQualified($className), $methodName, $node->args);
+        return null;
     }
 }
