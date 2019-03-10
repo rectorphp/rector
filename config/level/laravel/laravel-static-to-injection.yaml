@@ -10,3 +10,28 @@ services:
         collect: 'Illuminate\Support\Collection'
 
     Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector: ~
+
+    # from https://github.com/laravel/framework/blob/5.8/src/Illuminate/Support/helpers.php to direct static calls
+    Rector\Rector\Function_\FunctionToStaticCallRector:
+        array_add: ['Illuminate\Support\Arr', 'add']
+        array_collapse: ['Illuminate\Support\Arr', 'collapse']
+        array_divide: ['Illuminate\Support\Arr', 'divide']
+        array_dot: ['Illuminate\Support\Arr', 'dot']
+        array_except: ['Illuminate\Support\Arr', 'except']
+        array_first: ['Illuminate\Support\Arr', 'first']
+        array_flatten: ['Illuminate\Support\Arr', 'flatten']
+        array_forget: ['Illuminate\Support\Arr', 'forget']
+        array_get: ['Illuminate\Support\Arr', 'get']
+        array_has: ['Illuminate\Support\Arr', 'has']
+        array_last: ['Illuminate\Support\Arr', 'last']
+        array_only: ['Illuminate\Support\Arr', 'only']
+        array_pluck: ['Illuminate\Support\Arr', 'pluck']
+        array_prepend: ['Illuminate\Support\Arr', 'prepend']
+        array_pull: ['Illuminate\Support\Arr', 'pull']
+        array_random: ['Illuminate\Support\Arr', 'random']
+        array_set: ['Illuminate\Support\Arr', 'set']
+        array_sort: ['Illuminate\Support\Arr', 'sort']
+        array_where: ['Illuminate\Support\Arr', 'where']
+        array_sort_recursive: ['Illuminate\Support\Arr', 'sortRecursive']
+        camel_case: ['Illuminate\Support\Arr', 'camel']
+    Rector\Laravel\Rector\FuncCall\HelperFunctionToStaticCallRector: ~
