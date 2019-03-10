@@ -9,7 +9,7 @@ final class RequestStaticValidateToInjectRectorTest extends AbstractRectorTestCa
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/function.php.inc']);
     }
 
     protected function getRectorClass(): string
