@@ -28,3 +28,4 @@ services:
     Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector: ~
     Rector\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector: ~
     Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector: ~
+    Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector: ~
