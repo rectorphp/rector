@@ -6,7 +6,7 @@ class SomeClass
 {
     public function run($value)
     {
-        preg_match('#[a-zA-Z0-9+]#', $value);
+        preg_match('#[0-9]#', $value);
     }
 }
 
@@ -20,7 +20,7 @@ class SomeClass
 {
     public function run($value)
     {
-        preg_match('#[\w\d+]#', $value);
+        preg_match('#\d#', $value);
     }
 }
 

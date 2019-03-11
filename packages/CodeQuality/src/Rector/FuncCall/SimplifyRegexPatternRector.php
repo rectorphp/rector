@@ -2,9 +2,11 @@
 
 namespace Rector\CodeQuality\Rector\FuncCall;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Php\Regex\RegexPatternArgumentManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -14,6 +16,25 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class SimplifyRegexPatternRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private $complexPatternToSimple = [
+        '[0-9]' => '\d',
+        '[a-zA-Z0-9_]' => '\w',
+        '[\r\n\t\f\v ]' => '\s',
+    ];
+
+    /**
+     * @var RegexPatternArgumentManipulator
+     */
+    private $regexPatternArgumentManipulator;
+
+    public function __construct(RegexPatternArgumentManipulator $regexPatternArgumentManipulator)
+    {
+        $this->regexPatternArgumentManipulator = $regexPatternArgumentManipulator;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Simplify regex pattern to known ranges', [
@@ -54,22 +75,14 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // @todo detect "is regex wrapper" - func arg, Strings::match() etc.
-        if (! $this->isName($node, 'preg_match')) {
-            return null;
-        }
-
-        // only string patterns
-        $pattern = $node->args[0]->value;
+        $pattern = $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern($node);
         if (! $pattern instanceof String_) {
             return null;
         }
 
-        // @todo simplify
-        dump($pattern->value);
-        die;
-
-        // change the node
+        foreach ($this->complexPatternToSimple as $complexPattern => $simple) {
+            $pattern->value = Strings::replace($pattern->value, '#' . preg_quote($complexPattern) . '#', $simple);
+        }
 
         return $node;
     }

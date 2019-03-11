@@ -13,6 +13,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\Php\Regex\RegexPatternArgumentManipulator;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -63,9 +65,19 @@ final class RegexDashEscapeRector extends AbstractRector
      */
     private $constantNodeCollector;
 
-    public function __construct(ConstantNodeCollector $constantNodeCollector)
-    {
+    /**
+     * @var RegexPatternArgumentManipulator
+     */
+    private $regexPatternArgumentManipulator;
+
+    public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        ConstantNodeCollector $constantNodeCollector,
+        RegexPatternArgumentManipulator $regexPatternArgumentManipulator
+    ) {
+        $this->betterNodeFinder = $betterNodeFinder;
         $this->constantNodeCollector = $constantNodeCollector;
+        $this->regexPatternArgumentManipulator = $regexPatternArgumentManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -96,56 +108,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof FuncCall) {
-            $this->processFuncCall($node);
+        $regexArgument = $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern($node);
+        if ($regexArgument === null) {
+            return null;
         }
 
-        if ($node instanceof StaticCall) {
-            $this->processStaticCall($node);
+        if (! $this->isStringyType($regexArgument)) {
+            return null;
         }
+
+        $this->escapeDashInPattern($regexArgument);
 
         return $node;
-    }
-
-    private function processFuncCall(FuncCall $funcCall): void
-    {
-        foreach ($this->functionsWithPatternsToArgumentPosition as $functionName => $argumentPosition) {
-            if (! $this->isName($funcCall, $functionName)) {
-                return;
-            }
-
-            $this->processArgumentPosition($funcCall, $argumentPosition);
-        }
-    }
-
-    private function processStaticCall(StaticCall $staticCall): void
-    {
-        foreach ($this->staticMethodsWithPatternsToArgumentPosition as $type => $methodNamesToArgumentPosition) {
-            if (! $this->isType($staticCall, $type)) {
-                continue;
-            }
-
-            foreach ($methodNamesToArgumentPosition as $methodName => $argumentPosition) {
-                if (! $this->isName($staticCall, $methodName)) {
-                    continue;
-                }
-
-                $this->processArgumentPosition($staticCall, $argumentPosition);
-            }
-        }
-    }
-
-    /**
-     * @param StaticCall|FuncCall $node
-     */
-    private function processArgumentPosition(Node $node, int $argumentPosition): void
-    {
-        $valueNode = $node->args[$argumentPosition]->value;
-        if (! $this->isStringyType($valueNode)) {
-            return;
-        }
-
-        $this->escapeDashInPattern($valueNode);
     }
 
     private function escapeDashInPattern(Expr $expr): void
