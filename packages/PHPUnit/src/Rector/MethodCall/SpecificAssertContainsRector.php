@@ -40,8 +40,6 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertContains('foo', 'foo bar');
         $this->assertNotContains('foo', 'foo bar');
-        $this->assertContains('foo', ['foo', 'bar']);
-        $this->assertNotContains('foo', ['foo', 'bar']);
     }
 }
 CODE_SAMPLE
@@ -55,8 +53,6 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertStringContains('foo', 'foo bar');
         $this->assertStringNotContains('foo', 'foo bar');
-        $this->assertIterableContains('foo', ['foo', 'bar']);
-        $this->assertIterableNotContains('foo', ['foo', 'bar']);
     }
 }
 CODE_SAMPLE
