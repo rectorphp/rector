@@ -319,7 +319,22 @@ We would be happy to merge your feature then.
 With this command, you can process your project with rector from docker:
 
 ```bash
-docker run -v $(pwd):/project rector/rector:latest process project/app --level symfony40 --dry-run
+docker run -v $(pwd):/project rector/rector:latest process project/src --level symfony40 --dry-run
 
 # Note that a volume is mounted from `pwd` into `/project` which can be accessed later.
+```
+
+Using `rector.yaml`:
+
+```bash
+docker run --rm -v $(pwd):/project -t rector process project/src --config project/rector.yaml --dry-run
+```
+
+```yaml
+parameters:
+    autoload_paths:
+        - 'project/vendor/autoload.php'
+services:
+    Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector:
+        $annotation: "inject"
 ```
