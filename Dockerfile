@@ -1,17 +1,15 @@
-FROM composer:latest AS composer
+FROM composer:1.8 AS composer
 
-COPY ./composer.json /app
+COPY composer.json composer.json
 
-RUN composer install --no-dev
+RUN composer global require hirak/prestissimo && \
+  composer install --prefer-dist --no-scripts --no-dev --no-autoloader && \
+  rm -rf /root/.composer
 
+FROM php:7.1-cli-alpine
 
-FROM php:7.1-cli
-
-WORKDIR /rector
-
-COPY . /rector
 COPY --from=composer /app .
 
-CMD ["bin/rector", "process", "/project", "--dry-run", "--config", "/project/rector.yaml"]
+COPY . .
 
-# TODO: dev with xdebug extension for local development
+ENTRYPOINT [ "bin/rector" ]
