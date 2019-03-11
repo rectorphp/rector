@@ -178,6 +178,7 @@ final class DocBlockManipulator
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
         $types = $phpDocInfo->getParamTagValues();
+
         if ($types === []) {
             return [];
         }
@@ -193,7 +194,7 @@ final class DocBlockManipulator
                 $paramTagValueNode->parameterName,
                 $this->typeAnalyzer,
                 $paramTagValueNode->getAttribute(Attribute::TYPE_AS_ARRAY),
-                $fqnParamTagValueNode->getAttribute(Attribute::TYPE_AS_ARRAY)
+                $fqnParamTagValueNode->getAttribute(Attribute::RESOLVED_NAMES)
             );
 
             $paramTypeInfos[$paramTypeInfo->getName()] = $paramTypeInfo;

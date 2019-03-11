@@ -175,16 +175,17 @@ final class NodeTypeResolver
      */
     private function resolveFirstTypes(Node $node): array
     {
+        // nodes that cannot be resolver by PHPStan
+        $nodeClass = get_class($node);
+
+        if (isset($this->perNodeTypeResolvers[$nodeClass])) {
+            return $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
+        }
+
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(Attribute::SCOPE);
         if ($nodeScope === null) {
             return [];
-        }
-
-        // nodes that cannot be resolver by PHPStan
-        $nodeClass = get_class($node);
-        if (isset($this->perNodeTypeResolvers[$nodeClass])) {
-            return $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
         }
 
         if (! $node instanceof Expr) {
@@ -212,9 +213,9 @@ final class NodeTypeResolver
         $classTypes = $this->resolve($staticCall->class);
         $methodName = $this->nameResolver->resolve($staticCall->name);
 
-        // fallback
+        // no specific method found, return class types, e.g. <ClassType>::$method()
         if (! is_string($methodName)) {
-            return $this->resolve($staticCall->class);
+            return $classTypes;
         }
 
         foreach ($classTypes as $classType) {
@@ -222,14 +223,18 @@ final class NodeTypeResolver
                 continue;
             }
 
-            /** @var Scope $nodeScope */
+            /** @var Scope|null $nodeScope */
             $nodeScope = $staticCall->getAttribute(Attribute::SCOPE);
+            if ($nodeScope === null) {
+                return $classTypes;
+            }
+
             $type = $nodeScope->getType($staticCall);
             if ($type instanceof ObjectType) {
                 return [$type->getClassName()];
             }
         }
 
-        return $this->resolve($staticCall->class);
+        return $classTypes;
     }
 }
