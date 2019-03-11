@@ -10,8 +10,6 @@ FROM php:7.1-cli-alpine
 
 COPY --from=composer /app .
 
-WORKDIR /rector
-
-COPY . /rector
+COPY . .
 
 ENTRYPOINT [ "bin/rector" ]
