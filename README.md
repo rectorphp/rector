@@ -319,5 +319,7 @@ We would be happy to merge your feature then.
 With this command, you can process your project with rector from docker:
 
 ```bash
-docker run rector/rector:latest process src --level symfony40 --dry-run
+docker run -v $(pwd):/project rector/rector:latest process project/app --level symfony40 --dry-run
+
+# Note that a volume is mounted from `pwd` into `/project` which can be accessed later.
 ```
