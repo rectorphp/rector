@@ -52,6 +52,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion('7.3')) {
+            return null;
+        }
+
         return $this->dualCheckToAble->processBooleanOr($node, 'Countable', 'is_countable') ?: $node;
     }
 }
