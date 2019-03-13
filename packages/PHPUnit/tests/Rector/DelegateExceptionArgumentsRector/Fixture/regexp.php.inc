@@ -4,7 +4,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $this->setExpectedExceptionRegExp('SomeException', 'SomREGEPX');
+        self::setExpectedExceptionRegExp('SomeException', 'SomREGEPX');
     }
 }
 
@@ -16,8 +16,8 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $this->setExpectedExceptionRegExp('SomeException');
-        $this->expectExceptionMessageRegExp('SomREGEPX');
+        self::expectException('SomeException');
+        self::expectExceptionMessageRegExp('SomREGEPX');
     }
 }
 

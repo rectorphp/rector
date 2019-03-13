@@ -10,9 +10,9 @@ final class DelegateExceptionArgumentsRectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/fixture2.php.inc',
-            __DIR__ . '/Fixture/fixture3.php.inc',
+            __DIR__ . '/Fixture/message.php.inc',
+            __DIR__ . '/Fixture/regexp.php.inc',
+            __DIR__ . '/Fixture/self_nested.php.inc',
         ]);
     }
 

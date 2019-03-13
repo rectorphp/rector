@@ -80,7 +80,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAssertMethod($node, 'assertArraySubset')) {
+        if (! $this->isPHPUnitMethodName($node, 'assertArraySubset')) {
             return null;
         }
 
@@ -101,7 +101,7 @@ CODE_SAMPLE
 
             $identical = new Identical($arrayIntersect, $expectedArray);
 
-            $assertTrue = $this->createCallWithName($node, 'assertTrue');
+            $assertTrue = $this->createPHPUnitCallWithName($node, 'assertTrue');
             $assertTrue->args[] = new Arg($identical);
 
             $this->addNodeAfterNode($assertTrue, $node);
@@ -121,7 +121,7 @@ CODE_SAMPLE
     private function addKeyAsserts(Node $node): void
     {
         foreach ($this->expectedKeys as $expectedKey) {
-            $assertArrayHasKey = $this->createCallWithName($node, 'assertArrayHasKey');
+            $assertArrayHasKey = $this->createPHPUnitCallWithName($node, 'assertArrayHasKey');
             $assertArrayHasKey->args[0] = new Arg($expectedKey);
             $assertArrayHasKey->args[1] = $node->args[1];
 
@@ -135,7 +135,7 @@ CODE_SAMPLE
     private function addValueAsserts(Node $node): void
     {
         foreach ($this->expectedValuesByKeys as $key => $expectedValue) {
-            $assertSame = $this->createCallWithName($node, 'assertSame');
+            $assertSame = $this->createPHPUnitCallWithName($node, 'assertSame');
             $assertSame->args[0] = new Arg($expectedValue);
 
             $arrayDimFetch = new ArrayDimFetch($node->args[1]->value, BuilderHelpers::normalizeValue($key));
@@ -143,15 +143,6 @@ CODE_SAMPLE
 
             $this->addNodeAfterNode($assertSame, $node);
         }
-    }
-
-    /**
-     * @param StaticCall|MethodCall $node
-     * @return StaticCall|MethodCall
-     */
-    private function createCallWithName(Node $node, string $name): Node
-    {
-        return $node instanceof MethodCall ? new MethodCall($node->var, $name) : new StaticCall($node->class, $name);
     }
 
     private function collectExpectedKeysAndValues(Array_ $expectedArray): void

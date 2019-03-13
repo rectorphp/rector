@@ -3,8 +3,8 @@
 namespace Rector\PHPUnit\Rector;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -42,46 +42,41 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
+        if (! $this->isPHPUnitMethodNames($node, array_keys($this->oldToNewMethod))) {
             return null;
         }
 
-        if (! $this->isNames($node, array_keys($this->oldToNewMethod))) {
-            return null;
+        if (isset($node->args[1])) {
+            /** @var Identifier $identifierNode */
+            $identifierNode = $node->name;
+            $oldMethodName = $identifierNode->name;
+
+            $call = $this->createPHPUnitCallWithName($node, $this->oldToNewMethod[$oldMethodName]);
+            $call->args[] = $node->args[1];
+            $this->addNodeAfterNode($call, $node);
+
+            unset($node->args[1]);
+
+            // add exception code method call
+            if (isset($node->args[2])) {
+                $call = $this->createPHPUnitCallWithName($node, 'expectExceptionCode');
+                $call->args[] = $node->args[2];
+                $this->addNodeAfterNode($call, $node);
+
+                unset($node->args[2]);
+            }
         }
 
-        if (! isset($node->args[1])) {
-            return null;
-        }
-
-        /** @var Identifier $identifierNode */
-        $identifierNode = $node->name;
-        $oldMethodName = $identifierNode->name;
-
-        $this->addNewMethodCall($node, $this->oldToNewMethod[$oldMethodName], $node->args[1]);
-        unset($node->args[1]);
-
-        // add exception code method call
-        if (isset($node->args[2])) {
-            $this->addNewMethodCall($node, 'expectExceptionCode', $node->args[2]);
-            unset($node->args[2]);
-        }
+        $node->name = new Identifier('expectException');
 
         return $node;
-    }
-
-    private function addNewMethodCall(MethodCall $methodCall, string $methodName, Arg $arg): void
-    {
-        $expectExceptionMessageMethodCall = $this->createMethodCall('this', $methodName, [$arg]);
-
-        $this->addNodeAfterNode($expectExceptionMessageMethodCall, $methodCall);
     }
 }
