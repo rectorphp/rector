@@ -141,3 +141,5 @@ parameters:
         - '#Parameter \#1 \$children of class PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocNode constructor expects array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode\>, array<int, PHPStan\\PhpDocParser\\Ast\\Node\> given#'
         # false positive
         - '#If condition is always false#'
+        - '#Call to an undefined method PHPStan\\Type\\Type\:\:getValue\(\)#'
+        - '#Method Rector\\PHPUnit\\Rector\\MethodCall\\ReplaceAssertArraySubsetRector\:\:matchArray\(\) should return PhpParser\\Node\\Expr\\Array_\|null but returns PhpParser\\Node\\Expr#'
