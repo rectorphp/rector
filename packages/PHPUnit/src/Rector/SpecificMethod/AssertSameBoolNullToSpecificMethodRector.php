@@ -5,6 +5,7 @@ namespace Rector\PHPUnit\Rector\SpecificMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -53,19 +54,15 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
-            return null;
-        }
-
-        if (! $this->isNames($node, ['assertSame', 'assertNotSame'])) {
+        if (! $this->isPHPUnitMethodNames($node, ['assertSame', 'assertNotSame'])) {
             return null;
         }
         $firstArgumentValue = $node->args[0]->value;
@@ -84,21 +81,27 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
         return $node;
     }
 
-    private function renameMethod(MethodCall $methodCall): void
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function renameMethod(Node $node): void
     {
         [$sameMethodName, $notSameMethodName] = $this->constValueToNewMethodNames[$this->constantName];
 
-        $this->identifierManipulator->renameNodeWithMap($methodCall, [
+        $this->identifierManipulator->renameNodeWithMap($node, [
             'assertSame' => $sameMethodName,
             'assertNotSame' => $notSameMethodName,
         ]);
     }
 
-    private function moveArguments(MethodCall $methodCall): void
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function moveArguments(Node $node): void
     {
-        $methodArguments = $methodCall->args;
+        $methodArguments = $node->args;
         array_shift($methodArguments);
 
-        $methodCall->args = $methodArguments;
+        $node->args = $methodArguments;
     }
 }

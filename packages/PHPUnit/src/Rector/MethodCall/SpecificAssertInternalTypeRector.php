@@ -93,11 +93,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
-            return null;
-        }
-
-        if (! $this->isNames($node, ['assertInternalType', 'assertNotInternalType'])) {
+        if (! $this->isPHPUnitMethodNames($node, ['assertInternalType', 'assertNotInternalType'])) {
             return null;
         }
 

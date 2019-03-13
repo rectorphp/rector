@@ -119,6 +119,20 @@ final class NameResolver
         return strtolower((string) $this->resolve($node)) === strtolower($name);
     }
 
+    /**
+     * @param string[] $names
+     */
+    public function isNamesInsensitive(Node $node, array $names): bool
+    {
+        foreach ($names as $name) {
+            if ($this->isNameInsensitive($node, $name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function isName(Node $node, string $name): bool
     {
         $resolvedName = $this->resolve($node);

@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use Rector\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -60,19 +61,15 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
-            return null;
-        }
-
-        if (! $this->isNames($node, array_keys($this->renameMethodsMap))) {
+        if (! $this->isPHPUnitMethodNames($node, array_keys($this->renameMethodsMap))) {
             return null;
         }
 
@@ -86,9 +83,12 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
         return $node;
     }
 
-    public function changeOrderArguments(MethodCall $methodCall): void
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    public function changeOrderArguments(Node $node): void
     {
-        $oldArguments = $methodCall->args;
+        $oldArguments = $node->args;
         /** @var Instanceof_ $comparison */
         $comparison = $oldArguments[0]->value;
 
@@ -97,7 +97,7 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0]);
 
-        $methodCall->args = array_merge([
+        $node->args = array_merge([
             new Arg($this->builderFactory->classConstFetch($class, 'class')),
             new Arg($argument),
         ], $oldArguments);

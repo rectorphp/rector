@@ -4,6 +4,7 @@ namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -64,19 +65,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
-            return null;
-        }
-
-        if (! $this->isNames($node, ['assertEquals', 'assertNotEquals'])) {
+        if (! $this->isPHPUnitMethodNames($node, ['assertEquals', 'assertNotEquals'])) {
             return null;
         }
 
@@ -98,51 +95,60 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function processAssertEqualsIgnoringCase(MethodCall $methodCall): void
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function processAssertEqualsIgnoringCase(Node $node): void
     {
-        if (isset($methodCall->args[6])) {
-            if ($this->isTrue($methodCall->args[6]->value)) {
-                $newMethodCall = new MethodCall($methodCall->var, 'assertEqualsIgnoringCase');
-                $newMethodCall->args[0] = $methodCall->args[0];
-                $newMethodCall->args[1] = $methodCall->args[1];
-                $newMethodCall->args[2] = $methodCall->args[2];
-                $this->addNodeAfterNode($newMethodCall, $methodCall);
+        if (isset($node->args[6])) {
+            if ($this->isTrue($node->args[6]->value)) {
+                $newMethodCall = $this->createPHPUnitCallWithName($node, 'assertEqualsIgnoringCase');
+                $newMethodCall->args[0] = $node->args[0];
+                $newMethodCall->args[1] = $node->args[1];
+                $newMethodCall->args[2] = $node->args[2];
+                $this->addNodeAfterNode($newMethodCall, $node);
             }
 
-            unset($methodCall->args[6]);
+            unset($node->args[6]);
         }
     }
 
-    private function processAssertEqualsCanonicalizing(MethodCall $methodCall): void
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function processAssertEqualsCanonicalizing(Node $node): void
     {
-        if (isset($methodCall->args[5])) {
+        if (isset($node->args[5])) {
             // add new node only in case of non-default value
-            if ($this->isTrue($methodCall->args[5]->value)) {
-                $newMethodCall = new MethodCall($methodCall->var, 'assertEqualsCanonicalizing');
-                $newMethodCall->args[0] = $methodCall->args[0];
-                $newMethodCall->args[1] = $methodCall->args[1];
-                $newMethodCall->args[2] = $methodCall->args[2];
-                $this->addNodeAfterNode($newMethodCall, $methodCall);
+            if ($this->isTrue($node->args[5]->value)) {
+                $newMethodCall = $this->createPHPUnitCallWithName($node, 'assertEqualsCanonicalizing');
+                $newMethodCall->args[0] = $node->args[0];
+                $newMethodCall->args[1] = $node->args[1];
+                $newMethodCall->args[2] = $node->args[2];
+                $this->addNodeAfterNode($newMethodCall, $node);
             }
 
-            unset($methodCall->args[5]);
+            unset($node->args[5]);
         }
     }
 
-    private function processAssertEqualsWithDelta(MethodCall $methodCall): void
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function processAssertEqualsWithDelta(Node $node): void
     {
-        if (isset($methodCall->args[3])) {
+        if (isset($node->args[3])) {
             // add new node only in case of non-default value
-            if ($this->getValue($methodCall->args[3]->value) !== 0.0) {
-                $newMethodCall = new MethodCall($methodCall->var, 'assertEqualsWithDelta');
-                $newMethodCall->args[0] = $methodCall->args[0];
-                $newMethodCall->args[1] = $methodCall->args[1];
-                $newMethodCall->args[2] = $methodCall->args[3];
-                $newMethodCall->args[3] = $methodCall->args[2];
-                $this->addNodeAfterNode($newMethodCall, $methodCall);
+            if ($this->getValue($node->args[3]->value) !== 0.0) {
+                $newMethodCall = $this->createPHPUnitCallWithName($node, 'assertEqualsWithDelta');
+                $newMethodCall->args[0] = $node->args[0];
+                $newMethodCall->args[1] = $node->args[1];
+                $newMethodCall->args[2] = $node->args[3];
+                $newMethodCall->args[3] = $node->args[2];
+                $this->addNodeAfterNode($newMethodCall, $node);
             }
 
-            unset($methodCall->args[3]);
+            unset($node->args[3]);
         }
     }
 }

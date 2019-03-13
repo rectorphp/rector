@@ -46,6 +46,14 @@ trait NameResolverTrait
     }
 
     /**
+     * @param string[] $names
+     */
+    public function isNamesInsensitive(Node $node, array $names): bool
+    {
+        return $this->nameResolver->isNamesInsensitive($node, $names);
+    }
+
+    /**
      * @param string[] $map
      */
     public function matchNameInsensitiveInMap(Node $node, array $map): ?string

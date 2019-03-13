@@ -70,15 +70,11 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
-            return null;
-        }
-
-        if (! $this->isNames($node, ['assertContains', 'assertNotContains'])) {
+        if (! $this->isPHPUnitMethodNames($node, ['assertContains', 'assertNotContains'])) {
             return null;
         }
 

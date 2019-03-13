@@ -4,6 +4,7 @@ namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -67,11 +68,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -94,33 +95,41 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processWithCall(MethodCall $methodCall): ?MethodCall
+    /**
+     * @param MethodCall|StaticCall $node
+     * @return MethodCall|StaticCall
+     */
+    private function processWithCall(Node $node): Node
     {
-        foreach ($methodCall->args as $i => $argNode) {
+        foreach ($node->args as $i => $argNode) {
             if ($argNode->value instanceof MethodCall && $this->isName($argNode->value, 'equalTo')) {
-                $methodCall->args[$i] = $argNode->value->args[0];
+                $node->args[$i] = $argNode->value->args[0];
             }
         }
 
-        return $methodCall;
+        return $node;
     }
 
-    private function processWillCall(MethodCall $methodCall): ?MethodCall
+    /**
+     * @param MethodCall|StaticCall $node
+     * @return MethodCall|StaticCall|null
+     */
+    private function processWillCall(Node $node): ?Node
     {
-        if (! $methodCall->args[0]->value instanceof MethodCall) {
+        if (! $node->args[0]->value instanceof MethodCall) {
             return null;
         }
 
-        $nestedMethodCall = $methodCall->args[0]->value;
+        $nestedMethodCall = $node->args[0]->value;
 
         foreach ($this->nestedMethodToRenameMap as $oldMethodName => $newParentMethodName) {
             if ($this->isNameInsensitive($nestedMethodCall, $oldMethodName)) {
-                $methodCall->name = new Identifier($newParentMethodName);
+                $node->name = new Identifier($newParentMethodName);
 
                 // move args up
-                $methodCall->args = $nestedMethodCall->args;
+                $node->args = $nestedMethodCall->args;
 
-                return $methodCall;
+                return $node;
             }
         }
 

@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Exception\ShouldNotHappenException;
@@ -37,19 +38,15 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
-            return null;
-        }
-
-        if (! $this->isNames($node, ['assertSame', 'assertEquals', 'assertNotSame', 'assertNotEquals'])) {
+        if (! $this->isPHPUnitMethodNames($node, ['assertSame', 'assertEquals', 'assertNotSame', 'assertNotEquals'])) {
             return null;
         }
 
@@ -87,24 +84,30 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
         throw new ShouldNotHappenException(__METHOD__);
     }
 
-    private function renameMethod(MethodCall $methodCall, string $oldMethodName, int $oldCondition): void
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function renameMethod(Node $node, string $oldMethodName, int $oldCondition): void
     {
         if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $oldCondition === 1
             || in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $oldCondition === 0
         ) {
-            $methodCall->name = new Identifier('assertRegExp');
+            $node->name = new Identifier('assertRegExp');
         }
 
         if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $oldCondition === 0
             || in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $oldCondition === 1
         ) {
-            $methodCall->name = new Identifier('assertNotRegExp');
+            $node->name = new Identifier('assertNotRegExp');
         }
     }
 
-    private function moveFunctionArgumentsUp(MethodCall $methodCall): void
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function moveFunctionArgumentsUp(Node $node): void
     {
-        $oldArguments = $methodCall->args;
+        $oldArguments = $node->args;
 
         /** @var FuncCall $pregMatchFunction */
         $pregMatchFunction = $oldArguments[1]->value;
@@ -112,6 +115,6 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0], $oldArguments[1]);
 
-        $methodCall->args = array_merge([$regex, $variable], $oldArguments);
+        $node->args = array_merge([$regex, $variable], $oldArguments);
     }
 }
