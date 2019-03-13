@@ -22,3 +22,4 @@ services:
             tearDown: 'void'
             tearDownAfterClass: 'void'
             onNotSuccessfulTest: 'void'
+    Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector: ~

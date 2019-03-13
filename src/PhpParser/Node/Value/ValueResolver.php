@@ -7,9 +7,12 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
+use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\ConstantScalarType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\NodeTypeAnalyzer;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
@@ -30,10 +33,19 @@ final class ValueResolver
      */
     private $constantNodeCollector;
 
-    public function __construct(NameResolver $nameResolver, ConstantNodeCollector $constantNodeCollector)
-    {
+    /**
+     * @var NodeTypeAnalyzer
+     */
+    private $nodeTypeAnalyzer;
+
+    public function __construct(
+        NameResolver $nameResolver,
+        ConstantNodeCollector $constantNodeCollector,
+        NodeTypeAnalyzer $nodeTypeAnalyzer
+    ) {
         $this->nameResolver = $nameResolver;
         $this->constantNodeCollector = $constantNodeCollector;
+        $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
     }
 
     /**
@@ -41,7 +53,22 @@ final class ValueResolver
      */
     public function resolve(Expr $expr)
     {
-        return $this->getConstExprEvaluator()->evaluateDirectly($expr);
+        $value = $this->getConstExprEvaluator()->evaluateDirectly($expr);
+        if ($value !== null) {
+            return $value;
+        }
+
+        $nodeStaticType = $this->nodeTypeAnalyzer->getNodeStaticType($expr);
+
+        if ($nodeStaticType instanceof ConstantArrayType) {
+            return $this->extractConstantArrayTypeValue($nodeStaticType);
+        }
+
+        if ($nodeStaticType instanceof ConstantScalarType) {
+            return $nodeStaticType->getValue();
+        }
+
+        return null;
     }
 
     private function getConstExprEvaluator(): ConstExprEvaluator
@@ -124,5 +151,26 @@ final class ValueResolver
         }
 
         return $this->constExprEvaluator->evaluateDirectly($classConstNode->consts[0]->value);
+    }
+
+    /**
+     * @return mixed[]
+     */
+    private function extractConstantArrayTypeValue(ConstantArrayType $constantArrayType): array
+    {
+        $keys = [];
+        foreach ($constantArrayType->getKeyTypes() as $i => $keyType) {
+            /** @var ConstantScalarType $keyType */
+            $keys[$i] = $keyType->getValue();
+        }
+
+        $values = [];
+        foreach ($constantArrayType->getValueTypes() as $i => $valueType) {
+            /** @var ConstantScalarType $valueType */
+            $value = $valueType->getValue();
+            $values[$keys[$i]] = $value;
+        }
+
+        return $values;
     }
 }
