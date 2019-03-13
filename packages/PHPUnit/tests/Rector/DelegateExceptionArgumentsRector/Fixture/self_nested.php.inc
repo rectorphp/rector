@@ -25,10 +25,10 @@ class ArrayInputTest extends TestCase
     public function testParseInvalidInput($expectedExceptionMessage)
     {
         if (method_exists($this, 'expectException')) {
-            $this->setExpectedException('SomeException');
+            $this->expectException('SomeException');
             $this->expectExceptionMessage($message);
         } else {
-            $this->setExpectedException('InvalidArgumentException');
+            $this->expectException('InvalidArgumentException');
             $this->expectExceptionMessage($expectedExceptionMessage);
         }
     }

@@ -9,17 +9,25 @@ use Rector\NodeTypeResolver\Node\Attribute;
 
 abstract class AbstractPHPUnitRector extends AbstractRector
 {
-    protected function isAssertMethod(Node $node, string $name): bool
+    protected function isPHPUnitMethodName(Node $node, string $name): bool
     {
-        if (! $this->isInTestClass($node)) {
-            return false;
-        }
-
-        if (! $node instanceof MethodCall && ! $node instanceof StaticCall) {
+        if (! $this->isPHPUnitTestCaseCall($node)) {
             return false;
         }
 
         return $this->isName($node, $name);
+    }
+
+    /**
+     * @param string[] $names
+     */
+    protected function isPHPUnitMethodNames(Node $node, array $names): bool
+    {
+        if (! $this->isPHPUnitTestCaseCall($node)) {
+            return false;
+        }
+
+        return $this->isNames($node, $names);
     }
 
     protected function isInTestClass(Node $node): bool
@@ -30,5 +38,23 @@ abstract class AbstractPHPUnitRector extends AbstractRector
         }
 
         return $this->isTypes($classNode, ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase']);
+    }
+
+    /**
+     * @param StaticCall|MethodCall $node
+     * @return StaticCall|MethodCall
+     */
+    protected function createPHPUnitCallWithName(Node $node, string $name): Node
+    {
+        return $node instanceof MethodCall ? new MethodCall($node->var, $name) : new StaticCall($node->class, $name);
+    }
+
+    private function isPHPUnitTestCaseCall(Node $node): bool
+    {
+        if (! $this->isInTestClass($node)) {
+            return false;
+        }
+
+        return $node instanceof MethodCall || $node instanceof StaticCall;
     }
 }
