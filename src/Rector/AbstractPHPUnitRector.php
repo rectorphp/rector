@@ -15,7 +15,7 @@ abstract class AbstractPHPUnitRector extends AbstractRector
             return false;
         }
 
-        return $this->isName($node, $name);
+        return $this->isNameInsensitive($node, $name);
     }
 
     /**
@@ -27,7 +27,7 @@ abstract class AbstractPHPUnitRector extends AbstractRector
             return false;
         }
 
-        return $this->isNames($node, $names);
+        return $this->isNamesInsensitive($node, $names);
     }
 
     protected function isInTestClass(Node $node): bool

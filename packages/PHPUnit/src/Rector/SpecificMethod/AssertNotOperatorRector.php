@@ -56,11 +56,7 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
-            return null;
-        }
-
-        if (! $this->isNames($node, array_keys($this->renameMethodsMap))) {
+        if (! $this->isPHPUnitMethodNames($node, array_keys($this->renameMethodsMap))) {
             return null;
         }
 

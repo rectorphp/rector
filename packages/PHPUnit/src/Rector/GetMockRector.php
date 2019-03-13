@@ -4,6 +4,7 @@ namespace Rector\PHPUnit\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -27,19 +28,15 @@ final class GetMockRector extends AbstractPHPUnitRector
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
-            return null;
-        }
-
-        if (! $this->isNames($node, ['getMock', 'getMockWithoutInvokingTheOriginalConstructor'])) {
+        if (! $this->isPHPUnitMethodNames($node, ['getMock', 'getMockWithoutInvokingTheOriginalConstructor'])) {
             return null;
         }
 

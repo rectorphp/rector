@@ -5,6 +5,7 @@ namespace Rector\PHPUnit\Rector\SpecificMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -53,19 +54,15 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
-            return null;
-        }
-
-        if (! $this->isNames($node, array_keys($this->renameMethodsMap))) {
+        if (! $this->isPHPUnitMethodNames($node, array_keys($this->renameMethodsMap))) {
             return null;
         }
 
@@ -80,9 +77,12 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
         return $node;
     }
 
-    public function changeOrderArguments(MethodCall $methodCall): void
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    public function changeOrderArguments(Node $node): void
     {
-        $oldArguments = $methodCall->args;
+        $oldArguments = $node->args;
 
         /** @var Identifier $oldArguments */
         $strposFuncCallNode = $oldArguments[0]->value;
@@ -96,6 +96,6 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
 
         unset($oldArguments[0]);
 
-        $methodCall->args = array_merge([$firstArgument, $secondArgument], $oldArguments);
+        $node->args = array_merge([$firstArgument, $secondArgument], $oldArguments);
     }
 }

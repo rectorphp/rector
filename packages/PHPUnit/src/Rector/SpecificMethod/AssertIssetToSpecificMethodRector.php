@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -44,19 +45,15 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
-            return null;
-        }
-
-        if (! $this->isNames($node, ['assertTrue', 'assertFalse'])) {
+        if (! $this->isPHPUnitMethodNames($node, ['assertTrue', 'assertFalse'])) {
             return null;
         }
 
@@ -83,35 +80,41 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
         return $node;
     }
 
-    private function refactorPropertyFetchNode(MethodCall $methodCall, PropertyFetch $propertyFetch): void
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function refactorPropertyFetchNode(Node $node, PropertyFetch $propertyFetch): void
     {
         $name = $this->getName($propertyFetch);
         if ($name === null) {
             return;
         }
 
-        $this->identifierManipulator->renameNodeWithMap($methodCall, [
+        $this->identifierManipulator->renameNodeWithMap($node, [
             'assertTrue' => 'assertObjectHasAttribute',
             'assertFalse' => 'assertObjectNotHasAttribute',
         ]);
 
-        $oldArgs = $methodCall->args;
+        $oldArgs = $node->args;
         unset($oldArgs[0]);
 
-        $methodCall->args = array_merge($this->createArgs([new String_($name), $propertyFetch->var]), $oldArgs);
+        $node->args = array_merge($this->createArgs([new String_($name), $propertyFetch->var]), $oldArgs);
     }
 
-    private function refactorArrayDimFetchNode(MethodCall $methodCall, ArrayDimFetch $arrayDimFetch): void
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function refactorArrayDimFetchNode(Node $node, ArrayDimFetch $arrayDimFetch): void
     {
-        $this->identifierManipulator->renameNodeWithMap($methodCall, [
+        $this->identifierManipulator->renameNodeWithMap($node, [
             'assertTrue' => 'assertArrayHasKey',
             'assertFalse' => 'assertArrayNotHasKey',
         ]);
 
-        $oldArgs = $methodCall->args;
+        $oldArgs = $node->args;
 
         unset($oldArgs[0]);
 
-        $methodCall->args = array_merge($this->createArgs([$arrayDimFetch->dim, $arrayDimFetch->var]), $oldArgs);
+        $node->args = array_merge($this->createArgs([$arrayDimFetch->dim, $arrayDimFetch->var]), $oldArgs);
     }
 }

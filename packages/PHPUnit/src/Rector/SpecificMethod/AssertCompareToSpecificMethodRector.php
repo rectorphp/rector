@@ -5,6 +5,7 @@ namespace Rector\PHPUnit\Rector\SpecificMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -54,19 +55,15 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
      */
     public function getNodeTypes(): array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInTestClass($node)) {
-            return null;
-        }
-
-        if (! $this->isNames($node, ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals'])) {
+        if (! $this->isPHPUnitMethodNames($node, ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals'])) {
             return null;
         }
 
@@ -94,28 +91,31 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
         return $node;
     }
 
-    private function renameMethod(MethodCall $methodCall, string $funcName): void
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function renameMethod(Node $node, string $funcName): void
     {
-        /** @var Identifier $identifierNode */
-        $identifierNode = $methodCall->name;
-        $oldMethodName = $identifierNode->toString();
+        /** @var string $oldMethodName */
+        $oldMethodName = $this->getName($node);
 
         [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$funcName];
 
         if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $trueMethodName) {
-            $methodCall->name = new Identifier($trueMethodName);
+            $node->name = new Identifier($trueMethodName);
         } elseif (in_array($oldMethodName, ['assertNotSame', 'assertNotEquals'], true) && $falseMethodName) {
-            $methodCall->name = new Identifier($falseMethodName);
+            $node->name = new Identifier($falseMethodName);
         }
     }
 
     /**
      * Handles custom error messages to not be overwrite by function with multiple args.
+     * @param StaticCall|MethodCall $node
      */
-    private function moveFunctionArgumentsUp(MethodCall $methodCall): void
+    private function moveFunctionArgumentsUp(Node $node): void
     {
         /** @var FuncCall $secondArgument */
-        $secondArgument = $methodCall->args[1]->value;
-        $methodCall->args[1] = $secondArgument->args[0];
+        $secondArgument = $node->args[1]->value;
+        $node->args[1] = $secondArgument->args[0];
     }
 }
