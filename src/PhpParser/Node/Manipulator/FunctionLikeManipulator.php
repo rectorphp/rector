@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\NodeTypeAnalyzer;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\Php\TypeAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -21,23 +21,23 @@ final class FunctionLikeManipulator
     private $betterNodeFinder;
 
     /**
-     * @var NodeTypeAnalyzer
-     */
-    private $nodeTypeAnalyzer;
-
-    /**
      * @var TypeAnalyzer
      */
     private $typeAnalyzer;
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        NodeTypeAnalyzer $nodeTypeAnalyzer,
-        TypeAnalyzer $typeAnalyzer
+        TypeAnalyzer $typeAnalyzer,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     /**
@@ -61,7 +61,7 @@ final class FunctionLikeManipulator
                 continue;
             }
 
-            $types = array_merge($types, $this->nodeTypeAnalyzer->resolveSingleTypeToStrings($returnNode->expr));
+            $types = array_merge($types, $this->nodeTypeResolver->resolveSingleTypeToStrings($returnNode->expr));
             $isVoid = false;
         }
 

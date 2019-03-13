@@ -4,14 +4,13 @@ namespace Rector\Rector;
 
 use PhpParser\Node;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\NodeTypeAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
  * makes clear what code has 1 purpose.
  */
-trait TypeAnalyzerTrait
+trait NodeTypeResolverTrait
 {
     /**
      * @var NodeTypeResolver
@@ -19,19 +18,11 @@ trait TypeAnalyzerTrait
     private $nodeTypeResolver;
 
     /**
-     * @var NodeTypeAnalyzer
-     */
-    private $nodeTypeAnalyzer;
-
-    /**
      * @required
      */
-    public function autowireTypeAnalyzerDependencies(
-        NodeTypeResolver $nodeTypeResolver,
-        NodeTypeAnalyzer $nodeTypeAnalyzer
-    ): void {
+    public function autowireTypeAnalyzerDependencies(NodeTypeResolver $nodeTypeResolver): void
+    {
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
     }
 
     protected function isType(Node $node, string $type): bool
@@ -59,57 +50,57 @@ trait TypeAnalyzerTrait
 
     protected function isStringType(Node $node): bool
     {
-        return $this->nodeTypeAnalyzer->isStringType($node);
+        return $this->nodeTypeResolver->isStringType($node);
     }
 
     protected function isStringyType(Node $node): bool
     {
-        return $this->nodeTypeAnalyzer->isStringyType($node);
+        return $this->nodeTypeResolver->isStringyType($node);
     }
 
     protected function isIntegerType(Node $node): bool
     {
-        return $this->nodeTypeAnalyzer->isIntType($node);
+        return $this->nodeTypeResolver->isIntType($node);
     }
 
     protected function isFloatType(Node $node): bool
     {
-        return $this->nodeTypeAnalyzer->isFloatType($node);
+        return $this->nodeTypeResolver->isFloatType($node);
     }
 
     protected function getStaticType(Node $node): ?Type
     {
-        return $this->nodeTypeAnalyzer->getNodeStaticType($node);
+        return $this->nodeTypeResolver->getNodeStaticType($node);
     }
 
     protected function isNullableType(Node $node): bool
     {
-        return $this->nodeTypeAnalyzer->isNullableType($node);
+        return $this->nodeTypeResolver->isNullableType($node);
     }
 
     protected function isNullableObjectType(Node $node): bool
     {
-        return $this->nodeTypeAnalyzer->isNullableObjectType($node);
+        return $this->nodeTypeResolver->isNullableObjectType($node);
     }
 
     protected function isNullType(Node $node): bool
     {
-        return $this->nodeTypeAnalyzer->isNullType($node);
+        return $this->nodeTypeResolver->isNullType($node);
     }
 
     protected function isBoolType(Node $node): bool
     {
-        return $this->nodeTypeAnalyzer->isBoolType($node);
+        return $this->nodeTypeResolver->isBoolType($node);
     }
 
     protected function isCountableType(Node $node): bool
     {
-        return $this->nodeTypeAnalyzer->isCountableType($node);
+        return $this->nodeTypeResolver->isCountableType($node);
     }
 
     protected function isArrayType(Node $node): bool
     {
-        return $this->nodeTypeAnalyzer->isArrayType($node);
+        return $this->nodeTypeResolver->isArrayType($node);
     }
 
     /**

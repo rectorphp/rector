@@ -18,7 +18,7 @@ use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
-    use TypeAnalyzerTrait;
+    use NodeTypeResolverTrait;
     use NameResolverTrait;
     use ConstFetchAnalyzerTrait;
     use BetterStandardPrinterTrait;
