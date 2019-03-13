@@ -12,7 +12,7 @@ use PHPStan\Type\ConstantScalarType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\NodeTypeResolver\NodeTypeAnalyzer;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
@@ -34,18 +34,18 @@ final class ValueResolver
     private $constantNodeCollector;
 
     /**
-     * @var NodeTypeAnalyzer
+     * @var NodeTypeResolver
      */
-    private $nodeTypeAnalyzer;
+    private $nodeTypeResolver;
 
     public function __construct(
         NameResolver $nameResolver,
-        ConstantNodeCollector $constantNodeCollector,
-        NodeTypeAnalyzer $nodeTypeAnalyzer
+        NodeTypeResolver $nodeTypeResolver,
+        ConstantNodeCollector $constantNodeCollector
     ) {
         $this->nameResolver = $nameResolver;
         $this->constantNodeCollector = $constantNodeCollector;
-        $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     /**
@@ -58,7 +58,7 @@ final class ValueResolver
             return $value;
         }
 
-        $nodeStaticType = $this->nodeTypeAnalyzer->getNodeStaticType($expr);
+        $nodeStaticType = $this->nodeTypeResolver->getNodeStaticType($expr);
 
         if ($nodeStaticType instanceof ConstantArrayType) {
             return $this->extractConstantArrayTypeValue($nodeStaticType);

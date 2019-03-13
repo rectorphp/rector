@@ -6,25 +6,25 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
-use Rector\NodeTypeResolver\NodeTypeAnalyzer;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Manipulator\ConstFetchManipulator;
 
 final class NodeToStringTypeResolver
 {
     /**
-     * @var NodeTypeAnalyzer
-     */
-    private $nodeTypeAnalyzer;
-
-    /**
      * @var ConstFetchManipulator
      */
     private $constFetchManipulator;
 
-    public function __construct(NodeTypeAnalyzer $nodeTypeAnalyzer, ConstFetchManipulator $constFetchManipulator)
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    public function __construct(ConstFetchManipulator $constFetchManipulator, NodeTypeResolver $nodeTypeResolver)
     {
-        $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
         $this->constFetchManipulator = $constFetchManipulator;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function resolver(Node $node): string
@@ -41,11 +41,11 @@ final class NodeToStringTypeResolver
             return 'float';
         }
 
-        if ($this->nodeTypeAnalyzer->isIntType($node)) {
+        if ($this->nodeTypeResolver->isIntType($node)) {
             return 'int';
         }
 
-        if ($this->nodeTypeAnalyzer->isStringType($node)) {
+        if ($this->nodeTypeResolver->isStringType($node)) {
             return 'string';
         }
 

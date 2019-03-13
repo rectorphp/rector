@@ -33,9 +33,9 @@ final class ComplexNodeTypeResolver
     private $betterNodeFinder;
 
     /**
-     * @var NodeTypeAnalyzer
+     * @var NodeTypeResolver
      */
-    private $nodeTypeAnalyzer;
+    private $nodeTypeResolver;
 
     /**
      * @var TypeAnalyzer
@@ -46,13 +46,13 @@ final class ComplexNodeTypeResolver
         NodeToStringTypeResolver $nodeToStringTypeResolver,
         NameResolver $nameResolver,
         BetterNodeFinder $betterNodeFinder,
-        NodeTypeAnalyzer $nodeTypeAnalyzer,
+        NodeTypeResolver $nodeTypeResolver,
         TypeAnalyzer $typeAnalyzer
     ) {
         $this->nodeToStringTypeResolver = $nodeToStringTypeResolver;
         $this->nameResolver = $nameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
+        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeAnalyzer = $typeAnalyzer;
     }
 
@@ -93,7 +93,7 @@ final class ComplexNodeTypeResolver
         foreach ($propertyAssignNodes as $propertyAssignNode) {
             $types = array_merge(
                 $types,
-                $this->nodeTypeAnalyzer->resolveSingleTypeToStrings($propertyAssignNode->expr)
+                $this->nodeTypeResolver->resolveSingleTypeToStrings($propertyAssignNode->expr)
             );
         }
 
