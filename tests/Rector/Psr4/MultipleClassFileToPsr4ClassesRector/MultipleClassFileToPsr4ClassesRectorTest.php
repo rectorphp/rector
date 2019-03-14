@@ -9,6 +9,9 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
+/**
+ * @covers \Rector\Rector\Psr4\MultipleClassFileToPsr4ClassesRector
+ */
 final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestCase
 {
     /**

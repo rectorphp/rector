@@ -2,66 +2,25 @@
 
 namespace Rector\Rector\Psr4;
 
-use PhpParser\Lexer;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
-use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PhpParser\Parser\Parser;
-use Rector\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Symfony\Component\Filesystem\Filesystem;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
-final class MultipleClassFileToPsr4ClassesRector implements FileSystemRectorInterface
+final class MultipleClassFileToPsr4ClassesRector extends AbstractFileSystemRector
 {
     /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
 
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
-     * @var Lexer
-     */
-    private $lexer;
-
-    /**
-     * @var FormatPerservingPrinter
-     */
-    private $formatPerservingPrinter;
-
-    /**
-     * @var NodeScopeAndMetadataDecorator
-     */
-    private $nodeScopeAndMetadataDecorator;
-
-    public function __construct(
-        BetterNodeFinder $betterNodeFinder,
-        Filesystem $filesystem,
-        Parser $parser,
-        Lexer $lexer,
-        FormatPerservingPrinter $formatPerservingPrinter,
-        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
-    ) {
+    public function __construct(BetterNodeFinder $betterNodeFinder)
+    {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->filesystem = $filesystem;
-        $this->parser = $parser;
-        $this->lexer = $lexer;
-        $this->formatPerservingPrinter = $formatPerservingPrinter;
-        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -114,22 +73,17 @@ CODE_SAMPLE
 
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
-        $oldStmts = $this->parser->parseFile($smartFileInfo->getRealPath());
+        $nodes = $this->parseFileInfoToNodes($smartFileInfo);
 
-        // needed for format preserving
-        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile(
-            $oldStmts,
-            $smartFileInfo->getRealPath()
-        );
+        /** @var Namespace_[] $namespaceNodes */
+        $namespaceNodes = $this->betterNodeFinder->findInstanceOf($nodes, Namespace_::class);
 
-        $namespaceNodes = $this->betterNodeFinder->findInstanceOf($newStmts, Namespace_::class);
-
-        if ($this->shouldSkip($smartFileInfo, $newStmts, $namespaceNodes)) {
+        if ($this->shouldSkip($smartFileInfo, $nodes, $namespaceNodes)) {
             return;
         }
 
         foreach ($namespaceNodes as $namespaceNode) {
-            $newStmtsSet = $this->removeAllOtherNamespaces($newStmts, $namespaceNode);
+            $newStmtsSet = $this->removeAllOtherNamespaces($nodes, $namespaceNode);
 
             foreach ($newStmtsSet as $newStmt) {
                 if (! $newStmt instanceof Namespace_) {
@@ -145,13 +99,7 @@ CODE_SAMPLE
 
                     $fileDestination = $this->createClassFileDestination($classNode, $smartFileInfo);
 
-                    $fileContent = $this->formatPerservingPrinter->printToString(
-                        $newStmtsSet,
-                        $oldStmts,
-                        $this->lexer->getTokens()
-                    );
-
-                    $this->filesystem->dumpFile($fileDestination, $fileContent);
+                    $this->printNodesToFilePath($newStmtsSet, $fileDestination);
                 }
             }
         }
