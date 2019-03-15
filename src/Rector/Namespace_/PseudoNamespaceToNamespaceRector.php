@@ -2,14 +2,18 @@
 
 namespace Rector\Rector\Namespace_;
 
+use PhpParser\Builder\Property;
 use PhpParser\Node;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -33,12 +37,21 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $classManipulator;
 
     /**
+     * @var DocBlockManipulator
+     */
+    private $docBlockManipulator;
+
+    /**
      * @param string[][]|null[] $namespacePrefixesWithExcludedClasses
      */
-    public function __construct(ClassManipulator $classManipulator, array $namespacePrefixesWithExcludedClasses)
-    {
+    public function __construct(
+        ClassManipulator $classManipulator,
+        DocBlockManipulator $docBlockManipulator,
+        array $namespacePrefixesWithExcludedClasses
+    ) {
         $this->classManipulator = $classManipulator;
         $this->namespacePrefixWithExcludedClasses = $namespacePrefixesWithExcludedClasses;
+        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -53,11 +66,13 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
             ),
             new ConfiguredCodeSample(
 <<<'CODE_SAMPLE'
+/** @var Some_Object $someService */
 $someService = new Some_Object;
 $someClassToKeep = new Some_Class_To_Keep;
 CODE_SAMPLE
                 ,
 <<<'CODE_SAMPLE'
+/** @var Some\Object $someService */
 $someService = new Some\Object;
 $someClassToKeep = new Some_Class_To_Keep;
 CODE_SAMPLE
@@ -74,7 +89,9 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Name::class, Identifier::class];
+
+        // property, method
+        return [Name::class, Identifier::class, ClassMethod::class, Property::class, FunctionLike::class];
     }
 
     /**
@@ -82,26 +99,33 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // no name → skip
-        if ($node->toString() === '') {
-            return null;
-        }
-
-        foreach ($this->namespacePrefixWithExcludedClasses as $namespacePrefix => $excludedClasses) {
-            if (! $this->isName($node, '#^' . $namespacePrefix . '*#')) {
-                continue;
-            }
-
-            if (is_array($excludedClasses) && $this->isNames($node, $excludedClasses)) {
+        if ($node instanceof Name || $node instanceof Identifier) {
+            // no name → skip
+            if ($node->toString() === '') {
                 return null;
             }
 
-            if ($node instanceof Name) {
-                return $this->processName($node);
+            foreach ($this->namespacePrefixWithExcludedClasses as $namespacePrefix => $excludedClasses) {
+                if (! $this->isName($node, '#^' . $namespacePrefix . '*#')) {
+                    continue;
+                }
+
+                if (is_array($excludedClasses) && $this->isNames($node, $excludedClasses)) {
+                    return null;
+                }
+
+                if ($node instanceof Name) {
+                    return $this->processName($node);
+                }
+
+                return $this->processIdentifier($node);
             }
 
-            return $this->processIdentifier($node);
+            return null;
         }
+
+        // replace on @var/@param/@return
+//        $this->docBlockManipulator->removeParamTagByName()
 
         return null;
     }
