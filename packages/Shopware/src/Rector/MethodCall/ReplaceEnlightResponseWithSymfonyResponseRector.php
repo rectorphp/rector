@@ -3,8 +3,15 @@
 namespace Rector\Shopware\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\NodeTypeResolver\Node\Attribute;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -24,7 +31,7 @@ class FrontendController extends \Enlight_Controller_Action
     }
 }
 CODE_SAMPLE
-,
+                ,
                 <<<'CODE_SAMPLE'
 class FrontendController extends \Enlight_Controller_Action
 {
@@ -34,8 +41,7 @@ class FrontendController extends \Enlight_Controller_Action
     }
 }
 CODE_SAMPLE
-
-            )
+            ),
         ]);
     }
 
@@ -52,132 +58,100 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->isType($node, 'Enlight_Controller_Response_Response')) {
+        if (! $this->isType($node, 'Enlight_Controller_Response_Response')) {
             return null;
         }
 
-        if (!$node->name instanceof Node\Identifier) {
-            return null;
-        }
-
-        switch ($node->name->name) {
+        $name = $this->getName($node);
+        switch ($name) {
             case 'setHeader':
-                return self::modifySetHeader($node);
+                return $this->modifySetHeader($node);
             case 'clearHeader':
-                return self::modifyHeader($node, 'remove');
+                return $this->modifyHeader($node, 'remove');
             case 'clearAllHeaders':
-                return self::modifyHeader($node, 'replace');
             case 'clearRawHeaders':
-                return self::modifyHeader($node, 'replace');
+                return $this->modifyHeader($node, 'replace');
             case 'removeCookie':
-                return self::modifyHeader($node, 'removeCookie');
+                return $this->modifyHeader($node, 'removeCookie');
             case 'setRawHeader':
-                return self::modifyRawHeader($node, 'set');
+                return $this->modifyRawHeader($node, 'set');
             case 'clearRawHeader':
-                return self::modifyRawHeader($node, 'remove');
+                return $this->modifyRawHeader($node, 'remove');
             case 'setCookie':
-                return self::modifySetCookie($node);
+                return $this->modifySetCookie($node);
 
             default:
                 return null;
         }
     }
 
-    private static function modifySetHeader(MethodCall $node): ?MethodCall
+    private function modifySetHeader(MethodCall $methodCall): MethodCall
     {
-        if (!$node->name instanceof Node\Identifier) {
-            return null;
+        $methodCall->var = new PropertyFetch($methodCall->var, 'headers');
+        $methodCall->name = new Identifier('set');
+
+        if (! $methodCall->args[0]->value instanceof String_) {
+            return $methodCall;
         }
 
-        $node->var = new Node\Expr\PropertyFetch($node->var, 'headers');
-        $node->name->name = 'set';
-
-        if (! $node->args[0]->value instanceof Node\Scalar\String_) {
-            return $node;
-        }
-
-        /** @var Node\Scalar\String_ $arg1 */
-        $arg1 = $node->args[0]->value;
+        /** @var String_ $arg1 */
+        $arg1 = $methodCall->args[0]->value;
         $arg1->value = strtolower($arg1->value);
 
         // We have a cache-control call without replace header (3rd argument)
-        if ($arg1->value === 'cache-control' && !isset($node->args[2])) {
-            $node->args[2] = new Node\Arg(new Node\Expr\ConstFetch(new Node\Name(['true'])));
+        if ($arg1->value === 'cache-control' && ! isset($methodCall->args[2])) {
+            $methodCall->args[2] = new Arg(new ConstFetch(new Name(['true'])));
         }
 
-        return $node;
+        return $methodCall;
     }
 
-    private static function modifyHeader(MethodCall $node, string $newMethodName): ?MethodCall
+    private function modifyHeader(MethodCall $methodCall, string $newMethodName): MethodCall
     {
-        if (!$node->name instanceof Node\Identifier) {
-            return null;
-        }
+        $methodCall->var = new PropertyFetch($methodCall->var, 'headers');
+        $methodCall->name = new Identifier($newMethodName);
 
-        $node->var = new Node\Expr\PropertyFetch($node->var, 'headers');
-        $node->name->name = $newMethodName;
-
-        return $node;
+        return $methodCall;
     }
 
-    private static function modifyRawHeader(MethodCall $node, string $newMethodName): ?MethodCall
+    private function modifyRawHeader(MethodCall $methodCall, string $newMethodName): MethodCall
     {
-        $node->var = new Node\Expr\PropertyFetch($node->var, 'headers');
+        $methodCall->var = new PropertyFetch($methodCall->var, 'headers');
+        $methodCall->name = new Identifier($newMethodName);
 
-        if (!$node->name instanceof Node\Identifier) {
-            return null;
-        }
-
-        $node->name->name = $newMethodName;
-
-        if ($node->args[0]->value instanceof Node\Scalar\String_) {
-            $parts = self::getRawHeaderParts($node->args[0]->value->value);
+        if ($methodCall->args[0]->value instanceof String_) {
+            $parts = $this->getRawHeaderParts($methodCall->args[0]->value->value);
 
             $args = [];
-
             foreach ($parts as $i => $part) {
                 if ($i === 0) {
                     $part = strtolower($part);
                 }
 
-                $args[] = new Node\Arg(
-                    new Node\Scalar\String_($part)
-                );
+                $args[] = new Arg(new String_($part));
             }
 
-            $node->args = $args;
+            $methodCall->args = $args;
         }
 
-
-        return $node;
+        return $methodCall;
     }
 
-    private static function modifySetCookie(MethodCall $node): ?MethodCall
+    private function modifySetCookie(MethodCall $methodCall): MethodCall
     {
-        if (!$node->name instanceof Node\Identifier) {
-            return null;
-        }
+        $methodCall->var = new PropertyFetch($methodCall->var, 'headers');
+        $methodCall->name = new Identifier('setCookie');
 
-        $node->var = new Node\Expr\PropertyFetch($node->var, 'headers');
-        $node->name->name = 'setCookie';
+        $new = new New_(new FullyQualified('Symfony\Component\HttpFoundation\Cookie'), $methodCall->args);
+        $methodCall->args = [new Arg($new)];
 
-        $node->args = [
-            new Node\Arg(
-                new Node\Expr\New_(
-                    new Node\Name('\\Symfony\\Component\\HttpFoundation\\Cookie'),
-                    $node->args
-                )
-            )
-        ];
-
-        return $node;
+        return $methodCall;
     }
-
 
     /**
      * @return string[]
      */
-    private static function getRawHeaderParts(string $name): array
+    private function getRawHeaderParts(string $name): array
     {
         return array_map('trim', explode(':', $name, 2));
     }

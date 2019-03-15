@@ -332,7 +332,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->matchName($node, '#^(render|action)#')) {
+        if (! $this->isName($node, '#^(render|action)#')) {
             return true;
         }
 

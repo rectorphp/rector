@@ -113,11 +113,11 @@ final class NodeTypeResolver
 
     public function isType(Node $node, string $type): bool
     {
-        $nodeTypes = $this->getTypes($node);
+        $resolvedNodeTypes = $this->getTypes($node);
 
         // fnmatch support
         if (Strings::contains($type, '*')) {
-            foreach ($nodeTypes as $nodeType) {
+            foreach ($resolvedNodeTypes as $nodeType) {
                 if (fnmatch($type, $nodeType, FNM_NOESCAPE)) {
                     return true;
                 }
@@ -126,7 +126,7 @@ final class NodeTypeResolver
             return false;
         }
 
-        return in_array($type, $nodeTypes, true);
+        return in_array($type, $resolvedNodeTypes, true);
     }
 
     /**
