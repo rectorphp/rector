@@ -15,6 +15,7 @@ final class PseudoNamespaceToNamespaceRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture3.php.inc',
             __DIR__ . '/Fixture/fixture4.php.inc',
             __DIR__ . '/Fixture/fixture5.php.inc',
+            __DIR__ . '/Fixture/fixture6.php.inc',
         ]);
     }
 
