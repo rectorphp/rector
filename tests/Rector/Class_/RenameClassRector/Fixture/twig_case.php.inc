@@ -9,6 +9,11 @@ use Rector\Tests\Rector\Class_\RenameClassRector\Source\AbstractManualExtension;
 final class ShortUrlExtension extends AbstractManualExtension
 {
     /**
+     * @var \Twig_Extension_Sandbox
+     */
+    public $sandboxExtension;
+
+    /**
      * @return Manual_Twig_Filter[]
      */
     public function getFilters(): array
@@ -31,6 +36,11 @@ use Rector\Tests\Rector\Class_\RenameClassRector\Source\AbstractManualExtension;
 
 final class ShortUrlExtension extends AbstractManualExtension
 {
+    /**
+     * @var \Twig\Extension\SandboxExtension
+     */
+    public $sandboxExtension;
+
     /**
      * @return \Manual\Twig\TwigFilter[]
      */
