@@ -2,15 +2,14 @@
 
 namespace Rector\Rector\Namespace_;
 
-use PhpParser\Builder\Property;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -89,43 +88,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-
         // property, method
-        return [Name::class, Identifier::class, ClassMethod::class, Property::class, FunctionLike::class];
+        return [Name::class, Identifier::class, Property::class, FunctionLike::class];
     }
 
     /**
-     * @param Name|Identifier $node
+     * @param Name|Identifier|Property|FunctionLike $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Name || $node instanceof Identifier) {
-            // no name → skip
-            if ($node->toString() === '') {
-                return null;
-            }
-
-            foreach ($this->namespacePrefixWithExcludedClasses as $namespacePrefix => $excludedClasses) {
-                if (! $this->isName($node, '#^' . $namespacePrefix . '*#')) {
-                    continue;
-                }
-
-                if (is_array($excludedClasses) && $this->isNames($node, $excludedClasses)) {
-                    return null;
-                }
-
-                if ($node instanceof Name) {
-                    return $this->processName($node);
-                }
-
-                return $this->processIdentifier($node);
-            }
-
-            return null;
+        // replace on @var/@param/@return/@throws
+        foreach ($this->namespacePrefixWithExcludedClasses as $namespacePrefix => $excludedClasses) {
+            $this->docBlockManipulator->changeUnderscoreType($node, $namespacePrefix, $excludedClasses);
         }
 
-        // replace on @var/@param/@return
-//        $this->docBlockManipulator->removeParamTagByName()
+        if ($node instanceof Name || $node instanceof Identifier) {
+            return $this->processNameOrIdentifier($node);
+        }
 
         return null;
     }
@@ -185,7 +164,7 @@ CODE_SAMPLE
 
         $newNamespace = implode('\\', $namespaceParts);
         if ($this->newNamespace !== null && $this->newNamespace !== $newNamespace) {
-            throw new ShouldNotHappenException('There woulde are 2 different namespaces in one file');
+            throw new ShouldNotHappenException('There cannot be 2 different namespaces in one file');
         }
 
         $this->newNamespace = $newNamespace;
@@ -193,5 +172,35 @@ CODE_SAMPLE
         $identifier->name = $lastNewNamePart;
 
         return $identifier;
+    }
+
+    /**
+     * @param Name|Identifier $node
+     * @return Name|Identifier
+     */
+    private function processNameOrIdentifier(Node $node): ?Node
+    {
+        // no name → skip
+        if ($node->toString() === '') {
+            return null;
+        }
+
+        foreach ($this->namespacePrefixWithExcludedClasses as $namespacePrefix => $excludedClasses) {
+            if (! $this->isName($node, $namespacePrefix . '*')) {
+                continue;
+            }
+
+            if (is_array($excludedClasses) && $this->isNames($node, $excludedClasses)) {
+                return null;
+            }
+
+            if ($node instanceof Name) {
+                return $this->processName($node);
+            }
+
+            return $this->processIdentifier($node);
+        }
+
+        return null;
     }
 }

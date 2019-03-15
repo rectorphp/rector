@@ -5,11 +5,6 @@ namespace OldNamespace\SubNamespace;
 class AnnotationsTest
 {
     /**
-     * @var \PHPUnit_Framework_TestCase
-     */
-    public $test;
-
-    /**
      * @param \PHPUnit_Framework_TestCase $test
      * @return \PHPUnit_Framework_TestCase
      * @throws \PHPUnit_Framework_TestCase
@@ -27,11 +22,6 @@ namespace OldNamespace\SubNamespace;
 
 class AnnotationsTest
 {
-    /**
-     * @var \PHPUnit\Framework\TestCase
-     */
-    public $test;
-
     /**
      * @param \PHPUnit\Framework\TestCase $test
      * @return \PHPUnit\Framework\TestCase

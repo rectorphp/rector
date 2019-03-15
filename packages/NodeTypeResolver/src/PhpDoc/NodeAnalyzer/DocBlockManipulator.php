@@ -14,9 +14,11 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
+use Rector\BetterPhpDocParser\Ast\NodeTraverser;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
@@ -63,18 +65,25 @@ final class DocBlockManipulator
      */
     private $attributeAwareNodeFactory;
 
+    /**
+     * @var NodeTraverser
+     */
+    private $nodeTraverser;
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         TypeAnalyzer $typeAnalyzer,
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
-        StringsTypePhpDocNodeDecorator $stringsTypePhpDocNodeDecorator
+        StringsTypePhpDocNodeDecorator $stringsTypePhpDocNodeDecorator,
+        NodeTraverser $nodeTraverser
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->stringsTypePhpDocNodeDecorator = $stringsTypePhpDocNodeDecorator;
+        $this->nodeTraverser = $nodeTraverser;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -408,6 +417,46 @@ final class DocBlockManipulator
         return $attributeAwarePhpDocNode;
     }
 
+    /**
+     * @param string[]|null $excludedClasses
+     */
+    public function changeUnderscoreType(Node $node, string $namespacePrefix, ?array $excludedClasses): void
+    {
+        if ($node->getDocComment() === null) {
+            return;
+        }
+
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
+
+        $this->nodeTraverser->traverseWithCallable($phpDocNode, function (AttributeAwareNodeInterface $node) use (
+            $namespacePrefix,
+            $excludedClasses
+        ) {
+            if (! $node instanceof IdentifierTypeNode) {
+                return $node;
+            }
+
+            $name = ltrim($node->name, '\\');
+            if (! Strings::startsWith($name, $namespacePrefix)) {
+                return $node;
+            }
+
+            // excluded?
+            if (is_array($excludedClasses) && in_array($name, $excludedClasses, true)) {
+                return $node;
+            }
+
+            // change underscore to \\
+            $nameParts = explode('_', $name);
+            $node->name = '\\' . implode('\\', $nameParts);
+
+            return $node;
+        });
+
+        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+    }
+
     private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): void
     {
         // skip if has no doc comment
@@ -446,6 +495,8 @@ final class DocBlockManipulator
 
     private function replaceTypeNode(TypeNode $typeNode, string $oldType, string $newType): TypeNode
     {
+        // @todo use $this->nodeTraverser->traverseWithCallable here matching "AttributeAwareIdentifierTypeNode"
+
         if ($typeNode instanceof AttributeAwareIdentifierTypeNode) {
             $nodeType = $this->resolveNodeType($typeNode);
 
@@ -456,7 +507,6 @@ final class DocBlockManipulator
             }
         }
 
-        // @todo IntersectionTy
         if ($typeNode instanceof UnionTypeNode) {
             foreach ($typeNode->types as $key => $subTypeNode) {
                 $typeNode->types[$key] = $this->replaceTypeNode($subTypeNode, $oldType, $newType);

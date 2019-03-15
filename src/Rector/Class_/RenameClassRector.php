@@ -8,7 +8,6 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
@@ -77,11 +76,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Name::class, ClassMethod::class, Property::class, FunctionLike::class];
+        return [Name::class, Property::class, FunctionLike::class];
     }
 
     /**
-     * @param Name|ClassMethod|Property $node
+     * @param Name|FunctionLike|Property $node
      */
     public function refactor(Node $node): ?Node
     {

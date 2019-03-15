@@ -30,7 +30,7 @@ use Rector\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector\Source\Keep_
 class SomeTestCase
 {
     /**
-     * @return \ChangeMe_AnotherNamespace
+     * @return \ChangeMe\AnotherNamespace
      */
     public function someMethod(): Keep_This
     {
