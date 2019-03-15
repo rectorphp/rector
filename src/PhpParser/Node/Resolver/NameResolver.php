@@ -136,14 +136,26 @@ final class NameResolver
     public function isName(Node $node, string $name): bool
     {
         $resolvedName = $this->resolve($node);
+        if ($resolvedName === null) {
+            return false;
+        }
 
-        if (! isset($name[0])) {
+        if ($name === '') {
             return false;
         }
 
         // is probably regex pattern
         if (($name[0] === $name[strlen($name) - 1]) && ! ctype_alpha($name[0])) {
             return (bool) Strings::match($resolvedName, $name);
+        }
+
+        // is probably fnmatch
+        if (Strings::contains($name, '*')) {
+            if (fnmatch($name, $resolvedName, FNM_NOESCAPE)) {
+                return true;
+            }
+
+            return false;
         }
 
         return $resolvedName === $name;

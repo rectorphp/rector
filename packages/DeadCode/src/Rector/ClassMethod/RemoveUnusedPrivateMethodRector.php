@@ -70,7 +70,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->matchName($node, '#^__*#')) {
+        if ($this->isName($node, '__*')) {
             return null;
         }
 
