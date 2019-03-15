@@ -143,3 +143,4 @@ parameters:
         - '#If condition is always false#'
         - '#Call to an undefined method PHPStan\\Type\\Type\:\:getValue\(\)#'
         - '#Method Rector\\PHPUnit\\Rector\\MethodCall\\ReplaceAssertArraySubsetRector\:\:matchArray\(\) should return PhpParser\\Node\\Expr\\Array_\|null but returns PhpParser\\Node\\Expr#'
+        - '#Parameter \#2 \$name of method Rector\\PhpSpecToPHPUnit\\Rector\\Class_\\PhpSpecClassToPHPUnitClassRector\:\:processTestMethod\(\) expects string, int\|string given#'

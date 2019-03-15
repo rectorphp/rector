@@ -57,7 +57,8 @@
             "Rector\\Doctrine\\": "packages/Doctrine/src",
             "Rector\\FileSystemRector\\": "packages/FileSystemRector/src",
             "Rector\\ContributorTools\\": "packages/ContributorTools/src",
-            "Rector\\Laravel\\": "packages/Laravel/src"
+            "Rector\\Laravel\\": "packages/Laravel/src",
+            "Rector\\PhpSpecToPHPUnit\\": "packages/PhpSpecToPHPUnit/src"
         }
     },
     "autoload-dev": {
@@ -86,6 +87,7 @@
             "Rector\\MysqlToMysqli\\Tests\\": "packages/MysqlToMysqli/tests",
             "Rector\\Doctrine\\Tests\\": "packages/Doctrine/tests",
             "Rector\\Laravel\\Tests\\": "packages/Laravel/tests",
+            "Rector\\PhpSpecToPHPUnit\\Tests\\": "packages/PhpSpecToPHPUnit/tests",
             "Rector\\PHPStanExtensions\\": "utils/PHPStanExtensions/src"
         },
         "classmap": [

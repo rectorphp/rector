@@ -229,6 +229,20 @@ final class ClassManipulator
         return null;
     }
 
+    /**
+     * @return ClassMethod[]
+     */
+    public function getMethodsByName(Class_ $classNode): array
+    {
+        $methodsByName = [];
+        foreach ($classNode->stmts as $stmt) {
+            if ($stmt instanceof ClassMethod) {
+                $methodsByName[(string) $stmt->name] = $stmt;
+            }
+        }
+        return $methodsByName;
+    }
+
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
     {
         foreach ($classNode->stmts as $key => $classElementNode) {

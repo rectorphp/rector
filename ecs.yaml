@@ -9,6 +9,7 @@ services:
     Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
         allow_classes:
             - 'SomeClass' # from PHPUnit
+            - 'PHPUnit\Framework\TestCase' # usually part of node construction, it can be missed
 
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
         max_cognitive_complexity: 9
@@ -105,6 +106,7 @@ parameters:
             - 'packages/CodeQuality/src/Rector/Identical/SimplifyBoolIdenticalTrueRector.php'
             - 'packages/BetterPhpDocParser/src/Attributes/Ast/AttributeAwareNodeFactory.php'
             - 'packages/Laravel/src/Rector/FuncCall/HelperFunctionToConstructorInjectionRector.php'
+            - 'packages/PhpSpecToPHPUnit/src/Rector/Class_/PhpSpecClassToPHPUnitClassRector.php'
 
             # copied 3rd party logic
             - 'packages/Php/src/EregToPcreTransformer.php'
@@ -128,6 +130,7 @@ parameters:
             # notes
             - 'packages/Php/src/Rector/Each/ListEachRector.php'
             - 'packages/DeadCode/src/Rector/ClassMethod/RemoveOverriddenValuesRector.php'
+            - 'packages/PhpSpecToPHPUnit/src/Rector/Class_/PhpSpecClassToPHPUnitClassRector.php'
 
         Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
             # 3rd party api
