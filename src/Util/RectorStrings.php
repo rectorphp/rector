@@ -28,6 +28,34 @@ final class RectorStrings
         return self::camelCaseToGlue($input, '_');
     }
 
+    /**
+     * @param string[] $prefixesToRemove
+     */
+    public static function removePrefixes(string $value, array $prefixesToRemove): string
+    {
+        foreach ($prefixesToRemove as $prefixToRemove) {
+            if (Strings::startsWith($value, $prefixToRemove)) {
+                $value = Strings::substring($value, Strings::length($prefixToRemove));
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param string[] $suffixesToRemove
+     */
+    public static function removeSuffixes(string $value, array $suffixesToRemove): string
+    {
+        foreach ($suffixesToRemove as $prefixToRemove) {
+            if (Strings::endsWith($value, $prefixToRemove)) {
+                $value = Strings::substring($value, 0, -Strings::length($prefixToRemove));
+            }
+        }
+
+        return $value;
+    }
+
     private static function camelCaseToGlue(string $input, string $glue): string
     {
         $matches = Strings::matchAll($input, '!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!');

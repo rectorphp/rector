@@ -29,6 +29,7 @@ services:
 
     Symplify\PackageBuilder\Parameter\ParameterProvider: ~
     Symplify\PackageBuilder\Reflection\PrivatesCaller: ~
+    Symplify\PackageBuilder\Strings\StringFormatConverter: ~
 
     # see https://github.com/symplify/packagebuilder#prevent-parameter-typos
     Symplify\PackageBuilder\EventSubscriber\ParameterTypoProofreaderEventSubscriber: ~
