@@ -67,6 +67,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->isAbstract()) {
+            return null;
+        }
+
         if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($node)) {
             return null;
         }
