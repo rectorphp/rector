@@ -34,6 +34,12 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
         return sys_get_temp_dir() . '/_rector';
     }
 
+    public function getLogDir(): string
+    {
+        // manually configured, so it can be replaced in phar
+        return sys_get_temp_dir() . '/_rector_log';
+    }
+
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(__DIR__ . '/../../config/config.yaml');
