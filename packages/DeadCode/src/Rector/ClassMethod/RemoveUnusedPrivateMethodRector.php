@@ -70,6 +70,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->matchName($node, '#^__*#')) {
+            return null;
+        }
+
         $classMethodCalls = $this->classMethodManipulator->getAllClassMethodCall($node);
         if ($classMethodCalls === []) {
             $this->removeNode($node);
