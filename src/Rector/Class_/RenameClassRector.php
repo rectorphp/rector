@@ -4,6 +4,7 @@ namespace Rector\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
@@ -76,7 +77,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Name::class, ClassMethod::class, Property::class];
+        return [Name::class, ClassMethod::class, Property::class, FunctionLike::class];
     }
 
     /**

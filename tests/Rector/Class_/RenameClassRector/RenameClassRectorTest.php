@@ -47,7 +47,7 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
             'Countable' => 'stdClass',
             Manual_Twig_Filter::class => TwigFilter::class,
             'Twig_AbstractManualExtension' => AbstractManualExtension::class,
-            'Twig_Extension_Sandbox' => 'Twig\Extension\SandboxExtension'
+            'Twig_Extension_Sandbox' => 'Twig\Extension\SandboxExtension',
         ];
     }
 }
