@@ -44,7 +44,7 @@ final class RenameClassRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 use SomeOldClass;
 
-function (SomeOldClass $someOldClass): SomeOldClass
+function someFunction(SomeOldClass $someOldClass): SomeOldClass
 {
     if ($someOldClass instanceof SomeOldClass) {
         return new SomeOldClass; 
@@ -55,7 +55,7 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 use SomeNewClass;
 
-function (SomeNewClass $someOldClass): SomeNewClass
+function someFunction(SomeNewClass $someOldClass): SomeNewClass
 {
     if ($someOldClass instanceof SomeNewClass) {
         return new SomeNewClass;
@@ -85,7 +85,7 @@ CODE_SAMPLE
     {
         if ($node instanceof Name) {
             $name = $this->getName($node);
-            if (! $name) {
+            if ($name === null) {
                 return null;
             }
 
