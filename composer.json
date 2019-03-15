@@ -58,7 +58,8 @@
             "Rector\\FileSystemRector\\": "packages/FileSystemRector/src",
             "Rector\\ContributorTools\\": "packages/ContributorTools/src",
             "Rector\\Laravel\\": "packages/Laravel/src",
-            "Rector\\PhpSpecToPHPUnit\\": "packages/PhpSpecToPHPUnit/src"
+            "Rector\\PhpSpecToPHPUnit\\": "packages/PhpSpecToPHPUnit/src",
+            "Rector\\Shopware\\": "packages/Shopware/src"
         }
     },
     "autoload-dev": {
@@ -88,7 +89,8 @@
             "Rector\\Doctrine\\Tests\\": "packages/Doctrine/tests",
             "Rector\\Laravel\\Tests\\": "packages/Laravel/tests",
             "Rector\\PhpSpecToPHPUnit\\Tests\\": "packages/PhpSpecToPHPUnit/tests",
-            "Rector\\PHPStanExtensions\\": "utils/PHPStanExtensions/src"
+            "Rector\\PHPStanExtensions\\": "utils/PHPStanExtensions/src",
+            "Rector\\Shopware\\Tests\\": "packages/Shopware/tests"
         },
         "classmap": [
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
