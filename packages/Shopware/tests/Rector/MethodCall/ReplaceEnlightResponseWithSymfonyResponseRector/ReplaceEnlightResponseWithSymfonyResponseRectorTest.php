@@ -2,19 +2,18 @@
 
 namespace Rector\Shopware\Tests\Rector\MethodCall\ReplaceEnlightResponseWithSymfonyResponseRector;
 
+use Rector\Shopware\Rector\MethodCall\ReplaceEnlightResponseWithSymfonyResponseRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ReplaceEnlightResponseWithSymfonyResponseRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc'
-        ]);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
     protected function getRectorClass(): string
     {
-        return \Rector\Shopware\Rector\MethodCall\ReplaceEnlightResponseWithSymfonyResponseRector::class;
+        return ReplaceEnlightResponseWithSymfonyResponseRector::class;
     }
 }
