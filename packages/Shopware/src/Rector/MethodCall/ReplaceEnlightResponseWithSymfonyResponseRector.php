@@ -86,12 +86,8 @@ CODE_SAMPLE
         }
     }
 
-    private function modifySetHeader(MethodCall $methodCall): ?MethodCall
+    private function modifySetHeader(MethodCall $methodCall): MethodCall
     {
-        if (! $methodCall->name instanceof Identifier) {
-            return null;
-        }
-
         $methodCall->var = new PropertyFetch($methodCall->var, 'headers');
         $methodCall->name = new Identifier('set');
 
@@ -111,26 +107,17 @@ CODE_SAMPLE
         return $methodCall;
     }
 
-    private function modifyHeader(MethodCall $methodCall, string $newMethodName): ?MethodCall
+    private function modifyHeader(MethodCall $methodCall, string $newMethodName): MethodCall
     {
-        if (! $methodCall->name instanceof Identifier) {
-            return null;
-        }
-
         $methodCall->var = new PropertyFetch($methodCall->var, 'headers');
         $methodCall->name = new Identifier($newMethodName);
 
         return $methodCall;
     }
 
-    private function modifyRawHeader(MethodCall $methodCall, string $newMethodName): ?MethodCall
+    private function modifyRawHeader(MethodCall $methodCall, string $newMethodName): MethodCall
     {
         $methodCall->var = new PropertyFetch($methodCall->var, 'headers');
-
-        if (! $methodCall->name instanceof Identifier) {
-            return null;
-        }
-
         $methodCall->name = new Identifier($newMethodName);
 
         if ($methodCall->args[0]->value instanceof String_) {
@@ -151,12 +138,8 @@ CODE_SAMPLE
         return $methodCall;
     }
 
-    private function modifySetCookie(MethodCall $methodCall): ?MethodCall
+    private function modifySetCookie(MethodCall $methodCall): MethodCall
     {
-        if (! $methodCall->name instanceof Identifier) {
-            return null;
-        }
-
         $methodCall->var = new PropertyFetch($methodCall->var, 'headers');
         $methodCall->name = new Identifier('setCookie');
 
