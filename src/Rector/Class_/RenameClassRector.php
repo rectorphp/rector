@@ -8,6 +8,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -75,11 +76,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Name::class, ClassMethod::class];
+        return [Name::class, ClassMethod::class, Property::class];
     }
 
     /**
-     * @param Name|ClassMethod $node
+     * @param Name|ClassMethod|Property $node
      */
     public function refactor(Node $node): ?Node
     {
