@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\PhpDocModifier;
+namespace Rector\NodeTypeResolver\Tests\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 
 use Iterator;
 use Nette\Utils\FileSystem;
@@ -8,9 +8,9 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node\Stmt\Nop;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\PhpDocModifier;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\HttpKernel\RectorKernel;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class ReplaceTest extends AbstractKernelTestCase
@@ -26,9 +26,9 @@ final class ReplaceTest extends AbstractKernelTestCase
     private $phpDocInfoPrinter;
 
     /**
-     * @var PhpDocModifier
+     * @var DocBlockManipulator
      */
-    private $phpDocModifier;
+    private $docBlockManipulator;
 
     protected function setUp(): void
     {
@@ -36,7 +36,7 @@ final class ReplaceTest extends AbstractKernelTestCase
 
         $this->phpDocInfoFactory = self::$container->get(PhpDocInfoFactory::class);
         $this->phpDocInfoPrinter = self::$container->get(PhpDocInfoPrinter::class);
-        $this->phpDocModifier = self::$container->get(PhpDocModifier::class);
+        $this->docBlockManipulator = self::$container->get(DocBlockManipulator::class);
     }
 
     /**
@@ -49,7 +49,7 @@ final class ReplaceTest extends AbstractKernelTestCase
         $node = new Nop();
         $node->setDocComment(new Doc(Filesystem::read($originalFile)));
 
-        $this->phpDocModifier->replacePhpDocTypeByAnother($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
+        $this->docBlockManipulator->replacePhpDocTypeByAnother($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
 
         $newPhpDocContent = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
         $this->assertStringEqualsFile($expectedFile, $newPhpDocContent);

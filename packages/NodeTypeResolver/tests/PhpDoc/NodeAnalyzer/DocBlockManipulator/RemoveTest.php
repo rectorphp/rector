@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\PhpDocModifier;
+namespace Rector\NodeTypeResolver\Tests\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 
 use Iterator;
 use Nette\Utils\FileSystem;
@@ -8,9 +8,9 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node\Stmt\Nop;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\PhpDocModifier;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\HttpKernel\RectorKernel;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class RemoveTest extends AbstractKernelTestCase
@@ -26,9 +26,9 @@ final class RemoveTest extends AbstractKernelTestCase
     private $phpDocInfoPrinter;
 
     /**
-     * @var PhpDocModifier
+     * @var DocBlockManipulator
      */
-    private $phpDocModifier;
+    private $docBlockManipulator;
 
     protected function setUp(): void
     {
@@ -36,7 +36,7 @@ final class RemoveTest extends AbstractKernelTestCase
 
         $this->phpDocInfoFactory = self::$container->get(PhpDocInfoFactory::class);
         $this->phpDocInfoPrinter = self::$container->get(PhpDocInfoPrinter::class);
-        $this->phpDocModifier = self::$container->get(PhpDocModifier::class);
+        $this->docBlockManipulator = self::$container->get(DocBlockManipulator::class);
     }
 
     /**
@@ -45,7 +45,7 @@ final class RemoveTest extends AbstractKernelTestCase
     public function testRemoveTagByName(string $phpDocBeforeFilePath, string $phpDocAfter, string $tagName): void
     {
         $phpDocInfo = $this->createPhpDocInfoFromFile($phpDocBeforeFilePath);
-        $this->phpDocModifier->removeTagByName($phpDocInfo, $tagName);
+        $this->docBlockManipulator->removeTagByName($phpDocInfo, $tagName);
 
         $this->assertSame($phpDocAfter, $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo));
     }
@@ -54,41 +54,6 @@ final class RemoveTest extends AbstractKernelTestCase
     {
         yield [__DIR__ . '/RemoveSource/before.txt', '', 'var'];
         yield [__DIR__ . '/RemoveSource/before.txt', '', '@var'];
-    }
-
-    /**
-     * @dataProvider provideDataForRemoveTagByNameAndContent()
-     */
-    public function testRemoveTagByNameAndContent(
-        string $phpDocBeforeFilePath,
-        string $phpDocAfter,
-        string $tagName,
-        string $tagContent
-    ): void {
-        $phpDocInfo = $this->createPhpDocInfoFromFile($phpDocBeforeFilePath);
-        $this->phpDocModifier->removeTagByNameAndContent($phpDocInfo, $tagName, $tagContent);
-
-        $this->assertSame($phpDocAfter, $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo));
-    }
-
-    public function provideDataForRemoveTagByNameAndContent(): Iterator
-    {
-        yield [__DIR__ . '/RemoveSource/before2.txt', '', 'method', 'getThis()'];
-    }
-
-    public function testRemoveTagByNameAndContentComplex(): void
-    {
-        $phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/RemoveSource/before4.txt');
-
-        $this->phpDocModifier->removeTagByNameAndContent($phpDocInfo, 'method', 'setName');
-        $this->phpDocModifier->removeTagByNameAndContent($phpDocInfo, 'method', 'addItem');
-        $this->phpDocModifier->removeTagByNameAndContent($phpDocInfo, 'method', 'setItems');
-        $this->phpDocModifier->removeTagByNameAndContent($phpDocInfo, 'method', 'setEnabled');
-
-        $this->assertStringEqualsFile(
-            __DIR__ . '/RemoveSource/after4.txt',
-            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo)
-        );
     }
 
     /**
@@ -101,7 +66,7 @@ final class RemoveTest extends AbstractKernelTestCase
     ): void {
         $phpDocInfo = $this->createPhpDocInfoFromFile($phpDocBeforeFilePath);
 
-        $this->phpDocModifier->removeParamTagByParameter($phpDocInfo, $parameterName);
+        $this->docBlockManipulator->removeParamTagByParameter($phpDocInfo, $parameterName);
 
         $this->assertStringEqualsFile(
             $phpDocAfterFilePath,
@@ -112,7 +77,6 @@ final class RemoveTest extends AbstractKernelTestCase
     public function provideDataForRemoveParamTagByParameter(): Iterator
     {
         yield [__DIR__ . '/RemoveSource/before3.txt', __DIR__ . '/RemoveSource/after3.txt', 'paramName'];
-
         yield [__DIR__ . '/RemoveSource/before3.txt', __DIR__ . '/RemoveSource/after3.txt', '$paramName'];
     }
 

@@ -24,6 +24,13 @@ final class ShortUrlExtension extends AbstractManualExtension
     }
 }
 
+/**
+ * @var \Twig_Extension_Sandbox
+ */
+function someFunctionWithParamTwig(\Twig_Extension_Sandbox $argument)
+{
+}
+
 ?>
 -----
 <?php
@@ -50,6 +57,13 @@ final class ShortUrlExtension extends AbstractManualExtension
             new \Manual\Twig\TwigFilter('shortUrl', [$this, 'shortUrl']),
         ];
     }
+}
+
+/**
+ * @var \Twig\Extension\SandboxExtension
+ */
+function someFunctionWithParamTwig(\Twig\Extension\SandboxExtension $argument)
+{
 }
 
 ?>

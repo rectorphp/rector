@@ -5,8 +5,20 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
+use Rector\BetterPhpDocParser\Ast\NodeTraverser;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
@@ -14,9 +26,10 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareIdentifierTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
+use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\NodeDecorator\StringsTypePhpDocNodeDecorator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\PhpDocModifier;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
@@ -33,14 +46,14 @@ final class DocBlockManipulator
     private $phpDocInfoFactory;
 
     /**
+     * @var StringsTypePhpDocNodeDecorator
+     */
+    private $stringsTypePhpDocNodeDecorator;
+
+    /**
      * @var PhpDocInfoPrinter
      */
     private $phpDocInfoPrinter;
-
-    /**
-     * @var PhpDocModifier
-     */
-    private $phpDocModifier;
 
     /**
      * @var TypeAnalyzer
@@ -52,18 +65,25 @@ final class DocBlockManipulator
      */
     private $attributeAwareNodeFactory;
 
+    /**
+     * @var NodeTraverser
+     */
+    private $nodeTraverser;
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
-        PhpDocModifier $phpDocModifier,
         TypeAnalyzer $typeAnalyzer,
-        AttributeAwareNodeFactory $attributeAwareNodeFactory
+        AttributeAwareNodeFactory $attributeAwareNodeFactory,
+        StringsTypePhpDocNodeDecorator $stringsTypePhpDocNodeDecorator,
+        NodeTraverser $nodeTraverser
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
-        $this->phpDocModifier = $phpDocModifier;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
+        $this->stringsTypePhpDocNodeDecorator = $stringsTypePhpDocNodeDecorator;
+        $this->nodeTraverser = $nodeTraverser;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -91,7 +111,7 @@ final class DocBlockManipulator
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $this->phpDocModifier->removeParamTagByParameter($phpDocInfo, $name);
+        $this->removeParamTagByParameter($phpDocInfo, $name);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
@@ -119,7 +139,7 @@ final class DocBlockManipulator
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        $this->phpDocModifier->removeTagByName($phpDocInfo, $name);
+        $this->removeTagByName($phpDocInfo, $name);
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
@@ -131,7 +151,7 @@ final class DocBlockManipulator
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        $this->phpDocModifier->replacePhpDocTypeByAnother($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
+        $this->replacePhpDocTypeByAnother($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
@@ -143,7 +163,7 @@ final class DocBlockManipulator
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $this->phpDocModifier->replaceTagByAnother($phpDocInfo->getPhpDocNode(), $oldAnnotation, $newAnnotation);
+        $this->replaceTagByAnother($phpDocInfo->getPhpDocNode(), $oldAnnotation, $newAnnotation);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
@@ -269,6 +289,151 @@ final class DocBlockManipulator
         return new VarTypeInfo($types, $this->typeAnalyzer, $fqnTypes);
     }
 
+    public function removeTagByName(PhpDocInfo $phpDocInfo, string $tagName): void
+    {
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
+
+        $tagName = AnnotationNaming::normalizeName($tagName);
+
+        $phpDocTagNodes = $phpDocInfo->getTagsByName($tagName);
+
+        foreach ($phpDocTagNodes as $phpDocTagNode) {
+            $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
+        }
+    }
+
+    public function removeParamTagByParameter(PhpDocInfo $phpDocInfo, string $parameterName): void
+    {
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
+
+        /** @var PhpDocTagNode[] $phpDocTagNodes */
+        $phpDocTagNodes = $phpDocNode->getTagsByName('@param');
+
+        foreach ($phpDocTagNodes as $phpDocTagNode) {
+            /** @var ParamTagValueNode|InvalidTagValueNode $paramTagValueNode */
+            $paramTagValueNode = $phpDocTagNode->value;
+
+            $parameterName = '$' . ltrim($parameterName, '$');
+
+            // process invalid tag values
+            if ($paramTagValueNode instanceof InvalidTagValueNode) {
+                if ($paramTagValueNode->value === $parameterName) {
+                    $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
+                }
+                // process normal tag
+            } elseif ($paramTagValueNode->parameterName === $parameterName) {
+                $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
+            }
+        }
+    }
+
+    /**
+     * @param PhpDocTagNode|PhpDocTagValueNode $phpDocTagOrPhpDocTagValueNode
+     */
+    public function removeTagFromPhpDocNode(PhpDocNode $phpDocNode, $phpDocTagOrPhpDocTagValueNode): void
+    {
+        // remove specific tag
+        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
+            if ($phpDocChildNode === $phpDocTagOrPhpDocTagValueNode) {
+                unset($phpDocNode->children[$key]);
+                return;
+            }
+        }
+
+        // or by type
+        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
+            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
+            }
+
+            if ($phpDocChildNode->value === $phpDocTagOrPhpDocTagValueNode) {
+                unset($phpDocNode->children[$key]);
+            }
+        }
+    }
+
+    public function replaceTagByAnother(PhpDocNode $phpDocNode, string $oldTag, string $newTag): void
+    {
+        $oldTag = AnnotationNaming::normalizeName($oldTag);
+        $newTag = AnnotationNaming::normalizeName($newTag);
+
+        foreach ($phpDocNode->children as $phpDocChildNode) {
+            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
+            }
+
+            if ($phpDocChildNode->name === $oldTag) {
+                $phpDocChildNode->name = $newTag;
+            }
+        }
+    }
+
+    public function replacePhpDocTypeByAnother(
+        AttributeAwarePhpDocNode $attributeAwarePhpDocNode,
+        string $oldType,
+        string $newType,
+        Node $node
+    ): AttributeAwarePhpDocNode {
+        foreach ($attributeAwarePhpDocNode->children as $phpDocChildNode) {
+            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
+            }
+
+            if (! $this->isTagValueNodeWithType($phpDocChildNode)) {
+                continue;
+            }
+
+            /** @var VarTagValueNode|ParamTagValueNode|ReturnTagValueNode $tagValueNode */
+            $tagValueNode = $phpDocChildNode->value;
+
+            $phpDocChildNode->value->type = $this->replaceTypeNode($tagValueNode->type, $oldType, $newType);
+
+            $this->stringsTypePhpDocNodeDecorator->decorate($attributeAwarePhpDocNode, $node);
+        }
+
+        return $attributeAwarePhpDocNode;
+    }
+
+    /**
+     * @param string[]|null $excludedClasses
+     */
+    public function changeUnderscoreType(Node $node, string $namespacePrefix, ?array $excludedClasses): void
+    {
+        if ($node->getDocComment() === null) {
+            return;
+        }
+
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
+
+        $this->nodeTraverser->traverseWithCallable($phpDocNode, function (AttributeAwareNodeInterface $node) use (
+            $namespacePrefix,
+            $excludedClasses
+        ) {
+            if (! $node instanceof IdentifierTypeNode) {
+                return $node;
+            }
+
+            $name = ltrim($node->name, '\\');
+            if (! Strings::startsWith($name, $namespacePrefix)) {
+                return $node;
+            }
+
+            // excluded?
+            if (is_array($excludedClasses) && in_array($name, $excludedClasses, true)) {
+                return $node;
+            }
+
+            // change underscore to \\
+            $nameParts = explode('_', $name);
+            $node->name = '\\' . implode('\\', $nameParts);
+
+            return $node;
+        });
+
+        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+    }
+
     private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): void
     {
         // skip if has no doc comment
@@ -296,5 +461,68 @@ final class DocBlockManipulator
         }
 
         return $this->phpDocInfoFactory->createFromNode($node);
+    }
+
+    private function isTagValueNodeWithType(PhpDocTagNode $phpDocTagNode): bool
+    {
+        return $phpDocTagNode->value instanceof ParamTagValueNode ||
+            $phpDocTagNode->value instanceof VarTagValueNode ||
+            $phpDocTagNode->value instanceof ReturnTagValueNode;
+    }
+
+    private function replaceTypeNode(TypeNode $typeNode, string $oldType, string $newType): TypeNode
+    {
+        // @todo use $this->nodeTraverser->traverseWithCallable here matching "AttributeAwareIdentifierTypeNode"
+
+        if ($typeNode instanceof AttributeAwareIdentifierTypeNode) {
+            $nodeType = $this->resolveNodeType($typeNode);
+
+            if (is_a($nodeType, $oldType, true) || ltrim($nodeType, '\\') === $oldType) {
+                $newType = $this->forceFqnPrefix($newType);
+
+                return new AttributeAwareIdentifierTypeNode($newType);
+            }
+        }
+
+        if ($typeNode instanceof UnionTypeNode) {
+            foreach ($typeNode->types as $key => $subTypeNode) {
+                $typeNode->types[$key] = $this->replaceTypeNode($subTypeNode, $oldType, $newType);
+            }
+        }
+
+        if ($typeNode instanceof ArrayTypeNode) {
+            $typeNode->type = $this->replaceTypeNode($typeNode->type, $oldType, $newType);
+
+            return $typeNode;
+        }
+
+        return $typeNode;
+    }
+
+    /**
+     * @param AttributeAwareNodeInterface&TypeNode $typeNode
+     */
+    private function resolveNodeType(TypeNode $typeNode): string
+    {
+        $nodeType = $typeNode->getAttribute('resolved_name');
+
+        if ($nodeType === null) {
+            $nodeType = $typeNode->getAttribute(Attribute::TYPE_AS_STRING);
+        }
+
+        if ($nodeType === null) {
+            $nodeType = $typeNode->name;
+        }
+
+        return $nodeType;
+    }
+
+    private function forceFqnPrefix(string $newType): string
+    {
+        if (Strings::contains($newType, '\\')) {
+            $newType = '\\' . ltrim($newType, '\\');
+        }
+
+        return $newType;
     }
 }

@@ -9,9 +9,9 @@ use PhpParser\Node\Stmt\Nop;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\PhpDocModifier;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\HttpKernel\RectorKernel;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class PhpDocInfoTest extends AbstractKernelTestCase
@@ -27,14 +27,14 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
     private $phpDocInfoPrinter;
 
     /**
-     * @var PhpDocModifier
-     */
-    private $phpDocModifier;
-
-    /**
      * @var Node
      */
     private $node;
+
+    /**
+     * @var DocBlockManipulator
+     */
+    private $docBlockManipulator;
 
     protected function setUp(): void
     {
@@ -43,7 +43,7 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
         $this->phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/PhpDocInfoSource/doc.txt');
 
         $this->phpDocInfoPrinter = self::$container->get(PhpDocInfoPrinter::class);
-        $this->phpDocModifier = self::$container->get(PhpDocModifier::class);
+        $this->docBlockManipulator = self::$container->get(DocBlockManipulator::class);
     }
 
     public function testHasTag(): void
@@ -88,7 +88,7 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
         $this->assertFalse($phpDocInfo->hasTag('flow'));
         $this->assertTrue($phpDocInfo->hasTag('test'));
 
-        $this->phpDocModifier->replaceTagByAnother($phpDocInfo->getPhpDocNode(), 'test', 'flow');
+        $this->docBlockManipulator->replaceTagByAnother($phpDocInfo->getPhpDocNode(), 'test', 'flow');
 
         $this->assertFalse($phpDocInfo->hasTag('test'));
         $this->assertTrue($phpDocInfo->hasTag('flow'));

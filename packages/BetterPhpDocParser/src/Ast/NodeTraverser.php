@@ -8,6 +8,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
@@ -46,7 +47,8 @@ final class NodeTraverser
     {
         return $phpDocTagValueNode instanceof ReturnTagValueNode ||
             $phpDocTagValueNode instanceof ParamTagValueNode ||
-            $phpDocTagValueNode instanceof VarTagValueNode;
+            $phpDocTagValueNode instanceof VarTagValueNode ||
+            $phpDocTagValueNode instanceof ThrowsTagValueNode;
     }
 
     private function traverseTypeNode(TypeNode $typeNode, callable $callable): TypeNode

@@ -5,7 +5,7 @@ namespace Rector\Tests\Rector\MethodCall\RenameMethodCallRector;
 use Nette\Utils\Html;
 use Rector\Rector\MethodCall\RenameMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\MethodCall\RenameMethodCallRector\Fixture\SomeClass5;
+use Rector\Tests\Rector\MethodCall\RenameMethodCallRector\Source\ClassMethodToBeSkipped;
 
 final class RenameMethodCallRectorTest extends AbstractRectorTestCase
 {
@@ -37,9 +37,9 @@ final class RenameMethodCallRectorTest extends AbstractRectorTestCase
                     'array_key' => 'hi',
                 ],
             ],
-            SomeClass5::class => [
-                'createHtml' => 'testHtml'
-            ]
+            ClassMethodToBeSkipped::class => [
+                'createHtml' => 'testHtml',
+            ],
         ];
     }
 }

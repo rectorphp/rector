@@ -4,10 +4,11 @@ namespace Rector\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -44,7 +45,7 @@ final class RenameClassRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 use SomeOldClass;
 
-function (SomeOldClass $someOldClass): SomeOldClass
+function someFunction(SomeOldClass $someOldClass): SomeOldClass
 {
     if ($someOldClass instanceof SomeOldClass) {
         return new SomeOldClass; 
@@ -55,7 +56,7 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 use SomeNewClass;
 
-function (SomeNewClass $someOldClass): SomeNewClass
+function someFunction(SomeNewClass $someOldClass): SomeNewClass
 {
     if ($someOldClass instanceof SomeNewClass) {
         return new SomeNewClass;
@@ -75,17 +76,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Name::class, ClassMethod::class];
+        return [Name::class, Property::class, FunctionLike::class];
     }
 
     /**
-     * @param Name|ClassMethod $node
+     * @param Name|FunctionLike|Property $node
      */
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Name) {
             $name = $this->getName($node);
-            if (! $name) {
+            if ($name === null) {
                 return null;
             }
 
