@@ -40,6 +40,9 @@ final class NetteTesterClassToPHPUnitClassRector extends AbstractRector
     private $callableNodeTraverser;
 
     /**
+     * @see https://github.com/nette/tester/blob/master/src/Framework/Assert.php
+     * ↓
+     * @see https://github.com/sebastianbergmann/phpunit/blob/master/src/Framework/Assert.php
      * @var string[]
      */
     private $assertMethodsRemap = [
