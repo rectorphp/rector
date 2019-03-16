@@ -1,8 +1,6 @@
 <?php
 
-namespace Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Fixture;
-
-namespace KdybyTests\Doctrine;
+namespace Rector\NetteTesterToPHPUnit\Tests\Rector\StaticCall\NetteAssertToPHPUnitAssertRector\Fixture;
 
 use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\NetteTesterTestCase;
 use Tester\Assert;
@@ -33,14 +31,12 @@ class AssertTypeTest extends NetteTesterTestCase
 -----
 <?php
 
-namespace Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Fixture;
-
-namespace KdybyTests\Doctrine;
+namespace Rector\NetteTesterToPHPUnit\Tests\Rector\StaticCall\NetteAssertToPHPUnitAssertRector\Fixture;
 
 use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\NetteTesterTestCase;
 use Tester\Assert;
 
-class AssertTypeTest extends \PHPUnit\Framework\TestCase
+class AssertTypeTest extends NetteTesterTestCase
 {
     public function testFunctionality()
     {

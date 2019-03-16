@@ -1,20 +1,12 @@
 <?php
 
-namespace Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Fixture;
-
-namespace KdybyTests\Doctrine;
+namespace Rector\NetteTesterToPHPUnit\Tests\Rector\StaticCall\NetteAssertToPHPUnitAssertRector\Fixture;
 
 use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\NetteTesterTestCase;
 use Tester\Assert;
 
-require_once __DIR__ . '/bootstrap.php';
-
-class ExtensionTest extends NetteTesterTestCase
+class VariousAssertsTest extends NetteTesterTestCase
 {
-    public function setUp()
-    {
-    }
-
     public function testFunctionality()
     {
         $value = 'SomeValue';
@@ -53,25 +45,17 @@ class ExtensionTest extends NetteTesterTestCase
     }
 }
 
-(new ExtensionTest())->run();
-
 ?>
 -----
 <?php
 
-namespace Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Fixture;
-
-namespace KdybyTests\Doctrine;
+namespace Rector\NetteTesterToPHPUnit\Tests\Rector\StaticCall\NetteAssertToPHPUnitAssertRector\Fixture;
 
 use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\NetteTesterTestCase;
 use Tester\Assert;
 
-class ExtensionTest extends \PHPUnit\Framework\TestCase
+class VariousAssertsTest extends NetteTesterTestCase
 {
-    protected function setUp()
-    {
-    }
-
     public function testFunctionality()
     {
         $value = 'SomeValue';

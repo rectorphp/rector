@@ -14,7 +14,7 @@ final class NetteTesterClassToPHPUnitClassRectorTest extends AbstractRectorTestC
         // prepare dummy data
         FileSystem::copy(__DIR__ . '/Copy', $this->getTempPath());
 
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/assert_type.php.inc']);
+        $this->doTestFiles([__DIR__ . '/Fixture/test_class.php.inc']);
     }
 
     protected function getRectorClass(): string

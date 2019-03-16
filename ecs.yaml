@@ -84,6 +84,7 @@ parameters:
             # example in description
             - 'src/Rector/Annotation/RenameAnnotationRector.php'
             - 'packages/NetteToSymfony/src/Event/EventInfosFactory.php'
+            - 'packages/NetteTesterToPHPUnit/src/AssertManipulator.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
             - 'src/Util/*.php'
