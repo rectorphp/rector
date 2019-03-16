@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\Util\RectorStrings;
 use Symplify\PackageBuilder\Strings\StringFormatConverter;
 
@@ -21,13 +22,24 @@ final class PhpSpecRenaming
      */
     private $stringFormatConverter;
 
-    public function __construct(StringFormatConverter $stringFormatConverter)
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    public function __construct(StringFormatConverter $stringFormatConverter, NameResolver $nameResolver)
     {
         $this->stringFormatConverter = $stringFormatConverter;
+        $this->nameResolver = $nameResolver;
     }
 
-    public function renameMethod(ClassMethod $classMethod, string $name): void
+    public function renameMethod(ClassMethod $classMethod): void
     {
+        $name = $this->nameResolver->resolve($classMethod);
+        if ($name === null) {
+            return;
+        }
+
         $name = RectorStrings::removePrefixes(
             $name,
             ['it_should_have_', 'it_should_be', 'it_should_', 'it_is_', 'it_', 'is_']

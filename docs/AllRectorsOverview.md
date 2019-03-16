@@ -1524,8 +1524,8 @@ Change assertContains()/assertNotContains() method to new string and iterable al
 -        $this->assertNotContains('foo', 'foo bar');
 -        $this->assertContains('foo', ['foo', 'bar']);
 -        $this->assertNotContains('foo', ['foo', 'bar']);
-+        $this->assertStringContains('foo', 'foo bar');
-+        $this->assertStringNotContains('foo', 'foo bar');
++        $this->assertStringContainsString('foo', 'foo bar');
++        $this->assertStringNotContainsString('foo', 'foo bar');
 +        $this->assertIterableContains('foo', ['foo', 'bar']);
 +        $this->assertIterableNotContains('foo', ['foo', 'bar']);
      }

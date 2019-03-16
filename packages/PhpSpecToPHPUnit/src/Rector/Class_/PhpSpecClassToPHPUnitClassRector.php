@@ -230,23 +230,21 @@ CODE_SAMPLE
 
     private function processMethods(Class_ $class): void
     {
-        $methods = $this->classManipulator->getMethodsByName($class);
-
         // let → setUp
-        foreach ($methods as $name => $method) {
-            if ($name === 'let') {
+        foreach ($this->classManipulator->getMethods($class) as $method) {
+            if ($this->isName($method, 'let')) {
                 $this->processLetMethod($method);
             } else {
                 /** @var string $name */
-                $this->processTestMethod($method, $name);
+                $this->processTestMethod($method);
             }
         }
     }
 
-    private function processTestMethod(ClassMethod $classMethod, string $name): void
+    private function processTestMethod(ClassMethod $classMethod): void
     {
         // change name to phpunit test case format
-        $this->phpSpecRenaming->renameMethod($classMethod, $name);
+        $this->phpSpecRenaming->renameMethod($classMethod);
 
         // replace "$this" with "$this->{testedObject}"
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {

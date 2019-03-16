@@ -219,17 +219,18 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
      */
     private function processComposerAutoload(array $templateVariables): void
     {
-        $composerJsonContent = FileSystem::read(getcwd() . '/composer.json');
-        $composerJson = Json::decode($composerJsonContent, Json::FORCE_ARRAY);
+        $composerJsonFilePath = getcwd() . '/composer.json';
+        $composerJson = $this->loadFileToJson($composerJsonFilePath);
 
         $package = $templateVariables['_Package_'];
 
-        // already autoloaded?
+        // skip core, already autoloaded
         if ($package === 'Rector') {
             return;
         }
 
         $package = $templateVariables['_Package_'];
+
         $namespace = 'Rector\\' . $package . '\\';
         $namespaceTest = 'Rector\\' . $package . '\\Tests\\';
 
@@ -241,13 +242,7 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         $composerJson['autoload']['psr-4'][$namespace] = 'packages/' . $package . '/src';
         $composerJson['autoload-dev']['psr-4'][$namespaceTest] = 'packages/' . $package . '/tests';
 
-        $composerJsonContent = Json::encode($composerJson, Json::PRETTY);
-
-        $composerJsonContent = $this->inlineSections($composerJsonContent, ['keywords', 'bin']);
-
-        // inline short arrays
-
-        FileSystem::write(getcwd() . '/composer.json', $composerJsonContent);
+        $this->saveJsonToFile($composerJsonFilePath, $composerJson);
     }
 
     /**
@@ -266,5 +261,24 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         }
 
         return $jsonContent;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    private function loadFileToJson(string $filePath): array
+    {
+        $fileContent = FileSystem::read($filePath);
+        return Json::decode($fileContent, Json::FORCE_ARRAY);
+    }
+
+    /**
+     * @param mixed[] $json
+     */
+    private function saveJsonToFile(string $filePath, array $json): void
+    {
+        $content = Json::encode($json, Json::PRETTY);
+        $content = $this->inlineSections($content, ['keywords', 'bin']);
+        FileSystem::write($filePath, $content);
     }
 }

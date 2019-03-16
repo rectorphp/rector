@@ -2,6 +2,7 @@
 
 namespace Rector\PhpParser\Node\Manipulator;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
@@ -232,15 +233,11 @@ final class ClassManipulator
     /**
      * @return ClassMethod[]
      */
-    public function getMethodsByName(Class_ $classNode): array
+    public function getMethods(Class_ $class): array
     {
-        $methodsByName = [];
-        foreach ($classNode->stmts as $stmt) {
-            if ($stmt instanceof ClassMethod) {
-                $methodsByName[(string) $stmt->name] = $stmt;
-            }
-        }
-        return $methodsByName;
+        return array_filter($class->stmts, function (Node $node) {
+            return $node instanceof ClassMethod;
+        });
     }
 
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool

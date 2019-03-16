@@ -51,8 +51,8 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $this->assertStringContains('foo', 'foo bar');
-        $this->assertStringNotContains('foo', 'foo bar');
+        $this->assertStringContainsString('foo', 'foo bar');
+        $this->assertStringNotContainsString('foo', 'foo bar');
     }
 }
 CODE_SAMPLE
