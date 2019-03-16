@@ -59,7 +59,8 @@
             "Rector\\ContributorTools\\": "packages/ContributorTools/src",
             "Rector\\Laravel\\": "packages/Laravel/src",
             "Rector\\PhpSpecToPHPUnit\\": "packages/PhpSpecToPHPUnit/src",
-            "Rector\\Shopware\\": "packages/Shopware/src"
+            "Rector\\Shopware\\": "packages/Shopware/src",
+            "Rector\\NetteTesterToPHPUnit\\": "packages/NetteTesterToPHPUnit/src"
         }
     },
     "autoload-dev": {
@@ -90,7 +91,8 @@
             "Rector\\Laravel\\Tests\\": "packages/Laravel/tests",
             "Rector\\PhpSpecToPHPUnit\\Tests\\": "packages/PhpSpecToPHPUnit/tests",
             "Rector\\PHPStanExtensions\\": "utils/PHPStanExtensions/src",
-            "Rector\\Shopware\\Tests\\": "packages/Shopware/tests"
+            "Rector\\Shopware\\Tests\\": "packages/Shopware/tests",
+            "Rector\\NetteTesterToPHPUnit\\Tests\\": "packages/NetteTesterToPHPUnit/tests"
         },
         "classmap": [
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
@@ -106,7 +108,12 @@
         "symplify/easy-coding-standard": "Required to enable '--with-style' option. Use in case you don't have PHP_CodeSniffer or PHP-CS-Fixer yet."
     },
     "scripts": {
-        "complete-check": ["@check-cs", "phpunit", "@phpstan", "@update-docs"],
+        "complete-check": [
+            "@check-cs",
+            "phpunit",
+            "@phpstan",
+            "@update-docs"
+        ],
         "check-cs": "vendor/bin/ecs check bin packages src tests utils",
         "fix-cs": [
             "vendor/bin/ecs check bin packages src tests utils --fix",
