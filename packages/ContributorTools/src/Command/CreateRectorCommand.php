@@ -3,6 +3,7 @@
 namespace Rector\ContributorTools\Command;
 
 use Nette\Utils\FileSystem;
+use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use Rector\ContributorTools\Configuration\Configuration;
 use Rector\ContributorTools\Configuration\ConfigurationFactory;
@@ -83,6 +84,9 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     {
         $configuration = $this->configurationFactory->createFromConfigFile(getcwd() . '/create-rector.yaml');
         $templateVariables = $this->templateVariablesFactory->createFromConfiguration($configuration);
+
+        // setup psr-4 autoload, if not already in
+        $this->processComposerAutoload($templateVariables);
 
         foreach ($this->findTemplateFileInfos() as $smartFileInfo) {
             $destination = $this->resolveDestination($smartFileInfo, $templateVariables, $configuration);
@@ -208,5 +212,73 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     private function applyVariables(string $content, array $variables): string
     {
         return str_replace(array_keys($variables), array_values($variables), $content);
+    }
+
+    /**
+     * @param mixed[] $templateVariables
+     */
+    private function processComposerAutoload(array $templateVariables): void
+    {
+        $composerJsonFilePath = getcwd() . '/composer.json';
+        $composerJson = $this->loadFileToJson($composerJsonFilePath);
+
+        $package = $templateVariables['_Package_'];
+
+        // skip core, already autoloaded
+        if ($package === 'Rector') {
+            return;
+        }
+
+        $package = $templateVariables['_Package_'];
+
+        $namespace = 'Rector\\' . $package . '\\';
+        $namespaceTest = 'Rector\\' . $package . '\\Tests\\';
+
+        // already autoloaded?
+        if (isset($composerJson['autoload']['psr-4'][$namespace])) {
+            return;
+        }
+
+        $composerJson['autoload']['psr-4'][$namespace] = 'packages/' . $package . '/src';
+        $composerJson['autoload-dev']['psr-4'][$namespaceTest] = 'packages/' . $package . '/tests';
+
+        $this->saveJsonToFile($composerJsonFilePath, $composerJson);
+    }
+
+    /**
+     * @param string[] $sections
+     */
+    private function inlineSections(string $jsonContent, array $sections): string
+    {
+        foreach ($sections as $section) {
+            $pattern = '#("' . preg_quote($section, '#') . '": )\[(.*?)\](,)#ms';
+            $jsonContent = Strings::replace($jsonContent, $pattern, function (array $match) {
+                $inlined = Strings::replace($match[2], '#\s+#', ' ');
+                $inlined = trim($inlined);
+                $inlined = '[' . $inlined . ']';
+                return $match[1] . $inlined . $match[3];
+            });
+        }
+
+        return $jsonContent;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    private function loadFileToJson(string $filePath): array
+    {
+        $fileContent = FileSystem::read($filePath);
+        return Json::decode($fileContent, Json::FORCE_ARRAY);
+    }
+
+    /**
+     * @param mixed[] $json
+     */
+    private function saveJsonToFile(string $filePath, array $json): void
+    {
+        $content = Json::encode($json, Json::PRETTY);
+        $content = $this->inlineSections($content, ['keywords', 'bin']);
+        FileSystem::write($filePath, $content);
     }
 }

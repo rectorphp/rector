@@ -1,0 +1,9 @@
+services:
+    # rename class, rename extends, remove include __DIR__, remove (new TestCase())->run())
+    Rector\NetteTesterToPHPUnit\Rector\Class_\NetteTesterClassToPHPUnitClassRector: ~
+
+    # Assert::true → self::assertTrue() | PHPUnit\Framework\Assert::assertTrue()
+    Rector\NetteTesterToPHPUnit\Rector\StaticCall\NetteAssertToPHPUnitAssertRector: ~
+
+    # Some.phpt → SomeTest.php
+    Rector\NetteTesterToPHPUnit\Rector\RenameTesterTestToPHPUnitToTestFileRector: ~

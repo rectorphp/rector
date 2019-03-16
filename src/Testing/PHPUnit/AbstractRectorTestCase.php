@@ -66,12 +66,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected function provideConfig(): string
     {
         if ($this->getRectorClass() !== '') { // use local if not overloaded
-            $hash = Strings::substring(
-                md5($this->getRectorClass() . Json::encode($this->getRectorConfiguration())),
-                0,
-                10
-            );
-            $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/config_%s.yaml', $hash);
+            $fixtureHash = $this->createFixtureHash();
+            $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/config_%s.yaml', $fixtureHash);
 
             // cache for 2nd run, similar to original config one
             if (file_exists($configFileTempPath)) {
@@ -119,6 +115,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         }
 
         $this->autoloadTestFixture = true;
+    }
+
+    protected function getTempPath(): string
+    {
+        return sys_get_temp_dir() . '/rector_temp_tests';
     }
 
     /**
@@ -170,11 +171,15 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     {
         $hash = Strings::substring(md5($smartFileInfo->getRealPath()), 0, 5);
 
-        return sprintf(
-            sys_get_temp_dir() . '/rector_temp_tests/%s_%s_%s',
-            $prefix,
-            $hash,
-            $smartFileInfo->getBasename('.inc')
+        return sprintf($this->getTempPath() . '/%s_%s_%s', $prefix, $hash, $smartFileInfo->getBasename('.inc'));
+    }
+
+    private function createFixtureHash(): string
+    {
+        return Strings::substring(
+            md5($this->getRectorClass() . Json::encode($this->getRectorConfiguration())),
+            0,
+            10
         );
     }
 }
