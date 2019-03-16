@@ -1,4 +1,4 @@
-# All 234 Rectors Overview
+# All 243 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -16,12 +16,15 @@
 - [Jms](#jms)
 - [Laravel](#laravel)
 - [MysqlToMysqli](#mysqltomysqli)
+- [NetteTesterToPHPUnit](#nettetestertophpunit)
 - [NetteToSymfony](#nettetosymfony)
 - [PHPStan](#phpstan)
 - [PHPUnit](#phpunit)
 - [Php](#php)
 - [PhpParser](#phpparser)
+- [PhpSpecToPHPUnit](#phpspectophpunit)
 - [Sensio](#sensio)
+- [Shopware](#shopware)
 - [Silverstripe](#silverstripe)
 - [Sylius](#sylius)
 - [Symfony](#symfony)
@@ -1254,6 +1257,37 @@ Change static validate() method to $request->validate()
 
 <br>
 
+### `HelperFunctionToConstructorInjectionRector`
+
+- class: `Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector`
+
+Move help facade-like function calls to constructor injection
+
+```diff
+ class SomeController
+ {
++    /**
++     * @var \Illuminate\Contracts\View\Factory
++     */
++    private $viewFactory;
++
++    public function __construct(\Illuminate\Contracts\View\Factory $viewFactory)
++    {
++        $this->viewFactory = $viewFactory;
++    }
++
+     public function action()
+     {
+-        $template = view('template.blade');
+-        $viewFactory = view();
++        $template = $this->viewFactory->make('template.blade');
++        $viewFactory = $this->viewFactory;
+     }
+ }
+```
+
+<br>
+
 ## MysqlToMysqli
 
 ### `MysqlAssignToMysqliRector`
@@ -1299,6 +1333,47 @@ Replace mysql_pconnect() with mysqli_connect() with host p: prefix
 +        return mysqli_connect('p:' . $host, $username, $password);
      }
  }
+```
+
+<br>
+
+## NetteTesterToPHPUnit
+
+### `NetteTesterClassToPHPUnitClassRector`
+
+- class: `Rector\NetteTesterToPHPUnit\Rector\Class_\NetteTesterClassToPHPUnitClassRector`
+
+Migrate Nette Tester test case to PHPUnit
+
+```diff
+ namespace KdybyTests\Doctrine;
+
+ use Tester\TestCase;
+ use Tester\Assert;
+
+-require_once __DIR__ . '/../bootstrap.php';
+-
+-class ExtensionTest extends TestCase
++class ExtensionTest extends \PHPUnit\Framework\TestCase
+ {
+-    public function setUp()
++    protected function setUp()
+     {
+     }
+
+     public function testFunctionality()
+     {
+-        Assert::true($default instanceof Kdyby\Doctrine\EntityManager);
+-        Assert::true(5);
+-        Assert::same($container->getService('kdyby.doctrine.default.entityManager'), $default);
++        self::assertInstanceOf(\Kdyby\Doctrine\EntityManager::cllass, $default);
++        self::assertTrue(5);
++        self::same($container->getService('kdyby.doctrine.default.entityManager'), $default);
+     }
+-}
+-
+-(new \ExtensionTest())->run();
++}
 ```
 
 <br>
@@ -1522,12 +1597,32 @@ Change assertContains()/assertNotContains() method to new string and iterable al
      {
 -        $this->assertContains('foo', 'foo bar');
 -        $this->assertNotContains('foo', 'foo bar');
--        $this->assertContains('foo', ['foo', 'bar']);
--        $this->assertNotContains('foo', ['foo', 'bar']);
 +        $this->assertStringContainsString('foo', 'foo bar');
 +        $this->assertStringNotContainsString('foo', 'foo bar');
-+        $this->assertIterableContains('foo', ['foo', 'bar']);
-+        $this->assertIterableNotContains('foo', ['foo', 'bar']);
+     }
+ }
+```
+
+<br>
+
+### `ReplaceAssertArraySubsetRector`
+
+- class: `Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector`
+
+Replace deprecated "assertArraySubset()" method with alternative methods
+
+```diff
+ class SomeTest extends \PHPUnit\Framework\TestCase
+ {
+     public function test()
+     {
+         $checkedArray = [];
+
+-        $this->assertArraySubset([
+-           'cache_directory' => 'new_value',
+-        ], $checkedArray);
++        $this->assertArrayHasKey('cache_directory', $checkedArray);
++        $this->assertSame('new_value', $checkedArray['cache_directory']);
      }
  }
 ```
@@ -3015,6 +3110,49 @@ Turns use property to method and `$node->alias` to last name in UseAlias Node of
 
 <br>
 
+## PhpSpecToPHPUnit
+
+### `RenameSpecFileToTestFileRector`
+
+- class: `Rector\PhpSpecToPHPUnit\Rector\RenameSpecFileToTestFileRector`
+
+Rename "*Spec.php" file to "*Test.php" file
+
+<br>
+
+### `PhpSpecClassToPHPUnitClassRector`
+
+- class: `Rector\PhpSpecToPHPUnit\Rector\Class_\PhpSpecClassToPHPUnitClassRector`
+
+Migrate PhpSpec object behavior spec to PHPUnit test case
+
+```diff
+-namespace spec\SomeNamespaceForThisTest;
++namespace SomeNamespaceForThisTest;
+
+ use PhpSpec\ObjectBehavior;
+
+-class CartSpec extends ObjectBehavior
++class CartTest extends \PHPUnit\Framework\TestCase
+ {
+-    public function let()
++    protected function setUp()
+     {
+-        $this->beConstructedWith(5);
++        $this->cart = new Cart(5);
+     }
+
+-    public function it_returns_id()
++    public function testReturnsId()
+     {
+-        $this->id()->shouldReturn(5);
++        $this->assertSame(5, $this->cart->id());
+     }
+ }
+```
+
+<br>
+
 ## Sensio
 
 ### `TemplateAnnotationRector`
@@ -3030,6 +3168,27 @@ Turns `@Template` annotation to explicit method call in Controller of FrameworkE
  public function indexAction()
  {
 +    return $this->render("index.html.twig");
+ }
+```
+
+<br>
+
+## Shopware
+
+### `ReplaceEnlightResponseWithSymfonyResponseRector`
+
+- class: `Rector\Shopware\Rector\MethodCall\ReplaceEnlightResponseWithSymfonyResponseRector`
+
+Replace Enlight Response methods with Symfony Response methods
+
+```diff
+ class FrontendController extends \Enlight_Controller_Action
+ {
+     public function run()
+     {
+-        $this->Response()->setHeader('Foo', 'Yea');
++        $this->Response()->headers->set('Foo', 'Yea');
+     }
  }
 ```
 
@@ -3759,6 +3918,29 @@ services:
 
 <br>
 
+### `RenameMethodCallRector`
+
+- class: `Rector\Rector\MethodCall\RenameMethodCallRector`
+
+Turns method call names to new ones.
+
+```yaml
+services:
+    Rector\Rector\MethodCall\RenameMethodCallRector:
+        SomeExampleClass:
+            oldMethod: newMethod
+```
+
+↓
+
+```diff
+ $someObject = new SomeExampleClass;
+-$someObject->oldMethod();
++$someObject->newMethod();
+```
+
+<br>
+
 ### `FluentReplaceRector`
 
 - class: `Rector\Rector\MethodBody\FluentReplaceRector`
@@ -4166,7 +4348,9 @@ services:
 ↓
 
 ```diff
+-/** @var Some_Object $someService */
 -$someService = new Some_Object;
++/** @var Some\Object $someService */
 +$someService = new Some\Object;
  $someClassToKeep = new Some_Class_To_Keep;
 ```
@@ -4542,6 +4726,40 @@ services:
 
 <br>
 
+### `FunctionToNewRector`
+
+- class: `Rector\Rector\FuncCall\FunctionToNewRector`
+
+Change configured function calls to new Instance
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $array = collection([]);
++        $array = new \Collection([]);
+     }
+ }
+```
+
+<br>
+
+### `RemoveTraitRector`
+
+- class: `Rector\Rector\ClassLike\RemoveTraitRector`
+
+Remove specific traits from code
+
+```diff
+ class SomeClass
+ {
+-    use SomeTrait;
+ }
+```
+
+<br>
+
 ### `RemoveInterfacesRector`
 
 - class: `Rector\Rector\Interface_\RemoveInterfacesRector`
@@ -4779,8 +4997,8 @@ services:
 -use SomeOldClass;
 +use SomeNewClass;
 
--function (SomeOldClass $someOldClass): SomeOldClass
-+function (SomeNewClass $someOldClass): SomeNewClass
+-function someFunction(SomeOldClass $someOldClass): SomeOldClass
++function someFunction(SomeNewClass $someOldClass): SomeNewClass
  {
 -    if ($someOldClass instanceof SomeOldClass) {
 -        return new SomeOldClass;

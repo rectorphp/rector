@@ -54,8 +54,6 @@ final class NetteTesterClassToPHPUnitClassRector extends AbstractRector
         'count' => 'assertCount',
         'match' => 'assertStringMatchesFormat',
         'matchFile' => 'assertStringMatchesFormatFile',
-        'contains' => 'assertContains',
-        'notContains' => 'assertNotContains',
         'nan' => 'assertIsNumeric',
     ];
 
@@ -193,13 +191,19 @@ CODE_SAMPLE
                 $this->makeProtected($method);
             }
 
-            $this->processMethod($method);
+            $this->processClassMethod($method);
         }
     }
 
-    private function renameMethods(StaticCall $staticCall): void
+    private function processAssertCalls(StaticCall $staticCall): void
     {
-        // special cases
+        $staticCall->class = new Name('self');
+
+        if ($this->isNames($staticCall, ['contains', 'notContains'])) {
+            $this->processContainsStaticCall($staticCall);
+            return;
+        }
+
         if ($this->isNames($staticCall, ['exception', 'throws'])) {
             $this->processExceptionStaticCall($staticCall);
             return;
@@ -228,7 +232,7 @@ CODE_SAMPLE
         }
     }
 
-    private function processMethod(ClassMethod $classMethod): void
+    private function processClassMethod(ClassMethod $classMethod): void
     {
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
             if (! $node instanceof StaticCall) {
@@ -239,8 +243,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $node->class = new Name('self');
-            $this->renameMethods($node);
+            $this->processAssertCalls($node);
         });
     }
 
@@ -336,5 +339,19 @@ CODE_SAMPLE
         } else {
             $staticCall->name = new Identifier('assertInstanceOf');
         }
+    }
+
+    private function processContainsStaticCall(StaticCall $staticCall): void
+    {
+        if ($this->isStringyType($staticCall->args[1]->value)) {
+            $name = $this->isName(
+                $staticCall,
+                'contains'
+            ) ? 'assertStringContainsString' : 'assertStringNotContainsString';
+        } else {
+            $name = $this->isName($staticCall, 'contains') ? 'assertContains' : 'assertNotContains';
+        }
+
+        $staticCall->name = new Identifier($name);
     }
 }

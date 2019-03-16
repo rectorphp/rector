@@ -43,6 +43,14 @@ class ExtensionTest extends NetteTesterTestCase
         Assert::falsey('value', 'some messsage');
         Assert::truthy(true);
     }
+
+    public function testContains()
+    {
+        $value = 'some messsage';
+        Assert::contains('value', $value);
+        $values = [];
+        Assert::contains('value', $values);
+    }
 }
 
 (new ExtensionTest())->run();
@@ -93,6 +101,14 @@ class ExtensionTest extends \PHPUnit\Framework\TestCase
     {
         self::assertFalse((bool) 'value', 'some messsage');
         self::assertTrue(true);
+    }
+
+    public function testContains()
+    {
+        $value = 'some messsage';
+        self::assertStringContainsString('value', $value);
+        $values = [];
+        self::assertContains('value', $values);
     }
 }
 
