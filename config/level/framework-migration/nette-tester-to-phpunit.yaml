@@ -1,0 +1,3 @@
+services:
+    Rector\NetteTesterToPHPUnit\Rector\RenameTesterTestToPHPUnitToTestFileRector: ~
+    Rector\NetteTesterToPHPUnit\Rector\Class_\NetteTesterClassToPHPUnitClassRector: ~
