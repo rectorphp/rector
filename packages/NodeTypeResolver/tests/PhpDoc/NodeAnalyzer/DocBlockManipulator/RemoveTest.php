@@ -57,41 +57,6 @@ final class RemoveTest extends AbstractKernelTestCase
     }
 
     /**
-     * @dataProvider provideDataForRemoveTagByNameAndContent()
-     */
-    public function testRemoveTagByNameAndContent(
-        string $phpDocBeforeFilePath,
-        string $phpDocAfter,
-        string $tagName,
-        string $tagContent
-    ): void {
-        $phpDocInfo = $this->createPhpDocInfoFromFile($phpDocBeforeFilePath);
-        $this->docBlockManipulator->removeTagByNameAndContent($phpDocInfo, $tagName, $tagContent);
-
-        $this->assertSame($phpDocAfter, $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo));
-    }
-
-    public function provideDataForRemoveTagByNameAndContent(): Iterator
-    {
-        yield [__DIR__ . '/RemoveSource/before2.txt', '', 'method', 'getThis()'];
-    }
-
-    public function testRemoveTagByNameAndContentComplex(): void
-    {
-        $phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/RemoveSource/before4.txt');
-
-        $this->docBlockManipulator->removeTagByNameAndContent($phpDocInfo, 'method', 'setName');
-        $this->docBlockManipulator->removeTagByNameAndContent($phpDocInfo, 'method', 'addItem');
-        $this->docBlockManipulator->removeTagByNameAndContent($phpDocInfo, 'method', 'setItems');
-        $this->docBlockManipulator->removeTagByNameAndContent($phpDocInfo, 'method', 'setEnabled');
-
-        $this->assertStringEqualsFile(
-            __DIR__ . '/RemoveSource/after4.txt',
-            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo)
-        );
-    }
-
-    /**
      * @dataProvider provideDataForRemoveParamTagByParameter()
      */
     public function testRemoveParamTagByParameter(

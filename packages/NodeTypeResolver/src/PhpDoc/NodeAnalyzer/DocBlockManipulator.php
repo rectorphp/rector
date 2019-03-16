@@ -302,29 +302,6 @@ final class DocBlockManipulator
         }
     }
 
-    public function removeTagByNameAndContent(PhpDocInfo $phpDocInfo, string $tagName, string $tagContent): void
-    {
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
-
-        $tagName = AnnotationNaming::normalizeName($tagName);
-        $phpDocTagNodes = $phpDocNode->getTagsByName($tagName);
-
-        foreach ($phpDocTagNodes as $phpDocTagNode) {
-            if (! $phpDocTagNode instanceof PhpDocTagNode) {
-                continue;
-            }
-
-            if (! $phpDocTagNode->value instanceof PhpDocTagValueNode) {
-                continue;
-            }
-
-            // e.g. @method someMethod(), only matching content is enough, due to real case usability
-            if (Strings::contains((string) $phpDocTagNode->value, $tagContent)) {
-                $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
-            }
-        }
-    }
-
     public function removeParamTagByParameter(PhpDocInfo $phpDocInfo, string $parameterName): void
     {
         $phpDocNode = $phpDocInfo->getPhpDocNode();
