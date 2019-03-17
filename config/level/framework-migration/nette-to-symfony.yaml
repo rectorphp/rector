@@ -1,7 +1,5 @@
 imports:
-    - { resource: 'kdyby-to-symfony.yaml' }
-    - { resource: 'contributte-to-symfony.yaml' }
-    - { resource: 'doctrine.yaml' }
+    - { resource: 'nette-to-symfony/*.yaml' }
 
 services:
     Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector: ~
