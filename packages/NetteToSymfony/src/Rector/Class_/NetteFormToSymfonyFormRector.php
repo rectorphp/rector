@@ -46,16 +46,14 @@ final class NetteFormToSymfonyFormRector extends AbstractRector
         'addCheckbox' => 'Symfony\Component\Form\Extension\Core\Type\CheckboxType',
 
         'addUpload' => 'Symfony\Component\Form\Extension\Core\Type\FileType',
+        'addImage' => 'Symfony\Component\Form\Extension\Core\Type\FileType',
+        'addMultiUpload' => 'Symfony\Component\Form\Extension\Core\Type\FileType',
 
         // https://symfony.com/doc/current/reference/forms/types/choice.html#select-tag-checkboxes-or-radio-buttons
         'addSelect' => 'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
         'addRadioList' => 'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
         'addCheckboxList' => 'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
         'addMultiSelect' => 'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
-
-        // @todo
-        // 'addMultiUpload' => 'Symfony\Component\Form\Extension\Core\Type\FileType',
-        //  'addImage' => 'Symfony\Component\Form\Extension\Core\Type\FileType',
 
         'addSubmit' => 'Symfony\Component\Form\Extension\Core\Type\SubmitType',
         'addButton' => 'Symfony\Component\Form\Extension\Core\Type\ButtonType',
@@ -160,14 +158,8 @@ CODE_SAMPLE
         return new MethodCall(new Variable('this'), 'createFormBuilder');
     }
 
-    private function addChoiceTypeOptions(string $classType, string $method, Array_ $optionsArray): void
+    private function addChoiceTypeOptions(string $method, Array_ $optionsArray): void
     {
-        if ($classType !== 'Symfony\Component\Form\Extension\Core\Type\ChoiceType') {
-            return;
-        }
-
-        $expanded = false;
-        $multiple = false;
         if ($method === 'addSelect') {
             $expanded = false;
             $multiple = false;
@@ -180,6 +172,8 @@ CODE_SAMPLE
         } elseif ($method === 'addMultiSelect') {
             $expanded = false;
             $multiple = true;
+        } else {
+            return;
         }
 
         $optionsArray->items[] = new ArrayItem(
@@ -208,12 +202,22 @@ CODE_SAMPLE
             $optionsArray->items[] = new ArrayItem($methodCall->args[1]->value, new String_('label'));
         }
 
-        $this->addChoiceTypeOptions($classType, $method, $optionsArray);
+        $this->addChoiceTypeOptions($method, $optionsArray);
+        $this->addMultiFileTypeOptions($method, $optionsArray);
 
         $methodCall->args[1] = new Arg($this->createClassConstantReference($classType));
 
         if (count($optionsArray->items) > 0) {
             $methodCall->args[2] = new Arg($optionsArray);
         }
+    }
+
+    private function addMultiFileTypeOptions(string $method, Array_ $optionsArray): void
+    {
+        if ($method !== 'addMultiUpload') {
+            return;
+        }
+
+        $optionsArray->items[] = new ArrayItem($this->createTrue(), new String_('multiple'));
     }
 }

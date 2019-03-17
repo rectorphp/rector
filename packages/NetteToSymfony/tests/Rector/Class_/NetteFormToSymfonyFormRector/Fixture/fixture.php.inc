@@ -25,6 +25,8 @@ class SomePresenter extends NettePresenter
         $form->addRadioList('radio_list');
         $form->addCheckboxList('checkbox_list');
         $form->addMultiSelect('multi_select');
+
+        $form->addMultiUpload('multi_upload');
     }
 }
 
@@ -57,6 +59,8 @@ class SomePresenter extends NettePresenter
         $form->add('radio_list', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, ['expanded' => true, 'multiple' => false]);
         $form->add('checkbox_list', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, ['expanded' => true, 'multiple' => true]);
         $form->add('multi_select', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, ['expanded' => false, 'multiple' => true]);
+
+        $form->add('multi_upload', \Symfony\Component\Form\Extension\Core\Type\FileType::class, ['multiple' => true]);
     }
 }
 
