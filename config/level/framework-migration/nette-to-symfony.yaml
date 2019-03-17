@@ -1,9 +1,5 @@
 imports:
-    - { resource: 'kdyby-to-symfony.yaml' }
-    - { resource: 'contributte-to-symfony.yaml' }
-    - { resource: 'doctrine.yaml' }
-    - { resource: 'nette-forms-to-symfony.yaml' }
-    - { resource: 'nette-tester-to-phpunit.yaml' }
+    - { resource: 'nette-to-symfony/*.yaml' }
 
 services:
     Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector: ~
@@ -116,4 +112,3 @@ services:
             DELETE: Symfony\Component\HttpFoundation\Request::METHOD_DELETE
             PATCH: Symfony\Component\HttpFoundation\Request::METHOD_PATCH
             OPTIONS: Symfony\Component\HttpFoundation\Request::METHOD_OPTIONS
-    Rector\NetteToSymfony\Rector\Class_\NetteControlToSymfonyControllerRector: ~

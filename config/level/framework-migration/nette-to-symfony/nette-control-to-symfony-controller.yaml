@@ -1,0 +1,2 @@
+services:
+    Rector\NetteToSymfony\Rector\Class_\NetteControlToSymfonyControllerRector: ~
