@@ -2,6 +2,7 @@
 
 namespace Rector\PhpSpecToPHPUnit\Rector\Class_;
 
+use PhpParser\Builder\Method;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -10,11 +11,15 @@ use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
@@ -175,11 +180,27 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function processLetMethod(ClassMethod $classMethod): void
+    private function processBeConstructed(ClassMethod $classMethod): void
     {
-        $classMethod->name = new Identifier('setUp');
+        if ($this->isName($classMethod, 'let')) {
+            $classMethod->name = new Identifier('setUp');
+            $this->makeProtected($classMethod);
+        }
 
-        $this->makeProtected($classMethod);
+        // remove params and turn them to instances
+        $assigns = [];
+        if ($classMethod->params) {
+            foreach ($classMethod->params as $param) {
+                if (! $param->type instanceof Name) {
+                    throw new ShouldNotHappenException();
+                }
+
+                $assign = new Assign($param->var, new New_($param->type));
+                $assigns[] = new Expression($assign);
+            }
+
+            $classMethod->params = [];
+        }
 
         // "beConstructedWith()" → "$this->{testedObject} = new ..."
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
@@ -187,15 +208,33 @@ CODE_SAMPLE
                 return null;
             }
 
-            if (! $this->isName($node, 'beConstructedWith')) {
+            if (! $this->isName($node, 'beConstructed*')) {
                 return null;
             }
 
-            $new = new New_(new FullyQualified($this->testedClass));
-            $new->args = $node->args;
+            if ($this->isName($node, 'beConstructedWith')) {
+                $new = new New_(new FullyQualified($this->testedClass));
+                $new->args = $node->args;
 
-            return new Assign($this->testedObjectPropertyFetch, $new);
+                return new Assign($this->testedObjectPropertyFetch, $new);
+            } elseif ($this->isName($node, 'beConstructedThrough')) {
+                // static method
+                $methodName = $this->getValue($node->args[0]->value);
+                $staticCall = new StaticCall(new FullyQualified($this->testedClass), $methodName);
+
+                if (isset($node->args[1])) {
+                    $staticCall->args[] = $node->args[1];
+                }
+
+                return new Assign($this->testedObjectPropertyFetch, $staticCall);
+            }
+
+            return null;
         });
+
+        if ($assigns) {
+            $classMethod->stmts = array_merge($assigns, (array) $classMethod->stmts);
+        }
     }
 
     private function thisToTestedObjectPropertyFetch(Expr $expr): Expr
@@ -233,9 +272,10 @@ CODE_SAMPLE
         // let → setUp
         foreach ($this->classManipulator->getMethods($class) as $method) {
             if ($this->isName($method, 'let')) {
-                $this->processLetMethod($method);
+                $this->processBeConstructed($method);
             } else {
                 /** @var string $name */
+                $this->processBeConstructed($method);
                 $this->processTestMethod($method);
             }
         }
@@ -313,15 +353,36 @@ CODE_SAMPLE
             return;
         }
 
-        $this->removeNode($nextCall);
+        if ($this->isName($nextCall, 'duringInstantiation')) {
+            // expected instantiation
+            /** @var Expression $previousExpression */
+            $previousExpression = $methodCall->getAttribute(Attribute::PREVIOUS_EXPRESSION);
 
-        $methodName = $this->getValue($nextCall->args[0]->value);
+            /** @var Expression $previousPreviousExpression */
+            $previousPreviousExpression = $previousExpression->getAttribute(Attribute::PREVIOUS_EXPRESSION);
 
-        $separatedCall = new MethodCall($this->testedObjectPropertyFetch, $methodName);
-        $separatedCall->args[] = $nextCall->args[1];
+            $this->addNodeAfterNode($expectException, $previousPreviousExpression);
+            $this->removeNode($nextCall);
+        } else {
+            if (! isset($nextCall->args[0])) {
+                return;
+            }
 
-        $this->addNodeAfterNode($expectException, $methodCall);
-        $this->addNodeAfterNode($separatedCall, $methodCall);
+            $methodName = $this->getValue($nextCall->args[0]->value);
+
+            $this->removeNode($nextCall);
+
+            $separatedCall = new MethodCall($this->testedObjectPropertyFetch, $methodName);
+
+            $this->addNodeAfterNode($expectException, $methodCall);
+
+            if (! isset($nextCall->args[1])) {
+                return;
+            }
+
+            $separatedCall->args[] = $nextCall->args[1];
+            $this->addNodeAfterNode($separatedCall, $methodCall);
+        }
     }
 
     private function resolveBoolMethodName(string $name, Expr $expr): string

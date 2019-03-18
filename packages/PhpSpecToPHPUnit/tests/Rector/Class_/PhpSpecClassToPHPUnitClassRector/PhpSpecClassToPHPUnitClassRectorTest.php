@@ -10,7 +10,11 @@ final class PhpSpecClassToPHPUnitClassRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/full_blown.php.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/full_blown.php.inc',
+            __DIR__ . '/Fixture/let_create_edge.php.inc',
+        ]);
     }
 
     protected function getRectorClass(): string
