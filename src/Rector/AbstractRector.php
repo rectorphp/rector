@@ -4,6 +4,7 @@ namespace Rector\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
@@ -98,8 +99,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         // changed!
         if ($originalNode !== $node) {
             $this->mirrorAttributes($originalNode, $node);
+            $this->updateAttributes($node);
             $this->keepFileInfoAttribute($node, $originalNode);
             $this->notifyNodeChangeFileInfo($node);
+
         // doc block has changed
         } elseif ($node->getComments() !== $originalComment || $node->getDocComment() !== $originalDocComment) {
             $this->notifyNodeChangeFileInfo($node);
@@ -235,6 +238,14 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             }
 
             $newNode->setAttribute($attributeName, $oldNodeAttributeValue);
+        }
+    }
+
+    private function updateAttributes(Node $node): void
+    {
+        // update Resolved name attribute if name is changed
+        if ($node instanceof Name) {
+            $node->setAttribute(Attribute::RESOLVED_NAME, $node->toString());
         }
     }
 }
