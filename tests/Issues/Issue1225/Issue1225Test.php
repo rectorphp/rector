@@ -1,0 +1,18 @@
+<?php declare(strict_types=1);
+
+namespace Rector\Tests\Issues\Issue1225;
+
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+
+final class Issue1225Test extends AbstractRectorTestCase
+{
+    public function test(): void
+    {
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture1225.php']);
+    }
+
+    protected function provideConfig(): string
+    {
+        return __DIR__ . '/config/config1225.yaml';
+    }
+}
