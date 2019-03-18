@@ -2,14 +2,11 @@
 
 namespace Rector\Tests\Issues\Issue1225\Fixture;
 
-final class SomeController
+function issue1225()
 {
-    public function view($id = null)
-    {
-        $this->safeTwigEnvironment = new \Twig_Environment(
-            new \Twig_Loader_Array([])
-        );
-    }
+    $safeTwigEnvironment = new \Twig_Environment(
+        new \Twig_Loader_Array([])
+    );
 }
 
 ?>
@@ -18,14 +15,11 @@ final class SomeController
 
 namespace Rector\Tests\Issues\Issue1225\Fixture;
 
-final class SomeController
+function issue1225()
 {
-    public function view($id = null)
-    {
-        $this->safeTwigEnvironment = new \Twig\Environment(
-            new \Twig\Loader\ArrayLoader([])
-        );
-    }
+    $safeTwigEnvironment = new \Twig\Environment(
+        new \Twig\Loader\ArrayLoader([])
+    );
 }
 
 ?>
