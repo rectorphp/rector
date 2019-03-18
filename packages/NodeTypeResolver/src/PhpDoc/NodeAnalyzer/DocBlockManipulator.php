@@ -443,6 +443,11 @@ final class DocBlockManipulator
 
         $phpDoc = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
         if ($phpDoc !== '') {
+            // no change, don't save it
+            if ($node->getDocComment()->getText() === $phpDoc) {
+                return;
+            }
+
             $node->setDocComment(new Doc($phpDoc));
             return;
         }
