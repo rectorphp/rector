@@ -46,10 +46,10 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
             [
                 new CodeSample(
                     '$this->assertTrue($foo instanceof Foo, "message");',
-                    '$this->assertFalse($foo instanceof Foo, "message");'
+                    '$this->assertInstanceOf("Foo", $foo, "message");'
                 ),
                 new CodeSample(
-                    '$this->assertInstanceOf("Foo", $foo, "message");',
+                    '$this->assertFalse($foo instanceof Foo, "message");',
                     '$this->assertNotInstanceOf("Foo", $foo, "message");'
                 ),
             ]
