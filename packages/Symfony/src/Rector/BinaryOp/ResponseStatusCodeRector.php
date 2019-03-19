@@ -4,6 +4,7 @@ namespace Rector\Symfony\Rector\BinaryOp;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\NodeDumper;
 use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Rector\AbstractRector;
@@ -12,10 +13,12 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class ResponseStatusCodeRector extends AbstractRector
 {
+    private const RESPONSE_CLASS = 'Symfony\Component\HttpFoundation\Response';
+
     /**
      * @var array
      */
-    private $codeToConst = [
+    private const CODE_TO_CONST = [
         100 => 'HTTP_CONTINUE',
         101 => 'HTTP_SWITCHING_PROTOCOLS',
         102 => 'HTTP_PROCESSING',
@@ -132,7 +135,7 @@ CODE_SAMPLE
             return $this->processMethodCall($node);
         }
 
-        if ($node instanceof Node\Expr\BinaryOp\Identical || $node instanceof Node\Expr\BinaryOp\NotIdentical || $node instanceof Node\Expr\BinaryOp\Equal || $node instanceof Node\Expr\BinaryOp\NotEqual) {
+        if ($node instanceof Node\Expr\BinaryOp) {
             return $this->processBinaryOp($node);
         }
 
@@ -141,7 +144,11 @@ CODE_SAMPLE
 
     private function processMethodCall(Node\Expr\MethodCall $methodCall): ?Node\Expr\MethodCall
     {
-        if (!$this->isType($methodCall->var, 'Symfony\\Component\\HttpFoundation\\Response') || !$this->isName($methodCall, 'setStatusCode')) {
+        if (!$this->isType($methodCall->var, self::RESPONSE_CLASS)) {
+            return null;
+        }
+
+        if (!$this->isName($methodCall, 'setStatusCode')) {
             return null;
         }
 
@@ -151,11 +158,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if (!isset($this->codeToConst[$statusCode->value])) {
+        if (!isset(self::CODE_TO_CONST[$statusCode->value])) {
             return null;
         }
 
-        $methodCall->args[0] = new Node\Arg($this->createClassConstant('Symfony\\Component\\HttpFoundation\\Response', $this->codeToConst[$statusCode->value]));
+        $methodCall->args[0] = new Node\Arg($this->createClassConstant(self::RESPONSE_CLASS, self::CODE_TO_CONST[$statusCode->value]));
 
 
         return $methodCall;
@@ -163,24 +170,47 @@ CODE_SAMPLE
 
     private function processBinaryOp(Node\Expr\BinaryOp $node): ?Node\Expr\BinaryOp
     {
-        /** @var Node\Expr\MethodCall $left */
-        $left = $node->left;
-
-        if (!$this->isType($left, 'Symfony\\Component\\HttpFoundation\\Response') || !$this->isName($left, 'getStatusCode')) {
+        if (!$this->isGetStatusMethod($node->left) && !$this->isGetStatusMethod($node->right)) {
             return null;
         }
 
-        if (! $node->right instanceof Node\Scalar\LNumber) {
-            return null;
+        if ($node->right instanceof Node\Scalar\LNumber && $this->isGetStatusMethod($node->left)) {
+            $node->right = $this->convertNumberToConstant($node->right);
+
+            return $node;
         }
 
+        if ($node->left instanceof Node\Scalar\LNumber && $this->isGetStatusMethod($node->right)) {
+            $node->left = $this->convertNumberToConstant($node->left);
 
-        if (!isset($this->codeToConst[$node->right->value])) {
-            return null;
+            return $node;
         }
 
-        $node->right = $this->createClassConstant('Symfony\\Component\\HttpFoundation\\Response', $this->codeToConst[$node->right->value]);
+        return null;
+    }
 
-        return $node;
+    private function isGetStatusMethod(Node $node): bool
+    {
+        if (! $node instanceof Node\Expr\MethodCall) {
+            return false;
+        }
+
+        if (!$this->isType($node, self::RESPONSE_CLASS)) {
+            return false;
+        }
+
+        return $this->isName($node, 'getStatusCode');
+    }
+
+    /**
+     * @return ClassConstFetch|Node\Scalar\LNumber
+     */
+    private function convertNumberToConstant(Node\Scalar\LNumber $number)
+    {
+        if (!isset(self::CODE_TO_CONST[$number->value])) {
+            return $number;
+        }
+
+        return $this->createClassConstant(self::RESPONSE_CLASS, self::CODE_TO_CONST[$number->value]);
     }
 }
