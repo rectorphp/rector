@@ -2,11 +2,12 @@
 
 namespace Rector\PhpSpecToPHPUnit\Rector\Class_;
 
-use PhpParser\Builder\Method;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -195,8 +196,23 @@ CODE_SAMPLE
                     throw new ShouldNotHappenException();
                 }
 
-                $assign = new Assign($param->var, new New_($param->type));
-                $assigns[] = new Expression($assign);
+                $methodCall = new MethodCall(new Variable('this'), 'createMock');
+                $methodCall->args[] = new Arg(new ClassConstFetch(new FullyQualified($param->type), 'class'));
+
+                $varDoc = sprintf(
+                    '/** @var \%s|\%s $%s */',
+                    $this->getName($param->type),
+                    'PHPUnit\Framework\MockObject\MockObject',
+                    $this->getName($param->var)
+                );
+
+                $assign = new Assign($param->var, $methodCall);
+
+                // add @var doc comment
+                $assignExpression = new Expression($assign);
+                $assignExpression->setDocComment(new Doc($varDoc));
+
+                $assigns[] = $assignExpression;
             }
 
             $classMethod->params = [];
@@ -318,6 +334,11 @@ CODE_SAMPLE
             }
 
             if ($node->var instanceof Variable && $this->isName($node->var, 'this')) {
+                // skip "createMock" method
+                if ($this->isName($node, 'createMock')) {
+                    return $node;
+                }
+
                 // $this->clone() ↓
                 // clone $this->testedObject
                 if ($this->isName($node, 'clone')) {
