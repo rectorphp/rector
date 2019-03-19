@@ -20,7 +20,7 @@ final class ListSwapArrayOrderRector extends AbstractRector
     {
         return new RectorDefinition(
             'list() assigns variables in reverse order - relevant in array assign',
-            [new CodeSample('list($a[], $a[]) = [1, 2];', 'list($a[], $a[]) = array_reverse([1, 2])];')]
+            [new CodeSample('list($a[], $a[]) = [1, 2];', 'list($a[], $a[]) = array_reverse([1, 2]);')]
         );
     }
 
