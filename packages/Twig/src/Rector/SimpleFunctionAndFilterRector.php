@@ -87,7 +87,7 @@ class SomeExtension extends Twig_Extension
         ];
     }
 
-    public function getFilteres()
+    public function getFilters()
     {
         return [
              new Twig_SimpleFilter('is_mobile', [$this, 'isMobile']),
