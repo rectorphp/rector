@@ -2,12 +2,11 @@
 
 namespace Rector\PhpSpecToPHPUnit\Rector\Class_;
 
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -15,12 +14,10 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
@@ -33,6 +30,7 @@ use Rector\Util\RectorStrings;
 
 /**
  * @see https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
+ * @see http://www.phpspec.net/en/stable/cookbook/construction.html
  */
 final class PhpSpecClassToPHPUnitClassRector extends AbstractRector
 {
@@ -188,36 +186,6 @@ CODE_SAMPLE
             $this->makeProtected($classMethod);
         }
 
-        // remove params and turn them to instances
-        $assigns = [];
-        if ($classMethod->params) {
-            foreach ($classMethod->params as $param) {
-                if (! $param->type instanceof Name) {
-                    throw new ShouldNotHappenException();
-                }
-
-                $methodCall = new MethodCall(new Variable('this'), 'createMock');
-                $methodCall->args[] = new Arg(new ClassConstFetch(new FullyQualified($param->type), 'class'));
-
-                $varDoc = sprintf(
-                    '/** @var \%s|\%s $%s */',
-                    $this->getName($param->type),
-                    'PHPUnit\Framework\MockObject\MockObject',
-                    $this->getName($param->var)
-                );
-
-                $assign = new Assign($param->var, $methodCall);
-
-                // add @var doc comment
-                $assignExpression = new Expression($assign);
-                $assignExpression->setDocComment(new Doc($varDoc));
-
-                $assigns[] = $assignExpression;
-            }
-
-            $classMethod->params = [];
-        }
-
         // "beConstructedWith()" → "$this->{testedObject} = new ..."
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) {
             if (! $node instanceof MethodCall) {
@@ -239,7 +207,13 @@ CODE_SAMPLE
                 $staticCall = new StaticCall(new FullyQualified($this->testedClass), $methodName);
 
                 if (isset($node->args[1])) {
-                    $staticCall->args[] = $node->args[1];
+                    if ($node->args[1]->value instanceof Array_) {
+                        /** @var Array_ $array */
+                        $array = $node->args[1]->value;
+                        foreach ($array->items as $arrayItem) {
+                            $staticCall->args[] = new Arg($arrayItem->value);
+                        }
+                    }
                 }
 
                 return new Assign($this->testedObjectPropertyFetch, $staticCall);
@@ -247,10 +221,6 @@ CODE_SAMPLE
 
             return null;
         });
-
-        if ($assigns) {
-            $classMethod->stmts = array_merge($assigns, (array) $classMethod->stmts);
-        }
     }
 
     private function thisToTestedObjectPropertyFetch(Expr $expr): Expr
