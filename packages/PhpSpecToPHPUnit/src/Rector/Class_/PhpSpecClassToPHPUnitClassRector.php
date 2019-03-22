@@ -96,7 +96,8 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
         $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
         $newClass = new New_(new FullyQualified($this->testedClass));
 
-        $letClassMethod = new ClassMethod(new Identifier('let'));
+        $letClassMethod = new ClassMethod(new Identifier('setUp'));
+        $this->makeProtected($letClassMethod);
         $letClassMethod->stmts[] = new Expression(new Assign($propertyFetch, $newClass));
 
         $this->phpUnitTypeDeclarationDecorator->decorate($letClassMethod);
