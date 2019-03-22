@@ -17,6 +17,11 @@ final class PHPUnitTypeDeclarationDecorator
             return;
         }
 
+        // skip test run
+        if (defined('PHPUNIT_COMPOSER_INSTALL')) {
+            return;
+        }
+
         $reflectionMethod = new ReflectionMethod('PHPUnit\Framework\TestCase', 'setUp');
         if (! $reflectionMethod->hasReturnType()) {
             return;
