@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecClassToPHPUnitClassRector\Fixture;
+namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
 use Ecommerce\Cart\Cart;
 use Ecommerce\Cart\Exception\NotFoundException;
@@ -11,7 +11,7 @@ use Ecommerce\Pricing\Price\CalculatedPrice;
 use Ecommerce\Pricing\Price\Price;
 use Ecommerce\Taxing\PriceType;
 use Ramsey\Uuid\Uuid;
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecClassToPHPUnitClassRector\Source\DummyObjectBehavior;
+use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
 
 class CartSpec extends DummyObjectBehavior
 {
@@ -175,7 +175,7 @@ class CartSpec extends DummyObjectBehavior
 -----
 <?php
 
-namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecClassToPHPUnitClassRector\Fixture;
+namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
 use Ecommerce\Cart\Cart;
 use Ecommerce\Cart\Exception\NotFoundException;
@@ -186,19 +186,19 @@ use Ecommerce\Pricing\Price\CalculatedPrice;
 use Ecommerce\Pricing\Price\Price;
 use Ecommerce\Taxing\PriceType;
 use Ramsey\Uuid\Uuid;
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecClassToPHPUnitClassRector\Source\DummyObjectBehavior;
+use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
 
 class CartTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecClassToPHPUnitClassRector\Fixture\Cart
+     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Cart
      */
     private $cart;
     protected function setUp()
     {
         DefaultCurrency::setProvider(new DummyDefaultCurrencyProvider());
 
-        $this->cart = new \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecClassToPHPUnitClassRector\Fixture\Cart(Uuid::uuid1());
+        $this->cart = new \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Cart(Uuid::uuid1());
     }
 
     public function testInitializable()

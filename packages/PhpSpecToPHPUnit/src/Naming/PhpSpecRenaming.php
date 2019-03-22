@@ -3,6 +3,7 @@
 namespace Rector\PhpSpecToPHPUnit\Naming;
 
 use Nette\Utils\Strings;
+use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -95,8 +96,18 @@ final class PhpSpecRenaming
             throw new ShouldNotHappenException();
         }
 
-        $bareClassName = RectorStrings::removeSuffixes($class->name->toString(), ['Spec']);
+        $bareClassName = RectorStrings::removeSuffixes($class->name->toString(), ['Spec', 'Test']);
 
         return lcfirst($bareClassName);
+    }
+
+    public function resolveTestedClass(Node $node): string
+    {
+        /** @var string $className */
+        $className = $node->getAttribute(Attribute::CLASS_NAME);
+
+        $newClassName = RectorStrings::removePrefixes($className, ['spec\\']);
+
+        return RectorStrings::removeSuffixes($newClassName, ['Spec']);
     }
 }
