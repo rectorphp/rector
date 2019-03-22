@@ -59,7 +59,7 @@ class OrderSpec extends ObjectBehavior
         /** @var ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
         $shippingMethod = $this->createMock(ShippingMethod::class);
 
-        $factory->method('createShippingMethodFor')->expects($this->once())->willReturn($shippingMethod);
+        $factory->expects($this->once())->method('createShippingMethodFor')->willReturn($shippingMethod);
     }
 }
 CODE_SAMPLE

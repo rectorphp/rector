@@ -16,7 +16,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 
 final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRector
@@ -118,26 +117,23 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
     private function processMethodCall(MethodCall $methodCall): ?MethodCall
     {
         if ($this->isName($methodCall, 'shouldBeCalled')) {
-            $methodCall->name = new Identifier('expects');
+            if (! $methodCall->var instanceof MethodCall) {
+                throw new ShouldNotHappenException();
+            }
+
+            $mockMethodName = $this->getName($methodCall->var);
+            if ($mockMethodName === null) {
+                throw new ShouldNotHappenException();
+            }
+
+            $methodCall->var->name = new Identifier('expects');
             $thisOnceMethodCall = new MethodCall(new Variable('this'), new Identifier('once'));
-            $methodCall->args[] = new Arg($thisOnceMethodCall);
+            $methodCall->var->args = [new Arg($thisOnceMethodCall)];
+
+            $methodCall->name = new Identifier('method');
+            $methodCall->args = [new Arg(new String_($mockMethodName))];
 
             return $methodCall;
-        }
-
-        // add method mocks on mock variable
-        if ($this->isNames($methodCall->var, $this->mockVariableNames)) {
-            $nextNode = $methodCall->getAttribute(Attribute::NEXT_NODE);
-            // @todo check maybe for the name "isName($node, 'shouldBeCalled')"
-            if ($nextNode instanceof Identifier && $this->isName($nextNode, 'shouldBeCalled')) {
-                /** @var string $methodName */
-                $methodName = $this->getName($methodCall);
-
-                $methodCall->args = [new Arg(new String_($methodName))];
-                $methodCall->name = new Identifier('method');
-
-                return $methodCall;
-            }
         }
 
         return null;
