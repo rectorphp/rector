@@ -9,8 +9,10 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
@@ -92,10 +94,10 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
     private function createLetClassMethod(string $propertyName): ClassMethod
     {
         $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
-        $newClass = new New_(new Name($this->testedClass));
+        $newClass = new New_(new FullyQualified($this->testedClass));
 
         $letClassMethod = new ClassMethod(new Identifier('let'));
-        $letClassMethod->stmts[] = new Assign($propertyFetch, $newClass);
+        $letClassMethod->stmts[] = new Expression(new Assign($propertyFetch, $newClass));
 
         $this->phpUnitTypeDeclarationDecorator->decorate($letClassMethod);
 
