@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
+use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 
 final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitRector
@@ -15,11 +16,18 @@ final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitR
      */
     private $phpSpecRenaming;
 
+    /**
+     * @var PHPUnitTypeDeclarationDecorator
+     */
+    private $phpUnitTypeDeclarationDecorator;
+
     public function __construct(
         PhpSpecRenaming $phpSpecRenaming,
+        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
         string $objectBehaviorClass = 'PhpSpec\ObjectBehavior'
     ) {
         $this->phpSpecRenaming = $phpSpecRenaming;
+        $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
 
         parent::__construct($objectBehaviorClass);
     }
@@ -41,23 +49,20 @@ final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitR
             return null;
         }
 
-        if ($this->isName($node, 'let')) {
-            $this->processBeConstructed($node);
+        if ($this->isName($node, 'letGo')) {
+            $node->name = new Identifier('tearDown');
+            $this->makeProtected($node);
+            $this->phpUnitTypeDeclarationDecorator->decorate($node);
+        } elseif ($this->isName($node, 'let')) {
+            $node->name = new Identifier('setUp');
+            $this->makeProtected($node);
+            $this->phpUnitTypeDeclarationDecorator->decorate($node);
         } else {
             /** @var string $name */
-            $this->processBeConstructed($node);
             $this->processTestMethod($node);
         }
 
         return $node;
-    }
-
-    private function processBeConstructed(ClassMethod $classMethod): void
-    {
-        if ($this->isName($classMethod, 'let')) {
-            $classMethod->name = new Identifier('setUp');
-            $this->makeProtected($classMethod);
-        }
     }
 
     private function processTestMethod(ClassMethod $classMethod): void

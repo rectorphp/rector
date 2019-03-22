@@ -3,10 +3,18 @@
 namespace Rector\PhpSpecToPHPUnit\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
+use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 
 final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRector
@@ -26,13 +34,20 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
      */
     private $phpSpecRenaming;
 
+    /**
+     * @var PHPUnitTypeDeclarationDecorator
+     */
+    private $phpUnitTypeDeclarationDecorator;
+
     public function __construct(
         ClassManipulator $classManipulator,
         PhpSpecRenaming $phpSpecRenaming,
+        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
         string $objectBehaviorClass = 'PhpSpec\ObjectBehavior'
     ) {
         $this->classManipulator = $classManipulator;
         $this->phpSpecRenaming = $phpSpecRenaming;
+        $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
 
         parent::__construct($objectBehaviorClass);
     }
@@ -65,6 +80,25 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
         $this->testedClass = $this->phpSpecRenaming->resolveTestedClass($node);
         $this->classManipulator->addPropertyToClass($node, new VariableInfo($propertyName, $this->testedClass));
 
+        // add let if missing
+        if ($node->getMethod('let') === null) {
+            $letClassMethod = $this->createLetClassMethod($propertyName);
+            $this->classManipulator->addAsFirstMethod($node, $letClassMethod);
+        }
+
         return $node;
+    }
+
+    private function createLetClassMethod(string $propertyName): ClassMethod
+    {
+        $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
+        $newClass = new New_(new Name($this->testedClass));
+
+        $letClassMethod = new ClassMethod(new Identifier('let'));
+        $letClassMethod->stmts[] = new Assign($propertyFetch, $newClass);
+
+        $this->phpUnitTypeDeclarationDecorator->decorate($letClassMethod);
+
+        return $letClassMethod;
     }
 }
