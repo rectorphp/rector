@@ -3,16 +3,20 @@
 namespace Rector\Symfony\Rector\BinaryOp;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\NodeDumper;
-use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Scalar\LNumber;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ResponseStatusCodeRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
     private const RESPONSE_CLASS = 'Symfony\Component\HttpFoundation\Response';
 
     /**
@@ -113,8 +117,7 @@ class SomeController
     }
 }
 CODE_SAMPLE
-
-            )
+            ),
         ]);
     }
 
@@ -123,67 +126,67 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Node\Expr\BinaryOp::class, Node\Expr\MethodCall::class];
+        return [BinaryOp::class, MethodCall::class];
     }
 
     /**
-     * @param Node\Expr\BinaryOp|Node\Expr\MethodCall $node
+     * @param BinaryOp|MethodCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Node\Expr\MethodCall) {
+        if ($node instanceof MethodCall) {
             return $this->processMethodCall($node);
         }
 
-        if ($node instanceof Node\Expr\BinaryOp) {
+        if ($node instanceof BinaryOp) {
             return $this->processBinaryOp($node);
         }
 
         return $node;
     }
 
-    private function processMethodCall(Node\Expr\MethodCall $methodCall): ?Node\Expr\MethodCall
+    private function processMethodCall(MethodCall $methodCall): ?MethodCall
     {
-        if (!$this->isType($methodCall->var, self::RESPONSE_CLASS)) {
+        if (! $this->isType($methodCall->var, self::RESPONSE_CLASS)) {
             return null;
         }
 
-        if (!$this->isName($methodCall, 'setStatusCode')) {
+        if (! $this->isName($methodCall, 'setStatusCode')) {
             return null;
         }
 
         $statusCode = $methodCall->args[0]->value;
 
-        if (! $statusCode instanceof Node\Scalar\LNumber) {
+        if (! $statusCode instanceof LNumber) {
             return null;
         }
 
-        if (!isset(self::CODE_TO_CONST[$statusCode->value])) {
+        if (! isset(self::CODE_TO_CONST[$statusCode->value])) {
             return null;
         }
 
-        $methodCall->args[0] = new Node\Arg($this->createClassConstant(self::RESPONSE_CLASS, self::CODE_TO_CONST[$statusCode->value]));
-
+        $classConstant = $this->createClassConstant(self::RESPONSE_CLASS, self::CODE_TO_CONST[$statusCode->value]);
+        $methodCall->args[0] = new Arg($classConstant);
 
         return $methodCall;
     }
 
-    private function processBinaryOp(Node\Expr\BinaryOp $node): ?Node\Expr\BinaryOp
+    private function processBinaryOp(BinaryOp $binaryOp): ?BinaryOp
     {
-        if (!$this->isGetStatusMethod($node->left) && !$this->isGetStatusMethod($node->right)) {
+        if (! $this->isGetStatusMethod($binaryOp->left) && ! $this->isGetStatusMethod($binaryOp->right)) {
             return null;
         }
 
-        if ($node->right instanceof Node\Scalar\LNumber && $this->isGetStatusMethod($node->left)) {
-            $node->right = $this->convertNumberToConstant($node->right);
+        if ($binaryOp->right instanceof LNumber && $this->isGetStatusMethod($binaryOp->left)) {
+            $binaryOp->right = $this->convertNumberToConstant($binaryOp->right);
 
-            return $node;
+            return $binaryOp;
         }
 
-        if ($node->left instanceof Node\Scalar\LNumber && $this->isGetStatusMethod($node->right)) {
-            $node->left = $this->convertNumberToConstant($node->left);
+        if ($binaryOp->left instanceof LNumber && $this->isGetStatusMethod($binaryOp->right)) {
+            $binaryOp->left = $this->convertNumberToConstant($binaryOp->left);
 
-            return $node;
+            return $binaryOp;
         }
 
         return null;
@@ -191,11 +194,11 @@ CODE_SAMPLE
 
     private function isGetStatusMethod(Node $node): bool
     {
-        if (! $node instanceof Node\Expr\MethodCall) {
+        if (! $node instanceof MethodCall) {
             return false;
         }
 
-        if (!$this->isType($node, self::RESPONSE_CLASS)) {
+        if (! $this->isType($node, self::RESPONSE_CLASS)) {
             return false;
         }
 
@@ -203,14 +206,14 @@ CODE_SAMPLE
     }
 
     /**
-     * @return ClassConstFetch|Node\Scalar\LNumber
+     * @return ClassConstFetch|LNumber
      */
-    private function convertNumberToConstant(Node\Scalar\LNumber $number)
+    private function convertNumberToConstant(LNumber $lNumber)
     {
-        if (!isset(self::CODE_TO_CONST[$number->value])) {
-            return $number;
+        if (! isset(self::CODE_TO_CONST[$lNumber->value])) {
+            return $lNumber;
         }
 
-        return $this->createClassConstant(self::RESPONSE_CLASS, self::CODE_TO_CONST[$number->value]);
+        return $this->createClassConstant(self::RESPONSE_CLASS, self::CODE_TO_CONST[$lNumber->value]);
     }
 }
