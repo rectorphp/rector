@@ -17,69 +17,14 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 
-final class PhpSpecMocksToPHPUnitMocksRector extends AbstractRector
+final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRector
 {
-    /**
-     * @var string
-     */
-    private $objectBehaviorClass;
-
     /**
      * @var string[]
      */
     private $mockVariableNames = [];
-
-    public function __construct(string $objectBehaviorClass = 'PhpSpec\ObjectBehavior')
-    {
-        $this->objectBehaviorClass = $objectBehaviorClass;
-    }
-
-    public function getDefinition(): RectorDefinition
-    {
-        return new RectorDefinition('Migrate PhpSpec mocking behavior to PHPUnit mocks', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
-namespace spec\SomeNamespaceForThisTest;
-
-use PhpSpec\ObjectBehavior;
-
-class OrderSpec extends ObjectBehavior
-{
-    public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
-    {
-        $factory->createShippingMethodFor(Argument::any())->shouldBeCalled()->willReturn($shippingMethod);
-    }
-}
-CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
-namespace spec\SomeNamespaceForThisTest;
-
-class OrderSpec extends ObjectBehavior
-{
-    /**
-     * @var \SomeNamespaceForThisTest\Order
-     */
-    private $order;
-    protected function setUp()
-    {
-        /** @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
-        $factory = $this->createMock(OrderFactory::class);
-
-        /** @var ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
-        $shippingMethod = $this->createMock(ShippingMethod::class);
-
-        $factory->method('createShippingMethodFor')->expects($this->once())->willReturn($shippingMethod);
-    }
-}
-CODE_SAMPLE
-            ),
-        ]);
-    }
 
     /**
      * @return string[]
@@ -94,18 +39,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
-        if ($classNode === null) {
-            return null;
-        }
-
-        if (! $this->isType($classNode, $this->objectBehaviorClass)) {
+        if (! $this->isInPhpSpecBehavior($node)) {
             return null;
         }
 
         if ($node instanceof ClassMethod) {
-            // only public methods are tests
-            if (! $node->isPublic()) {
+            // public = tests, protected = internal, private = own (no framework magic)
+            if ($node->isPrivate()) {
                 return null;
             }
 
@@ -115,6 +55,12 @@ CODE_SAMPLE
         }
 
         return $this->processMethodCall($node);
+    }
+
+    protected function reset(): void
+    {
+        // reset once per class
+        $this->mockVariableNames = [];
     }
 
     private function createCreateMockCall(Param $param, Name $name): Expression
@@ -182,7 +128,6 @@ CODE_SAMPLE
         // add method mocks on mock variable
         if ($this->isNames($methodCall->var, $this->mockVariableNames)) {
             $nextNode = $methodCall->getAttribute(Attribute::NEXT_NODE);
-
             // @todo check maybe for the name "isName($node, 'shouldBeCalled')"
             if ($nextNode instanceof Identifier && $this->isName($nextNode, 'shouldBeCalled')) {
                 /** @var string $methodName */

@@ -1,13 +1,11 @@
-# see: https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
+parameters:
+    # for tests only
+    object_behavior_class: 'Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior'
+
 services:
-    # 1. first convert mocks
+    # order matters
     Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecMocksToPHPUnitMocksRector: ~
     Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecPromisesToPHPUnitAssertRector: ~
 
-    # 2. then methods
     Rector\PhpSpecToPHPUnit\Rector\ClassMethod\PhpSpecMethodToPHPUnitMethodRector: ~
-
-    # 3. then the class itself
     Rector\PhpSpecToPHPUnit\Rector\Class_\PhpSpecClassToPHPUnitClassRector: ~
-
-    Rector\PhpSpecToPHPUnit\Rector\RenameSpecFileToTestFileRector: ~

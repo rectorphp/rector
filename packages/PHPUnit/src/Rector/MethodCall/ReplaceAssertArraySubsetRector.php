@@ -115,6 +115,12 @@ CODE_SAMPLE
         return null;
     }
 
+    private function reset(): void
+    {
+        $this->expectedKeys = [];
+        $this->expectedValuesByKeys = [];
+    }
+
     /**
      * @param MethodCall|StaticCall $node
      */
@@ -157,12 +163,6 @@ CODE_SAMPLE
             $key = $this->getValue($arrayItem->key);
             $this->expectedValuesByKeys[$key] = $arrayItem->value;
         }
-    }
-
-    private function reset(): void
-    {
-        $this->expectedKeys = [];
-        $this->expectedValuesByKeys = [];
     }
 
     private function matchArray(Expr $expr): ?Array_
