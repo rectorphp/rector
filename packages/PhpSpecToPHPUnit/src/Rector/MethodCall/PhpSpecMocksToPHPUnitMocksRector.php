@@ -127,7 +127,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
             }
 
             $methodCall->var->name = new Identifier('expects');
-            $thisOnceMethodCall = new MethodCall(new Variable('this'), new Identifier('once'));
+            $thisOnceMethodCall = new MethodCall(new Variable('this'), new Identifier('atLeastOnce'));
             $methodCall->var->args = [new Arg($thisOnceMethodCall)];
 
             $methodCall->name = new Identifier('method');
