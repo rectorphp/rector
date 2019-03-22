@@ -143,28 +143,13 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             return null;
         }
 
-        /** @var Class_ $classNode */
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
-
-        $this->prepare($node, $classNode);
+        $this->prepare($node);
 
         if ($this->isName($node, 'beConstructed*')) {
             return $this->processBeConstructed($node);
         }
 
         $this->processMatchersKeys($node);
-
-        if ($this->isName($node, 'shouldBeCalled')) {
-            // chain call - use method that compares something
-            if ($node->getAttribute(Attribute::PARENT_NODE) instanceof MethodCall) {
-                /** @var MethodCall $node */
-                $node = $node->var;
-            // last call, no added value
-            } else {
-                $this->removeNode($node);
-                return null;
-            }
-        }
 
         foreach ($this->newMethodToOldMethods as $newMethod => $oldMethods) {
             if ($this->isNames($node, $oldMethods)) {
@@ -378,11 +363,14 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         return new PropertyFetch(new Variable('this'), $propertyName);
     }
 
-    private function prepare(Node $node, Class_ $classNode): void
+    private function prepare(Node $node): void
     {
         if ($this->isPrepared) {
             return;
         }
+
+        /** @var Class_ $classNode */
+        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
 
         $this->matchersKeys = $this->matchersManipulator->resolveMatcherNamesFromClass($classNode);
         $this->testedClass = $this->phpSpecRenaming->resolveTestedClass($node);
