@@ -47,6 +47,11 @@ final class VisibilityManipulator
     {
         $this->ensureIsClassMethodOrProperty($node, __METHOD__);
 
+        // no modifier
+        if ($node->flags === 0) {
+            return;
+        }
+
         if ($node->isPublic()) {
             $node->flags -= Class_::MODIFIER_PUBLIC;
         }
