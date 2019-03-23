@@ -3,12 +3,14 @@
 namespace Rector\PhpParser\Node\Commander;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 
 final class NodeRemovingCommander implements CommanderInterface
@@ -20,7 +22,14 @@ final class NodeRemovingCommander implements CommanderInterface
 
     public function addNode(Node $node): void
     {
-        if (! $node instanceof Expression && ($node->getAttribute(Attribute::PARENT_NODE) instanceof Expression)) {
+        // chain call: "->method()->another()"
+        if ($node instanceof MethodCall && $node->var instanceof MethodCall) {
+            throw new ShouldNotHappenException(
+                'Chain method calls cannot be removed this way. It would remove the whole tree of calls. Remove them manually by creating new parent node with no following method.'
+            );
+        } elseif (! $node instanceof Expression && ($node->getAttribute(
+            Attribute::PARENT_NODE
+        ) instanceof Expression)) {
             // only expressions can be removed
             $node = $node->getAttribute(Attribute::PARENT_NODE);
         }

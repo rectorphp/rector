@@ -20,6 +20,7 @@ final class PhpSpecToPHPUnitRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/let_create_edge.php.inc',
             __DIR__ . '/Fixture/mocking.php.inc',
             __DIR__ . '/Fixture/custom_matcher.php.inc',
+            __DIR__ . '/Fixture/exception.php.inc',
         ]);
     }
 

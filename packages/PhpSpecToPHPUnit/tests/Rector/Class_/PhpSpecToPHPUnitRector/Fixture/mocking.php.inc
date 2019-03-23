@@ -32,7 +32,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $factory = $this->createMock(OrderFactory::class);
         /** @var ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
         $shippingMethod = $this->createMock(ShippingMethod::class);
-        $factory->expects($this->once())->method('createShippingMethodFor')->willReturn($shippingMethod);
+        $factory->expects($this->atLeastOnce())->method('createShippingMethodFor')->willReturn($shippingMethod);
     }
 }
 

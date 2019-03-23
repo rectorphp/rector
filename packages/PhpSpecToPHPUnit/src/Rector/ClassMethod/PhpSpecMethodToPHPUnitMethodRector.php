@@ -2,6 +2,7 @@
 
 namespace Rector\PhpSpecToPHPUnit\Rector\ClassMethod;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -74,5 +75,18 @@ final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitR
 
         // change name to phpunit test case format
         $this->phpSpecRenaming->renameMethod($classMethod);
+
+        // reorder instantiation + expected exception
+        $previousStmt = null;
+        foreach ((array) $classMethod->stmts as $key => $stmt) {
+            if ($previousStmt && Strings::contains($this->print($stmt), 'duringInstantiation')) {
+                if (Strings::contains($this->print($previousStmt), 'beConstructedThrough')) {
+                    $classMethod->stmts[$key - 1] = $stmt;
+                    $classMethod->stmts[$key] = $previousStmt;
+                }
+            }
+
+            $previousStmt = $stmt;
+        }
     }
 }
