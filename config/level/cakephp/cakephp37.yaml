@@ -79,3 +79,5 @@ services:
             className:
                 set: 'setClassName'
                 get: 'getClassName'
+
+    Rector\CakePHP\Rector\Name\ChangeSnakedFixtureNameToCamel: ~
