@@ -234,8 +234,9 @@ class CartTest extends \PHPUnit\Framework\TestCase
     public function testThrowAnExceptionWhenItemIsNotInCart()
     {
         $id = Uuid::uuid1();
+
         $this->expectException(NotFoundException::class);
-        $this->cart->item([$id]);
+        $this->cart->item($id);
     }
 
     public function testSummUpQuantitiesWhenAddingSameItemMultipleTimes()
@@ -264,8 +265,9 @@ class CartTest extends \PHPUnit\Framework\TestCase
 
         $this->cart->add(new \Ecommerce\Cart\Item($id, 'Lorem ipsum', 3, new Price(671, $taxRate, $currency)));
         $this->cart->remove($id);
+
         $this->expectException(NotFoundException::class);
-        $this->cart->item([$id]);
+        $this->cart->item($id);
     }
 
     public function testCalculateZeroPriceWhenCartIsEmpty()

@@ -66,15 +66,15 @@ class CreateMeTest extends \PHPUnit\Framework\TestCase
     public function testBlows()
     {
         $this->expectException('SomeException');
-        $this->createMe->item([5]);
+        $this->createMe->item(5);
     }
 
     public function testCalled()
     {
         /** @var Cart|\PHPUnit\Framework\MockObject\MockObject $cart */
         $cart = $this->createMock(Cart::class);
-        $cart->expects($this->once())->method('price')->willReturn(5);
-        $cart->expects($this->once())->method('shippingAddress');
+        $cart->expects($this->atLeastOnce())->method('price')->willReturn(5);
+        $cart->expects($this->atLeastOnce())->method('shippingAddress');
     }
 
     public function testBoolCheck()

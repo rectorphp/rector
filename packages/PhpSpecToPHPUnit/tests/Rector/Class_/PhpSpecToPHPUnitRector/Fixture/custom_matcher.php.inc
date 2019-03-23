@@ -71,7 +71,7 @@ class RatesTest extends \PHPUnit\Framework\TestCase
     {
         /** @var Provider|\PHPUnit\Framework\MockObject\MockObject $provider */
         $provider = $this->createMock(Provider::class);
-        $provider->expects($this->once())->method('get')->willReturn(
+        $provider->expects($this->atLeastOnce())->method('get')->willReturn(
             '08.12.2017 #237
             země|měna|množství|kód|kurz
             Austrálie|dolar|1|AUD|16,362
@@ -89,7 +89,7 @@ class RatesTest extends \PHPUnit\Framework\TestCase
     {
         /** @var Provider|\PHPUnit\Framework\MockObject\MockObject $provider */
         $provider = $this->createMock(Provider::class);
-        $provider->expects($this->once())->method('get')->willReturn(
+        $provider->expects($this->atLeastOnce())->method('get')->willReturn(
             '08.12.2017 #237
             země|měna|množství|kód|kurz
             Austrálie|dolar|1|AUD|16,362

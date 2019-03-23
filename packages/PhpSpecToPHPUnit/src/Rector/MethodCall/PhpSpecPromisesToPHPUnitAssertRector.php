@@ -19,7 +19,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Expression;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpSpecToPHPUnit\MatchersManipulator;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
@@ -139,6 +139,14 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             return null;
         }
 
+        if ($this->isName($node, 'during')) {
+            return $this->processDuring($node);
+        }
+
+        if ($this->isName($node, 'duringInstantiation')) {
+            return $this->processDuringInstantiation($node);
+        }
+
         if ($this->isName($node, 'getMatchers')) {
             return null;
         }
@@ -155,11 +163,6 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             if ($this->isNames($node, $oldMethods)) {
                 return $this->createAssertMethod($newMethod, $node->var, $node->args[0]->value ?? null);
             }
-        }
-
-        if ($this->isName($node->name, 'shouldThrow')) {
-            $this->processShouldThrow($node);
-            return null;
         }
 
         if (! $node->var instanceof Variable) {
@@ -216,48 +219,6 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         $assetMethodCall->args[] = new Arg($this->thisToTestedObjectPropertyFetch($value));
 
         return $assetMethodCall;
-    }
-
-    private function processShouldThrow(MethodCall $methodCall): void
-    {
-        $expectException = new MethodCall(new Variable('this'), 'expectException');
-        $expectException->args[] = $methodCall->args[0];
-
-        $nextCall = $methodCall->getAttribute(Attribute::PARENT_NODE);
-        if (! $nextCall instanceof MethodCall) {
-            return;
-        }
-
-        if ($this->isName($nextCall, 'duringInstantiation')) {
-            // expected instantiation
-            /** @var Expression $previousExpression */
-            $previousExpression = $methodCall->getAttribute(Attribute::PREVIOUS_EXPRESSION);
-
-            /** @var Expression $previousPreviousExpression */
-            $previousPreviousExpression = $previousExpression->getAttribute(Attribute::PREVIOUS_EXPRESSION);
-
-            $this->addNodeAfterNode($expectException, $previousPreviousExpression);
-            $this->removeNode($nextCall);
-        } else {
-            if (! isset($nextCall->args[0])) {
-                return;
-            }
-
-            $methodName = $this->getValue($nextCall->args[0]->value);
-
-            $this->removeNode($nextCall);
-
-            $separatedCall = new MethodCall($this->testedObjectPropertyFetch, $methodName);
-
-            $this->addNodeAfterNode($expectException, $methodCall);
-
-            if (! isset($nextCall->args[1])) {
-                return;
-            }
-
-            $separatedCall->args[] = $nextCall->args[1];
-            $this->addNodeAfterNode($separatedCall, $methodCall);
-        }
     }
 
     private function resolveBoolMethodName(string $name, Expr $expr): string
@@ -377,5 +338,41 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         $this->testedObjectPropertyFetch = $this->createTestedObjectPropertyFetch($classNode);
 
         $this->isPrepared = true;
+    }
+
+    private function processDuring(MethodCall $methodCall): MethodCall
+    {
+        if (! isset($methodCall->args[0])) {
+            throw new ShouldNotHappenException();
+        }
+
+        $name = $this->getValue($methodCall->args[0]->value);
+        $thisObjectPropertyMethodCall = new MethodCall($this->testedObjectPropertyFetch, $name);
+
+        if (isset($methodCall->args[1]) && $methodCall->args[1]->value instanceof Array_) {
+            /** @var Array_ $array */
+            $array = $methodCall->args[1]->value;
+            if (isset($array->items[0])) {
+                $thisObjectPropertyMethodCall->args[] = new Arg($array->items[0]->value);
+            }
+        }
+
+        /** @var MethodCall $parentMethodCall */
+        $parentMethodCall = $methodCall->var;
+        $parentMethodCall->name = new Identifier('expectException');
+
+        // add $this->object->someCall($withArgs)
+        $this->addNodeAfterNode($thisObjectPropertyMethodCall, $methodCall);
+
+        return $parentMethodCall;
+    }
+
+    private function processDuringInstantiation(MethodCall $methodCall): MethodCall
+    {
+        /** @var MethodCall $parentMethodCall */
+        $parentMethodCall = $methodCall->var;
+        $parentMethodCall->name = new Identifier('expectException');
+
+        return $parentMethodCall;
     }
 }
