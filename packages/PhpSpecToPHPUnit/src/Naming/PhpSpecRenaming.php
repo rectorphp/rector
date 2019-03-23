@@ -41,10 +41,11 @@ final class PhpSpecRenaming
             return;
         }
 
-        $name = RectorStrings::removePrefixes(
-            $name,
-            ['it_should_have_', 'it_should_be', 'it_should_', 'it_is_', 'it_', 'is_']
-        );
+        if ($classMethod->isPrivate()) {
+            return;
+        }
+
+        $name = $this->removeNamePrefixes($name);
 
         // from PhpSpec to PHPUnit method naming convention
         $name = $this->stringFormatConverter->underscoreToCamelCase($name);
@@ -109,5 +110,17 @@ final class PhpSpecRenaming
         $newClassName = RectorStrings::removePrefixes($className, ['spec\\']);
 
         return RectorStrings::removeSuffixes($newClassName, ['Spec']);
+    }
+
+    private function removeNamePrefixes(string $name): string
+    {
+        $originalName = $name;
+
+        $name = RectorStrings::removePrefixes(
+            $name,
+            ['it_should_have_', 'it_should_be', 'it_should_', 'it_is_', 'it_', 'is_']
+        );
+
+        return $name ?: $originalName;
     }
 }

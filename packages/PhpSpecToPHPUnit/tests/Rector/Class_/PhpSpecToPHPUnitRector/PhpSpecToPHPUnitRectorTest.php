@@ -9,6 +9,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
  * @covers \Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecPromisesToPHPUnitAssertRector
  * @covers \Rector\PhpSpecToPHPUnit\Rector\ClassMethod\PhpSpecMethodToPHPUnitMethodRector
  * @covers \Rector\PhpSpecToPHPUnit\Rector\Class_\PhpSpecClassToPHPUnitClassRector
+ * @covers \Rector\PhpSpecToPHPUnit\Rector\Class_\AddMockPropertiesRector
  */
 final class PhpSpecToPHPUnitRectorTest extends AbstractRectorTestCase
 {
@@ -21,6 +22,11 @@ final class PhpSpecToPHPUnitRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/mocking.php.inc',
             __DIR__ . '/Fixture/custom_matcher.php.inc',
             __DIR__ . '/Fixture/exception.php.inc',
+            __DIR__ . '/Fixture/mock_method_call_arguments.php.inc',
+            __DIR__ . '/Fixture/no_self_type_test.php.inc',
+            __DIR__ . '/Fixture/keep_method.php.inc',
+            __DIR__ . '/Fixture/get_wrapped_object.php.inc',
+            __DIR__ . '/Fixture/mock_properties.php.inc',
         ]);
     }
 

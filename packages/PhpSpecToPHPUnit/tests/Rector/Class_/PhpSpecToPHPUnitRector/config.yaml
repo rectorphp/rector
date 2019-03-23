@@ -8,4 +8,8 @@ services:
     Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecPromisesToPHPUnitAssertRector: ~
 
     Rector\PhpSpecToPHPUnit\Rector\ClassMethod\PhpSpecMethodToPHPUnitMethodRector: ~
+
+    Rector\PhpSpecToPHPUnit\Rector\Class_\AddMockPropertiesRector: ~
     Rector\PhpSpecToPHPUnit\Rector\Class_\PhpSpecClassToPHPUnitClassRector: ~
+
+    Rector\PhpSpecToPHPUnit\Rector\ClassMethod\MockVariableToPropertyFetchRector: ~

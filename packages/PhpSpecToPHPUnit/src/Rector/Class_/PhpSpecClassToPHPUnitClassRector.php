@@ -4,11 +4,11 @@ namespace Rector\PhpSpecToPHPUnit\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -44,14 +44,11 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
     public function __construct(
         ClassManipulator $classManipulator,
         PhpSpecRenaming $phpSpecRenaming,
-        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
-        string $objectBehaviorClass = 'PhpSpec\ObjectBehavior'
+        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator
     ) {
         $this->classManipulator = $classManipulator;
         $this->phpSpecRenaming = $phpSpecRenaming;
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
-
-        parent::__construct($objectBehaviorClass);
     }
 
     /**
@@ -88,7 +85,7 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
             $this->classManipulator->addAsFirstMethod($node, $letClassMethod);
         }
 
-        return $node;
+        return $this->removeSelfTypeMethod($node);
     }
 
     private function createLetClassMethod(string $propertyName): ClassMethod
@@ -103,5 +100,41 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
         $this->phpUnitTypeDeclarationDecorator->decorate($letClassMethod);
 
         return $letClassMethod;
+    }
+
+    /**
+     * This is already checked on construction of object
+     */
+    private function removeSelfTypeMethod(Class_ $node): Class_
+    {
+        foreach ((array) $node->stmts as $key => $stmt) {
+            if (! $stmt instanceof ClassMethod) {
+                continue;
+            }
+
+            if (count((array) $stmt->stmts) !== 1) {
+                continue;
+            }
+
+            $innerClassMethodStmt = $stmt->stmts[0] instanceof Expression ? $stmt->stmts[0]->expr : $stmt->stmts[0];
+
+            if (! $innerClassMethodStmt instanceof MethodCall) {
+                continue;
+            }
+
+            if (! $this->isName($innerClassMethodStmt, 'shouldHaveType')) {
+                continue;
+            }
+
+            // not the tested type
+            if (! $this->isValue($innerClassMethodStmt->args[0]->value, $this->testedClass)) {
+                continue;
+            }
+
+            // remove it
+            unset($node->stmts[$key]);
+        }
+
+        return $node;
     }
 }

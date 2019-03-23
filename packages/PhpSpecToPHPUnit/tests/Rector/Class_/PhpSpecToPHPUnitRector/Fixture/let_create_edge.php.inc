@@ -33,24 +33,25 @@ use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\Du
 class CurrencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @var \CurrencyData|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $data;
+    /**
      * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Currency
      */
     private $currency;
     protected function setUp()
     {
-        /** @var CurrencyData|\PHPUnit\Framework\MockObject\MockObject $data */
-        $data = $this->createMock(CurrencyData::class);
-        $data->code = 'CZK';
-        $this->currency = \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Currency::create($data);
+        $this->data = $this->createMock(CurrencyData::class);
+        $this->data->code = 'CZK';
+        $this->currency = \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Currency::create($this->data);
     }
 
     public function testNotBeConstructedWithoutCode()
     {
-        /** @var CurrencyData|\PHPUnit\Framework\MockObject\MockObject $data */
-        $data = $this->createMock(CurrencyData::class);
-        $data->code = '';
+        $this->data->code = '';
         $this->expectException(ValidationException::class);
-        $this->currency = \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Currency::create($data);
+        $this->currency = \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Currency::create($this->data);
     }
 }
 

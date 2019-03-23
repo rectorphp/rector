@@ -74,7 +74,7 @@ class CreateMeTest extends \PHPUnit\Framework\TestCase
         /** @var Cart|\PHPUnit\Framework\MockObject\MockObject $cart */
         $cart = $this->createMock(Cart::class);
         $cart->expects($this->atLeastOnce())->method('price')->willReturn(5);
-        $cart->expects($this->atLeastOnce())->method('shippingAddress');
+        $cart->expects($this->atLeastOnce())->method('shippingAddress')->with($this->isType(Address::class));
     }
 
     public function testBoolCheck()

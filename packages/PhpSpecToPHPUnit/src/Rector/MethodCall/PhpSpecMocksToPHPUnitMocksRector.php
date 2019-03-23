@@ -5,25 +5,36 @@ namespace Rector\PhpSpecToPHPUnit\Rector\MethodCall;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpSpecToPHPUnit\PhpSpecMockCollector;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 
 final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRector
 {
     /**
-     * @var string[]
+     * @var PhpSpecMockCollector
      */
-    private $mockVariableNames = [];
+    private $phpSpecMockCollector;
+
+    public function __construct(PhpSpecMockCollector $phpSpecMockCollector)
+    {
+        $this->phpSpecMockCollector = $phpSpecMockCollector;
+    }
 
     /**
      * @return string[]
@@ -56,25 +67,34 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
         return $this->processMethodCall($node);
     }
 
-    protected function reset(): void
+    /**
+     * Variable or property fetch, based on number of present params in whole class
+     */
+    private function createCreateMockCall(Param $param, Name $name): ?Expression
     {
-        // reset once per class
-        $this->mockVariableNames = [];
-    }
+        /** @var Class_ $classNode */
+        $classNode = $param->getAttribute(Attribute::CLASS_NODE);
 
-    private function createCreateMockCall(Param $param, Name $name): Expression
-    {
-        $methodCall = new MethodCall(new Variable('this'), 'createMock');
-        $methodCall->args[] = new Arg(new ClassConstFetch($name, 'class'));
+        $classMocks = $this->phpSpecMockCollector->resolveClassMocksFromParam($classNode);
 
-        $assign = new Assign($param->var, $methodCall);
-        $assignExpression = new Expression($assign);
+        $variable = $this->getName($param->var);
+        $method = $param->getAttribute(Attribute::METHOD_NAME);
 
-        // add @var doc comment
-        $varDoc = $this->createMockVarDoc($param, $name);
-        $assignExpression->setDocComment(new Doc($varDoc));
+        $methodsWithWThisMock = $classMocks[$variable];
 
-        return $assignExpression;
+        // single use: "$mock = $this->createMock()"
+        if (count($methodsWithWThisMock) === 1) {
+            return $this->createNewMockVariableAssign($param, $name);
+        }
+
+        $reversedMethodsWithThisMock = array_flip($methodsWithWThisMock);
+
+        // first use of many: "$this->mock = $this->createMock()"
+        if ($reversedMethodsWithThisMock[$method] === 0) {
+            return $this->createPropertyFetchMockVariableAssign($param, $name);
+        }
+
+        return null;
     }
 
     private function createMockVarDoc(Param $param, Name $name): string
@@ -85,8 +105,6 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
         if ($variableName === null) {
             throw new ShouldNotHappenException();
         }
-
-        $this->mockVariableNames[] = $variableName;
 
         return sprintf(
             '/** @var %s|\%s $%s */',
@@ -105,7 +123,10 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
                 throw new ShouldNotHappenException();
             }
 
-            $assigns[] = $this->createCreateMockCall($param, $param->type);
+            $createMockCall = $this->createCreateMockCall($param, $param->type);
+            if ($createMockCall) {
+                $assigns[] = $createMockCall;
+            }
         }
 
         // remove all params
@@ -126,6 +147,8 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
                 throw new ShouldNotHappenException();
             }
 
+            $expectedArg = $methodCall->var->args[0]->value ?? null;
+
             $methodCall->var->name = new Identifier('expects');
             $thisOnceMethodCall = new MethodCall(new Variable('this'), new Identifier('atLeastOnce'));
             $methodCall->var->args = [new Arg($thisOnceMethodCall)];
@@ -133,9 +156,67 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
             $methodCall->name = new Identifier('method');
             $methodCall->args = [new Arg(new String_($mockMethodName))];
 
+            if ($expectedArg) {
+                return $this->appendWithMethodCall($methodCall, $expectedArg);
+            }
+
             return $methodCall;
         }
 
         return null;
+    }
+
+    private function appendWithMethodCall(MethodCall $methodCall, Expr $expr): MethodCall
+    {
+        $withMethodCall = new MethodCall($methodCall, 'with');
+
+        if ($expr instanceof StaticCall) {
+            if ($this->isName($expr->class, '*Argument')) {
+                if ($this->isName($expr->name, 'any')) {
+                    // no added value having this method
+                    return $methodCall;
+                }
+
+                if ($this->isName($expr->name, 'type')) {
+                    $expr = new MethodCall(new Variable('this'), 'isType', $expr->args);
+                }
+            }
+        }
+
+        $withMethodCall->args = [new Arg($expr)];
+
+        return $withMethodCall;
+    }
+
+    private function createNewMockVariableAssign(Param $param, Name $name): Expression
+    {
+        $methodCall = new MethodCall(new Variable('this'), 'createMock');
+        $methodCall->args[] = new Arg(new ClassConstFetch($name, 'class'));
+
+        $assign = new Assign($param->var, $methodCall);
+        $assignExpression = new Expression($assign);
+
+        // add @var doc comment
+        $varDoc = $this->createMockVarDoc($param, $name);
+        $assignExpression->setDocComment(new Doc($varDoc));
+
+        return $assignExpression;
+    }
+
+    private function createPropertyFetchMockVariableAssign(Param $param, Name $name): Expression
+    {
+        $variable = $this->getName($param->var);
+        if ($variable === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $propertyFetch = new PropertyFetch(new Variable('this'), $variable);
+
+        $methodCall = new MethodCall(new Variable('this'), 'createMock');
+        $methodCall->args[] = new Arg(new ClassConstFetch($name, 'class'));
+
+        $assign = new Assign($propertyFetch, $methodCall);
+
+        return new Expression($assign);
     }
 }
