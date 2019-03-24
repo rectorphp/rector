@@ -19,7 +19,10 @@ abstract class AbstractPhpSpecToPHPUnitRector extends AbstractRector
      */
     private $objectBehaviorClass;
 
-    public function __construct(string $objectBehaviorClass = 'PhpSpec\ObjectBehavior')
+    /**
+     * @required
+     */
+    public function autowireObjectBehaviorClass(string $objectBehaviorClass = 'PhpSpec\ObjectBehavior'): void
     {
         $this->objectBehaviorClass = $objectBehaviorClass;
     }

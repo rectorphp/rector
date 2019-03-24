@@ -105,15 +105,10 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
      */
     private $isPrepared = false;
 
-    public function __construct(
-        PhpSpecRenaming $phpSpecRenaming,
-        MatchersManipulator $matchersManipulator,
-        string $objectBehaviorClass = 'PhpSpec\ObjectBehavior'
-    ) {
+    public function __construct(PhpSpecRenaming $phpSpecRenaming, MatchersManipulator $matchersManipulator)
+    {
         $this->phpSpecRenaming = $phpSpecRenaming;
         $this->matchersManipulator = $matchersManipulator;
-
-        parent::__construct($objectBehaviorClass);
     }
 
     protected function tearDown(): void
@@ -137,6 +132,10 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     {
         if (! $this->isInPhpSpecBehavior($node)) {
             return null;
+        }
+
+        if ($this->isName($node, 'getWrappedObject')) {
+            return $node->var;
         }
 
         if ($this->isName($node, 'during')) {
@@ -181,6 +180,18 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         // $this->clone() → clone $this->testedObject
         if ($this->isName($node, 'clone')) {
             return new Clone_($this->testedObjectPropertyFetch);
+        }
+
+        $methodName = $this->getName($node);
+        if ($methodName === null) {
+            return null;
+        }
+
+        /** @var Class_ $class */
+        $class = $node->getAttribute(Attribute::CLASS_NODE);
+        // it's a method call, skip
+        if ($class->getMethod($methodName)) {
+            return null;
         }
 
         $node->var = $this->testedObjectPropertyFetch;

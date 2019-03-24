@@ -24,13 +24,10 @@ final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitR
 
     public function __construct(
         PhpSpecRenaming $phpSpecRenaming,
-        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
-        string $objectBehaviorClass = 'PhpSpec\ObjectBehavior'
+        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator
     ) {
         $this->phpSpecRenaming = $phpSpecRenaming;
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
-
-        parent::__construct($objectBehaviorClass);
     }
 
     /**

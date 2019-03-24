@@ -9,5 +9,8 @@ services:
 
     # 3. then the class itself
     Rector\PhpSpecToPHPUnit\Rector\Class_\PhpSpecClassToPHPUnitClassRector: ~
+    Rector\PhpSpecToPHPUnit\Rector\Class_\AddMockPropertiesRector: ~
+
+    Rector\PhpSpecToPHPUnit\Rector\ClassMethod\MockVariableToPropertyFetchRector: ~
 
     Rector\PhpSpecToPHPUnit\Rector\RenameSpecFileToTestFileRector: ~

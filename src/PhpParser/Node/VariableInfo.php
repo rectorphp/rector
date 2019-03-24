@@ -2,6 +2,9 @@
 
 namespace Rector\PhpParser\Node;
 
+/**
+ * @todo refactor type to php-doc-parser types
+ */
 final class VariableInfo
 {
     /**

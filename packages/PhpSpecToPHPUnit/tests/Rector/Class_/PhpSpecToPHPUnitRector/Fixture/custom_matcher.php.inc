@@ -64,20 +64,23 @@ use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\Du
 class RatesTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @var \Provider|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $provider;
+    /**
      * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\MethodCall\PhpSpecToPHPUnitRector\Fixture\Rates
      */
     private $rates;
     protected function setUp()
     {
-        /** @var Provider|\PHPUnit\Framework\MockObject\MockObject $provider */
-        $provider = $this->createMock(Provider::class);
-        $provider->expects($this->atLeastOnce())->method('get')->willReturn(
+        $this->provider = $this->createMock(Provider::class);
+        $this->provider->expects($this->atLeastOnce())->method('get')->willReturn(
             '08.12.2017 #237
             země|měna|množství|kód|kurz
             Austrálie|dolar|1|AUD|16,362
             Velká Británie|libra|1|GBP|29,194'
         );
-        $this->rates = new \Rector\PhpSpecToPHPUnit\Tests\Rector\MethodCall\PhpSpecToPHPUnitRector\Fixture\Rates($provider);
+        $this->rates = new \Rector\PhpSpecToPHPUnit\Tests\Rector\MethodCall\PhpSpecToPHPUnitRector\Fixture\Rates($this->provider);
     }
 
     public function testInitializable()
@@ -87,9 +90,7 @@ class RatesTest extends \PHPUnit\Framework\TestCase
 
     public function testLoadCurrentRates()
     {
-        /** @var Provider|\PHPUnit\Framework\MockObject\MockObject $provider */
-        $provider = $this->createMock(Provider::class);
-        $provider->expects($this->atLeastOnce())->method('get')->willReturn(
+        $this->provider->expects($this->atLeastOnce())->method('get')->willReturn(
             '08.12.2017 #237
             země|měna|množství|kód|kurz
             Austrálie|dolar|1|AUD|16,362
