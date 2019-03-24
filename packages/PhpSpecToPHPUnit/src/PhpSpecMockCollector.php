@@ -92,11 +92,15 @@ final class PhpSpecMockCollector
         return in_array($methodName, $methodNames, true);
     }
 
-    public function getTypeForClassAndVariable(Class_ $node, string $variable): ?string
+    public function getTypeForClassAndVariable(Class_ $node, string $variable): string
     {
         $className = $this->nameResolver->resolve($node);
 
-        return $this->mocksWithsTypes[$className][$variable] ?? null;
+        if (! isset($this->mocksWithsTypes[$className][$variable])) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $this->mocksWithsTypes[$className][$variable];
     }
 
     private function addMockFromParam(Param $param): void

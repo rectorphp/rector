@@ -4,6 +4,8 @@ namespace Rector\PhpSpecToPHPUnit\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareUnionTypeNode;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
 use Rector\PhpSpecToPHPUnit\PhpSpecMockCollector;
@@ -53,10 +55,12 @@ final class AddMockPropertiesRector extends AbstractPhpSpecToPHPUnitRector
 
             $variableType = $this->phpSpecMockCollector->getTypeForClassAndVariable($node, $variable);
 
-            $this->classManipulator->addPropertyToClass(
-                $node,
-                new VariableInfo($variable, $variableType . '|\PHPUnit\Framework\MockObject\MockObject')
-            );
+            $unionTypeNode = new AttributeAwareUnionTypeNode([
+                new IdentifierTypeNode($variableType),
+                new IdentifierTypeNode('\PHPUnit\Framework\MockObject\MockObject'),
+            ]);
+
+            $this->classManipulator->addPropertyToClass($node, new VariableInfo($variable, $unionTypeNode));
         }
 
         return null;

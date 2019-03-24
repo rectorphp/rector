@@ -33,7 +33,7 @@ use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\Du
 class CurrencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \CurrencyData|\PHPUnit\Framework\MockObject\MockObject
+     * @var CurrencyData|\PHPUnit\Framework\MockObject\MockObject
      */
     private $data;
     /**

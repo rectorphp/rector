@@ -22,6 +22,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Php\TypeAnalyzer;
@@ -133,7 +134,14 @@ final class NodeFactory
     public function createParamFromVariableInfo(VariableInfo $variableInfo): Param
     {
         $paramBuild = $this->builderFactory->param($variableInfo->getName());
-        $paramBuild->setType($this->createTypeName($variableInfo->getType()));
+
+        if (is_string($variableInfo->getType())) {
+            $type = $this->createTypeName($variableInfo->getType());
+        } else {
+            $type = new Name((string) $variableInfo->getType());
+        }
+
+        $paramBuild->setType($type);
 
         return $paramBuild->getNode();
     }
@@ -228,9 +236,18 @@ final class NodeFactory
         ));
     }
 
-    private function createVarDoc(string $type): Doc
+    /**
+     * @param string|TypeNode $type
+     * @return Doc
+     */
+    private function createVarDoc($type): Doc
     {
-        $type = $this->typeAnalyzer->isPhpReservedType($type) ? $type : '\\' . $type;
+        if (is_string($type)) {
+            $type = $this->typeAnalyzer->isPhpReservedType($type) ? $type : '\\' . $type;
+        } else {
+            $type = (string) $type;
+        }
+
         return new Doc(sprintf('/**%s * @var %s%s */', PHP_EOL, $type, PHP_EOL));
     }
 

@@ -64,7 +64,7 @@ use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\Du
 class RatesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Provider|\PHPUnit\Framework\MockObject\MockObject
+     * @var Provider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $provider;
     /**

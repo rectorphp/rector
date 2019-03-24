@@ -2,9 +2,8 @@
 
 namespace Rector\PhpParser\Node;
 
-/**
- * @todo refactor type to php-doc-parser types
- */
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+
 final class VariableInfo
 {
     /**
@@ -13,11 +12,14 @@ final class VariableInfo
     private $name;
 
     /**
-     * @var string
+     * @var string|TypeNode
      */
     private $type;
 
-    public function __construct(string $name, string $type)
+    /**
+     * @param string|TypeNode $type
+     */
+    public function __construct(string $name, $type)
     {
         $this->name = $name;
         $this->type = $type;
@@ -28,8 +30,20 @@ final class VariableInfo
         return $this->name;
     }
 
-    public function getType(): string
+    /**
+     * @return TypeNode|string
+     */
+    public function getType()
     {
         return $this->type;
+    }
+
+    public function getTypeAsString(): string
+    {
+        if (is_string($this->type)) {
+            return $this->type;
+        }
+
+        return (string) $this->type;
     }
 }
