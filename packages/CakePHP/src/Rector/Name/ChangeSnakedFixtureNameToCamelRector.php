@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see https://book.cakephp.org/3.0/en/appendices/3-7-migration-guide.html
+ */
 final class ChangeSnakedFixtureNameToCamelRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
