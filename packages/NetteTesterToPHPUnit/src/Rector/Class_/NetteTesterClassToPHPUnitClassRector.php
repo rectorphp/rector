@@ -47,10 +47,6 @@ require_once __DIR__ . '/../bootstrap.php';
 
 class ExtensionTest extends TestCase
 {
-    public function setUp()
-    {
-    }
-
     public function testFunctionality()
     {
         Assert::true($default instanceof Kdyby\Doctrine\EntityManager);
@@ -70,15 +66,11 @@ use Tester\Assert;
 
 class ExtensionTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
-    {
-    }
-
     public function testFunctionality()
     {
-        self::assertInstanceOf(\Kdyby\Doctrine\EntityManager::cllass, $default);
-        self::assertTrue(5);
-        self::same($container->getService('kdyby.doctrine.default.entityManager'), $default);
+        $this->assertInstanceOf(\Kdyby\Doctrine\EntityManager::cllass, $default);
+        $this->assertTrue(5);
+        $this->same($container->getService('kdyby.doctrine.default.entityManager'), $default);
     }
 }
 CODE_SAMPLE
