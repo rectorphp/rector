@@ -12,13 +12,12 @@ final class NetteTesterPHPUnitRectorTest extends AbstractRectorTestCase
         // prepare dummy data
         FileSystem::copy(__DIR__ . '/Copy', $this->getTempPath());
 
-        // @todo do it together, like spec :)
-
         $this->doTestFiles([
             __DIR__ . '/Fixture/test_class.php.inc',
             __DIR__ . '/Fixture/assert_true.php.inc',
             __DIR__ . '/Fixture/assert_type.php.inc',
             __DIR__ . '/Fixture/various_asserts.php.inc',
+            __DIR__ . '/Fixture/kdyby_tests_events.php.inc',
         ]);
     }
 
