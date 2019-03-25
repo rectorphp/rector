@@ -108,6 +108,7 @@ parameters:
             - 'packages/BetterPhpDocParser/src/Attributes/Ast/AttributeAwareNodeFactory.php'
             - 'packages/Laravel/src/Rector/FuncCall/HelperFunctionToConstructorInjectionRector.php'
             - 'packages/PhpSpecToPHPUnit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php'
+            - 'packages/NetteTesterToPHPUnit/src/AssertManipulator.php'
 
             # copied 3rd party logic
             - 'packages/Php/src/EregToPcreTransformer.php'

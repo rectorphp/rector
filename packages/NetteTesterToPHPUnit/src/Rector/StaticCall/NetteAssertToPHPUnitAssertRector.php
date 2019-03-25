@@ -63,8 +63,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->assertManipulator->processStaticCall($node);
-
-        return $node;
+        return $this->assertManipulator->processStaticCall($node);
     }
 }
