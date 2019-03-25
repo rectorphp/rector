@@ -54,7 +54,7 @@ namespace Rector\NetteTesterToPHPUnit\Tests\Rector\StaticCall\NetteAssertToPHPUn
 use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\NetteTesterTestCase;
 use Tester\Assert;
 
-class VariousAssertsTest extends NetteTesterTestCase
+class VariousAssertsTest extends \PHPUnit\Framework\TestCase
 {
     public function testFunctionality()
     {

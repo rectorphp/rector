@@ -18,6 +18,14 @@ class ExtensionTest extends NetteTesterTestCase
         $value = 'SomeValue';
         Assert::false(5);
     }
+
+    public function testException()
+    {
+        $o = 1;
+        Assert::exception(function () use ($o) {
+            $o->say('');
+        }, InvalidArgumentException::class, 'Invalid name');
+    }
 }
 
 (new ExtensionTest())->run();
@@ -40,7 +48,15 @@ class ExtensionTest extends \PHPUnit\Framework\TestCase
     public function testFunctionality()
     {
         $value = 'SomeValue';
-        Assert::false(5);
+        self::assertFalse(5);
+    }
+
+    public function testException()
+    {
+        $o = 1;
+        self::expectException(InvalidArgumentException::class);
+        self::expectExceptionMessage('Invalid name');
+        $o->say('');
     }
 }
 
