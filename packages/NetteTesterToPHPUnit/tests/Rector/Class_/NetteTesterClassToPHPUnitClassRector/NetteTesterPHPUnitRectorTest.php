@@ -18,6 +18,7 @@ final class NetteTesterPHPUnitRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/assert_type.php.inc',
             __DIR__ . '/Fixture/various_asserts.php.inc',
             __DIR__ . '/Fixture/kdyby_tests_events.php.inc',
+            __DIR__ . '/Fixture/data_provider.php.inc',
         ]);
     }
 

@@ -48,14 +48,14 @@ class ExtensionTest extends \PHPUnit\Framework\TestCase
     public function testFunctionality()
     {
         $value = 'SomeValue';
-        self::assertFalse(5);
+        $this->assertFalse(5);
     }
 
     public function testException()
     {
         $o = 1;
-        self::expectException(InvalidArgumentException::class);
-        self::expectExceptionMessage('Invalid name');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid name');
         $o->say('');
     }
 }

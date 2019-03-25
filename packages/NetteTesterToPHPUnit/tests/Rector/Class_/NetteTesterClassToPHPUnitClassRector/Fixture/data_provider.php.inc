@@ -5,25 +5,48 @@ namespace Rector\NetteTesterToPHPUnit\Tests\Rector\StaticCall\NetteAssertToPHPUn
 use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\NetteTesterTestCase;
 use Tester\Assert;
 
-class AssertTypeTest extends NetteTesterTestCase
+class DataProviderTest extends NetteTesterTestCase
 {
-    public function testFunctionality()
+    /**
+     * @dataProvider dataMySqlExceptions
+     *
+     * @param \Exception $exception
+     * @param string $class
+     * @param array $props
+     */
+    public function testDriverExceptions_MySQL($exception, $class, array $props)
     {
-        $value = 'SomeValue';
-
-        Assert::type('list', $value);
-        Assert::type('array', $value);
-        Assert::type('bool', $value);
-        Assert::type('callable', $value);
-        Assert::type('float', $value);
-        Assert::type('int', $value);
-        Assert::type('integer', $value);
-        Assert::type('null', $value);
-        Assert::type('object', $value);
-        Assert::type('resource', $value);
-        Assert::type('scalar', $value);
-        Assert::type('string', $value);
-        Assert::type(\stdClass::class, $value);
+        $conn = new ConnectionMock([], new MysqlDriverMock());
+        $conn->setDatabasePlatform(new Doctrine\DBAL\Platforms\MySqlPlatform());
+        $conn->throwOldKdybyExceptions = TRUE;
+        $resolved = $conn->resolveException($exception);
+        Assert::true($resolved instanceof $class);
+        foreach ($props as $prop => $val) {
+            Assert::same($val, $resolved->{$prop});
+        }
+    }
+    /**
+     * @return array
+     */
+    public function dataMySqlExceptions()
+    {
+        $e = new \PDOException('SQLSTATE[23000]: Integrity constraint violation: 1048 Column \'name\' cannot be null', '23000');
+        $e->errorInfo = ['23000', 1048, 'Column \'name\' cannot be null'];
+        $emptyPdo = new PDOException($e);
+        $driver = new MysqlDriverMock();
+        $empty = Doctrine\DBAL\DBALException::driverExceptionDuringQuery(
+            $driver, $emptyPdo, "INSERT INTO `test_empty` (`name`) VALUES (NULL)", []
+        );
+        $e = new \PDOException('SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry \'filip-prochazka\' for key \'uniq_name_surname\'', '23000');
+        $e->errorInfo = ['23000', 1062, 'Duplicate entry \'filip-prochazka\' for key \'uniq_name_surname\''];
+        $uniquePdo = new PDOException($e);
+        $unique = Doctrine\DBAL\DBALException::driverExceptionDuringQuery(
+            $driver, $uniquePdo, "INSERT INTO `test_empty` (`name`, `surname`) VALUES ('filip', 'prochazka')", []
+        );
+        return [
+            [$empty, \Kdyby\Doctrine\EmptyValueException::class, ['column' => 'name']],
+            [$unique, \Kdyby\Doctrine\DuplicateEntryException::class, ['columns' => ['uniq_name_surname' => ['name', 'surname']]]],
+        ];
     }
 }
 
@@ -36,25 +59,48 @@ namespace Rector\NetteTesterToPHPUnit\Tests\Rector\StaticCall\NetteAssertToPHPUn
 use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\NetteTesterTestCase;
 use Tester\Assert;
 
-class AssertTypeTest extends \PHPUnit\Framework\TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
-    public function testFunctionality()
+    /**
+     * @dataProvider dataMySqlExceptions
+     *
+     * @param \Exception $exception
+     * @param string $class
+     * @param array $props
+     */
+    public function testDriverExceptions_MySQL($exception, $class, array $props)
     {
-        $value = 'SomeValue';
-
-        self::assertIsArray($value);
-        self::assertIsArray($value);
-        self::assertIsBool($value);
-        self::assertIsCallable($value);
-        self::assertIsFloat($value);
-        self::assertIsInt($value);
-        self::assertIsInt($value);
-        self::assertNull($value);
-        self::assertIsObject($value);
-        self::assertIsResource($value);
-        self::assertIsScalar($value);
-        self::assertIsString($value);
-        self::assertInstanceOf(\stdClass::class, $value);
+        $conn = new ConnectionMock([], new MysqlDriverMock());
+        $conn->setDatabasePlatform(new Doctrine\DBAL\Platforms\MySqlPlatform());
+        $conn->throwOldKdybyExceptions = TRUE;
+        $resolved = $conn->resolveException($exception);
+        $this->assertTrue($resolved instanceof $class);
+        foreach ($props as $prop => $val) {
+            $this->assertSame($val, $resolved->{$prop});
+        }
+    }
+    /**
+     * @return array
+     */
+    public function dataMySqlExceptions()
+    {
+        $e = new \PDOException('SQLSTATE[23000]: Integrity constraint violation: 1048 Column \'name\' cannot be null', '23000');
+        $e->errorInfo = ['23000', 1048, 'Column \'name\' cannot be null'];
+        $emptyPdo = new PDOException($e);
+        $driver = new MysqlDriverMock();
+        $empty = Doctrine\DBAL\DBALException::driverExceptionDuringQuery(
+            $driver, $emptyPdo, "INSERT INTO `test_empty` (`name`) VALUES (NULL)", []
+        );
+        $e = new \PDOException('SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry \'filip-prochazka\' for key \'uniq_name_surname\'', '23000');
+        $e->errorInfo = ['23000', 1062, 'Duplicate entry \'filip-prochazka\' for key \'uniq_name_surname\''];
+        $uniquePdo = new PDOException($e);
+        $unique = Doctrine\DBAL\DBALException::driverExceptionDuringQuery(
+            $driver, $uniquePdo, "INSERT INTO `test_empty` (`name`, `surname`) VALUES ('filip', 'prochazka')", []
+        );
+        return [
+            [$empty, \Kdyby\Doctrine\EmptyValueException::class, ['column' => 'name']],
+            [$unique, \Kdyby\Doctrine\DuplicateEntryException::class, ['columns' => ['uniq_name_surname' => ['name', 'surname']]]],
+        ];
     }
 }
 

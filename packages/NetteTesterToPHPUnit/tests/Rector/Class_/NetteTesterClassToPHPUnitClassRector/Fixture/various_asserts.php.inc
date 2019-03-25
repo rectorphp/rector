@@ -33,6 +33,7 @@ class VariousAssertsTest extends NetteTesterTestCase
     public function testY()
     {
         Assert::falsey('value', 'some messsage');
+        // keep my comments
         Assert::truthy(true);
     }
 
@@ -59,16 +60,16 @@ class VariousAssertsTest extends \PHPUnit\Framework\TestCase
     public function testFunctionality()
     {
         $value = 'SomeValue';
-        self::assertInstanceOf(\Kdyby\Doctrine\EntityManager::class, $value);
-        self::assertFalse(5);
-        self::assertSame('ExpectedValue', $value);
+        $this->assertInstanceOf(\Kdyby\Doctrine\EntityManager::class, $value);
+        $this->assertFalse(5);
+        $this->assertSame('ExpectedValue', $value);
     }
 
     public function testExceptions()
     {
-        self::expectException('ExceptionClass');
-        self::expectExceptionMessage("Service 'one': Class or interface 'X' not found.");
-        self::expectExceptionCode(200);
+        $this->expectException('ExceptionClass');
+        $this->expectExceptionMessage("Service 'one': Class or interface 'X' not found.");
+        $this->expectExceptionCode(200);
         $builder = new DI\ContainerBuilder;
         $builder->run();
     }
@@ -83,16 +84,17 @@ class VariousAssertsTest extends \PHPUnit\Framework\TestCase
 
     public function testY()
     {
-        self::assertFalse((bool) 'value', 'some messsage');
-        self::assertTrue(true);
+        $this->assertFalse((bool) 'value', 'some messsage');
+        // keep my comments
+        $this->assertTrue(true);
     }
 
     public function testContains()
     {
         $value = 'some messsage';
-        self::assertStringContainsString('value', $value);
+        $this->assertStringContainsString('value', $value);
         $values = [];
-        self::assertContains('value', $values);
+        $this->assertContains('value', $values);
     }
 }
 

@@ -42,19 +42,19 @@ class AssertTypeTest extends \PHPUnit\Framework\TestCase
     {
         $value = 'SomeValue';
 
-        self::assertIsArray($value);
-        self::assertIsArray($value);
-        self::assertIsBool($value);
-        self::assertIsCallable($value);
-        self::assertIsFloat($value);
-        self::assertIsInt($value);
-        self::assertIsInt($value);
-        self::assertNull($value);
-        self::assertIsObject($value);
-        self::assertIsResource($value);
-        self::assertIsScalar($value);
-        self::assertIsString($value);
-        self::assertInstanceOf(\stdClass::class, $value);
+        $this->assertIsArray($value);
+        $this->assertIsArray($value);
+        $this->assertIsBool($value);
+        $this->assertIsCallable($value);
+        $this->assertIsFloat($value);
+        $this->assertIsInt($value);
+        $this->assertIsInt($value);
+        $this->assertNull($value);
+        $this->assertIsObject($value);
+        $this->assertIsResource($value);
+        $this->assertIsScalar($value);
+        $this->assertIsString($value);
+        $this->assertInstanceOf(\stdClass::class, $value);
     }
 }
 

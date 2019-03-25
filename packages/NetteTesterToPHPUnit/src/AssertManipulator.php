@@ -2,9 +2,13 @@
 
 namespace Rector\NetteTesterToPHPUnit;
 
+use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -86,65 +90,86 @@ final class AssertManipulator
         $this->docBlockManipulator = $docBlockManipulator;
     }
 
-    public function processStaticCall(StaticCall $staticCall): void
+    /**
+     * @return StaticCall|MethodCall
+     */
+    public function processStaticCall(StaticCall $staticCall): Node
     {
-        $classNode = $staticCall->getAttribute(Attribute::CLASS_NODE);
-
-        // self or class, depending on the context
-        $staticCall->class = $classNode ? new Name('self') : new FullyQualified('PHPUnit\Framework\Assert');
-
         if ($this->nameResolver->isNames($staticCall, ['contains', 'notContains'])) {
-            $this->processContainsStaticCall($staticCall);
-            return;
-        }
-
-        if ($this->nameResolver->isNames($staticCall, ['exception', 'throws'])) {
-            $this->processExceptionStaticCall($staticCall);
-            return;
-        }
-
-        if ($this->nameResolver->isName($staticCall, 'type')) {
-            $this->processTypeStaticCall($staticCall);
-            return;
-        }
-
-        if ($this->nameResolver->isName($staticCall, 'noError')) {
-            $this->processNoErrorStaticCall($staticCall);
-            return;
-        }
-
-        if ($this->nameResolver->isNames($staticCall, ['truthy', 'falsey'])) {
-            $this->processTruthyOrFalseyStaticCall($staticCall);
-            return;
-        }
-
-        foreach ($this->assertMethodsRemap as $oldMethod => $newMethod) {
-            if ($this->nameResolver->isName($staticCall, $oldMethod)) {
-                $staticCall->name = new Identifier($newMethod);
-                continue;
+            $this->processContainsCall($staticCall);
+        } elseif ($this->nameResolver->isNames($staticCall, ['exception', 'throws'])) {
+            $this->processExceptionCall($staticCall);
+        } elseif ($this->nameResolver->isName($staticCall, 'type')) {
+            $this->processTypeCall($staticCall);
+        } elseif ($this->nameResolver->isName($staticCall, 'noError')) {
+            $this->processNoErrorCall($staticCall);
+        } elseif ($this->nameResolver->isNames($staticCall, ['truthy', 'falsey'])) {
+            return $this->processTruthyOrFalseyCall($staticCall);
+        } else {
+            foreach ($this->assertMethodsRemap as $oldMethod => $newMethod) {
+                if ($this->nameResolver->isName($staticCall, $oldMethod)) {
+                    $staticCall->name = new Identifier($newMethod);
+                    continue;
+                }
             }
         }
+
+        // self or class, depending on the context
+        // prefer $this->assertSame() as more conventional and explicit in class-context
+        if (! $this->sholdBeStaticCall($staticCall)) {
+            $methodCall = new MethodCall(new Variable('this'), $staticCall->name);
+            $methodCall->args = $staticCall->args;
+            $methodCall->setAttributes($staticCall->getAttributes());
+            $methodCall->setAttribute(Attribute::ORIGINAL_NODE, null);
+
+            return $methodCall;
+        }
+
+        $staticCall->class = new FullyQualified('PHPUnit\Framework\Assert');
+
+        return $staticCall;
     }
 
-    private function processExceptionStaticCall(StaticCall $staticCall): void
+    private function processExceptionCall(StaticCall $staticCall): void
     {
+        $method = 'expectException';
+
         // expect exception
-        $expectException = new StaticCall(new Name('self'), 'expectException');
+        if ($this->sholdBeStaticCall($staticCall)) {
+            $expectException = new StaticCall(new Name('self'), $method);
+        } else {
+            $expectException = new MethodCall(new Variable('this'), $method);
+        }
+
         $expectException->args[] = $staticCall->args[1];
         $this->nodeAddingCommander->addNodeAfterNode($expectException, $staticCall);
 
         // expect message
         if (isset($staticCall->args[2])) {
-            $expectExceptionMessage = new StaticCall(new Name('self'), 'expectExceptionMessage');
+            $method = 'expectExceptionMessage';
+
+            if ($this->sholdBeStaticCall($staticCall)) {
+                $expectExceptionMessage = new StaticCall(new Name('self'), $method);
+            } else {
+                $expectExceptionMessage = new MethodCall(new Variable('this'), $method);
+            }
+
             $expectExceptionMessage->args[] = $staticCall->args[2];
             $this->nodeAddingCommander->addNodeAfterNode($expectExceptionMessage, $staticCall);
         }
 
         // expect code
         if (isset($staticCall->args[3])) {
-            $expectExceptionMessage = new StaticCall(new Name('self'), 'expectExceptionCode');
-            $expectExceptionMessage->args[] = $staticCall->args[3];
-            $this->nodeAddingCommander->addNodeAfterNode($expectExceptionMessage, $staticCall);
+            $method = 'expectExceptionCode';
+
+            if ($this->sholdBeStaticCall($staticCall)) {
+                $expectExceptionCode = new StaticCall(new Name('self'), $method);
+            } else {
+                $expectExceptionCode = new MethodCall(new Variable('this'), $method);
+            }
+
+            $expectExceptionCode->args[] = $staticCall->args[3];
+            $this->nodeAddingCommander->addNodeAfterNode($expectExceptionCode, $staticCall);
         }
 
         /** @var Closure $closure */
@@ -156,7 +181,7 @@ final class AssertManipulator
         $this->nodeRemovingCommander->addNode($staticCall);
     }
 
-    private function processNoErrorStaticCall(StaticCall $staticCall): void
+    private function processNoErrorCall(StaticCall $staticCall): void
     {
         /** @var Closure $closure */
         $closure = $staticCall->args[0]->value;
@@ -176,20 +201,35 @@ final class AssertManipulator
         $this->docBlockManipulator->addTag($methodNode, $phpDocTagNode);
     }
 
-    private function processTruthyOrFalseyStaticCall(StaticCall $staticCall): void
+    /**
+     * @return StaticCall|MethodCall
+     */
+    private function processTruthyOrFalseyCall(StaticCall $staticCall): Expr
     {
-        if (! $this->nodeTypeResolver->isBoolType($staticCall->args[0]->value)) {
-            $staticCall->args[0]->value = new Bool_($staticCall->args[0]->value);
+        if ($this->nameResolver->isName($staticCall, 'truthy')) {
+            $method = 'assertTrue';
+        } else {
+            $method = 'assertFalse';
         }
 
-        if ($this->nameResolver->isName($staticCall, 'truthy')) {
-            $staticCall->name = new Identifier('assertTrue');
+        if (! $this->sholdBeStaticCall($staticCall)) {
+            $call = new MethodCall(new Variable('this'), $method);
+            $call->args = $staticCall->args;
+            $call->setAttributes($staticCall->getAttributes());
+            $call->setAttribute(Attribute::ORIGINAL_NODE, null);
         } else {
-            $staticCall->name = new Identifier('assertFalse');
+            $call = $staticCall;
+            $call->name = new Identifier($method);
         }
+
+        if (! $this->nodeTypeResolver->isBoolType($staticCall->args[0]->value)) {
+            $call->args[0]->value = new Bool_($staticCall->args[0]->value);
+        }
+
+        return $call;
     }
 
-    private function processTypeStaticCall(StaticCall $staticCall): void
+    private function processTypeCall(StaticCall $staticCall): void
     {
         $value = $this->valueResolver->resolve($staticCall->args[0]->value);
 
@@ -220,7 +260,7 @@ final class AssertManipulator
         }
     }
 
-    private function processContainsStaticCall(StaticCall $staticCall): void
+    private function processContainsCall(StaticCall $staticCall): void
     {
         if ($this->nodeTypeResolver->isStringyType($staticCall->args[1]->value)) {
             $name = $this->nameResolver->isName(
@@ -232,5 +272,10 @@ final class AssertManipulator
         }
 
         $staticCall->name = new Identifier($name);
+    }
+
+    private function sholdBeStaticCall(StaticCall $staticCall): bool
+    {
+        return ! (bool) $staticCall->getAttribute(Attribute::CLASS_NODE);
     }
 }
