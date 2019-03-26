@@ -30,6 +30,6 @@ final class PhpVersionProvider
 
     public function isAtLeast(string $version): bool
     {
-        return version_compare($this->provide(), $version) === 1;
+        return version_compare($this->provide(), $version) >= 0;
     }
 }
