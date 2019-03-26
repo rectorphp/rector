@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,16 +22,9 @@ final class RootNodeTreeBuilderRector extends AbstractRector
      */
     private $treeBuilderClass;
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
         string $treeBuilderClass = 'Symfony\Component\Config\Definition\Builder\TreeBuilder'
     ) {
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->treeBuilderClass = $treeBuilderClass;
     }
 

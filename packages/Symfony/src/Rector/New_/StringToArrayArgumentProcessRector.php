@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Scalar\String_;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\NodeTransformer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -34,22 +33,15 @@ final class StringToArrayArgumentProcessRector extends AbstractRector
     private $processHelperClass;
 
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var NodeTransformer
      */
     private $nodeTransformer;
 
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
         NodeTransformer $nodeTransformer,
         string $processClass = 'Symfony\Component\Process\Process',
         string $processHelperClass = 'Symfony\Component\Console\Helper\ProcessHelper'
     ) {
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeTransformer = $nodeTransformer;
         $this->processClass = $processClass;
         $this->processHelperClass = $processHelperClass;

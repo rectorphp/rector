@@ -18,7 +18,6 @@ use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeVisitor\NameResolver;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -37,18 +36,12 @@ final class RemoveUnusedAliasRector extends AbstractRector
     private $resolvedDocPossibleAliases = [];
 
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, CallableNodeTraverser $callableNodeTraverser)
+    public function __construct(CallableNodeTraverser $callableNodeTraverser)
     {
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->callableNodeTraverser = $callableNodeTraverser;
     }
 

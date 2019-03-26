@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
+use Rector\PhpSpecToPHPUnit\LetManipulator;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
@@ -41,14 +42,21 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
      */
     private $phpUnitTypeDeclarationDecorator;
 
+    /**
+     * @var LetManipulator
+     */
+    private $letManipulator;
+
     public function __construct(
         ClassManipulator $classManipulator,
         PhpSpecRenaming $phpSpecRenaming,
-        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator
+        PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
+        LetManipulator $letManipulator
     ) {
         $this->classManipulator = $classManipulator;
         $this->phpSpecRenaming = $phpSpecRenaming;
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
+        $this->letManipulator = $letManipulator;
     }
 
     /**
@@ -81,6 +89,10 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
 
         // add let if missing
         if ($node->getMethod('let') === null) {
+            if (! $this->letManipulator->isLetNeededInClass($node)) {
+                return null;
+            }
+
             $letClassMethod = $this->createLetClassMethod($propertyName);
             $this->classManipulator->addAsFirstMethod($node, $letClassMethod);
         }

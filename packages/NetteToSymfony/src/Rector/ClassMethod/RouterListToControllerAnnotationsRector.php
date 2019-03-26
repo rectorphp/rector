@@ -14,7 +14,6 @@ use Rector\NetteToSymfony\Route\RouteInfo;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
@@ -45,11 +44,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $routeAnnotationClass;
 
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var ClassLikeNodeCollector
      */
     private $classLikeNodeCollector;
@@ -75,7 +69,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $classMethodManipulator;
 
     public function __construct(
-        BetterNodeFinder $betterNodeFinder,
         ClassLikeNodeCollector $classLikeNodeCollector,
         ClassManipulator $classManipulator,
         ClassMethodManipulator $classMethodManipulator,
@@ -87,7 +80,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     ) {
         $this->routeListClass = $routeListClass;
         $this->routerClass = $routerClass;
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->classLikeNodeCollector = $classLikeNodeCollector;
         $this->classManipulator = $classManipulator;
         $this->docBlockManipulator = $docBlockManipulator;

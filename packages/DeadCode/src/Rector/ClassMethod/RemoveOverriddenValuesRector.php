@@ -11,23 +11,12 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use Rector\DeadCode\Rector\ClassMethod\Data\VariableNodeUseInfo;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class RemoveOverriddenValuesRector extends AbstractRector
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    public function __construct(BetterNodeFinder $betterNodeFinder)
-    {
-        $this->betterNodeFinder = $betterNodeFinder;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Remove initial assigns of overridden values', [

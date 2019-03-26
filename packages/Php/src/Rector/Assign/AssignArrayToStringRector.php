@@ -20,7 +20,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -42,15 +41,9 @@ final class AssignArrayToStringRector extends AbstractRector
      */
     private $callableNodeTraverser;
 
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, BetterNodeFinder $betterNodeFinder)
+    public function __construct(CallableNodeTraverser $callableNodeTraverser)
     {
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function getDefinition(): RectorDefinition
