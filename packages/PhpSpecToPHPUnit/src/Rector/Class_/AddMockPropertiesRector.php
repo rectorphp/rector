@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareUnionTypeNode;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
 use Rector\PhpSpecToPHPUnit\PhpSpecMockCollector;
@@ -48,10 +49,20 @@ final class AddMockPropertiesRector extends AbstractPhpSpecToPHPUnitRector
 
         $classMocks = $this->phpSpecMockCollector->resolveClassMocksFromParam($node);
 
+        /** @var string $class */
+        $class = $node->getAttribute(Attribute::CLASS_NAME);
+
         foreach ($classMocks as $variable => $methods) {
             if (count($methods) <= 1) {
                 continue;
             }
+
+            // non-ctor used mocks are probably local only
+            if (! in_array('let', $methods, true)) {
+                continue;
+            }
+
+            $this->phpSpecMockCollector->addPropertyMock($class, $variable);
 
             $variableType = $this->phpSpecMockCollector->getTypeForClassAndVariable($node, $variable);
 

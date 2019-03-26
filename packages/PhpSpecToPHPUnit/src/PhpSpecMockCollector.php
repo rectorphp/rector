@@ -34,6 +34,11 @@ final class PhpSpecMockCollector
      */
     private $mocksWithsTypes = [];
 
+    /**
+     * @var mixed[]
+     */
+    private $propertyMocksByClass = [];
+
     public function __construct(NameResolver $nameResolver, CallableNodeTraverser $callableNodeTraverser)
     {
         $this->nameResolver = $nameResolver;
@@ -76,20 +81,9 @@ final class PhpSpecMockCollector
     public function isVariableMockInProperty(Variable $variable): bool
     {
         $variableName = $this->nameResolver->resolve($variable);
-        $methodName = $variable->getAttribute(Attribute::METHOD_NAME);
         $className = $variable->getAttribute(Attribute::CLASS_NAME);
 
-        if (! isset($this->mocks[$className][$variableName])) {
-            return false;
-        }
-
-        $methodNames = $this->mocks[$className][$variableName];
-
-        if (count($methodNames) <= 1) {
-            return false;
-        }
-
-        return in_array($methodName, $methodNames, true);
+        return in_array($variableName, $this->propertyMocksByClass[$className] ?? [], true);
     }
 
     public function getTypeForClassAndVariable(Class_ $node, string $variable): string
@@ -101,6 +95,11 @@ final class PhpSpecMockCollector
         }
 
         return $this->mocksWithsTypes[$className][$variable];
+    }
+
+    public function addPropertyMock(string $class, string $property): void
+    {
+        $this->propertyMocksByClass[$class][] = $property;
     }
 
     private function addMockFromParam(Param $param): void
