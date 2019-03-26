@@ -1,0 +1,5 @@
+# @see http://www.phpspec.net/en/stable/manual/upgrading-to-phpspec-4.html
+services:
+    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
+        PhpSpec\ObjectBehavior:
+            getMatchers: 'array'
