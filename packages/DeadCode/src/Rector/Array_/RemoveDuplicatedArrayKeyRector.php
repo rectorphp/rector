@@ -8,6 +8,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see https://3v4l.org/SG0Wu
+ */
 final class RemoveDuplicatedArrayKeyRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
@@ -17,13 +20,13 @@ final class RemoveDuplicatedArrayKeyRector extends AbstractRector
                 <<<'CODE_SAMPLE'
 $item = [
     1 => 'A',
-    1 => 'A'
+    1 => 'B'
 ];
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
 $item = [
-    1 => 'A',
+    1 => 'B'
 ];
 CODE_SAMPLE
             ),
@@ -43,20 +46,22 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $arrayKeyValues = [];
+        $arrayItemsByKeys = [];
+
         foreach ($node->items as $arrayItem) {
             if ($arrayItem->key === null) {
                 continue;
             }
 
-            $keyAndValue = $this->print($arrayItem->key) . $this->print($arrayItem->value);
+            $keyValue = $this->print($arrayItem->key);
+            $arrayItemsByKeys[$keyValue][] = $arrayItem;
+        }
 
-            // already set the same value
-            if (in_array($keyAndValue, $arrayKeyValues, true)) {
-                $this->removeNode($arrayItem);
-            } else {
-                $arrayKeyValues[] = $keyAndValue;
-            }
+        foreach ($arrayItemsByKeys as $arrayItems) {
+            // keep last item
+            array_pop($arrayItems);
+
+            $this->removeNodes($arrayItems);
         }
 
         return $node;
