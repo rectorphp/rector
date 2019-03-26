@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -29,11 +28,6 @@ final class TemplateAnnotationRector extends AbstractRector
     private $docBlockManipulator;
 
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var TemplateGuesser
      */
     private $templateGuesser;
@@ -41,12 +35,10 @@ final class TemplateAnnotationRector extends AbstractRector
     public function __construct(
         int $version,
         DocBlockManipulator $docBlockManipulator,
-        BetterNodeFinder $betterNodeFinder,
         TemplateGuesser $templateGuesser
     ) {
         $this->version = $version;
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->templateGuesser = $templateGuesser;
     }
 

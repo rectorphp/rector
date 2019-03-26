@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -60,18 +59,12 @@ final class RegexDashEscapeRector extends AbstractRector
     ];
 
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var ConstantNodeCollector
      */
     private $constantNodeCollector;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, ConstantNodeCollector $constantNodeCollector)
+    public function __construct(ConstantNodeCollector $constantNodeCollector)
     {
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->constantNodeCollector = $constantNodeCollector;
     }
 

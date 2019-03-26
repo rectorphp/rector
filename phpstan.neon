@@ -135,3 +135,4 @@ parameters:
 
         - '#Parameter \#2 \$classMethod of method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolvePathFromClassAndMethodNodes\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
         - '#Parameter \#2 \$constFetch of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyArraySearchRector\:\:resolveIsNot\(\) expects PhpParser\\Node\\Expr\\ConstFetch, PhpParser\\Node given#'
+        - '#(.*?)PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable given#'

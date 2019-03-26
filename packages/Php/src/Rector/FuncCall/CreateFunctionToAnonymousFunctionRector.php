@@ -18,7 +18,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\Attribute;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Parser\InlineCodeParser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -31,18 +30,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class CreateFunctionToAnonymousFunctionRector extends AbstractRector
 {
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var InlineCodeParser
      */
     private $inlineCodeParser;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, InlineCodeParser $inlineCodeParser)
+    public function __construct(InlineCodeParser $inlineCodeParser)
     {
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->inlineCodeParser = $inlineCodeParser;
     }
 

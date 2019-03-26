@@ -8,11 +8,14 @@ use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\PhpParser\Parser\Parser;
 use Rector\PhpParser\Printer\FormatPerservingPrinter;
+use Rector\Rector\AbstractRectorTrait;
 use Symfony\Component\Filesystem\Filesystem;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 abstract class AbstractFileSystemRector implements FileSystemRectorInterface
 {
+    use AbstractRectorTrait;
+
     /**
      * @var Parser
      */

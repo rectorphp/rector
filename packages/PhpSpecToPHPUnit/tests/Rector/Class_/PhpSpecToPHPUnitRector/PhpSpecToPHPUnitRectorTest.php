@@ -30,6 +30,7 @@ final class PhpSpecToPHPUnitRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/get_wrapped_object.php.inc',
             __DIR__ . '/Fixture/mock_properties.php.inc',
             __DIR__ . '/Fixture/mock_properties_non_local.php.inc',
+            __DIR__ . '/Fixture/setup_private_ctor.php.inc',
         ]);
     }
 

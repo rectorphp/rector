@@ -6,23 +6,12 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class MultipleClassFileToPsr4ClassesRector extends AbstractFileSystemRector
 {
-    /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    public function __construct(BetterNodeFinder $betterNodeFinder)
-    {
-        $this->betterNodeFinder = $betterNodeFinder;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
