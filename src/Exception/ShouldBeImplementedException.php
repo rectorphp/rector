@@ -6,6 +6,4 @@ use Exception;
 
 final class ShouldBeImplementedException extends Exception
 {
-
 }
-
