@@ -8,6 +8,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
@@ -89,7 +90,7 @@ CODE_SAMPLE
     public function getNodeTypes(): array
     {
         // property, method
-        return [Name::class, Identifier::class, Property::class, FunctionLike::class];
+        return [Name::class, Identifier::class, Property::class, FunctionLike::class, Expression::class];
     }
 
     /**
