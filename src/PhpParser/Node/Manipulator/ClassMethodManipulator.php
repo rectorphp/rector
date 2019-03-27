@@ -3,6 +3,7 @@
 namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -14,6 +15,7 @@ use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class ClassMethodManipulator
@@ -43,27 +45,51 @@ final class ClassMethodManipulator
      */
     private $nameResolver;
 
+    /**
+     * @var ValueResolver
+     */
+    private $valueResolver;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         NodeTypeResolver $nodeTypeResolver,
         FunctionLikeManipulator $functionLikeManipulator,
-        NameResolver $nameResolver
+        NameResolver $nameResolver,
+        ValueResolver $valueResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->functionLikeManipulator = $functionLikeManipulator;
         $this->nameResolver = $nameResolver;
+        $this->valueResolver = $valueResolver;
     }
 
     public function isParameterUsedMethod(Param $param, ClassMethod $classMethod): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use (
+        $isUsedDirectly = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use (
             $param
         ) {
             return $this->betterStandardPrinter->areNodesEqual($node, $param->var);
         });
+
+        if ($isUsedDirectly) {
+            return true;
+        }
+
+        /** @var FuncCall[] $compactFuncCalls */
+        $compactFuncCalls = $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) {
+            if (! $node instanceof FuncCall) {
+                return false;
+            }
+
+            return $this->nameResolver->isName($node, 'compact');
+        });
+
+        $arguments = $this->extractArgumentsFromCompactFuncCalls($compactFuncCalls);
+
+        return $this->nameResolver->isNames($param, $arguments);
     }
 
     public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod): bool
@@ -217,5 +243,25 @@ final class ClassMethodManipulator
         }
 
         throw new ShouldNotHappenException();
+    }
+
+    /**
+     * @param FuncCall[] $compactFuncCalls
+     * @return string[]
+     */
+    private function extractArgumentsFromCompactFuncCalls(array $compactFuncCalls): array
+    {
+        $arguments = [];
+        foreach ($compactFuncCalls as $compactFuncCall) {
+            foreach ($compactFuncCall->args as $arg) {
+                $value = $this->valueResolver->resolve($arg->value);
+
+                if ($value) {
+                    $arguments[] = $value;
+                }
+            }
+        }
+
+        return $arguments;
     }
 }
