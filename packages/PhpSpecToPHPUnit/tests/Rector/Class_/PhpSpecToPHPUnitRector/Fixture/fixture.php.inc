@@ -26,6 +26,7 @@ class CreateMeSpec extends DummyObjectBehavior
         $cart->price()->shouldBeCalled()->willReturn(5);
         $cart->shippingAddress(Argument::type(Address::class))->shouldBeCalled();
         $cart->shippingAddress(Argument::type('DateTime'))->shouldBeCalled();
+        $cart->shippingAddress(Argument::type('string'))->shouldBeCalled();
     }
 
     public function is_bool_check()
@@ -77,6 +78,7 @@ class CreateMeTest extends \PHPUnit\Framework\TestCase
         $cart->expects($this->atLeastOnce())->method('price')->willReturn(5);
         $cart->expects($this->atLeastOnce())->method('shippingAddress')->with($this->isInstanceOf(Address::class));
         $cart->expects($this->atLeastOnce())->method('shippingAddress')->with($this->isInstanceOf('DateTime'));
+        $cart->expects($this->atLeastOnce())->method('shippingAddress')->with($this->isType('string'));
     }
 
     public function testBoolCheck()

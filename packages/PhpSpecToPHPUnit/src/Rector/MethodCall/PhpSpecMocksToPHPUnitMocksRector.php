@@ -21,6 +21,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\Php\TypeAnalyzer;
 use Rector\PhpSpecToPHPUnit\PhpSpecMockCollector;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 
@@ -31,9 +32,15 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
      */
     private $phpSpecMockCollector;
 
-    public function __construct(PhpSpecMockCollector $phpSpecMockCollector)
+    /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    public function __construct(PhpSpecMockCollector $phpSpecMockCollector, TypeAnalyzer $typeAnalyzer)
     {
         $this->phpSpecMockCollector = $phpSpecMockCollector;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     /**
@@ -178,7 +185,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
                 }
 
                 if ($this->isName($expr->name, 'type')) {
-                    $expr = new MethodCall(new Variable('this'), 'isInstanceOf', $expr->args);
+                    $expr = $this->createIsTypeOrIsInstanceOf($expr);
                 }
             }
         }
@@ -218,5 +225,18 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
         $assign = new Assign($propertyFetch, $methodCall);
 
         return new Expression($assign);
+    }
+
+    private function createIsTypeOrIsInstanceOf(StaticCall $staticCall): MethodCall
+    {
+        $type = $this->getValue($staticCall->args[0]->value);
+
+        if ($this->typeAnalyzer->isPhpReservedType($type)) {
+            $name = 'isType';
+        } else {
+            $name = 'isInstanceOf';
+        }
+
+        return new MethodCall(new Variable('this'), $name, $staticCall->args);
     }
 }
