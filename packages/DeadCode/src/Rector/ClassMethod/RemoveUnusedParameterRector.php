@@ -13,6 +13,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see https://www.php.net/manual/en/function.compact.php
+ */
 final class RemoveUnusedParameterRector extends AbstractRector
 {
     /**
