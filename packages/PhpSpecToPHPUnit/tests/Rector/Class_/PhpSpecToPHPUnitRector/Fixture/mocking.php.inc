@@ -9,6 +9,7 @@ class OrderSpec extends DummyObjectBehavior
     public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
     {
         $factory->createShippingMethodFor(Argument::any())->shouldBeCalled()->willReturn($shippingMethod);
+        $factory->anotherMethod(25)->shouldBeCalled()->willReturn($shippingMethod);
     }
 }
 
@@ -33,6 +34,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         /** @var ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
         $shippingMethod = $this->createMock(ShippingMethod::class);
         $factory->expects($this->atLeastOnce())->method('createShippingMethodFor')->willReturn($shippingMethod);
+        $factory->expects($this->atLeastOnce())->method('anotherMethod')->with($this->equalTo(25))->willReturn($shippingMethod);
     }
 }
 

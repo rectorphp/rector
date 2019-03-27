@@ -188,6 +188,10 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
                     $expr = $this->createIsTypeOrIsInstanceOf($expr);
                 }
             }
+        } else {
+            $newExpr = new MethodCall(new Variable('this'), 'equalTo');
+            $newExpr->args = [new Arg($expr)];
+            $expr = $newExpr;
         }
 
         $withMethodCall->args = [new Arg($expr)];
