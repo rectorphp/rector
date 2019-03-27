@@ -53,10 +53,6 @@ CODE_SAMPLE
             return new BooleanOr($node->left, $node->right);
         }
 
-        if ($node instanceof LogicalAnd) {
-            return new BooleanAnd($node->left, $node->right);
-        }
-
-        return null;
+        return new BooleanAnd($node->left, $node->right);
     }
 }

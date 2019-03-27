@@ -7,6 +7,7 @@ use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use Rector\Application\FileProcessor;
 use Rector\Configuration\Option;
+use Rector\Exception\ShouldBeImplementedException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\HttpKernel\RectorKernel;
 use Symfony\Component\Yaml\Yaml;
@@ -86,11 +87,13 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         }
 
         // to be implemented
+        throw new ShouldBeImplementedException();
     }
 
     protected function getRectorClass(): string
     {
         // to be implemented
+        return '';
     }
 
     /**

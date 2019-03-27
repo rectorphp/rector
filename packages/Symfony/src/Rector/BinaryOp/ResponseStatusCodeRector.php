@@ -138,11 +138,7 @@ CODE_SAMPLE
             return $this->processMethodCall($node);
         }
 
-        if ($node instanceof BinaryOp) {
-            return $this->processBinaryOp($node);
-        }
-
-        return $node;
+        return $this->processBinaryOp($node);
     }
 
     private function processMethodCall(MethodCall $methodCall): ?MethodCall

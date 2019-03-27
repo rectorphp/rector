@@ -116,15 +116,11 @@ CODE_SAMPLE
             return ! $this->isTypes($node, $this->requestTypes);
         }
 
-        if ($node instanceof FuncCall) {
-            $class = $node->getAttribute(Attribute::CLASS_NODE);
-            if (! $class instanceof Class_) {
-                return true;
-            }
-
-            return ! $this->isName($node, 'request');
+        $class = $node->getAttribute(Attribute::CLASS_NODE);
+        if (! $class instanceof Class_) {
+            return true;
         }
 
-        return true;
+        return ! $this->isName($node, 'request');
     }
 }

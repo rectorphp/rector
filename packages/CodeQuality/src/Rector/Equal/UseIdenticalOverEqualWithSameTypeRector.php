@@ -77,10 +77,6 @@ CODE_SAMPLE
             return new Identical($node->left, $node->right);
         }
 
-        if ($node instanceof NotEqual) {
-            return new NotIdentical($node->left, $node->right);
-        }
-
-        return $node;
+        return new NotIdentical($node->left, $node->right);
     }
 }
