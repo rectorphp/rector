@@ -12,6 +12,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -472,7 +473,8 @@ final class DocBlockManipulator
     {
         return $phpDocTagNode->value instanceof ParamTagValueNode ||
             $phpDocTagNode->value instanceof VarTagValueNode ||
-            $phpDocTagNode->value instanceof ReturnTagValueNode;
+            $phpDocTagNode->value instanceof ReturnTagValueNode ||
+            $phpDocTagNode->value instanceof ThrowsTagValueNode;
     }
 
     private function replaceTypeNode(TypeNode $typeNode, string $oldType, string $newType): TypeNode
