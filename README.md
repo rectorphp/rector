@@ -234,8 +234,8 @@ final class MyFirstRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Add "_" to private method calls that start with "internal"', [
-            new CodeSample('$this->internalMethod();', '$this->_internalMethod();')
+        return new RectorDefinition('Change method calls from set* to change*.', [
+            new CodeSample('$user->setPassword('123456');', '$user->changePassword('123456');')
         ]);
     }
 
@@ -252,7 +252,7 @@ final class MyFirstRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        // we only care about "internal*" method names
+        // we only care about "set*" method names
         $methodCallName = $this->getName($node);
 
         if (! Strings::startsWith($methodCallName, 'set')) {
