@@ -5,7 +5,6 @@ namespace Rector\Php\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use Rector\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -149,6 +148,11 @@ CODE_SAMPLE
             return null;
         }
 
-        return new MethodCall(new Variable('this'), $node->name);
+        $name = $this->getName($node->name);
+        if ($name === null) {
+            return null;
+        }
+
+        return $this->createMethodCall('this', $name);
     }
 }

@@ -221,7 +221,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             $name = $this->resolveBoolMethodName($name, $expected);
         }
 
-        $assetMethodCall = new MethodCall(new Variable('this'), new Identifier($name));
+        $assetMethodCall = $this->createMethodCall('this', $name);
 
         if (! $this->isBoolAssert && $expected) {
             $assetMethodCall->args[] = new Arg($this->thisToTestedObjectPropertyFetch($expected));
@@ -305,7 +305,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             }
 
             // 1. assign callable to variable
-            $thisGetMatchers = new MethodCall(new Variable('this'), 'getMatchers');
+            $thisGetMatchers = $this->createMethodCall('this', 'getMatchers');
             $arrayDimFetch = new ArrayDimFetch($thisGetMatchers, new String_($matcherKey));
             $matcherCallableVariable = new Variable('matcherCallable');
             $assign = new Assign($matcherCallableVariable, $arrayDimFetch);
