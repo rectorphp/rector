@@ -1,4 +1,4 @@
-# All 243 Rectors Overview
+# All 258 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -50,6 +50,27 @@ Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.
 -$object->config(['key' => 'value']);
 +$object->setConfig('key', 'value');
 +$object->setConfig(['key' => 'value']);
+```
+
+<br>
+
+### `ChangeSnakedFixtureNameToCamelRector`
+
+- class: `Rector\CakePHP\Rector\Name\ChangeSnakedFixtureNameToCamelRector`
+
+Changes $fixtues style from snake_case to CamelCase.
+
+```diff
+ class SomeTest
+ {
+     protected $fixtures = [
+-        'app.posts',
+-        'app.users',
+-        'some_plugin.posts/special_posts',
++        'app.Posts',
++        'app.Users',
++        'some_plugin.Posts/SpeectialPosts',
+     ];
 ```
 
 <br>
@@ -353,6 +374,25 @@ Simplify strpos(strtolower(), "...") calls
 ```diff
 -strpos(strtolower($var), "...")"
 +stripos($var, "...")"
+```
+
+<br>
+
+### `SimplifyRegexPatternRector`
+
+- class: `Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector`
+
+Simplify regex pattern to known ranges
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+-        preg_match('#[a-zA-Z0-9+]#', $value);
++        preg_match('#[\w\d+]#', $value);
+     }
+ }
 ```
 
 <br>
@@ -847,8 +887,8 @@ Remove duplicated key in defined arrays.
 
 ```diff
  $item = [
-     1 => 'A',
--    1 => 'A'
+-    1 => 'A',
+     1 => 'B'
  ];
 ```
 
@@ -968,6 +1008,34 @@ Remove initial assigns of overridden values
 
 <br>
 
+### `RemoveDeadIfForeachForRector`
+
+- class: `Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector`
+
+Remove if, foreach and for that does not do anything
+
+```diff
+ class SomeClass
+ {
+     public function run($someObject)
+     {
+         $value = 5;
+-        if ($value) {
+-        }
+-
+         if ($someObject->run()) {
+-        }
+-
+-        foreach ($values as $value) {
+         }
+
+         return $value;
+     }
+ }
+```
+
+<br>
+
 ### `RemoveUnusedPrivatePropertyRector`
 
 - class: `Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector`
@@ -1029,6 +1097,30 @@ Remove dead code after return statement
      {
           return $a;
 -         $a++;
+     }
+ }
+```
+
+<br>
+
+### `RemoveDeadReturnRector`
+
+- class: `Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector`
+
+Remove last return in the functions, since does not do anything
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $shallWeDoThis = true;
+
+         if ($shallWeDoThis) {
+             return;
+         }
+-
+-        return;
      }
  }
 ```
@@ -1339,6 +1431,32 @@ Replace mysql_pconnect() with mysqli_connect() with host p: prefix
 
 ## NetteTesterToPHPUnit
 
+### `NetteAssertToPHPUnitAssertRector`
+
+- class: `Rector\NetteTesterToPHPUnit\Rector\StaticCall\NetteAssertToPHPUnitAssertRector`
+
+Migrate Nette/Assert calls to PHPUnit
+
+```diff
+ use Tester\Assert;
+
+ function someStaticFunctions()
+ {
+-    Assert::true(10 == 5);
++    \PHPUnit\Framework\Assert::assertTrue(10 == 5);
+ }
+```
+
+<br>
+
+### `RenameTesterTestToPHPUnitToTestFileRector`
+
+- class: `Rector\NetteTesterToPHPUnit\Rector\RenameTesterTestToPHPUnitToTestFileRector`
+
+Rename "*.phpt" file to "*Test.php" file
+
+<br>
+
 ### `NetteTesterClassToPHPUnitClassRector`
 
 - class: `Rector\NetteTesterToPHPUnit\Rector\Class_\NetteTesterClassToPHPUnitClassRector`
@@ -1356,19 +1474,14 @@ Migrate Nette Tester test case to PHPUnit
 -class ExtensionTest extends TestCase
 +class ExtensionTest extends \PHPUnit\Framework\TestCase
  {
--    public function setUp()
-+    protected function setUp()
-     {
-     }
-
      public function testFunctionality()
      {
 -        Assert::true($default instanceof Kdyby\Doctrine\EntityManager);
 -        Assert::true(5);
 -        Assert::same($container->getService('kdyby.doctrine.default.entityManager'), $default);
-+        self::assertInstanceOf(\Kdyby\Doctrine\EntityManager::cllass, $default);
-+        self::assertTrue(5);
-+        self::same($container->getService('kdyby.doctrine.default.entityManager'), $default);
++        $this->assertInstanceOf(\Kdyby\Doctrine\EntityManager::cllass, $default);
++        $this->assertTrue(5);
++        $this->same($container->getService('kdyby.doctrine.default.entityManager'), $default);
      }
 -}
 -
@@ -1495,6 +1608,65 @@ Adds %% to placeholder name of trans() method if missing
 -            ['name' => $name]
 +            ['%name%' => $name]
          );
+     }
+ }
+```
+
+<br>
+
+### `NetteControlToSymfonyControllerRector`
+
+- class: `Rector\NetteToSymfony\Rector\Class_\NetteControlToSymfonyControllerRector`
+
+Migrate Nette Component to Symfony Controller
+
+```diff
+ use Nette\Application\UI\Control;
+
+-class SomeControl extends Control
++class SomeController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
+ {
+-    public function render()
+-    {
+-        $this->template->param = 'some value';
+-        $this->template->render(__DIR__ . '/poll.latte');
+-    }
++     public function some()
++     {
++         $this->render(__DIR__ . '/poll.latte', ['param' => 'some value']);
++     }
+ }
+```
+
+<br>
+
+### `NetteFormToSymfonyFormRector`
+
+- class: `Rector\NetteToSymfony\Rector\Class_\NetteFormToSymfonyFormRector`
+
+Migrate Nette\Forms in Presenter to Symfony
+
+```diff
+ use Nette\Application\UI;
+
+ class SomePresenter extends UI\Presenter
+ {
+     public function someAction()
+     {
+-        $form = new UI\Form;
+-        $form->addText('name', 'Name:');
+-        $form->addPassword('password', 'Password:');
+-        $form->addSubmit('login', 'Sign up');
++        $form = $this->createFormBuilder();
++        $form->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
++            'label' => 'Name:'
++        ]);
++        $form->add('password', \Symfony\Component\Form\Extension\Core\Type\PasswordType::class, [
++            'label' => 'Password:'
++        ]);
++        $form->add('login', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class, [
++            'label' => 'Sign up'
++        ]);
      }
  }
 ```
@@ -1881,11 +2053,11 @@ Turns instanceof comparisons to their method name alternatives in PHPUnit TestCa
 
 ```diff
 -$this->assertTrue($foo instanceof Foo, "message");
-+$this->assertFalse($foo instanceof Foo, "message");
++$this->assertInstanceOf("Foo", $foo, "message");
 ```
 
 ```diff
--$this->assertInstanceOf("Foo", $foo, "message");
+-$this->assertFalse($foo instanceof Foo, "message");
 +$this->assertNotInstanceOf("Foo", $foo, "message");
 ```
 
@@ -1953,6 +2125,68 @@ Turns getMock*() methods to createMock()
 ```diff
 -$this->getMockWithoutInvokingTheOriginalConstructor("Class");
 +$this->createMock("Class");
+```
+
+<br>
+
+### `TestListenerToHooksRector`
+
+- class: `Rector\PHPUnit\Rector\Class_\TestListenerToHooksRector`
+
+Refactor "*TestListener.php" to particular "*Hook.php" files
+
+```diff
+ namespace App\Tests;
+
+-use PHPUnit\Framework\TestListener;
+-
+-final class BeforeListHook implements TestListener
++final class BeforeListHook implements \PHPUnit\Runner\BeforeTestHook, \PHPUnit\Runner\AfterTestHook
+ {
+-    public function addError(Test $test, \Throwable $t, float $time): void
++    public function executeBeforeTest(Test $test): void
+     {
+-    }
+-
+-    public function addWarning(Test $test, Warning $e, float $time): void
+-    {
+-    }
+-
+-    public function addFailure(Test $test, AssertionFailedError $e, float $time): void
+-    {
+-    }
+-
+-    public function addIncompleteTest(Test $test, \Throwable $t, float $time): void
+-    {
+-    }
+-
+-    public function addRiskyTest(Test $test, \Throwable $t, float $time): void
+-    {
+-    }
+-
+-    public function addSkippedTest(Test $test, \Throwable $t, float $time): void
+-    {
+-    }
+-
+-    public function startTestSuite(TestSuite $suite): void
+-    {
+-    }
+-
+-    public function endTestSuite(TestSuite $suite): void
+-    {
+-    }
+-
+-    public function startTest(Test $test): void
+-    {
+         echo 'start test!';
+     }
+
+-    public function endTest(Test $test, float $time): void
++    public function executeAfterTest(Test $test, float $time): void
+     {
+         echo $time;
+     }
+ }
 ```
 
 <br>
@@ -2372,7 +2606,7 @@ Changes rand, srand and getrandmax by new md_* alternatives.
 
 - class: `Rector\Php\Rector\FuncCall\PregReplaceEModifierRector`
 
-The /e modifier is no longer supported, use preg_replace_callback instead
+The /e modifier is no longer supported, use preg_replace_callback instead 
 
 ```diff
  class SomeClass
@@ -2653,8 +2887,8 @@ Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonExcepti
 ```diff
 -json_encode($content);
 -json_decode($json);
-+json_encode($content, JSON_THROW_ON_ERROR
-+json_decode($json, null, null, JSON_THROW_ON_ERROR););
++json_encode($content, JSON_THROW_ON_ERROR);
++json_decode($json, null, null, JSON_THROW_ON_ERROR);
 ```
 
 <br>
@@ -2969,7 +3203,7 @@ list() assigns variables in reverse order - relevant in array assign
 
 ```diff
 -list($a[], $a[]) = [1, 2];
-+list($a[], $a[]) = array_reverse([1, 2])];
++list($a[], $a[]) = array_reverse([1, 2]);
 ```
 
 <br>
@@ -3112,6 +3346,142 @@ Turns use property to method and `$node->alias` to last name in UseAlias Node of
 
 ## PhpSpecToPHPUnit
 
+### `PhpSpecMethodToPHPUnitMethodRector`
+
+- class: `Rector\PhpSpecToPHPUnit\Rector\ClassMethod\PhpSpecMethodToPHPUnitMethodRector`
+
+Migrate PhpSpec behavior to PHPUnit test
+
+```diff
+ namespace spec\SomeNamespaceForThisTest;
+
+-use PhpSpec\ObjectBehavior;
+-
+ class OrderSpec extends ObjectBehavior
+ {
+-    public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
++    /**
++     * @var \SomeNamespaceForThisTest\Order
++     */
++    private $order;
++    protected function setUp()
+     {
+-        $factory->createShippingMethodFor(Argument::any())->shouldBeCalled()->willReturn($shippingMethod);
++        /** @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
++        $factory = $this->createMock(OrderFactory::class);
++
++        /** @var ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
++        $shippingMethod = $this->createMock(ShippingMethod::class);
++
++        $factory->expects($this->once())->method('createShippingMethodFor')->willReturn($shippingMethod);
+     }
+ }
+```
+
+<br>
+
+### `MockVariableToPropertyFetchRector`
+
+- class: `Rector\PhpSpecToPHPUnit\Rector\ClassMethod\MockVariableToPropertyFetchRector`
+
+Migrate PhpSpec behavior to PHPUnit test
+
+```diff
+ namespace spec\SomeNamespaceForThisTest;
+
+-use PhpSpec\ObjectBehavior;
+-
+ class OrderSpec extends ObjectBehavior
+ {
+-    public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
++    /**
++     * @var \SomeNamespaceForThisTest\Order
++     */
++    private $order;
++    protected function setUp()
+     {
+-        $factory->createShippingMethodFor(Argument::any())->shouldBeCalled()->willReturn($shippingMethod);
++        /** @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
++        $factory = $this->createMock(OrderFactory::class);
++
++        /** @var ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
++        $shippingMethod = $this->createMock(ShippingMethod::class);
++
++        $factory->expects($this->once())->method('createShippingMethodFor')->willReturn($shippingMethod);
+     }
+ }
+```
+
+<br>
+
+### `PhpSpecMocksToPHPUnitMocksRector`
+
+- class: `Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecMocksToPHPUnitMocksRector`
+
+Migrate PhpSpec behavior to PHPUnit test
+
+```diff
+ namespace spec\SomeNamespaceForThisTest;
+
+-use PhpSpec\ObjectBehavior;
+-
+ class OrderSpec extends ObjectBehavior
+ {
+-    public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
++    /**
++     * @var \SomeNamespaceForThisTest\Order
++     */
++    private $order;
++    protected function setUp()
+     {
+-        $factory->createShippingMethodFor(Argument::any())->shouldBeCalled()->willReturn($shippingMethod);
++        /** @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
++        $factory = $this->createMock(OrderFactory::class);
++
++        /** @var ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
++        $shippingMethod = $this->createMock(ShippingMethod::class);
++
++        $factory->expects($this->once())->method('createShippingMethodFor')->willReturn($shippingMethod);
+     }
+ }
+```
+
+<br>
+
+### `PhpSpecPromisesToPHPUnitAssertRector`
+
+- class: `Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecPromisesToPHPUnitAssertRector`
+
+Migrate PhpSpec behavior to PHPUnit test
+
+```diff
+ namespace spec\SomeNamespaceForThisTest;
+
+-use PhpSpec\ObjectBehavior;
+-
+ class OrderSpec extends ObjectBehavior
+ {
+-    public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
++    /**
++     * @var \SomeNamespaceForThisTest\Order
++     */
++    private $order;
++    protected function setUp()
+     {
+-        $factory->createShippingMethodFor(Argument::any())->shouldBeCalled()->willReturn($shippingMethod);
++        /** @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
++        $factory = $this->createMock(OrderFactory::class);
++
++        /** @var ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
++        $shippingMethod = $this->createMock(ShippingMethod::class);
++
++        $factory->expects($this->once())->method('createShippingMethodFor')->willReturn($shippingMethod);
+     }
+ }
+```
+
+<br>
+
 ### `RenameSpecFileToTestFileRector`
 
 - class: `Rector\PhpSpecToPHPUnit\Rector\RenameSpecFileToTestFileRector`
@@ -3120,33 +3490,68 @@ Rename "*Spec.php" file to "*Test.php" file
 
 <br>
 
+### `AddMockPropertiesRector`
+
+- class: `Rector\PhpSpecToPHPUnit\Rector\Class_\AddMockPropertiesRector`
+
+Migrate PhpSpec behavior to PHPUnit test
+
+```diff
+ namespace spec\SomeNamespaceForThisTest;
+
+-use PhpSpec\ObjectBehavior;
+-
+ class OrderSpec extends ObjectBehavior
+ {
+-    public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
++    /**
++     * @var \SomeNamespaceForThisTest\Order
++     */
++    private $order;
++    protected function setUp()
+     {
+-        $factory->createShippingMethodFor(Argument::any())->shouldBeCalled()->willReturn($shippingMethod);
++        /** @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
++        $factory = $this->createMock(OrderFactory::class);
++
++        /** @var ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
++        $shippingMethod = $this->createMock(ShippingMethod::class);
++
++        $factory->expects($this->once())->method('createShippingMethodFor')->willReturn($shippingMethod);
+     }
+ }
+```
+
+<br>
+
 ### `PhpSpecClassToPHPUnitClassRector`
 
 - class: `Rector\PhpSpecToPHPUnit\Rector\Class_\PhpSpecClassToPHPUnitClassRector`
 
-Migrate PhpSpec object behavior spec to PHPUnit test case
+Migrate PhpSpec behavior to PHPUnit test
 
 ```diff
--namespace spec\SomeNamespaceForThisTest;
-+namespace SomeNamespaceForThisTest;
+ namespace spec\SomeNamespaceForThisTest;
 
- use PhpSpec\ObjectBehavior;
-
--class CartSpec extends ObjectBehavior
-+class CartTest extends \PHPUnit\Framework\TestCase
+-use PhpSpec\ObjectBehavior;
+-
+ class OrderSpec extends ObjectBehavior
  {
--    public function let()
+-    public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
++    /**
++     * @var \SomeNamespaceForThisTest\Order
++     */
++    private $order;
 +    protected function setUp()
      {
--        $this->beConstructedWith(5);
-+        $this->cart = new Cart(5);
-     }
-
--    public function it_returns_id()
-+    public function testReturnsId()
-     {
--        $this->id()->shouldReturn(5);
-+        $this->assertSame(5, $this->cart->id());
+-        $factory->createShippingMethodFor(Argument::any())->shouldBeCalled()->willReturn($shippingMethod);
++        /** @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
++        $factory = $this->createMock(OrderFactory::class);
++
++        /** @var ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
++        $shippingMethod = $this->createMock(ShippingMethod::class);
++
++        $factory->expects($this->once())->method('createShippingMethodFor')->willReturn($shippingMethod);
      }
  }
 ```
@@ -3488,6 +3893,29 @@ Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Valid
 
 <br>
 
+### `ResponseStatusCodeRector`
+
+- class: `Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector`
+
+Turns status code numbers to constants
+
+```diff
+ class SomeController
+ {
+     public function index()
+     {
+         $response = new \Symfony\Component\HttpFoundation\Response();
+-        $response->setStatusCode(200);
++        $response->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_OK);
+
+-        if ($response->getStatusCode() === 200) {}
++        if ($response->getStatusCode() === \Symfony\Component\HttpFoundation\Response::HTTP_OK) {}
+     }
+ }
+```
+
+<br>
+
 ### `GetParameterToConstructorInjectionRector`
 
 - class: `Rector\Symfony\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector`
@@ -3677,8 +4105,7 @@ Changes Twig_Function_Method to Twig_SimpleFunction calls in TwigExtension.
          ];
      }
 
--    public function getFilters()
-+    public function getFilteres()
+     public function getFilters()
      {
          return [
 -            'is_mobile' => new Twig_Filter_Method($this, 'isMobile'),
