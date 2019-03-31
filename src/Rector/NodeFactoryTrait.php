@@ -34,9 +34,18 @@ trait NodeFactoryTrait
         $this->nodeFactory = $nodeFactory;
     }
 
-    protected function createStaticCall(string $class, string $method): Expr\StaticCall
+    /**
+     * @param Arg[] $args
+     */
+    protected function createStaticCall(string $class, string $method, array $args = []): Expr\StaticCall
     {
-        return new Node\Expr\StaticCall(new Node\Name\FullyQualified($class), $method);
+        if (in_array($class, ['self', 'parent', 'static'], true)) {
+            $class = new Name($class);
+        } else {
+            $class = new Name\FullyQualified($class);
+        }
+
+        return new Node\Expr\StaticCall($class, $method, $args);
     }
 
     protected function createClassConstant(string $class, string $constant): ClassConstFetch

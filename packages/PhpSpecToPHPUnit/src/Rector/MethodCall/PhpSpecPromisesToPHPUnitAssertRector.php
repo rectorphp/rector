@@ -263,7 +263,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         if ($this->isName($methodCall, 'beConstructedThrough')) {
             // static method
             $methodName = $this->getValue($methodCall->args[0]->value);
-            $staticCall = new StaticCall(new FullyQualified($this->testedClass), $methodName);
+            $staticCall = $this->createStaticCall($this->testedClass, $methodName);
 
             $this->moveConstructorArguments($methodCall, $staticCall);
 

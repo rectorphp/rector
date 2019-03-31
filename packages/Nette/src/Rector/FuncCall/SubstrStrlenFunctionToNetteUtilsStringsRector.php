@@ -63,10 +63,7 @@ CODE_SAMPLE
     {
         foreach ($this->functionToStaticMethod as $function => $staticMethod) {
             if ($this->isName($node, $function)) {
-                $staticCall = $this->createStaticCall('Nette\Utils\Strings', $staticMethod);
-                $staticCall->args = $node->args;
-
-                return $staticCall;
+                return $this->createStaticCall('Nette\Utils\Strings', $staticMethod, $node->args);
             }
         }
 
