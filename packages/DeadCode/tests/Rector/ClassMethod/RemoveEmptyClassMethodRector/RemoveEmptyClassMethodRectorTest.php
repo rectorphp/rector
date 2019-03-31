@@ -14,6 +14,7 @@ final class RemoveEmptyClassMethodRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/with_parent.php.inc',
             __DIR__ . '/Fixture/with_interface.php.inc',
             __DIR__ . '/Fixture/keep_abstract_method.php.inc',
+            __DIR__ . '/Fixture/keep_protected_child_method.php.inc',
         ]);
     }
 

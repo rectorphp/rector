@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveEmptyClassMethodRector\Fixture;
 
-class WithParent extends ParentClass
+final class WithParent extends ParentClass
 {
     public function run()
     {
@@ -27,7 +27,7 @@ class ParentClass
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveEmptyClassMethodRector\Fixture;
 
-class WithParent extends ParentClass
+final class WithParent extends ParentClass
 {
     public function run()
     {
