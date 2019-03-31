@@ -1,3 +1,4 @@
+# @see https://www.tomasvotruba.cz/blog/2018/07/30/hidden-gems-of-php-packages-nette-utils/
 services:
     Rector\Rector\Function_\FunctionToStaticCallRector:
         # filesystem
@@ -10,3 +11,4 @@ services:
         json_encode: ['Nette\Utils\Json', 'encode']
 
         # strings
+    Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector: ~
