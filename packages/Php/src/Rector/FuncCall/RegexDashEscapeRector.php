@@ -4,15 +4,11 @@ namespace Rector\Php\Rector\FuncCall;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\Php\Regex\RegexPatternArgumentManipulator;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -34,38 +30,16 @@ final class RegexDashEscapeRector extends AbstractRector
     private const RIGHT_HAND_UNESCAPED_DASH_PATTERN = '#(?<!\[)-\\\\(w|s|d)#i';
 
     /**
-     * @var int[]
+     * @var RegexPatternArgumentManipulator
      */
-    private $functionsWithPatternsToArgumentPosition = [
-        'preg_match' => 0,
-        'preg_replace_callback_array' => 0,
-        'preg_replace_callback' => 0,
-        'preg_replace' => 0,
-        'preg_match_all' => 0,
-        'preg_split' => 0,
-        'preg_grep' => 0,
-    ];
+    private $regexPatternArgumentManipulator;
 
-    /**
-     * @var int[][]
-     */
-    private $staticMethodsWithPatternsToArgumentPosition = [
-        'Nette\Utils\Strings' => [
-            'match' => 1,
-            'matchAll' => 1,
-            'replace' => 1,
-            'split' => 1,
-        ],
-    ];
-
-    /**
-     * @var ConstantNodeCollector
-     */
-    private $constantNodeCollector;
-
-    public function __construct(ConstantNodeCollector $constantNodeCollector)
-    {
-        $this->constantNodeCollector = $constantNodeCollector;
+    public function __construct(
+        BetterNodeFinder $betterNodeFinder,
+        RegexPatternArgumentManipulator $regexPatternArgumentManipulator
+    ) {
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->regexPatternArgumentManipulator = $regexPatternArgumentManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -96,105 +70,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof FuncCall) {
-            $this->processFuncCall($node);
+        $regexArguments = $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern($node);
+        if ($regexArguments === []) {
+            return null;
         }
 
-        if ($node instanceof StaticCall) {
-            $this->processStaticCall($node);
+        foreach ($regexArguments as $regexArgument) {
+            $this->escapeStringNode($regexArgument);
         }
 
         return $node;
-    }
-
-    private function processFuncCall(FuncCall $funcCall): void
-    {
-        foreach ($this->functionsWithPatternsToArgumentPosition as $functionName => $argumentPosition) {
-            if (! $this->isName($funcCall, $functionName)) {
-                return;
-            }
-
-            $this->processArgumentPosition($funcCall, $argumentPosition);
-        }
-    }
-
-    private function processStaticCall(StaticCall $staticCall): void
-    {
-        foreach ($this->staticMethodsWithPatternsToArgumentPosition as $type => $methodNamesToArgumentPosition) {
-            if (! $this->isType($staticCall, $type)) {
-                continue;
-            }
-
-            foreach ($methodNamesToArgumentPosition as $methodName => $argumentPosition) {
-                if (! $this->isName($staticCall, $methodName)) {
-                    continue;
-                }
-
-                $this->processArgumentPosition($staticCall, $argumentPosition);
-            }
-        }
-    }
-
-    /**
-     * @param StaticCall|FuncCall $node
-     */
-    private function processArgumentPosition(Node $node, int $argumentPosition): void
-    {
-        $valueNode = $node->args[$argumentPosition]->value;
-        if (! $this->isStringyType($valueNode)) {
-            return;
-        }
-
-        $this->escapeDashInPattern($valueNode);
-    }
-
-    private function escapeDashInPattern(Expr $expr): void
-    {
-        if ($expr instanceof ClassConstFetch) {
-            $this->processClassConstFetch($expr);
-        }
-
-        // pattern can be defined in property or contant above
-        if ($expr instanceof Variable) {
-            $this->processVariable($expr);
-        }
-
-        if ($expr instanceof String_) {
-            $this->escapeStringNode($expr);
-        }
-    }
-
-    private function processClassConstFetch(ClassConstFetch $classConstFetch): void
-    {
-        $className = $classConstFetch->getAttribute(Attribute::CLASS_NAME);
-        if (! is_string($className)) {
-            return;
-        }
-
-        $constantName = $this->getName($classConstFetch->name);
-        if ($constantName === null) {
-            return;
-        }
-
-        $classConstNode = $this->constantNodeCollector->findConstant($constantName, $className);
-        if ($classConstNode !== null) {
-            if ($classConstNode->consts[0]->value instanceof String_) {
-                /** @var String_ $stringNode */
-                $stringNode = $classConstNode->consts[0]->value;
-                $this->escapeStringNode($stringNode);
-            }
-        }
-    }
-
-    private function processVariable(Expr $expr): void
-    {
-        $assignNodes = $this->findAssigners($expr);
-
-        foreach ($assignNodes as $assignNode) {
-            if ($assignNode->expr instanceof String_) {
-                $this->escapeStringNode($assignNode->expr);
-            }
-        }
     }
 
     private function escapeStringNode(String_ $stringNode): void
@@ -213,29 +98,5 @@ CODE_SAMPLE
             // helped needed to skip re-escaping regular expression
             $stringNode->setAttribute('is_regular_pattern', true);
         }
-    }
-
-    /**
-     * @return Assign[]
-     */
-    private function findAssigners(Node $variableNode): array
-    {
-        $methodNode = $variableNode->getAttribute(Attribute::METHOD_NODE);
-        if ($methodNode === null) {
-            return [];
-        }
-
-        /** @var Assign[] $assignNode */
-        return $this->betterNodeFinder->find([$methodNode], function (Node $node) use ($variableNode) {
-            if (! $node instanceof Assign) {
-                return null;
-            }
-
-            if (! $this->areNodesEqual($node->var, $variableNode)) {
-                return null;
-            }
-
-            return $node;
-        });
     }
 }

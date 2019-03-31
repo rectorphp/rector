@@ -63,7 +63,7 @@ use PHPUnit\Framework\TestListener;
 use PHPUnit\Framework\TestSuite;
 use PHPUnit\Framework\Warning;
 
-final class SomeListener implements TestListener
+final class SomeListener
 {
 }
 
