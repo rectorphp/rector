@@ -12,6 +12,8 @@ matrix:
           env: STANDALONE=true
         - php: 7.3
           env: COVERAGE=true
+        - php: 7.3
+          env: DOG_FOOD=true
     allow_failures:
         - php: 7.1
           env: CODING_STANDARD=true
@@ -40,6 +42,12 @@ script:
       if [[ $RUN_RECTOR == true ]]; then
           bin/rector process src --level symfony40 --dry-run
           composer docs
+      fi
+
+    # eat your own dog fodd
+    - |
+      if [[ $DOG_FOOD == true ]]; then
+          bin/rector process src packages --level dead-code --dry-run
       fi
 
     # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
