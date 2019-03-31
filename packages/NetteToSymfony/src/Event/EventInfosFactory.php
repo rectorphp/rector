@@ -37,17 +37,6 @@ final class EventInfosFactory
         );
 
         $eventInfos[] = new EventInfo(
-            ['nette.application.shutdown'],
-            [
-                'Contributte\Events\Extra\Event\Application\PresenterShutdownEvent::NAME',
-                'Contributte\Events\Extra\Event\Application\ApplicationEvents::ON_SHUTDOWN',
-            ],
-            'Symfony\Component\HttpKernel\KernelEvents',
-            'TERMINATE',
-            'Symfony\Component\HttpKernel\Event\PostResponseEvent'
-        );
-
-        $eventInfos[] = new EventInfo(
             ['nette.application.presenter', 'nette.application.presenter.startup'],
             [
                 'Contributte\Events\Extra\Event\Application\PresenterEvent::NAME',

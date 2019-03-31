@@ -6,7 +6,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -41,6 +43,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $node->var instanceof Variable && ! $node->var instanceof PropertyFetch) {
+            return null;
+        }
+
         $previousExpression = $node->getAttribute(Attribute::PREVIOUS_EXPRESSION);
         if ($previousExpression === null) {
             return null;
