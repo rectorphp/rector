@@ -115,12 +115,26 @@ CODE_SAMPLE
     {
         $firstNodeParent = $this->betterNodeFinder->findFirstParentInstanceOf(
             $firstNode,
-            [Node\Stmt\Foreach_::class, Node\Stmt\If_::class, Node\Stmt\While_::class, Node\Stmt\Do_::class]
+            [
+                Node\Stmt\Foreach_::class,
+                Node\Stmt\If_::class,
+                Node\Stmt\While_::class,
+                Node\Stmt\Do_::class,
+                Node\Stmt\Else_::class,
+                Node\Stmt\ElseIf_::class,
+            ]
         );
 
         $secondNodeParent = $this->betterNodeFinder->findFirstParentInstanceOf(
             $secondNode,
-            [Node\Stmt\Foreach_::class, Node\Stmt\If_::class, Node\Stmt\While_::class, Node\Stmt\Do_::class]
+            [
+                Node\Stmt\Foreach_::class,
+                Node\Stmt\If_::class,
+                Node\Stmt\While_::class,
+                Node\Stmt\Do_::class,
+                Node\Stmt\If_::class,
+                Node\Stmt\ElseIf_::class,
+            ]
         );
 
         if ($firstNodeParent === null || $secondNodeParent === null) {

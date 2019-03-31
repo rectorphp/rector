@@ -16,6 +16,7 @@ final class RemoveDoubleAssignRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/property_assign.php.inc',
             __DIR__ . '/Fixture/keep_array_reset.php.inc',
             __DIR__ . '/Fixture/keep_property_assign_in_different_ifs.php.inc',
+            __DIR__ . '/Fixture/inside_if_else.php.inc',
         ]);
     }
 
