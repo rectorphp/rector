@@ -91,6 +91,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // changed!
         if ($originalNode !== $node) {
+            // no change
+            if ($this->areNodesEqual($originalNode, $node)) {
+                return $node;
+            }
+
             $this->mirrorAttributes($originalNode, $node);
             $this->updateAttributes($node);
             $this->keepFileInfoAttribute($node, $originalNode);
