@@ -1,0 +1,12 @@
+services:
+    Rector\Rector\Function_\FunctionToStaticCallRector:
+        # filesystem
+        file_get_contents: ['Nette\Utils\FileSystem', 'read']
+        unlink: ['Nette\Utils\FileSystem', 'delete']
+        rmdir: ['Nette\Utils\FileSystem', 'delete']
+
+        # json
+        json_decode: ['Nette\Utils\Json', 'decode']
+        json_encode: ['Nette\Utils\Json', 'encode']
+
+        # strings
