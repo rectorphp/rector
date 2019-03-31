@@ -12,6 +12,8 @@ matrix:
           env: STANDALONE=true
         - php: 7.3
           env: COVERAGE=true
+        - php: 7.3
+          env: DOG_FOOD=true
     allow_failures:
         - php: 7.1
           env: CODING_STANDARD=true
@@ -42,6 +44,12 @@ script:
           composer docs
       fi
 
+    # eat your own dog fodd
+    - |
+      if [[ $DOG_FOOD == true ]]; then
+          bin/rector process src packages --level dead-code --dry-run
+      fi
+
     # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
     - |
       if [[ $STANDALONE == true ]]; then
@@ -63,7 +71,7 @@ script:
           ../rector-dir/vendor/bin/rector
 
           # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
-          ../rector-dir/vendor/bin/rector process src --level code-quality --hide-autoload-errors -vvv --dry-run
+          ../rector-dir/vendor/bin/rector process src --level code-quality --hide-autoload-errors --dry-run
       fi
 
 after_script:

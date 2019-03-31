@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveEmptyClassMethodRector\Fixture;
 
-class WithInterface implements ImplementedInterface
+final class WithInterface implements ImplementedInterface
 {
     public function trample()
     {
@@ -24,7 +24,7 @@ interface ImplementedInterface
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveEmptyClassMethodRector\Fixture;
 
-class WithInterface implements ImplementedInterface
+final class WithInterface implements ImplementedInterface
 {
     public function go()
     {

@@ -71,6 +71,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! $classNode->isFinal() && ($node->isProtected() || $node->isPublic()) && ! $this->isName($node, '__*')) {
+            return null;
+        }
+
         if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($node)) {
             return null;
         }
