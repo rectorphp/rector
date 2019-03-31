@@ -143,3 +143,5 @@ parameters:
         - '#Unreachable statement \- code above always terminates#'
         - '#Method Rector\\NodeTypeResolver\\NodeVisitor\\(.*?)\:\:enterNode\(\) should return int\|PhpParser\\Node\|void\|null but return statement is missing#'
         - '#Negated boolean expression is always true#'
+        - '#Strict comparison using \=\=\= between PhpParser\\Node and null will always evaluate to false#'
+

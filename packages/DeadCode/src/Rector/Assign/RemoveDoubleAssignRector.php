@@ -77,7 +77,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->shouldSkipDueToForeachOverride($node, $previousExpression)) {
+        if ($this->shouldSkipForDifferentScope($node, $previousExpression)) {
             return null;
         }
 
@@ -106,6 +106,42 @@ CODE_SAMPLE
                 // there is probably value override
                 return count($variableAssigns) >= 2;
             }
+        }
+
+        return false;
+    }
+
+    private function shouldSkipForDifferenceParent(Node $firstNode, Node $secondNode): bool
+    {
+        $firstNodeParent = $this->betterNodeFinder->findFirstParentInstanceOf(
+            $firstNode,
+            [Node\Stmt\Foreach_::class, Node\Stmt\If_::class, Node\Stmt\While_::class, Node\Stmt\Do_::class]
+        );
+
+        $secondNodeParent = $this->betterNodeFinder->findFirstParentInstanceOf(
+            $secondNode,
+            [Node\Stmt\Foreach_::class, Node\Stmt\If_::class, Node\Stmt\While_::class, Node\Stmt\Do_::class]
+        );
+
+        if ($firstNodeParent === null || $secondNodeParent === null) {
+            return false;
+        }
+
+        if (! $this->areNodesEqual($firstNodeParent, $secondNodeParent)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function shouldSkipForDifferentScope(Assign $assign, Node $anotherNode): bool
+    {
+        if ($this->shouldSkipDueToForeachOverride($assign, $anotherNode)) {
+            return true;
+        }
+
+        if ($this->shouldSkipForDifferenceParent($assign, $anotherNode)) {
+            return true;
         }
 
         return false;

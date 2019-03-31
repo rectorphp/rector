@@ -27,14 +27,27 @@ final class BetterNodeFinder
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
-    public function findFirstParentInstanceOf(Node $node, string $type): ?Node
+    /**
+     * @param string|string[] $type
+     */
+    public function findFirstParentInstanceOf(Node $node, $type): ?Node
     {
+        if (! is_array($type)) {
+            $type = [$type];
+        }
+
         /** @var Node|null $parentNode */
         $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+
+        if ($parentNode === null) {
+            return null;
+        }
+
         do {
-            if ($parentNode instanceof $type) {
+            if ($this->isTypes($parentNode, $type)) {
                 return $parentNode;
             }
+
             if ($parentNode === null) {
                 return null;
             }
@@ -144,5 +157,19 @@ final class BetterNodeFinder
 
             return false;
         });
+    }
+
+    /**
+     * @param string[] $types
+     */
+    private function isTypes(Node $node, array $types): bool
+    {
+        foreach ($types as $type) {
+            if (is_a($node, $type, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
