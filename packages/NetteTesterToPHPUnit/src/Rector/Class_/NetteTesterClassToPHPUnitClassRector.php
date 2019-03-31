@@ -121,8 +121,6 @@ CODE_SAMPLE
         if ($include->getAttribute(Attribute::CLASS_NODE) === null) {
             $this->removeNode($include);
         }
-
-        return;
     }
 
     private function processUnderTestRun(MethodCall $methodCall): void
@@ -130,8 +128,6 @@ CODE_SAMPLE
         if ($this->isName($methodCall, 'run')) {
             $this->removeNode($methodCall);
         }
-
-        return;
     }
 
     private function processMethods(Class_ $class): void
