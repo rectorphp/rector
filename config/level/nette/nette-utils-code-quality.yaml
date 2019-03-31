@@ -10,5 +10,6 @@ services:
         json_decode: ['Nette\Utils\Json', 'decode']
         json_encode: ['Nette\Utils\Json', 'encode']
 
-        # strings
+    # strings
     Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector: ~
+    Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector: ~

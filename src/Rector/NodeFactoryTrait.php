@@ -34,7 +34,12 @@ trait NodeFactoryTrait
         $this->nodeFactory = $nodeFactory;
     }
 
-    public function createClassConstant(string $class, string $constant): ClassConstFetch
+    protected function createStaticCall(string $class, string $method): Expr\StaticCall
+    {
+        return new Node\Expr\StaticCall(new Node\Name\FullyQualified($class), $method);
+    }
+
+    protected function createClassConstant(string $class, string $constant): ClassConstFetch
     {
         return $this->nodeFactory->createClassConstant($class, $constant);
     }
