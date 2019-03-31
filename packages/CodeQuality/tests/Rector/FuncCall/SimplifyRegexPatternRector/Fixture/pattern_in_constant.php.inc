@@ -2,14 +2,13 @@
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyRegexPatternRector\Fixture;
 
-use Nette\Utils\Strings;
-
-class SomeClass
+class PatternInConstant
 {
+    const PATTERN = '#[0-9]#';
+
     public function run($value)
     {
-        preg_match('#[0-9]#', $value);
-        Strings::match($value, '#[A-Za-z0-9_]+#');
+        preg_match(self::PATTERN, $value);
     }
 }
 
@@ -19,14 +18,13 @@ class SomeClass
 
 namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyRegexPatternRector\Fixture;
 
-use Nette\Utils\Strings;
-
-class SomeClass
+class PatternInConstant
 {
+    const PATTERN = '#\d#';
+
     public function run($value)
     {
-        preg_match('#\d#', $value);
-        Strings::match($value, '#\w+#');
+        preg_match(self::PATTERN, $value);
     }
 }
 

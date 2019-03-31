@@ -36,31 +36,6 @@ final class RegexDashEscapeRector extends AbstractRector
     private const RIGHT_HAND_UNESCAPED_DASH_PATTERN = '#(?<!\[)-\\\\(w|s|d)#i';
 
     /**
-     * @var int[]
-     */
-    private $functionsWithPatternsToArgumentPosition = [
-        'preg_match' => 0,
-        'preg_replace_callback_array' => 0,
-        'preg_replace_callback' => 0,
-        'preg_replace' => 0,
-        'preg_match_all' => 0,
-        'preg_split' => 0,
-        'preg_grep' => 0,
-    ];
-
-    /**
-     * @var int[][]
-     */
-    private $staticMethodsWithPatternsToArgumentPosition = [
-        'Nette\Utils\Strings' => [
-            'match' => 1,
-            'matchAll' => 1,
-            'replace' => 1,
-            'split' => 1,
-        ],
-    ];
-
-    /**
      * @var ConstantNodeCollector
      */
     private $constantNodeCollector;

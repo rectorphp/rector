@@ -22,6 +22,9 @@ final class SimplifyRegexPatternRector extends AbstractRector
     private $complexPatternToSimple = [
         '[0-9]' => '\d',
         '[a-zA-Z0-9_]' => '\w',
+        '[A-Za-z0-9_]' => '\w',
+        '[0-9a-zA-Z_]' => '\w',
+        '[0-9A-Za-z_]' => '\w',
         '[\r\n\t\f\v ]' => '\s',
     ];
 
@@ -67,11 +70,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [FuncCall::class];
+        return [FuncCall::class, Node\Expr\StaticCall::class];
     }
 
     /**
-     * @param FuncCall $node
+     * @param FuncCall|Node\Expr\StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -81,7 +84,7 @@ CODE_SAMPLE
         }
 
         foreach ($this->complexPatternToSimple as $complexPattern => $simple) {
-            $pattern->value = Strings::replace($pattern->value, '#' . preg_quote($complexPattern) . '#', $simple);
+            $pattern->value = Strings::replace($pattern->value, '#' . preg_quote($complexPattern, '#') . '#', $simple);
         }
 
         return $node;

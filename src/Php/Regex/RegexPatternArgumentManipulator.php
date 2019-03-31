@@ -6,6 +6,9 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Scalar\String_;
+use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -46,10 +49,19 @@ final class RegexPatternArgumentManipulator
      */
     private $nameResolver;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver, NameResolver $nameResolver)
-    {
+    /**
+     * @var ConstantNodeCollector
+     */
+    private $constantNodeCollector;
+
+    public function __construct(
+        NodeTypeResolver $nodeTypeResolver,
+        NameResolver $nameResolver,
+        ConstantNodeCollector $constantNodeCollector
+    ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nameResolver = $nameResolver;
+        $this->constantNodeCollector = $constantNodeCollector;
     }
 
     public function matchCallArgumentWithRegexPattern(Expr $expr): ?Expr
@@ -65,7 +77,7 @@ final class RegexPatternArgumentManipulator
         return null;
     }
 
-    private function processFuncCall(FuncCall $funcCall): ?Expr
+    private function processFuncCall(FuncCall $funcCall): ?String_
     {
         foreach ($this->functionsWithPatternsToArgumentPosition as $functionName => $argumentPosition) {
             if (! $this->nameResolver->isName($funcCall, $functionName)) {
@@ -76,7 +88,7 @@ final class RegexPatternArgumentManipulator
                 return null;
             }
 
-            return $funcCall->args[$argumentPosition]->value;
+            return $this->resolveArgumentValue($funcCall->args[$argumentPosition]->value);
         }
 
         return null;
@@ -99,6 +111,39 @@ final class RegexPatternArgumentManipulator
                 }
 
                 return $staticCall->args[$argumentPosition]->value;
+            }
+        }
+
+        return null;
+    }
+
+    private function resolveArgumentValue(Expr $expr): ?String_
+    {
+        if ($expr instanceof String_) {
+            return $expr;
+        }
+
+        if ($expr instanceof Expr\ClassConstFetch) {
+            $className = $expr->getAttribute(Attribute::CLASS_NAME);
+            if (! is_string($className)) {
+                return null;
+            }
+
+            $constantName = $this->nameResolver->resolve($expr->name);
+
+            if ($constantName === null) {
+                return null;
+            }
+
+            $classConstNode = $this->constantNodeCollector->findConstant($constantName, $className);
+
+            if ($classConstNode === null) {
+                return null;
+            }
+
+            if ($classConstNode->consts[0]->value instanceof String_) {
+                /** @var String_ $stringNode */
+                return $classConstNode->consts[0]->value;
             }
         }
 
