@@ -13,3 +13,5 @@ services:
     # strings
     Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector: ~
     Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector: ~
+    Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector: ~
+    Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector: ~
