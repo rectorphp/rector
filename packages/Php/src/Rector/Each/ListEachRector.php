@@ -21,7 +21,7 @@ final class ListEachRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'each() function is deprecated, use foreach() instead.',
+            'each() function is deprecated, use key() and current() instead',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
