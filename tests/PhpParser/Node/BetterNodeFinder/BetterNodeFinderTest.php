@@ -7,14 +7,14 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
-use PHPUnit\Framework\TestCase;
+use Rector\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-final class BetterNodeFinderTest extends TestCase
+final class BetterNodeFinderTest extends AbstractKernelTestCase
 {
     /**
      * @var Node[]
@@ -28,7 +28,9 @@ final class BetterNodeFinderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->betterNodeFinder = new BetterNodeFinder(new NodeFinder());
+        $this->bootKernel(RectorKernel::class);
+
+        $this->betterNodeFinder = self::$container->get(BetterNodeFinder::class);
         $this->nodes = $this->createNodesFromFile(__DIR__ . '/Source/SomeFile.php.inc');
     }
 

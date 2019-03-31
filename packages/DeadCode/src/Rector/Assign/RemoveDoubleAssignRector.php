@@ -77,9 +77,37 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->shouldSkipDueToForeachOverride($node, $previousExpression)) {
+            return null;
+        }
+
         // no calls on right, could hide e.g. array_pop()|array_shift()
         $this->removeNode($node);
 
         return $node;
+    }
+
+    private function shouldSkipDueToForeachOverride(Assign $assign, Node $node): bool
+    {
+        // is nested in a foreach and the previous expression is not?
+        $nodePreviousForeach = $this->betterNodeFinder->findFirstParentInstanceOf($assign, Node\Stmt\Foreach_::class);
+
+        $previousExpressionPreviousForeach = $this->betterNodeFinder->findFirstParentInstanceOf(
+            $node,
+            Node\Stmt\Foreach_::class
+        );
+
+        if ($nodePreviousForeach !== $previousExpressionPreviousForeach) {
+            if ($nodePreviousForeach instanceof Node\Stmt\Foreach_ && $assign->var instanceof Variable) {
+                // is value changed inside the foreach?
+
+                $variableAssigns = $this->betterNodeFinder->findAssignsOfVariable($nodePreviousForeach, $assign->var);
+
+                // there is probably value override
+                return count($variableAssigns) >= 2;
+            }
+        }
+
+        return false;
     }
 }

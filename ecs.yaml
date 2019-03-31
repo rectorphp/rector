@@ -56,6 +56,8 @@ parameters:
 
     skip:
         Symplify\CodingStandard\Sniffs\Architecture\DuplicatedClassShortNameSniff: ~
+        # skip temporary due to missing "import" feature in PhpStorm
+        SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff.PartialUse: ~
 
         # run manually from time to time - performance demanding + not to bother user with it
         Symplify\CodingStandard\Fixer\Order\PropertyOrderByComplexityFixer: ~

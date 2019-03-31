@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class BetterNodeFinder
 {
@@ -15,9 +16,31 @@ final class BetterNodeFinder
      */
     private $nodeFinder;
 
-    public function __construct(NodeFinder $nodeFinder)
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    public function __construct(NodeFinder $nodeFinder, BetterStandardPrinter $betterStandardPrinter)
     {
         $this->nodeFinder = $nodeFinder;
+        $this->betterStandardPrinter = $betterStandardPrinter;
+    }
+
+    public function findFirstParentInstanceOf(Node $node, string $type): ?Node
+    {
+        /** @var Node|null $parentNode */
+        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        do {
+            if ($parentNode instanceof $type) {
+                return $parentNode;
+            }
+            if ($parentNode === null) {
+                return null;
+            }
+        } while ($parentNode = $parentNode->getAttribute(Attribute::PARENT_NODE));
+
+        return null;
     }
 
     public function findFirstAncestorInstanceOf(Node $node, string $type): ?Node
@@ -101,5 +124,25 @@ final class BetterNodeFinder
         }
 
         return $this->findFirstPrevious($previousExpression, $filter);
+    }
+
+    /**
+     * @return Node\Expr\Assign[]
+     */
+    public function findAssignsOfVariable(Node $node, Node\Expr\Variable $variable): array
+    {
+        $assignNodes = $this->findInstanceOf($node, Node\Expr\Assign::class);
+
+        return array_filter($assignNodes, function (Node\Expr\Assign $assign) use ($variable) {
+            if ($this->betterStandardPrinter->areNodesEqual($assign->var, $variable)) {
+                return true;
+            }
+
+            if ($assign->var instanceof Node\Expr\ArrayDimFetch) {
+                return $this->betterStandardPrinter->areNodesEqual($assign->var->var, $variable);
+            }
+
+            return false;
+        });
     }
 }
