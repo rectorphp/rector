@@ -71,7 +71,7 @@ script:
           ../rector-dir/vendor/bin/rector
 
           # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
-          ../rector-dir/vendor/bin/rector process src --level code-quality --hide-autoload-errors -vvv --dry-run
+          ../rector-dir/vendor/bin/rector process src --level code-quality --hide-autoload-errors --dry-run
       fi
 
 after_script:
