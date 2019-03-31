@@ -20,7 +20,7 @@ final class OriginalSpacingRestorer
         $oldWhitespaces = $this->detectOldWhitespaces($tokens, $startEndInfo);
 
         // no original whitespaces, return
-        if (! $oldWhitespaces) {
+        if ($oldWhitespaces === []) {
             return $nodeOutput;
         }
 
@@ -54,7 +54,7 @@ final class OriginalSpacingRestorer
             if ($this->isQuotedStringWithSpaces($tokens, $i)) {
                 $matches = Strings::matchAll($tokens[$i][0], '#\s+#m');
 
-                if ($matches) {
+                if ($matches !== []) {
                     $oldWhitespaces = array_merge($oldWhitespaces, Arrays::flatten($matches));
                 }
             }

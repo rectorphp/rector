@@ -151,11 +151,7 @@ final class NameResolver
 
         // is probably fnmatch
         if (Strings::contains($name, '*')) {
-            if (fnmatch($name, $resolvedName, FNM_NOESCAPE)) {
-                return true;
-            }
-
-            return false;
+            return fnmatch($name, $resolvedName, FNM_NOESCAPE);
         }
 
         return $resolvedName === $name;

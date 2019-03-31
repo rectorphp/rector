@@ -104,7 +104,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         }
 
         $classNode = $classMethod->getAttribute(Attribute::CLASS_NODE);
-        if (! ($classNode instanceof Class_ || $classNode instanceof Interface_)) {
+        if (! $classNode instanceof Class_ && ! $classNode instanceof Interface_) {
             return false;
         }
 

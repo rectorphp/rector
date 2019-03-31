@@ -78,7 +78,7 @@ CODE_SAMPLE
         }
 
         if ($node instanceof For_) {
-            if ($node->stmts) {
+            if ($node->stmts !== []) {
                 return null;
             }
 
@@ -92,15 +92,15 @@ CODE_SAMPLE
 
     private function processIf(If_ $if): ?If_
     {
-        if ($if->stmts) {
+        if ($if->stmts !== []) {
             return null;
         }
 
-        if ($if->else) {
+        if ($if->else !== null) {
             return null;
         }
 
-        if ($if->elseifs) {
+        if ($if->elseifs !== []) {
             return null;
         }
 
@@ -115,7 +115,7 @@ CODE_SAMPLE
 
     private function processForeach(Foreach_ $node): ?Foreach_
     {
-        if ($node->stmts) {
+        if ($node->stmts !== []) {
             return null;
         }
 
@@ -137,11 +137,6 @@ CODE_SAMPLE
         if ($expr instanceof Scalar) {
             return false;
         }
-
-        if ($this->isBool($expr)) {
-            return false;
-        }
-
-        return true;
+        return ! $this->isBool($expr);
     }
 }

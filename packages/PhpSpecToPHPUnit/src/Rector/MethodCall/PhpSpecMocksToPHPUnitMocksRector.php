@@ -131,7 +131,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
             }
 
             $createMockCall = $this->createCreateMockCall($param, $param->type);
-            if ($createMockCall) {
+            if ($createMockCall !== null) {
                 $assigns[] = $createMockCall;
             }
         }
@@ -163,7 +163,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
             $methodCall->name = new Identifier('method');
             $methodCall->args = [new Arg(new String_($mockMethodName))];
 
-            if ($expectedArg) {
+            if ($expectedArg !== null) {
                 return $this->appendWithMethodCall($methodCall, $expectedArg);
             }
 

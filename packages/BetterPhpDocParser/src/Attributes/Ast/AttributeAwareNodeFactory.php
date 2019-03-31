@@ -124,7 +124,7 @@ final class AttributeAwareNodeFactory
         }
 
         if ($phpDocTagValueNode instanceof MethodTagValueNode) {
-            $typeNode = $phpDocTagValueNode->returnType ? $this->createFromTypeNode(
+            $typeNode = $phpDocTagValueNode->returnType !== null ? $this->createFromTypeNode(
                 $phpDocTagValueNode->returnType
             ) : null;
             return new AttributeAwareMethodTagValueNode(
