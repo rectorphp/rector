@@ -4,6 +4,7 @@ namespace Rector\DeadCode\Rector\Array_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -49,6 +50,10 @@ CODE_SAMPLE
         $arrayItemsByKeys = [];
 
         foreach ($node->items as $arrayItem) {
+            if (! $arrayItem instanceof ArrayItem) {
+                continue;
+            }
+
             if ($arrayItem->key === null) {
                 continue;
             }
@@ -60,7 +65,6 @@ CODE_SAMPLE
         foreach ($arrayItemsByKeys as $arrayItems) {
             // keep last item
             array_pop($arrayItems);
-
             $this->removeNodes($arrayItems);
         }
 

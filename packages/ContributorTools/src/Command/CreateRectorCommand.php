@@ -229,8 +229,6 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
             return;
         }
 
-        $package = $templateVariables['_Package_'];
-
         $namespace = 'Rector\\' . $package . '\\';
         $namespaceTest = 'Rector\\' . $package . '\\Tests\\';
 
