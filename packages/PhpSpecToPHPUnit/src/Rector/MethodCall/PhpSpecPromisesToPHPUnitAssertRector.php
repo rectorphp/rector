@@ -190,7 +190,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         /** @var Class_ $class */
         $class = $node->getAttribute(Attribute::CLASS_NODE);
         // it's a method call, skip
-        if ($class->getMethod($methodName)) {
+        if ($class->getMethod($methodName) !== null) {
             return null;
         }
 
@@ -217,13 +217,13 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         $this->isBoolAssert = false;
 
         // special case with bool!
-        if ($expected) {
+        if ($expected !== null) {
             $name = $this->resolveBoolMethodName($name, $expected);
         }
 
         $assetMethodCall = new MethodCall(new Variable('this'), new Identifier($name));
 
-        if ($this->isBoolAssert === false && $expected) {
+        if (! $this->isBoolAssert && $expected) {
             $assetMethodCall->args[] = new Arg($this->thisToTestedObjectPropertyFetch($expected));
         }
 

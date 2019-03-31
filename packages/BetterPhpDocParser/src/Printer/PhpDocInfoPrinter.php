@@ -107,7 +107,7 @@ final class PhpDocInfoPrinter
 
         foreach ($phpDocNode->children as $phpDocChildNode) {
             if ($phpDocChildNode instanceof PhpDocTextNode) {
-                if ($phpDocChildNode->text) {
+                if ($phpDocChildNode->text !== '') {
                     return false;
                 }
             } else {
@@ -221,7 +221,7 @@ final class PhpDocInfoPrinter
      */
     private function getRemovedNodesPositions(): array
     {
-        if ($this->removedNodePositions) {
+        if ($this->removedNodePositions !== []) {
             return $this->removedNodePositions;
         }
 
