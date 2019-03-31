@@ -4,15 +4,9 @@ namespace Rector\Php\Rector\FuncCall;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Php\Regex\RegexPatternArgumentManipulator;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
@@ -36,22 +30,15 @@ final class RegexDashEscapeRector extends AbstractRector
     private const RIGHT_HAND_UNESCAPED_DASH_PATTERN = '#(?<!\[)-\\\\(w|s|d)#i';
 
     /**
-     * @var ConstantNodeCollector
-     */
-    private $constantNodeCollector;
-
-    /**
      * @var RegexPatternArgumentManipulator
      */
     private $regexPatternArgumentManipulator;
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        ConstantNodeCollector $constantNodeCollector,
         RegexPatternArgumentManipulator $regexPatternArgumentManipulator
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->constantNodeCollector = $constantNodeCollector;
         $this->regexPatternArgumentManipulator = $regexPatternArgumentManipulator;
     }
 
@@ -83,67 +70,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $regexArgument = $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern($node);
-        if ($regexArgument === null) {
+        $regexArguments = $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern($node);
+        if ($regexArguments === []) {
             return null;
         }
 
-        if (! $this->isStringyType($regexArgument)) {
-            return null;
+        foreach ($regexArguments as $regexArgument) {
+            $this->escapeStringNode($regexArgument);
         }
-
-        $this->escapeDashInPattern($regexArgument);
 
         return $node;
-    }
-
-    private function escapeDashInPattern(Expr $expr): void
-    {
-        if ($expr instanceof ClassConstFetch) {
-            $this->processClassConstFetch($expr);
-        }
-
-        // pattern can be defined in property or contant above
-        if ($expr instanceof Variable) {
-            $this->processVariable($expr);
-        }
-
-        if ($expr instanceof String_) {
-            $this->escapeStringNode($expr);
-        }
-    }
-
-    private function processClassConstFetch(ClassConstFetch $classConstFetch): void
-    {
-        $className = $classConstFetch->getAttribute(Attribute::CLASS_NAME);
-        if (! is_string($className)) {
-            return;
-        }
-
-        $constantName = $this->getName($classConstFetch->name);
-        if ($constantName === null) {
-            return;
-        }
-
-        $classConstNode = $this->constantNodeCollector->findConstant($constantName, $className);
-        if ($classConstNode !== null) {
-            if ($classConstNode->consts[0]->value instanceof String_) {
-                /** @var String_ $stringNode */
-                $stringNode = $classConstNode->consts[0]->value;
-                $this->escapeStringNode($stringNode);
-            }
-        }
-    }
-
-    private function processVariable(Expr $expr): void
-    {
-        $assignNodes = $this->findAssigners($expr);
-
-        foreach ($assignNodes as $assignNode) {
-            if ($assignNode->expr instanceof String_) {
-                $this->escapeStringNode($assignNode->expr);
-            }
-        }
     }
 
     private function escapeStringNode(String_ $stringNode): void
@@ -162,29 +98,5 @@ CODE_SAMPLE
             // helped needed to skip re-escaping regular expression
             $stringNode->setAttribute('is_regular_pattern', true);
         }
-    }
-
-    /**
-     * @return Assign[]
-     */
-    private function findAssigners(Node $variableNode): array
-    {
-        $methodNode = $variableNode->getAttribute(Attribute::METHOD_NODE);
-        if ($methodNode === null) {
-            return [];
-        }
-
-        /** @var Assign[] $assignNode */
-        return $this->betterNodeFinder->find([$methodNode], function (Node $node) use ($variableNode) {
-            if (! $node instanceof Assign) {
-                return null;
-            }
-
-            if (! $this->areNodesEqual($node->var, $variableNode)) {
-                return null;
-            }
-
-            return $node;
-        });
     }
 }

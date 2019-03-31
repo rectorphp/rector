@@ -12,9 +12,10 @@ final class RegexDashEscapeRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/method_call.php.inc',
+            __DIR__ . '/Fixture/const.php.inc',
+            // variables
             __DIR__ . '/Fixture/variable.php.inc',
             __DIR__ . '/Fixture/multiple_variables.php.inc',
-            __DIR__ . '/Fixture/const.php.inc',
         ]);
     }
 

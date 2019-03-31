@@ -5,7 +5,7 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Expr\StaticCall;
 use Rector\Php\Regex\RegexPatternArgumentManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -70,21 +70,24 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [FuncCall::class, Node\Expr\StaticCall::class];
+        return [FuncCall::class, StaticCall::class];
     }
 
     /**
-     * @param FuncCall|Node\Expr\StaticCall $node
+     * @param FuncCall|StaticCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        $pattern = $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern($node);
-        if (! $pattern instanceof String_) {
-            return null;
-        }
+        $patterns = $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern($node);
 
-        foreach ($this->complexPatternToSimple as $complexPattern => $simple) {
-            $pattern->value = Strings::replace($pattern->value, '#' . preg_quote($complexPattern, '#') . '#', $simple);
+        foreach ($patterns as $pattern) {
+            foreach ($this->complexPatternToSimple as $complexPattern => $simple) {
+                $pattern->value = Strings::replace(
+                    $pattern->value,
+                    '#' . preg_quote($complexPattern, '#') . '#',
+                    $simple
+                );
+            }
         }
 
         return $node;

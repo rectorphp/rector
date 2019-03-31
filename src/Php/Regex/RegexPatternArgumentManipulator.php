@@ -3,14 +3,20 @@
 namespace Rector\Php\Regex;
 
 use Nette\Utils\Strings;
+use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class RegexPatternArgumentManipulator
 {
@@ -54,17 +60,34 @@ final class RegexPatternArgumentManipulator
      */
     private $constantNodeCollector;
 
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         NameResolver $nameResolver,
-        ConstantNodeCollector $constantNodeCollector
+        ConstantNodeCollector $constantNodeCollector,
+        BetterNodeFinder $betterNodeFinder,
+        BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nameResolver = $nameResolver;
         $this->constantNodeCollector = $constantNodeCollector;
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
-    public function matchCallArgumentWithRegexPattern(Expr $expr): ?Expr
+    /**
+     * @return String_[]
+     */
+    public function matchCallArgumentWithRegexPattern(Expr $expr): array
     {
         if ($expr instanceof FuncCall) {
             return $this->processFuncCall($expr);
@@ -74,10 +97,13 @@ final class RegexPatternArgumentManipulator
             return $this->processStaticCall($expr);
         }
 
-        return null;
+        return [];
     }
 
-    private function processFuncCall(FuncCall $funcCall): ?String_
+    /**
+     * @return String_[]
+     */
+    private function processFuncCall(FuncCall $funcCall): array
     {
         foreach ($this->functionsWithPatternsToArgumentPosition as $functionName => $argumentPosition) {
             if (! $this->nameResolver->isName($funcCall, $functionName)) {
@@ -85,16 +111,19 @@ final class RegexPatternArgumentManipulator
             }
 
             if (! isset($funcCall->args[$argumentPosition])) {
-                return null;
+                return [];
             }
 
-            return $this->resolveArgumentValue($funcCall->args[$argumentPosition]->value);
+            return $this->resolveArgumentValues($funcCall->args[$argumentPosition]->value);
         }
 
-        return null;
+        return [];
     }
 
-    private function processStaticCall(StaticCall $staticCall): ?Expr
+    /**
+     * @return String_[]
+     */
+    private function processStaticCall(StaticCall $staticCall): array
     {
         foreach ($this->staticMethodsWithPatternsToArgumentPosition as $type => $methodNamesToArgumentPosition) {
             if (! $this->nodeTypeResolver->isType($staticCall, $type)) {
@@ -107,46 +136,95 @@ final class RegexPatternArgumentManipulator
                 }
 
                 if (! isset($staticCall->args[$argumentPosition])) {
-                    return null;
+                    return [];
                 }
 
-                return $staticCall->args[$argumentPosition]->value;
+                return $this->resolveArgumentValues($staticCall->args[$argumentPosition]->value);
             }
         }
 
-        return null;
+        return [];
     }
 
-    private function resolveArgumentValue(Expr $expr): ?String_
+    /**
+     * @return String_[]
+     */
+    private function resolveArgumentValues(Expr $expr): array
     {
         if ($expr instanceof String_) {
-            return $expr;
+            return [$expr];
         }
 
-        if ($expr instanceof Expr\ClassConstFetch) {
-            $className = $expr->getAttribute(Attribute::CLASS_NAME);
-            if (! is_string($className)) {
-                return null;
+        if ($expr instanceof Variable) {
+            $strings = [];
+            $assignNodes = $this->findAssignerForVariable($expr);
+            foreach ($assignNodes as $assignNode) {
+                if ($assignNode->expr instanceof String_) {
+                    $strings[] = $assignNode->expr;
+                }
             }
 
-            $constantName = $this->nameResolver->resolve($expr->name);
-
-            if ($constantName === null) {
-                return null;
-            }
-
-            $classConstNode = $this->constantNodeCollector->findConstant($constantName, $className);
-
-            if ($classConstNode === null) {
-                return null;
-            }
-
-            if ($classConstNode->consts[0]->value instanceof String_) {
-                /** @var String_ $stringNode */
-                return $classConstNode->consts[0]->value;
-            }
+            return $strings;
         }
 
-        return null;
+        if ($expr instanceof ClassConstFetch) {
+            return $this->resolveClassConstFetchValue($expr);
+        }
+
+        return [];
+    }
+
+    /**
+     * @return Assign[]
+     */
+    private function findAssignerForVariable(Variable $variable): array
+    {
+        $methodNode = $variable->getAttribute(Attribute::METHOD_NODE);
+        if ($methodNode === null) {
+            return [];
+        }
+
+        /** @var Assign[] $assignNode */
+        return $this->betterNodeFinder->find([$methodNode], function (Node $node) use ($variable) {
+            if (! $node instanceof Assign) {
+                return null;
+            }
+
+            if (! $this->betterStandardPrinter->areNodesEqual($node->var, $variable)) {
+                return null;
+            }
+
+            return $node;
+        });
+    }
+
+    /**
+     * @return String_[]
+     */
+    private function resolveClassConstFetchValue(ClassConstFetch $classConstFetch): array
+    {
+        $className = $classConstFetch->getAttribute(Attribute::CLASS_NAME);
+        if (! is_string($className)) {
+            return [];
+        }
+
+        $constantName = $this->nameResolver->resolve($classConstFetch->name);
+
+        if ($constantName === null) {
+            return [];
+        }
+
+        $classConstNode = $this->constantNodeCollector->findConstant($constantName, $className);
+
+        if ($classConstNode === null) {
+            return [];
+        }
+
+        if ($classConstNode->consts[0]->value instanceof String_) {
+            /** @var String_ $stringNode */
+            return [$classConstNode->consts[0]->value];
+        }
+
+        return [];
     }
 }
