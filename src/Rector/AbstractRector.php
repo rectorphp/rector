@@ -90,7 +90,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         // changed!
-        if ($this->wasNodeChanged($originalNode, $node)) {
+        if ($this->hasNodeChanged($originalNode, $node)) {
             $this->mirrorAttributes($originalNode, $node);
             $this->updateAttributes($node);
             $this->keepFileInfoAttribute($node, $originalNode);
@@ -232,12 +232,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
     }
 
-    private function wasNodeChanged(Node $originalNode, Node $node): bool
+    private function hasNodeChanged(Node $originalNode, Node $node): bool
     {
-        if ($originalNode !== $node) {
-            return false;
-        }
-
         return ! $this->areNodesEqual($originalNode, $node);
     }
 }
