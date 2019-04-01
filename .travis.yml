@@ -48,6 +48,7 @@ script:
     - |
       if [[ $DOG_FOOD == true ]]; then
           bin/rector process src packages --level dead-code --dry-run
+          bin/rector process src packages --level code-quality --dry-run
       fi
 
     # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
