@@ -24,7 +24,7 @@ trait NodeFactoryTrait
     /**
      * @var NodeFactory
      */
-    private $nodeFactory;
+    protected $nodeFactory;
 
     /**
      * @required
