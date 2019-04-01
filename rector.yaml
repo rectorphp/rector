@@ -3,14 +3,7 @@ parameters:
         - "/tests/"
         - "/Fixtures/"
         # autoload-buggy cases
-        - "*TransformerTest.php"
-        - "*FactoryV1.php"
-        - "*CollectorTest.php"
-        - "*ValidatorTest.php"
         - "*.php.inc"
-
-    exclude_rectors:
-        - 'Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector'
 
     # so Rector code is still PHP 7.1 compatible
     php_version_features: '7.1'
