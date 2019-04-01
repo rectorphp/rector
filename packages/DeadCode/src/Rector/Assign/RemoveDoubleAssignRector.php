@@ -140,12 +140,7 @@ CODE_SAMPLE
         if ($firstNodeParent === null || $secondNodeParent === null) {
             return false;
         }
-
-        if (! $this->areNodesEqual($firstNodeParent, $secondNodeParent)) {
-            return true;
-        }
-
-        return false;
+        return ! $this->areNodesEqual($firstNodeParent, $secondNodeParent);
     }
 
     private function shouldSkipForDifferentScope(Assign $assign, Node $anotherNode): bool
@@ -153,11 +148,6 @@ CODE_SAMPLE
         if ($this->shouldSkipDueToForeachOverride($assign, $anotherNode)) {
             return true;
         }
-
-        if ($this->shouldSkipForDifferenceParent($assign, $anotherNode)) {
-            return true;
-        }
-
-        return false;
+        return $this->shouldSkipForDifferenceParent($assign, $anotherNode);
     }
 }
