@@ -4,8 +4,6 @@ namespace Rector\Php\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
 use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
 use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\Rector\AbstractRector;
@@ -99,6 +97,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return new StaticCall(new Name('self'), $methodName);
+        return $this->createStaticCall('self', $methodName);
     }
 }

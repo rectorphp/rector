@@ -126,12 +126,6 @@ vendor/bin/rector process src --level symfony40 --dry-run
 vendor/bin/rector process src --level symfony40
 ```
 
-Tip: To process just specific subdirectories, you can use [fnmatch](http://php.net/manual/en/function.fnmatch.php) pattern:
-
-```bash
-vendor/bin/rector process "src/Symfony/Component/*/Tests" --level phpunit60 --dry-run
-```
-
 ### B. Custom Sets
 
 1. Create `rector.yaml` with desired Rectors:

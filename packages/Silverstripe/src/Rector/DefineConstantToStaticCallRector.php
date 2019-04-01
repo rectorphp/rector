@@ -5,8 +5,6 @@ namespace Rector\Silverstripe\Rector;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -51,9 +49,6 @@ final class DefineConstantToStaticCallRector extends AbstractRector
             return null;
         }
 
-        $staticCallNode = new StaticCall(new FullyQualified('Environment'), 'getEnv');
-        $staticCallNode->args = $node->args;
-
-        return $staticCallNode;
+        return $this->createStaticCall('Environment', 'getEnv', $node->args);
     }
 }

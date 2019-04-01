@@ -4,8 +4,6 @@ namespace Rector\Rector\Function_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -58,7 +56,7 @@ final class FunctionToStaticCallRector extends AbstractRector
 
             [$className, $methodName] = $staticCall;
 
-            return new StaticCall(new FullyQualified($className), $methodName, $node->args);
+            return $this->createStaticCall($className, $methodName, $node->args);
         }
 
         return null;

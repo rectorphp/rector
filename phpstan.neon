@@ -144,4 +144,5 @@ parameters:
         - '#Method Rector\\NodeTypeResolver\\NodeVisitor\\(.*?)\:\:enterNode\(\) should return int\|PhpParser\\Node\|void\|null but return statement is missing#'
         - '#Negated boolean expression is always true#'
         - '#Strict comparison using \=\=\= between PhpParser\\Node and null will always evaluate to false#'
-
+        - '#In method "Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:createStaticCall", parameter \$args type is "array"\. Please provide a @param annotation to further specify the type of the array\. For instance\: @param int\[\] \$args\. More info\: http\://bit\.ly/typehintarray#'
+        - '#In method "Rector\\Rector\\AbstractRector\:\:createStaticCall", parameter \$args type is "array"\. Please provide a @param annotation to further specify the type of the array\. For instance\: @param int\[\] \$args\. More info\: http\://bit\.ly/typehintarray#'

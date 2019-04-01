@@ -4,8 +4,6 @@ namespace Rector\Rector\New_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -74,9 +72,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $className = new FullyQualified($staticCall[0]);
-
-            return new StaticCall($className, $staticCall[1], $node->args);
+            return $this->createStaticCall($staticCall[0], $staticCall[1], $node->args);
         }
 
         return $node;

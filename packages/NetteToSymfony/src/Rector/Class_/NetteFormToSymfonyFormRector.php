@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeTypeResolver\Node\Attribute;
@@ -155,7 +154,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return new MethodCall(new Variable('this'), 'createFormBuilder');
+        return $this->createMethodCall('this', 'createFormBuilder');
     }
 
     private function addChoiceTypeOptions(string $method, Array_ $optionsArray): void

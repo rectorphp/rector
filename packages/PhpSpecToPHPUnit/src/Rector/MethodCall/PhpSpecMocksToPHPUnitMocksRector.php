@@ -157,7 +157,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
             $expectedArg = $methodCall->var->args[0]->value ?? null;
 
             $methodCall->var->name = new Identifier('expects');
-            $thisOnceMethodCall = new MethodCall(new Variable('this'), new Identifier('atLeastOnce'));
+            $thisOnceMethodCall = $this->createMethodCall('this', 'atLeastOnce');
             $methodCall->var->args = [new Arg($thisOnceMethodCall)];
 
             $methodCall->name = new Identifier('method');
@@ -189,7 +189,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
                 }
             }
         } else {
-            $newExpr = new MethodCall(new Variable('this'), 'equalTo');
+            $newExpr = $this->createMethodCall('this', 'equalTo');
             $newExpr->args = [new Arg($expr)];
             $expr = $newExpr;
         }
@@ -201,7 +201,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
     private function createNewMockVariableAssign(Param $param, Name $name): Expression
     {
-        $methodCall = new MethodCall(new Variable('this'), 'createMock');
+        $methodCall = $this->createMethodCall('this', 'createMock');
         $methodCall->args[] = new Arg(new ClassConstFetch($name, 'class'));
 
         $assign = new Assign($param->var, $methodCall);
@@ -223,7 +223,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
         $propertyFetch = new PropertyFetch(new Variable('this'), $variable);
 
-        $methodCall = new MethodCall(new Variable('this'), 'createMock');
+        $methodCall = $this->createMethodCall('this', 'createMock');
         $methodCall->args[] = new Arg(new ClassConstFetch($name, 'class'));
 
         $assign = new Assign($propertyFetch, $methodCall);
@@ -237,6 +237,6 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
         $name = $this->typeAnalyzer->isPhpReservedType($type) ? 'isType' : 'isInstanceOf';
 
-        return new MethodCall(new Variable('this'), $name, $staticCall->args);
+        return $this->createMethodCall('this', $name, $staticCall->args);
     }
 }

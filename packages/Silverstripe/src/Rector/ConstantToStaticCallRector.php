@@ -6,8 +6,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -44,9 +42,6 @@ final class ConstantToStaticCallRector extends AbstractRector
             return null;
         }
 
-        $staticCallNode = new StaticCall(new FullyQualified('Environment'), 'getEnv');
-        $staticCallNode->args[] = new Arg(new String_($constantName));
-
-        return $staticCallNode;
+        return $this->createStaticCall('Environment', 'getEnv', [new Arg(new String_($constantName))]);
     }
 }

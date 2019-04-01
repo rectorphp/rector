@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
@@ -146,7 +145,7 @@ CODE_SAMPLE
 
         $this->collectTemplateFileNameAndVariables($classMethod);
 
-        $thisRenderMethod = new MethodCall(new Variable('this'), 'render');
+        $thisRenderMethod = $this->createMethodCall('this', 'render');
 
         if ($this->templateFileExpr !== null) {
             $thisRenderMethod->args[0] = new Arg($this->templateFileExpr);

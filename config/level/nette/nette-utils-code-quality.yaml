@@ -1,0 +1,17 @@
+# @see https://www.tomasvotruba.cz/blog/2018/07/30/hidden-gems-of-php-packages-nette-utils/
+services:
+    Rector\Rector\Function_\FunctionToStaticCallRector:
+        # filesystem
+        file_get_contents: ['Nette\Utils\FileSystem', 'read']
+        unlink: ['Nette\Utils\FileSystem', 'delete']
+        rmdir: ['Nette\Utils\FileSystem', 'delete']
+
+        # json
+        json_decode: ['Nette\Utils\Json', 'decode']
+        json_encode: ['Nette\Utils\Json', 'encode']
+
+    # strings
+    Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector: ~
+    Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector: ~
+    Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector: ~
+    Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector: ~
