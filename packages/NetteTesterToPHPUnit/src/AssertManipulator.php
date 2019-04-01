@@ -206,11 +206,7 @@ final class AssertManipulator
      */
     private function processTruthyOrFalseyCall(StaticCall $staticCall): Expr
     {
-        if ($this->nameResolver->isName($staticCall, 'truthy')) {
-            $method = 'assertTrue';
-        } else {
-            $method = 'assertFalse';
-        }
+        $method = $this->nameResolver->isName($staticCall, 'truthy') ? 'assertTrue' : 'assertFalse';
 
         if (! $this->sholdBeStaticCall($staticCall)) {
             $call = new MethodCall(new Variable('this'), $method);

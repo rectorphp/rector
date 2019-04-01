@@ -2,6 +2,7 @@
 
 namespace Rector\CodeQuality\Rector\If_;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -15,6 +16,11 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class SimplifyIfElseToTernaryRector extends AbstractRector
 {
+    /**
+     * @var int
+     */
+    private const LINE_LENGHT_LIMIT = 120;
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes if/else for same value as assign to ternary', [
@@ -80,13 +86,24 @@ CODE_SAMPLE
 
         $ternaryIf = $this->resolveOnlyStmtAssignExpr($node->stmts);
         $ternaryElse = $this->resolveOnlyStmtAssignExpr($node->else->stmts);
-        if ($ternaryElse === null) {
+        if ($ternaryIf === null || $ternaryElse === null) {
             return null;
         }
 
-        $ternaryNode = new Ternary($node->cond, $ternaryIf, $ternaryElse);
+        // has nested ternary → skip, it's super hard to read
+        if ($this->haveNestedTernary([$node->cond, $ternaryIf, $ternaryElse])) {
+            return null;
+        }
 
-        return new Assign($ifAssignVar, $ternaryNode);
+        $ternary = new Ternary($node->cond, $ternaryIf, $ternaryElse);
+        $assign = new Assign($ifAssignVar, $ternary);
+
+        // do not create super long lines
+        if ($this->isNodeTooLong($assign)) {
+            return null;
+        }
+
+        return $assign;
     }
 
     /**
@@ -126,5 +143,24 @@ CODE_SAMPLE
     private function unwrapExpression(Node $node): Node
     {
         return $node instanceof Expression ? $node->expr : $node;
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    private function haveNestedTernary(array $nodes): bool
+    {
+        foreach ($nodes as $node) {
+            if ($this->betterNodeFinder->findInstanceOf($node, Ternary::class)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isNodeTooLong(Assign $assign): bool
+    {
+        return Strings::length($this->print($assign)) > self::LINE_LENGHT_LIMIT;
     }
 }
