@@ -11,5 +11,11 @@ class KeepNestedTernary
         } else {
             $type = (string) $type;
         }
+
+        if ($type ? true : false) {
+            $type = 'Hou';
+        } else {
+            $type = (string) $type;
+        }
     }
 }

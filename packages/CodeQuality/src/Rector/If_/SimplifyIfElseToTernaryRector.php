@@ -91,7 +91,7 @@ CODE_SAMPLE
         }
 
         // has nested ternary → skip, it's super hard to read
-        if ($this->hasNestedTernary($ternaryIf, $ternaryElse)) {
+        if ($this->haveNestedTernary([$node->cond, $ternaryIf, $ternaryElse])) {
             return null;
         }
 
@@ -99,7 +99,7 @@ CODE_SAMPLE
         $assign = new Assign($ifAssignVar, $ternary);
 
         // do not create super long lines
-        if (Strings::length($this->print($assign)) > self::LINE_LENGHT_LIMIT) {
+        if ($this->isNodeTooLong($assign)) {
             return null;
         }
 
@@ -145,12 +145,22 @@ CODE_SAMPLE
         return $node instanceof Expression ? $node->expr : $node;
     }
 
-    private function hasNestedTernary(Expr $ternaryIf, Expr $ternaryElse): bool
+    /**
+     * @param Node[] $nodes
+     */
+    private function haveNestedTernary(array $nodes): bool
     {
-        if ($this->betterNodeFinder->findInstanceOf($ternaryIf, Ternary::class)) {
-            return true;
+        foreach ($nodes as $node) {
+            if ($this->betterNodeFinder->findInstanceOf($node, Ternary::class)) {
+                return true;
+            }
         }
 
-        return (bool) $this->betterNodeFinder->findInstanceOf($ternaryElse, Ternary::class);
+        return false;
+    }
+
+    private function isNodeTooLong(Assign $assign): bool
+    {
+        return Strings::length($this->print($assign)) > self::LINE_LENGHT_LIMIT;
     }
 }
