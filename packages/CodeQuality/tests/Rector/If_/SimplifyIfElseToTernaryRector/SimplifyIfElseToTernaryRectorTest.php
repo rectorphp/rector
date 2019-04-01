@@ -13,6 +13,7 @@ final class SimplifyIfElseToTernaryRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/keep.php.inc',
             __DIR__ . '/Fixture/too_long.php.inc',
+            __DIR__ . '/Fixture/keep_nested_ternary.php.inc',
         ]);
     }
 

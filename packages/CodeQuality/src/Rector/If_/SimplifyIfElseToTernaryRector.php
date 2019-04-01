@@ -86,7 +86,12 @@ CODE_SAMPLE
 
         $ternaryIf = $this->resolveOnlyStmtAssignExpr($node->stmts);
         $ternaryElse = $this->resolveOnlyStmtAssignExpr($node->else->stmts);
-        if ($ternaryElse === null) {
+        if ($ternaryIf === null || $ternaryElse === null) {
+            return null;
+        }
+
+        // has nested ternary → skip, it's super hard to read
+        if ($this->hasNestedTernary($ternaryIf, $ternaryElse)) {
             return null;
         }
 
@@ -138,5 +143,14 @@ CODE_SAMPLE
     private function unwrapExpression(Node $node): Node
     {
         return $node instanceof Expression ? $node->expr : $node;
+    }
+
+    private function hasNestedTernary(Expr $ternaryIf, Expr $ternaryElse): bool
+    {
+        if ($this->betterNodeFinder->findInstanceOf($ternaryIf, Ternary::class)) {
+            return true;
+        }
+
+        return (bool) $this->betterNodeFinder->findInstanceOf($ternaryElse, Ternary::class);
     }
 }
