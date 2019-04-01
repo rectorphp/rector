@@ -2,6 +2,7 @@
 
 namespace Rector\CodeQuality\Rector\If_;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -15,6 +16,11 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class SimplifyIfElseToTernaryRector extends AbstractRector
 {
+    /**
+     * @var int
+     */
+    private const LINE_LENGHT_LIMIT = 120;
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes if/else for same value as assign to ternary', [
@@ -84,9 +90,15 @@ CODE_SAMPLE
             return null;
         }
 
-        $ternaryNode = new Ternary($node->cond, $ternaryIf, $ternaryElse);
+        $ternary = new Ternary($node->cond, $ternaryIf, $ternaryElse);
+        $assign = new Assign($ifAssignVar, $ternary);
 
-        return new Assign($ifAssignVar, $ternaryNode);
+        // do not create super long lines
+        if (Strings::length($this->print($assign)) > self::LINE_LENGHT_LIMIT) {
+            return null;
+        }
+
+        return $assign;
     }
 
     /**
