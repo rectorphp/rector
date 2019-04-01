@@ -24,6 +24,7 @@ install:
     - composer update $COMPOSER_FLAGS
 
 before_script:
+    - phpenv config-add travis.php.ini
     # disable xdebug
     - if [[ $COVERAGE == "" ]]; then phpenv config-rm xdebug.ini || echo "xdebug not available"; fi
     # increase memory for tests
