@@ -15,3 +15,4 @@ services:
     Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector: ~
     Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector: ~
     Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector: ~
+    Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector: ~
