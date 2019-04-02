@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class ProcessCommand extends AbstractCommand
 {
@@ -66,6 +67,11 @@ final class ProcessCommand extends AbstractCommand
      */
     private $rectorApplication;
 
+    /**
+     * @var string[]
+     */
+    private $fileExtensions;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         FilesFinder $phpFilesFinder,
@@ -75,7 +81,8 @@ final class ProcessCommand extends AbstractCommand
         ErrorAndDiffCollector $errorAndDiffCollector,
         AfterRectorCodingStyle $afterRectorCodingStyle,
         Configuration $configuration,
-        RectorApplication $rectorApplication
+        RectorApplication $rectorApplication,
+        array $fileExtensions
     ) {
         parent::__construct();
 
@@ -88,6 +95,7 @@ final class ProcessCommand extends AbstractCommand
         $this->afterRectorCodingStyle = $afterRectorCodingStyle;
         $this->configuration = $configuration;
         $this->rectorApplication = $rectorApplication;
+        $this->fileExtensions = $fileExtensions;
     }
 
     protected function configure(): void
@@ -135,7 +143,7 @@ final class ProcessCommand extends AbstractCommand
 
         $this->configuration->resolveFromInput($input);
 
-        $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
+        $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, $this->fileExtensions);
 
         $this->additionalAutoloader->autoloadWithInputAndSource($input, $source);
 
