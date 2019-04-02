@@ -1,4 +1,4 @@
-# All 258 Rectors Overview
+# All 263 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -16,6 +16,7 @@
 - [Jms](#jms)
 - [Laravel](#laravel)
 - [MysqlToMysqli](#mysqltomysqli)
+- [Nette](#nette)
 - [NetteTesterToPHPUnit](#nettetestertophpunit)
 - [NetteToSymfony](#nettetosymfony)
 - [PHPStan](#phpstan)
@@ -427,7 +428,7 @@ Make if conditions more explicit
      public function run($items)
      {
 -        if (!count($items)) {
-+        if (count($items) < 0) {
++        if (count($items) !== 0) {
              return 'no items';
          }
      }
@@ -1423,6 +1424,113 @@ Replace mysql_pconnect() with mysqli_connect() with host p: prefix
      {
 -        return mysql_pconnect($host, $username, $password);
 +        return mysqli_connect('p:' . $host, $username, $password);
+     }
+ }
+```
+
+<br>
+
+## Nette
+
+### `SubstrStrlenFunctionToNetteUtilsStringsRector`
+
+- class: `Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector`
+
+Use Nette\Utils\Strings over bare string-functions
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        return substr($value, 0, 3);
++        return \Nette\Utils\Strings::substring($value, 0, 3);
+     }
+ }
+```
+
+<br>
+
+### `PregFunctionToNetteUtilsStringsRector`
+
+- class: `Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector`
+
+Use Nette\Utils\Strings over bare preg_* functions
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $content = 'Hi my name is Tom';
+-        preg_match('#Hi#', $content);
++        \Nette\Utils\Strings::match($content, '#Hi#');
+     }
+ }
+```
+
+<br>
+
+### `StrposToStringsContainsRector`
+
+- class: `Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector`
+
+Use Nette\Utils\Strings over bare string-functions
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $name = 'Hi, my name is Tom';
+-        return strpos($name, 'Hi') !== false;
++        return \Nette\Utils\Strings::contains($name, 'Hi');
+     }
+ }
+```
+
+<br>
+
+### `EndsWithFunctionToNetteUtilsStringsRector`
+
+- class: `Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector`
+
+Use Nette\Utils\Strings over bare string-functions
+
+```diff
+ class SomeClass
+ {
+     public function end($needle)
+     {
+         $content = 'Hi, my name is Tom';
+
+-        $yes = substr($content, -strlen($needle)) === $needle;
+-        $no = $needle !== substr($content, -strlen($needle));
++        $yes = \Nette\Utils\Strings::endsWith($content, $needle);
++        $no = !\Nette\Utils\Strings::endsWith($content, $needle);
+     }
+ }
+```
+
+<br>
+
+### `StartsWithFunctionToNetteUtilsStringsRector`
+
+- class: `Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector`
+
+Use Nette\Utils\Strings over bare string-functions
+
+```diff
+ class SomeClass
+ {
+     public function start($needle)
+     {
+         $content = 'Hi, my name is Tom';
+
+-        $yes = substr($content, 0, strlen($needle)) === $needle;
+-        $no = $needle !== substr($content, 0, strlen($needle));
++        $yes = \Nette\Utils\Strings::startwith($content, $needle);
++        $no = !\Nette\Utils\Strings::startwith($content, $needle);
      }
  }
 ```
@@ -2606,7 +2714,7 @@ Changes rand, srand and getrandmax by new md_* alternatives.
 
 - class: `Rector\Php\Rector\FuncCall\PregReplaceEModifierRector`
 
-The /e modifier is no longer supported, use preg_replace_callback instead
+The /e modifier is no longer supported, use preg_replace_callback instead 
 
 ```diff
  class SomeClass
@@ -3159,7 +3267,7 @@ each() function is deprecated, use foreach() instead.
 
 - class: `Rector\Php\Rector\Each\ListEachRector`
 
-each() function is deprecated, use foreach() instead.
+each() function is deprecated, use key() and current() instead
 
 ```diff
 -list($key, $callback) = each($callbacks);

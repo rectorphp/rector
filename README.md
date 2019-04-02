@@ -41,9 +41,10 @@ Rector **instantly upgrades and instantly refactors PHP code of your application
 - Rename classes, methods, properties, namespaces, constants... anything :)
 - Add, replace or remove arguments
 - Add [parameter or return type declarations](https://www.tomasvotruba.cz/blog/2019/01/03/how-to-complete-type-declarations-without-docblocks-with-rector/) without docblocks - just with static analysis
-- Change visibility of constant, property or method
 - Upgrade from PHP 5.3 to PHP 7.4
+- [Migrate from one PHP framework to another](https://www.tomasvotruba.cz/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
 - [Complete PHP 7.4 property type declarations](https://www.tomasvotruba.cz/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
+- [Turn Laravel static to Dependency Injection](https://www.tomasvotruba.cz/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
 - And much more...
 
 ...**look at overview of [all available Rectors](/docs/AllRectorsOverview.md)** with before/after diffs and configuration examples. You can use them to build your own sets.
