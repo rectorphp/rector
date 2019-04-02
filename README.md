@@ -324,3 +324,9 @@ Using `rector.yaml`:
 ```bash
 docker run -v $(pwd):/project rector/rector:latest process /project/app --config /project/rector.yaml --autoload-file /project/vendor/autoload.php --dry-run
 ```
+
+### Community Packages
+
+Do you use Rector to upgrade your code? Share it here:
+
+- [mxr576/drupal8-rector](https://github.com/mxr576/drupal8-rector) by @mxr576
