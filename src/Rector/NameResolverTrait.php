@@ -31,7 +31,7 @@ trait NameResolverTrait
 
     public function areNamesEqual(Node $firstNode, Node $secondNode): bool
     {
-        return $this->getName($firstNode) === $this->getName($secondNode);
+        return $this->nameResolver->areNamesEqual($firstNode, $secondNode);
     }
 
     public function isNameInsensitive(Node $node, string $name): bool

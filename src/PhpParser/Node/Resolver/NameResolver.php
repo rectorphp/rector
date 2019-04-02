@@ -192,4 +192,9 @@ final class NameResolver
 
         return (string) $node->name;
     }
+
+    public function areNamesEqual(Node $firstNode, Node $secondNode): bool
+    {
+        return $this->resolve($firstNode) === $this->resolve($secondNode);
+    }
 }

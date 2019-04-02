@@ -18,7 +18,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class ProcessCommand extends AbstractCommand
 {
@@ -70,8 +69,11 @@ final class ProcessCommand extends AbstractCommand
     /**
      * @var string[]
      */
-    private $fileExtensions;
+    private $fileExtensions = [];
 
+    /**
+     * @param string[] $fileExtensions
+     */
     public function __construct(
         SymfonyStyle $symfonyStyle,
         FilesFinder $phpFilesFinder,
