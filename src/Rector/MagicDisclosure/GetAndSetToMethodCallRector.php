@@ -118,10 +118,6 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($this->propertyFetchManipulator->isPropertyToSelf($propertyFetchNode)) {
-                continue;
-            }
-
             if (! $this->propertyFetchManipulator->isMagicOnType($propertyFetchNode, $type)) {
                 continue;
             }

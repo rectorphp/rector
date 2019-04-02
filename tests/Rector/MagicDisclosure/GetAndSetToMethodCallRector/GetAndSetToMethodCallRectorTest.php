@@ -4,19 +4,19 @@ namespace Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
 
 use Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\Klarka;
 use Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\SomeContainer;
 
 final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles(
-            [
-                __DIR__ . '/Fixture/fixture.php.inc',
-                __DIR__ . '/Fixture/fixture2.php.inc',
-                __DIR__ . '/Fixture/fixture3.php.inc',
-            ]
-        );
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/fixture2.php.inc',
+            __DIR__ . '/Fixture/fixture3.php.inc',
+            __DIR__ . '/Fixture/klarka.php.inc',
+        ]);
     }
 
     protected function getRectorClass(): string
@@ -37,6 +37,9 @@ final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
             'Enlight_View_Default' => [
                 'get' => 'getService',
                 'set' => 'addService',
+            ],
+            Klarka::class => [
+                'get' => 'get',
             ],
         ];
     }
