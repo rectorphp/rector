@@ -4,7 +4,6 @@ namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\Type\ObjectType;
@@ -34,20 +33,36 @@ final class PropertyFetchManipulator
      */
     private $nameResolver;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver, Broker $broker, NameResolver $nameResolver)
-    {
+    /**
+     * @var ClassManipulator
+     */
+    private $classManipulator;
+
+    public function __construct(
+        NodeTypeResolver $nodeTypeResolver,
+        Broker $broker,
+        NameResolver $nameResolver,
+        ClassManipulator $classManipulator
+    ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->broker = $broker;
         $this->nameResolver = $nameResolver;
+        $this->classManipulator = $classManipulator;
     }
 
     public function isPropertyToSelf(PropertyFetch $propertyFetch): bool
     {
-        if (! $propertyFetch->var instanceof Variable) {
+        if (! $this->nameResolver->isName($propertyFetch->var, 'this')) {
             return false;
         }
 
-        return $propertyFetch->var->name === 'this';
+        /** @var Node\Stmt\Class_|null $class */
+        $class = $propertyFetch->getAttribute(Attribute::CLASS_NODE);
+        if ($class === null) {
+            return false;
+        }
+
+        return $this->classManipulator->hasPropertyFetchAsProperty($class, $propertyFetch);
     }
 
     public function isMagicOnType(Node $node, string $type): bool

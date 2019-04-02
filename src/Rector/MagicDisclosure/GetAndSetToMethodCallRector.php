@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\If_;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -83,54 +83,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Assign::class, If_::class];
+        return [Assign::class, PropertyFetch::class];
     }
 
     /**
-     * @param Assign|If_ $node
+     * @param Assign|PropertyFetch $node
      */
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Assign) {
-            if ($node->expr instanceof PropertyFetch) {
-                return $this->processMagicGet($node);
-            }
-
             if ($node->var instanceof PropertyFetch) {
                 return $this->processMagicSet($node);
             }
+
+            return null;
         }
 
-        if ($node instanceof If_ && $node->cond instanceof PropertyFetch) {
-            return $this->processMagicGetOnIf($node);
-        }
-
-        return null;
-    }
-
-    private function processMagicGet(Assign $assign): ?Node
-    {
-        /** @var PropertyFetch $propertyFetchNode */
-        $propertyFetchNode = $assign->expr;
-
-        foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if (! $this->isType($propertyFetchNode, $type)) {
-                continue;
-            }
-
-            if (! $this->propertyFetchManipulator->isMagicOnType($propertyFetchNode, $type)) {
-                continue;
-            }
-
-            $assign->expr = $this->createMethodCallNodeFromPropertyFetchNode(
-                $propertyFetchNode,
-                $transformation['get']
-            );
-
-            return $assign;
-        }
-
-        return null;
+        return $this->processPropertyFetch($node);
     }
 
     private function processMagicSet(Assign $assign): ?Node
@@ -139,15 +108,7 @@ CODE_SAMPLE
         $propertyFetchNode = $assign->var;
 
         foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if (! $this->isType($propertyFetchNode, $type)) {
-                continue;
-            }
-
-            if ($this->propertyFetchManipulator->isPropertyToSelf($propertyFetchNode)) {
-                continue;
-            }
-
-            if (! $this->propertyFetchManipulator->isMagicOnType($propertyFetchNode, $type)) {
+            if ($this->shouldSkipPropertyFetch($propertyFetchNode, $type)) {
                 continue;
             }
 
@@ -156,31 +117,6 @@ CODE_SAMPLE
                 $assign->expr,
                 $transformation['set']
             );
-        }
-
-        return null;
-    }
-
-    private function processMagicGetOnIf(If_ $if): ?Node
-    {
-        /** @var PropertyFetch $propertyFetchNode */
-        $propertyFetchNode = $if->cond;
-
-        foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if (! $this->isType($propertyFetchNode, $type)) {
-                continue;
-            }
-
-            if (! $this->propertyFetchManipulator->isMagicOnType($propertyFetchNode, $type)) {
-                continue;
-            }
-
-            $if->cond = $this->createMethodCallNodeFromPropertyFetchNode(
-                $propertyFetchNode,
-                $transformation['get']
-            );
-
-            return $if;
         }
 
         return null;
@@ -205,5 +141,41 @@ CODE_SAMPLE
         $variableNode = $propertyFetch->var;
 
         return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetch), $node]);
+    }
+
+    private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch, string $type): bool
+    {
+        if (! $this->isType($propertyFetch, $type)) {
+            return true;
+        }
+
+        if (! $this->propertyFetchManipulator->isMagicOnType($propertyFetch, $type)) {
+            return true;
+        }
+
+        // $this->value = $value
+        return $this->propertyFetchManipulator->isPropertyToSelf($propertyFetch);
+    }
+
+    private function processPropertyFetch(PropertyFetch $propertyFetch): ?MethodCall
+    {
+        foreach ($this->typeToMethodCalls as $type => $transformation) {
+            if ($this->shouldSkipPropertyFetch($propertyFetch, $type)) {
+                continue;
+            }
+
+            // setter, skip
+            $parentNode = $propertyFetch->getAttribute(Attribute::PARENT_NODE);
+
+            if ($parentNode instanceof Assign) {
+                if ($parentNode->var === $propertyFetch) {
+                    continue;
+                }
+            }
+
+            return $this->createMethodCallNodeFromPropertyFetchNode($propertyFetch, $transformation['get']);
+        }
+
+        return null;
     }
 }

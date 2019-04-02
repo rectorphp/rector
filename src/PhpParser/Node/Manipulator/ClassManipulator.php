@@ -240,6 +240,25 @@ final class ClassManipulator
         });
     }
 
+    public function hasPropertyFetchAsProperty(Class_ $class, Node\Expr\PropertyFetch $propertyFetch): bool
+    {
+        if (! $this->nameResolver->isName($propertyFetch->var, 'this')) {
+            return false;
+        }
+
+        foreach ((array) $class->stmts as $classStmt) {
+            if (! $classStmt instanceof Property) {
+                continue;
+            }
+
+            if ($this->nameResolver->areNamesEqual($classStmt->props[0], $propertyFetch)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
     {
         foreach ($classNode->stmts as $key => $classElementNode) {
