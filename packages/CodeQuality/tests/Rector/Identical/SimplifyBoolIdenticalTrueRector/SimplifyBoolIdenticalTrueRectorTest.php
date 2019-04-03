@@ -9,7 +9,11 @@ final class SimplifyBoolIdenticalTrueRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/directly.php.inc', __DIR__ . '/Fixture/negate.php.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/directly.php.inc',
+            __DIR__ . '/Fixture/negate.php.inc',
+            __DIR__ . '/Fixture/double_negate.php.inc',
+        ]);
     }
 
     protected function getRectorClass(): string

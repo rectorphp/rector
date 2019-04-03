@@ -55,46 +55,40 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($this->isBoolType($node->left) && ! $this->isBool($node->left)) {
-            if ($node instanceof Identical) {
-                if ($this->isTrue($node->right)) {
-                    return $node->left;
-                }
-
-                if ($this->isFalse($node->right)) {
-                    return new BooleanNot($node->left);
-                }
-            }
-
-            if ($node instanceof NotIdentical) {
-                if ($this->isFalse($node->right)) {
-                    return $node->left;
-                }
-
-                if ($this->isTrue($node->right)) {
-                    return new BooleanNot($node->left);
-                }
-            }
+            return $this->processBoolTypeToNotBool($node, $node->left, $node->right);
         }
 
         if ($this->isBoolType($node->right) && ! $this->isBool($node->right)) {
-            if ($node instanceof Identical) {
-                if ($this->isTrue($node->left)) {
-                    return $node->right;
-                }
+            return $this->processBoolTypeToNotBool($node, $node->right, $node->left);
+        }
 
-                if ($this->isFalse($node->left)) {
-                    return new BooleanNot($node->right);
-                }
+        return null;
+    }
+
+    private function processBoolTypeToNotBool(Node $node, Node\Expr $leftExpr, Node\Expr $rightExpr): ?Node\Expr
+    {
+        if ($node instanceof Identical) {
+            if ($this->isTrue($rightExpr)) {
+                return $leftExpr;
             }
 
-            if ($node instanceof NotIdentical) {
-                if ($this->isFalse($node->left)) {
-                    return $node->right;
+            if ($this->isFalse($rightExpr)) {
+                // prevent !!
+                if ($leftExpr instanceof BooleanNot) {
+                    return $leftExpr->expr;
                 }
 
-                if ($this->isTrue($node->left)) {
-                    return new BooleanNot($node->right);
-                }
+                return new BooleanNot($leftExpr);
+            }
+        }
+
+        if ($node instanceof NotIdentical) {
+            if ($this->isFalse($rightExpr)) {
+                return $leftExpr;
+            }
+
+            if ($this->isTrue($rightExpr)) {
+                return new BooleanNot($leftExpr);
             }
         }
 
