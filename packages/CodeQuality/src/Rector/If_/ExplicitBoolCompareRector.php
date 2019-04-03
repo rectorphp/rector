@@ -48,7 +48,7 @@ final class SomeController
 {
     public function run($items)
     {
-        if (count($items) !== 0) {
+        if (count($items) === 0) {
             return 'no items';
         }
     }

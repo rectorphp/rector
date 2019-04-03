@@ -428,7 +428,7 @@ Make if conditions more explicit
      public function run($items)
      {
 -        if (!count($items)) {
-+        if (count($items) !== 0) {
++        if (count($items) === 0) {
              return 'no items';
          }
      }
@@ -2714,7 +2714,7 @@ Changes rand, srand and getrandmax by new md_* alternatives.
 
 - class: `Rector\Php\Rector\FuncCall\PregReplaceEModifierRector`
 
-The /e modifier is no longer supported, use preg_replace_callback instead
+The /e modifier is no longer supported, use preg_replace_callback instead 
 
 ```diff
  class SomeClass
