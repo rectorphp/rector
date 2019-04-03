@@ -1,2 +1,3 @@
 services:
     Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector: ~
+    Rector\CodeQuality\Rector\Identical\BooleanNotIdenticalToNotIdenticalRector: ~
