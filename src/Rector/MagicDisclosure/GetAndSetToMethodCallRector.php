@@ -145,7 +145,7 @@ CODE_SAMPLE
 
     private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch, string $type): bool
     {
-        if (! $this->isType($propertyFetch, $type)) {
+        if (! $this->isType($propertyFetch->var, $type)) {
             return true;
         }
 

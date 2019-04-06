@@ -74,7 +74,7 @@ CODE_SAMPLE
         $propertyNode = $propertyFetchNode->var;
 
         foreach ($this->oldPropertiesToNewMethodCallsByType as $type => $oldPropertiesToNewMethodCalls) {
-            if (! $this->isType($propertyFetchNode, $type)) {
+            if (! $this->isType($propertyFetchNode->var, $type)) {
                 continue;
             }
 
