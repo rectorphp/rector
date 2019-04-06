@@ -24,3 +24,4 @@ services:
     Rector\Rector\Function_\RenameFunctionRector:
         # https://3v4l.org/1s1St
         mktime: 'time'
+    Rector\Php\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector: ~
