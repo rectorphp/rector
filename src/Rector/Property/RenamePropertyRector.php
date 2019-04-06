@@ -59,7 +59,7 @@ final class RenamePropertyRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         foreach ($this->oldToNewPropertyByTypes as $type => $oldToNewProperties) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isType($node->var, $type)) {
                 continue;
             }
 

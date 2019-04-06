@@ -3,16 +3,27 @@
 namespace Rector\CodeQuality\Rector\Array_;
 
 use PhpParser\Node;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://3v4l.org/MsMbQ
+ * @see https://3v4l.org/KM1Ji
  */
 final class CallableThisArrayToAnonymousFunctionRector extends AbstractRector
 {
+    /**
+     * @var ClassLikeNodeCollector
+     */
+    private $classLikeNodeCollector;
+
+    public function __construct(ClassLikeNodeCollector $classLikeNodeCollector)
+    {
+        $this->classLikeNodeCollector = $classLikeNodeCollector;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Convert [$this, "method"] to proper anonymous function', [
@@ -75,12 +86,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $thisVariable = $node->items[0]->value;
-        if (! $this->isThisVariable($thisVariable)) {
-            return null;
-        }
+        // is callable
+        $objectVariable = $node->items[0]->value;
 
-        $classMethod = $this->matchLocalMethod($node->items[1]->value);
+        $classMethod = $this->matchCallableMethod($objectVariable, $node->items[1]->value);
         if ($classMethod === null) {
             return null;
         }
@@ -88,7 +97,7 @@ CODE_SAMPLE
         $anonymousFunction = new Node\Expr\Closure();
         $anonymousFunction->params = $classMethod->params;
 
-        $innerMethodCall = new Node\Expr\MethodCall($thisVariable, $classMethod->name);
+        $innerMethodCall = new Node\Expr\MethodCall($objectVariable, $classMethod->name);
         $innerMethodCall->args = $this->convertParamsToArgs($classMethod->params);
 
         if ($classMethod->returnType) {
@@ -97,33 +106,13 @@ CODE_SAMPLE
 
         $anonymousFunction->stmts[] = new Node\Stmt\Return_($innerMethodCall);
 
+        if ($objectVariable instanceof Node\Expr\Variable) {
+            if (! $this->isName($objectVariable, 'this')) {
+                $anonymousFunction->uses[] = new Node\Expr\ClosureUse($objectVariable);
+            }
+        }
+
         return $anonymousFunction;
-    }
-
-    private function isThisVariable(Node\Expr $expr): bool
-    {
-        if (! $expr instanceof Node\Expr\Variable) {
-            return true;
-        }
-
-        return $this->isName($expr, 'this');
-    }
-
-    private function matchLocalMethod(Node\Expr $expr): ?Node\Stmt\ClassMethod
-    {
-        if (! $expr instanceof Node\Scalar\String_) {
-            return null;
-        }
-
-        $possibleMethodName = $expr->value;
-
-        /** @var Node\Stmt\Class_|null $classNode */
-        $classNode = $expr->getAttribute(Attribute::CLASS_NODE);
-        if ($classNode === null) {
-            return null;
-        }
-
-        return $classNode->getMethod($possibleMethodName);
     }
 
     /**
@@ -138,5 +127,34 @@ CODE_SAMPLE
         }
 
         return $args;
+    }
+
+    private function matchCallableMethod(Node\Expr $objectExpr, Node\Expr $methodExpr): ?Node\Stmt\ClassMethod
+    {
+        $methodName = $this->getValue($methodExpr);
+
+        foreach ($this->getTypes($objectExpr) as $type) {
+            $class = $this->classLikeNodeCollector->findClass($type);
+            if ($class === null) {
+                continue;
+            }
+
+            $classMethod = $class->getMethod($methodName);
+            if ($classMethod === null) {
+                continue;
+            }
+
+            if ($this->isName($objectExpr, 'this')) {
+                return $classMethod;
+            }
+
+            if ($classMethod->isPublic()) {
+                return $classMethod;
+            }
+
+            return null;
+        }
+
+        return null;
     }
 }

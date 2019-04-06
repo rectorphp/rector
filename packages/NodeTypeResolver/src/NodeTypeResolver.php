@@ -135,7 +135,7 @@ final class NodeTypeResolver
     public function getTypes(Node $node): array
     {
         // @todo should be resolved by NodeTypeResolver internally
-        if ($node instanceof MethodCall || $node instanceof PropertyFetch || $node instanceof ArrayDimFetch) {
+        if ($node instanceof MethodCall || $node instanceof ArrayDimFetch) {
             return $this->resolve($node->var);
         }
 

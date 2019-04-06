@@ -71,12 +71,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isTypes($node, array_keys($this->typeToPropertiesMap))) {
-            return null;
-        }
-
         foreach ($this->typeToPropertiesMap as $type => $properties) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isType($node->var, $type)) {
                 continue;
             }
 
