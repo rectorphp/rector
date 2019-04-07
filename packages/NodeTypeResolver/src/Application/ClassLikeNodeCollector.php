@@ -200,4 +200,9 @@ final class ClassLikeNodeCollector
 
         return $classNodes;
     }
+
+    public function hasClassChildren(string $class): bool
+    {
+        return $this->findChildrenOfClass($class) !== [];
+    }
 }

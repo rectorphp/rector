@@ -1,0 +1,2 @@
+services:
+    Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector: ~
