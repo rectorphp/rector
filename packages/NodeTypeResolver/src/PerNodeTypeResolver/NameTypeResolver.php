@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\Attribute;
 
@@ -44,8 +45,25 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
     private function resolveFullyQualifiedName(Node $nameNode, string $name): ?string
     {
         if (in_array($name, ['self', 'static', 'this'], true)) {
-            return $nameNode->getAttribute(Attribute::CLASS_NAME);
+            $class = $nameNode->getAttribute(Attribute::CLASS_NAME);
+            if ($class === null) {
+                throw new ShouldNotHappenException();
+            }
+
+            return $class;
         }
+
+        if ($name === 'parent') {
+            // @tooo not sure which parent though
+            $class = $nameNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+            if ($class === null) {
+                throw new ShouldNotHappenException();
+            }
+
+            return $class;
+        }
+
+        // @todo add "parent"
 
         /** @var Name|null $name */
         $resolvedNameNode = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
