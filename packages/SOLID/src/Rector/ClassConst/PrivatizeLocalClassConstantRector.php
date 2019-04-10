@@ -88,11 +88,9 @@ CODE_SAMPLE
         }
 
         // 1. is only local use? → private
-        if ($useClasses) {
-            if ($useClasses === [$class]) {
-                $this->makePrivate($node);
-                return $node;
-            }
+        if ($useClasses === [$class]) {
+            $this->makePrivate($node);
+            return $node;
         }
 
         // 2. used by children → protected
