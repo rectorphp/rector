@@ -46,9 +46,9 @@ trait NodeCommandersTrait
         $this->propertyAddingCommander = $propertyAddingCommander;
     }
 
-    protected function addNodeAfterNode(Node $node, Node $positionNode): void
+    protected function addNodeAfterNode(Node $newNode, Node $positionNode): void
     {
-        $this->nodeAddingCommander->addNodeAfterNode($node, $positionNode);
+        $this->nodeAddingCommander->addNodeAfterNode($newNode, $positionNode);
 
         $this->notifyNodeChangeFileInfo($positionNode);
     }

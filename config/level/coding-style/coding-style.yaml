@@ -11,3 +11,4 @@ services:
     # Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector: ~
     # Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector: ~
     Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector: ~
+    Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector: ~

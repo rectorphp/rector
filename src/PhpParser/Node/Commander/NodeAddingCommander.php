@@ -11,6 +11,7 @@ use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\PhpParser\Node\BetterNodeFinder;
 
 /**
@@ -77,7 +78,12 @@ final class NodeAddingCommander implements CommanderInterface
         /** @var Expression|null $foundNode */
         $foundNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($node, Expression::class);
         if ($foundNode === null) {
-            throw new ShouldNotHappenException();
+            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+            if ($parentNode instanceof Stmt\ClassLike) {
+                $foundNode = $node;
+            } else {
+                throw new ShouldNotHappenException();
+            }
         }
 
         return spl_object_hash($foundNode);
