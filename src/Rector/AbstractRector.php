@@ -2,6 +2,7 @@
 
 namespace Rector\Rector;
 
+use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
@@ -19,6 +20,11 @@ use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
     use AbstractRectorTrait;
+
+    /**
+     * @var BuilderFactory
+     */
+    protected $builderFactory;
 
     /**
      * @var SymfonyStyle
@@ -54,12 +60,14 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         SymfonyStyle $symfonyStyle,
         ValueResolver $valueResolver,
         RemovedFilesCollector $removedFilesCollector,
-        PhpVersionProvider $phpVersionProvider
+        PhpVersionProvider $phpVersionProvider,
+        BuilderFactory $builderFactory
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->valueResolver = $valueResolver;
         $this->removedFilesCollector = $removedFilesCollector;
         $this->phpVersionProvider = $phpVersionProvider;
+        $this->builderFactory = $builderFactory;
     }
 
     /**

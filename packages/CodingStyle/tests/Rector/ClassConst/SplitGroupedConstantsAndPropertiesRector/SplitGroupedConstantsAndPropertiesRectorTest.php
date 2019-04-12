@@ -9,10 +9,7 @@ final class SplitGroupedConstantsAndPropertiesRectorTest extends AbstractRectorT
 {
     public function test(): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/skip.php.inc',
-        ]);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/skip.php.inc']);
     }
 
     protected function getRectorClass(): string
