@@ -58,7 +58,12 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
         }
 
         if ($node instanceof ClassConst) {
-            $this->constantNodeCollector->addConstant($node);
+            $this->constantNodeCollector->addClassConstant($node);
+            return;
+        }
+
+        if ($node instanceof Node\Expr\ClassConstFetch) {
+            $this->constantNodeCollector->addClassConstantFetch($node);
             return;
         }
 

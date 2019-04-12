@@ -214,7 +214,7 @@ final class RegexPatternArgumentManipulator
             return [];
         }
 
-        $classConstNode = $this->constantNodeCollector->findConstant($constantName, $className);
+        $classConstNode = $this->constantNodeCollector->findClassConstant($className, $constantName);
 
         if ($classConstNode === null) {
             return [];

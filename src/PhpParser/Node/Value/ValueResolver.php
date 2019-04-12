@@ -143,7 +143,7 @@ final class ValueResolver
             return $class;
         }
 
-        $classConstNode = $this->constantNodeCollector->findConstant($constant, $class);
+        $classConstNode = $this->constantNodeCollector->findClassConstant($class, $constant);
 
         if ($classConstNode === null) {
             // fallback to the name

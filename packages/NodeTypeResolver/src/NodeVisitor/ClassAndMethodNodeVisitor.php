@@ -109,7 +109,7 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
         }
 
         if ($classNode->name === null) {
-            return false;
+            return true;
         }
 
         // PHPStan polution

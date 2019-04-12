@@ -104,6 +104,10 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser->addVisitor($this->parentAndNextNodeVisitor);
         $nodeTraverser->addVisitor($this->classAndMethodNodeVisitor);
         $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
+        $nodes = $nodeTraverser->traverse($nodes);
+
+        // this split is needed, so nodes have names, classes and namespaces
+        $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->expressionNodeVisitor);
         $nodeTraverser->addVisitor($this->fileInfoNodeVisitor);
         $nodeTraverser->addVisitor($this->nodeCollectorNodeVisitor);

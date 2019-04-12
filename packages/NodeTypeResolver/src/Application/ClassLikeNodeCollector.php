@@ -205,4 +205,17 @@ final class ClassLikeNodeCollector
     {
         return $this->findChildrenOfClass($class) !== [];
     }
+
+    /**
+     * @return Class_|Interface_|null
+     */
+    public function findClassOrInterface(string $type): ?ClassLike
+    {
+        $class = $this->findClass($type);
+        if ($class !== null) {
+            return $class;
+        }
+
+        return $this->findInterface($type);
+    }
 }
