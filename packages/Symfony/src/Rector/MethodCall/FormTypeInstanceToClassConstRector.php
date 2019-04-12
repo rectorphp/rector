@@ -2,7 +2,6 @@
 
 namespace Rector\Symfony\Rector\MethodCall;
 
-use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -55,14 +54,8 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
      */
     private $classLikeNodeCollector;
 
-    /**
-     * @var BuilderFactory
-     */
-    private $builderFactory;
-
     public function __construct(
         ClassLikeNodeCollector $classLikeNodeCollector,
-        BuilderFactory $builderFactory,
         string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller',
         string $formBuilderType = 'Symfony\Component\Form\FormBuilderInterface',
         string $formType = 'Symfony\Component\Form\FormInterface'
@@ -71,7 +64,6 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
         $this->controllerClass = $controllerClass;
         $this->formBuilderType = $formBuilderType;
         $this->formType = $formType;
-        $this->builderFactory = $builderFactory;
     }
 
     public function getDefinition(): RectorDefinition

@@ -2,7 +2,6 @@
 
 namespace Rector\PHPUnit\Rector\SpecificMethod;
 
-use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Instanceof_;
@@ -28,15 +27,9 @@ final class AssertInstanceOfComparisonRector extends AbstractPHPUnitRector
      */
     private $identifierManipulator;
 
-    /**
-     * @var BuilderFactory
-     */
-    private $builderFactory;
-
-    public function __construct(IdentifierManipulator $identifierManipulator, BuilderFactory $builderFactory)
+    public function __construct(IdentifierManipulator $identifierManipulator)
     {
         $this->identifierManipulator = $identifierManipulator;
-        $this->builderFactory = $builderFactory;
     }
 
     public function getDefinition(): RectorDefinition

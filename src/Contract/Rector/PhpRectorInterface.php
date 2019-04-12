@@ -8,7 +8,9 @@ use PhpParser\NodeVisitor;
 interface PhpRectorInterface extends NodeVisitor, RectorInterface
 {
     /**
-     * List of nodes this class checks, classes that implement @see \PhpParser\Node
+     * List of nodes this class checks, classes that implement
+     * @see \PhpParser\Node
+     *
      * @return string[]
      */
     public function getNodeTypes(): array;
