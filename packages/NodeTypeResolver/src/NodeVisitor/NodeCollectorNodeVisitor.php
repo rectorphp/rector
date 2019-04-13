@@ -11,35 +11,18 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeVisitorAbstract;
-use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
-use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
-use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
+use Rector\NodeContainer\ParsedNodesByType;
 
 final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var ClassLikeNodeCollector
+     * @var ParsedNodesByType
      */
-    private $classLikeNodeCollector;
+    private $parsedNodesByType;
 
-    /**
-     * @var FunctionLikeNodeCollector
-     */
-    private $functionLikeNodeCollector;
-
-    /**
-     * @var ConstantNodeCollector
-     */
-    private $constantNodeCollector;
-
-    public function __construct(
-        FunctionLikeNodeCollector $functionLikeNodeCollector,
-        ClassLikeNodeCollector $classLikeNodeCollector,
-        ConstantNodeCollector $constantNodeCollector
-    ) {
-        $this->functionLikeNodeCollector = $functionLikeNodeCollector;
-        $this->classLikeNodeCollector = $classLikeNodeCollector;
-        $this->constantNodeCollector = $constantNodeCollector;
+    public function __construct(ParsedNodesByType $parsedNodesByType)
+    {
+        $this->parsedNodesByType = $parsedNodesByType;
     }
 
     /**
@@ -48,37 +31,37 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         if ($node instanceof Class_ && ! $this->isClassAnonymous($node)) {
-            $this->classLikeNodeCollector->addClass($node);
+            $this->parsedNodesByType->addClass($node);
             return;
         }
 
         if ($node instanceof Interface_) {
-            $this->classLikeNodeCollector->addInterface($node);
+            $this->parsedNodesByType->addInterface($node);
             return;
         }
 
         if ($node instanceof ClassConst) {
-            $this->constantNodeCollector->addClassConstant($node);
+            $this->parsedNodesByType->addClassConstant($node);
             return;
         }
 
         if ($node instanceof Node\Expr\ClassConstFetch) {
-            $this->constantNodeCollector->addClassConstantFetch($node);
+            $this->parsedNodesByType->addClassConstantFetch($node);
             return;
         }
 
         if ($node instanceof Trait_) {
-            $this->classLikeNodeCollector->addTrait($node);
+            $this->parsedNodesByType->addTrait($node);
             return;
         }
 
         if ($node instanceof ClassMethod) {
-            $this->functionLikeNodeCollector->addMethod($node);
+            $this->parsedNodesByType->addMethod($node);
             return;
         }
 
         if ($node instanceof Function_) {
-            $this->functionLikeNodeCollector->addFunction($node);
+            $this->parsedNodesByType->addFunction($node);
             return;
         }
     }

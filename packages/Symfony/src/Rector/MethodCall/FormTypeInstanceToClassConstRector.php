@@ -20,7 +20,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -50,17 +50,17 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
     private $formType;
 
     /**
-     * @var ClassLikeNodeCollector
+     * @var ParsedNodesByType
      */
-    private $classLikeNodeCollector;
+    private $parsedNodesByType;
 
     public function __construct(
-        ClassLikeNodeCollector $classLikeNodeCollector,
+        ParsedNodesByType $parsedNodesByType,
         string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller',
         string $formBuilderType = 'Symfony\Component\Form\FormBuilderInterface',
         string $formType = 'Symfony\Component\Form\FormInterface'
     ) {
-        $this->classLikeNodeCollector = $classLikeNodeCollector;
+        $this->parsedNodesByType = $parsedNodesByType;
         $this->controllerClass = $controllerClass;
         $this->formBuilderType = $formBuilderType;
         $this->formType = $formType;
@@ -191,7 +191,7 @@ CODE_SAMPLE
             $methodCall->args[$optionsPosition] = new Arg($optionsArrayNode);
         }
 
-        $formTypeClassNode = $this->classLikeNodeCollector->findClass($className);
+        $formTypeClassNode = $this->parsedNodesByType->findClass($className);
         if ($formTypeClassNode === null) {
             return null;
         }

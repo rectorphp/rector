@@ -3,7 +3,7 @@
 namespace Rector\CodeQuality\Rector\Array_;
 
 use PhpParser\Node;
-use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -16,13 +16,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class CallableThisArrayToAnonymousFunctionRector extends AbstractRector
 {
     /**
-     * @var ClassLikeNodeCollector
+     * @var ParsedNodesByType
      */
-    private $classLikeNodeCollector;
+    private $parsedNodesByType;
 
-    public function __construct(ClassLikeNodeCollector $classLikeNodeCollector)
+    public function __construct(ParsedNodesByType $parsedNodesByType)
     {
-        $this->classLikeNodeCollector = $classLikeNodeCollector;
+        $this->parsedNodesByType = $parsedNodesByType;
     }
 
     public function getDefinition(): RectorDefinition
@@ -135,7 +135,7 @@ CODE_SAMPLE
         $methodName = $this->getValue($methodExpr);
 
         foreach ($this->getTypes($objectExpr) as $type) {
-            $class = $this->classLikeNodeCollector->findClass($type);
+            $class = $this->parsedNodesByType->findClass($type);
             if ($class === null) {
                 continue;
             }

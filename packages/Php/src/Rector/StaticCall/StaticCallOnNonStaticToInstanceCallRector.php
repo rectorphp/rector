@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
-use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
@@ -23,9 +23,9 @@ use ReflectionClass;
 final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
 {
     /**
-     * @var FunctionLikeNodeCollector
+     * @var ParsedNodesByType
      */
-    private $functionLikeNodeCollector;
+    private $parsedNodesByType;
 
     /**
      * @var ClassMethodManipulator
@@ -33,10 +33,10 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
     private $classMethodManipulator;
 
     public function __construct(
-        FunctionLikeNodeCollector $functionLikeNodeCollector,
+        ParsedNodesByType $parsedNodesByType,
         ClassMethodManipulator $classMethodManipulator
     ) {
-        $this->functionLikeNodeCollector = $functionLikeNodeCollector;
+        $this->parsedNodesByType = $parsedNodesByType;
         $this->classMethodManipulator = $classMethodManipulator;
     }
 
@@ -100,7 +100,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $isStaticMethod = $this->functionLikeNodeCollector->isStaticMethod($methodName, $className);
+        $isStaticMethod = $this->parsedNodesByType->isStaticMethod($methodName, $className);
         if ($isStaticMethod) {
             return null;
         }
@@ -127,7 +127,7 @@ CODE_SAMPLE
 
         // can we add static to method?
 
-        $classMethodNode = $this->functionLikeNodeCollector->findMethod($methodName, $className);
+        $classMethodNode = $this->parsedNodesByType->findMethod($methodName, $className);
         if ($classMethodNode === null) {
             return null;
         }

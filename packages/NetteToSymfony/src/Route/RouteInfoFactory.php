@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
 
@@ -25,18 +25,18 @@ final class RouteInfoFactory
     private $valueResolver;
 
     /**
-     * @var ClassLikeNodeCollector
+     * @var ParsedNodesByType
      */
-    private $classLikeNodeCollector;
+    private $parsedNodesByType;
 
     public function __construct(
         NameResolver $nameResolver,
         ValueResolver $valueResolver,
-        ClassLikeNodeCollector $classLikeNodeCollector
+        ParsedNodesByType $parsedNodesByType
     ) {
         $this->nameResolver = $nameResolver;
         $this->valueResolver = $valueResolver;
-        $this->classLikeNodeCollector = $classLikeNodeCollector;
+        $this->parsedNodesByType = $parsedNodesByType;
     }
 
     public function createFromNode(Node $node): ?RouteInfo
@@ -125,9 +125,9 @@ final class RouteInfoFactory
             // detect class by controller name?
             // foreach all instance and try to match a name $controller . 'Presenter/Controller'
 
-            $classNode = $this->classLikeNodeCollector->findByShortName($controller . 'Presenter');
+            $classNode = $this->parsedNodesByType->findByShortName($controller . 'Presenter');
             if ($classNode === null) {
-                $classNode = $this->classLikeNodeCollector->findByShortName($controller . 'Controller');
+                $classNode = $this->parsedNodesByType->findByShortName($controller . 'Controller');
             }
 
             // unable to find here

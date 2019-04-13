@@ -1,0 +1,414 @@
+<?php declare(strict_types=1);
+
+namespace Rector\NodeContainer;
+
+use Nette\Utils\Strings;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Trait_;
+use PhpParser\Node\Stmt\TraitUse;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PhpParser\Node\Resolver\NameResolver;
+use ReflectionClass;
+
+/**
+ * All parsed nodes grouped type
+ */
+final class ParsedNodesByType
+{
+    /**
+     * @var Class_[]
+     */
+    private $classes = [];
+
+    /**
+     * @var Interface_[]
+     */
+    private $interfaces = [];
+
+    /**
+     * @var Trait_[]
+     */
+    private $traits = [];
+
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    /**
+     * @var ClassConst[][]
+     */
+    private $constantsByType = [];
+
+    /**
+     * @var string[][][]
+     */
+    private $classConstantFetchByClassAndName = [];
+
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    /**
+     * @var ClassMethod[][]
+     */
+    private $methodsByType = [];
+
+    /**
+     * @var Function_[]
+     */
+    private $functions = [];
+
+    public function __construct(NameResolver $nameResolver)
+    {
+        $this->nameResolver = $nameResolver;
+    }
+
+    /**
+     * Due to circular reference
+     * @required
+     */
+    public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    {
+        $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
+    public function addClass(Class_ $classNode): void
+    {
+        $name = $classNode->getAttribute(AttributeKey::CLASS_NAME);
+        if ($name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->classes[$name] = $classNode;
+    }
+
+    public function findClass(string $name): ?Class_
+    {
+        return $this->classes[$name] ?? null;
+    }
+
+    public function addInterface(Interface_ $interfaceNode): void
+    {
+        $name = $interfaceNode->getAttribute(AttributeKey::CLASS_NAME);
+        if ($name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->interfaces[$name] = $interfaceNode;
+    }
+
+    public function addTrait(Trait_ $traitNode): void
+    {
+        $name = $traitNode->getAttribute(AttributeKey::CLASS_NAME);
+        if ($name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->traits[$name] = $traitNode;
+    }
+
+    public function findInterface(string $name): ?Interface_
+    {
+        return $this->interfaces[$name] ?? null;
+    }
+
+    public function findTrait(string $name): ?Trait_
+    {
+        return $this->traits[$name] ?? null;
+    }
+
+    /**
+     * @return Class_[]|Interface_[]
+     */
+    public function findClassesAndInterfacesByType(string $type): array
+    {
+        return array_merge($this->findChildrenOfClass($type), $this->findImplementersOfInterface($type));
+    }
+
+    /**
+     * @return Class_[]
+     */
+    public function findChildrenOfClass(string $class): array
+    {
+        $childrenClasses = [];
+        foreach ($this->classes as $classNode) {
+            $className = $classNode->getAttribute(AttributeKey::CLASS_NAME);
+            if ($className === null) {
+                return [];
+            }
+
+            if (! is_a($className, $class, true)) {
+                continue;
+            }
+
+            if ($className === $class) {
+                continue;
+            }
+
+            $childrenClasses[] = $classNode;
+        }
+
+        return $childrenClasses;
+    }
+
+    /**
+     * @return Interface_[]
+     */
+    public function findImplementersOfInterface(string $interface): array
+    {
+        $implementerInterfaces = [];
+        foreach ($this->interfaces as $interfaceNode) {
+            $className = $interfaceNode->getAttribute(AttributeKey::CLASS_NAME);
+            if ($className === null) {
+                return [];
+            }
+
+            if (! is_a($className, $interface, true)) {
+                continue;
+            }
+
+            if ($className === $interface) {
+                continue;
+            }
+
+            $implementerInterfaces[] = $interfaceNode;
+        }
+
+        return $implementerInterfaces;
+    }
+
+    /**
+     * @return Trait_[]
+     */
+    public function findUsedTraitsInClass(ClassLike $classLike): array
+    {
+        $traits = [];
+
+        foreach ($classLike->stmts as $stmt) {
+            if (! $stmt instanceof TraitUse) {
+                continue;
+            }
+
+            foreach ($stmt->traits as $trait) {
+                $traitName = $this->nameResolver->resolve($trait);
+                if ($traitName === null) {
+                    continue;
+                }
+
+                $foundTrait = $this->findTrait($traitName);
+                if ($foundTrait !== null) {
+                    $traits[] = $foundTrait;
+                }
+            }
+        }
+
+        return $traits;
+    }
+
+    public function findByShortName(string $shortName): ?Class_
+    {
+        foreach ($this->classes as $className => $classNode) {
+            if (Strings::endsWith($className, '\\' . $shortName)) {
+                return $classNode;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return Class_[]
+     */
+    public function findClassesBySuffix(string $suffix): array
+    {
+        $classNodes = [];
+
+        foreach ($this->classes as $className => $classNode) {
+            if (! Strings::endsWith($className, $suffix)) {
+                continue;
+            }
+
+            $classNodes[] = $classNode;
+        }
+
+        return $classNodes;
+    }
+
+    public function hasClassChildren(string $class): bool
+    {
+        return $this->findChildrenOfClass($class) !== [];
+    }
+
+    /**
+     * @return Class_|Interface_|null
+     */
+    public function findClassOrInterface(string $type): ?ClassLike
+    {
+        $class = $this->findClass($type);
+        if ($class !== null) {
+            return $class;
+        }
+
+        return $this->findInterface($type);
+    }
+
+    public function addClassConstant(ClassConst $classConst): void
+    {
+        $className = $classConst->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $constantName = $this->nameResolver->resolve($classConst);
+
+        $this->constantsByType[$className][$constantName] = $classConst;
+    }
+
+    public function addClassConstantFetch(ClassConstFetch $classConstFetch): void
+    {
+        $constantName = $this->nameResolver->resolve($classConstFetch->name);
+        if ($constantName === 'class' || $constantName === null) {
+            // this is not a manual constant
+            return;
+        }
+
+        $className = $this->nameResolver->resolve($classConstFetch->class);
+
+        if (in_array($className, ['static', 'self', 'parent'], true)) {
+            $resolvedClassTypes = $this->nodeTypeResolver->resolve($classConstFetch->class);
+
+            $className = $this->matchClassTypeThatContainsConstant($resolvedClassTypes, $constantName);
+            if ($className === null) {
+                return;
+            }
+        } else {
+            $resolvedClassTypes = $this->nodeTypeResolver->resolve($classConstFetch->class);
+            $className = $this->matchClassTypeThatContainsConstant($resolvedClassTypes, $constantName);
+            if ($className === null) {
+                return;
+            }
+        }
+
+        // current class
+        $classOfUse = $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
+
+        $this->classConstantFetchByClassAndName[$className][$constantName][] = $classOfUse;
+
+        $this->classConstantFetchByClassAndName[$className][$constantName] = array_unique(
+            $this->classConstantFetchByClassAndName[$className][$constantName]
+        );
+    }
+
+    public function findClassConstant(string $className, string $constantName): ?ClassConst
+    {
+        if (Strings::contains($constantName, '\\')) {
+            throw new ShouldNotHappenException(sprintf('Switched arguments in "%s"', __METHOD__));
+        }
+
+        return $this->constantsByType[$className][$constantName] ?? null;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function findClassConstantFetches(string $className, string $constantName): ?array
+    {
+        return $this->classConstantFetchByClassAndName[$className][$constantName] ?? null;
+    }
+
+    public function addMethod(ClassMethod $classMethod): void
+    {
+        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) { // anonymous
+            return;
+        }
+
+        $methodName = $this->nameResolver->resolve($classMethod);
+
+        $this->methodsByType[$className][$methodName] = $classMethod;
+    }
+
+    public function addFunction(Function_ $functionNode): void
+    {
+        $functionName = $this->nameResolver->resolve($functionNode);
+        $this->functions[$functionName] = $functionNode;
+    }
+
+    public function findFunction(string $name): ?Function_
+    {
+        return $this->functions[$name] ?? null;
+    }
+
+    public function findMethod(string $methodName, string $className): ?ClassMethod
+    {
+        if (isset($this->methodsByType[$className][$methodName])) {
+            return $this->methodsByType[$className][$methodName];
+        }
+
+        $parentClass = $className;
+        while ($parentClass = get_parent_class($parentClass)) {
+            if (isset($this->methodsByType[$parentClass][$methodName])) {
+                return $this->methodsByType[$parentClass][$methodName];
+            }
+        }
+
+        return null;
+    }
+
+    public function isStaticMethod(string $methodName, string $className): bool
+    {
+        $methodNode = $this->findMethod($methodName, $className);
+        if ($methodNode !== null) {
+            return $methodNode->isStatic();
+        }
+
+        // could be static in doc type magic
+        // @see https://regex101.com/r/tlvfTB/1
+        if (class_exists($className) || trait_exists($className)) {
+            $reflectionClass = new ReflectionClass($className);
+            if (Strings::match(
+                (string) $reflectionClass->getDocComment(),
+                '#@method\s*static\s*(.*?)\b' . $methodName . '\b#'
+            )) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string[] $resolvedClassTypes
+     */
+    private function matchClassTypeThatContainsConstant(array $resolvedClassTypes, string $constant): ?string
+    {
+        foreach ($resolvedClassTypes as $resolvedClassType) {
+            $classOrInterface = $this->findClassOrInterface($resolvedClassType);
+            if ($classOrInterface === null) {
+                continue;
+            }
+
+            foreach ($classOrInterface->stmts as $stmt) {
+                if (! $stmt instanceof ClassConst) {
+                    continue;
+                }
+
+                if ($this->nameResolver->isName($stmt, $constant)) {
+                    return $resolvedClassType;
+                }
+            }
+        }
+
+        return null;
+    }
+}
