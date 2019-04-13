@@ -46,16 +46,6 @@ final class ParsedNodesByType
     private $classes = [];
 
     /**
-     * @var Interface_[]
-     */
-    private $interfaces = [];
-
-    /**
-     * @var Trait_[]
-     */
-    private $traits = [];
-
-    /**
      * @var NameResolver
      */
     private $nameResolver;
@@ -79,11 +69,6 @@ final class ParsedNodesByType
      * @var ClassMethod[][]
      */
     private $methodsByType = [];
-
-    /**
-     * @var Function_[]
-     */
-    private $functions = [];
 
     /**
      * @var Node[][]
@@ -127,12 +112,12 @@ final class ParsedNodesByType
 
     public function findInterface(string $name): ?Interface_
     {
-        return $this->interfaces[$name] ?? null;
+        return $this->simpleParsedNodesByType[Interface_::class][$name] ?? null;
     }
 
     public function findTrait(string $name): ?Trait_
     {
-        return $this->traits[$name] ?? null;
+        return $this->simpleParsedNodesByType[Trait_::class][$name] ?? null;
     }
 
     /**
@@ -175,7 +160,7 @@ final class ParsedNodesByType
     public function findImplementersOfInterface(string $interface): array
     {
         $implementerInterfaces = [];
-        foreach ($this->interfaces as $interfaceNode) {
+        foreach ($this->simpleParsedNodesByType[Interface_::class] ?? [] as $interfaceNode) {
             $className = $interfaceNode->getAttribute(AttributeKey::CLASS_NAME);
             if ($className === null) {
                 return [];
@@ -289,7 +274,7 @@ final class ParsedNodesByType
 
     public function findFunction(string $name): ?Function_
     {
-        return $this->functions[$name] ?? null;
+        return $this->simpleParsedNodesByType[Function_::class][$name] ?? null;
     }
 
     public function findMethod(string $methodName, string $className): ?ClassMethod
@@ -348,8 +333,14 @@ final class ParsedNodesByType
             return;
         }
 
-        if ($node instanceof Interface_) {
-            $this->addInterface($node);
+        if ($node instanceof Interface_ || $node instanceof Trait_ || $node instanceof Function_) {
+            $name = $this->nameResolver->resolve($node);
+            if ($name === null) {
+                throw new ShouldNotHappenException();
+            }
+
+            $nodeClass = get_class($node);
+            $this->simpleParsedNodesByType[$nodeClass][$name] = $node;
             return;
         }
 
@@ -363,18 +354,8 @@ final class ParsedNodesByType
             return;
         }
 
-        if ($node instanceof Trait_) {
-            $this->addTrait($node);
-            return;
-        }
-
         if ($node instanceof ClassMethod) {
             $this->addMethod($node);
-            return;
-        }
-
-        if ($node instanceof Function_) {
-            $this->addFunction($node);
             return;
         }
 
@@ -395,26 +376,6 @@ final class ParsedNodesByType
         }
 
         $this->classes[$name] = $classNode;
-    }
-
-    private function addInterface(Interface_ $interfaceNode): void
-    {
-        $name = $interfaceNode->getAttribute(AttributeKey::CLASS_NAME);
-        if ($name === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $this->interfaces[$name] = $interfaceNode;
-    }
-
-    private function addTrait(Trait_ $traitNode): void
-    {
-        $name = $traitNode->getAttribute(AttributeKey::CLASS_NAME);
-        if ($name === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $this->traits[$name] = $traitNode;
     }
 
     private function addClassConstant(ClassConst $classConst): void
@@ -474,12 +435,6 @@ final class ParsedNodesByType
         $methodName = $this->nameResolver->resolve($classMethod);
 
         $this->methodsByType[$className][$methodName] = $classMethod;
-    }
-
-    private function addFunction(Function_ $functionNode): void
-    {
-        $functionName = $this->nameResolver->resolve($functionNode);
-        $this->functions[$functionName] = $functionNode;
     }
 
     /**
