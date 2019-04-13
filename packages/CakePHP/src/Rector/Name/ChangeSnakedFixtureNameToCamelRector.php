@@ -5,7 +5,7 @@ namespace Rector\CakePHP\Rector\Name;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -56,7 +56,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return null;
         }

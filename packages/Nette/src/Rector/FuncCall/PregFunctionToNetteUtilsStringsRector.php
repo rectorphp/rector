@@ -4,7 +4,7 @@ namespace Rector\Nette\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -75,7 +75,7 @@ CODE_SAMPLE
         $matchStaticCall = $this->createMatchStaticCall($node, $methodName);
 
         // skip assigns, might be used with differnt return value
-        if ($node->getAttribute(Attribute::PARENT_NODE) instanceof Node\Expr\Assign) {
+        if ($node->getAttribute(AttributeKey::PARENT_NODE) instanceof Node\Expr\Assign) {
             if ($methodName === 'matchAll') {
                 // use count
                 return new FuncCall(new Node\Name('count'), [new Node\Arg($matchStaticCall)]);

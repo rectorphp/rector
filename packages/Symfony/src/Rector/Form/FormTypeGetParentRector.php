@@ -4,7 +4,7 @@ namespace Rector\Symfony\Rector\Form;
 
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -83,11 +83,11 @@ final class FormTypeGetParentRector extends AbstractRector
 
     private function isParentTypeAndMethod(Node $node, string $type, string $method): bool
     {
-        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
         if ($parentClassName !== $type) {
             return false;
         }
 
-        return $node->getAttribute(Attribute::METHOD_NAME) === $method;
+        return $node->getAttribute(AttributeKey::METHOD_NAME) === $method;
     }
 }

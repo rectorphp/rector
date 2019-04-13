@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -95,7 +95,7 @@ CODE_SAMPLE
         $parameterName = $stringArgument->value;
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
 
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {
             return null;
         }

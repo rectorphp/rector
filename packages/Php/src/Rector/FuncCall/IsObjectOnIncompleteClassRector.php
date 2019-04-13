@@ -5,7 +5,7 @@ namespace Rector\Php\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -60,14 +60,14 @@ CODE_SAMPLE
         }
 
         $booleanNotNode = new BooleanNot($node);
-        $node->setAttribute(Attribute::PARENT_NODE, $booleanNotNode);
+        $node->setAttribute(AttributeKey::PARENT_NODE, $booleanNotNode);
 
         return $booleanNotNode;
     }
 
     private function shouldSkip(FuncCall $funcCall): bool
     {
-        $parentNode = $funcCall->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
         return $parentNode instanceof BooleanNot;
     }
 }

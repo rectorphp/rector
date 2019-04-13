@@ -13,7 +13,7 @@ use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -124,7 +124,7 @@ CODE_SAMPLE
                 }
             }
         } else {
-            $nextNode = $node->getAttribute(Attribute::NEXT_NODE);
+            $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
             if ($nextNode instanceof Return_) {
                 if ($nextNode->expr instanceof Ternary) {
                     $this->processTernary($nextNode->expr);

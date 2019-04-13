@@ -10,7 +10,7 @@ use PHPStan\TrinaryLogic;
 use PHPStan\Type\ThisType;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
@@ -62,7 +62,7 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
      */
     public function resolve(Node $variableNode): array
     {
-        $parentNode = $variableNode->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $variableNode->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Param) {
             return $this->nodeTypeResolver->resolve($parentNode);
         }
@@ -96,23 +96,23 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
     private function resolveNodeScope(Node $variableNode): ?Scope
     {
         /** @var Scope|null $nodeScope */
-        $nodeScope = $variableNode->getAttribute(Attribute::SCOPE);
+        $nodeScope = $variableNode->getAttribute(AttributeKey::SCOPE);
         if ($nodeScope instanceof Scope) {
             return $nodeScope;
         }
 
-        $parentNode = $variableNode->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $variableNode->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Node) {
-            $nodeScope = $parentNode->getAttribute(Attribute::SCOPE);
+            $nodeScope = $parentNode->getAttribute(AttributeKey::SCOPE);
             if ($nodeScope instanceof Scope) {
                 return $nodeScope;
             }
         }
 
         // get nearest variable scope
-        $method = $variableNode->getAttribute(Attribute::METHOD_NODE);
+        $method = $variableNode->getAttribute(AttributeKey::METHOD_NODE);
         if ($method instanceof Node) {
-            $nodeScope = $method->getAttribute(Attribute::SCOPE);
+            $nodeScope = $method->getAttribute(AttributeKey::SCOPE);
             if ($nodeScope instanceof Scope) {
                 return $nodeScope;
             }

@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -159,7 +159,7 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         if (! is_string($className)) {
             throw new ShouldNotHappenException();
         }

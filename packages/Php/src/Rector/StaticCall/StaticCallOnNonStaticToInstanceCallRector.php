@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -110,7 +110,7 @@ CODE_SAMPLE
         }
 
         $className = $this->getName($node->class);
-        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
         if ($className === $parentClassName) {
             return null;
         }

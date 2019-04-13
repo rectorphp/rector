@@ -11,7 +11,7 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
@@ -101,7 +101,7 @@ final class ValueResolver
 
     private function resolveDirConstant(Dir $dir): string
     {
-        $fileInfo = $dir->getAttribute(Attribute::FILE_INFO);
+        $fileInfo = $dir->getAttribute(AttributeKey::FILE_INFO);
         if (! $fileInfo instanceof SmartFileInfo) {
             throw new ShouldNotHappenException();
         }
@@ -111,7 +111,7 @@ final class ValueResolver
 
     private function resolveFileConstant(File $file): string
     {
-        $fileInfo = $file->getAttribute(Attribute::FILE_INFO);
+        $fileInfo = $file->getAttribute(AttributeKey::FILE_INFO);
         if (! $fileInfo instanceof SmartFileInfo) {
             throw new ShouldNotHappenException();
         }
@@ -136,7 +136,7 @@ final class ValueResolver
         }
 
         if ($class === 'self') {
-            $class = (string) $classConstFetch->class->getAttribute(Attribute::CLASS_NAME);
+            $class = (string) $classConstFetch->class->getAttribute(AttributeKey::CLASS_NAME);
         }
 
         if ($constant === 'class') {

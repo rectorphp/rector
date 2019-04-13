@@ -7,7 +7,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -97,7 +97,7 @@ CODE_SAMPLE
                     $this->coalescingNodes[] = $comparedNode;
                     $this->nodesToRemove[] = $currentNode;
 
-                    $currentNode = $currentNode->getAttribute(Attribute::NEXT_NODE);
+                    $currentNode = $currentNode->getAttribute(AttributeKey::NEXT_NODE);
                     continue;
                 }
                 return null;

@@ -5,7 +5,7 @@ namespace Rector\Symfony\Rector\Form;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -56,7 +56,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // skip just added calls
-        if ($node->getAttribute(Attribute::ORIGINAL_NODE) === null) {
+        if ($node->getAttribute(AttributeKey::ORIGINAL_NODE) === null) {
             return null;
         }
 
@@ -68,7 +68,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node->getAttribute(Attribute::PREVIOUS_NODE) !== null) {
+        if ($node->getAttribute(AttributeKey::PREVIOUS_NODE) !== null) {
             return null;
         }
 

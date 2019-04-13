@@ -5,7 +5,7 @@ namespace Rector\CodeQuality\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -61,7 +61,7 @@ CODE_SAMPLE
         if ($comparedNode !== null) {
             $insideIfNode = $node->stmts[0];
 
-            $nextNode = $node->getAttribute(Attribute::NEXT_NODE);
+            $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
             if (! $nextNode instanceof Return_ || $nextNode->expr === null) {
                 return null;
             }
@@ -76,7 +76,7 @@ CODE_SAMPLE
 
         $comparedNode = $this->ifManipulator->matchIfValueReturnValue($node);
         if ($comparedNode !== null) {
-            $nextNode = $node->getAttribute(Attribute::NEXT_NODE);
+            $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
             if (! $nextNode instanceof Return_) {
                 return null;
             }

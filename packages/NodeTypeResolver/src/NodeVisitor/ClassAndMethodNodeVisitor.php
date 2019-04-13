@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
 {
@@ -69,8 +69,8 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
             $this->className = $node->namespacedName->toString();
         }
 
-        $node->setAttribute(Attribute::CLASS_NODE, $this->classNode);
-        $node->setAttribute(Attribute::CLASS_NAME, $this->className);
+        $node->setAttribute(AttributeKey::CLASS_NODE, $this->classNode);
+        $node->setAttribute(AttributeKey::CLASS_NAME, $this->className);
 
         if ($this->classNode instanceof Class_) {
             $this->setParentClassName($this->classNode, $node);
@@ -84,8 +84,8 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
             $this->methodName = (string) $node->name;
         }
 
-        $node->setAttribute(Attribute::METHOD_NAME, $this->methodName);
-        $node->setAttribute(Attribute::METHOD_NODE, $this->methodNode);
+        $node->setAttribute(AttributeKey::METHOD_NAME, $this->methodName);
+        $node->setAttribute(AttributeKey::METHOD_NODE, $this->methodNode);
     }
 
     private function setParentClassName(Class_ $classNode, Node $node): void
@@ -94,12 +94,12 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
             return;
         }
 
-        $parentClassResolvedName = $classNode->extends->getAttribute(Attribute::RESOLVED_NAME);
+        $parentClassResolvedName = $classNode->extends->getAttribute(AttributeKey::RESOLVED_NAME);
         if ($parentClassResolvedName instanceof FullyQualified) {
             $parentClassResolvedName = $parentClassResolvedName->toString();
         }
 
-        $node->setAttribute(Attribute::PARENT_CLASS_NAME, $parentClassResolvedName);
+        $node->setAttribute(AttributeKey::PARENT_CLASS_NAME, $parentClassResolvedName);
     }
 
     private function isClassAnonymous(Class_ $classNode): bool

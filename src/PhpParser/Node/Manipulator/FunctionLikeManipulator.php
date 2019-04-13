@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\Php\TypeAnalyzer;
@@ -80,7 +80,7 @@ final class FunctionLikeManipulator
             return false;
         }
 
-        $classNode = $functionLike->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
         // only class or trait method body can be analyzed for returns
         if ($classNode instanceof Interface_) {
             return true;

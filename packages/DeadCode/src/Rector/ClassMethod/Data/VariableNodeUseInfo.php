@@ -5,7 +5,7 @@ namespace Rector\DeadCode\Rector\ClassMethod\Data;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class VariableNodeUseInfo
 {
@@ -80,7 +80,7 @@ final class VariableNodeUseInfo
 
     public function getParentNode(): Node
     {
-        $parentNode = $this->variable->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $this->variable->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode === null) {
             throw new ShouldNotHappenException();
         }

@@ -5,7 +5,7 @@ namespace Rector\PhpParser\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -80,7 +80,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof MethodCall) {
                 continue;
             }

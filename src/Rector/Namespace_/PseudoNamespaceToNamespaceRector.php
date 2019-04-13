@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
@@ -147,7 +147,7 @@ CODE_SAMPLE
 
     private function processIdentifier(Identifier $identifier): ?Identifier
     {
-        $parentNode = $identifier->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $identifier->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof Class_) {
             return null;
         }

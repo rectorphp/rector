@@ -17,7 +17,7 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeVisitor\NameResolver;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -214,12 +214,12 @@ CODE_SAMPLE
 
     private function resolveSearchNode(Use_ $node): Node
     {
-        $searchNode = $node->getAttribute(Attribute::PARENT_NODE);
+        $searchNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($searchNode) {
             return $searchNode;
         }
 
-        $searchNode = $node->getAttribute(Attribute::NEXT_NODE);
+        $searchNode = $node->getAttribute(AttributeKey::NEXT_NODE);
         if ($searchNode) {
             return $searchNode;
         }
@@ -239,7 +239,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $parentNode = $nameNode->getAttribute(Attribute::PARENT_NODE);
+            $parentNode = $nameNode->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode === null) {
                 throw new ShouldNotHappenException();
             }
@@ -269,7 +269,7 @@ CODE_SAMPLE
         $identifierNodes = $this->betterNodeFinder->findInstanceOf($searchNode, Identifier::class);
 
         foreach ($identifierNodes as $identifierNode) {
-            $parentNode = $identifierNode->getAttribute(Attribute::PARENT_NODE);
+            $parentNode = $identifierNode->getAttribute(AttributeKey::PARENT_NODE);
             if (! $parentNode instanceof UseUse) {
                 continue;
             }

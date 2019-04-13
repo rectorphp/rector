@@ -5,7 +5,7 @@ namespace Rector\Php\Rector\String_;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -67,7 +67,7 @@ CODE_SAMPLE
         $node->setAttribute('docLabel', $this->uniquateDocLabel($node->value, $docLabel));
 
         // invoke redraw
-        $node->setAttribute(Attribute::ORIGINAL_NODE, null);
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
         return $node;
     }

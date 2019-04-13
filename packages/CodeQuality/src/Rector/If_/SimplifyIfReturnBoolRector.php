@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -56,7 +56,7 @@ CODE_SAMPLE
         $ifInnerNode = $node->stmts[0];
 
         /** @var Return_ $nextNode */
-        $nextNode = $node->getAttribute(Attribute::NEXT_NODE);
+        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
 
         /** @var Node $innerIfInnerNode */
         $innerIfInnerNode = $ifInnerNode->expr;
@@ -102,7 +102,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $nextNode = $ifNode->getAttribute(Attribute::NEXT_NODE);
+        $nextNode = $ifNode->getAttribute(AttributeKey::NEXT_NODE);
         if (! $nextNode instanceof Return_ || $nextNode->expr === null) {
             return true;
         }

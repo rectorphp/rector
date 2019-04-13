@@ -5,7 +5,7 @@ namespace Rector\Php\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\ComplexNodeTypeResolver;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -96,7 +96,7 @@ CODE_SAMPLE
 
         $this->docBlockManipulator->addVarTag($node, $varType);
 
-        $node->setAttribute(Attribute::ORIGINAL_NODE, null);
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
         return $node;
     }

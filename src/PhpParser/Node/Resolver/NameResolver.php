@@ -18,7 +18,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Collector\CallableCollectorPopulator;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class NameResolver
 {
@@ -57,7 +57,7 @@ final class NameResolver
                 return $this->resolve($paramNode->var);
             },
             function (Name $nameNode): string {
-                $resolvedName = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
+                $resolvedName = $nameNode->getAttribute(AttributeKey::RESOLVED_NAME);
                 if ($resolvedName instanceof FullyQualified) {
                     return $resolvedName->toString();
                 }
@@ -183,7 +183,7 @@ final class NameResolver
         }
 
         if ($node instanceof Variable) {
-            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             // is $variable::method(), unable to resolve $variable->class name
             if ($parentNode instanceof StaticCall) {
                 return null;

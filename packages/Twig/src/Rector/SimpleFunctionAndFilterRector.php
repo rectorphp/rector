@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -117,7 +117,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return null;
         }
@@ -126,7 +126,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $methodName = $node->getAttribute(Attribute::METHOD_NAME);
+        $methodName = $node->getAttribute(AttributeKey::METHOD_NAME);
 
         if (! in_array($methodName, ['getFunctions', 'getFilters'], true)) {
             return null;

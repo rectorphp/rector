@@ -5,7 +5,7 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ExpressionNodeVisitor extends NodeVisitorAbstract
 {
@@ -41,7 +41,7 @@ final class ExpressionNodeVisitor extends NodeVisitorAbstract
             $this->currentExpression = $node;
         }
 
-        $node->setAttribute(Attribute::PREVIOUS_EXPRESSION, $this->previousExpression);
-        $node->setAttribute(Attribute::CURRENT_EXPRESSION, $this->currentExpression);
+        $node->setAttribute(AttributeKey::PREVIOUS_EXPRESSION, $this->previousExpression);
+        $node->setAttribute(AttributeKey::CURRENT_EXPRESSION, $this->currentExpression);
     }
 }

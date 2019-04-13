@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -70,7 +70,7 @@ CODE_SAMPLE
 
         // only relevant inside the class
         /** @var Scope|null $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
         if ($nodeScope instanceof Scope) {
             if (! $nodeScope->isInClass()) {
                 return null;
@@ -98,14 +98,14 @@ CODE_SAMPLE
             'class'
         )));
 
-        $newFuncCallNode->setAttribute(Attribute::PARENT_NODE, $ternaryNode);
+        $newFuncCallNode->setAttribute(AttributeKey::PARENT_NODE, $ternaryNode);
 
         return $ternaryNode;
     }
 
     private function shouldSkip(FuncCall $funcCall): bool
     {
-        $parentNode = $funcCall->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof Ternary) {
             return false;
         }

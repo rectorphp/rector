@@ -5,7 +5,7 @@ namespace Rector\PhpParser\Node\Manipulator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
@@ -42,7 +42,7 @@ final class ClassConstManipulator
      */
     public function getAllClassConstFetch(ClassConst $classConst): array
     {
-        $classNode = $classConst->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $classConst->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return [];
         }

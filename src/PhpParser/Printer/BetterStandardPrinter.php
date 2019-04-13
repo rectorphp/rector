@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\PrettyPrinter\Standard;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class BetterStandardPrinter extends Standard
 {
@@ -119,7 +119,7 @@ final class BetterStandardPrinter extends Standard
             return 'yield';
         }
 
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         $shouldAddBrackets = $parentNode instanceof Expression;
 
         return sprintf(

@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -97,7 +97,7 @@ CODE_SAMPLE
 
         $this->removeNode($node);
 
-        $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
+        $methodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
         if ($methodNode === null) {
             throw new ShouldNotHappenException();
         }

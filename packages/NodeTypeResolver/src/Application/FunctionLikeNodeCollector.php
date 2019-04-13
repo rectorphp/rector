@@ -5,7 +5,7 @@ namespace Rector\NodeTypeResolver\Application;
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use ReflectionClass;
 
@@ -33,7 +33,7 @@ final class FunctionLikeNodeCollector
 
     public function addMethod(ClassMethod $classMethod): void
     {
-        $className = $classMethod->getAttribute(Attribute::CLASS_NAME);
+        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) { // anonymous
             return;
         }

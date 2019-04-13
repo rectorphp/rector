@@ -14,7 +14,7 @@ use PhpParser\Node\Expr\Cast\Object_;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Expression;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -96,7 +96,7 @@ CODE_SAMPLE
         $typeNode = strtolower($typeNode);
 
         $varNode = $node->args[0]->value;
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         // result of function or probably used
         if ($parentNode instanceof Expr || $parentNode instanceof Arg) {

@@ -9,7 +9,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -110,7 +110,7 @@ final class RenameNamespaceRector extends AbstractRector
      */
     private function isClassFullyQualifiedName(Node $node): bool
     {
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode === null) {
             return false;
         }
@@ -136,7 +136,7 @@ final class RenameNamespaceRector extends AbstractRector
 
     private function isPartialNamespace(Name $name): bool
     {
-        $resolvedName = $name->getAttribute(Attribute::RESOLVED_NAME);
+        $resolvedName = $name->getAttribute(AttributeKey::RESOLVED_NAME);
         if ($resolvedName === null) {
             return false;
         }

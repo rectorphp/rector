@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Application\RemovedFilesCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\PhpVersionProvider;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -195,32 +195,32 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     private function keepFileInfoAttribute(Node $node, Node $originalNode): void
     {
-        if ($node->getAttribute(Attribute::FILE_INFO) instanceof SmartFileInfo) {
+        if ($node->getAttribute(AttributeKey::FILE_INFO) instanceof SmartFileInfo) {
             return;
         }
 
-        if ($originalNode->getAttribute(Attribute::FILE_INFO) !== null) {
-            $node->setAttribute(Attribute::FILE_INFO, $originalNode->getAttribute(Attribute::FILE_INFO));
-        } elseif ($originalNode->getAttribute(Attribute::PARENT_NODE)) {
+        if ($originalNode->getAttribute(AttributeKey::FILE_INFO) !== null) {
+            $node->setAttribute(AttributeKey::FILE_INFO, $originalNode->getAttribute(AttributeKey::FILE_INFO));
+        } elseif ($originalNode->getAttribute(AttributeKey::PARENT_NODE)) {
             /** @var Node $parentOriginalNode */
-            $parentOriginalNode = $originalNode->getAttribute(Attribute::PARENT_NODE);
-            $node->setAttribute(Attribute::FILE_INFO, $parentOriginalNode->getAttribute(Attribute::FILE_INFO));
+            $parentOriginalNode = $originalNode->getAttribute(AttributeKey::PARENT_NODE);
+            $node->setAttribute(AttributeKey::FILE_INFO, $parentOriginalNode->getAttribute(AttributeKey::FILE_INFO));
         }
     }
 
     private function mirrorAttributes(Node $oldNode, Node $newNode): void
     {
         $attributesToMirror = [
-            Attribute::CLASS_NODE,
-            Attribute::CLASS_NAME,
-            Attribute::FILE_INFO,
-            Attribute::METHOD_NODE,
-            Attribute::USE_NODES,
-            Attribute::SCOPE,
-            Attribute::METHOD_NAME,
-            Attribute::NAMESPACE_NAME,
-            Attribute::NAMESPACE_NODE,
-            Attribute::RESOLVED_NAME,
+            AttributeKey::CLASS_NODE,
+            AttributeKey::CLASS_NAME,
+            AttributeKey::FILE_INFO,
+            AttributeKey::METHOD_NODE,
+            AttributeKey::USE_NODES,
+            AttributeKey::SCOPE,
+            AttributeKey::METHOD_NAME,
+            AttributeKey::NAMESPACE_NAME,
+            AttributeKey::NAMESPACE_NODE,
+            AttributeKey::RESOLVED_NAME,
         ];
 
         foreach ($oldNode->getAttributes() as $attributeName => $oldNodeAttributeValue) {
@@ -236,7 +236,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     {
         // update Resolved name attribute if name is changed
         if ($node instanceof Name) {
-            $node->setAttribute(Attribute::RESOLVED_NAME, $node->toString());
+            $node->setAttribute(AttributeKey::RESOLVED_NAME, $node->toString());
         }
     }
 

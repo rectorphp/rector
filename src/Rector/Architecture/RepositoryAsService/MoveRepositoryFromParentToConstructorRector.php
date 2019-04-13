@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\Exception\Bridge\RectorProviderException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
 use Rector\Rector\AbstractRector;
@@ -108,12 +108,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
         if ($parentClassName !== $this->entityRepositoryClass) {
             return null;
         }
 
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         if (! Strings::endsWith($className, 'Repository')) {
             return null;
         }
@@ -141,7 +141,7 @@ CODE_SAMPLE
      */
     private function createRepositoryAssign(Class_ $classNode): Assign
     {
-        $repositoryClassName = (string) $classNode->getAttribute(Attribute::CLASS_NAME);
+        $repositoryClassName = (string) $classNode->getAttribute(AttributeKey::CLASS_NAME);
         $entityClassName = $this->doctrineEntityAndRepositoryMapper->mapRepositoryToEntity($repositoryClassName);
 
         if ($entityClassName === null) {

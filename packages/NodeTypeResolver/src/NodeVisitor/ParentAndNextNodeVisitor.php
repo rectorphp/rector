@@ -4,7 +4,7 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * See https://github.com/nikic/PHP-Parser/blob/master/doc/5_FAQ.markdown#how-can-the-nextprevious-sibling-of-a-node-be-obtained.
@@ -39,14 +39,14 @@ final class ParentAndNextNodeVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         if (! empty($this->stack)) {
-            $node->setAttribute(Attribute::PARENT_NODE, $this->stack[count($this->stack) - 1]);
+            $node->setAttribute(AttributeKey::PARENT_NODE, $this->stack[count($this->stack) - 1]);
         }
 
         if ($this->prev &&
-            $this->prev->getAttribute(Attribute::PARENT_NODE) === $node->getAttribute(Attribute::PARENT_NODE)
+            $this->prev->getAttribute(AttributeKey::PARENT_NODE) === $node->getAttribute(AttributeKey::PARENT_NODE)
         ) {
-            $node->setAttribute(Attribute::PREVIOUS_NODE, $this->prev);
-            $this->prev->setAttribute(Attribute::NEXT_NODE, $node);
+            $node->setAttribute(AttributeKey::PREVIOUS_NODE, $this->prev);
+            $this->prev->setAttribute(AttributeKey::NEXT_NODE, $node);
         }
 
         $this->stack[] = $node;

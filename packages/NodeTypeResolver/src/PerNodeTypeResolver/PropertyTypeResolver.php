@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class PropertyTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
@@ -34,7 +34,7 @@ final class PropertyTypeResolver implements PerNodeTypeResolverInterface, NodeTy
     {
         // fake property to local PropertyFetch → PHPStan understands that
         $propertyFetchNode = new PropertyFetch(new Variable('this'), (string) $propertyNode->props[0]->name);
-        $propertyFetchNode->setAttribute(Attribute::SCOPE, $propertyNode->getAttribute(Attribute::SCOPE));
+        $propertyFetchNode->setAttribute(AttributeKey::SCOPE, $propertyNode->getAttribute(AttributeKey::SCOPE));
 
         return $this->nodeTypeResolver->resolve($propertyFetchNode);
     }

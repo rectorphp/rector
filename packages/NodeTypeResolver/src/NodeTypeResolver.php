@@ -36,7 +36,7 @@ use PHPStan\Type\UnionType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
@@ -285,7 +285,7 @@ final class NodeTypeResolver
     public function getNodeStaticType(Node $node): ?Type
     {
         /** @var Scope|null $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $node instanceof Expr || $nodeScope === null) {
             return null;
         }
@@ -365,7 +365,7 @@ final class NodeTypeResolver
      */
     private function resolveClassNode(Node $node): array
     {
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             throw new ShouldNotHappenException();
         }
@@ -386,7 +386,7 @@ final class NodeTypeResolver
         }
 
         /** @var Scope|null $nodeScope */
-        $nodeScope = $node->getAttribute(Attribute::SCOPE);
+        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
         if ($nodeScope === null) {
             return [];
         }
@@ -427,7 +427,7 @@ final class NodeTypeResolver
             }
 
             /** @var Scope|null $nodeScope */
-            $nodeScope = $staticCall->getAttribute(Attribute::SCOPE);
+            $nodeScope = $staticCall->getAttribute(AttributeKey::SCOPE);
             if ($nodeScope === null) {
                 return $classTypes;
             }
@@ -448,7 +448,7 @@ final class NodeTypeResolver
     private function correctPregMatchType(Node $node, Type $originalType): Type
     {
         /** @var Expression|null $previousExpression */
-        $previousExpression = $node->getAttribute(Attribute::CURRENT_EXPRESSION);
+        $previousExpression = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
         if ($previousExpression === null) {
             return $originalType;
         }
@@ -505,7 +505,7 @@ final class NodeTypeResolver
         }
 
         /** @var Class_ $classNode */
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
 
         $propertyName = $this->nameResolver->resolve($node->name);
         if ($propertyName === null) {

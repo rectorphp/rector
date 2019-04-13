@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TraitUse;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class ClassLikeNodeCollector
@@ -41,7 +41,7 @@ final class ClassLikeNodeCollector
 
     public function addClass(Class_ $classNode): void
     {
-        $name = $classNode->getAttribute(Attribute::CLASS_NAME);
+        $name = $classNode->getAttribute(AttributeKey::CLASS_NAME);
         if ($name === null) {
             throw new ShouldNotHappenException();
         }
@@ -56,7 +56,7 @@ final class ClassLikeNodeCollector
 
     public function addInterface(Interface_ $interfaceNode): void
     {
-        $name = $interfaceNode->getAttribute(Attribute::CLASS_NAME);
+        $name = $interfaceNode->getAttribute(AttributeKey::CLASS_NAME);
         if ($name === null) {
             throw new ShouldNotHappenException();
         }
@@ -66,7 +66,7 @@ final class ClassLikeNodeCollector
 
     public function addTrait(Trait_ $traitNode): void
     {
-        $name = $traitNode->getAttribute(Attribute::CLASS_NAME);
+        $name = $traitNode->getAttribute(AttributeKey::CLASS_NAME);
         if ($name === null) {
             throw new ShouldNotHappenException();
         }
@@ -99,7 +99,7 @@ final class ClassLikeNodeCollector
     {
         $childrenClasses = [];
         foreach ($this->classes as $classNode) {
-            $className = $classNode->getAttribute(Attribute::CLASS_NAME);
+            $className = $classNode->getAttribute(AttributeKey::CLASS_NAME);
             if ($className === null) {
                 return [];
             }
@@ -125,7 +125,7 @@ final class ClassLikeNodeCollector
     {
         $implementerInterfaces = [];
         foreach ($this->interfaces as $interfaceNode) {
-            $className = $interfaceNode->getAttribute(Attribute::CLASS_NAME);
+            $className = $interfaceNode->getAttribute(AttributeKey::CLASS_NAME);
             if ($className === null) {
                 return [];
             }

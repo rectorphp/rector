@@ -24,7 +24,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Rector\Exception\NotImplementedException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\TypeAnalyzer;
 
 final class NodeFactory
@@ -55,7 +55,7 @@ final class NodeFactory
         ) : new FullyQualified($className);
 
         $classConstFetchNode = $this->builderFactory->classConstFetch($classNameNode, $constantName);
-        $classConstFetchNode->class->setAttribute(Attribute::RESOLVED_NAME, $classNameNode);
+        $classConstFetchNode->class->setAttribute(AttributeKey::RESOLVED_NAME, $classNameNode);
 
         return $classConstFetchNode;
     }
@@ -182,7 +182,7 @@ final class NodeFactory
 
         $methodCallNode = $this->builderFactory->methodCall($variable, $method, $arguments);
 
-        $variable->setAttribute(Attribute::PARENT_NODE, $methodCallNode);
+        $variable->setAttribute(AttributeKey::PARENT_NODE, $methodCallNode);
 
         return $methodCallNode;
     }

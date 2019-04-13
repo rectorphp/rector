@@ -13,7 +13,7 @@ use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -97,7 +97,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
             return null;
         }
@@ -123,7 +123,7 @@ CODE_SAMPLE
         }
 
         $repositoryFqn = $this->repositoryFqn($node);
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {
             return null;
         }

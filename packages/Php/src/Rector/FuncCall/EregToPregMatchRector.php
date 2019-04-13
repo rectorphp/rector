@@ -14,7 +14,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\EregToPcreTransformer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -92,7 +92,7 @@ final class EregToPregMatchRector extends AbstractRector
 
         // ereg|eregi 3rd argument return value fix
         if (in_array($functionName, ['ereg', 'eregi'], true) && isset($node->args[2])) {
-            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof Assign) {
                 return $this->createTernaryWithStrlenOfFirstMatch($node);
             }

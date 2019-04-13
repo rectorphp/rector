@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -172,7 +172,7 @@ CODE_SAMPLE
         $methodName = $this->getName($node);
 
         /** @var string $className */
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         // anonymous class
         if ($className === null) {
             return;

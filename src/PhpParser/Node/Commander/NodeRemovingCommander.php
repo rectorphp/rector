@@ -11,7 +11,7 @@ use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class NodeRemovingCommander implements CommanderInterface
 {
@@ -28,10 +28,10 @@ final class NodeRemovingCommander implements CommanderInterface
                 'Chain method calls cannot be removed this way. It would remove the whole tree of calls. Remove them manually by creating new parent node with no following method.'
             );
         } elseif (! $node instanceof Expression && ($node->getAttribute(
-            Attribute::PARENT_NODE
+            AttributeKey::PARENT_NODE
         ) instanceof Expression)) {
             // only expressions can be removed
-            $node = $node->getAttribute(Attribute::PARENT_NODE);
+            $node = $node->getAttribute(AttributeKey::PARENT_NODE);
         }
 
         /** @var Stmt $node */

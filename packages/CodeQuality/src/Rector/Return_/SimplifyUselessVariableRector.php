@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -66,7 +66,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $previousNode = $node->getAttribute(Attribute::PREVIOUS_NODE);
+        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
         if (! $previousNode instanceof Expression) {
             return null;
         }
@@ -106,7 +106,7 @@ CODE_SAMPLE
 
         $variableNode = $returnNode->expr;
 
-        $previousExpression = $returnNode->getAttribute(Attribute::PREVIOUS_NODE);
+        $previousExpression = $returnNode->getAttribute(AttributeKey::PREVIOUS_NODE);
         if ($previousExpression === null || ! $previousExpression instanceof Expression) {
             return true;
         }
@@ -129,7 +129,7 @@ CODE_SAMPLE
      */
     private function isPreviousExpressionVisuallySimilar(Expression $previousExpression, Node $previousNode): bool
     {
-        $prePreviousExpression = $previousExpression->getAttribute(Attribute::PREVIOUS_EXPRESSION);
+        $prePreviousExpression = $previousExpression->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
         if ($prePreviousExpression instanceof Expression && $prePreviousExpression->expr instanceof AssignOp) {
             if ($this->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var)) {
                 return true;

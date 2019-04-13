@@ -4,7 +4,7 @@ namespace Rector\Celebrity\Rector\NotEqual;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -55,7 +55,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // invoke override to default "!="
-        $node->setAttribute(Attribute::ORIGINAL_NODE, null);
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
         return $node;
     }

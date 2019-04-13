@@ -5,7 +5,7 @@ namespace Rector\Rector\Architecture\DependencyInjection;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -104,7 +104,7 @@ CODE_SAMPLE
 
     private function addPropertyToCollector(Property $property): void
     {
-        $classNode = $property->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {
             return;
         }

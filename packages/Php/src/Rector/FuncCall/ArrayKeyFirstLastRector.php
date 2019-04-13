@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -115,11 +115,11 @@ CODE_SAMPLE
     private function getNextExpression(Node $node): ?Node
     {
         /** @var Expression|null $currentExpression */
-        $currentExpression = $node->getAttribute(Attribute::CURRENT_EXPRESSION);
+        $currentExpression = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
         if ($currentExpression === null) {
             return null;
         }
 
-        return $currentExpression->getAttribute(Attribute::NEXT_NODE);
+        return $currentExpression->getAttribute(AttributeKey::NEXT_NODE);
     }
 }

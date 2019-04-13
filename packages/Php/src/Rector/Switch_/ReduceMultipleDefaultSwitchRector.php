@@ -5,7 +5,7 @@ namespace Rector\Php\Rector\Switch_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Switch_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -90,7 +90,7 @@ CODE_SAMPLE
 
     private function keepStatementsToParentCase(Case_ $caseNode): void
     {
-        $previousNode = $caseNode->getAttribute(Attribute::PREVIOUS_NODE);
+        $previousNode = $caseNode->getAttribute(AttributeKey::PREVIOUS_NODE);
         if (! $previousNode instanceof Case_) {
             return;
         }

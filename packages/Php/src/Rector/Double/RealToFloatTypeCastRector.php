@@ -4,7 +4,7 @@ namespace Rector\Php\Rector\Double;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\Double;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -63,7 +63,7 @@ CODE_SAMPLE
         }
 
         $node->setAttribute('kind', Double::KIND_FLOAT);
-        $node->setAttribute(Attribute::ORIGINAL_NODE, null);
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
         return $node;
     }

@@ -12,7 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -179,7 +179,7 @@ final class RegexPatternArgumentManipulator
      */
     private function findAssignerForVariable(Variable $variable): array
     {
-        $methodNode = $variable->getAttribute(Attribute::METHOD_NODE);
+        $methodNode = $variable->getAttribute(AttributeKey::METHOD_NODE);
         if ($methodNode === null) {
             return [];
         }
@@ -203,7 +203,7 @@ final class RegexPatternArgumentManipulator
      */
     private function resolveClassConstFetchValue(ClassConstFetch $classConstFetch): array
     {
-        $className = $classConstFetch->getAttribute(Attribute::CLASS_NAME);
+        $className = $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
         if (! is_string($className)) {
             return [];
         }

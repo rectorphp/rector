@@ -4,7 +4,7 @@ namespace Rector\Symfony\Rector\Controller;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -44,7 +44,7 @@ final class RedirectToRouteRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
         if ($parentClassName !== $this->controllerClass) {
             return null;
         }

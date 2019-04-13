@@ -6,7 +6,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -40,7 +40,7 @@ final class ChildAndParentClassManipulator
     public function completeParentConstructor(Class_ $classNode, ClassMethod $classMethod): void
     {
         /** @var string|null $parentClassName */
-        $parentClassName = $classNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
         if ($parentClassName === null) {
             return;
         }
@@ -113,7 +113,7 @@ final class ChildAndParentClassManipulator
             }
 
             /** @var string|null $parentClassName */
-            $parentClassName = $classNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+            $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
             if ($parentClassName === null) {
                 return null;
             }

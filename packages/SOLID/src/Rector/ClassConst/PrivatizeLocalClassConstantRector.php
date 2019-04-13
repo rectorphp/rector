@@ -5,7 +5,7 @@ namespace Rector\SOLID\Rector\ClassConst;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -75,7 +75,7 @@ CODE_SAMPLE
         }
 
         /** @var string $class */
-        $class = $node->getAttribute(Attribute::CLASS_NAME);
+        $class = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         /** @var string $constant */
         $constant = $this->getName($node);

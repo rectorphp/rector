@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -116,7 +116,7 @@ CODE_SAMPLE
             return ! $this->isTypes($node, $this->requestTypes);
         }
 
-        $class = $node->getAttribute(Attribute::CLASS_NODE);
+        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
         if (! $class instanceof Class_) {
             return true;
         }

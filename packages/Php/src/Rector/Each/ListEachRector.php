@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Expression;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -100,7 +100,7 @@ CODE_SAMPLE
         }
 
         // assign should be top level, e.g. not in a while loop
-        if (! $assign->getAttribute(Attribute::PARENT_NODE) instanceof Expression) {
+        if (! $assign->getAttribute(AttributeKey::PARENT_NODE) instanceof Expression) {
             return true;
         }
 
@@ -120,12 +120,12 @@ CODE_SAMPLE
      */
     private function isInsideDoWhile(Node $assignNode): bool
     {
-        $parentNode = $assignNode->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $assignNode->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof Expression) {
             return false;
         }
 
-        $parentParentNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
+        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
 
         return $parentParentNode instanceof Do_;
     }

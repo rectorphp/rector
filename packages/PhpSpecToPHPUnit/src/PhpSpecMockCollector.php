@@ -8,7 +8,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
@@ -81,7 +81,7 @@ final class PhpSpecMockCollector
     public function isVariableMockInProperty(Variable $variable): bool
     {
         $variableName = $this->nameResolver->resolve($variable);
-        $className = $variable->getAttribute(Attribute::CLASS_NAME);
+        $className = $variable->getAttribute(AttributeKey::CLASS_NAME);
 
         return in_array($variableName, $this->propertyMocksByClass[$className] ?? [], true);
     }
@@ -107,9 +107,9 @@ final class PhpSpecMockCollector
         $variable = $this->nameResolver->resolve($param->var);
 
         /** @var string $class */
-        $class = $param->getAttribute(Attribute::CLASS_NAME);
+        $class = $param->getAttribute(AttributeKey::CLASS_NAME);
 
-        $this->mocks[$class][$variable][] = $param->getAttribute(Attribute::METHOD_NAME);
+        $this->mocks[$class][$variable][] = $param->getAttribute(AttributeKey::METHOD_NAME);
 
         if ($param->type === null) {
             throw new ShouldNotHappenException();

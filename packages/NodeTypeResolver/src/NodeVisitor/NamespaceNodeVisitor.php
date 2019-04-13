@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\NodeVisitorAbstract;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
 
 final class NamespaceNodeVisitor extends NodeVisitorAbstract
@@ -59,9 +59,9 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
             $this->useNodes = $this->betterNodeFinder->findInstanceOf($node, Use_::class);
         }
 
-        $node->setAttribute(Attribute::NAMESPACE_NAME, $this->namespaceName);
-        $node->setAttribute(Attribute::NAMESPACE_NODE, $this->namespaceNode);
-        $node->setAttribute(Attribute::USE_NODES, $this->useNodes);
+        $node->setAttribute(AttributeKey::NAMESPACE_NAME, $this->namespaceName);
+        $node->setAttribute(AttributeKey::NAMESPACE_NODE, $this->namespaceNode);
+        $node->setAttribute(AttributeKey::USE_NODES, $this->useNodes);
 
         return $node;
     }
