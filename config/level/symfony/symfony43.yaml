@@ -1,0 +1,3 @@
+services:
+    # https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
+    Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector: ~
