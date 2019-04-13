@@ -7,7 +7,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -51,7 +51,7 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
         }
 
         /** @var FunctionLike $parentNode */
-        $parentNode = $paramNode->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $paramNode->getAttribute(AttributeKey::PARENT_NODE);
 
         return $this->resolveTypesFromFunctionDocBlock($paramNode, $parentNode);
     }

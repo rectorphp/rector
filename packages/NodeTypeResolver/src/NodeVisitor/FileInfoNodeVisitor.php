@@ -5,7 +5,7 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class FileInfoNodeVisitor extends NodeVisitorAbstract
 {
@@ -21,7 +21,7 @@ final class FileInfoNodeVisitor extends NodeVisitorAbstract
 
     public function enterNode(Node $node): ?Node
     {
-        $node->setAttribute(Attribute::FILE_INFO, $this->currentFileInfoProvider->getSmartFileInfo());
+        $node->setAttribute(AttributeKey::FILE_INFO, $this->currentFileInfoProvider->getSmartFileInfo());
 
         return $node;
     }

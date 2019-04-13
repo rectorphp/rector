@@ -2,7 +2,7 @@
 
 namespace Rector\NodeTypeResolver\Node;
 
-final class Attribute
+final class AttributeKey
 {
     /**
      * @var string

@@ -9,7 +9,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeDecoratorInterface;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
 
 /**
@@ -58,7 +58,7 @@ final class FqnAnnotationTypeDecorator implements PhpDocNodeDecoratorInterface
 
     private function resolveTagFqnName(Node $node, string $tagShortName): string
     {
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         if (! $className) {
             return $tagShortName;
         }

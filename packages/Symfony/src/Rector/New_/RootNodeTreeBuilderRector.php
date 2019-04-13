@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -93,12 +93,12 @@ CODE_SAMPLE
 
     private function getRootMethodCallNode(Node $node): ?Node
     {
-        $expression = $node->getAttribute(Attribute::CURRENT_EXPRESSION);
+        $expression = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
         if ($expression === null) {
             return null;
         }
 
-        $nextExpression = $expression->getAttribute(Attribute::NEXT_NODE);
+        $nextExpression = $expression->getAttribute(AttributeKey::NEXT_NODE);
         if ($nextExpression === null) {
             return null;
         }

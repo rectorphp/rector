@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\Php\TypeAnalyzer;
 use Rector\Rector\AbstractRector;
@@ -93,7 +93,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->typehintForArgumentByMethodAndClass as $type => $methodToArgumentToTypes) {
-            $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+            $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
             if ($classNode === null) {
                 throw new ShouldNotHappenException();
             }

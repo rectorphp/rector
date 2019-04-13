@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -49,7 +49,7 @@ final class BarewordStringRector extends AbstractRector
         }
 
         // load the file!
-        $fileInfo = $node->getAttribute(Attribute::FILE_INFO);
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
         if ($fileInfo === null) {
             throw new ShouldNotHappenException();
         }

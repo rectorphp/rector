@@ -9,7 +9,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\NodeTransformer;
 use Rector\Rector\AbstractRector;
@@ -138,7 +138,7 @@ CODE_SAMPLE
         $yieldNodes = $this->nodeTransformer->transformArrayToYields($arrayNode);
 
         // remove whole return node
-        $parentNode = $arrayNode->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $arrayNode->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode === null) {
             throw new ShouldNotHappenException();
         }

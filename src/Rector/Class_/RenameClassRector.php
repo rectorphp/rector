@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -130,7 +130,7 @@ CODE_SAMPLE
     private function isClassToInterfaceValidChange(Node $node, string $newName): bool
     {
         // ensure new is not with interface
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof New_ && interface_exists($newName)) {
             return false;
         }
@@ -150,7 +150,7 @@ CODE_SAMPLE
     private function isValidUseImportChange(string $newName, UseUse $useUse): bool
     {
         /** @var Use_[]|null $useNodes */
-        $useNodes = $useUse->getAttribute(Attribute::USE_NODES);
+        $useNodes = $useUse->getAttribute(AttributeKey::USE_NODES);
         if ($useNodes === null) {
             return true;
         }

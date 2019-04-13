@@ -5,7 +5,7 @@ namespace Rector\Symfony\Rector\Validator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -47,7 +47,7 @@ final class ConstraintUrlOptionRector extends AbstractRector
             return null;
         }
 
-        $prevNode = $node->getAttribute(Attribute::PREVIOUS_NODE);
+        $prevNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
         if (! $prevNode instanceof String_) {
             return null;
         }

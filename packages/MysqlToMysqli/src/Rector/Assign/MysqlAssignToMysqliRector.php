@@ -15,7 +15,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -151,7 +151,7 @@ CODE_SAMPLE
             'stmts' => [new Expression($funcCall)],
         ]);
 
-        $previousExpression = $assign->getAttribute(Attribute::PREVIOUS_EXPRESSION);
+        $previousExpression = $assign->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
         if ($previousExpression === null) {
             throw new ShouldNotHappenException();
         }
@@ -165,7 +165,7 @@ CODE_SAMPLE
     {
         foreach ($this->fieldToFieldDirect as $funcName => $property) {
             if ($this->isName($funcCall, $funcName)) {
-                if ($funcCall->getAttribute(Attribute::PARENT_NODE) instanceof PropertyFetch) {
+                if ($funcCall->getAttribute(AttributeKey::PARENT_NODE) instanceof PropertyFetch) {
                     continue;
                 }
 

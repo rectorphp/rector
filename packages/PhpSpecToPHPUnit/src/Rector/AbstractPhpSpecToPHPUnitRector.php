@@ -3,7 +3,7 @@
 namespace Rector\PhpSpecToPHPUnit\Rector;
 
 use PhpParser\Node;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -72,7 +72,7 @@ CODE_SAMPLE
 
     public function isInPhpSpecBehavior(Node $node): bool
     {
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return false;
         }

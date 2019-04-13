@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -106,7 +106,7 @@ CODE_SAMPLE
         }
 
         // in method parameter update docs as well
-        $parentNode = $nullableType->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $nullableType->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Param) {
             $this->processParamNode($nullableType, $parentNode, $newType);
         }
@@ -123,8 +123,8 @@ CODE_SAMPLE
 
         $exprNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($variable, Expr::class);
         $node = $variable;
-        if ($exprNode && $exprNode->getAttribute(Attribute::PARENT_NODE)) {
-            $node = $exprNode->getAttribute(Attribute::PARENT_NODE);
+        if ($exprNode && $exprNode->getAttribute(AttributeKey::PARENT_NODE)) {
+            $node = $exprNode->getAttribute(AttributeKey::PARENT_NODE);
         }
 
         if ($node === null) {
@@ -136,7 +136,7 @@ CODE_SAMPLE
 
     private function processParamNode(NullableType $nullableType, Param $param, string $newType): void
     {
-        $classMethodNode = $param->getAttribute(Attribute::PARENT_NODE);
+        $classMethodNode = $param->getAttribute(AttributeKey::PARENT_NODE);
         if ($classMethodNode === null) {
             return;
         }

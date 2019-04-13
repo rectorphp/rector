@@ -5,7 +5,7 @@ namespace Rector\Sensio\Helper;
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class TemplateGuesser
@@ -22,12 +22,12 @@ final class TemplateGuesser
 
     public function resolveFromClassMethodNode(ClassMethod $classMethod, int $version = 5): string
     {
-        $namespace = $classMethod->getAttribute(Attribute::NAMESPACE_NAME);
+        $namespace = $classMethod->getAttribute(AttributeKey::NAMESPACE_NAME);
         if (! is_string($namespace)) {
             throw new ShouldNotHappenException();
         }
 
-        $class = $classMethod->getAttribute(Attribute::CLASS_NAME);
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
         if (! is_string($class)) {
             throw new ShouldNotHappenException();
         }

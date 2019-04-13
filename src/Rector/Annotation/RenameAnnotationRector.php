@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -95,7 +95,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode === null) {
             throw new ShouldNotHappenException();
         }
@@ -126,7 +126,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return $node->getAttribute(Attribute::PARENT_NODE) === null;
+        return $node->getAttribute(AttributeKey::PARENT_NODE) === null;
     }
 
     private function hasAnyAnnotation(Node $node): bool

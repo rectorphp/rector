@@ -8,7 +8,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\Type\ObjectType;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -57,7 +57,7 @@ final class PropertyFetchManipulator
         }
 
         /** @var Node\Stmt\Class_|null $class */
-        $class = $propertyFetch->getAttribute(Attribute::CLASS_NODE);
+        $class = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
         if ($class === null) {
             return false;
         }
@@ -86,7 +86,7 @@ final class PropertyFetchManipulator
 
     private function hasPublicProperty(PropertyFetch $propertyFetch, string $propertyName): bool
     {
-        $nodeScope = $propertyFetch->getAttribute(Attribute::SCOPE);
+        $nodeScope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
         if ($nodeScope === null) {
             throw new ShouldNotHappenException();
         }

@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
@@ -46,7 +46,7 @@ final class PropertyManipulator
      */
     public function getAllPropertyFetch(Property $property): array
     {
-        $classNode = $property->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return [];
         }

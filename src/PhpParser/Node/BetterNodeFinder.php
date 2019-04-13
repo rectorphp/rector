@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class BetterNodeFinder
@@ -37,7 +37,7 @@ final class BetterNodeFinder
         }
 
         /** @var Node|null $parentNode */
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         if ($parentNode === null) {
             return null;
@@ -51,20 +51,20 @@ final class BetterNodeFinder
             if ($parentNode === null) {
                 return null;
             }
-        } while ($parentNode = $parentNode->getAttribute(Attribute::PARENT_NODE));
+        } while ($parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE));
 
         return null;
     }
 
     public function findFirstAncestorInstanceOf(Node $node, string $type): ?Node
     {
-        $currentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        $currentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         while ($currentNode !== null) {
             if ($currentNode instanceof $type) {
                 return $currentNode;
             }
 
-            $currentNode = $currentNode->getAttribute(Attribute::PARENT_NODE);
+            $currentNode = $currentNode->getAttribute(AttributeKey::PARENT_NODE);
         }
 
         return null;
@@ -119,7 +119,7 @@ final class BetterNodeFinder
 
     public function findFirstPrevious(Node $node, callable $filter): ?Node
     {
-        $node = $node instanceof Expression ? $node : $node->getAttribute(Attribute::CURRENT_EXPRESSION);
+        $node = $node instanceof Expression ? $node : $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
         if ($node === null) {
             return null;
         }
@@ -131,7 +131,7 @@ final class BetterNodeFinder
         }
 
         // move to next expression
-        $previousExpression = $node->getAttribute(Attribute::PREVIOUS_EXPRESSION);
+        $previousExpression = $node->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
         if ($previousExpression === null) {
             return null;
         }

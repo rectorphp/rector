@@ -4,7 +4,7 @@ namespace Rector\CodingStyle\Rector\String_;
 
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -56,19 +56,19 @@ CODE_SAMPLE
         $doubleQuoteCount = substr_count($node->value, '"');
         $singleQuoteCount = substr_count($node->value, "'");
 
-        if ($node->getAttribute(Attribute::KIND) === String_::KIND_SINGLE_QUOTED) {
+        if ($node->getAttribute(AttributeKey::KIND) === String_::KIND_SINGLE_QUOTED) {
             if ($doubleQuoteCount === 0 && $singleQuoteCount > 0) {
-                $node->setAttribute(Attribute::KIND, String_::KIND_DOUBLE_QUOTED);
+                $node->setAttribute(AttributeKey::KIND, String_::KIND_DOUBLE_QUOTED);
                 // invoke override
-                $node->setAttribute(Attribute::ORIGINAL_NODE, null);
+                $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             }
         }
 
-        if ($node->getAttribute(Attribute::KIND) === String_::KIND_DOUBLE_QUOTED) {
+        if ($node->getAttribute(AttributeKey::KIND) === String_::KIND_DOUBLE_QUOTED) {
             if ($singleQuoteCount === 0 && $doubleQuoteCount > 0) {
-                $node->setAttribute(Attribute::KIND, String_::KIND_SINGLE_QUOTED);
+                $node->setAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
                 // invoke override
-                $node->setAttribute(Attribute::ORIGINAL_NODE, null);
+                $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             }
         }
 

@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -66,13 +66,13 @@ CODE_SAMPLE
         $resultVariable = new Variable('result');
         $node->args[1] = new Arg($resultVariable);
 
-        $expression = $node->getAttribute(Attribute::CURRENT_EXPRESSION);
+        $expression = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
         if ($expression === null) {
             return null;
         }
 
         // @todo maybe solve in generic way as attribute?
-        $nextExpression = $expression->getAttribute(Attribute::NEXT_NODE);
+        $nextExpression = $expression->getAttribute(AttributeKey::NEXT_NODE);
         if ($nextExpression === null) {
             return null;
         }

@@ -20,7 +20,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpSpecToPHPUnit\MatchersManipulator;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
@@ -188,7 +188,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         }
 
         /** @var Class_ $class */
-        $class = $node->getAttribute(Attribute::CLASS_NODE);
+        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
         // it's a method call, skip
         if ($class->getMethod($methodName) !== null) {
             return null;
@@ -342,7 +342,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         }
 
         /** @var Class_ $classNode */
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
 
         $this->matchersKeys = $this->matchersManipulator->resolveMatcherNamesFromClass($classNode);
         $this->testedClass = $this->phpSpecRenaming->resolveTestedClass($node);

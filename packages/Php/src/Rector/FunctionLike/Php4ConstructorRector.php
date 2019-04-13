@@ -11,7 +11,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -77,7 +77,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {
             return null;
         }
@@ -115,7 +115,7 @@ CODE_SAMPLE
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        $namespace = $classMethod->getAttribute(Attribute::NAMESPACE_NAME);
+        $namespace = $classMethod->getAttribute(AttributeKey::NAMESPACE_NAME);
         // catch only classes without namespace
         if ($namespace !== null) {
             return true;
@@ -125,7 +125,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $classNode = $classMethod->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
         return $classNode instanceof Class_ && $classNode->name === null;
     }
 
@@ -168,7 +168,7 @@ CODE_SAMPLE
 
     private function processParentPhp4ConstructCall(Node $node): void
     {
-        $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
 
         if (! $node instanceof StaticCall) {
             return;

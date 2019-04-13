@@ -9,7 +9,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -133,7 +133,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
+        $methodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
         if ($methodNode === null) {
             return false;
         }

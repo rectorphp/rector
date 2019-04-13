@@ -5,7 +5,7 @@ namespace Rector\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 abstract class AbstractPHPUnitRector extends AbstractRector
 {
@@ -32,7 +32,7 @@ abstract class AbstractPHPUnitRector extends AbstractRector
 
     protected function isInTestClass(Node $node): bool
     {
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return false;
         }

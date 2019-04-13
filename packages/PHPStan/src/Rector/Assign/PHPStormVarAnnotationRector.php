@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -49,12 +49,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $expression = $node->getAttribute(Attribute::CURRENT_EXPRESSION);
+        $expression = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
         if ($expression === null) {
             throw new ShouldNotHappenException();
         }
 
-        $nextNode = $expression->getAttribute(Attribute::NEXT_NODE);
+        $nextNode = $expression->getAttribute(AttributeKey::NEXT_NODE);
         if ($nextNode === null) {
             return null;
         }
@@ -81,7 +81,7 @@ CODE_SAMPLE
         // switch docs
         $expression->setDocComment($this->createDocComment($nextNode));
         // invoke override
-        $expression->setAttribute(Attribute::ORIGINAL_NODE, null);
+        $expression->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
         // remove otherwise empty node
         if ($nextNode instanceof Nop) {

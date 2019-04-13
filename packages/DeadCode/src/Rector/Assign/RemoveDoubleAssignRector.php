@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -47,7 +47,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $previousExpression = $node->getAttribute(Attribute::PREVIOUS_EXPRESSION);
+        $previousExpression = $node->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
         if ($previousExpression === null) {
             return null;
         }
@@ -65,14 +65,16 @@ CODE_SAMPLE
         }
 
         // skip different method expressions
-        if ($node->getAttribute(Attribute::METHOD_NAME) !== $previousExpression->getAttribute(Attribute::METHOD_NAME)) {
+        if ($node->getAttribute(AttributeKey::METHOD_NAME) !== $previousExpression->getAttribute(
+            AttributeKey::METHOD_NAME
+        )) {
             return null;
         }
 
         // are 2 different methods
         if (! $this->areNodesEqual(
-            $node->getAttribute(Attribute::METHOD_NODE),
-            $previousExpression->getAttribute(Attribute::METHOD_NODE)
+            $node->getAttribute(AttributeKey::METHOD_NODE),
+            $previousExpression->getAttribute(AttributeKey::METHOD_NODE)
         )) {
             return null;
         }

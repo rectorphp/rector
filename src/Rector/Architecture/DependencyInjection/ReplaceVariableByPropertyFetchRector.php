@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -108,7 +108,7 @@ CODE_SAMPLE
 
     private function isInControllerActionMethod(Variable $variable): bool
     {
-        $className = $variable->getAttribute(Attribute::CLASS_NAME);
+        $className = $variable->getAttribute(AttributeKey::CLASS_NAME);
 
         if ($className === null) {
             return false;
@@ -119,7 +119,7 @@ CODE_SAMPLE
         }
 
         /** @var ClassMethod|null $methodNode */
-        $methodNode = $variable->getAttribute(Attribute::METHOD_NODE);
+        $methodNode = $variable->getAttribute(AttributeKey::METHOD_NODE);
         if ($methodNode === null) {
             return false;
         }

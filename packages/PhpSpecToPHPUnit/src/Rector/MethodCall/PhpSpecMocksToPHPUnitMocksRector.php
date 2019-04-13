@@ -20,7 +20,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\TypeAnalyzer;
 use Rector\PhpSpecToPHPUnit\PhpSpecMockCollector;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
@@ -80,12 +80,12 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
     private function createCreateMockCall(Param $param, Name $name): ?Expression
     {
         /** @var Class_ $classNode */
-        $classNode = $param->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $param->getAttribute(AttributeKey::CLASS_NODE);
 
         $classMocks = $this->phpSpecMockCollector->resolveClassMocksFromParam($classNode);
 
         $variable = $this->getName($param->var);
-        $method = $param->getAttribute(Attribute::METHOD_NAME);
+        $method = $param->getAttribute(AttributeKey::METHOD_NAME);
 
         $methodsWithWThisMock = $classMocks[$variable];
 

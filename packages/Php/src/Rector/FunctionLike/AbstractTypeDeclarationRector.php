@@ -15,7 +15,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\Php\AbstractTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Manipulator\FunctionLikeManipulator;
@@ -78,7 +78,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         // @todo extract to some "inherited parent method" service
 
         /** @var string|null $parentClassName */
-        $parentClassName = $classMethod->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $parentClassName = $classMethod->getAttribute(AttributeKey::PARENT_CLASS_NAME);
 
         if ($parentClassName !== null) {
             $parentClassNode = $this->classLikeNodeCollector->findClass($parentClassName);
@@ -103,7 +103,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
             }
         }
 
-        $classNode = $classMethod->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_ && ! $classNode instanceof Interface_) {
             return false;
         }
@@ -179,7 +179,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         }
 
         if ($nakedType->toString() === 'self') {
-            $className = $node->getAttribute(Attribute::CLASS_NAME);
+            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
             if ($className === null) {
                 throw new ShouldNotHappenException();
             }
@@ -190,7 +190,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         }
 
         if ($nakedType->toString() === 'parent') {
-            $parentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+            $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
             if ($parentClassName === null) {
                 throw new ShouldNotHappenException();
             }
@@ -211,7 +211,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
 
     private function hasParentClassOrImplementsInterface(ClassMethod $classMethod): bool
     {
-        $classNode = $classMethod->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return false;
         }
@@ -264,7 +264,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
 
     private function haveSameNamespace(Node $firstNode, Node $secondNode): bool
     {
-        return $firstNode->getAttribute(Attribute::NAMESPACE_NAME)
-            === $secondNode->getAttribute(Attribute::NAMESPACE_NAME);
+        return $firstNode->getAttribute(AttributeKey::NAMESPACE_NAME)
+            === $secondNode->getAttribute(AttributeKey::NAMESPACE_NAME);
     }
 }

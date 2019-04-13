@@ -4,7 +4,7 @@ namespace Rector\DeadCode\Rector\StaticCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -65,12 +65,12 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node->getAttribute(Attribute::PARENT_CLASS_NAME) === null) {
+        if ($node->getAttribute(AttributeKey::PARENT_CLASS_NAME) === null) {
             $this->removeNode($node);
             return null;
         }
 
-        $methodNode = $node->getAttribute(Attribute::METHOD_NODE);
+        $methodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
         if ($methodNode === null) {
             return null;
         }

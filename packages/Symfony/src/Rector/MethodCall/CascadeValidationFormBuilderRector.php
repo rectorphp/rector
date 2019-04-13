@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ArrayManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -147,7 +147,7 @@ CODE_SAMPLE
             new String_('constraints')
         );
 
-        $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         while ($parentNode instanceof MethodCall) {
             if ($this->isName($parentNode, 'add')) {
@@ -158,7 +158,7 @@ CODE_SAMPLE
                 $parentNode->args[2] = new Arg($addOptionsArrayNode);
             }
 
-            $parentNode = $parentNode->getAttribute(Attribute::PARENT_NODE);
+            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
         }
     }
 }

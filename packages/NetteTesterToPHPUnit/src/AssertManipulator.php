@@ -13,7 +13,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Commander\NodeAddingCommander;
@@ -120,7 +120,7 @@ final class AssertManipulator
             $methodCall = new MethodCall(new Variable('this'), $staticCall->name);
             $methodCall->args = $staticCall->args;
             $methodCall->setAttributes($staticCall->getAttributes());
-            $methodCall->setAttribute(Attribute::ORIGINAL_NODE, null);
+            $methodCall->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
             return $methodCall;
         }
@@ -192,7 +192,7 @@ final class AssertManipulator
 
         $this->nodeRemovingCommander->addNode($staticCall);
 
-        $methodNode = $staticCall->getAttribute(Attribute::METHOD_NODE);
+        $methodNode = $staticCall->getAttribute(AttributeKey::METHOD_NODE);
         if ($methodNode === null) {
             return;
         }
@@ -212,7 +212,7 @@ final class AssertManipulator
             $call = new MethodCall(new Variable('this'), $method);
             $call->args = $staticCall->args;
             $call->setAttributes($staticCall->getAttributes());
-            $call->setAttribute(Attribute::ORIGINAL_NODE, null);
+            $call->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         } else {
             $call = $staticCall;
             $call->name = new Identifier($method);
@@ -272,6 +272,6 @@ final class AssertManipulator
 
     private function sholdBeStaticCall(StaticCall $staticCall): bool
     {
-        return ! (bool) $staticCall->getAttribute(Attribute::CLASS_NODE);
+        return ! (bool) $staticCall->getAttribute(AttributeKey::CLASS_NODE);
     }
 }

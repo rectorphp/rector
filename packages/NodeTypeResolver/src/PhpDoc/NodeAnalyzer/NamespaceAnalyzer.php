@@ -5,7 +5,7 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\TypeAnalyzer;
 
 final class NamespaceAnalyzer
@@ -22,7 +22,7 @@ final class NamespaceAnalyzer
 
     public function resolveTypeToFullyQualified(string $type, Node $node): string
     {
-        $useNodes = $node->getAttribute(Attribute::USE_NODES);
+        $useNodes = $node->getAttribute(AttributeKey::USE_NODES);
         if ($useNodes === null) {
             $useNodes = [];
         }
@@ -41,7 +41,7 @@ final class NamespaceAnalyzer
             return ltrim($type, '\\');
         }
 
-        $namespace = $node->getAttribute(Attribute::NAMESPACE_NAME);
+        $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
 
         return ($namespace ? $namespace . '\\' : '') . $type;
     }

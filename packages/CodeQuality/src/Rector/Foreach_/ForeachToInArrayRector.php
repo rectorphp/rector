@@ -14,7 +14,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
@@ -107,7 +107,7 @@ CODE_SAMPLE
         $inArrayFunctionCall = $this->createInArrayFunction($comparedNode, $ifCondition, $node);
 
         /** @var Return_ $returnToRemove */
-        $returnToRemove = $node->getAttribute(Attribute::NEXT_NODE);
+        $returnToRemove = $node->getAttribute(AttributeKey::NEXT_NODE);
 
         /** @var Return_ $return */
         $return = $firstNodeInsideForeach->stmts[0];
@@ -149,7 +149,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $nextNode = $foreachNode->getAttribute(Attribute::NEXT_NODE);
+        $nextNode = $foreachNode->getAttribute(AttributeKey::NEXT_NODE);
         if ($nextNode === null || ! $nextNode instanceof Return_) {
             return true;
         }

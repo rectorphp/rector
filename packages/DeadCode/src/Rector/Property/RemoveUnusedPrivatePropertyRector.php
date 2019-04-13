@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -93,7 +93,7 @@ CODE_SAMPLE
         $uselessAssigns = [];
 
         foreach ($propertyFetches as $propertyFetch) {
-            $propertyFetchParentNode = $propertyFetch->getAttribute(Attribute::PARENT_NODE);
+            $propertyFetchParentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
             if ($propertyFetchParentNode instanceof Assign && $propertyFetchParentNode->var === $propertyFetch) {
                 $uselessAssigns[] = $propertyFetchParentNode;
             } else {

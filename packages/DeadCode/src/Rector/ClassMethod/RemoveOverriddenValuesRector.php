@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use Rector\DeadCode\Rector\ClassMethod\Data\VariableNodeUseInfo;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -85,7 +85,7 @@ CODE_SAMPLE
     private function resolveAssignedVariables(FunctionLike $functionLike): array
     {
         return $this->betterNodeFinder->find($functionLike, function (Node $node) {
-            if (! $node->getAttribute(Attribute::PARENT_NODE) instanceof Assign) {
+            if (! $node->getAttribute(AttributeKey::PARENT_NODE) instanceof Assign) {
                 return false;
             }
 
@@ -95,7 +95,7 @@ CODE_SAMPLE
 
             // is variable on the left
             /** @var Assign $assignNode */
-            $assignNode = $node->getAttribute(Attribute::PARENT_NODE);
+            $assignNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($assignNode->var !== $node) {
                 return false;
             }
@@ -115,7 +115,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            $parentNode = $node->getAttribute(Attribute::PARENT_NODE);
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof Assign) {
                 // is the left assign - not use of one
                 if ($parentNode->var instanceof Variable && $parentNode->var === $node) {
@@ -163,13 +163,13 @@ CODE_SAMPLE
 
         foreach ($assignedVariables as $assignedVariable) {
             /** @var int $startTokenPos */
-            $startTokenPos = $assignedVariable->getAttribute(Attribute::START_TOKEN_POSITION);
+            $startTokenPos = $assignedVariable->getAttribute(AttributeKey::START_TOKEN_POSITION);
 
             // not in different scope, than previous one - e.g. if/while/else...
             // get nesting level to $classMethodNode
 
             /** @var Assign $assignNode */
-            $assignNode = $assignedVariable->getAttribute(Attribute::PARENT_NODE);
+            $assignNode = $assignedVariable->getAttribute(AttributeKey::PARENT_NODE);
             $nestingHash = $this->resolveNestingHashFromClassMethod($functionLike, $assignNode);
 
             $nodesByTypeAndPosition[] = new VariableNodeUseInfo(
@@ -183,7 +183,7 @@ CODE_SAMPLE
 
         foreach ($assignedVariablesUse as $assignedVariableUse) {
             /** @var int $startTokenPos */
-            $startTokenPos = $assignedVariableUse->getAttribute(Attribute::START_TOKEN_POSITION);
+            $startTokenPos = $assignedVariableUse->getAttribute(AttributeKey::START_TOKEN_POSITION);
 
             $nodesByTypeAndPosition[] = new VariableNodeUseInfo(
                 $startTokenPos,
@@ -276,7 +276,7 @@ CODE_SAMPLE
     {
         $nestingHash = '_';
         $parentNode = $assign;
-        while ($parentNode = $parentNode->getAttribute(Attribute::PARENT_NODE)) {
+        while ($parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE)) {
             if ($parentNode instanceof Expression) {
                 continue;
             }

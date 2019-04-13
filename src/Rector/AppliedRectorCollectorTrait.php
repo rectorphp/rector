@@ -4,7 +4,7 @@ namespace Rector\Rector;
 
 use PhpParser\Node;
 use Rector\Application\AppliedRectorCollector;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -27,7 +27,7 @@ trait AppliedRectorCollectorTrait
 
     protected function notifyNodeChangeFileInfo(Node $node): void
     {
-        $fileInfo = $node->getAttribute(Attribute::FILE_INFO);
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
         if ($fileInfo === null) {
             // this file was changed before and this is a sub-new node
             // array Traverse to all new nodes would have to be used, but it's not worth the performance

@@ -5,7 +5,7 @@ namespace Rector\Symfony\Bridge\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ControllerMethodAnalyzer
 {
@@ -18,7 +18,7 @@ final class ControllerMethodAnalyzer
             return false;
         }
 
-        $parentClassName = (string) $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $parentClassName = (string) $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
         if (Strings::endsWith($parentClassName, 'Controller')) {
             return true;
         }

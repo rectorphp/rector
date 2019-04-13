@@ -10,7 +10,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\Application\ErrorAndDiffCollector;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -127,7 +127,7 @@ CODE_SAMPLE
         // set to private
         $node->flags = Class_::MODIFIER_PRIVATE;
 
-        $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {
             throw new ShouldNotHappenException();
         }
@@ -150,7 +150,7 @@ CODE_SAMPLE
             // collect error
 
             /** @var SmartFileInfo $fileInfo */
-            $fileInfo = $node->getAttribute(Attribute::FILE_INFO);
+            $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
 
             $this->errorAndDiffCollector->addErrorWithRectorClassMessageAndFileInfo(
                 self::class,

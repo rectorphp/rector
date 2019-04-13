@@ -6,7 +6,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -49,7 +49,7 @@ final class ConstantNodeCollector
 
     public function addClassConstant(ClassConst $classConst): void
     {
-        $className = $classConst->getAttribute(Attribute::CLASS_NAME);
+        $className = $classConst->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
             throw new ShouldNotHappenException();
         }
@@ -85,7 +85,7 @@ final class ConstantNodeCollector
         }
 
         // current class
-        $classOfUse = $classConstFetch->getAttribute(Attribute::CLASS_NAME);
+        $classOfUse = $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
 
         $this->classConstantFetchByClassAndName[$className][$constantName][] = $classOfUse;
 

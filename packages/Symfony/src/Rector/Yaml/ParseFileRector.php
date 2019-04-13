@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantStringType;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -73,7 +73,7 @@ final class ParseFileRector extends AbstractRector
         }
 
         // try to detect current value
-        $nodeScope = $possibleFileNode->getAttribute(Attribute::SCOPE);
+        $nodeScope = $possibleFileNode->getAttribute(AttributeKey::SCOPE);
         if ($nodeScope === null) {
             throw new ShouldNotHappenException();
         }

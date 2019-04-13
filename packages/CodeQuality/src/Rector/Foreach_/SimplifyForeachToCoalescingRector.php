@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ForeachManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -146,8 +146,8 @@ CODE_SAMPLE
         }
 
         // is next node Return?
-        if ($foreachNode->getAttribute(Attribute::NEXT_NODE) instanceof Return_) {
-            $this->returnNode = $foreachNode->getAttribute(Attribute::NEXT_NODE);
+        if ($foreachNode->getAttribute(AttributeKey::NEXT_NODE) instanceof Return_) {
+            $this->returnNode = $foreachNode->getAttribute(AttributeKey::NEXT_NODE);
             $this->removeNode($this->returnNode);
         }
 

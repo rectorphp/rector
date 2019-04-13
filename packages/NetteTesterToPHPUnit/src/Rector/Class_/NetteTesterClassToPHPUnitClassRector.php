@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -118,7 +118,7 @@ CODE_SAMPLE
 
     private function processAboveTestInclude(Include_ $include): void
     {
-        if ($include->getAttribute(Attribute::CLASS_NODE) === null) {
+        if ($include->getAttribute(AttributeKey::CLASS_NODE) === null) {
             $this->removeNode($include);
         }
     }

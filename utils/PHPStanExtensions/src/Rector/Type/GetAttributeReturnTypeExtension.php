@@ -22,6 +22,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanExtensions\Utils\PHPStanValueResolver;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
@@ -31,24 +32,24 @@ final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeEx
      * @var string[]|string[][]
      */
     private $argumentKeyToReturnType = [
-        'Rector\NodeTypeResolver\Node\Attribute::FILE_INFO' => SmartFileInfo::class,
-        'Rector\NodeTypeResolver\Node\Attribute::RESOLVED_NAME' => Name::class,
-        'Rector\NodeTypeResolver\Node\Attribute::CLASS_NODE' => ClassLike::class,
-        'Rector\NodeTypeResolver\Node\Attribute::METHOD_NODE' => ClassMethod::class,
-        'Rector\NodeTypeResolver\Node\Attribute::CURRENT_EXPRESSION' => Expression::class,
-        'Rector\NodeTypeResolver\Node\Attribute::PREVIOUS_EXPRESSION' => Expression::class,
-        'Rector\NodeTypeResolver\Node\Attribute::SCOPE' => Scope::class,
+        AttributeKey::class . '::FILE_INFO' => SmartFileInfo::class,
+        AttributeKey::class . '::RESOLVED_NAME' => Name::class,
+        AttributeKey::class . '::CLASS_NODE' => ClassLike::class,
+        AttributeKey::class . '::METHOD_NODE' => ClassMethod::class,
+        AttributeKey::class . '::CURRENT_EXPRESSION' => Expression::class,
+        AttributeKey::class . '::PREVIOUS_EXPRESSION' => Expression::class,
+        AttributeKey::class . '::SCOPE' => Scope::class,
         # Node
-        'Rector\NodeTypeResolver\Node\Attribute::ORIGINAL_NODE' => Node::class,
-        'Rector\NodeTypeResolver\Node\Attribute::PARENT_NODE' => Node::class,
-        'Rector\NodeTypeResolver\Node\Attribute::NEXT_NODE' => Node::class,
-        'Rector\NodeTypeResolver\Node\Attribute::PREVIOUS_NODE' => Node::class,
-        'Rector\NodeTypeResolver\Node\Attribute::USE_NODES' => [Use_::class],
+        AttributeKey::class . '::ORIGINAL_NODE' => Node::class,
+        AttributeKey::class . '::PARENT_NODE' => Node::class,
+        AttributeKey::class . '::NEXT_NODE' => Node::class,
+        AttributeKey::class . '::PREVIOUS_NODE' => Node::class,
+        AttributeKey::class . '::USE_NODES' => [Use_::class],
         # scalars
-        'Rector\NodeTypeResolver\Node\Attribute::PARENT_CLASS_NAME' => 'string',
-        'Rector\NodeTypeResolver\Node\Attribute::NAMESPACE_NAME' => 'string',
-        'Rector\NodeTypeResolver\Node\Attribute::CLASS_NAME' => 'string',
-        'Rector\NodeTypeResolver\Node\Attribute::METHOD_NAME' => 'string',
+        AttributeKey::class . '::PARENT_CLASS_NAME' => 'string',
+        AttributeKey::class . '::NAMESPACE_NAME' => 'string',
+        AttributeKey::class . '::CLASS_NAME' => 'string',
+        AttributeKey::class . '::METHOD_NAME' => 'string',
     ];
 
     /**

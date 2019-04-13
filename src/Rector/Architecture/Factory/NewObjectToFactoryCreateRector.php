@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -89,12 +89,12 @@ CODE_SAMPLE
             $factoryClass = $factoryInfo['class'];
             $factoryMethod = $factoryInfo['method'];
 
-            if ($node->getAttribute(Attribute::CLASS_NAME) === $factoryClass) {
+            if ($node->getAttribute(AttributeKey::CLASS_NAME) === $factoryClass) {
                 continue;
             }
 
             /** @var Class_ $classNode */
-            $classNode = $node->getAttribute(Attribute::CLASS_NODE);
+            $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
             $propertyName = $this->getExistingFactoryPropertyName($classNode, $factoryClass);
 
             if ($propertyName === null) {

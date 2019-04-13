@@ -11,7 +11,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -94,12 +94,12 @@ final class ClassMethodManipulator
 
     public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod): bool
     {
-        $class = $classMethod->getAttribute(Attribute::CLASS_NAME);
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
         if (! is_string($class)) {
             return false;
         }
 
-        $method = $classMethod->getAttribute(Attribute::METHOD_NAME);
+        $method = $classMethod->getAttribute(AttributeKey::METHOD_NAME);
         if (! is_string($method)) {
             return false;
         }
@@ -168,7 +168,7 @@ final class ClassMethodManipulator
      */
     public function getAllClassMethodCall(ClassMethod $classMethod): array
     {
-        $classNode = $classMethod->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return [];
         }
@@ -196,7 +196,7 @@ final class ClassMethodManipulator
      */
     public function addMethodParameterIfMissing(Node $node, string $type, array $possibleNames): string
     {
-        $classMethodNode = $node->getAttribute(Attribute::METHOD_NODE);
+        $classMethodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
         if (! $classMethodNode instanceof ClassMethod) {
             // or null?
             throw new ShouldNotHappenException();

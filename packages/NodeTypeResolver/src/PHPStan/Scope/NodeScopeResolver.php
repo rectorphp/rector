@@ -11,7 +11,7 @@ use PHPStan\Analyser\NodeScopeResolver as PHPStanNodeScopeResolver;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
 
 /**
@@ -73,7 +73,7 @@ final class NodeScopeResolver
                     $scope = $this->resolveClassOrInterfaceNode($node, $scope);
                 }
 
-                $node->setAttribute(Attribute::SCOPE, $scope);
+                $node->setAttribute(AttributeKey::SCOPE, $scope);
             }
         );
 

@@ -4,7 +4,7 @@ namespace Rector\Rector\Visibility;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -84,11 +84,11 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // doesn't have a parent class
-        if (! $node->hasAttribute(Attribute::PARENT_CLASS_NAME)) {
+        if (! $node->hasAttribute(AttributeKey::PARENT_CLASS_NAME)) {
             return null;
         }
 
-        $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $nodeParentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
         if (! isset($this->methodToVisibilityByClass[$nodeParentClassName])) {
             return null;
         }
@@ -101,7 +101,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $nodeParentClassName = $node->getAttribute(Attribute::PARENT_CLASS_NAME);
+        $nodeParentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
         $visibility = $this->methodToVisibilityByClass[$nodeParentClassName][$methodName];
 
         $this->changeNodeVisibility($node, $visibility);

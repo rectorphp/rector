@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -87,7 +87,7 @@ CODE_SAMPLE
     private function processName(Name $name): Name
     {
         // we look for "extends <Name>"
-        $parentNode = $name->getAttribute(Attribute::PARENT_NODE);
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         // "Object" can part of namespace name
         if ($parentNode instanceof Namespace_) {
             return $name;
@@ -97,7 +97,7 @@ CODE_SAMPLE
         foreach ($this->reservedKeywordsToReplacements as $reservedKeyword => $replacement) {
             if (strtolower($name->getLast()) === strtolower($reservedKeyword)) {
                 $name->parts[count($name->parts) - 1] = $replacement;
-                $name->setAttribute(Attribute::ORIGINAL_NODE, null);
+                $name->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             }
         }
 

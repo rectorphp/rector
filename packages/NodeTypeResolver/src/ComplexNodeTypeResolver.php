@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\Node\NodeToStringTypeResolver;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
 use Rector\Php\TypeAnalyzer;
@@ -68,7 +68,7 @@ final class ComplexNodeTypeResolver
             $types[] = $this->nodeToStringTypeResolver->resolver($propertyDefault);
         }
 
-        $classNode = $property->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {
             throw new ShouldNotHappenException();
         }

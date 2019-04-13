@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareUnionTypeNode;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
 use Rector\PhpSpecToPHPUnit\PhpSpecMockCollector;
@@ -50,7 +50,7 @@ final class AddMockPropertiesRector extends AbstractPhpSpecToPHPUnitRector
         $classMocks = $this->phpSpecMockCollector->resolveClassMocksFromParam($node);
 
         /** @var string $class */
-        $class = $node->getAttribute(Attribute::CLASS_NAME);
+        $class = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         foreach ($classMocks as $variable => $methods) {
             if (count($methods) <= 1) {

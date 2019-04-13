@@ -7,7 +7,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class NameTypeResolver implements PerNodeTypeResolverInterface
 {
@@ -26,7 +26,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
     public function resolve(Node $nameNode): array
     {
         if ($nameNode->toString() === 'parent') {
-            $parentClassName = $nameNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+            $parentClassName = $nameNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
             if ($parentClassName === null) {
                 return [];
             }
@@ -45,7 +45,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
     private function resolveFullyQualifiedName(Node $nameNode, string $name): ?string
     {
         if (in_array($name, ['self', 'static', 'this'], true)) {
-            $class = $nameNode->getAttribute(Attribute::CLASS_NAME);
+            $class = $nameNode->getAttribute(AttributeKey::CLASS_NAME);
             if ($class === null) {
                 throw new ShouldNotHappenException();
             }
@@ -55,7 +55,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
 
         if ($name === 'parent') {
             // @tooo not sure which parent though
-            $class = $nameNode->getAttribute(Attribute::PARENT_CLASS_NAME);
+            $class = $nameNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
             if ($class === null) {
                 throw new ShouldNotHappenException();
             }
@@ -66,7 +66,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
         // @todo add "parent"
 
         /** @var Name|null $name */
-        $resolvedNameNode = $nameNode->getAttribute(Attribute::RESOLVED_NAME);
+        $resolvedNameNode = $nameNode->getAttribute(AttributeKey::RESOLVED_NAME);
         if ($resolvedNameNode instanceof Name) {
             return $resolvedNameNode->toString();
         }

@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\Util\RectorStrings;
 use Symplify\PackageBuilder\Strings\StringFormatConverter;
@@ -66,7 +66,7 @@ final class PhpSpecRenaming
     public function renameNamespace(Class_ $class): void
     {
         /** @var Namespace_ $namespace */
-        $namespace = $class->getAttribute(Attribute::NAMESPACE_NODE);
+        $namespace = $class->getAttribute(AttributeKey::NAMESPACE_NODE);
         if ($namespace->name === null) {
             return;
         }
@@ -105,7 +105,7 @@ final class PhpSpecRenaming
     public function resolveTestedClass(Node $node): string
     {
         /** @var string $className */
-        $className = $node->getAttribute(Attribute::CLASS_NAME);
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         $newClassName = RectorStrings::removePrefixes($className, ['spec\\']);
 

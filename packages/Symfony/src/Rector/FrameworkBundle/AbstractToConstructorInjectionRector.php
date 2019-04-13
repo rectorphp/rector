@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 
 abstract class AbstractToConstructorInjectionRector extends AbstractRector
@@ -45,7 +45,7 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         }
 
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
-        $classNode = $methodCall->getAttribute(Attribute::CLASS_NODE);
+        $classNode = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {
             throw new ShouldNotHappenException();
         }

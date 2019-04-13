@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use Rector\NodeTypeResolver\Node\Attribute;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -165,7 +165,7 @@ CODE_SAMPLE
             }
 
             // setter, skip
-            $parentNode = $propertyFetch->getAttribute(Attribute::PARENT_NODE);
+            $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
 
             if ($parentNode instanceof Assign) {
                 if ($parentNode->var === $propertyFetch) {
