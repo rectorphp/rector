@@ -20,10 +20,11 @@
         "symplify/package-builder": "^5.4.6"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.14",
         "ocramius/package-versions": "^1.3",
         "phpunit/phpunit": "^7.5|^8.0",
+        "symplify/changelog-linker": "^5.4",
         "symplify/easy-coding-standard": "^5.4.6",
-        "friendsofphp/php-cs-fixer": "^2.14",
         "symplify/monorepo-builder": "^5.4.6",
         "symplify/phpstan-extensions": "^5.4.6",
         "thecodingmachine/phpstan-strict-rules": "^0.11.0",
@@ -124,6 +125,11 @@
             "bin/clean_trailing_spaces.sh"
         ],
         "phpstan": "vendor/bin/phpstan analyse packages src tests --error-format symplify --ansi",
+        "changelog": [
+            "vendor/bin/changelog-linker dump-merges --in-categories",
+            "vendor/bin/changelog-linker link",
+            "vendor/bin/changelog-linker cleanup"
+        ],
         "docs": [
             "bin/rector dump-rectors -o markdown > docs/AllRectorsOverview.md",
             "bin/rector dump-nodes -o markdown > docs/NodesOverview.md"
