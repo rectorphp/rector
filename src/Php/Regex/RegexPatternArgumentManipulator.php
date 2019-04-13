@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -56,9 +56,9 @@ final class RegexPatternArgumentManipulator
     private $nameResolver;
 
     /**
-     * @var ConstantNodeCollector
+     * @var ParsedNodesByType
      */
-    private $constantNodeCollector;
+    private $parsedNodesByType;
 
     /**
      * @var BetterNodeFinder
@@ -73,13 +73,13 @@ final class RegexPatternArgumentManipulator
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         NameResolver $nameResolver,
-        ConstantNodeCollector $constantNodeCollector,
+        ParsedNodesByType $parsedNodesByType,
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nameResolver = $nameResolver;
-        $this->constantNodeCollector = $constantNodeCollector;
+        $this->parsedNodesByType = $parsedNodesByType;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
@@ -214,7 +214,7 @@ final class RegexPatternArgumentManipulator
             return [];
         }
 
-        $classConstNode = $this->constantNodeCollector->findClassConstant($className, $constantName);
+        $classConstNode = $this->parsedNodesByType->findClassConstant($className, $constantName);
 
         if ($classConstNode === null) {
             return [];

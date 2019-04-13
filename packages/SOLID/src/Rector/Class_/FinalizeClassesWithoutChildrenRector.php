@@ -4,7 +4,7 @@ namespace Rector\SOLID\Rector\Class_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -12,13 +12,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class FinalizeClassesWithoutChildrenRector extends AbstractRector
 {
     /**
-     * @var ClassLikeNodeCollector
+     * @var ParsedNodesByType
      */
-    private $classLikeNodeCollector;
+    private $parsedNodesByType;
 
-    public function __construct(ClassLikeNodeCollector $classLikeNodeCollector)
+    public function __construct(ParsedNodesByType $parsedNodesByType)
     {
-        $this->classLikeNodeCollector = $classLikeNodeCollector;
+        $this->parsedNodesByType = $parsedNodesByType;
     }
 
     public function getDefinition(): RectorDefinition
@@ -79,7 +79,7 @@ CODE_SAMPLE
 
         /** @var string $class */
         $class = $this->getName($node);
-        if ($this->classLikeNodeCollector->hasClassChildren($class)) {
+        if ($this->parsedNodesByType->hasClassChildren($class)) {
             return null;
         }
 

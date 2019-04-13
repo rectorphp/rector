@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\Php\AbstractTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -40,9 +40,9 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     protected $docBlockManipulator;
 
     /**
-     * @var ClassLikeNodeCollector
+     * @var ParsedNodesByType
      */
-    protected $classLikeNodeCollector;
+    protected $parsedNodesByType;
 
     /**
      * @var FunctionLikeManipulator
@@ -51,11 +51,11 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
 
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
-        ClassLikeNodeCollector $classLikeNodeCollector,
+        ParsedNodesByType $parsedNodesByType,
         FunctionLikeManipulator $functionLikeManipulator
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->classLikeNodeCollector = $classLikeNodeCollector;
+        $this->parsedNodesByType = $parsedNodesByType;
         $this->functionLikeManipulator = $functionLikeManipulator;
     }
 
@@ -81,7 +81,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         $parentClassName = $classMethod->getAttribute(AttributeKey::PARENT_CLASS_NAME);
 
         if ($parentClassName !== null) {
-            $parentClassNode = $this->classLikeNodeCollector->findClass($parentClassName);
+            $parentClassNode = $this->parsedNodesByType->findClass($parentClassName);
             if ($parentClassNode !== null) {
                 $parentMethodNode = $parentClassNode->getMethod($methodName);
                 // @todo validate type is conflicting
@@ -110,7 +110,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
 
         $interfaceNames = $this->getClassLikeNodeParentInterfaceNames($classNode);
         foreach ($interfaceNames as $interfaceName) {
-            $interface = $this->classLikeNodeCollector->findInterface($interfaceName);
+            $interface = $this->parsedNodesByType->findInterface($interfaceName);
             if ($interface !== null) {
                 // parent class method in local scope → it's ok
                 // @todo validate type is conflicting

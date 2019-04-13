@@ -178,12 +178,12 @@ CODE_SAMPLE
             return;
         }
 
-        $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
+        $childrenClassLikes = $this->parsedNodesByType->findClassesAndInterfacesByType($className);
 
         // update their methods as well
         foreach ($childrenClassLikes as $childClassLike) {
             if ($childClassLike instanceof Class_) {
-                $usedTraits = $this->classLikeNodeCollector->findUsedTraitsInClass($childClassLike);
+                $usedTraits = $this->parsedNodesByType->findUsedTraitsInClass($childClassLike);
 
                 foreach ($usedTraits as $trait) {
                     $this->addParamTypeToMethod($trait, $methodName, $position, $node, $paramTypeInfo);

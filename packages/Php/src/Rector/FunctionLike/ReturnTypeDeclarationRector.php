@@ -164,7 +164,7 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        $childrenClassLikes = $this->classLikeNodeCollector->findClassesAndInterfacesByType($className);
+        $childrenClassLikes = $this->parsedNodesByType->findClassesAndInterfacesByType($className);
 
         // update their methods as well
         foreach ($childrenClassLikes as $childClassLike) {
@@ -172,7 +172,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $usedTraits = $this->classLikeNodeCollector->findUsedTraitsInClass($childClassLike);
+            $usedTraits = $this->parsedNodesByType->findUsedTraitsInClass($childClassLike);
             foreach ($usedTraits as $trait) {
                 $this->addReturnTypeToMethod($trait, $methodName, $node, $returnTypeInfo);
             }

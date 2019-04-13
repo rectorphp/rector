@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Parser\Parser;
@@ -29,9 +29,9 @@ final class CallManipulator
     private const VARIADIC_FUNCTION_NAMES = ['func_get_args', 'func_get_arg', 'func_num_args'];
 
     /**
-     * @var FunctionLikeNodeCollector
+     * @var ParsedNodesByType
      */
-    private $functionLikeNodeCollector;
+    private $parsedNodesByType;
 
     /**
      * @var BetterNodeFinder
@@ -54,13 +54,13 @@ final class CallManipulator
     private $betterStandardPrinter;
 
     public function __construct(
-        FunctionLikeNodeCollector $functionLikeNodeCollector,
+        ParsedNodesByType $parsedNodesByType,
         BetterNodeFinder $betterNodeFinder,
         NameResolver $nameResolver,
         Parser $parser,
         BetterStandardPrinter $betterStandardPrinter
     ) {
-        $this->functionLikeNodeCollector = $functionLikeNodeCollector;
+        $this->parsedNodesByType = $parsedNodesByType;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nameResolver = $nameResolver;
         $this->parser = $parser;
@@ -79,7 +79,7 @@ final class CallManipulator
         }
 
         if ($reflectionFunctionAbstract instanceof ReflectionFunction) {
-            $functionNode = $this->functionLikeNodeCollector->findFunction($reflectionFunctionAbstract->getName());
+            $functionNode = $this->parsedNodesByType->findFunction($reflectionFunctionAbstract->getName());
             if ($functionNode === null) {
                 return false;
             }
@@ -87,7 +87,7 @@ final class CallManipulator
             return $this->containsFuncGetArgsFuncCall($functionNode);
         }
 
-        $classMethodNode = $this->functionLikeNodeCollector->findMethod(
+        $classMethodNode = $this->parsedNodesByType->findMethod(
             $reflectionFunctionAbstract->getName(),
             $reflectionFunctionAbstract->getDeclaringClass()->getName()
         );

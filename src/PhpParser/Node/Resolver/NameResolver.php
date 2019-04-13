@@ -3,6 +3,7 @@
 namespace Rector\PhpParser\Node\Resolver;
 
 use Nette\Utils\Strings;
+use PhpParser\Builder\Trait_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -74,16 +75,11 @@ final class NameResolver
 
                 return $this->resolve($classNode->name);
             },
-            function (Interface_ $interfaceNode): ?string {
-                if (isset($interfaceNode->namespacedName)) {
-                    return $interfaceNode->namespacedName->toString();
-                }
-
-                if ($interfaceNode->name === null) {
-                    return null;
-                }
-
-                return $this->resolve($interfaceNode->name);
+            function (Interface_ $interface): ?string {
+                return $this->resolveNamespacedNameAwareNode($interface);
+            },
+            function (Node\Stmt\Trait_ $trait): ?string {
+                return $this->resolveNamespacedNameAwareNode($trait);
             },
             function (ClassConstFetch $classConstFetch): ?string {
                 $class = $this->resolve($classConstFetch->class);
@@ -196,5 +192,21 @@ final class NameResolver
     public function areNamesEqual(Node $firstNode, Node $secondNode): bool
     {
         return $this->resolve($firstNode) === $this->resolve($secondNode);
+    }
+
+    /**
+     * @param Interface_|Trait_ $classLike
+     */
+    private function resolveNamespacedNameAwareNode(Node\Stmt\ClassLike $classLike): ?string
+    {
+        if (isset($classLike->namespacedName)) {
+            return $classLike->namespacedName->toString();
+        }
+
+        if ($classLike->name === null) {
+            return null;
+        }
+
+        return $this->resolve($classLike->name);
     }
 }

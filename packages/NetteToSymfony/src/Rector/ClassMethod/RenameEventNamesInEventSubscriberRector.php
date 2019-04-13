@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NetteToSymfony\Event\EventInfo;
 use Rector\NetteToSymfony\Event\EventInfosFactory;
-use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -33,16 +33,14 @@ final class RenameEventNamesInEventSubscriberRector extends AbstractRector
     private $symfonyClassConstWithAliases = [];
 
     /**
-     * @var FunctionLikeNodeCollector
+     * @var ParsedNodesByType
      */
-    private $functionLikeNodeCollector;
+    private $parsedNodesByType;
 
-    public function __construct(
-        EventInfosFactory $eventInfosFactory,
-        FunctionLikeNodeCollector $functionLikeNodeCollector
-    ) {
+    public function __construct(EventInfosFactory $eventInfosFactory, ParsedNodesByType $parsedNodesByType)
+    {
         $this->symfonyClassConstWithAliases = $eventInfosFactory->create();
-        $this->functionLikeNodeCollector = $functionLikeNodeCollector;
+        $this->parsedNodesByType = $parsedNodesByType;
     }
 
     public function getDefinition(): RectorDefinition
@@ -195,7 +193,7 @@ CODE_SAMPLE
 
     private function processMethodArgument(string $class, string $method, EventInfo $eventInfo): void
     {
-        $classMethodNode = $this->functionLikeNodeCollector->findMethod($method, $class);
+        $classMethodNode = $this->parsedNodesByType->findMethod($method, $class);
         if ($classMethodNode === null) {
             return;
         }

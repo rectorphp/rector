@@ -4,7 +4,7 @@ namespace Rector\SOLID\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\NodeTypeResolver\Application\ConstantNodeCollector;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -13,13 +13,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class PrivatizeLocalClassConstantRector extends AbstractRector
 {
     /**
-     * @var ConstantNodeCollector
+     * @var ParsedNodesByType
      */
-    private $constantNodeCollector;
+    private $parsedNodesByType;
 
-    public function __construct(ConstantNodeCollector $constantNodeCollector)
+    public function __construct(ParsedNodesByType $parsedNodesByType)
     {
-        $this->constantNodeCollector = $constantNodeCollector;
+        $this->parsedNodesByType = $parsedNodesByType;
     }
 
     public function getDefinition(): RectorDefinition
@@ -79,7 +79,7 @@ CODE_SAMPLE
 
         /** @var string $constant */
         $constant = $this->getName($node);
-        $useClasses = $this->constantNodeCollector->findClassConstantFetches($class, $constant);
+        $useClasses = $this->parsedNodesByType->findClassConstantFetches($class, $constant);
 
         // 0. is actually never used (@todo use in "dead-code" set)
         if ($useClasses === null) {

@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NetteToSymfony\Annotation\SymfonyRoutePhpDocTagNode;
 use Rector\NetteToSymfony\Route\RouteInfo;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
-use Rector\NodeTypeResolver\Application\ClassLikeNodeCollector;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
@@ -44,9 +44,9 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $routeAnnotationClass;
 
     /**
-     * @var ClassLikeNodeCollector
+     * @var ParsedNodesByType
      */
-    private $classLikeNodeCollector;
+    private $parsedNodesByType;
 
     /**
      * @var ClassManipulator
@@ -69,7 +69,7 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $classMethodManipulator;
 
     public function __construct(
-        ClassLikeNodeCollector $classLikeNodeCollector,
+        ParsedNodesByType $parsedNodesByType,
         ClassManipulator $classManipulator,
         ClassMethodManipulator $classMethodManipulator,
         DocBlockManipulator $docBlockManipulator,
@@ -80,7 +80,7 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     ) {
         $this->routeListClass = $routeListClass;
         $this->routerClass = $routerClass;
-        $this->classLikeNodeCollector = $classLikeNodeCollector;
+        $this->parsedNodesByType = $parsedNodesByType;
         $this->classManipulator = $classManipulator;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->routeAnnotationClass = $routeAnnotationClass;
@@ -255,7 +255,7 @@ CODE_SAMPLE
 
     private function resolveControllerClassMethod(RouteInfo $routeInfo): ?ClassMethod
     {
-        $classNode = $this->classLikeNodeCollector->findClass($routeInfo->getClass());
+        $classNode = $this->parsedNodesByType->findClass($routeInfo->getClass());
         if ($classNode === null) {
             return null;
         }
@@ -265,7 +265,7 @@ CODE_SAMPLE
 
     private function completeImplicitRoutes(): void
     {
-        $presenterClasses = $this->classLikeNodeCollector->findClassesBySuffix('Presenter');
+        $presenterClasses = $this->parsedNodesByType->findClassesBySuffix('Presenter');
 
         foreach ($presenterClasses as $presenterClass) {
             foreach ((array) $presenterClass->stmts as $classStmt) {

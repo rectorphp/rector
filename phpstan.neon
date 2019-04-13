@@ -146,3 +146,8 @@ parameters:
         - '#Strict comparison using \=\=\= between PhpParser\\Node and null will always evaluate to false#'
         - '#In method "Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:createStaticCall", parameter \$args type is "array"\. Please provide a @param annotation to further specify the type of the array\. For instance\: @param int\[\] \$args\. More info\: http\://bit\.ly/typehintarray#'
         - '#In method "Rector\\Rector\\AbstractRector\:\:createStaticCall", parameter \$args type is "array"\. Please provide a @param annotation to further specify the type of the array\. For instance\: @param int\[\] \$args\. More info\: http\://bit\.ly/typehintarray#'
+
+        # known types
+        - '#Method Rector\\NodeContainer\\ParsedNodesByType\:\:(.*?)\(\) should return PhpParser\\Node\\Stmt\\(.*?)\|null but returns PhpParser\\Node\|null#'
+        - '#Method Rector\\NodeContainer\\ParsedNodesByType\:\:findImplementersOfInterface\(\) should return array<PhpParser\\Node\\Stmt\\Interface_\> but returns array<int, PhpParser\\Node\>#'
+        - '#PHPDoc tag @param for parameter \$classLike with type PhpParser\\Builder\\Trait_\|PhpParser\\Node\\Stmt\\Interface_ is not subtype of native type PhpParser\\Node\\Stmt\\ClassLike#'

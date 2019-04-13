@@ -4,7 +4,7 @@ namespace Rector\Php\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\NodeTypeResolver\Application\FunctionLikeNodeCollector;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -16,13 +16,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector
 {
     /**
-     * @var FunctionLikeNodeCollector
+     * @var ParsedNodesByType
      */
-    private $functionLikeNodeCollector;
+    private $parsedNodesByType;
 
-    public function __construct(FunctionLikeNodeCollector $functionLikeNodeCollector)
+    public function __construct(ParsedNodesByType $parsedNodesByType)
     {
-        $this->functionLikeNodeCollector = $functionLikeNodeCollector;
+        $this->parsedNodesByType = $parsedNodesByType;
     }
 
     public function getDefinition(): RectorDefinition
@@ -87,7 +87,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $isStaticMethod = $this->functionLikeNodeCollector->isStaticMethod($methodName, $className);
+        $isStaticMethod = $this->parsedNodesByType->isStaticMethod($methodName, $className);
         if (! $isStaticMethod) {
             return null;
         }

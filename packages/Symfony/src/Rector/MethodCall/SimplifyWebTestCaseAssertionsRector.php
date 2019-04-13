@@ -4,7 +4,6 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\NodeTypeResolver\Node\Attribute;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -114,7 +113,7 @@ CODE_SAMPLE
 
         // assertResponseStatusCodeSame
         $newNode = $this->processAssertResponseStatusCodeSame($node);
-        if ($newNode) {
+        if ($newNode !== null) {
             return $newNode;
         }
 
