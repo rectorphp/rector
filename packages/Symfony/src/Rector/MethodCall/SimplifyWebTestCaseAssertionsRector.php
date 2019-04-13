@@ -114,7 +114,7 @@ CODE_SAMPLE
 
         // assertResponseStatusCodeSame
         $newNode = $this->processAssertResponseStatusCodeSame($node);
-        if ($newNode) {
+        if ($newNode !== null) {
             return $newNode;
         }
 
