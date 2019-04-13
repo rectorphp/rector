@@ -329,4 +329,4 @@ docker run -v $(pwd):/project rector/rector:latest process /project/app --config
 
 Do you use Rector to upgrade your code? Share it here:
 
-- [mxr576/drupal8-rector](https://github.com/mxr576/drupal8-rector) by @mxr576
+- [drupal8-rector/drupal8-rector](https://github.com/drupal8-rector/drupal8-rector) by @mxr576
