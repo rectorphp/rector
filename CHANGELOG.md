@@ -13,6 +13,8 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 ### Added
 
+- [#1317] Add Changelog
+- [#1302] [Symfony 4.3] Add SimplifyWebTestCaseAssertionsRector
 - [#1302] [Symfony 4.3] Add `SimplifyWebTestCaseAssertionsRector`
 - [#1311] [CodingStyle] Add `SplitGroupedConstantsAndPropertiesRector`
 - [#1301] [PHPUnit] Add `RemoveExpectAnyFromMockRector`
@@ -23,6 +25,8 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 ### Changed
 
 - [#1314] rename `Attribute` to `AttributeKey` to prevent duplicated names with other projects
+- [#1318] Update reference to drupal8-rector/drupal8-rector, Thanks to [@mxr576]
+- [#1316] Merge collected nodes to ParsedNodesByType
 
 ### Fixed
 
@@ -36,3 +40,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#1303]: https://github.com/rectorphp/rector/pull/1303
 [#1301]: https://github.com/rectorphp/rector/pull/1301
 [@Dodenis]: https://github.com/Dodenis
+[#1318]: https://github.com/rectorphp/rector/pull/1318
+[#1317]: https://github.com/rectorphp/rector/pull/1317
+[#1316]: https://github.com/rectorphp/rector/pull/1316
+[@mxr576]: https://github.com/mxr576
