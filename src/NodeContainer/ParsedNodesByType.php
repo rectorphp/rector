@@ -35,6 +35,9 @@ final class ParsedNodesByType
         Trait_::class,
         ClassMethod::class,
         Function_::class,
+        // simply collected
+        Node\Expr\New_::class,
+        Node\Expr\StaticCall::class,
     ];
 
     /**
@@ -82,9 +85,30 @@ final class ParsedNodesByType
      */
     private $functions = [];
 
+    /**
+     * @var Node[][]
+     */
+    private $simpleParsedNodesByType = [];
+
     public function __construct(NameResolver $nameResolver)
     {
         $this->nameResolver = $nameResolver;
+    }
+
+    /**
+     * @return Node\Expr\New_[]
+     */
+    public function getNewNodes(): array
+    {
+        return $this->simpleParsedNodesByType[Node\Expr\New_::class] ?? [];
+    }
+
+    /**
+     * @return Node\Expr\StaticCall[]
+     */
+    public function getStaticCallNodes(): array
+    {
+        return $this->simpleParsedNodesByType[Node\Expr\StaticCall::class] ?? [];
     }
 
     /**
@@ -353,6 +377,10 @@ final class ParsedNodesByType
             $this->addFunction($node);
             return;
         }
+
+        // simple collect
+        $type = get_class($node);
+        $this->simpleParsedNodesByType[$type][] = $node;
     }
 
     private function addClass(Class_ $classNode): void
