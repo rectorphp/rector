@@ -3,6 +3,7 @@
 namespace Rector\NodeContainer;
 
 use Nette\Utils\Strings;
+use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -23,6 +24,19 @@ use ReflectionClass;
  */
 final class ParsedNodesByType
 {
+    /**
+     * @var string[]
+     */
+    private $collectableNodeTypes = [
+        Class_::class,
+        Interface_::class,
+        ClassConst::class,
+        ClassConstFetch::class,
+        Trait_::class,
+        ClassMethod::class,
+        Function_::class,
+    ];
+
     /**
      * @var Class_[]
      */
@@ -82,39 +96,9 @@ final class ParsedNodesByType
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    public function addClass(Class_ $classNode): void
-    {
-        $name = $classNode->getAttribute(AttributeKey::CLASS_NAME);
-        if ($name === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $this->classes[$name] = $classNode;
-    }
-
     public function findClass(string $name): ?Class_
     {
         return $this->classes[$name] ?? null;
-    }
-
-    public function addInterface(Interface_ $interfaceNode): void
-    {
-        $name = $interfaceNode->getAttribute(AttributeKey::CLASS_NAME);
-        if ($name === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $this->interfaces[$name] = $interfaceNode;
-    }
-
-    public function addTrait(Trait_ $traitNode): void
-    {
-        $name = $traitNode->getAttribute(AttributeKey::CLASS_NAME);
-        if ($name === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $this->traits[$name] = $traitNode;
     }
 
     public function findInterface(string $name): ?Interface_
@@ -262,53 +246,6 @@ final class ParsedNodesByType
         return $this->findInterface($type);
     }
 
-    public function addClassConstant(ClassConst $classConst): void
-    {
-        $className = $classConst->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $constantName = $this->nameResolver->resolve($classConst);
-
-        $this->constantsByType[$className][$constantName] = $classConst;
-    }
-
-    public function addClassConstantFetch(ClassConstFetch $classConstFetch): void
-    {
-        $constantName = $this->nameResolver->resolve($classConstFetch->name);
-        if ($constantName === 'class' || $constantName === null) {
-            // this is not a manual constant
-            return;
-        }
-
-        $className = $this->nameResolver->resolve($classConstFetch->class);
-
-        if (in_array($className, ['static', 'self', 'parent'], true)) {
-            $resolvedClassTypes = $this->nodeTypeResolver->resolve($classConstFetch->class);
-
-            $className = $this->matchClassTypeThatContainsConstant($resolvedClassTypes, $constantName);
-            if ($className === null) {
-                return;
-            }
-        } else {
-            $resolvedClassTypes = $this->nodeTypeResolver->resolve($classConstFetch->class);
-            $className = $this->matchClassTypeThatContainsConstant($resolvedClassTypes, $constantName);
-            if ($className === null) {
-                return;
-            }
-        }
-
-        // current class
-        $classOfUse = $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
-
-        $this->classConstantFetchByClassAndName[$className][$constantName][] = $classOfUse;
-
-        $this->classConstantFetchByClassAndName[$className][$constantName] = array_unique(
-            $this->classConstantFetchByClassAndName[$className][$constantName]
-        );
-    }
-
     public function findClassConstant(string $className, string $constantName): ?ClassConst
     {
         if (Strings::contains($constantName, '\\')) {
@@ -324,24 +261,6 @@ final class ParsedNodesByType
     public function findClassConstantFetches(string $className, string $constantName): ?array
     {
         return $this->classConstantFetchByClassAndName[$className][$constantName] ?? null;
-    }
-
-    public function addMethod(ClassMethod $classMethod): void
-    {
-        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) { // anonymous
-            return;
-        }
-
-        $methodName = $this->nameResolver->resolve($classMethod);
-
-        $this->methodsByType[$className][$methodName] = $classMethod;
-    }
-
-    public function addFunction(Function_ $functionNode): void
-    {
-        $functionName = $this->nameResolver->resolve($functionNode);
-        $this->functions[$functionName] = $functionNode;
     }
 
     public function findFunction(string $name): ?Function_
@@ -387,6 +306,154 @@ final class ParsedNodesByType
         return false;
     }
 
+    public function isCollectableNode(Node $node): bool
+    {
+        foreach ($this->collectableNodeTypes as $collectableNodeType) {
+            if (is_a($node, $collectableNodeType, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function collect(Node $node): void
+    {
+        if ($node instanceof Class_) {
+            $this->addClass($node);
+            return;
+        }
+
+        if ($node instanceof Interface_) {
+            $this->addInterface($node);
+            return;
+        }
+
+        if ($node instanceof ClassConst) {
+            $this->addClassConstant($node);
+            return;
+        }
+
+        if ($node instanceof ClassConstFetch) {
+            $this->addClassConstantFetch($node);
+            return;
+        }
+
+        if ($node instanceof Trait_) {
+            $this->addTrait($node);
+            return;
+        }
+
+        if ($node instanceof ClassMethod) {
+            $this->addMethod($node);
+            return;
+        }
+
+        if ($node instanceof Function_) {
+            $this->addFunction($node);
+            return;
+        }
+    }
+
+    private function addClass(Class_ $classNode): void
+    {
+        if ($this->isClassAnonymous($classNode)) {
+            return;
+        }
+
+        $name = $classNode->getAttribute(AttributeKey::CLASS_NAME);
+        if ($name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->classes[$name] = $classNode;
+    }
+
+    private function addInterface(Interface_ $interfaceNode): void
+    {
+        $name = $interfaceNode->getAttribute(AttributeKey::CLASS_NAME);
+        if ($name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->interfaces[$name] = $interfaceNode;
+    }
+
+    private function addTrait(Trait_ $traitNode): void
+    {
+        $name = $traitNode->getAttribute(AttributeKey::CLASS_NAME);
+        if ($name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->traits[$name] = $traitNode;
+    }
+
+    private function addClassConstant(ClassConst $classConst): void
+    {
+        $className = $classConst->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $constantName = $this->nameResolver->resolve($classConst);
+
+        $this->constantsByType[$className][$constantName] = $classConst;
+    }
+
+    private function addClassConstantFetch(ClassConstFetch $classConstFetch): void
+    {
+        $constantName = $this->nameResolver->resolve($classConstFetch->name);
+        if ($constantName === 'class' || $constantName === null) {
+            // this is not a manual constant
+            return;
+        }
+
+        $className = $this->nameResolver->resolve($classConstFetch->class);
+
+        if (in_array($className, ['static', 'self', 'parent'], true)) {
+            $resolvedClassTypes = $this->nodeTypeResolver->resolve($classConstFetch->class);
+
+            $className = $this->matchClassTypeThatContainsConstant($resolvedClassTypes, $constantName);
+            if ($className === null) {
+                return;
+            }
+        } else {
+            $resolvedClassTypes = $this->nodeTypeResolver->resolve($classConstFetch->class);
+            $className = $this->matchClassTypeThatContainsConstant($resolvedClassTypes, $constantName);
+            if ($className === null) {
+                return;
+            }
+        }
+
+        // current class
+        $classOfUse = $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
+
+        $this->classConstantFetchByClassAndName[$className][$constantName][] = $classOfUse;
+
+        $this->classConstantFetchByClassAndName[$className][$constantName] = array_unique(
+            $this->classConstantFetchByClassAndName[$className][$constantName]
+        );
+    }
+
+    private function addMethod(ClassMethod $classMethod): void
+    {
+        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) { // anonymous
+            return;
+        }
+
+        $methodName = $this->nameResolver->resolve($classMethod);
+
+        $this->methodsByType[$className][$methodName] = $classMethod;
+    }
+
+    private function addFunction(Function_ $functionNode): void
+    {
+        $functionName = $this->nameResolver->resolve($functionNode);
+        $this->functions[$functionName] = $functionNode;
+    }
+
     /**
      * @param string[] $resolvedClassTypes
      */
@@ -410,5 +477,15 @@ final class ParsedNodesByType
         }
 
         return null;
+    }
+
+    private function isClassAnonymous(Class_ $classNode): bool
+    {
+        if ($classNode->isAnonymous() || $classNode->name === null) {
+            return true;
+        }
+
+        // PHPStan polution
+        return Strings::startsWith($classNode->name->toString(), 'AnonymousClass');
     }
 }
