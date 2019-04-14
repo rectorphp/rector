@@ -81,6 +81,14 @@ final class ParsedNodesByType
     }
 
     /**
+     * @return Node[]
+     */
+    public function getNodesByType(string $type): array
+    {
+        return $this->simpleParsedNodesByType[$type] ?? [];
+    }
+
+    /**
      * @return Node\Expr\New_[]
      */
     public function getNewNodes(): array
