@@ -89,7 +89,7 @@ final class ParsedNodesByType
     }
 
     /**
-     * @return Class_
+     * @return Class_[]
      */
     public function getClasses(): array
     {
