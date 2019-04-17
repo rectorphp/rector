@@ -13,3 +13,4 @@ services:
     Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector: ~
     Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector: ~
     Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector: ~
+    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~

@@ -160,6 +160,11 @@ final class ConfigurationFactory
 
     private function isNodeClassMatch(string $nodeClass, string $nodeType): bool
     {
+        // skip "magic", they're used less than rarely
+        if (Strings::contains($nodeClass, 'MagicConst')) {
+            return false;
+        }
+
         if (Strings::endsWith($nodeClass, '\\' . $nodeType)) {
             return true;
         }

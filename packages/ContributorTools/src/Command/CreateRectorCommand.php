@@ -91,7 +91,6 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         foreach ($this->findTemplateFileInfos() as $smartFileInfo) {
             $destination = $this->resolveDestination($smartFileInfo, $templateVariables, $configuration);
 
-            // @todo for core package
             $content = $this->resolveContent($smartFileInfo, $templateVariables);
 
             if ($configuration->getPackage() === 'Rector') {

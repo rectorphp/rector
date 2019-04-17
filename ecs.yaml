@@ -111,6 +111,8 @@ parameters:
             - 'packages/Laravel/src/Rector/FuncCall/HelperFunctionToConstructorInjectionRector.php'
             - 'packages/PhpSpecToPHPUnit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php'
             - 'packages/NetteTesterToPHPUnit/src/AssertManipulator.php'
+            # aliases
+            - 'packages/CodingStyle/src/Rector/Namespace_/ImportFullyQualifiedNamesRector.php'
 
             # copied 3rd party logic
             - 'packages/Php/src/EregToPcreTransformer.php'
