@@ -120,7 +120,7 @@ CODE_SAMPLE
                     throw new ShouldNotHappenException();
                 }
 
-                if ($useUse->alias) {
+                if ($useUse->alias !== null) {
                     // alias workaround
                     $this->aliasedUses[] = $name;
                 }
