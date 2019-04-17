@@ -15,6 +15,7 @@ final class RemoveUnusedParameterRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/parent_required.php.inc',
             __DIR__ . '/Fixture/in_between_parameter.php.inc',
             __DIR__ . '/Fixture/compact.php.inc',
+            __DIR__ . '/Fixture/keep_magic_methods_param.php.inc',
         ]);
     }
 
