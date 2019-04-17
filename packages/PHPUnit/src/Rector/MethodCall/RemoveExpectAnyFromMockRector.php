@@ -77,7 +77,7 @@ CODE_SAMPLE
         $onlyArgument = $node->args[0]->value;
 
         // @todo add match sequence method, ref https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/be664e0c9f3cca94d0bbefa06a731848144e4a22/src/Tokenizer/Tokens.php#L776
-        if (! $onlyArgument instanceof Node\Expr\MethodCall) {
+        if (! $onlyArgument instanceof MethodCall) {
             return null;
         }
 

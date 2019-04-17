@@ -4,6 +4,8 @@ namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -58,7 +60,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Identical::class, Node\Expr\BooleanNot::class];
+        return [Identical::class, BooleanNot::class];
     }
 
     /**
@@ -80,13 +82,13 @@ CODE_SAMPLE
                 return null;
             }
 
-            return new Node\Expr\BinaryOp\NotIdentical($identical->left, $identical->right);
+            return new NotIdentical($identical->left, $identical->right);
         }
 
         return null;
     }
 
-    private function processIdentical(Identical $identical): ?Node\Expr\BinaryOp\NotIdentical
+    private function processIdentical(Identical $identical): ?NotIdentical
     {
         if (! $this->isBoolType($identical->left)) {
             return null;
@@ -96,8 +98,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($identical->left instanceof Node\Expr\BooleanNot) {
-            return new Node\Expr\BinaryOp\NotIdentical($identical->left->expr, $identical->right);
+        if ($identical->left instanceof BooleanNot) {
+            return new NotIdentical($identical->left->expr, $identical->right);
         }
 
         return null;

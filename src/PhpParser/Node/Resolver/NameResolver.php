@@ -15,6 +15,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
@@ -197,7 +198,7 @@ final class NameResolver
     /**
      * @param Interface_|Trait_ $classLike
      */
-    private function resolveNamespacedNameAwareNode(Node\Stmt\ClassLike $classLike): ?string
+    private function resolveNamespacedNameAwareNode(ClassLike $classLike): ?string
     {
         if (isset($classLike->namespacedName)) {
             return $classLike->namespacedName->toString();

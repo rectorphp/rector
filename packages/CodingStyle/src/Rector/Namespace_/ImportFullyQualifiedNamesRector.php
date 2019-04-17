@@ -4,6 +4,11 @@ namespace Rector\CodingStyle\Rector\Namespace_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\Stmt\UseUse;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
@@ -71,7 +76,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Node\Stmt\Namespace_::class];
+        return [Namespace_::class];
     }
 
     /**
@@ -83,12 +88,12 @@ CODE_SAMPLE
         $this->newUseStatements = [];
 
         /** @var Node\Stmt\Class_|null $class */
-        $class = $this->betterNodeFinder->findFirstInstanceOf($node, Node\Stmt\Class_::class);
+        $class = $this->betterNodeFinder->findFirstInstanceOf($node, Class_::class);
         if ($class === null) {
             return null;
         }
 
-        $this->resolveAlreadyImporteUses($node);
+        $this->resolveAlreadyImportedUses($node);
         $newUseStatements = $this->importNamesAndCollectNewUseStatements($class);
 
         $this->addNewUseStatements($node, $newUseStatements);
@@ -96,17 +101,19 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function resolveAlreadyImporteUses(Node\Stmt\Namespace_ $namespace): void
+    private function resolveAlreadyImportedUses(Namespace_ $namespace): void
     {
         /** @var Node\Stmt\Use_[] $uses */
-        $uses = $this->betterNodeFinder->findInstanceOf($namespace->stmts, Node\Stmt\Use_::class);
-
-        foreach ($uses as $use) {
-            // only import uses
-            if ($use->type !== Node\Stmt\Use_::TYPE_NORMAL) {
-                continue;
+        $uses = $this->betterNodeFinder->find($namespace->stmts, function (Node $node) {
+            if (! $node instanceof Use_) {
+                return false;
             }
 
+            // only import uses
+            return $node->type === Use_::TYPE_NORMAL;
+        });
+
+        foreach ($uses as $use) {
             foreach ($use->uses as $useUse) {
                 $name = $this->getName($useUse);
                 if ($name === null) {
@@ -126,7 +133,7 @@ CODE_SAMPLE
     /**
      * @param string[] $newUseStatements
      */
-    private function addNewUseStatements(Node\Stmt\Namespace_ $namespace, array $newUseStatements): void
+    private function addNewUseStatements(Namespace_ $namespace, array $newUseStatements): void
     {
         if ($newUseStatements === []) {
             return;
@@ -140,8 +147,8 @@ CODE_SAMPLE
                 continue;
             }
 
-            $useUse = new Node\Stmt\UseUse(new Node\Name($newUseStatement));
-            $newUses[] = new Node\Stmt\Use_([$useUse]);
+            $useUse = new UseUse(new Name($newUseStatement));
+            $newUses[] = new Use_([$useUse]);
 
             $this->alreadyImportedUses[] = $newUseStatement;
         }
@@ -152,13 +159,21 @@ CODE_SAMPLE
     /**
      * @return string[]
      */
-    private function importNamesAndCollectNewUseStatements(Node\Stmt\Class_ $class): array
+    private function importNamesAndCollectNewUseStatements(Class_ $class): array
     {
         $this->newUseStatements = [];
 
         $this->callableNodeTraverser->traverseNodesWithCallable([$class], function (Node $node) {
-            if (! $node instanceof Node\Name) {
+            if (! $node instanceof Name) {
                 return null;
+            }
+
+            $name = $node->getAttribute('originalName');
+            if ($name instanceof Name) {
+                // already short
+                if (! Strings::contains($name->toString(), '\\')) {
+                    return null;
+                }
             }
 
             // 1. name is fully qualified → import it
@@ -168,14 +183,20 @@ CODE_SAMPLE
                     return null;
                 }
 
-                $shortName = Strings::after($fullyQualifiedName, '\\', -1);
-                if ($shortName === false) {
-                    throw new ShouldNotHappenException();
-                }
+                $shortName = $this->getShortName($fullyQualifiedName);
 
                 // nothing to change
                 if ($shortName === $fullyQualifiedName) {
                     return null;
+                }
+
+                // the similar end is already imported → skip
+                foreach ($this->alreadyImportedUses as $alreadyImportedUse) {
+                    if ($this->getShortName(
+                        $alreadyImportedUse
+                    ) === $shortName && $alreadyImportedUse !== $fullyQualifiedName) {
+                        return null;
+                    }
                 }
 
                 if (! in_array($fullyQualifiedName, $this->alreadyImportedUses, true)) {
@@ -188,10 +209,19 @@ CODE_SAMPLE
                     return null;
                 }
 
-                return new Node\Name($shortName);
+                return new Name($shortName);
             }
         });
 
         return $this->newUseStatements;
+    }
+
+    private function getShortName(string $fullyQualifiedName): string
+    {
+        if (! Strings::contains($fullyQualifiedName, '\\')) {
+            return $fullyQualifiedName;
+        }
+
+        return Strings::after($fullyQualifiedName, '\\', -1);
     }
 }

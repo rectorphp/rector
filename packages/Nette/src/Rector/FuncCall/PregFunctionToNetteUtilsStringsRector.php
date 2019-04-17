@@ -3,7 +3,11 @@
 namespace Rector\Nette\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -75,10 +79,10 @@ CODE_SAMPLE
         $matchStaticCall = $this->createMatchStaticCall($node, $methodName);
 
         // skip assigns, might be used with differnt return value
-        if ($node->getAttribute(AttributeKey::PARENT_NODE) instanceof Node\Expr\Assign) {
+        if ($node->getAttribute(AttributeKey::PARENT_NODE) instanceof Assign) {
             if ($methodName === 'matchAll') {
                 // use count
-                return new FuncCall(new Node\Name('count'), [new Node\Arg($matchStaticCall)]);
+                return new FuncCall(new Name('count'), [new Arg($matchStaticCall)]);
             }
 
             if ($methodName === 'split') {
@@ -94,13 +98,13 @@ CODE_SAMPLE
 
         // assign
         if (isset($node->args[2])) {
-            return new Node\Expr\Assign($node->args[2]->value, $matchStaticCall);
+            return new Assign($node->args[2]->value, $matchStaticCall);
         }
 
         return $matchStaticCall;
     }
 
-    private function createMatchStaticCall(FuncCall $funcCall, string $methodName): Node\Expr\StaticCall
+    private function createMatchStaticCall(FuncCall $funcCall, string $methodName): StaticCall
     {
         $args = [];
 
@@ -116,7 +120,7 @@ CODE_SAMPLE
         return $this->createStaticCall('Nette\Utils\Strings', $methodName, $args);
     }
 
-    private function processSplit(FuncCall $funcCall, Node\Expr\StaticCall $matchStaticCall): Node
+    private function processSplit(FuncCall $funcCall, StaticCall $matchStaticCall): Node
     {
         if (isset($funcCall->args[2])) {
             if ($this->isValue($funcCall->args[2]->value, -1)) {

@@ -3,8 +3,12 @@
 namespace Rector\Nette\Rector\Identical;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -62,11 +66,11 @@ CODE_SAMPLE
     {
         $contentAndNeedle = null;
 
-        if ($node->left instanceof Node\Expr\Variable) {
+        if ($node->left instanceof Variable) {
             $contentAndNeedle = $this->matchContentAndNeedleOfSubstrOfVariableLength($node->right, $node->left);
         }
 
-        if ($node->right instanceof Node\Expr\Variable) {
+        if ($node->right instanceof Variable) {
             $contentAndNeedle = $this->matchContentAndNeedleOfSubstrOfVariableLength($node->left, $node->right);
         }
 
@@ -78,12 +82,12 @@ CODE_SAMPLE
 
         // starts with
         $startsWithStaticCall = $this->createStaticCall('Nette\Utils\Strings', 'startsWith', [
-            new Node\Arg($contentNode),
-            new Node\Arg($needleNode),
+            new Arg($contentNode),
+            new Arg($needleNode),
         ]);
 
-        if ($node instanceof Node\Expr\BinaryOp\NotIdentical) {
-            return new Node\Expr\BooleanNot($startsWithStaticCall);
+        if ($node instanceof NotIdentical) {
+            return new BooleanNot($startsWithStaticCall);
         }
 
         return $startsWithStaticCall;
@@ -92,9 +96,9 @@ CODE_SAMPLE
     /**
      * @return Node\Expr[]|null
      */
-    private function matchContentAndNeedleOfSubstrOfVariableLength(Node $node, Node\Expr\Variable $variable): ?array
+    private function matchContentAndNeedleOfSubstrOfVariableLength(Node $node, Variable $variable): ?array
     {
-        if (! $node instanceof Node\Expr\FuncCall) {
+        if (! $node instanceof FuncCall) {
             return null;
         }
 
@@ -109,7 +113,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $node->args[2]->value instanceof Node\Expr\FuncCall) {
+        if (! $node->args[2]->value instanceof FuncCall) {
             return null;
         }
 

@@ -3,7 +3,13 @@
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -29,7 +35,7 @@ final class SimplifyWebTestCaseAssertionsRector extends AbstractRector
     {
         $this->webTestCaseClass = $webTestCaseClass;
 
-        $clientGetResponse = new MethodCall(new Node\Expr\Variable('client'), 'getResponse');
+        $clientGetResponse = new MethodCall(new Variable('client'), 'getResponse');
         $this->getStatusCodeMethodCall = new MethodCall($clientGetResponse, 'getStatusCode');
     }
 
@@ -104,11 +110,11 @@ CODE_SAMPLE
 
         // assertResponseIsSuccessful
         $args = [];
-        $args[] = new Node\Arg(new Node\Scalar\LNumber(200));
-        $args[] = new Node\Arg($this->getStatusCodeMethodCall);
-        $match = new MethodCall(new Node\Expr\Variable('this'), 'assertSame', $args);
+        $args[] = new Arg(new LNumber(200));
+        $args[] = new Arg($this->getStatusCodeMethodCall);
+        $match = new MethodCall(new Variable('this'), 'assertSame', $args);
         if ($this->areNodesEqual($node, $match)) {
-            return new MethodCall(new Node\Expr\Variable('this'), 'assertResponseIsSuccessful');
+            return new MethodCall(new Variable('this'), 'assertResponseIsSuccessful');
         }
 
         // assertResponseStatusCodeSame
@@ -120,7 +126,7 @@ CODE_SAMPLE
         // assertSelectorTextContains
         $args = $this->matchAssertContainsCrawlerArg($node);
         if ($args !== null) {
-            return new MethodCall(new Node\Expr\Variable('this'), 'assertSelectorTextContains', $args);
+            return new MethodCall(new Variable('this'), 'assertSelectorTextContains', $args);
         }
 
         // 3. assertResponseRedirects
@@ -155,7 +161,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $comparedNode->var->var instanceof Node\Expr\Variable) {
+        if (! $comparedNode->var->var instanceof Variable) {
             return null;
         }
 
@@ -178,7 +184,7 @@ CODE_SAMPLE
     {
         /** @var Node\Stmt\Expression|null $previousNode */
         $previousExpression = $methodCall->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
-        if (! $previousExpression instanceof Node\Stmt\Expression) {
+        if (! $previousExpression instanceof Expression) {
             return null;
         }
 
@@ -188,16 +194,16 @@ CODE_SAMPLE
         }
 
         $args = [];
-        $args[] = new Node\Arg(new Node\Scalar\LNumber(301));
-        $args[] = new Node\Arg($this->getStatusCodeMethodCall);
+        $args[] = new Arg(new LNumber(301));
+        $args[] = new Arg($this->getStatusCodeMethodCall);
 
-        $match = new MethodCall(new Node\Expr\Variable('this'), 'assertSame', $args);
+        $match = new MethodCall(new Variable('this'), 'assertSame', $args);
 
         if ($this->areNodesEqual($previousNode, $match)) {
-            $clientGetLocation = new MethodCall(new Node\Expr\PropertyFetch(new MethodCall(
-                new Node\Expr\Variable('client'),
+            $clientGetLocation = new MethodCall(new PropertyFetch(new MethodCall(
+                new Variable('client'),
                 'getResponse'
-            ), 'headers'), 'get', [new Node\Arg(new Node\Scalar\String_('Location'))]);
+            ), 'headers'), 'get', [new Arg(new String_('Location'))]);
 
             if (! isset($methodCall->args[1])) {
                 return null;
@@ -210,7 +216,7 @@ CODE_SAMPLE
 
                 $this->removeNode($previousNode);
 
-                return new MethodCall(new Node\Expr\Variable('this'), 'assertResponseRedirects', $args);
+                return new MethodCall(new Variable('this'), 'assertResponseRedirects', $args);
             }
         }
 
@@ -238,6 +244,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return new MethodCall(new Node\Expr\Variable('this'), 'assertResponseStatusCodeSame', [$node->args[0]]);
+        return new MethodCall(new Variable('this'), 'assertResponseStatusCodeSame', [$node->args[0]]);
     }
 }

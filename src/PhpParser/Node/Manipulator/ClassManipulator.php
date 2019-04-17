@@ -4,6 +4,7 @@ namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -240,7 +241,7 @@ final class ClassManipulator
         });
     }
 
-    public function hasPropertyFetchAsProperty(Class_ $class, Node\Expr\PropertyFetch $propertyFetch): bool
+    public function hasPropertyFetchAsProperty(Class_ $class, PropertyFetch $propertyFetch): bool
     {
         if (! $this->nameResolver->isName($propertyFetch->var, 'this')) {
             return false;

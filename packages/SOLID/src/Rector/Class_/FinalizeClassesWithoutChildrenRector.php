@@ -4,6 +4,7 @@ namespace Rector\SOLID\Rector\Class_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -61,7 +62,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Node\Stmt\Class_::class];
+        return [Class_::class];
     }
 
     /**
@@ -83,7 +84,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->flags |= Node\Stmt\Class_::MODIFIER_FINAL;
+        $node->flags |= Class_::MODIFIER_FINAL;
 
         return $node;
     }
