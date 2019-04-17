@@ -61,7 +61,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Node\Stmt\ClassConst) {
+        if ($node instanceof ClassConst) {
             if (count($node->consts) < 2) {
                 return null;
             }
@@ -73,9 +73,7 @@ CODE_SAMPLE
             $node->consts = [$firstConstant];
 
             foreach ($allConstants as $anotherConstant) {
-                $nextClassConst = new Node\Stmt\ClassConst([
-                    $anotherConstant,
-                ], $node->flags, $node->getAttributes());
+                $nextClassConst = new ClassConst([$anotherConstant], $node->flags, $node->getAttributes());
                 $this->addNodeAfterNode($nextClassConst, $node);
             }
 
@@ -92,7 +90,7 @@ CODE_SAMPLE
         $node->props = [$firstProperty];
 
         foreach ($allProperties as $anotherProperty) {
-            $nextProperty = new Node\Stmt\Property($node->flags, [$anotherProperty], $node->getAttributes());
+            $nextProperty = new Property($node->flags, [$anotherProperty], $node->getAttributes());
             $this->addNodeAfterNode($nextProperty, $node);
         }
 

@@ -4,10 +4,13 @@ namespace Rector\Context;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\While_;
 use Rector\PhpParser\Node\BetterNodeFinder;
 
@@ -22,7 +25,7 @@ final class ContextAnalyzer
     /**
      * @var string[]
      */
-    private const LOOP_NODES = [For_::class, Foreach_::class, While_::class, Do_::class, Node\Stmt\Switch_::class];
+    private const LOOP_NODES = [For_::class, Foreach_::class, While_::class, Do_::class, Switch_::class];
 
     /**
      * @var BetterNodeFinder
@@ -48,18 +51,18 @@ final class ContextAnalyzer
         return $this->isTypes($firstParent, self::LOOP_NODES);
     }
 
-    public function isInIf(Node\Stmt\Break_ $node): bool
+    public function isInIf(Break_ $node): bool
     {
         $previousNode = $this->betterNodeFinder->findFirstParentInstanceOf(
             $node,
-            array_merge([Node\Stmt\If_::class], self::BREAK_NODES)
+            array_merge([If_::class], self::BREAK_NODES)
         );
 
         if ($previousNode === null) {
             return false;
         }
 
-        return $this->isTypes($previousNode, [Node\Stmt\If_::class]);
+        return $this->isTypes($previousNode, [If_::class]);
     }
 
     /**

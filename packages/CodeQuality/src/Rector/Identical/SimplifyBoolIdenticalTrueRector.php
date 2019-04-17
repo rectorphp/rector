@@ -3,6 +3,7 @@
 namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -65,7 +66,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processBoolTypeToNotBool(Node $node, Node\Expr $leftExpr, Node\Expr $rightExpr): ?Node\Expr
+    private function processBoolTypeToNotBool(Node $node, Expr $leftExpr, Expr $rightExpr): ?Expr
     {
         if ($node instanceof Identical) {
             if ($this->isTrue($rightExpr)) {

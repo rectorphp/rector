@@ -3,6 +3,13 @@
 namespace Rector\Nette\Rector\NotIdentical;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -47,7 +54,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Node\Expr\BinaryOp\NotIdentical::class, Node\Expr\BinaryOp\Identical::class];
+        return [NotIdentical::class, Identical::class];
     }
 
     /**
@@ -64,21 +71,21 @@ CODE_SAMPLE
             return null;
         }
 
-        $containsStaticCall = new Node\Expr\StaticCall(new Node\Name\FullyQualified('Nette\Utils\Strings'), 'contains');
+        $containsStaticCall = new StaticCall(new FullyQualified('Nette\Utils\Strings'), 'contains');
         $containsStaticCall->args[0] = $strpos->args[0];
         $containsStaticCall->args[1] = $strpos->args[1];
 
-        if ($node instanceof Node\Expr\BinaryOp\Identical) {
-            return new Node\Expr\BooleanNot($containsStaticCall);
+        if ($node instanceof Identical) {
+            return new BooleanNot($containsStaticCall);
         }
 
         return $containsStaticCall;
     }
 
-    private function matchStrposInComparisonToFalse(Node\Expr\BinaryOp $binaryOp): ?Node\Expr\FuncCall
+    private function matchStrposInComparisonToFalse(BinaryOp $binaryOp): ?FuncCall
     {
         if ($this->isFalse($binaryOp->left)) {
-            if (! $binaryOp->right instanceof Node\Expr\FuncCall) {
+            if (! $binaryOp->right instanceof FuncCall) {
                 return null;
             }
 
@@ -88,7 +95,7 @@ CODE_SAMPLE
         }
 
         if ($this->isFalse($binaryOp->right)) {
-            if (! $binaryOp->left instanceof Node\Expr\FuncCall) {
+            if (! $binaryOp->left instanceof FuncCall) {
                 return null;
             }
 

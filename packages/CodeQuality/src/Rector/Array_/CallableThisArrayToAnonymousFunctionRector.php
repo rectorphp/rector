@@ -3,6 +3,15 @@
 namespace Rector\CodeQuality\Rector\Array_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\ClosureUse;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -75,7 +84,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Node\Expr\Array_::class];
+        return [Array_::class];
     }
 
     /**
@@ -95,21 +104,21 @@ CODE_SAMPLE
             return null;
         }
 
-        $anonymousFunction = new Node\Expr\Closure();
+        $anonymousFunction = new Closure();
         $anonymousFunction->params = $classMethod->params;
 
-        $innerMethodCall = new Node\Expr\MethodCall($objectVariable, $classMethod->name);
+        $innerMethodCall = new MethodCall($objectVariable, $classMethod->name);
         $innerMethodCall->args = $this->convertParamsToArgs($classMethod->params);
 
         if ($classMethod->returnType) {
             $anonymousFunction->returnType = $classMethod->returnType;
         }
 
-        $anonymousFunction->stmts[] = new Node\Stmt\Return_($innerMethodCall);
+        $anonymousFunction->stmts[] = new Return_($innerMethodCall);
 
-        if ($objectVariable instanceof Node\Expr\Variable) {
+        if ($objectVariable instanceof Variable) {
             if (! $this->isName($objectVariable, 'this')) {
-                $anonymousFunction->uses[] = new Node\Expr\ClosureUse($objectVariable);
+                $anonymousFunction->uses[] = new ClosureUse($objectVariable);
             }
         }
 
@@ -124,13 +133,13 @@ CODE_SAMPLE
     {
         $args = [];
         foreach ($params as $key => $param) {
-            $args[$key] = new Node\Arg($param->var);
+            $args[$key] = new Arg($param->var);
         }
 
         return $args;
     }
 
-    private function matchCallableMethod(Node\Expr $objectExpr, Node\Expr $methodExpr): ?Node\Stmt\ClassMethod
+    private function matchCallableMethod(Expr $objectExpr, Expr $methodExpr): ?ClassMethod
     {
         $methodName = $this->getValue($methodExpr);
 

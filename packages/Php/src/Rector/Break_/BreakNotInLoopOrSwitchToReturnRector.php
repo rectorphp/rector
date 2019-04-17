@@ -4,6 +4,7 @@ namespace Rector\Php\Rector\Break_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Break_;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Context\ContextAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -83,7 +84,7 @@ CODE_SAMPLE
         }
 
         if ($this->contextAnalyzer->isInIf($node)) {
-            return new Node\Stmt\Return_();
+            return new Return_();
         }
 
         $this->removeNode($node);

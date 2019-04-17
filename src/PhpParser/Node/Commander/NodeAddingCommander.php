@@ -5,6 +5,7 @@ namespace Rector\PhpParser\Node\Commander;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
@@ -79,7 +80,7 @@ final class NodeAddingCommander implements CommanderInterface
         $foundNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($node, Expression::class);
         if ($foundNode === null) {
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof Stmt\ClassLike) {
+            if ($parentNode instanceof ClassLike) {
                 $foundNode = $node;
             } else {
                 throw new ShouldNotHappenException();

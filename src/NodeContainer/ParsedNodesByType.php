@@ -5,6 +5,8 @@ namespace Rector\NodeContainer;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
@@ -36,8 +38,8 @@ final class ParsedNodesByType
         ClassMethod::class,
         Function_::class,
         // simply collected
-        Node\Expr\New_::class,
-        Node\Expr\StaticCall::class,
+        New_::class,
+        StaticCall::class,
     ];
 
     /**
@@ -101,7 +103,7 @@ final class ParsedNodesByType
      */
     public function getNewNodes(): array
     {
-        return $this->simpleParsedNodesByType[Node\Expr\New_::class] ?? [];
+        return $this->simpleParsedNodesByType[New_::class] ?? [];
     }
 
     /**
@@ -109,7 +111,7 @@ final class ParsedNodesByType
      */
     public function getStaticCallNodes(): array
     {
-        return $this->simpleParsedNodesByType[Node\Expr\StaticCall::class] ?? [];
+        return $this->simpleParsedNodesByType[StaticCall::class] ?? [];
     }
 
     /**

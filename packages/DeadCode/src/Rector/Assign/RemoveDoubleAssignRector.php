@@ -9,6 +9,12 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Do_;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\While_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -92,15 +98,15 @@ CODE_SAMPLE
     private function shouldSkipDueToForeachOverride(Assign $assign, Node $node): bool
     {
         // is nested in a foreach and the previous expression is not?
-        $nodePreviousForeach = $this->betterNodeFinder->findFirstParentInstanceOf($assign, Node\Stmt\Foreach_::class);
+        $nodePreviousForeach = $this->betterNodeFinder->findFirstParentInstanceOf($assign, Foreach_::class);
 
         $previousExpressionPreviousForeach = $this->betterNodeFinder->findFirstParentInstanceOf(
             $node,
-            Node\Stmt\Foreach_::class
+            Foreach_::class
         );
 
         if ($nodePreviousForeach !== $previousExpressionPreviousForeach) {
-            if ($nodePreviousForeach instanceof Node\Stmt\Foreach_ && $assign->var instanceof Variable) {
+            if ($nodePreviousForeach instanceof Foreach_ && $assign->var instanceof Variable) {
                 // is value changed inside the foreach?
 
                 $variableAssigns = $this->betterNodeFinder->findAssignsOfVariable($nodePreviousForeach, $assign->var);
@@ -117,26 +123,12 @@ CODE_SAMPLE
     {
         $firstNodeParent = $this->betterNodeFinder->findFirstParentInstanceOf(
             $firstNode,
-            [
-                Node\Stmt\Foreach_::class,
-                Node\Stmt\If_::class,
-                Node\Stmt\While_::class,
-                Node\Stmt\Do_::class,
-                Node\Stmt\Else_::class,
-                Node\Stmt\ElseIf_::class,
-            ]
+            [Foreach_::class, If_::class, While_::class, Do_::class, Else_::class, ElseIf_::class]
         );
 
         $secondNodeParent = $this->betterNodeFinder->findFirstParentInstanceOf(
             $secondNode,
-            [
-                Node\Stmt\Foreach_::class,
-                Node\Stmt\If_::class,
-                Node\Stmt\While_::class,
-                Node\Stmt\Do_::class,
-                Node\Stmt\If_::class,
-                Node\Stmt\ElseIf_::class,
-            ]
+            [Foreach_::class, If_::class, While_::class, Do_::class, If_::class, ElseIf_::class]
         );
 
         if ($firstNodeParent === null || $secondNodeParent === null) {
