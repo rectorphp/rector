@@ -28,6 +28,26 @@ final class RemoveUnusedParameterRector extends AbstractRector
      */
     private $classMethodManipulator;
 
+    /**
+     * @var string[]
+     */
+    private $magicMethods = [
+        '__call',
+        '__callStatic',
+        '__clone',
+        '__debugInfo',
+        '__destruct',
+        '__get',
+        '__invoke',
+        '__isset',
+        '__set',
+        '__set_state',
+        '__sleep',
+        '__toString',
+        '__unset',
+        '__wakeup',
+    ];
+
     public function __construct(ClassManipulator $classManipulator, ClassMethodManipulator $classMethodManipulator)
     {
         $this->classManipulator = $classManipulator;
@@ -80,6 +100,10 @@ CODE_SAMPLE
         }
 
         if ($node->params === []) {
+            return null;
+        }
+
+        if ($this->isNames($node, $this->magicMethods)) {
             return null;
         }
 
