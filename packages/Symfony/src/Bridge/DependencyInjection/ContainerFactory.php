@@ -1,4 +1,4 @@
-<?php declare (strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace Rector\Symfony\Bridge\DependencyInjection;
 
@@ -38,8 +38,7 @@ final class ContainerFactory
         $containerBuilder->getCompilerPassConfig()->setRemovingPasses([]);
 
         // anonymous class on intention, since this depends on Symfony\DependencyInjection in rector-prefixed
-        $containerBuilder->getCompilerPassConfig()->addPass(new class () implements CompilerPassInterface
-        {
+        $containerBuilder->getCompilerPassConfig()->addPass(new class() implements CompilerPassInterface {
             public function process(ContainerBuilder $containerBuilder): void
             {
                 foreach ($containerBuilder->getDefinitions() as $definition) {
@@ -59,7 +58,7 @@ final class ContainerFactory
     private function createKernelFromKernelClass(string $kernelClass): Kernel
     {
         $environment = $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? 'dev';
-        $debug = (bool)($_ENV['APP_DEBUG'] ?? $_SERVER['APP_DEBUG'] ?? true);
+        $debug = (bool) ($_ENV['APP_DEBUG'] ?? $_SERVER['APP_DEBUG'] ?? true);
 
         return new $kernelClass($environment, $debug);
     }
