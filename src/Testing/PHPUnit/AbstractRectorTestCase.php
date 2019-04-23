@@ -49,6 +49,8 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             ));
         }
 
+        dump($configFile);
+
         $this->bootKernelWithConfigs(RectorKernel::class, [$configFile]);
 
         $this->fileProcessor = static::$container->get(FileProcessor::class);
