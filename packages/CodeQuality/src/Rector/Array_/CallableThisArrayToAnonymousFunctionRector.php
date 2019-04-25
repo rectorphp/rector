@@ -110,7 +110,7 @@ CODE_SAMPLE
         $innerMethodCall = new MethodCall($objectVariable, $classMethod->name);
         $innerMethodCall->args = $this->convertParamsToArgs($classMethod->params);
 
-        if ($classMethod->returnType) {
+        if ($classMethod->returnType !== null) {
             $anonymousFunction->returnType = $classMethod->returnType;
         }
 

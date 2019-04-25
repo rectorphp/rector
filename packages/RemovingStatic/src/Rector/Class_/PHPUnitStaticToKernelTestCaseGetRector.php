@@ -4,6 +4,20 @@ declare(strict_types=1);
 
 namespace Rector\RemovingStatic\Rector\Class_;
 
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Name;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -124,7 +138,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Node\Expr\StaticCall::class, Node\Stmt\Class_::class];
+        return [StaticCall::class, Class_::class];
     }
 
     /**
@@ -135,7 +149,7 @@ CODE_SAMPLE
         // skip yourself
         $this->newProperties = [];
 
-        if ($node instanceof Node\Stmt\Class_) {
+        if ($node instanceof Class_) {
             if ($this->isTypes($node, $this->staticClassTypes)) {
                 return null;
             }
@@ -146,7 +160,7 @@ CODE_SAMPLE
         return $this->processStaticCall($node);
     }
 
-    private function processClass(Node\Stmt\Class_ $class): ?Node\Stmt\Class_
+    private function processClass(Class_ $class): ?Class_
     {
         if ($this->isType($class, 'PHPUnit\Framework\TestCase')) {
             return $this->processPHPUnitClass($class);
@@ -167,7 +181,7 @@ CODE_SAMPLE
         return $class;
     }
 
-    private function processStaticCall(Node\Expr\StaticCall $staticCall): ?Node\Expr\MethodCall
+    private function processStaticCall(StaticCall $staticCall): ?MethodCall
     {
         /** @var Node\Stmt\Class_|null $class */
         $class = $staticCall->getAttribute(AttributeKey::CLASS_NODE);
@@ -189,12 +203,12 @@ CODE_SAMPLE
     /**
      * @return string[]
      */
-    private function collectNewProperties(Node\Stmt\Class_ $class): array
+    private function collectNewProperties(Class_ $class): array
     {
         $this->newProperties = [];
 
         $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node): void {
-            if (! $node instanceof Node\Expr\StaticCall) {
+            if (! $node instanceof StaticCall) {
                 return;
             }
 
@@ -212,7 +226,7 @@ CODE_SAMPLE
         return $this->newProperties;
     }
 
-    private function createPropertyFromType(string $type): Node\Stmt\Property
+    private function createPropertyFromType(string $type): Property
     {
         $propertyName = $this->propertyNaming->fqnToVariableName($type);
 
@@ -220,25 +234,25 @@ CODE_SAMPLE
     }
 
     private function convertStaticCallToPropertyMethodCall(
-        Node\Expr\StaticCall $staticCall,
+        StaticCall $staticCall,
         string $type
-    ): Node\Expr\MethodCall {
+    ): MethodCall {
         // create "$this->someService" instead
         $propertyName = $this->propertyNaming->fqnToVariableName($type);
-        $propertyFetch = new Node\Expr\PropertyFetch(new Node\Expr\Variable('this'), $propertyName);
+        $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
 
         // turn static call to method on property call
-        $methodCall = new Node\Expr\MethodCall($propertyFetch, $staticCall->name);
+        $methodCall = new MethodCall($propertyFetch, $staticCall->name);
         $methodCall->args = $staticCall->args;
 
         return $methodCall;
     }
 
-    private function createContainerGetTypeMethodCall(string $type): Node\Expr\MethodCall
+    private function createContainerGetTypeMethodCall(string $type): MethodCall
     {
-        $containerProperty = new Node\Expr\StaticPropertyFetch(new Node\Name('self'), 'container');
-        $getMethodCall = new Node\Expr\MethodCall($containerProperty, 'get');
-        $getMethodCall->args[] = new Node\Arg(new Node\Expr\ClassConstFetch(new Node\Name\FullyQualified(
+        $containerProperty = new StaticPropertyFetch(new Name('self'), 'container');
+        $getMethodCall = new MethodCall($containerProperty, 'get');
+        $getMethodCall->args[] = new Arg(new ClassConstFetch(new FullyQualified(
             $type
         ), 'class'));
 
@@ -248,7 +262,7 @@ CODE_SAMPLE
     /**
      * @param string[] $newProperties
      */
-    private function addNewPropertiesToClass(Node\Stmt\Class_ $class, array $newProperties): Node\Stmt\Class_
+    private function addNewPropertiesToClass(Class_ $class, array $newProperties): Class_
     {
         $properties = [];
         foreach ($newProperties as $type) {
@@ -261,26 +275,26 @@ CODE_SAMPLE
         return $class;
     }
 
-    private function createContainerGetTypeToPropertyAssign(string $type): Node\Stmt\Expression
+    private function createContainerGetTypeToPropertyAssign(string $type): Expression
     {
         $getMethodCall = $this->createContainerGetTypeMethodCall($type);
 
         $propertyName = $this->propertyNaming->fqnToVariableName($type);
-        $propertyFetch = new Node\Expr\PropertyFetch(new Node\Expr\Variable('this'), $propertyName);
+        $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
 
-        $assign = new Node\Expr\Assign($propertyFetch, $getMethodCall);
+        $assign = new Assign($propertyFetch, $getMethodCall);
 
-        return new Node\Stmt\Expression($assign);
+        return new Expression($assign);
     }
 
-    private function getParentSetUpStaticCallPosition(Node\Stmt\ClassMethod $setupClassMethod): ?int
+    private function getParentSetUpStaticCallPosition(ClassMethod $setupClassMethod): ?int
     {
         foreach ((array) $setupClassMethod->stmts as $position => $methodStmt) {
-            if ($methodStmt instanceof Node\Stmt\Expression) {
+            if ($methodStmt instanceof Expression) {
                 $methodStmt = $methodStmt->expr;
             }
 
-            if (! $methodStmt instanceof Node\Expr\StaticCall) {
+            if (! $methodStmt instanceof StaticCall) {
                 continue;
             }
 
@@ -298,12 +312,12 @@ CODE_SAMPLE
         return null;
     }
 
-    private function createParentSetUpStaticCall(): Node\Stmt\Expression
+    private function createParentSetUpStaticCall(): Expression
     {
-        return new Node\Stmt\Expression(new Node\Expr\StaticCall(new Node\Name('parent'), 'setUp'));
+        return new Expression(new StaticCall(new Name('parent'), 'setUp'));
     }
 
-    private function processPHPUnitClass(Node\Stmt\Class_ $class): ?Node\Stmt\Class_
+    private function processPHPUnitClass(Class_ $class): ?Class_
     {
         // add property with the object
         $newProperties = $this->collectNewProperties($class);
@@ -332,16 +346,16 @@ CODE_SAMPLE
 
         // update parent clsas if not already
         if (! $this->isType($class, $this->kernelTestCaseClass)) {
-            $class->extends = new Node\Name\FullyQualified($this->kernelTestCaseClass);
+            $class->extends = new FullyQualified($this->kernelTestCaseClass);
         }
 
         return $class;
     }
 
     private function createSetUpMethod(
-        Node\Stmt\Expression $parentSetupStaticCall,
-        Node\Stmt\Expression $assign
-    ): Node\Stmt\ClassMethod {
+        Expression $parentSetupStaticCall,
+        Expression $assign
+    ): ClassMethod {
         $classMethodBuilder = $this->builderFactory->method('setUp')
             ->makeProtected();
 
@@ -355,9 +369,9 @@ CODE_SAMPLE
     }
 
     private function updateSetUpMethod(
-        Node\Stmt\ClassMethod $setupClassMethod,
-        Node\Stmt\Expression $parentSetupStaticCall,
-        Node\Stmt\Expression $assign
+        ClassMethod $setupClassMethod,
+        Expression $parentSetupStaticCall,
+        Expression $assign
     ): void {
         $parentSetUpStaticCallPosition = $this->getParentSetUpStaticCallPosition($setupClassMethod);
         if ($parentSetUpStaticCallPosition === null) {

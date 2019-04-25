@@ -43,7 +43,7 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
      */
     public function resolve(Node $paramNode): array
     {
-        if ($paramNode->type) {
+        if ($paramNode->type !== null) {
             $resolveTypeName = $this->nameResolver->resolve($paramNode->type);
             if ($resolveTypeName) {
                 return [$resolveTypeName];
