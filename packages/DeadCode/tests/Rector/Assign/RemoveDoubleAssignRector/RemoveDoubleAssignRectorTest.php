@@ -20,6 +20,7 @@ final class RemoveDoubleAssignRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/inside_the_same_if.php.inc',
             // skip
             __DIR__ . '/Fixture/skip_double_catch.php.inc',
+            __DIR__ . '/Fixture/skip_double_case.php.inc',
         ]);
     }
 
