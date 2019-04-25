@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 
 final class UniqueObjectOrServiceDetector
 {
-    public function isUniqueObject(Class_ $class): bool
+    public function isUniqueObject(): bool
     {
         // ideas:
         // hook in container?
