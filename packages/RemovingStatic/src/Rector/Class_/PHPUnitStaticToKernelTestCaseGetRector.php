@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Rector\RemovingStatic\Rector\Class_;
 
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Name;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Property;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
@@ -233,10 +233,8 @@ CODE_SAMPLE
         return $this->nodeFactory->createPrivatePropertyFromVariableInfo(new VariableInfo($propertyName, $type));
     }
 
-    private function convertStaticCallToPropertyMethodCall(
-        StaticCall $staticCall,
-        string $type
-    ): MethodCall {
+    private function convertStaticCallToPropertyMethodCall(StaticCall $staticCall, string $type): MethodCall
+    {
         // create "$this->someService" instead
         $propertyName = $this->propertyNaming->fqnToVariableName($type);
         $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
@@ -252,9 +250,7 @@ CODE_SAMPLE
     {
         $containerProperty = new StaticPropertyFetch(new Name('self'), 'container');
         $getMethodCall = new MethodCall($containerProperty, 'get');
-        $getMethodCall->args[] = new Arg(new ClassConstFetch(new FullyQualified(
-            $type
-        ), 'class'));
+        $getMethodCall->args[] = new Arg(new ClassConstFetch(new FullyQualified($type), 'class'));
 
         return $getMethodCall;
     }
@@ -352,10 +348,8 @@ CODE_SAMPLE
         return $class;
     }
 
-    private function createSetUpMethod(
-        Expression $parentSetupStaticCall,
-        Expression $assign
-    ): ClassMethod {
+    private function createSetUpMethod(Expression $parentSetupStaticCall, Expression $assign): ClassMethod
+    {
         $classMethodBuilder = $this->builderFactory->method('setUp')
             ->makeProtected();
 
