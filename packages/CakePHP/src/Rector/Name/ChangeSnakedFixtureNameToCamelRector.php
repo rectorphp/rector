@@ -87,7 +87,7 @@ CODE_SAMPLE
             function ($token) {
                 $tokens = explode('_', $token);
 
-                return implode(array_map('ucfirst', $tokens));
+                return implode('', array_map('ucfirst', $tokens));
             },
             explode('/', $table)
         );
