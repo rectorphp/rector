@@ -199,4 +199,3 @@ CODE_SAMPLE
         return $node;
     }
 }
-/NewUniqueObjectToEntityFactoryRector.php

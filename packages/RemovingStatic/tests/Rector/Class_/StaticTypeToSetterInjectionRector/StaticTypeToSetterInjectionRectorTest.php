@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector;
 
+use Rector\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector;
+use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory;
 use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactoryWithInterface;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
