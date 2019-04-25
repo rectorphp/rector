@@ -131,6 +131,7 @@ CODE_SAMPLE
                 Else_::class,
                 ElseIf_::class,
                 Node\Stmt\Catch_::class,
+                Node\Stmt\Case_::class,
             ]
         );
 
@@ -144,6 +145,7 @@ CODE_SAMPLE
                 If_::class,
                 ElseIf_::class,
                 Node\Stmt\Catch_::class,
+                Node\Stmt\Case_::class,
             ]
         );
 
