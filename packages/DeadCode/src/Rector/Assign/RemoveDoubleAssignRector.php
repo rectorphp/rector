@@ -123,17 +123,34 @@ CODE_SAMPLE
     {
         $firstNodeParent = $this->betterNodeFinder->findFirstParentInstanceOf(
             $firstNode,
-            [Foreach_::class, If_::class, While_::class, Do_::class, Else_::class, ElseIf_::class]
+            [
+                Foreach_::class,
+                If_::class,
+                While_::class,
+                Do_::class,
+                Else_::class,
+                ElseIf_::class,
+                Node\Stmt\Catch_::class,
+            ]
         );
 
         $secondNodeParent = $this->betterNodeFinder->findFirstParentInstanceOf(
             $secondNode,
-            [Foreach_::class, If_::class, While_::class, Do_::class, If_::class, ElseIf_::class]
+            [
+                Foreach_::class,
+                If_::class,
+                While_::class,
+                Do_::class,
+                If_::class,
+                ElseIf_::class,
+                Node\Stmt\Catch_::class,
+            ]
         );
 
         if ($firstNodeParent === null || $secondNodeParent === null) {
             return false;
         }
+
         return ! $this->areNodesEqual($firstNodeParent, $secondNodeParent);
     }
 
