@@ -4,7 +4,6 @@ namespace Rector\Context;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\For_;
@@ -51,7 +50,7 @@ final class ContextAnalyzer
         return $this->isTypes($firstParent, self::LOOP_NODES);
     }
 
-    public function isInIf(Break_ $node): bool
+    public function isInIf(Node $node): bool
     {
         $previousNode = $this->betterNodeFinder->findFirstParentInstanceOf(
             $node,

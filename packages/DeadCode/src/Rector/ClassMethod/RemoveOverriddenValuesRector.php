@@ -6,9 +6,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PHPStan\Analyser\Scope;
+use Rector\Context\ContextAnalyzer;
 use Rector\DeadCode\Rector\ClassMethod\Data\VariableNodeUseInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -17,6 +16,16 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class RemoveOverriddenValuesRector extends AbstractRector
 {
+    /**
+     * @var ContextAnalyzer
+     */
+    private $contextAnalyzer;
+
+    public function __construct(ContextAnalyzer $contextAnalyzer)
+    {
+        $this->contextAnalyzer = $contextAnalyzer;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Remove initial assigns of overridden values', [
@@ -56,7 +65,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param ClassMethod $node
+     * @param FunctionLike $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -90,6 +99,11 @@ CODE_SAMPLE
             }
 
             if (! $node instanceof Variable) {
+                return false;
+            }
+
+            // skin in if
+            if ($this->contextAnalyzer->isInIf($node)) {
                 return false;
             }
 
