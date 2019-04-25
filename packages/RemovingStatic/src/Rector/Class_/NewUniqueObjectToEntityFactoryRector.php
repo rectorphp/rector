@@ -5,6 +5,12 @@ declare(strict_types=1);
 namespace Rector\RemovingStatic\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -125,7 +131,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Node\Stmt\Class_::class];
+        return [Class_::class];
     }
 
     /**
@@ -141,7 +147,7 @@ CODE_SAMPLE
         $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node) use (
             $classesUsingTypes
         ) {
-            if (! $node instanceof Node\Expr\New_) {
+            if (! $node instanceof New_) {
                 return null;
             }
 
@@ -154,9 +160,9 @@ CODE_SAMPLE
             $this->matchedTypes[] = $class;
 
             $propertyName = $this->propertyNaming->fqnToVariableName($class) . 'Factory';
-            $propertyFetch = new Node\Expr\PropertyFetch(new Node\Expr\Variable('this'), $propertyName);
+            $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
 
-            return new Node\Expr\MethodCall($propertyFetch, 'create', $node->args);
+            return new MethodCall($propertyFetch, 'create', $node->args);
         });
 
         foreach ($this->matchedTypes as $matchedType) {
@@ -188,11 +194,15 @@ CODE_SAMPLE
                 $this->typesToServices
             );
             if ($hasTypes) {
-                $this->classesUsingTypes[] = $this->getName($class);
+                $name = $this->getName($class);
+                if ($name === null) {
+                    throw new ShouldNotHappenException();
+                }
+                $this->classesUsingTypes[] = $name;
             }
         }
 
-        $this->classesUsingTypes = array_unique($this->classesUsingTypes);
+        $this->classesUsingTypes = (array) array_unique($this->classesUsingTypes);
 
         return $this->classesUsingTypes;
     }

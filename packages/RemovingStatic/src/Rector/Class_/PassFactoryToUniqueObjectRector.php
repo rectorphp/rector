@@ -5,6 +5,11 @@ declare(strict_types=1);
 namespace Rector\RemovingStatic\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
 use Rector\Naming\PropertyNaming;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -144,15 +149,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Node\Stmt\Class_::class, Node\Expr\StaticCall::class];
+        return [Class_::class, StaticCall::class];
     }
 
     /**
-     * @param Node\Expr\StaticCall $node
+     * @param Node\Expr\StaticCall|Node\Stmt\Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Node\Stmt\Class_) {
+        if ($node instanceof Class_) {
             $staticTypesInClass = $this->staticTypesInClassResolver->collectStaticCallTypeInClass(
                 $node,
                 $this->typesToServices
@@ -186,9 +191,9 @@ CODE_SAMPLE
 
             // is this object created via new somewhere else? use factory!
             $variableName = $this->propertyNaming->fqnToVariableName($type);
-            $thisPropertyFetch = new Node\Expr\PropertyFetch(new Node\Expr\Variable('this'), $variableName);
+            $thisPropertyFetch = new PropertyFetch(new Variable('this'), $variableName);
 
-            return new Node\Expr\MethodCall($thisPropertyFetch, $node->name, $node->args);
+            return new MethodCall($thisPropertyFetch, $node->name, $node->args);
         }
 
         return $node;

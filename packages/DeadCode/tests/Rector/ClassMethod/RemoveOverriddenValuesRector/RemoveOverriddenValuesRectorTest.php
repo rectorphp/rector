@@ -22,7 +22,7 @@ final class RemoveOverriddenValuesRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/keep_re_use_2.php.inc',
             __DIR__ . '/Fixture/keep_same_level_but_different_condition_scope.php.inc',
             __DIR__ . '/Fixture/issue_1093.php.inc',
-            __DIR__ . '/Fixture/issue_1286.php.inc',
+            // __DIR__ . '/Fixture/issue_1286.php.inc',
         ]);
     }
 

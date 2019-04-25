@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\RemovingStatic;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\Class_;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
@@ -35,12 +37,12 @@ final class StaticTypesInClassResolver
      * @param string[] $types
      * @return string[]
      */
-    public function collectStaticCallTypeInClass(Node\Stmt\Class_ $node, array $types): array
+    public function collectStaticCallTypeInClass(Class_ $node, array $types): array
     {
         $this->staticTypesInClass = [];
 
         $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node) use ($types) {
-            if (! $node instanceof Node\Expr\StaticCall) {
+            if (! $node instanceof StaticCall) {
                 return null;
             }
 

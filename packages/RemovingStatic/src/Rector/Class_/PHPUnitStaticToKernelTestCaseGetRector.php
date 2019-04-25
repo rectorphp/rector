@@ -332,7 +332,7 @@ CODE_SAMPLE
             $setupClassMethod = $class->getMethod('setUp');
 
             // get setup or create a setup add add it there
-            if ($setupClassMethod) {
+            if ($setupClassMethod !== null) {
                 $this->updateSetUpMethod($setupClassMethod, $parentSetupStaticCall, $assign);
             } else {
                 $setUpMethod = $this->createSetUpMethod($parentSetupStaticCall, $assign);

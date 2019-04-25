@@ -6,7 +6,7 @@ namespace Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionR
 
 use phpDocumentor\Reflection\Types\Integer;
 
-final class GenericEntityFactory
+final class GenericEntityFactoryWithInterface
 {
     public static function make(): Integer
     {

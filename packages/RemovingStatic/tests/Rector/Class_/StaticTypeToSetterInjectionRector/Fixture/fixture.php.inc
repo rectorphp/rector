@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\RemovingStatic\Rector\Tests\Rector\Class_Fixture\EntityFactoryInsideEntityFactoryRector\Fixture;
+namespace Rector\RemovingStatic\Rector\Tests\Rector\Class_Fixture\StaticTypeToSetterInjectionRector\Fixture;
 
-use Rector\RemovingStatic\Rector\Tests\Rector\Class_Fixture\EntityFactoryInsideEntityFactoryRector\Source\GenericEntityFactory;
+use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory;
 
 final class CheckoutEntityFactory
 {
@@ -20,17 +20,17 @@ final class CheckoutEntityFactory
 
 declare(strict_types=1);
 
-namespace Rector\RemovingStatic\Rector\Tests\Rector\Class_Fixture\EntityFactoryInsideEntityFactoryRector\Fixture;
+namespace Rector\RemovingStatic\Rector\Tests\Rector\Class_Fixture\StaticTypeToSetterInjectionRector\Fixture;
 
-use Rector\RemovingStatic\Rector\Tests\Rector\Class_Fixture\EntityFactoryInsideEntityFactoryRector\Source\GenericEntityFactory;
+use Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory;
 
-final class CheckoutEntityFactory implements \Rector\RemovingStatic\Rector\Tests\Rector\Class_Fixture\EntityFactoryInsideEntityFactoryRector\Source\GenericEntityFactoryAwareInterface
+final class CheckoutEntityFactory
 {
     /**
-     * @var \Rector\RemovingStatic\Rector\Tests\Rector\Class_Fixture\EntityFactoryInsideEntityFactoryRector\Source\GenericEntityFactory
+     * @var \Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory
      */
     private $genericEntityFactory;
-    public function setGenericEntityFactory(\Rector\RemovingStatic\Rector\Tests\Rector\Class_Fixture\EntityFactoryInsideEntityFactoryRector\Source\GenericEntityFactory $genericEntityFactory): void
+    public function setGenericEntityFactory(\Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\Source\GenericEntityFactory $genericEntityFactory): void
     {
         $this->genericEntityFactory = $genericEntityFactory;
     }

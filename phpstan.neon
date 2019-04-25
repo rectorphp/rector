@@ -152,3 +152,6 @@ parameters:
         - '#Method Rector\\NodeContainer\\ParsedNodesByType\:\:findImplementersOfInterface\(\) should return array<PhpParser\\Node\\Stmt\\Interface_\> but returns array<int, PhpParser\\Node\>#'
         - '#PHPDoc tag @param for parameter \$classLike with type PhpParser\\Builder\\Trait_\|PhpParser\\Node\\Stmt\\Interface_ is not subtype of native type PhpParser\\Node\\Stmt\\ClassLike#'
         - '#Method Rector\\CodingStyle\\Rector\\Namespace_\\ImportFullyQualifiedNamesRector\:\:getShortName\(\) should return string but returns string\|false#'
+        - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable\:\:\$name#'
+        - '#Empty array passed to foreach#'
+        - '#Method Rector\\RemovingStatic\\UniqueObjectFactoryFactory\:\:resolveClassShortName\(\) should return string but returns string\|false#'

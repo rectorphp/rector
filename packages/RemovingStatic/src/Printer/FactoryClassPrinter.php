@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
@@ -71,6 +72,9 @@ final class FactoryClassPrinter
     {
         /** @var SmartFileInfo|null $classFileInfo */
         $classFileInfo = $oldClass->getAttribute(AttributeKey::FILE_INFO);
+        if ($classFileInfo === null) {
+            throw new ShouldNotHappenException();
+        }
 
         $directoryPath = Strings::before($classFileInfo->getRealPath(), DIRECTORY_SEPARATOR, -1);
         $bareClassName = Strings::after($this->nameResolver->resolve($oldClass), '\\', -1) . 'Factory.php';

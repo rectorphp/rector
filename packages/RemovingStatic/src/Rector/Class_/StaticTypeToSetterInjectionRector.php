@@ -5,6 +5,13 @@ declare(strict_types=1);
 namespace Rector\RemovingStatic\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
@@ -90,7 +97,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Node\Stmt\Class_::class, Node\Expr\StaticCall::class];
+        return [Class_::class, StaticCall::class];
     }
 
     /**
@@ -98,40 +105,40 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Node\Stmt\Class_) {
+        if ($node instanceof Class_) {
             return $this->processClass($node);
         }
 
         foreach ($this->staticTypes as $staticType) {
-            if (! $this->isType($node, $staticType)) {
+            if (! $this->isType($node->class, $staticType)) {
                 continue;
             }
 
             $variableName = $this->propertyNaming->fqnToVariableName($staticType);
-            $propertyFetch = new Node\Expr\PropertyFetch(new Node\Expr\Variable('this'), $variableName);
+            $propertyFetch = new PropertyFetch(new Variable('this'), $variableName);
 
-            return new Node\Expr\MethodCall($propertyFetch, $node->name, $node->args);
+            return new MethodCall($propertyFetch, $node->name, $node->args);
         }
 
         return null;
     }
 
-    private function isEntityFactoryStaticCall(Node $node): bool
+    private function isEntityFactoryStaticCall(Node $node, string $staticType): bool
     {
-        if (! $node instanceof Node\Expr\StaticCall) {
+        if (! $node instanceof StaticCall) {
             return false;
         }
 
-        return $this->isTypes($node, $this->staticTypes);
+        return $this->isType($node->class, $staticType);
     }
 
-    private function processClass(Node\Stmt\Class_ $class): ?Node\Stmt\Class_
+    private function processClass(Class_ $class): ?Class_
     {
-        foreach ($this->staticTypes as $staticType) {
+        foreach ($this->staticTypes as $implements => $staticType) {
             $containsEntityFactoryStaticCall = (bool) $this->betterNodeFinder->findFirst(
                 $class->stmts,
-                function (Node $node) {
-                    return $this->isEntityFactoryStaticCall($node);
+                function (Node $node) use ($staticType) {
+                    return $this->isEntityFactoryStaticCall($node, $staticType);
                 }
             );
 
@@ -139,17 +146,18 @@ CODE_SAMPLE
                 continue;
             }
 
-            // @todo resolve in configuration: key => value
-            // $class->implements[] = new Node\Name\FullyQualified($this->entityFactoryAwareInterface);
+            if (is_string($implements)) {
+                $class->implements[] = new FullyQualified($implements);
+            }
 
             $variableName = $this->propertyNaming->fqnToVariableName($staticType);
 
             $param = $this->builderFactory->param($variableName)
-                ->setType(new Node\Name\FullyQualified($staticType))
+                ->setType(new FullyQualified($staticType))
                 ->getNode();
 
-            $propertyFetch = new Node\Expr\PropertyFetch(new Node\Expr\Variable('this'), $variableName);
-            $assign = new Node\Expr\Assign($propertyFetch, new Node\Expr\Variable($variableName));
+            $propertyFetch = new PropertyFetch(new Variable('this'), $variableName);
+            $assign = new Assign($propertyFetch, new Variable($variableName));
 
             $setMethodName = 'set' . ucfirst($variableName);
 

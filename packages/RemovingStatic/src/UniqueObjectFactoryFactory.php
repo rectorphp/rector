@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -62,7 +63,8 @@ final class UniqueObjectFactoryFactory
     {
         $className = $this->nameResolver->resolve($class);
         $name = $className . 'Factory';
-        $shortName = Strings::after($name, '\\', -1);
+
+        $shortName = $this->resolveClassShortName($name);
 
         $factoryClassBuilder = $this->builderFactory->class($shortName)
             ->makeFinal();
@@ -73,6 +75,10 @@ final class UniqueObjectFactoryFactory
         // constructor
         $constructMethod = $this->createConstructMethod($staticTypesInClass);
         $factoryClassBuilder->addStmt($constructMethod);
+
+        if ($className === null) {
+            throw new ShouldNotHappenException();
+        }
 
         // create
         $createMethod = $this->createCreateMethod($class, $className, $properties);
@@ -131,7 +137,7 @@ final class UniqueObjectFactoryFactory
 
         $constructClassMethod = $class->getMethod('__construct');
         $params = [];
-        if ($constructClassMethod) {
+        if ($constructClassMethod !== null) {
             foreach ($constructClassMethod->params as $param) {
                 $params[] = $param;
                 $new->args[] = new Arg($param->var);
@@ -174,5 +180,14 @@ final class UniqueObjectFactoryFactory
         }
 
         return $properties;
+    }
+
+    private function resolveClassShortName(string $name): string
+    {
+        if (Strings::contains($name, '\\')) {
+            return Strings::after($name, '\\', -1);
+        }
+
+        return $name;
     }
 }
