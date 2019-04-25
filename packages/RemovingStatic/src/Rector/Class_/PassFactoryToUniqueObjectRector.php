@@ -174,7 +174,7 @@ CODE_SAMPLE
             }
 
             // is this an object? create factory for it next to this :)
-            if ($this->uniqueObjectOrServiceDetector->isUniqueObject($node)) {
+            if ($this->uniqueObjectOrServiceDetector->isUniqueObject()) {
                 $factoryClass = $this->uniqueObjectFactoryFactory->createFactoryClass($node, $staticTypesInClass);
 
                 $this->factoryClassPrinter->printFactoryForClass($factoryClass, $node);
