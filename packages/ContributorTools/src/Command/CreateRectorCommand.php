@@ -14,6 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
@@ -240,6 +241,10 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         $composerJson['autoload-dev']['psr-4'][$namespaceTest] = 'packages/' . $package . '/tests';
 
         $this->saveJsonToFile($composerJsonFilePath, $composerJson);
+
+        // rebuild new namespace
+        $composerDumpProcess = new Process(['composer', 'dump']);
+        $composerDumpProcess->run();
     }
 
     /**
