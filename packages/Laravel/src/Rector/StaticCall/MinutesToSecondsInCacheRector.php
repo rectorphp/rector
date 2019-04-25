@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\BinaryOp\Mul;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\LNumber;
+use PHPStan\Type\Constant\ConstantIntegerType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -111,6 +112,12 @@ CODE_SAMPLE
     private function processArgumentPosition(Expr $expr, int $argumentPosition): Expr
     {
         $oldValue = $expr->args[$argumentPosition]->value;
+        if (! $oldValue instanceof LNumber) {
+            if (! $this->getStaticType($oldValue) instanceof ConstantIntegerType) {
+                return $expr;
+            }
+        }
+
         $newArgumentValue = new Mul($oldValue, new LNumber(60));
 
         $expr->args[$argumentPosition] = new Arg($newArgumentValue);
