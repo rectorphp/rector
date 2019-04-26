@@ -16,6 +16,7 @@ final class RemoveUnusedPrivateMethodRectorTest extends AbstractRectorTestCase
             // skip
             __DIR__ . '/Fixture/keep_anonymous.php.inc',
             __DIR__ . '/Fixture/skip_local_called.php.inc',
+            __DIR__ . '/Fixture/keep_in_trait.php.inc',
         ]);
     }
 

@@ -5,6 +5,7 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeContainer\ParsedNodesByType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -66,6 +67,14 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+
+        // unreliable to detect trait method usage
+        if ($classNode instanceof Node\Stmt\Trait_) {
+            return null;
+        }
+
+        // skips interfaces by default too
         if (! $node->isPrivate()) {
             return null;
         }
@@ -75,9 +84,11 @@ CODE_SAMPLE
         }
 
         $classMethodCalls = $this->parsedNodesByType->findClassMethodCalls($node);
-        if ($classMethodCalls === []) {
-            $this->removeNode($node);
+        if ($classMethodCalls !== []) {
+            return null;
         }
+
+        $this->removeNode($node);
 
         return $node;
     }
