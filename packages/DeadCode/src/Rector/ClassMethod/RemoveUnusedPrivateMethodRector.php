@@ -4,7 +4,7 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -12,13 +12,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RemoveUnusedPrivateMethodRector extends AbstractRector
 {
     /**
-     * @var ClassMethodManipulator
+     * @var ParsedNodesByType
      */
-    private $classMethodManipulator;
+    private $parsedNodesByType;
 
-    public function __construct(ClassMethodManipulator $classMethodManipulator)
+    public function __construct(ParsedNodesByType $parsedNodesByType)
     {
-        $this->classMethodManipulator = $classMethodManipulator;
+        $this->parsedNodesByType = $parsedNodesByType;
     }
 
     public function getDefinition(): RectorDefinition
@@ -74,7 +74,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $classMethodCalls = $this->classMethodManipulator->getAllClassMethodCall($node);
+        $classMethodCalls = $this->parsedNodesByType->findClassMethodCalls($node);
         if ($classMethodCalls === []) {
             $this->removeNode($node);
         }
