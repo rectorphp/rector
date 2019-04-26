@@ -4,8 +4,6 @@ namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
@@ -160,34 +158,6 @@ final class ClassMethodManipulator
             }
 
             return $this->nameResolver->isName($node, 'this');
-        });
-    }
-
-    /**
-     * @return MethodCall[]
-     */
-    public function getAllClassMethodCall(ClassMethod $classMethod): array
-    {
-        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
-            return [];
-        }
-
-        return $this->betterNodeFinder->find($classNode, function (Node $node) use ($classMethod) {
-            // itself
-            if ($this->betterStandardPrinter->areNodesEqual($node, $classMethod)) {
-                return false;
-            }
-
-            // is it the name match?
-            if ($this->nameResolver->resolve($node) !== $this->nameResolver->resolve($classMethod)) {
-                return false;
-            }
-
-            if ($node instanceof MethodCall && $this->nameResolver->isName($node->var, 'this')) {
-                return true;
-            }
-            return $node instanceof StaticCall && $this->nameResolver->isNames($node->class, ['self', 'static']);
         });
     }
 

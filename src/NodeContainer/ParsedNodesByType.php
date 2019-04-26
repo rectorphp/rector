@@ -5,6 +5,7 @@ namespace Rector\NodeContainer;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
@@ -40,6 +41,7 @@ final class ParsedNodesByType
         // simply collected
         New_::class,
         StaticCall::class,
+        MethodCall::class,
     ];
 
     /**
@@ -76,6 +78,11 @@ final class ParsedNodesByType
      * @var Node[][]
      */
     private $simpleParsedNodesByType = [];
+
+    /**
+     * @var mixed[]
+     */
+    private $methodsCallsByTypeAndMethod = [];
 
     public function __construct(NameResolver $nameResolver)
     {
@@ -377,9 +384,32 @@ final class ParsedNodesByType
             return;
         }
 
+        if ($node instanceof MethodCall || $node instanceof StaticCall) {
+            $this->addCall($node);
+            return;
+        }
+
         // simple collect
         $type = get_class($node);
         $this->simpleParsedNodesByType[$type][] = $node;
+    }
+
+    /**
+     * @return MethodCall[]
+     */
+    public function findClassMethodCalls(ClassMethod $classMethod): array
+    {
+        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) { // anonymous
+            return [];
+        }
+
+        $methodName = $this->nameResolver->resolve($classMethod);
+        if ($methodName === null) {
+            return [];
+        }
+
+        return $this->methodsCallsByTypeAndMethod[$className][$methodName] ?? [];
     }
 
     private function addClass(Class_ $classNode): void
@@ -488,5 +518,23 @@ final class ParsedNodesByType
 
         // PHPStan polution
         return Strings::startsWith($classNode->name->toString(), 'AnonymousClass');
+    }
+
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function addCall(Node $node): void
+    {
+        $className = $this->nodeTypeResolver->resolve($node)[0] ?? null;
+        if ($className === null) { // anonymous
+            return;
+        }
+
+        $methodName = $this->nameResolver->resolve($node);
+        if ($methodName === null) {
+            return;
+        }
+
+        $this->methodsCallsByTypeAndMethod[$className][$methodName][] = $node;
     }
 }
