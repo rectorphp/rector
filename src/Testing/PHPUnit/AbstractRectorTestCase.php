@@ -18,11 +18,6 @@ use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 {
     /**
-     * @var string
-     */
-    private const SPLIT_LINE = '#-----\n#';
-
-    /**
      * @var FileProcessor
      */
     protected $fileProcessor;
@@ -37,8 +32,15 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      */
     private $autoloadTestFixture = true;
 
+    /**
+     * @var FixtureSplitter
+     */
+    private $fixtureSplitter;
+
     protected function setUp(): void
     {
+        $this->fixtureSplitter = new FixtureSplitter($this->getTempPath());
+
         $configFile = $this->provideConfig();
 
         if (! file_exists($configFile)) {
@@ -113,7 +115,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         // 1. original to changed content
         foreach ($files as $file) {
             $smartFileInfo = new SmartFileInfo($file);
-            [$originalFile, $changedFile] = $this->splitContentToOriginalFileAndExpectedFile($smartFileInfo);
+            [$originalFile, $changedFile] = $this->fixtureSplitter->splitContentToOriginalFileAndExpectedFile(
+                $smartFileInfo,
+                $this->autoloadTestFixture
+            );
             $this->doTestFileMatchesExpectedContent($originalFile, $changedFile, $smartFileInfo->getRealPath());
         }
 
@@ -123,34 +128,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected function getTempPath(): string
     {
         return sys_get_temp_dir() . '/rector_temp_tests';
-    }
-
-    /**
-     * @return string[]
-     */
-    private function splitContentToOriginalFileAndExpectedFile(SmartFileInfo $smartFileInfo): array
-    {
-        if (Strings::match($smartFileInfo->getContents(), self::SPLIT_LINE)) {
-            // original → expected
-            [$originalContent, $expectedContent] = Strings::split($smartFileInfo->getContents(), self::SPLIT_LINE);
-        } else {
-            // no changes
-            $originalContent = $smartFileInfo->getContents();
-            $expectedContent = $originalContent;
-        }
-
-        $originalFile = $this->createTemporaryPathWithPrefix($smartFileInfo, 'original');
-        $expectedFile = $this->createTemporaryPathWithPrefix($smartFileInfo, 'expected');
-
-        FileSystem::write($originalFile, $originalContent);
-        FileSystem::write($expectedFile, $expectedContent);
-
-        // file needs to be autoload PHPStan analyze
-        if ($this->autoloadTestFixture) {
-            require_once $originalFile;
-        }
-
-        return [$originalFile, $expectedFile];
     }
 
     private function doTestFileMatchesExpectedContent(
@@ -168,13 +145,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $changedContent = $this->fileProcessor->printToString($smartFileInfo);
 
         $this->assertStringEqualsFile($expectedFile, $changedContent, 'Caused by ' . $fixtureFile);
-    }
-
-    private function createTemporaryPathWithPrefix(SmartFileInfo $smartFileInfo, string $prefix): string
-    {
-        $hash = Strings::substring(md5($smartFileInfo->getRealPath()), 0, 5);
-
-        return sprintf($this->getTempPath() . '/%s_%s_%s', $prefix, $hash, $smartFileInfo->getBasename('.inc'));
     }
 
     private function createFixtureHash(): string

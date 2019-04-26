@@ -2,9 +2,9 @@
 
 namespace Rector\DeadCode\Rector\ClassMethod;
 
-use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
