@@ -2,6 +2,7 @@
 
 namespace Rector\DeadCode\Rector\Property;
 
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -62,7 +63,7 @@ CODE_SAMPLE
         }
 
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode instanceof Node\Stmt\Trait_) {
+        if ($classNode instanceof Trait_) {
             return null;
         }
 

@@ -2,6 +2,7 @@
 
 namespace Rector\DeadCode\Rector\ClassMethod;
 
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeContainer\ParsedNodesByType;
@@ -70,7 +71,7 @@ CODE_SAMPLE
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
 
         // unreliable to detect trait method usage
-        if ($classNode instanceof Node\Stmt\Trait_) {
+        if ($classNode instanceof Trait_) {
             return null;
         }
 

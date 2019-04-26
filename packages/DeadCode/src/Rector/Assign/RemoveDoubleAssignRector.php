@@ -2,6 +2,8 @@
 
 namespace Rector\DeadCode\Rector\Assign;
 
+use PhpParser\Node\Stmt\Catch_;
+use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
@@ -130,8 +132,8 @@ CODE_SAMPLE
                 Do_::class,
                 Else_::class,
                 ElseIf_::class,
-                Node\Stmt\Catch_::class,
-                Node\Stmt\Case_::class,
+                Catch_::class,
+                Case_::class,
             ]
         );
 
@@ -144,8 +146,8 @@ CODE_SAMPLE
                 Do_::class,
                 If_::class,
                 ElseIf_::class,
-                Node\Stmt\Catch_::class,
-                Node\Stmt\Case_::class,
+                Catch_::class,
+                Case_::class,
             ]
         );
 

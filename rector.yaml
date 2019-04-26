@@ -4,6 +4,9 @@ parameters:
         - "/Fixtures/"
         # autoload-buggy cases
         - "*.php.inc"
+        # string might not exist for SplitStringClassConstantToClassConstFetchRector
+        - "packages/Symfony/src/Rector/Console/ConsoleExceptionToErrorEventConstantRector.php"
+
 
     # so Rector code is still PHP 7.1 compatible
     php_version_features: '7.1'
