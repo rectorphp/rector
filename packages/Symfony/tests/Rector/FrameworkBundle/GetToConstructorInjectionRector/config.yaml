@@ -1,7 +1,0 @@
-parameters:
-    kernel_class: 'Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeKernelClass'
-
-services:
-    Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector:
-        - 'Rector\Symfony\Tests\Rector\Source\SymfonyController'
-        - 'Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\GetTrait'

@@ -20,7 +20,7 @@ final class StringToClassConstantRector extends AbstractRector
     /**
      * @param string[][] $stringsToClassConstants
      */
-    public function __construct(array $stringsToClassConstants)
+    public function __construct(array $stringsToClassConstants = [])
     {
         $this->stringsToClassConstants = $stringsToClassConstants;
     }

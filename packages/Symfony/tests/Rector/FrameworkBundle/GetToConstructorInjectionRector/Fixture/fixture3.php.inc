@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Fixture;
+
 use Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\GetTrait;
 
 class ClassWithNamedServiceAndTrait
@@ -15,6 +17,8 @@ class ClassWithNamedServiceAndTrait
 ?>
 -----
 <?php
+
+namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Fixture;
 
 use Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\GetTrait;
 

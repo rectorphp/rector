@@ -20,7 +20,7 @@ final class FunctionToNewRector extends AbstractRector
     /**
      * @param string[] $functionToNew
      */
-    public function __construct(array $functionToNew)
+    public function __construct(array $functionToNew = [])
     {
         $this->functionToNew = $functionToNew;
     }

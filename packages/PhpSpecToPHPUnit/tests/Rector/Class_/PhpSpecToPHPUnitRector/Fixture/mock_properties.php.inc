@@ -29,13 +29,13 @@ use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\Du
 class MockPropertiesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $factory;
-    /**
      * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\MethodCall\PhpSpecToPHPUnitRector\Fixture\MockProperties
      */
     private $mockProperties;
+    /**
+     * @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $factory;
     protected function setUp()
     {
         $this->factory = $this->createMock(OrderFactory::class);

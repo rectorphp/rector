@@ -64,13 +64,13 @@ use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\Du
 class RatesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Provider|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $provider;
-    /**
      * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\MethodCall\PhpSpecToPHPUnitRector\Fixture\Rates
      */
     private $rates;
+    /**
+     * @var Provider|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $provider;
     protected function setUp()
     {
         $this->provider = $this->createMock(Provider::class);

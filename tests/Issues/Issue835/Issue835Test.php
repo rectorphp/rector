@@ -13,6 +13,6 @@ final class Issue835Test extends AbstractRectorTestCase
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/config835.yaml';
+        return __DIR__ . '/../../../config/level/cakephp/cakephp34.yaml';
     }
 }

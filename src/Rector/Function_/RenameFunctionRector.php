@@ -22,7 +22,7 @@ final class RenameFunctionRector extends AbstractRector
     /**
      * @param string[]|string[][] $oldFunctionToNewFunction
      */
-    public function __construct(array $oldFunctionToNewFunction)
+    public function __construct(array $oldFunctionToNewFunction = [])
     {
         $this->oldFunctionToNewFunction = $oldFunctionToNewFunction;
     }

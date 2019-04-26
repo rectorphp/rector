@@ -32,7 +32,7 @@ final class YieldClassMethodToArrayClassMethodRector extends AbstractRector
     /**
      * @param string[][] $methodsByType
      */
-    public function __construct(array $methodsByType, NodeTransformer $nodeTransformer)
+    public function __construct(NodeTransformer $nodeTransformer, array $methodsByType = [])
     {
         $this->methodsByType = $methodsByType;
         $this->nodeTransformer = $nodeTransformer;

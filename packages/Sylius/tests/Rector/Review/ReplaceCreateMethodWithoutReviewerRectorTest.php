@@ -19,9 +19,9 @@ final class ReplaceCreateMethodWithoutReviewerRectorTest extends AbstractRectorT
     }
 
     /**
-     * @return mixed[]|null
+     * @return mixed[]
      */
-    protected function getRectorConfiguration(): ?array
+    protected function getRectorConfiguration(): array
     {
         return [
             '$reviewFactoryInterface' => ReviewFactoryInterface::class,

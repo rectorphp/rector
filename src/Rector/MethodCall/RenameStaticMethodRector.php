@@ -20,7 +20,7 @@ final class RenameStaticMethodRector extends AbstractRector
     /**
      * @param string[][]|string[][][] $oldToNewMethodByClasses
      */
-    public function __construct(array $oldToNewMethodByClasses)
+    public function __construct(array $oldToNewMethodByClasses = [])
     {
         $this->oldToNewMethodByClasses = $oldToNewMethodByClasses;
     }

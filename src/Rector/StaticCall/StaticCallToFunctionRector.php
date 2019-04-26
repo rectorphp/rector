@@ -20,7 +20,7 @@ final class StaticCallToFunctionRector extends AbstractRector
     /**
      * @param string[][] $staticCallToFunctionByType
      */
-    public function __construct(array $staticCallToFunctionByType)
+    public function __construct(array $staticCallToFunctionByType = [])
     {
         $this->staticCallToFunctionByType = $staticCallToFunctionByType;
     }

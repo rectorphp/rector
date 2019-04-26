@@ -21,7 +21,7 @@ final class ArgumentRemoverRector extends AbstractRector
     /**
      * @param mixed[] $positionsByMethodNameByClassType
      */
-    public function __construct(array $positionsByMethodNameByClassType)
+    public function __construct(array $positionsByMethodNameByClassType = [])
     {
         $this->positionsByMethodNameByClassType = $positionsByMethodNameByClassType;
     }

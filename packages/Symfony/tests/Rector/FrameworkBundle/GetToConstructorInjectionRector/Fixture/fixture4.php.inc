@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Fixture;
+
 use Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\ParentClassWithGetTrait;
 
 class ClassWithNamedServiceAndParentTrait extends ParentClassWithGetTrait
@@ -13,6 +15,8 @@ class ClassWithNamedServiceAndParentTrait extends ParentClassWithGetTrait
 ?>
 -----
 <?php
+
+namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Fixture;
 
 use Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\ParentClassWithGetTrait;
 

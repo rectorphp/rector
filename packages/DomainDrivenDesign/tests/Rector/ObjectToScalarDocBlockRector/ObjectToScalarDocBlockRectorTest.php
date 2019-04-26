@@ -27,6 +27,10 @@ final class ObjectToScalarDocBlockRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorConfiguration(): array
     {
-        return [SomeValueObject::class => 'string'];
+        return [
+            '$valueObjectsToSimpleTypes' => [
+                SomeValueObject::class => 'string',
+            ],
+        ];
     }
 }

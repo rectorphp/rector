@@ -155,3 +155,4 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable\:\:\$name#'
         - '#Empty array passed to foreach#'
         - '#Method Rector\\RemovingStatic\\UniqueObjectFactoryFactory\:\:resolveClassShortName\(\) should return string but returns string\|false#'
+        - '#Parameter \#1 \$str of function ltrim expects string, int\|string given#'

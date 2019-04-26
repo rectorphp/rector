@@ -30,7 +30,7 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      */
     private $docBlockManipulator;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator, string $annotation)
+    public function __construct(DocBlockManipulator $docBlockManipulator, string $annotation = 'inject')
     {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->annotation = $annotation;

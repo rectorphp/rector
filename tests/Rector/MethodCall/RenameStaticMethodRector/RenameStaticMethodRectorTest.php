@@ -25,8 +25,10 @@ final class RenameStaticMethodRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            Html::class => ['add' => 'addHtml'],
-            FormMacros::class => ['renderFormBegin' => ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']],
+            '$oldToNewMethodByClasses' => [
+                Html::class => ['add' => 'addHtml'],
+                FormMacros::class => ['renderFormBegin' => ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']],
+            ],
         ];
     }
 }

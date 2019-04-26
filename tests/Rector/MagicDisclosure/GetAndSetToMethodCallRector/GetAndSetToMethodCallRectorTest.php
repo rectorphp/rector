@@ -30,16 +30,18 @@ final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            SomeContainer::class => [
-                'get' => 'getService',
-                'set' => 'addService',
-            ],
-            'Enlight_View_Default' => [
-                'get' => 'getService',
-                'set' => 'addService',
-            ],
-            Klarka::class => [
-                'get' => 'get',
+            '$typeToMethodCalls' => [
+                SomeContainer::class => [
+                    'get' => 'getService',
+                    'set' => 'addService',
+                ],
+                'Enlight_View_Default' => [
+                    'get' => 'getService',
+                    'set' => 'addService',
+                ],
+                Klarka::class => [
+                    'get' => 'get',
+                ],
             ],
         ];
     }

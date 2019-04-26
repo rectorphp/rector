@@ -25,9 +25,9 @@ final class StaticTypeToSetterInjectionRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return string[]
+     * @return mixed[]
      */
-    protected function getRectorConfiguration(): ?array
+    protected function getRectorConfiguration(): array
     {
         return [
             '$staticTypes' => [

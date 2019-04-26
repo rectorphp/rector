@@ -22,9 +22,9 @@ final class SimplifyWebTestCaseAssertionsRectorTest extends AbstractRectorTestCa
     }
 
     /**
-     * @return mixed[]|null
+     * @return mixed[]
      */
-    protected function getRectorConfiguration(): ?array
+    protected function getRectorConfiguration(): array
     {
         return [
             '$webTestCaseClass' => FixtureWebTestCase::class,

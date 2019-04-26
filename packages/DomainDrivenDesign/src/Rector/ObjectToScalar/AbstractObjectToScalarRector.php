@@ -33,7 +33,7 @@ abstract class AbstractObjectToScalarRector extends AbstractRector
     /**
      * @param string[] $valueObjectsToSimpleTypes
      */
-    public function __construct(array $valueObjectsToSimpleTypes)
+    public function __construct(array $valueObjectsToSimpleTypes = [])
     {
         $this->valueObjectsToSimpleTypes = $valueObjectsToSimpleTypes;
     }

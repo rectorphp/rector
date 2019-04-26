@@ -1,3 +1,0 @@
-services:
-    Rector\Php\Rector\Each\WhileEachToForeachRector: ~
-    Rector\Php\Rector\Each\ListEachRector: ~

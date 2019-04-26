@@ -19,9 +19,9 @@ final class FromHttpRequestGetHeaderToHeadersGetRectorTest extends AbstractRecto
     }
 
     /**
-     * @return mixed[]|null
+     * @return mixed[]
      */
-    protected function getRectorConfiguration(): ?array
+    protected function getRectorConfiguration(): array
     {
         return [
             '$netteHttpRequestClass' => NetteHttpRequest::class,

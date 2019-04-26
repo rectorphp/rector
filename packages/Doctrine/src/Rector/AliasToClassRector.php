@@ -25,7 +25,7 @@ final class AliasToClassRector extends AbstractRector
      * @param string[] $aliasesToNamespaces
      */
     public function __construct(
-        array $aliasesToNamespaces,
+        array $aliasesToNamespaces = [],
         string $entityManagerClass = 'Doctrine\ORM\EntityManagerInterface'
     ) {
         $this->aliasesToNamespaces = $aliasesToNamespaces;

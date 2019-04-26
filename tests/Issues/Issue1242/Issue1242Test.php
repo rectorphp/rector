@@ -13,6 +13,6 @@ final class Issue1242Test extends AbstractRectorTestCase
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/config/config1242.yaml';
+        return __DIR__ . '/../../../config/level/twig/twig-underscore-to-namespace.yaml';
     }
 }

@@ -20,7 +20,7 @@ final class FunctionToMethodCallRector extends AbstractRector
     /**
      * @param string[] $functionToMethodCall e.g. ["view" => ["this", "render"]]
      */
-    public function __construct(array $functionToMethodCall)
+    public function __construct(array $functionToMethodCall = [])
     {
         $this->functionToMethodCall = $functionToMethodCall;
     }

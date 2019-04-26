@@ -20,25 +20,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class MinutesToSecondsInCacheRector extends AbstractRector
 {
     /**
-     * @var int[][]
+     * @var string
      */
-    private $typesToMethods = [];
+    private $storeClass;
 
     public function __construct(string $storeClass = 'Illuminate\Contracts\Cache\Store')
     {
-        $this->typesToMethods = [
-            'Illuminate\Support\Facades\Cache' => [
-                'put' => 2, // time argument position
-                'add' => 2,
-            ],
-            $storeClass => [
-                'put' => 2,
-                'putMany' => 1,
-            ],
-            'Illuminate\Cache\DynamoDbStore' => [
-                'add' => 2,
-            ],
-        ];
+        $this->storeClass = $storeClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -84,7 +72,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->typesToMethods as $type => $methodsToArguments) {
+        foreach ($this->getTypesToMethods() as $type => $methodsToArguments) {
             if (! $this->isType($node, $type)) {
                 continue;
             }
@@ -123,5 +111,25 @@ CODE_SAMPLE
         $expr->args[$argumentPosition] = new Arg($newArgumentValue);
 
         return $expr;
+    }
+
+    /**
+     * @return int[][]
+     */
+    private function getTypesToMethods(): array
+    {
+        return [
+            'Illuminate\Support\Facades\Cache' => [
+                'put' => 2, // time argument position
+                'add' => 2,
+            ],
+            $this->storeClass => [
+                'put' => 2,
+                'putMany' => 1,
+            ],
+            'Illuminate\Cache\DynamoDbStore' => [
+                'add' => 2,
+            ],
+        ];
     }
 }

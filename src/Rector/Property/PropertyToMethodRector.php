@@ -21,7 +21,7 @@ final class PropertyToMethodRector extends AbstractRector
     /**
      * @param string[][][] $perClassPropertyToMethods
      */
-    public function __construct(array $perClassPropertyToMethods)
+    public function __construct(array $perClassPropertyToMethods = [])
     {
         $this->perClassPropertyToMethods = $perClassPropertyToMethods;
     }

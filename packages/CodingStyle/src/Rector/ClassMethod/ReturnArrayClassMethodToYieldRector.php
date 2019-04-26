@@ -41,13 +41,13 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector
      * @param string[][] $methodsByType
      */
     public function __construct(
-        array $methodsByType,
         NodeTransformer $nodeTransformer,
-        DocBlockManipulator $docBlockManipulator
+        DocBlockManipulator $docBlockManipulator,
+        array $methodsByType = []
     ) {
-        $this->methodsByType = $methodsByType;
         $this->nodeTransformer = $nodeTransformer;
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->methodsByType = $methodsByType;
     }
 
     public function getDefinition(): RectorDefinition

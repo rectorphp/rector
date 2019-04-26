@@ -33,13 +33,13 @@ final class TemplateAnnotationRector extends AbstractRector
     private $templateGuesser;
 
     public function __construct(
-        int $version,
         DocBlockManipulator $docBlockManipulator,
-        TemplateGuesser $templateGuesser
+        TemplateGuesser $templateGuesser,
+        int $version = 3
     ) {
-        $this->version = $version;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->templateGuesser = $templateGuesser;
+        $this->version = $version;
     }
 
     public function getDefinition(): RectorDefinition

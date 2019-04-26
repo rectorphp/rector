@@ -18,7 +18,7 @@ final class SwapFuncCallArgumentsRector extends AbstractRector
     /**
      * @param int[][] $newArgumentPositionsByFunctionName
      */
-    public function __construct(array $newArgumentPositionsByFunctionName)
+    public function __construct(array $newArgumentPositionsByFunctionName = [])
     {
         $this->newArgumentPositionsByFunctionName = $newArgumentPositionsByFunctionName;
     }

@@ -26,7 +26,7 @@ final class NewObjectToFactoryCreateRector extends AbstractRector
     /**
      * @param string[][] $objectToFactoryMethod
      */
-    public function __construct(array $objectToFactoryMethod)
+    public function __construct(array $objectToFactoryMethod = [])
     {
         $this->objectToFactoryMethod = $objectToFactoryMethod;
     }

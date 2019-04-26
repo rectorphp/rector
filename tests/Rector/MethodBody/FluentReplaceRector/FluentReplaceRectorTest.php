@@ -23,6 +23,8 @@ final class FluentReplaceRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorConfiguration(): array
     {
-        return [FluentInterfaceClass::class];
+        return [
+            '$classesToDefluent' => [FluentInterfaceClass::class],
+        ];
     }
 }

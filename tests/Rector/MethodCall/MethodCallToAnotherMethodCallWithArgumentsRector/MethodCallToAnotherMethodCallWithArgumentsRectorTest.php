@@ -23,6 +23,10 @@ final class MethodCallToAnotherMethodCallWithArgumentsRectorTest extends Abstrac
      */
     protected function getRectorConfiguration(): array
     {
-        return [NetteServiceDefinition::class => ['setInject' => ['addTag', ['inject']]]];
+        return [
+            '$oldMethodsToNewMethodsWithArgsByType' => [
+                NetteServiceDefinition::class => ['setInject' => ['addTag', ['inject']]],
+            ],
+        ];
     }
 }

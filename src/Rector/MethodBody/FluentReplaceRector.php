@@ -18,7 +18,7 @@ final class FluentReplaceRector extends AbstractRector
     /**
      * @param string[] $classesToDefluent
      */
-    public function __construct(array $classesToDefluent)
+    public function __construct(array $classesToDefluent = [])
     {
         $this->classesToDefluent = $classesToDefluent;
     }

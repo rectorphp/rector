@@ -34,10 +34,10 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     /**
      * @param mixed[] $typehintForArgumentByMethodAndClass
      */
-    public function __construct(array $typehintForArgumentByMethodAndClass, TypeAnalyzer $typeAnalyzer)
+    public function __construct(TypeAnalyzer $typeAnalyzer, array $typehintForArgumentByMethodAndClass = [])
     {
-        $this->typehintForArgumentByMethodAndClass = $typehintForArgumentByMethodAndClass;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->typehintForArgumentByMethodAndClass = $typehintForArgumentByMethodAndClass;
     }
 
     public function getDefinition(): RectorDefinition

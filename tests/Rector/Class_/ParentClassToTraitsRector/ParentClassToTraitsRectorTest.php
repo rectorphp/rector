@@ -33,8 +33,10 @@ final class ParentClassToTraitsRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            ParentObject::class => [SomeTrait::class],
-            AnotherParentObject::class => [SomeTrait::class, SecondTrait::class],
+            '$parentClassToTraits' => [
+                ParentObject::class => [SomeTrait::class],
+                AnotherParentObject::class => [SomeTrait::class, SecondTrait::class],
+            ],
         ];
     }
 }

@@ -20,7 +20,7 @@ final class PropertyAssignToMethodCallRector extends AbstractRector
     /**
      * @param string[][] $oldPropertiesToNewMethodCallsByType
      */
-    public function __construct(array $oldPropertiesToNewMethodCallsByType)
+    public function __construct(array $oldPropertiesToNewMethodCallsByType = [])
     {
         $this->oldPropertiesToNewMethodCallsByType = $oldPropertiesToNewMethodCallsByType;
     }

@@ -29,10 +29,12 @@ final class RenameNamespaceRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            'OldNamespace' => 'NewNamespace',
-            'OldNamespaceWith\OldSplitNamespace' => 'NewNamespaceWith\NewSplitNamespace',
-            'Old\Long\AnyNamespace' => 'Short\AnyNamespace',
-            'PHPUnit_Framework_' => 'PHPUnit\Framework\\',
+            '$oldToNewNamespaces' => [
+                'OldNamespace' => 'NewNamespace',
+                'OldNamespaceWith\OldSplitNamespace' => 'NewNamespaceWith\NewSplitNamespace',
+                'Old\Long\AnyNamespace' => 'Short\AnyNamespace',
+                'PHPUnit_Framework_' => 'PHPUnit\Framework\\',
+            ],
         ];
     }
 }

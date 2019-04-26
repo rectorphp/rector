@@ -19,7 +19,7 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
     /**
      * @param mixed[][][] $oldMethodsToNewMethodsWithArgsByType
      */
-    public function __construct(array $oldMethodsToNewMethodsWithArgsByType)
+    public function __construct(array $oldMethodsToNewMethodsWithArgsByType = [])
     {
         $this->oldMethodsToNewMethodsWithArgsByType = $oldMethodsToNewMethodsWithArgsByType;
     }

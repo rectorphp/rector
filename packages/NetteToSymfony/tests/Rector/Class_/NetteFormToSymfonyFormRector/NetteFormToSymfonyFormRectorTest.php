@@ -19,9 +19,9 @@ final class NetteFormToSymfonyFormRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return mixed[]|null
+     * @return mixed[]
      */
-    protected function getRectorConfiguration(): ?array
+    protected function getRectorConfiguration(): array
     {
         return [
             '$presenterClass' => NettePresenter::class,

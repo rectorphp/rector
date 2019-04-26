@@ -18,7 +18,7 @@ final class FunctionToStaticCallRector extends AbstractRector
     /**
      * @param string[] $functionToStaticCall
      */
-    public function __construct(array $functionToStaticCall)
+    public function __construct(array $functionToStaticCall = [])
     {
         $this->functionToStaticCall = $functionToStaticCall;
     }

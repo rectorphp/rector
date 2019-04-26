@@ -18,13 +18,15 @@ final class StringToClassConstantRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return mixed[]|null
+     * @return mixed[]
      */
-    protected function getRectorConfiguration(): ?array
+    protected function getRectorConfiguration(): array
     {
         return [
-            'compiler.post_dump' => ['Yet\AnotherClass', 'CONSTANT'],
-            'compiler.to_class' => ['Yet\AnotherClass', 'class'],
+            '$stringsToClassConstants' => [
+                'compiler.post_dump' => ['Yet\AnotherClass', 'CONSTANT'],
+                'compiler.to_class' => ['Yet\AnotherClass', 'class'],
+            ],
         ];
     }
 }

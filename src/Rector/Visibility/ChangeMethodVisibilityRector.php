@@ -19,7 +19,7 @@ final class ChangeMethodVisibilityRector extends AbstractRector
     /**
      * @param string[][] $methodToVisibilityByClass
      */
-    public function __construct(array $methodToVisibilityByClass)
+    public function __construct(array $methodToVisibilityByClass = [])
     {
         $this->methodToVisibilityByClass = $methodToVisibilityByClass;
     }

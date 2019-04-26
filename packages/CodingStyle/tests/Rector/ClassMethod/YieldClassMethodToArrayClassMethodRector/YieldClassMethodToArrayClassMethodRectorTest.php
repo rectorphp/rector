@@ -19,12 +19,14 @@ final class YieldClassMethodToArrayClassMethodRectorTest extends AbstractRectorT
     }
 
     /**
-     * @return string[]
+     * @return mixed[]
      */
-    protected function getRectorConfiguration(): ?array
+    protected function getRectorConfiguration(): array
     {
         return [
-            EventSubscriberInterface::class => ['getSubscribedEvents'],
+            '$methodsByType' => [
+                EventSubscriberInterface::class => ['getSubscribedEvents'],
+            ],
         ];
     }
 }

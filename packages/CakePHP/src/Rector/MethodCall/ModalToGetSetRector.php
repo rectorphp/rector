@@ -24,7 +24,7 @@ final class ModalToGetSetRector extends AbstractRector
     /**
      * @param mixed[] $methodNamesByTypes
      */
-    public function __construct(array $methodNamesByTypes)
+    public function __construct(array $methodNamesByTypes = [])
     {
         $this->methodNamesByTypes = $methodNamesByTypes;
     }
