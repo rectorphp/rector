@@ -61,6 +61,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classNode instanceof Node\Stmt\Trait_) {
+            return null;
+        }
+
         if (count($node->props) !== 1) {
             return null;
         }
