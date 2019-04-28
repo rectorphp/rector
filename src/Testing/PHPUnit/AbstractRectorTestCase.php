@@ -195,7 +195,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
     private function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
     {
-        if ($this->getRectorsWithConfiguration()) {
+        if ($this->getRectorsWithConfiguration() !== []) {
             foreach ($this->getRectorsWithConfiguration() as $rectorClass => $rectorConfiguration) {
                 $enabledRectorsProvider->addEnabledRector($rectorClass, $rectorConfiguration);
             }

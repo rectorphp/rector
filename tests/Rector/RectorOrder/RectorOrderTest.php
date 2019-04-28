@@ -14,8 +14,16 @@ final class RectorOrderTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function provideConfig(): string
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorsWithConfiguration(): array
     {
-        return __DIR__ . '/config.yaml';
+        // order matters
+        return [
+            \Rector\PHPUnit\Rector\SpecificMethod\AssertComparisonToSpecificMethodRector::class => [],
+            \Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector::class => [],
+            \Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector::class => [],
+        ];
     }
 }

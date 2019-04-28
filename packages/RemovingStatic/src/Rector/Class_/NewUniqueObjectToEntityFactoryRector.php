@@ -178,7 +178,7 @@ CODE_SAMPLE
      */
     private function resolveClassesUsingTypes(): array
     {
-        if ($this->classesUsingTypes) {
+        if ($this->classesUsingTypes !== []) {
             return $this->classesUsingTypes;
         }
 
