@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
@@ -525,7 +526,7 @@ final class ParsedNodesByType
      */
     private function addCall(Node $node): void
     {
-        if ($node instanceof MethodCall && $node->var instanceof Node\Expr\Variable && $node->var->name === 'this') {
+        if ($node instanceof MethodCall && $node->var instanceof Variable && $node->var->name === 'this') {
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         } else {
             $className = $this->nodeTypeResolver->resolve($node)[0] ?? null;
