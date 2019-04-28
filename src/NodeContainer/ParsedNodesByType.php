@@ -525,7 +525,12 @@ final class ParsedNodesByType
      */
     private function addCall(Node $node): void
     {
-        $className = $this->nodeTypeResolver->resolve($node)[0] ?? null;
+        if ($node instanceof MethodCall && $node->var instanceof Node\Expr\Variable && $node->var->name === 'this') {
+            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        } else {
+            $className = $this->nodeTypeResolver->resolve($node)[0] ?? null;
+        }
+
         if ($className === null) { // anonymous
             return;
         }
