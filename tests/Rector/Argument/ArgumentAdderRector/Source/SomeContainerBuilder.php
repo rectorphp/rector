@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Source;
 
-class ContainerBuilder
+class SomeContainerBuilder
 {
 
 }

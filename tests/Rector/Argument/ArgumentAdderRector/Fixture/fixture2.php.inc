@@ -2,13 +2,13 @@
 
 namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
 
-use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\ContainerBuilder;
+use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeContainerBuilder;
 
 class SomeClass2
 {
     public function create()
     {
-        $containerBuilder = new ContainerBuilder();
+        $containerBuilder = new SomeContainerBuilder();
         $containerBuilder->addCompilerPass('pass', 'type');
     }
 }
@@ -19,13 +19,13 @@ class SomeClass2
 
 namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
 
-use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\ContainerBuilder;
+use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeContainerBuilder;
 
 class SomeClass2
 {
     public function create()
     {
-        $containerBuilder = new ContainerBuilder();
+        $containerBuilder = new SomeContainerBuilder();
         $containerBuilder->addCompilerPass('pass', 'type', 0);
     }
 }

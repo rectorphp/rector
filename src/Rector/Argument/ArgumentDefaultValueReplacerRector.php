@@ -23,7 +23,7 @@ final class ArgumentDefaultValueReplacerRector extends AbstractRector
     /**
      * @param mixed[] $replacesByMethodAndTypes
      */
-    public function __construct(array $replacesByMethodAndTypes)
+    public function __construct(array $replacesByMethodAndTypes = [])
     {
         $this->replacesByMethodAndTypes = $replacesByMethodAndTypes;
     }

@@ -1,3 +1,0 @@
-imports:
-    # same as "--level twig-underscore-to-namespace"
-    - { resource: "../../../../config/level/twig/twig-underscore-to-namespace.yaml" }

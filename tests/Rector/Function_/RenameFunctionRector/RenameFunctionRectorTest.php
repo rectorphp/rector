@@ -27,9 +27,11 @@ final class RenameFunctionRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            'view' => 'Laravel\Templating\render',
-            'sprintf' => 'Safe\sprintf',
-            'hebrevc' => ['nl2br', 'hebrev'],
+            '$oldFunctionToNewFunction' => [
+                'view' => 'Laravel\Templating\render',
+                'sprintf' => 'Safe\sprintf',
+                'hebrevc' => ['nl2br', 'hebrev'],
+            ],
         ];
     }
 }

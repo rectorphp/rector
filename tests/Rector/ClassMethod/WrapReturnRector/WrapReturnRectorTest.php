@@ -21,11 +21,13 @@ final class WrapReturnRectorTest extends AbstractRectorTestCase
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): ?array
+    protected function getRectorConfiguration(): array
     {
         return [
-            SomeReturnClass::class => [
-                'getItem' => 'array',
+            '$typeToMethodToWrap' => [
+                SomeReturnClass::class => [
+                    'getItem' => 'array',
+                ],
             ],
         ];
     }

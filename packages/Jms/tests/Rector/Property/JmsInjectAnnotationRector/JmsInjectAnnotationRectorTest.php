@@ -2,10 +2,22 @@
 
 namespace Rector\Jms\Tests\Rector\Property\JmsInjectAnnotationRector;
 
+use Rector\Configuration\Option;
+use Rector\Jms\Rector\Property\JmsInjectAnnotationRector;
+use Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeKernelClass;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class JmsInjectAnnotationRectorTest extends AbstractRectorTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $parameterProvider = self::$container->get(ParameterProvider::class);
+        $parameterProvider->changeParameter(Option::KERNEL_CLASS_PARAMETER, SomeKernelClass::class);
+    }
+
     public function test(): void
     {
         $this->doTestFiles([
@@ -17,8 +29,8 @@ final class JmsInjectAnnotationRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/config.yaml';
+        return JmsInjectAnnotationRector::class;
     }
 }

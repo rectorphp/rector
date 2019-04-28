@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Fixture;
+
 use App\Service\Anything;
 use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 
@@ -17,6 +19,8 @@ class ClassWithNamedService2 extends SymfonyController
 ?>
 -----
 <?php
+
+namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Fixture;
 
 use App\Service\Anything;
 use Rector\Symfony\Tests\Rector\Source\SymfonyController;

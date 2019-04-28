@@ -19,9 +19,9 @@ final class NetteControlToSymfonyControllerRectorTest extends AbstractRectorTest
     }
 
     /**
-     * @return string[]|null
+     * @return mixed[]
      */
-    protected function getRectorConfiguration(): ?array
+    protected function getRectorConfiguration(): array
     {
         return [
             '$netteControlClass' => NetteControl::class,

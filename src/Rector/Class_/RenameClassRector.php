@@ -33,10 +33,10 @@ final class RenameClassRector extends AbstractRector
     /**
      * @param string[] $oldToNewClasses
      */
-    public function __construct(array $oldToNewClasses, DocBlockManipulator $docBlockManipulator)
+    public function __construct(DocBlockManipulator $docBlockManipulator, array $oldToNewClasses = [])
     {
-        $this->oldToNewClasses = $oldToNewClasses;
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->oldToNewClasses = $oldToNewClasses;
     }
 
     public function getDefinition(): RectorDefinition

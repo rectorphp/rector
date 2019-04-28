@@ -30,10 +30,10 @@ final class GetAndSetToMethodCallRector extends AbstractRector
      *
      * @param string[][] $typeToMethodCalls
      */
-    public function __construct(array $typeToMethodCalls, PropertyFetchManipulator $propertyFetchManipulator)
+    public function __construct(PropertyFetchManipulator $propertyFetchManipulator, array $typeToMethodCalls = [])
     {
-        $this->typeToMethodCalls = $typeToMethodCalls;
         $this->propertyFetchManipulator = $propertyFetchManipulator;
+        $this->typeToMethodCalls = $typeToMethodCalls;
     }
 
     public function getDefinition(): RectorDefinition

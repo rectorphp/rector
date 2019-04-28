@@ -1,6 +1,0 @@
-parameters:
-    kernel_class: 'Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\SomeKernelClass'
-
-services:
-    Rector\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector: ~
-    Rector\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector: ~

@@ -26,7 +26,7 @@ final class ReservedObjectRector extends AbstractRector
     /**
      * @param string[] $reservedKeywordsToReplacements
      */
-    public function __construct(array $reservedKeywordsToReplacements)
+    public function __construct(array $reservedKeywordsToReplacements = [])
     {
         $this->reservedKeywordsToReplacements = $reservedKeywordsToReplacements;
     }

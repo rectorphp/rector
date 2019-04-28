@@ -23,8 +23,10 @@ final class FunctionToStaticCallRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            'view' => ['SomeStaticClass', 'render'],
-            'SomeNamespaced\view' => ['AnotherStaticClass', 'render'],
+            '$functionToStaticCall' => [
+                'view' => ['SomeStaticClass', 'render'],
+                'SomeNamespaced\view' => ['AnotherStaticClass', 'render'],
+            ],
         ];
     }
 }

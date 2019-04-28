@@ -24,9 +24,11 @@ final class RenamePropertyRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            ClassWithProperties::class => [
-                'oldProperty' => 'newProperty',
-                'anotherOldProperty' => 'anotherNewProperty',
+            '$oldToNewPropertyByTypes' => [
+                ClassWithProperties::class => [
+                    'oldProperty' => 'newProperty',
+                    'anotherOldProperty' => 'anotherNewProperty',
+                ],
             ],
         ];
     }

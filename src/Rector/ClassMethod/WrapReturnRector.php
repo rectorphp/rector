@@ -21,7 +21,7 @@ final class WrapReturnRector extends AbstractRector
     /**
      * @param mixed[][] $typeToMethodToWrap
      */
-    public function __construct(array $typeToMethodToWrap)
+    public function __construct(array $typeToMethodToWrap = [])
     {
         $this->typeToMethodToWrap = $typeToMethodToWrap;
     }

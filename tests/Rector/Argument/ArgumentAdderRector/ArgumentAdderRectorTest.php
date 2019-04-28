@@ -4,7 +4,7 @@ namespace Rector\Tests\Rector\Argument\ArgumentAdderRector;
 
 use Rector\Rector\Argument\ArgumentAdderRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\ContainerBuilder;
+use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeContainerBuilder;
 
 final class ArgumentAdderRectorTest extends AbstractRectorTestCase
 {
@@ -29,18 +29,20 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            ContainerBuilder::class => [
-                'compile' => [
-                    0 => [
-                        'name' => 'isCompiled',
-                        'default_value' => false,
+            '$positionWithDefaultValueByMethodNamesByClassTypes' => [
+                SomeContainerBuilder::class => [
+                    'compile' => [
+                        0 => [
+                            'name' => 'isCompiled',
+                            'default_value' => false,
+                        ],
                     ],
-                ],
-                'addCompilerPass' => [
-                    2 => [
-                        'name' => 'priority',
-                        'default_value' => 0,
-                        'type' => 'int',
+                    'addCompilerPass' => [
+                        2 => [
+                            'name' => 'priority',
+                            'default_value' => 0,
+                            'type' => 'int',
+                        ],
                     ],
                 ],
             ],

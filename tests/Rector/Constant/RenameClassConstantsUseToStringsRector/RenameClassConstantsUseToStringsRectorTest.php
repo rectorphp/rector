@@ -23,9 +23,14 @@ final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTes
      */
     protected function getRectorConfiguration(): array
     {
-        return [Configurator::class => [
-            'DEVELOPMENT' => 'development',
-            'PRODUCTION' => 'production',
-        ]];
+        return [
+            '$oldConstantsToNewValuesByType' => [
+                Configurator::class => [
+                    'DEVELOPMENT' => 'development',
+                    'PRODUCTION' => 'production',
+                ],
+
+            ],
+        ];
     }
 }

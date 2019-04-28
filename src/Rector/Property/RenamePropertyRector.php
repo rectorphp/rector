@@ -23,7 +23,7 @@ final class RenamePropertyRector extends AbstractRector
     /**
      * @param string[][] $oldToNewPropertyByTypes
      */
-    public function __construct(array $oldToNewPropertyByTypes)
+    public function __construct(array $oldToNewPropertyByTypes = [])
     {
         $this->oldToNewPropertyByTypes = $oldToNewPropertyByTypes;
     }

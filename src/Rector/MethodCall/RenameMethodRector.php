@@ -27,7 +27,7 @@ final class RenameMethodRector extends AbstractRector
     /**
      * @param string[][]|mixed[][][] $oldToNewMethodsByClass
      */
-    public function __construct(array $oldToNewMethodsByClass)
+    public function __construct(array $oldToNewMethodsByClass = [])
     {
         $this->oldToNewMethodsByClass = $oldToNewMethodsByClass;
     }

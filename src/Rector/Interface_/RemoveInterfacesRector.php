@@ -18,7 +18,7 @@ final class RemoveInterfacesRector extends AbstractRector
     /**
      * @param string[] $interfacesToRemove
      */
-    public function __construct(array $interfacesToRemove)
+    public function __construct(array $interfacesToRemove = [])
     {
         $this->interfacesToRemove = $interfacesToRemove;
     }

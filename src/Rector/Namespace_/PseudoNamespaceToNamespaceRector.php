@@ -29,7 +29,7 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     /**
      * @var string[][]|null[]
      */
-    private $namespacePrefixWithExcludedClasses = [];
+    private $namespacePrefixesWithExcludedClasses = [];
 
     /**
      * @var ClassManipulator
@@ -47,10 +47,10 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     public function __construct(
         ClassManipulator $classManipulator,
         DocBlockManipulator $docBlockManipulator,
-        array $namespacePrefixesWithExcludedClasses
+        array $namespacePrefixesWithExcludedClasses = []
     ) {
         $this->classManipulator = $classManipulator;
-        $this->namespacePrefixWithExcludedClasses = $namespacePrefixesWithExcludedClasses;
+        $this->namespacePrefixesWithExcludedClasses = $namespacePrefixesWithExcludedClasses;
         $this->docBlockManipulator = $docBlockManipulator;
     }
 
@@ -99,7 +99,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // replace on @var/@param/@return/@throws
-        foreach ($this->namespacePrefixWithExcludedClasses as $namespacePrefix => $excludedClasses) {
+        foreach ($this->namespacePrefixesWithExcludedClasses as $namespacePrefix => $excludedClasses) {
             $this->docBlockManipulator->changeUnderscoreType($node, $namespacePrefix, $excludedClasses);
         }
 
@@ -186,7 +186,7 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->namespacePrefixWithExcludedClasses as $namespacePrefix => $excludedClasses) {
+        foreach ($this->namespacePrefixesWithExcludedClasses as $namespacePrefix => $excludedClasses) {
             if (! $this->isName($node, $namespacePrefix . '*')) {
                 continue;
             }

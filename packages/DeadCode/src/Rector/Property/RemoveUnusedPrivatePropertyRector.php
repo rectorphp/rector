@@ -2,11 +2,11 @@
 
 namespace Rector\DeadCode\Rector\Property;
 
-use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Rector\AbstractRector;

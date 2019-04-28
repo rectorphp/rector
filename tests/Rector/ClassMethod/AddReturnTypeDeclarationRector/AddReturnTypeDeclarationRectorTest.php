@@ -24,14 +24,16 @@ final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            'Rector\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass' => [
-                'parse' => 'array',
-                'resolve' => 'SomeType',
-                'nullable' => '?SomeType',
-                'clear' => '',
-            ],
-            PHPUnitTestCase::class => [
-                'tearDown' => 'void',
+            '$typehintForMethodByClass' => [
+                'Rector\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass' => [
+                    'parse' => 'array',
+                    'resolve' => 'SomeType',
+                    'nullable' => '?SomeType',
+                    'clear' => '',
+                ],
+                PHPUnitTestCase::class => [
+                    'tearDown' => 'void',
+                ],
             ],
         ];
     }

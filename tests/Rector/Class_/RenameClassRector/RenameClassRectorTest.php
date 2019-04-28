@@ -41,13 +41,15 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            OldClass::class => NewClass::class,
-            OldClassWithTypo::class => NewClassWithoutTypo::class,
-            'DateTime' => 'DateTimeInterface',
-            'Countable' => 'stdClass',
-            Manual_Twig_Filter::class => TwigFilter::class,
-            'Twig_AbstractManualExtension' => AbstractManualExtension::class,
-            'Twig_Extension_Sandbox' => 'Twig\Extension\SandboxExtension',
+            'oldToNewClasses' => [
+                OldClass::class => NewClass::class,
+                OldClassWithTypo::class => NewClassWithoutTypo::class,
+                'DateTime' => 'DateTimeInterface',
+                'Countable' => 'stdClass',
+                Manual_Twig_Filter::class => TwigFilter::class,
+                'Twig_AbstractManualExtension' => AbstractManualExtension::class,
+                'Twig_Extension_Sandbox' => 'Twig\Extension\SandboxExtension',
+            ],
         ];
     }
 }

@@ -3,13 +3,16 @@
 namespace Rector\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
-use Nette\Utils\Json;
-use Nette\Utils\Strings;
+use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
 use Rector\Configuration\Option;
-use Rector\Exception\ShouldBeImplementedException;
+use Rector\ContributorTools\Finder\RectorsFinder;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\HttpKernel\RectorKernel;
+use Rector\Testing\Application\EnabledRectorsProvider;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -17,11 +20,6 @@ use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 {
-    /**
-     * @var string
-     */
-    private const SPLIT_LINE = '#-----\n#';
-
     /**
      * @var FileProcessor
      */
@@ -37,19 +35,47 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      */
     private $autoloadTestFixture = true;
 
+    /**
+     * @var FixtureSplitter
+     */
+    private $fixtureSplitter;
+
+    /**
+     * @var Container|ContainerInterface|null
+     */
+    private static $allRectorContainer;
+
     protected function setUp(): void
     {
-        $configFile = $this->provideConfig();
+        $this->fixtureSplitter = new FixtureSplitter($this->getTempPath());
 
-        if (! file_exists($configFile)) {
-            throw new ShouldNotHappenException(sprintf(
-                'Config "%s" for test "%s" was not found',
-                $configFile,
-                static::class
-            ));
+        // defined in phpunit.xml
+        if (defined('RECTOR_REPOSITORY') && $this->provideConfig() === '') {
+            if (self::$allRectorContainer === null) {
+                $this->createContainerWithAllRectors();
+
+                self::$allRectorContainer = self::$container;
+            } else {
+                // load from cache
+                self::$container = self::$allRectorContainer;
+            }
+
+            $enabledRectorsProvider = static::$container->get(EnabledRectorsProvider::class);
+            $enabledRectorsProvider->reset();
+            $this->configureEnabledRectors($enabledRectorsProvider);
+        } elseif ($this->provideConfig() !== '') {
+            $this->ensureConfigFileExists();
+            $this->bootKernelWithConfigs(RectorKernel::class, [$this->provideConfig()]);
+
+            $enabledRectorsProvider = static::$container->get(EnabledRectorsProvider::class);
+            $enabledRectorsProvider->reset();
+        } else {
+            throw new ShouldNotHappenException();
         }
 
-        $this->bootKernelWithConfigs(RectorKernel::class, [$configFile]);
+        // disable any output
+        $symfonyStyle = static::$container->get(SymfonyStyle::class);
+        $symfonyStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
 
         $this->fileProcessor = static::$container->get(FileProcessor::class);
         $this->parameterProvider = static::$container->get(ParameterProvider::class);
@@ -66,43 +92,32 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
     protected function provideConfig(): string
     {
-        if ($this->getRectorClass() !== '') { // use local if not overloaded
-            $fixtureHash = $this->createFixtureHash();
-            $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/config_%s.yaml', $fixtureHash);
-
-            // cache for 2nd run, similar to original config one
-            if (file_exists($configFileTempPath)) {
-                return $configFileTempPath;
-            }
-
-            $yamlContent = Yaml::dump([
-                'services' => [
-                    $this->getRectorClass() => $this->getRectorConfiguration() ?: null,
-                ],
-            ], Yaml::DUMP_OBJECT_AS_MAP);
-
-            FileSystem::write($configFileTempPath, $yamlContent);
-
-            return $configFileTempPath;
-        }
-
-        // to be implemented
-        throw new ShouldBeImplementedException();
+        // can be implemented
+        return '';
     }
 
     protected function getRectorClass(): string
     {
-        // to be implemented
+        // can be implemented
         return '';
     }
 
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): ?array
+    protected function getRectorConfiguration(): array
     {
-        // to be implemented
-        return null;
+        // can be implemented
+        return [];
+    }
+
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorsWithConfiguration(): array
+    {
+        // can be implemented, has the highest priority
+        return [];
     }
 
     /**
@@ -113,7 +128,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         // 1. original to changed content
         foreach ($files as $file) {
             $smartFileInfo = new SmartFileInfo($file);
-            [$originalFile, $changedFile] = $this->splitContentToOriginalFileAndExpectedFile($smartFileInfo);
+            [$originalFile, $changedFile] = $this->fixtureSplitter->splitContentToOriginalFileAndExpectedFile(
+                $smartFileInfo,
+                $this->autoloadTestFixture
+            );
             $this->doTestFileMatchesExpectedContent($originalFile, $changedFile, $smartFileInfo->getRealPath());
         }
 
@@ -123,34 +141,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected function getTempPath(): string
     {
         return sys_get_temp_dir() . '/rector_temp_tests';
-    }
-
-    /**
-     * @return string[]
-     */
-    private function splitContentToOriginalFileAndExpectedFile(SmartFileInfo $smartFileInfo): array
-    {
-        if (Strings::match($smartFileInfo->getContents(), self::SPLIT_LINE)) {
-            // original → expected
-            [$originalContent, $expectedContent] = Strings::split($smartFileInfo->getContents(), self::SPLIT_LINE);
-        } else {
-            // no changes
-            $originalContent = $smartFileInfo->getContents();
-            $expectedContent = $originalContent;
-        }
-
-        $originalFile = $this->createTemporaryPathWithPrefix($smartFileInfo, 'original');
-        $expectedFile = $this->createTemporaryPathWithPrefix($smartFileInfo, 'expected');
-
-        FileSystem::write($originalFile, $originalContent);
-        FileSystem::write($expectedFile, $expectedContent);
-
-        // file needs to be autoload PHPStan analyze
-        if ($this->autoloadTestFixture) {
-            require_once $originalFile;
-        }
-
-        return [$originalFile, $expectedFile];
     }
 
     private function doTestFileMatchesExpectedContent(
@@ -170,19 +160,47 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->assertStringEqualsFile($expectedFile, $changedContent, 'Caused by ' . $fixtureFile);
     }
 
-    private function createTemporaryPathWithPrefix(SmartFileInfo $smartFileInfo, string $prefix): string
+    private function ensureConfigFileExists(): void
     {
-        $hash = Strings::substring(md5($smartFileInfo->getRealPath()), 0, 5);
+        if (file_exists($this->provideConfig())) {
+            return;
+        }
 
-        return sprintf($this->getTempPath() . '/%s_%s_%s', $prefix, $hash, $smartFileInfo->getBasename('.inc'));
+        throw new ShouldNotHappenException(sprintf(
+            'Config "%s" for test "%s" was not found',
+            $this->provideConfig(),
+            static::class
+        ));
     }
 
-    private function createFixtureHash(): string
+    private function createContainerWithAllRectors(): void
     {
-        return Strings::substring(
-            md5($this->getRectorClass() . Json::encode($this->getRectorConfiguration())),
-            0,
-            10
-        );
+        $allRectorClasses = (new RectorsFinder())->findCoreRectorClasses();
+        $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/all_rectors.yaml');
+
+        $listForConfig = [];
+        foreach ($allRectorClasses as $rectorClass) {
+            $listForConfig[$rectorClass] = null;
+        }
+
+        $yamlContent = Yaml::dump([
+            'services' => $listForConfig,
+        ], Yaml::DUMP_OBJECT_AS_MAP);
+
+        FileSystem::write($configFileTempPath, $yamlContent);
+
+        $configFile = $configFileTempPath;
+        $this->bootKernelWithConfigs(RectorKernel::class, [$configFile]);
+    }
+
+    private function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
+    {
+        if ($this->getRectorsWithConfiguration() !== []) {
+            foreach ($this->getRectorsWithConfiguration() as $rectorClass => $rectorConfiguration) {
+                $enabledRectorsProvider->addEnabledRector($rectorClass, $rectorConfiguration);
+            }
+        } else {
+            $enabledRectorsProvider->addEnabledRector($this->getRectorClass(), $this->getRectorConfiguration());
+        }
     }
 }

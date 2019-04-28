@@ -18,13 +18,15 @@ final class RenameConstantRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return string[][]
+     * @return mixed[]
      */
-    protected function getRectorConfiguration(): ?array
+    protected function getRectorConfiguration(): array
     {
         return [
-            'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
-            'OLD_CONSTANT' => 'NEW_CONSTANT',
+            '$oldToNewConstants' => [
+                'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
+                'OLD_CONSTANT' => 'NEW_CONSTANT',
+            ],
         ];
     }
 }

@@ -25,7 +25,7 @@ final class NormalToFluentRector extends AbstractRector
     /**
      * @param string[][] $fluentMethodsByType
      */
-    public function __construct(array $fluentMethodsByType)
+    public function __construct(array $fluentMethodsByType = [])
     {
         $this->fluentMethodsByType = $fluentMethodsByType;
     }

@@ -18,7 +18,7 @@ final class ChangeConstantVisibilityRector extends AbstractRector
     /**
      * @param string[][] $constantToVisibilityByClass
      */
-    public function __construct(array $constantToVisibilityByClass)
+    public function __construct(array $constantToVisibilityByClass = [])
     {
         $this->constantToVisibilityByClass = $constantToVisibilityByClass;
     }

@@ -5,6 +5,9 @@
     colors="true"
     verbose="true"
 >
+    <php>
+        <const name="RECTOR_REPOSITORY" value="true"/>
+    </php>
     <testsuites>
         <testsuite name="main">
             <directory>packages/*/tests</directory>

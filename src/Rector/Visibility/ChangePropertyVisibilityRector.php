@@ -19,7 +19,7 @@ final class ChangePropertyVisibilityRector extends AbstractRector
     /**
      * @param string[][] $propertyToVisibilityByClass
      */
-    public function __construct(array $propertyToVisibilityByClass)
+    public function __construct(array $propertyToVisibilityByClass = [])
     {
         $this->propertyToVisibilityByClass = $propertyToVisibilityByClass;
     }

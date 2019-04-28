@@ -32,10 +32,10 @@ final class RemoveTraitRector extends AbstractRector
     /**
      * @param string[] $traitsToRemove
      */
-    public function __construct(array $traitsToRemove, ClassManipulator $classManipulator)
+    public function __construct(ClassManipulator $classManipulator, array $traitsToRemove = [])
     {
-        $this->traitsToRemove = $traitsToRemove;
         $this->classManipulator = $classManipulator;
+        $this->traitsToRemove = $traitsToRemove;
     }
 
     public function getDefinition(): RectorDefinition

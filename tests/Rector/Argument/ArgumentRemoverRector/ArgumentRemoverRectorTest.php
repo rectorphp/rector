@@ -30,20 +30,22 @@ final class ArgumentRemoverRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            Persister::class => [
-                'getSelectJoinColumnSQL' => [
-                    4 => null,
+            '$positionsByMethodNameByClassType' => [
+                Persister::class => [
+                    'getSelectJoinColumnSQL' => [
+                        4 => null,
+                    ],
                 ],
-            ],
-            Yaml::class => [
-                'parse' => [
-                    1 => ['Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS', 'hey', 55, 5.5],
+                Yaml::class => [
+                    'parse' => [
+                        1 => ['Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS', 'hey', 55, 5.5],
+                    ],
                 ],
-            ],
-            RemoveInTheMiddle::class => [
-                'run' => [
-                    1 => [
-                        'name' => 'second',
+                RemoveInTheMiddle::class => [
+                    'run' => [
+                        1 => [
+                            'name' => 'second',
+                        ],
                     ],
                 ],
             ],

@@ -1,5 +1,0 @@
-services:
-    # order matters!
-    Rector\PHPUnit\Rector\SpecificMethod\AssertComparisonToSpecificMethodRector: ~
-    Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector: ~
-    Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector: ~

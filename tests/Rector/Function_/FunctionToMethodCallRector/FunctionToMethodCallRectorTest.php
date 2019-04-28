@@ -22,6 +22,10 @@ final class FunctionToMethodCallRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorConfiguration(): array
     {
-        return ['view' => ['this', 'render']];
+        return [
+            '$functionToMethodCall' => [
+                'view' => ['this', 'render'],
+            ],
+        ];
     }
 }

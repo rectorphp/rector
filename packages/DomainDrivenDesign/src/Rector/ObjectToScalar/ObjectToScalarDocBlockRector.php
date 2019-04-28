@@ -14,14 +14,6 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class ObjectToScalarDocBlockRector extends AbstractObjectToScalarRector
 {
-    /**
-     * @param string[] $valueObjectsToSimpleTypes
-     */
-    public function __construct(array $valueObjectsToSimpleTypes)
-    {
-        parent::__construct($valueObjectsToSimpleTypes);
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns defined value object to simple types in doc blocks', [

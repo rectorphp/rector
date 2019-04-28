@@ -124,6 +124,9 @@ CODE_SAMPLE
     private function resolveUsedNameNodes(Use_ $node): void
     {
         $searchNode = $this->resolveSearchNode($node);
+        if ($searchNode === null) {
+            return;
+        }
 
         $this->resolveUsedNames($searchNode);
         $this->resolveUsedClassNames($searchNode);
@@ -212,7 +215,7 @@ CODE_SAMPLE
         }
     }
 
-    private function resolveSearchNode(Use_ $node): Node
+    private function resolveSearchNode(Use_ $node): ?Node
     {
         $searchNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($searchNode) {
@@ -224,7 +227,8 @@ CODE_SAMPLE
             return $searchNode;
         }
 
-        throw new ShouldNotHappenException();
+        // skip
+        return null;
     }
 
     private function resolveUsedNames(Node $searchNode): void

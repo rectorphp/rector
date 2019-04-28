@@ -20,12 +20,14 @@ final class NewToStaticCallRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return mixed[]|null
+     * @return mixed[]
      */
-    protected function getRectorConfiguration(): ?array
+    protected function getRectorConfiguration(): array
     {
         return [
-            FromNewClass::class => [IntoStaticClass::class, 'run'],
+            '$typeToStaticCalls' => [
+                FromNewClass::class => [IntoStaticClass::class, 'run'],
+            ],
         ];
     }
 }

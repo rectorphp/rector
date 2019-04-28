@@ -27,10 +27,10 @@ final class ReturnThisRemoveRector extends AbstractRector
     /**
      * @param string[] $classesToDefluent
      */
-    public function __construct(array $classesToDefluent, DocBlockManipulator $docBlockManipulator)
+    public function __construct(DocBlockManipulator $docBlockManipulator, array $classesToDefluent = [])
     {
-        $this->classesToDefluent = $classesToDefluent;
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->classesToDefluent = $classesToDefluent;
     }
 
     public function getDefinition(): RectorDefinition

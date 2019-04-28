@@ -19,7 +19,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
     /**
      * @param string[][] $oldConstantsToNewValuesByType
      */
-    public function __construct(array $oldConstantsToNewValuesByType)
+    public function __construct(array $oldConstantsToNewValuesByType = [])
     {
         $this->oldConstantsToNewValuesByType = $oldConstantsToNewValuesByType;
     }

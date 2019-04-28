@@ -23,11 +23,15 @@ final class ChangeMethodVisibilityRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorConfiguration(): array
     {
-        return [ParentObject::class => [
-            'toBePublicMethod' => 'public',
-            'toBeProtectedMethod' => 'protected',
-            'toBePrivateMethod' => 'private',
-            'toBePublicStaticMethod' => 'public',
-        ]];
+        return [
+            '$methodToVisibilityByClass' => [
+                ParentObject::class => [
+                    'toBePublicMethod' => 'public',
+                    'toBeProtectedMethod' => 'protected',
+                    'toBePrivateMethod' => 'private',
+                    'toBePublicStaticMethod' => 'public',
+                ],
+            ],
+        ];
     }
 }

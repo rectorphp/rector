@@ -26,7 +26,7 @@ final class ArgumentAdderRector extends AbstractRector
     /**
      * @param mixed[] $positionWithDefaultValueByMethodNamesByClassTypes
      */
-    public function __construct(array $positionWithDefaultValueByMethodNamesByClassTypes)
+    public function __construct(array $positionWithDefaultValueByMethodNamesByClassTypes = [])
     {
         $this->positionWithDefaultValueByMethodNamesByClassTypes = $positionWithDefaultValueByMethodNamesByClassTypes;
     }

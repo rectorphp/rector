@@ -23,9 +23,13 @@ final class UnsetAndIssetToMethodCallRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorConfiguration(): array
     {
-        return [Container::class => [
-            'isset' => 'hasService',
-            'unset' => 'removeService',
-        ]];
+        return [
+            '$typeToMethodCalls' => [
+                Container::class => [
+                    'isset' => 'hasService',
+                    'unset' => 'removeService',
+                ],
+            ],
+        ];
     }
 }

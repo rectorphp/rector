@@ -23,7 +23,9 @@ final class FunctionToNewRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            'collection' => ['Collection'],
+            '$functionToNew' => [
+                'collection' => ['Collection'],
+            ],
         ];
     }
 }

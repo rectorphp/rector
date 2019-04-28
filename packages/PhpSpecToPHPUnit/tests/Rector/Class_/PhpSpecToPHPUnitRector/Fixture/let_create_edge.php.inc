@@ -33,13 +33,13 @@ use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\Du
 class CurrencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var CurrencyData|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $data;
-    /**
      * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Currency
      */
     private $currency;
+    /**
+     * @var CurrencyData|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $data;
     protected function setUp()
     {
         $this->data = $this->createMock(CurrencyData::class);

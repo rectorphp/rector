@@ -2,12 +2,11 @@
 
 namespace Rector\Php\Tests\Rector\Each;
 
+use Rector\Php\Rector\Each\ListEachRector;
+use Rector\Php\Rector\Each\WhileEachToForeachRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Php\Rector\Each\WhileEachToForeachRector
- * @covers \Rector\Php\Rector\Each\ListEachRector
- *
  * Test battery inspired by:
  * - https://stackoverflow.com/q/46492621/1348344 + Drupal refactorings
  * - https://stackoverflow.com/a/51278641/1348344
@@ -23,8 +22,14 @@ final class EachRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function provideConfig(): string
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorsWithConfiguration(): array
     {
-        return __DIR__ . '/config.yaml';
+        return [
+            WhileEachToForeachRector::class => [],
+            ListEachRector::class => [],
+        ];
     }
 }

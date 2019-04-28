@@ -4,15 +4,6 @@ namespace Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector;
 
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecMocksToPHPUnitMocksRector
- * @covers \Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecPromisesToPHPUnitAssertRector
- *
- * @covers \Rector\PhpSpecToPHPUnit\Rector\ClassMethod\PhpSpecMethodToPHPUnitMethodRector
- *
- * @covers \Rector\PhpSpecToPHPUnit\Rector\Class_\PhpSpecClassToPHPUnitClassRector
- * @covers \Rector\PhpSpecToPHPUnit\Rector\Class_\AddMockPropertiesRector
- */
 final class PhpSpecToPHPUnitRectorTest extends AbstractRectorTestCase
 {
     public function test(): void

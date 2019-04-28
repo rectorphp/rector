@@ -18,12 +18,14 @@ final class SwapFuncCallArgumentsRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return mixed[]|null
+     * @return mixed[]
      */
-    protected function getRectorConfiguration(): ?array
+    protected function getRectorConfiguration(): array
     {
         return [
-            'some_function' => [1, 0],
+            '$newArgumentPositionsByFunctionName' => [
+                'some_function' => [1, 0],
+            ],
         ];
     }
 }

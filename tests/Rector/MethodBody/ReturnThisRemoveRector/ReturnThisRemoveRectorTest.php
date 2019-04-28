@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector;
 
+use Rector\Rector\MethodBody\ReturnThisRemoveRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase
@@ -15,8 +16,18 @@ final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function provideConfig(): string
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorsWithConfiguration(): array
     {
-        return __DIR__ . '/config.yaml';
+        return [
+            ReturnThisRemoveRector::class => [
+                '$classesToDefluent' => [
+                    'Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\SomeClass',
+                    'Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\SomeClassWithReturnAnnotations',
+                ],
+            ],
+        ];
     }
 }

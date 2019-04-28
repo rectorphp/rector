@@ -31,10 +31,10 @@ final class ParentClassToTraitsRector extends AbstractRector
     /**
      * @param string[][] $parentClassToTraits { parent class => [ traits ] }
      */
-    public function __construct(array $parentClassToTraits, ClassManipulator $classManipulator)
+    public function __construct(ClassManipulator $classManipulator, array $parentClassToTraits = [])
     {
-        $this->parentClassToTraits = $parentClassToTraits;
         $this->classManipulator = $classManipulator;
+        $this->parentClassToTraits = $parentClassToTraits;
     }
 
     public function getDefinition(): RectorDefinition

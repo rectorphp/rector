@@ -22,7 +22,7 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector
      *
      * @param string[][] $typeToMethodCalls
      */
-    public function __construct(array $typeToMethodCalls)
+    public function __construct(array $typeToMethodCalls = [])
     {
         $this->typeToMethodCalls = $typeToMethodCalls;
     }

@@ -22,6 +22,10 @@ final class ReservedObjectRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorConfiguration(): array
     {
-        return ['ReservedObject' => 'SmartObject'];
+        return [
+            '$reservedKeywordsToReplacements' => [
+                'ReservedObject' => 'SmartObject',
+            ],
+        ];
     }
 }

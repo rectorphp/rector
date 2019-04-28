@@ -32,7 +32,7 @@ final class RenameAnnotationRector extends AbstractPHPUnitRector
     /**
      * @param string[][] $classToAnnotationMap
      */
-    public function __construct(array $classToAnnotationMap, DocBlockManipulator $docBlockManipulator)
+    public function __construct(DocBlockManipulator $docBlockManipulator, array $classToAnnotationMap = [])
     {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->classToAnnotationMap = $classToAnnotationMap;

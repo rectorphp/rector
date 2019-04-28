@@ -24,7 +24,7 @@ final class MergeInterfacesRector extends AbstractRector
     /**
      * @param string[] $oldToNewInterfaces
      */
-    public function __construct(array $oldToNewInterfaces)
+    public function __construct(array $oldToNewInterfaces = [])
     {
         $this->oldToNewInterfaces = $oldToNewInterfaces;
     }

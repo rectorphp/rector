@@ -28,13 +28,17 @@ final class ChangePropertyVisibilityRectorTest extends AbstractRectorTestCase
     protected function getRectorConfiguration(): array
     {
         return [
-            ParentObject::class => [
-                'toBePublicProperty' => 'public',
-                'toBeProtectedProperty' => 'protected',
-                'toBePrivateProperty' => 'private',
-                'toBePublicStaticProperty' => 'public',
+            '$propertyToVisibilityByClass' => [
+                ParentObject::class => [
+                    'toBePublicProperty' => 'public',
+                    'toBeProtectedProperty' => 'protected',
+                    'toBePrivateProperty' => 'private',
+                    'toBePublicStaticProperty' => 'public',
+                ],
+                'Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Fixture\NormalObject' => [
+                    'toBePublicStaticProperty' => 'public',
+                ],
             ],
-            'Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Fixture\NormalObject' => ['toBePublicStaticProperty' => 'public'],
         ];
     }
 }
