@@ -241,42 +241,12 @@ final class DocBlockManipulator
 
     public function addVarTag(Node $node, string $type): void
     {
-        // there might be no phpdoc at all
-        if ($node->getDocComment() !== null) {
-            $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-            $phpDocNode = $phpDocInfo->getPhpDocNode();
-
-            $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode(
-                '\\' . $type
-            ), '', '');
-            $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@var', $varTagValueNode);
-
-            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
-        } else {
-            // create completely new docblock
-            $varDocComment = sprintf("/**\n * @var %s\n */", $type);
-            $node->setDocComment(new Doc($varDocComment));
-        }
+        $this->addTypeSpecificTag($node, 'var', $type);
     }
 
     public function addReturnTag(Node $node, string $type): void
     {
-        // there might be no phpdoc at all
-        if ($node->getDocComment() !== null) {
-            $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-            $phpDocNode = $phpDocInfo->getPhpDocNode();
-
-            $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode(
-                '\\' . $type
-            ), '', '');
-            $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@return', $varTagValueNode);
-
-            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
-        } else {
-            // create completely new docblock
-            $varDocComment = sprintf("/**\n * @return %s\n */", $type);
-            $node->setDocComment(new Doc($varDocComment));
-        }
+        $this->addTypeSpecificTag($node, 'return', $type);
     }
 
     /**
@@ -453,6 +423,26 @@ final class DocBlockManipulator
         });
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+    }
+
+    private function addTypeSpecificTag(Node $node, string $name, string $type): void
+    {
+        // there might be no phpdoc at all
+        if ($node->getDocComment() !== null) {
+            $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+            $phpDocNode = $phpDocInfo->getPhpDocNode();
+
+            $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode(
+                '\\' . $type
+            ), '', '');
+            $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@' . $name, $varTagValueNode);
+
+            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+        } else {
+            // create completely new docblock
+            $varDocComment = sprintf("/**\n * @%s %s\n */", $name, $type);
+            $node->setDocComment(new Doc($varDocComment));
+        }
     }
 
     private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): void
