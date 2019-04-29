@@ -19,6 +19,8 @@ matrix:
           env: CODING_STANDARD=true
         - php: '7.2'
           env: STANDALONE=true
+        - php: '7.3'
+          env: DOG_FOOD=true
 
 install:
     - composer update $COMPOSER_FLAGS
