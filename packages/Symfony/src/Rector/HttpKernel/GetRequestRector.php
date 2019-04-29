@@ -159,6 +159,10 @@ CODE_SAMPLE
         // "$this->get('request')"
         /** @var MethodCall[] $getMethodCalls */
         $getMethodCalls = $this->betterNodeFinder->find($node, function (Node $node) {
+            if (! $node instanceof MethodCall) {
+                return false;
+            }
+
             return $this->isName($node, 'get');
         });
 
