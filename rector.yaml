@@ -1,12 +1,14 @@
 parameters:
     exclude_paths:
-        - "/tests/"
+        - "/Fixture/"
         - "/Fixtures/"
+        - "/Source/"
         # autoload-buggy cases
         - "*.php.inc"
         # string might not exist for SplitStringClassConstantToClassConstFetchRector
         - "packages/Symfony/src/Rector/Console/ConsoleExceptionToErrorEventConstantRector.php"
-
+        - "tests/Rector/Argument/ArgumentRemoverRector/ArgumentRemoverRectorTest.php"
+        - "tests/Rector/Argument/ArgumentDefaultValueReplacerRector/ArgumentDefaultValueReplacerRectorTest.php"
 
     # so Rector code is still PHP 7.1 compatible
     php_version_features: '7.1'
