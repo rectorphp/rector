@@ -3,6 +3,7 @@
 namespace Rector\Guard;
 
 use Rector\Exception\NoRectorsLoadedException;
+use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
 
 final class RectorGuard
@@ -12,14 +13,26 @@ final class RectorGuard
      */
     private $rectorNodeTraverser;
 
-    public function __construct(RectorNodeTraverser $rectorNodeTraverser)
-    {
+    /**
+     * @var FileSystemFileProcessor
+     */
+    private $fileSystemFileProcessor;
+
+    public function __construct(
+        RectorNodeTraverser $rectorNodeTraverser,
+        FileSystemFileProcessor $fileSystemFileProcessor
+    ) {
         $this->rectorNodeTraverser = $rectorNodeTraverser;
+        $this->fileSystemFileProcessor = $fileSystemFileProcessor;
     }
 
     public function ensureSomeRectorsAreRegistered(): void
     {
-        if ($this->rectorNodeTraverser->getRectorCount() !== 0) {
+        if ($this->rectorNodeTraverser->getRectorCount() > 0) {
+            return;
+        }
+
+        if ($this->fileSystemFileProcessor->getFileSystemRectorsCount() > 0) {
             return;
         }
 
