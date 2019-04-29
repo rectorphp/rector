@@ -259,6 +259,27 @@ final class DocBlockManipulator
         }
     }
 
+
+    public function addReturnTag(Node $node, string $type): void
+    {
+        // there might be no phpdoc at all
+        if ($node->getDocComment() !== null) {
+            $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+            $phpDocNode = $phpDocInfo->getPhpDocNode();
+
+            $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode(
+                '\\' . $type
+            ), '', '');
+            $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@return', $varTagValueNode);
+
+            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+        } else {
+            // create completely new docblock
+            $varDocComment = sprintf("/**\n * @return %s\n */", $type);
+            $node->setDocComment(new Doc($varDocComment));
+        }
+    }
+
     /**
      * @final
      */
