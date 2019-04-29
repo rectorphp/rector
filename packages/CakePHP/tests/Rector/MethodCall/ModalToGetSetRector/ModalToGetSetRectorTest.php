@@ -17,17 +17,12 @@ final class ModalToGetSetRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return ModalToGetSetRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [ModalToGetSetRector::class => [
             '$methodNamesByTypes' => [
                 SomeModelType::class => [
                     'config' => [
@@ -44,6 +39,6 @@ final class ModalToGetSetRectorTest extends AbstractRectorTestCase
                     'method' => null,
                 ],
             ],
-        ];
+        ]];
     }
 }

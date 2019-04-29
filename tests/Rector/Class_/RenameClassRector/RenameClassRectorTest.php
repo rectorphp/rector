@@ -30,17 +30,12 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return RenameClassRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [RenameClassRector::class => [
             'oldToNewClasses' => [
                 OldClass::class => NewClass::class,
                 OldClassWithTypo::class => NewClassWithoutTypo::class,
@@ -50,6 +45,6 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
                 'Twig_AbstractManualExtension' => AbstractManualExtension::class,
                 'Twig_Extension_Sandbox' => 'Twig\Extension\SandboxExtension',
             ],
-        ];
+        ]];
     }
 }

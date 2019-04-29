@@ -132,6 +132,10 @@ parameters:
             - 'src/PhpParser/Printer/BetterStandardPrinter.php'
             - 'tests/AbstractContainerAwareTestCase.php'
 
+        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingTraversableReturnTypeHintSpecification:
+            # false positive
+            - 'src/Testing/PHPUnit/AbstractRectorTestCase.php'
+
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff.Found:
             # notes
             - 'packages/Php/src/Rector/Each/ListEachRector.php'

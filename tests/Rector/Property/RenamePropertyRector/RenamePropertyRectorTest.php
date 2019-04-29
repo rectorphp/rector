@@ -13,23 +13,18 @@ final class RenamePropertyRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return RenamePropertyRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [RenamePropertyRector::class => [
             '$oldToNewPropertyByTypes' => [
                 ClassWithProperties::class => [
                     'oldProperty' => 'newProperty',
                     'anotherOldProperty' => 'anotherNewProperty',
                 ],
             ],
-        ];
+        ]];
     }
 }

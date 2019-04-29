@@ -13,17 +13,12 @@ final class PropertyToMethodRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return PropertyToMethodRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [PropertyToMethodRector::class => [
             '$perClassPropertyToMethods' => [
                 Translator::class => [
                     'locale' => [
@@ -40,6 +35,6 @@ final class PropertyToMethodRectorTest extends AbstractRectorTestCase
                     ],
                 ],
             ],
-        ];
+        ]];
     }
 }

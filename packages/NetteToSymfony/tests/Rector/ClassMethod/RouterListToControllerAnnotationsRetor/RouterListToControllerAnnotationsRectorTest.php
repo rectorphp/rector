@@ -21,19 +21,14 @@ final class RouterListToControllerAnnotationsRectorTest extends AbstractRectorTe
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return RouterListToControllerAnnotationsRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [RouterListToControllerAnnotationsRector::class => [
             '$routeListClass' => RouteList::class,
             '$routerClass' => Route::class,
-        ];
+        ]];
     }
 }

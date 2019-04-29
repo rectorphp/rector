@@ -14,19 +14,14 @@ final class FormTypeGetParentRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return FormTypeGetParentRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [FormTypeGetParentRector::class => [
             '$abstractTypeClass' => AbstractType::class,
             '$abstractTypeExtensionClass' => AbstractTypeExtension::class,
-        ];
+        ]];
     }
 }

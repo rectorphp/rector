@@ -19,17 +19,12 @@ final class RenameMethodCallRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return RenameMethodCallRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [RenameMethodCallRector::class => [
             '$oldToNewMethodsByClass' => [
                 Html::class => [
                     'add' => 'addHtml',
@@ -42,6 +37,6 @@ final class RenameMethodCallRectorTest extends AbstractRectorTestCase
                     'createHtml' => 'testHtml',
                 ],
             ],
-        ];
+        ]];
     }
 }

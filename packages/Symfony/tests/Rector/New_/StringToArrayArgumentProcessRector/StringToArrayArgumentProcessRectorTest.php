@@ -20,19 +20,14 @@ final class StringToArrayArgumentProcessRectorTest extends AbstractRectorTestCas
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return StringToArrayArgumentProcessRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [StringToArrayArgumentProcessRector::class => [
             '$processClass' => Process::class,
             '$processHelperClass' => ProcessHelper::class,
-        ];
+        ]];
     }
 }

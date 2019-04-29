@@ -14,17 +14,12 @@ final class RenameClassConstantRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return RenameClassConstantRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [RenameClassConstantRector::class => [
             'oldToNewConstantsByClass' => [
                 LocalFormEvents::class => [
                     'PRE_BIND' => 'PRE_SUBMIT',
@@ -33,6 +28,6 @@ final class RenameClassConstantRectorTest extends AbstractRectorTestCase
                     'OLD_CONSTANT' => DifferentClass::class . '::NEW_CONSTANT',
                 ],
             ],
-        ];
+        ]];
     }
 }

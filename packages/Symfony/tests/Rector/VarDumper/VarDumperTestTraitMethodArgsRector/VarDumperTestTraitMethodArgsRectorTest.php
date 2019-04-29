@@ -13,16 +13,11 @@ final class VarDumperTestTraitMethodArgsRectorTest extends AbstractRectorTestCas
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return VarDumperTestTraitMethodArgsRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return ['$traitName' => VarDumperTrait::class];
+        return [VarDumperTestTraitMethodArgsRector::class => ['$traitName' => VarDumperTrait::class]];
     }
 }

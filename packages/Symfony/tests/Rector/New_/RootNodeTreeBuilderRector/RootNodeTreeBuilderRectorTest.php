@@ -13,16 +13,11 @@ final class RootNodeTreeBuilderRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return RootNodeTreeBuilderRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return ['$treeBuilderClass' => TreeBuilder::class];
+        return [RootNodeTreeBuilderRector::class => ['$treeBuilderClass' => TreeBuilder::class]];
     }
 }

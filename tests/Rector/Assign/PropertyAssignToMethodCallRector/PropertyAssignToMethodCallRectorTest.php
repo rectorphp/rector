@@ -14,21 +14,16 @@ final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return PropertyAssignToMethodCallRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [PropertyAssignToMethodCallRector::class => [
             '$oldPropertiesToNewMethodCallsByType' => [
                 ChoiceControl::class => ['checkAllowedValues' => 'checkDefaultValue'],
                 MultiChoiceControl::class => ['checkAllowedValues' => 'checkDefaultValue'],
             ],
-        ];
+        ]];
     }
 }

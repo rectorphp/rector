@@ -12,20 +12,15 @@ final class RenameAnnotationRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return RenameAnnotationRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [RenameAnnotationRector::class => [
             '$classToAnnotationMap' => [
                 'PHPUnit\Framework\TestCase' => ['scenario' => 'test'],
             ],
-        ];
+        ]];
     }
 }

@@ -12,20 +12,15 @@ final class ReservedObjectRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/ReservedObject.php']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return ReservedObjectRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [ReservedObjectRector::class => [
             '$reservedKeywordsToReplacements' => [
                 'ReservedObject' => 'SmartObject',
             ],
-        ];
+        ]];
     }
 }

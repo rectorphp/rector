@@ -14,20 +14,15 @@ final class MergeInterfacesRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return MergeInterfacesRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [MergeInterfacesRector::class => [
             '$oldToNewInterfaces' => [
                 SomeOldInterface::class => SomeInterface::class,
             ],
-        ];
+        ]];
     }
 }

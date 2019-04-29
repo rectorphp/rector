@@ -13,16 +13,11 @@ final class StringFormTypeToClassRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return StringFormTypeToClassRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return ['$formBuilderClass' => FormBuilder::class];
+        return [StringFormTypeToClassRector::class => ['$formBuilderClass' => FormBuilder::class]];
     }
 }

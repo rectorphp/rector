@@ -18,23 +18,18 @@ final class RenameNamespaceRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return RenameNamespaceRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [RenameNamespaceRector::class => [
             '$oldToNewNamespaces' => [
                 'OldNamespace' => 'NewNamespace',
                 'OldNamespaceWith\OldSplitNamespace' => 'NewNamespaceWith\NewSplitNamespace',
                 'Old\Long\AnyNamespace' => 'Short\AnyNamespace',
                 'PHPUnit_Framework_' => 'PHPUnit\Framework\\',
             ],
-        ];
+        ]];
     }
 }

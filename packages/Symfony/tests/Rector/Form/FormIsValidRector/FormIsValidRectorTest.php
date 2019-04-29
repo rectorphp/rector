@@ -13,16 +13,11 @@ final class FormIsValidRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return FormIsValidRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return ['$formClass' => Form::class];
+        return [FormIsValidRector::class => ['$formClass' => Form::class]];
     }
 }

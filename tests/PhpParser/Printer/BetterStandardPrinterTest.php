@@ -35,7 +35,7 @@ final class BetterStandardPrinterTest extends AbstractKernelTestCase
     {
         yield ['Vendor\Name', "'Vendor\Name'"];
         yield ['Vendor\\', "'Vendor\\\\'"];
-        yield ['Vendor\'Name', "'Vendor\'Name'"];
+        yield ["Vendor'Name", "'Vendor\'Name'"];
     }
 
     public function testYield(): void

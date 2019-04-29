@@ -13,17 +13,12 @@ final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/extended_parent.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return AddReturnTypeDeclarationRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [AddReturnTypeDeclarationRector::class => [
             '$typehintForMethodByClass' => [
                 'Rector\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass' => [
                     'parse' => 'array',
@@ -35,6 +30,6 @@ final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
                     'tearDown' => 'void',
                 ],
             ],
-        ];
+        ]];
     }
 }

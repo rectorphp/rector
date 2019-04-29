@@ -13,16 +13,11 @@ final class AddFlashRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return AddFlashRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return ['$controllerClass' => SymfonyController::class];
+        return [AddFlashRector::class => ['$controllerClass' => SymfonyController::class]];
     }
 }

@@ -13,17 +13,12 @@ final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTes
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return RenameClassConstantsUseToStringsRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [RenameClassConstantsUseToStringsRector::class => [
             '$oldConstantsToNewValuesByType' => [
                 Configurator::class => [
                     'DEVELOPMENT' => 'development',
@@ -31,6 +26,6 @@ final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTes
                 ],
 
             ],
-        ];
+        ]];
     }
 }

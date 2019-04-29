@@ -13,22 +13,17 @@ final class WrapReturnRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/already_array.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return WrapReturnRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [WrapReturnRector::class => [
             '$typeToMethodToWrap' => [
                 SomeReturnClass::class => [
                     'getItem' => 'array',
                 ],
             ],
-        ];
+        ]];
     }
 }

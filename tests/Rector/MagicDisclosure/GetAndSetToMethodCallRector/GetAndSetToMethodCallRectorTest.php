@@ -19,17 +19,12 @@ final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return GetAndSetToMethodCallRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [GetAndSetToMethodCallRector::class => [
             '$typeToMethodCalls' => [
                 SomeContainer::class => [
                     'get' => 'getService',
@@ -43,6 +38,6 @@ final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
                     'get' => 'get',
                 ],
             ],
-        ];
+        ]];
     }
 }

@@ -20,22 +20,17 @@ final class PseudoNamespaceToNamespaceRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return PseudoNamespaceToNamespaceRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [PseudoNamespaceToNamespaceRector::class => [
             '$namespacePrefixesWithExcludedClasses' => [
                 // namespace prefix => excluded classes
                 'PHPUnit_' => ['PHPUnit_Framework_MockObject_MockObject'],
                 'ChangeMe_' => ['KeepMe_'],
             ],
-        ];
+        ]];
     }
 }

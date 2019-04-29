@@ -12,21 +12,16 @@ final class StringToClassConstantRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return StringToClassConstantRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [StringToClassConstantRector::class => [
             '$stringsToClassConstants' => [
                 'compiler.post_dump' => ['Yet\AnotherClass', 'CONSTANT'],
                 'compiler.to_class' => ['Yet\AnotherClass', 'class'],
             ],
-        ];
+        ]];
     }
 }

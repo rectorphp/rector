@@ -19,18 +19,13 @@ final class PHPUnitStaticToKernelTestCaseGetRectorTest extends AbstractRectorTes
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return PHPUnitStaticToKernelTestCaseGetRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [PHPUnitStaticToKernelTestCaseGetRector::class => [
             '$staticClassTypes' => [ClassWithStaticMethods::class],
-        ];
+        ]];
     }
 }

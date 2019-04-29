@@ -21,21 +21,16 @@ final class ReturnArrayClassMethodToYieldRectorTest extends AbstractRectorTestCa
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return ReturnArrayClassMethodToYieldRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [ReturnArrayClassMethodToYieldRector::class => [
             '$methodsByType' => [
                 EventSubscriberInterface::class => ['getSubscribedEvents'],
                 ParentTestCase::class => ['#(provide|dataProvider)*#'],
             ],
-        ];
+        ]];
     }
 }

@@ -13,21 +13,16 @@ final class AliasToClassRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return AliasToClassRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [AliasToClassRector::class => [
             '$aliasesToNamespaces' => [
                 'App' => 'App\Entity',
             ],
             '$entityManagerClass' => DoctrineEntityManager::class,
-        ];
+        ]];
     }
 }

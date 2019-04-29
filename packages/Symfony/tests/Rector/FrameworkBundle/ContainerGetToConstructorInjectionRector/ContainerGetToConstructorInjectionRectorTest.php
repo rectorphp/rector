@@ -23,20 +23,15 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return ContainerGetToConstructorInjectionRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [ContainerGetToConstructorInjectionRector::class => [
             '$containerAwareParentTypes' => [
                 'Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass',
             ],
-        ];
+        ]];
     }
 }

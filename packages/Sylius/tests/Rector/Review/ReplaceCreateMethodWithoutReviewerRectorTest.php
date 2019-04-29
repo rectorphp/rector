@@ -13,18 +13,13 @@ final class ReplaceCreateMethodWithoutReviewerRectorTest extends AbstractRectorT
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
-    public function getRectorClass(): string
-    {
-        return ReplaceCreateMethodWithoutReviewerRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [ReplaceCreateMethodWithoutReviewerRector::class => [
             '$reviewFactoryInterface' => ReviewFactoryInterface::class,
-        ];
+        ]];
     }
 }

@@ -13,16 +13,11 @@ final class ProcessBuilderInstanceRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return ProcessBuilderInstanceRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return ['$processBuilderClass' => ProcessBuilder::class];
+        return [ProcessBuilderInstanceRector::class => ['$processBuilderClass' => ProcessBuilder::class]];
     }
 }
