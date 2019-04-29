@@ -22,21 +22,16 @@ final class ParentClassToTraitsRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return ParentClassToTraitsRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [ParentClassToTraitsRector::class => [
             '$parentClassToTraits' => [
                 ParentObject::class => [SomeTrait::class],
                 AnotherParentObject::class => [SomeTrait::class, SecondTrait::class],
             ],
-        ];
+        ]];
     }
 }

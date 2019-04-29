@@ -12,20 +12,15 @@ final class FunctionToNewRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return FunctionToNewRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [FunctionToNewRector::class => [
             '$functionToNew' => [
                 'collection' => ['Collection'],
             ],
-        ];
+        ]];
     }
 }

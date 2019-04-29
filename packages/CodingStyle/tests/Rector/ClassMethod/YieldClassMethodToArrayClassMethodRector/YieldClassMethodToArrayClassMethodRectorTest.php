@@ -13,20 +13,15 @@ final class YieldClassMethodToArrayClassMethodRectorTest extends AbstractRectorT
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/type_declaration.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return YieldClassMethodToArrayClassMethodRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [YieldClassMethodToArrayClassMethodRector::class => [
             '$methodsByType' => [
                 EventSubscriberInterface::class => ['getSubscribedEvents'],
             ],
-        ];
+        ]];
     }
 }

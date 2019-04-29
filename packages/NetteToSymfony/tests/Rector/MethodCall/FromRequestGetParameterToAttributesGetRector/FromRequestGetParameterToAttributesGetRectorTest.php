@@ -13,18 +13,13 @@ final class FromRequestGetParameterToAttributesGetRectorTest extends AbstractRec
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return FromRequestGetParameterToAttributesGetRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [FromRequestGetParameterToAttributesGetRector::class => [
             '$netteRequestClass' => NetteRequest::class,
-        ];
+        ]];
     }
 }

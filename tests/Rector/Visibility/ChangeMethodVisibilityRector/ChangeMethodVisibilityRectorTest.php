@@ -13,17 +13,12 @@ final class ChangeMethodVisibilityRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return ChangeMethodVisibilityRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [ChangeMethodVisibilityRector::class => [
             '$methodToVisibilityByClass' => [
                 ParentObject::class => [
                     'toBePublicMethod' => 'public',
@@ -32,6 +27,6 @@ final class ChangeMethodVisibilityRectorTest extends AbstractRectorTestCase
                     'toBePublicStaticMethod' => 'public',
                 ],
             ],
-        ];
+        ]];
     }
 }

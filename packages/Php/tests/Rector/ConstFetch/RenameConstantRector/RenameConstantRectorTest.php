@@ -12,21 +12,16 @@ final class RenameConstantRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/spaghetti.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return RenameConstantRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [RenameConstantRector::class => [
             '$oldToNewConstants' => [
                 'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
                 'OLD_CONSTANT' => 'NEW_CONSTANT',
             ],
-        ];
+        ]];
     }
 }

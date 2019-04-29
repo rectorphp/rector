@@ -16,22 +16,17 @@ final class RenameFunctionRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return RenameFunctionRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [RenameFunctionRector::class => [
             '$oldFunctionToNewFunction' => [
                 'view' => 'Laravel\Templating\render',
                 'sprintf' => 'Safe\sprintf',
                 'hebrevc' => ['nl2br', 'hebrev'],
             ],
-        ];
+        ]];
     }
 }

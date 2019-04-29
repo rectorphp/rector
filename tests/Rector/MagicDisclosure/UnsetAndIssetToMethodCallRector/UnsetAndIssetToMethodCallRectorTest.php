@@ -13,23 +13,18 @@ final class UnsetAndIssetToMethodCallRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return UnsetAndIssetToMethodCallRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [UnsetAndIssetToMethodCallRector::class => [
             '$typeToMethodCalls' => [
                 Container::class => [
                     'isset' => 'hasService',
                     'unset' => 'removeService',
                 ],
             ],
-        ];
+        ]];
     }
 }

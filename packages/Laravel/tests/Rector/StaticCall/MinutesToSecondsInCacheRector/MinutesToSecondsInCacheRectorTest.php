@@ -13,18 +13,13 @@ final class MinutesToSecondsInCacheRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/skip_call.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return MinutesToSecondsInCacheRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [MinutesToSecondsInCacheRector::class => [
             '$storeClass' => LaravelStoreInterface::class, // just for test case
-        ];
+        ]];
     }
 }

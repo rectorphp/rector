@@ -14,21 +14,16 @@ final class RenameStaticMethodRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return RenameStaticMethodRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [RenameStaticMethodRector::class => [
             '$oldToNewMethodByClasses' => [
                 Html::class => ['add' => 'addHtml'],
                 FormMacros::class => ['renderFormBegin' => ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin']],
             ],
-        ];
+        ]];
     }
 }

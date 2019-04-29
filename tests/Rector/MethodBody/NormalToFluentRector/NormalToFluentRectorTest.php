@@ -18,20 +18,15 @@ final class NormalToFluentRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return NormalToFluentRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [NormalToFluentRector::class => [
             '$fluentMethodsByType' => [
                 FluentInterfaceClass::class => ['someFunction', 'otherFunction', 'joinThisAsWell'],
             ],
-        ];
+        ]];
     }
 }

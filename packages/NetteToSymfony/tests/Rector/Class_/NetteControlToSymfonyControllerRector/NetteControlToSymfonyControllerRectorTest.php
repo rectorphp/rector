@@ -13,18 +13,13 @@ final class NetteControlToSymfonyControllerRectorTest extends AbstractRectorTest
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return NetteControlToSymfonyControllerRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [NetteControlToSymfonyControllerRector::class => [
             '$netteControlClass' => NetteControl::class,
-        ];
+        ]];
     }
 }

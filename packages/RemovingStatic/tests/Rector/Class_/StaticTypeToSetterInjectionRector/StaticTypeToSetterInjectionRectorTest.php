@@ -19,22 +19,17 @@ final class StaticTypeToSetterInjectionRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return StaticTypeToSetterInjectionRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [StaticTypeToSetterInjectionRector::class => [
             '$staticTypes' => [
                 GenericEntityFactory::class,
                 // with adding a parent interface to the class
                 'ParentSetterEnforcingInterface' => GenericEntityFactoryWithInterface::class,
             ],
-        ];
+        ]];
     }
 }

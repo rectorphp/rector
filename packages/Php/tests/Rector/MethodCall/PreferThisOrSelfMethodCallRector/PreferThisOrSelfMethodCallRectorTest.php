@@ -14,21 +14,16 @@ final class PreferThisOrSelfMethodCallRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/to_self.php.inc', __DIR__ . '/Fixture/to_this.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return PreferThisOrSelfMethodCallRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [PreferThisOrSelfMethodCallRector::class => [
             '$typeToPreference' => [
                 AbstractTestCase::class => 'self',
                 BeLocalClass::class => 'this',
             ],
-        ];
+        ]];
     }
 }

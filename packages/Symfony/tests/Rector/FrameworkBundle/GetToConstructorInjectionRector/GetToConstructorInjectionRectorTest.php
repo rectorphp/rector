@@ -30,18 +30,13 @@ final class GetToConstructorInjectionRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return GetToConstructorInjectionRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [GetToConstructorInjectionRector::class => [
             '$getMethodAwareTypes' => [SymfonyController::class, GetTrait::class],
-        ];
+        ]];
     }
 }

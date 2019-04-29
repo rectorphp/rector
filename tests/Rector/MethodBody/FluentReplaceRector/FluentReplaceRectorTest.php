@@ -13,18 +13,13 @@ final class FluentReplaceRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return FluentReplaceRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [FluentReplaceRector::class => [
             '$classesToDefluent' => [FluentInterfaceClass::class],
-        ];
+        ]];
     }
 }

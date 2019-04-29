@@ -21,22 +21,17 @@ final class SimpleFunctionAndFilterRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return SimpleFunctionAndFilterRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [SimpleFunctionAndFilterRector::class => [
             '$twigExtensionClass' => TwigExtension::class,
             '$oldToNewClasses' => [
                 TwigFunctionMethod::class => TwigSimpleFunction::class,
                 TwigFilterMethod::class => TwigSimpleFilter::class,
             ],
-        ];
+        ]];
     }
 }

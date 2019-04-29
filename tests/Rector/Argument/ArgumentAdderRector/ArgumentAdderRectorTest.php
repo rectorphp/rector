@@ -18,17 +18,12 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return ArgumentAdderRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [ArgumentAdderRector::class => [
             '$positionWithDefaultValueByMethodNamesByClassTypes' => [
                 SomeContainerBuilder::class => [
                     'compile' => [
@@ -46,6 +41,6 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
                     ],
                 ],
             ],
-        ];
+        ]];
     }
 }

@@ -17,16 +17,11 @@ final class RedirectToRouteRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return RedirectToRouteRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return ['$controllerClass' => SymfonyController::class];
+        return [RedirectToRouteRector::class => ['$controllerClass' => SymfonyController::class]];
     }
 }

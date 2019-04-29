@@ -17,16 +17,11 @@ final class TemplateAnnotationVersion5RectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return TemplateAnnotationRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return ['$version' => 5];
+        return [TemplateAnnotationRector::class => ['$version' => 5]];
     }
 }

@@ -13,17 +13,12 @@ final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return ChangeConstantVisibilityRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [ChangeConstantVisibilityRector::class => [
             '$constantToVisibilityByClass' => [
                 ParentObject::class => [
                     'TO_BE_PUBLIC_CONSTANT' => 'public',
@@ -32,6 +27,6 @@ final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
                 ],
                 'Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\AnotherClassWithInvalidConstants' => ['TO_BE_PRIVATE_CONSTANT' => 'private'],
             ],
-        ];
+        ]];
     }
 }

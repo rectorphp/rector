@@ -103,15 +103,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     }
 
     /**
-     * @return mixed[]
-     */
-    protected function getRectorConfiguration(): array
-    {
-        // can be implemented
-        return [];
-    }
-
-    /**
      * @return array<string, array>
      */
     protected function getRectorsWithConfiguration(): array
@@ -200,7 +191,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
                 $enabledRectorsProvider->addEnabledRector($rectorClass, $rectorConfiguration);
             }
         } else {
-            $enabledRectorsProvider->addEnabledRector($this->getRectorClass(), $this->getRectorConfiguration());
+            $enabledRectorsProvider->addEnabledRector($this->getRectorClass(), []);
         }
     }
 }

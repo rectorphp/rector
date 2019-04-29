@@ -259,7 +259,6 @@ final class DocBlockManipulator
         }
     }
 
-
     public function addReturnTag(Node $node, string $type): void
     {
         // there might be no phpdoc at all

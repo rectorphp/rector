@@ -13,18 +13,13 @@ final class RemoveTraitRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return RemoveTraitRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [RemoveTraitRector::class => [
             '$traitsToRemove' => [TraitToBeRemoved::class],
-        ];
+        ]];
     }
 }

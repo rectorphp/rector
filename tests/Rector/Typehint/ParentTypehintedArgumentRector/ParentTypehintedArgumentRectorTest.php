@@ -17,21 +17,16 @@ final class ParentTypehintedArgumentRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return ParentTypehintedArgumentRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [ParentTypehintedArgumentRector::class => [
             '$typehintForArgumentByMethodAndClass' => [
                 ParserInterface::class => ['parse' => ['code' => 'string']],
                 ClassMetadataFactory::class => ['setEntityManager' => ['$em' => 'Doctrine\ORM\EntityManagerInterface']],
             ],
-        ];
+        ]];
     }
 }

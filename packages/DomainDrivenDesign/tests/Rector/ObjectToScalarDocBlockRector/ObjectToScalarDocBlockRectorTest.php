@@ -17,20 +17,15 @@ final class ObjectToScalarDocBlockRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return ObjectToScalarDocBlockRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [ObjectToScalarDocBlockRector::class => [
             '$valueObjectsToSimpleTypes' => [
                 SomeValueObject::class => 'string',
             ],
-        ];
+        ]];
     }
 }

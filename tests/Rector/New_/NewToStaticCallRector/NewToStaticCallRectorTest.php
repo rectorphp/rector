@@ -14,20 +14,15 @@ final class NewToStaticCallRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return NewToStaticCallRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [NewToStaticCallRector::class => [
             '$typeToStaticCalls' => [
                 FromNewClass::class => [IntoStaticClass::class, 'run'],
             ],
-        ];
+        ]];
     }
 }

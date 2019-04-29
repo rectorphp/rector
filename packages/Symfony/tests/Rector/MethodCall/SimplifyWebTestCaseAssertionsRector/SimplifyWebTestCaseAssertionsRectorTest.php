@@ -16,18 +16,13 @@ final class SimplifyWebTestCaseAssertionsRectorTest extends AbstractRectorTestCa
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return SimplifyWebTestCaseAssertionsRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [SimplifyWebTestCaseAssertionsRector::class => [
             '$webTestCaseClass' => FixtureWebTestCase::class,
-        ];
+        ]];
     }
 }

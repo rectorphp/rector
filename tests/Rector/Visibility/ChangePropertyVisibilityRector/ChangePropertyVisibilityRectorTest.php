@@ -17,17 +17,12 @@ final class ChangePropertyVisibilityRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
-    {
-        return ChangePropertyVisibilityRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [ChangePropertyVisibilityRector::class => [
             '$propertyToVisibilityByClass' => [
                 ParentObject::class => [
                     'toBePublicProperty' => 'public',
@@ -39,6 +34,6 @@ final class ChangePropertyVisibilityRectorTest extends AbstractRectorTestCase
                     'toBePublicStaticProperty' => 'public',
                 ],
             ],
-        ];
+        ]];
     }
 }

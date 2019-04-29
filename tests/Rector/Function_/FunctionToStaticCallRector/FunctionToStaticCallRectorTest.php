@@ -12,21 +12,16 @@ final class FunctionToStaticCallRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
     }
 
-    protected function getRectorClass(): string
-    {
-        return FunctionToStaticCallRector::class;
-    }
-
     /**
      * @return mixed[]
      */
-    protected function getRectorConfiguration(): array
+    protected function getRectorsWithConfiguration(): array
     {
-        return [
+        return [FunctionToStaticCallRector::class => [
             '$functionToStaticCall' => [
                 'view' => ['SomeStaticClass', 'render'],
                 'SomeNamespaced\view' => ['AnotherStaticClass', 'render'],
             ],
-        ];
+        ]];
     }
 }
