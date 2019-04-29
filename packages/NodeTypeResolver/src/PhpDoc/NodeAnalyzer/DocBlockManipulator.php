@@ -71,6 +71,11 @@ final class DocBlockManipulator
      */
     private $nodeTraverser;
 
+    /**
+     * @var string[]
+     */
+    private $importedNames = [];
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
@@ -94,7 +99,7 @@ final class DocBlockManipulator
         }
 
         // simple check
-        $pattern = '#@(\\\\)?' . preg_quote(ltrim($name, '@')) . '#';
+        $pattern = '#@(\\\\)?' . preg_quote(ltrim($name, '@'), '#') . '#';
         if (Strings::match($node->getDocComment()->getText(), $pattern)) {
             return true;
         }
@@ -386,6 +391,44 @@ final class DocBlockManipulator
     }
 
     /**
+     * @param string[] $alreadyImportedUses
+     * @return string[]
+     */
+    public function importNames(Node $node, array $alreadyImportedUses): array
+    {
+        if ($node->getDocComment() === null) {
+            return [];
+        }
+
+        $this->importedNames = [];
+
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
+
+        $this->nodeTraverser->traverseWithCallable($phpDocNode, function (AttributeAwareNodeInterface $node) use (
+            $alreadyImportedUses
+        ) {
+            if (! $node instanceof IdentifierTypeNode) {
+                return $node;
+            }
+
+            $name = ltrim($node->name, '\\');
+            if (! Strings::contains($name, '\\')) {
+                return $node;
+            }
+
+            $fullyQualifiedName = $this->getFullyQualifiedName($node);
+            $shortName = $this->getShortName($name);
+
+            return $this->processFqnNameImport($node, $alreadyImportedUses, $shortName, $fullyQualifiedName);
+        });
+
+        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+
+        return $this->importedNames;
+    }
+
+    /**
      * @param string[]|null $excludedClasses
      */
     public function changeUnderscoreType(Node $node, string $namespacePrefix, ?array $excludedClasses): void
@@ -541,5 +584,53 @@ final class DocBlockManipulator
         }
 
         return $newType;
+    }
+
+    private function getShortName(string $name): string
+    {
+        return Strings::after($name, '\\', -1) ?: $name;
+    }
+
+    /**
+     * @param AttributeAwareNodeInterface|AttributeAwareIdentifierTypeNode $attributeAwareNode
+     */
+    private function getFullyQualifiedName(AttributeAwareNodeInterface $attributeAwareNode): string
+    {
+        if ($attributeAwareNode->getAttribute('resolved_name')) {
+            $fqnName = $attributeAwareNode->getAttribute('resolved_name');
+        } else {
+            $fqnName = $attributeAwareNode->getAttribute('resolved_names')[0] ?? $attributeAwareNode->name;
+        }
+
+        return ltrim($fqnName, '\\');
+    }
+
+    /**
+     * @param AttributeAwareIdentifierTypeNode $attributeAwareNode
+     * @param string[] $alreadyImportedUses
+     */
+    private function processFqnNameImport(
+        AttributeAwareNodeInterface $attributeAwareNode,
+        array $alreadyImportedUses,
+        string $shortName,
+        string $fullyQualifiedName
+    ): AttributeAwareNodeInterface {
+        $alreadyImportedUses = array_merge($this->importedNames, $alreadyImportedUses);
+
+        foreach ($alreadyImportedUses as $alreadyImportedUse) {
+            $shortAlreadyImportedUsed = $this->getShortName($alreadyImportedUse);
+            if ($shortAlreadyImportedUsed === $shortName) {
+                if ($alreadyImportedUse === $fullyQualifiedName) {
+                    $attributeAwareNode->name = $shortName;
+                }
+
+                return $attributeAwareNode;
+            }
+        }
+
+        $attributeAwareNode->name = $shortName;
+        $this->importedNames[] = $fullyQualifiedName;
+
+        return $attributeAwareNode;
     }
 }
