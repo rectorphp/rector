@@ -2,6 +2,7 @@ parameters:
     exclude_paths:
         - "/Fixture/"
         - "/Fixtures/"
+        - "/Expected/"
         - "/Source/"
         # autoload-buggy cases
         - "*.php.inc"

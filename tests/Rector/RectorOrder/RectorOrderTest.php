@@ -2,8 +2,8 @@
 
 namespace Rector\Tests\Rector\RectorOrder;
 
-use Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertComparisonToSpecificMethodRector;
+use Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
