@@ -4,6 +4,7 @@ namespace Rector\Nette\Rector\Identical;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -95,7 +96,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Node\Expr[]|null
+     * @return Expr[]|null
      */
     private function matchContentAndNeedleOfSubstrOfVariableLength(Node $node, Variable $variable): ?array
     {
@@ -111,7 +112,7 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Node\Expr\UnaryMinus $unaryMinus */
+        /** @var UnaryMinus $unaryMinus */
         $unaryMinus = $node->args[1]->value;
 
         if (! $unaryMinus->expr instanceof FuncCall) {
@@ -122,7 +123,7 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Node\Expr\FuncCall $strlenFuncCall */
+        /** @var FuncCall $strlenFuncCall */
         $strlenFuncCall = $unaryMinus->expr;
 
         if ($this->areNodesEqual($strlenFuncCall->args[0]->value, $variable)) {

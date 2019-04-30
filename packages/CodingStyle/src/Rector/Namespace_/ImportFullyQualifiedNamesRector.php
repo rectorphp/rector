@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -37,9 +38,15 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
      */
     private $aliasedUses = [];
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser)
+    /**
+     * @var DocBlockManipulator
+     */
+    private $docBlockManipulator;
+
+    public function __construct(CallableNodeTraverser $callableNodeTraverser, DocBlockManipulator $docBlockManipulator)
     {
         $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -80,14 +87,14 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node\Stmt\Namespace_ $node
+     * @param Namespace_ $node
      */
     public function refactor(Node $node): ?Node
     {
         $this->alreadyImportedUses = [];
         $this->newUseStatements = [];
 
-        /** @var Node\Stmt\Class_|null $class */
+        /** @var Class_|null $class */
         $class = $this->betterNodeFinder->findFirstInstanceOf($node, Class_::class);
         if ($class === null) {
             return null;
@@ -103,7 +110,7 @@ CODE_SAMPLE
 
     private function resolveAlreadyImportedUses(Namespace_ $namespace): void
     {
-        /** @var Node\Stmt\Use_[] $uses */
+        /** @var Use_[] $uses */
         $uses = $this->betterNodeFinder->find($namespace->stmts, function (Node $node) {
             if (! $node instanceof Use_) {
                 return false;
@@ -161,9 +168,15 @@ CODE_SAMPLE
      */
     private function importNamesAndCollectNewUseStatements(Class_ $class): array
     {
+        if ($class->name === null) {
+            return [];
+        }
+
         $this->newUseStatements = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable([$class], function (Node $node) {
+        $classShortName = $class->name->toString();
+
+        $this->callableNodeTraverser->traverseNodesWithCallable([$class], function (Node $node) use ($classShortName) {
             if (! $node instanceof Name) {
                 return null;
             }
@@ -176,34 +189,32 @@ CODE_SAMPLE
                 }
             }
 
-            // 1. name is fully qualified → import it
+            // 0. name is same as class name → skip it
+            if ($node->getLast() === $classShortName) {
+                return null;
+            }
+
             if ($this->getName($node) === $node->toString()) {
                 $fullyQualifiedName = $this->getName($node);
-                if (! Strings::contains($fullyQualifiedName, '\\')) {
+
+                // the similar end is already imported → skip
+                if ($this->shouldSkipName($fullyQualifiedName)) {
                     return null;
                 }
 
                 $shortName = $this->getShortName($fullyQualifiedName);
+                if (isset($this->newUseStatements[$shortName])) {
+                    if ($fullyQualifiedName === $this->newUseStatements[$shortName]) {
+                        return new Name($shortName);
+                    }
 
-                // nothing to change
-                if ($shortName === $fullyQualifiedName) {
                     return null;
                 }
 
-                // the similar end is already imported → skip
-                foreach ($this->alreadyImportedUses as $alreadyImportedUse) {
-                    if ($this->getShortName(
-                        $alreadyImportedUse
-                    ) === $shortName && $alreadyImportedUse !== $fullyQualifiedName) {
-                        return null;
-                    }
-                }
-
                 if (! in_array($fullyQualifiedName, $this->alreadyImportedUses, true)) {
-                    $this->newUseStatements[] = $fullyQualifiedName;
+                    $this->newUseStatements[$shortName] = $fullyQualifiedName;
                 }
 
-                // @todo detect aliases somehow, look like overrided by name resolver node traverser
                 // possibly aliased
                 if (in_array($fullyQualifiedName, $this->aliasedUses, true)) {
                     return null;
@@ -213,15 +224,42 @@ CODE_SAMPLE
             }
         });
 
+        // for doc blocks
+        $this->callableNodeTraverser->traverseNodesWithCallable([$class], function (Node $node): void {
+            $importedDocUseStatements = $this->docBlockManipulator->importNames($node, $this->alreadyImportedUses);
+            $this->newUseStatements = array_merge($this->newUseStatements, $importedDocUseStatements);
+        });
+
         return $this->newUseStatements;
     }
 
     private function getShortName(string $fullyQualifiedName): string
     {
+        return Strings::after($fullyQualifiedName, '\\', -1) ?: $fullyQualifiedName;
+    }
+
+    // 1. name is fully qualified → import it
+    private function shouldSkipName(string $fullyQualifiedName): bool
+    {
+        // not namespaced class
         if (! Strings::contains($fullyQualifiedName, '\\')) {
-            return $fullyQualifiedName;
+            return true;
         }
 
-        return Strings::after($fullyQualifiedName, '\\', -1);
+        $shortName = $this->getShortName($fullyQualifiedName);
+
+        // nothing to change
+        if ($shortName === $fullyQualifiedName) {
+            return true;
+        }
+
+        foreach ($this->alreadyImportedUses as $alreadyImportedUse) {
+            $shortAlreadyImportedUsed = $this->getShortName($alreadyImportedUse);
+            if ($alreadyImportedUse !== $fullyQualifiedName && $shortAlreadyImportedUsed === $shortName) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

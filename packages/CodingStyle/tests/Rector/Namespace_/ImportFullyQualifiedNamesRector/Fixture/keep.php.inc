@@ -11,6 +11,9 @@ final class ScopeFactory
      */
     private $phpStanScopeFactory;
 
+    /**
+     * @param PHPStanScopeFactory $phpStanScopeFactory
+     */
     public function __construct(PHPStanScopeFactory $phpStanScopeFactory)
     {
         $this->phpStanScopeFactory = $phpStanScopeFactory;

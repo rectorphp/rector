@@ -4,9 +4,13 @@ namespace Rector\Php\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -78,7 +82,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node\Stmt\ClassMethod|Node\Stmt\Function_|Node\Expr\Closure $node
+     * @param ClassMethod|Function_|Closure $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -111,7 +115,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            if ($parentNode instanceof Node\Stmt\Unset_ || $parentNode instanceof Node\Expr\Cast\Unset_) {
+            if ($parentNode instanceof Unset_ || $parentNode instanceof Node\Expr\Cast\Unset_) {
                 return null;
             }
 

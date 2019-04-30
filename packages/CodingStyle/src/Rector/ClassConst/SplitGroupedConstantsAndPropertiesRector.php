@@ -3,8 +3,10 @@
 namespace Rector\CodingStyle\Rector\ClassConst;
 
 use PhpParser\Node;
+use PhpParser\Node\Const_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -68,7 +70,7 @@ CODE_SAMPLE
 
             $allConstants = $node->consts;
 
-            /** @var Node\Const_ $firstConstant */
+            /** @var Const_ $firstConstant */
             $firstConstant = array_shift($allConstants);
             $node->consts = [$firstConstant];
 
@@ -85,7 +87,7 @@ CODE_SAMPLE
         }
 
         $allProperties = $node->props;
-        /** @var Node\Stmt\PropertyProperty $firstProperty */
+        /** @var PropertyProperty $firstProperty */
         $firstProperty = array_shift($allProperties);
         $node->props = [$firstProperty];
 

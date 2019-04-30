@@ -107,7 +107,7 @@ final class ParsedNodesByType
     }
 
     /**
-     * @return Node\Expr\New_[]
+     * @return New_[]
      */
     public function getNewNodes(): array
     {
@@ -115,7 +115,7 @@ final class ParsedNodesByType
     }
 
     /**
-     * @return Node\Expr\StaticCall[]
+     * @return StaticCall[]
      */
     public function getStaticCallNodes(): array
     {

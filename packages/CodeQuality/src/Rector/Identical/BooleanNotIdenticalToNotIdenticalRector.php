@@ -64,7 +64,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Identical|Node\Expr\BooleanNot $node
+     * @param Identical|BooleanNot $node
      */
     public function refactor(Node $node): ?Node
     {
