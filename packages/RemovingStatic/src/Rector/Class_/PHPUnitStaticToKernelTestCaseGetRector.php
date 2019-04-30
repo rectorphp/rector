@@ -142,7 +142,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node\Expr\StaticCall|Node\Stmt\Class_ $node
+     * @param StaticCall|Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -183,7 +183,7 @@ CODE_SAMPLE
 
     private function processStaticCall(StaticCall $staticCall): ?MethodCall
     {
-        /** @var Node\Stmt\Class_|null $class */
+        /** @var Class_|null $class */
         $class = $staticCall->getAttribute(AttributeKey::CLASS_NODE);
         if ($class === null) {
             return null;

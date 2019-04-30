@@ -4,6 +4,7 @@ namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\Type\ObjectType;
@@ -56,7 +57,7 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        /** @var Node\Stmt\Class_|null $class */
+        /** @var Class_|null $class */
         $class = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
         if ($class === null) {
             return false;

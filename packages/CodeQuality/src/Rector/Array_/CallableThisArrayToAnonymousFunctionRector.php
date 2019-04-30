@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeContainer\ParsedNodesByType;
@@ -88,7 +89,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node\Expr\Array_ $node
+     * @param Array_ $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -126,8 +127,8 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node\Param[] $params
-     * @return Node\Arg[]
+     * @param Param[] $params
+     * @return Arg[]
      */
     private function convertParamsToArgs(array $params): array
     {

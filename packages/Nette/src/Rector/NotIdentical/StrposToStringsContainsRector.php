@@ -58,7 +58,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node\Expr\BinaryOp\NotIdentical|Node\Expr\BinaryOp\Identical $node
+     * @param NotIdentical|Identical $node
      */
     public function refactor(Node $node): ?Node
     {

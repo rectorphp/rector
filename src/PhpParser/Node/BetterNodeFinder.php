@@ -143,7 +143,7 @@ final class BetterNodeFinder
     }
 
     /**
-     * @return Node\Expr\Assign[]
+     * @return Assign[]
      */
     public function findAssignsOfVariable(Node $node, Variable $variable): array
     {

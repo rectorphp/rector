@@ -144,7 +144,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return Node\Arg[]|null
+     * @return Arg[]|null
      */
     private function matchAssertContainsCrawlerArg(MethodCall $methodCall): ?array
     {
@@ -182,7 +182,7 @@ CODE_SAMPLE
 
     private function processAssertResponseRedirects(MethodCall $methodCall): ?Node
     {
-        /** @var Node\Stmt\Expression|null $previousNode */
+        /** @var Expression|null $previousNode */
         $previousExpression = $methodCall->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
         if (! $previousExpression instanceof Expression) {
             return null;

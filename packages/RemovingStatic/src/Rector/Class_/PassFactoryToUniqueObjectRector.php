@@ -153,7 +153,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node\Expr\StaticCall|Node\Stmt\Class_ $node
+     * @param StaticCall|Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
