@@ -28,6 +28,11 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
     /**
      * @var string[]
      */
+    private $alreadyUsedShortNames = [];
+
+    /**
+     * @var string[]
+     */
     private $newUseStatements = [];
 
     /**
@@ -115,6 +120,10 @@ CODE_SAMPLE
         }
 
         $this->resolveAlreadyImportedUses($node);
+
+        // "new X" or "X::static()"
+        $this->resolveAlreadyUsedShortNames($node);
+
         $newUseStatements = $this->importNamesAndCollectNewUseStatements($class);
 
         $this->addNewUseStatements($node, $newUseStatements);
@@ -183,7 +192,6 @@ CODE_SAMPLE
         }
 
         $newUses = [];
-
         $newUseStatements = array_unique($newUseStatements);
 
         foreach ($newUseStatements as $newUseStatement) {
@@ -222,6 +230,14 @@ CODE_SAMPLE
                 if (! Strings::contains($name->toString(), '\\')) {
                     return null;
                 }
+            }
+
+            // the short name is already used, skip it
+            $shortName = $this->classNaming->getShortName($name->toString());
+
+            // is already used
+            if (isset($this->alreadyUsedShortNames[$shortName]) && $this->alreadyUsedShortNames[$shortName] !== $name->toString()) {
+                return null;
             }
 
             // 0. name is same as class name → skip it
@@ -286,5 +302,22 @@ CODE_SAMPLE
         }
 
         return $this->importsInClassCollection->canImportBeAdded($fullyQualifiedName);
+    }
+
+    private function resolveAlreadyUsedShortNames(Namespace_ $namespace): void
+    {
+        $this->callableNodeTraverser->traverseNodesWithCallable($namespace->stmts, function (Node $node): void {
+            if ($node instanceof Node\Expr\New_) {
+                if ($node->class instanceof Name) {
+                    $this->alreadyUsedShortNames[$node->class->getLast()] = $this->getName($node->class);
+                }
+            }
+
+            if ($node instanceof Node\Expr\StaticCall) {
+                if ($node->class instanceof Name) {
+                    $this->alreadyUsedShortNames[$node->class->getLast()] = $this->getName($node->class);
+                }
+            }
+        });
     }
 }
