@@ -135,6 +135,17 @@ CODE_SAMPLE
                 $this->alreadyImportedUses[] = $name;
             }
         }
+
+        /** @var Class_ $class */
+        $class = $this->betterNodeFinder->findFirstInstanceOf($namespace->stmts, Class_::class);
+
+        // add class itself
+        $className = $this->getName($class);
+        if ($className === null) {
+            return;
+        }
+
+        $this->alreadyImportedUses[] = $className;
     }
 
     /**
