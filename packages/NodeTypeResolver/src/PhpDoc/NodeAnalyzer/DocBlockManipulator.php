@@ -32,6 +32,7 @@ use Rector\BetterPhpDocParser\NodeDecorator\StringsTypePhpDocNodeDecorator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+use Rector\CodingStyle\Imports\ImportsInClassCollection;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
 use Rector\NodeTypeResolver\Php\ParamTypeInfo;
@@ -76,13 +77,19 @@ final class DocBlockManipulator
      */
     private $importedNames = [];
 
+    /**
+     * @var ImportsInClassCollection
+     */
+    private $importsInClassCollection;
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         TypeAnalyzer $typeAnalyzer,
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
         StringsTypePhpDocNodeDecorator $stringsTypePhpDocNodeDecorator,
-        NodeTraverser $nodeTraverser
+        NodeTraverser $nodeTraverser,
+        ImportsInClassCollection $importsInClassCollection
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
@@ -90,6 +97,7 @@ final class DocBlockManipulator
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->stringsTypePhpDocNodeDecorator = $stringsTypePhpDocNodeDecorator;
         $this->nodeTraverser = $nodeTraverser;
+        $this->importsInClassCollection = $importsInClassCollection;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -391,27 +399,23 @@ final class DocBlockManipulator
     }
 
     /**
-     * @param string[] $alreadyImportedUses
      * @return string[]
      */
-    public function importNames(Node $node, array $alreadyImportedUses): array
+    public function importNames(Node $node): array
     {
         if ($node->getDocComment() === null) {
             return [];
         }
 
-        $this->importedNames = [];
-
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
         $phpDocNode = $phpDocInfo->getPhpDocNode();
 
-        $this->nodeTraverser->traverseWithCallable($phpDocNode, function (AttributeAwareNodeInterface $node) use (
-            $alreadyImportedUses
-        ) {
+        $this->nodeTraverser->traverseWithCallable($phpDocNode, function (AttributeAwareNodeInterface $node) {
             if (! $node instanceof IdentifierTypeNode) {
                 return $node;
             }
 
+            // is class without namespaced name → skip
             $name = ltrim($node->name, '\\');
             if (! Strings::contains($name, '\\')) {
                 return $node;
@@ -420,7 +424,7 @@ final class DocBlockManipulator
             $fullyQualifiedName = $this->getFullyQualifiedName($node);
             $shortName = $this->getShortName($name);
 
-            return $this->processFqnNameImport($node, $alreadyImportedUses, $shortName, $fullyQualifiedName);
+            return $this->processFqnNameImport($node, $shortName, $fullyQualifiedName);
         });
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
@@ -466,6 +470,11 @@ final class DocBlockManipulator
         });
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+    }
+
+    public function resetImportedNames(): void
+    {
+        $this->importedNames = [];
     }
 
     private function addTypeSpecificTag(Node $node, string $name, string $type): void
@@ -607,15 +616,14 @@ final class DocBlockManipulator
 
     /**
      * @param AttributeAwareIdentifierTypeNode $attributeAwareNode
-     * @param string[] $alreadyImportedUses
      */
     private function processFqnNameImport(
         AttributeAwareNodeInterface $attributeAwareNode,
-        array $alreadyImportedUses,
         string $shortName,
         string $fullyQualifiedName
     ): AttributeAwareNodeInterface {
-        $alreadyImportedUses = array_merge($this->importedNames, $alreadyImportedUses);
+        $alreadyImportedUses = array_merge($this->importedNames, $this->importsInClassCollection->get());
+        $alreadyImportedUses = array_unique($alreadyImportedUses);
 
         foreach ($alreadyImportedUses as $alreadyImportedUse) {
             $shortAlreadyImportedUsed = $this->getShortName($alreadyImportedUse);

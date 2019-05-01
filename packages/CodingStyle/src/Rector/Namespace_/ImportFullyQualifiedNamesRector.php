@@ -9,6 +9,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
+use Rector\CodingStyle\Imports\ImportsInClassCollection;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -31,11 +33,6 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $alreadyImportedUses = [];
-
-    /**
-     * @var string[]
-     */
     private $aliasedUses = [];
 
     /**
@@ -43,10 +40,26 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
      */
     private $docBlockManipulator;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, DocBlockManipulator $docBlockManipulator)
-    {
+    /**
+     * @var ImportsInClassCollection
+     */
+    private $importsInClassCollection;
+
+    /**
+     * @var ClassNaming
+     */
+    private $classNaming;
+
+    public function __construct(
+        CallableNodeTraverser $callableNodeTraverser,
+        DocBlockManipulator $docBlockManipulator,
+        ImportsInClassCollection $importsInClassCollection,
+        ClassNaming $classNaming
+    ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->importsInClassCollection = $importsInClassCollection;
+        $this->classNaming = $classNaming;
     }
 
     public function getDefinition(): RectorDefinition
@@ -91,8 +104,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->alreadyImportedUses = [];
         $this->newUseStatements = [];
+        $this->importsInClassCollection->reset();
+        $this->docBlockManipulator->resetImportedNames();
 
         /** @var Class_|null $class */
         $class = $this->betterNodeFinder->findFirstInstanceOf($node, Class_::class);
@@ -110,6 +124,17 @@ CODE_SAMPLE
 
     private function resolveAlreadyImportedUses(Namespace_ $namespace): void
     {
+        /** @var Class_ $class */
+        $class = $this->betterNodeFinder->findFirstInstanceOf($namespace->stmts, Class_::class);
+
+        // add class itself
+        $className = $this->getName($class);
+        if ($className === null) {
+            return;
+        }
+
+        $this->importsInClassCollection->addImport($className);
+
         /** @var Use_[] $uses */
         $uses = $this->betterNodeFinder->find($namespace->stmts, function (Node $node) {
             if (! $node instanceof Use_) {
@@ -132,7 +157,7 @@ CODE_SAMPLE
                     $this->aliasedUses[] = $name;
                 }
 
-                $this->alreadyImportedUses[] = $name;
+                $this->importsInClassCollection->addImport($name);
             }
         }
 
@@ -145,7 +170,7 @@ CODE_SAMPLE
             return;
         }
 
-        $this->alreadyImportedUses[] = $className;
+        $this->importsInClassCollection->addImport($className);
     }
 
     /**
@@ -161,14 +186,14 @@ CODE_SAMPLE
 
         foreach ($newUseStatements as $newUseStatement) {
             // already imported in previous cycle
-            if (in_array($newUseStatement, $this->alreadyImportedUses, true)) {
+            if ($this->importsInClassCollection->hasImport($newUseStatement)) {
                 continue;
             }
 
             $useUse = new UseUse(new Name($newUseStatement));
             $newUses[] = new Use_([$useUse]);
 
-            $this->alreadyImportedUses[] = $newUseStatement;
+            $this->importsInClassCollection->addImport($newUseStatement);
         }
 
         $namespace->stmts = array_merge($newUses, $namespace->stmts);
@@ -179,6 +204,7 @@ CODE_SAMPLE
      */
     private function importNamesAndCollectNewUseStatements(Class_ $class): array
     {
+        // probably anonymous class
         if ($class->name === null) {
             return [];
         }
@@ -213,7 +239,7 @@ CODE_SAMPLE
                     return null;
                 }
 
-                $shortName = $this->getShortName($fullyQualifiedName);
+                $shortName = $this->classNaming->getShortName($fullyQualifiedName);
                 if (isset($this->newUseStatements[$shortName])) {
                     if ($fullyQualifiedName === $this->newUseStatements[$shortName]) {
                         return new Name($shortName);
@@ -222,7 +248,7 @@ CODE_SAMPLE
                     return null;
                 }
 
-                if (! in_array($fullyQualifiedName, $this->alreadyImportedUses, true)) {
+                if (! $this->importsInClassCollection->hasImport($fullyQualifiedName)) {
                     $this->newUseStatements[$shortName] = $fullyQualifiedName;
                 }
 
@@ -237,16 +263,11 @@ CODE_SAMPLE
 
         // for doc blocks
         $this->callableNodeTraverser->traverseNodesWithCallable([$class], function (Node $node): void {
-            $importedDocUseStatements = $this->docBlockManipulator->importNames($node, $this->alreadyImportedUses);
+            $importedDocUseStatements = $this->docBlockManipulator->importNames($node);
             $this->newUseStatements = array_merge($this->newUseStatements, $importedDocUseStatements);
         });
 
         return $this->newUseStatements;
-    }
-
-    private function getShortName(string $fullyQualifiedName): string
-    {
-        return Strings::after($fullyQualifiedName, '\\', -1) ?: $fullyQualifiedName;
     }
 
     // 1. name is fully qualified → import it
@@ -257,20 +278,13 @@ CODE_SAMPLE
             return true;
         }
 
-        $shortName = $this->getShortName($fullyQualifiedName);
+        $shortName = $this->classNaming->getShortName($fullyQualifiedName);
 
         // nothing to change
         if ($shortName === $fullyQualifiedName) {
             return true;
         }
 
-        foreach ($this->alreadyImportedUses as $alreadyImportedUse) {
-            $shortAlreadyImportedUsed = $this->getShortName($alreadyImportedUse);
-            if ($alreadyImportedUse !== $fullyQualifiedName && $shortAlreadyImportedUsed === $shortName) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->importsInClassCollection->canImportBeAdded($fullyQualifiedName);
     }
 }
