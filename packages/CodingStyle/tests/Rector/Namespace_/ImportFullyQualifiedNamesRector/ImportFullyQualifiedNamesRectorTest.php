@@ -25,6 +25,9 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/doc_combined.php.inc',
             __DIR__ . '/Fixture/conflicting_endings.php.inc',
             __DIR__ . '/Fixture/already_class_name_in_param_doc.php.inc',
+
+            // buggy
+            __DIR__ . '/Fixture/many_imports.php.inc',
         ]);
     }
 
