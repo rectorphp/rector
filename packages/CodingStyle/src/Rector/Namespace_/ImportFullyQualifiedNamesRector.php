@@ -307,17 +307,21 @@ CODE_SAMPLE
     private function resolveAlreadyUsedShortNames(Namespace_ $namespace): void
     {
         $this->callableNodeTraverser->traverseNodesWithCallable($namespace->stmts, function (Node $node): void {
-            if ($node instanceof Node\Expr\New_) {
-                if ($node->class instanceof Name) {
-                    $this->alreadyUsedShortNames[$node->class->getLast()] = $this->getName($node->class);
-                }
+            if (! $node instanceof Name) {
+                return;
             }
 
-            if ($node instanceof Node\Expr\StaticCall) {
-                if ($node->class instanceof Name) {
-                    $this->alreadyUsedShortNames[$node->class->getLast()] = $this->getName($node->class);
-                }
+            $name = $node->getAttribute('originalName');
+            if (! $name instanceof Name) {
+                return;
             }
+
+            // already short
+            if (Strings::contains($name->toString(), '\\')) {
+                return;
+            }
+
+            $this->alreadyUsedShortNames[$name->toString()] = $node->toString();
         });
     }
 }
