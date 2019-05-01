@@ -52,7 +52,10 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if ($node instanceof Class_ && $this->isClassAnonymous($node)) {
+        if (
+            ($node instanceof Class_ && $this->isClassAnonymous($node)) ||
+            ($node instanceof ClassMethod && ($parentNode = $node->getAttribute(AttributeKey::PARENT_NODE)) instanceof Class_ && $this->isClassAnonymous($parentNode))
+        ) {
             return null;
         }
 
