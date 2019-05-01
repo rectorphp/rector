@@ -9,6 +9,10 @@ final class StockRepository
         /** @var Stock\Query $query */
         $query = 5;
 
+        if (!($query instanceof Stock\Querying\Query)) {
+            throw new \InvalidArgumentException('Wrong query provided');
+        }
+
         /** @var Querying\Query $query */
         $builder = $this->createBuilder();
         $query->build($builder);
@@ -28,6 +32,10 @@ final class StockRepository
     {
         /** @var Query $query */
         $query = 5;
+
+        if (!($query instanceof Stock\Querying\Query)) {
+            throw new \InvalidArgumentException('Wrong query provided');
+        }
 
         /** @var Querying\Query $query */
         $builder = $this->createBuilder();
