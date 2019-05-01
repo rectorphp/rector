@@ -184,6 +184,8 @@ CODE_SAMPLE
 
         $newUses = [];
 
+        $newUseStatements = array_unique($newUseStatements);
+
         foreach ($newUseStatements as $newUseStatement) {
             // already imported in previous cycle
             $useUse = new UseUse(new Name($newUseStatement));

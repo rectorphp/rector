@@ -17,6 +17,15 @@ final class StockRepository
         $builder = $this->createBuilder();
         $query->build($builder);
     }
+
+    public function multiDoc()
+    {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = $this->registry->getConnection();
+
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = $this->registry->getConnection();
+    }
 }
 
 ?>
@@ -26,6 +35,7 @@ final class StockRepository
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source;
 
 use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Stock\Query;
+use Doctrine\DBAL\Connection;
 final class StockRepository
 {
     public function filter(Query $query)
@@ -40,6 +50,15 @@ final class StockRepository
         /** @var Querying\Query $query */
         $builder = $this->createBuilder();
         $query->build($builder);
+    }
+
+    public function multiDoc()
+    {
+        /** @var Connection $connection */
+        $connection = $this->registry->getConnection();
+
+        /** @var Connection $connection */
+        $connection = $this->registry->getConnection();
     }
 }
 
