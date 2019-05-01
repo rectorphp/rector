@@ -186,10 +186,6 @@ CODE_SAMPLE
 
         foreach ($newUseStatements as $newUseStatement) {
             // already imported in previous cycle
-            if ($this->importsInClassCollection->hasImport($newUseStatement)) {
-                continue;
-            }
-
             $useUse = new UseUse(new Name($newUseStatement));
             $newUses[] = new Use_([$useUse]);
 
@@ -256,6 +252,8 @@ CODE_SAMPLE
                 if (in_array($fullyQualifiedName, $this->aliasedUses, true)) {
                     return null;
                 }
+
+                $this->importsInClassCollection->addImport($fullyQualifiedName);
 
                 return new Name($shortName);
             }
