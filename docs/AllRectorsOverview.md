@@ -1,4 +1,4 @@
-# All 263 Rectors Overview
+# All 279 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -24,6 +24,8 @@
 - [Php](#php)
 - [PhpParser](#phpparser)
 - [PhpSpecToPHPUnit](#phpspectophpunit)
+- [RemovingStatic](#removingstatic)
+- [SOLID](#solid)
 - [Sensio](#sensio)
 - [Shopware](#shopware)
 - [Silverstripe](#silverstripe)
@@ -286,6 +288,35 @@ Changes foreach that returns set value to ??
 -
 -return null;
 +return $this->oldToNewFunctions[$currentFunction] ?? null;
+```
+
+<br>
+
+### `CallableThisArrayToAnonymousFunctionRector`
+
+- class: `Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector`
+
+Convert [$this, "method"] to proper anonymous function
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $values = [1, 5, 3];
+-        usort($values, [$this, 'compareSize']);
++        usort($values, function ($first, $second) {
++            return $this->compareSize($first, $second);
++        });
+
+         return $values;
+     }
+
+     private function compareSize($first, $second)
+     {
+         return $first <=> $second;
+     }
+ }
 ```
 
 <br>
@@ -591,6 +622,31 @@ Symplify bool value compare to true or false
 
 <br>
 
+### `BooleanNotIdenticalToNotIdenticalRector`
+
+- class: `Rector\CodeQuality\Rector\Identical\BooleanNotIdenticalToNotIdenticalRector`
+
+Negated identical boolean compare to not identical compare (does not apply to non-bool values)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $a = true;
+         $b = false;
+
+-        var_dump(! $a === $b); // true
+-        var_dump(! ($a === $b)); // true
++        var_dump($a !== $b); // true
++        var_dump($a !== $b); // true
+         var_dump($a !== $b); // true
+     }
+ }
+```
+
+<br>
+
 ### `SimplifyConditionsRector`
 
 - class: `Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector`
@@ -720,6 +776,51 @@ Prefer quote that not inside the string
 
 <br>
 
+### `SplitStringClassConstantToClassConstFetchRector`
+
+- class: `Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector`
+
+Separate class constant in a string to class constant fetch and string
+
+```diff
+ class SomeClass
+ {
+     const HI = true;
+ }
+
+ class AnotherClass
+ {
+     public function get()
+     {
+-        return 'SomeClass::HI';
++        return SomeClass::class . '::HI';
+     }
+ }
+```
+
+<br>
+
+### `ImportFullyQualifiedNamesRector`
+
+- class: `Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector`
+
+Import fully qualified names to use statements
+
+```diff
++use SomeAnother\AnotherClass;
++
+ class SomeClass
+ {
+     public function create()
+     {
+-          return SomeAnother\AnotherClass;
++          return AnotherClass;
+     }
+ }
+```
+
+<br>
+
 ### `RemoveUnusedAliasRector`
 
 - class: `Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector`
@@ -790,6 +891,34 @@ Changes negate of empty comparison of nullable value to explicit === or !== comp
 
 -if (!$value) {
 +if ($value === null) {
+ }
+```
+
+<br>
+
+### `SplitGroupedConstantsAndPropertiesRector`
+
+- class: `Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector`
+
+Separate constant and properties to own lines
+
+```diff
+ class SomeClass
+ {
+-    const HI = true, AHOJ = 'true';
++    const HI = true;
++    const AHOJ = 'true';
+
+     /**
+      * @var string
+      */
+-    public $isIt, $isIsThough;
++    public $isIt;
++
++    /**
++     * @var string
++     */
++    public $isIsThough;
  }
 ```
 
@@ -1955,6 +2084,30 @@ Change assertInternalType()/assertNotInternalType() method to new specific alter
 
 <br>
 
+### `RemoveExpectAnyFromMockRector`
+
+- class: `Rector\PHPUnit\Rector\MethodCall\RemoveExpectAnyFromMockRector`
+
+Remove `expect($this->any())` from mocks as it has no added value
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ class SomeClass extends TestCase
+ {
+     public function test()
+     {
+         $translator = $this->getMock('SomeClass');
+-        $translator->expects($this->any())
+-            ->method('trans')
++        $translator->method('trans')
+             ->willReturn('translated max {{ max }}!');
+     }
+ }
+```
+
+<br>
+
 ### `ExceptionAnnotationRector`
 
 - class: `Rector\PHPUnit\Rector\ExceptionAnnotationRector`
@@ -2559,6 +2712,31 @@ Replace constant by new ones
 
 <br>
 
+### `ReservedFnFunctionRector`
+
+- class: `Rector\Php\Rector\Function_\ReservedFnFunctionRector`
+
+Change fn() function name, since it will be reserved keyword
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        function fn($value)
++        function f($value)
+         {
+             return $value;
+         }
+
+-        fn(5);
++        f(5);
+     }
+ }
+```
+
+<br>
+
 ### `MultiExceptionCatchRector`
 
 - class: `Rector\Php\Rector\TryCatch\MultiExceptionCatchRector`
@@ -2714,7 +2892,7 @@ Changes rand, srand and getrandmax by new md_* alternatives.
 
 - class: `Rector\Php\Rector\FuncCall\PregReplaceEModifierRector`
 
-The /e modifier is no longer supported, use preg_replace_callback instead
+The /e modifier is no longer supported, use preg_replace_callback instead 
 
 ```diff
  class SomeClass
@@ -3079,6 +3257,31 @@ Changes pow(val, val2) to ** (exp) parameter
 
 <br>
 
+### `BreakNotInLoopOrSwitchToReturnRector`
+
+- class: `Rector\Php\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector`
+
+Convert break outside for/foreach/switch context to return
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $zhrs = abs($gmt)/3600;
+         $hrs = floor($zhrs);
+         if ($isphp5)
+             return sprintf('%s%02d%02d',($gmt<=0)?'+':'-',floor($zhrs),($zhrs-$hrs)*60);
+         else
+             return sprintf('%s%02d%02d',($gmt<0)?'+':'-',floor($zhrs),($zhrs-$hrs)*60);
+-        break;
++        return;
+     }
+ }
+```
+
+<br>
+
 ### `IfToSpaceshipRector`
 
 - class: `Rector\Php\Rector\If_\IfToSpaceshipRector`
@@ -3235,6 +3438,28 @@ Changes PHP 4 style constructor to __construct.
 -    public function SomeClass()
 +    public function __construct()
      {
+     }
+ }
+```
+
+<br>
+
+### `AddDefaultValueForUndefinedVariableRector`
+
+- class: `Rector\Php\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector`
+
+Adds default value for undefined variable
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
++        $a = null;
+         if (rand(0, 1)) {
+             $a = 5;
+         }
+         echo $a;
      }
  }
 ```
@@ -3666,6 +3891,242 @@ Migrate PhpSpec behavior to PHPUnit test
 
 <br>
 
+## RemovingStatic
+
+### `PHPUnitStaticToKernelTestCaseGetRector`
+
+- class: `Rector\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector`
+
+Convert static calls in PHPUnit test cases, to get() from the container of KernelTestCase
+
+```yaml
+services:
+    Rector\RemovingStatic\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector:
+        staticClassTypes:
+            - EntityFactory
+```
+
+↓
+
+```diff
+-<?php
++use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+
+-use PHPUnit\Framework\TestCase;
++final class SomeTestCase extends KernelTestCase
++{
++    /**
++     * @var EntityFactory
++     */
++    private $entityFactory;
++
++    protected function setUp(): void
++    {
++        parent::setUp();
++        $this->entityFactory = self::$container->get(EntityFactory::class);
++    }
+
+-final class SomeTestCase extends TestCase
+-{
+     public function test()
+     {
+-        $product = EntityFactory::create('product');
++        $product = $this->entityFactory->create('product');
+     }
+ }
+```
+
+<br>
+
+### `StaticTypeToSetterInjectionRector`
+
+- class: `Rector\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector`
+
+Changes types to setter injection
+
+```yaml
+services:
+    Rector\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector:
+        $staticTypes:
+            - SomeStaticClass
+```
+
+↓
+
+```diff
+ <?php
+
+ final class CheckoutEntityFactory
+ {
++    /**
++     * @var SomeStaticClass
++     */
++    private $someStaticClass;
++
++    public function setSomeStaticClass(SomeStaticClass $someStaticClass)
++    {
++        $this->someStaticClass = $someStaticClass;
++    }
++
+     public function run()
+     {
+-        return SomeStaticClass::go();
++        return $this->someStaticClass->go();
+     }
+-}
++}
+```
+
+<br>
+
+### `NewUniqueObjectToEntityFactoryRector`
+
+- class: `Rector\RemovingStatic\Rector\Class_\NewUniqueObjectToEntityFactoryRector`
+
+Convert new X to new factories
+
+```diff
+-<?php
+-
+ class SomeClass
+ {
++    public function __construct(AnotherClassFactory $anotherClassFactory)
++    {
++        $this->anotherClassFactory = $anotherClassFactory;
++    }
++
+     public function run()
+     {
+-        return new AnotherClass;
++        return $this->anotherClassFactory->create();
+     }
+ }
+
+ class AnotherClass
+ {
+     public function someFun()
+     {
+         return StaticClass::staticMethod();
+     }
+ }
+```
+
+<br>
+
+### `PassFactoryToUniqueObjectRector`
+
+- class: `Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector`
+
+Convert new X/Static::call() to factories in entities, pass them via constructor to each other
+
+```yaml
+services:
+    Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector:
+        typesToServices:
+            - StaticClass
+```
+
+↓
+
+```diff
+-<?php
+-
+ class SomeClass
+ {
++    public function __construct(AnotherClassFactory $anotherClassFactory)
++    {
++        $this->anotherClassFactory = $anotherClassFactory;
++    }
++
+     public function run()
+     {
+-        return new AnotherClass;
++        return $this->anotherClassFactory->create();
+     }
+ }
+
+ class AnotherClass
+ {
++    public function __construct(StaticClass $staticClass)
++    {
++        $this->staticClass = $staticClass;
++    }
++
+     public function someFun()
+     {
+-        return StaticClass::staticMethod();
++        return $this->staticClass->staticMethod();
++    }
++}
++
++final class AnotherClassFactory
++{
++    /**
++     * @var StaticClass
++     */
++    private $staticClass;
++
++    public function __construct(StaticClass $staticClass)
++    {
++        $this->staticClass = $staticClass;
++    }
++
++    public function create(): AnotherClass
++    {
++        return new AnotherClass($this->staticClass);
+     }
+ }
+```
+
+<br>
+
+## SOLID
+
+### `PrivatizeLocalClassConstantRector`
+
+- class: `Rector\SOLID\Rector\ClassConst\PrivatizeLocalClassConstantRector`
+
+Finalize every class constant that is used only locally
+
+```diff
+ class ClassWithConstantUsedOnlyHere
+ {
+-    const LOCAL_ONLY = true;
++    private const LOCAL_ONLY = true;
+
+     public function isLocalOnly()
+     {
+         return self::LOCAL_ONLY;
+     }
+ }
+```
+
+<br>
+
+### `FinalizeClassesWithoutChildrenRector`
+
+- class: `Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector`
+
+Finalize every class that has no children
+
+```diff
+-class FirstClass
++final class FirstClass
+ {
+ }
+
+ class SecondClass
+ {
+ }
+
+-class ThirdClass extends SecondClass
++final class ThirdClass extends SecondClass
+ {
+ }
+```
+
+<br>
+
 ## Sensio
 
 ### `TemplateAnnotationRector`
@@ -3888,6 +4349,40 @@ Changes createForm(new FormType), add(new FormType) to ones with "FormType::clas
              'method' => 'PUT',
 -        ]);
 +        ));
+     }
+ }
+```
+
+<br>
+
+### `SimplifyWebTestCaseAssertionsRector`
+
+- class: `Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector`
+
+Simplify use of assertions in WebTestCase
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ class SomeClass extends TestCase
+ {
+     public function test()
+     {
+-        $this->assertSame(200, $client->getResponse()->getStatusCode());
++         $this->assertResponseIsSuccessful();
+     }
+
+     public function testUrl()
+     {
+-        $this->assertSame(301, $client->getResponse()->getStatusCode());
+-        $this->assertSame('https://example.com', $client->getResponse()->headers->get('Location'));
++        $this->assertResponseRedirects('https://example.com', 301);
+     }
+
+     public function testContains()
+     {
+-        $this->assertContains('Hello World', $crawler->filter('h1')->text());
++        $this->assertSelectorTextContains('h1', 'Hello World');
      }
  }
 ```
@@ -5523,12 +6018,14 @@ Replaces defined classes by new ones.
 ```yaml
 services:
     Rector\Rector\Class_\RenameClassRector:
-        SomeOldClass: SomeNewClass
+        App\SomeOldClass: App\SomeNewClass
 ```
 
 ↓
 
 ```diff
+ namespace App;
+
 -use SomeOldClass;
 +use SomeNewClass;
 
