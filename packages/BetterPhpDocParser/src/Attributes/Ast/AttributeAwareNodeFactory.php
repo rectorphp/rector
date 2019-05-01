@@ -3,6 +3,7 @@
 namespace Rector\BetterPhpDocParser\Attributes\Ast;
 
 use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\DeprecatedTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
@@ -26,6 +27,7 @@ use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\BetterPhpDocParser\Ast\NodeTraverser;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareDeprecatedTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareInvalidTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareMethodTagValueNode;
@@ -156,6 +158,10 @@ final class AttributeAwareNodeFactory
         if ($phpDocTagValueNode instanceof ThrowsTagValueNode) {
             $typeNode = $this->createFromTypeNode($phpDocTagValueNode->type);
             return new AttributeAwareThrowsTagValueNode($typeNode, $phpDocTagValueNode->description);
+        }
+
+        if ($phpDocTagValueNode instanceof DeprecatedTagValueNode) {
+            return new AttributeAwareDeprecatedTagValueNode($phpDocTagValueNode->description);
         }
 
         throw new NotImplementedYetException(sprintf(
