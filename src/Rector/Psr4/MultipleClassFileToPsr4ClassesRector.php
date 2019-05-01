@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Psr4;
 
+use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
@@ -71,6 +72,8 @@ CODE_SAMPLE
             return;
         }
 
+        $shouldDelete = true;
+
         foreach ($namespaceNodes as $namespaceNode) {
             $newStmtsSet = $this->removeAllOtherNamespaces($nodes, $namespaceNode);
 
@@ -83,14 +86,26 @@ CODE_SAMPLE
                 $namespacedClassNodes = $this->betterNodeFinder->findInstanceOf($newStmt->stmts, Class_::class);
 
                 foreach ($namespacedClassNodes as $classNode) {
+                    if ($classNode->isAnonymous()) {
+                        continue;
+                    }
+
                     $this->removeAllClassesFromNamespaceNode($newStmt);
                     $newStmt->stmts[] = $classNode;
 
                     $fileDestination = $this->createClassFileDestination($classNode, $smartFileInfo);
 
+                    if ($smartFileInfo->getRealPath() === $fileDestination) {
+                        $shouldDelete = false;
+                    }
+
                     $this->printNodesToFilePath($newStmtsSet, $fileDestination);
                 }
             }
+        }
+
+        if ($shouldDelete) {
+            FileSystem::delete($smartFileInfo->getRealPath());
         }
     }
 

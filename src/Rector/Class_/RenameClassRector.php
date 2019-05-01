@@ -44,6 +44,8 @@ final class RenameClassRector extends AbstractRector
         return new RectorDefinition('Replaces defined classes by new ones.', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
+namespace App;
+
 use SomeOldClass;
 
 function someFunction(SomeOldClass $someOldClass): SomeOldClass
@@ -55,6 +57,8 @@ function someFunction(SomeOldClass $someOldClass): SomeOldClass
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
+namespace App;
+
 use SomeNewClass;
 
 function someFunction(SomeNewClass $someOldClass): SomeNewClass
@@ -66,7 +70,7 @@ function someFunction(SomeNewClass $someOldClass): SomeNewClass
 CODE_SAMPLE
                 ,
                 [
-                    'SomeOldClass' => 'SomeNewClass',
+                    'App\SomeOldClass' => 'App\SomeNewClass',
                 ]
             ),
         ]);

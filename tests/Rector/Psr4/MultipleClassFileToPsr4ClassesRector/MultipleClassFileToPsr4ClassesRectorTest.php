@@ -3,9 +3,9 @@
 namespace Rector\Tests\Rector\Psr4\MultipleClassFileToPsr4ClassesRector;
 
 use Iterator;
+use Nette\Utils\FileSystem;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\HttpKernel\RectorKernel;
-use Symfony\Component\Filesystem\Filesystem;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
@@ -27,27 +27,37 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
 
     protected function tearDown(): void
     {
-        if (! $this->getProvidedData()) {
-            return;
-        }
-
-        // cleanup filesystem
-        $generatedFiles = array_keys($this->getProvidedData()[1]);
-        (new Filesystem())->remove($generatedFiles);
+        FileSystem::delete(__DIR__ . '/Fixture');
     }
 
     /**
      * @param string[] $expectedExceptions
      * @dataProvider provideExceptionsData
+     * @dataProvider provideMissNamed
      */
     public function test(string $file, array $expectedExceptions): void
     {
-        $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo($file));
+        $fileInfo = new SmartFileInfo($file);
+
+        $temporaryFilePath = sprintf(
+            '%s%sFixture%s%s',
+            dirname($fileInfo->getPath()),
+            DIRECTORY_SEPARATOR,
+            DIRECTORY_SEPARATOR,
+            $fileInfo->getBasename()
+        );
+
+        FileSystem::copy($file, $temporaryFilePath);
+        require_once $temporaryFilePath;
+
+        $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo($temporaryFilePath));
 
         foreach ($expectedExceptions as $expectedExceptionLocation => $expectedFormat) {
             $this->assertFileExists($expectedExceptionLocation);
             $this->assertFileEquals($expectedFormat, $expectedExceptionLocation);
         }
+
+        $this->assertFileNotExists($temporaryFilePath);
     }
 
     public function provideExceptionsData(): Iterator
@@ -55,8 +65,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
         yield [
             __DIR__ . '/Source/exceptions.php',
             [
-                __DIR__ . '/Source/FirstException.php' => __DIR__ . '/Expected/FirstException.php',
-                __DIR__ . '/Source/SecondException.php' => __DIR__ . '/Expected/SecondException.php',
+                __DIR__ . '/Fixture/FirstException.php' => __DIR__ . '/Expected/FirstException.php',
+                __DIR__ . '/Fixture/SecondException.php' => __DIR__ . '/Expected/SecondException.php',
             ],
         ];
 
@@ -64,10 +74,10 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
         yield [
             __DIR__ . '/Source/nette-exceptions.php',
             [
-                __DIR__ . '/Source/ArgumentOutOfRangeException.php' => __DIR__ . '/Expected/ArgumentOutOfRangeException.php',
-                __DIR__ . '/Source/InvalidStateException.php' => __DIR__ . '/Expected/InvalidStateException.php',
-                __DIR__ . '/Source/RegexpException.php' => __DIR__ . '/Expected/RegexpException.php',
-                __DIR__ . '/Source/UnknownImageFileException.php' => __DIR__ . '/Expected/UnknownImageFileException.php',
+                __DIR__ . '/Fixture/ArgumentOutOfRangeException.php' => __DIR__ . '/Expected/ArgumentOutOfRangeException.php',
+                __DIR__ . '/Fixture/InvalidStateException.php' => __DIR__ . '/Expected/InvalidStateException.php',
+                __DIR__ . '/Fixture/RegexpException.php' => __DIR__ . '/Expected/RegexpException.php',
+                __DIR__ . '/Fixture/UnknownImageFileException.php' => __DIR__ . '/Expected/UnknownImageFileException.php',
             ],
         ];
 
@@ -75,7 +85,18 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
         yield [
             __DIR__ . '/Source/exception.php',
             [
-                __DIR__ . '/Source/JustOneException.php' => __DIR__ . '/Expected/JustOneException.php',
+                __DIR__ . '/Fixture/JustOneException.php' => __DIR__ . '/Expected/JustOneException.php',
+            ],
+        ];
+    }
+
+    public function provideMissNamed(): Iterator
+    {
+        yield [
+            __DIR__ . '/Source/MissNamed.php',
+            [
+                __DIR__ . '/Fixture/Miss.php' => __DIR__ . '/Expected/Miss.php',
+                __DIR__ . '/Fixture/Named.php' => __DIR__ . '/Expected/Named.php',
             ],
         ];
     }

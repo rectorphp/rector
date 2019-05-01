@@ -101,6 +101,7 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # tough logic
+            - 'src/Rector/Psr4/MultipleClassFileToPsr4ClassesRector.php'
             - 'src/PhpParser/Node/Resolver/NameResolver.php'
             - 'src/Rector/MethodBody/NormalToFluentRector.php'
             - 'packages/CodingStyle/src/Rector/Use_/RemoveUnusedAliasRector.php'
