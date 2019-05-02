@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Imports\ImportsInClassCollection;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
@@ -34,6 +35,11 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
      * @var string[]
      */
     private $newUseStatements = [];
+
+    /**
+     * @var string[]
+     */
+    private $newFunctionUseStatements = [];
 
     /**
      * @var string[]
@@ -110,22 +116,16 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $this->newUseStatements = [];
+        $this->newFunctionUseStatements = [];
         $this->importsInClassCollection->reset();
         $this->docBlockManipulator->resetImportedNames();
-
-        /** @var Class_|null $class */
-        $class = $this->betterNodeFinder->findFirstInstanceOf($node, Class_::class);
-        if ($class === null) {
-            return null;
-        }
 
         $this->resolveAlreadyImportedUses($node);
 
         // "new X" or "X::static()"
         $this->resolveAlreadyUsedShortNames($node);
 
-        $newUseStatements = $this->importNamesAndCollectNewUseStatements($class);
-
+        $newUseStatements = $this->importNamesAndCollectNewUseStatements($node);
         $this->addNewUseStatements($node, $newUseStatements);
 
         return $node;
@@ -133,29 +133,28 @@ CODE_SAMPLE
 
     private function resolveAlreadyImportedUses(Namespace_ $namespace): void
     {
-        /** @var Class_ $class */
+        /** @var Class_|null $class */
         $class = $this->betterNodeFinder->findFirstInstanceOf($namespace->stmts, Class_::class);
 
         // add class itself
-        $className = $this->getName($class);
-        if ($className === null) {
-            return;
+        if ($class) {
+            $className = $this->getName($class);
+            if ($className !== null) {
+                $this->importsInClassCollection->addImport($className);
+            }
         }
 
-        $this->importsInClassCollection->addImport($className);
-
-        /** @var Use_[] $uses */
-        $uses = $this->betterNodeFinder->find($namespace->stmts, function (Node $node) {
+        $this->callableNodeTraverser->traverseNodesWithCallable($namespace->stmts, function (Node $node) {
             if (! $node instanceof Use_) {
-                return false;
+                return null;
             }
 
             // only import uses
-            return $node->type === Use_::TYPE_NORMAL;
-        });
+            if ($node->type !== Use_::TYPE_NORMAL) {
+                return null;
+            }
 
-        foreach ($uses as $use) {
-            foreach ($use->uses as $useUse) {
+            foreach ($node->uses as $useUse) {
                 $name = $this->getName($useUse);
                 if ($name === null) {
                     throw new ShouldNotHappenException();
@@ -168,18 +167,7 @@ CODE_SAMPLE
 
                 $this->importsInClassCollection->addImport($name);
             }
-        }
-
-        /** @var Class_ $class */
-        $class = $this->betterNodeFinder->findFirstInstanceOf($namespace->stmts, Class_::class);
-
-        // add class itself
-        $className = $this->getName($class);
-        if ($className === null) {
-            return;
-        }
-
-        $this->importsInClassCollection->addImport($className);
+        });
     }
 
     /**
@@ -187,19 +175,40 @@ CODE_SAMPLE
      */
     private function addNewUseStatements(Namespace_ $namespace, array $newUseStatements): void
     {
-        if ($newUseStatements === []) {
+        if ($newUseStatements === [] && $this->newFunctionUseStatements === []) {
             return;
         }
 
         $newUses = [];
         $newUseStatements = array_unique($newUseStatements);
 
+        $namespaceName = $this->getName($namespace);
+        if ($namespaceName === null) {
+            throw new ShouldNotHappenException();
+        }
+
         foreach ($newUseStatements as $newUseStatement) {
+            if ($this->isCurrentNamespace($namespaceName, $newUseStatement)) {
+                continue;
+            }
+
             // already imported in previous cycle
             $useUse = new UseUse(new Name($newUseStatement));
             $newUses[] = new Use_([$useUse]);
 
             $this->importsInClassCollection->addImport($newUseStatement);
+        }
+
+        foreach ($this->newFunctionUseStatements as $newFunctionUseStatement) {
+            if ($this->isCurrentNamespace($namespaceName, $newFunctionUseStatement)) {
+                continue;
+            }
+
+            // already imported in previous cycle
+            $useUse = new UseUse(new Name($newFunctionUseStatement), null, Use_::TYPE_FUNCTION);
+            $newUses[] = new Use_([$useUse]);
+
+            $this->importsInClassCollection->addImport($newFunctionUseStatement);
         }
 
         $namespace->stmts = array_merge($newUses, $namespace->stmts);
@@ -208,18 +217,12 @@ CODE_SAMPLE
     /**
      * @return string[]
      */
-    private function importNamesAndCollectNewUseStatements(Class_ $class): array
+    private function importNamesAndCollectNewUseStatements(Namespace_ $node): array
     {
-        // probably anonymous class
-        if ($class->name === null) {
-            return [];
-        }
-
         $this->newUseStatements = [];
+        $this->newFunctionUseStatements = [];
 
-        $classShortName = $class->name->toString();
-
-        $this->callableNodeTraverser->traverseNodesWithCallable([$class], function (Node $node) use ($classShortName) {
+        $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node) {
             if (! $node instanceof Name) {
                 return null;
             }
@@ -230,6 +233,8 @@ CODE_SAMPLE
                 if (! Strings::contains($name->toString(), '\\')) {
                     return null;
                 }
+            } else {
+                return null;
             }
 
             // the short name is already used, skip it
@@ -237,11 +242,6 @@ CODE_SAMPLE
 
             // is already used
             if (isset($this->alreadyUsedShortNames[$shortName]) && $this->alreadyUsedShortNames[$shortName] !== $name->toString()) {
-                return null;
-            }
-
-            // 0. name is same as class name → skip it
-            if ($node->getLast() === $classShortName) {
                 return null;
             }
 
@@ -254,8 +254,8 @@ CODE_SAMPLE
                 }
 
                 $shortName = $this->classNaming->getShortName($fullyQualifiedName);
-                if (isset($this->newUseStatements[$shortName])) {
-                    if ($fullyQualifiedName === $this->newUseStatements[$shortName]) {
+                if (isset($this->newUseStatements[$shortName]) || isset($this->newFunctionUseStatements[$shortName])) {
+                    if ($fullyQualifiedName === $this->newUseStatements[$shortName] || $fullyQualifiedName === $this->newFunctionUseStatements[$shortName]) {
                         return new Name($shortName);
                     }
 
@@ -263,7 +263,11 @@ CODE_SAMPLE
                 }
 
                 if (! $this->importsInClassCollection->hasImport($fullyQualifiedName)) {
-                    $this->newUseStatements[$shortName] = $fullyQualifiedName;
+                    if ($node->getAttribute(AttributeKey::PARENT_NODE) instanceof Node\Expr\FuncCall) {
+                        $this->newFunctionUseStatements[$shortName] = $fullyQualifiedName;
+                    } else {
+                        $this->newUseStatements[$shortName] = $fullyQualifiedName;
+                    }
                 }
 
                 // possibly aliased
@@ -278,7 +282,7 @@ CODE_SAMPLE
         });
 
         // for doc blocks
-        $this->callableNodeTraverser->traverseNodesWithCallable([$class], function (Node $node): void {
+        $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node): void {
             $importedDocUseStatements = $this->docBlockManipulator->importNames($node);
             $this->newUseStatements = array_merge($this->newUseStatements, $importedDocUseStatements);
         });
@@ -306,7 +310,11 @@ CODE_SAMPLE
 
     private function resolveAlreadyUsedShortNames(Namespace_ $namespace): void
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable($namespace->stmts, function (Node $node): void {
+        if ($namespace->name instanceof Name) {
+            $this->alreadyUsedShortNames[$namespace->name->toString()] = $namespace->name->toString();
+        }
+
+        $this->callableNodeTraverser->traverseNodesWithCallable((array) $namespace->stmts, function (Node $node): void {
             if (! $node instanceof Name) {
                 return;
             }
@@ -323,5 +331,15 @@ CODE_SAMPLE
 
             $this->alreadyUsedShortNames[$name->toString()] = $node->toString();
         });
+    }
+
+    private function isCurrentNamespace(string $namespaceName, string $newUseStatement): bool
+    {
+        $afterCurrentNamespace = Strings::after($newUseStatement, $namespaceName . '\\');
+        if ($afterCurrentNamespace === false) {
+            return false;
+        }
+
+        return ! Strings::contains($afterCurrentNamespace, '\\');
     }
 }
