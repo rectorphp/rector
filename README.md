@@ -165,7 +165,7 @@ Just use `--with-style` option to handle these basic cases:
 vendor/bin/rector process src --with-style
 ```
 
-## 4 Steps to Create Own Rector
+## 3 Steps to Create Own Rector
 
 First, make sure it's not covered by [any existing Rectors yet](/docs/AllRectorsOverview.md).
 
@@ -177,11 +177,9 @@ Let's say we want to **change method calls from `set*` to `change*`**.
 +$user->changePassword('123456');
 ```
 
-### 1. Create New Rector
+### 1. Create New Rector and Implement Methods
 
 Create class that extends [`Rector\Rector\AbstractRector`](/src/Rector/AbstractRector.php). It has useful methods like checking node type and name. Just run `$this->` and let PHPStorm show you all possible methods.
-
-### 1. Implement Methods from `AbstractRector`
 
 ```php
 <?php declare(strict_types=1);
