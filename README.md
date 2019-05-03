@@ -181,46 +181,7 @@ Let's say we want to **change method calls from `set*` to `change*`**.
 
 Create class that extends [`Rector\Rector\AbstractRector`](/src/Rector/AbstractRector.php). It has useful methods like checking node type and name. Just run `$this->` and let PHPStorm show you all possible methods.
 
-```php
-<?php declare(strict_types=1);
-
-namespace App\Rector;
-
-use PhpParser\Node;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\RectorDefinition;
-
-final class MyFirstRector extends AbstractRector
-{
-    public function getDefinition(): RectorDefinition
-    {
-        // what does this do?
-        // minimalistic before/after sample - to explain in code
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getNodeTypes(): array
-    {
-        // what node types we look for?
-        // String_? FuncCall? ...
-        // pick any node from https://github.com/nikic/PHP-Parser/tree/master/lib/PhpParser/Node
-        return [];
-    }
-
-    public function refactor(Node $node): ?Node
-    {
-        // what will happen with the node?
-        // common work flow:
-        // - should skip? → return null;
-        // - modify it? → do it, then return $node;
-        // - remove/add nodes elsewhere? → do it, then return null;
-    }
-}
-```
-
-### 2. Implement Methods
+### 1. Implement Methods from `AbstractRector`
 
 ```php
 <?php declare(strict_types=1);
@@ -239,8 +200,10 @@ final class MyFirstRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
+        // what does this do?
+        // minimalistic before/after sample - to explain in code
         return new RectorDefinition('Change method calls from set* to change*.', [
-            new CodeSample('$user->setPassword('123456');', '$user->changePassword('123456');')
+            new CodeSample('$user->setPassword("123456");', '$user->changePassword("123456");')
         ]);
     }
 
@@ -249,6 +212,8 @@ final class MyFirstRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
+        // what node types we look for?
+        // pick any node from https://github.com/rectorphp/rector/blob/master/docs/NodesOverview.md
         return [MethodCall::class];
     }
 
@@ -257,6 +222,13 @@ final class MyFirstRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        // what will happen with the node?
+        // common work flow:
+        // - should skip? → return null;
+        // - modify it? → do it, then return $node;
+        // - remove/add nodes elsewhere? → do it, then return null;
+        
+        
         // we only care about "set*" method names
         $methodCallName = $this->getName($node);
 
@@ -273,7 +245,7 @@ final class MyFirstRector extends AbstractRector
 }
 ```
 
-### 3. Register it
+### 2. Register it
 
 ```yaml
 # rector.yaml
@@ -281,7 +253,7 @@ services:
     App\Rector\MyFirstRector: ~
 ```
 
-### 4. Let Rector Refactor Your Code
+### 3. Let Rector Refactor Your Code
 
 ```bash
 # see the diff first
