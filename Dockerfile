@@ -6,7 +6,7 @@ COPY composer.json composer.json
 RUN  composer install --no-dev --optimize-autoloader --prefer-dist
 
 
-FROM php:7.1-cli-alpine
+FROM php:7.3-cli
 WORKDIR /rector
 
 COPY . .
