@@ -220,24 +220,18 @@ final class MyFirstRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        // what will happen with the node?
-        // common work flow:
-        // - should skip? → return null;
-        // - modify it? → do it, then return $node;
-        // - remove/add nodes elsewhere? → do it, then return null;
-        
-        
         // we only care about "set*" method names
-        $methodCallName = $this->getName($node);
-
-        if (! Strings::startsWith($methodCallName, 'set')) {
+        if (! $this->isName($node, 'set*')) {
+            // return null to skip it
             return null;
         }
 
+        $methodCallName = $this->getName($node);
         $newMethodCallName = Strings::replace($methodCallName, '#^set#', 'change');
 
         $node->name = new Identifier($newMethodCallName);
 
+        // return $node if you modified it
         return $node;
     }
 }
