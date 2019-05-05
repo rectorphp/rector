@@ -16,3 +16,4 @@ services:
     Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector: ~
     Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector: ~
     Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector: ~
+    Rector\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector: ~
