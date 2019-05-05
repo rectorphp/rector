@@ -115,10 +115,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->newUseStatements = [];
-        $this->newFunctionUseStatements = [];
-        $this->importsInClassCollection->reset();
-        $this->docBlockManipulator->resetImportedNames();
+        $this->resetCollectedNames();
 
         $this->resolveAlreadyImportedUses($node);
 
@@ -341,5 +338,14 @@ CODE_SAMPLE
         }
 
         return ! Strings::contains($afterCurrentNamespace, '\\');
+    }
+
+    private function resetCollectedNames(): void
+    {
+        $this->newUseStatements = [];
+        $this->newFunctionUseStatements = [];
+        $this->alreadyUsedShortNames = [];
+        $this->importsInClassCollection->reset();
+        $this->docBlockManipulator->resetImportedNames();
     }
 }
