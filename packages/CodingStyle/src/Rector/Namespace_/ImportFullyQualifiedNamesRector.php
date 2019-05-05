@@ -4,6 +4,7 @@ namespace Rector\CodingStyle\Rector\Namespace_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
@@ -260,7 +261,7 @@ CODE_SAMPLE
                 }
 
                 if (! $this->importsInClassCollection->hasImport($fullyQualifiedName)) {
-                    if ($node->getAttribute(AttributeKey::PARENT_NODE) instanceof Node\Expr\FuncCall) {
+                    if ($node->getAttribute(AttributeKey::PARENT_NODE) instanceof FuncCall) {
                         $this->newFunctionUseStatements[$shortName] = $fullyQualifiedName;
                     } else {
                         $this->newUseStatements[$shortName] = $fullyQualifiedName;
