@@ -5,6 +5,7 @@ namespace Rector\PhpParser\Node\Value;
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -56,6 +57,10 @@ final class ValueResolver
         $value = $this->getConstExprEvaluator()->evaluateDirectly($expr);
         if ($value !== null) {
             return $value;
+        }
+
+        if ($expr instanceof ConstFetch) {
+            return $this->nameResolver->resolve($expr);
         }
 
         $nodeStaticType = $this->nodeTypeResolver->getNodeStaticType($expr);
