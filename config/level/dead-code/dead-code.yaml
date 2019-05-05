@@ -15,3 +15,4 @@ services:
     Rector\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector: ~
     Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector: ~
     Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector: ~
+    Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector: ~
