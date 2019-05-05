@@ -29,3 +29,7 @@ services:
     Rector\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector: ~
     Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector: ~
     Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector: ~
+
+    Rector\CodeQuality\Rector\Identical\BooleanNotIdenticalToNotIdenticalRector: ~
+    Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector: ~
+    Rector\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector: ~
