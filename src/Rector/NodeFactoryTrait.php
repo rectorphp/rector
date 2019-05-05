@@ -12,7 +12,9 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use Rector\PhpParser\Node\NodeFactory;
 
 /**
@@ -37,15 +39,15 @@ trait NodeFactoryTrait
     /**
      * @param Arg[] $args
      */
-    protected function createStaticCall(string $class, string $method, array $args = []): Expr\StaticCall
+    protected function createStaticCall(string $class, string $method, array $args = []): StaticCall
     {
         if (in_array($class, ['self', 'parent', 'static'], true)) {
             $class = new Name($class);
         } else {
-            $class = new Name\FullyQualified($class);
+            $class = new FullyQualified($class);
         }
 
-        return new Node\Expr\StaticCall($class, $method, $args);
+        return new StaticCall($class, $method, $args);
     }
 
     protected function createClassConstant(string $class, string $constant): ClassConstFetch

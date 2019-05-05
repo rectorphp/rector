@@ -3,7 +3,9 @@
 namespace Rector\CodeQuality\Rector\LogicalAnd;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\LogicalAnd;
+use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -57,12 +59,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->left instanceof Node\Expr\Assign || ! $node->right instanceof Node\Expr\Assign) {
+        if (! $node->left instanceof Assign || ! $node->right instanceof Assign) {
             return null;
         }
 
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Node\Stmt\Expression) {
+        if (! $parentNode instanceof Expression) {
             return null;
         }
 
