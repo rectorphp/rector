@@ -156,8 +156,11 @@ CODE_SAMPLE
      */
     private function resolveDefaultValuesFromCall(Node $node): array
     {
-        /** @var string $nodeName */
+        /** @var string|null $nodeName */
         $nodeName = $this->getName($node);
+        if ($nodeName === null) {
+            return [];
+        }
 
         if ($node instanceof FuncCall) {
             return $this->resolveFuncCallDefaultParamValues($nodeName);
