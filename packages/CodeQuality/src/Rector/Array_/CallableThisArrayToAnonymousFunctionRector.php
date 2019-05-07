@@ -2,8 +2,6 @@
 
 namespace Rector\CodeQuality\Rector\Array_;
 
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -11,8 +9,10 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeContainer\ParsedNodesByType;
