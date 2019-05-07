@@ -5,6 +5,7 @@ namespace Rector\DeadCode\Rector\BooleanAnd;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PHPStan\Type\Constant\ConstantBooleanType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -51,24 +52,31 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isConstantTrue($node->left)) {
+        if ($this->isTrueOrBooleanAndTrues($node->left)) {
             return $node->right;
         }
 
-        if ($this->isConstantTrue($node->right)) {
+        if ($this->isTrueOrBooleanAndTrues($node->right)) {
             return $node->left;
         }
 
         return null;
     }
 
-    private function isConstantTrue(Node $node): bool
+
+
+    private function isTrueOrBooleanAndTrues(Node $node): bool
     {
-        $leftStaticType = $this->getStaticType($node);
-        if (! $leftStaticType instanceof ConstantBooleanType) {
-            return false;
+        if ($this->isTrue($node)) {
+            return true;
         }
 
-        return $leftStaticType->getValue() === true;
+        if ($node instanceof BooleanAnd) {
+            if ($this->isTrueOrBooleanAndTrues($node->left) && $this->isTrueOrBooleanAndTrues($node->right)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
