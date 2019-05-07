@@ -86,13 +86,6 @@ CODE_SAMPLE
             return null;
         }
 
-        // skip different method expressions
-        if ($node->getAttribute(AttributeKey::METHOD_NAME) !== $previousExpression->getAttribute(
-            AttributeKey::METHOD_NAME
-        )) {
-            return null;
-        }
-
         if ($this->shouldSkipForDifferentScope($node, $previousExpression)) {
             return null;
         }
@@ -114,14 +107,7 @@ CODE_SAMPLE
         );
 
         if ($nodePreviousForeach !== $previousExpressionPreviousForeach) {
-            if ($nodePreviousForeach instanceof Foreach_ && $assign->var instanceof Variable) {
-                // is value changed inside the foreach?
-
-                $variableAssigns = $this->betterNodeFinder->findAssignsOfVariable($nodePreviousForeach, $assign->var);
-
-                // there is probably value override
-                return count($variableAssigns) >= 2;
-            }
+            return true;
         }
 
         return false;
@@ -148,6 +134,7 @@ CODE_SAMPLE
         if ($this->shouldSkipDueToForeachOverride($assign, $anotherNode)) {
             return true;
         }
+
         return $this->shouldSkipForDifferenceParent($assign, $anotherNode);
     }
 
