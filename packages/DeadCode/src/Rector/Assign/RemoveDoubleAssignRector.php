@@ -105,12 +105,7 @@ CODE_SAMPLE
             $node,
             Foreach_::class
         );
-
-        if ($nodePreviousForeach !== $previousExpressionPreviousForeach) {
-            return true;
-        }
-
-        return false;
+        return $nodePreviousForeach !== $previousExpressionPreviousForeach;
     }
 
     private function shouldSkipForDifferenceParent(Node $firstNode, Node $secondNode): bool

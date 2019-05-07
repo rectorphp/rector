@@ -203,7 +203,7 @@ CODE_SAMPLE
     private function resolveFuncCallDefaultParamValues(string $nodeName): array
     {
         $functionNode = $this->parsedNodesByType->findFunction($nodeName);
-        if ($functionNode) {
+        if ($functionNode !== null) {
             return $this->resolveDefaultParamValuesFromFunctionLike($functionNode);
         }
 

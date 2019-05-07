@@ -135,7 +135,7 @@ CODE_SAMPLE
         $class = $this->betterNodeFinder->findFirstInstanceOf($namespace->stmts, Class_::class);
 
         // add class itself
-        if ($class) {
+        if ($class !== null) {
             $className = $this->getName($class);
             if ($className !== null) {
                 $this->importsInClassCollection->addImport($className);
