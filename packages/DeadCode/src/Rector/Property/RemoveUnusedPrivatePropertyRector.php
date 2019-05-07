@@ -62,8 +62,13 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var Node\Stmt\ClassLike|null $classNode */
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode instanceof Trait_) {
+        if ($classNode === null || $classNode instanceof Trait_) {
+            return null;
+        }
+
+        if ($classNode instanceof Node\Stmt\Class_ && $classNode->isAnonymous()) {
             return null;
         }
 
