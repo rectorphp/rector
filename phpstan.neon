@@ -152,3 +152,4 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable\:\:\$name#'
         - '#Empty array passed to foreach#'
         - '#Method Rector\\RemovingStatic\\UniqueObjectFactoryFactory\:\:resolveClassShortName\(\) should return string but returns string\|false#'
+        - '#Strict comparison using \=\=\= between PhpParser\\Node\\Expr\\ArrayItem and null will always evaluate to false#'

@@ -97,7 +97,12 @@ CODE_SAMPLE
             return null;
         }
 
-        // is callable
+        // is callable?
+        // can be totally empty, e.g [, $value]
+        if ($node->items[0] === null) {
+            return null;
+        }
+
         $objectVariable = $node->items[0]->value;
 
         $classMethod = $this->matchCallableMethod($objectVariable, $node->items[1]->value);
