@@ -15,6 +15,7 @@ final class RemoveOverriddenValuesRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/multiple_assigns.php.inc',
             __DIR__ . '/Fixture/reference_use.php.inc',
             __DIR__ . '/Fixture/method_call.php.inc',
+            // keep
             __DIR__ . '/Fixture/keep.php.inc',
             __DIR__ . '/Fixture/keep_pre_assign.php.inc',
             __DIR__ . '/Fixture/keep_conditional_override.php.inc',

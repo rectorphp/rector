@@ -111,8 +111,8 @@ parameters:
         - '#Method Rector\\(.*?) should return array<PhpParser\\Node\\(.*?)> but returns array<PhpParser\\Node\>#'
 
         # known values
-        - '#Parameter \#2 \$variableName of class Rector\\DeadCode\\Rector\\ClassMethod\\Data\\VariableNodeUseInfo constructor expects string, string\|null given#'
-        - '#Cannot call method getParentNode\(\) on Rector\\DeadCode\\Rector\\ClassMethod\\Data\\VariableNodeUseInfo\|null#'
+        - '#Parameter \#2 \$variableName of class Rector\\DeadCode\\Data\\VariableNodeUseInfo constructor expects string, string\|null given#'
+        - '#Cannot call method getParentNode\(\) on Rector\\DeadCode\\Data\\VariableNodeUseInfo\|null#'
 
         # part of test
         - '#Class Manual\\Twig\\TwigFilter not found#'
