@@ -3,6 +3,8 @@
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeContainer\ParsedNodesByType;
@@ -68,10 +70,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        /** @var ClassLike|null $classNode */
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classNode === null) {
+            return null;
+        }
 
         // unreliable to detect trait method usage
         if ($classNode instanceof Trait_) {
+            return null;
+        }
+
+        if ($classNode instanceof Class_ && $classNode->isAnonymous()) {
             return null;
         }
 
