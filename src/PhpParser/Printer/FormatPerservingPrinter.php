@@ -28,7 +28,7 @@ final class FormatPerservingPrinter
     {
         $newContent = $this->printToString($newStmts, $oldStmts, $oldTokens);
 
-        FileSystem::write($fileInfo->getRealPath(), $newContent);
+        FileSystem::write($fileInfo->getRealPath(), $newContent, $fileInfo->getPerms());
 
         return $newContent;
     }
