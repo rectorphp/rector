@@ -4,8 +4,6 @@ namespace Rector\DeadCode\Rector\BooleanAnd;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PHPStan\Type\Constant\ConstantBooleanType;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -63,20 +61,20 @@ CODE_SAMPLE
         return null;
     }
 
-
-
     private function isTrueOrBooleanAndTrues(Node $node): bool
     {
         if ($this->isTrue($node)) {
             return true;
         }
 
-        if ($node instanceof BooleanAnd) {
-            if ($this->isTrueOrBooleanAndTrues($node->left) && $this->isTrueOrBooleanAndTrues($node->right)) {
-                return true;
-            }
+        if (! $node instanceof BooleanAnd) {
+            return false;
         }
 
-        return false;
+        if (! $this->isTrueOrBooleanAndTrues($node->left)) {
+            return false;
+        }
+
+        return $this->isTrueOrBooleanAndTrues($node->right);
     }
 }

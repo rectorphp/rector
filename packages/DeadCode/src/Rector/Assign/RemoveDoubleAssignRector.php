@@ -24,6 +24,20 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class RemoveDoubleAssignRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const CONTROL_STRUCTURE_NODES = [
+        Foreach_::class,
+        If_::class,
+        While_::class,
+        Do_::class,
+        Else_::class,
+        ElseIf_::class,
+        Catch_::class,
+        Case_::class,
+    ];
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Simplify useless double assigns', [
@@ -79,14 +93,6 @@ CODE_SAMPLE
             return null;
         }
 
-        // are 2 different methods
-        if (! $this->areNodesEqual(
-            $node->getAttribute(AttributeKey::METHOD_NODE),
-            $previousExpression->getAttribute(AttributeKey::METHOD_NODE)
-        )) {
-            return null;
-        }
-
         if ($this->shouldSkipForDifferentScope($node, $previousExpression)) {
             return null;
         }
@@ -123,33 +129,8 @@ CODE_SAMPLE
 
     private function shouldSkipForDifferenceParent(Node $firstNode, Node $secondNode): bool
     {
-        $firstNodeParent = $this->betterNodeFinder->findFirstParentInstanceOf(
-            $firstNode,
-            [
-                Foreach_::class,
-                If_::class,
-                While_::class,
-                Do_::class,
-                Else_::class,
-                ElseIf_::class,
-                Catch_::class,
-                Case_::class,
-            ]
-        );
-
-        $secondNodeParent = $this->betterNodeFinder->findFirstParentInstanceOf(
-            $secondNode,
-            [
-                Foreach_::class,
-                If_::class,
-                While_::class,
-                Do_::class,
-                If_::class,
-                ElseIf_::class,
-                Catch_::class,
-                Case_::class,
-            ]
-        );
+        $firstNodeParent = $this->findParentControlStructure($firstNode);
+        $secondNodeParent = $this->findParentControlStructure($secondNode);
 
         if ($firstNodeParent === null || $secondNodeParent === null) {
             return false;
@@ -160,9 +141,26 @@ CODE_SAMPLE
 
     private function shouldSkipForDifferentScope(Assign $assign, Node $anotherNode): bool
     {
+        if (! $this->areInSameClassMethod($assign, $anotherNode)) {
+            return true;
+        }
+
         if ($this->shouldSkipDueToForeachOverride($assign, $anotherNode)) {
             return true;
         }
         return $this->shouldSkipForDifferenceParent($assign, $anotherNode);
+    }
+
+    private function findParentControlStructure(Node $node): ?Node
+    {
+        return $this->betterNodeFinder->findFirstParentInstanceOf($node, self::CONTROL_STRUCTURE_NODES);
+    }
+
+    private function areInSameClassMethod(Node $node, Node $previousExpression): bool
+    {
+        return $this->areNodesEqual(
+            $node->getAttribute(AttributeKey::METHOD_NODE),
+            $previousExpression->getAttribute(AttributeKey::METHOD_NODE)
+        );
     }
 }
