@@ -100,12 +100,16 @@ final class FileProcessor
      */
     public function printToString(SmartFileInfo $smartFileInfo): string
     {
+        $this->makeSureFileIsParsed($smartFileInfo);
+
         [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
         return $this->formatPerservingPrinter->printToString($newStmts, $oldStmts, $oldTokens);
     }
 
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
+        $this->makeSureFileIsParsed($smartFileInfo);
+
         [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
         $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
 
@@ -121,11 +125,28 @@ final class FileProcessor
         $oldStmts = $this->parser->parseFile($smartFileInfo->getRealPath());
         $oldTokens = $this->lexer->getTokens();
 
+        // needed for \Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver
+        $this->tokensByFilePath[$smartFileInfo->getRealPath()] = [$oldStmts, $oldStmts, $oldTokens];
+
         $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile(
             $oldStmts,
             $smartFileInfo->getRealPath()
         );
 
         return [$newStmts, $oldStmts, $oldTokens];
+    }
+
+    private function makeSureFileIsParsed(SmartFileInfo $smartFileInfo): void
+    {
+        if (isset($this->tokensByFilePath[$smartFileInfo->getRealPath()])) {
+            return;
+        }
+
+        throw new ShouldNotHappenException(sprintf(
+            'File %s was not preparsed, so it cannot be printed.%sCheck "%s" method.',
+            $smartFileInfo->getRealPath(),
+            PHP_EOL,
+            self::class . '::parseFileInfoToLocalCache()'
+        ));
     }
 }

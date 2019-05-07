@@ -12,3 +12,6 @@ composer.lock
 create-rector.yaml
 phpstan-dependencies.json
 phpstan-paths.txt
+
+# tests - travis
+/laravel-dir
