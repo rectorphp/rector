@@ -334,7 +334,7 @@ CODE_SAMPLE
     private function isCurrentNamespace(string $namespaceName, string $newUseStatement): bool
     {
         $afterCurrentNamespace = Strings::after($newUseStatement, $namespaceName . '\\');
-        if ($afterCurrentNamespace === false) {
+        if (! $afterCurrentNamespace) {
             return false;
         }
 

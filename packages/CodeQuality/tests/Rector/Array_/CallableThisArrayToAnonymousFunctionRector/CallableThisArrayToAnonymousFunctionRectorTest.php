@@ -13,7 +13,9 @@ final class CallableThisArrayToAnonymousFunctionRectorTest extends AbstractRecto
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/skip.php.inc',
             __DIR__ . '/Fixture/another_class.php.inc',
-            __DIR__ . '/Fixture/skip_too.php.inc',
+            __DIR__ . '/Fixture/skip_another_class.php.inc',
+            __DIR__ . '/Fixture/skip_empty_first_array.php.inc',
+            __DIR__ . '/Fixture/skip_as_well.php.inc',
         ]);
     }
 

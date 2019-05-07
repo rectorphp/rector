@@ -2,13 +2,10 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\Fixture;
 
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Foreach_;
-
 final class ForeachToInArrayRector
 {
-    public function refactor(Node $node)
+    public function refactor($node)
     {
-        [, $comparedNode] = $matchedNodes;
+        [, $comparedNode] = $node;
     }
 }
