@@ -156,8 +156,11 @@ CODE_SAMPLE
      */
     private function resolveDefaultValuesFromCall(Node $node): array
     {
-        /** @var string $nodeName */
+        /** @var string|null $nodeName */
         $nodeName = $this->getName($node);
+        if ($nodeName === null) {
+            return [];
+        }
 
         if ($node instanceof FuncCall) {
             return $this->resolveFuncCallDefaultParamValues($nodeName);
@@ -200,7 +203,7 @@ CODE_SAMPLE
     private function resolveFuncCallDefaultParamValues(string $nodeName): array
     {
         $functionNode = $this->parsedNodesByType->findFunction($nodeName);
-        if ($functionNode) {
+        if ($functionNode !== null) {
             return $this->resolveDefaultParamValuesFromFunctionLike($functionNode);
         }
 

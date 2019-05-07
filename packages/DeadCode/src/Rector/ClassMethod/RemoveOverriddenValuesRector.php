@@ -6,9 +6,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\Expression;
 use Rector\Context\ContextAnalyzer;
-use Rector\DeadCode\Rector\ClassMethod\Data\VariableNodeUseInfo;
+use Rector\DeadCode\Data\VariableNodeUseInfo;
+use Rector\DeadCode\FlowOfControlLocator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -21,9 +21,15 @@ final class RemoveOverriddenValuesRector extends AbstractRector
      */
     private $contextAnalyzer;
 
-    public function __construct(ContextAnalyzer $contextAnalyzer)
+    /**
+     * @var FlowOfControlLocator
+     */
+    private $flowOfControlLocator;
+
+    public function __construct(ContextAnalyzer $contextAnalyzer, FlowOfControlLocator $flowOfControlLocator)
     {
         $this->contextAnalyzer = $contextAnalyzer;
+        $this->flowOfControlLocator = $flowOfControlLocator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -184,7 +190,7 @@ CODE_SAMPLE
 
             /** @var Assign $assignNode */
             $assignNode = $assignedVariable->getAttribute(AttributeKey::PARENT_NODE);
-            $nestingHash = $this->resolveNestingHashFromClassMethod($functionLike, $assignNode);
+            $nestingHash = $this->flowOfControlLocator->resolveNestingHashFromFunctionLike($functionLike, $assignNode);
 
             $nodesByTypeAndPosition[] = new VariableNodeUseInfo(
                 $startTokenPos,
@@ -284,24 +290,6 @@ CODE_SAMPLE
         });
 
         return ! $isVariableAssigned;
-    }
-
-    private function resolveNestingHashFromClassMethod(FunctionLike $functionLike, Assign $assign): string
-    {
-        $nestingHash = '_';
-        $parentNode = $assign;
-        while ($parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE)) {
-            if ($parentNode instanceof Expression) {
-                continue;
-            }
-
-            $nestingHash .= spl_object_hash($parentNode);
-            if ($functionLike === $parentNode) {
-                return $nestingHash;
-            }
-        }
-
-        return $nestingHash;
     }
 
     private function isAssignNodeUsed(

@@ -2,6 +2,8 @@
 
 namespace Rector\CodeQuality\Rector\Array_;
 
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -93,14 +95,21 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (count($node->items) !== 2) {
+        if ($this->shouldSkipArray($node)) {
             return null;
         }
 
-        // is callable
         $objectVariable = $node->items[0]->value;
+        if (! $objectVariable instanceof Variable && ! $objectVariable instanceof PropertyFetch) {
+            return null;
+        }
 
-        $classMethod = $this->matchCallableMethod($objectVariable, $node->items[1]->value);
+        $methodName = $node->items[1]->value;
+        if (! $methodName instanceof String_) {
+            return null;
+        }
+
+        $classMethod = $this->matchCallableMethod($objectVariable, $methodName);
         if ($classMethod === null) {
             return null;
         }
@@ -140,7 +149,10 @@ CODE_SAMPLE
         return $args;
     }
 
-    private function matchCallableMethod(Expr $objectExpr, Expr $methodExpr): ?ClassMethod
+    /**
+     * @param Variable|PropertyFetch $objectExpr
+     */
+    private function matchCallableMethod(Expr $objectExpr, String_ $methodExpr): ?ClassMethod
     {
         $methodName = $this->getValue($methodExpr);
 
@@ -167,5 +179,16 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function shouldSkipArray(Array_ $array): bool
+    {
+        // callback is exactly "[$two, 'items']"
+        if (count($array->items) !== 2) {
+            return true;
+        }
+
+        // can be totally empty in case of "[, $value]"
+        return $array->items[0] === null;
     }
 }

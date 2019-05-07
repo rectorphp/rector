@@ -65,6 +65,8 @@ script:
 
           mkdir laravel-dir
           composer create-project laravel/framework laravel-dir
+          # missing in laravel for some reason
+          composer require doctrine/dbal -d laravel-dir
           composer dump-autoload --no-dev -d laravel-dir
 
           # 2. run an nother project

@@ -21,6 +21,7 @@ final class RemoveDoubleAssignRectorTest extends AbstractRectorTestCase
             // skip
             __DIR__ . '/Fixture/skip_double_catch.php.inc',
             __DIR__ . '/Fixture/skip_double_case.php.inc',
+            __DIR__ . '/Fixture/skip_double_assign.php.inc',
         ]);
     }
 

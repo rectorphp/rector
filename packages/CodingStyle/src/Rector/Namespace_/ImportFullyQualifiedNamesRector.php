@@ -135,7 +135,7 @@ CODE_SAMPLE
         $class = $this->betterNodeFinder->findFirstInstanceOf($namespace->stmts, Class_::class);
 
         // add class itself
-        if ($class) {
+        if ($class !== null) {
             $className = $this->getName($class);
             if ($className !== null) {
                 $this->importsInClassCollection->addImport($className);
@@ -334,7 +334,7 @@ CODE_SAMPLE
     private function isCurrentNamespace(string $namespaceName, string $newUseStatement): bool
     {
         $afterCurrentNamespace = Strings::after($newUseStatement, $namespaceName . '\\');
-        if ($afterCurrentNamespace === false) {
+        if (! $afterCurrentNamespace) {
             return false;
         }
 

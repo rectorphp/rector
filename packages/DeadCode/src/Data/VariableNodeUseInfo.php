@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DeadCode\Rector\ClassMethod\Data;
+namespace Rector\DeadCode\Data;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;

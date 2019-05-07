@@ -5,6 +5,8 @@ namespace Rector\DeadCode\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -62,8 +64,13 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var ClassLike|null $classNode */
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode instanceof Trait_) {
+        if ($classNode === null || $classNode instanceof Trait_) {
+            return null;
+        }
+
+        if ($classNode instanceof Class_ && $classNode->isAnonymous()) {
             return null;
         }
 
