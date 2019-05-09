@@ -2,6 +2,8 @@ includes:
      - 'utils/PHPStanExtensions/config/phpstan-extensions.neon'
      - 'vendor/symplify/phpstan-extensions/config/config.neon'
      - 'vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon'
+     # bleeing edge
+     - 'vendor/phpstan/phpstan/conf/bleedingEdge.neon'
 
 parameters:
     # to allow intalling with various phsptan versions without reporting old errors here
