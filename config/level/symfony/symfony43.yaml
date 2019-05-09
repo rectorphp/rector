@@ -11,3 +11,4 @@ services:
         Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent: 'Symfony\Component\HttpKernel\Event\ViewEvent'
         Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent: 'Symfony\Component\HttpKernel\Event\ExceptionEvent'
         Symfony\Component\HttpKernel\Event\PostResponseEvent: 'Symfony\Component\HttpKernel\Event\TerminateEvent'
+    Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector: ~
