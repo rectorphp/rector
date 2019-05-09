@@ -129,6 +129,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->autoloadTestFixture = true;
     }
 
+    protected function doTestFile(string $file): void
+    {
+        $this->doTestFiles([$file]);
+    }
+
     protected function getTempPath(): string
     {
         return sys_get_temp_dir() . '/rector_temp_tests';

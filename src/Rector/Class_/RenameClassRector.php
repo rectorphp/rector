@@ -5,13 +5,17 @@ namespace Rector\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
@@ -31,11 +35,25 @@ final class RenameClassRector extends AbstractRector
     private $docBlockManipulator;
 
     /**
+     * @var string[]
+     */
+    private $alreadyProcessedClasses = [];
+    /**
+     * @var ClassNaming
+     */
+    private $classNaming;
+
+    /**
      * @param string[] $oldToNewClasses
      */
-    public function __construct(DocBlockManipulator $docBlockManipulator, array $oldToNewClasses = [])
+    public function __construct(
+        DocBlockManipulator $docBlockManipulator,
+        ClassNaming $classNaming,
+        array $oldToNewClasses = []
+    )
     {
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->classNaming = $classNaming;
         $this->oldToNewClasses = $oldToNewClasses;
     }
 
@@ -81,7 +99,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Name::class, Property::class, FunctionLike::class, Expression::class];
+        return [
+            Name::class,
+            Property::class,
+            FunctionLike::class,
+            Expression::class,
+            ClassLike::class,
+            Namespace_::class,
+        ];
     }
 
     /**
@@ -110,6 +135,18 @@ CODE_SAMPLE
             }
 
             return new FullyQualified($newName);
+        }
+
+        if ($node instanceof Namespace_) {
+            $node = $this->refactorNamespaceNode($node);
+        }
+
+        if ($node instanceof ClassLike) {
+            $node = $this->refactorClassLikeNode($node);
+        }
+
+        if (! $node) {
+            return null;
         }
 
         foreach ($this->oldToNewClasses as $oldType => $newType) {
@@ -175,5 +212,78 @@ CODE_SAMPLE
             return false;
         }
         return ! (in_array($node, $classNode->implements, true) && class_exists($newName));
+    }
+
+    private function refactorNamespaceNode(Namespace_ $node): ?Node
+    {
+        $name = $this->getName($node);
+        if ($name === null) {
+            return null;
+        }
+
+        $classNode = $this->getClassOfNamespaceToRefactor($node);
+        if (! $classNode) {
+            return null;
+        }
+
+        $newClassFqn = $this->oldToNewClasses[$this->getName($classNode)];
+        $newNamespace = $this->classNaming->getNamespace($newClassFqn);
+
+        // Renaming to class without namespace (example MyNamespace\DateTime -> DateTimeImmutable)
+        if (! $newNamespace) {
+            $classNode->name = new Identifier($newClassFqn);
+
+            return $classNode;
+        }
+
+        $node->name = new Name($newNamespace);
+
+        return $node;
+    }
+
+    private function getClassOfNamespaceToRefactor(Namespace_ $namespace): ?ClassLike
+    {
+        $foundClass = $this->betterNodeFinder->findFirst($namespace, function (Node $node) {
+            if (! $node instanceof ClassLike) {
+                return false;
+            }
+
+            return isset($this->oldToNewClasses[$this->getName($node)]);
+        });
+
+        return $foundClass instanceof ClassLike ? $foundClass : null;
+    }
+
+    private function refactorClassLikeNode(ClassLike $classLike): ?Node
+    {
+        $name = $this->getName($classLike);
+        if ($name === null) {
+            return null;
+        }
+
+        $newName = $this->oldToNewClasses[$name] ?? null;
+        if (! $newName) {
+            return null;
+        }
+
+        // prevents re-iterating same class in endless loop
+        if (in_array($name, $this->alreadyProcessedClasses, true)) {
+            return null;
+        }
+
+        $this->alreadyProcessedClasses[] = $name;
+
+        $newName = $this->oldToNewClasses[$name];
+        $newClassNamePart = $this->classNaming->getShortName($newName);
+        $newNamespacePart = $this->classNaming->getNamespace($newName);
+
+        $classLike->name = new Identifier($newClassNamePart);
+
+        // Old class did not have any namespace, we need to wrap class with Namespace_ node
+        if ($newNamespacePart && ! $this->classNaming->getNamespace($name)) {
+            return new Namespace_(new Name($newNamespacePart), [$classLike]);
+        }
+
+        return $classLike;
     }
 }
