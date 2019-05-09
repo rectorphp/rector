@@ -82,7 +82,7 @@ final class ValueResolver
             return $this->constExprEvaluator;
         }
 
-        $this->constExprEvaluator = new ConstExprEvaluator(function (Expr $expr) {
+        $this->constExprEvaluator = new ConstExprEvaluator(function (Expr $expr): ?string {
             if ($expr instanceof Dir) {
                 // __DIR__
                 return $this->resolveDirConstant($expr);

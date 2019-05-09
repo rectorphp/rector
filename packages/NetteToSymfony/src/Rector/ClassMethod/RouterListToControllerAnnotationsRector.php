@@ -209,7 +209,7 @@ CODE_SAMPLE
     private function resolveAssignRouteNodes(ClassMethod $classMethod): array
     {
         // look for <...>[] = IRoute<Type>
-        return $this->betterNodeFinder->find($classMethod->stmts, function (Node $classMethod) {
+        return $this->betterNodeFinder->find($classMethod->stmts, function (Node $classMethod): bool {
             if (! $classMethod instanceof Assign) {
                 return false;
             }

@@ -88,7 +88,7 @@ CODE_SAMPLE
         /** @var FuncCall|null $keyFuncCall */
         $keyFuncCall = $this->betterNodeFinder->findFirst($nextExpression, function (Node $node) use (
             $resetOrEndFuncCall
-        ) {
+        ): bool {
             if (! $node instanceof FuncCall) {
                 return false;
             }

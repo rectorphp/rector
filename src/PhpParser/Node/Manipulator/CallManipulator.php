@@ -100,7 +100,7 @@ final class CallManipulator
 
     private function containsFuncGetArgsFuncCall(Node $node): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($node, function (Node $node) {
+        return (bool) $this->betterNodeFinder->findFirst($node, function (Node $node): ?bool {
             if (! $node instanceof FuncCall) {
                 return null;
             }
@@ -134,7 +134,7 @@ final class CallManipulator
         $externalFunctionNode = $this->betterNodeFinder->findFirst($externalFileContent, function (Node $node) use (
             $requiredExternalType,
             $functionName
-        ) {
+        ): ?bool {
             if (! is_a($node, $requiredExternalType, true)) {
                 return null;
             }

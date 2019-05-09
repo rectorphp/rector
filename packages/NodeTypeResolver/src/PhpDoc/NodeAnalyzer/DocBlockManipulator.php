@@ -410,7 +410,9 @@ final class DocBlockManipulator
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
         $phpDocNode = $phpDocInfo->getPhpDocNode();
 
-        $this->nodeTraverser->traverseWithCallable($phpDocNode, function (AttributeAwareNodeInterface $node) {
+        $this->nodeTraverser->traverseWithCallable($phpDocNode, function (
+            AttributeAwareNodeInterface $node
+        ): AttributeAwareNodeInterface {
             if (! $node instanceof IdentifierTypeNode) {
                 return $node;
             }
@@ -447,7 +449,7 @@ final class DocBlockManipulator
         $this->nodeTraverser->traverseWithCallable($phpDocNode, function (AttributeAwareNodeInterface $node) use (
             $namespacePrefix,
             $excludedClasses
-        ) {
+        ): AttributeAwareNodeInterface {
             if (! $node instanceof IdentifierTypeNode) {
                 return $node;
             }

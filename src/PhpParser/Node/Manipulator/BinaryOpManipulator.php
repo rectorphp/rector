@@ -63,7 +63,7 @@ final class BinaryOpManipulator
             return $condition;
         }
 
-        return function (Node $node) use ($condition) {
+        return function (Node $node) use ($condition): bool {
             return is_a($node, $condition, true);
         };
     }

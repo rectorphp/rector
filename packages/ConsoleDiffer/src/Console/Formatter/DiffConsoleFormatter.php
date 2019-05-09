@@ -34,7 +34,7 @@ final class DiffConsoleFormatter
 
     private function formatWithTemplate(string $diff, string $template): string
     {
-        return sprintf($template, implode(PHP_EOL, array_map(function ($string) {
+        return sprintf($template, implode(PHP_EOL, array_map(function ($string): string {
             // make "+" lines green
             $string = Strings::replace($string, '#^(\+.*)#', '<fg=green>$1</fg=green>');
             // make "-" lines red

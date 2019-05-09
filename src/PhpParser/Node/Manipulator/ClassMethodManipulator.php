@@ -68,7 +68,7 @@ final class ClassMethodManipulator
     {
         $isUsedDirectly = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use (
             $param
-        ) {
+        ): bool {
             return $this->betterStandardPrinter->areNodesEqual($node, $param->var);
         });
 
@@ -77,7 +77,7 @@ final class ClassMethodManipulator
         }
 
         /** @var FuncCall[] $compactFuncCalls */
-        $compactFuncCalls = $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) {
+        $compactFuncCalls = $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node): bool {
             if (! $node instanceof FuncCall) {
                 return false;
             }
@@ -152,7 +152,7 @@ final class ClassMethodManipulator
      */
     public function isStaticClassMethod(ClassMethod $classMethod): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node): bool {
             if (! $node instanceof Variable) {
                 return false;
             }

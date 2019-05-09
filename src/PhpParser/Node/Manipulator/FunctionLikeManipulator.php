@@ -2,6 +2,7 @@
 
 namespace Rector\PhpParser\Node\Manipulator;
 
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -42,7 +43,7 @@ final class FunctionLikeManipulator
 
     /**
      * Based on static analysis of code, looking for return types
-     * @param ClassMethod|Function_ $functionLike
+     * @param ClassMethod|Function_|Closure $functionLike
      */
     public function resolveStaticReturnTypeInfo(FunctionLike $functionLike): ?ReturnTypeInfo
     {

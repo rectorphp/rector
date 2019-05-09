@@ -15,4 +15,5 @@ parameters:
     php_version_features: '7.1'
 
 services:
-    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
+#    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
+    Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector: ~

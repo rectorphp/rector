@@ -149,7 +149,7 @@ final class BetterNodeFinder
     {
         $assignNodes = $this->findInstanceOf($node, Assign::class);
 
-        return array_filter($assignNodes, function (Assign $assign) use ($variable) {
+        return array_filter($assignNodes, function (Assign $assign) use ($variable): bool {
             if ($this->betterStandardPrinter->areNodesEqual($assign->var, $variable)) {
                 return true;
             }

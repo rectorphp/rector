@@ -152,7 +152,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $variableAssign = $this->betterNodeFinder->findFirstPrevious($assign, function (Node $node) use ($expr) {
+        $variableAssign = $this->betterNodeFinder->findFirstPrevious($assign, function (Node $node) use ($expr): bool {
             if (! $node instanceof Assign) {
                 return false;
             }

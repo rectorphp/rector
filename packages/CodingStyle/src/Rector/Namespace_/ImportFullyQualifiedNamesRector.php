@@ -220,7 +220,7 @@ CODE_SAMPLE
         $this->newUseStatements = [];
         $this->newFunctionUseStatements = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node) {
+        $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node): ?Name {
             if (! $node instanceof Name) {
                 return null;
             }
@@ -277,6 +277,8 @@ CODE_SAMPLE
 
                 return new Name($shortName);
             }
+
+            return null;
         });
 
         // for doc blocks

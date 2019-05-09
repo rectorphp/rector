@@ -17,7 +17,7 @@ final class RectorsFinder
     {
         $allRectors = $this->findInDirectories([__DIR__ . '/../../../../packages', __DIR__ . '/../../../../src']);
 
-        return array_map(function (RectorInterface $rector) {
+        return array_map(function (RectorInterface $rector): string {
             return get_class($rector);
         }, $allRectors);
     }

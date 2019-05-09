@@ -41,7 +41,7 @@ final class FunctionReflectionResolver
         $nodes = $this->parser->parseFile($stubFileLocation);
 
         /** @var Function_|null $function */
-        $function = $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($nodeName) {
+        $function = $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($nodeName): bool {
             if (! $node instanceof Function_) {
                 return false;
             }

@@ -148,7 +148,7 @@ CODE_SAMPLE
         }
 
         // "$this->getRequest()"
-        $isGetRequestMethod = (bool) $this->betterNodeFinder->find($node, function (Node $node) {
+        $isGetRequestMethod = (bool) $this->betterNodeFinder->find($node, function (Node $node): bool {
             return $this->isName($node, 'getRequest');
         });
 
@@ -158,7 +158,7 @@ CODE_SAMPLE
 
         // "$this->get('request')"
         /** @var MethodCall[] $getMethodCalls */
-        $getMethodCalls = $this->betterNodeFinder->find($node, function (Node $node) {
+        $getMethodCalls = $this->betterNodeFinder->find($node, function (Node $node): bool {
             if (! $node instanceof MethodCall) {
                 return false;
             }

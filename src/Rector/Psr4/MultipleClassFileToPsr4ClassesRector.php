@@ -4,6 +4,7 @@ namespace Rector\Rector\Psr4;
 
 use Nette\Utils\FileSystem;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
@@ -123,7 +124,7 @@ CODE_SAMPLE
         /** @var Class_[] $classNodes */
         $classNodes = $this->betterNodeFinder->findInstanceOf($nodes, Class_::class);
 
-        $nonAnonymousClassNodes = array_filter($classNodes, function (Class_ $classNode) {
+        $nonAnonymousClassNodes = array_filter($classNodes, function (Class_ $classNode): ?Identifier {
             return $classNode->name;
         });
 

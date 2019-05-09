@@ -7,6 +7,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Php\TypeAnalyzer;
 use Traversable;
 
@@ -91,12 +92,14 @@ abstract class AbstractTypeInfo
      */
     public function getTypeNode(bool $forceFqn = false)
     {
-        $types = $forceFqn ? $this->fqnTypes : $this->types;
         if (! $this->isTypehintAble()) {
             return null;
         }
 
-        $type = $types[0];
+        $type = $this->resolveTypeForTypehint($forceFqn);
+        if ($type === null) {
+            throw new ShouldNotHappenException();
+        }
 
         if ($this->typeAnalyzer->isPhpReservedType($type)) {
             if ($this->isNullable) {
@@ -124,8 +127,12 @@ abstract class AbstractTypeInfo
             return false;
         }
 
-        $typeCount = count($this->types);
+        // are object subtypes
+        if ($this->areMutualObjectSubtypes($this->types)) {
+            return true;
+        }
 
+        $typeCount = count($this->types);
         if ($typeCount >= 2 && $this->isArraySubtype($this->types)) {
             return true;
         }
@@ -292,5 +299,51 @@ abstract class AbstractTypeInfo
         sort($arraySubtypeGroup);
 
         return $types === $arraySubtypeGroup;
+    }
+
+    /**
+     * @param string[] $types
+     */
+    private function areMutualObjectSubtypes(array $types): bool
+    {
+        return $this->resolveMutualObjectSubtype($types) !== null;
+    }
+
+    /**
+     * @param string[] $types
+     */
+    private function resolveMutualObjectSubtype(array $types): ?string
+    {
+        foreach ($types as $type) {
+            if ($this->classLikeExists($type)) {
+                return null;
+            }
+
+            foreach ($types as $subloopType) {
+                if (! is_a($subloopType, $type, true)) {
+                    continue 2;
+                }
+            }
+
+            return $type;
+        }
+
+        return null;
+    }
+
+    private function resolveTypeForTypehint(bool $forceFqn): ?string
+    {
+        if ($this->areMutualObjectSubtypes($this->types)) {
+            return $this->resolveMutualObjectSubtype($this->types);
+        }
+
+        $types = $forceFqn ? $this->fqnTypes : $this->types;
+
+        return $types[0];
+    }
+
+    private function classLikeExists(string $type): bool
+    {
+        return ! class_exists($type) && ! interface_exists($type) && ! trait_exists($type);
     }
 }
