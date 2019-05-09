@@ -176,6 +176,11 @@ final class DumpNodesCommand extends AbstractCommand
 
             if ($contructorReflection->getNumberOfRequiredParameters() === 0) {
                 $node = $nodeClassReflection->newInstance();
+                // special case
+                if ($node instanceof Node\Expr\ArrowFunction) {
+                    $node->expr = new LNumber(1);
+                }
+
                 $category = $this->resolveCategoryByNodeClass($nodeClass);
                 $this->nodeInfoResult->addNodeInfo($category, new NodeInfo(
                     $nodeClass,

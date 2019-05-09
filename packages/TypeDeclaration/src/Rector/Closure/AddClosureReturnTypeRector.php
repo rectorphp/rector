@@ -3,6 +3,7 @@
 namespace Rector\TypeDeclaration\Rector\Closure;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\FunctionLikeManipulator;
@@ -58,11 +59,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Node\Expr\Closure::class];
+        return [Closure::class];
     }
 
     /**
-     * @param Node\Expr\Closure $node
+     * @param Closure $node
      */
     public function refactor(Node $node): ?Node
     {
