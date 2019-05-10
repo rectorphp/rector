@@ -62,16 +62,23 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
      */
     private $classNaming;
 
+    /**
+     * @var bool
+     */
+    private $shouldImportDocBlocks = true;
+
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,
         DocBlockManipulator $docBlockManipulator,
         ImportsInClassCollection $importsInClassCollection,
-        ClassNaming $classNaming
+        ClassNaming $classNaming,
+        bool $shouldImportDocBlocks = true
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->importsInClassCollection = $importsInClassCollection;
         $this->classNaming = $classNaming;
+        $this->shouldImportDocBlocks = $shouldImportDocBlocks;
     }
 
     public function getDefinition(): RectorDefinition
@@ -281,11 +288,13 @@ CODE_SAMPLE
             return null;
         });
 
-        // for doc blocks
-        $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node): void {
-            $importedDocUseStatements = $this->docBlockManipulator->importNames($node);
-            $this->newUseStatements = array_merge($this->newUseStatements, $importedDocUseStatements);
-        });
+        if ($this->shouldImportDocBlocks) {
+            // for doc blocks
+            $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node): void {
+                $importedDocUseStatements = $this->docBlockManipulator->importNames($node);
+                $this->newUseStatements = array_merge($this->newUseStatements, $importedDocUseStatements);
+            });
+        }
 
         return $this->newUseStatements;
     }
