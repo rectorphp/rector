@@ -68,7 +68,10 @@
             "Rector\\NetteTesterToPHPUnit\\": "packages/NetteTesterToPHPUnit/src",
             "Rector\\Nette\\": "packages/Nette/src",
             "Rector\\SOLID\\": "packages/SOLID/src"
-        }
+        },
+        "classmap": [
+            "MultipleFilesPsr4Bug"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

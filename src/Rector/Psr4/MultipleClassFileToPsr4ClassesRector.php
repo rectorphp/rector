@@ -66,7 +66,6 @@ CODE_SAMPLE
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
         $nodes = $this->parseFileInfoToNodes($smartFileInfo);
-
         if ($this->shouldSkip($smartFileInfo, $nodes)) {
             return;
         }
@@ -204,8 +203,11 @@ CODE_SAMPLE
                     }
 
                     // has file changed?
-
-                    $this->printNodesToFilePath($newStmtsSet, $fileDestination);
+                    if ($shouldDelete) {
+                        $this->printNewNodesToFilePath($newStmtsSet, $fileDestination);
+                    } else {
+                        $this->printNodesToFilePath($newStmtsSet, $fileDestination);
+                    }
                 }
             }
         }

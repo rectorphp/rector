@@ -9,6 +9,7 @@ use Rector\Configuration\Configuration;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\PhpParser\Parser\Parser;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Rector\AbstractRectorTrait;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
@@ -61,7 +62,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         FormatPerservingPrinter $formatPerservingPrinter,
         NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        Configuration $configuration
+        Configuration $configuration,
+        BetterStandardPrinter $betterStandardPrinter
     ): void {
         $this->parser = $parser;
         $this->lexer = $lexer;
@@ -69,6 +71,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->configuration = $configuration;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     /**
@@ -95,6 +98,16 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
             $this->oldStmts,
             $this->lexer->getTokens()
         );
+
+        $this->addFile($fileDestination, $fileContent);
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    protected function printNewNodesToFilePath(array $nodes, string $fileDestination): void
+    {
+        $fileContent = $this->betterStandardPrinter->prettyPrint($nodes);
 
         $this->addFile($fileDestination, $fileContent);
     }

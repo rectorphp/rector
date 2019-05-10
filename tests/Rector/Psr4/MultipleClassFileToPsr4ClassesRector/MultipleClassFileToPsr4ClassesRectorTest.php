@@ -45,10 +45,10 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
 
     /**
      * @param string[] $expectedExceptions
-     * @dataProvider provideWithoutNamespace
-     * @dataProvider provideExceptionsData
+     * @dataProvid_er provideWithoutNamespace
+     * @dataProvid_er provideExceptionsData
      * @dataProvider provideClassLike
-     * @dataProvider provideExceptionsData
+     * @dataProvid_er provideExceptionsData
      */
     public function test(string $file, array $expectedExceptions): void
     {
