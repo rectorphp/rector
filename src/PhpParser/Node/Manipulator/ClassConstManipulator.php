@@ -47,7 +47,7 @@ final class ClassConstManipulator
             return [];
         }
 
-        return $this->betterNodeFinder->find($classNode, function (Node $node) use ($classConst) {
+        return $this->betterNodeFinder->find($classNode, function (Node $node) use ($classConst): bool {
             // itself
             if ($this->betterStandardPrinter->areNodesEqual($node, $classConst)) {
                 return false;

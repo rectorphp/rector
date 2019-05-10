@@ -236,7 +236,7 @@ final class ClassManipulator
      */
     public function getMethods(Class_ $class): array
     {
-        return array_filter($class->stmts, function (Node $node) {
+        return array_filter($class->stmts, function (Node $node): bool {
             return $node instanceof ClassMethod;
         });
     }

@@ -34,7 +34,7 @@ final class NodeInfoResult
      */
     private function sortNodeInfosByClass(array $nodeInfos): array
     {
-        usort($nodeInfos, function (NodeInfo $firstNodeInfo, NodeInfo $secondNodeInfo) {
+        usort($nodeInfos, function (NodeInfo $firstNodeInfo, NodeInfo $secondNodeInfo): int {
             return $firstNodeInfo->getClass() <=> $secondNodeInfo->getClass();
         });
 

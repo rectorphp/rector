@@ -77,7 +77,7 @@ trait BetterStandardPrinterTrait
      */
     protected function isNodeUsedIn(Node $seekedNode, $nodes): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($seekedNode) {
+        return (bool) $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($seekedNode): bool {
             return $this->areNodesEqual($node, $seekedNode);
         });
     }

@@ -146,7 +146,7 @@ CODE_SAMPLE
 
         $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node) use (
             $classesUsingTypes
-        ) {
+        ): ?MethodCall {
             if (! $node instanceof New_) {
                 return null;
             }

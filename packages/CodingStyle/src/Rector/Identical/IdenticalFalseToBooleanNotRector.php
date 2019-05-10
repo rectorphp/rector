@@ -50,10 +50,10 @@ final class IdenticalFalseToBooleanNotRector extends AbstractRector
     {
         $matchedNodes = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $node,
-            function (Node $node) {
+            function (Node $node): bool {
                 return ! $node instanceof BinaryOp;
             },
-            function (Node $node) {
+            function (Node $node): bool {
                 return $this->isFalse($node);
             }
         );

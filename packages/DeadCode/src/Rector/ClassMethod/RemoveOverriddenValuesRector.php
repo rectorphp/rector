@@ -99,7 +99,7 @@ CODE_SAMPLE
      */
     private function resolveAssignedVariables(FunctionLike $functionLike): array
     {
-        return $this->betterNodeFinder->find($functionLike, function (Node $node) {
+        return $this->betterNodeFinder->find($functionLike, function (Node $node): bool {
             if (! $node->getAttribute(AttributeKey::PARENT_NODE) instanceof Assign) {
                 return false;
             }
@@ -130,7 +130,7 @@ CODE_SAMPLE
      */
     private function resolveUsedVariables(Node $node, array $assignedVariables): array
     {
-        return $this->betterNodeFinder->find($node, function (Node $node) use ($assignedVariables) {
+        return $this->betterNodeFinder->find($node, function (Node $node) use ($assignedVariables): bool {
             if (! $node instanceof Variable) {
                 return false;
             }
@@ -216,7 +216,10 @@ CODE_SAMPLE
         // sort
         usort(
             $nodesByTypeAndPosition,
-            function (VariableNodeUseInfo $firstVariableNodeUseInfo, VariableNodeUseInfo $secondVariableNodeUseInfo) {
+            function (
+                VariableNodeUseInfo $firstVariableNodeUseInfo,
+                VariableNodeUseInfo $secondVariableNodeUseInfo
+            ): int {
                 return $firstVariableNodeUseInfo->getStartTokenPosition() <=> $secondVariableNodeUseInfo->getStartTokenPosition();
             }
         );
@@ -285,7 +288,7 @@ CODE_SAMPLE
 
         $isVariableAssigned = (bool) $this->betterNodeFinder->findFirst($assignNode->expr, function (Node $node) use (
             $nodeByTypeAndPosition
-        ) {
+        ): bool {
             return $this->areNodesEqual($node, $nodeByTypeAndPosition->getVariableNode());
         });
 

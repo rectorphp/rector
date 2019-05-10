@@ -56,10 +56,10 @@ final class GetClassToInstanceOfRector extends AbstractRector
     {
         $matchedNodes = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $node,
-            function (Node $node) {
+            function (Node $node): bool {
                 return $this->isClassReference($node);
             },
-            function (Node $node) {
+            function (Node $node): bool {
                 return $this->isGetClassFuncCallNode($node);
             }
         );

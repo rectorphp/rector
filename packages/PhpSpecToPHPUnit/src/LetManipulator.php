@@ -36,7 +36,7 @@ final class LetManipulator
 
             $hasBeConstructedThrough = (bool) $this->betterNodeFinder->find(
                 (array) $method->stmts,
-                function (Node $node) {
+                function (Node $node): ?bool {
                     if (! $node instanceof MethodCall) {
                         return null;
                     }

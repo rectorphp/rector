@@ -254,7 +254,7 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     {
         foreach ($sections as $section) {
             $pattern = '#("' . preg_quote($section, '#') . '": )\[(.*?)\](,)#ms';
-            $jsonContent = Strings::replace($jsonContent, $pattern, function (array $match) {
+            $jsonContent = Strings::replace($jsonContent, $pattern, function (array $match): string {
                 $inlined = Strings::replace($match[2], '#\s+#', ' ');
                 $inlined = trim($inlined);
                 $inlined = '[' . $inlined . ']';

@@ -73,7 +73,7 @@ final class AttributeAwareNodeFactory
         }
 
         if ($node instanceof PhpDocNode) {
-            $this->nodeTraverser->traverseWithCallable($node, function (Node $node) {
+            $this->nodeTraverser->traverseWithCallable($node, function (Node $node): AttributeAwareNodeInterface {
                 if ($node instanceof AttributeAwareNodeInterface) {
                     return $node;
                 }

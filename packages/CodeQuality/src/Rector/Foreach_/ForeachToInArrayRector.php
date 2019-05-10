@@ -181,7 +181,7 @@ CODE_SAMPLE
         return $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $binaryOp,
             Variable::class,
-            function (Node $node, Node $otherNode) use ($expr) {
+            function (Node $node, Node $otherNode) use ($expr): bool {
                 return $this->areNodesEqual($otherNode, $expr);
             }
         );

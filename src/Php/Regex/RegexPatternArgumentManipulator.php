@@ -185,7 +185,7 @@ final class RegexPatternArgumentManipulator
         }
 
         /** @var Assign[] $assignNode */
-        return $this->betterNodeFinder->find([$methodNode], function (Node $node) use ($variable) {
+        return $this->betterNodeFinder->find([$methodNode], function (Node $node) use ($variable): ?Assign {
             if (! $node instanceof Assign) {
                 return null;
             }

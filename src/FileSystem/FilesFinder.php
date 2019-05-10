@@ -124,7 +124,7 @@ final class FilesFinder
             return;
         }
 
-        $finder->filter(function (SplFileInfo $splFileInfo) {
+        $finder->filter(function (SplFileInfo $splFileInfo): bool {
             // return false to remove file
             foreach ($this->excludePaths as $excludePath) {
                 if (Strings::match($splFileInfo->getRealPath(), '#' . preg_quote($excludePath, '#') . '#')) {

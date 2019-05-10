@@ -129,7 +129,7 @@ CODE_SAMPLE
 
         $stmt = $contentNodes[0]->expr;
 
-        $this->callableNodeTraverser->traverseNodesWithCallable([$stmt], function (Node $node) {
+        $this->callableNodeTraverser->traverseNodesWithCallable([$stmt], function (Node $node): Node {
             if (! $node instanceof String_) {
                 return $node;
             }

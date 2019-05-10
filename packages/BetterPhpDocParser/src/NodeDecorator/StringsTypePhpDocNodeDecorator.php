@@ -32,7 +32,7 @@ final class StringsTypePhpDocNodeDecorator implements PhpDocNodeDecoratorInterfa
     ): AttributeAwarePhpDocNode {
         $this->nodeTraverser->traverseWithCallable(
             $attributeAwarePhpDocNode,
-            function (AttributeAwareNodeInterface $phpParserNode) {
+            function (AttributeAwareNodeInterface $phpParserNode): AttributeAwareNodeInterface {
                 $typeNode = $this->resolveTypeNode($phpParserNode);
                 if ($typeNode === null) {
                     return $phpParserNode;

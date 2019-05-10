@@ -103,7 +103,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->betterNodeFinder->findFirst([$nextExpression], function (Node $node) {
+        return $this->betterNodeFinder->findFirst([$nextExpression], function (Node $node): bool {
             if (! $node instanceof MethodCall) {
                 return false;
             }

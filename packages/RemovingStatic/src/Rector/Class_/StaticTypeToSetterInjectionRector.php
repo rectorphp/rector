@@ -137,7 +137,7 @@ CODE_SAMPLE
         foreach ($this->staticTypes as $implements => $staticType) {
             $containsEntityFactoryStaticCall = (bool) $this->betterNodeFinder->findFirst(
                 $class->stmts,
-                function (Node $node) use ($staticType) {
+                function (Node $node) use ($staticType): bool {
                     return $this->isEntityFactoryStaticCall($node, $staticType);
                 }
             );

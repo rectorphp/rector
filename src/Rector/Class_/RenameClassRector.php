@@ -38,6 +38,7 @@ final class RenameClassRector extends AbstractRector
      * @var string[]
      */
     private $alreadyProcessedClasses = [];
+
     /**
      * @var ClassNaming
      */
@@ -50,8 +51,7 @@ final class RenameClassRector extends AbstractRector
         DocBlockManipulator $docBlockManipulator,
         ClassNaming $classNaming,
         array $oldToNewClasses = []
-    )
-    {
+    ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->classNaming = $classNaming;
         $this->oldToNewClasses = $oldToNewClasses;
@@ -120,21 +120,7 @@ CODE_SAMPLE
         }
 
         if ($node instanceof Name) {
-            $name = $this->getName($node);
-            if ($name === null) {
-                return null;
-            }
-
-            $newName = $this->oldToNewClasses[$name] ?? null;
-            if (! $newName) {
-                return null;
-            }
-
-            if (! $this->isClassToInterfaceValidChange($node, $newName)) {
-                return null;
-            }
-
-            return new FullyQualified($newName);
+            return $this->refactorName($node);
         }
 
         if ($node instanceof Namespace_) {
@@ -145,7 +131,7 @@ CODE_SAMPLE
             $node = $this->refactorClassLikeNode($node);
         }
 
-        if (! $node) {
+        if ($node === null) {
             return null;
         }
 
@@ -222,7 +208,7 @@ CODE_SAMPLE
         }
 
         $classNode = $this->getClassOfNamespaceToRefactor($node);
-        if (! $classNode) {
+        if ($classNode === null) {
             return null;
         }
 
@@ -243,7 +229,7 @@ CODE_SAMPLE
 
     private function getClassOfNamespaceToRefactor(Namespace_ $namespace): ?ClassLike
     {
-        $foundClass = $this->betterNodeFinder->findFirst($namespace, function (Node $node) {
+        $foundClass = $this->betterNodeFinder->findFirst($namespace, function (Node $node): bool {
             if (! $node instanceof ClassLike) {
                 return false;
             }
@@ -285,5 +271,24 @@ CODE_SAMPLE
         }
 
         return $classLike;
+    }
+
+    private function refactorName(Node $node): ?FullyQualified
+    {
+        $name = $this->getName($node);
+        if ($name === null) {
+            return null;
+        }
+
+        $newName = $this->oldToNewClasses[$name] ?? null;
+        if (! $newName) {
+            return null;
+        }
+
+        if (! $this->isClassToInterfaceValidChange($node, $newName)) {
+            return null;
+        }
+
+        return new FullyQualified($newName);
     }
 }

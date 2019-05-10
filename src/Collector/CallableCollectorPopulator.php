@@ -9,8 +9,8 @@ use ReflectionFunction;
 final class CallableCollectorPopulator
 {
     /**
-     * @param string[]|callable[]|Closure[] $callables
-     * @return callable[]
+     * @param string[]|Closure[]|mixed[] $callables
+     * @return Closure[]
      */
     public function populate(array $callables): array
     {

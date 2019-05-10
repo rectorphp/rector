@@ -155,7 +155,9 @@ CODE_SAMPLE
 
     private function findPreviousNodeAssign(Node $node, Node $firstArgument): ?Assign
     {
-        return $this->betterNodeFinder->findFirstPrevious($node, function (Node $checkedNode) use ($firstArgument) {
+        return $this->betterNodeFinder->findFirstPrevious($node, function (Node $checkedNode) use (
+            $firstArgument
+        ): ?Assign {
             if (! $checkedNode instanceof Assign) {
                 return null;
             }

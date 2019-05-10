@@ -2,6 +2,8 @@ includes:
      - 'utils/PHPStanExtensions/config/phpstan-extensions.neon'
      - 'vendor/symplify/phpstan-extensions/config/config.neon'
      - 'vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon'
+     # bleeing edge
+     - 'vendor/phpstan/phpstan/conf/bleedingEdge.neon'
 
 parameters:
     # to allow intalling with various phsptan versions without reporting old errors here
@@ -153,3 +155,6 @@ parameters:
         - '#Empty array passed to foreach#'
         - '#Method Rector\\RemovingStatic\\UniqueObjectFactoryFactory\:\:resolveClassShortName\(\) should return string but returns string\|false#'
         - '#Strict comparison using \=\=\= between PhpParser\\Node\\Expr\\ArrayItem and null will always evaluate to false#'
+        - '#Anonymous function should have native typehint "string"#'
+        - '#Parameter \#2 \.\.\.\$args of function array_merge expects array, array<int, string\>\|false given#'
+        - '#Method Rector\\Collector\\CallableCollectorPopulator\:\:populate\(\) should return array<Closure\> but returns array<int\|string, callable\>#'
