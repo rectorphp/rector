@@ -135,10 +135,6 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->oldToNewClasses as $oldType => $newType) {
-            $this->docBlockManipulator->changeType($node, $oldType, $newType);
-        }
-
         return $node;
     }
 
