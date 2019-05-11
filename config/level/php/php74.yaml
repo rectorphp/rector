@@ -17,3 +17,4 @@ services:
     Rector\Php\Rector\Assign\NullCoalescingOperatorRector: ~
     Rector\Php\Rector\Function_\ReservedFnFunctionRector: ~
     Rector\Php\Rector\Closure\ClosureToArrowFunctionRector: ~
+    Rector\Php\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector: ~
