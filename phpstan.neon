@@ -158,3 +158,6 @@ parameters:
         - '#Anonymous function should have native typehint "string"#'
         - '#Parameter \#2 \.\.\.\$args of function array_merge expects array, array<int, string\>\|false given#'
         - '#Method Rector\\Collector\\CallableCollectorPopulator\:\:populate\(\) should return array<Closure\> but returns array<int\|string, callable\>#'
+
+        # waits on php-parser release
+        - '#ArrowFunction#'
