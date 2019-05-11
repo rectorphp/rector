@@ -11,7 +11,7 @@
         "jetbrains/phpstorm-stubs": "^2019.1",
         "nette/robot-loader": "^3.1",
         "nette/utils": "^2.5|^3.0",
-        "nikic/php-parser": "^4.2.1",
+        "nikic/php-parser": "dev-master",
         "phpstan/phpdoc-parser": "0.3.3",
         "phpstan/phpstan": "0.11.6",
         "sebastian/diff": "^3.0",
