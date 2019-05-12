@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -285,7 +286,7 @@ final class NodeTypeResolver
 
     public function getNodeStaticType(Node $node): ?Type
     {
-        if ($node instanceof Node\Scalar\String_) {
+        if ($node instanceof String_) {
             return new ConstantStringType($node->value);
         }
 

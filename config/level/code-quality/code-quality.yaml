@@ -33,3 +33,4 @@ services:
     Rector\CodeQuality\Rector\Identical\BooleanNotIdenticalToNotIdenticalRector: ~
     Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector: ~
     Rector\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector: ~
+    Rector\CodeQuality\Rector\For_\ForToForeachRector: ~

@@ -135,9 +135,10 @@ final class ConfigurationFactory
             return null;
         }
 
+        $fileLevel = sprintf('#^%s(\.yaml)?$#', $level);
         $finder = Finder::create()->files()
             ->in($this->levelsDirectory)
-            ->name(sprintf('#%s(\.yaml)?$#', $level));
+            ->name($fileLevel);
 
         /** @var SplFileInfo[] $fileInfos */
         $fileInfos = iterator_to_array($finder->getIterator());
@@ -153,6 +154,7 @@ final class ConfigurationFactory
 
         /** @var SplFileInfo $foundLevelConfigFileInfo */
         $foundLevelConfigFileInfo = array_pop($fileInfos);
+
         return $foundLevelConfigFileInfo->getRealPath();
     }
 

@@ -8,6 +8,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\AssignRef;
@@ -177,7 +178,7 @@ final class DumpNodesCommand extends AbstractCommand
             if ($contructorReflection->getNumberOfRequiredParameters() === 0) {
                 $node = $nodeClassReflection->newInstance();
                 // special case
-                if ($node instanceof Node\Expr\ArrowFunction) {
+                if ($node instanceof ArrowFunction) {
                     $node->expr = new LNumber(1);
                 }
 

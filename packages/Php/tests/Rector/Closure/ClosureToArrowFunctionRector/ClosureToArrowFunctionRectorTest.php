@@ -10,7 +10,7 @@ final class ClosureToArrowFunctionRectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         if (! class_exists('PhpParser\Node\Expr\ArrowFunction')) {
-            $this->markTestSkipped('Wait on php-parser release');
+            $this->markTestSkipped('Waits on php-parser release');
         }
 
         $this->doTestFiles([
