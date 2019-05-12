@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Jms\Rector\Property;
+namespace Rector\Rector\Property;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -13,20 +13,15 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 /**
  * @see https://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations#inject
  */
-final class JmsInjectAnnotationRector extends AbstractRector
+final class InjectAnnotationClassRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const INJECT_ANNOTATION = 'JMS\DiExtraBundle\Annotation\Inject';
-
     /**
      * @var DocBlockManipulator
      */
@@ -42,22 +37,29 @@ final class JmsInjectAnnotationRector extends AbstractRector
      */
     private $errorAndDiffCollector;
 
+    /**
+     * @var string
+     */
+    private $annotationClass;
+
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
         AnalyzedApplicationContainerInterface $analyzedApplicationContainer,
-        ErrorAndDiffCollector $errorAndDiffCollector
+        ErrorAndDiffCollector $errorAndDiffCollector,
+        string $annotationClass = ''
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
+        $this->annotationClass = $annotationClass;
     }
 
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Changes properties with `@JMS\DiExtraBundle\Annotation\Inject` to constructor injection',
+            'Changes properties with specified annotations class to constructor injection',
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'
 use JMS\DiExtraBundle\Annotation as DI;
 
@@ -86,6 +88,10 @@ class SomeController
     }
 }
 CODE_SAMPLE
+                    ,
+                    [
+                        '$annotationClass' => 'JMS\DiExtraBundle\Annotation\Inject',
+                    ]
                 ),
             ]
         );
@@ -104,7 +110,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->docBlockManipulator->hasTag($node, self::INJECT_ANNOTATION)) {
+        if (! $this->docBlockManipulator->hasTag($node, $this->annotationClass)) {
             return null;
         }
 
@@ -122,7 +128,7 @@ CODE_SAMPLE
             $this->docBlockManipulator->addVarTag($node, $type);
         }
 
-        $this->docBlockManipulator->removeTagFromNode($node, self::INJECT_ANNOTATION);
+        $this->docBlockManipulator->removeTagFromNode($node, $this->annotationClass);
 
         // set to private
         $node->flags = Class_::MODIFIER_PRIVATE;
@@ -139,7 +145,7 @@ CODE_SAMPLE
 
     private function resolveType(Node $node): ?string
     {
-        $injectTagNode = $this->docBlockManipulator->getTagByName($node, self::INJECT_ANNOTATION);
+        $injectTagNode = $this->docBlockManipulator->getTagByName($node, $this->annotationClass);
 
         $serviceName = $this->resolveServiceName($injectTagNode, $node);
         if ($serviceName) {
