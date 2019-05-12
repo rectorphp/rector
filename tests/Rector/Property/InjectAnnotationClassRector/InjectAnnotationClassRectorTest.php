@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Jms\Tests\Rector\Property\JmsInjectAnnotationRector;
+namespace Rector\Tests\Rector\Property\InjectAnnotationClassRector;
 
 use Rector\Configuration\Option;
-use Rector\Jms\Rector\Property\JmsInjectAnnotationRector;
+use Rector\Rector\Property\InjectAnnotationClassRector;
 use Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeKernelClass;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
-final class JmsInjectAnnotationRectorTest extends AbstractRectorTestCase
+final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
 {
     protected function setUp(): void
     {
@@ -29,8 +29,15 @@ final class JmsInjectAnnotationRectorTest extends AbstractRectorTestCase
         ]);
     }
 
-    protected function getRectorClass(): string
+    /**
+     * @return mixed[]
+     */
+    protected function getRectorsWithConfiguration(): array
     {
-        return JmsInjectAnnotationRector::class;
+        return [
+            InjectAnnotationClassRector::class => [
+                '$annotationClass' => 'JMS\DiExtraBundle\Annotation\Inject',
+            ],
+        ];
     }
 }
