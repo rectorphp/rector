@@ -5,10 +5,7 @@ namespace Rector\Php\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
-use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantStringType;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -71,12 +68,8 @@ CODE_SAMPLE
         // is argument string?
         $needleArgNode = $node->args[1]->value;
 
-        $nodeScope = $needleArgNode->getAttribute(AttributeKey::SCOPE);
-        if ($nodeScope === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        if ($nodeScope->getType($needleArgNode) instanceof ConstantStringType) {
+        $nodeStaticType = $this->getStaticType($needleArgNode);
+        if ($nodeStaticType instanceof ConstantStringType) {
             return null;
         }
 

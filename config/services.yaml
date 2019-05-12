@@ -23,6 +23,7 @@ services:
 
     # value resolver
     Symfony\Component\Filesystem\Filesystem: ~
+    Symplify\PackageBuilder\Reflection\PrivatesAccessor: ~
 
     Symplify\PackageBuilder\FileSystem\FileSystem: ~
     Symplify\PackageBuilder\FileSystem\FinderSanitizer: ~
