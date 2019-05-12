@@ -6,6 +6,7 @@ use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\RectorDefinition\CodeSample;
@@ -83,18 +84,18 @@ CODE_SAMPLE
                     continue;
                 }
 
-                /** @var Class_[] $namespacedClassNodes */
-                $namespacedClassNodes = $this->betterNodeFinder->findInstanceOf($newStmt->stmts, Class_::class);
+                /** @var ClassLike[] $namespacedClassLikeNodes */
+                $namespacedClassLikeNodes = $this->betterNodeFinder->findInstanceOf($newStmt->stmts, ClassLike::class);
 
-                foreach ($namespacedClassNodes as $classNode) {
-                    if ($classNode->isAnonymous()) {
+                foreach ($namespacedClassLikeNodes as $classLikeNode) {
+                    if ($classLikeNode instanceof Class_ && $classLikeNode->isAnonymous()) {
                         continue;
                     }
 
-                    $this->removeAllClassesFromNamespaceNode($newStmt);
-                    $newStmt->stmts[] = $classNode;
+                    $this->removeAllClassLikesFromNamespaceNode($newStmt);
+                    $newStmt->stmts[] = $classLikeNode;
 
-                    $fileDestination = $this->createClassFileDestination($classNode, $smartFileInfo);
+                    $fileDestination = $this->createClassLikeFileDestination($classLikeNode, $smartFileInfo);
 
                     if ($smartFileInfo->getRealPath() === $fileDestination) {
                         $shouldDelete = false;
@@ -121,20 +122,20 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var Class_[] $classNodes */
-        $classNodes = $this->betterNodeFinder->findInstanceOf($nodes, Class_::class);
+        /** @var ClassLike[] $classLikeNodes */
+        $classLikeNodes = $this->betterNodeFinder->findInstanceOf($nodes, ClassLike::class);
 
-        $nonAnonymousClassNodes = array_filter($classNodes, function (Class_ $classNode): ?Identifier {
-            return $classNode->name;
+        $nonAnonymousClassLikeNodes = array_filter($classLikeNodes, function (ClassLike $classLikeNode): ?Identifier {
+            return $classLikeNode->name;
         });
 
         // only process file with multiple classes || class with non PSR-4 format
-        if ($nonAnonymousClassNodes === []) {
+        if ($nonAnonymousClassLikeNodes === []) {
             return true;
         }
 
-        if (count($nonAnonymousClassNodes) === 1) {
-            $nonAnonymousClassNode = $nonAnonymousClassNodes[0];
+        if (count($nonAnonymousClassLikeNodes) === 1) {
+            $nonAnonymousClassNode = $nonAnonymousClassLikeNodes[0];
             if ((string) $nonAnonymousClassNode->name === $smartFileInfo->getFilename()) {
                 return true;
             }
@@ -158,19 +159,19 @@ CODE_SAMPLE
         return $nodes;
     }
 
-    private function removeAllClassesFromNamespaceNode(Namespace_ $namespaceNode): void
+    private function removeAllClassLikesFromNamespaceNode(Namespace_ $namespaceNode): void
     {
         foreach ($namespaceNode->stmts as $key => $namespaceStatement) {
-            if ($namespaceStatement instanceof Class_) {
+            if ($namespaceStatement instanceof ClassLike) {
                 unset($namespaceNode->stmts[$key]);
             }
         }
     }
 
-    private function createClassFileDestination(Class_ $classNode, SmartFileInfo $smartFileInfo): string
+    private function createClassLikeFileDestination(ClassLike $classLikeNode, SmartFileInfo $smartFileInfo): string
     {
         $currentDirectory = dirname($smartFileInfo->getRealPath());
 
-        return $currentDirectory . DIRECTORY_SEPARATOR . (string) $classNode->name . '.php';
+        return $currentDirectory . DIRECTORY_SEPARATOR . (string) $classLikeNode->name . '.php';
     }
 }

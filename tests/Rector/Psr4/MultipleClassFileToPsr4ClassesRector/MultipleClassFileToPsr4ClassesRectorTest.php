@@ -34,6 +34,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
      * @param string[] $expectedExceptions
      * @dataProvider provideExceptionsData
      * @dataProvider provideMissNamed
+     * @dataProvider provideClassLike
      */
     public function test(string $file, array $expectedExceptions): void
     {
@@ -97,6 +98,17 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
             [
                 __DIR__ . '/Fixture/Miss.php' => __DIR__ . '/Expected/Miss.php',
                 __DIR__ . '/Fixture/Named.php' => __DIR__ . '/Expected/Named.php',
+            ],
+        ];
+    }
+    public function provideClassLike(): Iterator
+    {
+        yield [
+            __DIR__ . '/Source/ClassLike.php',
+            [
+                __DIR__ . '/Fixture/MyTrait.php' => __DIR__ . '/Expected/MyTrait.php',
+                __DIR__ . '/Fixture/MyClass.php' => __DIR__ . '/Expected/MyClass.php',
+                __DIR__ . '/Fixture/MyInterface.php' => __DIR__ . '/Expected/MyInterface.php',
             ],
         ];
     }
