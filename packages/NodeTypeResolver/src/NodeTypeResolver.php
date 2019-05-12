@@ -24,6 +24,7 @@ use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
@@ -284,6 +285,10 @@ final class NodeTypeResolver
 
     public function getNodeStaticType(Node $node): ?Type
     {
+        if ($node instanceof Node\Scalar\String_) {
+            return new ConstantStringType($node->value);
+        }
+
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $node instanceof Expr || $nodeScope === null) {

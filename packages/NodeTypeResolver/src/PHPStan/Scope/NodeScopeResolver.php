@@ -6,13 +6,18 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\NodeScopeResolver as PHPStanNodeScopeResolver;
 use PHPStan\Analyser\Scope;
+use PHPStan\Analyser\ScopeContext;
 use PHPStan\Broker\Broker;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
+use Rector\NodeTypeResolver\PHPStan\Scope\Stub\ClassReflectionForUnusedTrait;
+use ReflectionClass;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
@@ -40,16 +45,23 @@ final class NodeScopeResolver
      */
     private $removeDeepChainMethodCallNodeVisitor;
 
+    /**
+     * @var PrivatesAccessor
+     */
+    private $privatesAccessor;
+
     public function __construct(
         ScopeFactory $scopeFactory,
         PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
         Broker $broker,
-        RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor
+        RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor,
+        PrivatesAccessor $privatesAccessor
     ) {
         $this->scopeFactory = $scopeFactory;
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->broker = $broker;
         $this->removeDeepChainMethodCallNodeVisitor = $removeDeepChainMethodCallNodeVisitor;
+        $this->privatesAccessor = $privatesAccessor;
     }
 
     /**
@@ -70,7 +82,9 @@ final class NodeScopeResolver
                 // the class reflection is resolved AFTER entering to class node
                 // so we need to get it from the first after this one
                 if ($node instanceof Class_ || $node instanceof Interface_) {
-                    $scope = $this->resolveClassOrInterfaceNode($node, $scope);
+                    $scope = $this->resolveClassOrInterfaceScope($node, $scope);
+                } elseif ($node instanceof Trait_) {
+                    $scope = $this->resolveTraitScope($node, $scope);
                 }
 
                 $node->setAttribute(AttributeKey::SCOPE, $scope);
@@ -93,17 +107,16 @@ final class NodeScopeResolver
     /**
      * @param Class_|Interface_ $classOrInterfaceNode
      */
-    private function resolveClassOrInterfaceNode(Node $classOrInterfaceNode, Scope $scope): Scope
+    private function resolveClassOrInterfaceScope(Node $classOrInterfaceNode, Scope $scope): Scope
     {
         $className = $this->resolveClassName($classOrInterfaceNode);
-
         $classReflection = $this->broker->getClass($className);
 
         return $scope->enterClass($classReflection);
     }
 
     /**
-     * @param Class_|Interface_ $classOrInterfaceNode
+     * @param Class_|Interface_|Trait_ $classOrInterfaceNode
      */
     private function resolveClassName(ClassLike $classOrInterfaceNode): string
     {
@@ -116,5 +129,33 @@ final class NodeScopeResolver
         }
 
         return $classOrInterfaceNode->name->toString();
+    }
+
+    private function resolveTraitScope(Trait_ $trait, Scope $scope): Scope
+    {
+        $traitName = $this->resolveClassName($trait);
+        $traitReflection = $this->broker->getClass($traitName);
+
+        /** @var ScopeContext $scopeContext */
+        $scopeContext = $this->privatesAccessor->getPrivateProperty($scope, 'context');
+        if ($scopeContext->getClassReflection() !== null) {
+            return $scope->enterTrait($traitReflection);
+        }
+
+        // we need to emulate class reflection, because PHPStan is unable to analyze trait without it
+        $classReflection = new ReflectionClass(ClassReflectionForUnusedTrait::class);
+        $phpstanClassReflection = $this->broker->getClassFromReflection(
+            $classReflection,
+            ClassReflectionForUnusedTrait::class,
+            null
+        );
+
+        // set stub
+        $this->privatesAccessor->setPrivateProperty($scopeContext, 'classReflection', $phpstanClassReflection);
+
+        $traitScope = $scope->enterTrait($traitReflection);
+        $this->privatesAccessor->setPrivateProperty($scopeContext, 'classReflection', null);
+
+        return $traitScope;
     }
 }
