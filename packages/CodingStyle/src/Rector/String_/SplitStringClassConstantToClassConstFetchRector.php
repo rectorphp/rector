@@ -75,7 +75,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $classConstFetch = new ClassConstFetch(new FullyQualified($possibleClass), 'class');
+        $classConstFetch = new ClassConstFetch(new FullyQualified(ltrim($possibleClass, '\\')), 'class');
 
         return new Concat($classConstFetch, new String_('::' . $secondPart));
     }
