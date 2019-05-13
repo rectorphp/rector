@@ -115,8 +115,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // replace on @var/@param/@return/@throws
-        foreach ($this->oldToNewClasses as $oldClass => $newClass) {
-            $this->docBlockManipulator->changeType($node, $oldClass, $newClass);
+        if ($node->getDocComment()) {
+            foreach ($this->oldToNewClasses as $oldClass => $newClass) {
+                $this->docBlockManipulator->changeType($node, $oldClass, $newClass);
+            }
         }
 
         if ($node instanceof Name) {
