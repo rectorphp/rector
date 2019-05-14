@@ -22,7 +22,7 @@ use PhpParser\Parser;
 foreach ($fileInfos as $fileInfo) {
     // 1 file => nodes
     /** @var Parser $phpParser */
-    $nodes = $phpParser->parse(file_get_contents($fileInfo->getRealPath());
+    $nodes = $phpParser->parse(file_get_contents($fileInfo->getRealPath()));
 
     // nodes => 1 node
     foreach ($nodes as $node) { // rather traverse all of them
