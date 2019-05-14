@@ -101,6 +101,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
             ],
         ];
     }
+
     public function provideClassLike(): Iterator
     {
         yield [
