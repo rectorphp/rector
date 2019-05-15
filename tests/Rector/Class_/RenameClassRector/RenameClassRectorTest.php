@@ -35,6 +35,7 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/twig_case.php.inc'];
         yield [__DIR__ . '/Fixture/underscore_doc.php.inc'];
         yield [__DIR__ . '/Fixture/keep_return_tag.php.inc'];
+        yield [__DIR__ . '/Fixture/class_with_space_in_annotations.php.inc'];
 
         // Renaming class itself and its namespace
         yield [__DIR__ . '/Fixture/rename_class_without_namespace.php.inc'];
