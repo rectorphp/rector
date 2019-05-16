@@ -168,10 +168,10 @@ CODE_SAMPLE
         }
     }
 
-    private function createClassLikeFileDestination(ClassLike $classLikeNode, SmartFileInfo $smartFileInfo): string
+    private function createClassLikeFileDestination(ClassLike $classLike, SmartFileInfo $smartFileInfo): string
     {
         $currentDirectory = dirname($smartFileInfo->getRealPath());
 
-        return $currentDirectory . DIRECTORY_SEPARATOR . (string) $classLikeNode->name . '.php';
+        return $currentDirectory . DIRECTORY_SEPARATOR . (string) $classLike->name . '.php';
     }
 }
