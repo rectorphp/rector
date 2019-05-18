@@ -6,6 +6,8 @@ use Jean85\PrettyVersions;
 use Rector\ContributorTools\Command\DumpNodesCommand;
 use Rector\ContributorTools\Command\DumpRectorsCommand;
 use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
+use Rector\Exception\Configuration\InvalidConfigurationException;
+use RuntimeException;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -44,6 +46,14 @@ final class Application extends SymfonyApplication
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
         $shouldFollowByNewline = false;
+
+        // switch working dir
+        $newWorkDir = $this->getNewWorkingDir($input);
+        if ($newWorkDir) {
+            $oldWorkingDir = getcwd();
+            chdir($newWorkDir);
+            $output->isDebug() && $output->writeln('Changed CWD form ' . $oldWorkingDir . ' to ' . getcwd());
+        }
 
         // skip in this case, since generate content must be clear from meta-info
         $dumpCommands = [
@@ -147,10 +157,34 @@ final class Application extends SymfonyApplication
             InputOption::VALUE_NONE,
             'Enable debug verbosity (-vvv)'
         ));
+
+        $inputDefinition->addOption(new InputOption(
+            '--working-dir',
+            '-d',
+            InputOption::VALUE_REQUIRED,
+            'If specified, use the given directory as working directory.'
+        ));
     }
 
     private function getDefaultConfigPath(): string
     {
         return getcwd() . '/rector.yaml';
+    }
+
+    /**
+     * @param  InputInterface    $input
+     * @throws RuntimeException
+     * @return string
+     */
+    private function getNewWorkingDir(InputInterface $input): string
+    {
+        $workingDir = $input->getParameterOption(['--working-dir', '-d']);
+        if ($workingDir !== false && ! is_dir($workingDir)) {
+            throw new InvalidConfigurationException(
+                'Invalid working directory specified, ' . $workingDir . ' does not exist.'
+            );
+        }
+
+        return (string) $workingDir;
     }
 }

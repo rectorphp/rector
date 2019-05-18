@@ -111,7 +111,7 @@ final class ProcessCommand extends AbstractCommand
         );
         $this->addOption(
             Option::OPTION_DRY_RUN,
-            'd',
+            'n',
             InputOption::VALUE_NONE,
             'See diff of changes, do not save them to files.'
         );
