@@ -166,3 +166,5 @@ parameters:
         - '#Parameter \#6 \$subNodeName of method PhpParser\\PrettyPrinterAbstract\:\:pArray\(\) expects string, int\|null given#'
         - '#Parameter \#7 \$fixup of method PhpParser\\PrettyPrinterAbstract\:\:pArray\(\) expects int\|null, string\|null given#'
         - '#Class PhpParser\\Node\\Expr\\ArrayItem constructor invoked with 5 parameters, 1\-4 required#'
+
+        - '#Parameter \#2 \$name of method Rector\\Rector\\AbstractRector\:\:isName\(\) expects string, string\|null given#'
