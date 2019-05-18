@@ -13,6 +13,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Exception\ShouldNotHappenException;
@@ -247,7 +249,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node\Stmt[] $stmts
+     * @param Stmt[] $stmts
      */
     private function useForeachVariableInStmts(Expr $expr, array $stmts): void
     {
@@ -291,7 +293,7 @@ CODE_SAMPLE
         $previousNode = $node;
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
-        while ($parentNode !== null && ! $parentNode instanceof Node\Stmt\Expression) {
+        while ($parentNode !== null && ! $parentNode instanceof Expression) {
             if ($parentNode instanceof Assign) {
                 if ($this->areNodesEqual($parentNode->var, $previousNode)) {
                     return true;

@@ -153,8 +153,6 @@ final class ProcessCommand extends AbstractCommand
 
         $this->processCommandReporter->reportFileDiffs($this->errorAndDiffCollector->getFileDiffs());
 
-        $this->processCommandReporter->reportRemovedFiles();
-
         if ($this->errorAndDiffCollector->getErrors() !== []) {
             $this->processCommandReporter->reportErrors($this->errorAndDiffCollector->getErrors());
             return Shell::CODE_ERROR;
@@ -166,7 +164,9 @@ final class ProcessCommand extends AbstractCommand
 
         $this->symfonyStyle->success(sprintf(
             'Rector is done! %d changed files',
-            count($this->errorAndDiffCollector->getFileDiffs())
+            count(
+                $this->errorAndDiffCollector->getFileDiffs()
+            ) + $this->errorAndDiffCollector->getRemovedAndAddedFilesCount()
         ));
 
         if ($this->configuration->isDryRun() && count($this->errorAndDiffCollector->getFileDiffs())) {

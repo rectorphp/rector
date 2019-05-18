@@ -3,6 +3,7 @@
 namespace Rector\Application;
 
 use PHPStan\AnalysedCodeException;
+use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Error\ExceptionCorrector;
 use Rector\Reporting\FileDiff;
@@ -36,14 +37,21 @@ final class ErrorAndDiffCollector
      */
     private $exceptionCorrector;
 
+    /**
+     * @var RemovedAndAddedFilesCollector
+     */
+    private $removedAndAddedFilesCollector;
+
     public function __construct(
         DifferAndFormatter $differAndFormatter,
         AppliedRectorCollector $appliedRectorCollector,
-        ExceptionCorrector $exceptionCorrector
+        ExceptionCorrector $exceptionCorrector,
+        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
     ) {
         $this->differAndFormatter = $differAndFormatter;
         $this->appliedRectorCollector = $appliedRectorCollector;
         $this->exceptionCorrector = $exceptionCorrector;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
 
     public function addError(Error $error): void
@@ -57,6 +65,11 @@ final class ErrorAndDiffCollector
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    public function getRemovedAndAddedFilesCount(): int
+    {
+        return $this->removedAndAddedFilesCollector->getAffectedFilesCount();
     }
 
     public function addFileDiff(SmartFileInfo $smartFileInfo, string $newContent, string $oldContent): void

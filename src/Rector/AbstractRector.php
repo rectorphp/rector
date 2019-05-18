@@ -9,7 +9,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
-use Rector\Application\RemovedFilesCollector;
+use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\PhpVersionProvider;
@@ -32,9 +32,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $symfonyStyle;
 
     /**
-     * @var RemovedFilesCollector
+     * @var RemovedAndAddedFilesCollector
      */
-    private $removedFilesCollector;
+    private $removedAndAddedFilesCollector;
 
     /**
      * @var ValueResolver
@@ -59,13 +59,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     public function setAbstractRectorDependencies(
         SymfonyStyle $symfonyStyle,
         ValueResolver $valueResolver,
-        RemovedFilesCollector $removedFilesCollector,
+        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->valueResolver = $valueResolver;
-        $this->removedFilesCollector = $removedFilesCollector;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;
     }
@@ -141,7 +141,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     protected function removeFile(SmartFileInfo $smartFileInfo): void
     {
-        $this->removedFilesCollector->addFile($smartFileInfo);
+        $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
+    }
+
+    protected function addFileWithContent(string $filePath, string $content): void
+    {
+        $this->removedAndAddedFilesCollector->addFileWithContent($filePath, $content);
     }
 
     /**

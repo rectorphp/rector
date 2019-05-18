@@ -4,11 +4,11 @@ namespace Rector\NetteTesterToPHPUnit\Rector;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
-use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
+use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\RectorDefinition\RectorDefinition;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
-final class RenameTesterTestToPHPUnitToTestFileRector implements FileSystemRectorInterface
+final class RenameTesterTestToPHPUnitToTestFileRector extends AbstractFileSystemRector
 {
     public function getDefinition(): RectorDefinition
     {
@@ -28,7 +28,7 @@ final class RenameTesterTestToPHPUnitToTestFileRector implements FileSystemRecto
         FileSystem::rename($oldRealPath, $newRealPath);
 
         // remove old file
-        FileSystem::delete($oldRealPath);
+        $this->removeFile($smartFileInfo);
     }
 
     private function createNewRealPath(string $oldRealPath): string
