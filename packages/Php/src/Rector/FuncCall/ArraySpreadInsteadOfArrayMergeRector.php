@@ -9,20 +9,25 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
+use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Constant\ConstantStringType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/spread_operator_for_array
+ * @see https://twitter.com/nikita_ppv/status/1126470222838366209
  */
 final class ArraySpreadInsteadOfArrayMergeRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change array_merge() to spread operator', [
-            new CodeSample(
-                <<<'CODE_SAMPLE'
+        return new RectorDefinition(
+            'Change array_merge() to spread operator, except values with possible string key values',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($iter1, $iter2)
@@ -37,21 +42,22 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($iter1, $iter2)
     {
-        $values = [ ...$iter1, ...$iter2 ];
+        $values = [...$iter1, ...$iter2];
 
         // Or to generalize to all iterables
-        $anotherValues = [ ...$iter1, ...$iter2 ];
+        $anotherValues = [...$iter1, ...$iter2];
     }
 }
 CODE_SAMPLE
-            ),
-        ]);
+                ),
+            ]
+        );
     }
 
     /**
@@ -111,12 +117,17 @@ CODE_SAMPLE
         return $expr;
     }
 
-    private function refactorArray(Node $node): Array_
+    private function refactorArray(FuncCall $funcCall): ?Array_
     {
         $array = new Array_();
 
-        foreach ($node->args as $arg) {
+        foreach ($funcCall->args as $arg) {
             $value = $arg->value;
+
+            if ($this->shouldSkipArrayForInvalidTypeOrKeys($value)) {
+                return null;
+            }
+
             $value = $this->resolveValue($value);
 
             $array->items[] = $this->createUnpackedArrayItem($value);
@@ -136,5 +147,25 @@ CODE_SAMPLE
     private function createUnpackedArrayItem(Expr $expr): ArrayItem
     {
         return new ArrayItem($expr, null, false, [], true);
+    }
+
+    private function shouldSkipArrayForInvalidTypeOrKeys(Expr $expr): bool
+    {
+        // we have no idea what it is → cannot change it
+        if (! $this->isArrayType($expr)) {
+            return true;
+        }
+
+        $arrayStaticType = $this->getStaticType($expr);
+        if ($arrayStaticType instanceof ConstantArrayType) {
+            foreach ($arrayStaticType->getKeyTypes() as $keyType) {
+                // key cannot be string
+                if ($keyType instanceof ConstantStringType) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
