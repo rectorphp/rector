@@ -353,6 +353,11 @@ final class NodeTypeResolver
         return false;
     }
 
+    public function isNumberType(Node $node): bool
+    {
+        return $this->isIntType($node) || $this->isFloatType($node);
+    }
+
     private function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
     {
         foreach ($perNodeTypeResolver->getNodeClasses() as $nodeClass) {

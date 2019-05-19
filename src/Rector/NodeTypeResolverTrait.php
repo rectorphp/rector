@@ -63,6 +63,11 @@ trait NodeTypeResolverTrait
         return $this->nodeTypeResolver->isIntType($node);
     }
 
+    protected function isNumberType(Node $node): bool
+    {
+        return $this->nodeTypeResolver->isNumberType($node);
+    }
+
     protected function isFloatType(Node $node): bool
     {
         return $this->nodeTypeResolver->isFloatType($node);
