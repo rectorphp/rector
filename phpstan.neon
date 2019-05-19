@@ -165,3 +165,7 @@ parameters:
         - '#Class PhpParser\\Node\\Expr\\ArrayItem constructor invoked with 5 parameters, 1\-4 required#'
 
         - '#Parameter \#2 \$name of method Rector\\Rector\\AbstractRector\:\:isName\(\) expects string, string\|null given#'
+        # file always exists here
+        - '#Cannot call method getRealPath\(\) on Symplify\\PackageBuilder\\FileSystem\\SmartFileInfo\|null#'
+        # cascade irelevant
+        - '#Parameter (.*?) expects array<PhpParser\\Node\\Stmt\>, array<PhpParser\\Node\> given#'

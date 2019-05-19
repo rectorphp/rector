@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -32,7 +33,7 @@ use Rector\BetterPhpDocParser\NodeDecorator\StringsTypePhpDocNodeDecorator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Rector\CodingStyle\Imports\ImportsInClassCollection;
+use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
 use Rector\NodeTypeResolver\Php\ParamTypeInfo;
@@ -78,9 +79,9 @@ final class DocBlockManipulator
     private $importedNames = [];
 
     /**
-     * @var ImportsInClassCollection
+     * @var UseAddingCommander
      */
-    private $importsInClassCollection;
+    private $useAddingCommander;
 
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
@@ -89,7 +90,7 @@ final class DocBlockManipulator
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
         StringsTypePhpDocNodeDecorator $stringsTypePhpDocNodeDecorator,
         NodeTraverser $nodeTraverser,
-        ImportsInClassCollection $importsInClassCollection
+        UseAddingCommander $useAddingCommander
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
@@ -97,7 +98,7 @@ final class DocBlockManipulator
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->stringsTypePhpDocNodeDecorator = $stringsTypePhpDocNodeDecorator;
         $this->nodeTraverser = $nodeTraverser;
-        $this->importsInClassCollection = $importsInClassCollection;
+        $this->useAddingCommander = $useAddingCommander;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -411,22 +412,22 @@ final class DocBlockManipulator
         $phpDocNode = $phpDocInfo->getPhpDocNode();
 
         $this->nodeTraverser->traverseWithCallable($phpDocNode, function (
-            AttributeAwareNodeInterface $node
-        ): AttributeAwareNodeInterface {
-            if (! $node instanceof IdentifierTypeNode) {
-                return $node;
+            AttributeAwareNodeInterface $docNode
+        ) use ($node): AttributeAwareNodeInterface {
+            if (! $docNode instanceof IdentifierTypeNode) {
+                return $docNode;
             }
 
             // is class without namespaced name → skip
-            $name = ltrim($node->name, '\\');
+            $name = ltrim($docNode->name, '\\');
             if (! Strings::contains($name, '\\')) {
-                return $node;
+                return $docNode;
             }
 
-            $fullyQualifiedName = $this->getFullyQualifiedName($node);
+            $fullyQualifiedName = $this->getFullyQualifiedName($docNode);
             $shortName = $this->getShortName($name);
 
-            return $this->processFqnNameImport($node, $shortName, $fullyQualifiedName);
+            return $this->processFqnNameImport($node, $docNode, $shortName, $fullyQualifiedName);
         });
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
@@ -620,26 +621,21 @@ final class DocBlockManipulator
      * @param AttributeAwareIdentifierTypeNode $attributeAwareNode
      */
     private function processFqnNameImport(
+        Node $node,
         AttributeAwareNodeInterface $attributeAwareNode,
         string $shortName,
         string $fullyQualifiedName
     ): AttributeAwareNodeInterface {
-        $alreadyImportedUses = array_merge($this->importedNames, $this->importsInClassCollection->get());
-        $alreadyImportedUses = array_unique($alreadyImportedUses);
-
-        foreach ($alreadyImportedUses as $alreadyImportedUse) {
-            $shortAlreadyImportedUsed = $this->getShortName($alreadyImportedUse);
-            if ($shortAlreadyImportedUsed === $shortName) {
-                if ($alreadyImportedUse === $fullyQualifiedName) {
-                    $attributeAwareNode->name = $shortName;
-                }
-
-                return $attributeAwareNode;
+        if ($this->useAddingCommander->isShortImported($node, $fullyQualifiedName)) {
+            if ($this->useAddingCommander->isImportShortable($node, $fullyQualifiedName)) {
+                $attributeAwareNode->name = $shortName;
             }
+
+            return $attributeAwareNode;
         }
 
         $attributeAwareNode->name = $shortName;
-        $this->importedNames[] = $fullyQualifiedName;
+        $this->useAddingCommander->addUseImport($node, $fullyQualifiedName);
 
         return $attributeAwareNode;
     }

@@ -66,9 +66,7 @@ parameters:
         PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer:
             - 'packages/Php/src/Rector/Double/RealToFloatTypeCastRector.php'
 
-        Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenReferenceSniff:
-            # 3rd party contract
-            - 'src/PhpParser/Printer/BetterStandardPrinter.php'
+        Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenReferenceSniff: ~
 
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
@@ -146,3 +144,4 @@ parameters:
         Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
             # 3rd party api
             - 'src/PhpParser/Node/Value/ValueResolver.php'
+

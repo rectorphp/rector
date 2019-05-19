@@ -134,6 +134,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $nodes = $this->nodeRemovingCommander->traverseNodes($nodes);
         }
 
+        if ($this->useAddingCommander->isActive()) {
+            $nodes = $this->useAddingCommander->traverseNodes($nodes);
+        }
+
         $this->tearDown();
 
         return $nodes;
