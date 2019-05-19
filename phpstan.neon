@@ -77,7 +77,6 @@ parameters:
 
         # false positive, resolved in previous method
         - '#Parameter (.*?) of method Rector\\PhpParser\\Node\\Manipulator\\IdentifierManipulator\:\:(.*?)\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch\|PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\PropertyFetch\|PhpParser\\Node\\Expr\\StaticCall\|PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#'
-        - '#Parameter \#1 \$callables of method Rector\\Collector\\CallableCollectorPopulator::populate\(\) expects (.*?) given#'
 
         # intentionally incorrect - part of the test
         - '#Parameter \#2 \$codeSamples of class Rector\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\Contract\\RectorDefinition\\CodeSampleInterface>, array<int, stdClass> given#'
@@ -150,12 +149,10 @@ parameters:
         - '#Method Rector\\NodeContainer\\ParsedNodesByType\:\:(.*?)\(\) should return PhpParser\\Node\\Stmt\\(.*?)\|null but returns PhpParser\\Node\|null#'
         - '#Method Rector\\NodeContainer\\ParsedNodesByType\:\:findImplementersOfInterface\(\) should return array<PhpParser\\Node\\Stmt\\Interface_\> but returns array<int, PhpParser\\Node\>#'
         - '#PHPDoc tag @param for parameter \$classLike with type PhpParser\\Builder\\Trait_\|PhpParser\\Node\\Stmt\\Interface_ is not subtype of native type PhpParser\\Node\\Stmt\\ClassLike#'
-        - '#Method Rector\\CodingStyle\\Rector\\Namespace_\\ImportFullyQualifiedNamesRector\:\:getShortName\(\) should return string but returns string\|false#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable\:\:\$name#'
         - '#Empty array passed to foreach#'
         - '#Method Rector\\RemovingStatic\\UniqueObjectFactoryFactory\:\:resolveClassShortName\(\) should return string but returns string\|false#'
         - '#Strict comparison using \=\=\= between PhpParser\\Node\\Expr\\ArrayItem and null will always evaluate to false#'
-        - '#Anonymous function should have native typehint "string"#'
         - '#Parameter \#2 \.\.\.\$args of function array_merge expects array, array<int, string\>\|false given#'
         - '#Method Rector\\Collector\\CallableCollectorPopulator\:\:populate\(\) should return array<Closure\> but returns array<int\|string, callable\>#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$args#'

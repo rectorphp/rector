@@ -16,7 +16,10 @@ final class ArraySpreadInsteadOfArrayMergeRectorTest extends AbstractRectorTestC
         $this->doTestFiles([
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/iterator_to_array.php.inc',
-            __DIR__ . '/Fixture/simple_array_merge.php.inc',
+            __DIR__ . '/Fixture/integer_keys.php.inc',
+            // see caveat: https://twitter.com/nikita_ppv/status/1126470222838366209
+            __DIR__ . '/Fixture/skip_simple_array_merge.php.inc',
+            __DIR__ . '/Fixture/skip_string_keys.php.inc',
         ]);
     }
 
