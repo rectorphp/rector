@@ -233,6 +233,7 @@ CODE_SAMPLE
             }
 
             $name = $node->getAttribute('originalName');
+
             if ($name instanceof Name) {
                 // already short
                 if (! Strings::contains($name->toString(), '\\')) {
@@ -244,9 +245,7 @@ CODE_SAMPLE
 
             // the short name is already used, skip it
             $shortName = $this->classNaming->getShortName($name->toString());
-
-            // is already used
-            if (isset($this->alreadyUsedShortNames[$shortName]) && $this->alreadyUsedShortNames[$shortName] !== $name->toString()) {
+            if ($this->isShortNameAlreadyUsedForDifferentFqn($node, $shortName)) {
                 return null;
             }
 
@@ -359,5 +358,15 @@ CODE_SAMPLE
         $this->alreadyUsedShortNames = [];
         $this->importsInClassCollection->reset();
         $this->docBlockManipulator->resetImportedNames();
+    }
+
+    // is already used
+    private function isShortNameAlreadyUsedForDifferentFqn(Name $name, string $shortName): bool
+    {
+        if (! isset($this->alreadyUsedShortNames[$shortName])) {
+            return false;
+        }
+
+        return $this->alreadyUsedShortNames[$shortName] !== $this->getName($name);
     }
 }
