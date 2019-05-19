@@ -25,3 +25,4 @@ services:
     Rector\Php\Rector\FuncCall\StringifyStrNeedlesRector: ~
     Rector\Php\Rector\FuncCall\JsonThrowOnErrorRector: ~
     Rector\Php\Rector\FuncCall\RegexDashEscapeRector: ~
+    Rector\Php\Rector\FuncCall\RemoveMissingCompactVariableRector: ~
