@@ -7,3 +7,4 @@ services:
     Rector\Php\Rector\Assign\AssignArrayToStringRector: ~
     Rector\Php\Rector\FuncCall\CountOnNullRector: ~
     Rector\Php\Rector\FuncCall\RemoveExtraParametersRector: ~
+    Rector\Php\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector: ~
