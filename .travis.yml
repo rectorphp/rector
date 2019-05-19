@@ -1,6 +1,7 @@
 language: php
 
 matrix:
+    fast_finish: true
     include:
         - php: '7.1'
           env: STATIC_ANALYSIS=true RUN_RECTOR=true
