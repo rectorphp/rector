@@ -4,6 +4,8 @@ namespace Rector\Tests\Rector\Psr4\MultipleClassFileToPsr4ClassesRector;
 
 use Iterator;
 use Nette\Utils\FileSystem;
+use Rector\Application\FileSystem\RemovedAndAddedFilesProcessor;
+use Rector\Configuration\Configuration;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
@@ -19,10 +21,21 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
      */
     private $fileSystemFileProcessor;
 
+    /**
+     * @var RemovedAndAddedFilesProcessor
+     */
+    private $removedAndAddedFilesProcessor;
+
     protected function setUp(): void
     {
         $this->bootKernelWithConfigs(RectorKernel::class, [__DIR__ . '/config.yaml']);
         $this->fileSystemFileProcessor = self::$container->get(FileSystemFileProcessor::class);
+
+        // so the files are removed and added
+        $configuration = self::$container->get(Configuration::class);
+        $configuration->setIsDryRun(false);
+
+        $this->removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
     }
 
     protected function tearDown(): void
@@ -40,18 +53,11 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
     {
         $fileInfo = new SmartFileInfo($file);
 
-        $temporaryFilePath = sprintf(
-            '%s%sFixture%s%s',
-            dirname($fileInfo->getPath()),
-            DIRECTORY_SEPARATOR,
-            DIRECTORY_SEPARATOR,
-            $fileInfo->getBasename()
-        );
-
-        FileSystem::copy($file, $temporaryFilePath);
+        $temporaryFilePath = $this->createTemporaryFilePath($fileInfo, $file);
         require_once $temporaryFilePath;
 
         $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo($temporaryFilePath));
+        $this->removedAndAddedFilesProcessor->run();
 
         foreach ($expectedExceptions as $expectedExceptionLocation => $expectedFormat) {
             $this->assertFileExists($expectedExceptionLocation);
@@ -120,5 +126,20 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
 
         $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo(__DIR__ . '/Source/ReadyException.php'));
         $this->assertStringEqualsFile(__DIR__ . '/Source/ReadyException.php', $originalFileContent);
+    }
+
+    private function createTemporaryFilePath(SmartFileInfo $fileInfo, string $file): string
+    {
+        $temporaryFilePath = sprintf(
+            '%s%sFixture%s%s',
+            dirname($fileInfo->getPath()),
+            DIRECTORY_SEPARATOR,
+            DIRECTORY_SEPARATOR,
+            $fileInfo->getBasename()
+        );
+
+        FileSystem::copy($file, $temporaryFilePath);
+
+        return $temporaryFilePath;
     }
 }

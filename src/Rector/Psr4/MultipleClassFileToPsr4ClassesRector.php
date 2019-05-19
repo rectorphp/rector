@@ -2,7 +2,6 @@
 
 namespace Rector\Rector\Psr4;
 
-use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
@@ -101,13 +100,15 @@ CODE_SAMPLE
                         $shouldDelete = false;
                     }
 
+                    // has file changed?
+
                     $this->printNodesToFilePath($newStmtsSet, $fileDestination);
                 }
             }
         }
 
         if ($shouldDelete) {
-            FileSystem::delete($smartFileInfo->getRealPath());
+            $this->removeFile($smartFileInfo);
         }
     }
 

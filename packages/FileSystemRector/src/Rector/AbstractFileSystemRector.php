@@ -4,17 +4,23 @@ namespace Rector\FileSystemRector\Rector;
 
 use PhpParser\Lexer;
 use PhpParser\Node;
+use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
+use Rector\Configuration\Configuration;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\PhpParser\Parser\Parser;
 use Rector\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Rector\AbstractRectorTrait;
-use Symfony\Component\Filesystem\Filesystem;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 abstract class AbstractFileSystemRector implements FileSystemRectorInterface
 {
     use AbstractRectorTrait;
+
+    /**
+     * @var Configuration
+     */
+    protected $configuration;
 
     /**
      * @var Parser
@@ -37,14 +43,14 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     private $nodeScopeAndMetadataDecorator;
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var Node[]
      */
     private $oldStmts = [];
+
+    /**
+     * @var RemovedAndAddedFilesCollector
+     */
+    private $removedAndAddedFilesCollector;
 
     /**
      * @required
@@ -53,14 +59,16 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         Parser $parser,
         Lexer $lexer,
         FormatPerservingPrinter $formatPerservingPrinter,
-        Filesystem $filesystem,
-        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator
+        NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
+        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
+        Configuration $configuration
     ): void {
         $this->parser = $parser;
         $this->lexer = $lexer;
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
-        $this->filesystem = $filesystem;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -87,6 +95,17 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
             $this->oldStmts,
             $this->lexer->getTokens()
         );
-        $this->filesystem->dumpFile($fileDestination, $fileContent);
+
+        $this->addFile($fileDestination, $fileContent);
+    }
+
+    protected function removeFile(SmartFileInfo $smartFileInfo): void
+    {
+        $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
+    }
+
+    protected function addFile(string $filePath, string $content): void
+    {
+        $this->removedAndAddedFilesCollector->addFileWithContent($filePath, $content);
     }
 }

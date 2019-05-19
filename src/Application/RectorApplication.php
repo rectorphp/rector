@@ -2,8 +2,9 @@
 
 namespace Rector\Application;
 
-use Nette\Utils\FileSystem;
 use PHPStan\AnalysedCodeException;
+use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
+use Rector\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Configuration\Configuration;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -52,9 +53,14 @@ final class RectorApplication
     private $fileProcessor;
 
     /**
-     * @var RemovedFilesCollector
+     * @var RemovedAndAddedFilesCollector
      */
-    private $removedFilesCollector;
+    private $removedAndAddedFilesCollector;
+
+    /**
+     * @var RemovedAndAddedFilesProcessor
+     */
+    private $removedAndAddedFilesProcessor;
 
     public function __construct(
         SymfonyStyle $symfonyStyle,
@@ -62,14 +68,16 @@ final class RectorApplication
         ErrorAndDiffCollector $errorAndDiffCollector,
         Configuration $configuration,
         FileProcessor $fileProcessor,
-        RemovedFilesCollector $removedFilesCollector
+        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
+        RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->configuration = $configuration;
         $this->fileProcessor = $fileProcessor;
-        $this->removedFilesCollector = $removedFilesCollector;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
+        $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
     }
 
     /**
@@ -109,6 +117,9 @@ final class RectorApplication
         }
 
         $this->symfonyStyle->newLine(2);
+
+        // 4. remove and add files
+        $this->removedAndAddedFilesProcessor->run();
     }
 
     private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback): void
@@ -141,21 +152,20 @@ final class RectorApplication
 
     private function processFileInfo(SmartFileInfo $fileInfo): void
     {
-        if ($this->removedFilesCollector->hasFile($fileInfo)) {
-            if (! $this->configuration->isDryRun()) {
-                FileSystem::delete($fileInfo->getRealPath());
-            }
-        } else {
-            $oldContent = $fileInfo->getContents();
-
-            $newContent = $this->configuration->isDryRun() ? $this->fileProcessor->printToString(
-                $fileInfo
-            ) : $this->fileProcessor->printToFile($fileInfo);
-
-            $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
-
-            $this->fileSystemFileProcessor->processFileInfo($fileInfo);
+        if ($this->removedAndAddedFilesCollector->isFileRemoved($fileInfo)) {
+            // skip, because this file exists no more
+            return;
         }
+
+        $oldContent = $fileInfo->getContents();
+
+        $newContent = $this->configuration->isDryRun() ? $this->fileProcessor->printToString(
+            $fileInfo
+        ) : $this->fileProcessor->printToFile($fileInfo);
+
+        $this->errorAndDiffCollector->addFileDiff($fileInfo, $newContent, $oldContent);
+
+        $this->fileSystemFileProcessor->processFileInfo($fileInfo);
     }
 
     private function advance(SmartFileInfo $smartFileInfo): void

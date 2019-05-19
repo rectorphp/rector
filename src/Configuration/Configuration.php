@@ -38,6 +38,14 @@ final class Configuration
         $this->withStyle = (bool) $input->getOption(Option::OPTION_WITH_STYLE);
     }
 
+    /**
+     * @forTests
+     */
+    public function setIsDryRun(bool $isDryRun): void
+    {
+        $this->isDryRun = $isDryRun;
+    }
+
     public function isDryRun(): bool
     {
         return $this->isDryRun;

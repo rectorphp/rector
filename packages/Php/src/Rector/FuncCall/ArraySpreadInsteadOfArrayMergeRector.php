@@ -3,8 +3,12 @@
 namespace Rector\Php\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -74,19 +78,19 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isIteratorToArrayFuncCall(Node\Expr $expr): bool
+    private function isIteratorToArrayFuncCall(Expr $expr): bool
     {
         return $expr instanceof Node\Expr\FuncCall && $this->isName($expr, 'iterator_to_array');
     }
 
-    private function resolveValue(Node\Expr $expr): Node\Expr
+    private function resolveValue(Expr $expr): Expr
     {
         if ($this->isIteratorToArrayFuncCall($expr)) {
             /** @var FuncCall $expr */
             $expr = $expr->args[0]->value;
         }
 
-        if (! $expr instanceof Node\Expr\Ternary) {
+        if (! $expr instanceof Ternary) {
             return $expr;
         }
 
@@ -98,7 +102,7 @@ CODE_SAMPLE
             return $expr;
         }
 
-        if ($expr->if instanceof Node\Expr\Variable) {
+        if ($expr->if instanceof Variable) {
             if ($this->isIteratorToArrayFuncCall($expr->else)) {
                 return $expr->if;
             }
@@ -107,9 +111,9 @@ CODE_SAMPLE
         return $expr;
     }
 
-    private function refactorArray(Node $node): Node\Expr\Array_
+    private function refactorArray(Node $node): Array_
     {
-        $array = new Node\Expr\Array_();
+        $array = new Array_();
 
         foreach ($node->args as $arg) {
             $value = $arg->value;
@@ -121,15 +125,15 @@ CODE_SAMPLE
         return $array;
     }
 
-    private function refactorIteratorToArray(FuncCall $funcCall): Node\Expr\Array_
+    private function refactorIteratorToArray(FuncCall $funcCall): Array_
     {
-        $array = new Node\Expr\Array_();
+        $array = new Array_();
         $array->items[] = $this->createUnpackedArrayItem($funcCall->args[0]->value);
 
         return $array;
     }
 
-    private function createUnpackedArrayItem(Node\Expr $expr): ArrayItem
+    private function createUnpackedArrayItem(Expr $expr): ArrayItem
     {
         return new ArrayItem($expr, null, false, [], true);
     }

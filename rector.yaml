@@ -15,6 +15,4 @@ parameters:
     php_version_features: '7.1'
 
 services:
-    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
-
-#    Rector\CodeQuality\Rector\For_\ForToForeachRector: ~
+#    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
