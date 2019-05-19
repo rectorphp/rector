@@ -13,7 +13,6 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/object-typehint
- *
  * @see https://github.com/cebe/yii2/commit/9548a212ecf6e50fcdb0e5ba6daad88019cfc544
  */
 final class ReservedObjectRector extends AbstractRector
@@ -76,7 +75,7 @@ CODE_SAMPLE
     private function processIdentifier(Identifier $identifier): Identifier
     {
         foreach ($this->reservedKeywordsToReplacements as $reservedKeyword => $replacement) {
-            if ($this->isNameInsensitive($identifier, $reservedKeyword)) {
+            if ($this->isName($identifier, $reservedKeyword)) {
                 $identifier->name = $replacement;
             }
         }

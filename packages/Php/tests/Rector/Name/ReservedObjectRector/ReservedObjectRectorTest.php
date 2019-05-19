@@ -9,7 +9,10 @@ final class ReservedObjectRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/ReservedObject.php']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/ReservedObject.php',
+            __DIR__ . '/Fixture/skip_type_declaration_object.php',
+        ]);
     }
 
     /**
@@ -17,10 +20,13 @@ final class ReservedObjectRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [ReservedObjectRector::class => [
-            '$reservedKeywordsToReplacements' => [
-                'ReservedObject' => 'SmartObject',
+        return [
+            ReservedObjectRector::class => [
+                '$reservedKeywordsToReplacements' => [
+                    'ReservedObject' => 'SmartObject',
+                    'Object' => 'AnotherSmartObject',
+                ],
             ],
-        ]];
+        ];
     }
 }
