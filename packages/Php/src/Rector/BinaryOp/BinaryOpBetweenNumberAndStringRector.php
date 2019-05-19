@@ -4,6 +4,7 @@ namespace Rector\Php\Rector\BinaryOp;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Scalar\LNumber;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -26,11 +27,7 @@ class SomeClass
     public function run()
     {
         $value = 5 + '';
-        $value = 5 + 'hi';
-        $value = 5 + 'Tom';
-
-        $value = 5 * '';
-        $value = 5 * 'hi';
+        $value = 5.0 + 'hi';
 
         $name = 'Tom';
         $value = 5 * $name;
@@ -44,11 +41,7 @@ class SomeClass
     public function run()
     {
         $value = 5 + 0;
-        $value = 5 + 0
-        $value = 5 + 0;
-
-        $value = 5 * 0;
-        $value = 5 * 0;
+        $value = 5.0 + 0
 
         $name = 'Tom';
         $value = 5 * 0;
@@ -73,13 +66,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isStringyType($node->left) && $this->isIntegerType($node->right)) {
-            $node->left = new Node\Scalar\LNumber(0);
+        if ($this->isStringyType($node->left) && $this->isNumberType($node->right)) {
+            $node->left = new LNumber(0);
+
             return $node;
         }
 
-        if ($this->isStringyType($node->right) && $this->isIntegerType($node->left)) {
-            $node->right = new Node\Scalar\LNumber(0);
+        if ($this->isStringyType($node->right) && $this->isNumberType($node->left)) {
+            $node->right = new LNumber(0);
+
             return $node;
         }
 
