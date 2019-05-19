@@ -1,4 +1,4 @@
-# All 279 Rectors Overview
+# All 288 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -13,7 +13,6 @@
 - [Doctrine](#doctrine)
 - [DomainDrivenDesign](#domaindrivendesign)
 - [Guzzle](#guzzle)
-- [Jms](#jms)
 - [Laravel](#laravel)
 - [MysqlToMysqli](#mysqltomysqli)
 - [Nette](#nette)
@@ -32,6 +31,7 @@
 - [Sylius](#sylius)
 - [Symfony](#symfony)
 - [Twig](#twig)
+- [TypeDeclaration](#typedeclaration)
 
 ## CakePHP
 
@@ -321,6 +321,34 @@ Convert [$this, "method"] to proper anonymous function
 
 <br>
 
+### `ForToForeachRector`
+
+- class: `Rector\CodeQuality\Rector\For_\ForToForeachRector`
+
+Change for() to foreach() where useful
+
+```diff
+ class SomeClass
+ {
+     public function run($tokens)
+     {
+-        for ($i = 0, $c = count($tokens); $i < $c; ++$i) {
+-            if ($tokens[$i][0] === T_STRING && $tokens[$i][1] === 'fn') {
++        foreach ($tokens as $i => $token) {
++            if ($token[0] === T_STRING && $token[1] === 'fn') {
+                 $previousNonSpaceToken = $this->getPreviousNonSpaceToken($tokens, $i);
+                 if ($previousNonSpaceToken !== null && $previousNonSpaceToken[0] === T_OBJECT_OPERATOR) {
+                     continue;
+                 }
+                 $tokens[$i][0] = self::T_FN;
+             }
+         }
+     }
+ }
+```
+
+<br>
+
 ### `SimplifyUselessVariableRector`
 
 - class: `Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector`
@@ -359,6 +387,28 @@ Removes unneeded array_values() in in_array() call
 ```diff
 -in_array("key", array_values($array), true);
 +in_array("key", $array, true);
+```
+
+<br>
+
+### `CompactToVariablesRector`
+
+- class: `Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector`
+
+Change compact() call to own array
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $checkout = 'one';
+         $form = 'two';
+
+-        return compact('checkout', 'form');
++        return ['checkout' => $checkout, 'form' => $form];
+     }
+ }
 ```
 
 <br>
@@ -552,6 +602,27 @@ Change multiple null compares to ?? queue
 -
 -        return null;
 +        return $this->orderItem ?? $this->orderItemUnit;
+     }
+ }
+```
+
+<br>
+
+### `AndAssignsToSeparateLinesRector`
+
+- class: `Rector\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector`
+
+Split 2 assigns ands to separate line
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $tokens = [];
+-        $token = 4 and $tokens[] = $token;
++        $token = 4;
++        $tokens[] = $token;
      }
  }
 ```
@@ -1138,6 +1209,37 @@ Remove initial assigns of overridden values
 
 <br>
 
+### `RemoveDefaultArgumentValueRector`
+
+- class: `Rector\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector`
+
+Remove argument value, if it is the same as default value
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $this->runWithDefault([]);
+-        $card = self::runWithStaticDefault([]);
++        $this->runWithDefault();
++        $card = self::runWithStaticDefault();
+     }
+
+     public function runWithDefault($items = [])
+     {
+         return $items;
+     }
+
+     public function runStaticWithDefault($cards = [])
+     {
+         return $cards;
+     }
+ }
+```
+
+<br>
+
 ### `RemoveDeadIfForeachForRector`
 
 - class: `Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector`
@@ -1191,6 +1293,25 @@ Removes dead code statements
 -$value = 5;
 -$value;
 +$value = 5;
+```
+
+<br>
+
+### `RemoveAndTrueRector`
+
+- class: `Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector`
+
+Remove and true that has no added value
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        return true && 5 === 1;
++        return 5 === 1;
+     }
+ }
 ```
 
 <br>
@@ -1354,34 +1475,6 @@ Changes getMessage(..., true) to getMessageAsArray()
  /** @var GuzzleHttp\Message\MessageInterface */
 -$value = $message->getMessage('key', true);
 +$value = $message->getMessageAsArray('key');
-```
-
-<br>
-
-## Jms
-
-### `JmsInjectAnnotationRector`
-
-- class: `Rector\Jms\Rector\Property\JmsInjectAnnotationRector`
-
-Changes properties with `@JMS\DiExtraBundle\Annotation\Inject` to constructor injection
-
-```diff
- use JMS\DiExtraBundle\Annotation as DI;
-
- class SomeController
- {
-     /**
--     * @DI\Inject("entity.manager")
-+     * @var EntityManager
-      */
-     private $entityManager;
-+
-+    public function __construct(EntityManager $entityManager)
-+    {
-+        $this->entityManager = entityManager;
-+    }
- }
 ```
 
 <br>
@@ -2665,6 +2758,27 @@ Changes heredoc/nowdoc that contains closing word to safe wrapper name
 
 <br>
 
+### `ClosureToArrowFunctionRector`
+
+- class: `Rector\Php\Rector\Closure\ClosureToArrowFunctionRector`
+
+Change closure to arrow function
+
+```diff
+ class SomeClass
+ {
+     public function run($meetups)
+     {
+-        return array_filter($meetups, function (Meetup $meetup) {
+-            return is_object($meetup);
+-        });
++        return array_filter($meetups, fn(Meetup $meetup) => is_object($meetup));
+     }
+ }
+```
+
+<br>
+
 ### `SensitiveConstantNameRector`
 
 - class: `Rector\Php\Rector\ConstFetch\SensitiveConstantNameRector`
@@ -3111,6 +3225,32 @@ Change __CLASS__ to self::class
 
 <br>
 
+### `ArraySpreadInsteadOfArrayMergeRector`
+
+- class: `Rector\Php\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector`
+
+Change array_merge() to spread operator
+
+```diff
+ class SomeClass
+ {
+     public function run($iter1, $iter2)
+     {
+-        $values = array_merge(iterator_to_array($iter1), iterator_to_array($iter2));
++        $values = [ ...$iter1, ...$iter2 ];
+
+         // Or to generalize to all iterables
+-        $anotherValues = array_merge(
+-            is_array($iter1) ? $iter1 : iterator_to_array($iter1),
+-            is_array($iter2) ? $iter2 : iterator_to_array($iter2)
+-        );
++        $anotherValues = [ ...$iter1, ...$iter2 ];
+     }
+ }
+```
+
+<br>
+
 ### `CountOnNullRector`
 
 - class: `Rector\Php\Rector\FuncCall\CountOnNullRector`
@@ -3359,69 +3499,6 @@ Changes property `@var` annotations from annotation to type.
 -function handler(Exception $exception) { ... }
 +function handler(Throwable $exception) { ... }
  set_exception_handler('handler');
-```
-
-<br>
-
-### `ReturnTypeDeclarationRector`
-
-- class: `Rector\Php\Rector\FunctionLike\ReturnTypeDeclarationRector`
-
-Change @return types and type from static analysis to type declarations if not a BC-break
-
-```diff
- <?php
-
- class SomeClass
- {
-     /**
-      * @return int
-      */
--    public function getCount()
-+    public function getCount(): int
-     {
-     }
- }
-```
-
-<br>
-
-### `ParamTypeDeclarationRector`
-
-- class: `Rector\Php\Rector\FunctionLike\ParamTypeDeclarationRector`
-
-Change @param types to type declarations if not a BC-break
-
-```diff
- <?php
-
- class ParentClass
- {
-     /**
-      * @param int $number
-      */
-     public function keep($number)
-     {
-     }
- }
-
- final class ChildClass extends ParentClass
- {
-     /**
-      * @param int $number
-      */
-     public function keep($number)
-     {
-     }
-
-     /**
-      * @param int $number
-      */
--    public function change($number)
-+    public function change(int $number)
-     {
-     }
- }
 ```
 
 <br>
@@ -4314,6 +4391,27 @@ Change "cascade_validation" option to specific node attribute
 
 <br>
 
+### `MakeDispatchFirstArgumentEventRector`
+
+- class: `Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector`
+
+Make event object a first argument of dispatch() method, event name as second
+
+```diff
+ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+ class SomeClass
+ {
+     public function run(EventDispatcherInterface $eventDisptacher)
+     {
+-        $eventDisptacher->dispatch('event_name', new Event());
++        $eventDisptacher->dispatch(new Event(), 'event_name');
+     }
+ }
+```
+
+<br>
+
 ### `ReadOnlyOptionToAttributeRector`
 
 - class: `Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector`
@@ -4714,6 +4812,92 @@ Changes Twig_Function_Method to Twig_SimpleFunction calls in TwigExtension.
 -            'is_mobile' => new Twig_Filter_Method($this, 'isMobile'),
 +             new Twig_SimpleFilter('is_mobile', [$this, 'isMobile']),
          ];
+     }
+ }
+```
+
+<br>
+
+## TypeDeclaration
+
+### `AddClosureReturnTypeRector`
+
+- class: `Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector`
+
+Add known return type to functions
+
+```diff
+ class SomeClass
+ {
+     public function run($meetups)
+     {
+-        return array_filter($meetups, function (Meetup $meetup) {
++        return array_filter($meetups, function (Meetup $meetup): bool {
+             return is_object($meetup);
+         });
+     }
+ }
+```
+
+<br>
+
+### `ReturnTypeDeclarationRector`
+
+- class: `Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector`
+
+Change @return types and type from static analysis to type declarations if not a BC-break
+
+```diff
+ <?php
+
+ class SomeClass
+ {
+     /**
+      * @return int
+      */
+-    public function getCount()
++    public function getCount(): int
+     {
+     }
+ }
+```
+
+<br>
+
+### `ParamTypeDeclarationRector`
+
+- class: `Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector`
+
+Change @param types to type declarations if not a BC-break
+
+```diff
+ <?php
+
+ class ParentClass
+ {
+     /**
+      * @param int $number
+      */
+     public function keep($number)
+     {
+     }
+ }
+
+ final class ChildClass extends ParentClass
+ {
+     /**
+      * @param int $number
+      */
+     public function keep($number)
+     {
+     }
+
+     /**
+      * @param int $number
+      */
+-    public function change($number)
++    public function change(int $number)
+     {
      }
  }
 ```
@@ -5518,6 +5702,40 @@ services:
 ```diff
 -$result = $object->property;
 +$result = $object->getProperty('someArg');
+```
+
+<br>
+
+### `InjectAnnotationClassRector`
+
+- class: `Rector\Rector\Property\InjectAnnotationClassRector`
+
+Changes properties with specified annotations class to constructor injection
+
+```yaml
+services:
+    Rector\Rector\Property\InjectAnnotationClassRector:
+        $annotationClass: JMS\DiExtraBundle\Annotation\Inject
+```
+
+↓
+
+```diff
+ use JMS\DiExtraBundle\Annotation as DI;
+
+ class SomeController
+ {
+     /**
+-     * @DI\Inject("entity.manager")
++     * @var EntityManager
+      */
+     private $entityManager;
++
++    public function __construct(EntityManager $entityManager)
++    {
++        $this->entityManager = entityManager;
++    }
+ }
 ```
 
 <br>
