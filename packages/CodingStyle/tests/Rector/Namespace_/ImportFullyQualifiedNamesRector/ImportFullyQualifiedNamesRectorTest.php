@@ -2,42 +2,53 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector;
 
+use Iterator;
 use Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideNamespacedClasses()
+     * @dataProvider provideFunctions()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/double_import.php.inc',
-            __DIR__ . '/Fixture/double_import_with_existing.php.inc',
-            __DIR__ . '/Fixture/already_with_use.php.inc',
-            __DIR__ . '/Fixture/already_class_name.php.inc',
+        $this->doTestFile($file);
+    }
 
-            // keep
-            __DIR__ . '/Fixture/keep.php.inc',
-            __DIR__ . '/Fixture/keep_same_end.php.inc',
-            __DIR__ . '/Fixture/keep_trait_use.php.inc',
+    public function provideFunctions(): Iterator
+    {
+        yield [__DIR__ . '/Fixture/import_function.php.inc'];
+        yield [__DIR__ . '/Fixture/import_function_no_class.php.inc'];
+        yield [__DIR__ . '/Fixture/import_return_doc.php.inc'];
+    }
 
-            // php doc
-            __DIR__ . '/Fixture/import_param_doc.php.inc',
-            __DIR__ . '/Fixture/import_return_doc.php.inc',
-            __DIR__ . '/Fixture/doc_combined.php.inc',
-            __DIR__ . '/Fixture/conflicting_endings.php.inc',
-            __DIR__ . '/Fixture/already_class_name_in_param_doc.php.inc',
+    public function provideNamespacedClasses(): Iterator
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/double_import.php.inc'];
+        yield [__DIR__ . '/Fixture/double_import_with_existing.php.inc'];
+        yield [__DIR__ . '/Fixture/already_with_use.php.inc'];
+        yield [__DIR__ . '/Fixture/already_class_name.php.inc'];
+        yield [__DIR__ . '/Fixture/no_class.php.inc'];
 
-            // buggy
-            __DIR__ . '/Fixture/many_imports.php.inc',
-            __DIR__ . '/Fixture/keep_static_method.php.inc',
-            __DIR__ . '/Fixture/keep_various_request.php.inc',
-            __DIR__ . '/Fixture/instance_of.php.inc',
+        // keep
+        yield [__DIR__ . '/Fixture/keep.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_same_end.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_trait_use.php.inc'];
 
-            // function
-            __DIR__ . '/Fixture/import_function.php.inc',
-            __DIR__ . '/Fixture/import_function_no_class.php.inc',
-        ]);
+        // php doc
+        yield [__DIR__ . '/Fixture/import_param_doc.php.inc'];
+        yield [__DIR__ . '/Fixture/doc_combined.php.inc'];
+        yield [__DIR__ . '/Fixture/conflicting_endings.php.inc'];
+        yield [__DIR__ . '/Fixture/already_class_name_in_param_doc.php.inc'];
+
+        // buggy
+        yield [__DIR__ . '/Fixture/many_imports.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_static_method.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_various_request.php.inc'];
+        yield [__DIR__ . '/Fixture/instance_of.php.inc'];
     }
 
     protected function getRectorClass(): string

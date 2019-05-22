@@ -86,7 +86,7 @@ CODE_SAMPLE
 
     private function isIteratorToArrayFuncCall(Expr $expr): bool
     {
-        return $expr instanceof Node\Expr\FuncCall && $this->isName($expr, 'iterator_to_array');
+        return $expr instanceof FuncCall && $this->isName($expr, 'iterator_to_array');
     }
 
     private function resolveValue(Expr $expr): Expr
@@ -100,7 +100,7 @@ CODE_SAMPLE
             return $expr;
         }
 
-        if (! $expr->cond instanceof Node\Expr\FuncCall) {
+        if (! $expr->cond instanceof FuncCall) {
             return $expr;
         }
 

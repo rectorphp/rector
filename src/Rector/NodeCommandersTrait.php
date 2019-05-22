@@ -5,6 +5,7 @@ namespace Rector\Rector;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Application\AppliedRectorCollector;
+use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\PhpParser\Node\Commander\PropertyAddingCommander;
@@ -34,16 +35,23 @@ trait NodeCommandersTrait
     private $propertyAddingCommander;
 
     /**
+     * @var UseAddingCommander
+     */
+    private $useAddingCommander;
+
+    /**
      * @required
      */
     public function setRequiredCommanders(
         NodeRemovingCommander $nodeRemovingCommander,
         NodeAddingCommander $nodeAddingCommander,
-        PropertyAddingCommander $propertyAddingCommander
+        PropertyAddingCommander $propertyAddingCommander,
+        UseAddingCommander $useAddingCommander
     ): void {
         $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->nodeAddingCommander = $nodeAddingCommander;
         $this->propertyAddingCommander = $propertyAddingCommander;
+        $this->useAddingCommander = $useAddingCommander;
     }
 
     protected function addNodeAfterNode(Node $newNode, Node $positionNode): void
@@ -71,6 +79,16 @@ trait NodeCommandersTrait
     protected function isNodeRemoved(Node $node): bool
     {
         return $this->nodeRemovingCommander->isNodeRemoved($node);
+    }
+
+    protected function addUseImport(Node $node, string $useImport): void
+    {
+        $this->useAddingCommander->addUseImport($node, $useImport);
+    }
+
+    protected function addFunctionUseImport(Node $node, string $functionUseImport): void
+    {
+        $this->useAddingCommander->addFunctionUseImport($node, $functionUseImport);
     }
 
     /**

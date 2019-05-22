@@ -7,7 +7,6 @@ use PhpParser\Node\Arg;
 
 final class CallableThisArrayToAnonymousFunctionRector
 {
-
     /**
      * @param Node\Param[] $params
      * @return Node\Arg[]
@@ -29,7 +28,6 @@ use PhpParser\Node\Arg;
 
 final class CallableThisArrayToAnonymousFunctionRector
 {
-
     /**
      * @param Param[] $params
      * @return Arg[]

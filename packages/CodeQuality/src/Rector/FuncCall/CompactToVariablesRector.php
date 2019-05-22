@@ -3,7 +3,11 @@
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -64,13 +68,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $array = new Node\Expr\Array_();
+        $array = new Array_();
 
         foreach ($node->args as $arg) {
             $variableName = $this->getValue($arg->value);
-            $array->items[] = new Node\Expr\ArrayItem(new Node\Expr\Variable($variableName), new Node\Scalar\String_(
-                $variableName
-            ));
+            $array->items[] = new ArrayItem(new Variable($variableName), new String_($variableName));
         }
 
         return $array;
