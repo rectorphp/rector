@@ -14,3 +14,6 @@ services:
     Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector: ~
     Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector: ~
     Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
+
+    # 'ClassName' → ClassName::class
+    Rector\Php\Rector\String_\StringClassNameToClassConstantRector: ~
