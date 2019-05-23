@@ -254,14 +254,10 @@ CODE_SAMPLE
 
     private function resolveUsedClassNames(Node $searchNode): void
     {
-        /** @var ClassLike[] $classLikeNodes */
-        $classLikeNodes = $this->betterNodeFinder->findInstanceOf($searchNode, ClassLike::class);
+        /** @var ClassLike[] $classLikes */
+        $classLikes = $this->betterNodeFinder->findClassLikes([$searchNode]);
 
-        foreach ($classLikeNodes as $classLikeNode) {
-            if ($classLikeNode->name === null) { // skip anonymous classes
-                continue;
-            }
-
+        foreach ($classLikes as $classLikeNode) {
             $name = $this->getName($classLikeNode->name);
             $this->resolvedNodeNames[$name][] = [$classLikeNode->name, $classLikeNode];
         }

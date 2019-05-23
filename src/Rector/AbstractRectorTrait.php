@@ -12,4 +12,5 @@ trait AbstractRectorTrait
     use NodeCommandersTrait;
     use NodeFactoryTrait;
     use VisibilityTrait;
+    use ValueResolverTrait;
 }

@@ -13,7 +13,6 @@ use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\PhpVersionProvider;
-use Rector\PhpParser\Node\Value\ValueResolver;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
@@ -37,11 +36,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $removedAndAddedFilesCollector;
 
     /**
-     * @var ValueResolver
-     */
-    private $valueResolver;
-
-    /**
      * @var PhpVersionProvider
      */
     private $phpVersionProvider;
@@ -58,13 +52,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     public function setAbstractRectorDependencies(
         SymfonyStyle $symfonyStyle,
-        ValueResolver $valueResolver,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory
     ): void {
         $this->symfonyStyle = $symfonyStyle;
-        $this->valueResolver = $valueResolver;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;
@@ -151,22 +143,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected function addFileWithContent(string $filePath, string $content): void
     {
         $this->removedAndAddedFilesCollector->addFileWithContent($filePath, $content);
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function getValue(Expr $expr)
-    {
-        return $this->valueResolver->resolve($expr);
-    }
-
-    /**
-     * @param mixed $expectedValue
-     */
-    protected function isValue(Expr $expr, $expectedValue): bool
-    {
-        return $this->getValue($expr) === $expectedValue;
     }
 
     /**
