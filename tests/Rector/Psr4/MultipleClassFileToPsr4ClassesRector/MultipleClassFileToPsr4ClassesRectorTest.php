@@ -45,9 +45,10 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
 
     /**
      * @param string[] $expectedExceptions
+     * @dataProvider provideWithoutNamespace
      * @dataProvider provideExceptionsData
-     * @dataProvider provideMissNamed
      * @dataProvider provideClassLike
+     * @dataProvider provideExceptionsData
      */
     public function test(string $file, array $expectedExceptions): void
     {
@@ -93,6 +94,18 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
             __DIR__ . '/Source/exception.php',
             [
                 __DIR__ . '/Fixture/JustOneException.php' => __DIR__ . '/Expected/JustOneException.php',
+            ],
+        ];
+    }
+
+    public function provideWithoutNamespace(): Iterator
+    {
+        // non namespaced PSR-4 file with one class
+        yield [
+            __DIR__ . '/Source/exceptions-without-namespace.php',
+            [
+                __DIR__ . '/Fixture/JustOneExceptionWithoutNamespace.php' => __DIR__ . '/Expected/JustOneExceptionWithoutNamespace.php',
+                __DIR__ . '/Fixture/JustTwoExceptionWithoutNamespace.php' => __DIR__ . '/Expected/JustTwoExceptionWithoutNamespace.php',
             ],
         ];
     }

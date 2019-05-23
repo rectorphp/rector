@@ -29,6 +29,7 @@ parameters:
         - '*/packages/ContributorTools/templates/*'
         # part of composer
         - 'tests/Composer/AutoloadWrongCasesEventSubscriber.php'
+        - '*/tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Expected/Just*ExceptionWithoutNamespace.php'
 
     ignoreErrors:
         # false positive
