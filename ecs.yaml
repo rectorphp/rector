@@ -28,6 +28,7 @@ services:
             - 'PhpParser\NodeVisitor\NameResolver'
             - 'PhpParser\Node\*'
             - 'PhpParser\Comment'
+            - 'PhpParser\Lexer'
             - 'PhpParser\Comment\Doc'
             - 'PhpParser\NodeTraverser'
             - 'Rector\Reporting\FileDiff'

@@ -23,3 +23,6 @@ services:
 
     # add spaces between class elements
     PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer: ~
+
+    # add declare strict types to start of the file
+    PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer: ~

@@ -170,3 +170,6 @@ parameters:
         - '#Cannot call method getRealPath\(\) on Symplify\\PackageBuilder\\FileSystem\\SmartFileInfo\|null#'
         # cascade irelevant
         - '#Parameter (.*?) expects array<PhpParser\\Node\\Stmt\>, array<PhpParser\\Node\> given#'
+
+        # known value
+        - '#Parameter \#1 \$node of method Rector\\Rector\\AbstractRector\:\:getName\(\) expects PhpParser\\Node, PhpParser\\Node\\Identifier\|null given#'

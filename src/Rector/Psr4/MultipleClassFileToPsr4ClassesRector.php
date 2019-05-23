@@ -4,6 +4,7 @@ namespace Rector\Rector\Psr4;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Declare_;
@@ -71,7 +72,7 @@ CODE_SAMPLE
             return;
         }
 
-        $shouldDelete = true;
+        $shouldDelete = false;
 
         /** @var Namespace_[] $namespaceNodes */
         $namespaceNodes = $this->betterNodeFinder->findInstanceOf($nodes, Namespace_::class);
@@ -79,8 +80,14 @@ CODE_SAMPLE
         if (count($namespaceNodes)) {
             $shouldDelete = $this->processNamespaceNodes($smartFileInfo, $namespaceNodes, $nodes);
         } else {
-            $declareNode = null;
+            // process only files with 2 classes and more
+            $classes = $this->betterNodeFinder->findClassLikes($nodes);
 
+            if (count($classes) <= 1) {
+                return;
+            }
+
+            $declareNode = null;
             foreach ($nodes as $node) {
                 if ($node instanceof Declare_) {
                     $declareNode = $node;
@@ -91,8 +98,9 @@ CODE_SAMPLE
                 }
 
                 $fileDestination = $this->createClassLikeFileDestination($node, $smartFileInfo);
-                if ($smartFileInfo->getRealPath() === $fileDestination) {
-                    $shouldDelete = false;
+
+                if ($smartFileInfo->getRealPath() !== $fileDestination) {
+                    $shouldDelete = true;
                 }
 
                 // has file changed?
@@ -103,7 +111,12 @@ CODE_SAMPLE
                     $nodes = [$node];
                 }
 
-                $this->printNodesToFilePath($nodes, $fileDestination);
+                // has file changed?
+                if ($shouldDelete) {
+                    $this->printNewNodesToFilePath($nodes, $fileDestination);
+                } else {
+                    $this->printNodesToFilePath($nodes, $fileDestination);
+                }
             }
         }
 
@@ -117,20 +130,20 @@ CODE_SAMPLE
      */
     private function shouldSkip(SmartFileInfo $smartFileInfo, array $nodes): bool
     {
-        /** @var ClassLike[] $classLikeNodes */
-        $classLikeNodes = $this->betterNodeFinder->findInstanceOf($nodes, ClassLike::class);
+        /** @var ClassLike[] $classLikes */
+        $classLikes = $this->betterNodeFinder->findClassLikes($nodes);
 
-        $nonAnonymousClassLikeNodes = array_filter($classLikeNodes, function (ClassLike $classLikeNode): ?Identifier {
+        $nonAnonymousClassLikes = array_filter($classLikes, function (ClassLike $classLikeNode): ?Identifier {
             return $classLikeNode->name;
         });
 
         // only process file with multiple classes || class with non PSR-4 format
-        if ($nonAnonymousClassLikeNodes === []) {
+        if ($nonAnonymousClassLikes === []) {
             return true;
         }
 
-        if (count($nonAnonymousClassLikeNodes) === 1) {
-            $nonAnonymousClassNode = $nonAnonymousClassLikeNodes[0];
+        if (count($nonAnonymousClassLikes) === 1) {
+            $nonAnonymousClassNode = $nonAnonymousClassLikes[0];
             if ((string) $nonAnonymousClassNode->name === $smartFileInfo->getFilename()) {
                 return true;
             }
@@ -172,11 +185,11 @@ CODE_SAMPLE
 
     /**
      * @param Namespace_[] $namespaceNodes
-     * @param Node\Stmt[] $nodes
+     * @param Stmt[] $nodes
      */
     private function processNamespaceNodes(SmartFileInfo $smartFileInfo, array $namespaceNodes, array $nodes): bool
     {
-        $shouldDelete = true;
+        $shouldDelete = false;
 
         foreach ($namespaceNodes as $namespaceNode) {
             $newStmtsSet = $this->removeAllOtherNamespaces($nodes, $namespaceNode);
@@ -186,26 +199,29 @@ CODE_SAMPLE
                     continue;
                 }
 
-                /** @var ClassLike[] $namespacedClassLikeNodes */
-                $namespacedClassLikeNodes = $this->betterNodeFinder->findInstanceOf($newStmt->stmts, ClassLike::class);
+                /** @var ClassLike[] $classLikes */
+                $classLikes = $this->betterNodeFinder->findClassLikes($nodes);
 
-                foreach ($namespacedClassLikeNodes as $classLikeNode) {
-                    if ($classLikeNode instanceof Class_ && $classLikeNode->isAnonymous()) {
-                        continue;
-                    }
+                if (count($classLikes) <= 1) {
+                    continue;
+                }
 
+                foreach ($classLikes as $classLikeNode) {
                     $this->removeAllClassLikesFromNamespaceNode($newStmt);
                     $newStmt->stmts[] = $classLikeNode;
 
                     $fileDestination = $this->createClassLikeFileDestination($classLikeNode, $smartFileInfo);
 
-                    if ($smartFileInfo->getRealPath() === $fileDestination) {
-                        $shouldDelete = false;
+                    if ($smartFileInfo->getRealPath() !== $fileDestination) {
+                        $shouldDelete = true;
                     }
 
                     // has file changed?
-
-                    $this->printNodesToFilePath($newStmtsSet, $fileDestination);
+                    if ($shouldDelete) {
+                        $this->printNewNodesToFilePath($newStmtsSet, $fileDestination);
+                    } else {
+                        $this->printNodesToFilePath($newStmtsSet, $fileDestination);
+                    }
                 }
             }
         }

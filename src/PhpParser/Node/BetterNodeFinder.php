@@ -7,6 +7,8 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -110,6 +112,27 @@ final class BetterNodeFinder
     public function find($nodes, callable $filter): array
     {
         return $this->nodeFinder->find($nodes, $filter);
+    }
+
+    /**
+     * Excludes anonymous classes!
+     *
+     * @param Node[] $nodes
+     * @return ClassLike[]
+     */
+    public function findClassLikes(array $nodes): array
+    {
+        return $this->find($nodes, function (Node $node): bool {
+            if (! $node instanceof ClassLike) {
+                return false;
+            }
+
+            if ($node instanceof Class_ && $node->isAnonymous()) {
+                return false;
+            }
+
+            return true;
+        });
     }
 
     /**

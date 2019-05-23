@@ -77,25 +77,6 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
                 __DIR__ . '/Fixture/SecondException.php' => __DIR__ . '/Expected/SecondException.php',
             ],
         ];
-
-        // source: https://github.com/nette/utils/blob/798f8c1626a8e0e23116d90e588532725cce7d0e/src/Utils/exceptions.php
-        yield [
-            __DIR__ . '/Source/nette-exceptions.php',
-            [
-                __DIR__ . '/Fixture/ArgumentOutOfRangeException.php' => __DIR__ . '/Expected/ArgumentOutOfRangeException.php',
-                __DIR__ . '/Fixture/InvalidStateException.php' => __DIR__ . '/Expected/InvalidStateException.php',
-                __DIR__ . '/Fixture/RegexpException.php' => __DIR__ . '/Expected/RegexpException.php',
-                __DIR__ . '/Fixture/UnknownImageFileException.php' => __DIR__ . '/Expected/UnknownImageFileException.php',
-            ],
-        ];
-
-        // non PSR-4 file with one class
-        yield [
-            __DIR__ . '/Source/exception.php',
-            [
-                __DIR__ . '/Fixture/JustOneException.php' => __DIR__ . '/Expected/JustOneException.php',
-            ],
-        ];
     }
 
     public function provideWithoutNamespace(): Iterator
