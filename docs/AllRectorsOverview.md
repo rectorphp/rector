@@ -1,4 +1,4 @@
-# All 288 Rectors Overview
+# All 291 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -2742,6 +2742,29 @@ Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configure
 
 <br>
 
+### `StringClassNameToClassConstantRector`
+
+- class: `Rector\Php\Rector\String_\StringClassNameToClassConstantRector`
+
+Replace string class names by <class>::class constant
+
+```diff
+ class AnotherClass
+ {
+ }
+
+ class SomeClass
+ {
+     public function run()
+     {
+-        return 'AnotherClass';
++        return \AnotherClass::class;
+     }
+ }
+```
+
+<br>
+
 ### `SensitiveHereNowDocRector`
 
 - class: `Rector\Php\Rector\String_\SensitiveHereNowDocRector`
@@ -3075,6 +3098,27 @@ Change array_key_exists() on property to property_exists()
 
 <br>
 
+### `RemoveMissingCompactVariableRector`
+
+- class: `Rector\Php\Rector\FuncCall\RemoveMissingCompactVariableRector`
+
+Remove non-existing vars from compact()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $value = 'yes';
+
+-        compact('value', 'non_existing');
++        compact('value');
+     }
+ }
+```
+
+<br>
+
 ### `ArrayKeyFirstLastRector`
 
 - class: `Rector\Php\Rector\FuncCall\ArrayKeyFirstLastRector`
@@ -3229,7 +3273,7 @@ Change __CLASS__ to self::class
 
 - class: `Rector\Php\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector`
 
-Change array_merge() to spread operator
+Change array_merge() to spread operator, except values with possible string key values
 
 ```diff
  class SomeClass
@@ -3237,14 +3281,14 @@ Change array_merge() to spread operator
      public function run($iter1, $iter2)
      {
 -        $values = array_merge(iterator_to_array($iter1), iterator_to_array($iter2));
-+        $values = [ ...$iter1, ...$iter2 ];
++        $values = [...$iter1, ...$iter2];
 
          // Or to generalize to all iterables
 -        $anotherValues = array_merge(
 -            is_array($iter1) ? $iter1 : iterator_to_array($iter1),
 -            is_array($iter2) ? $iter2 : iterator_to_array($iter2)
 -        );
-+        $anotherValues = [ ...$iter1, ...$iter2 ];
++        $anotherValues = [...$iter1, ...$iter2];
      }
  }
 ```
@@ -3441,6 +3485,31 @@ Changes if/else to spaceship <=> where useful
 -            return ($a[0] < $b[0]) ? 1 : -1;
 +            return $b[0] <=> $a[0];
          });
+     }
+ }
+```
+
+<br>
+
+### `BinaryOpBetweenNumberAndStringRector`
+
+- class: `Rector\Php\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector`
+
+Change binary operation between some number + string to PHP 7.1 compatible version
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = 5 + '';
+-        $value = 5.0 + 'hi';
++        $value = 5 + 0;
++        $value = 5.0 + 0
+
+         $name = 'Tom';
+-        $value = 5 * $name;
++        $value = 5 * 0;
      }
  }
 ```
