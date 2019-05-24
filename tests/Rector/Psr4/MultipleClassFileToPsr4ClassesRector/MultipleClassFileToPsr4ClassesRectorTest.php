@@ -46,12 +46,13 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
     /**
      * @param string[] $expectedExceptions
      * @dataProvider provideWithoutNamespace
-     * @dataProvider provideExceptionsData
      * @dataProvider provideClassLike
-     * @dataProvider provideExceptionsData
      * @dataProvider provideFileNameMatchingOneClass
+     *
+     * @dataProvider provideExceptionsData
+     * @dataProvider provideNetteExceptions
      */
-    public function test(string $file, array $expectedExceptions): void
+    public function test(string $file, array $expectedExceptions, bool $shouldDeleteOriginalFile): void
     {
         $fileInfo = new SmartFileInfo($file);
 
@@ -66,7 +67,24 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
             $this->assertFileEquals($expectedFormat, $expectedExceptionLocation);
         }
 
-        $this->assertFileNotExists($temporaryFilePath);
+        if ($shouldDeleteOriginalFile) {
+            $this->assertFileNotExists($temporaryFilePath);
+        }
+    }
+
+    public function provideNetteExceptions(): Iterator
+    {
+        // source: https://github.com/nette/utils/blob/798f8c1626a8e0e23116d90e588532725cce7d0e/src/Utils/exceptions.php
+        yield [
+            __DIR__ . '/Source/nette-exceptions.php',
+            [
+                __DIR__ . '/Fixture/ArgumentOutOfRangeException.php' => __DIR__ . '/Expected/ArgumentOutOfRangeException.php',
+                __DIR__ . '/Fixture/InvalidStateException.php' => __DIR__ . '/Expected/InvalidStateException.php',
+                __DIR__ . '/Fixture/RegexpException.php' => __DIR__ . '/Expected/RegexpException.php',
+                __DIR__ . '/Fixture/UnknownImageFileException.php' => __DIR__ . '/Expected/UnknownImageFileException.php',
+            ],
+            true,
+        ];
     }
 
     public function provideExceptionsData(): Iterator
@@ -77,6 +95,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
                 __DIR__ . '/Fixture/FirstException.php' => __DIR__ . '/Expected/FirstException.php',
                 __DIR__ . '/Fixture/SecondException.php' => __DIR__ . '/Expected/SecondException.php',
             ],
+            true,
         ];
     }
 
@@ -89,6 +108,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
                 __DIR__ . '/Fixture/JustOneExceptionWithoutNamespace.php' => __DIR__ . '/Expected/JustOneExceptionWithoutNamespace.php',
                 __DIR__ . '/Fixture/JustTwoExceptionWithoutNamespace.php' => __DIR__ . '/Expected/JustTwoExceptionWithoutNamespace.php',
             ],
+            true,
         ];
     }
 
@@ -100,6 +120,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
                 __DIR__ . '/Fixture/Miss.php' => __DIR__ . '/Expected/Miss.php',
                 __DIR__ . '/Fixture/Named.php' => __DIR__ . '/Expected/Named.php',
             ],
+            true,
         ];
     }
 
@@ -112,6 +133,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
                 __DIR__ . '/Fixture/MyClass.php' => __DIR__ . '/Expected/MyClass.php',
                 __DIR__ . '/Fixture/MyInterface.php' => __DIR__ . '/Expected/MyInterface.php',
             ],
+            true,
         ];
     }
 
@@ -123,6 +145,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
                 __DIR__ . '/Fixture/SomeClass.php' => __DIR__ . '/Expected/SomeClass.php',
                 __DIR__ . '/Fixture/SomeClass_Exception.php' => __DIR__ . '/Expected/SomeClass_Exception.php',
             ],
+            false,
         ];
     }
 
