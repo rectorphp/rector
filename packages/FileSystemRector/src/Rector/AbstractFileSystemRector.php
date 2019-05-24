@@ -146,6 +146,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         if ($this->areStringsSameWithoutSpaces($formatPreservingContent, $prettyPrintContent)) {
             $fileContent = $formatPreservingContent;
         } else {
+            $prettyPrintContent = $this->resolveLastEmptyLine($prettyPrintContent);
             $fileContent = $prettyPrintContent;
         }
 
@@ -167,26 +168,46 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      */
     private function areStringsSameWithoutSpaces(string $firstString, string $secondString): bool
     {
-        // remove all comments
+        return $this->clearString($firstString) === $this->clearString($secondString);
+    }
+
+    private function clearString(string $string): string
+    {
+        $string = $this->removeComments($string);
 
         // remove all spaces
-        $firstString = Strings::replace($firstString, '#\s+#', '');
-        $secondString = Strings::replace($secondString, '#\s+#', '');
-
-        $firstString = $this->removeComments($firstString);
-        $secondString = $this->removeComments($secondString);
+        $string = Strings::replace($string, '#\s+#', '');
 
         // remove FQN "\" that are added by basic printer
-        $firstString = Strings::replace($firstString, '#\\\\#', '');
-        $secondString = Strings::replace($secondString, '#\\\\#', '');
+        $string = Strings::replace($string, '#\\\\#', '');
 
-        return $firstString === $secondString;
+        // remove trailing commas, as one of them doesn't have to contain them
+        return Strings::replace($string, '#\,#', '');
     }
 
     private function removeComments(string $string): string
     {
+        // remove comments like this noe
+        $string = Strings::replace($string, '#\/\/(.*?)\n#', '');
+
         $string = Strings::replace($string, '#/\*.*?\*/#s', '');
 
         return Strings::replace($string, '#\n\s*\n#', "\n");
+    }
+
+    /**
+     * Add empty line in the end, if it is in the original tokens
+     */
+    private function resolveLastEmptyLine(string $prettyPrintContent): string
+    {
+        $tokens = $this->lexer->getTokens();
+        $lastToken = array_pop($tokens);
+        if ($lastToken) {
+            if (Strings::contains($lastToken[1], "\n")) {
+                $prettyPrintContent = trim($prettyPrintContent) . PHP_EOL;
+            }
+        }
+
+        return $prettyPrintContent;
     }
 }
