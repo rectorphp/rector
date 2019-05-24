@@ -49,6 +49,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
      * @dataProvider provideExceptionsData
      * @dataProvider provideClassLike
      * @dataProvider provideExceptionsData
+     * @dataProvider provideFileNameMatchingOneClass
      */
     public function test(string $file, array $expectedExceptions): void
     {
@@ -110,6 +111,17 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
                 __DIR__ . '/Fixture/MyTrait.php' => __DIR__ . '/Expected/MyTrait.php',
                 __DIR__ . '/Fixture/MyClass.php' => __DIR__ . '/Expected/MyClass.php',
                 __DIR__ . '/Fixture/MyInterface.php' => __DIR__ . '/Expected/MyInterface.php',
+            ],
+        ];
+    }
+
+    public function provideFileNameMatchingOneClass(): Iterator
+    {
+        yield [
+            __DIR__ . '/Source/SomeClass.php',
+            [
+                __DIR__ . '/Fixture/SomeClass.php' => __DIR__ . '/Expected/SomeClass.php',
+                __DIR__ . '/Fixture/SomeClass_Exception.php' => __DIR__ . '/Expected/SomeClass_Exception.php',
             ],
         ];
     }
