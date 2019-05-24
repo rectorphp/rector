@@ -18,6 +18,20 @@ final class RectorStrings
         return $privatesCaller->callPrivateMethod(new StringInput(''), 'tokenize', $command);
     }
 
+    /**
+     * @param string[] $array
+     */
+    public static function isInArrayInsensitive(string $checkedItem, array $array): bool
+    {
+        foreach ($array as $item) {
+            if (Strings::lower($item) === Strings::lower($checkedItem)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static function camelCaseToDashes(string $input): string
     {
         return self::camelCaseToGlue($input, '-');
