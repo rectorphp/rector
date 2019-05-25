@@ -3,14 +3,38 @@
 namespace Rector\CodingStyle\Naming;
 
 use Nette\Utils\Strings;
+use PhpParser\Node\Name;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class ClassNaming
 {
-    public function getShortName(string $fullyQualifiedName): string
-    {
-        $fullyQualifiedName = trim($fullyQualifiedName, '\\');
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
 
-        return Strings::after($fullyQualifiedName, '\\', -1) ?: $fullyQualifiedName;
+    public function __construct(NameResolver $nameResolver)
+    {
+        $this->nameResolver = $nameResolver;
+    }
+
+    /**
+     * @param string|Name $name
+     * @return string
+     */
+    public function getShortName($name): string
+    {
+        if ($name instanceof Name) {
+            $name = $this->nameResolver->resolve($name);
+            if ($name === null) {
+                throw new ShouldNotHappenException();
+            }
+        }
+
+        $name = trim($name, '\\');
+
+        return Strings::after($name, '\\', -1) ?: $name;
     }
 
     public function getNamespace(string $fullyQualifiedName): ?string
