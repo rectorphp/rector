@@ -2,7 +2,12 @@
     "name": "rector/rector",
     "description": "Instant upgrade and refactoring of your PHP code",
     "keywords": ["instant upgrades", "instant refactoring", "ast", "automated refactoring"],
+    "homepage": "https://getrector.org",
     "license": "MIT",
+    "authors": [
+        { "name": "Tomas Votruba", "email": "tomas.vot@gmail.com", "homepage": "https://tomasvotruba.com" },
+        { "name": "Jan Mikes", "email": "j.mikes@me.com", "homepage": "https://janmikes.cz" }
+    ],
     "bin": ["bin/rector"],
     "require": {
         "php": "^7.1",
