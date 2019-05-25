@@ -18,3 +18,4 @@ services:
     # 'ClassName' → ClassName::class
     Rector\Php\Rector\String_\StringClassNameToClassConstantRector: ~
     Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector: ~
+    Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector: ~
