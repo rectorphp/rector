@@ -48,4 +48,19 @@ final class VarTypeInfo extends AbstractTypeInfo
     {
         return $this->fqnTypes[0] ?? null;
     }
+
+    public function isIterable(): bool
+    {
+        if ($this->types === []) {
+            return false;
+        }
+
+        foreach ($this->types as $type) {
+            if ($type !== 'array') {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
