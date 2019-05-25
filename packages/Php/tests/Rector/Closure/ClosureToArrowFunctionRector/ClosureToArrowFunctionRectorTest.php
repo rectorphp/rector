@@ -9,10 +9,6 @@ final class ClosureToArrowFunctionRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        if (! class_exists('PhpParser\Node\Expr\ArrowFunction')) {
-            $this->markTestSkipped('Waits on php-parser release');
-        }
-
         $this->doTestFiles([
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/referenced_but_not_used.php.inc',
