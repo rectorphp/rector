@@ -3,6 +3,8 @@
 namespace Rector\Php\Rector\String_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -86,7 +88,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return new Node\Expr\ClassConstFetch(new Node\Name\FullyQualified($classLikeName), 'class');
+        return new ClassConstFetch(new FullyQualified($classLikeName), 'class');
     }
 
     private function classLikeExists(string $classLikeName): bool

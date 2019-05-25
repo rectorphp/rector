@@ -27,6 +27,11 @@ final class Option
     /**
      * @var string
      */
+    public const OPTION_OUTPUT_FORMAT = 'output-format';
+
+    /**
+     * @var string
+     */
     public const OPTION_LEVEL = 'level';
 
     /**

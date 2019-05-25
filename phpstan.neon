@@ -173,3 +173,4 @@ parameters:
 
         # known value
         - '#Parameter \#1 \$node of method Rector\\Rector\\AbstractRector\:\:getName\(\) expects PhpParser\\Node, PhpParser\\Node\\Identifier\|null given#'
+        - '#Cannot cast array<string\>\|bool\|string\|null to string#'

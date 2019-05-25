@@ -17,6 +17,7 @@ final class Configuration
     private $hideAutoloadErrors = false;
 
     /**
+     * Should use base coding style after the run
      * @var bool
      */
     private $withStyle = false;

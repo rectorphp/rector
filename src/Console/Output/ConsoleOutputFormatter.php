@@ -3,11 +3,17 @@
 namespace Rector\Console\Output;
 
 use Rector\Application\Error;
+use Rector\Contract\Console\Output\OutputFormatterInterface;
 use Rector\Reporting\FileDiff;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class ProcessCommandReporter
+final class ConsoleOutputFormatter implements OutputFormatterInterface
 {
+    /**
+     * @var string
+     */
+    public const NAME = 'console';
+
     /**
      * @var SymfonyStyle
      */
@@ -16,6 +22,11 @@ final class ProcessCommandReporter
     public function __construct(SymfonyStyle $symfonyStyle)
     {
         $this->symfonyStyle = $symfonyStyle;
+    }
+
+    public function getName(): string
+    {
+        return self::NAME;
     }
 
     /**

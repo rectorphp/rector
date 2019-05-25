@@ -8,7 +8,8 @@ use Rector\Autoloading\AdditionalAutoloader;
 use Rector\CodingStyle\AfterRectorCodingStyle;
 use Rector\Configuration\Configuration;
 use Rector\Configuration\Option;
-use Rector\Console\Output\ProcessCommandReporter;
+use Rector\Console\Output\ConsoleOutputFormatter;
+use Rector\Console\Output\OutputFormatterCollector;
 use Rector\Console\Shell;
 use Rector\FileSystem\FilesFinder;
 use Rector\Guard\RectorGuard;
@@ -30,11 +31,6 @@ final class ProcessCommand extends AbstractCommand
      * @var FilesFinder
      */
     private $filesFinder;
-
-    /**
-     * @var ProcessCommandReporter
-     */
-    private $processCommandReporter;
 
     /**
      * @var AdditionalAutoloader
@@ -72,25 +68,27 @@ final class ProcessCommand extends AbstractCommand
     private $fileExtensions = [];
 
     /**
+     * @var OutputFormatterCollector
+     */
+    private $outputFormatterCollector;
+
+    /**
      * @param string[] $fileExtensions
      */
     public function __construct(
         SymfonyStyle $symfonyStyle,
         FilesFinder $phpFilesFinder,
-        ProcessCommandReporter $processCommandReporter,
         AdditionalAutoloader $additionalAutoloader,
         RectorGuard $rectorGuard,
         ErrorAndDiffCollector $errorAndDiffCollector,
         AfterRectorCodingStyle $afterRectorCodingStyle,
         Configuration $configuration,
         RectorApplication $rectorApplication,
+        OutputFormatterCollector $outputFormatterCollector,
         array $fileExtensions
     ) {
-        parent::__construct();
-
         $this->symfonyStyle = $symfonyStyle;
         $this->filesFinder = $phpFilesFinder;
-        $this->processCommandReporter = $processCommandReporter;
         $this->additionalAutoloader = $additionalAutoloader;
         $this->rectorGuard = $rectorGuard;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
@@ -98,6 +96,9 @@ final class ProcessCommand extends AbstractCommand
         $this->configuration = $configuration;
         $this->rectorApplication = $rectorApplication;
         $this->fileExtensions = $fileExtensions;
+        $this->outputFormatterCollector = $outputFormatterCollector;
+
+        parent::__construct();
     }
 
     protected function configure(): void
@@ -135,6 +136,15 @@ final class ProcessCommand extends AbstractCommand
             InputOption::VALUE_NONE,
             'Hide autoload errors for the moment.'
         );
+
+        $availableOutputFormatters = $this->outputFormatterCollector->getNames();
+        $this->addOption(
+            Option::OPTION_OUTPUT_FORMAT,
+            null,
+            InputOption::VALUE_OPTIONAL,
+            sprintf('Select output format: "%s".', implode('", "', $availableOutputFormatters)),
+            ConsoleOutputFormatter::NAME
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -151,10 +161,13 @@ final class ProcessCommand extends AbstractCommand
 
         $this->rectorApplication->runOnFileInfos($phpFileInfos);
 
-        $this->processCommandReporter->reportFileDiffs($this->errorAndDiffCollector->getFileDiffs());
+        $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
+        $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
+
+        $outputFormatter->reportFileDiffs($this->errorAndDiffCollector->getFileDiffs());
 
         if ($this->errorAndDiffCollector->getErrors() !== []) {
-            $this->processCommandReporter->reportErrors($this->errorAndDiffCollector->getErrors());
+            $outputFormatter->reportErrors($this->errorAndDiffCollector->getErrors());
             return Shell::CODE_ERROR;
         }
 
