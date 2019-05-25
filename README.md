@@ -1,4 +1,5 @@
 # Rector - Upgrade your Legacy App to Modern Codebase
+[![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors)
 
 Rector is a **rec**onstruc**tor** tool - it does **instant upgrades** and **instant refactoring** of your code.
 Why doing it manually if 80% Rector can handle for you?
@@ -304,3 +305,13 @@ docker run -v $(pwd):/project rector/rector:latest process /project/app --config
 Do you use Rector to upgrade your code? Share it here:
 
 - [drupal8-rector/drupal8-rector](https://github.com/drupal8-rector/drupal8-rector) by @mxr576
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

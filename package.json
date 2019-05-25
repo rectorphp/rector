@@ -1,0 +1,11 @@
+{
+    "dependencies": {
+        "all-contributors-cli": "^6.3"
+    },
+	"scripts": {
+    	"contributors:init": "all-contributors init",
+    	"contributors:add": "all-contributors add",
+	    "contributors:generate": "all-contributors generate"
+  	},
+    "private": true
+}

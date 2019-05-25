@@ -15,3 +15,6 @@ phpstan-paths.txt
 
 # tests - travis
 /laravel-dir
+
+/node_modules
+package-lock.json
