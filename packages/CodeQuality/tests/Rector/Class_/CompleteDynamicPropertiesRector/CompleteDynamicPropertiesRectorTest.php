@@ -1,0 +1,19 @@
+<?php declare(strict_types=1);
+
+namespace Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector;
+
+use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
+use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+
+final class CompleteDynamicPropertiesRectorTest extends AbstractRectorTestCase
+{
+    public function test(): void
+    {
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/multiple_types.php.inc']);
+    }
+
+    protected function getRectorClass(): string
+    {
+        return CompleteDynamicPropertiesRector::class;
+    }
+}
