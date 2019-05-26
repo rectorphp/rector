@@ -96,6 +96,7 @@ CODE_SAMPLE
             return null;
         }
 
+        // type is already set → skip
         if ($node->type !== null) {
             return null;
         }

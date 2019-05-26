@@ -1,4 +1,4 @@
-# All 299 Rectors Overview
+# All 300 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -763,6 +763,28 @@ Joins concat of 2 strings
      {
 -        $name = 'Hi' . ' Tom';
 +        $name = 'Hi Tom';
+     }
+ }
+```
+
+<br>
+
+### `CompleteDynamicPropertiesRector`
+
+- class: `Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector`
+
+Add missing dynamic properties
+
+```diff
+ class SomeClass
+ {
++    /**
++     * @var int
++     */
++    public $value;
+     public function set()
+     {
+         $this->value = 5;
      }
  }
 ```
