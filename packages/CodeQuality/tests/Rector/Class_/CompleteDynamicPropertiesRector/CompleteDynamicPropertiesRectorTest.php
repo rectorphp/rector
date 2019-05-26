@@ -9,7 +9,11 @@ final class CompleteDynamicPropertiesRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/multiple_types.php.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/multiple_types.php.inc',
+            __DIR__ . '/Fixture/skip_defined.php.inc',
+        ]);
     }
 
     protected function getRectorClass(): string
