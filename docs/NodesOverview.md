@@ -23,6 +23,13 @@ $someVariable[0]
 ```
 <br>
 
+#### `PhpParser\Node\Expr\ArrowFunction`
+
+```php
+fn() => 1
+```
+<br>
+
 #### `PhpParser\Node\Expr\Assign`
 
 ```php

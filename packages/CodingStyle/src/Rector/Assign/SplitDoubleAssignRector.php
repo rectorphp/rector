@@ -54,11 +54,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->expr instanceof Node\Expr\Assign) {
+        if (! $node->expr instanceof Assign) {
             return null;
         }
 
-        $newAssign = new Node\Expr\Assign($node->var, $node->expr->expr);
+        $newAssign = new Assign($node->var, $node->expr->expr);
 
         $this->addNodeAfterNode($node->expr, $node);
 

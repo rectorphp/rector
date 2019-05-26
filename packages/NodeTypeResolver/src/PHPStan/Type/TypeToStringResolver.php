@@ -54,7 +54,8 @@ final class TypeToStringResolver
 
         $arrayTypes = array_unique($arrayTypes);
 
-        return array_map(function (string $arrayType) {
+        /** @var string[] $arrayType */
+        return array_map(function (string $arrayType): string {
             return $arrayType . '[]';
         }, $arrayTypes);
     }

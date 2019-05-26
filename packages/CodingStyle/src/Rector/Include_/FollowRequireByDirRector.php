@@ -4,7 +4,9 @@ namespace Rector\CodingStyle\Rector\Include_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Include_;
+use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -65,7 +67,7 @@ CODE_SAMPLE
         $this->removeExtraDotSlash($includedPath);
         $this->prependSlashIfMissing($includedPath);
 
-        $node->expr = new Node\Expr\BinaryOp\Concat(new Node\Scalar\MagicConst\Dir(), $includedPath);
+        $node->expr = new Concat(new Dir(), $includedPath);
 
         return $node;
     }

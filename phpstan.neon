@@ -158,13 +158,6 @@ parameters:
         - '#Method Rector\\Collector\\CallableCollectorPopulator\:\:populate\(\) should return array<Closure\> but returns array<int\|string, callable\>#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$args#'
 
-        # waits on php-parser release
-        - '#ArrowFunction#'
-        - '#Parameter \#6 \$fixup \(int\|null\) of method Rector\\PhpParser\\Printer\\BetterStandardPrinter\:\:pArray\(\) should be compatible with parameter \$subNodeName \(string\) of method PhpParser\\PrettyPrinterAbstract\:\:pArray\(\)#'
-        - '#Parameter \#6 \$subNodeName of method PhpParser\\PrettyPrinterAbstract\:\:pArray\(\) expects string, int\|null given#'
-        - '#Parameter \#7 \$fixup of method PhpParser\\PrettyPrinterAbstract\:\:pArray\(\) expects int\|null, string\|null given#'
-        - '#Class PhpParser\\Node\\Expr\\ArrayItem constructor invoked with 5 parameters, 1\-4 required#'
-
         - '#Parameter \#2 \$name of method Rector\\Rector\\AbstractRector\:\:isName\(\) expects string, string\|null given#'
         # file always exists here
         - '#Cannot call method getRealPath\(\) on Symplify\\PackageBuilder\\FileSystem\\SmartFileInfo\|null#'
@@ -174,3 +167,6 @@ parameters:
         # known value
         - '#Parameter \#1 \$node of method Rector\\Rector\\AbstractRector\:\:getName\(\) expects PhpParser\\Node, PhpParser\\Node\\Identifier\|null given#'
         - '#Cannot cast array<string\>\|bool\|string\|null to string#'
+
+        - '#Parameter \#1 \$node of method Rector\\PhpParser\\Node\\Manipulator\\VisibilityManipulator\:\:makeAbstract\(\) expects PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#'
+

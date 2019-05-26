@@ -1,4 +1,4 @@
-# All 291 Rectors Overview
+# All 298 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -770,6 +770,26 @@ Joins concat of 2 strings
 
 ## CodingStyle
 
+### `SplitDoubleAssignRector`
+
+- class: `Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector`
+
+Split multiple inline assigns to each own lines default value, to prevent undefined array issues
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $one = $two = 1;
++        $one = 1;
++        $two = 1;
+     }
+ }
+```
+
+<br>
+
 ### `ReturnArrayClassMethodToYieldRector`
 
 - class: `Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector`
@@ -820,6 +840,30 @@ services:
      {
 -        yield 'event' => 'callback';
 +        return ['event' => 'callback'];
+     }
+ }
+```
+
+<br>
+
+### `CatchExceptionNameMatchingTypeRector`
+
+- class: `Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector`
+
+Type and name of catch exception should match
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         try {
+             // ...
+-        } catch (SomeException $typoException) {
+-            $typoException->getMessage();
++        } catch (SomeException $someException) {
++            $someException->getMessage();
+         }
      }
  }
 ```
@@ -892,6 +936,31 @@ Import fully qualified names to use statements
 
 <br>
 
+### `ArrayPropertyDefaultValueRector`
+
+- class: `Rector\CodingStyle\Rector\Property\ArrayPropertyDefaultValueRector`
+
+Array property should have default value, to prevent undefined array issues
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @var int[]
+      */
+-    private $items;
++    private $items = [];
+
+     public function run()
+     {
+         foreach ($items as $item) {
+         }
+     }
+ }
+```
+
+<br>
+
 ### `RemoveUnusedAliasRector`
 
 - class: `Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector`
@@ -905,6 +974,25 @@ Removes unused use aliases
 -class SomeClass extends BaseKernel
 +class SomeClass extends Kernel
  {
+ }
+```
+
+<br>
+
+### `FollowRequireByDirRector`
+
+- class: `Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector`
+
+include/require should be followed by absolute path
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        require 'autoload.php';
++        require __DIR__ . '/autoload.php';
+     }
  }
 ```
 
@@ -944,6 +1032,27 @@ Changes redundant anonymous bool functions to simple calls
 -    return is_dir($path);
 -});
 +array_filter($paths, "is_dir");
+```
+
+<br>
+
+### `ConsistentPregDelimiterRector`
+
+- class: `Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector`
+
+Replace PREG delimiter with configured one
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        preg_match('~value~', $value);
+-        preg_match_all('~value~im', $value);
++        preg_match('#value#', $value);
++        preg_match_all('#value#im', $value);
+     }
+ }
 ```
 
 <br>
@@ -990,6 +1099,24 @@ Separate constant and properties to own lines
 +     * @var string
 +     */
 +    public $isIsThough;
+ }
+```
+
+<br>
+
+### `VarConstantCommentRector`
+
+- class: `Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector`
+
+Constant should have a @var comment with type
+
+```diff
+ class SomeClass
+ {
++    /**
++     * @var string
++     */
+     const HI = 'hi';
  }
 ```
 
@@ -4244,6 +4371,30 @@ Finalize every class constant that is used only locally
      {
          return self::LOCAL_ONLY;
      }
+ }
+```
+
+<br>
+
+### `AbstractChildlessUnusedClassesRector`
+
+- class: `Rector\SOLID\Rector\Class_\AbstractChildlessUnusedClassesRector`
+
+Classes that have no children nor are used, should have abstract
+
+```diff
+ class SomeClass extends PossibleAbstractClass
+ {
+ }
+
+-class PossibleAbstractClass
++abstract class PossibleAbstractClass
+ {
+ }
+
+ function run()
+ {
+     return new SomeClass();
  }
 ```
 
