@@ -21,3 +21,4 @@ services:
     Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector: ~
     Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector: ~
     Rector\CodingStyle\Rector\Property\ArrayPropertyDefaultValueRector: ~
+    Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector: ~
