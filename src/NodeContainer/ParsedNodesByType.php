@@ -413,6 +413,29 @@ final class ParsedNodesByType
         return $this->methodsCallsByTypeAndMethod[$className][$methodName] ?? [];
     }
 
+    /**
+     * @return MethodCall[]|StaticCall[]
+     */
+    public function findMethodCallsOnClass(string $className): array
+    {
+        return $this->methodsCallsByTypeAndMethod[$className] ?? [];
+    }
+
+    /**
+     * @return New_[]
+     */
+    public function findNewNodesByClass(string $className): array
+    {
+        $newNodesByClass = [];
+        foreach ($this->getNewNodes() as $newNode) {
+            if ($this->nameResolver->isName($newNode->class, $className)) {
+                $newNodesByClass[] = $newNode;
+            }
+        }
+
+        return $newNodesByClass;
+    }
+
     private function addClass(Class_ $classNode): void
     {
         if ($this->isClassAnonymous($classNode)) {

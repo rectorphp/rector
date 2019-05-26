@@ -63,7 +63,7 @@ final class PropertyManipulator
             }
 
             // is it the name match?
-            if ($this->nameResolver->resolve($node) !== $this->nameResolver->resolve($property)) {
+            if (! $this->nameResolver->areNamesEqual($node, $property)) {
                 return null;
             }
 

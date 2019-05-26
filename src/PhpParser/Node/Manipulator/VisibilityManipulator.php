@@ -14,7 +14,7 @@ final class VisibilityManipulator
     /**
      * @var string[]
      */
-    private $allowedNodeTypes = [ClassMethod::class, Property::class, ClassConst::class];
+    private $allowedNodeTypes = [ClassMethod::class, Property::class, ClassConst::class, Class_::class];
 
     /**
      * @param ClassMethod|Property|ClassConst $node
@@ -25,13 +25,21 @@ final class VisibilityManipulator
     }
 
     /**
+     * @param ClassMethod|Class_ $node
+     */
+    public function makeAbstract(Node $node): void
+    {
+        $this->addVisibilityFlag($node, 'abstract');
+    }
+
+    /**
      * @param ClassMethod|Property|ClassConst $node
      */
     public function replaceVisibilityFlag(Node $node, string $visibility): void
     {
         $visibility = strtolower($visibility);
 
-        if ($visibility !== 'static') {
+        if ($visibility !== 'static' && $visibility !== 'abstract') {
             $this->removeOriginalVisibilityFromFlags($node);
         }
 
@@ -66,7 +74,7 @@ final class VisibilityManipulator
     }
 
     /**
-     * @param ClassMethod|Property|ClassConst $node
+     * @param Class_|ClassMethod|Property|ClassConst $node
      */
     private function addVisibilityFlag(Node $node, string $visibility): void
     {
@@ -86,6 +94,10 @@ final class VisibilityManipulator
 
         if ($visibility === 'static') {
             $node->flags |= Class_::MODIFIER_STATIC;
+        }
+
+        if ($visibility === 'abstract') {
+            $node->flags |= Class_::MODIFIER_ABSTRACT;
         }
     }
 

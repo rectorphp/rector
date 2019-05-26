@@ -3,6 +3,8 @@
 namespace Rector\CodingStyle\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -78,7 +80,7 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Node\Stmt\Property $parentNode */
+        /** @var Property $parentNode */
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($parentNode);
@@ -90,7 +92,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->default = new Node\Expr\Array_();
+        $node->default = new Array_();
 
         return $node;
     }

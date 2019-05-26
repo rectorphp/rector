@@ -3,6 +3,7 @@
 namespace Rector\CodingStyle\Rector\Catch_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Catch_;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -100,16 +101,13 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function renameVariableInStmts(
-        Node\Stmt\Catch_ $catch,
-        string $oldVariableName,
-        string $newVariableName
-    ): void {
+    private function renameVariableInStmts(Catch_ $catch, string $oldVariableName, string $newVariableName): void
+    {
         $this->callableNodeTraverser->traverseNodesWithCallable($catch->stmts, function (Node $node) use (
             $oldVariableName,
             $newVariableName
         ): void {
-            if (! $node instanceof Node\Expr\Variable) {
+            if (! $node instanceof Variable) {
                 return;
             }
 
