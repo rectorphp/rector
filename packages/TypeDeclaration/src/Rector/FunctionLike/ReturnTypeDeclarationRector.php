@@ -19,7 +19,7 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
     /**
      * @var string[]
      */
-    private $excludeClassMethodNames = ['__construct', '__destruct', '__clone'];
+    private const EXCLUDED_METHOD_NAMES = ['__construct', '__destruct', '__clone'];
 
     public function getDefinition(): RectorDefinition
     {
@@ -69,7 +69,7 @@ CODE_SAMPLE
         }
 
         // skip excluded methods
-        if ($node instanceof ClassMethod && $this->isNames($node, $this->excludeClassMethodNames)) {
+        if ($node instanceof ClassMethod && $this->isNames($node, self::EXCLUDED_METHOD_NAMES)) {
             return null;
         }
 

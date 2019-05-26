@@ -4,6 +4,8 @@ parameters:
         - "/Fixtures/"
         - "/Expected/"
         - "/Source/"
+        - "/tests/" # for better performance of local changes
+
         # autoload-buggy cases
         - "*.php.inc"
         # string might not exist for SplitStringClassConstantToClassConstFetchRector
@@ -15,3 +17,4 @@ parameters:
     php_version_features: '7.1'
 
 services:
+#    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
