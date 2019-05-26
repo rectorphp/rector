@@ -9,6 +9,10 @@ Development of Rector is made possible thanks to these awesome backers! Would yo
 
 Check out all the tiers - higher ones include additional goodies like placing the logo of your company in Rector's README or creating custom set for your needs.
 
+## $20+
+
+- Jan Votruba
+
 ## $5+
 
 - Kerrial Newham
