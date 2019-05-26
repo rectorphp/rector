@@ -125,7 +125,7 @@ CODE_SAMPLE
         }
 
         if (! $this->docBlockManipulator->hasTag($node, 'var')) {
-            $this->docBlockManipulator->addVarTag($node, $type);
+            $this->docBlockManipulator->changeVarTag($node, $type);
         }
 
         $this->docBlockManipulator->removeTagFromNode($node, $this->annotationClass);

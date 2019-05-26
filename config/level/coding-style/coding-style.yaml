@@ -22,3 +22,4 @@ services:
     Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector: ~
     Rector\CodingStyle\Rector\Property\ArrayPropertyDefaultValueRector: ~
     Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector: ~
+    Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector: ~

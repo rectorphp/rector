@@ -175,7 +175,7 @@ final class UniqueObjectFactoryFactory
                 ->getNode();
 
             // add doc block
-            $this->docBlockManipulator->addVarTag($property, '\\' . $type);
+            $this->docBlockManipulator->changeVarTag($property, '\\' . $type);
             $properties[] = $property;
         }
 
