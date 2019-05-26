@@ -1,4 +1,4 @@
-# All 298 Rectors Overview
+# All 299 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -14,6 +14,7 @@
 - [DomainDrivenDesign](#domaindrivendesign)
 - [Guzzle](#guzzle)
 - [Laravel](#laravel)
+- [Legacy](#legacy)
 - [MysqlToMysqli](#mysqltomysqli)
 - [Nette](#nette)
 - [NetteTesterToPHPUnit](#nettetestertophpunit)
@@ -1724,6 +1725,37 @@ Move help facade-like function calls to constructor injection
 -        $viewFactory = view();
 +        $template = $this->viewFactory->make('template.blade');
 +        $viewFactory = $this->viewFactory;
+     }
+ }
+```
+
+<br>
+
+## Legacy
+
+### `ChangeSingletonToServiceRector`
+
+- class: `Rector\Legacy\Rector\ClassMethod\ChangeSingletonToServiceRector`
+
+Change singleton class to normal class that can be registered as a service
+
+```diff
+ class SomeClass
+ {
+-    private static $instance;
+-
+-    private function __construct()
++    public function __construct()
+     {
+-    }
+-
+-    public static function getInstance()
+-    {
+-        if (null === static::$instance) {
+-            static::$instance = new static();
+-        }
+-
+-        return static::$instance;
      }
  }
 ```
@@ -4376,9 +4408,9 @@ Finalize every class constant that is used only locally
 
 <br>
 
-### `AbstractChildlessUnusedClassesRector`
+### `MakeUnusedClassesWithChildrenAbstractRector`
 
-- class: `Rector\SOLID\Rector\Class_\AbstractChildlessUnusedClassesRector`
+- class: `Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector`
 
 Classes that have no children nor are used, should have abstract
 
@@ -4390,11 +4422,6 @@ Classes that have no children nor are used, should have abstract
 -class PossibleAbstractClass
 +abstract class PossibleAbstractClass
  {
- }
-
- function run()
- {
-     return new SomeClass();
  }
 ```
 
