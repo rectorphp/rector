@@ -94,7 +94,7 @@ CODE_SAMPLE
 
         $varType = implode('|', $varTypeInfo->getDocTypes());
 
-        $this->docBlockManipulator->addVarTag($node, $varType);
+        $this->docBlockManipulator->changeVarTag($node, $varType);
 
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 

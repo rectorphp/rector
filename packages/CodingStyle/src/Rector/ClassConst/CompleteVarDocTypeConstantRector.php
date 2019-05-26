@@ -81,7 +81,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->docBlockManipulator->addVarTag($node, $knownType);
+        $this->docBlockManipulator->changeVarTag($node, $knownType);
 
         return $node;
     }

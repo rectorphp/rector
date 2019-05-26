@@ -253,8 +253,9 @@ final class DocBlockManipulator
         return $phpDocInfo->getTagsByName($name);
     }
 
-    public function addVarTag(Node $node, string $type): void
+    public function changeVarTag(Node $node, string $type): void
     {
+        $this->removeTagFromNode($node, 'var');
         $this->addTypeSpecificTag($node, 'var', $type);
     }
 
@@ -487,9 +488,12 @@ final class DocBlockManipulator
             $phpDocInfo = $this->createPhpDocInfoFromNode($node);
             $phpDocNode = $phpDocInfo->getPhpDocNode();
 
-            $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode(
-                '\\' . $type
-            ), '', '');
+            // preffix possible class name
+            if (! $this->typeAnalyzer->isPhpReservedType($type)) {
+                $type = '\\' . $type;
+            }
+
+            $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode($type), '', '');
             $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@' . $name, $varTagValueNode);
 
             $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
