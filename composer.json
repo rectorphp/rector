@@ -25,16 +25,16 @@
         "symfony/dependency-injection": "^3.4|^4.2",
         "symfony/finder": "^3.4|^4.2",
         "symfony/process": "^3.4|^4.2",
-        "symplify/package-builder": "^5.4.16"
+        "symplify/package-builder": "^6.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.14",
         "ocramius/package-versions": "^1.4",
         "phpunit/phpunit": "^7.5|^8.0",
-        "symplify/changelog-linker": "^5.4.16",
-        "symplify/easy-coding-standard": "^5.4.16",
-        "symplify/monorepo-builder": "^5.4.16",
-        "symplify/phpstan-extensions": "^5.4.16",
+        "symplify/changelog-linker": "^6.0",
+        "symplify/easy-coding-standard": "^6.0",
+        "symplify/monorepo-builder": "^6.0",
+        "symplify/phpstan-extensions": "^6.0",
         "thecodingmachine/phpstan-strict-rules": "^0.11",
         "tracy/tracy": "^2.5"
     },
