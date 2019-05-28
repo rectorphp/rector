@@ -9,7 +9,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
-## Unreleased
+## [v0.5.0]- 2019-05-28
 
 ### Added
 
@@ -251,3 +251,4 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@Inject]: https://github.com/Inject
 [@DaveLiddament]: https://github.com/DaveLiddament
 [v0.4.12]: https://github.com/rectorphp/rector/compare/v0.4.11...v0.4.12
+[v0.5.0]: https://github.com/rectorphp/rector/compare/v0.4.12...v0.5.0
