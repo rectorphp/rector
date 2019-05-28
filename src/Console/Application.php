@@ -120,15 +120,6 @@ final class Application extends SymfonyApplication
         return array_values($filteredCommands);
     }
 
-    private function getConfigPath(InputInterface $input): string
-    {
-        if ($input->getParameterOption('--config')) {
-            return $input->getParameterOption('--config');
-        }
-
-        return $this->getDefaultConfigPath();
-    }
-
     private function removeUnusedOptions(InputDefinition $inputDefinition): void
     {
         $options = $inputDefinition->getOptions();
