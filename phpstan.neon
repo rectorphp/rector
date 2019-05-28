@@ -152,7 +152,6 @@ parameters:
         - '#PHPDoc tag @param for parameter \$classLike with type PhpParser\\Builder\\Trait_\|PhpParser\\Node\\Stmt\\Interface_ is not subtype of native type PhpParser\\Node\\Stmt\\ClassLike#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable\:\:\$name#'
         - '#Empty array passed to foreach#'
-        - '#Method Rector\\RemovingStatic\\UniqueObjectFactoryFactory\:\:resolveClassShortName\(\) should return string but returns string\|false#'
         - '#Strict comparison using \=\=\= between PhpParser\\Node\\Expr\\ArrayItem and null will always evaluate to false#'
         - '#Parameter \#2 \.\.\.\$args of function array_merge expects array, array<int, string\>\|false given#'
         - '#Method Rector\\Collector\\CallableCollectorPopulator\:\:populate\(\) should return array<Closure\> but returns array<int\|string, callable\>#'
@@ -167,9 +166,5 @@ parameters:
         # known value
         - '#Parameter \#1 \$node of method Rector\\Rector\\AbstractRector\:\:getName\(\) expects PhpParser\\Node, PhpParser\\Node\\Identifier\|null given#'
         - '#Cannot cast array<string\>\|bool\|string\|null to string#'
-
-        - '#Parameter \#1 \$node of method Rector\\PhpParser\\Node\\Manipulator\\VisibilityManipulator\:\:makeAbstract\(\) expects PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#'
-        - '#Method Rector\\Legacy\\NodeAnalyzer\\SingletonClassMethodAnalyzer\:\:matchStaticPropertyFetch\(\) should return PhpParser\\Node\\Expr\\StaticPropertyFetch\|null but returns PhpParser\\Node\\Expr#'
-        - '#Method Rector\\Legacy\\Rector\\ClassMethod\\ChangeSingletonToServiceRector\:\:matchStaticPropertyFetchAndGetSingletonMethodName\(\) should return array<string\>\|null but returns array<int, string\|null\>#'
         - '#Method Rector\\ContributorTools\\Configuration\\ConfigurationFactory\:\:resolveCategoryFromFqnNodeTypes\(\) should return string but returns string\|null#'
-
+        - '#Method Rector\\Legacy\\Rector\\ClassMethod\\ChangeSingletonToServiceRector\:\:matchStaticPropertyFetchAndGetSingletonMethodName\(\) should return array<string\>\|null but returns array<int, string\|null\>#'
