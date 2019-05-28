@@ -29,6 +29,15 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     {
         $this->reportFileDiffs($errorAndDiffCollector->getFileDiffs());
         $this->reportErrors($errorAndDiffCollector->getErrors());
+
+        if ($errorAndDiffCollector->getErrors() !== []) {
+            return;
+        }
+
+        $this->symfonyStyle->success(sprintf(
+            'Rector is done! %d changed files',
+            count($errorAndDiffCollector->getFileDiffs()) + $errorAndDiffCollector->getRemovedAndAddedFilesCount()
+        ));
     }
 
     public function getName(): string

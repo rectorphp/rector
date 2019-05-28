@@ -17,16 +17,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
 final class ProcessCommand extends AbstractCommand
 {
-    /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
     /**
      * @var FilesFinder
      */
@@ -76,7 +70,6 @@ final class ProcessCommand extends AbstractCommand
      * @param string[] $fileExtensions
      */
     public function __construct(
-        SymfonyStyle $symfonyStyle,
         FilesFinder $phpFilesFinder,
         AdditionalAutoloader $additionalAutoloader,
         RectorGuard $rectorGuard,
@@ -87,7 +80,6 @@ final class ProcessCommand extends AbstractCommand
         OutputFormatterCollector $outputFormatterCollector,
         array $fileExtensions
     ) {
-        $this->symfonyStyle = $symfonyStyle;
         $this->filesFinder = $phpFilesFinder;
         $this->additionalAutoloader = $additionalAutoloader;
         $this->rectorGuard = $rectorGuard;
@@ -140,7 +132,7 @@ final class ProcessCommand extends AbstractCommand
         $availableOutputFormatters = $this->outputFormatterCollector->getNames();
         $this->addOption(
             Option::OPTION_OUTPUT_FORMAT,
-            null,
+            'o',
             InputOption::VALUE_OPTIONAL,
             sprintf('Select output format: "%s".', implode('", "', $availableOutputFormatters)),
             ConsoleOutputFormatter::NAME
@@ -149,11 +141,11 @@ final class ProcessCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->configuration->resolveFromInput($input);
+
         $this->rectorGuard->ensureSomeRectorsAreRegistered();
 
         $source = (array) $input->getArgument(Option::SOURCE);
-
-        $this->configuration->resolveFromInput($input);
 
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, $this->fileExtensions);
 
@@ -166,20 +158,15 @@ final class ProcessCommand extends AbstractCommand
 
         $outputFormatter->report($this->errorAndDiffCollector);
 
-        if ($this->errorAndDiffCollector->getErrors() !== []) {
-            return Shell::CODE_ERROR;
-        }
-
+        // apply coding standard
         if ($this->configuration->isWithStyle()) {
             $this->afterRectorCodingStyle->apply($source);
         }
 
-        $this->symfonyStyle->success(sprintf(
-            'Rector is done! %d changed files',
-            count(
-                $this->errorAndDiffCollector->getFileDiffs()
-            ) + $this->errorAndDiffCollector->getRemovedAndAddedFilesCount()
-        ));
+        // some errors were found → fail
+        if ($this->errorAndDiffCollector->getErrors() !== []) {
+            return Shell::CODE_ERROR;
+        }
 
         // inverse error code for CI dry-run
         if ($this->configuration->isDryRun() && count($this->errorAndDiffCollector->getFileDiffs())) {

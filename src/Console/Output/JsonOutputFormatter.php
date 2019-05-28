@@ -4,32 +4,52 @@ namespace Rector\Console\Output;
 
 use Nette\Utils\Json;
 use Rector\Application\ErrorAndDiffCollector;
+use Rector\Configuration\Configuration;
 use Rector\Contract\Console\Output\OutputFormatterInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
     /**
+     * @var string
+     */
+    public const NAME = 'json';
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
 
-    public function __construct(SymfonyStyle $symfonyStyle)
+    /**
+     * @var Configuration
+     */
+    private $configuration;
+
+    public function __construct(SymfonyStyle $symfonyStyle, Configuration $configuration)
     {
         $this->symfonyStyle = $symfonyStyle;
+        $this->configuration = $configuration;
     }
 
     public function getName(): string
     {
-        return 'json';
+        return self::NAME;
     }
 
     public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
     {
         $fileDiffs = $errorAndDiffCollector->getFileDiffs();
 
-        $errorsArray = [];
-        $errorsArray['totals']['changed_files'] = count($fileDiffs);
+        $errorsArray = [
+            'meta' => [
+                'version' => $this->configuration->getPrettyVersion(),
+                'config' => $this->configuration->getConfigFilePath(),
+            ],
+            'totals' => [
+                'changed_files' => count($fileDiffs),
+                'removed_and_added_files_count' => $errorAndDiffCollector->getRemovedAndAddedFilesCount(),
+            ],
+        ];
 
         ksort($fileDiffs);
 
