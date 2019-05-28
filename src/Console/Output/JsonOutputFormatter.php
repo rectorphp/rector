@@ -53,14 +53,16 @@ final class JsonOutputFormatter implements OutputFormatterInterface
 
         ksort($fileDiffs);
         foreach ($fileDiffs as $fileDiff) {
+            $relativeFilePath = $fileDiff->getSmartFileInfo()->getRelativeFilePath();
+
             $errorsArray['file_diffs'][] = [
-                'file' => $fileDiff->getFile(),
+                'file' => $relativeFilePath,
                 'diff' => $fileDiff->getDiff(),
                 'applied_rectors' => $fileDiff->getAppliedRectorClasses(),
             ];
 
             // for Rector CI
-            $errorsArray['changed_files'][] = $fileDiff->getFile();
+            $errorsArray['changed_files'][] = $relativeFilePath;
         }
 
         $errors = $errorAndDiffCollector->getErrors();
