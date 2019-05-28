@@ -51,9 +51,9 @@ final class FileDiff
         return $this->diffConsoleFormatted;
     }
 
-    public function getSmartFileInfo(): SmartFileInfo
+    public function getRelativeFilePath(): string
     {
-        return $this->smartFileInfo;
+        return $this->smartFileInfo->getRelativeFilePath();
     }
 
     /**
