@@ -1,9 +1,9 @@
 imports:
-    - { resource: 'vendor/symplify/easy-coding-standard/config/psr2.yml' }
-    - { resource: 'vendor/symplify/easy-coding-standard/config/php71.yml' }
-    - { resource: 'vendor/symplify/easy-coding-standard/config/symplify.yml' }
-    - { resource: 'vendor/symplify/easy-coding-standard/config/common.yml' }
-    - { resource: 'vendor/symplify/easy-coding-standard/config/clean-code.yml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/set/psr2.yaml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/set/php71.yaml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/set/symplify.yaml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/set/common.yaml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/set/clean-code.yaml' }
 
 services:
     Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
@@ -56,6 +56,7 @@ parameters:
         - '*utils/ContributorTools/templates/*'
 
     skip:
+        PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff.Underscore: ~
         Symplify\CodingStandard\Sniffs\Architecture\DuplicatedClassShortNameSniff: ~
         # skip temporary due to missing "import" feature in PhpStorm
         SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff.PartialUse: ~
