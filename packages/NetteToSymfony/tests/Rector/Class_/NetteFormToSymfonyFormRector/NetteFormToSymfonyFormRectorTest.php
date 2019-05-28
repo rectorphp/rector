@@ -18,8 +18,10 @@ final class NetteFormToSymfonyFormRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [NetteFormToSymfonyFormRector::class => [
-            '$presenterClass' => NettePresenter::class,
-        ]];
+        return [
+            NetteFormToSymfonyFormRector::class => [
+                '$presenterClass' => NettePresenter::class,
+            ],
+        ];
     }
 }

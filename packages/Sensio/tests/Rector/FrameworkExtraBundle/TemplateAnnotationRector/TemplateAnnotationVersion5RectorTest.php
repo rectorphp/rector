@@ -22,6 +22,10 @@ final class TemplateAnnotationVersion5RectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [TemplateAnnotationRector::class => ['$version' => 5]];
+        return [
+            TemplateAnnotationRector::class => [
+                '$version' => 5,
+            ],
+        ];
     }
 }

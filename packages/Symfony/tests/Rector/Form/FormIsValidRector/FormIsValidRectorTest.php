@@ -18,6 +18,10 @@ final class FormIsValidRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [FormIsValidRector::class => ['$formClass' => Form::class]];
+        return [
+            FormIsValidRector::class => [
+                '$formClass' => Form::class,
+            ],
+        ];
     }
 }

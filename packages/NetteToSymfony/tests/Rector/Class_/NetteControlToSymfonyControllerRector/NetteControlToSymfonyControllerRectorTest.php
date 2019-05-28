@@ -18,8 +18,10 @@ final class NetteControlToSymfonyControllerRectorTest extends AbstractRectorTest
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [NetteControlToSymfonyControllerRector::class => [
-            '$netteControlClass' => NetteControl::class,
-        ]];
+        return [
+            NetteControlToSymfonyControllerRector::class => [
+                '$netteControlClass' => NetteControl::class,
+            ],
+        ];
     }
 }

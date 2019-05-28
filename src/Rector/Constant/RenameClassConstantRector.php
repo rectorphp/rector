@@ -44,10 +44,12 @@ $value = SomeClass::NEW_CONSTANT;
 $value = DifferentClass::NEW_CONSTANT;
 CODE_SAMPLE
                 ,
-                ['SomeClass' => [
-                    'OLD_CONSTANT' => 'NEW_CONSTANT',
-                    'OTHER_OLD_CONSTANT' => 'DifferentClass::NEW_CONSTANT',
-                ]]
+                [
+                    'SomeClass' => [
+                        'OLD_CONSTANT' => 'NEW_CONSTANT',
+                        'OTHER_OLD_CONSTANT' => 'DifferentClass::NEW_CONSTANT',
+                    ],
+                ]
             ),
         ]);
     }

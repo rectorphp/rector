@@ -14,6 +14,10 @@ final class ExceptionCorrector
             return null;
         }
 
+        if (! isset($throwable->getTrace()[0]['class'])) {
+            return null;
+        }
+
         /** @var string $class */
         $class = $throwable->getTrace()[0]['class'];
         if (! is_a($class, RectorInterface::class, true)) {

@@ -18,6 +18,10 @@ final class MessageAsArrayRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [MessageAsArrayRector::class => ['$messageType' => MessageType::class]];
+        return [
+            MessageAsArrayRector::class => [
+                '$messageType' => MessageType::class,
+            ],
+        ];
     }
 }

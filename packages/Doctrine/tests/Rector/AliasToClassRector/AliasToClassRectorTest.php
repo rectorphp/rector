@@ -18,11 +18,13 @@ final class AliasToClassRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [AliasToClassRector::class => [
-            '$aliasesToNamespaces' => [
-                'App' => 'App\Entity',
+        return [
+            AliasToClassRector::class => [
+                '$aliasesToNamespaces' => [
+                    'App' => 'App\Entity',
+                ],
+                '$entityManagerClass' => DoctrineEntityManager::class,
             ],
-            '$entityManagerClass' => DoctrineEntityManager::class,
-        ]];
+        ];
     }
 }

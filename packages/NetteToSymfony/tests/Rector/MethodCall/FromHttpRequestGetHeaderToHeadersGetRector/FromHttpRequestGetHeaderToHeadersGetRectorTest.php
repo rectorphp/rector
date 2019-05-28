@@ -18,8 +18,10 @@ final class FromHttpRequestGetHeaderToHeadersGetRectorTest extends AbstractRecto
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [FromHttpRequestGetHeaderToHeadersGetRector::class => [
-            '$netteHttpRequestClass' => NetteHttpRequest::class,
-        ]];
+        return [
+            FromHttpRequestGetHeaderToHeadersGetRector::class => [
+                '$netteHttpRequestClass' => NetteHttpRequest::class,
+            ],
+        ];
     }
 }

@@ -18,6 +18,10 @@ final class ReadOnlyOptionToAttributeRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [ReadOnlyOptionToAttributeRector::class => ['$formBuilderType' => FormBuilder::class]];
+        return [
+            ReadOnlyOptionToAttributeRector::class => [
+                '$formBuilderType' => FormBuilder::class,
+            ],
+        ];
     }
 }

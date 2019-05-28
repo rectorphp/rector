@@ -18,6 +18,10 @@ final class GetParameterToConstructorInjectionRectorTest extends AbstractRectorT
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [GetParameterToConstructorInjectionRector::class => ['$controllerClass' => SymfonyController::class]];
+        return [
+            GetParameterToConstructorInjectionRector::class => [
+                '$controllerClass' => SymfonyController::class,
+            ],
+        ];
     }
 }

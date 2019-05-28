@@ -87,7 +87,9 @@ final class CheckoutEntityFactory
 }               
 CODE_SAMPLE
                 ,
-                ['$staticTypes' => ['SomeStaticClass']]
+                [
+                    '$staticTypes' => ['SomeStaticClass'],
+                ]
             ),
         ]);
     }

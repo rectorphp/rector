@@ -23,10 +23,12 @@ final class ObjectToScalarRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [ObjectToScalarRector::class => [
-            '$valueObjectsToSimpleTypes' => [
-                SomeValueObject::class => 'string',
+        return [
+            ObjectToScalarRector::class => [
+                '$valueObjectsToSimpleTypes' => [
+                    SomeValueObject::class => 'string',
+                ],
             ],
-        ]];
+        ];
     }
 }

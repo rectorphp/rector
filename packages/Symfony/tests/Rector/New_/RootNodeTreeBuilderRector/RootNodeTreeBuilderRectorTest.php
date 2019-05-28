@@ -18,6 +18,10 @@ final class RootNodeTreeBuilderRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [RootNodeTreeBuilderRector::class => ['$treeBuilderClass' => TreeBuilder::class]];
+        return [
+            RootNodeTreeBuilderRector::class => [
+                '$treeBuilderClass' => TreeBuilder::class,
+            ],
+        ];
     }
 }

@@ -140,7 +140,9 @@ final class AnotherClassFactory
 }
 CODE_SAMPLE
                 ,
-                ['typesToServices' => ['StaticClass']]
+                [
+                    'typesToServices' => ['StaticClass'],
+                ]
             ), ]);
     }
 

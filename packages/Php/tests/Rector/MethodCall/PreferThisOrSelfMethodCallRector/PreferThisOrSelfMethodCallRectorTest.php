@@ -19,11 +19,13 @@ final class PreferThisOrSelfMethodCallRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [PreferThisOrSelfMethodCallRector::class => [
-            '$typeToPreference' => [
-                AbstractTestCase::class => 'self',
-                BeLocalClass::class => 'this',
+        return [
+            PreferThisOrSelfMethodCallRector::class => [
+                '$typeToPreference' => [
+                    AbstractTestCase::class => 'self',
+                    BeLocalClass::class => 'this',
+                ],
             ],
-        ]];
+        ];
     }
 }
