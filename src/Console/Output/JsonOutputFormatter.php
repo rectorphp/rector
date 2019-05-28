@@ -3,9 +3,8 @@
 namespace Rector\Console\Output;
 
 use Nette\Utils\Json;
-use Rector\Application\Error;
+use Rector\Application\ErrorAndDiffCollector;
 use Rector\Contract\Console\Output\OutputFormatterInterface;
-use Rector\Reporting\FileDiff;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class JsonOutputFormatter implements OutputFormatterInterface
@@ -25,11 +24,10 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         return 'json';
     }
 
-    /**
-     * @param FileDiff[] $fileDiffs
-     */
-    public function reportFileDiffs(array $fileDiffs): void
+    public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
     {
+        $fileDiffs = $errorAndDiffCollector->getFileDiffs();
+
         $errorsArray = [];
         $errorsArray['totals']['changed_files'] = count($fileDiffs);
 
@@ -43,17 +41,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
             ];
         }
 
-        $json = Json::encode($errorsArray, Json::PRETTY);
-
-        $this->symfonyStyle->writeln($json);
-    }
-
-    /**
-     * @param Error[] $errors
-     */
-    public function reportErrors(array $errors): void
-    {
-        $errorsArray = [];
+        $errors = $errorAndDiffCollector->getErrors();
         $errorsArray['totals']['errors'] = count($errors);
 
         foreach ($errors as $error) {

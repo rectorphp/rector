@@ -164,10 +164,9 @@ final class ProcessCommand extends AbstractCommand
         $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
 
-        $outputFormatter->reportFileDiffs($this->errorAndDiffCollector->getFileDiffs());
+        $outputFormatter->report($this->errorAndDiffCollector);
 
         if ($this->errorAndDiffCollector->getErrors() !== []) {
-            $outputFormatter->reportErrors($this->errorAndDiffCollector->getErrors());
             return Shell::CODE_ERROR;
         }
 
@@ -182,6 +181,7 @@ final class ProcessCommand extends AbstractCommand
             ) + $this->errorAndDiffCollector->getRemovedAndAddedFilesCount()
         ));
 
+        // inverse error code for CI dry-run
         if ($this->configuration->isDryRun() && count($this->errorAndDiffCollector->getFileDiffs())) {
             return Shell::CODE_ERROR;
         }

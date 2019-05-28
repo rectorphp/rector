@@ -3,6 +3,7 @@
 namespace Rector\Console\Output;
 
 use Rector\Application\Error;
+use Rector\Application\ErrorAndDiffCollector;
 use Rector\Contract\Console\Output\OutputFormatterInterface;
 use Rector\Reporting\FileDiff;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -24,6 +25,12 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         $this->symfonyStyle = $symfonyStyle;
     }
 
+    public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
+    {
+        $this->reportFileDiffs($errorAndDiffCollector->getFileDiffs());
+        $this->reportErrors($errorAndDiffCollector->getErrors());
+    }
+
     public function getName(): string
     {
         return self::NAME;
@@ -32,7 +39,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     /**
      * @param FileDiff[] $fileDiffs
      */
-    public function reportFileDiffs(array $fileDiffs): void
+    private function reportFileDiffs(array $fileDiffs): void
     {
         if (count($fileDiffs) <= 0) {
             return;
@@ -64,7 +71,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     /**
      * @param Error[] $errors
      */
-    public function reportErrors(array $errors): void
+    private function reportErrors(array $errors): void
     {
         foreach ($errors as $error) {
             $message = sprintf(
