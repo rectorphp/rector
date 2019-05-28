@@ -9,7 +9,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
-## [v0.5.0]- 2019-05-28
+## [v0.5.0] - 2019-05-28
 
 ### Added
 
