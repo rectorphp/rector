@@ -17,10 +17,14 @@ final class RenameAnnotationRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [RenameAnnotationRector::class => [
-            '$classToAnnotationMap' => [
-                'PHPUnit\Framework\TestCase' => ['scenario' => 'test'],
+        return [
+            RenameAnnotationRector::class => [
+                '$classToAnnotationMap' => [
+                    'PHPUnit\Framework\TestCase' => [
+                        'scenario' => 'test',
+                    ],
+                ],
             ],
-        ]];
+        ];
     }
 }

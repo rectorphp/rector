@@ -18,8 +18,10 @@ final class RemoveInterfacesRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [RemoveInterfacesRector::class => [
-            '$interfacesToRemove' => [SomeInterface::class],
-        ]];
+        return [
+            RemoveInterfacesRector::class => [
+                '$interfacesToRemove' => [SomeInterface::class],
+            ],
+        ];
     }
 }

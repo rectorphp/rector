@@ -28,6 +28,10 @@ final class AnnotatedPropertyInjectToConstructorInjectionRectorTest extends Abst
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [AnnotatedPropertyInjectToConstructorInjectionRector::class => ['$annotation' => 'inject']];
+        return [
+            AnnotatedPropertyInjectToConstructorInjectionRector::class => [
+                '$annotation' => 'inject',
+            ],
+        ];
     }
 }

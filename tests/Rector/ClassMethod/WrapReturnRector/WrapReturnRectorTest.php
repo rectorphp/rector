@@ -18,12 +18,14 @@ final class WrapReturnRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [WrapReturnRector::class => [
-            '$typeToMethodToWrap' => [
-                SomeReturnClass::class => [
-                    'getItem' => 'array',
+        return [
+            WrapReturnRector::class => [
+                '$typeToMethodToWrap' => [
+                    SomeReturnClass::class => [
+                        'getItem' => 'array',
+                    ],
                 ],
             ],
-        ]];
+        ];
     }
 }

@@ -22,11 +22,21 @@ final class ParentTypehintedArgumentRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [ParentTypehintedArgumentRector::class => [
-            '$typehintForArgumentByMethodAndClass' => [
-                ParserInterface::class => ['parse' => ['code' => 'string']],
-                ClassMetadataFactory::class => ['setEntityManager' => ['$em' => 'Doctrine\ORM\EntityManagerInterface']],
+        return [
+            ParentTypehintedArgumentRector::class => [
+                '$typehintForArgumentByMethodAndClass' => [
+                    ParserInterface::class => [
+                        'parse' => [
+                            'code' => 'string',
+                        ],
+                    ],
+                    ClassMetadataFactory::class => [
+                        'setEntityManager' => [
+                            '$em' => 'Doctrine\ORM\EntityManagerInterface',
+                        ],
+                    ],
+                ],
             ],
-        ]];
+        ];
     }
 }

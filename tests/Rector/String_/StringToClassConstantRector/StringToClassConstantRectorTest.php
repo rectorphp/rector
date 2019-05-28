@@ -17,11 +17,13 @@ final class StringToClassConstantRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [StringToClassConstantRector::class => [
-            '$stringsToClassConstants' => [
-                'compiler.post_dump' => ['Yet\AnotherClass', 'CONSTANT'],
-                'compiler.to_class' => ['Yet\AnotherClass', 'class'],
+        return [
+            StringToClassConstantRector::class => [
+                '$stringsToClassConstants' => [
+                    'compiler.post_dump' => ['Yet\AnotherClass', 'CONSTANT'],
+                    'compiler.to_class' => ['Yet\AnotherClass', 'class'],
+                ],
             ],
-        ]];
+        ];
     }
 }

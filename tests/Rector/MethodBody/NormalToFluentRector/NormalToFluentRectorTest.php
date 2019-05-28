@@ -23,10 +23,12 @@ final class NormalToFluentRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [NormalToFluentRector::class => [
-            '$fluentMethodsByType' => [
-                FluentInterfaceClass::class => ['someFunction', 'otherFunction', 'joinThisAsWell'],
+        return [
+            NormalToFluentRector::class => [
+                '$fluentMethodsByType' => [
+                    FluentInterfaceClass::class => ['someFunction', 'otherFunction', 'joinThisAsWell'],
+                ],
             ],
-        ]];
+        ];
     }
 }

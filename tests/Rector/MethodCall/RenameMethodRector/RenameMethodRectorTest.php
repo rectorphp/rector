@@ -29,25 +29,27 @@ final class RenameMethodRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [RenameMethodRector::class => [
-            '$oldToNewMethodsByClass' => [
-                AbstractType::class => [
-                    'setDefaultOptions' => 'configureOptions',
-                ],
-                Html::class => [
-                    'add' => 'addHtml',
-                    'addToArray' => [
-                        'name' => 'addHtmlArray',
-                        'array_key' => 'hi',
+        return [
+            RenameMethodRector::class => [
+                '$oldToNewMethodsByClass' => [
+                    AbstractType::class => [
+                        'setDefaultOptions' => 'configureOptions',
+                    ],
+                    Html::class => [
+                        'add' => 'addHtml',
+                        'addToArray' => [
+                            'name' => 'addHtmlArray',
+                            'array_key' => 'hi',
+                        ],
+                    ],
+                    FormMacros::class => [
+                        'renderFormBegin' => ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin'],
+                    ],
+                    '*Presenter' => [
+                        'run' => '__invoke',
                     ],
                 ],
-                FormMacros::class => [
-                    'renderFormBegin' => ['Nette\Bridges\FormsLatte\Runtime', 'renderFormBegin'],
-                ],
-                '*Presenter' => [
-                    'run' => '__invoke',
-                ],
             ],
-        ]];
+        ];
     }
 }

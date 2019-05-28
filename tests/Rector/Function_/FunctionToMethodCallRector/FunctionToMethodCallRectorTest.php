@@ -17,10 +17,12 @@ final class FunctionToMethodCallRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [FunctionToMethodCallRector::class => [
-            '$functionToMethodCall' => [
-                'view' => ['this', 'render'],
+        return [
+            FunctionToMethodCallRector::class => [
+                '$functionToMethodCall' => [
+                    'view' => ['this', 'render'],
+                ],
             ],
-        ]];
+        ];
     }
 }

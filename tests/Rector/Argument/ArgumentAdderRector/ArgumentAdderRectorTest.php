@@ -23,24 +23,26 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [ArgumentAdderRector::class => [
-            '$positionWithDefaultValueByMethodNamesByClassTypes' => [
-                SomeContainerBuilder::class => [
-                    'compile' => [
-                        0 => [
-                            'name' => 'isCompiled',
-                            'default_value' => false,
+        return [
+            ArgumentAdderRector::class => [
+                '$positionWithDefaultValueByMethodNamesByClassTypes' => [
+                    SomeContainerBuilder::class => [
+                        'compile' => [
+                            0 => [
+                                'name' => 'isCompiled',
+                                'default_value' => false,
+                            ],
                         ],
-                    ],
-                    'addCompilerPass' => [
-                        2 => [
-                            'name' => 'priority',
-                            'default_value' => 0,
-                            'type' => 'int',
+                        'addCompilerPass' => [
+                            2 => [
+                                'name' => 'priority',
+                                'default_value' => 0,
+                                'type' => 'int',
+                            ],
                         ],
                     ],
                 ],
             ],
-        ]];
+        ];
     }
 }

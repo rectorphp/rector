@@ -19,12 +19,15 @@ final class NewObjectToFactoryCreateRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [NewObjectToFactoryCreateRector::class => [
-            '$objectToFactoryMethod' => [
-                MyClass::class => [
-                    'class' => MyClassFactory::class,
-                    'method' => 'create',
-                ], ],
-        ]];
+        return [
+            NewObjectToFactoryCreateRector::class => [
+                '$objectToFactoryMethod' => [
+                    MyClass::class => [
+                        'class' => MyClassFactory::class,
+                        'method' => 'create',
+                    ],
+                ],
+            ],
+        ];
     }
 }

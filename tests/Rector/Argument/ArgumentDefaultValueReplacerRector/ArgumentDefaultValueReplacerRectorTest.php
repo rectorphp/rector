@@ -35,26 +35,30 @@ final class ArgumentDefaultValueReplacerRectorTest extends AbstractRectorTestCas
                         ],
                     ],
                     'Symfony\Component\Yaml\Yaml' => [
-                        'parse' => [1 => [[
-                            'before' => ['false', 'false', 'true'],
-                            'after' => 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT_FOR_MAP',
-                        ], [
-                            'before' => ['false', 'true'],
-                            'after' => 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT',
-                        ], [
-                            'before' => 'false',
-                            'after' => 0,
-                        ], [
-                            'before' => 'true',
-                            'after' => 'Symfony\Component\Yaml\Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE',
-                        ]]],
-                        'dump' => [3 => [[
-                            'before' => ['false', 'true'],
-                            'after' => 'Symfony\Component\Yaml\Yaml::DUMP_OBJECT',
-                        ], [
-                            'before' => 'true',
-                            'after' => 'Symfony\Component\Yaml\Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE',
-                        ]]],
+                        'parse' => [
+                            1 => [[
+                                'before' => ['false', 'false', 'true'],
+                                'after' => 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT_FOR_MAP',
+                            ], [
+                                'before' => ['false', 'true'],
+                                'after' => 'Symfony\Component\Yaml\Yaml::PARSE_OBJECT',
+                            ], [
+                                'before' => 'false',
+                                'after' => 0,
+                            ], [
+                                'before' => 'true',
+                                'after' => 'Symfony\Component\Yaml\Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE',
+                            ]],
+                        ],
+                        'dump' => [
+                            3 => [[
+                                'before' => ['false', 'true'],
+                                'after' => 'Symfony\Component\Yaml\Yaml::DUMP_OBJECT',
+                            ], [
+                                'before' => 'true',
+                                'after' => 'Symfony\Component\Yaml\Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE',
+                            ]],
+                        ],
                     ],
                 ],
             ],
