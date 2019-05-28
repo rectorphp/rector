@@ -162,7 +162,7 @@ CODE_SAMPLE
     private function normalizeValueToArgument($value): Arg
     {
         // class constants → turn string to composite
-        if (Strings::contains($value, '::')) {
+        if (is_string($value) && Strings::contains($value, '::')) {
             [$class, $constant] = explode('::', $value);
             $classConstantFetchNode = $this->createClassConstant($class, $constant);
 

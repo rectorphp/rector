@@ -185,7 +185,7 @@ final class UniqueObjectFactoryFactory
     private function resolveClassShortName(string $name): string
     {
         if (Strings::contains($name, '\\')) {
-            return Strings::after($name, '\\', -1);
+            return (string) Strings::after($name, '\\', -1);
         }
 
         return $name;

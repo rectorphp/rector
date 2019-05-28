@@ -171,4 +171,5 @@ parameters:
         - '#Parameter \#1 \$node of method Rector\\PhpParser\\Node\\Manipulator\\VisibilityManipulator\:\:makeAbstract\(\) expects PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#'
         - '#Method Rector\\Legacy\\NodeAnalyzer\\SingletonClassMethodAnalyzer\:\:matchStaticPropertyFetch\(\) should return PhpParser\\Node\\Expr\\StaticPropertyFetch\|null but returns PhpParser\\Node\\Expr#'
         - '#Method Rector\\Legacy\\Rector\\ClassMethod\\ChangeSingletonToServiceRector\:\:matchStaticPropertyFetchAndGetSingletonMethodName\(\) should return array<string\>\|null but returns array<int, string\|null\>#'
+        - '#Method Rector\\ContributorTools\\Configuration\\ConfigurationFactory\:\:resolveCategoryFromFqnNodeTypes\(\) should return string but returns string\|null#'
 

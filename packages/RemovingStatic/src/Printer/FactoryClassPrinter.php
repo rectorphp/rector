@@ -77,7 +77,12 @@ final class FactoryClassPrinter
         }
 
         $directoryPath = Strings::before($classFileInfo->getRealPath(), DIRECTORY_SEPARATOR, -1);
-        $bareClassName = Strings::after($this->nameResolver->resolve($oldClass), '\\', -1) . 'Factory.php';
+        $resolvedOldClass = $this->nameResolver->resolve($oldClass);
+        if ($resolvedOldClass === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $bareClassName = Strings::after($resolvedOldClass, '\\', -1) . 'Factory.php';
 
         return $directoryPath . DIRECTORY_SEPARATOR . $bareClassName;
     }

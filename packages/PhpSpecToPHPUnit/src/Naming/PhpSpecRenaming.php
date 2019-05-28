@@ -48,7 +48,7 @@ final class PhpSpecRenaming
         $name = $this->removeNamePrefixes($name);
 
         // from PhpSpec to PHPUnit method naming convention
-        $name = $this->stringFormatConverter->underscoreToCamelCase($name);
+        $name = $this->stringFormatConverter->underscoreAndHyphenToCamelCase($name);
 
         // add "test", so PHPUnit runs the method
         if (! Strings::startsWith($name, 'test')) {

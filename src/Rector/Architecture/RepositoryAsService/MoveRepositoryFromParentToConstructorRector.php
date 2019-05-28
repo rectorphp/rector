@@ -114,6 +114,10 @@ CODE_SAMPLE
         }
 
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            return null;
+        }
+
         if (! Strings::endsWith($className, 'Repository')) {
             return null;
         }
