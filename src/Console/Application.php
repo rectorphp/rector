@@ -3,6 +3,8 @@
 namespace Rector\Console;
 
 use Jean85\PrettyVersions;
+use Rector\Configuration\Configuration;
+use Rector\Console\Output\JsonOutputFormatter;
 use Rector\ContributorTools\Command\DumpNodesCommand;
 use Rector\ContributorTools\Command\DumpRectorsCommand;
 use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
@@ -25,14 +27,20 @@ final class Application extends SymfonyApplication
     private const NAME = 'Rector';
 
     /**
+     * @var Configuration
+     */
+    private $configuration;
+
+    /**
      * @param Command[] $commands
      */
-    public function __construct(array $commands = [])
+    public function __construct(Configuration $configuration, array $commands = [])
     {
         parent::__construct(self::NAME, PrettyVersions::getVersion('rector/rector')->getPrettyVersion());
 
         $commands = $this->filterCommandsByScope($commands);
         $this->addCommands($commands);
+        $this->configuration = $configuration;
     }
 
     /**
@@ -45,6 +53,8 @@ final class Application extends SymfonyApplication
 
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
+        $this->configuration->setConfigFilePathFromInput($input);
+
         $shouldFollowByNewline = false;
 
         // switch working dir
@@ -64,16 +74,15 @@ final class Application extends SymfonyApplication
             return parent::doRun($input, $output);
         }
 
-        if (! $this->isVersionPrintedElsewhere($input)) {
-            // always print name version to more debug info
+        if ($this->shouldPrintMetaInformation($input)) {
             $output->writeln($this->getLongVersion());
             $shouldFollowByNewline = true;
-        }
 
-        $configPath = $this->getConfigPath($input);
-        if (file_exists($configPath)) {
-            $output->writeln('Config file: ' . realpath($configPath));
-            $shouldFollowByNewline = true;
+            $configPath = $this->configuration->getConfigFilePath();
+            if ($configPath) {
+                $output->writeln('Config file: ' . realpath($configPath));
+                $shouldFollowByNewline = true;
+            }
         }
 
         if ($shouldFollowByNewline) {
@@ -111,11 +120,6 @@ final class Application extends SymfonyApplication
         return array_values($filteredCommands);
     }
 
-    private function isVersionPrintedElsewhere(InputInterface $input): bool
-    {
-        return $input->hasParameterOption('--version') || $input->getFirstArgument() === null;
-    }
-
     private function getConfigPath(InputInterface $input): string
     {
         if ($input->getParameterOption('--config')) {
@@ -132,6 +136,19 @@ final class Application extends SymfonyApplication
         unset($options['quiet'], $options['no-interaction']);
 
         $inputDefinition->setOptions($options);
+    }
+
+    private function shouldPrintMetaInformation(InputInterface $input): bool
+    {
+        $hasNoArguments = $input->getFirstArgument() === null;
+        $hasVersionOption = $input->hasParameterOption('--version');
+
+        $hasJsonOutput = (
+            $input->getParameterOption('--output-format') === JsonOutputFormatter::NAME ||
+            $input->getParameterOption('-o') === JsonOutputFormatter::NAME
+        );
+
+        return ! ($hasVersionOption || $hasNoArguments || $hasJsonOutput);
     }
 
     private function addCustomOptions(InputDefinition $inputDefinition): void

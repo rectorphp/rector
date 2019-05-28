@@ -90,7 +90,7 @@ final class RectorApplication
             return;
         }
 
-        if (! $this->symfonyStyle->isVerbose()) {
+        if (! $this->symfonyStyle->isVerbose() && $this->configuration->showProgressBar()) {
             // why 3? one for each cycle, so user sees some activity all the time
             $this->symfonyStyle->progressStart($fileCount * 3);
         }
@@ -116,7 +116,9 @@ final class RectorApplication
             });
         }
 
-        $this->symfonyStyle->newLine(2);
+        if ($this->configuration->showProgressBar()) {
+            $this->symfonyStyle->newLine(2);
+        }
 
         // 4. remove and add files
         $this->removedAndAddedFilesProcessor->run();
@@ -172,7 +174,7 @@ final class RectorApplication
     {
         if ($this->symfonyStyle->isVerbose()) {
             $this->symfonyStyle->writeln($smartFileInfo->getRealPath());
-        } else {
+        } elseif ($this->configuration->showProgressBar()) {
             $this->symfonyStyle->progressAdvance();
         }
     }
