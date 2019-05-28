@@ -78,8 +78,8 @@ final class Application extends SymfonyApplication
             $output->writeln($this->getLongVersion());
             $shouldFollowByNewline = true;
 
-            $configPath = $this->getConfigPath($input);
-            if (file_exists($configPath)) {
+            $configPath = $this->configuration->getConfigFilePath();
+            if ($configPath) {
                 $output->writeln('Config file: ' . realpath($configPath));
                 $shouldFollowByNewline = true;
             }

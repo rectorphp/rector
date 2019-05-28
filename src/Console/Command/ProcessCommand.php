@@ -153,9 +153,9 @@ final class ProcessCommand extends AbstractCommand
 
         $this->rectorApplication->runOnFileInfos($phpFileInfos);
 
+        // report diffs and errors
         $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
-
         $outputFormatter->report($this->errorAndDiffCollector);
 
         // apply coding standard

@@ -116,7 +116,9 @@ final class RectorApplication
             });
         }
 
-        $this->symfonyStyle->newLine(2);
+        if ($this->configuration->showProgressBar()) {
+            $this->symfonyStyle->newLine(2);
+        }
 
         // 4. remove and add files
         $this->removedAndAddedFilesProcessor->run();
