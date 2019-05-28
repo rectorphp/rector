@@ -28,10 +28,12 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [ContainerGetToConstructorInjectionRector::class => [
-            '$containerAwareParentTypes' => [
-                'Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass',
+        return [
+            ContainerGetToConstructorInjectionRector::class => [
+                '$containerAwareParentTypes' => [
+                    'Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass',
+                ],
             ],
-        ]];
+        ];
     }
 }

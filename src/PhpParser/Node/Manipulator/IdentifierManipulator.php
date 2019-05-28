@@ -61,7 +61,11 @@ final class IdentifierManipulator
     {
         $this->ensureNodeHasIdentifier($node);
 
-        $newName = Strings::replace($this->nameResolver->resolve($node), sprintf('#%s$#', $suffixToRemove));
+        $name = $this->nameResolver->resolve($node);
+        if ($name === null) {
+            return;
+        }
+        $newName = Strings::replace($name, sprintf('#%s$#', $suffixToRemove));
 
         $node->name = new Identifier($newName);
     }

@@ -50,23 +50,25 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [RenameClassRector::class => [
-            'oldToNewClasses' => [
-                OldClass::class => NewClass::class,
-                OldClassWithTypo::class => NewClassWithoutTypo::class,
-                'DateTime' => 'DateTimeInterface',
-                'Countable' => 'stdClass',
-                Manual_Twig_Filter::class => TwigFilter::class,
-                'Twig_AbstractManualExtension' => AbstractManualExtension::class,
-                'Twig_Extension_Sandbox' => 'Twig\Extension\SandboxExtension',
-                // Renaming class itself and its namespace
-                'MyNamespace\MyClass' => 'MyNewNamespace\MyNewClass',
-                'MyNamespace\MyTrait' => 'MyNewNamespace\MyNewTrait',
-                'MyNamespace\MyInterface' => 'MyNewNamespace\MyNewInterface',
-                'MyOldClass' => 'MyNamespace\MyNewClass',
-                'AnotherMyOldClass' => 'AnotherMyNewClass',
-                'MyNamespace\AnotherMyClass' => 'MyNewClassWithoutNamespace',
+        return [
+            RenameClassRector::class => [
+                'oldToNewClasses' => [
+                    OldClass::class => NewClass::class,
+                    OldClassWithTypo::class => NewClassWithoutTypo::class,
+                    'DateTime' => 'DateTimeInterface',
+                    'Countable' => 'stdClass',
+                    Manual_Twig_Filter::class => TwigFilter::class,
+                    'Twig_AbstractManualExtension' => AbstractManualExtension::class,
+                    'Twig_Extension_Sandbox' => 'Twig\Extension\SandboxExtension',
+                    // Renaming class itself and its namespace
+                    'MyNamespace\MyClass' => 'MyNewNamespace\MyNewClass',
+                    'MyNamespace\MyTrait' => 'MyNewNamespace\MyNewTrait',
+                    'MyNamespace\MyInterface' => 'MyNewNamespace\MyNewInterface',
+                    'MyOldClass' => 'MyNamespace\MyNewClass',
+                    'AnotherMyOldClass' => 'AnotherMyNewClass',
+                    'MyNamespace\AnotherMyClass' => 'MyNewClassWithoutNamespace',
+                ],
             ],
-        ]];
+        ];
     }
 }

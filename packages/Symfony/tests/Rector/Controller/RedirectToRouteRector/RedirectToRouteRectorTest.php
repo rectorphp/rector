@@ -22,6 +22,10 @@ final class RedirectToRouteRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [RedirectToRouteRector::class => ['$controllerClass' => SymfonyController::class]];
+        return [
+            RedirectToRouteRector::class => [
+                '$controllerClass' => SymfonyController::class,
+            ],
+        ];
     }
 }

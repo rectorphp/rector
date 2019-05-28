@@ -18,6 +18,10 @@ final class ProcessBuilderInstanceRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [ProcessBuilderInstanceRector::class => ['$processBuilderClass' => ProcessBuilder::class]];
+        return [
+            ProcessBuilderInstanceRector::class => [
+                '$processBuilderClass' => ProcessBuilder::class,
+            ],
+        ];
     }
 }

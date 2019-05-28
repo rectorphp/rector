@@ -18,6 +18,10 @@ final class VarDumperTestTraitMethodArgsRectorTest extends AbstractRectorTestCas
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [VarDumperTestTraitMethodArgsRector::class => ['$traitName' => VarDumperTrait::class]];
+        return [
+            VarDumperTestTraitMethodArgsRector::class => [
+                '$traitName' => VarDumperTrait::class,
+            ],
+        ];
     }
 }

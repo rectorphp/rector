@@ -26,9 +26,11 @@ final class RouterListToControllerAnnotationsRectorTest extends AbstractRectorTe
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [RouterListToControllerAnnotationsRector::class => [
-            '$routeListClass' => RouteList::class,
-            '$routerClass' => Route::class,
-        ]];
+        return [
+            RouterListToControllerAnnotationsRector::class => [
+                '$routeListClass' => RouteList::class,
+                '$routerClass' => Route::class,
+            ],
+        ];
     }
 }

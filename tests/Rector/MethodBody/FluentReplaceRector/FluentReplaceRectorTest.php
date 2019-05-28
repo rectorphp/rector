@@ -18,8 +18,10 @@ final class FluentReplaceRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [FluentReplaceRector::class => [
-            '$classesToDefluent' => [FluentInterfaceClass::class],
-        ]];
+        return [
+            FluentReplaceRector::class => [
+                '$classesToDefluent' => [FluentInterfaceClass::class],
+            ],
+        ];
     }
 }

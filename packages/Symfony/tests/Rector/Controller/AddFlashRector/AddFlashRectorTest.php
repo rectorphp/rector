@@ -18,6 +18,10 @@ final class AddFlashRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [AddFlashRector::class => ['$controllerClass' => SymfonyController::class]];
+        return [
+            AddFlashRector::class => [
+                '$controllerClass' => SymfonyController::class,
+            ],
+        ];
     }
 }

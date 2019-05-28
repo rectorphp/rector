@@ -63,7 +63,9 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
         $i = 0;
         foreach ($fileDiffs as $fileDiff) {
-            $this->symfonyStyle->writeln(sprintf('<options=bold>%d) %s</>', ++$i, $fileDiff->getFile()));
+            $relativeFilePath = $fileDiff->getSmartFileInfo()->getRelativeFilePath();
+
+            $this->symfonyStyle->writeln(sprintf('<options=bold>%d) %s</>', ++$i, $relativeFilePath));
             $this->symfonyStyle->newLine();
             $this->symfonyStyle->writeln($fileDiff->getDiffConsoleFormatted());
             $this->symfonyStyle->newLine();

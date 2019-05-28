@@ -18,23 +18,25 @@ final class PropertyToMethodRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [PropertyToMethodRector::class => [
-            '$perClassPropertyToMethods' => [
-                Translator::class => [
-                    'locale' => [
-                        'get' => 'getLocale',
-                        'set' => 'setLocale',
+        return [
+            PropertyToMethodRector::class => [
+                '$perClassPropertyToMethods' => [
+                    Translator::class => [
+                        'locale' => [
+                            'get' => 'getLocale',
+                            'set' => 'setLocale',
+                        ],
                     ],
-                ],
-                'Rector\Tests\Rector\Property\PropertyToMethodRector\Fixture\SomeClassWithParameters' => [
-                    'parameter' => [
-                        'get' => [
-                            'method' => 'getConfig',
-                            'arguments' => ['parameter'],
+                    'Rector\Tests\Rector\Property\PropertyToMethodRector\Fixture\SomeClassWithParameters' => [
+                        'parameter' => [
+                            'get' => [
+                                'method' => 'getConfig',
+                                'arguments' => ['parameter'],
+                            ],
                         ],
                     ],
                 ],
             ],
-        ]];
+        ];
     }
 }

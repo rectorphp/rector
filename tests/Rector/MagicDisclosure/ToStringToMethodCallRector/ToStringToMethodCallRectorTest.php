@@ -18,10 +18,12 @@ final class ToStringToMethodCallRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [ToStringToMethodCallRector::class => [
-            '$methodNamesByType' => [
-                ConfigCache::class => 'getPath',
+        return [
+            ToStringToMethodCallRector::class => [
+                '$methodNamesByType' => [
+                    ConfigCache::class => 'getPath',
+                ],
             ],
-        ]];
+        ];
     }
 }

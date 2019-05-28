@@ -18,6 +18,10 @@ final class WrapTransParameterNameRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [WrapTransParameterNameRector::class => ['$translatorClass' => SomeTranslator::class]];
+        return [
+            WrapTransParameterNameRector::class => [
+                '$translatorClass' => SomeTranslator::class,
+            ],
+        ];
     }
 }

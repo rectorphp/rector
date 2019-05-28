@@ -19,11 +19,17 @@ final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [PropertyAssignToMethodCallRector::class => [
-            '$oldPropertiesToNewMethodCallsByType' => [
-                ChoiceControl::class => ['checkAllowedValues' => 'checkDefaultValue'],
-                MultiChoiceControl::class => ['checkAllowedValues' => 'checkDefaultValue'],
+        return [
+            PropertyAssignToMethodCallRector::class => [
+                '$oldPropertiesToNewMethodCallsByType' => [
+                    ChoiceControl::class => [
+                        'checkAllowedValues' => 'checkDefaultValue',
+                    ],
+                    MultiChoiceControl::class => [
+                        'checkAllowedValues' => 'checkDefaultValue',
+                    ],
+                ],
             ],
-        ]];
+        ];
     }
 }

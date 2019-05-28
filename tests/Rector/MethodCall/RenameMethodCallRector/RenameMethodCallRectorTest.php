@@ -24,19 +24,21 @@ final class RenameMethodCallRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [RenameMethodCallRector::class => [
-            '$oldToNewMethodsByClass' => [
-                Html::class => [
-                    'add' => 'addHtml',
-                    'addToArray' => [
-                        'name' => 'addHtmlArray',
-                        'array_key' => 'hi',
+        return [
+            RenameMethodCallRector::class => [
+                '$oldToNewMethodsByClass' => [
+                    Html::class => [
+                        'add' => 'addHtml',
+                        'addToArray' => [
+                            'name' => 'addHtmlArray',
+                            'array_key' => 'hi',
+                        ],
+                    ],
+                    ClassMethodToBeSkipped::class => [
+                        'createHtml' => 'testHtml',
                     ],
                 ],
-                ClassMethodToBeSkipped::class => [
-                    'createHtml' => 'testHtml',
-                ],
             ],
-        ]];
+        ];
     }
 }

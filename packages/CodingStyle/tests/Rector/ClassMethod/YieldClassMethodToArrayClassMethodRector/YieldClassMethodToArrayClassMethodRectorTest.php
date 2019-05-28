@@ -18,10 +18,12 @@ final class YieldClassMethodToArrayClassMethodRectorTest extends AbstractRectorT
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [YieldClassMethodToArrayClassMethodRector::class => [
-            '$methodsByType' => [
-                EventSubscriberInterface::class => ['getSubscribedEvents'],
+        return [
+            YieldClassMethodToArrayClassMethodRector::class => [
+                '$methodsByType' => [
+                    EventSubscriberInterface::class => ['getSubscribedEvents'],
+                ],
             ],
-        ]];
+        ];
     }
 }

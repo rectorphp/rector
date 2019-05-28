@@ -26,12 +26,14 @@ final class SimpleFunctionAndFilterRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [SimpleFunctionAndFilterRector::class => [
-            '$twigExtensionClass' => TwigExtension::class,
-            '$oldToNewClasses' => [
-                TwigFunctionMethod::class => TwigSimpleFunction::class,
-                TwigFilterMethod::class => TwigSimpleFilter::class,
+        return [
+            SimpleFunctionAndFilterRector::class => [
+                '$twigExtensionClass' => TwigExtension::class,
+                '$oldToNewClasses' => [
+                    TwigFunctionMethod::class => TwigSimpleFunction::class,
+                    TwigFilterMethod::class => TwigSimpleFilter::class,
+                ],
             ],
-        ]];
+        ];
     }
 }

@@ -19,10 +19,12 @@ final class MergeInterfacesRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [MergeInterfacesRector::class => [
-            '$oldToNewInterfaces' => [
-                SomeOldInterface::class => SomeInterface::class,
+        return [
+            MergeInterfacesRector::class => [
+                '$oldToNewInterfaces' => [
+                    SomeOldInterface::class => SomeInterface::class,
+                ],
             ],
-        ]];
+        ];
     }
 }

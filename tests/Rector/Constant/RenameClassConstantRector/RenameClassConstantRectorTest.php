@@ -19,15 +19,17 @@ final class RenameClassConstantRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [RenameClassConstantRector::class => [
-            'oldToNewConstantsByClass' => [
-                LocalFormEvents::class => [
-                    'PRE_BIND' => 'PRE_SUBMIT',
-                    'BIND' => 'SUBMIT',
-                    'POST_BIND' => 'POST_SUBMIT',
-                    'OLD_CONSTANT' => DifferentClass::class . '::NEW_CONSTANT',
+        return [
+            RenameClassConstantRector::class => [
+                'oldToNewConstantsByClass' => [
+                    LocalFormEvents::class => [
+                        'PRE_BIND' => 'PRE_SUBMIT',
+                        'BIND' => 'SUBMIT',
+                        'POST_BIND' => 'POST_SUBMIT',
+                        'OLD_CONSTANT' => DifferentClass::class . '::NEW_CONSTANT',
+                    ],
                 ],
             ],
-        ]];
+        ];
     }
 }

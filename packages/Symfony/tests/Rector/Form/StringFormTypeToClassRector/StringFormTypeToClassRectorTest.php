@@ -18,6 +18,10 @@ final class StringFormTypeToClassRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [StringFormTypeToClassRector::class => ['$formBuilderClass' => FormBuilder::class]];
+        return [
+            StringFormTypeToClassRector::class => [
+                '$formBuilderClass' => FormBuilder::class,
+            ],
+        ];
     }
 }

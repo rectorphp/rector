@@ -2,6 +2,8 @@
 
 namespace Rector\Reporting;
 
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+
 final class FileDiff
 {
     /**
@@ -10,9 +12,9 @@ final class FileDiff
     private $diff;
 
     /**
-     * @var string
+     * @var SmartFileInfo
      */
-    private $file;
+    private $smartFileInfo;
 
     /**
      * @var string[]
@@ -28,12 +30,12 @@ final class FileDiff
      * @param string[] $appliedRectorClasses
      */
     public function __construct(
-        string $file,
+        SmartFileInfo $smartFileInfo,
         string $diff,
         string $diffConsoleFormatted,
         array $appliedRectorClasses = []
     ) {
-        $this->file = $file;
+        $this->smartFileInfo = $smartFileInfo;
         $this->diff = $diff;
         $this->appliedRectorClasses = $appliedRectorClasses;
         $this->diffConsoleFormatted = $diffConsoleFormatted;
@@ -49,9 +51,9 @@ final class FileDiff
         return $this->diffConsoleFormatted;
     }
 
-    public function getFile(): string
+    public function getSmartFileInfo(): SmartFileInfo
     {
-        return $this->file;
+        return $this->smartFileInfo;
     }
 
     /**

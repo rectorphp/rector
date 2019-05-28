@@ -18,8 +18,10 @@ final class MinutesToSecondsInCacheRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [MinutesToSecondsInCacheRector::class => [
-            '$storeClass' => LaravelStoreInterface::class, // just for test case
-        ]];
+        return [
+            MinutesToSecondsInCacheRector::class => [
+                '$storeClass' => LaravelStoreInterface::class, // just for test case
+            ],
+        ];
     }
 }

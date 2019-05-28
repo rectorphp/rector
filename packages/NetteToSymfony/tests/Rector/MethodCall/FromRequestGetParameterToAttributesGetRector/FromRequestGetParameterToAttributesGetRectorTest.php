@@ -18,8 +18,10 @@ final class FromRequestGetParameterToAttributesGetRectorTest extends AbstractRec
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [FromRequestGetParameterToAttributesGetRector::class => [
-            '$netteRequestClass' => NetteRequest::class,
-        ]];
+        return [
+            FromRequestGetParameterToAttributesGetRector::class => [
+                '$netteRequestClass' => NetteRequest::class,
+            ],
+        ];
     }
 }

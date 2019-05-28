@@ -24,10 +24,12 @@ final class FormTypeInstanceToClassConstRectorTest extends AbstractRectorTestCas
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [FormTypeInstanceToClassConstRector::class => [
-            '$controllerClass' => ControllerClass::class,
-            '$formBuilderType' => FormBuilder::class,
-            '$formType' => FormType::class,
-        ]];
+        return [
+            FormTypeInstanceToClassConstRector::class => [
+                '$controllerClass' => ControllerClass::class,
+                '$formBuilderType' => FormBuilder::class,
+                '$formType' => FormType::class,
+            ],
+        ];
     }
 }

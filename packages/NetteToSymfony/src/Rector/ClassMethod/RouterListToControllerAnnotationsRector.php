@@ -334,8 +334,11 @@ CODE_SAMPLE
 
     private function resolvePathFromClassAndMethodNodes(Class_ $classNode, ClassMethod $classMethod): string
     {
+        /** @var string $presenterName */
         $presenterName = $this->getName($classNode);
+        /** @var string $presenterPart */
         $presenterPart = Strings::after($presenterName, '\\', -1);
+        /** @var string $presenterPart */
         $presenterPart = Strings::substring($presenterPart, 0, -Strings::length('Presenter'));
         $presenterPart = RectorStrings::camelCaseToDashes($presenterPart);
 

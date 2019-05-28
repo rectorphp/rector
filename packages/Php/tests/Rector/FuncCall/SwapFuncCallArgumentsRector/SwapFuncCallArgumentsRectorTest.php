@@ -17,10 +17,12 @@ final class SwapFuncCallArgumentsRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [SwapFuncCallArgumentsRector::class => [
-            '$newArgumentPositionsByFunctionName' => [
-                'some_function' => [1, 0],
+        return [
+            SwapFuncCallArgumentsRector::class => [
+                '$newArgumentPositionsByFunctionName' => [
+                    'some_function' => [1, 0],
+                ],
             ],
-        ]];
+        ];
     }
 }

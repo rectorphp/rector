@@ -24,8 +24,10 @@ final class PHPUnitStaticToKernelTestCaseGetRectorTest extends AbstractRectorTes
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [PHPUnitStaticToKernelTestCaseGetRector::class => [
-            '$staticClassTypes' => [ClassWithStaticMethods::class],
-        ]];
+        return [
+            PHPUnitStaticToKernelTestCaseGetRector::class => [
+                '$staticClassTypes' => [ClassWithStaticMethods::class],
+            ],
+        ];
     }
 }

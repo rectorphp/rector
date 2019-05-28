@@ -61,7 +61,9 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
                 '$someService = new Some_Object;',
                 '$someService = new Some\Object;',
                 [
-                    ['Some_' => []],
+                    [
+                        'Some_' => [],
+                    ],
                 ]
             ),
             new ConfiguredCodeSample(
@@ -78,7 +80,9 @@ $someClassToKeep = new Some_Class_To_Keep;
 CODE_SAMPLE
                 ,
                 [
-                    ['Some_' => ['Some_Class_To_Keep']],
+                    [
+                        'Some_' => ['Some_Class_To_Keep'],
+                    ],
                 ]
             ),
         ]);

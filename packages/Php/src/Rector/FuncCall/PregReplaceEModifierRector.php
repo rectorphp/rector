@@ -92,6 +92,7 @@ CODE_SAMPLE
         $pattern = $this->getValue($node->args[0]->value);
         $delimiter = $pattern[0];
 
+        /** @var string $modifiers */
         $modifiers = Strings::after($pattern, $delimiter, -1);
         if (! Strings::contains($modifiers, 'e')) {
             return null;

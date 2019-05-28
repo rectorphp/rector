@@ -18,8 +18,10 @@ final class ReplaceCreateMethodWithoutReviewerRectorTest extends AbstractRectorT
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [ReplaceCreateMethodWithoutReviewerRector::class => [
-            '$reviewFactoryInterface' => ReviewFactoryInterface::class,
-        ]];
+        return [
+            ReplaceCreateMethodWithoutReviewerRector::class => [
+                '$reviewFactoryInterface' => ReviewFactoryInterface::class,
+            ],
+        ];
     }
 }

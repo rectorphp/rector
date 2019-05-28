@@ -19,9 +19,11 @@ final class FormTypeGetParentRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [FormTypeGetParentRector::class => [
-            '$abstractTypeClass' => AbstractType::class,
-            '$abstractTypeExtensionClass' => AbstractTypeExtension::class,
-        ]];
+        return [
+            FormTypeGetParentRector::class => [
+                '$abstractTypeClass' => AbstractType::class,
+                '$abstractTypeExtensionClass' => AbstractTypeExtension::class,
+            ],
+        ];
     }
 }

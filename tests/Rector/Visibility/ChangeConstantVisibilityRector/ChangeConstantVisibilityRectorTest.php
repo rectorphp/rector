@@ -18,15 +18,19 @@ final class ChangeConstantVisibilityRectorTest extends AbstractRectorTestCase
      */
     protected function getRectorsWithConfiguration(): array
     {
-        return [ChangeConstantVisibilityRector::class => [
-            '$constantToVisibilityByClass' => [
-                ParentObject::class => [
-                    'TO_BE_PUBLIC_CONSTANT' => 'public',
-                    'TO_BE_PROTECTED_CONSTANT' => 'protected',
-                    'TO_BE_PRIVATE_CONSTANT' => 'private',
+        return [
+            ChangeConstantVisibilityRector::class => [
+                '$constantToVisibilityByClass' => [
+                    ParentObject::class => [
+                        'TO_BE_PUBLIC_CONSTANT' => 'public',
+                        'TO_BE_PROTECTED_CONSTANT' => 'protected',
+                        'TO_BE_PRIVATE_CONSTANT' => 'private',
+                    ],
+                    'Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\AnotherClassWithInvalidConstants' => [
+                        'TO_BE_PRIVATE_CONSTANT' => 'private',
+                    ],
                 ],
-                'Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\AnotherClassWithInvalidConstants' => ['TO_BE_PRIVATE_CONSTANT' => 'private'],
             ],
-        ]];
+        ];
     }
 }
