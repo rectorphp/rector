@@ -23,13 +23,22 @@ final class DifferAndFormatter
         $this->diffConsoleFormatter = $diffConsoleFormatter;
     }
 
+    public function diff(string $old, string $new): string
+    {
+        if ($old === $new) {
+            return '';
+        }
+
+        return $this->differ->diff($old, $new);
+    }
+
     public function diffAndFormat(string $old, string $new): string
     {
         if ($old === $new) {
             return '';
         }
 
-        $diff = $this->differ->diff($old, $new);
+        $diff = $this->diff($old, $new);
 
         return $this->diffConsoleFormatter->format($diff);
     }

@@ -83,6 +83,7 @@ final class ErrorAndDiffCollector
         // always keep the most recent diff
         $this->fileDiffs[$smartFileInfo->getRealPath()] = new FileDiff(
             $smartFileInfo->getRealPath(),
+            $this->differAndFormatter->diff($oldContent, $newContent),
             $this->differAndFormatter->diffAndFormat($oldContent, $newContent),
             $appliedRectors
         );
