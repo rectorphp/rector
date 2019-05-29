@@ -4570,8 +4570,8 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
 +
  class SomeController
  {
--    public function someAction()
-+    public action(Request $request)
+-    public function somethingAction()
++    public function something(Request $request)
      {
 -        $this->getRequest()->...();
 +        $request->...();
