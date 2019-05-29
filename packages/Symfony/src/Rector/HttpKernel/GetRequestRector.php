@@ -58,7 +58,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SomeController
 {
-    public action(Request $request)
+    public function someAction(Request $request)
     {
         $request->...();
     }
