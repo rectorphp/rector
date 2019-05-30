@@ -10,6 +10,8 @@ services:
         Symfony\Component\Security\Http\Firewall:
             handleRequest: 'callListeners'
 
+    Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector: ~
+
     # https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
     Rector\Rector\Class_\RenameClassRector:
         # Browser Kit
@@ -44,7 +46,6 @@ services:
         Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent: 'Symfony\Component\HttpKernel\Event\ViewEvent'
         Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent: 'Symfony\Component\HttpKernel\Event\ExceptionEvent'
         Symfony\Component\HttpKernel\Event\PostResponseEvent: 'Symfony\Component\HttpKernel\Event\TerminateEvent'
-    Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector: ~
 
         # MimeType
         Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface: 'Symfony\Component\Mime\MimeTypesInterface'
