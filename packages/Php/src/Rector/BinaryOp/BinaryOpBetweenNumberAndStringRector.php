@@ -66,6 +66,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node instanceof BinaryOp\Concat) {
+            return null;
+        }
+
         if ($this->isStringyType($node->left) && $this->isNumberType($node->right)) {
             $node->left = new LNumber(0);
 
