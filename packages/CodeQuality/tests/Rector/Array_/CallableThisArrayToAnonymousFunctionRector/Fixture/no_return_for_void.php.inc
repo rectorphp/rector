@@ -6,7 +6,7 @@ class HasVoidMethod
 {
     public function run(array $values)
     {
-        usort($values, [$this, 'compareSize']);
+        usort($values, [$this, 'thisReturnsVoid']);
 
         return $values;
     }
