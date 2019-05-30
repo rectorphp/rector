@@ -94,7 +94,7 @@ CODE_SAMPLE
             }
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof Assign) {
+            if ($parentNode instanceof Assign || $this->isStaticVariable($parentNode)) {
                 return null;
             }
 
@@ -137,5 +137,18 @@ CODE_SAMPLE
         $node->stmts = array_merge($variablesInitiation, (array) $node->stmts);
 
         return $node;
+    }
+
+    private function isStaticVariable(Node $parentNode): bool
+    {
+        // definition of static variable
+        if ($parentNode instanceof Node\Stmt\StaticVar) {
+            $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentParentNode instanceof Node\Stmt\Static_) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
