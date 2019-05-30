@@ -9,7 +9,10 @@ final class BinaryOpBetweenNumberAndStringRectorTest extends AbstractRectorTestC
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/ignore_concatenation_dot.php.inc',
+        ]);
     }
 
     protected function getRectorClass(): string
