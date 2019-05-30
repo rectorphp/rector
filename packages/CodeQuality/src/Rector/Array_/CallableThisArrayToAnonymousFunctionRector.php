@@ -114,25 +114,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $anonymousFunction = new Closure();
-        $anonymousFunction->params = $classMethod->params;
-
-        $innerMethodCall = new MethodCall($objectVariable, $classMethod->name);
-        $innerMethodCall->args = $this->convertParamsToArgs($classMethod->params);
-
-        if ($classMethod->returnType !== null) {
-            $anonymousFunction->returnType = $classMethod->returnType;
-        }
-
-        $anonymousFunction->stmts[] = new Return_($innerMethodCall);
-
-        if ($objectVariable instanceof Variable) {
-            if (! $this->isName($objectVariable, 'this')) {
-                $anonymousFunction->uses[] = new ClosureUse($objectVariable);
-            }
-        }
-
-        return $anonymousFunction;
+        return $this->createAnonymousFunction($classMethod, $objectVariable);
     }
 
     /**
@@ -190,5 +172,38 @@ CODE_SAMPLE
 
         // can be totally empty in case of "[, $value]"
         return $array->items[0] === null;
+    }
+
+    /**
+     * @param Variable|PropertyFetch $node
+     */
+    private function createAnonymousFunction(ClassMethod $classMethod, Node $node): Closure
+    {
+        $hasClassMethodReturn = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Return_::class);
+
+        $anonymousFunction = new Closure();
+        $anonymousFunction->params = $classMethod->params;
+
+        $innerMethodCall = new MethodCall($node, $classMethod->name);
+        $innerMethodCall->args = $this->convertParamsToArgs($classMethod->params);
+
+        if ($classMethod->returnType !== null) {
+            $anonymousFunction->returnType = $classMethod->returnType;
+        }
+
+        // does method return something?
+        if ($hasClassMethodReturn) {
+            $anonymousFunction->stmts[] = new Return_($innerMethodCall);
+        } else {
+            $anonymousFunction->stmts[] = new Node\Stmt\Expression($innerMethodCall);
+        }
+
+        if ($node instanceof Variable) {
+            if (! $this->isName($node, 'this')) {
+                $anonymousFunction->uses[] = new ClosureUse($node);
+            }
+        }
+
+        return $anonymousFunction;
     }
 }
