@@ -15,5 +15,7 @@ final class AutowiredEventDispatcher extends EventDispatcher
         foreach ($eventSubscribers as $eventSubscriber) {
             $this->addSubscriber($eventSubscriber);
         }
+
+        parent::__construct();
     }
 }

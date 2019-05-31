@@ -2,10 +2,12 @@
 
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
+use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\ParserException;
@@ -106,6 +108,51 @@ final class BetterPhpDocParser extends PhpDocParser
         $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($node);
         $attributeAwareNode->setAttribute(Attribute::PHP_DOC_NODE_INFO, new StartEndInfo($tokenStart, $tokenEnd));
 
+        // add original text, for keeping trimmed spaces
+        if ($attributeAwareNode instanceof PhpDocTextNode) {
+            $originalContent = $this->getOriginalContentFromTokenIterator($tokenIterator);
+
+            $currentText = $attributeAwareNode->text;
+
+            // we try to match original content without trimmed spaces
+            $currentTextPattern = '#' . preg_quote($currentText, '#') . '#s';
+            $currentTextPattern = Strings::replace($currentTextPattern, '#\s#', '\s+');
+            $match = Strings::match($originalContent, $currentTextPattern);
+
+            if (isset($match[0])) {
+                $attributeAwareNode->setAttribute(Attribute::ORIGINAL_CONTENT, $match[0]);
+            }
+        }
+
         return $attributeAwareNode;
+    }
+
+    /**
+     * @todo cache per tokens array hash
+     */
+    private function getOriginalContentFromTokenIterator(TokenIterator $tokenIterator): string
+    {
+        $originalTokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
+        $originalContent = '';
+
+        foreach ($originalTokens as $originalToken) {
+            // skip opening
+            if (Strings::match($originalToken[0], '#/\*\*#')) {
+                continue;
+            }
+
+            // skip closing
+            if (Strings::match($originalToken[0], '#\*\/#')) {
+                continue;
+            }
+
+            if (Strings::match($originalToken[0], '#^\s+\*#')) {
+                $originalToken[0] = PHP_EOL;
+            }
+
+            $originalContent .= $originalToken[0];
+        }
+
+        return trim($originalContent);
     }
 }

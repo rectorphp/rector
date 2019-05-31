@@ -40,4 +40,9 @@ final class Attribute
      * @var string
      */
     public const ANNOTATION_CLASS = 'annotation_class';
+
+    /**
+     * @var string
+     */
+    public const ORIGINAL_CONTENT = 'original_content';
 }

@@ -33,6 +33,7 @@ final class PhpDocInfoPrinterTest extends AbstractKernelTestCase
 
     /**
      * @dataProvider provideDocFilesForPrint()
+     * @dataProvider provideMultiline()
      */
     public function testPrintFormatPreserving(string $docFilePath): void
     {
@@ -65,6 +66,12 @@ final class PhpDocInfoPrinterTest extends AbstractKernelTestCase
         yield [__DIR__ . '/PhpDocInfoPrinterSource/doc11.txt'];
         yield [__DIR__ . '/PhpDocInfoPrinterSource/doc12.txt'];
         yield [__DIR__ . '/PhpDocInfoPrinterSource/doc13.txt'];
+    }
+
+    public function provideMultiline(): Iterator
+    {
+        yield [__DIR__ . '/PhpDocInfoPrinterSource/multiline1.txt'];
+        yield [__DIR__ . '/PhpDocInfoPrinterSource/multiline2.txt'];
     }
 
     /**
