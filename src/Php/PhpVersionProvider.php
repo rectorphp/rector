@@ -16,13 +16,13 @@ final class PhpVersionProvider
 
     public function provide(): string
     {
+        if ($this->phpVersionFeatures) {
+            return $this->phpVersionFeatures;
+        }
+
         // for tests
         if (defined('PHPUNIT_COMPOSER_INSTALL') || defined('__PHPUNIT_PHAR__')) {
             return '7.5';
-        }
-
-        if ($this->phpVersionFeatures) {
-            return $this->phpVersionFeatures;
         }
 
         return PHP_VERSION;

@@ -57,17 +57,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, 'count')) {
-            return null;
-        }
-
-        // check if it has some condition before already, if so, probably it's already handled
-        if ($node->getAttribute(self::ALREADY_CHANGED_ON_COUNT)) {
-            return null;
-        }
-
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Ternary) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -82,14 +72,16 @@ CODE_SAMPLE
 
         if ($this->isNullType($countedNode)) {
             $identicalNode = new Identical($countedNode, $this->createNull());
-            $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, true);
-
             $ternaryNode = new Ternary($identicalNode, new LNumber(0), $node);
         } else {
-            $conditionNode = new BooleanOr(
-                $this->createFunction('is_array', [new Arg($countedNode)]),
-                new Instanceof_($countedNode, new FullyQualified('Countable'))
-            );
+            if ($this->isAtLeastPhpVersion('7.3')) {
+                $conditionNode = new FuncCall(new Node\Name('is_countable'), [new Arg($countedNode)]);
+            } else {
+                $conditionNode = new BooleanOr(
+                    $this->createFunction('is_array', [new Arg($countedNode)]),
+                    new Instanceof_($countedNode, new FullyQualified('Countable'))
+                );
+            }
 
             $ternaryNode = new Ternary($conditionNode, $node, new LNumber(0));
         }
@@ -98,5 +90,21 @@ CODE_SAMPLE
         $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, true);
 
         return $ternaryNode;
+    }
+
+    private function shouldSkip(FuncCall $funcCall): bool
+    {
+        if (! $this->isName($funcCall, 'count')) {
+            return true;
+        }
+
+        // check if it has some condition before already, if so, probably it's already handled
+        if ($funcCall->getAttribute(self::ALREADY_CHANGED_ON_COUNT)) {
+            return true;
+        }
+
+        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+
+        return $parentNode instanceof Ternary;
     }
 }
