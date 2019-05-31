@@ -2,6 +2,7 @@
 
 namespace Rector\Php\Rector\BinaryOp;
 
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Scalar\LNumber;
@@ -66,7 +67,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof BinaryOp\Concat) {
+        if ($node instanceof Concat) {
             return null;
         }
 

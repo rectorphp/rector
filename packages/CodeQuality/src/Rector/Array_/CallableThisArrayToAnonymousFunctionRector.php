@@ -2,6 +2,7 @@
 
 namespace Rector\CodeQuality\Rector\Array_;
 
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -195,7 +196,7 @@ CODE_SAMPLE
         if ($hasClassMethodReturn) {
             $anonymousFunction->stmts[] = new Return_($innerMethodCall);
         } else {
-            $anonymousFunction->stmts[] = new Node\Stmt\Expression($innerMethodCall);
+            $anonymousFunction->stmts[] = new Expression($innerMethodCall);
         }
 
         if ($node instanceof Variable) {
