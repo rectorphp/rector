@@ -10,6 +10,8 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Static_;
+use PhpParser\Node\Stmt\StaticVar;
 use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -132,9 +134,9 @@ CODE_SAMPLE
     private function isStaticVariable(Node $parentNode): bool
     {
         // definition of static variable
-        if ($parentNode instanceof Node\Stmt\StaticVar) {
+        if ($parentNode instanceof StaticVar) {
             $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentParentNode instanceof Node\Stmt\Static_) {
+            if ($parentParentNode instanceof Static_) {
                 return true;
             }
         }

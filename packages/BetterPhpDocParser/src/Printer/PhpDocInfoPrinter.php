@@ -159,6 +159,10 @@ final class PhpDocInfoPrinter
         }
 
         // fix multiline BC break - https://github.com/phpstan/phpdoc-parser/pull/26/files
+        if ($attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT)) {
+            $this->restoreOriginalSpacingInText($attributeAwareNode);
+        }
+
         $content = (string) $attributeAwareNode;
         $content = explode(PHP_EOL, $content);
         $content = implode(PHP_EOL . ' * ', $content);
@@ -281,5 +285,39 @@ final class PhpDocInfoPrinter
         }
 
         return Strings::contains($this->phpDocInfo->getOriginalContent(), $phpDocTagNode->name . ' ');
+    }
+
+    /**
+     * @param PhpDocTextNode|AttributeAwareNodeInterface $attributeAwareNode
+     */
+    private function restoreOriginalSpacingInText(AttributeAwareNodeInterface $attributeAwareNode): void
+    {
+        /** @var string $originalContent */
+        $originalContent = $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT);
+        $oldSpaces = Strings::matchAll($originalContent, '#\s+#ms');
+
+        $newParts = Strings::split($attributeAwareNode->text, '#\s+#');
+
+        // we can't do this!
+        if (count($oldSpaces) + 1 !== count($newParts)) {
+            return;
+        }
+
+        $newText = '';
+        foreach ($newParts as $key => $newPart) {
+            $newText .= $newPart;
+            if (isset($oldSpaces[$key])) {
+                if (Strings::match($oldSpaces[$key][0], '#\n {1,}$#s')) {
+                    // remove last extra space
+                    $oldSpaces[$key][0] = Strings::substring($oldSpaces[$key][0], 0, -1);
+                }
+
+                $newText .= $oldSpaces[$key][0];
+            }
+        }
+
+        if ($newText) {
+            $attributeAwareNode->text = $newText;
+        }
     }
 }
