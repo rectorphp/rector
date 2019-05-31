@@ -50,8 +50,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $expression = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
+
+        // unable to analyze
         if ($expression === null) {
-            throw new ShouldNotHappenException();
+            return null;
         }
 
         $nextNode = $expression->getAttribute(AttributeKey::NEXT_NODE);
