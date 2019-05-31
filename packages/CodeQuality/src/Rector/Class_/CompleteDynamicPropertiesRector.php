@@ -92,6 +92,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->isAnonymous()) {
+            return null;
+        }
+
         $fetchedLocalPropertyNameToTypes = $this->resolveFetchedLocalPropertyNameToTypes($node);
 
         $propertyNames = [];
@@ -107,6 +111,17 @@ CODE_SAMPLE
 
         $fetchedLocalPropertyNames = array_keys($fetchedLocalPropertyNameToTypes);
         $propertiesToComplete = array_diff($fetchedLocalPropertyNames, $propertyNames);
+
+        // remove other properties that are accessible from this scope
+        /** @var string $class */
+        $class = $this->getName($node);
+        foreach ($propertiesToComplete as $key => $propertyToComplete) {
+            if (! property_exists($class, $propertyToComplete)) {
+                continue;
+            }
+
+            unset($propertiesToComplete[$key]);
+        }
 
         $newProperties = $this->createNewProperties($fetchedLocalPropertyNameToTypes, $propertiesToComplete);
 
