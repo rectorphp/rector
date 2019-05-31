@@ -200,6 +200,9 @@ final class UseAddingCommander implements CommanderInterface
     {
         /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        if ($fileInfo === null) {
+            return null;
+        }
 
         return $fileInfo->getRealPath();
     }
