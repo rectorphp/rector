@@ -38,7 +38,6 @@ services:
         Psr\SimpleCache\CacheInterface: 'Symfony\Contracts\Cache\CacheInterface'
 
         # EventDispatcher
-        Symfony\Component\EventDispatcher\Event: 'Symfony\Contracts\EventDispatcher\Event'
         Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent: 'Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent'
         Symfony\Component\HttpKernel\Event\FilterControllerEvent: 'Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent'
         Symfony\Component\HttpKernel\Event\FilterResponseEvent: 'Symfony\Component\HttpKernel\Event\ResponseEvent'
@@ -46,6 +45,8 @@ services:
         Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent: 'Symfony\Component\HttpKernel\Event\ViewEvent'
         Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent: 'Symfony\Component\HttpKernel\Event\ExceptionEvent'
         Symfony\Component\HttpKernel\Event\PostResponseEvent: 'Symfony\Component\HttpKernel\Event\TerminateEvent'
+        # has lowest priority, have to be last
+        Symfony\Component\EventDispatcher\Event: 'Symfony\Contracts\EventDispatcher\Event'
 
         # MimeType
         Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface: 'Symfony\Component\Mime\MimeTypesInterface'
