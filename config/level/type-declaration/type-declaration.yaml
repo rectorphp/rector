@@ -1,4 +1,4 @@
 services:
-    Rector\Php\Rector\FunctionLike\ParamTypeDeclarationRector: ~
-    Rector\Php\Rector\FunctionLike\ReturnTypeDeclarationRector: ~
-    Rector\TypeDeclaration\Rector\Function_\AddFunctionReturnTypeRector: ~
+    Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector: ~
+    Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector: ~
+    Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector: ~
