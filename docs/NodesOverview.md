@@ -917,7 +917,7 @@ if (true) {
 
 ```php
 ?>
-<strong>feel</strong><?php 
+<strong>feel</strong><?php
 ```
 <br>
 

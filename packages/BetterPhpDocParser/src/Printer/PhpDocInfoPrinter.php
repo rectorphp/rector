@@ -147,7 +147,7 @@ final class PhpDocInfoPrinter
         }
 
         if ($attributeAwareNode instanceof PhpDocTagNode) {
-            return $output . PHP_EOL . '     * ' . (string) $attributeAwareNode;
+            return $output . PHP_EOL . '     * ' . $attributeAwareNode;
         }
 
         if (! $attributeAwareNode instanceof PhpDocTextNode && ! $attributeAwareNode instanceof GenericTagValueNode && $startEndInfo) {
@@ -158,7 +158,12 @@ final class PhpDocInfoPrinter
             );
         }
 
-        return $output . (string) $attributeAwareNode;
+        // fix multiline BC break - https://github.com/phpstan/phpdoc-parser/pull/26/files
+        $content = (string) $attributeAwareNode;
+        $content = explode(PHP_EOL, $content);
+        $content = implode(PHP_EOL . ' * ', $content);
+
+        return $output . $content;
     }
 
     private function printEnd(string $output): string
