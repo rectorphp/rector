@@ -161,6 +161,11 @@ final class UseAddingCommander implements CommanderInterface
     {
         $filePath = $this->getRealPathFromNode($node);
 
+        // already analysed
+        if (isset($this->useImportsInFilePath[$filePath])) {
+            return;
+        }
+
         $usedImports = $this->usedImportsResolver->resolveForNode($node);
 
         foreach ($usedImports as $usedImport) {
