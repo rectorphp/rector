@@ -93,15 +93,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof Assign || $this->isStaticVariable($parentNode)) {
-                return null;
-            }
-
-            /** @var Scope|null $nodeScope */
-            $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-            if ($nodeScope === null) {
-                // possible in foreach variable
+            if ($this->shouldSkipVariable($node)) {
                 return null;
             }
 
@@ -111,11 +103,9 @@ CODE_SAMPLE
             }
 
             // defined 100 %
+            /** @var Scope $nodeScope */
+            $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
             if ($nodeScope->hasVariableType($variableName)->yes()) {
-                return null;
-            }
-
-            if ($parentNode instanceof Unset_ || $parentNode instanceof Node\Expr\Cast\Unset_) {
                 return null;
             }
 
@@ -150,5 +140,24 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function shouldSkipVariable(Variable $variable): bool
+    {
+        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Node) {
+            if ($parentNode instanceof Assign || $this->isStaticVariable($parentNode)) {
+                return true;
+            }
+        }
+
+        if ($parentNode instanceof Unset_ || $parentNode instanceof Node\Expr\Cast\Unset_) {
+            return true;
+        }
+
+        /** @var Scope|null $nodeScope */
+        $nodeScope = $variable->getAttribute(AttributeKey::SCOPE);
+
+        return $nodeScope === null;
     }
 }

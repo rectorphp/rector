@@ -15,6 +15,3 @@ parameters:
 
     # so Rector code is still PHP 7.1 compatible
     php_version_features: '7.1'
-
-services:
-    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
