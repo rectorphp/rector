@@ -87,7 +87,7 @@ CODE_SAMPLE
 
         [$oldType, $newType] = $match;
 
-        $this->docBlockManipulator->changeType($property, $oldType, $newType);
+        $this->docBlockManipulator->changeTypeIncludingChildren($property, $oldType, $newType);
     }
 
     private function refactorNullableType(NullableType $nullableType): void
@@ -123,7 +123,7 @@ CODE_SAMPLE
             return;
         }
 
-        $this->docBlockManipulator->changeType($node, $oldType, $newType);
+        $this->docBlockManipulator->changeTypeIncludingChildren($node, $oldType, $newType);
     }
 
     private function processParamNode(NullableType $nullableType, Param $param, string $newType): void
@@ -135,6 +135,6 @@ CODE_SAMPLE
 
         $oldType = $this->namespaceAnalyzer->resolveTypeToFullyQualified((string) $nullableType->type, $nullableType);
 
-        $this->docBlockManipulator->changeType($classMethodNode, $oldType, $newType);
+        $this->docBlockManipulator->changeTypeIncludingChildren($classMethodNode, $oldType, $newType);
     }
 }

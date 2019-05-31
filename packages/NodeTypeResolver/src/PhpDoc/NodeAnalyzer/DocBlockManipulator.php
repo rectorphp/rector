@@ -5,7 +5,6 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -158,17 +157,22 @@ final class DocBlockManipulator
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
-    public function changeType(Node $node, string $oldType, string $newType): void
+    public function changeType(Node $node, string $oldType, string $newType, bool $includeChildren = false): void
     {
-        if ($node->getDocComment() === null) {
+        if (! $this->hasNodeTypeChangeableTags($node)) {
             return;
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        $this->replacePhpDocTypeByAnother($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
+        $this->replacePhpDocTypeByAnother($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node, $includeChildren);
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+    }
+
+    public function changeTypeIncludingChildren(Node $node, string $oldType, string $newType): void
+    {
+        $this->changeType($node, $oldType, $newType, true);
     }
 
     public function replaceAnnotationInNode(Node $node, string $oldAnnotation, string $newAnnotation): void
@@ -378,7 +382,8 @@ final class DocBlockManipulator
         AttributeAwarePhpDocNode $attributeAwarePhpDocNode,
         string $oldType,
         string $newType,
-        Node $node
+        Node $node,
+        bool $includeChildren = false
     ): AttributeAwarePhpDocNode {
         foreach ($attributeAwarePhpDocNode->children as $phpDocChildNode) {
             if (! $phpDocChildNode instanceof PhpDocTagNode) {
@@ -392,7 +397,12 @@ final class DocBlockManipulator
             /** @var VarTagValueNode|ParamTagValueNode|ReturnTagValueNode $tagValueNode */
             $tagValueNode = $phpDocChildNode->value;
 
-            $phpDocChildNode->value->type = $this->replaceTypeNode($tagValueNode->type, $oldType, $newType);
+            $phpDocChildNode->value->type = $this->replaceTypeNode(
+                $tagValueNode->type,
+                $oldType,
+                $newType,
+                $includeChildren
+            );
 
             $this->stringsTypePhpDocNodeDecorator->decorate($attributeAwarePhpDocNode, $node);
         }
@@ -481,6 +491,21 @@ final class DocBlockManipulator
         $this->importedNames = [];
     }
 
+    /**
+     * For better performance
+     */
+    public function hasNodeTypeChangeableTags(Node $node): bool
+    {
+        $docComment = $node->getDocComment();
+        if ($docComment === null) {
+            return false;
+        }
+
+        $text = $docComment->getText();
+
+        return (bool) Strings::match($text, '#\@(param|throws|return|var)\b#');
+    }
+
     private function addTypeSpecificTag(Node $node, string $name, string $type): void
     {
         // there might be no phpdoc at all
@@ -504,26 +529,28 @@ final class DocBlockManipulator
         }
     }
 
-    private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): void
+    private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): bool
     {
         // skip if has no doc comment
         if ($node->getDocComment() === null) {
-            return;
+            return false;
         }
 
         $phpDoc = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
         if ($phpDoc !== '') {
             // no change, don't save it
             if ($node->getDocComment()->getText() === $phpDoc) {
-                return;
+                return false;
             }
 
             $node->setDocComment(new Doc($phpDoc));
-            return;
+            return true;
         }
 
         // no comments, null
         $node->setAttribute('comments', null);
+
+        return true;
     }
 
     private function createPhpDocInfoFromNode(Node $node): PhpDocInfo
@@ -546,14 +573,20 @@ final class DocBlockManipulator
             $phpDocTagNode->value instanceof ThrowsTagValueNode;
     }
 
-    private function replaceTypeNode(TypeNode $typeNode, string $oldType, string $newType): TypeNode
-    {
+    private function replaceTypeNode(
+        TypeNode $typeNode,
+        string $oldType,
+        string $newType,
+        bool $includeChildren = false
+    ): TypeNode {
         // @todo use $this->nodeTraverser->traverseWithCallable here matching "AttributeAwareIdentifierTypeNode"
 
         if ($typeNode instanceof AttributeAwareIdentifierTypeNode) {
             $nodeType = $this->resolveNodeType($typeNode);
 
-            if (is_a($nodeType, $oldType, true) || ltrim($nodeType, '\\') === $oldType) {
+            // by default do not override subtypes, can actually use parent type (race condition), which is not desired
+            // see: $includeChildren
+            if (($includeChildren && is_a($nodeType, $oldType, true)) || ltrim($nodeType, '\\') === $oldType) {
                 $newType = $this->forceFqnPrefix($newType);
 
                 return new AttributeAwareIdentifierTypeNode($newType);
@@ -562,12 +595,12 @@ final class DocBlockManipulator
 
         if ($typeNode instanceof UnionTypeNode) {
             foreach ($typeNode->types as $key => $subTypeNode) {
-                $typeNode->types[$key] = $this->replaceTypeNode($subTypeNode, $oldType, $newType);
+                $typeNode->types[$key] = $this->replaceTypeNode($subTypeNode, $oldType, $newType, $includeChildren);
             }
         }
 
         if ($typeNode instanceof ArrayTypeNode) {
-            $typeNode->type = $this->replaceTypeNode($typeNode->type, $oldType, $newType);
+            $typeNode->type = $this->replaceTypeNode($typeNode->type, $oldType, $newType, $includeChildren);
 
             return $typeNode;
         }

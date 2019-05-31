@@ -115,7 +115,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // replace on @var/@param/@return/@throws
-        if ($node->getDocComment()) {
+        if ($this->docBlockManipulator->hasNodeTypeChangeableTags($node)) {
             foreach ($this->oldToNewClasses as $oldClass => $newClass) {
                 $this->docBlockManipulator->changeType($node, $oldClass, $newClass);
             }
