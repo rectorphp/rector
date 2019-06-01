@@ -9,6 +9,42 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+## [v0.5.3] - 2019-06-01
+
+### Added
+
+- [#1520] [PHP] Add `is_countable` to `CountOnNull`
+
+### Changed
+
+- [#1521] make `LevelOptionResolver` smarter + add `--set` alias to `--level`
+
+## [v0.5.2] - 2019-05-31
+
+### Fixed
+
+- [#1510] [CodeQuality] Add trait and parent class support for `CompleteDynamicPropertiesRector`
+- [#1508] [CodeQuality] Fix unneeded return in `CallableThisArrayToAnonymousFunctionRector`
+- [#1509] [PHP] Fix `AddDefaultValueForUndefinedVariableRector` for static variable
+- [#1507] [PHP] Fix `BinaryOpBetweenNumberAndStringRector` for concat
+- [#1517] fix `RenameClassRector` to change only direct class names, not children
+- [#1511] fix `PHPStormVarAnnotationRector` for too nested var [closes [#1407]]
+- [#1513] Make Symfony 4.3 + phpdoc-parser 0.3.4 compatible
+- [#1506] Ensure `static` variables are considered as declared, Thanks to [@Aerendir]
+- [#1502] Test concatenation dot is ignored, Thanks to [@Aerendir]
+
+## [v0.5.1] - 2019-05-30
+
+### Added
+
+- [#1496] [Symfony 4.3] Add class renames, method renames and added arguments
+
+### Fixed
+
+- [#1493] Fix documentation minor mistake, Thanks to [@alterphp]
+
+<!-- dumped content end -->
+
 ## [v0.5.0] - 2019-05-28
 
 ### Added
@@ -202,7 +238,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#1479]: https://github.com/rectorphp/rector/pull/1479
 [#1478]: https://github.com/rectorphp/rector/pull/1478
 [#1477]: https://github.com/rectorphp/rector/pull/1477
-[#1473]: https://github.com/rectorphp/rector/pull/1473
 [#1471]: https://github.com/rectorphp/rector/pull/1471
 [#1470]: https://github.com/rectorphp/rector/pull/1470
 [#1468]: https://github.com/rectorphp/rector/pull/1468
@@ -252,3 +287,22 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@DaveLiddament]: https://github.com/DaveLiddament
 [v0.4.12]: https://github.com/rectorphp/rector/compare/v0.4.11...v0.4.12
 [v0.5.0]: https://github.com/rectorphp/rector/compare/v0.4.12...v0.5.0
+[#1521]: https://github.com/rectorphp/rector/pull/1521
+[#1520]: https://github.com/rectorphp/rector/pull/1520
+[#1517]: https://github.com/rectorphp/rector/pull/1517
+[#1513]: https://github.com/rectorphp/rector/pull/1513
+[#1511]: https://github.com/rectorphp/rector/pull/1511
+[#1510]: https://github.com/rectorphp/rector/pull/1510
+[#1509]: https://github.com/rectorphp/rector/pull/1509
+[#1508]: https://github.com/rectorphp/rector/pull/1508
+[#1507]: https://github.com/rectorphp/rector/pull/1507
+[#1506]: https://github.com/rectorphp/rector/pull/1506
+[#1502]: https://github.com/rectorphp/rector/pull/1502
+[#1500]: https://github.com/rectorphp/rector/pull/1500
+[#1496]: https://github.com/rectorphp/rector/pull/1496
+[#1493]: https://github.com/rectorphp/rector/pull/1493
+[#1407]: https://github.com/rectorphp/rector/pull/1407
+[v0.5.2]: https://github.com/rectorphp/rector/compare/v0.5.1...v0.5.2
+[@alterphp]: https://github.com/alterphp
+[@Aerendir]: https://github.com/Aerendir
+[v0.5.1]: https://github.com/rectorphp/rector/compare/v0.5.0...v0.5.1
