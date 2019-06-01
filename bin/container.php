@@ -1,15 +1,27 @@
 <?php declare(strict_types=1);
 
+use Rector\Console\Option\LevelOptionResolver;
 use Rector\HttpKernel\RectorKernel;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symplify\PackageBuilder\Configuration\ConfigFileFinder;
-use Symplify\PackageBuilder\Configuration\LevelFileFinder;
 use Symplify\PackageBuilder\Console\Input\InputDetector;
+use Symplify\PackageBuilder\Console\ShellCode;
+use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use Symplify\PackageBuilder\Exception\Configuration\LevelNotFoundException;
 
 $configFiles = [];
 
 // Detect configuration from --level
-$configFiles[] = (new LevelFileFinder())->detectFromInputAndDirectory(new ArgvInput(), __DIR__ . '/../config/level');
+try {
+    $configFiles[] = (new LevelOptionResolver())->detectFromInputAndDirectory(
+        new ArgvInput(),
+        __DIR__ . '/../config/level'
+    );
+} catch (LevelNotFoundException $levelNotFoundException) {
+    $symfonyStyle = (new SymfonyStyleFactory())->create();
+    $symfonyStyle->error($levelNotFoundException->getMessage());
+    exit(ShellCode::ERROR);
+}
 
 // And from --config or default one
 ConfigFileFinder::detectFromInput('rector', new ArgvInput());
