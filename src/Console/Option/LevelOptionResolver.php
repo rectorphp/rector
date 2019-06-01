@@ -25,7 +25,7 @@ final class LevelOptionResolver
     /**
      * @param string[] $optionNames
      */
-    public function __construct(array $optionNames = ['--level', '-l'], string $keyName = 'level')
+    public function __construct(array $optionNames = ['--level', '-l', '--set', '-s'], string $keyName = 'level')
     {
         $this->optionNames = $optionNames;
         $this->keyName = $keyName;

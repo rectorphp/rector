@@ -153,6 +153,14 @@ final class Application extends SymfonyApplication
         ));
 
         $inputDefinition->addOption(new InputOption(
+            'set',
+            's',
+            InputOption::VALUE_REQUIRED,
+            'Finds config by shortcut name'
+        ));
+
+        // same as "set", for BC
+        $inputDefinition->addOption(new InputOption(
             'level',
             'l',
             InputOption::VALUE_REQUIRED,
