@@ -101,6 +101,7 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # tough logic
+            - 'packages/BetterPhpDocParser/src/'
             - 'packages/Symfony/src/Rector/Class_/MakeCommandLazyRector.php'
             - 'packages/Legacy/src/Rector/ClassMethod/ChangeSingletonToServiceRector.php'
             - 'src/Rector/Psr4/MultipleClassFileToPsr4ClassesRector.php'

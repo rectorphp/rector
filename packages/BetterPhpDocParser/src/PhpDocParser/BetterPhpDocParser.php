@@ -6,6 +6,7 @@ use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
@@ -108,14 +109,23 @@ final class BetterPhpDocParser extends PhpDocParser
         $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($node);
         $attributeAwareNode->setAttribute(Attribute::PHP_DOC_NODE_INFO, new StartEndInfo($tokenStart, $tokenEnd));
 
-        // add original text, for keeping trimmed spaces
+        $possibleMultilineText = null;
+        if ($attributeAwareNode instanceof PhpDocTagNode) {
+            if (property_exists($attributeAwareNode->value, 'description')) {
+                $possibleMultilineText = $attributeAwareNode->value->description;
+            }
+        }
+
         if ($attributeAwareNode instanceof PhpDocTextNode) {
+            $possibleMultilineText = $attributeAwareNode->text;
+        }
+
+        if ($possibleMultilineText) {
+            // add original text, for keeping trimmed spaces
             $originalContent = $this->getOriginalContentFromTokenIterator($tokenIterator);
 
-            $currentText = $attributeAwareNode->text;
-
             // we try to match original content without trimmed spaces
-            $currentTextPattern = '#' . preg_quote($currentText, '#') . '#s';
+            $currentTextPattern = '#' . preg_quote($possibleMultilineText, '#') . '#s';
             $currentTextPattern = Strings::replace($currentTextPattern, '#\s#', '\s+');
             $match = Strings::match($originalContent, $currentTextPattern);
 

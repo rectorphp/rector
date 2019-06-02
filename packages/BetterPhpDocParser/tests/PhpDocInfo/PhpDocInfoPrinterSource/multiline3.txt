@@ -1,5 +1,4 @@
 /**
-  * @param string      $orderSrcId
   * @param string|null $channelId  Also if we do the check in the self::execute method,
   *                                allow for null to make PHPStan pass
   */
