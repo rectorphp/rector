@@ -5,6 +5,11 @@ namespace Rector\BetterPhpDocParser\Attributes\Attribute;
 final class Attribute
 {
     /**
+     * @var string
+     */
+    public const HAS_DESCRIPTION_WITH_ORIGINAL_SPACES = 'has_description_with_restored_spaces';
+
+    /**
      * Fully-qualified name
      *
      * @var string

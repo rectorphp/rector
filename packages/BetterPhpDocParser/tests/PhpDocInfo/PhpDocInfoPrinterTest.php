@@ -72,6 +72,9 @@ final class PhpDocInfoPrinterTest extends AbstractKernelTestCase
     {
         yield [__DIR__ . '/PhpDocInfoPrinterSource/multiline1.txt'];
         yield [__DIR__ . '/PhpDocInfoPrinterSource/multiline2.txt'];
+        yield [__DIR__ . '/PhpDocInfoPrinterSource/multiline3.txt'];
+        yield [__DIR__ . '/PhpDocInfoPrinterSource/multiline4.txt'];
+        yield [__DIR__ . '/PhpDocInfoPrinterSource/multiline5.txt'];
     }
 
     /**

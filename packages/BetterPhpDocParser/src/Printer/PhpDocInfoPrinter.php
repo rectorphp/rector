@@ -128,6 +128,7 @@ final class PhpDocInfoPrinter
 
         /** @var StartEndInfo|null $tokenStartEndInfo */
         $startEndInfo = $attributeAwareNode->getAttribute(Attribute::PHP_DOC_NODE_INFO) ?: $startEndInfo;
+        $attributeAwareNode = $this->fixMultilineDescriptions($attributeAwareNode);
 
         if ($startEndInfo) {
             $isLastToken = ($nodeCount === $i);
@@ -156,11 +157,6 @@ final class PhpDocInfoPrinter
                 $this->tokens,
                 $startEndInfo
             );
-        }
-
-        // fix multiline BC break - https://github.com/phpstan/phpdoc-parser/pull/26/files
-        if ($attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT)) {
-            $this->restoreOriginalSpacingInText($attributeAwareNode);
         }
 
         $content = (string) $attributeAwareNode;
@@ -209,6 +205,9 @@ final class PhpDocInfoPrinter
         return $this->appendToOutput($output, $from, $to, $positionJumpSet);
     }
 
+    /**
+     * @param PhpDocTagNode|AttributeAwareNodeInterface $phpDocTagNode
+     */
     private function printPhpDocTagNode(
         PhpDocTagNode $phpDocTagNode,
         StartEndInfo $startEndInfo,
@@ -220,6 +219,17 @@ final class PhpDocInfoPrinter
 
         if ($nodeOutput && $this->isTagSeparatedBySpace($nodeOutput, $phpDocTagNode)) {
             $output .= ' ';
+        }
+
+        if ($phpDocTagNode->getAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES)) {
+            if (property_exists($phpDocTagNode->value, 'description') && $phpDocTagNode->value->description) {
+                $pattern = Strings::replace($phpDocTagNode->value->description, '#[\s]+#', '\s+');
+                $nodeOutput = Strings::replace($nodeOutput, '#' . $pattern . '#', $phpDocTagNode->value->description);
+
+                if (substr_count($nodeOutput, "\n")) {
+                    $nodeOutput = Strings::replace($nodeOutput, "#\n#", PHP_EOL . '  * ');
+                }
+            }
         }
 
         return $output . $nodeOutput;
@@ -290,17 +300,29 @@ final class PhpDocInfoPrinter
     /**
      * @param PhpDocTextNode|AttributeAwareNodeInterface $attributeAwareNode
      */
-    private function restoreOriginalSpacingInText(AttributeAwareNodeInterface $attributeAwareNode): void
-    {
+    private function restoreOriginalSpacingInText(
+        AttributeAwareNodeInterface $attributeAwareNode
+    ): ?AttributeAwareNodeInterface {
         /** @var string $originalContent */
         $originalContent = $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT);
         $oldSpaces = Strings::matchAll($originalContent, '#\s+#ms');
 
-        $newParts = Strings::split($attributeAwareNode->text, '#\s+#');
+        $currentText = null;
+        if ($attributeAwareNode instanceof PhpDocTagNode) {
+            if (property_exists($attributeAwareNode->value, 'description')) {
+                $currentText = $attributeAwareNode->value->description;
+            }
+        }
+
+        if ($attributeAwareNode instanceof PhpDocTextNode) {
+            $currentText = $attributeAwareNode->text;
+        }
+
+        $newParts = Strings::split($currentText, '#\s+#');
 
         // we can't do this!
         if (count($oldSpaces) + 1 !== count($newParts)) {
-            return;
+            return null;
         }
 
         $newText = '';
@@ -317,7 +339,36 @@ final class PhpDocInfoPrinter
         }
 
         if ($newText) {
-            $attributeAwareNode->text = $newText;
+            if ($attributeAwareNode instanceof PhpDocTagNode) {
+                if (property_exists($attributeAwareNode->value, 'description')) {
+                    $attributeAwareNode->value->description = $newText;
+                    return $attributeAwareNode;
+                }
+            }
+
+            if ($attributeAwareNode instanceof PhpDocTextNode) {
+                $attributeAwareNode->text = $newText;
+                return $attributeAwareNode;
+            }
         }
+
+        return null;
+    }
+
+    /**
+     * Fix multiline BC break - https://github.com/phpstan/phpdoc-parser/pull/26/files
+     */
+    private function fixMultilineDescriptions(AttributeAwareNodeInterface $attributeAwareNode): AttributeAwareNodeInterface
+    {
+        if (! $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT)) {
+            return $attributeAwareNode;
+        }
+
+        $nodeWithRestoredSpaces = $this->restoreOriginalSpacingInText($attributeAwareNode);
+        if ($nodeWithRestoredSpaces !== null) {
+            $attributeAwareNode = $nodeWithRestoredSpaces;
+            $attributeAwareNode->setAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES, true);
+        }
+        return $attributeAwareNode;
     }
 }
