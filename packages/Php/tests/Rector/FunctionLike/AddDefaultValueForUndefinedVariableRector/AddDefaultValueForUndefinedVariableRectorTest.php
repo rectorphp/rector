@@ -10,6 +10,7 @@ final class AddDefaultValueForUndefinedVariableRectorTest extends AbstractRector
     public function test(): void
     {
         $this->doTestFiles([
+            __DIR__ . '/Fixture/anonymous_function.php.inc',
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/in_foreach.php.inc',
             __DIR__ . '/Fixture/vimeo_one.php.inc',
