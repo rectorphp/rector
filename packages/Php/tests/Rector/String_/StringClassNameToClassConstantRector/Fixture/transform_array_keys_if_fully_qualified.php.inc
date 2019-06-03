@@ -7,7 +7,7 @@ class IgnoreArrayKeys
     public function run()
     {
         // This key contains the \Exception object
-        return ['Exception' => new \Exception()];
+        return ['\Exception' => new \Exception()];
     }
 }
 
