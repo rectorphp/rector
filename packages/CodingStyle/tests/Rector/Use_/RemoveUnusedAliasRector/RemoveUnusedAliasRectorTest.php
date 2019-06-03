@@ -13,6 +13,7 @@ final class RemoveUnusedAliasRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/used.php.inc',
             __DIR__ . '/Fixture/class_name.php.inc',
+            __DIR__ . '/Fixture/different_namespaces_same_name.php.inc',
             # no namespace
             __DIR__ . '/Fixture/no_namespace.php.inc',
             __DIR__ . '/Fixture/no_namespace_class_name.php.inc',
