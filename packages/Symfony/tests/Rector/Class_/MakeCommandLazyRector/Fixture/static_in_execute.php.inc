@@ -2,19 +2,21 @@
 
 namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\Fixture;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SunshineCommand extends \Symfony\Component\Console\Command\Command
+final class StaticInExecute extends Command
 {
-    public function configure()
+    protected function configure()
     {
-        $this->setName('sunshine');
+        $this->setName('some:command');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $input->setName('trap');
+        // This will fail
+        SomeClass::staticMethodCall();
     }
 }
 
@@ -24,19 +26,21 @@ class SunshineCommand extends \Symfony\Component\Console\Command\Command
 
 namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\Fixture;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SunshineCommand extends \Symfony\Component\Console\Command\Command
+final class StaticInExecute extends Command
 {
-    protected static $defaultName = 'sunshine';
-    public function configure()
+    protected static $defaultName = 'some:command';
+    protected function configure()
     {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $input->setName('trap');
+        // This will fail
+        SomeClass::staticMethodCall();
     }
 }
 
