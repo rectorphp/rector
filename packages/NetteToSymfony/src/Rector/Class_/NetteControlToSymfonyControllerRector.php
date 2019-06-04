@@ -18,7 +18,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -41,11 +40,6 @@ final class NetteControlToSymfonyControllerRector extends AbstractRector
     private $classManipulator;
 
     /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
      * @var Expr|null
      */
     private $templateFileExpr;
@@ -57,11 +51,9 @@ final class NetteControlToSymfonyControllerRector extends AbstractRector
 
     public function __construct(
         ClassManipulator $classManipulator,
-        CallableNodeTraverser $callableNodeTraverser,
         string $netteControlClass = 'Nette\Application\UI\Control'
     ) {
         $this->classManipulator = $classManipulator;
-        $this->callableNodeTraverser = $callableNodeTraverser;
         $this->netteControlClass = $netteControlClass;
     }
 
@@ -163,9 +155,7 @@ CODE_SAMPLE
         $this->templateFileExpr = null;
         $this->templateVariables = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (
-            Node $node
-        ): void {
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): void {
             if ($node instanceof MethodCall && $this->isName($node, 'render')) {
                 $this->templateFileExpr = $node->args[0]->value;
                 $this->removeNode($node);

@@ -20,7 +20,6 @@ use Rector\CodingStyle\Imports\ShortNameResolver;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -38,11 +37,6 @@ final class RemoveUnusedAliasRector extends AbstractRector
     private $resolvedDocPossibleAliases = [];
 
     /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
      * @var ShortNameResolver
      */
     private $shortNameResolver;
@@ -52,12 +46,8 @@ final class RemoveUnusedAliasRector extends AbstractRector
      */
     private $classNaming;
 
-    public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
-        ShortNameResolver $shortNameResolver,
-        ClassNaming $classNaming
-    ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
+    public function __construct(ShortNameResolver $shortNameResolver, ClassNaming $classNaming)
+    {
         $this->shortNameResolver = $shortNameResolver;
         $this->classNaming = $classNaming;
     }
@@ -308,7 +298,7 @@ CODE_SAMPLE
 
     private function resolveDocPossibleAliases(Node $searchNode): void
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable([$searchNode], function (Node $node): void {
+        $this->traverseNodesWithCallable([$searchNode], function (Node $node): void {
             if ($node->getDocComment() === null) {
                 return;
             }

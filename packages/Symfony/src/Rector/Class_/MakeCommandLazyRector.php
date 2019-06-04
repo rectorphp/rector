@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\StringType;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -24,16 +23,6 @@ final class MakeCommandLazyRector extends AbstractRector
      * @var string
      */
     private const COMMAND_CLASS = 'Symfony\Component\Console\Command\Command';
-
-    /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    public function __construct(CallableNodeTraverser $callableNodeTraverser)
-    {
-        $this->callableNodeTraverser = $callableNodeTraverser;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -106,9 +95,7 @@ CODE_SAMPLE
     private function resolveCommandNameAndRemove(Class_ $class): ?Node
     {
         $commandName = null;
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (
-            &$commandName
-        ) {
+        $this->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (&$commandName) {
             if ($node instanceof MethodCall) {
                 if (! $this->isType($node->var, self::COMMAND_CLASS)) {
                     return null;

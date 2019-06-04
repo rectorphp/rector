@@ -20,7 +20,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -35,16 +34,6 @@ final class AssignArrayToStringRector extends AbstractRector
      * @var PropertyProperty[]
      */
     private $emptyStringPropertyNodes = [];
-
-    /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    public function __construct(CallableNodeTraverser $callableNodeTraverser)
-    {
-        $this->callableNodeTraverser = $callableNodeTraverser;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -115,8 +104,7 @@ CODE_SAMPLE
     public function beforeTraverse(array $nodes): ?array
     {
         // collect all known "{anything} = '';" assigns
-
-        $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node): void {
+        $this->traverseNodesWithCallable($nodes, function (Node $node): void {
             if ($node instanceof PropertyProperty && $node->default && $this->isEmptyStringNode($node->default)) {
                 $this->emptyStringPropertyNodes[] = $node;
             }

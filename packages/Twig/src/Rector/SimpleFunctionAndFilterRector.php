@@ -11,7 +11,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -32,15 +31,9 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
     private $oldToNewClasses = [];
 
     /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
      * @param string[] $oldToNewClasses
      */
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
         string $twigExtensionClass = 'Twig_Extension',
         array $oldToNewClasses = [
             'Twig_Function_Method' => 'Twig_SimpleFunction',
@@ -48,7 +41,6 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
         ]
     ) {
         $this->twigExtensionClass = $twigExtensionClass;
-        $this->callableNodeTraverser = $callableNodeTraverser;
         $this->oldToNewClasses = $oldToNewClasses;
     }
 
@@ -132,7 +124,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->callableNodeTraverser->traverseNodesWithCallable([$node->expr], function (Node $node): ?Node {
+        $this->traverseNodesWithCallable([$node->expr], function (Node $node): ?Node {
             if (! $node instanceof ArrayItem) {
                 return null;
             }

@@ -19,7 +19,6 @@ use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -40,16 +39,6 @@ final class ForToForeachRector extends AbstractRector
      * @var Expr|null
      */
     private $iteratedExpr;
-
-    /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    public function __construct(CallableNodeTraverser $callableNodeTraverser)
-    {
-        $this->callableNodeTraverser = $callableNodeTraverser;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -257,7 +246,7 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use ($expr): ?Expr {
+        $this->traverseNodesWithCallable($stmts, function (Node $node) use ($expr): ?Expr {
             if (! $node instanceof ArrayDimFetch) {
                 return null;
             }

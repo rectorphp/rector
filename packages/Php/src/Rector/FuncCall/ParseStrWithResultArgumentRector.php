@@ -7,7 +7,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,16 +18,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class ParseStrWithResultArgumentRector extends AbstractRector
 {
-    /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    public function __construct(CallableNodeTraverser $callableNodeTraverser)
-    {
-        $this->callableNodeTraverser = $callableNodeTraverser;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Use $result argument in parse_str() function', [
@@ -77,7 +66,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->callableNodeTraverser->traverseNodesWithCallable([$nextExpression], function (Node $node) use (
+        $this->traverseNodesWithCallable([$nextExpression], function (Node $node) use (
             $resultVariable
         ): ?Variable {
             if ($node instanceof FuncCall) {
