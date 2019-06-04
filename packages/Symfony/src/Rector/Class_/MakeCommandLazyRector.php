@@ -3,11 +3,13 @@
 namespace Rector\Symfony\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\StringType;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -108,11 +110,20 @@ CODE_SAMPLE
             &$commandName
         ) {
             if ($node instanceof MethodCall) {
+                if (! $this->isType($node->var, self::COMMAND_CLASS)) {
+                    return null;
+                }
+
                 if (! $this->isName($node, 'setName')) {
                     return null;
                 }
 
                 $commandName = $node->args[0]->value;
+                $commandNameStaticType = $this->getStaticType($commandName);
+                if (! $commandNameStaticType instanceof StringType) {
+                    return null;
+                }
+
                 $this->removeNode($node);
             }
 
@@ -124,12 +135,29 @@ CODE_SAMPLE
                 $onlyNode = $node->stmts[0];
                 if ($onlyNode instanceof Expression) {
                     $onlyNode = $onlyNode->expr;
-                    if (! $this->isName($onlyNode, '__construct')) {
+
+                    $commandName = $this->matchCommandNameNodeInConstruct($onlyNode);
+                    if ($commandName === null) {
                         return null;
                     }
 
-                    $commandName = $onlyNode->args[0]->value;
-                    if (! is_string($this->getValue($commandName))) {
+                    if (count($node->params) === 0) {
+                        $this->removeNode($node);
+                    }
+                }
+            }
+
+            if ($node instanceof ClassMethod && $this->isName($node, '__construct')) {
+                if (count((array) $node->stmts) !== 1) {
+                    return null;
+                }
+
+                $onlyNode = $node->stmts[0];
+                if ($onlyNode instanceof Expression) {
+                    $onlyNode = $onlyNode->expr;
+
+                    $commandName = $this->matchCommandNameNodeInConstruct($onlyNode);
+                    if ($commandName === null) {
                         return null;
                     }
 
@@ -140,16 +168,41 @@ CODE_SAMPLE
             }
 
             if ($node instanceof StaticCall) {
-                if (! $this->isName($node, '__construct')) {
+                if (! $this->isType($node, self::COMMAND_CLASS)) {
                     return null;
                 }
 
-                $commandName = $node->args[0]->value;
+                $commandName = $this->matchCommandNameNodeInConstruct($node);
+                if ($commandName === null) {
+                    return null;
+                }
 
                 array_shift($node->args);
             }
         });
 
         return $commandName;
+    }
+
+    private function matchCommandNameNodeInConstruct(Expr $expr): ?Node
+    {
+        if (! $expr instanceof MethodCall && ! $expr instanceof StaticCall) {
+            return null;
+        }
+
+        if (! $this->isName($expr, '__construct')) {
+            return null;
+        }
+
+        if (count($expr->args) < 1) {
+            return null;
+        }
+
+        $staticType = $this->getStaticType($expr->args[0]->value);
+        if (! $staticType instanceof StringType) {
+            return null;
+        }
+
+        return $expr->args[0]->value;
     }
 }

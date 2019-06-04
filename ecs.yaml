@@ -101,7 +101,8 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # tough logic
-            - 'packages/BetterPhpDocParser/src/'
+            - 'src/PhpParser/Node/Commander/NodeRemovingCommander.php'
+            - 'packages/BetterPhpDocParser/src/*'
             - 'packages/Symfony/src/Rector/Class_/MakeCommandLazyRector.php'
             - 'packages/Legacy/src/Rector/ClassMethod/ChangeSingletonToServiceRector.php'
             - 'src/Rector/Psr4/MultipleClassFileToPsr4ClassesRector.php'
@@ -150,4 +151,3 @@ parameters:
         Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
             # 3rd party api
             - 'src/PhpParser/Node/Value/ValueResolver.php'
-
