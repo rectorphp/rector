@@ -232,7 +232,11 @@ final class PhpDocInfoPrinter
         if ($phpDocTagNode->getAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES)) {
             if (property_exists($phpDocTagNode->value, 'description') && $phpDocTagNode->value->description) {
                 $pattern = Strings::replace($phpDocTagNode->value->description, '#[\s]+#', '\s+');
-                $nodeOutput = Strings::replace($nodeOutput, '#' . preg_quote($pattern, '#') . '#', $phpDocTagNode->value->description);
+                $nodeOutput = Strings::replace(
+                    $nodeOutput,
+                    '#' . preg_quote($pattern, '#') . '#',
+                    $phpDocTagNode->value->description
+                );
                 if (substr_count($nodeOutput, "\n")) {
                     $nodeOutput = Strings::replace($nodeOutput, "#\n#", PHP_EOL . '  * ');
                 }
