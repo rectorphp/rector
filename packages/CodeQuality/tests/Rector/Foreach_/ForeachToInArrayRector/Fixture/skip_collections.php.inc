@@ -4,7 +4,7 @@ namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\Fixtur
 
 use Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\Source\Collection;
 
-final class IgnoreCollections
+final class SkipCollections
 {
     public function foreachToInArray(): bool
     {

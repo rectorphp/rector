@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -92,6 +93,11 @@ CODE_SAMPLE
         /** @var Identical|Equal $ifCondition */
         $ifCondition = $firstNodeInsideForeach->cond;
         $foreachValueVar = $node->valueVar;
+
+        $foreachValueStaticType = $this->getStaticType($node->expr);
+        if ($foreachValueStaticType instanceof ObjectType) {
+            return null;
+        }
 
         $matchedNodes = $this->matchNodes($ifCondition, $foreachValueVar);
         if ($matchedNodes === null) {
