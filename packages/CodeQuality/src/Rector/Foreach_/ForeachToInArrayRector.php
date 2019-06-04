@@ -94,11 +94,6 @@ CODE_SAMPLE
         $ifCondition = $firstNodeInsideForeach->cond;
         $foreachValueVar = $node->valueVar;
 
-        $foreachValueStaticType = $this->getStaticType($node->expr);
-        if ($foreachValueStaticType instanceof ObjectType) {
-            return null;
-        }
-
         $matchedNodes = $this->matchNodes($ifCondition, $foreachValueVar);
         if ($matchedNodes === null) {
             return null;
@@ -145,17 +140,17 @@ CODE_SAMPLE
         return $return;
     }
 
-    private function shouldSkipForeach(Foreach_ $foreachNode): bool
+    private function shouldSkipForeach(Foreach_ $foreach): bool
     {
-        if (isset($foreachNode->keyVar)) {
+        if (isset($foreach->keyVar)) {
             return true;
         }
 
-        if (count($foreachNode->stmts) > 1) {
+        if (count($foreach->stmts) > 1) {
             return true;
         }
 
-        $nextNode = $foreachNode->getAttribute(AttributeKey::NEXT_NODE);
+        $nextNode = $foreach->getAttribute(AttributeKey::NEXT_NODE);
         if ($nextNode === null || ! $nextNode instanceof Return_) {
             return true;
         }
@@ -170,7 +165,12 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $foreachNode->stmts[0] instanceof If_;
+        $foreachValueStaticType = $this->getStaticType($foreach->expr);
+        if ($foreachValueStaticType instanceof ObjectType) {
+            return true;
+        }
+
+        return ! $foreach->stmts[0] instanceof If_;
     }
 
     private function shouldSkipIf(If_ $ifNode): bool
