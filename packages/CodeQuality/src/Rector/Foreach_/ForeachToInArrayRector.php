@@ -17,7 +17,6 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -30,18 +29,12 @@ final class ForeachToInArrayRector extends AbstractRector
     private $comments = [];
 
     /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
      * @var BinaryOpManipulator
      */
     private $binaryOpManipulator;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, BinaryOpManipulator $binaryOpManipulator)
+    public function __construct(BinaryOpManipulator $binaryOpManipulator)
     {
-        $this->callableNodeTraverser = $callableNodeTraverser;
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
 
@@ -226,7 +219,7 @@ CODE_SAMPLE
      */
     private function combineCommentsToNode(Node $originalNode, Node $newNode): void
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable([$originalNode], function (Node $node): void {
+        $this->traverseNodesWithCallable([$originalNode], function (Node $node): void {
             if ($node->hasAttribute('comments')) {
                 $this->comments = array_merge($this->comments, $node->getComments());
             }

@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeContainer\ParsedNodesByType;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -25,11 +24,6 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
  */
 final class NewUniqueObjectToEntityFactoryRector extends AbstractRector
 {
-    /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
     /**
      * @var string[]
      */
@@ -65,12 +59,10 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector
      */
     public function __construct(
         PropertyNaming $propertyNaming,
-        CallableNodeTraverser $callableNodeTraverser,
         ParsedNodesByType $parsedNodesByType,
         StaticTypesInClassResolver $staticTypesInClassResolver,
         array $typesToServices = []
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
         $this->propertyNaming = $propertyNaming;
         $this->typesToServices = $typesToServices;
         $this->parsedNodesByType = $parsedNodesByType;
@@ -144,7 +136,7 @@ CODE_SAMPLE
         // collect classes with new to factory in all classes
         $classesUsingTypes = $this->resolveClassesUsingTypes();
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node) use (
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use (
             $classesUsingTypes
         ): ?MethodCall {
             if (! $node instanceof New_) {

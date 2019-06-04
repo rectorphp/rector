@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -24,11 +23,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class CompleteDynamicPropertiesRector extends AbstractRector
 {
     /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
      * @var TypeToStringResolver
      */
     private $typeToStringResolver;
@@ -39,11 +33,9 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
     private $docBlockManipulator;
 
     public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
         TypeToStringResolver $typeToStringResolver,
         DocBlockManipulator $docBlockManipulator
     ) {
-        $this->callableNodeTraverser = $callableNodeTraverser;
         $this->typeToStringResolver = $typeToStringResolver;
         $this->docBlockManipulator = $docBlockManipulator;
     }
@@ -99,9 +91,7 @@ CODE_SAMPLE
         $fetchedLocalPropertyNameToTypes = $this->resolveFetchedLocalPropertyNameToTypes($node);
 
         $propertyNames = [];
-        $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node) use (
-            &$propertyNames
-        ) {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use (&$propertyNames) {
             if (! $node instanceof Property) {
                 return null;
             }
@@ -169,7 +159,7 @@ CODE_SAMPLE
     {
         $fetchedLocalPropertyNameToTypes = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             &$fetchedLocalPropertyNameToTypes
         ) {
             if (! $node instanceof PropertyFetch) {

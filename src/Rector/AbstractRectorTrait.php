@@ -13,4 +13,5 @@ trait AbstractRectorTrait
     use NodeFactoryTrait;
     use VisibilityTrait;
     use ValueResolverTrait;
+    use CallableNodeTraverserTrait;
 }

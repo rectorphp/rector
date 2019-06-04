@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\Exception\BreakScopeException;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -31,16 +30,6 @@ final class AddDefaultValueForUndefinedVariableRector extends AbstractRector
      * @var string[]
      */
     private $undefinedVariables = [];
-
-    /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    public function __construct(CallableNodeTraverser $callableNodeTraverser)
-    {
-        $this->callableNodeTraverser = $callableNodeTraverser;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -92,7 +81,7 @@ CODE_SAMPLE
         $this->undefinedVariables = [];
 
         try {
-            $this->callableNodeTraverser->traverseNodesWithCallable((array) $node->stmts, function (Node $node) {
+            $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) {
                 // entering new scope - break!
                 if ($node instanceof FunctionLike) {
                     throw new BreakScopeException();

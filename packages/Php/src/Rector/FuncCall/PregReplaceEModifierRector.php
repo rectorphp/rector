@@ -17,7 +17,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Parser;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -32,15 +31,9 @@ final class PregReplaceEModifierRector extends AbstractRector
      */
     private $parser;
 
-    /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    public function __construct(Parser $parser, CallableNodeTraverser $callableNodeTraverser)
+    public function __construct(Parser $parser)
     {
         $this->parser = $parser;
-        $this->callableNodeTraverser = $callableNodeTraverser;
     }
 
     public function getDefinition(): RectorDefinition
@@ -130,7 +123,7 @@ CODE_SAMPLE
 
         $stmt = $contentNodes[0]->expr;
 
-        $this->callableNodeTraverser->traverseNodesWithCallable([$stmt], function (Node $node): Node {
+        $this->traverseNodesWithCallable([$stmt], function (Node $node): Node {
             if (! $node instanceof String_) {
                 return $node;
             }

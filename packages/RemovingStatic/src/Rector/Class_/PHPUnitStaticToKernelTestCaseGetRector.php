@@ -23,7 +23,6 @@ use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -52,11 +51,6 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector
     private $kernelTestCaseClass;
 
     /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
      * @var ClassManipulator
      */
     private $classManipulator;
@@ -71,7 +65,6 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector
      */
     public function __construct(
         PropertyNaming $propertyNaming,
-        CallableNodeTraverser $callableNodeTraverser,
         ClassManipulator $classManipulator,
         PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
         array $staticClassTypes = [],
@@ -80,7 +73,6 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector
         $this->staticClassTypes = $staticClassTypes;
         $this->propertyNaming = $propertyNaming;
         $this->kernelTestCaseClass = $kernelTestCaseClass;
-        $this->callableNodeTraverser = $callableNodeTraverser;
         $this->classManipulator = $classManipulator;
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
     }
@@ -207,7 +199,7 @@ CODE_SAMPLE
     {
         $this->newProperties = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node): void {
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node): void {
             if (! $node instanceof StaticCall) {
                 return;
             }

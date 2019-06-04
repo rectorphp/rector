@@ -11,14 +11,12 @@ final class CallableNodeTraverser
 {
     /**
      * @param Node[] $nodes
-     * @return Node[]
      */
-    public function traverseNodesWithCallable(array $nodes, callable $callable): array
+    public function traverseNodesWithCallable(array $nodes, callable $callable): void
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->createNodeVisitor($callable));
-
-        return $nodeTraverser->traverse($nodes);
+        $nodeTraverser->traverse($nodes);
     }
 
     private function createNodeVisitor(callable $callable): NodeVisitor

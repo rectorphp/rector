@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Catch_;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,15 +17,9 @@ final class CatchExceptionNameMatchingTypeRector extends AbstractRector
      */
     private $classNaming;
 
-    /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    public function __construct(ClassNaming $classNaming, CallableNodeTraverser $callableNodeTraverser)
+    public function __construct(ClassNaming $classNaming)
     {
         $this->classNaming = $classNaming;
-        $this->callableNodeTraverser = $callableNodeTraverser;
     }
 
     public function getDefinition(): RectorDefinition
@@ -103,7 +96,7 @@ CODE_SAMPLE
 
     private function renameVariableInStmts(Catch_ $catch, string $oldVariableName, string $newVariableName): void
     {
-        $this->callableNodeTraverser->traverseNodesWithCallable($catch->stmts, function (Node $node) use (
+        $this->traverseNodesWithCallable($catch->stmts, function (Node $node) use (
             $oldVariableName,
             $newVariableName
         ): void {
