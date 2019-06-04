@@ -127,13 +127,14 @@ final class LevelOptionResolver
         foreach ($configFiles as $configFile) {
             // only similar configs, not too far
             // this allows to match "Symfony.40" to "symfony40" config
-            $distance = levenshtein($configFile->getFilenameWithoutExtension(), $levelName);
+            $fileNameWithoutExtension = pathinfo($configFile->getFilename(), PATHINFO_FILENAME);
+            $distance = levenshtein($fileNameWithoutExtension, $levelName);
             if ($distance > 2) {
                 continue;
             }
 
             if ($levelVersion) {
-                $fileVersion = $this->matchVersionInTheEnd($configFile->getFilenameWithoutExtension());
+                $fileVersion = $this->matchVersionInTheEnd($fileNameWithoutExtension);
                 if ($levelVersion !== $fileVersion) {
                     // not a version match
                     continue;
