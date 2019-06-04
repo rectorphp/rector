@@ -92,6 +92,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($varTypeInfo->isNullable()) {
+            return null;
+        }
+
         $node->default = new Array_();
 
         return $node;

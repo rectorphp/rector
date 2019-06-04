@@ -13,6 +13,7 @@ final class ArrayPropertyDefaultValueRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/skip.php.inc',
             __DIR__ . '/Fixture/static_property.php.inc',
+            __DIR__ . '/Fixture/skip_nullable_array.php.inc',
         ]);
     }
 
