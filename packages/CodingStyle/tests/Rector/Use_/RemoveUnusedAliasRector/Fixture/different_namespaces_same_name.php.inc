@@ -9,6 +9,8 @@ class DifferentNamespacesSameClass
 {
     public function run()
     {
+        $firstStandalone = new FirstStandalone;
+        $secondStandalone = new SecondStandalone;
     }
 }
 
