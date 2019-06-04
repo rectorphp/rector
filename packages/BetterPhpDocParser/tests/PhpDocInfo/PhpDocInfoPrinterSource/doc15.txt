@@ -1,0 +1,6 @@
+/**
+ * Stage constructor.
+ *
+ * @param string $stage
+ * @param boolean $undefined Should the object be undefined?
+ */
