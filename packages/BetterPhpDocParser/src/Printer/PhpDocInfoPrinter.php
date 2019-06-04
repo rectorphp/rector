@@ -51,9 +51,17 @@ final class PhpDocInfoPrinter
      */
     private $phpDocInfo;
 
-    public function __construct(OriginalSpacingRestorer $originalSpacingRestorer)
-    {
+    /**
+     * @var MultilineSpaceFormatPreserver
+     */
+    private $multilineSpaceFormatPreserver;
+
+    public function __construct(
+        OriginalSpacingRestorer $originalSpacingRestorer,
+        MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver
+    ) {
         $this->originalSpacingRestorer = $originalSpacingRestorer;
+        $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
     }
 
     /**
@@ -128,7 +136,7 @@ final class PhpDocInfoPrinter
 
         /** @var StartEndInfo|null $tokenStartEndInfo */
         $startEndInfo = $attributeAwareNode->getAttribute(Attribute::PHP_DOC_NODE_INFO) ?: $startEndInfo;
-        $attributeAwareNode = $this->fixMultilineDescriptions($attributeAwareNode);
+        $attributeAwareNode = $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($attributeAwareNode);
 
         if ($startEndInfo) {
             $isLastToken = ($nodeCount === $i);
@@ -295,80 +303,5 @@ final class PhpDocInfoPrinter
         }
 
         return Strings::contains($this->phpDocInfo->getOriginalContent(), $phpDocTagNode->name . ' ');
-    }
-
-    /**
-     * @param PhpDocTextNode|AttributeAwareNodeInterface $attributeAwareNode
-     */
-    private function restoreOriginalSpacingInText(
-        AttributeAwareNodeInterface $attributeAwareNode
-    ): ?AttributeAwareNodeInterface {
-        /** @var string $originalContent */
-        $originalContent = $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT);
-        $oldSpaces = Strings::matchAll($originalContent, '#\s+#ms');
-
-        $currentText = null;
-        if ($attributeAwareNode instanceof PhpDocTagNode) {
-            if (property_exists($attributeAwareNode->value, 'description')) {
-                $currentText = $attributeAwareNode->value->description;
-            }
-        }
-
-        if ($attributeAwareNode instanceof PhpDocTextNode) {
-            $currentText = $attributeAwareNode->text;
-        }
-
-        $newParts = Strings::split($currentText, '#\s+#');
-
-        // we can't do this!
-        if (count($oldSpaces) + 1 !== count($newParts)) {
-            return null;
-        }
-
-        $newText = '';
-        foreach ($newParts as $key => $newPart) {
-            $newText .= $newPart;
-            if (isset($oldSpaces[$key])) {
-                if (Strings::match($oldSpaces[$key][0], '#\n {1,}$#s')) {
-                    // remove last extra space
-                    $oldSpaces[$key][0] = Strings::substring($oldSpaces[$key][0], 0, -1);
-                }
-
-                $newText .= $oldSpaces[$key][0];
-            }
-        }
-
-        if ($newText) {
-            if ($attributeAwareNode instanceof PhpDocTagNode) {
-                if (property_exists($attributeAwareNode->value, 'description')) {
-                    $attributeAwareNode->value->description = $newText;
-                    return $attributeAwareNode;
-                }
-            }
-
-            if ($attributeAwareNode instanceof PhpDocTextNode) {
-                $attributeAwareNode->text = $newText;
-                return $attributeAwareNode;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Fix multiline BC break - https://github.com/phpstan/phpdoc-parser/pull/26/files
-     */
-    private function fixMultilineDescriptions(AttributeAwareNodeInterface $attributeAwareNode): AttributeAwareNodeInterface
-    {
-        if (! $attributeAwareNode->getAttribute(Attribute::ORIGINAL_CONTENT)) {
-            return $attributeAwareNode;
-        }
-
-        $nodeWithRestoredSpaces = $this->restoreOriginalSpacingInText($attributeAwareNode);
-        if ($nodeWithRestoredSpaces !== null) {
-            $attributeAwareNode = $nodeWithRestoredSpaces;
-            $attributeAwareNode->setAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES, true);
-        }
-        return $attributeAwareNode;
     }
 }
