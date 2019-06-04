@@ -16,7 +16,7 @@ final class AutowiredEventDispatcher extends EventDispatcher
             $this->addSubscriber($eventSubscriber);
         }
 
-        if (method_exists(get_parent_class($this), '__construct')) {
+        if (method_exists(parent::class, '__construct')) {
             parent::__construct();
         }
     }

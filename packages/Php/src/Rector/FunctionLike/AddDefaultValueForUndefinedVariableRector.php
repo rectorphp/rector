@@ -121,7 +121,7 @@ CODE_SAMPLE
                 $this->undefinedVariables[] = $variableName;
             });
         } catch (BreakScopeException $breakScopeException) {
-            // nothing
+            // @ignoreException
         }
 
         if ($this->undefinedVariables === []) {

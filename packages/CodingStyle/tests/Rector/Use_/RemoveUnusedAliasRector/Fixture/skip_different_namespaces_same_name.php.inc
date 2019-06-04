@@ -13,6 +13,3 @@ class DifferentNamespacesSameClass
         $secondStandalone = new SecondStandalone;
     }
 }
-
-?>
-

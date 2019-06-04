@@ -16,6 +16,8 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeVisitor\NameResolver;
+use Rector\CodingStyle\Imports\ShortNameResolver;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -40,9 +42,24 @@ final class RemoveUnusedAliasRector extends AbstractRector
      */
     private $callableNodeTraverser;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser)
-    {
+    /**
+     * @var ShortNameResolver
+     */
+    private $shortNameResolver;
+
+    /**
+     * @var ClassNaming
+     */
+    private $classNaming;
+
+    public function __construct(
+        CallableNodeTraverser $callableNodeTraverser,
+        ShortNameResolver $shortNameResolver,
+        ClassNaming $classNaming
+    ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->shortNameResolver = $shortNameResolver;
+        $this->classNaming = $classNaming;
     }
 
     public function getDefinition(): RectorDefinition
@@ -83,8 +100,14 @@ CODE_SAMPLE
     {
         $this->resolvedNodeNames = [];
         $this->resolveUsedNameNodes($node);
-        if ($this->resolvedNodeNames === []) {
-            return null;
+
+        // collect differentiated aliases
+        $useNamesAliasToName = [];
+
+        $shortNames = $this->shortNameResolver->resolveForNode($node);
+        foreach ($shortNames as $alias => $useImport) {
+            $shortName = $this->classNaming->getShortName($useImport);
+            $useNamesAliasToName[$shortName][] = $alias;
         }
 
         foreach ($node->uses as $use) {
@@ -96,7 +119,7 @@ CODE_SAMPLE
             $aliasName = $this->getName($use->alias);
 
             // both are used → nothing to remove
-            if (isset($this->resolvedNodeNames[$lastName]) && isset($this->resolvedNodeNames[$aliasName])) {
+            if (isset($this->resolvedNodeNames[$lastName], $this->resolvedNodeNames[$aliasName])) {
                 continue;
             }
 
@@ -113,6 +136,11 @@ CODE_SAMPLE
 
             // only alias name is used → use last name directly
             if (isset($this->resolvedNodeNames[$aliasName])) {
+                // keep to differentiate 2 alaises classes
+                if (isset($useNamesAliasToName[$lastName]) && count($useNamesAliasToName[$lastName]) > 1) {
+                    continue;
+                }
+
                 $this->renameNameNode($this->resolvedNodeNames[$aliasName], $lastName);
                 $use->alias = null;
             }
