@@ -168,3 +168,6 @@ parameters:
         - '#Cannot cast array<string\>\|bool\|string\|null to string#'
         - '#Method Rector\\ContributorTools\\Configuration\\ConfigurationFactory\:\:resolveCategoryFromFqnNodeTypes\(\) should return string but returns string\|null#'
         - '#Method Rector\\Legacy\\Rector\\ClassMethod\\ChangeSingletonToServiceRector\:\:matchStaticPropertyFetchAndGetSingletonMethodName\(\) should return array<string\>\|null but returns array<int, string\|null\>#'
+
+        # future compat
+        - '#Call to function method_exists\(\) with (.*?) will always evaluate to false#'
