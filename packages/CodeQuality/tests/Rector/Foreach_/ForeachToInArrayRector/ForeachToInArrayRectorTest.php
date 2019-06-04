@@ -14,6 +14,7 @@ final class ForeachToInArrayRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture2.php.inc',
             __DIR__ . '/Fixture/fixture3.php.inc',
             __DIR__ . '/Fixture/fixture4.php.inc',
+            __DIR__ . '/Fixture/ignore_collections.php.inc',
         ]);
     }
 
