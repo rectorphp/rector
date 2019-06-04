@@ -4,7 +4,6 @@ namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
-
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -16,9 +15,12 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Data\StartEndInfo;
+use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -44,16 +46,23 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     private $attributeAwareNodeFactory;
 
+    /**
+     * @var MultilineSpaceFormatPreserver
+     */
+    private $multilineSpaceFormatPreserver;
+
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
-        AttributeAwareNodeFactory $attributeAwareNodeFactory
+        AttributeAwareNodeFactory $attributeAwareNodeFactory,
+        MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver
     ) {
         parent::__construct($typeParser, $constExprParser);
 
         $this->privatesCaller = new PrivatesCaller();
         $this->privatesAccessor = new PrivatesAccessor();
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
+        $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
     }
 
     /**
@@ -109,16 +118,9 @@ final class BetterPhpDocParser extends PhpDocParser
         $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($node);
         $attributeAwareNode->setAttribute(Attribute::PHP_DOC_NODE_INFO, new StartEndInfo($tokenStart, $tokenEnd));
 
-        $possibleMultilineText = null;
-        if ($attributeAwareNode instanceof PhpDocTagNode) {
-            if (property_exists($attributeAwareNode->value, 'description')) {
-                $possibleMultilineText = $attributeAwareNode->value->description;
-            }
-        }
-
-        if ($attributeAwareNode instanceof PhpDocTextNode) {
-            $possibleMultilineText = $attributeAwareNode->text;
-        }
+        $possibleMultilineText = $this->multilineSpaceFormatPreserver->resolveCurrentPhpDocNodeText(
+            $attributeAwareNode
+        );
 
         if ($possibleMultilineText) {
             // add original text, for keeping trimmed spaces
