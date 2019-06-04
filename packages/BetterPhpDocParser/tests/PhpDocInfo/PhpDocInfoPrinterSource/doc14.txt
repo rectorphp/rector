@@ -1,0 +1,3 @@
+/**
+ * @param bool $setTicketAuthor @see self::create()
+ */
