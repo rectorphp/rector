@@ -16,6 +16,11 @@ final class ShortNameResolver
      */
     private $callableNodeTraverser;
 
+    /**
+     * @var string[][]
+     */
+    private $shortNamesByNamespaceObjectHash = [];
+
     public function __construct(CallableNodeTraverser $callableNodeTraverser)
     {
         $this->callableNodeTraverser = $callableNodeTraverser;
@@ -26,10 +31,22 @@ final class ShortNameResolver
      */
     public function resolveForNode(Node $node): array
     {
+        /** @var Namespace_|null $namespace */
         $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NODE);
 
+        if ($namespace === null) {
+            return [];
+        }
+
+        $namespaceHash = spl_object_hash($namespace);
+        if (isset($this->shortNamesByNamespaceObjectHash[$namespaceHash])) {
+            return $this->shortNamesByNamespaceObjectHash[$namespaceHash];
+        }
+
         if ($namespace instanceof Namespace_) {
-            return $this->resolveForNamespace($namespace);
+            $shortNames = $this->resolveForNamespace($namespace);
+            $this->shortNamesByNamespaceObjectHash[$namespaceHash] = $shortNames;
+            return $shortNames;
         }
 
         return [];
