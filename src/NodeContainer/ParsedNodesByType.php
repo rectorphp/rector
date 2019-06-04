@@ -336,6 +336,9 @@ final class ParsedNodesByType
             )) {
                 return true;
             }
+
+            $methodReflection = $reflectionClass->getMethod($methodName);
+            return $methodReflection->isStatic();
         }
 
         return false;

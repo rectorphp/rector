@@ -126,7 +126,6 @@ CODE_SAMPLE
         }
 
         // can we add static to method?
-
         $classMethodNode = $this->parsedNodesByType->findMethod($methodName, $className);
         if ($classMethodNode === null) {
             return null;
