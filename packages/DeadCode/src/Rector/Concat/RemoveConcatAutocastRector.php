@@ -3,7 +3,9 @@
 namespace Rector\DeadCode\Rector\Concat;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\Cast\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -56,8 +58,8 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function removeStringCast(Node\Expr $expr): Node
+    private function removeStringCast(Expr $expr): Expr
     {
-        return $expr instanceof Node\Expr\Cast\String_ ? $expr->expr : $expr;
+        return $expr instanceof String_ ? $expr->expr : $expr;
     }
 }
