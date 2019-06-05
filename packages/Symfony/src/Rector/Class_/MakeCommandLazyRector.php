@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Rector\Class_;
 
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
@@ -83,7 +84,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function createDefaultNameProperty(Node $commandNameNode): Node\Stmt\Property
+    private function createDefaultNameProperty(Node $commandNameNode): Property
     {
         return $this->builderFactory->property('defaultName')
             ->makeProtected()

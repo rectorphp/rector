@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Rector\MethodCall;
 
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
@@ -101,7 +102,7 @@ CODE_SAMPLE
      */
     private function isEventNameSameAsEventObjectClass(MethodCall $methodCall): bool
     {
-        if (! $methodCall->args[1]->value instanceof Node\Expr\ClassConstFetch) {
+        if (! $methodCall->args[1]->value instanceof ClassConstFetch) {
             return false;
         }
 

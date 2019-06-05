@@ -2,6 +2,7 @@
 
 namespace Rector\Php\Rector\FuncCall;
 
+use PhpParser\Node\Name;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
@@ -75,7 +76,7 @@ CODE_SAMPLE
             $ternaryNode = new Ternary($identicalNode, new LNumber(0), $node);
         } else {
             if ($this->isAtLeastPhpVersion('7.3')) {
-                $conditionNode = new FuncCall(new Node\Name('is_countable'), [new Arg($countedNode)]);
+                $conditionNode = new FuncCall(new Name('is_countable'), [new Arg($countedNode)]);
             } else {
                 $conditionNode = new BooleanOr(
                     $this->createFunction('is_array', [new Arg($countedNode)]),
