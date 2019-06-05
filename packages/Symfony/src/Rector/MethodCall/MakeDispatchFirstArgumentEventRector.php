@@ -4,6 +4,7 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -33,9 +34,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SomeClass
 {
-    public function run(EventDispatcherInterface $eventDisptacher)
+    public function run(EventDispatcherInterface $eventDispatcher)
     {
-        $eventDisptacher->dispatch('event_name', new Event());
+        $eventDispatcher->dispatch('event_name', new Event());
     }
 }
 CODE_SAMPLE
@@ -45,9 +46,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SomeClass
 {
-    public function run(EventDispatcherInterface $eventDisptacher)
+    public function run(EventDispatcherInterface $eventDispatcher)
     {
-        $eventDisptacher->dispatch(new Event(), 'event_name');
+        $eventDispatcher->dispatch(new Event(), 'event_name');
     }
 }
 CODE_SAMPLE
@@ -87,6 +88,30 @@ CODE_SAMPLE
         // swap arguments
         [$node->args[0], $node->args[1]] = [$node->args[1], $node->args[0]];
 
+        if ($this->isEventNameSameAsEventObjectClass($node)) {
+            unset($node->args[1]);
+        }
+
         return $node;
+    }
+
+    /**
+     * Is the event name just `::class`?
+     * We can remove it
+     */
+    private function isEventNameSameAsEventObjectClass(MethodCall $methodCall): bool
+    {
+        if (! $methodCall->args[1]->value instanceof Node\Expr\ClassConstFetch) {
+            return false;
+        }
+
+        $classConst = $this->getValue($methodCall->args[1]->value);
+        $eventStaticType = $this->getStaticType($methodCall->args[0]->value);
+
+        if (! $eventStaticType instanceof ObjectType) {
+            return false;
+        }
+
+        return $classConst === $eventStaticType->getClassName();
     }
 }

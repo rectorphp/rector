@@ -9,7 +9,11 @@ final class MakeDispatchFirstArgumentEventRectorTest extends AbstractRectorTestC
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/event_class_constant.php.inc',
+            __DIR__ . '/Fixture/keep_string_event_constant.php.inc',
+        ]);
     }
 
     protected function getRectorClass(): string
