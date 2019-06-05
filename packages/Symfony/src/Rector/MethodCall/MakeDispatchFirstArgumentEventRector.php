@@ -2,8 +2,8 @@
 
 namespace Rector\Symfony\Rector\MethodCall;
 
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;

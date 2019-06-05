@@ -82,7 +82,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return null;
         }
 
-        $originalNode = clone $node;
+        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? clone $node;
         $originalComment = $node->getComments();
         $originalDocComment = $node->getDocComment();
         $node = $this->refactor($node);
@@ -102,6 +102,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $this->notifyNodeChangeFileInfo($node);
         }
 
+        // if stmt ("$value;") was replaced by expr ("$value"), add the ending ";" (Expression) to prevent breaking code
         if ($originalNode instanceof Stmt && $node instanceof Expr) {
             return new Expression($node);
         }
