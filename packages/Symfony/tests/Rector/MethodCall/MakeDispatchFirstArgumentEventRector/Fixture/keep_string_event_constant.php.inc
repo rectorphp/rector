@@ -13,6 +13,7 @@ class KeepStringEventConstant
         /** @var Event|CustomEvent $customEvent */
         $customEvent = new CustomEvent();
         $eventDispatcher->dispatch(CustomEvent::NAME, $customEvent);
+        $eventDispatcher->dispatch($customEvent, CustomEvent::NAME);
     }
 }
 
@@ -24,6 +25,7 @@ namespace Rector\Symfony\Tests\Rector\MethodCall\MakeDispatchFirstArgumentEventR
 
 use Rector\Symfony\Tests\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\Source\CustomEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class KeepStringEventConstant
 {
@@ -31,6 +33,7 @@ class KeepStringEventConstant
     {
         /** @var Event|CustomEvent $customEvent */
         $customEvent = new CustomEvent();
+        $eventDispatcher->dispatch($customEvent, CustomEvent::NAME);
         $eventDispatcher->dispatch($customEvent, CustomEvent::NAME);
     }
 }
