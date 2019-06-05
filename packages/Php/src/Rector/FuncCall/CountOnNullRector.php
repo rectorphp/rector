@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -75,7 +76,7 @@ CODE_SAMPLE
             $ternaryNode = new Ternary($identicalNode, new LNumber(0), $node);
         } else {
             if ($this->isAtLeastPhpVersion('7.3')) {
-                $conditionNode = new FuncCall(new Node\Name('is_countable'), [new Arg($countedNode)]);
+                $conditionNode = new FuncCall(new Name('is_countable'), [new Arg($countedNode)]);
             } else {
                 $conditionNode = new BooleanOr(
                     $this->createFunction('is_array', [new Arg($countedNode)]),

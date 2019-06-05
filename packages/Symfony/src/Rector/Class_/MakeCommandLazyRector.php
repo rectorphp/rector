@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\StringType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -83,7 +84,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function createDefaultNameProperty(Node $commandNameNode): Node\Stmt\Property
+    private function createDefaultNameProperty(Node $commandNameNode): Property
     {
         return $this->builderFactory->property('defaultName')
             ->makeProtected()
