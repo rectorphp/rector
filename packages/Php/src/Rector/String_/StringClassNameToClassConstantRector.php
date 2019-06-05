@@ -10,6 +10,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Util\RectorStrings;
+use ReflectionClass;
 
 /**
  * @see https://wiki.php.net/rfc/class_name_scalars
@@ -20,6 +21,16 @@ final class StringClassNameToClassConstantRector extends AbstractRector
      * @var string[]
      */
     private $classesToSkip = [];
+
+    /**
+     * @var string[]
+     */
+    private $sensitiveExistingClasses = [];
+
+    /**
+     * @var string[]
+     */
+    private $sensitiveNonExistingClasses = [];
 
     /**
      * @param string[] $classesToSkip
@@ -80,7 +91,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $classLikeName = $node->value;
-        if (! $this->classLikeExists($classLikeName)) {
+        if (! $this->classLikeSensitiveExists($classLikeName)) {
             return null;
         }
 
@@ -91,7 +102,33 @@ CODE_SAMPLE
         return new ClassConstFetch(new FullyQualified($classLikeName), 'class');
     }
 
-    private function classLikeExists(string $classLikeName): bool
+    private function classLikeSensitiveExists(string $classLikeName): bool
+    {
+        if (! $this->classLikeInsensitiveExists($classLikeName)) {
+            return false;
+        }
+
+        // already known values
+        if (in_array($classLikeName, $this->sensitiveExistingClasses, true)) {
+            return true;
+        }
+
+        if (in_array($classLikeName, $this->sensitiveNonExistingClasses, true)) {
+            return false;
+        }
+
+        $classReflection = new ReflectionClass($classLikeName);
+
+        if ($classLikeName !== $classReflection->getName()) {
+            $this->sensitiveNonExistingClasses[] = $classLikeName;
+            return false;
+        }
+
+        $this->sensitiveExistingClasses[] = $classLikeName;
+        return true;
+    }
+
+    private function classLikeInsensitiveExists(string $classLikeName): bool
     {
         if (class_exists($classLikeName)) {
             return true;
