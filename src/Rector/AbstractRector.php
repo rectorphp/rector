@@ -13,6 +13,7 @@ use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\PhpVersionProvider;
+use Rector\Rector\AbstractRector\AbstractRectorTrait;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
