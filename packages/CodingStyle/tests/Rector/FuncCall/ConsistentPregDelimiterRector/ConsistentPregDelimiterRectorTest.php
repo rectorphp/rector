@@ -11,7 +11,7 @@ final class ConsistentPregDelimiterRectorTest extends AbstractRectorTestCase
     {
         $this->doTestFiles([
             __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/static_call.php.inc',
+            __DIR__ . '/Fixture/escape_nette_static_call.php.inc',
             __DIR__ . '/Fixture/skip_concat.php.inc',
         ]);
     }

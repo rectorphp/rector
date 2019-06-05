@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector;
+namespace Rector\Rector\AbstractRector;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;

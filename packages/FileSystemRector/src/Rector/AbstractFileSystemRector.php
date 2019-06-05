@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\PhpParser\Parser\Parser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\PhpParser\Printer\FormatPerservingPrinter;
-use Rector\Rector\AbstractRectorTrait;
+use Rector\Rector\AbstractRector\AbstractRectorTrait;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use TypeError;
 
