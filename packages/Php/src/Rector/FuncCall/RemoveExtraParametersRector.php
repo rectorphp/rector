@@ -68,7 +68,7 @@ final class RemoveExtraParametersRector extends AbstractRector
             return null;
         }
 
-        for ($i = $reflectionFunctionLike->getNumberOfParameters(); $i <= count($node->args); $i++) {
+        for ($i = $reflectionFunctionLike->getNumberOfParameters(), $iMax = count($node->args); $i <= $iMax; $i++) {
             unset($node->args[$i]);
         }
 
