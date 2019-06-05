@@ -71,3 +71,7 @@ services:
                     name: 'context'
                     default_value: []
                     # type: array
+
+    Rector\Rector\ClassMethod\AddMethodParentCallRector:
+        Symfony\Component\EventDispatcher\EventDispatcher:
+            - '__construct'

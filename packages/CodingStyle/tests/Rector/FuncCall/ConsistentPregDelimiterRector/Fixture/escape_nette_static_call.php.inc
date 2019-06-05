@@ -4,7 +4,7 @@ namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentPregDelimiterRector
 
 use Nette\Utils\Strings;
 
-class StaticCall
+class EscapeNetteStaticCall
 {
     public function run($value)
     {
@@ -20,7 +20,7 @@ namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentPregDelimiterRector
 
 use Nette\Utils\Strings;
 
-class StaticCall
+class EscapeNetteStaticCall
 {
     public function run($value)
     {
