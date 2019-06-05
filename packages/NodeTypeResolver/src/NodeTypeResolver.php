@@ -35,7 +35,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -378,7 +377,8 @@ final class NodeTypeResolver
     {
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
-            throw new ShouldNotHappenException();
+            // anonymous class
+            return [];
         }
 
         return $this->resolve($classNode);

@@ -19,6 +19,7 @@ final class RenameMethodRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture4.php.inc',
             __DIR__ . '/Fixture/fixture5.php.inc',
             __DIR__ . '/Fixture/fixture6.php.inc',
+            __DIR__ . '/Fixture/under_anonymous_class.php.inc',
             __DIR__ . '/Fixture/SomeClass.php',
             __DIR__ . '/Fixture/nette_to_symfony_presenter.php.inc',
         ]);
@@ -47,6 +48,10 @@ final class RenameMethodRectorTest extends AbstractRectorTestCase
                     ],
                     '*Presenter' => [
                         'run' => '__invoke',
+                    ],
+                    'PHPUnit\Framework\TestClass' => [
+                        'setExpectedException' => 'expectedException',
+                        'setExpectedExceptionRegExp' => 'expectedException',
                     ],
                 ],
             ],
