@@ -28,6 +28,11 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RenameEventNamesInEventSubscriberRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const EVENT_SUBSCRIBER_INTERFACE = 'Symfony\Component\EventDispatcher\EventSubscriberInterface';
+
+    /**
      * @var EventInfo[]
      */
     private $symfonyClassConstWithAliases = [];
@@ -87,13 +92,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-
-        if ($classNode === null) {
+        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($class === null) {
             return null;
         }
 
-        if (! $this->isType($classNode, 'Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
+        if (! $this->isType($class, self::EVENT_SUBSCRIBER_INTERFACE)) {
             return null;
         }
 
