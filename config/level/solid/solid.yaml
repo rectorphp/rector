@@ -2,4 +2,4 @@ services:
     Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector: ~
 
     Rector\SOLID\Rector\ClassConst\PrivatizeLocalClassConstantRector: ~
-    Rector\SOLID\Rector\Class_\AbstractChildlessUnusedClassesRector: ~
+    Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector: ~
