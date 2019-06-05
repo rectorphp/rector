@@ -2,9 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\Source;
 
-use Symfony\Contracts\EventDispatcher\Event;
-
-final class CustomEvent extends Event
+final class CustomEvent
 {
     public const NAME = 'custom_event';
 }
