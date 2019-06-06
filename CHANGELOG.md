@@ -9,6 +9,42 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+## [v0.5.4] - 2019-06-06
+
+### Added
+
+- [#1570] [DeadCode] Add `RemoveConcatAutocastRector`
+- [#1519] [Symfony] Add `MakeCommandLazyRector`
+- [#1568] [Symfony 4.3] Add `parent::__construct` to `EventDispatcher`
+- [#1562] add `CallableNodeTraverserTrait`
+
+### Changed
+
+- [#1523] make RectorsFinder return consistent order by shorter names
+- [#1572] [Symfony 4.3] Improve event name and class flip
+- [#1548] Widen `PHPStan` version constraint to `~0.11.6`., Thanks to [@Aerendir]
+
+### Fixed
+
+- [#1550] Fix `symfony/finder` 3.4 compact in `LevelOptionResolver`
+- [#1544] Fix phpdoc-parser BC break for generic multiline nodes
+- [#1569] Fix reporting of changed nodes
+- [#1559] Fix classname change for `FilterControllerEvent`, Thanks to [@keulinho]
+- [#1557] Fix scope overflow in `AddDefaultValueForUndefinedVariableRector`
+- [#1556] fix static method in reflection for `StaticCallOnNonStaticToInstanceCallRector`
+- [#1571] Fix anonymous class method return type resolving
+- [#1567] Fix `solid.yaml`, Thanks to [@Great-Antique]
+- [#1549] fix unescaped regular
+- [#1538] Don't remove aliases of classes with same name but different namespaces., Thanks to [@Aerendir]
+- [#1553] [CodeQuality] Skip collections `ForeachToInArrayRector` [closes [#1533]]
+- [#1524] Cover multiline in description-aware nodes [closes [#1522]]
+- [#1565] make `StringClassNameToClassConstantRector` case sensitive [closes [#1539]]
+- [#1545] Ensure Doctrine's `Collection`-like arrays are ignored., Thanks to [@Aerendir]
+- [#1554] optimize
+- [#1558] Do not call parent constructor of `AutowiredEventDispatcher` unless it exists, Thanks to [@cgkkevinr]
+- [#1561] make `RemoveUnusedAliasRector` take into account aliases that keep 2 classes with same short name explicit
+- [#1555] skip nullable array for `ArrayPropertyDefaultValueRector` [closes [#1542]]
+
 ## [v0.5.3] - 2019-06-01
 
 ### Added
@@ -298,7 +334,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#1507]: https://github.com/rectorphp/rector/pull/1507
 [#1506]: https://github.com/rectorphp/rector/pull/1506
 [#1502]: https://github.com/rectorphp/rector/pull/1502
-[#1500]: https://github.com/rectorphp/rector/pull/1500
 [#1496]: https://github.com/rectorphp/rector/pull/1496
 [#1493]: https://github.com/rectorphp/rector/pull/1493
 [#1407]: https://github.com/rectorphp/rector/pull/1407
@@ -306,3 +341,39 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@alterphp]: https://github.com/alterphp
 [@Aerendir]: https://github.com/Aerendir
 [v0.5.1]: https://github.com/rectorphp/rector/compare/v0.5.0...v0.5.1
+[#1572]: https://github.com/rectorphp/rector/pull/1572
+[#1571]: https://github.com/rectorphp/rector/pull/1571
+[#1570]: https://github.com/rectorphp/rector/pull/1570
+[#1569]: https://github.com/rectorphp/rector/pull/1569
+[#1568]: https://github.com/rectorphp/rector/pull/1568
+[#1567]: https://github.com/rectorphp/rector/pull/1567
+[#1565]: https://github.com/rectorphp/rector/pull/1565
+[#1563]: https://github.com/rectorphp/rector/pull/1563
+[#1562]: https://github.com/rectorphp/rector/pull/1562
+[#1561]: https://github.com/rectorphp/rector/pull/1561
+[#1559]: https://github.com/rectorphp/rector/pull/1559
+[#1558]: https://github.com/rectorphp/rector/pull/1558
+[#1557]: https://github.com/rectorphp/rector/pull/1557
+[#1556]: https://github.com/rectorphp/rector/pull/1556
+[#1555]: https://github.com/rectorphp/rector/pull/1555
+[#1554]: https://github.com/rectorphp/rector/pull/1554
+[#1553]: https://github.com/rectorphp/rector/pull/1553
+[#1550]: https://github.com/rectorphp/rector/pull/1550
+[#1549]: https://github.com/rectorphp/rector/pull/1549
+[#1548]: https://github.com/rectorphp/rector/pull/1548
+[#1545]: https://github.com/rectorphp/rector/pull/1545
+[#1544]: https://github.com/rectorphp/rector/pull/1544
+[#1542]: https://github.com/rectorphp/rector/pull/1542
+[#1541]: https://github.com/rectorphp/rector/pull/1541
+[#1539]: https://github.com/rectorphp/rector/pull/1539
+[#1538]: https://github.com/rectorphp/rector/pull/1538
+[#1533]: https://github.com/rectorphp/rector/pull/1533
+[#1531]: https://github.com/rectorphp/rector/pull/1531
+[#1524]: https://github.com/rectorphp/rector/pull/1524
+[#1523]: https://github.com/rectorphp/rector/pull/1523
+[#1522]: https://github.com/rectorphp/rector/pull/1522
+[#1519]: https://github.com/rectorphp/rector/pull/1519
+[@keulinho]: https://github.com/keulinho
+[@cgkkevinr]: https://github.com/cgkkevinr
+[@Great-Antique]: https://github.com/Great-Antique
+[v0.5.3]: https://github.com/rectorphp/rector/compare/v0.5.2...v0.5.3
