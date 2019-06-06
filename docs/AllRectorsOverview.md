@@ -1,4 +1,4 @@
-# All 300 Rectors Overview
+# All 303 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -1233,6 +1233,25 @@ Remove dead code after return statement
      {
           return $a;
 -         $a++;
+     }
+ }
+```
+
+<br>
+
+### `RemoveConcatAutocastRector`
+
+- class: `Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector`
+
+Remove (string) casting when it comes to concat, that does this by default
+
+```diff
+ class SomeConcatingClass
+ {
+     public function run($value)
+     {
+-        return 'hi ' . (string) $value;
++        return 'hi ' . $value;
      }
  }
 ```
@@ -4827,6 +4846,27 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
 
 <br>
 
+### `MakeCommandLazyRector`
+
+- class: `Rector\Symfony\Rector\Class_\MakeCommandLazyRector`
+
+Make Symfony commands lazy
+
+```diff
+ use Symfony\Component\Console\Command\Command
+
+ class SunshineCommand extends Command
+ {
++    protected static $defaultName = 'sunshine';
+     public function configure()
+     {
+-        $this->setName('sunshine');
+     }
+ }
+```
+
+<br>
+
 ### `MakeDispatchFirstArgumentEventRector`
 
 - class: `Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector`
@@ -4838,10 +4878,10 @@ Make event object a first argument of dispatch() method, event name as second
 
  class SomeClass
  {
-     public function run(EventDispatcherInterface $eventDisptacher)
+     public function run(EventDispatcherInterface $eventDispatcher)
      {
--        $eventDisptacher->dispatch('event_name', new Event());
-+        $eventDisptacher->dispatch(new Event(), 'event_name');
+-        $eventDispatcher->dispatch('event_name', new Event());
++        $eventDispatcher->dispatch(new Event(), 'event_name');
      }
  }
 ```
@@ -5203,6 +5243,26 @@ Turns action injection in Controllers to constructor injection
 +    public function default()
 +    {
 +        $products = $this->productRepository->fetchAll();
+     }
+ }
+```
+
+<br>
+
+### `AddMethodParentCallRector`
+
+- class: `Rector\Rector\ClassMethod\AddMethodParentCallRector`
+
+Add method parent call, in case new parent method is added
+
+```diff
+ class SunshineCommand extends ParentClassWithNewConstructor
+ {
+     public function __construct()
+     {
+         $value = 5;
++
++        parent::__construct();
      }
  }
 ```
