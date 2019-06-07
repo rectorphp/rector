@@ -17,6 +17,7 @@ final class StringToArrayArgumentProcessRectorTest extends AbstractRectorTestCas
             __DIR__ . '/Fixture/fixture3.php.inc',
             __DIR__ . '/Fixture/fixture4.php.inc',
             __DIR__ . '/Fixture/with_sprintf.php.inc',
+            __DIR__ . '/Fixture/skip_anonymous_class.php.inc',
         ]);
     }
 

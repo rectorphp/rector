@@ -406,7 +406,14 @@ final class NodeTypeResolver
             return [];
         }
 
-        // PHPStan
+        // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
+        if ($node instanceof Expr\New_) {
+            $className = $this->nameResolver->resolve($node->class);
+            if ($className === null || Strings::contains($className, 'AnonymousClass')) {
+                return [];
+            }
+        }
+
         $type = $nodeScope->getType($node);
 
         $typesInStrings = $this->typeToStringResolver->resolve($type);
