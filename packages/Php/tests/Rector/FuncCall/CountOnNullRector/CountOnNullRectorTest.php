@@ -20,7 +20,11 @@ final class CountOnNullRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/preg_match_array.php.inc',
             __DIR__ . '/Fixture/local_property.php.inc',
             __DIR__ . '/Fixture/double_same_variable.php.inc',
-            __DIR__ . '/Fixture/array_merge.php.inc',
+
+            __DIR__ . '/Fixture/property_with_doc.php.inc',
+            __DIR__ . '/Fixture/nullable_array.php.inc',
+            // skip
+            __DIR__ . '/Fixture/skip_array_merge.php.inc',
         ]);
     }
 
