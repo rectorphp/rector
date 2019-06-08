@@ -26,23 +26,23 @@ Rector **instantly upgrades and instantly refactors PHP code of your application
 <br>
 
 <p align="center">
-    <a href="/config/level/php"><img src="/docs/images/php.png"></a>
+    <a href="/config/set/php"><img src="/docs/images/php.png"></a>
     <img src="/docs/images/space.png" width=20>
-    <a href="/config/level/cakephp"><img src="/docs/images/cakephp.png"></a>
+    <a href="/config/set/cakephp"><img src="/docs/images/cakephp.png"></a>
     <img src="/docs/images/space.png" width=20>
-    <a href="/config/level/symfony"><img src="/docs/images/symfony.png"></a>
+    <a href="/config/set/symfony"><img src="/docs/images/symfony.png"></a>
     <img src="/docs/images/space.png" width=20>
-    <a href="/config/level/symfony"><img src="/docs/images/easy-admin.png"></a>
+    <a href="/config/set/symfony"><img src="/docs/images/easy-admin.png"></a>
     <img src="/docs/images/space.png" width=20>
-    <a href="/config/level/sylius"><img src="/docs/images/sylius.png"></a>
+    <a href="/config/set/sylius"><img src="/docs/images/sylius.png"></a>
     <img src="/docs/images/space.png" width=20>
-    <a href="/config/level/phpunit"><img src="/docs/images/phpunit.jpg"></a>
+    <a href="/config/set/phpunit"><img src="/docs/images/phpunit.jpg"></a>
     <img src="/docs/images/space.png" width=20>
-    <a href="/config/level/twig"><img src="/docs/images/twig.png"></a>
+    <a href="/config/set/twig"><img src="/docs/images/twig.png"></a>
     <img src="/docs/images/space.png" width=20>
-    <a href="/config/level/laravel"><img src="/docs/images/laravel.png"></a>
+    <a href="/config/set/laravel"><img src="/docs/images/laravel.png"></a>
     <img src="/docs/images/space.png" width=20>
-    <a href="/config/level/silverstripe"><img src="/docs/images/silverstripe.jpg"></a>
+    <a href="/config/set/silverstripe"><img src="/docs/images/silverstripe.jpg"></a>
 </p>
 
 <br>
@@ -119,7 +119,7 @@ parameters:
 
 ### A. Prepared Sets
 
-Featured open-source projects have **prepared sets**. You'll find them in [`/config/level`](/config/level) or by calling:
+Featured open-source projects have **prepared sets**. You'll find them in [`/config/set`](/config/set) or by calling:
 
 ```bash
 vendor/bin/rector levels

@@ -18,3 +18,5 @@ services:
     Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector: ~
     Rector\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector: ~
     Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector: ~
+
+    Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector: ~

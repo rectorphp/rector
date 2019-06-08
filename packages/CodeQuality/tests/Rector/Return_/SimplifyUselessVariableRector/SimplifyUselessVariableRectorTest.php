@@ -18,7 +18,7 @@ final class SimplifyUselessVariableRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/fixture2.php.inc',
             __DIR__ . '/Fixture/fixture3.php.inc',
-            __DIR__ . '/Fixture/fixture4.php.inc',
+            __DIR__ . '/Fixture/in_a_function.php.inc',
             __DIR__ . '/Fixture/keep_visual.php.inc',
         ]);
     }

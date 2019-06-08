@@ -1,5 +1,5 @@
 imports:
-    - { resource: '../../../../../../config/level/framework-migration/phpspec-to-phpunit.yaml' }
+    - { resource: '../../../../../../config/set/framework-migration/phpspec-to-phpunit.yaml' }
 
 parameters:
     # for tests only
