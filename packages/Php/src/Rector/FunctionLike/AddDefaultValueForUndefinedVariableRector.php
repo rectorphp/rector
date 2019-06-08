@@ -13,9 +13,9 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Static_;
 use PhpParser\Node\Stmt\StaticVar;
 use PhpParser\Node\Stmt\Unset_;
+use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php\Exception\BreakScopeException;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -80,38 +80,36 @@ CODE_SAMPLE
     {
         $this->undefinedVariables = [];
 
-        try {
-            $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) {
-                // entering new scope - break!
-                if ($node instanceof FunctionLike) {
-                    throw new BreakScopeException();
-                }
+        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node): ?int {
+            // entering new scope - break!
+            if ($node instanceof FunctionLike) {
+                return NodeTraverser::STOP_TRAVERSAL;
+            }
 
-                if (! $node instanceof Variable) {
-                    return null;
-                }
+            if (! $node instanceof Variable) {
+                return null;
+            }
 
-                if ($this->shouldSkipVariable($node)) {
-                    return null;
-                }
+            if ($this->shouldSkipVariable($node)) {
+                return null;
+            }
 
-                $variableName = $this->getName($node);
-                if ($variableName === null) {
-                    return null;
-                }
+            $variableName = $this->getName($node);
+            if ($variableName === null) {
+                return null;
+            }
 
-                // defined 100 %
-                /** @var Scope $nodeScope */
-                $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-                if ($nodeScope->hasVariableType($variableName)->yes()) {
-                    return null;
-                }
+            // defined 100 %
+            /** @var Scope $nodeScope */
+            $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
+            if ($nodeScope->hasVariableType($variableName)->yes()) {
+                return null;
+            }
 
-                $this->undefinedVariables[] = $variableName;
-            });
-        } catch (BreakScopeException $breakScopeException) {
-            // @ignoreException
-        }
+            $this->undefinedVariables[] = $variableName;
+
+            return null;
+        });
 
         if ($this->undefinedVariables === []) {
             return null;
