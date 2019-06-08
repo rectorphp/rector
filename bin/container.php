@@ -15,7 +15,7 @@ $configFiles = [];
 try {
     $configFiles[] = (new LevelOptionResolver())->detectFromInputAndDirectory(
         new ArgvInput(),
-        __DIR__ . '/../config/level'
+        __DIR__ . '/../config/set'
     );
 } catch (LevelNotFoundException $levelNotFoundException) {
     $symfonyStyle = (new SymfonyStyleFactory())->create();

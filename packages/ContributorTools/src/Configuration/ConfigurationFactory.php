@@ -25,7 +25,7 @@ final class ConfigurationFactory
 
     public function __construct(NodeClassProvider $nodeClassProvider)
     {
-        $this->levelsDirectory = __DIR__ . '/../../../../config/level';
+        $this->levelsDirectory = __DIR__ . '/../../../../config/set';
         $this->nodeClassProvider = $nodeClassProvider;
     }
 
