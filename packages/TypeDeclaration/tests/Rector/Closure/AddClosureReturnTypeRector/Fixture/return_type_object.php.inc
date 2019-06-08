@@ -26,7 +26,7 @@ class ReturnTypeObject
 {
     public function shouldSkip()
     {
-        $nonAnonymousClassNodes = array_filter([], function (Class_ $classNode) : ?\PhpParser\Node\Identifier {
+        $nonAnonymousClassNodes = array_filter([], function (Class_ $classNode): ?\PhpParser\Node\Identifier {
             return $classNode->name;
         });
     }
