@@ -9,7 +9,7 @@ final class HeaderControl
     /**
      * @var mixed[]
      */
-    private $alsoTitles;
+    private $alsoTitles = [];
 
     /**
      * @var mixed
@@ -42,7 +42,7 @@ final class HeaderControl
     /**
      * @var mixed[]
      */
-    private $alsoTitles;
+    private $alsoTitles = [];
 
     /**
      * @var mixed

@@ -71,7 +71,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isNullType($countedNode)) {
+        if ($this->isNullableType($countedNode) || $this->isNullType($countedNode)) {
             $identicalNode = new Identical($countedNode, $this->createNull());
             $ternaryNode = new Ternary($identicalNode, new LNumber(0), $node);
         } else {

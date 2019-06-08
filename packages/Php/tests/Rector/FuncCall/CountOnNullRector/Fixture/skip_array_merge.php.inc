@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
 
-class ArrayMerge
+class SkipArrayMerge
 {
     public function run(string $string, array $regexes): ?array
     {

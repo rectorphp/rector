@@ -270,6 +270,13 @@ final class NodeTypeResolver
             return true;
         }
 
+        if ($node instanceof PropertyFetch) {
+            // PHPStan false positive, when variable has type[] docblock, but default array is missing
+            if ($this->isPropertyFetchWithArrayDefault($node) === false) {
+                return false;
+            }
+        }
+
         if ($nodeStaticType instanceof MixedType) {
             if ($nodeStaticType->isExplicitMixed()) {
                 return false;
