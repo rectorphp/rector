@@ -2,17 +2,22 @@
 name: Bug Report
 about: Report errors and problems
 ---
+
 <!-- First, thank you for reporting a bug. That takes time and we appreciate that! -->
-<!-- Let's start with common details: -->
 
-| Subject        | Details                                                                       |
-| :------------- | :---------------------------------------------------------------------------- |
-| Language level | e.g. PHP 7.3 (invoke php -v or check composer.json)                        |
-| Framework      | e.g. N/A, Symfony, Nette                                                      |
+| Subject        | Details                                                      |
+| :------------- | :----------------------------------------------------------- |
+| PHP version    | e.g. PHP 7.3 (invoke `php -v`)                               |
+| Full Command   | e.g. vendor/bin/rector process /src --set dead-code --debug  | 
 
-Current behaviour
---
+## Current Behaviour 
+
+<!-- report from command line with --debug -->
 <!-- description/screenshot -->
 
-Expected behaviour
---
+## Minimal PHP Code Causing Issue
+
+<!-- if possible, always run Rector on specfic file, that causes the error -->
+<!-- e.g. vendor/bin/rector process /src/SpecificFile.php --set dead-code --debug -->  
+
+## Expected Behaviour
