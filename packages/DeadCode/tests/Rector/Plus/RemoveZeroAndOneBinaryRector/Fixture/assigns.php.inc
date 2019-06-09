@@ -1,0 +1,29 @@
+<?php
+
+namespace Rector\DeadCode\Tests\Rector\Plus\RemoveZeroAndOneBinaryRector\Fixture;
+
+class Assigns
+{
+    public function run(int $value)
+    {
+        $value += 0;
+        $value *= 1;
+    }
+}
+
+?>
+-----
+<?php
+
+namespace Rector\DeadCode\Tests\Rector\Plus\RemoveZeroAndOneBinaryRector\Fixture;
+
+class Assigns
+{
+    public function run(int $value)
+    {
+        $value;
+        $value;
+    }
+}
+
+?>
