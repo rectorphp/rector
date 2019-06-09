@@ -5,6 +5,7 @@ namespace Rector\Php\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -151,6 +152,14 @@ CODE_SAMPLE
 
         if ($parentNode instanceof Unset_ || $parentNode instanceof Node\Expr\Cast\Unset_) {
             return true;
+        }
+
+        // list() = | [$values] = defines variables as null
+        if ($parentNode instanceof Node) {
+            $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentParentNode instanceof List_ || $parentParentNode instanceof Node\Expr\Array_) {
+                return true;
+            }
         }
 
         /** @var Scope|null $nodeScope */
