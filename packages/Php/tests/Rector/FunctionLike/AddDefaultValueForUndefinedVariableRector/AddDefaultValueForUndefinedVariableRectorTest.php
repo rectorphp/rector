@@ -20,6 +20,7 @@ final class AddDefaultValueForUndefinedVariableRectorTest extends AbstractRector
             __DIR__ . '/Fixture/take_static_into_account.php.inc',
             // @see https://3v4l.org/ObtMn
             __DIR__ . '/Fixture/skip_list.php.inc',
+            __DIR__ . '/Fixture/skip_foreach_assign.php.inc',
         ]);
     }
 
