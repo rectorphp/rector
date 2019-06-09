@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Static_;
 use PhpParser\Node\Stmt\StaticVar;
@@ -31,6 +32,11 @@ final class AddDefaultValueForUndefinedVariableRector extends AbstractRector
      * @var string[]
      */
     private $undefinedVariables = [];
+
+    /**
+     * @var string[]
+     */
+    private $definedVariables = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -79,6 +85,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $this->definedVariables = [];
         $this->undefinedVariables = [];
 
         $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node): ?int {
@@ -86,6 +93,8 @@ CODE_SAMPLE
             if ($node instanceof FunctionLike) {
                 return NodeTraverser::STOP_TRAVERSAL;
             }
+
+            $this->collectDefinedVariablesFromForeach($node);
 
             if (! $node instanceof Variable) {
                 return null;
@@ -95,10 +104,8 @@ CODE_SAMPLE
                 return null;
             }
 
+            /** @var string $variableName */
             $variableName = $this->getName($node);
-            if ($variableName === null) {
-                return null;
-            }
 
             // defined 100 %
             /** @var Scope $nodeScope */
@@ -120,6 +127,10 @@ CODE_SAMPLE
 
         $variablesInitiation = [];
         foreach ($this->undefinedVariables as $undefinedVariable) {
+            if (in_array($undefinedVariable, $this->definedVariables, true)) {
+                continue;
+            }
+
             $variablesInitiation[] = new Expression(new Assign(new Variable($undefinedVariable), $this->createNull()));
         }
 
@@ -165,6 +176,37 @@ CODE_SAMPLE
         /** @var Scope|null $nodeScope */
         $nodeScope = $variable->getAttribute(AttributeKey::SCOPE);
 
-        return $nodeScope === null;
+        if ($nodeScope === null) {
+            return true;
+        }
+
+        $variableName = $this->getName($variable);
+        if ($variableName === null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function collectDefinedVariablesFromForeach(Node $node): void
+    {
+        if (! $node instanceof Foreach_) {
+            return;
+        }
+
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node): void {
+            if ($node instanceof Assign || $node instanceof Node\Expr\AssignRef) {
+                if (! $node->var instanceof Variable) {
+                    return;
+                }
+
+                $variableName = $this->getName($node->var);
+                if ($variableName === null) {
+                    return;
+                }
+
+                $this->definedVariables[] = $variableName;
+            }
+        });
     }
 }
