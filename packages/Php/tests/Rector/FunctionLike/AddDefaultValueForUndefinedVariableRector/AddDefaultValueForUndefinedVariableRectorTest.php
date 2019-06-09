@@ -18,6 +18,8 @@ final class AddDefaultValueForUndefinedVariableRectorTest extends AbstractRector
             __DIR__ . '/Fixture/vimeo_else.php.inc',
             __DIR__ . '/Fixture/keep_vimeo_unset.php.inc',
             __DIR__ . '/Fixture/take_static_into_account.php.inc',
+            // @see https://3v4l.org/ObtMn
+            __DIR__ . '/Fixture/skip_list.php.inc',
         ]);
     }
 
