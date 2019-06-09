@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
@@ -414,7 +415,7 @@ final class NodeTypeResolver
         }
 
         // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
-        if ($node instanceof Expr\New_) {
+        if ($node instanceof New_) {
             $className = $this->nameResolver->resolve($node->class);
             if ($className === null || Strings::contains($className, 'AnonymousClass')) {
                 return [];

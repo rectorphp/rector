@@ -20,3 +20,4 @@ services:
     Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector: ~
 
     Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector: ~
+    Rector\DeadCode\Rector\Plus\RemoveZeroAndOneBinaryRector: ~
