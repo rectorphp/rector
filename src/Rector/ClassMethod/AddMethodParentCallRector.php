@@ -4,6 +4,8 @@ namespace Rector\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -103,7 +105,7 @@ CODE_SAMPLE
     /**
      * Looks for "parent::<methodName>
      */
-    private function hasParentCallOfMethod(Node\Stmt\ClassMethod $classMethod, string $method): bool
+    private function hasParentCallOfMethod(ClassMethod $classMethod, string $method): bool
     {
         return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use (
             $method
@@ -122,7 +124,7 @@ CODE_SAMPLE
 
     private function createParentStaticCall(string $method): Expression
     {
-        $parentStaticCall = new StaticCall(new Node\Name('parent'), new Node\Identifier($method));
+        $parentStaticCall = new StaticCall(new Name('parent'), new Identifier($method));
 
         return new Expression($parentStaticCall);
     }
