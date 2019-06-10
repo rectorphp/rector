@@ -21,3 +21,4 @@ services:
 
     Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector: ~
     Rector\DeadCode\Rector\Plus\RemoveZeroAndOneBinaryRector: ~
+    Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector: ~
