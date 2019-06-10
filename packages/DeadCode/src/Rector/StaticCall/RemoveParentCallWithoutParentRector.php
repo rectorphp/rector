@@ -4,6 +4,7 @@ namespace Rector\DeadCode\Rector\StaticCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\Class_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
@@ -61,11 +62,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof Class_) {
+            return null;
+        }
+
         if (! $this->isName($node->class, 'parent')) {
             return null;
         }
 
-        if ($node->getAttribute(AttributeKey::PARENT_CLASS_NAME) === null) {
+        $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        if ($parentClassName === null) {
             $this->removeNode($node);
             return null;
         }

@@ -12,6 +12,7 @@ final class RemoveParentCallWithoutParentRectorTest extends AbstractRectorTestCa
         $this->doTestFiles([
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/parent_but_no_method.php.inc',
+            __DIR__ . '/Fixture/skip_trait.php.inc',
         ]);
     }
 

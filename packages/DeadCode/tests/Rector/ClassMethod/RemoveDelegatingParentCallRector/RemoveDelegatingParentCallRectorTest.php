@@ -11,6 +11,7 @@ final class RemoveDelegatingParentCallRectorTest extends AbstractRectorTestCase
     {
         $this->doTestFiles([
             __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/in_trait.php.inc',
             __DIR__ . '/Fixture/skip_extra_content.php.inc',
             __DIR__ . '/Fixture/skip_different_method_name.php.inc',
             __DIR__ . '/Fixture/skip_changed_arguments.php.inc',
