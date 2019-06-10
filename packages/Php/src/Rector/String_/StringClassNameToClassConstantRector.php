@@ -91,6 +91,11 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $classLikeName = $node->value;
+
+        if ($classLikeName === '\\') {
+            return null;
+        }
+
         if (! $this->classLikeSensitiveExists($classLikeName)) {
             return null;
         }
