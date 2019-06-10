@@ -156,7 +156,9 @@ CODE_SAMPLE
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Node) {
-            if ($parentNode instanceof Assign || $this->isStaticVariable($parentNode)) {
+            if ($parentNode instanceof Assign || $parentNode instanceof Node\Expr\AssignRef || $this->isStaticVariable(
+                $parentNode
+            )) {
                 return true;
             }
         }
