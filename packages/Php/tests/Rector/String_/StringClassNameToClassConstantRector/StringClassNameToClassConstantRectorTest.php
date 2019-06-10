@@ -11,8 +11,10 @@ final class StringClassNameToClassConstantRectorTest extends AbstractRectorTestC
     {
         $this->doTestFiles([
             __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/pre_slash.php.inc',
             __DIR__ . '/Fixture/skip_error.php.inc',
             __DIR__ . '/Fixture/skip_sensitive.php.inc',
+            __DIR__ . '/Fixture/skip_slashes.php.inc',
         ]);
     }
 
