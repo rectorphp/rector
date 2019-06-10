@@ -12,7 +12,7 @@ final class ListSwapArrayOrderRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/skip.php.inc',
-            __DIR__ . '/Fixture/skip_empty.php.inc'
+            __DIR__ . '/Fixture/skip_empty.php.inc',
         ]);
     }
 
