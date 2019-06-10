@@ -92,7 +92,9 @@ CODE_SAMPLE
     {
         $classLikeName = $node->value;
 
-        if ($classLikeName === '\\') {
+        // remove leading slash
+        $classLikeName = ltrim($classLikeName, '\\');
+        if ($classLikeName === '') {
             return null;
         }
 
