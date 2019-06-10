@@ -22,5 +22,6 @@ services:
 
     Rector\Rector\Argument\ArgumentRemoverRector:
         Illuminate\Foundation\Application:
-            1:
-                name: 'options'
+            register:
+                1:
+                    name: 'options'
