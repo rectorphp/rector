@@ -7,3 +7,4 @@ services:
             setHttpResponseCode: setStatusCode
             sendCookies: sendHeaders
             setBody: setContent
+    Rector\Shopware\Rector\ClassConstFetch\ShopwareVersionConstsRector: ~
