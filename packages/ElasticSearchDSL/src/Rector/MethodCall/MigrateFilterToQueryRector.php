@@ -67,17 +67,13 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $node->name instanceof Node\Identifier) {
+        if (! $this->isName($node, 'addFilter')) {
             return null;
         }
 
-        if ($node->name->name !== 'addFilter') {
-            return null;
-        }
+        $node->name = new Node\Identifier('addQuery');
 
-        $node->name->name = 'addQuery';
-
-        $node->args[1] = new Node\Arg(new Node\Expr\ClassConstFetch(new Node\Name('\ONGR\ElasticsearchDSL\Query\Compound\BoolQuery'), new Node\Identifier('FILTER')));
+        $node->args[1] = new Node\Arg(new Node\Expr\ClassConstFetch(new Node\Name\FullyQualified('ONGR\ElasticsearchDSL\Query\Compound\BoolQuery'), new Node\Identifier('FILTER')));
 
         return $node;
     }

@@ -11,6 +11,10 @@ class SomeClass
         $search->addFilter(
             new \ONGR\ElasticsearchDSL\Query\TermsQuery('categoryIds', [1, 2])
         );
+
+        $search->addQuery(
+            new \ONGR\ElasticsearchDSL\Query\TermsQuery('categoryIds', [1, 2]), \ONGR\ElasticsearchDSL\Query\Compound\BoolQuery::FILTER
+        );
     }
 }
 
@@ -25,6 +29,10 @@ class SomeClass
     public function run()
     {
         $search = new \ONGR\ElasticsearchDSL\Search();
+
+        $search->addQuery(
+            new \ONGR\ElasticsearchDSL\Query\TermsQuery('categoryIds', [1, 2]), \ONGR\ElasticsearchDSL\Query\Compound\BoolQuery::FILTER
+        );
 
         $search->addQuery(
             new \ONGR\ElasticsearchDSL\Query\TermsQuery('categoryIds', [1, 2]), \ONGR\ElasticsearchDSL\Query\Compound\BoolQuery::FILTER
