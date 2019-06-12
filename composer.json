@@ -73,7 +73,8 @@
             "Rector\\NetteTesterToPHPUnit\\": "packages/NetteTesterToPHPUnit/src",
             "Rector\\Nette\\": "packages/Nette/src",
             "Rector\\SOLID\\": "packages/SOLID/src",
-            "Rector\\Legacy\\": "packages/Legacy/src"
+            "Rector\\Legacy\\": "packages/Legacy/src",
+            "Rector\\ElasticSearchDSL\\": "packages/ElasticSearchDSL/src"
         }
     },
     "autoload-dev": {
@@ -109,7 +110,8 @@
             "Rector\\NetteTesterToPHPUnit\\Tests\\": "packages/NetteTesterToPHPUnit/tests",
             "Rector\\Nette\\Tests\\": "packages/Nette/tests",
             "Rector\\SOLID\\Tests\\": "packages/SOLID/tests",
-            "Rector\\Legacy\\Tests\\": "packages/Legacy/tests"
+            "Rector\\Legacy\\Tests\\": "packages/Legacy/tests",
+            "Rector\\ElasticSearchDSL\\Tests\\": "packages/ElasticSearchDSL/tests"
         },
         "classmap": [
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
