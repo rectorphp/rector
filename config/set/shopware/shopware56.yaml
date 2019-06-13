@@ -8,3 +8,4 @@ services:
             sendCookies: sendHeaders
             setBody: setContent
     Rector\Shopware\Rector\ClassConstFetch\ShopwareVersionConstsRector: ~
+    Rector\Shopware\Rector\MethodCall\ShopRegistrationServiceRector: ~
