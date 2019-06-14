@@ -17,6 +17,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://symfony.com/doc/current/console/commands_as_services.html
+ * @sponsor Thanks https://www.musement.com/ for sponsoring this rule; initiated by https://github.com/stloyd
  */
 final class MakeCommandLazyRector extends AbstractRector
 {
