@@ -23,7 +23,6 @@ matrix:
           env: STANDALONE=true
         - php: '7.3'
           env: DOG_FOOD=true
-        - php: '7.4snapshot'
 
 install:
     - composer update $COMPOSER_FLAGS

@@ -38,6 +38,8 @@ services:
         $correctToTypos:
             # keep "exclude_" explicit, to get typos to the correct key
             exclude_paths:
+                - 'exclude'
+                - 'excluded'
                 - 'exclude_path'
                 - 'excluded_path'
                 - 'exclude_dir'
