@@ -88,6 +88,12 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var string $class */
+        $class = $this->getName($node);
+        if (method_exists($class, '__set') || method_exists($class, '__get')) {
+            return null;
+        }
+
         $fetchedLocalPropertyNameToTypes = $this->resolveFetchedLocalPropertyNameToTypes($node);
 
         $propertyNames = [];
