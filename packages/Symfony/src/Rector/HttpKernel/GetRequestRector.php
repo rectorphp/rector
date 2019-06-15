@@ -129,6 +129,11 @@ CODE_SAMPLE
             return false;
         }
 
+        // must be $this->getRequest() in controller
+        if (! $this->isName($node->var, 'this')) {
+            return false;
+        }
+
         if (! $this->isName($node, 'getRequest') && ! $this->isGetMethodCallWithRequestParameters($node)) {
             return false;
         }
@@ -146,13 +151,8 @@ CODE_SAMPLE
         if (! $this->controllerMethodAnalyzer->isAction($node)) {
             return false;
         }
-
-        // "$this->getRequest()"
-        $isGetRequestMethod = (bool) $this->betterNodeFinder->find($node, function (Node $node): bool {
-            return $this->isName($node, 'getRequest');
-        });
-
-        if ($isGetRequestMethod) {
+        $containsGetRequestMethod = $this->containsGetRequestMethod($node);
+        if ($containsGetRequestMethod) {
             return true;
         }
 
@@ -160,6 +160,10 @@ CODE_SAMPLE
         /** @var MethodCall[] $getMethodCalls */
         $getMethodCalls = $this->betterNodeFinder->find($node, function (Node $node): bool {
             if (! $node instanceof MethodCall) {
+                return false;
+            }
+
+            if (! $this->isName($node->var, 'this')) {
                 return false;
             }
 
@@ -193,5 +197,21 @@ CODE_SAMPLE
         $stringValue = $methodCall->args[0]->value;
 
         return $stringValue->value === 'request';
+    }
+
+    private function containsGetRequestMethod(Node $node): bool
+    {
+        // "$this->getRequest()"
+        return (bool) $this->betterNodeFinder->find($node, function (Node $node): bool {
+            if (! $node instanceof MethodCall) {
+                return false;
+            }
+
+            if (! $this->isName($node->var, 'this')) {
+                return false;
+            }
+
+            return $this->isName($node, 'getRequest');
+        });
     }
 }
