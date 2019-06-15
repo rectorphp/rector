@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -63,6 +64,11 @@ CODE_SAMPLE
 
         foreach ($node->stmts as $key => $stmt) {
             if ($isDeadAfterReturn) {
+                // keep comment
+                if ($node->stmts[$key] instanceof Nop) {
+                    continue;
+                }
+
                 unset($node->stmts[$key]);
             }
 
