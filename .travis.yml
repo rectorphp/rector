@@ -15,6 +15,7 @@ matrix:
           env: COVERAGE=true
         - php: '7.3'
           env: DOG_FOOD=true
+        - php: '7.4snapshot'
     allow_failures:
         - php: '7.1'
           env: CODING_STANDARD=true
@@ -22,6 +23,7 @@ matrix:
           env: STANDALONE=true
         - php: '7.3'
           env: DOG_FOOD=true
+        - php: '7.4snapshot'
 
 install:
     - composer update $COMPOSER_FLAGS
