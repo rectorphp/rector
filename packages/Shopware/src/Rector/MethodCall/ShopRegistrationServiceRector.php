@@ -3,11 +3,16 @@
 namespace Rector\Shopware\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+
 /**
  * @see https://github.com/shopware/shopware/blob/5.6/UPGRADE-5.6.md
  */
@@ -27,7 +32,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
+                ,
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -38,8 +43,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-
-            )
+            ),
         ]);
     }
 
@@ -64,10 +68,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $shopwareFunction = new FuncCall(new Node\Name('Shopware'));
-        $containerCall = new MethodCall($shopwareFunction, new Node\Identifier('Container'));
-        $methodCall = new MethodCall($containerCall, new Node\Identifier('get'), [new Node\Arg(new Node\Scalar\String_('shopware.components.shop_registration_service'))]);
+        $shopwareFunction = new FuncCall(new Name('Shopware'));
+        $containerCall = new MethodCall($shopwareFunction, new Identifier('Container'));
+        $methodCall = new MethodCall($containerCall, new Identifier('get'), [
+            new Arg(new String_('shopware.components.shop_registration_service')),
+        ]);
 
-        return new MethodCall($methodCall, new Node\Identifier('registerShop'), [new Node\Arg($node->var)]);
+        return new MethodCall($methodCall, new Identifier('registerShop'), [new Arg($node->var)]);
     }
 }

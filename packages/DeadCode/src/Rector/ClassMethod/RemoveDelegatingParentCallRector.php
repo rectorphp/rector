@@ -3,7 +3,10 @@
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -50,17 +53,14 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node->stmts[0] instanceof Node\Stmt\Expression) {
+        if ($node->stmts[0] instanceof Expression) {
             $onlyStmt = $node->stmts[0]->expr;
         } else {
             $onlyStmt = $node->stmts[0];
         }
 
         // are both return?
-        if ($node->returnType && ! $this->isName(
-            $node->returnType,
-            'void'
-        ) && ! $onlyStmt instanceof Node\Stmt\Return_) {
+        if ($node->returnType && ! $this->isName($node->returnType, 'void') && ! $onlyStmt instanceof Return_) {
             return null;
         }
 
@@ -77,25 +77,25 @@ CODE_SAMPLE
         return null;
     }
 
-    private function matchStaticCall(Node $node): ?Node\Expr\StaticCall
+    private function matchStaticCall(Node $node): ?StaticCall
     {
         // must be static call
-        if ($node instanceof Node\Stmt\Return_) {
-            if ($node->expr instanceof Node\Expr\StaticCall) {
+        if ($node instanceof Return_) {
+            if ($node->expr instanceof StaticCall) {
                 return $node->expr;
             }
 
             return null;
         }
 
-        if ($node instanceof Node\Expr\StaticCall) {
+        if ($node instanceof StaticCall) {
             return $node;
         }
 
         return null;
     }
 
-    private function isParentCallMatching(ClassMethod $classMethod, ?Node\Expr\StaticCall $staticCall): bool
+    private function isParentCallMatching(ClassMethod $classMethod, ?StaticCall $staticCall): bool
     {
         if ($staticCall === null) {
             return false;

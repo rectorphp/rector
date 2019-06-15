@@ -3,11 +3,16 @@
 namespace Rector\Shopware\Rector\ClassConstFetch;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\BlablaSpec;
 
 /**
  * @see https://github.com/shopware/shopware/blob/5.6/UPGRADE-5.6.md
@@ -27,7 +32,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
+                ,
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -37,8 +42,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-
-            )
+            ),
         ]);
     }
 
@@ -59,7 +63,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $node->name instanceof Node\Identifier) {
+        if (! $node->name instanceof Identifier) {
             return null;
         }
 
@@ -75,10 +79,12 @@ CODE_SAMPLE
         }
     }
 
-    private function buildParameterCall(string $paramterName): Node\Expr\MethodCall
+    private function buildParameterCall(string $paramterName): MethodCall
     {
-        $shopwareFunction = new Node\Expr\FuncCall(new Node\Name('Shopware'));
-        $containerCall = new Node\Expr\MethodCall($shopwareFunction, new Node\Identifier('Container'));
-        return new Node\Expr\MethodCall($containerCall, new Node\Identifier('getParameter'), [new Node\Arg(new Node\Scalar\String_($paramterName))]);
+        $shopwareFunction = new FuncCall(new Name('Shopware'));
+        $containerCall = new MethodCall($shopwareFunction, new Identifier('Container'));
+        return new MethodCall($containerCall, new Identifier('getParameter'), [
+            new Arg(new String_($paramterName)),
+        ]);
     }
 }
