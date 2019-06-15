@@ -105,10 +105,36 @@ final class RemoveExtraParametersRector extends AbstractRector
             return null;
         }
 
-        if (! method_exists($nodeTypes[0], $methodName)) {
+        $priorityType = $this->resolvePriorityType($nodeTypes);
+        if ($priorityType === null) {
             return null;
         }
 
-        return new ReflectionMethod($nodeTypes[0], $methodName);
+        if (! method_exists($priorityType, $methodName)) {
+            return null;
+        }
+
+        return new ReflectionMethod($priorityType, $methodName);
+    }
+
+    /**
+     * Give class priority, because it can change the interface signature,
+     * @see https://github.com/rectorphp/rector/issues/1593#issuecomment-502404580
+     *
+     * @param string[] $nodeTypes
+     */
+    private function resolvePriorityType(array $nodeTypes): ?string
+    {
+        $priorityType = null;
+        foreach ($nodeTypes as $nodeType) {
+            if (class_exists($nodeType)) {
+                $priorityType = $nodeType;
+                break;
+            }
+
+            $priorityType = $nodeType;
+        }
+
+        return $priorityType;
     }
 }
