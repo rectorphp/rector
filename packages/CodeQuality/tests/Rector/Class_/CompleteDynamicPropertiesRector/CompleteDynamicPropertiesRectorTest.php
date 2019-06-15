@@ -15,6 +15,8 @@ final class CompleteDynamicPropertiesRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/skip_defined.php.inc',
             __DIR__ . '/Fixture/skip_parent_property.php.inc',
             __DIR__ . '/Fixture/skip_trait_used.php.inc',
+            __DIR__ . '/Fixture/skip_magic_parent.php.inc',
+            __DIR__ . '/Fixture/skip_magic.php.inc',
         ]);
     }
 
