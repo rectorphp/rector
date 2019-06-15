@@ -3,7 +3,9 @@
 namespace Rector\Php\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
@@ -156,7 +158,7 @@ CODE_SAMPLE
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Node) {
-            if ($parentNode instanceof Assign || $parentNode instanceof Node\Expr\AssignRef || $this->isStaticVariable(
+            if ($parentNode instanceof Assign || $parentNode instanceof AssignRef || $this->isStaticVariable(
                 $parentNode
             )) {
                 return true;
@@ -170,7 +172,7 @@ CODE_SAMPLE
         // list() = | [$values] = defines variables as null
         if ($parentNode instanceof Node) {
             $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentParentNode instanceof List_ || $parentParentNode instanceof Node\Expr\Array_) {
+            if ($parentParentNode instanceof List_ || $parentParentNode instanceof Array_) {
                 return true;
             }
         }
@@ -197,7 +199,7 @@ CODE_SAMPLE
         }
 
         $this->traverseNodesWithCallable($node->stmts, function (Node $node): void {
-            if ($node instanceof Assign || $node instanceof Node\Expr\AssignRef) {
+            if ($node instanceof Assign || $node instanceof AssignRef) {
                 if (! $node->var instanceof Variable) {
                     return;
                 }

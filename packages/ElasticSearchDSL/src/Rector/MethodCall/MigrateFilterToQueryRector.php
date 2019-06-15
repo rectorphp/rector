@@ -3,11 +3,15 @@
 namespace Rector\ElasticSearchDSL\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\NodeDumper;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+
 /**
  * @see https://github.com/ongr-io/ElasticsearchDSL/blob/5.x/CHANGELOG.md
  */
@@ -30,7 +34,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
+                ,
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -45,8 +49,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-
-            )
+            ),
         ]);
     }
 
@@ -71,9 +74,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->name = new Node\Identifier('addQuery');
+        $node->name = new Identifier('addQuery');
 
-        $node->args[1] = new Node\Arg(new Node\Expr\ClassConstFetch(new Node\Name\FullyQualified('ONGR\ElasticsearchDSL\Query\Compound\BoolQuery'), new Node\Identifier('FILTER')));
+        $node->args[1] = new Arg(new ClassConstFetch(new FullyQualified(
+            'ONGR\ElasticsearchDSL\Query\Compound\BoolQuery'
+        ), new Identifier('FILTER')));
 
         return $node;
     }

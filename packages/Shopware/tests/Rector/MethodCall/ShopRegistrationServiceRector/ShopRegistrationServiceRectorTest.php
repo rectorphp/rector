@@ -2,19 +2,18 @@
 
 namespace Rector\Shopware\Tests\Rector\MethodCall\ShopRegistrationServiceRector;
 
+use Rector\Shopware\Rector\MethodCall\ShopRegistrationServiceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ShopRegistrationServiceRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc'
-        ]);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
     protected function getRectorClass(): string
     {
-        return \Rector\Shopware\Rector\MethodCall\ShopRegistrationServiceRector::class;
+        return ShopRegistrationServiceRector::class;
     }
 }

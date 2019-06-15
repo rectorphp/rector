@@ -3,8 +3,10 @@
 namespace Rector\DeadCode\Rector\Instanceof_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Expr\Variable;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -94,7 +96,7 @@ CODE_SAMPLE
 
     private function createUniqueKeyForInstanceOf(Instanceof_ $instanceof): ?string
     {
-        if (! $instanceof->expr instanceof Node\Expr\Variable) {
+        if (! $instanceof->expr instanceof Variable) {
             return null;
         }
         $variableName = $this->getName($instanceof->expr);
@@ -137,7 +139,7 @@ CODE_SAMPLE
         unset($this->duplicatedInstanceOfs[array_search($variableClassKey, $this->duplicatedInstanceOfs, true)]);
     }
 
-    private function processBinaryWithFirstInstaneOf(Instanceof_ $instanceof, Node\Expr $otherExpr): ?Node\Expr
+    private function processBinaryWithFirstInstaneOf(Instanceof_ $instanceof, Expr $otherExpr): ?Expr
     {
         $variableClassKey = $this->createUniqueKeyForInstanceOf($instanceof);
 

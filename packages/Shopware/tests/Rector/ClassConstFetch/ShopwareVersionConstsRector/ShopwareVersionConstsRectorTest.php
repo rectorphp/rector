@@ -2,19 +2,18 @@
 
 namespace Rector\Shopware\Tests\Rector\ClassConstFetch\ShopwareVersionConstsRector;
 
+use Rector\Shopware\Rector\ClassConstFetch\ShopwareVersionConstsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ShopwareVersionConstsRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc'
-        ]);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
     }
 
     protected function getRectorClass(): string
     {
-        return \Rector\Shopware\Rector\ClassConstFetch\ShopwareVersionConstsRector::class;
+        return ShopwareVersionConstsRector::class;
     }
 }
