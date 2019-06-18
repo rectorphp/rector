@@ -14,57 +14,6 @@ services:
     Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector: ~
     Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector: ~
 
-    Rector\Rector\Argument\ArgumentAdderRector:
-        # https://github.com/symfony/symfony/commit/fa2063efe43109aea093d6fbfc12d675dba82146
-        # https://github.com/symfony/symfony/commit/e3aa90f852f69040be19da3d8729cdf02d238ec7
-        Symfony\Component\BrowserKit\Client:
-            submit:
-                2:
-                    name: 'serverParameters'
-                    default_value: []
-
-        # https://github.com/symfony/symfony/commit/f634afdb6f573e4af8d89aaa605e0c7d4058676d
-        Symfony\Component\DomCrawler\Crawler:
-            children:
-                0:
-                    # $selector
-                    default_value: null
-
-        Symfony\Component\Finder\Finder:
-            sortByName:
-                0:
-                    # $useNaturalSort
-                    default_vlaue: false
-
-        Symfony\Bridge\Monolog\Processor\DebugProcessor:
-            getLogs:
-                0:
-                    # $request
-                    default_value: null
-            countErrors:
-                0:
-                    # $request
-                    default_value: null
-
-        Symfony\Bridge\Monolog\Logger:
-            getLogs:
-                0:
-                    # $request
-                    default_value: null
-            countErrors:
-                0:
-                    # $request
-                    default_value: null
-
-        Symfony\Component\Serializer\Normalizer:
-            handleCircularReference:
-                1:
-                    # $format
-                    default_value: null
-                2:
-                    # $context
-                    default_value: []
-
     Rector\Rector\MethodCall\RenameMethodRector:
         Symfony\Component\Cache\CacheItem:
             getPreviousTags: 'getMetadata'
