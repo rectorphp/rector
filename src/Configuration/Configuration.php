@@ -3,7 +3,10 @@
 namespace Rector\Configuration;
 
 use Jean85\PrettyVersions;
+use Nette\Utils\Strings;
 use Rector\Console\Output\JsonOutputFormatter;
+use Rector\Exception\Rector\RectorNotFoundOrNotValidRectorClassException;
+use Rector\Rector\AbstractRector;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\PackageBuilder\Configuration\ConfigFileFinder;
 
@@ -47,6 +50,11 @@ final class Configuration
     private $showProgressBar = true;
 
     /**
+     * @var string|null
+     */
+    private $rule;
+
+    /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
      */
     public function resolveFromInput(InputInterface $input): void
@@ -57,6 +65,8 @@ final class Configuration
         $this->withStyle = (bool) $input->getOption(Option::OPTION_WITH_STYLE);
         $this->outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
         $this->showProgressBar = $this->canShowProgressBar($input);
+
+        $this->setRule($input->getOption(Option::OPTION_RULE));
     }
 
     public function setConfigFilePathFromInput(InputInterface $input): void
@@ -127,8 +137,40 @@ final class Configuration
         return $this->showProgressBar;
     }
 
+    public function getRule(): ?string
+    {
+        return $this->rule;
+    }
+
     private function canShowProgressBar(InputInterface $input): bool
     {
         return $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== JsonOutputFormatter::NAME;
+    }
+
+    private function setRule(?string $rule): void
+    {
+        if ($rule) {
+            $this->ensureIsValidRectorClass($rule);
+            $this->rule = $rule;
+        } else {
+            $this->rule = null;
+        }
+    }
+
+    private function ensureIsValidRectorClass(string $rector): void
+    {
+        // simple check
+        if (! Strings::endsWith($rector, 'Rector')) {
+            throw new RectorNotFoundOrNotValidRectorClassException($rector);
+        }
+
+        if (! class_exists($rector)) {
+            throw new RectorNotFoundOrNotValidRectorClassException($rector);
+        }
+
+        // must inherit from AbstractRector
+        if (! in_array(AbstractRector::class, class_parents($rector), true)) {
+            throw new RectorNotFoundOrNotValidRectorClassException($rector);
+        }
     }
 }
