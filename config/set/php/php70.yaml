@@ -21,7 +21,5 @@ services:
     Rector\Php\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector: ~
     Rector\Php\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector: ~
 
-    Rector\Rector\Function_\RenameFunctionRector:
-        # https://3v4l.org/1s1St
-        mktime: 'time'
     Rector\Php\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector: ~
+    Rector\Php\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector: ~
