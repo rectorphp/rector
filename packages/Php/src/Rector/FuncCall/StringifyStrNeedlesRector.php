@@ -73,6 +73,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->args[1]->value instanceof String_) {
+            return null;
+        }
+
         $node->args[1]->value = new String_($node->args[1]->value);
 
         return $node;
