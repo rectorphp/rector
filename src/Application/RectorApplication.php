@@ -7,6 +7,7 @@ use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Configuration\Configuration;
 use Rector\FileSystemRector\FileSystemFileProcessor;
+use Rector\Testing\Application\EnabledRectorsProvider;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Throwable;
@@ -62,12 +63,18 @@ final class RectorApplication
      */
     private $removedAndAddedFilesProcessor;
 
+    /**
+     * @var EnabledRectorsProvider
+     */
+    private $enabledRectorsProvider;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         FileSystemFileProcessor $fileSystemFileProcessor,
         ErrorAndDiffCollector $errorAndDiffCollector,
         Configuration $configuration,
         FileProcessor $fileProcessor,
+        EnabledRectorsProvider $enabledRectorsProvider,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor
     ) {
@@ -78,6 +85,7 @@ final class RectorApplication
         $this->fileProcessor = $fileProcessor;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
+        $this->enabledRectorsProvider = $enabledRectorsProvider;
     }
 
     /**
@@ -100,6 +108,12 @@ final class RectorApplication
             $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
             });
+        }
+
+        // active only one rule
+        if ($this->configuration->getRule() !== null) {
+            $rule = $this->configuration->getRule();
+            $this->enabledRectorsProvider->addEnabledRector($rule);
         }
 
         // 2. change nodes with Rectors
@@ -173,7 +187,7 @@ final class RectorApplication
     private function advance(SmartFileInfo $smartFileInfo): void
     {
         if ($this->symfonyStyle->isVerbose()) {
-            $this->symfonyStyle->writeln($smartFileInfo->getRealPath());
+            $this->symfonyStyle->writeln('[parsing] ' . $smartFileInfo->getRealPath());
         } elseif ($this->configuration->showProgressBar()) {
             $this->symfonyStyle->progressAdvance();
         }

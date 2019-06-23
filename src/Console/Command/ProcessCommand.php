@@ -129,6 +129,8 @@ final class ProcessCommand extends AbstractCommand
             'Hide autoload errors for the moment.'
         );
 
+        $this->addOption(Option::OPTION_RULE, 'r', InputOption::VALUE_REQUIRED, 'Run only this single rule.');
+
         $availableOutputFormatters = $this->outputFormatterCollector->getNames();
         $this->addOption(
             Option::OPTION_OUTPUT_FORMAT,
