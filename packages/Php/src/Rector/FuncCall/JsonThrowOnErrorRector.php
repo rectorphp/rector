@@ -13,17 +13,10 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see http://wiki.php.net/rfc/json_throw_on_error
+ * @see https://3v4l.org/5HMVE
  */
 final class JsonThrowOnErrorRector extends AbstractRector
 {
-    /**
-     * @var int[]
-     */
-    private $functionsToConstantPositions = [
-        'json_encode' => 1,
-        'json_decode' => 3,
-    ];
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -57,23 +50,46 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isNames($node, array_keys($this->functionsToConstantPositions))) {
+        if ($this->isName($node, 'json_encode')) {
+            return $this->processJsonEncode($node);
+        }
+
+        if ($this->isName($node, 'json_decode')) {
+            return $this->processJsonDecode($node);
+        }
+
+        return null;
+    }
+
+    private function processJsonEncode(FuncCall $funcCall): ?FuncCall
+    {
+        if (isset($funcCall->args[1])) {
             return null;
         }
 
-        $constantPosition = $this->functionsToConstantPositions[$this->getName($node)];
+        $funcCall->args[1] = new Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
 
-        for ($i = 0; $i <= $constantPosition; ++$i) {
-            if (isset($node->args[$i])) {
-                continue;
-            }
+        return $funcCall;
+    }
 
-            $node->args[$i] = $i === $constantPosition ? new Arg($this->createConstFetch(
-                'JSON_THROW_ON_ERROR'
-            )) : new Arg($this->createNull());
+    private function processJsonDecode(FuncCall $funcCall): ?FuncCall
+    {
+        if (isset($funcCall->args[3])) {
+            return null;
         }
 
-        return $node;
+        // set default to inter-args
+        if (! isset($funcCall->args[1])) {
+            $funcCall->args[1] = new Arg($this->createFalse());
+        }
+
+        if (! isset($funcCall->args[2])) {
+            $funcCall->args[2] = new Arg(new Node\Scalar\LNumber(512));
+        }
+
+        $funcCall->args[3] = new Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
+
+        return $funcCall;
     }
 
     private function createConstFetch(string $name): ConstFetch
