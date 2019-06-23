@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassConst\CompleteVarDocTypeConstantRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
-final class SomeClass
+final class MiscType
 {
     private const NUMBER = 5;
     private const NUMBER_NEGATIVE = -5;
@@ -16,9 +16,9 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassConst\CompleteVarDocTypeConstantRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector\Fixture;
 
-final class SomeClass
+final class MiscType
 {
     /**
      * @var int
@@ -33,7 +33,7 @@ final class SomeClass
      */
     const STRING = 'name';
     /**
-     * @var mixed[]
+     * @var string[][]
      */
     const ITEMs = [[self::STRING]];
 

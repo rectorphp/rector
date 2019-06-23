@@ -43,6 +43,9 @@ final class TypeAnalyzer
         $type = strtolower($type);
         $extraTypes = ['object'];
 
+        // remove [] from arrays
+        $type = Strings::replace($type, '#(\[\])+$#');
+
         return in_array($type, array_merge($this->phpSupportedTypes, $extraTypes), true);
     }
 
