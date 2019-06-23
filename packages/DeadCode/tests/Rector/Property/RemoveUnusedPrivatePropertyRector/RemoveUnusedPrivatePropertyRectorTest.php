@@ -13,6 +13,7 @@ final class RemoveUnusedPrivatePropertyRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/property_assign.php.inc',
             __DIR__ . '/Fixture/skip_anonymous_class.php.inc',
+            __DIR__ . '/Fixture/skip_anonymous_function.php.inc',
         ]);
     }
 
