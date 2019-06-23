@@ -78,6 +78,10 @@ final class CallManipulator
             return true;
         }
 
+        if ($this->isVariadicByName($reflectionFunctionAbstract)) {
+            return true;
+        }
+
         if ($reflectionFunctionAbstract instanceof ReflectionFunction) {
             $functionNode = $this->parsedNodesByType->findFunction($reflectionFunctionAbstract->getName());
             if ($functionNode === null) {
@@ -159,5 +163,21 @@ final class CallManipulator
     private function resolveMotherType(Node $callNode): string
     {
         return $callNode instanceof FuncCall ? Function_::class : ClassMethod::class;
+    }
+
+    /**
+     * native PHP bug fix
+     */
+    private function isVariadicByName(ReflectionFunctionAbstract $reflectionFunctionAbstract): bool
+    {
+        if (! $reflectionFunctionAbstract instanceof ReflectionMethod) {
+            return false;
+        }
+
+        if ($reflectionFunctionAbstract->getDeclaringClass()->getName() !== 'ReflectionMethod') {
+            return false;
+        }
+
+        return $reflectionFunctionAbstract->getName() === 'invoke';
     }
 }
