@@ -8,8 +8,8 @@ use PhpParser\NodeVisitor;
 interface PhpRectorInterface extends NodeVisitor, RectorInterface
 {
     /**
-     * List of nodes this class checks, classes that implement
-     * @see \PhpParser\Node
+     * List of nodes this class checks, classes that implement @see \PhpParser\Node
+     * @see beautifull map of all nodes https://github.com/rectorphp/rector/blob/master/docs/NodesOverview.md
      *
      * @return string[]
      */

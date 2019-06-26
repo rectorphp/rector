@@ -7,6 +7,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\LNumber;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -84,7 +85,7 @@ CODE_SAMPLE
         }
 
         if (! isset($funcCall->args[2])) {
-            $funcCall->args[2] = new Arg(new Node\Scalar\LNumber(512));
+            $funcCall->args[2] = new Arg(new LNumber(512));
         }
 
         $funcCall->args[3] = new Arg($this->createConstFetch('JSON_THROW_ON_ERROR'));
