@@ -1,5 +1,5 @@
 # resources:
-# - https://github.com/symfony/symfony/blob/master/UPGRADE-3.0.md
+# - https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.0.md
 
 services:
     # php
