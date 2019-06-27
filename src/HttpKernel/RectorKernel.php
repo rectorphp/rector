@@ -19,7 +19,6 @@ use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoBindParametersC
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutoReturnFactoryCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
-use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireSinglyImplementedCompilerPass;
 
 final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterface
 {
@@ -70,7 +69,6 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
         $containerBuilder->addCompilerPass(new RemoveExcludedRectorsCompilerPass());
 
         $containerBuilder->addCompilerPass(new AutoReturnFactoryCompilerPass());
-        $containerBuilder->addCompilerPass(new AutowireSinglyImplementedCompilerPass());
         $containerBuilder->addCompilerPass(new AutowireArrayParameterCompilerPass());
 
         // autowire Rectors by default (mainly for 3rd party code)
