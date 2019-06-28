@@ -106,7 +106,7 @@ final class PhpDocInfo
         /** @var AttributeAwareNodeInterface[]|PhpDocTagNode[] $tags */
         $tags = $this->phpDocNode->getTags();
 
-        return array_filter($tags, function (PhpDocTagNode $tag) use ($name): bool {
+        $tags = array_filter($tags, function (PhpDocTagNode $tag) use ($name): bool {
             if ($tag->name === $name) {
                 return true;
             }
@@ -119,6 +119,8 @@ final class PhpDocInfo
 
             return AnnotationNaming::normalizeName($annotationClass) === $name;
         });
+
+        return array_values($tags);
     }
 
     /**
