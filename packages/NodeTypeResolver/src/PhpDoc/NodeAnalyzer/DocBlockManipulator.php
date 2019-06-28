@@ -506,30 +506,7 @@ final class DocBlockManipulator
         return (bool) Strings::match($text, '#\@(param|throws|return|var)\b#');
     }
 
-    private function addTypeSpecificTag(Node $node, string $name, string $type): void
-    {
-        // there might be no phpdoc at all
-        if ($node->getDocComment() !== null) {
-            $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-            $phpDocNode = $phpDocInfo->getPhpDocNode();
-
-            // preffix possible class name
-            if (! $this->typeAnalyzer->isPhpReservedType($type)) {
-                $type = '\\' . $type;
-            }
-
-            $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode($type), '', '');
-            $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@' . $name, $varTagValueNode);
-
-            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
-        } else {
-            // create completely new docblock
-            $varDocComment = sprintf("/**\n * @%s %s\n */", $name, $type);
-            $node->setDocComment(new Doc($varDocComment));
-        }
-    }
-
-    private function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): bool
+    public function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): bool
     {
         // skip if has no doc comment
         if ($node->getDocComment() === null) {
@@ -551,6 +528,29 @@ final class DocBlockManipulator
         $node->setAttribute('comments', null);
 
         return true;
+    }
+
+    private function addTypeSpecificTag(Node $node, string $name, string $type): void
+    {
+        // there might be no phpdoc at all
+        if ($node->getDocComment() !== null) {
+            $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+            $phpDocNode = $phpDocInfo->getPhpDocNode();
+
+            // preffix possible class name
+            if (! $this->typeAnalyzer->isPhpReservedType($type)) {
+                $type = '\\' . $type;
+            }
+
+            $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode($type), '', '');
+            $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@' . $name, $varTagValueNode);
+
+            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+        } else {
+            // create completely new docblock
+            $varDocComment = sprintf("/**\n * @%s %s\n */", $name, $type);
+            $node->setDocComment(new Doc($varDocComment));
+        }
     }
 
     private function createPhpDocInfoFromNode(Node $node): PhpDocInfo
