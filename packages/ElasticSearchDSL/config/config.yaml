@@ -5,3 +5,4 @@ services:
 
     Rector\ElasticSearchDSL\:
         resource: '../src'
+        exclude: '../src/{Rector/**/*Rector.php}'
