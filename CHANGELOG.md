@@ -9,6 +9,62 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+<!-- dumped content start -->
+
+## [v0.5.6] - 2019-06-28
+
+### Added
+
+- [#1584] [DeadCode] Add `RemoveDeadZeroAndOneOperationRector`
+- [#1586] [DeadCode] Add `RemoveDelegatingParentCallRector`
+- [#1603] [DeadCode] Add `RemoveDuplicatedInstanceOfRector`
+- [#1656] [SymfonyPHPUnit] Add `MultipleServiceGetToSetUpMethodRector`
+- [#1589] Add assign ref support to `AddDefaultValueForUndefinedVariableRector`
+- [#1609] Add `ElasticSearchDSL` package, Thanks to [@shyim]
+- [#1611] Add rector for ShopRegistration, Thanks to [@shyim]
+- [#1615] add exclude to typical reported typos
+- [#1610] Add shopware version const rector, Thanks to [@shyim]
+- [#1640] Add `--rule` option to process only single rule from set
+- [#1641] Add test case for [#1630]
+
+### Changed
+
+- [#1582] Rename "level" directory to "set"
+- [#1612] travis: allow PHP 7.4
+
+### Fixed
+
+- [#1619] [CodeQuality] Fix `__set`/`__get` case for `CompleteDynamicPropertiesRector`
+- [#1643] [CodingStyle] Fix extra slash in array simple types
+- [#1616] [DeadCode] Fix removed comment after return at `RemoveCodeAfterReturnRector`
+- [#1602] [Laravel] Fix missing method name in 5.7
+- [#1645] [PHP] Fix `mktime` rename with args [closes [#1622]]
+- [#1647] [PHP] Fix `JsonThrowOnErrorRector` inter-args
+- [#1644] [PHP] Fix missed variadic on `ReflectionMethod::invoke()` [closes [#1625]]
+- [#1618] [PHP] Fix class signature over interface priority in `RemoveExtraParametersRector`
+- [#1642] [PHP] Fix `StringifyStrNeedlesRector` duplicated change
+- [#1617] [Symfony] Fix GetRequestRector overlap to non-controllers
+- [#1605] Fix Open Collective link for `FUNDING.yml`, Thanks to [@pxgamer]
+- [#1583] Fix CountOnNullRector for nullable and invalid property
+- [#1599] Fix `StringClassNameToClassConstantRector` for empty name [closes [#1596]]
+- [#1590] Fix nullable item in `ListSwapArrayOrderRector`
+- [#1631] Fix typo : rename `jsm-decouple.yaml` to `jms-decouple.yaml`, Thanks to [@gnutix]
+- [#1588] Fix foreach scope for `AddDefaultValueForUndefinedVariableRector`
+- [#1601] Fix trait skip in `RemoveParentCallWithoutParentRector`
+
+### Changed
+
+- [#1587] [PHP] Skip list in `AddDefaultValueForUndefinedVariableRector`
+- [#1651] Update link to `UPGRADE.md 3.0`, Thanks to [@vasilvestre]
+- [#1581] use `STOP_TRAVERSAL` over exception
+- [#1525] [#1469] prototype github issue template, Thanks to [@funivan]
+
+## [v0.5.5] - 2019-06-08
+
+- [#1577] skip analysis of new anonymous classes in method call [closes [#1574]]
+
+<!-- dumped content end -->
+
 ## [v0.5.4] - 2019-06-06
 
 ### Added
@@ -348,7 +404,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#1568]: https://github.com/rectorphp/rector/pull/1568
 [#1567]: https://github.com/rectorphp/rector/pull/1567
 [#1565]: https://github.com/rectorphp/rector/pull/1565
-[#1563]: https://github.com/rectorphp/rector/pull/1563
 [#1562]: https://github.com/rectorphp/rector/pull/1562
 [#1561]: https://github.com/rectorphp/rector/pull/1561
 [#1559]: https://github.com/rectorphp/rector/pull/1559
@@ -364,11 +419,9 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#1545]: https://github.com/rectorphp/rector/pull/1545
 [#1544]: https://github.com/rectorphp/rector/pull/1544
 [#1542]: https://github.com/rectorphp/rector/pull/1542
-[#1541]: https://github.com/rectorphp/rector/pull/1541
 [#1539]: https://github.com/rectorphp/rector/pull/1539
 [#1538]: https://github.com/rectorphp/rector/pull/1538
 [#1533]: https://github.com/rectorphp/rector/pull/1533
-[#1531]: https://github.com/rectorphp/rector/pull/1531
 [#1524]: https://github.com/rectorphp/rector/pull/1524
 [#1523]: https://github.com/rectorphp/rector/pull/1523
 [#1522]: https://github.com/rectorphp/rector/pull/1522
@@ -377,3 +430,54 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@cgkkevinr]: https://github.com/cgkkevinr
 [@Great-Antique]: https://github.com/Great-Antique
 [v0.5.3]: https://github.com/rectorphp/rector/compare/v0.5.2...v0.5.3
+[#1659]: https://github.com/rectorphp/rector/pull/1659
+[#1656]: https://github.com/rectorphp/rector/pull/1656
+[#1651]: https://github.com/rectorphp/rector/pull/1651
+[#1647]: https://github.com/rectorphp/rector/pull/1647
+[#1645]: https://github.com/rectorphp/rector/pull/1645
+[#1644]: https://github.com/rectorphp/rector/pull/1644
+[#1643]: https://github.com/rectorphp/rector/pull/1643
+[#1642]: https://github.com/rectorphp/rector/pull/1642
+[#1641]: https://github.com/rectorphp/rector/pull/1641
+[#1640]: https://github.com/rectorphp/rector/pull/1640
+[#1631]: https://github.com/rectorphp/rector/pull/1631
+[#1630]: https://github.com/rectorphp/rector/pull/1630
+[#1625]: https://github.com/rectorphp/rector/pull/1625
+[#1622]: https://github.com/rectorphp/rector/pull/1622
+[#1619]: https://github.com/rectorphp/rector/pull/1619
+[#1618]: https://github.com/rectorphp/rector/pull/1618
+[#1617]: https://github.com/rectorphp/rector/pull/1617
+[#1616]: https://github.com/rectorphp/rector/pull/1616
+[#1615]: https://github.com/rectorphp/rector/pull/1615
+[#1612]: https://github.com/rectorphp/rector/pull/1612
+[#1611]: https://github.com/rectorphp/rector/pull/1611
+[#1610]: https://github.com/rectorphp/rector/pull/1610
+[#1609]: https://github.com/rectorphp/rector/pull/1609
+[#1605]: https://github.com/rectorphp/rector/pull/1605
+[#1603]: https://github.com/rectorphp/rector/pull/1603
+[#1602]: https://github.com/rectorphp/rector/pull/1602
+[#1601]: https://github.com/rectorphp/rector/pull/1601
+[#1600]: https://github.com/rectorphp/rector/pull/1600
+[#1599]: https://github.com/rectorphp/rector/pull/1599
+[#1597]: https://github.com/rectorphp/rector/pull/1597
+[#1596]: https://github.com/rectorphp/rector/pull/1596
+[#1590]: https://github.com/rectorphp/rector/pull/1590
+[#1589]: https://github.com/rectorphp/rector/pull/1589
+[#1588]: https://github.com/rectorphp/rector/pull/1588
+[#1587]: https://github.com/rectorphp/rector/pull/1587
+[#1586]: https://github.com/rectorphp/rector/pull/1586
+[#1584]: https://github.com/rectorphp/rector/pull/1584
+[#1583]: https://github.com/rectorphp/rector/pull/1583
+[#1582]: https://github.com/rectorphp/rector/pull/1582
+[#1581]: https://github.com/rectorphp/rector/pull/1581
+[#1577]: https://github.com/rectorphp/rector/pull/1577
+[#1574]: https://github.com/rectorphp/rector/pull/1574
+[#1525]: https://github.com/rectorphp/rector/pull/1525
+[#1469]: https://github.com/rectorphp/rector/pull/1469
+[@vasilvestre]: https://github.com/vasilvestre
+[@shyim]: https://github.com/shyim
+[@pxgamer]: https://github.com/pxgamer
+[@gnutix]: https://github.com/gnutix
+[@funivan]: https://github.com/funivan
+[v0.5.5]: https://github.com/rectorphp/rector/compare/v0.5.4...v0.5.5
+[v0.5.4]: https://github.com/rectorphp/rector/compare/v0.5.3...v0.5.4
