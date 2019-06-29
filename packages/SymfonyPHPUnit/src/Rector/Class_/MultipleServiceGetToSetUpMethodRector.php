@@ -2,6 +2,7 @@
 
 namespace Rector\SymfonyPHPUnit\Rector\Class_;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
@@ -11,6 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -212,7 +214,14 @@ CODE_SAMPLE
         $staticPropertyFetch = new StaticPropertyFetch(new Name('self'), 'container');
 
         $methodCall = new MethodCall($staticPropertyFetch, 'get');
-        $methodCall->args[] = new Arg($this->createClassConstantReference($serviceType));
+        if (Strings::contains($serviceType, '_')) {
+            // keep string
+            $getArgumentValue = new String_($serviceType);
+        } else {
+            $getArgumentValue = $this->createClassConstantReference($serviceType);
+        }
+
+        $methodCall->args[] = new Arg($getArgumentValue);
 
         return $methodCall;
     }
@@ -232,7 +241,7 @@ CODE_SAMPLE
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);
 
         foreach ($serviceTypes as $serviceType) {
-            $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
+            $propertyName = $this->resolvePropertyNameFromServiceType($serviceType);
 
             // skip existing properties
             if (property_exists($className, $propertyName)) {
@@ -263,7 +272,7 @@ CODE_SAMPLE
         $className = $class->getAttribute(AttributeKey::CLASS_NAME);
 
         foreach ($serviceTypes as $serviceType) {
-            $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
+            $propertyName = $this->resolvePropertyNameFromServiceType($serviceType);
 
             // skip existing properties
             if (property_exists($className, $propertyName)) {
@@ -296,7 +305,12 @@ CODE_SAMPLE
             }
 
             /** @var MethodCall $node */
-            $serviceTypes[] = $this->getValue($node->args[0]->value);
+            $serviceType = $this->getValue($node->args[0]->value);
+            if ($this->shouldSkipServiceType($serviceType)) {
+                return null;
+            }
+
+            $serviceTypes[] = $serviceType;
         });
 
         return array_unique($serviceTypes);
@@ -344,7 +358,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $propertyName = $this->propertyNaming->fqnToVariableName($type);
+            $propertyName = $this->resolvePropertyNameFromServiceType($type);
 
             return new PropertyFetch(new Variable('this'), $propertyName);
         });
@@ -375,10 +389,25 @@ CODE_SAMPLE
                 return null;
             }
 
-            $type = $formerVariablesByMethods[$methodName][$variableName];
-            $propertyName = $this->propertyNaming->fqnToVariableName($type);
+            $serviceType = $formerVariablesByMethods[$methodName][$variableName];
+
+            $propertyName = $this->resolvePropertyNameFromServiceType($serviceType);
 
             return new PropertyFetch(new Variable('this'), $propertyName);
         });
+    }
+
+    private function shouldSkipServiceType(string $serviceType): bool
+    {
+        return $serviceType === 'Symfony\Component\HttpFoundation\Session\SessionInterface';
+    }
+
+    private function resolvePropertyNameFromServiceType(string $serviceType): string
+    {
+        if (Strings::contains($serviceType, '_')) {
+            return $this->propertyNaming->underscoreToName($serviceType);
+        }
+
+        return $this->propertyNaming->fqnToVariableName($serviceType);
     }
 }
