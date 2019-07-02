@@ -131,8 +131,15 @@ CODE_SAMPLE
                 continue;
             }
 
+            // is correct scope?
+            if (! $this->isInCorrectScope($node, $parameterConfiguration)) {
+                continue;
+            }
+
             if ($node instanceof ClassMethod) {
                 $this->addClassMethodParam($node, $name, $defaultValue, $type, $position);
+            } elseif ($node instanceof StaticCall && $this->isName($node->class, 'parent')) {
+                $node->args[$position] = new Arg(new Variable($name));
             } else {
                 $arg = new Arg(BuilderHelpers::normalizeValue($defaultValue));
                 $node->args[$position] = $arg;
@@ -170,5 +177,37 @@ CODE_SAMPLE
 
         // already added?
         return isset($node->args[$position]) && $this->isName($node->args[$position], $name);
+    }
+
+    /**
+     * @param ClassMethod|MethodCall|StaticCall $node
+     * @param mixed[] $parameterConfiguration
+     */
+    private function isInCorrectScope(Node $node, array $parameterConfiguration): bool
+    {
+        if (! isset($parameterConfiguration['scope'])) {
+            return true;
+        }
+
+        /** @var string[] $scope */
+        $scope = $parameterConfiguration['scope'];
+
+        if ($node instanceof ClassMethod) {
+            return in_array('class_method', $scope, true);
+        }
+
+        if ($node instanceof StaticCall) {
+            if ($this->isName($node->class, 'parent')) {
+                return in_array('parent_call', $scope, true);
+            }
+
+            return in_array('method_call', $scope, true);
+        }
+
+        if ($node instanceof MethodCall) {
+            return in_array('method_call', $scope, true);
+        }
+
+        return false;
     }
 }
