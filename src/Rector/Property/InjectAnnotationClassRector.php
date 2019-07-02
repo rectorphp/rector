@@ -16,6 +16,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Throwable;
 
 /**
  * @see https://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations#inject
@@ -38,20 +39,23 @@ final class InjectAnnotationClassRector extends AbstractRector
     private $errorAndDiffCollector;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $annotationClass;
+    private $annotationClasses = [];
 
+    /**
+     * @param string[] $annotationClasses
+     */
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
         AnalyzedApplicationContainerInterface $analyzedApplicationContainer,
         ErrorAndDiffCollector $errorAndDiffCollector,
-        string $annotationClass = ''
+        array $annotationClasses = []
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
-        $this->annotationClass = $annotationClass;
+        $this->annotationClasses = $annotationClasses;
     }
 
     public function getDefinition(): RectorDefinition
@@ -90,7 +94,7 @@ class SomeController
 CODE_SAMPLE
                     ,
                     [
-                        '$annotationClass' => 'JMS\DiExtraBundle\Annotation\Inject',
+                        '$annotationClasses' => ['JMS\DiExtraBundle\Annotation\Inject'],
                     ]
                 ),
             ]
@@ -110,51 +114,39 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->docBlockManipulator->hasTag($node, $this->annotationClass)) {
-            return null;
+        foreach ($this->annotationClasses as $annotationClass) {
+            if (! $this->docBlockManipulator->hasTag($node, $annotationClass)) {
+                continue;
+            }
+
+            return $this->refactorPropertyWithAnnotation($node, $annotationClass);
         }
 
-        $type = $this->resolveType($node);
-        if ($type === null) {
-            return null;
-        }
-
-        $name = $this->getName($node);
-        if ($name === null) {
-            return null;
-        }
-
-        if (! $this->docBlockManipulator->hasTag($node, 'var')) {
-            $this->docBlockManipulator->changeVarTag($node, $type);
-        }
-
-        $this->docBlockManipulator->removeTagFromNode($node, $this->annotationClass);
-
-        // set to private
-        $node->flags = Class_::MODIFIER_PRIVATE;
-
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
-            throw new ShouldNotHappenException();
-        }
-
-        $this->addPropertyToClass($classNode, $type, $name);
-
-        return $node;
+        return null;
     }
 
-    private function resolveType(Node $node): ?string
+    private function resolveType(Node $node, string $annotationClass): ?string
     {
-        $injectTagNode = $this->docBlockManipulator->getTagByName($node, $this->annotationClass);
+        $injectTagNode = $this->docBlockManipulator->getTagByName($node, $annotationClass);
 
         $serviceName = $this->resolveServiceName($injectTagNode, $node);
         if ($serviceName) {
-            if ($this->analyzedApplicationContainer->hasService($serviceName)) {
-                return $this->analyzedApplicationContainer->getTypeForName($serviceName);
+            try {
+                if ($this->analyzedApplicationContainer->hasService($serviceName)) {
+                    return $this->analyzedApplicationContainer->getTypeForName($serviceName);
+                }
+            } catch (Throwable $throwable) {
+                // resolve later in errorAndDiffCollector if @var not found
             }
+        }
 
-            // collect error
+        $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($node);
+        if ($varTypeInfo !== null && $varTypeInfo->getFqnType() !== null) {
+            return ltrim($varTypeInfo->getFqnType(), '\\');
+        }
 
+        // the @var is missing and service name was not found → report it
+        if ($serviceName) {
             /** @var SmartFileInfo $fileInfo */
             $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
 
@@ -165,19 +157,13 @@ CODE_SAMPLE
             );
         }
 
-        $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($node);
-        if ($varTypeInfo === null) {
-            return null;
-        }
-
-        return $varTypeInfo->getFqnType();
+        return null;
     }
 
     private function resolveServiceName(PhpDocTagNode $phpDocTagNode, Node $node): ?string
     {
         $injectTagContent = (string) $phpDocTagNode->value;
         $match = Strings::match($injectTagContent, '#(\'|")(?<serviceName>.*?)(\'|")#');
-
         if ($match['serviceName']) {
             return $match['serviceName'];
         }
@@ -189,5 +175,36 @@ CODE_SAMPLE
         }
 
         return $this->getName($node);
+    }
+
+    private function refactorPropertyWithAnnotation(Property $property, string $annotationClass): ?Property
+    {
+        $type = $this->resolveType($property, $annotationClass);
+        if ($type === null) {
+            return null;
+        }
+
+        $name = $this->getName($property);
+        if ($name === null) {
+            return null;
+        }
+
+        if (! $this->docBlockManipulator->hasTag($property, 'var')) {
+            $this->docBlockManipulator->changeVarTag($property, $type);
+        }
+
+        $this->docBlockManipulator->removeTagFromNode($property, $annotationClass);
+
+        // set to private
+        $property->flags = Class_::MODIFIER_PRIVATE;
+
+        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->addPropertyToClass($classNode, $type, $name);
+
+        return $property;
     }
 }

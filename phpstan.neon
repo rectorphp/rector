@@ -171,3 +171,5 @@ parameters:
         - '#Call to function method_exists\(\) with (.*?) will always evaluate to false#'
 
         - '#Parameter \#1 \$rule of method Rector\\Configuration\\Configuration\:\:setRule\(\) expects string\|null, array<string\>\|bool\|string\|null given#'
+        - '#In method "Rector\\Rector\\Property\\InjectAnnotationClassRector\:\:resolveType", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
+        - '#Empty catch block\. If you are sure this is meant to be empty, please add a "// @ignoreException" comment in the catch block#'

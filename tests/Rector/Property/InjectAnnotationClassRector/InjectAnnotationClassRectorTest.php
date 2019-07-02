@@ -26,6 +26,7 @@ final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture3.php.inc',
             __DIR__ . '/Fixture/fixture4.php.inc',
             __DIR__ . '/Fixture/fixture5.php.inc',
+            __DIR__ . '/Fixture/inject_from_var.php.inc',
         ]);
     }
 
@@ -36,7 +37,7 @@ final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
     {
         return [
             InjectAnnotationClassRector::class => [
-                '$annotationClass' => 'JMS\DiExtraBundle\Annotation\Inject',
+                '$annotationClasses' => ['JMS\DiExtraBundle\Annotation\Inject', 'Inject'],
             ],
         ];
     }
