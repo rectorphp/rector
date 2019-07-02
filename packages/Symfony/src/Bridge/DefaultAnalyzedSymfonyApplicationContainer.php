@@ -14,6 +14,13 @@ use Throwable;
 final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplicationContainerInterface
 {
     /**
+     * @var string[]
+     */
+    private $commonNamesToTypes = [
+        'doctrine' => 'Doctrine\Bundle\DoctrineBundle\Registry',
+    ];
+
+    /**
      * @var ParameterProvider
      */
     private $parameterProvider;
@@ -40,7 +47,12 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
 
     public function getTypeForName(string $name): ?string
     {
-        $container = $this->getContainer();
+        if (isset($this->commonNamesToTypes[$name])) {
+            return $this->commonNamesToTypes[$name];
+        }
+
+        // get known Symfony  types
+        $container = $this->getContainer($name);
 
         if (! $container->has($name)) {
             return null;
@@ -74,7 +86,7 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
 
     public function hasService(string $name): bool
     {
-        $container = $this->getContainer();
+        $container = $this->getContainer($name);
 
         return $container->has($name);
     }
@@ -82,14 +94,14 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
     /**
      * @return ContainerBuilder
      */
-    private function getContainer(): Container
+    private function getContainer(string $requestServiceName): Container
     {
         $kernelClass = $this->parameterProvider->provideParameter(Option::KERNEL_CLASS_PARAMETER);
         if ($kernelClass === null) {
             $kernelClass = $this->getDefaultKernelClass();
         }
 
-        $this->symfonyKernelParameterGuard->ensureKernelClassIsValid($kernelClass);
+        $this->symfonyKernelParameterGuard->ensureKernelClassIsValid($kernelClass, $requestServiceName);
 
         /** @var string $kernelClass */
         return $this->containerFactory->createFromKernelClass($kernelClass);
