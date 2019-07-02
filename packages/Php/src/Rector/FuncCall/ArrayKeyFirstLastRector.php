@@ -20,11 +20,21 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ArrayKeyFirstLastRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const ARRAY_KEY_FIRST = 'array_key_first';
+
+    /**
+     * @var string
+     */
+    private const ARRAY_KEY_LAST = 'array_key_last';
+
+    /**
      * @var string[]
      */
     private $previousToNewFunctions = [
-        'reset' => 'array_key_first',
-        'end' => 'array_key_last',
+        'reset' => self::ARRAY_KEY_FIRST,
+        'end' => self::ARRAY_KEY_LAST,
     ];
 
     public function getDefinition(): RectorDefinition
@@ -70,11 +80,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion('7.3')) {
-            return null;
-        }
-
-        if (! $this->isNames($node, ['reset', 'end'])) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -121,5 +127,22 @@ CODE_SAMPLE
         }
 
         return $currentExpression->getAttribute(AttributeKey::NEXT_NODE);
+    }
+
+    private function shouldSkip(FuncCall $funcCall): bool
+    {
+        if ($this->isAtLeastPhpVersion('7.3')) {
+            return false;
+        }
+
+        if (function_exists(self::ARRAY_KEY_FIRST) && function_exists(self::ARRAY_KEY_LAST)) {
+            return false;
+        }
+
+        if ($this->isNames($funcCall, ['reset', 'end'])) {
+            return true;
+        }
+
+        return false;
     }
 }

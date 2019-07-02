@@ -11,7 +11,7 @@ use PhpParser\Node\Name;
 use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
-final class DualCheckToAble
+final class IsArrayAndDualCheckToAble
 {
     /**
      * @var NameResolver

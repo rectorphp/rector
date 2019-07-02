@@ -14,6 +14,7 @@ final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
     {
         parent::setUp();
 
+        /** @var ParameterProvider $parameterProvider */
         $parameterProvider = self::$container->get(ParameterProvider::class);
         $parameterProvider->changeParameter(Option::KERNEL_CLASS_PARAMETER, SomeKernelClass::class);
     }
