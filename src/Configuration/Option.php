@@ -42,6 +42,11 @@ final class Option
     /**
      * @var string
      */
+    public const PHP_VERSION_FEATURES = 'php_version_features';
+
+    /**
+     * @var string
+     */
     public const HIDE_AUTOLOAD_ERRORS = 'hide-autoload-errors';
 
     /**
