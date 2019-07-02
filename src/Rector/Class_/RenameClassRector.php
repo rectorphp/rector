@@ -271,7 +271,7 @@ CODE_SAMPLE
         return $classLike;
     }
 
-    private function refactorName(Node $node): ?FullyQualified
+    private function refactorName(Node $node): ?Name
     {
         $name = $this->getName($node);
         if ($name === null) {
@@ -285,6 +285,14 @@ CODE_SAMPLE
 
         if (! $this->isClassToInterfaceValidChange($node, $newName)) {
             return null;
+        }
+
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        // no need to preslash "use \SomeNamespace" of imported namespace
+        if ($parentNode instanceof UseUse) {
+            if ($parentNode->type === Use_::TYPE_NORMAL || $parentNode->type === Use_::TYPE_UNKNOWN) {
+                return new Name($newName);
+            }
         }
 
         return new FullyQualified($newName);
