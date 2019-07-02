@@ -8,13 +8,15 @@ use Symfony\Component\HttpKernel\Kernel;
 
 final class SymfonyKernelParameterGuard
 {
-    public function ensureKernelClassIsValid(?string $kernelClass): void
+    public function ensureKernelClassIsValid(?string $kernelClass, string $requestServiceName): void
     {
         // ensure value is not null nor empty
         if ($kernelClass === null || $kernelClass === '') {
             throw new InvalidConfigurationException(sprintf(
-                'Make sure "%s" parameters is set in rector.yaml in "parameters:" section',
-                Option::KERNEL_CLASS_PARAMETER
+                'Make sure "%s" parameters is set in rector.yaml in "parameters:" section.%sIt is needed to resolve "%s" service name to type',
+                Option::KERNEL_CLASS_PARAMETER,
+                PHP_EOL,
+                $requestServiceName
             ));
         }
 
