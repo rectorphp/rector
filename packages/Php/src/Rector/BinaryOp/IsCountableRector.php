@@ -61,10 +61,10 @@ CODE_SAMPLE
 
     private function shouldSkip(): bool
     {
-        if ($this->isAtLeastPhpVersion('7.3')) {
+        if (function_exists('is_countable')) {
             return false;
         }
 
-        return ! function_exists('is_countable');
+        return $this->isAtLeastPhpVersion('7.3');
     }
 }
