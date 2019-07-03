@@ -136,26 +136,6 @@ CODE_SAMPLE
                 }
             }
 
-            if ($node instanceof ClassMethod && $this->isName($node, '__construct')) {
-                if (count((array) $node->stmts) !== 1) {
-                    return null;
-                }
-
-                $onlyNode = $node->stmts[0];
-                if ($onlyNode instanceof Expression) {
-                    $onlyNode = $onlyNode->expr;
-
-                    $commandName = $this->matchCommandNameNodeInConstruct($onlyNode);
-                    if ($commandName === null) {
-                        return null;
-                    }
-
-                    if (count($node->params) === 0) {
-                        $this->removeNode($node);
-                    }
-                }
-            }
-
             if ($node instanceof StaticCall) {
                 if (! $this->isType($node, self::COMMAND_CLASS)) {
                     return null;
