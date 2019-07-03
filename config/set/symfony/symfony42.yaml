@@ -25,6 +25,7 @@ services:
                 2:
                     name: 'serverParameters'
                     default_value: []
+                    scope: ['method_call']
 
         # https://github.com/symfony/symfony/commit/f634afdb6f573e4af8d89aaa605e0c7d4058676d
         Symfony\Component\DomCrawler\Crawler:
@@ -32,41 +33,49 @@ services:
                 0:
                     # $selector
                     default_value: null
+                    scope: ['method_call']
 
         Symfony\Component\Finder\Finder:
             sortByName:
                 0:
                     # $useNaturalSort
-                    default_vlaue: false
+                    default_value: false
+                    scope: ['method_call']
 
         Symfony\Bridge\Monolog\Processor\DebugProcessor:
             getLogs:
                 0:
                     # $request
                     default_value: null
+                    scope: ['method_call']
             countErrors:
                 0:
                     # $request
                     default_value: null
+                    scope: ['method_call']
 
         Symfony\Bridge\Monolog\Logger:
             getLogs:
                 0:
                     # $request
                     default_value: null
+                    scope: ['method_call']
             countErrors:
                 0:
                     # $request
                     default_value: null
+                    scope: ['method_call']
 
         Symfony\Component\Serializer\Normalizer:
             handleCircularReference:
                 1:
                     # $format
                     default_value: null
+                    scope: ['method_call']
                 2:
                     # $context
                     default_value: []
+                    scope: ['method_call']
 
     Rector\Rector\MethodCall\RenameMethodRector:
         Symfony\Component\Cache\CacheItem:

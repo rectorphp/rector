@@ -5,6 +5,7 @@ namespace Rector\Tests\Rector\Argument\ArgumentAdderRector;
 use Rector\Rector\Argument\ArgumentAdderRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeContainerBuilder;
+use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeParentClient;
 
 final class ArgumentAdderRectorTest extends AbstractRectorTestCase
 {
@@ -14,6 +15,7 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/fixture2.php.inc',
             __DIR__ . '/Fixture/fixture3.php.inc',
+            __DIR__ . '/Fixture/scoped.php.inc',
             __DIR__ . '/Fixture/already_added.php.inc',
         ]);
     }
@@ -38,6 +40,19 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
                                 'name' => 'priority',
                                 'default_value' => 0,
                                 'type' => 'int',
+                            ],
+                        ],
+                    ],
+
+                    // scoped
+                    SomeParentClient::class => [
+                        'submit' => [
+                            2 => [
+                                'name' => 'serverParameters',
+                                'default_value' => [],
+                                'type' => 'array',
+                                // scope!
+                                'scope' => ['parent_call', 'class_method'],
                             ],
                         ],
                     ],
