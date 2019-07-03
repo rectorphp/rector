@@ -37,7 +37,7 @@ final class RectorGuard
         }
 
         throw new NoRectorsLoadedException(sprintf(
-            'We need some rectors to run:%s* register them in rector.yaml under "services:"%s* use "--level <level>"%s* or "--config <file>.yaml"',
+            'We need some rectors to run:%s* register them in rector.yaml under "services:"%s* use "--set <set>"%s* or use "--config <file>.yaml"',
             PHP_EOL,
             PHP_EOL,
             PHP_EOL
