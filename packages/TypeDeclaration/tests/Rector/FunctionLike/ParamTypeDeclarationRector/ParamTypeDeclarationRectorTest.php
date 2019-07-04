@@ -15,6 +15,7 @@ final class ParamTypeDeclarationRectorTest extends AbstractRectorTestCase
             // various
             __DIR__ . '/Fixture/variadic.php.inc',
             __DIR__ . '/Fixture/mixed.php.inc',
+            __DIR__ . '/Fixture/resource.php.inc',
             __DIR__ . '/Fixture/trait_interface.php.inc',
             __DIR__ . '/Fixture/this.php.inc',
             __DIR__ . '/Fixture/false.php.inc',

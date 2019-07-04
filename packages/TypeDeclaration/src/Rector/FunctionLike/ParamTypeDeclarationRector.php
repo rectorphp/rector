@@ -151,6 +151,13 @@ CODE_SAMPLE
                 }
             } else {
                 $paramNode->type = $paramTypeInfo->getTypeNode();
+
+                // "resource" is valid phpdoc type, but it's not implemented in PHP
+                if ($paramNode->type instanceof Node\Name && reset($paramNode->type->parts) === 'resource') {
+                    $paramNode->type = null;
+
+                    continue;
+                }
             }
 
             $this->populateChildren($node, $position, $paramTypeInfo);
