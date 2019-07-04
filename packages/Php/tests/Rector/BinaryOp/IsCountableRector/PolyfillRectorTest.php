@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Tests\Rector\BinaryOp\IsIterableRector;
+namespace Rector\Php\Tests\Rector\BinaryOp\IsCountableRector;
 
 use Rector\Configuration\Option;
-use Rector\Php\Rector\BinaryOp\IsIterableRector;
+use Rector\Php\Rector\BinaryOp\IsCountableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
@@ -23,7 +23,7 @@ final class PolyfillRectorTest extends AbstractRectorTestCase
             Option::PHP_VERSION_FEATURES
         );
 
-        $this->parameterProvider->changeParameter(Option::PHP_VERSION_FEATURES, '7.0');
+        $this->parameterProvider->changeParameter(Option::PHP_VERSION_FEATURES, '7.2');
     }
 
     protected function tearDown(): void
@@ -43,6 +43,6 @@ final class PolyfillRectorTest extends AbstractRectorTestCase
 
     public function getRectorClass(): string
     {
-        return IsIterableRector::class;
+        return IsCountableRector::class;
     }
 }

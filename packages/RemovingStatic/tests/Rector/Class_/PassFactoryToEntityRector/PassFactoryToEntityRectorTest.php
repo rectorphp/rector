@@ -17,10 +17,10 @@ final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
 
         // test factory content
-        $this->assertFileExists('/tmp/rector_temp_tests/AnotherClassFactory.php');
+        $this->assertFileExists($this->getTempPath() . '/AnotherClassFactory.php');
         $this->assertFileEquals(
             __DIR__ . '/Source/ExpectedAnotherClassFactory.php',
-            '/tmp/rector_temp_tests/AnotherClassFactory.php'
+            $this->getTempPath() . '/AnotherClassFactory.php'
         );
     }
 
@@ -29,10 +29,10 @@ final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/multiple_args.php.inc']);
 
         // test factory content
-        $this->assertFileExists('/tmp/rector_temp_tests/AnotherClassWithMoreArgumentsFactory.php');
+        $this->assertFileExists($this->getTempPath() . '/AnotherClassWithMoreArgumentsFactory.php');
         $this->assertFileEquals(
             __DIR__ . '/Source/ExpectedAnotherClassWithMoreArgumentsFactory.php',
-            '/tmp/rector_temp_tests/AnotherClassWithMoreArgumentsFactory.php'
+            $this->getTempPath() . '/AnotherClassWithMoreArgumentsFactory.php'
         );
     }
 
