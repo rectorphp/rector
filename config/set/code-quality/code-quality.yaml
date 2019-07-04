@@ -37,3 +37,4 @@ services:
     Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector: ~
     Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector: ~
     Rector\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector: ~
+    Rector\CodeQuality\Rector\FuncCall\StrlenZeroToIdenticalEmptyStringRector: ~
