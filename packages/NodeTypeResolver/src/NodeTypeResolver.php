@@ -20,6 +20,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\Type\Accessory\HasOffsetType;
@@ -41,7 +43,6 @@ use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInte
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 
@@ -78,11 +79,6 @@ final class NodeTypeResolver
     private $betterStandardPrinter;
 
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
      * @var StaticTypeToStringResolver
      */
     private $staticTypeToStringResolver;
@@ -93,7 +89,6 @@ final class NodeTypeResolver
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         NameResolver $nameResolver,
-        ClassManipulator $classManipulator,
         StaticTypeToStringResolver $staticTypeToStringResolver,
         TypeToStringResolver $typeToStringResolver,
         Broker $broker,
@@ -102,7 +97,6 @@ final class NodeTypeResolver
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nameResolver = $nameResolver;
-        $this->classManipulator = $classManipulator;
         $this->staticTypeToStringResolver = $staticTypeToStringResolver;
         $this->typeToStringResolver = $typeToStringResolver;
         $this->broker = $broker;
@@ -538,12 +532,28 @@ final class NodeTypeResolver
             return false;
         }
 
-        $propertyPropertyNode = $this->classManipulator->getProperty($classNode, $propertyName);
-
+        $propertyPropertyNode = $this->getClassNodeProperty($classNode, $propertyName);
         if ($propertyPropertyNode === null) {
             return false;
         }
 
         return $propertyPropertyNode->default instanceof Array_;
+    }
+
+    private function getClassNodeProperty(Class_ $class, string $name): ?PropertyProperty
+    {
+        foreach ($class->stmts as $stmt) {
+            if (! $stmt instanceof Property) {
+                continue;
+            }
+
+            foreach ($stmt->props as $propertyProperty) {
+                if ($this->nameResolver->isName($propertyProperty, $name)) {
+                    return $propertyProperty;
+                }
+            }
+        }
+
+        return null;
     }
 }

@@ -37,6 +37,9 @@ final class ChildAndParentClassManipulator
         $this->nameResolver = $nameResolver;
     }
 
+    /**
+     * Add "parent::__construct()" where needed
+     */
     public function completeParentConstructor(Class_ $classNode, ClassMethod $classMethod): void
     {
         /** @var string|null $parentClassName */
@@ -47,27 +50,19 @@ final class ChildAndParentClassManipulator
 
         // not in analyzed scope, nothing we can do
         $parentClassNode = $this->parsedNodesByType->findClass($parentClassName);
-        if ($parentClassNode === null) {
+        if ($parentClassNode) {
+            $this->completeParentConstructorBasedOnParentNode($parentClassNode, $classMethod);
             return;
         }
 
-        // iterate up?
-        $firstParentConstructMethodNode = $this->findFirstParentConstructor($parentClassNode);
-        if ($firstParentConstructMethodNode === null) {
-            return;
+        // complete parent call for __construct()
+        if ($parentClassName) {
+            if (method_exists($parentClassName, '__construct')) {
+                $parentConstructCallNode = $this->nodeFactory->createParentConstructWithParams([]);
+                $classMethod->stmts[] = new Expression($parentConstructCallNode);
+                return;
+            }
         }
-
-        if ($firstParentConstructMethodNode->params === []) {
-            return;
-        }
-
-        // replicate parent parameters
-        $classMethod->params = array_merge($firstParentConstructMethodNode->params, $classMethod->params);
-
-        $parentConstructCallNode = $this->nodeFactory->createParentConstructWithParams(
-            $firstParentConstructMethodNode->params
-        );
-        $classMethod->stmts[] = new Expression($parentConstructCallNode);
     }
 
     public function completeChildConstructors(Class_ $classNode, ClassMethod $constructorClassMethod): void
@@ -122,5 +117,26 @@ final class ChildAndParentClassManipulator
         }
 
         return null;
+    }
+
+    private function completeParentConstructorBasedOnParentNode(Class_ $parentClassNode, ClassMethod $classMethod): void
+    {
+        // iterate up?
+        $firstParentConstructMethodNode = $this->findFirstParentConstructor($parentClassNode);
+        if ($firstParentConstructMethodNode === null) {
+            return;
+        }
+
+        if ($firstParentConstructMethodNode->params === []) {
+            return;
+        }
+
+        // replicate parent parameters
+        $classMethod->params = array_merge($firstParentConstructMethodNode->params, $classMethod->params);
+
+        $parentConstructCallNode = $this->nodeFactory->createParentConstructWithParams(
+            $firstParentConstructMethodNode->params
+        );
+        $classMethod->stmts[] = new Expression($parentConstructCallNode);
     }
 }

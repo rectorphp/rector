@@ -1,8 +1,10 @@
 <?php
 
+namespace Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Fixture;
+
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
 
-final class AnotherCommand extends ContainerAwareParentClass
+final class FirstClass extends ContainerAwareParentClass
 {
     protected function execute()
     {
@@ -16,9 +18,11 @@ final class AnotherCommand extends ContainerAwareParentClass
 -----
 <?php
 
+namespace Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Fixture;
+
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
 
-final class AnotherCommand extends ContainerAwareParentClass
+final class FirstClass extends ContainerAwareParentClass
 {
     /**
      * @var \Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslatorInterface

@@ -2,7 +2,7 @@
 
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
 
-final class MyCommand extends ContainerAwareParentClass
+final class SomeController extends ContainerAwareParentClass
 {
     protected function execute()
     {
@@ -16,7 +16,7 @@ final class MyCommand extends ContainerAwareParentClass
 
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
 
-final class MyCommand extends ContainerAwareParentClass
+final class SomeController extends ContainerAwareParentClass
 {
     /**
      * @var \stdClass

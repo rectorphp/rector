@@ -5,6 +5,9 @@ namespace Rector\Symfony\Tests\Rector\FrameworkBundle\ContainerGetToConstructorI
 use Rector\Configuration\Option;
 use Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector;
 use Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeKernelClass;
+use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
+use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentCommand;
+use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ThisClassCallsMethodInConstructor;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
@@ -20,7 +23,12 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
 
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/fixture2.php.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/my_command.php.inc',
+            __DIR__ . '/Fixture/first_class.php.inc',
+            __DIR__ . '/Fixture/some_controller.inc',
+            __DIR__ . '/Fixture/parent_class_with_in_construct_call.php.inc',
+        ]);
     }
 
     /**
@@ -31,7 +39,9 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
         return [
             ContainerGetToConstructorInjectionRector::class => [
                 '$containerAwareParentTypes' => [
-                    'Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass',
+                    ContainerAwareParentClass::class,
+                    ContainerAwareParentCommand::class,
+                    ThisClassCallsMethodInConstructor::class,
                 ],
             ],
         ];

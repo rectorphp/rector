@@ -12,7 +12,7 @@ use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
 
 /**
- * Adds new properties to class and to constructor
+ * Adds new private properties to class + to constructor
  */
 final class PropertyAddingCommander implements CommanderInterface
 {

@@ -17,9 +17,11 @@ final class AnnotatedPropertyInjectToConstructorInjectionRectorTest extends Abst
             __DIR__ . '/Fixture/fixture5.php.inc',
             __DIR__ . '/Fixture/fixture6.php.inc',
             __DIR__ . '/Fixture/fixture7.php.inc',
-            __DIR__ . '/Fixture/fixture8.php.inc',
-            __DIR__ . '/Fixture/fixture9.php.inc',
-            __DIR__ . '/Fixture/fixture10.php.inc',
+
+            __DIR__ . '/Fixture/parent_constructor.php.inc',
+            __DIR__ . '/Fixture/parent_constructor_with_own_inject.php.inc',
+            __DIR__ . '/Fixture/parent_constructor_with_middle_class.php.inc',
+
         ]);
     }
 

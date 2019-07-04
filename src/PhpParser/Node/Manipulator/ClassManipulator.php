@@ -137,9 +137,9 @@ final class ClassManipulator
 
         $constructorMethod = $this->nodeFactory->createPublicMethod('__construct');
 
-        $this->childAndParentClassManipulator->completeParentConstructor($classNode, $constructorMethod);
-
         $this->addParameterAndAssignToMethod($constructorMethod, $variableInfo, $assign);
+
+        $this->childAndParentClassManipulator->completeParentConstructor($classNode, $constructorMethod);
 
         $this->addAsFirstMethod($classNode, $constructorMethod);
 
