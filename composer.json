@@ -76,7 +76,8 @@
             "Rector\\SOLID\\": "packages/SOLID/src",
             "Rector\\Legacy\\": "packages/Legacy/src",
             "Rector\\ElasticSearchDSL\\": "packages/ElasticSearchDSL/src",
-            "Rector\\SymfonyPHPUnit\\": "packages/SymfonyPHPUnit/src"
+            "Rector\\SymfonyPHPUnit\\": "packages/SymfonyPHPUnit/src",
+            "Rector\\Architecture\\": "packages/Architecture/src"
         }
     },
     "autoload-dev": {
@@ -114,7 +115,8 @@
             "Rector\\SOLID\\Tests\\": "packages/SOLID/tests",
             "Rector\\Legacy\\Tests\\": "packages/Legacy/tests",
             "Rector\\ElasticSearchDSL\\Tests\\": "packages/ElasticSearchDSL/tests",
-            "Rector\\SymfonyPHPUnit\\Tests\\": "packages/SymfonyPHPUnit/tests"
+            "Rector\\SymfonyPHPUnit\\Tests\\": "packages/SymfonyPHPUnit/tests",
+            "Rector\\Architecture\\Tests\\": "packages/Architecture/tests"
         },
         "classmap": [
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",

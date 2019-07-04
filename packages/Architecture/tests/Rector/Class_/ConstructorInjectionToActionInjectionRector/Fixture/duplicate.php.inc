@@ -1,0 +1,43 @@
+<?php
+
+namespace Rector\Architecture\Tests\Rector\Class_\ConstructorInjectionToActionInjectionRector\Fixture;
+
+use Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\ProductRepository;
+
+final class DuplicateController
+{
+    /**
+     * @var ProductRepository
+     */
+    private $productRepository;
+
+    public function __construct(ProductRepository $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
+    public function actionInjection(ProductRepository $productRepository)
+    {
+        $products = $productRepository->fetchAll();
+        $products = $this->productRepository->fetchAll();
+    }
+}
+
+?>
+-----
+<?php
+
+namespace Rector\Architecture\Tests\Rector\Class_\ConstructorInjectionToActionInjectionRector\Fixture;
+
+use Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\ProductRepository;
+
+final class DuplicateController
+{
+    public function actionInjection(ProductRepository $productRepository)
+    {
+        $products = $productRepository->fetchAll();
+        $products = $productRepository->fetchAll();
+    }
+}
+
+?>
