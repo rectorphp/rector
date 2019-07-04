@@ -1,64 +1,53 @@
 <?php
 
-namespace Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
-
 use Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\SomeProduct;
-use Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface;
 
-class ClassWithInjects7 extends ClassWithInjects7Parent
+class ClassWithInjects9 extends ClassWithInjects9Parent
 {
     /**
      * @var SomeProduct
      * @inject
      */
-    public $someProduct;
+    public $property;
 }
 
-class ClassWithInjects7Parent
+class ClassWithInjects9Parent
 {
     /**
-     * @var SomeProductWithInterface
+     * @var DateTimeInterface
+     * @inject
      */
-    private $someProductWith;
-
-    public function __construct(SomeProductWithInterface $someProductWith)
-    {
-        $this->someProductWith = $someProductWith;
-    }
+    public $dateTime;
 }
 
 ?>
 -----
 <?php
 
-namespace Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Fixture;
-
 use Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\SomeProduct;
-use Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface;
 
-class ClassWithInjects7 extends ClassWithInjects7Parent
+class ClassWithInjects9 extends ClassWithInjects9Parent
 {
     /**
      * @var SomeProduct
      */
-    private $someProduct;
-    public function __construct(SomeProductWithInterface $someProductWith, \Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\SomeProduct $someProduct)
+    private $property;
+    public function __construct(\DateTimeInterface $dateTime, \Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\SomeProduct $property)
     {
-        parent::__construct($someProductWith);
-        $this->someProduct = $someProduct;
+        parent::__construct($dateTime);
+        $this->property = $property;
     }
 }
 
-class ClassWithInjects7Parent
+class ClassWithInjects9Parent
 {
     /**
-     * @var SomeProductWithInterface
+     * @var DateTimeInterface
      */
-    private $someProductWith;
-
-    public function __construct(SomeProductWithInterface $someProductWith)
+    private $dateTime;
+    public function __construct(\DateTimeInterface $dateTime)
     {
-        $this->someProductWith = $someProductWith;
+        $this->dateTime = $dateTime;
     }
 }
 
