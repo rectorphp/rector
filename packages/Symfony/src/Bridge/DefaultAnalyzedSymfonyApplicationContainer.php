@@ -18,6 +18,8 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
      */
     private $commonNamesToTypes = [
         'doctrine' => 'Doctrine\Bundle\DoctrineBundle\Registry',
+        'doctrine.orm.entity_manager' => 'Doctrine\ORM\EntityManagerInterface',
+        'doctrine.orm.default_entity_manager' => 'Doctrine\ORM\EntityManagerInterface',
     ];
 
     /**
@@ -35,14 +37,19 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
      */
     private $containerFactory;
 
+    /**
+     * @param array<string, string> $commonNamesToTypes
+     */
     public function __construct(
         ParameterProvider $parameterProvider,
         SymfonyKernelParameterGuard $symfonyKernelParameterGuard,
-        ContainerFactory $containerFactory
+        ContainerFactory $containerFactory,
+        array $commonNamesToTypes = []
     ) {
         $this->parameterProvider = $parameterProvider;
         $this->symfonyKernelParameterGuard = $symfonyKernelParameterGuard;
         $this->containerFactory = $containerFactory;
+        $this->commonNamesToTypes = array_merge($this->commonNamesToTypes, $commonNamesToTypes);
     }
 
     public function getTypeForName(string $name): ?string
