@@ -38,13 +38,20 @@ final class NodeTransformer
         $message = $stringArgument->value;
         $messageParts = $this->splitBySpace($message);
 
-        foreach ($messageParts as $key => $messagePart) {
-            $messageParts[$key] = Strings::match($messagePart, '#^%\w$#') ? array_shift($arrayItems) : new String_(
-                $messagePart
-            );
+        $arrayMessageParts = [];
+
+        foreach ($messageParts as $messagePart) {
+            if (Strings::match($messagePart, '#^%\w$#')) {
+                /** @var Expr $messagePartNode */
+                $messagePartNode = array_shift($arrayItems);
+            } else {
+                $messagePartNode = new String_($messagePart);
+            }
+
+            $arrayMessageParts[] = new ArrayItem($messagePartNode);
         }
 
-        return new Array_($messageParts);
+        return new Array_($arrayMessageParts);
     }
 
     /**

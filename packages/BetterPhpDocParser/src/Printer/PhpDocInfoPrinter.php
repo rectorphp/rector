@@ -134,7 +134,7 @@ final class PhpDocInfoPrinter
     ): string {
         $output = '';
 
-        /** @var StartEndInfo|null $tokenStartEndInfo */
+        /** @var StartEndInfo|null $startEndInfo */
         $startEndInfo = $attributeAwareNode->getAttribute(Attribute::PHP_DOC_NODE_INFO) ?: $startEndInfo;
         $attributeAwareNode = $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($attributeAwareNode);
 

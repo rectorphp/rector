@@ -198,7 +198,6 @@ CODE_SAMPLE
 
         $stmts = array_merge([new StaticCall(new Name('parent'), 'setUp')], $assigns);
 
-        /** @var ClassMethod $node */
         $classMethod = $this->builderFactory->method('setUp')
             ->makeProtected()
             ->addStmts($stmts)

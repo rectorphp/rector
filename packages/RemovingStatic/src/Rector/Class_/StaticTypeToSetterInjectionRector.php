@@ -134,7 +134,7 @@ CODE_SAMPLE
         return $this->isType($node->class, $staticType);
     }
 
-    private function processClass(Class_ $class): ?Class_
+    private function processClass(Class_ $class): Class_
     {
         foreach ($this->staticTypes as $implements => $staticType) {
             $containsEntityFactoryStaticCall = (bool) $this->betterNodeFinder->findFirst(

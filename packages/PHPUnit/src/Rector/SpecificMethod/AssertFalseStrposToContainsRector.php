@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
 use Rector\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -84,9 +83,7 @@ final class AssertFalseStrposToContainsRector extends AbstractPHPUnitRector
     {
         $oldArguments = $node->args;
 
-        /** @var Identifier $oldArguments */
         $strposFuncCallNode = $oldArguments[0]->value;
-
         if (! $strposFuncCallNode instanceof FuncCall) {
             return;
         }

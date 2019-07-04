@@ -182,7 +182,7 @@ CODE_SAMPLE
 
     private function processAssertResponseRedirects(MethodCall $methodCall): ?Node
     {
-        /** @var Expression|null $previousNode */
+        /** @var Expression|null $previousExpression */
         $previousExpression = $methodCall->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
         if (! $previousExpression instanceof Expression) {
             return null;

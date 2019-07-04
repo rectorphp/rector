@@ -86,7 +86,9 @@ final class FqnNamePhpDocNodeDecorator implements PhpDocNodeDecoratorInterface
                 $resolvedNames = $this->collectResolvedNames($attributeAwarePhpDocNode->type);
                 $attributeAwarePhpDocNode->setAttribute(self::RESOLVED_NAMES, $resolvedNames);
 
-                $attributeAwarePhpDocNode->type->setAttribute(self::RESOLVED_NAMES, $resolvedNames);
+                /** @var AttributeAwareNodeInterface $attributeAwaretType */
+                $attributeAwaretType = $attributeAwarePhpDocNode->type;
+                $attributeAwaretType->setAttribute(self::RESOLVED_NAMES, $resolvedNames);
 
                 return $attributeAwarePhpDocNode;
             }

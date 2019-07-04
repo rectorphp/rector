@@ -45,6 +45,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
     private function resolveFullyQualifiedName(Node $nameNode, string $name): ?string
     {
         if (in_array($name, ['self', 'static', 'this'], true)) {
+            /** @var string|null $class */
             $class = $nameNode->getAttribute(AttributeKey::CLASS_NAME);
             if ($class === null) {
                 throw new ShouldNotHappenException();
@@ -54,7 +55,8 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
         }
 
         if ($name === 'parent') {
-            // @tooo not sure which parent though
+            // @todo not sure which parent though
+            /** @var string|null $class */
             $class = $nameNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
             if ($class === null) {
                 throw new ShouldNotHappenException();
