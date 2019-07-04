@@ -56,7 +56,6 @@ final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitR
             $this->makeProtected($node);
             $this->phpUnitTypeDeclarationDecorator->decorate($node);
         } else {
-            /** @var string $name */
             $this->processTestMethod($node);
         }
 

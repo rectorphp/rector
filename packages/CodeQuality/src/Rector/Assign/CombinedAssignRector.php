@@ -4,7 +4,6 @@ namespace Rector\CodeQuality\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\BinaryOp;
 use Rector\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Rector\AbstractRector;
@@ -60,7 +59,6 @@ final class CombinedAssignRector extends AbstractRector
             return null;
         }
 
-        /** @var AssignOp $newAssignNodeClass */
         return new $assignClass($node->var, $binaryNode->right);
     }
 }

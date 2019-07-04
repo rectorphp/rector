@@ -7,7 +7,7 @@ includes:
 
 parameters:
     # to allow intalling with various phsptan versions without reporting old errors here
-#    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: false
     level: max
 
     excludes_analyse:
@@ -173,3 +173,7 @@ parameters:
         - '#Parameter \#1 \$rule of method Rector\\Configuration\\Configuration\:\:setRule\(\) expects string\|null, array<string\>\|bool\|string\|null given#'
         - '#In method "Rector\\Rector\\Property\\InjectAnnotationClassRector\:\:resolveType", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
         - '#Empty catch block\. If you are sure this is meant to be empty, please add a "// @ignoreException" comment in the catch block#'
+
+        - '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\)\|null, Closure\(mixed, mixed, mixed, mixed\)\: void given#'
+        - '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\)\|null, callable given#'
+        - '#Method Rector\\NodeTypeResolver\\PerNodeTypeResolver\\NameTypeResolver\:\:resolveFullyQualifiedName\(\) should return string\|null but returns PhpParser\\Node\\Name\|null#'

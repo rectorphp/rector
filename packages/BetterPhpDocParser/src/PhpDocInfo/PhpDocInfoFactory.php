@@ -68,8 +68,8 @@ final class PhpDocInfoFactory
             return $attributeAwarePhpDocNode;
         }
 
-        /** @var AttributeAwareNodeInterface $lastChildNode */
         $phpDocChildNodes = $attributeAwarePhpDocNode->children;
+        /** @var AttributeAwareNodeInterface $lastChildNode */
         $lastChildNode = array_pop($phpDocChildNodes);
         $phpDocNodeInfo = $lastChildNode->getAttribute(Attribute::PHP_DOC_NODE_INFO);
 

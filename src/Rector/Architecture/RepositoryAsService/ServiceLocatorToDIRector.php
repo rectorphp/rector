@@ -155,7 +155,7 @@ CODE_SAMPLE
         ));
     }
 
-    private function entityFqnOrAlias(MethodCall $methodCall): ?string
+    private function entityFqnOrAlias(MethodCall $methodCall): string
     {
         $repositoryArgument = $methodCall->args[0]->value;
 

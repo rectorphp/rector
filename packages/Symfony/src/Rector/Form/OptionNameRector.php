@@ -4,7 +4,6 @@ namespace Rector\Symfony\Rector\Form;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
@@ -78,7 +77,6 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var ArrayItem[] $optionsNodes */
         foreach ($optionsNode->items as $arrayItemNode) {
             if (! $arrayItemNode->key instanceof String_) {
                 continue;

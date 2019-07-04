@@ -70,11 +70,13 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof If_) {
-            return $this->processIf($node);
+            $this->processIf($node);
+            return null;
         }
 
         if ($node instanceof Foreach_) {
-            return $this->processForeach($node);
+            $this->processForeach($node);
+            return null;
         }
 
         if ($node instanceof For_) {
@@ -90,42 +92,38 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function processIf(If_ $if): ?If_
+    private function processIf(If_ $if): void
     {
         if ($if->stmts !== []) {
-            return null;
+            return;
         }
 
         if ($if->else !== null) {
-            return null;
+            return;
         }
 
         if ($if->elseifs !== []) {
-            return null;
+            return;
         }
 
         if ($this->isNodeWithSideEffect($if->cond)) {
-            return null;
+            return;
         }
 
         $this->removeNode($if);
-
-        return null;
     }
 
-    private function processForeach(Foreach_ $node): ?Foreach_
+    private function processForeach(Foreach_ $node): void
     {
         if ($node->stmts !== []) {
-            return null;
+            return;
         }
 
         if ($this->isNodeWithSideEffect($node->expr)) {
-            return null;
+            return;
         }
 
         $this->removeNode($node);
-
-        return null;
     }
 
     private function isNodeWithSideEffect(Expr $expr): bool

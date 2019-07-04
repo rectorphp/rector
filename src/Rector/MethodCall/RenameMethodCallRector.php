@@ -89,8 +89,9 @@ CODE_SAMPLE
     /**
      * @param MethodCall $node
      * @param string|mixed[] $newMethod
+     * @return MethodCall|ArrayDimFetch
      */
-    private function process(Node $node, $newMethod): ?Node
+    private function process(Node $node, $newMethod): Node
     {
         if (is_string($newMethod)) {
             $node->name = new Identifier($newMethod);

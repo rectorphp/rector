@@ -184,7 +184,6 @@ final class RegexPatternArgumentManipulator
             return [];
         }
 
-        /** @var Assign[] $assignNode */
         return $this->betterNodeFinder->find([$methodNode], function (Node $node) use ($variable): ?Assign {
             if (! $node instanceof Assign) {
                 return null;
@@ -221,7 +220,6 @@ final class RegexPatternArgumentManipulator
         }
 
         if ($classConstNode->consts[0]->value instanceof String_) {
-            /** @var String_ $stringNode */
             return [$classConstNode->consts[0]->value];
         }
 

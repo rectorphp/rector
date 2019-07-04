@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\PhpParser\Node\Manipulator\IdentifierManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -84,7 +83,6 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
             return null;
         }
 
-        /** @var Identifier $oldArguments */
         $propertyExistsMethodCall = $node->args[0]->value;
         if (! $propertyExistsMethodCall instanceof FuncCall) {
             return null;

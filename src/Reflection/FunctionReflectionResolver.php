@@ -56,7 +56,7 @@ final class FunctionReflectionResolver
     {
         foreach (self::POSSIBLE_CORE_STUB_LOCATIONS as $possibleCoreStubLocation) {
             if (file_exists($possibleCoreStubLocation)) {
-                /** @var string $stubFileLocation */
+                /** @var string $possibleCoreStubLocation */
                 return $possibleCoreStubLocation;
             }
         }
