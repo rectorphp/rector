@@ -530,6 +530,18 @@ final class DocBlockManipulator
         return true;
     }
 
+    public function createPhpDocInfoFromNode(Node $node): PhpDocInfo
+    {
+        if ($node->getDocComment() === null) {
+            throw new ShouldNotHappenException(sprintf(
+                'Node must have a comment. Check `$node->getDocComment() !== null` before passing it to %s',
+                __METHOD__
+            ));
+        }
+
+        return $this->phpDocInfoFactory->createFromNode($node);
+    }
+
     private function addTypeSpecificTag(Node $node, string $name, string $type): void
     {
         // there might be no phpdoc at all
@@ -551,18 +563,6 @@ final class DocBlockManipulator
             $varDocComment = sprintf("/**\n * @%s %s\n */", $name, $type);
             $node->setDocComment(new Doc($varDocComment));
         }
-    }
-
-    private function createPhpDocInfoFromNode(Node $node): PhpDocInfo
-    {
-        if ($node->getDocComment() === null) {
-            throw new ShouldNotHappenException(sprintf(
-                'Node must have a comment. Check `$node->getDocComment() !== null` before passing it to %s',
-                __METHOD__
-            ));
-        }
-
-        return $this->phpDocInfoFactory->createFromNode($node);
     }
 
     private function isTagValueNodeWithType(PhpDocTagNode $phpDocTagNode): bool
