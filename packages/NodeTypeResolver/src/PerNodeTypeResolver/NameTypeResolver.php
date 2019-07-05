@@ -65,9 +65,7 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
             return $class;
         }
 
-        // @todo add "parent"
-
-        /** @var Name|null $name */
+        /** @var Name|null $resolvedNameNode */
         $resolvedNameNode = $nameNode->getAttribute(AttributeKey::RESOLVED_NAME);
         if ($resolvedNameNode instanceof Name) {
             return $resolvedNameNode->toString();

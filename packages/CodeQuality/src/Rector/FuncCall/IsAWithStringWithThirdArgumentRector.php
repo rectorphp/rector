@@ -3,6 +3,7 @@
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Type\StringType;
 use Rector\Rector\AbstractRector;
@@ -64,7 +65,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->args[2] = new Node\Arg($this->createTrue());
+        $node->args[2] = new Arg($this->createTrue());
 
         return $node;
     }

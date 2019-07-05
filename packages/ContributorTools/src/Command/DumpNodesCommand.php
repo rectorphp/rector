@@ -172,7 +172,6 @@ final class DumpNodesCommand extends AbstractCommand
                 continue;
             }
 
-            /** @var Node $node */
             $contructorReflection = $nodeClassReflection->getConstructor();
 
             if ($contructorReflection->getNumberOfRequiredParameters() === 0) {
