@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Name;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -258,6 +259,35 @@ final class ClassManipulator
         }
 
         return false;
+    }
+
+    public function removeProperty(Class_ $class, string $propertyName): void
+    {
+        foreach ($class->stmts as $key => $classStmt) {
+            if (! $classStmt instanceof Node\Stmt\Property) {
+                continue;
+            }
+
+            if (! $this->nameResolver->isName($classStmt, $propertyName)) {
+                continue;
+            }
+
+            unset($class->stmts[$key]);
+            break;
+        }
+    }
+
+    public function findMethodParamByName(ClassMethod $classMethod, string $name): ?Param
+    {
+        foreach ($classMethod->params as $param) {
+            if (! $this->nameResolver->isName($param, $name)) {
+                continue;
+            }
+
+            return $param;
+        }
+
+        return null;
     }
 
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool

@@ -1,0 +1,2 @@
+services:
+    Rector\Architecture\Rector\Class_\ConstructorInjectionToActionInjectionRector: ~
