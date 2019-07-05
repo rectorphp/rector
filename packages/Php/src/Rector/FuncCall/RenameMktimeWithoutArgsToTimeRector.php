@@ -4,6 +4,7 @@ namespace Rector\Php\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Name;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -63,7 +64,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->name = new Node\Name('time');
+        $node->name = new Name('time');
 
         return $node;
     }

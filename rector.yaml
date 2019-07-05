@@ -17,5 +17,4 @@ parameters:
     php_version_features: '7.1'
 
 services:
-    Rector\PHPStan\Rector\Node\RemoveNonExistingVarAnnotationRector:
-#    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
+    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~

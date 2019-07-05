@@ -264,7 +264,7 @@ final class ClassManipulator
     public function removeProperty(Class_ $class, string $propertyName): void
     {
         foreach ($class->stmts as $key => $classStmt) {
-            if (! $classStmt instanceof Node\Stmt\Property) {
+            if (! $classStmt instanceof Property) {
                 continue;
             }
 

@@ -3,8 +3,10 @@
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -76,7 +78,7 @@ CODE_SAMPLE
             $variable = $node->right->args[0]->value;
         }
 
-        /** @var Node\Expr $variable */
-        return new Identical($variable, new Node\Scalar\String_(''));
+        /** @var Expr $variable */
+        return new Identical($variable, new String_(''));
     }
 }

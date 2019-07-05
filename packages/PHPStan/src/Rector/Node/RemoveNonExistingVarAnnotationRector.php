@@ -6,6 +6,16 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Stmt\Echo_;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Static_;
+use PhpParser\Node\Stmt\Switch_;
+use PhpParser\Node\Stmt\Throw_;
+use PhpParser\Node\Stmt\While_;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\RemoveNonExistingVarAnnotationRectorTest;
@@ -93,16 +103,16 @@ CODE_SAMPLE
     {
         return ! $node instanceof Assign
             && ! $node instanceof AssignRef
-            && ! $node instanceof Node\Stmt\Foreach_
-            && ! $node instanceof Node\Stmt\Static_
-            && ! $node instanceof Node\Stmt\Echo_
-            && ! $node instanceof Node\Stmt\Return_
-            && ! $node instanceof Node\Stmt\Expression
-            && ! $node instanceof Node\Stmt\Throw_
-            && ! $node instanceof Node\Stmt\If_
-            && ! $node instanceof Node\Stmt\While_
-            && ! $node instanceof Node\Stmt\Switch_
-            && ! $node instanceof Node\Stmt\Nop;
+            && ! $node instanceof Foreach_
+            && ! $node instanceof Static_
+            && ! $node instanceof Echo_
+            && ! $node instanceof Return_
+            && ! $node instanceof Expression
+            && ! $node instanceof Throw_
+            && ! $node instanceof If_
+            && ! $node instanceof While_
+            && ! $node instanceof Switch_
+            && ! $node instanceof Nop;
     }
 
     private function getVarTagVariableName(Node $node): ?string

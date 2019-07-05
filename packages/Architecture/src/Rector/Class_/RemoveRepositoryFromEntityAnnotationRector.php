@@ -70,7 +70,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node\Stmt\Class_ $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
