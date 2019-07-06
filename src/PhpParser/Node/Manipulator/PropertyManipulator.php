@@ -37,13 +37,6 @@ final class PropertyManipulator
      */
     private $parsedNodesByType;
 
-    /**
-     * PropertyManipulator constructor.
-     * @param BetterNodeFinder      $betterNodeFinder
-     * @param BetterStandardPrinter $betterStandardPrinter
-     * @param NameResolver          $nameResolver
-     * @param ParsedNodesByType     $parsedNodesByType
-     */
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
