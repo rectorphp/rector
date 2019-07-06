@@ -105,9 +105,11 @@ CODE_SAMPLE
      */
     private function processBinaryMulAndDiv(BinaryOp $binaryOp): ?Expr
     {
-        if ($this->isValue($binaryOp->left, 1)) {
-            if ($this->isNumberType($binaryOp->right)) {
-                return $binaryOp->right;
+        if ($binaryOp instanceof Mul) {
+            if ($this->isValue($binaryOp->left, 1)) {
+                if ($this->isNumberType($binaryOp->right)) {
+                    return $binaryOp->right;
+                }
             }
         }
 

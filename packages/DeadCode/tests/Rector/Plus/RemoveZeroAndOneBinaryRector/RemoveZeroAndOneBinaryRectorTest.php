@@ -12,6 +12,7 @@ final class RemoveZeroAndOneBinaryRectorTest extends AbstractRectorTestCase
         $this->doTestFiles([
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/assigns.php.inc',
+            __DIR__ . '/Fixture/no_unintended.php.inc',
             __DIR__ . '/Fixture/skip_type_change.php.inc',
             __DIR__ . '/Fixture/skip_floats.php.inc',
         ]);
