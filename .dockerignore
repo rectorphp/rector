@@ -7,6 +7,8 @@
 .editorconfig
 .phpstorm.meta.php
 
+rector.yaml
+
 LICENSE
 
 .git/
