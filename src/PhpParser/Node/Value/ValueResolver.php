@@ -2,6 +2,7 @@
 
 namespace Rector\PhpParser\Node\Value;
 
+use PhpParser\ConstExprEvaluationException;
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -54,7 +55,12 @@ final class ValueResolver
      */
     public function resolve(Expr $expr)
     {
-        $value = $this->getConstExprEvaluator()->evaluateDirectly($expr);
+        try {
+            $value = $this->getConstExprEvaluator()->evaluateDirectly($expr);
+        } catch (ConstExprEvaluationException $constExprEvaluationException) {
+            $value = null;
+        }
+
         if ($value !== null) {
             return $value;
         }
@@ -82,7 +88,7 @@ final class ValueResolver
             return $this->constExprEvaluator;
         }
 
-        $this->constExprEvaluator = new ConstExprEvaluator(function (Expr $expr): ?string {
+        $this->constExprEvaluator = new ConstExprEvaluator(function (Expr $expr) {
             if ($expr instanceof Dir) {
                 // __DIR__
                 return $this->resolveDirConstant($expr);
@@ -98,7 +104,7 @@ final class ValueResolver
                 return $this->resolveClassConstFetch($expr);
             }
 
-            return null;
+            throw new ConstExprEvaluationException("Expression of type {$expr->getType()} cannot be evaluated");
         });
 
         return $this->constExprEvaluator;

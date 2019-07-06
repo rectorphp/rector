@@ -2,7 +2,10 @@
 
 namespace Rector\Tests\PhpParser\Node\Value;
 
+use Generator;
 use PhpParser\BuilderFactory;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Plus;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -22,17 +25,35 @@ final class ValueResolverTest extends AbstractKernelTestCase
         $this->valueResolver = self::$container->get(ValueResolver::class);
     }
 
-    public function test(): void
+    /**
+     * @dataProvider dataProvider
+     * @param mixed $expected
+     * @param Expr $expr
+     */
+    public function test($expected, Expr $expr): void
     {
-        $classConstFetchNode = (new BuilderFactory())->classConstFetch('SomeClass', 'SOME_CONSTANT');
+        $this->assertSame($expected, $this->valueResolver->resolve($expr));
+    }
+
+    /**
+     * @return Generator
+     */
+    public function dataProvider(): Generator
+    {
+        $builderFactory = new BuilderFactory();
+
+        $classConstFetchNode = $builderFactory->classConstFetch('SomeClass', 'SOME_CONSTANT');
         $classConstFetchNode->class->setAttribute(
             AttributeKey::RESOLVED_NAME,
             new FullyQualified('SomeClassResolveName')
         );
 
-        $this->assertSame(
-            'SomeClassResolveName::SOME_CONSTANT',
-            $this->valueResolver->resolve($classConstFetchNode)
-        );
+        yield ['SomeClassResolveName::SOME_CONSTANT', $classConstFetchNode];
+        yield [true, $builderFactory->val(true)];
+        yield [1, $builderFactory->val(1)];
+        yield [1.0, $builderFactory->val(1.0)];
+        yield [null, $builderFactory->var('foo')];
+        yield [2, new Plus($builderFactory->val(1), $builderFactory->val(1))];
+        yield [null, new Plus($builderFactory->val(1), $builderFactory->var('foo'))];
     }
 }

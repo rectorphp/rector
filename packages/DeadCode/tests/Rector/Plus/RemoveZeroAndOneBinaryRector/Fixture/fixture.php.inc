@@ -7,6 +7,7 @@ class SomeClass
     public function run()
     {
         $value = 5 * 1;
+        $value = 5 / 1;
         $value = 5 + 0;
     }
 }
@@ -21,6 +22,7 @@ class SomeClass
 {
     public function run()
     {
+        $value = 5;
         $value = 5;
         $value = 5;
     }
