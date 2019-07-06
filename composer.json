@@ -156,7 +156,7 @@
         ]
     },
     "scripts-descriptions": {
-        "update-docs": "Regenerate descriptions of all Rectors to docs/AllRectorsOverview.md file"
+        "docs": "Regenerate descriptions of all Rectors to docs/AllRectorsOverview.md file"
     },
     "config": {
         "sort-packages": true
