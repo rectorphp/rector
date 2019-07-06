@@ -150,7 +150,7 @@
             "vendor/bin/changelog-linker link",
             "vendor/bin/changelog-linker cleanup"
         ],
-        "docs": [
+        "update-docs": [
             "bin/rector dump-rectors -o markdown > docs/AllRectorsOverview.md",
             "bin/rector dump-nodes -o markdown > docs/NodesOverview.md"
         ]

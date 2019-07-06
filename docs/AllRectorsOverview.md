@@ -1,4 +1,4 @@
-# All 303 Rectors Overview
+# All 312 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -12,6 +12,7 @@
 - [DeadCode](#deadcode)
 - [Doctrine](#doctrine)
 - [DomainDrivenDesign](#domaindrivendesign)
+- [ElasticSearchDSL](#elasticsearchdsl)
 - [Guzzle](#guzzle)
 - [Laravel](#laravel)
 - [Legacy](#legacy)
@@ -31,6 +32,7 @@
 - [Silverstripe](#silverstripe)
 - [Sylius](#sylius)
 - [Symfony](#symfony)
+- [SymfonyPHPUnit](#symfonyphpunit)
 - [Twig](#twig)
 - [TypeDeclaration](#typedeclaration)
 
@@ -865,24 +867,6 @@ Type and name of catch exception should match
 
 <br>
 
-### `CompleteVarDocTypeConstantRector`
-
-- class: `Rector\CodingStyle\Rector\ClassConst\CompleteVarDocTypeConstantRector`
-
-Complete constant `@var` annotations for missing one, yet known.
-
-```diff
- final class SomeClass
- {
-+    /**
-+     * @var int
-+     */
-     private const NUMBER = 5;
- }
-```
-
-<br>
-
 ### `ConsistentImplodeRector`
 
 - class: `Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector`
@@ -1341,6 +1325,25 @@ Removes dead code statements
 
 <br>
 
+### `RemoveDeadZeroAndOneOperationRector`
+
+- class: `Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = 5 * 1;
+-        $value = 5 + 0;
++        $value = 5;
++        $value = 5;
+     }
+ }
+```
+
+<br>
+
 ### `RemoveDefaultArgumentValueRector`
 
 - class: `Rector\DeadCode\Rector\MethodCall\RemoveDefaultArgumentValueRector`
@@ -1372,6 +1375,22 @@ Remove argument value, if it is the same as default value
 
 <br>
 
+### `RemoveDelegatingParentCallRector`
+
+- class: `Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector`
+
+```diff
+ class SomeClass
+ {
+-    public function prettyPrint(array $stmts): string
+-    {
+-        return parent::prettyPrint($stmts);
+-    }
+ }
+```
+
+<br>
+
 ### `RemoveDoubleAssignRector`
 
 - class: `Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector`
@@ -1396,6 +1415,25 @@ Remove duplicated key in defined arrays.
 -    1 => 'A',
      1 => 'B'
  ];
+```
+
+<br>
+
+### `RemoveDuplicatedInstanceOfRector`
+
+- class: `Rector\DeadCode\Rector\Instanceof_\RemoveDuplicatedInstanceOfRector`
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+-        $isIt = $value instanceof A || $value instanceof A;
+-        $isIt = $value instanceof A && $value instanceof A;
++        $isIt = $value instanceof A;
++        $isIt = $value instanceof A;
+     }
+ }
 ```
 
 <br>
@@ -1547,6 +1585,25 @@ Remove unused private properties
 
 <br>
 
+### `RemoveZeroAndOneBinaryRector`
+
+- class: `Rector\DeadCode\Rector\Plus\RemoveZeroAndOneBinaryRector`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = 5 * 1;
+-        $value = 5 + 0;
++        $value = 5;
++        $value = 5;
+     }
+ }
+```
+
+<br>
+
 ### `SimplifyMirrorAssignRector`
 
 - class: `Rector\DeadCode\Rector\Expression\SimplifyMirrorAssignRector`
@@ -1571,6 +1628,41 @@ Replaces doctrine alias with class.
  $entityManager = new Doctrine\ORM\EntityManager();
 -$entityManager->getRepository("AppBundle:Post");
 +$entityManager->getRepository(\App\Entity\Post::class);
+```
+
+<br>
+
+### `ManagerRegistryGetManagerToEntityManagerRector`
+
+- class: `Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector`
+
+```diff
+-use Doctrine\Common\Persistence\ManagerRegistry;
++use Doctrine\ORM\EntityManagerInterface;
+
+ class CustomRepository
+ {
+     /**
+-     * @var ManagerRegistry
++     * @var EntityManagerInterface
+      */
+-    private $managerRegistry;
++    private $entityManager;
+
+-    public function __construct(ManagerRegistry $managerRegistry)
++    public function __construct(EntityManagerInterface $entityManager)
+     {
+-        $this->managerRegistry = $managerRegistry;
++        $this->entityManager = $entityManager;
+     }
+
+     public function run()
+     {
+-        $entityManager = $this->managerRegistry->getManager();
+-        $someRepository = $entityManager->getRepository('Some');
++        $someRepository = $this->entityManager->getRepository('Some');
+     }
+ }
 ```
 
 <br>
@@ -1627,6 +1719,33 @@ services:
 
 -function someFunction(ValueObject $name): ?ValueObject {
 +function someFunction(string $name): ?string {
+ }
+```
+
+<br>
+
+## ElasticSearchDSL
+
+### `MigrateFilterToQueryRector`
+
+- class: `Rector\ElasticSearchDSL\Rector\MethodCall\MigrateFilterToQueryRector`
+
+Migrates addFilter to addQuery
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $search = new \ONGR\ElasticsearchDSL\Search();
+
+-        $search->addFilter(
+-            new \ONGR\ElasticsearchDSL\Query\TermsQuery('categoryIds', [1, 2])
++        $search->addQuery(
++            new \ONGR\ElasticsearchDSL\Query\TermsQuery('categoryIds', [1, 2]),
++            \ONGR\ElasticsearchDSL\Query\Compound\BoolQuery::FILTER
+         );
+     }
  }
 ```
 
@@ -3428,7 +3547,7 @@ services:
 
 - class: `Rector\Php\Rector\FuncCall\PregReplaceEModifierRector`
 
-The /e modifier is no longer supported, use preg_replace_callback instead
+The /e modifier is no longer supported, use preg_replace_callback instead 
 
 ```diff
  class SomeClass
@@ -3593,6 +3712,24 @@ Replace constant by new ones
      {
 -        return MYSQL_ASSOC;
 +        return MYSQLI_ASSOC;
+     }
+ }
+```
+
+<br>
+
+### `RenameMktimeWithoutArgsToTimeRector`
+
+- class: `Rector\Php\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector`
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $time = mktime(1, 2, 3);
+-        $nextTime = mktime();
++        $nextTime = time();
      }
  }
 ```
@@ -4533,6 +4670,45 @@ Replace Enlight Response methods with Symfony Response methods
 
 <br>
 
+### `ShopRegistrationServiceRector`
+
+- class: `Rector\Shopware\Rector\MethodCall\ShopRegistrationServiceRector`
+
+Replace $shop->registerResources() with ShopRegistrationService
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $shop = new \Shopware\Models\Shop\Shop();
+-        $shop->registerResources();
++        Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
+     }
+ }
+```
+
+<br>
+
+### `ShopwareVersionConstsRector`
+
+- class: `Rector\Shopware\Rector\ClassConstFetch\ShopwareVersionConstsRector`
+
+Use version from di parameter
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        echo \Shopware::VERSION;
++        echo Shopware()->Container()->getParameter('shopware.release.version');
+     }
+ }
+```
+
+<br>
+
 ## Silverstripe
 
 ### `ConstantToStaticCallRector`
@@ -5092,6 +5268,47 @@ Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Valid
 ```diff
 -$varDumperTestTrait->assertDumpMatchesFormat($dump, $format, $mesage = "");
 +$varDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");
+```
+
+<br>
+
+## SymfonyPHPUnit
+
+### `MultipleServiceGetToSetUpMethodRector`
+
+- class: `Rector\SymfonyPHPUnit\Rector\Class_\MultipleServiceGetToSetUpMethodRector`
+
+```diff
+ use ItemRepository;
+ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+
+ class SomeTest extends KernelTestCase
+ {
++    /**
++     * @var \ItemRepository
++     */
++    private $itemRepository;
++
++    protected function setUp()
++    {
++        parent::setUp();
++        $this->itemRepository = self::$container->get(ItemRepository::class);
++    }
++
+     public function testOne()
+     {
+-        $itemRepository = self::$container->get(ItemRepository::class);
+-        $itemRepository->doStuff();
++        $this->itemRepository->doStuff();
+     }
+
+     public function testTwo()
+     {
+-        $itemRepository = self::$container->get(ItemRepository::class);
+-        $itemRepository->doAnotherStuff();
++        $this->itemRepository->doAnotherStuff();
+     }
+ }
 ```
 
 <br>
@@ -5658,7 +5875,8 @@ Changes properties with specified annotations class to constructor injection
 ```yaml
 services:
     Rector\Rector\Property\InjectAnnotationClassRector:
-        $annotationClass: JMS\DiExtraBundle\Annotation\Inject
+        $annotationClasses:
+            - JMS\DiExtraBundle\Annotation\Inject
 ```
 
 ↓
