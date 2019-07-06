@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Property;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -31,14 +32,28 @@ final class PropertyManipulator
      */
     private $nameResolver;
 
+    /**
+     * @var ParsedNodesByType
+     */
+    private $parsedNodesByType;
+
+    /**
+     * PropertyManipulator constructor.
+     * @param BetterNodeFinder      $betterNodeFinder
+     * @param BetterStandardPrinter $betterStandardPrinter
+     * @param NameResolver          $nameResolver
+     * @param ParsedNodesByType     $parsedNodesByType
+     */
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        NameResolver $nameResolver
+        NameResolver $nameResolver,
+        ParsedNodesByType $parsedNodesByType
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nameResolver = $nameResolver;
+        $this->parsedNodesByType = $parsedNodesByType;
     }
 
     /**
@@ -51,7 +66,10 @@ final class PropertyManipulator
             return [];
         }
 
-        return $this->betterNodeFinder->find($classNode, function (Node $node) use ($property) {
+        $nodesToSearch = $this->parsedNodesByType->findUsedTraitsInClass($classNode);
+        $nodesToSearch[] = $classNode;
+
+        return $this->betterNodeFinder->find($nodesToSearch, function (Node $node) use ($property) {
             // itself
             if ($this->betterStandardPrinter->areNodesEqual($node, $property)) {
                 return null;
