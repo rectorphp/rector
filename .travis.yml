@@ -45,7 +45,7 @@ script:
     - |
       if [[ $RUN_RECTOR == true ]]; then
           bin/rector process src --level symfony40 --dry-run
-          composer docs
+          composer update-docs
       fi
 
     # eat your own dog fodd
