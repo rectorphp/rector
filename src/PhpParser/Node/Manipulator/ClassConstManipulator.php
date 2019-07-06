@@ -58,12 +58,13 @@ final class ClassConstManipulator
                 return false;
             }
 
-            // is it the name match?
-            if ($this->nameResolver->resolve($node) !== 'self::' . $this->nameResolver->resolve($classConst)) {
-                return false;
-            }
-
-            return true;
+            return $this->isNameMatch($node, $classConst);
         });
+    }
+
+    private function isNameMatch(Node $node, ClassConst $classConst): bool
+    {
+        return $this->nameResolver->resolve($node) === 'self::' . $this->nameResolver->resolve($classConst)
+            || $this->nameResolver->resolve($node) === 'static::' . $this->nameResolver->resolve($classConst);
     }
 }
