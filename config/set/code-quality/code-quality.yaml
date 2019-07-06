@@ -38,3 +38,4 @@ services:
     Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector: ~
     Rector\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector: ~
     Rector\CodeQuality\Rector\FuncCall\StrlenZeroToIdenticalEmptyStringRector: ~
+    Rector\CodeQuality\Rector\If_\RemoveAlwaysTrueConditionSetInConstructorRector: ~

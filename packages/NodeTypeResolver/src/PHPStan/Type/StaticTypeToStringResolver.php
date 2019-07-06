@@ -13,12 +13,12 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 
-final class TypeToStringResolver
+final class StaticTypeToStringResolver
 {
     /**
      * @return string[]
      */
-    public function resolve(Type $type): array
+    public function resolveAnyType(Type $type): array
     {
         $types = [];
 
@@ -49,7 +49,7 @@ final class TypeToStringResolver
         $arrayTypes = [];
 
         foreach ($constantArrayType->getValueTypes() as $valueType) {
-            $arrayTypes = array_merge($arrayTypes, $this->resolve($valueType));
+            $arrayTypes = array_merge($arrayTypes, $this->resolveAnyType($valueType));
         }
 
         $arrayTypes = array_unique($arrayTypes);

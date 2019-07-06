@@ -12,6 +12,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -215,7 +216,7 @@ final class BetterStandardPrinter extends Standard
     private function containsNop(array $nodes): bool
     {
         foreach ($nodes as $node) {
-            if ($node instanceof Node\Stmt\Nop) {
+            if ($node instanceof Nop) {
                 return true;
             }
         }
