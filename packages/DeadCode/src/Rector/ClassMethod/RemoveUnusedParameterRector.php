@@ -6,9 +6,11 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -27,6 +29,11 @@ final class RemoveUnusedParameterRector extends AbstractRector
      * @var ClassMethodManipulator
      */
     private $classMethodManipulator;
+
+    /**
+     * @var ParsedNodesByType
+     */
+    private $parsedNodesByType;
 
     /**
      * @var string[]
@@ -48,10 +55,21 @@ final class RemoveUnusedParameterRector extends AbstractRector
         '__wakeup',
     ];
 
-    public function __construct(ClassManipulator $classManipulator, ClassMethodManipulator $classMethodManipulator)
-    {
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    public function __construct(
+        ClassManipulator $classManipulator,
+        ClassMethodManipulator $classMethodManipulator,
+        ParsedNodesByType $parsedNodesByType,
+        BetterStandardPrinter $betterStandardPrinter
+    ) {
         $this->classManipulator = $classManipulator;
         $this->classMethodManipulator = $classMethodManipulator;
+        $this->parsedNodesByType = $parsedNodesByType;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     public function getDefinition(): RectorDefinition
@@ -117,9 +135,14 @@ CODE_SAMPLE
             return null;
         }
 
-        $unusedParameters = $this->resolveUnusedParameters($node);
-        if ($unusedParameters === []) {
-            return null;
+        $childrenOfClass = $this->parsedNodesByType->findChildrenOfClass($class);
+        $unusedParameters = $this->getUnusedParameters($node, $methodName, $childrenOfClass);
+
+        foreach ($childrenOfClass as $childClassNode) {
+            $methodOfChild = $childClassNode->getMethod($methodName);
+            if ($methodOfChild !== null) {
+                $this->removeNodes($this->getParameterOverlap($methodOfChild->params, $unusedParameters));
+            }
         }
 
         $this->removeNodes($unusedParameters);
@@ -147,6 +170,47 @@ CODE_SAMPLE
             $unusedParameters[$i] = $param;
         }
 
+        return $unusedParameters;
+    }
+
+    /**
+     * @param Param[] $parameters1
+     * @param Param[] $parameters2
+     * @return Param[]
+     */
+    private function getParameterOverlap(array $parameters1, array $parameters2): array
+    {
+        return array_uintersect(
+            $parameters1,
+            $parameters2,
+            function (Param $a, Param $b) {
+                return $this->betterStandardPrinter->areNodesEqual($a, $b) ? 0 : 1;
+            }
+        );
+    }
+
+    /**
+     * @param ClassMethod $classMethod
+     * @param string      $methodName
+     * @param Class_[]    $childrenOfClass
+     * @return Param[]
+     */
+    private function getUnusedParameters(ClassMethod $classMethod, string $methodName, array $childrenOfClass): array
+    {
+        $unusedParameters = $this->resolveUnusedParameters($classMethod);
+        if ($unusedParameters === []) {
+            return [];
+        }
+
+        foreach ($childrenOfClass as $childClassNode) {
+            $methodOfChild = $childClassNode->getMethod($methodName);
+            if ($methodOfChild !== null) {
+                $unusedParameters = $this->getParameterOverlap(
+                    $unusedParameters,
+                    $this->resolveUnusedParameters($methodOfChild)
+                );
+            }
+        }
         return $unusedParameters;
     }
 }
