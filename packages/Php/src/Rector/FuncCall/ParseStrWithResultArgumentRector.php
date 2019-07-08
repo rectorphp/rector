@@ -52,6 +52,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (isset($node->args[1])) {
+            return null;
+        }
+
         $resultVariable = new Variable('result');
         $node->args[1] = new Arg($resultVariable);
 
