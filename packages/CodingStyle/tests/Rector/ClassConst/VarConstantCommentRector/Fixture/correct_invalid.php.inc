@@ -19,6 +19,24 @@ class CorrectInvalid
      * Some comment, but no type.
      */
     public const HI = 5;
+
+    /**
+     * Some comment and right type, with a line between.
+     *
+     * @var string[]
+     */
+    public const HELLO = [
+        'string'
+    ];
+
+    /**
+     * Some comment and wrong type, with a line between.
+     *
+     * @var int
+     */
+    public const HELLO_AGAIN = [
+        'string'
+    ];
 }
 
 ?>
@@ -48,6 +66,24 @@ class CorrectInvalid
      * @var int
      */
     public const HI = 5;
+
+    /**
+     * Some comment and right type, with a line between.
+     *
+     * @var string[]
+     */
+    public const HELLO = [
+        'string'
+    ];
+
+    /**
+     * Some comment and wrong type, with a line between.
+     *
+     * @var string[]
+     */
+    public const HELLO_AGAIN = [
+        'string'
+    ];
 }
 
 ?>
