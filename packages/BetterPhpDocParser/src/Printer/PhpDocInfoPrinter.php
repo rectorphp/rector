@@ -74,7 +74,7 @@ final class PhpDocInfoPrinter
      * - Print(subnode2)
      * - Tokens[subnode2.endPos .. node.endPos]
      */
-    public function printFormatPreserving(PhpDocInfo $phpDocInfo): string
+    public function printFormatPreserving(PhpDocInfo $phpDocInfo, bool $shouldSkipEmptyLinesAbove = false): string
     {
         $this->attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
         $this->tokens = $phpDocInfo->getTokens();
@@ -84,11 +84,13 @@ final class PhpDocInfoPrinter
         $this->currentTokenPosition = 0;
         $this->removedNodePositions = [];
 
-        return $this->printPhpDocNode($this->attributeAwarePhpDocNode);
+        return $this->printPhpDocNode($this->attributeAwarePhpDocNode, $shouldSkipEmptyLinesAbove);
     }
 
-    private function printPhpDocNode(AttributeAwarePhpDocNode $attributeAwarePhpDocNode): string
-    {
+    private function printPhpDocNode(
+        AttributeAwarePhpDocNode $attributeAwarePhpDocNode,
+        bool $shouldSkipEmptyLinesAbove = false
+    ): string {
         // no nodes were, so empty doc
         if ($this->isPhpDocNodeEmpty($attributeAwarePhpDocNode)) {
             return '';
@@ -101,7 +103,7 @@ final class PhpDocInfoPrinter
         // node output
         $nodeCount = count($attributeAwarePhpDocNode->children);
         foreach ($attributeAwarePhpDocNode->children as $i => $phpDocChildNode) {
-            $output .= $this->printNode($phpDocChildNode, null, $i + 1, $nodeCount);
+            $output .= $this->printNode($phpDocChildNode, null, $i + 1, $nodeCount, $shouldSkipEmptyLinesAbove);
         }
 
         return $this->printEnd($output);
@@ -130,7 +132,8 @@ final class PhpDocInfoPrinter
         AttributeAwareNodeInterface $attributeAwareNode,
         ?StartEndInfo $startEndInfo = null,
         int $i = 0,
-        int $nodeCount = 0
+        int $nodeCount = 0,
+        bool $shouldSkipEmptyLinesAbove = false
     ): string {
         $output = '';
 
@@ -145,7 +148,7 @@ final class PhpDocInfoPrinter
                 $output,
                 $this->currentTokenPosition,
                 $startEndInfo->getStart(),
-                $isLastToken
+                ! $shouldSkipEmptyLinesAbove && $isLastToken
             );
 
             $this->currentTokenPosition = $startEndInfo->getEnd();

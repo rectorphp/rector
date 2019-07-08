@@ -145,7 +145,7 @@ final class DocBlockManipulator
         }
     }
 
-    public function removeTagFromNode(Node $node, string $name): void
+    public function removeTagFromNode(Node $node, string $name, bool $shouldSkipEmptyLinesAbove = false): void
     {
         if ($node->getDocComment() === null) {
             return;
@@ -154,7 +154,7 @@ final class DocBlockManipulator
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         $this->removeTagByName($phpDocInfo, $name);
-        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo, $shouldSkipEmptyLinesAbove);
     }
 
     public function changeType(Node $node, string $oldType, string $newType, bool $includeChildren = false): void
@@ -259,7 +259,7 @@ final class DocBlockManipulator
 
     public function changeVarTag(Node $node, string $type): void
     {
-        $this->removeTagFromNode($node, 'var');
+        $this->removeTagFromNode($node, 'var', true);
         $this->addTypeSpecificTag($node, 'var', $type);
     }
 
@@ -506,14 +506,17 @@ final class DocBlockManipulator
         return (bool) Strings::match($text, '#\@(param|throws|return|var)\b#');
     }
 
-    public function updateNodeWithPhpDocInfo(Node $node, PhpDocInfo $phpDocInfo): bool
-    {
+    public function updateNodeWithPhpDocInfo(
+        Node $node,
+        PhpDocInfo $phpDocInfo,
+        bool $shouldSkipEmptyLinesAbove = false
+    ): bool {
         // skip if has no doc comment
         if ($node->getDocComment() === null) {
             return false;
         }
 
-        $phpDoc = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
+        $phpDoc = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo, $shouldSkipEmptyLinesAbove);
         if ($phpDoc !== '') {
             // no change, don't save it
             if ($node->getDocComment()->getText() === $phpDoc) {

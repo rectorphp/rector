@@ -69,8 +69,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($node);
-
         $constStaticType = $this->getStaticType($node->consts[0]->value);
         if ($constStaticType === null) {
             return null;
@@ -82,6 +80,8 @@ CODE_SAMPLE
         if ($staticTypesInStrings === []) {
             return null;
         }
+
+        $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($node);
 
         if ($varTypeInfo && $varTypeInfo->getTypes() === $staticTypesInStrings) {
             // already set
