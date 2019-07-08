@@ -177,8 +177,12 @@ final class ValueResolver
 
         $values = [];
         foreach ($constantArrayType->getValueTypes() as $i => $valueType) {
-            /** @var ConstantScalarType $valueType */
-            $value = $valueType->getValue();
+            if ($valueType instanceof ConstantArrayType) {
+                $value = $this->extractConstantArrayTypeValue($valueType);
+            } else {
+                /** @var ConstantScalarType $valueType */
+                $value = $valueType->getValue();
+            }
             $values[$keys[$i]] = $value;
         }
 

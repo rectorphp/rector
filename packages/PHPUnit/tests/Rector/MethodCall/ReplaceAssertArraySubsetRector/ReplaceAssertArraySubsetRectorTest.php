@@ -13,6 +13,7 @@ final class ReplaceAssertArraySubsetRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/issue_2069.php.inc',
             __DIR__ . '/Fixture/issue_2237.php.inc',
+            __DIR__ . '/Fixture/multilevel_array.php.inc',
             __DIR__ . '/Fixture/variable.php.inc',
         ]);
     }
