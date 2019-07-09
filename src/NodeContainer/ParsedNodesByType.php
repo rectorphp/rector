@@ -468,6 +468,7 @@ final class ParsedNodesByType
     private function addClassConstantFetch(ClassConstFetch $classConstFetch): void
     {
         $constantName = $this->nameResolver->resolve($classConstFetch->name);
+
         if ($constantName === 'class' || $constantName === null) {
             // this is not a manual constant
             return;
@@ -485,6 +486,7 @@ final class ParsedNodesByType
         } else {
             $resolvedClassTypes = $this->nodeTypeResolver->resolve($classConstFetch->class);
             $className = $this->matchClassTypeThatContainsConstant($resolvedClassTypes, $constantName);
+
             if ($className === null) {
                 return;
             }
@@ -517,6 +519,10 @@ final class ParsedNodesByType
      */
     private function matchClassTypeThatContainsConstant(array $resolvedClassTypes, string $constant): ?string
     {
+        if (count($resolvedClassTypes) === 1) {
+            return $resolvedClassTypes[0];
+        }
+
         foreach ($resolvedClassTypes as $resolvedClassType) {
             $classOrInterface = $this->findClassOrInterface($resolvedClassType);
             if ($classOrInterface === null) {
