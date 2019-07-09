@@ -35,6 +35,7 @@ use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
@@ -297,6 +298,12 @@ final class NodeTypeResolver
             return null;
         }
 
+        if ($node instanceof New_) {
+            if ($this->isAnonymousClass($node->class)) {
+                return new ObjectWithoutClassType();
+            }
+        }
+
         return $nodeScope->getType($node);
     }
 
@@ -410,8 +417,7 @@ final class NodeTypeResolver
 
         // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
         if ($node instanceof New_) {
-            $className = $this->nameResolver->resolve($node->class);
-            if ($className === null || Strings::contains($className, 'AnonymousClass')) {
+            if ($this->isAnonymousClass($node->class)) {
                 return [];
             }
         }
@@ -555,5 +561,16 @@ final class NodeTypeResolver
         }
 
         return null;
+    }
+
+    private function isAnonymousClass(Node $node): bool
+    {
+        if (! $node instanceof Class_) {
+            return false;
+        }
+
+        $className = $this->nameResolver->resolve($node);
+
+        return $className === null || Strings::contains($className, 'AnonymousClass');
     }
 }
