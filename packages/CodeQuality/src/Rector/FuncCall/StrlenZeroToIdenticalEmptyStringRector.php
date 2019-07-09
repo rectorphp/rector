@@ -64,9 +64,7 @@ CODE_SAMPLE
             }
 
             $variable = $node->left->args[0]->value;
-        }
-
-        if ($node->right instanceof FuncCall) {
+        } elseif ($node->right instanceof FuncCall) {
             if (! $this->isName($node->right, 'strlen')) {
                 return null;
             }
@@ -76,6 +74,8 @@ CODE_SAMPLE
             }
 
             $variable = $node->right->args[0]->value;
+        } else {
+            return null;
         }
 
         /** @var Expr $variable */

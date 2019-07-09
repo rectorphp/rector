@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\PhpParser\Node\Value;
 
-use Generator;
+use Iterator;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Plus;
@@ -28,17 +28,13 @@ final class ValueResolverTest extends AbstractKernelTestCase
     /**
      * @dataProvider dataProvider
      * @param mixed $expected
-     * @param Expr $expr
      */
     public function test($expected, Expr $expr): void
     {
         $this->assertSame($expected, $this->valueResolver->resolve($expr));
     }
 
-    /**
-     * @return Generator
-     */
-    public function dataProvider(): Generator
+    public function dataProvider(): Iterator
     {
         $builderFactory = new BuilderFactory();
 
