@@ -2,10 +2,6 @@
 
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\Fixture;
 
-use PhpParser\Node;
-use PhpParser\NodeVisitor;
-use PhpParser\NodeVisitorAbstract;
-
 class SkipAnonymousFunction
 {
     /**
