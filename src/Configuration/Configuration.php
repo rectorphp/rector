@@ -23,12 +23,6 @@ final class Configuration
     private $hideAutoloadErrors = false;
 
     /**
-     * Should use base coding style after the run
-     * @var bool
-     */
-    private $withStyle = false;
-
-    /**
      * Files and directories to by analysed
      * @var string[]
      */
@@ -62,7 +56,6 @@ final class Configuration
         $this->isDryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
         $this->source = (array) $input->getArgument(Option::SOURCE);
         $this->hideAutoloadErrors = (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS);
-        $this->withStyle = (bool) $input->getOption(Option::OPTION_WITH_STYLE);
         $this->outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
         $this->showProgressBar = $this->canShowProgressBar($input);
 
@@ -125,11 +118,6 @@ final class Configuration
     public function shouldHideAutoloadErrors(): bool
     {
         return $this->hideAutoloadErrors;
-    }
-
-    public function isWithStyle(): bool
-    {
-        return $this->withStyle;
     }
 
     public function showProgressBar(): bool

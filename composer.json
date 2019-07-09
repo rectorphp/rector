@@ -133,9 +133,6 @@
             "packages/DeadCode/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php"
         ]
     },
-    "suggest": {
-        "symplify/easy-coding-standard": "Required to enable '--with-style' option. Use in case you don't have PHP_CodeSniffer or PHP-CS-Fixer yet."
-    },
     "scripts": {
         "complete-check": [
             "@check-cs",

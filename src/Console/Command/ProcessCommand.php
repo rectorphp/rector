@@ -5,7 +5,6 @@ namespace Rector\Console\Command;
 use Rector\Application\ErrorAndDiffCollector;
 use Rector\Application\RectorApplication;
 use Rector\Autoloading\AdditionalAutoloader;
-use Rector\CodingStyle\AfterRectorCodingStyle;
 use Rector\Configuration\Configuration;
 use Rector\Configuration\Option;
 use Rector\Console\Output\ConsoleOutputFormatter;
@@ -42,11 +41,6 @@ final class ProcessCommand extends AbstractCommand
     private $errorAndDiffCollector;
 
     /**
-     * @var AfterRectorCodingStyle
-     */
-    private $afterRectorCodingStyle;
-
-    /**
      * @var Configuration
      */
     private $configuration;
@@ -74,7 +68,6 @@ final class ProcessCommand extends AbstractCommand
         AdditionalAutoloader $additionalAutoloader,
         RectorGuard $rectorGuard,
         ErrorAndDiffCollector $errorAndDiffCollector,
-        AfterRectorCodingStyle $afterRectorCodingStyle,
         Configuration $configuration,
         RectorApplication $rectorApplication,
         OutputFormatterCollector $outputFormatterCollector,
@@ -84,7 +77,6 @@ final class ProcessCommand extends AbstractCommand
         $this->additionalAutoloader = $additionalAutoloader;
         $this->rectorGuard = $rectorGuard;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
-        $this->afterRectorCodingStyle = $afterRectorCodingStyle;
         $this->configuration = $configuration;
         $this->rectorApplication = $rectorApplication;
         $this->fileExtensions = $fileExtensions;
@@ -113,13 +105,6 @@ final class ProcessCommand extends AbstractCommand
             'a',
             InputOption::VALUE_REQUIRED,
             'File with extra autoload'
-        );
-
-        $this->addOption(
-            Option::OPTION_WITH_STYLE,
-            'w',
-            InputOption::VALUE_NONE,
-            'Apply basic coding style afterwards to make code look nicer'
         );
 
         $this->addOption(
@@ -159,11 +144,6 @@ final class ProcessCommand extends AbstractCommand
         $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
         $outputFormatter->report($this->errorAndDiffCollector);
-
-        // apply coding standard
-        if ($this->configuration->isWithStyle()) {
-            $this->afterRectorCodingStyle->apply($source);
-        }
 
         // some errors were found → fail
         if ($this->errorAndDiffCollector->getErrors() !== []) {
