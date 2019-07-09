@@ -615,11 +615,8 @@ final class ParsedNodesByType
             return null;
         }
 
-        if (! $array->items[0]->value instanceof Variable) {
-            return null;
-        }
-
-        if (! $this->nameResolver->isName($array->items[0]->value, 'this')) {
+        // $this, self, static, FQN
+        if (! $this->isThisVariable($array->items[0]->value)) {
             return null;
         }
 
@@ -637,6 +634,36 @@ final class ParsedNodesByType
         $methodName = $string->value;
         $className = $array->getAttribute(AttributeKey::CLASS_NAME);
 
+        if ($className === null) {
+            return null;
+        }
+
         return [$className, $methodName];
+    }
+
+    private function isThisVariable(Node $node): bool
+    {
+        // $this
+        if ($node instanceof Variable && $this->nameResolver->isName($node, 'this')) {
+            return true;
+        }
+
+        if ($node instanceof ClassConstFetch) {
+            if (! $this->nameResolver->isName($node->name, 'class')) {
+                return false;
+            }
+
+            // self::class, static::class
+            if ($this->nameResolver->isNames($node->class, ['self', 'static'])) {
+                return true;
+            }
+
+            /** @var string $className */
+            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+
+            return $this->nameResolver->isName($node->class, $className);
+        }
+
+        return false;
     }
 }
