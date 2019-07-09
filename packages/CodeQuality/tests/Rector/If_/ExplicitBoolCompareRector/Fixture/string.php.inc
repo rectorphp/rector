@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
-final class String_
+final class ExplicitString
 {
     public function run(string $item)
     {
@@ -22,7 +22,7 @@ final class String_
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
-final class String_
+final class ExplicitString
 {
     public function run(string $item)
     {
