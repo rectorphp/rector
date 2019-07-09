@@ -6,7 +6,7 @@ includes:
      - 'vendor/phpstan/phpstan/conf/bleedingEdge.neon'
 
 parameters:
-    # to allow intalling with various phsptan versions without reporting old errors here
+    # to allow installing with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false
     level: max
 
@@ -24,7 +24,7 @@ parameters:
         - '*tests/*/Source/*'
         - '*tests/Source/*'
         - 'packages/NodeTypeResolver/tests/Source/SomeClass.php'
-        # intetionally original
+        # intentionally original
         - 'packages/Php/src/EregToPcreTransformer.php'
         - '*/packages/ContributorTools/templates/*'
         # part of composer
@@ -36,7 +36,7 @@ parameters:
         - '#Call to function method_exists\(\) with string and (.*?) will always evaluate to false#'
         - '#PHPDoc tag \@param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
 
-        # missuse of interface and class
+        # misuse of interface and class
         - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#'
         - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer::getContainer\(\) should return Symfony\\Component\\DependencyInjection\\ContainerBuilder but returns Symfony\\Component\\DependencyInjection\\Container#'
 
@@ -48,14 +48,14 @@ parameters:
         # nette container
         - '#Method Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory::create(.*?)() should return (.*?) but returns object#'
 
-        # false postive - type is set by annotation above
+        # false positive - type is set by annotation above
         - '#Array \(array<PhpParser\\Node\\Stmt>\) does not accept PhpParser\\Node#'
         - '#Method Rector\\Php\\Rector\\TryCatch\\MultiExceptionCatchRector\:\:collectCatchKeysByContent\(\) should return array<array<int\>\> but returns array<string, array<int, int\|string\>\>#'
         - '#Method Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockManipulator::getTagByName\(\) should return PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|null#'
         - '#Parameter \#1 \$expr of class PhpParser\\Node\\Expr\\BooleanNot constructor expects PhpParser\\Node\\Expr, PhpParser\\Node given#'
         - '#Parameter \#1 \$node of method Rector\\PhpParser\\Node\\Commander\\NodeAddingCommander::wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
 
-        # irelevant
+        # irrelevant
         - '#Call to function in_array\(\) with arguments string, (.*?) and true will always evaluate to false#'
         - '#Parameter \#1 \$name of class ReflectionFunction constructor expects Closure\|string, callable given#'
 
@@ -159,7 +159,7 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$args#'
 
         - '#Parameter \#2 \$name of method Rector\\Rector\\AbstractRector\:\:isName\(\) expects string, string\|null given#'
-        # cascade irelevant
+        # cascade irrelevant
         - '#Parameter (.*?) expects array<PhpParser\\Node\\Stmt\>, array<PhpParser\\Node\> given#'
 
         # known value
