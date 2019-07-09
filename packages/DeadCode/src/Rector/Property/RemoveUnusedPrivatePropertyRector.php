@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -64,13 +64,13 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var ClassLike|null $classNode */
+        /** @var Class_|Interface_|Trait_|null $classNode */
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null || $classNode instanceof Trait_) {
+        if ($classNode === null || $classNode instanceof Trait_ || $classNode instanceof Interface_) {
             return null;
         }
 
-        if ($classNode instanceof Class_ && $classNode->isAnonymous()) {
+        if ($classNode->isAnonymous()) {
             return null;
         }
 
@@ -86,7 +86,6 @@ CODE_SAMPLE
         }
 
         $uselessAssigns = $this->resolveUselessAssignNode($propertyFetches);
-
         if (count($uselessAssigns) > 0) {
             $this->removeNode($node);
             foreach ($uselessAssigns as $uselessAssign) {
@@ -98,6 +97,9 @@ CODE_SAMPLE
     }
 
     /**
+     * Matches all-only: "$this->property = x"
+     * If these is ANY OTHER use of property, e.g. process($this->property), it returns []
+     *
      * @param PropertyFetch[] $propertyFetches
      * @return Assign[]
      */
@@ -107,9 +109,11 @@ CODE_SAMPLE
 
         foreach ($propertyFetches as $propertyFetch) {
             $propertyFetchParentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
+
             if ($propertyFetchParentNode instanceof Assign && $propertyFetchParentNode->var === $propertyFetch) {
                 $uselessAssigns[] = $propertyFetchParentNode;
             } else {
+                // it is used another way as well → nothing to remove
                 return [];
             }
         }

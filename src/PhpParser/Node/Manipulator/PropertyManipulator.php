@@ -63,13 +63,13 @@ final class PropertyManipulator
         $nodesToSearch[] = $classNode;
 
         return $this->betterNodeFinder->find($nodesToSearch, function (Node $node) use ($property) {
-            // itself
-            if ($this->betterStandardPrinter->areNodesEqual($node, $property)) {
+            // property + static fetch
+            if (! $node instanceof PropertyFetch && ! $node instanceof StaticPropertyFetch) {
                 return null;
             }
 
-            // property + static fetch
-            if (! $node instanceof PropertyFetch && ! $node instanceof StaticPropertyFetch) {
+            // itself
+            if ($this->betterStandardPrinter->areNodesEqual($node, $property)) {
                 return null;
             }
 
