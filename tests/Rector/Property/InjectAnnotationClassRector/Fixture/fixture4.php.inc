@@ -25,7 +25,7 @@ class ClassWithPublicInjects
     /**
      * @var \Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslatorInterface
      */
-    private $translator;
+    public $translator;
     public function __construct(\Rector\Symfony\Tests\Rector\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeTranslatorInterface $translator)
     {
         $this->translator = $translator;

@@ -195,9 +195,6 @@ CODE_SAMPLE
 
         $this->docBlockManipulator->removeTagFromNode($property, $annotationClass);
 
-        // set to private
-        $property->flags = Class_::MODIFIER_PRIVATE;
-
         $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {
             throw new ShouldNotHappenException();
