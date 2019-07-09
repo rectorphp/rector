@@ -10,6 +10,7 @@ use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
@@ -26,6 +27,7 @@ final class StaticTypeToStringResolver
     {
         $resolvers = [
             IntegerType::class => ['int'],
+            ObjectWithoutClassType::class => ['object'],
             ClosureType::class => ['callable'],
             CallableType::class => ['callable'],
             FloatType::class => ['float'],

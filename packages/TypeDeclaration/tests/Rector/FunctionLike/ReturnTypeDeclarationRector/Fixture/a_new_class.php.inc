@@ -9,3 +9,19 @@ class ANewClass
         return new class() {};
     }
 }
+
+?>
+-----
+<?php
+
+namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
+
+class ANewClass
+{
+    public function getObject(): object
+    {
+        return new class() {};
+    }
+}
+
+?>
