@@ -18,6 +18,7 @@ final class PrivatizeLocalClassConstantRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/in_interface.php.inc',
             __DIR__ . '/Fixture/in_interface_used_child_and_external.php.inc',
             __DIR__ . '/Fixture/in_interface_used_child_and_extended.php.inc',
+            __DIR__ . '/Fixture/skip_used_in_another_class.php.inc',
         ]);
     }
 
