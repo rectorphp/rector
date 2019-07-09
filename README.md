@@ -59,6 +59,12 @@ Rector **instantly upgrades and instantly refactors PHP code of your application
 
 ...**look at overview of [all available Rectors](/docs/AllRectorsOverview.md)** with before/after diffs and configuration examples. You can use them to build your own sets.
 
+## How to Apply Coding Standards?
+
+AST libraries that Rector use, doesn't work well with coding standards, so it's better to let coding standard tools do that.
+
+Your project doesn't have one? Consider adding [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard), [PHP CS Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) or [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer).
+
 ## Install
 
 ```bash
@@ -154,16 +160,6 @@ vendor/bin/rector process src --level symfony40
     # apply
     vendor/bin/rector process src
     ```
-
-## How to Apply Coding Standards?
-
-AST that Rector uses doesn't deal with coding standards very well, so it's better to let coding standard tools do that. Your project doesn't have one? Rector ships with [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard) set that covers namespaces import, 1 empty line between class elements etc.
-
-Just use `--with-style` option to handle these basic cases:
-
-```bash
-vendor/bin/rector process src --with-style
-```
 
 ## 3 Steps to Create Own Rector
 
