@@ -61,7 +61,9 @@ Rector **instantly upgrades and instantly refactors PHP code of your application
 
 ## How to Apply Coding Standards?
 
-AST libraries that Rector use, doesn't work well with coding standards, so it's better to let coding standard tools do that. Your project doesn't have one? Consider usage of i.e. [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard), that covers namespaces import, 1 empty line between class elements & many more _boring_ stuff that cs-fixer tool should do for you.
+AST libraries that Rector use, doesn't work well with coding standards, so it's better to let coding standard tools do that.
+
+Your project doesn't have one? Consider adding [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard), [PHP CS Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) or [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer).
 
 ## Install
 
