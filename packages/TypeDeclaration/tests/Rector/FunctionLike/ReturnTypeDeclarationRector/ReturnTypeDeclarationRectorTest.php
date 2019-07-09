@@ -53,6 +53,8 @@ final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/dunglas/BazTrait.php.inc',
             __DIR__ . '/Fixture/dunglas/Child.php.inc',
             __DIR__ . '/Fixture/dunglas/nullable_types.php.inc',
+            // anonymous class
+            __DIR__ . '/Fixture/a_new_class.php.inc',
         ];
 
         $this->doTestFiles($integrationFiles);
