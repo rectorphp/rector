@@ -4,6 +4,7 @@ namespace Rector\NodeContainer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -43,6 +44,8 @@ final class ParsedNodesByType
         New_::class,
         StaticCall::class,
         MethodCall::class,
+        // for array callable - [$this, 'someCall']
+        Array_::class,
     ];
 
     /**
@@ -81,9 +84,15 @@ final class ParsedNodesByType
     private $simpleParsedNodesByType = [];
 
     /**
-     * @var mixed[]
+     * @var MethodCall[][][]|StaticCall[][][]
      */
     private $methodsCallsByTypeAndMethod = [];
+
+    /**
+     * E.g. [$this, 'someLocalMethod']
+     * @var Array_[][][]
+     */
+    private $arrayCallablesByTypeAndMethod = [];
 
     public function __construct(NameResolver $nameResolver)
     {
@@ -388,6 +397,22 @@ final class ParsedNodesByType
             return;
         }
 
+        // array callable - [$this, 'someCall']
+        if ($node instanceof Array_) {
+            $arrayCallableClassAndMethod = $this->matchArrayCallableClassAndMethod($node);
+            if ($arrayCallableClassAndMethod === null) {
+                return;
+            }
+
+            [$className, $methodName] = $arrayCallableClassAndMethod;
+            if (! method_exists($className, $methodName)) {
+                return;
+            }
+
+            $this->arrayCallablesByTypeAndMethod[$className][$methodName][] = $node;
+            return;
+        }
+
         if ($node instanceof MethodCall || $node instanceof StaticCall) {
             $this->addCall($node);
             return;
@@ -399,7 +424,7 @@ final class ParsedNodesByType
     }
 
     /**
-     * @return MethodCall[]
+     * @return MethodCall[]|StaticCall[]|Array_[]
      */
     public function findClassMethodCalls(ClassMethod $classMethod): array
     {
@@ -413,11 +438,11 @@ final class ParsedNodesByType
             return [];
         }
 
-        return $this->methodsCallsByTypeAndMethod[$className][$methodName] ?? [];
+        return $this->methodsCallsByTypeAndMethod[$className][$methodName] ?? $this->arrayCallablesByTypeAndMethod[$className][$methodName] ?? [];
     }
 
     /**
-     * @return MethodCall[]|StaticCall[]
+     * @return MethodCall[][]|StaticCall[][]
      */
     public function findMethodCallsOnClass(string $className): array
     {
@@ -574,5 +599,44 @@ final class ParsedNodesByType
         }
 
         $this->methodsCallsByTypeAndMethod[$className][$methodName][] = $node;
+    }
+
+    /**
+     * Matches array like: "[$this, 'methodName']" → ['ClassName', 'methodName']
+     * @return string[]|null
+     */
+    private function matchArrayCallableClassAndMethod(Array_ $array): ?array
+    {
+        if (count($array->items) !== 2) {
+            return null;
+        }
+
+        if ($array->items[0] === null) {
+            return null;
+        }
+
+        if (! $array->items[0]->value instanceof Variable) {
+            return null;
+        }
+
+        if (! $this->nameResolver->isName($array->items[0]->value, 'this')) {
+            return null;
+        }
+
+        if ($array->items[1] === null) {
+            return null;
+        }
+
+        if (! $array->items[1]->value instanceof Node\Scalar\String_) {
+            return null;
+        }
+
+        /** @var Node\Scalar\String_ $string */
+        $string = $array->items[1]->value;
+
+        $methodName = $string->value;
+        $className = $array->getAttribute(AttributeKey::CLASS_NAME);
+
+        return [$className, $methodName];
     }
 }
