@@ -150,7 +150,9 @@ CODE_SAMPLE
                     ->getNode();
             } else {
                 $newProperty = $propertyBuilder->getNode();
-                $this->docBlockManipulator->changeVarTag($newProperty, $propertyTypesAsString);
+                if ($propertyTypesAsString) {
+                    $this->docBlockManipulator->changeVarTag($newProperty, $propertyTypesAsString);
+                }
             }
 
             $newProperties[] = $newProperty;
