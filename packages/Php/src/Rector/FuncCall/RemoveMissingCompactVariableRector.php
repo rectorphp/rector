@@ -3,6 +3,7 @@
 namespace Rector\Php\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -76,6 +77,10 @@ CODE_SAMPLE
             }
 
             unset($node->args[$key]);
+        }
+
+        if (!$node->args) {
+            return new Array_();
         }
 
         return $node;

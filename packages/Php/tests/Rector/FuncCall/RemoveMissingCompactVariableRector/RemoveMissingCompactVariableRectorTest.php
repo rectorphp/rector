@@ -9,7 +9,11 @@ final class RemoveMissingCompactVariableRectorTest extends AbstractRectorTestCas
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/skip_maybe_defined.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/empty_compact.php.inc',
+            __DIR__ . '/Fixture/skip_maybe_defined.inc',
+        ]);
     }
 
     protected function getRectorClass(): string
