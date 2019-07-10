@@ -2,7 +2,6 @@
 
 namespace Rector\Rector\MethodCall;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -161,23 +160,5 @@ CODE_SAMPLE
         }
 
         return $node;
-    }
-
-    private function isNonAnonymousClass(?Node $node): bool
-    {
-        if ($node === null) {
-            return false;
-        }
-
-        if (! $node instanceof Class_) {
-            return false;
-        }
-
-        $name = $this->getName($node);
-        if ($name === null) {
-            return false;
-        }
-
-        return ! Strings::contains($name, 'AnonymousClass');
     }
 }

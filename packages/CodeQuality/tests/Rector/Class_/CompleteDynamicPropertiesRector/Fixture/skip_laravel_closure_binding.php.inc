@@ -2,6 +2,8 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector\Fixture;
 
+use Illuminate\Support\Collection;
+
 class SkipLaravelClosureBinding
 {
     /**

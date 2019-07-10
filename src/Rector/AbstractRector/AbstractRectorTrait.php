@@ -2,6 +2,10 @@
 
 namespace Rector\Rector\AbstractRector;
 
+use Nette\Utils\Strings;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+
 trait AbstractRectorTrait
 {
     use AppliedRectorCollectorTrait;
@@ -14,4 +18,22 @@ trait AbstractRectorTrait
     use VisibilityTrait;
     use ValueResolverTrait;
     use CallableNodeTraverserTrait;
+
+    protected function isNonAnonymousClass(?Node $node): bool
+    {
+        if ($node === null) {
+            return false;
+        }
+
+        if (! $node instanceof Class_) {
+            return false;
+        }
+
+        $name = $this->getName($node);
+        if ($name === null) {
+            return false;
+        }
+
+        return ! Strings::contains($name, 'AnonymousClass');
+    }
 }

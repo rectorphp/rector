@@ -76,6 +76,26 @@ final class BetterNodeFinder
     }
 
     /**
+     * @param Node $node
+     * @param string[] $types
+     */
+    public function findFirstAncestorInstancesOf(Node $node, array $types): ?Node
+    {
+        $currentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        while ($currentNode !== null) {
+            foreach ($types as $type) {
+                if (is_a($currentNode, $type, true)) {
+                    return $currentNode;
+                }
+            }
+
+            $currentNode = $currentNode->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        return null;
+    }
+
+    /**
      * @param Node|Node[]|Stmt[] $nodes
      * @return Node[]
      */
