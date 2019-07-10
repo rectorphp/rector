@@ -1,0 +1,7 @@
+services:
+    Rector\Rector\MethodCall\ServiceGetterToConstructorInjectionRector:
+        $methodNamesByTypesToServiceTypes:
+            'Doctrine\Common\Persistence\ManagerRegistry':
+                'getConnection': 'Doctrine\DBAL\Connection'
+            'Doctrine\ORM\EntityManagerInterface':
+                'getConfiguration': 'Doctrine\ORM\Configuration'
