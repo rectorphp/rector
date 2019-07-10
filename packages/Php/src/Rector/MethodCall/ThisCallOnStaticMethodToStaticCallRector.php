@@ -97,6 +97,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->createStaticCall('self', $methodName);
+        return $this->createStaticCall('self', $methodName, $node->args);
     }
 }
