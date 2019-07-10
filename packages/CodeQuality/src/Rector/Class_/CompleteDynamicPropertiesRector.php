@@ -6,7 +6,9 @@ use Nette\Utils\Arrays;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -22,6 +24,11 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class CompleteDynamicPropertiesRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const LARAVEL_COLLECTION_CLASS = 'Illuminate\Support\Collection';
+
     /**
      * @var TypeToStringResolver
      */
@@ -84,26 +91,21 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->isAnonymous()) {
+        if (! $this->isNonAnonymousClass($node)) {
             return null;
         }
 
         /** @var string $class */
         $class = $this->getName($node);
+        // properties are accessed via magic, nothing we can do
         if (method_exists($class, '__set') || method_exists($class, '__get')) {
             return null;
         }
 
+        // special case for Laravel Collection macro magic
         $fetchedLocalPropertyNameToTypes = $this->resolveFetchedLocalPropertyNameToTypes($node);
 
-        $propertyNames = [];
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use (&$propertyNames) {
-            if (! $node instanceof Property) {
-                return null;
-            }
-
-            $propertyNames[] = $this->getName($node);
-        });
+        $propertyNames = $this->getClassPropertyNames($node);
 
         $fetchedLocalPropertyNames = array_keys($fetchedLocalPropertyNameToTypes);
         $propertiesToComplete = array_diff($fetchedLocalPropertyNames, $propertyNames);
@@ -150,7 +152,9 @@ CODE_SAMPLE
                     ->getNode();
             } else {
                 $newProperty = $propertyBuilder->getNode();
-                $this->docBlockManipulator->changeVarTag($newProperty, $propertyTypesAsString);
+                if ($propertyTypesAsString) {
+                    $this->docBlockManipulator->changeVarTag($newProperty, $propertyTypesAsString);
+                }
             }
 
             $newProperties[] = $newProperty;
@@ -176,25 +180,69 @@ CODE_SAMPLE
                 return null;
             }
 
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-            // fallback type
-            $propertyFetchType = ['mixed'];
-
-            // possible get type
-            if ($parentNode instanceof Assign) {
-                $assignedValueStaticType = $this->getStaticType($parentNode->expr);
-                if ($assignedValueStaticType) {
-                    $propertyFetchType = $this->typeToStringResolver->resolve($assignedValueStaticType);
-                }
+            // special Laravel collection scope
+            if ($this->shouldSkipForLaravelCollection($node)) {
+                return null;
             }
 
             /** @var string $propertyName */
             $propertyName = $this->getName($node->name);
+            $propertyFetchType = $this->resolvePropertyFetchType($node);
 
             $fetchedLocalPropertyNameToTypes[$propertyName][] = $propertyFetchType;
         });
 
         return $fetchedLocalPropertyNameToTypes;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getClassPropertyNames(Class_ $class): array
+    {
+        $propertyNames = [];
+
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$propertyNames) {
+            if (! $node instanceof Property) {
+                return null;
+            }
+
+            $propertyNames[] = $this->getName($node);
+        });
+
+        return $propertyNames;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolvePropertyFetchType(Node $node): array
+    {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        // possible get type
+        if ($parentNode instanceof Assign) {
+            $assignedValueStaticType = $this->getStaticType($parentNode->expr);
+            if ($assignedValueStaticType) {
+                return $this->typeToStringResolver->resolve($assignedValueStaticType);
+            }
+        }
+
+        // fallback type
+        return ['mixed'];
+    }
+
+    private function shouldSkipForLaravelCollection(Node $node): bool
+    {
+        $staticCallOrClassMethod = $this->betterNodeFinder->findFirstAncestorInstancesOf(
+            $node,
+            [ClassMethod::class, StaticCall::class]
+        );
+
+        if (! $staticCallOrClassMethod instanceof StaticCall) {
+            return false;
+        }
+
+        return $this->isName($staticCallOrClassMethod->class, self::LARAVEL_COLLECTION_CLASS);
     }
 }
