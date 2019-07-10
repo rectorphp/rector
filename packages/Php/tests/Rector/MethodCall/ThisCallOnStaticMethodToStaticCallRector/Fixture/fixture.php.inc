@@ -6,10 +6,10 @@ class SomeClass
 {
     public static function run()
     {
-        $this->eat();
+        $this->eat('something');
     }
 
-    public static function eat()
+    public static function eat(string $thing)
     {
     }
 }
@@ -24,10 +24,10 @@ class SomeClass
 {
     public static function run()
     {
-        self::eat();
+        self::eat('something');
     }
 
-    public static function eat()
+    public static function eat(string $thing)
     {
     }
 }
