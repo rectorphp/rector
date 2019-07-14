@@ -9,6 +9,11 @@
 *.gif binary
 *.ico binary
 
+# Set syntax highlight on GitHub
+# https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
+*.neon linguist-language=YAML
+*.neon.dist linguist-language=YAML
+
 # Remove files for archives generated using `git archive`
 .coveralls.yml export-ignore
 .travis.yml export-ignore
