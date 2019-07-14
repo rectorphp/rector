@@ -7,7 +7,6 @@ use Fully\Qualified\ClassName\TheActual\Foo\Bar;
 use Fully\Qualified\ClassName\TheActual\Bar\Foo;
 use Fully\Qualified\ClassName\SomeTotallyDifferentButLastListed\Bar\Foo as BarFooLast;
 
-
 class InjectFromVarWithTypeOfSameName
 {
     /**
@@ -45,7 +44,6 @@ class InjectFromVarWithTypeOfSameName
     private $someBarDependency;
 
     /**
-     * @Inject
      *
      * @var Foo
      */

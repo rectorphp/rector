@@ -616,7 +616,7 @@ final class DocBlockManipulator
      */
     private function resolveNodeType(TypeNode $typeNode): string
     {
-        $nodeType = $typeNode->getAttribute('resolved_name');
+        $nodeType = $typeNode->getAttribute(Attribute::RESOLVED_NAME);
 
         if ($nodeType === null) {
             $nodeType = $typeNode->getAttribute(Attribute::TYPE_AS_STRING);
@@ -648,10 +648,10 @@ final class DocBlockManipulator
      */
     private function getFullyQualifiedName(AttributeAwareNodeInterface $attributeAwareNode): string
     {
-        if ($attributeAwareNode->getAttribute('resolved_name')) {
-            $fqnName = $attributeAwareNode->getAttribute('resolved_name');
+        if ($attributeAwareNode->getAttribute(Attribute::RESOLVED_NAME)) {
+            $fqnName = $attributeAwareNode->getAttribute(Attribute::RESOLVED_NAME);
         } else {
-            $fqnName = $attributeAwareNode->getAttribute('resolved_names')[0] ?? $attributeAwareNode->name;
+            $fqnName = $attributeAwareNode->getAttribute(Attribute::RESOLVED_NAMES)[0] ?? $attributeAwareNode->name;
         }
 
         return ltrim($fqnName, '\\');

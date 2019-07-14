@@ -18,22 +18,11 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareIntersect
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareThisTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute as PhpDocAttribute;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeDecoratorInterface;
 
 final class FqnNamePhpDocNodeDecorator implements PhpDocNodeDecoratorInterface
 {
-    /**
-     * @var string
-     */
-    public const RESOLVED_NAMES = 'resolved_names';
-
-    /**
-     * @var string
-     */
-    private const RESOLVED_NAME = 'resolved_name';
-
     /**
      * @var NamespaceAnalyzer
      */
@@ -68,7 +57,7 @@ final class FqnNamePhpDocNodeDecorator implements PhpDocNodeDecoratorInterface
                     $node
                 );
 
-                $attributeAwarePhpDocNode->setAttribute(self::RESOLVED_NAME, $fqnName);
+                $attributeAwarePhpDocNode->setAttribute(Attribute::RESOLVED_NAME, $fqnName);
 
                 return $attributeAwarePhpDocNode;
             }
@@ -84,11 +73,11 @@ final class FqnNamePhpDocNodeDecorator implements PhpDocNodeDecoratorInterface
 
                 /** @var AttributeAwareVarTagValueNode $attributeAwarePhpDocNode */
                 $resolvedNames = $this->collectResolvedNames($attributeAwarePhpDocNode->type);
-                $attributeAwarePhpDocNode->setAttribute(self::RESOLVED_NAMES, $resolvedNames);
+                $attributeAwarePhpDocNode->setAttribute(Attribute::RESOLVED_NAMES, $resolvedNames);
 
                 /** @var AttributeAwareNodeInterface $attributeAwaretType */
                 $attributeAwaretType = $attributeAwarePhpDocNode->type;
-                $attributeAwaretType->setAttribute(self::RESOLVED_NAMES, $resolvedNames);
+                $attributeAwaretType->setAttribute(Attribute::RESOLVED_NAMES, $resolvedNames);
 
                 return $attributeAwarePhpDocNode;
             }
@@ -122,10 +111,10 @@ final class FqnNamePhpDocNodeDecorator implements PhpDocNodeDecoratorInterface
                 $resolvedNames = array_merge($resolvedNames, $this->collectResolvedNames($subtype));
             }
         } elseif ($typeNode instanceof AttributeAwareArrayTypeNode || $typeNode instanceof AttributeAwareThisTypeNode) {
-            $resolvedNames[] = $typeNode->getAttribute(PhpDocAttribute::TYPE_AS_STRING);
+            $resolvedNames[] = $typeNode->getAttribute(Attribute::TYPE_AS_STRING);
         } elseif ($typeNode instanceof AttributeAwareIdentifierTypeNode) {
-            if ($typeNode->getAttribute(self::RESOLVED_NAME)) {
-                $resolvedNames[] = $typeNode->getAttribute(self::RESOLVED_NAME);
+            if ($typeNode->getAttribute(Attribute::RESOLVED_NAME)) {
+                $resolvedNames[] = $typeNode->getAttribute(Attribute::RESOLVED_NAME);
             } elseif ($typeNode->getAttribute(Attribute::TYPE_AS_STRING)) {
                 $resolvedNames[] = $typeNode->getAttribute(Attribute::TYPE_AS_STRING);
             }
