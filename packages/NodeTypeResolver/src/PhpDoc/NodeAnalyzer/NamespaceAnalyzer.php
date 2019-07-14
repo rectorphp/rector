@@ -53,7 +53,11 @@ final class NamespaceAnalyzer
     {
         foreach ($useNodes as $useNode) {
             $useUseNode = $useNode->uses[0];
-            $nodeUseName = $useUseNode->name->toString();
+            if ($useUseNode->alias) {
+                $nodeUseName = $useUseNode->alias->name;
+            } else {
+                $nodeUseName = $useUseNode->name->toString();
+            }
 
             if (Strings::endsWith($nodeUseName, '\\' . $type)) {
                 return $nodeUseName;

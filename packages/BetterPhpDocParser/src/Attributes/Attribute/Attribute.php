@@ -39,6 +39,11 @@ final class Attribute
     /**
      * @var string
      */
+    public const RESOLVED_NAME = 'resolved_name';
+
+    /**
+     * @var string
+     */
     public const RESOLVED_NAMES = 'resolved_names';
 
     /**

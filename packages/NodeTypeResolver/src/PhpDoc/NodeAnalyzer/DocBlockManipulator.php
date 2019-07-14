@@ -651,7 +651,7 @@ final class DocBlockManipulator
         if ($attributeAwareNode->getAttribute('resolved_name')) {
             $fqnName = $attributeAwareNode->getAttribute('resolved_name');
         } else {
-            $fqnName = $attributeAwareNode->getAttribute('resolved_names')[0] ?? $attributeAwareNode->name;
+            $fqnName = $attributeAwareNode->getAttribute(Attribute::RESOLVED_NAMES)[0] ?? $attributeAwareNode->name;
         }
 
         return ltrim($fqnName, '\\');
