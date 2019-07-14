@@ -29,6 +29,7 @@ final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture5.php.inc',
             __DIR__ . '/Fixture/inject_from_var.php.inc',
             __DIR__ . '/Fixture/inject_from_var2.php.inc',
+            __DIR__ . '/Fixture/inject_from_var3.php.inc',
         ]);
     }
 
