@@ -48,7 +48,7 @@ script:
           composer docs
       fi
 
-    # eat your own dog fodd
+    # Eat your own dog food
     - |
       if [[ $DOG_FOOD == true ]]; then
           bin/rector process src packages --level dead-code --dry-run
