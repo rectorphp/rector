@@ -4,6 +4,8 @@ namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
@@ -13,6 +15,7 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Data\StartEndInfo;
@@ -100,6 +103,25 @@ final class BetterPhpDocParser extends PhpDocParser
 
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
+        // needed for reference support in params, see https://github.com/rectorphp/rector/issues/1734
+        if ($tag === '@param') {
+            try {
+                $tokenIterator->pushSavePoint();
+                $tagValue = $this->parseParamTagValue($tokenIterator);
+                $tokenIterator->dropSavePoint();
+            } catch (ParserException $parserException) {
+                $tokenIterator->rollback();
+                $description = $this->privatesCaller->callPrivateMethod(
+                    $this,
+                    'parseOptionalDescription',
+                    $tokenIterator
+                );
+                $tagValue = new InvalidTagValueNode($description, $parserException);
+            }
+
+            return $tagValue;
+        }
+
         $tagValueNode = parent::parseTagValue($tokenIterator, $tag);
 
         return $this->attributeAwareNodeFactory->createFromNode($tagValueNode);
@@ -162,5 +184,25 @@ final class BetterPhpDocParser extends PhpDocParser
         }
 
         return trim($originalContent);
+    }
+
+    /**
+     * Override of parent private method to allow reference: https://github.com/rectorphp/rector/pull/1735
+     */
+    private function parseParamTagValue(TokenIterator $tokenIterator): ParamTagValueNode
+    {
+        $typeParser = $this->privatesAccessor->getPrivateProperty($this, 'typeParser');
+
+        $type = $typeParser->parse($tokenIterator);
+
+        $isVariadic = $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_VARIADIC);
+
+        // extra value over parent
+        $isReference = $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_REFERENCE);
+
+        $parameterName = $this->privatesCaller->callPrivateMethod($this, 'parseRequiredVariableName', $tokenIterator);
+        $description = $this->privatesCaller->callPrivateMethod($this, 'parseOptionalDescription', $tokenIterator);
+
+        return new AttributeAwareParamTagValueNode($type, $isVariadic, $parameterName, $description, $isReference);
     }
 }

@@ -96,6 +96,10 @@ final class AttributeAwareNodeFactory
             return $this->createFromPhpDocValueNode($node);
         }
 
+        if ($node instanceof TypeNode) {
+            return $this->createFromTypeNode($node);
+        }
+
         throw new ShouldNotHappenException(sprintf('Node "%s" was missed in "%s".', get_class($node), __METHOD__));
     }
 
