@@ -3,7 +3,7 @@
 Rector is a **rec**onstruc**tor** tool - it does **instant upgrades** and **instant refactoring** of your code.
 Why doing it manually if 80% Rector can handle for you?
 
-[![Build Status](https://img.shields.io/travis/rectorphp/rector/master.svg?style=flat-square)](https://travis-ci.org/rectorphp/rector)
+[![Financial Contributors on Open Collective](https://opencollective.com/rectorphp/all/badge.svg?label=financial+contributors)](https://opencollective.com/rectorphp) [![Build Status](https://img.shields.io/travis/rectorphp/rector/master.svg?style=flat-square)](https://travis-ci.org/rectorphp/rector)
 [![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
 
@@ -300,3 +300,33 @@ docker run -v $(pwd):/project rector/rector:latest process /project/app --config
 Do you use Rector to upgrade your code? Share it here:
 
 - [drupal8-rector/drupal8-rector](https://github.com/drupal8-rector/drupal8-rector) by @mxr576
+
+## Contributors
+
+### Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/rectorphp/rector/graphs/contributors"><img src="https://opencollective.com/rectorphp/contributors.svg?width=890&button=false" /></a>
+
+### Financial Contributors
+
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/rectorphp/contribute)]
+
+#### Individuals
+
+<a href="https://opencollective.com/rectorphp"><img src="https://opencollective.com/rectorphp/individuals.svg?width=890"></a>
+
+#### Organizations
+
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/rectorphp/contribute)]
+
+<a href="https://opencollective.com/rectorphp/organization/0/website"><img src="https://opencollective.com/rectorphp/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/rectorphp/organization/1/website"><img src="https://opencollective.com/rectorphp/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/rectorphp/organization/2/website"><img src="https://opencollective.com/rectorphp/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/rectorphp/organization/3/website"><img src="https://opencollective.com/rectorphp/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/rectorphp/organization/4/website"><img src="https://opencollective.com/rectorphp/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/rectorphp/organization/5/website"><img src="https://opencollective.com/rectorphp/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/rectorphp/organization/6/website"><img src="https://opencollective.com/rectorphp/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/rectorphp/organization/7/website"><img src="https://opencollective.com/rectorphp/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/rectorphp/organization/8/website"><img src="https://opencollective.com/rectorphp/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/rectorphp/organization/9/website"><img src="https://opencollective.com/rectorphp/organization/9/avatar.svg"></a>
