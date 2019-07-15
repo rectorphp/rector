@@ -84,7 +84,19 @@ final class BetterStandardPrinter extends Standard
         // reindex positions for printer
         $nodes = array_values($nodes);
 
-        return parent::pArray($nodes, $origNodes, $pos, $indentAdjustment, $parentNodeType, $subNodeName, $fixup);
+        $content = parent::pArray($nodes, $origNodes, $pos, $indentAdjustment, $parentNodeType, $subNodeName, $fixup);
+
+        if ($content === null) {
+            return $content;
+        }
+
+        if (! $this->containsNop($nodes)) {
+            return $content;
+        }
+
+        // remove extra spaces before new Nop_ nodes, @see https://regex101.com/r/iSvroO/1
+        return Strings::replace($content, '#^[ \t]+$#m');
+        return Strings::replace($content, '#^[ \t]+$#m');
     }
 
     /**
@@ -195,5 +207,19 @@ final class BetterStandardPrinter extends Standard
         }
 
         return parent::pStmt_Class($class);
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    private function containsNop(array $nodes): bool
+    {
+        foreach ($nodes as $node) {
+            if ($node instanceof Node\Stmt\Nop) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
