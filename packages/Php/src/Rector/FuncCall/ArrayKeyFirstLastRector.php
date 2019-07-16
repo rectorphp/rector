@@ -5,8 +5,6 @@ namespace Rector\Php\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Expression;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -116,17 +114,6 @@ CODE_SAMPLE
         $this->removeNode($node);
 
         return $node;
-    }
-
-    private function getNextExpression(Node $node): ?Node
-    {
-        /** @var Expression|null $currentExpression */
-        $currentExpression = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
-        if ($currentExpression === null) {
-            return null;
-        }
-
-        return $currentExpression->getAttribute(AttributeKey::NEXT_NODE);
     }
 
     private function shouldSkip(FuncCall $funcCall): bool

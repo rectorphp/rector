@@ -177,6 +177,9 @@ parameters:
         - '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\)\|null, Closure\(mixed, mixed, mixed, mixed\)\: void given#'
         - '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\)\|null, callable given#'
         - '#Method Rector\\NodeTypeResolver\\PerNodeTypeResolver\\NameTypeResolver\:\:resolveFullyQualifiedName\(\) should return string\|null but returns PhpParser\\Node\\Name\|null#'
+        - '#Parameter \#1 \$json of static method Nette\\Utils\\Json\:\:decode\(\) expects string, array<PhpParser\\Node\\Expr\>\|string given#'
+        - '#Parameter \#1 \$stringValue of method Rector\\CodingStyle\\Rector\\String_\\ManualJsonStringToJsonEncodeArrayRector\:\:isJsonString\(\) expects string, array<PhpParser\\Node\\Expr\>\|string given#'
+        - '#In method "Rector\\(.*?)", (.*?) is "array"\. Please provide a (.*?) annotation to further specify the type of the array\. For instance\: (.*?). More info\: http\://bit\.ly/typehintarray#'
 
         # array is callable
         - '#Parameter \#2 \$listener of method Symfony\\Component\\EventDispatcher\\Debug\\TraceableEventDispatcher\:\:getListenerPriority\(\) expects callable\(\)\: mixed, array given#'

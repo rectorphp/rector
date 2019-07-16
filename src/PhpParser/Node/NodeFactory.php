@@ -79,8 +79,12 @@ final class NodeFactory
     {
         $arrayItems = [];
 
-        foreach ($items as $item) {
-            $arrayItems[] = $this->createArrayItem($item);
+        $defaultKey = 0;
+        foreach ($items as $key => $item) {
+            $customKey = $key !== $defaultKey ? $key : null;
+            $arrayItems[] = $this->createArrayItem($item, $customKey);
+
+            ++$defaultKey;
         }
 
         return new Array_($arrayItems);
@@ -213,26 +217,38 @@ final class NodeFactory
 
     /**
      * @param mixed $item
+     * @param string|int|null $key
      */
-    private function createArrayItem($item): ArrayItem
+    private function createArrayItem($item, $key = null): ArrayItem
     {
+        $arrayItem = null;
+
         if ($item instanceof Variable) {
-            return new ArrayItem($item);
-        }
-
-        if ($item instanceof Identifier) {
+            $arrayItem = new ArrayItem($item);
+        } elseif ($item instanceof Identifier) {
             $string = new String_($item->toString());
-            return new ArrayItem($string);
+            $arrayItem = new ArrayItem($string);
+        } elseif (is_scalar($item)) {
+            $itemValue = BuilderHelpers::normalizeValue($item);
+            $arrayItem = new ArrayItem($itemValue);
+        } elseif (is_array($item)) {
+            $arrayItem = new ArrayItem($this->createArray($item));
         }
 
-        if (is_scalar($item)) {
-            return new ArrayItem(BuilderHelpers::normalizeValue($item));
+        if ($arrayItem !== null) {
+            if ($key === null) {
+                return $arrayItem;
+            }
+
+            $arrayItem->key = BuilderHelpers::normalizeValue($key);
+
+            return $arrayItem;
         }
 
         throw new NotImplementedException(sprintf(
             'Not implemented yet. Go to "%s()" and add check for "%s" node.',
             __METHOD__,
-            get_class($item)
+            is_object($item) ? get_class($item) : $item
         ));
     }
 

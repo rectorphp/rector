@@ -34,6 +34,11 @@ final class NodeAddingCommander implements CommanderInterface
     private $nodesToAdd = [];
 
     /**
+     * @var Stmt[][]
+     */
+    private $nodesToAddBefore = [];
+
+    /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
@@ -43,11 +48,19 @@ final class NodeAddingCommander implements CommanderInterface
         $this->betterNodeFinder = $betterNodeFinder;
     }
 
-    public function addNodeAfterNode(Node $node, Node $positionNode): void
+    public function addNodeBeforeNode(Node $addedNode, Node $positionNode): void
     {
         $position = $this->resolveNearestExpressionPosition($positionNode);
 
-        $this->nodesToAdd[$position][] = $this->wrapToExpression($node);
+        // dump($this->wrapToExpression($addedNode));
+        $this->nodesToAddBefore[$position][] = $this->wrapToExpression($addedNode);
+    }
+
+    public function addNodeAfterNode(Node $addedNode, Node $positionNode): void
+    {
+        $position = $this->resolveNearestExpressionPosition($positionNode);
+
+        $this->nodesToAdd[$position][] = $this->wrapToExpression($addedNode);
     }
 
     /**
@@ -60,14 +73,14 @@ final class NodeAddingCommander implements CommanderInterface
         $nodeTraverser->addVisitor($this->createNodeVisitor());
 
         // new nodes to remove are always per traverse
-        $this->nodesToAdd = [];
+        $this->reset();
 
         return $nodeTraverser->traverse($nodes);
     }
 
     public function isActive(): bool
     {
-        return count($this->nodesToAdd) > 0;
+        return count($this->nodesToAdd) > 0 || count($this->nodesToAddBefore) > 0;
     }
 
     private function resolveNearestExpressionPosition(Node $node): string
@@ -100,18 +113,25 @@ final class NodeAddingCommander implements CommanderInterface
 
     private function createNodeVisitor(): NodeVisitor
     {
-        return new class($this->nodesToAdd) extends NodeVisitorAbstract {
+        return new class($this->nodesToAdd, $this->nodesToAddBefore) extends NodeVisitorAbstract {
             /**
              * @var Stmt[][]
              */
             private $nodesToAdd = [];
 
             /**
-             * @param Stmt[][] $nodesToAdd
+             * @var Stmt[][]
              */
-            public function __construct(array $nodesToAdd)
+            private $nodesToAddBefore = [];
+
+            /**
+             * @param Stmt[][] $nodesToAdd
+             * @param Stmt[][] $nodesToAddBefore
+             */
+            public function __construct(array $nodesToAdd, array $nodesToAddBefore)
             {
                 $this->nodesToAdd = $nodesToAdd;
+                $this->nodesToAddBefore = $nodesToAddBefore;
             }
 
             /**
@@ -121,16 +141,30 @@ final class NodeAddingCommander implements CommanderInterface
             {
                 $position = spl_object_hash($node);
 
-                if (! isset($this->nodesToAdd[$position])) {
-                    return null;
+                // add node after
+                if (isset($this->nodesToAdd[$position])) {
+                    $nodes = array_merge([$node], $this->nodesToAdd[$position]);
+                    unset($this->nodesToAdd[$position]);
+                    return $nodes;
                 }
 
-                $nodes = array_merge([$node], $this->nodesToAdd[$position]);
+                // add node before
+                if (isset($this->nodesToAddBefore[$position])) {
+                    $nodes = array_merge($this->nodesToAddBefore[$position], [$node]);
 
-                unset($this->nodesToAdd[$position]);
+                    unset($this->nodesToAddBefore[$position]);
 
-                return $nodes;
+                    return $nodes;
+                }
+
+                return null;
             }
         };
+    }
+
+    private function reset(): void
+    {
+        $this->nodesToAdd = [];
+        $this->nodesToAddBefore = [];
     }
 }
