@@ -37,10 +37,12 @@ trait NodeFactoryTrait
     }
 
     /**
-     * @param Arg[] $args
+     * @param Expr[]|Arg[] $args
      */
     protected function createStaticCall(string $class, string $method, array $args = []): StaticCall
     {
+        $args = $this->wrapToArg($args);
+
         if (in_array($class, ['self', 'parent', 'static'], true)) {
             $class = new Name($class);
         } else {
@@ -128,5 +130,21 @@ trait NodeFactoryTrait
     protected function createPropertyFetch($variable, string $property): PropertyFetch
     {
         return $this->nodeFactory->createPropertyFetch($variable, $property);
+    }
+
+    /**
+     * @param Expr[]|Arg[] $args
+     * @return Arg[]
+     */
+    private function wrapToArg(array $args): array
+    {
+        foreach ($args as $key => $arg) {
+            if ($arg instanceof Arg) {
+                continue;
+            }
+
+            $args[$key] = new Arg($arg);
+        }
+        return $args;
     }
 }

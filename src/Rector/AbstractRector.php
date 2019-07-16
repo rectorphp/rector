@@ -147,6 +147,16 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->removedAndAddedFilesCollector->addFileWithContent($filePath, $content);
     }
 
+    protected function getNextExpression(Node $node): ?Node
+    {
+        $currentExpression = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
+        if (! $currentExpression instanceof Expression) {
+            return null;
+        }
+
+        return $currentExpression->getAttribute(AttributeKey::NEXT_NODE);
+    }
+
     /**
      * @param Expr[]|null[] $nodes
      * @param mixed[] $expectedValues
