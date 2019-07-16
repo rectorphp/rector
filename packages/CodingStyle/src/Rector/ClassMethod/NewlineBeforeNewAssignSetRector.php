@@ -4,9 +4,12 @@ namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -17,6 +20,16 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class NewlineBeforeNewAssignSetRector extends AbstractRector
 {
+    /**
+     * @var string|null
+     */
+    private $previousStmtVariableName;
+
+    /**
+     * @var string|null
+     */
+    private $previousPreviousStmtVariableName;
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Add extra space before new assign set', [
@@ -56,15 +69,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Node\Stmt\ClassMethod::class, Node\Stmt\Function_::class, Node\Expr\Closure::class];
+        return [ClassMethod::class, Function_::class, Closure::class];
     }
 
     /**
-     * @param Node\Stmt\ClassMethod|Node\Stmt\Function_|Node\Expr\Closure $node
+     * @param ClassMethod|Function_|Closure $node
      */
     public function refactor(Node $node): ?Node
     {
-        $previousStmtVariableName = null;
+        $this->reset();
 
         if ($node->stmts === null) {
             return null;
@@ -78,25 +91,55 @@ CODE_SAMPLE
             }
 
             if ($stmt instanceof Assign || $stmt instanceof MethodCall) {
-                if ($stmt->var instanceof Variable) {
-                    $currentStmtVariableName = $this->getName($stmt->var);
+                if ($this->shouldSkipLeftVariable($stmt)) {
+                    continue;
                 }
+
+                $currentStmtVariableName = $this->getName($stmt->var);
             }
 
-            if ($this->isNewVariableThanBefore($previousStmtVariableName, $currentStmtVariableName)) {
+            if ($this->shouldAddEmptyLine($currentStmtVariableName, $node, $key)) {
                 // insert newline before
                 array_splice($node->stmts, $key, 0, [new Nop()]);
             }
 
-            $previousStmtVariableName = $currentStmtVariableName;
+            $this->previousPreviousStmtVariableName = $this->previousStmtVariableName;
+            $this->previousStmtVariableName = $currentStmtVariableName;
         }
 
         return $node;
     }
 
-    private function isNewVariableThanBefore(?string $previousStmtVariableName, ?string $currentStmtVariableName): bool
+    private function reset(): void
     {
-        if ($previousStmtVariableName === null) {
+        $this->previousStmtVariableName = null;
+        $this->previousPreviousStmtVariableName = null;
+    }
+
+    /**
+     * @param ClassMethod|Function_|Closure $node
+     */
+    private function shouldAddEmptyLine(?string $currentStmtVariableName, Node $node, int $key): bool
+    {
+        if (! $this->isNewVariableThanBefore($currentStmtVariableName)) {
+            return false;
+        }
+
+        // this is already empty line before
+        if ($this->isPreceededByEmptyLine($node, $key)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function isNewVariableThanBefore(?string $currentStmtVariableName): bool
+    {
+        if ($this->previousPreviousStmtVariableName === null) {
+            return false;
+        }
+
+        if ($this->previousStmtVariableName === null) {
             return false;
         }
 
@@ -104,6 +147,38 @@ CODE_SAMPLE
             return false;
         }
 
-        return $previousStmtVariableName !== $currentStmtVariableName;
+        if ($this->previousStmtVariableName !== $this->previousPreviousStmtVariableName) {
+            return false;
+        }
+
+        return $this->previousStmtVariableName !== $currentStmtVariableName;
+    }
+
+    /**
+     * @param ClassMethod|Function_|Closure $node
+     */
+    private function isPreceededByEmptyLine(Node $node, int $key): bool
+    {
+        if ($node->stmts === null) {
+            return false;
+        }
+
+        $previousNode = $node->stmts[$key - 1];
+        $currentNode = $node->stmts[$key];
+
+        return abs($currentNode->getLine() - $previousNode->getLine()) >= 2;
+    }
+
+    /**
+     * @param Assign|MethodCall $node
+     */
+    private function shouldSkipLeftVariable(Node $node): bool
+    {
+        if (! $node->var instanceof Variable) {
+            return true;
+        }
+
+        // local method call
+        return $this->isName($node->var, 'this');
     }
 }
