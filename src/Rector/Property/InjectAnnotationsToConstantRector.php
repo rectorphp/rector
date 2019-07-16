@@ -252,6 +252,7 @@ CODE_SAMPLE
     private function getConstantNode(Class_ $classNode): Node\Const_
     {
         $constantValue = $classNode->extends === null ? $this->getArray() : $this->getBinaryPlusOperation();
+
         return new Node\Const_($this->constantNameThatContainsDependencyMap, $constantValue);
     }
 
@@ -274,11 +275,10 @@ CODE_SAMPLE
     {
         $key = new Node\Scalar\String_($propertyName);
         $absoluteFullyQualifiedClassName = '\\' . $className;
-        $value = new Node\Expr\ClassConstFetch(new Node\Name(
-                            $absoluteFullyQualifiedClassName
-                        ), new Node\Identifier(
-                            'class'
-                        ));
+        $value = new Node\Expr\ClassConstFetch(
+            new Node\Name($absoluteFullyQualifiedClassName),
+            new Node\Identifier('class')
+        );
 
         return new Node\Expr\ArrayItem($value, $key);
     }
