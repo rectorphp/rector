@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeToStringResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -31,9 +31,9 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
     private const LARAVEL_COLLECTION_CLASS = 'Illuminate\Support\Collection';
 
     /**
-     * @var TypeToStringResolver
+     * @var StaticTypeToStringResolver
      */
-    private $typeToStringResolver;
+    private $staticTypeToStringResolver;
 
     /**
      * @var DocBlockManipulator
@@ -41,10 +41,10 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
     private $docBlockManipulator;
 
     public function __construct(
-        TypeToStringResolver $typeToStringResolver,
+        StaticTypeToStringResolver $staticTypeToStringResolver,
         DocBlockManipulator $docBlockManipulator
     ) {
-        $this->typeToStringResolver = $typeToStringResolver;
+        $this->staticTypeToStringResolver = $staticTypeToStringResolver;
         $this->docBlockManipulator = $docBlockManipulator;
     }
 
@@ -232,7 +232,7 @@ CODE_SAMPLE
         if ($parentNode instanceof Assign) {
             $assignedValueStaticType = $this->getStaticType($parentNode->expr);
             if ($assignedValueStaticType) {
-                return $this->typeToStringResolver->resolve($assignedValueStaticType);
+                return $this->staticTypeToStringResolver->resolveAnyType($assignedValueStaticType);
             }
         }
 

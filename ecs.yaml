@@ -102,6 +102,7 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # tough logic
+            - 'packages/NodeTypeResolver/src/PHPStan/Type/StaticTypeAnalyzer.php'
             - 'src/NodeContainer/ParsedNodesByType.php'
             - 'packages/PHPStan/src/Rector/Node/RemoveNonExistingVarAnnotationRector.php'
             - 'packages/Architecture/src/Rector/Class_/ConstructorInjectionToActionInjectionRector.php'

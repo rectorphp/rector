@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInte
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeToStringResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
@@ -24,9 +24,9 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
     private $docBlockManipulator;
 
     /**
-     * @var TypeToStringResolver
+     * @var StaticTypeToStringResolver
      */
-    private $typeToStringResolver;
+    private $staticTypeToStringResolver;
 
     /**
      * @var NameResolver
@@ -40,11 +40,11 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
 
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
-        TypeToStringResolver $typeToStringResolver,
+        StaticTypeToStringResolver $staticTypeToStringResolver,
         NameResolver $nameResolver
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->typeToStringResolver = $typeToStringResolver;
+        $this->staticTypeToStringResolver = $staticTypeToStringResolver;
         $this->nameResolver = $nameResolver;
     }
 
@@ -143,6 +143,6 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
             return [$nodeScope->getClassReflection()->getName()];
         }
 
-        return $this->typeToStringResolver->resolve($type);
+        return $this->staticTypeToStringResolver->resolveAnyType($type);
     }
 }

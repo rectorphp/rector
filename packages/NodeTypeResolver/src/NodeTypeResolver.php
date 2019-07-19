@@ -42,7 +42,7 @@ use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeToStringResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeToStringResolver as TypeToStringResolver;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
@@ -53,11 +53,6 @@ final class NodeTypeResolver
      * @var PerNodeTypeResolverInterface[]
      */
     private $perNodeTypeResolvers = [];
-
-    /**
-     * @var TypeToStringResolver
-     */
-    private $typeToStringResolver;
 
     /**
      * @var Broker
@@ -83,6 +78,11 @@ final class NodeTypeResolver
      * @var StaticTypeToStringResolver
      */
     private $staticTypeToStringResolver;
+
+    /**
+     * @var TypeToStringResolver
+     */
+    private $typeToStringResolver;
 
     /**
      * @param PerNodeTypeResolverInterface[] $perNodeTypeResolvers
@@ -315,7 +315,7 @@ final class NodeTypeResolver
         if ($this->isArrayType($node)) {
             $arrayType = $this->getNodeStaticType($node);
             if ($arrayType instanceof ArrayType) {
-                $itemTypes = $this->staticTypeToStringResolver->resolve($arrayType->getItemType());
+                $itemTypes = $this->staticTypeToStringResolver->resolveObjectType($arrayType->getItemType());
                 foreach ($itemTypes as $key => $itemType) {
                     $itemTypes[$key] = $itemType . '[]';
                 }
@@ -334,7 +334,7 @@ final class NodeTypeResolver
 
         $nodeStaticType = $this->getNodeStaticType($node);
 
-        return $this->staticTypeToStringResolver->resolve($nodeStaticType);
+        return $this->staticTypeToStringResolver->resolveObjectType($nodeStaticType);
     }
 
     public function isNullableObjectType(Node $node): bool
@@ -424,7 +424,7 @@ final class NodeTypeResolver
 
         $type = $nodeScope->getType($node);
 
-        $typesInStrings = $this->typeToStringResolver->resolve($type);
+        $typesInStrings = $this->typeToStringResolver->resolveAnyType($type);
 
         // hot fix for phpstan not resolving chain method calls
         if ($node instanceof MethodCall && ! $typesInStrings) {

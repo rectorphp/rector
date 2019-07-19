@@ -183,7 +183,7 @@ CODE_SAMPLE
         return array_uintersect(
             $parameters1,
             $parameters2,
-            function (Param $a, Param $b) {
+            function (Param $a, Param $b): int {
                 return $this->betterStandardPrinter->areNodesEqual($a, $b) ? 0 : 1;
             }
         );

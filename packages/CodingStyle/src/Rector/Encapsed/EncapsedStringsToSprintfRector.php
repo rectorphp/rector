@@ -3,7 +3,13 @@
 namespace Rector\CodingStyle\Rector\Encapsed;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Encapsed;
+use PhpParser\Node\Scalar\EncapsedStringPart;
+use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -57,19 +63,19 @@ CODE_SAMPLE
         $arguments = [];
 
         foreach ($node->parts as $part) {
-            if ($part instanceof Node\Scalar\EncapsedStringPart) {
+            if ($part instanceof EncapsedStringPart) {
                 $string .= $part->value;
                 continue;
             }
 
-            if ($part instanceof Node\Expr\Variable) {
+            if ($part instanceof Variable) {
                 $string .= '%s';
-                $arguments[] = new Node\Arg($part);
+                $arguments[] = new Arg($part);
             }
         }
 
-        $arguments = array_merge([new Node\Arg(new Node\Scalar\String_($string))], $arguments);
+        $arguments = array_merge([new Arg(new String_($string))], $arguments);
 
-        return new Node\Expr\FuncCall(new Node\Name('sprintf'), $arguments);
+        return new FuncCall(new Name('sprintf'), $arguments);
     }
 }

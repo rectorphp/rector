@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
@@ -624,11 +625,11 @@ final class ParsedNodesByType
             return null;
         }
 
-        if (! $array->items[1]->value instanceof Node\Scalar\String_) {
+        if (! $array->items[1]->value instanceof String_) {
             return null;
         }
 
-        /** @var Node\Scalar\String_ $string */
+        /** @var String_ $string */
         $string = $array->items[1]->value;
 
         $methodName = $string->value;

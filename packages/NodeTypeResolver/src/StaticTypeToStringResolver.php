@@ -36,7 +36,7 @@ final class StaticTypeToStringResolver
             NullType::class => ['null'],
             // more complex callables
             function (ArrayType $arrayType): array {
-                $types = $this->resolve($arrayType->getItemType());
+                $types = $this->resolveObjectType($arrayType->getItemType());
                 foreach ($types as $key => $type) {
                     $types[$key] = $type . '[]';
                 }
@@ -46,7 +46,7 @@ final class StaticTypeToStringResolver
             function (UnionType $unionType): array {
                 $types = [];
                 foreach ($unionType->getTypes() as $singleStaticType) {
-                    $types = array_merge($types, $this->resolve($singleStaticType));
+                    $types = array_merge($types, $this->resolveObjectType($singleStaticType));
                 }
 
                 return $types;
@@ -63,7 +63,7 @@ final class StaticTypeToStringResolver
     /**
      * @return string[]
      */
-    public function resolve(?Type $staticType): array
+    public function resolveObjectType(?Type $staticType): array
     {
         if ($staticType === null) {
             return [];
