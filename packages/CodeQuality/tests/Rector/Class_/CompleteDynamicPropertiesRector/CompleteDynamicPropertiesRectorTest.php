@@ -18,6 +18,7 @@ final class CompleteDynamicPropertiesRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/skip_magic_parent.php.inc',
             __DIR__ . '/Fixture/skip_magic.php.inc',
             __DIR__ . '/Fixture/skip_laravel_closure_binding.php.inc',
+            __DIR__ . '/Fixture/skip_dynamic_properties.php.inc',
         ]);
     }
 
