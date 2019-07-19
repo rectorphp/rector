@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -185,8 +186,15 @@ CODE_SAMPLE
                 return null;
             }
 
-            /** @var string $propertyName */
+            if ($node->name instanceof Variable) {
+                return null;
+            }
+
             $propertyName = $this->getName($node->name);
+            if ($propertyName === null) {
+                return null;
+            }
+
             $propertyFetchType = $this->resolvePropertyFetchType($node);
 
             $fetchedLocalPropertyNameToTypes[$propertyName][] = $propertyFetchType;
