@@ -53,6 +53,11 @@ CODE_SAMPLE
             return null;
         }
 
+        // Skip private as they lock creating new instances via `new ClassName()`
+        if ($node->isPrivate()) {
+            return null;
+        }
+
         $this->removeNode($node);
 
         return null;
