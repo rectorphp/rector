@@ -21,3 +21,5 @@ Check out all the tiers - higher ones include additional goodies like placing th
 - Martin Čermák
 - Jakob Oberhummer
 - Tomáš Pilař
+- Stefan Melbinger
+- Attila Fulop

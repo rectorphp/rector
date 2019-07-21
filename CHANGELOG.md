@@ -9,6 +9,92 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+## [v0.5.8] - 2019-07-21
+
+### Added
+
+- [#1691] [Architecture] Add `ConstructorInjectionToActionInjectionRector`
+- [#1689] [CodeQuality] Add `is_a` with string true
+- [#1754] [CodeQuality] Add `RemoveAlwaysTrueConditionSetInConstructorRector`
+- [#1690] [CodeQuality] Add `StrlenZeroToIdenticalEmptyStringRector`
+- [#1722] [CodingStyle] Add `EncapsedStringsToSprintfRector`
+- [#1717] [DeadCode] Add static, self and FQN type to `RemoveUnusedPrivateMethodRector`
+- [#1671] [Doctrine] Add registry to EM
+- [#1693] [Doctrine] Add `RemoveRepositoryFromEntityAnnotationRector`
+- [#1709] [FuncCall] Don't add `$result` to `parse_str` if second parameter is already set, Thanks to [@ravanscafi]
+- [#1720] [Generic] Add `ServiceGetterToConstructorInjectionRector`
+- [#1676] [PHP] Add scope limitation to `ArgumentAdderRector` for 3party non-existing params
+- [#1695] [PHPStan] Add `RemoveNonExistingVarAnnotationRector`
+- [#1696] [PHPUnit][Symfony] Add `AddMessageToEqualsResponseCodeRector`
+- [#1744] add reference support to `ParamTypeDeclarationRector`
+- [#1694] Add `rector.yaml` to `.dockerignore`, Thanks to [@aboks]
+- [#1731] Add failing test to demonstrate difference in import order, Thanks to [@holtkamp]
+- [#1674] Add Polyfil function support
+- [#1681] Add `parent::__construct()` to command dependencies
+
+### Changed
+
+- [#1748] [CodingStyle] Improve `NewlineBeforeNewAssignSetRector`
+- [#1697] [DeadCode] Allow static constant call on `RemoveUnusedPrivateConstantRector`, Thanks to [@ravanscafi]
+- [#1719] Resolve anonymous class return type to object
+
+### Fixed
+
+- [#1752] [CodeQuality] Fix `CompleteDynamicPropertiesRector` for dynamic property fetch
+- [#1718] [DeadCode] Fix too deep nesting in dead private property
+- [#1710] [MethodCall] Fix multilevel array subsets, Thanks to [@ravanscafi]
+- [#1715] [SOLID] Fix `PrivatizeLocalClassConstantRector` for in-class use
+- [#1698] Fix `NameTypeResolver` resolveFullyQualifiedName return type, Thanks to [@ravanscafi]
+- [#1684] fix new phpstan reports
+- [#1702] Fixed some issues for `RemoveZeroAndOneBinaryRector`, Thanks to [@jeroensmit]
+- [#1703] Fixed unintended removal of properties when used inside a trait, Thanks to [@jeroensmit]
+- [#1704] Fixed failing unit test when `sys_get_temp_dir()` != '/tmp', Thanks to [@jeroensmit]
+- [#1738] Fix InjectAnnotationClassRector with aliases
+- [#1705] Fixed wrong naming of docs script in composer.json, Thanks to [@jeroensmit]
+- [#1712] Fix tests according to review and a few typos, Thanks to [@ravanscafi]
+- [#1673] Fix `InjectAnnotationClassRector` for `@var` case
+- [#1677] [Bugfix] `IsCountableRector` & `IsIterableRector` should first check method availability, Thanks to [@stloyd]
+- [#1686] [Bugfix] PHPDoc type-hint `resource` should not be used as PHP type-hint, Thanks to [@stloyd]
+- [#1739] [CodeStyle] Newline before assign
+- [#1716] [DeadCode] Keep array method call in `RemoveUnusedPrivateMethodRector`
+- [#1753] [DeadCode] Rector `RemoveDeadConstructorRector` should skip `private` method, Thanks to [@stloyd]
+- [#1687] [Symfony] Set few default common service names for Symfony App Analyzer, Thanks to [@stloyd]
+- [#1675] [Symfony] Make set symfony42 refactor get(...) in former container aware commands
+- [#1666] Skip session in `MultipleServiceGetToSetUpMethodRector`
+- [#1757] make SymfonyContainer factory configurable with "kernel_environment" parameter in rector.yaml
+- [#1707] Don't mess with lines between docblock comment and var type., Thanks to [@ravanscafi]
+- [#1699] Update composer scripts, Thanks to [@ravanscafi]
+- [#1755] make interface description PHPStorm compatible, so it will not break abstract method complete
+- [#1711] Do not mark injected properties as private when moved to constructor, Thanks to [@holtkamp]
+- [#1714] Cleanup
+- [#1721] skip `Illuminate\Support\Collection` magic for `CompleteDynamicPropertiesRector`
+- [#1725] Empty compacts are forbidden, keep signature by replacing with empty array, Thanks to [@ravanscafi]
+- [#1728] `is_real()` is deprecated instead of `is_float()`, Thanks to [@holtkamp]
+- [#1735] Consider reference symbol in docblock for param type declaration rector, Thanks to [@tigitz]
+- [#1736] Colorify neon files, Thanks to [@szepeviktor]
+- [#1737] Typo in Travis config, Thanks to [@szepeviktor]
+
+### Removed
+
+- [#1679] [MakeCommandLazyRector] Remove duplicated check, Thanks to [@stloyd]
+- [#1701] Make sure parameter is not removed when a child class does use the parameter, Thanks to [@jeroensmit]
+- [#1723] Do not remove args when replacing to static calls, Thanks to [@ravanscafi]
+- [#1713] Remove `--with-style` in favour of mentioning ECS, Thanks to [@stloyd]
+
+## [v0.5.7] - 2019-06-28
+
+### Fixed
+
+- [#1661] Minor phpdoc fixes
+
+## [v0.5.6] - 2019-06-28
+
+### Removed
+
+- [#1659] remove deprecated singly implemented autowire compiler pass
+
+<!-- dumped content end -->
+
 <!-- dumped content start -->
 
 ## [v0.5.6] - 2019-06-28
@@ -457,9 +543,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#1603]: https://github.com/rectorphp/rector/pull/1603
 [#1602]: https://github.com/rectorphp/rector/pull/1602
 [#1601]: https://github.com/rectorphp/rector/pull/1601
-[#1600]: https://github.com/rectorphp/rector/pull/1600
 [#1599]: https://github.com/rectorphp/rector/pull/1599
-[#1597]: https://github.com/rectorphp/rector/pull/1597
 [#1596]: https://github.com/rectorphp/rector/pull/1596
 [#1590]: https://github.com/rectorphp/rector/pull/1590
 [#1589]: https://github.com/rectorphp/rector/pull/1589
@@ -481,3 +565,72 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@funivan]: https://github.com/funivan
 [v0.5.5]: https://github.com/rectorphp/rector/compare/v0.5.4...v0.5.5
 [v0.5.4]: https://github.com/rectorphp/rector/compare/v0.5.3...v0.5.4
+[#1757]: https://github.com/rectorphp/rector/pull/1757
+[#1755]: https://github.com/rectorphp/rector/pull/1755
+[#1754]: https://github.com/rectorphp/rector/pull/1754
+[#1753]: https://github.com/rectorphp/rector/pull/1753
+[#1752]: https://github.com/rectorphp/rector/pull/1752
+[#1748]: https://github.com/rectorphp/rector/pull/1748
+[#1744]: https://github.com/rectorphp/rector/pull/1744
+[#1739]: https://github.com/rectorphp/rector/pull/1739
+[#1738]: https://github.com/rectorphp/rector/pull/1738
+[#1737]: https://github.com/rectorphp/rector/pull/1737
+[#1736]: https://github.com/rectorphp/rector/pull/1736
+[#1735]: https://github.com/rectorphp/rector/pull/1735
+[#1731]: https://github.com/rectorphp/rector/pull/1731
+[#1728]: https://github.com/rectorphp/rector/pull/1728
+[#1725]: https://github.com/rectorphp/rector/pull/1725
+[#1723]: https://github.com/rectorphp/rector/pull/1723
+[#1722]: https://github.com/rectorphp/rector/pull/1722
+[#1721]: https://github.com/rectorphp/rector/pull/1721
+[#1720]: https://github.com/rectorphp/rector/pull/1720
+[#1719]: https://github.com/rectorphp/rector/pull/1719
+[#1718]: https://github.com/rectorphp/rector/pull/1718
+[#1717]: https://github.com/rectorphp/rector/pull/1717
+[#1716]: https://github.com/rectorphp/rector/pull/1716
+[#1715]: https://github.com/rectorphp/rector/pull/1715
+[#1714]: https://github.com/rectorphp/rector/pull/1714
+[#1713]: https://github.com/rectorphp/rector/pull/1713
+[#1712]: https://github.com/rectorphp/rector/pull/1712
+[#1711]: https://github.com/rectorphp/rector/pull/1711
+[#1710]: https://github.com/rectorphp/rector/pull/1710
+[#1709]: https://github.com/rectorphp/rector/pull/1709
+[#1707]: https://github.com/rectorphp/rector/pull/1707
+[#1705]: https://github.com/rectorphp/rector/pull/1705
+[#1704]: https://github.com/rectorphp/rector/pull/1704
+[#1703]: https://github.com/rectorphp/rector/pull/1703
+[#1702]: https://github.com/rectorphp/rector/pull/1702
+[#1701]: https://github.com/rectorphp/rector/pull/1701
+[#1699]: https://github.com/rectorphp/rector/pull/1699
+[#1698]: https://github.com/rectorphp/rector/pull/1698
+[#1697]: https://github.com/rectorphp/rector/pull/1697
+[#1696]: https://github.com/rectorphp/rector/pull/1696
+[#1695]: https://github.com/rectorphp/rector/pull/1695
+[#1694]: https://github.com/rectorphp/rector/pull/1694
+[#1693]: https://github.com/rectorphp/rector/pull/1693
+[#1691]: https://github.com/rectorphp/rector/pull/1691
+[#1690]: https://github.com/rectorphp/rector/pull/1690
+[#1689]: https://github.com/rectorphp/rector/pull/1689
+[#1687]: https://github.com/rectorphp/rector/pull/1687
+[#1686]: https://github.com/rectorphp/rector/pull/1686
+[#1684]: https://github.com/rectorphp/rector/pull/1684
+[#1681]: https://github.com/rectorphp/rector/pull/1681
+[#1679]: https://github.com/rectorphp/rector/pull/1679
+[#1677]: https://github.com/rectorphp/rector/pull/1677
+[#1676]: https://github.com/rectorphp/rector/pull/1676
+[#1675]: https://github.com/rectorphp/rector/pull/1675
+[#1674]: https://github.com/rectorphp/rector/pull/1674
+[#1673]: https://github.com/rectorphp/rector/pull/1673
+[#1671]: https://github.com/rectorphp/rector/pull/1671
+[#1666]: https://github.com/rectorphp/rector/pull/1666
+[#1661]: https://github.com/rectorphp/rector/pull/1661
+[v0.5.8]: https://github.com/rectorphp/rector/compare/v0.5.7...v0.5.8
+[v0.5.7]: https://github.com/rectorphp/rector/compare/v0.5.6...v0.5.7
+[@tigitz]: https://github.com/tigitz
+[@szepeviktor]: https://github.com/szepeviktor
+[@stloyd]: https://github.com/stloyd
+[@ravanscafi]: https://github.com/ravanscafi
+[@jeroensmit]: https://github.com/jeroensmit
+[@holtkamp]: https://github.com/holtkamp
+[@aboks]: https://github.com/aboks
+[v0.5.6]: https://github.com/rectorphp/rector/compare/v0.5.5...v0.5.6
