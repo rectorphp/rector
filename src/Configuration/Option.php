@@ -27,12 +27,12 @@ final class Option
     /**
      * @var string
      */
-    public const OPTION_LEVEL = 'level';
+    public const KERNEL_CLASS_PARAMETER = 'kernel_class';
 
     /**
      * @var string
      */
-    public const KERNEL_CLASS_PARAMETER = 'kernel_class';
+    public const KERNEL_ENVIRONMENT_PARAMETER = 'kernel_environment';
 
     /**
      * @var string

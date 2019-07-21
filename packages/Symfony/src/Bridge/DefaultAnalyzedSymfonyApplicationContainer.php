@@ -5,7 +5,7 @@ namespace Rector\Symfony\Bridge;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Configuration\Option;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\Symfony\Bridge\DependencyInjection\ContainerFactory;
+use Rector\Symfony\Bridge\DependencyInjection\SymfonyContainerFactory;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -13,6 +13,21 @@ use Throwable;
 
 final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplicationContainerInterface
 {
+    /**
+     * @var SymfonyKernelParameterGuard
+     */
+    private $symfonyKernelParameterGuard;
+
+    /**
+     * @var SymfonyContainerFactory
+     */
+    private $symfonyContainerFactory;
+
+    /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
     /**
      * @var string[]
      */
@@ -22,34 +37,14 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
         'doctrine.orm.default_entity_manager' => 'Doctrine\ORM\EntityManagerInterface',
     ];
 
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
-    /**
-     * @var SymfonyKernelParameterGuard
-     */
-    private $symfonyKernelParameterGuard;
-
-    /**
-     * @var ContainerFactory
-     */
-    private $containerFactory;
-
-    /**
-     * @param array<string, string> $commonNamesToTypes
-     */
     public function __construct(
-        ParameterProvider $parameterProvider,
         SymfonyKernelParameterGuard $symfonyKernelParameterGuard,
-        ContainerFactory $containerFactory,
-        array $commonNamesToTypes = []
+        SymfonyContainerFactory $symfonyContainerFactory,
+        ParameterProvider $parameterProvider
     ) {
-        $this->parameterProvider = $parameterProvider;
         $this->symfonyKernelParameterGuard = $symfonyKernelParameterGuard;
-        $this->containerFactory = $containerFactory;
-        $this->commonNamesToTypes = array_merge($this->commonNamesToTypes, $commonNamesToTypes);
+        $this->symfonyContainerFactory = $symfonyContainerFactory;
+        $this->parameterProvider = $parameterProvider;
     }
 
     public function getTypeForName(string $name): ?string
@@ -99,19 +94,26 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
     }
 
     /**
+     * @return object
+     */
+    public function getService(string $name)
+    {
+        $container = $this->getContainer($name);
+
+        return $container->get($name);
+    }
+
+    /**
      * @return ContainerBuilder
      */
     private function getContainer(string $requestServiceName): Container
     {
-        $kernelClass = $this->parameterProvider->provideParameter(Option::KERNEL_CLASS_PARAMETER);
-        if ($kernelClass === null) {
-            $kernelClass = $this->getDefaultKernelClass();
-        }
+        $kernelClass = $this->resolveKernelClass();
 
         $this->symfonyKernelParameterGuard->ensureKernelClassIsValid($kernelClass, $requestServiceName);
 
         /** @var string $kernelClass */
-        return $this->containerFactory->createFromKernelClass($kernelClass);
+        return $this->symfonyContainerFactory->createFromKernelClass($kernelClass);
     }
 
     private function getDefaultKernelClass(): ?string
@@ -125,5 +127,15 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
         }
 
         return null;
+    }
+
+    private function resolveKernelClass(): ?string
+    {
+        $kernelClassParameter = $this->parameterProvider->provideParameter(Option::KERNEL_CLASS_PARAMETER);
+        if ($kernelClassParameter) {
+            return $kernelClassParameter;
+        }
+
+        return $this->getDefaultKernelClass();
     }
 }
