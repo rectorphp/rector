@@ -1,3 +1,9 @@
+parameters:
+    # explicit environment of analyzed application
+    kernel_environment: ''
+    # explicit  kernel class of analyzed application
+    kernel_class: ''
+
 services:
     _defaults:
         public: true

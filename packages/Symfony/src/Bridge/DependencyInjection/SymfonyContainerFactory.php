@@ -2,18 +2,37 @@
 
 namespace Rector\Symfony\Bridge\DependencyInjection;
 
+use Rector\Configuration\Option;
+use Rector\Exception\ShouldNotHappenException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use Throwable;
 
-final class ContainerFactory
+final class SymfonyContainerFactory
 {
+    /**
+     * @var string
+     */
+    private const FALLBACK_ENVIRONMENT = 'dev';
+
     /**
      * @var Container[]
      */
     private $containersByKernelClass = [];
+
+    /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
+    public function __construct(ParameterProvider $parameterProvider)
+    {
+        $this->parameterProvider = $parameterProvider;
+    }
 
     public function createFromKernelClass(string $kernelClass): Container
     {
@@ -21,15 +40,34 @@ final class ContainerFactory
             return $this->containersByKernelClass[$kernelClass];
         }
 
-        return $this->containersByKernelClass[$kernelClass] = $this->createContainerFromKernelClass($kernelClass);
+        $environment = $this->resolveEnvironment();
+
+        try {
+            $debug = (bool) ($_ENV['APP_DEBUG'] ?? $_SERVER['APP_DEBUG'] ?? true);
+
+            $container = $this->createContainerFromKernelClass($kernelClass, $environment, $debug);
+        } catch (Throwable $throwable) {
+            throw new ShouldNotHappenException(sprintf(
+                'Kernel "%s" could not be instantiated for: %s.%sCurrent environment is "%s". Try changing it in "parameters > kernel_environment" in rector.yaml',
+                $kernelClass,
+                $throwable->getMessage(),
+                PHP_EOL . PHP_EOL,
+                $environment
+            ), $throwable->getCode(), $throwable);
+        }
+
+        $this->containersByKernelClass[$kernelClass] = $container;
+
+        return $container;
     }
 
     /**
      * Mimics https://github.com/symfony/symfony/blob/f834c9262b411aa5793fcea23694e3ad3b5acbb4/src/Symfony/Bundle/FrameworkBundle/Command/ContainerDebugCommand.php#L200-L203
      */
-    private function createContainerFromKernelClass(string $kernelClass): Container
+    private function createContainerFromKernelClass(string $kernelClass, string $environment, bool $debug): Container
     {
-        $kernel = $this->createKernelFromKernelClass($kernelClass);
+        /** @var Kernel $kernel */
+        $kernel = new $kernelClass($environment, $debug);
         // preloads all the extensions and $containerBuilder->compile()
         $kernel->boot();
 
@@ -55,11 +93,14 @@ final class ContainerFactory
         return $containerBuilder;
     }
 
-    private function createKernelFromKernelClass(string $kernelClass): Kernel
+    private function resolveEnvironment(): string
     {
-        $environment = $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? 'dev';
-        $debug = (bool) ($_ENV['APP_DEBUG'] ?? $_SERVER['APP_DEBUG'] ?? true);
+        /** @var string|null $kernelEnvironment */
+        $kernelEnvironment = $this->parameterProvider->provideParameter(Option::KERNEL_ENVIRONMENT_PARAMETER);
+        if ($kernelEnvironment) {
+            return $kernelEnvironment;
+        }
 
-        return new $kernelClass($environment, $debug);
+        return $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? self::FALLBACK_ENVIRONMENT;
     }
 }
