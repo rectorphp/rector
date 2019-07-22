@@ -177,3 +177,6 @@ parameters:
         - '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\)\|null, Closure\(mixed, mixed, mixed, mixed\)\: void given#'
         - '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\)\|null, callable given#'
         - '#Method Rector\\NodeTypeResolver\\PerNodeTypeResolver\\NameTypeResolver\:\:resolveFullyQualifiedName\(\) should return string\|null but returns PhpParser\\Node\\Name\|null#'
+
+        # array is callable
+        - '#Parameter \#2 \$listener of method Symfony\\Component\\EventDispatcher\\Debug\\TraceableEventDispatcher\:\:getListenerPriority\(\) expects callable\(\)\: mixed, array given#'
