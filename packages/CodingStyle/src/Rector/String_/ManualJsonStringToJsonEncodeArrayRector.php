@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\CodingStyle\Node\ConcatJoiner;
-use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -88,10 +87,12 @@ CODE_SAMPLE
                 return $this->processJsonString($node, $stringValue);
             }
 
+            // B. just start of a json?
             $currentNode = $node;
 
             /** @var Expr[] $placeholderNodes */
             $placeholderNodes = [];
+            $nodesToRemove = [];
             $content = '';
 
             while ($nextExpressionNode = $this->matchNextExpressionAssignConcatToSameVariable(
@@ -109,14 +110,15 @@ CODE_SAMPLE
                     $objectHash = spl_object_hash($nextExpressionNode->expr);
                     $placeholderNodes[$objectHash] = $nextExpressionNode->expr;
                     $content .= $objectHash;
-                } else {
-                    throw new NotImplementedException('Fix it! ' . __METHOD__);
                 }
+
+                $nodesToRemove[] = $nextExpressionNode;
 
                 // jump to next one
                 $currentNode = $this->getNextExpression($currentNode);
-
-                $this->removeNode($nextExpressionNode);
+                if ($currentNode === null) {
+                    break;
+                }
             }
 
             /** @var string $content */
@@ -124,6 +126,9 @@ CODE_SAMPLE
             if (! $this->isJsonString($stringValue)) {
                 return null;
             }
+
+            // remove nodes
+            $this->removeNodes($nodesToRemove);
 
             $array = Json::decode($stringValue, Json::FORCE_ARRAY);
 

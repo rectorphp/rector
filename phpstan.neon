@@ -180,6 +180,9 @@ parameters:
         - '#Parameter \#1 \$json of static method Nette\\Utils\\Json\:\:decode\(\) expects string, array<PhpParser\\Node\\Expr\>\|string given#'
         - '#Parameter \#1 \$stringValue of method Rector\\CodingStyle\\Rector\\String_\\ManualJsonStringToJsonEncodeArrayRector\:\:isJsonString\(\) expects string, array<PhpParser\\Node\\Expr\>\|string given#'
         - '#In method "Rector\\(.*?)", (.*?) is "array"\. Please provide a (.*?) annotation to further specify the type of the array\. For instance\: (.*?). More info\: http\://bit\.ly/typehintarray#'
+        - '#Method Rector\\Rector\\AbstractRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
+        - '#Parameter \#1 \$node of method Rector\\Rector\\AbstractRector\:\:getNextExpression\(\) expects PhpParser\\Node, PhpParser\\Node\|null given#'
+        - '#Parameter \#2 \$currentNode of method Rector\\CodingStyle\\Rector\\String_\\ManualJsonStringToJsonEncodeArrayRector\:\:matchNextExpressionAssignConcatToSameVariable\(\) expects PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Expr\\AssignOp\\Concat, PhpParser\\Node given#'
 
         # array is callable
         - '#Parameter \#2 \$listener of method Symfony\\Component\\EventDispatcher\\Debug\\TraceableEventDispatcher\:\:getListenerPriority\(\) expects callable\(\)\: mixed, array given#'
