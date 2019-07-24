@@ -27,6 +27,7 @@ services:
             - 'PHPStan\Analyser\Scope'
             - 'PhpParser\NodeVisitor\NameResolver'
             - 'PhpParser\Node\*'
+            - '*Data'
             - 'PhpParser\Comment'
             - 'PhpParser\Lexer'
             - 'PhpParser\Comment\Doc'
@@ -156,3 +157,7 @@ parameters:
         Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
             # 3rd party api
             - 'src/PhpParser/Node/Value/ValueResolver.php'
+
+        PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer:
+            # intentional equals
+            - 'tests/PhpParser/Node/NodeFactoryTest.php'

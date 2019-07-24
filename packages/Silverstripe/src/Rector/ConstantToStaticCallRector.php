@@ -4,7 +4,6 @@ namespace Rector\Silverstripe\Rector;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
@@ -42,6 +41,6 @@ final class ConstantToStaticCallRector extends AbstractRector
             return null;
         }
 
-        return $this->createStaticCall('Environment', 'getEnv', [new Arg(new String_($constantName))]);
+        return $this->createStaticCall('Environment', 'getEnv', [new String_($constantName)]);
     }
 }

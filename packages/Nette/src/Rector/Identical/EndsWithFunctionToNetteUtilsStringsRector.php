@@ -3,7 +3,6 @@
 namespace Rector\Nette\Rector\Identical;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
@@ -84,8 +83,8 @@ CODE_SAMPLE
 
         // starts with
         $startsWithStaticCall = $this->createStaticCall('Nette\Utils\Strings', 'endsWith', [
-            new Arg($contentNode),
-            new Arg($needleNode),
+            $contentNode,
+            $needleNode,
         ]);
 
         if ($node instanceof NotIdentical) {

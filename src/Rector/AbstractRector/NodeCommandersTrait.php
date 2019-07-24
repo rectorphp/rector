@@ -61,6 +61,13 @@ trait NodeCommandersTrait
         $this->notifyNodeChangeFileInfo($positionNode);
     }
 
+    protected function addNodeBeforeNode(Node $newNode, Node $positionNode): void
+    {
+        $this->nodeAddingCommander->addNodeBeforeNode($newNode, $positionNode);
+
+        $this->notifyNodeChangeFileInfo($positionNode);
+    }
+
     protected function addPropertyToClass(Class_ $classNode, string $propertyType, string $propertyName): void
     {
         $variableInfo = new VariableInfo($propertyName, $propertyType);
