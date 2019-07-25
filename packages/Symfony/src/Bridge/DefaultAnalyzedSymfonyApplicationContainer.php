@@ -32,7 +32,7 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
      * @var string[]
      */
     private $commonNamesToTypes = [
-        'doctrine' => 'Doctrine\Bundle\DoctrineBundle\Registry',
+        'doctrine' => 'Symfony\Bridge\Doctrine\RegistryInterface',
         'doctrine.orm.entity_manager' => 'Doctrine\ORM\EntityManagerInterface',
         'doctrine.orm.default_entity_manager' => 'Doctrine\ORM\EntityManagerInterface',
     ];
