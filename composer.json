@@ -79,7 +79,8 @@
             "Rector\\SymfonyPHPUnit\\": "packages/SymfonyPHPUnit/src",
             "Rector\\Architecture\\": "packages/Architecture/src",
             "Rector\\PHPUnitSymfony\\": "packages/PHPUnitSymfony/src",
-            "Rector\\SymfonyCodeQuality\\": "packages/SymfonyCodeQuality/src"
+            "Rector\\SymfonyCodeQuality\\": "packages/SymfonyCodeQuality/src",
+            "Rector\\Restoration\\": "packages/Restoration/src"
         }
     },
     "autoload-dev": {
@@ -120,7 +121,8 @@
             "Rector\\SymfonyPHPUnit\\Tests\\": "packages/SymfonyPHPUnit/tests",
             "Rector\\Architecture\\Tests\\": "packages/Architecture/tests",
             "Rector\\PHPUnitSymfony\\Tests\\": "packages/PHPUnitSymfony/tests",
-            "Rector\\SymfonyCodeQuality\\Tests\\": "packages/SymfonyCodeQuality/tests"
+            "Rector\\SymfonyCodeQuality\\Tests\\": "packages/SymfonyCodeQuality/tests",
+            "Rector\\Restoration\\Tests\\": "packages/Restoration/tests"
         },
         "classmap": [
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
