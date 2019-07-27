@@ -92,7 +92,8 @@ CODE_SAMPLE
                 $annotationToSeek = Strings::after($import, '\\', -1);
             }
 
-            if (! Strings::contains($this->print($class), $annotationToSeek)) {
+            $annotationToSeek = '#\*\s+@' . $annotationToSeek . '#';
+            if (! Strings::match($this->print($class), $annotationToSeek)) {
                 continue;
             }
 
