@@ -92,18 +92,18 @@ CODE_SAMPLE
                 $annotationToSeek = Strings::after($import, '\\', -1);
             }
 
-            $annotationToSeek = '#\*\s+@' . $annotationToSeek . '#';
+            $annotationToSeek = '#\*\s+\@' . $annotationToSeek . '#';
             if (! Strings::match($this->print($class), $annotationToSeek)) {
                 continue;
             }
 
-            return $this->addImportToNamespaceIfMissing($node, $import, $alias);
+            $node = $this->addImportToNamespaceIfMissing($node, $import, $alias);
         }
 
-        return null;
+        return $node;
     }
 
-    private function addImportToNamespaceIfMissing(Namespace_ $namespace, string $import, string $alias): ?Namespace_
+    private function addImportToNamespaceIfMissing(Namespace_ $namespace, string $import, string $alias): Namespace_
     {
         foreach ($namespace->stmts as $stmt) {
             if (! $stmt instanceof Use_) {
@@ -114,7 +114,7 @@ CODE_SAMPLE
 
             // already there
             if ($this->isName($useUse->name, $import) && (string) $useUse->alias === $alias) {
-                return null;
+                return $namespace;
             }
         }
 
