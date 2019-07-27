@@ -33,20 +33,23 @@ final class TypeAnalyzer
         }
     }
 
-    public function isNullableType(string $type): bool
-    {
-        return Strings::startsWith($type, '?');
-    }
-
     public function isPhpReservedType(string $type): bool
     {
-        $type = strtolower($type);
-        $extraTypes = ['object'];
+        $types = explode('|', $type);
 
-        // remove [] from arrays
-        $type = Strings::replace($type, '#(\[\])+$#');
+        foreach ($types as $singleType) {
+            $singleType = strtolower($singleType);
+            $extraTypes = ['object'];
 
-        return in_array($type, array_merge($this->phpSupportedTypes, $extraTypes), true);
+            // remove [] from arrays
+            $singleType = Strings::replace($singleType, '#(\[\])+$#');
+
+            if (in_array($singleType, array_merge($this->phpSupportedTypes, $extraTypes), true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function normalizeType(string $type, bool $allowTypedArrays = false): string

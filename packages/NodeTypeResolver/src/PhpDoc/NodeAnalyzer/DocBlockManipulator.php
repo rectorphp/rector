@@ -547,15 +547,15 @@ final class DocBlockManipulator
 
     private function addTypeSpecificTag(Node $node, string $name, string $type): void
     {
+        // prefix possible class name
+        if (! $this->typeAnalyzer->isPhpReservedType($type)) {
+            $type = '\\' . ltrim($type, '\\');
+        }
+
         // there might be no phpdoc at all
         if ($node->getDocComment() !== null) {
             $phpDocInfo = $this->createPhpDocInfoFromNode($node);
             $phpDocNode = $phpDocInfo->getPhpDocNode();
-
-            // preffix possible class name
-            if (! $this->typeAnalyzer->isPhpReservedType($type)) {
-                $type = '\\' . $type;
-            }
 
             $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode($type), '', '');
             $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@' . $name, $varTagValueNode);
