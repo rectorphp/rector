@@ -48,7 +48,7 @@ final class StaticTypeToStringResolver
                     $types[$key] = $type . '[]';
                 }
 
-                return $types;
+                return array_unique($types);
             },
             function (UnionType $unionType): array {
                 $types = [];
