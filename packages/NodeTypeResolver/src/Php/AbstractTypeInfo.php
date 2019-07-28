@@ -49,6 +49,11 @@ abstract class AbstractTypeInfo
     private $removedTypes = [];
 
     /**
+     * @var string[]
+     */
+    private $originalFqnTypes = [];
+
+    /**
      * @param string[] $types
      * @param string[] $fqnTypes
      */
@@ -59,6 +64,7 @@ abstract class AbstractTypeInfo
         bool $allowTypedArrays = false
     ) {
         $this->typeAnalyzer = $typeAnalyzer;
+
         $this->types = $this->analyzeAndNormalizeTypes($types, $allowTypedArrays);
 
         // fallback
@@ -67,6 +73,7 @@ abstract class AbstractTypeInfo
         }
 
         $this->fqnTypes = $this->analyzeAndNormalizeTypes($fqnTypes, $allowTypedArrays);
+        $this->originalFqnTypes = $fqnTypes;
     }
 
     public function isNullable(): bool
@@ -148,6 +155,14 @@ abstract class AbstractTypeInfo
         $allTypes = array_merge($this->types, $this->removedTypes);
 
         return array_filter(array_unique($allTypes));
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getOriginalFqnTypes(): array
+    {
+        return $this->originalFqnTypes;
     }
 
     protected function normalizeName(string $name): string
