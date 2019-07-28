@@ -545,6 +545,10 @@ final class DocBlockManipulator
         return $this->phpDocInfoFactory->createFromNode($node);
     }
 
+    /**
+     * All class-type tags are FQN by default to keep default convention through the code.
+     * Some people prefer FQN, some short. FQN can be shorten with \Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector later, while short prolonged not
+     */
     private function addTypeSpecificTag(Node $node, string $name, string $type): void
     {
         // prefix possible class name
