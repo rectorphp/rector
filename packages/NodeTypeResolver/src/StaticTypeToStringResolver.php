@@ -34,9 +34,15 @@ final class StaticTypeToStringResolver
             BooleanType::class => ['bool'],
             StringType::class => ['string'],
             NullType::class => ['null'],
+
             // more complex callables
             function (ArrayType $arrayType): array {
                 $types = $this->resolveObjectType($arrayType->getItemType());
+
+                if ($types === []) {
+                    return ['array'];
+                }
+
                 foreach ($types as $key => $type) {
                     $types[$key] = $type . '[]';
                 }
