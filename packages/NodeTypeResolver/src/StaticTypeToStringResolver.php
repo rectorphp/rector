@@ -8,6 +8,7 @@ use PHPStan\Type\CallableType;
 use PHPStan\Type\ClosureType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
@@ -52,6 +53,14 @@ final class StaticTypeToStringResolver
             function (UnionType $unionType): array {
                 $types = [];
                 foreach ($unionType->getTypes() as $singleStaticType) {
+                    $types = array_merge($types, $this->resolveObjectType($singleStaticType));
+                }
+
+                return $types;
+            },
+            function (IntersectionType $intersectionType): array {
+                $types = [];
+                foreach ($intersectionType->getTypes() as $singleStaticType) {
                     $types = array_merge($types, $this->resolveObjectType($singleStaticType));
                 }
 

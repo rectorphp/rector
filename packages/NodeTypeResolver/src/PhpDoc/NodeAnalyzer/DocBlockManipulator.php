@@ -217,7 +217,6 @@ final class DocBlockManipulator
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
         $types = $phpDocInfo->getParamTagValues();
-
         if ($types === []) {
             return [];
         }
@@ -551,10 +550,8 @@ final class DocBlockManipulator
      */
     private function addTypeSpecificTag(Node $node, string $name, string $type): void
     {
-        // prefix possible class name
-        if (! $this->typeAnalyzer->isPhpReservedType($type)) {
-            $type = '\\' . ltrim($type, '\\');
-        }
+        // preffix possible class name
+        $type = $this->preslashFullyQualifiedNames($type);
 
         // there might be no phpdoc at all
         if ($node->getDocComment() !== null) {
@@ -682,5 +679,29 @@ final class DocBlockManipulator
         $this->useAddingCommander->addUseImport($node, $fullyQualifiedName);
 
         return $attributeAwareNode;
+    }
+
+    private function preslashFullyQualifiedNames(string $type): string
+    {
+        $joinChar = '|'; // default
+        if (Strings::contains($type, '|')) { // intersection
+            $types = explode('|', $type);
+            $joinChar = '|';
+        } elseif (Strings::contains($type, '&')) { // union
+            $types = explode('&', $type);
+            $joinChar = '&';
+        } else {
+            $types = [$type];
+        }
+
+        foreach ($types as $key => $singleType) {
+            if ($this->typeAnalyzer->isPhpReservedType($singleType)) {
+                continue;
+            }
+
+            $types[$key] = '\\' . ltrim($singleType, '\\');
+        }
+
+        return implode($joinChar, $types);
     }
 }
