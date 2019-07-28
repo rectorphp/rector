@@ -18,8 +18,16 @@ final class PHPStanServicesFactory
 
     public function __construct()
     {
-        $this->container = (new ContainerFactory(getcwd()))
-            ->create(sys_get_temp_dir(), [], []);
+        $containerFactory = new ContainerFactory(getcwd());
+        $additionalConfigFiles = [];
+
+        // possible path collision for Docker
+        $phpstanPhpunitExtensionConfig = getcwd() . '/vendor/phpstan/phpstan-phpunit/extension.neon';
+        if (file_exists($phpstanPhpunitExtensionConfig)) {
+            $additionalConfigFiles[] = $phpstanPhpunitExtensionConfig;
+        }
+
+        $this->container = $containerFactory->create(sys_get_temp_dir(), $additionalConfigFiles, []);
     }
 
     public function createBroker(): Broker
