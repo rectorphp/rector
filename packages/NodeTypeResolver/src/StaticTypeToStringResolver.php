@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver;
 
+use Nette\Utils\Strings;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\CallableType;
@@ -58,13 +59,14 @@ final class StaticTypeToStringResolver
 
                 return $types;
             },
+
             function (IntersectionType $intersectionType): array {
                 $types = [];
                 foreach ($intersectionType->getTypes() as $singleStaticType) {
                     $types = array_merge($types, $this->resolveObjectType($singleStaticType));
                 }
 
-                return $types;
+                return $this->removeGenericArrayTypeIfThereIsSpecificArrayType($types);
             },
             function (ObjectType $objectType): array {
                 // the must be absolute, since we have no other way to check absolute/local path
@@ -91,5 +93,34 @@ final class StaticTypeToStringResolver
         }
 
         return [];
+    }
+
+    /**
+     * Removes "array" if there is "SomeType[]" already
+     *
+     * @param string[] $types
+     * @return string[]
+     */
+    private function removeGenericArrayTypeIfThereIsSpecificArrayType(array $types): array
+    {
+        $hasSpecificArrayType = false;
+        foreach ($types as $key => $type) {
+            if (Strings::endsWith($type, '[]')) {
+                $hasSpecificArrayType = true;
+                break;
+            }
+        }
+
+        if ($hasSpecificArrayType === false) {
+            return $types;
+        }
+
+        foreach ($types as $key => $type) {
+            if ($type === 'array') {
+                unset($types[$key]);
+            }
+        }
+
+        return $types;
     }
 }
