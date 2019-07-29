@@ -146,7 +146,7 @@ final class BetterPhpDocParser extends PhpDocParser
 
             // we try to match original content without trimmed spaces
             $currentTextPattern = '#' . preg_quote($possibleMultilineText, '#') . '#s';
-            $currentTextPattern = Strings::replace($currentTextPattern, '#\s#', '\s+');
+            $currentTextPattern = Strings::replace($currentTextPattern, '#(\s)+#', '\s+');
             $match = Strings::match($originalContent, $currentTextPattern);
 
             if (isset($match[0])) {
