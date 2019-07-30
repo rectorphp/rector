@@ -8,6 +8,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\Symfony\Bridge\DependencyInjection\SymfonyContainerFactory;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
 
@@ -27,6 +28,11 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
      * @var ParameterProvider
      */
     private $parameterProvider;
+
+    /**
+     * @var ContainerInterface[]
+     */
+    private $containerByKernelClass = [];
 
     /**
      * @var string[]
@@ -110,10 +116,18 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
     {
         $kernelClass = $this->resolveKernelClass();
 
+        if (isset($this->containerByKernelClass[$kernelClass])) {
+            return $this->containerByKernelClass[$kernelClass];
+        }
+
         $this->symfonyKernelParameterGuard->ensureKernelClassIsValid($kernelClass, $requestServiceName);
 
         /** @var string $kernelClass */
-        return $this->symfonyContainerFactory->createFromKernelClass($kernelClass);
+        $container = $this->symfonyContainerFactory->createFromKernelClass($kernelClass);
+
+        $this->containerByKernelClass[$kernelClass] = $container;
+
+        return $container;
     }
 
     private function getDefaultKernelClass(): ?string

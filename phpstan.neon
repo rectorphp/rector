@@ -189,3 +189,4 @@ parameters:
 
         # array is callable
         - '#Parameter \#2 \$listener of method Symfony\\Component\\EventDispatcher\\Debug\\TraceableEventDispatcher\:\:getListenerPriority\(\) expects callable\(\)\: mixed, array given#'
+        - '#Parameter \#1 \$kernelClass of method Rector\\Symfony\\Bridge\\DependencyInjection\\SymfonyContainerFactory\:\:createFromKernelClass\(\) expects string, string\|null given#'

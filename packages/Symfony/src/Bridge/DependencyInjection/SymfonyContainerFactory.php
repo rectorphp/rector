@@ -2,13 +2,17 @@
 
 namespace Rector\Symfony\Bridge\DependencyInjection;
 
+use Nette\Utils\Random;
 use Rector\Configuration\Option;
 use Rector\Exception\ShouldNotHappenException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\FrozenParameterBag;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpKernel\Kernel;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Throwable;
 
@@ -89,6 +93,21 @@ final class SymfonyContainerFactory
         });
 
         $containerBuilder->compile();
+
+        // solves "You have requested a synthetic service ("kernel"). The DIC does not know how to construct this service"
+        $containerBuilder->set('kernel', $kernel);
+
+        // solves "You have requested a non-existent parameter "container.build_id"
+        if ($containerBuilder->getParameterBag() instanceof FrozenParameterBag) {
+            $unfrozenParameterBag = new ParameterBag($containerBuilder->getParameterBag()->all());
+
+            $privatesAccessor = new PrivatesAccessor();
+            $privatesAccessor->setPrivateProperty($containerBuilder, 'parameterBag', $unfrozenParameterBag);
+        }
+
+        if (! $containerBuilder->hasParameter('container.build_id')) {
+            $containerBuilder->setParameter('container.build_id', Random::generate(10));
+        }
 
         return $containerBuilder;
     }
