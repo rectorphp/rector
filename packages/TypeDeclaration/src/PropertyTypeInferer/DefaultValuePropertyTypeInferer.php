@@ -24,4 +24,9 @@ final class DefaultValuePropertyTypeInferer extends AbstractPropertyTypeInferer 
 
         return $this->staticTypeToStringResolver->resolveObjectType($nodeStaticType);
     }
+
+    public function getPriority(): int
+    {
+        return 700;
+    }
 }

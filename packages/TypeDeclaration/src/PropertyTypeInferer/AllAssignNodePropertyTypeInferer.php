@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\ErrorType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -36,6 +37,11 @@ final class AllAssignNodePropertyTypeInferer extends AbstractPropertyTypeInferer
         return $this->staticTypeToStringResolver->resolveObjectType($assignedExprStaticType);
     }
 
+    public function getPriority(): int
+    {
+        return 500;
+    }
+
     /**
      * @return Type[]
      */
@@ -61,6 +67,10 @@ final class AllAssignNodePropertyTypeInferer extends AbstractPropertyTypeInferer
                 return null;
             }
 
+            if ($exprStaticType instanceof ErrorType) {
+                return null;
+            }
+
             if ($node->var instanceof ArrayDimFetch) {
                 $exprStaticType = new ArrayType(new MixedType(), $exprStaticType);
             }
@@ -70,7 +80,7 @@ final class AllAssignNodePropertyTypeInferer extends AbstractPropertyTypeInferer
             return null;
         });
 
-        return $assignedExprStaticTypes;
+        return $this->filterOutDuplicatedTypes($assignedExprStaticTypes);
     }
 
     /**
@@ -97,5 +107,24 @@ final class AllAssignNodePropertyTypeInferer extends AbstractPropertyTypeInferer
         }
 
         return null;
+    }
+
+    /**
+     * @param Type[] $types
+     * @return Type[]
+     */
+    private function filterOutDuplicatedTypes(array $types): array
+    {
+        if (count($types) === 1) {
+            return $types;
+        }
+
+        $uniqueTypes = [];
+        foreach ($types as $type) {
+            $valueObjectHash = md5(serialize($type));
+            $uniqueTypes[$valueObjectHash] = $type;
+        }
+
+        return $uniqueTypes;
     }
 }

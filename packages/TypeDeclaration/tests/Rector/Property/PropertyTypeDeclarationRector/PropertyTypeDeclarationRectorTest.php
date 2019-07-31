@@ -18,6 +18,8 @@ final class PropertyTypeDeclarationRectorTest extends AbstractRectorTestCase
 
             __DIR__ . '/Fixture/doctrine_column.php.inc',
             __DIR__ . '/Fixture/doctrine_relation.php.inc',
+
+            __DIR__ . '/Fixture/complex.php.inc',
             // skip
             __DIR__ . '/Fixture/skip_multi_vars.php.inc',
         ]);

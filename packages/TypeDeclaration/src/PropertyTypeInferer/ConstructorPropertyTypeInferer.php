@@ -62,6 +62,11 @@ final class ConstructorPropertyTypeInferer extends AbstractPropertyTypeInferer i
         return [];
     }
 
+    public function getPriority(): int
+    {
+        return 800;
+    }
+
     private function getResolveParamStaticTypeAsString(ClassMethod $classMethod, string $propertyName): ?string
     {
         $paramStaticType = $this->resolveParamStaticType($classMethod, $propertyName);
