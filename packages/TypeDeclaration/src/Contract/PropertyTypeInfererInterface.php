@@ -10,4 +10,9 @@ interface PropertyTypeInfererInterface
      * @return string[]
      */
     public function inferProperty(Property $property): array;
+
+    /**
+     * Higher priority goes first.
+     */
+    public function getPriority(): int;
 }

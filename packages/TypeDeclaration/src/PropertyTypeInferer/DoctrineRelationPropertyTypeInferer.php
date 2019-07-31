@@ -59,6 +59,11 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         return [];
     }
 
+    public function getPriority(): int
+    {
+        return 900;
+    }
+
     private function resolveTargetEntity(GenericTagValueNode $genericTagValueNode): ?string
     {
         $match = Strings::match($genericTagValueNode->value, '#targetEntity=\"(?<targetEntity>.*?)\"#');

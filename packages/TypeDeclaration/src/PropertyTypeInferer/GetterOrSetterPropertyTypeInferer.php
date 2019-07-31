@@ -56,4 +56,9 @@ final class GetterOrSetterPropertyTypeInferer extends AbstractPropertyTypeInfere
 
         return [];
     }
+
+    public function getPriority(): int
+    {
+        return 600;
+    }
 }

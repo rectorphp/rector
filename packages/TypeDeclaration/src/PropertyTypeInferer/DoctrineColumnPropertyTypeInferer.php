@@ -102,6 +102,11 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
         return $types;
     }
 
+    public function getPriority(): int
+    {
+        return 1000;
+    }
+
     private function isNullable(string $value): bool
     {
         return (bool) Strings::match($value, '#nullable=true#');

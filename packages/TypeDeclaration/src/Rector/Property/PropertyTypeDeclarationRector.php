@@ -10,6 +10,7 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\Exception\ConflictingPriorityException;
 
 final class PropertyTypeDeclarationRector extends AbstractRector
 {
@@ -29,7 +30,8 @@ final class PropertyTypeDeclarationRector extends AbstractRector
     public function __construct(DocBlockManipulator $docBlockManipulator, array $propertyTypeInferers = [])
     {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->propertyTypeInferers = $propertyTypeInferers;
+
+        $this->sortAndSetPropertyTypeInferers($propertyTypeInferers);
     }
 
     public function getDefinition(): RectorDefinition
@@ -79,5 +81,28 @@ final class PropertyTypeDeclarationRector extends AbstractRector
         $this->docBlockManipulator->changeVarTag($node, $typesAsString);
 
         return $node;
+    }
+
+    /**
+     * @param PropertyTypeInfererInterface[] $propertyTypeInferers
+     */
+    private function sortAndSetPropertyTypeInferers(array $propertyTypeInferers): void
+    {
+        foreach ($propertyTypeInferers as $propertyTypeInferer) {
+            $this->ensurePriorityIsUnique($propertyTypeInferer);
+            $this->propertyTypeInferers[$propertyTypeInferer->getPriority()] = $propertyTypeInferer;
+        }
+
+        krsort($this->propertyTypeInferers);
+    }
+
+    private function ensurePriorityIsUnique(PropertyTypeInfererInterface $propertyTypeInferer): void
+    {
+        if (! isset($this->propertyTypeInferers[$propertyTypeInferer->getPriority()])) {
+            return;
+        }
+
+        $alreadySetPropertyTypeInferer = $this->propertyTypeInferers[$propertyTypeInferer->getPriority()];
+        throw new ConflictingPriorityException($propertyTypeInferer, $alreadySetPropertyTypeInferer);
     }
 }

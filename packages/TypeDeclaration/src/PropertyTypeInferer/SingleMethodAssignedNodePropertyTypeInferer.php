@@ -79,6 +79,11 @@ final class SingleMethodAssignedNodePropertyTypeInferer implements PropertyTypeI
         return $stringTypes;
     }
 
+    public function getPriority(): int
+    {
+        return 750;
+    }
+
     private function resolveAssignedNodeToProperty(ClassMethod $classMethod, string $propertyName): ?Expr
     {
         $assignedNode = null;
