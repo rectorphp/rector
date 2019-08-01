@@ -2,13 +2,13 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Iterable;
 
-class A {
+class AnIterableClass {
     /** @return iterable */
     public function getIterable($value) {
         return $value;
     }
 }
-class B extends A {
+class BuildOnThePreviousClass extends AnIterableClass {
     /** @return array */
     public function getIterable($value) {
         return $value;
@@ -21,13 +21,13 @@ class B extends A {
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Iterable;
 
-class A {
+class AnIterableClass {
     /** @return iterable */
     public function getIterable($value): iterable {
         return $value;
     }
 }
-class B extends A {
+class BuildOnThePreviousClass extends AnIterableClass {
     /** @return array */
     public function getIterable($value): array {
         return $value;

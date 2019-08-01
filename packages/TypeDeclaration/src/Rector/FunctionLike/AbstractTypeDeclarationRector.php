@@ -32,7 +32,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     /**
      * @var string
      */
-    protected const HAS_NEW_INHERITED_TYPE = 'has_new_inherited_return_type';
+    public const HAS_NEW_INHERITED_TYPE = 'has_new_inherited_return_type';
 
     /**
      * @var DocBlockManipulator
@@ -49,11 +49,14 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
      */
     protected $functionLikeManipulator;
 
-    public function __construct(
+    /**
+     * @required
+     */
+    public function autowireAbstractTypeDeclarationRector(
         DocBlockManipulator $docBlockManipulator,
         ParsedNodesByType $parsedNodesByType,
         FunctionLikeManipulator $functionLikeManipulator
-    ) {
+    ): void {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->parsedNodesByType = $parsedNodesByType;
         $this->functionLikeManipulator = $functionLikeManipulator;

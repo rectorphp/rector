@@ -147,6 +147,10 @@ abstract class AbstractTypeInfo
     {
         $allTypes = array_merge($this->types, $this->removedTypes);
 
+        if ($this->isNullable) {
+            $allTypes[] = 'null';
+        }
+
         return array_filter(array_unique($allTypes));
     }
 
