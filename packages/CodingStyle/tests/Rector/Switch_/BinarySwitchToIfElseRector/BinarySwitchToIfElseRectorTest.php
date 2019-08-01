@@ -13,6 +13,7 @@ final class BinarySwitchToIfElseRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/in_class.php.inc',
             __DIR__ . '/Fixture/if_or.php.inc',
+            __DIR__ . '/Fixture/extra_break.php.inc',
         ]);
     }
 
