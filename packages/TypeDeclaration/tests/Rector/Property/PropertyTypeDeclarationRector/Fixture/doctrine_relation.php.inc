@@ -15,6 +15,17 @@ class DoctrineRelation
      * @ORM\ManyToMany(targetEntity="App\Car")
      */
     private $cars;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Company\Entity\Company", inversedBy="userBuildings")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id", nullable=true)
+     */
+    private $company;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
+     */
+    private $company2;
 }
 
 ?>
@@ -38,6 +49,19 @@ class DoctrineRelation
      * @var \App\Car[]|\Doctrine\Common\Collections\Collection
      */
     private $cars;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Company\Entity\Company", inversedBy="userBuildings")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id", nullable=true)
+     * @var \App\Company\Entity\Company|null
+     */
+    private $company;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
+     * @var \App\Company\Entity\Company
+     */
+    private $company2;
 }
 
 ?>
