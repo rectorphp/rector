@@ -18,6 +18,7 @@ use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\Php\TypeAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
 
 final class FunctionLikeManipulator
 {
@@ -66,7 +67,11 @@ final class FunctionLikeManipulator
         // A. resolve from function return type
         if ($functionLike->returnType !== null) {
             $types = $this->resolveReturnTypeToString($functionLike->returnType);
-            if ($types !== []) {
+
+            // do not override freshly added type declaration
+            if (! $functionLike->returnType->getAttribute(
+                AbstractTypeDeclarationRector::HAS_NEW_INHERITED_TYPE
+            ) && $types !== []) {
                 return new ReturnTypeInfo($types, $this->typeAnalyzer);
             }
         }
@@ -116,7 +121,7 @@ final class FunctionLikeManipulator
      * @param Identifier|Name|NullableType $node
      * @return string[]
      */
-    private function resolveReturnTypeToString(Node $node)
+    private function resolveReturnTypeToString(Node $node): array
     {
         $types = [];
 

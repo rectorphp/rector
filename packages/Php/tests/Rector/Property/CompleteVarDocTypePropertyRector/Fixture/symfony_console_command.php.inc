@@ -586,7 +586,7 @@ class Command
      */
     protected static $defaultName;
     /**
-     * @var \Symfony\Component\Console\Application
+     * @var \Symfony\Component\Console\Application|null
      */
     private $application;
     /**
@@ -642,7 +642,7 @@ class Command
      */
     private $usages = array();
     /**
-     * @var \Symfony\Component\Console\Helper\HelperSet
+     * @var \Symfony\Component\Console\Helper\HelperSet|null
      */
     private $helperSet;
     /**
