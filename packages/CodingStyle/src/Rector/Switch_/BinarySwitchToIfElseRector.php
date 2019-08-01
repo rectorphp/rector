@@ -95,7 +95,7 @@ CODE_SAMPLE
             $ifNode->elseifs[] = new ElseIf_($equalNode, $this->removeBreakNodes($secondCase->stmts));
         } else {
             // defaults
-            $ifNode->else = new Else_($secondCase->stmts);
+            $ifNode->else = new Else_($this->removeBreakNodes($secondCase->stmts));
         }
 
         return $ifNode;
