@@ -3,7 +3,6 @@
 namespace Rector\TypeDeclaration\PropertyTypeInferer;
 
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -82,30 +81,11 @@ final class GetterOrSetterPropertyTypeInferer extends AbstractPropertyTypeInfere
      */
     private function resolveClassMethodReturnTypes(ClassMethod $classMethod): array
     {
-        // resolve from doc
-        if (! $classMethod->returnType) {
-            $returnType = $this->returnTypeResolver->resolveFunctionLikeReturnType($classMethod);
-
-            return $returnType->getDocTypes();
+        $returnType = $this->returnTypeResolver->resolveFunctionLikeReturnType($classMethod);
+        if ($returnType === null) {
+            return [];
         }
 
-        if ($classMethod->returnType instanceof NullableType) {
-            $type = $classMethod->returnType->type;
-        } else {
-            $type = $classMethod->returnType;
-        }
-
-        $result = $this->nameResolver->resolve($type);
-        if ($result !== null) {
-            $types = [$result];
-
-            if ($classMethod->returnType instanceof NullableType) {
-                $types[] = 'null';
-            }
-
-            return $types;
-        }
-
-        return [];
+        return $returnType->getDocTypes();
     }
 }
