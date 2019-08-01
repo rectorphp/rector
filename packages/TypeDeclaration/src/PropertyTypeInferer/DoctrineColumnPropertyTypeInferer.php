@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\PropertyTypeInferer;
 
-use DateTime;
+use DateTimeInterface;
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
@@ -48,11 +48,11 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
         'varbinary' => 'string',
         'set' => 'string',
 
-        'date' => DateTime::class,
-        'datetime' => DateTime::class,
-        'timestamp' => DateTime::class,
-        'time' => DateTime::class,
-        'year' => DateTime::class,
+        'date' => DateTimeInterface::class,
+        'datetime' => DateTimeInterface::class,
+        'timestamp' => DateTimeInterface::class,
+        'time' => DateTimeInterface::class,
+        'year' => DateTimeInterface::class,
     ];
 
     /**
