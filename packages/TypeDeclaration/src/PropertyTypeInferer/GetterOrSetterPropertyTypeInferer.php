@@ -8,21 +8,20 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\ReturnTypeResolver\ReturnTypeResolver;
 
 final class GetterOrSetterPropertyTypeInferer extends AbstractPropertyTypeInferer implements PropertyTypeInfererInterface
 {
     /**
-     * @var BetterStandardPrinter
+     * @var ReturnTypeResolver
      */
-    private $betterStandardPrinter;
+    private $returnTypeResolver;
 
-    public function __construct(BetterStandardPrinter $betterStandardPrinter)
+    public function __construct(ReturnTypeResolver $returnTypeResolver)
     {
-        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->returnTypeResolver = $returnTypeResolver;
     }
 
     /**
@@ -40,16 +39,11 @@ final class GetterOrSetterPropertyTypeInferer extends AbstractPropertyTypeInfere
             if (! $this->hasClassMethodOnlyStatementReturnOfPropertyFetch($classMethod, $propertyName)) {
                 continue;
             }
+
             $returnTypes = $this->resolveClassMethodReturnTypes($classMethod);
             if ($returnTypes !== []) {
                 return $returnTypes;
             }
-
-            throw new ShouldNotHappenException(sprintf(
-                '"%s" for "%s" type',
-                __METHOD__,
-                $this->betterStandardPrinter->print($classMethod->returnType)
-            ));
         }
 
         return [];
@@ -88,9 +82,11 @@ final class GetterOrSetterPropertyTypeInferer extends AbstractPropertyTypeInfere
      */
     private function resolveClassMethodReturnTypes(ClassMethod $classMethod): array
     {
-        // @todo resolve from doc?
+        // resolve from doc
         if (! $classMethod->returnType) {
-            return [];
+            $returnType = $this->returnTypeResolver->resolveFunctionLikeReturnType($classMethod);
+
+            return $returnType->getDocTypes();
         }
 
         if ($classMethod->returnType instanceof NullableType) {

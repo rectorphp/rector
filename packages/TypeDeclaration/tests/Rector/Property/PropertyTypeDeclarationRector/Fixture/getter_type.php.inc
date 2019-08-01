@@ -1,0 +1,151 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture;
+
+use JMS\Serializer\Annotation as Serializer;
+
+final class GetterType
+{
+    /**
+     * @Serializer\Type("string")
+     */
+    private $email;
+
+    /**
+     * @Serializer\Type("string")
+     */
+    private $password;
+
+    /**
+     * @Serializer\Type("string")
+     */
+    private $language;
+
+    private $surname;
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    public function hasLanguage(): bool
+    {
+        return $this->language !== null;
+    }
+
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(string $language): void
+    {
+        $this->language = $language;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSurname()
+    {
+        return $this->surname;
+    }
+}
+
+?>
+-----
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture;
+
+use JMS\Serializer\Annotation as Serializer;
+
+final class GetterType
+{
+    /**
+     * @Serializer\Type("string")
+     * @var string
+     */
+    private $email;
+
+    /**
+     * @Serializer\Type("string")
+     * @var string
+     */
+    private $password;
+
+    /**
+     * @Serializer\Type("string")
+     * @var string
+     */
+    private $language;
+
+    /**
+     * @var string
+     */
+    private $surname;
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    public function hasLanguage(): bool
+    {
+        return $this->language !== null;
+    }
+
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(string $language): void
+    {
+        $this->language = $language;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSurname()
+    {
+        return $this->surname;
+    }
+}
+
+?>

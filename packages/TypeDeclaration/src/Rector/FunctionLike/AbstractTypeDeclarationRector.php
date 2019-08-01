@@ -49,11 +49,14 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
      */
     protected $functionLikeManipulator;
 
-    public function __construct(
+    /**
+     * @required
+     */
+    public function autowireAbstractTypeDeclarationRector(
         DocBlockManipulator $docBlockManipulator,
         ParsedNodesByType $parsedNodesByType,
         FunctionLikeManipulator $functionLikeManipulator
-    ) {
+    ): void {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->parsedNodesByType = $parsedNodesByType;
         $this->functionLikeManipulator = $functionLikeManipulator;

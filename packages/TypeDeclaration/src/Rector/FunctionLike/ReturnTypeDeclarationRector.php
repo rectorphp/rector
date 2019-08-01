@@ -3,7 +3,6 @@
 namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -13,6 +12,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\TypeDeclaration\ReturnTypeResolver\ReturnTypeResolver;
 
 final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
 {
@@ -20,6 +20,16 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
      * @var string[]
      */
     private const EXCLUDED_METHOD_NAMES = ['__construct', '__destruct', '__clone'];
+
+    /**
+     * @var ReturnTypeResolver
+     */
+    private $returnTypeResolver;
+
+    public function __construct(ReturnTypeResolver $returnTypeResolver)
+    {
+        $this->returnTypeResolver = $returnTypeResolver;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -82,7 +92,7 @@ CODE_SAMPLE
             }
         }
 
-        $returnTypeInfo = $this->resolveReturnType($node);
+        $returnTypeInfo = $this->returnTypeResolver->resolveFunctionLikeReturnType($node);
         if ($returnTypeInfo === null) {
             return null;
         }
@@ -123,26 +133,6 @@ CODE_SAMPLE
         $this->populateChildren($node, $returnTypeInfo);
 
         return $node;
-    }
-
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
-    private function resolveReturnType(FunctionLike $functionLike): ?ReturnTypeInfo
-    {
-        $docReturnTypeInfo = $this->docBlockManipulator->getReturnTypeInfo($functionLike);
-        $codeReturnTypeInfo = $this->functionLikeManipulator->resolveStaticReturnTypeInfo($functionLike);
-
-        // code has priority over docblock
-        if ($docReturnTypeInfo === null) {
-            return $codeReturnTypeInfo;
-        }
-
-        if ($codeReturnTypeInfo && $codeReturnTypeInfo->getTypeNode()) {
-            return $codeReturnTypeInfo;
-        }
-
-        return $docReturnTypeInfo;
     }
 
     /**
