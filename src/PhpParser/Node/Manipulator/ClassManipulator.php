@@ -290,6 +290,53 @@ final class ClassManipulator
         return null;
     }
 
+    /**
+     * @return string[]
+     */
+    public function getPrivatePropertyNames(Class_ $class): array
+    {
+        $privatePropertyNames = [];
+        foreach ($class->stmts as $stmt) {
+            if (! $stmt instanceof Property) {
+                continue;
+            }
+
+            if (! $stmt->isPrivate()) {
+                continue;
+            }
+
+            /** @var string $propertyName */
+            $propertyName = $this->nameResolver->getName($stmt);
+            $privatePropertyNames[] = $propertyName;
+        }
+
+        return $privatePropertyNames;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getPublicMethodNames(Class_ $class): array
+    {
+        $publicMethodNames = [];
+        foreach ($class->getMethods() as $method) {
+            if ($method->isAbstract()) {
+                continue;
+            }
+
+            if (! $method->isPublic()) {
+                continue;
+            }
+
+            /** @var string $methodName */
+            $methodName = $this->nameResolver->getName($method);
+
+            $publicMethodNames[] = $methodName;
+        }
+
+        return $publicMethodNames;
+    }
+
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
     {
         foreach ($classNode->stmts as $key => $classElementNode) {

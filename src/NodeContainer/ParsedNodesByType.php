@@ -584,15 +584,9 @@ final class ParsedNodesByType
      */
     private function addCall(Node $node): void
     {
-        if ($node instanceof MethodCall && $node->var instanceof Variable && $node->var->name === 'this') {
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-        } elseif ($node instanceof MethodCall) {
-            $className = $this->nodeTypeResolver->resolve($node->var)[0] ?? null;
-        } else {
-            $className = $this->nodeTypeResolver->resolve($node)[0] ?? null;
-        }
-
-        if ($className === null) { // anonymous
+        // one node can be of multiple-class types
+        $classTypes = $this->resolveNodeClassTypes($node);
+        if ($classTypes === []) { // anonymous
             return;
         }
 
@@ -601,7 +595,9 @@ final class ParsedNodesByType
             return;
         }
 
-        $this->methodsCallsByTypeAndMethod[$className][$methodName][] = $node;
+        foreach ($classTypes as $classType) {
+            $this->methodsCallsByTypeAndMethod[$classType][$methodName][] = $node;
+        }
     }
 
     /**
@@ -668,5 +664,20 @@ final class ParsedNodesByType
         }
 
         return false;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveNodeClassTypes(Node $node): array
+    {
+        if ($node instanceof MethodCall && $node->var instanceof Variable && $node->var->name === 'this') {
+            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+            return $className ? [$className] : [];
+        } elseif ($node instanceof MethodCall) {
+            return $this->nodeTypeResolver->resolve($node->var);
+        }
+
+        return $this->nodeTypeResolver->resolve($node);
     }
 }

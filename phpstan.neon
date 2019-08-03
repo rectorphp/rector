@@ -179,3 +179,6 @@ parameters:
         - '#Parameter \#2 \$listener of method Symfony\\Component\\EventDispatcher\\Debug\\TraceableEventDispatcher\:\:getListenerPriority\(\) expects callable\(\)\: mixed, array given#'
         - '#Parameter \#1 \$kernelClass of method Rector\\Symfony\\Bridge\\DependencyInjection\\SymfonyContainerFactory\:\:createFromKernelClass\(\) expects string, string\|null given#'
         - '#If condition is always true#'
+
+        # known value
+        - '#Method Rector\\PhpParser\\Node\\Manipulator\\ClassMethodManipulator\:\:addMethodParameterIfMissing\(\) should return string but returns string\|null#'
