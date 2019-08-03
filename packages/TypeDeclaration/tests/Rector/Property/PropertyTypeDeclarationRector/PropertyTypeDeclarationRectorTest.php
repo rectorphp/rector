@@ -13,6 +13,7 @@ final class PropertyTypeDeclarationRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/constructor_param.php.inc',
             __DIR__ . '/Fixture/constructor_param_with_nullable.php.inc',
             __DIR__ . '/Fixture/constructor_param_with_aliased_param.php.inc',
+            __DIR__ . '/Fixture/constructor_array_param_with_nullable.php.inc',
             __DIR__ . '/Fixture/constructor_assign.php.inc',
             __DIR__ . '/Fixture/phpunit_setup.php.inc',
             __DIR__ . '/Fixture/default_value.php.inc',
