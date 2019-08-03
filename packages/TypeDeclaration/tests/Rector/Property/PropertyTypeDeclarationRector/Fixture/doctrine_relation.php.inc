@@ -59,7 +59,7 @@ class DoctrineRelation
 
     /**
      * @ORM\OneToOne(targetEntity="DoctrineRelated")
-     * @var DoctrineRelated
+     * @var \Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture\DoctrineRelated
      */
     private $related;
 
