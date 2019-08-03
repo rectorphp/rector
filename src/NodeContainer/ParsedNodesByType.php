@@ -586,6 +586,8 @@ final class ParsedNodesByType
     {
         if ($node instanceof MethodCall && $node->var instanceof Variable && $node->var->name === 'this') {
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        } elseif ($node instanceof MethodCall) {
+            $className = $this->nodeTypeResolver->resolve($node->var)[0] ?? null;
         } else {
             $className = $this->nodeTypeResolver->resolve($node)[0] ?? null;
         }
