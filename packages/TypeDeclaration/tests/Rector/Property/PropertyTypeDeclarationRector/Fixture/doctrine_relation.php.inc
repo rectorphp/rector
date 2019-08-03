@@ -4,12 +4,21 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarati
 
 use Doctrine\ORM\Mapping as ORM;
 
+class DoctrineRelated
+{
+}
+
 class DoctrineRelation
 {
     /**
      * @ORM\OneToMany(targetEntity="App\Product")
      */
     private $products;
+
+    /**
+     * @ORM\OneToOne(targetEntity="DoctrineRelated")
+     */
+    private $related;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Car")
@@ -36,6 +45,10 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarati
 
 use Doctrine\ORM\Mapping as ORM;
 
+class DoctrineRelated
+{
+}
+
 class DoctrineRelation
 {
     /**
@@ -43,6 +56,12 @@ class DoctrineRelation
      * @var \App\Product[]|\Doctrine\Common\Collections\Collection
      */
     private $products;
+
+    /**
+     * @ORM\OneToOne(targetEntity="DoctrineRelated")
+     * @var DoctrineRelated
+     */
+    private $related;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Car")
