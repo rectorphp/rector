@@ -26,6 +26,7 @@ final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/this.php.inc',
             __DIR__ . '/Fixture/false.php.inc',
             __DIR__ . '/Fixture/complex_array.php.inc',
+            __DIR__ . '/Fixture/generator.php.inc',
             // php cs fixer return set - https://github.com/Slamdunk/PHP-CS-Fixer/blob/d7a409c10d0e21bc847efb26552aa65bb3c61547/tests/Fixer/FunctionNotation/PhpdocToReturnTypeFixerTest.php
             __DIR__ . '/Fixture/php-cs-fixer-return/invalid_class.php.inc',
             __DIR__ . '/Fixture/php-cs-fixer-return/invalid_return.php.inc',
