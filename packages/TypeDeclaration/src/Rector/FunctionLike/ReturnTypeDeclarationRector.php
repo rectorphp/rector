@@ -105,7 +105,6 @@ CODE_SAMPLE
 
             // use
             $returnTypeInfo = $this->functionLikeManipulator->resolveStaticReturnTypeInfo($node);
-
             if ($returnTypeInfo === null) {
                 return null;
             }
