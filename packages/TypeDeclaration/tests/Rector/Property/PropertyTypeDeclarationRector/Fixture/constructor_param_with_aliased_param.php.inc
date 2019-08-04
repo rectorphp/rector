@@ -2,9 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture;
 
-class Param {}
-
-use Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture\Param as Aliased;
+use Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\Source\ObjectToBeAliased as Aliased;
 
 class ConstructorParamWithAliasedParam
 {
@@ -22,9 +20,7 @@ class ConstructorParamWithAliasedParam
 
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture;
 
-class Param {}
-
-use Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture\Param as Aliased;
+use Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\Source\ObjectToBeAliased as Aliased;
 
 class ConstructorParamWithAliasedParam
 {

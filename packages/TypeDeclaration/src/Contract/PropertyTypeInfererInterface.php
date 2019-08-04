@@ -3,11 +3,12 @@
 namespace Rector\TypeDeclaration\Contract;
 
 use PhpParser\Node\Stmt\Property;
+use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 
 interface PropertyTypeInfererInterface
 {
     /**
-     * @return string[]
+     * @return string[]|IdentifierValueObject[]
      */
     public function inferProperty(Property $property): array;
 

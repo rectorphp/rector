@@ -38,6 +38,7 @@ services:
             - 'Rector\DependencyInjection\Loader\*'
             - 'Symplify\PackageBuilder\*'
             - 'Symfony\Component\Console\Input\*Input'
+            - '*ValueObject'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:

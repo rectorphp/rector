@@ -11,6 +11,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\Exception\ConflictingPriorityException;
+use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 
 final class PropertyTypeDeclarationRector extends AbstractRector
 {
@@ -72,13 +73,11 @@ final class PropertyTypeDeclarationRector extends AbstractRector
     }
 
     /**
-     * @param string[] $varTypes
+     * @param string[]|IdentifierValueObject[] $varTypes
      */
     private function setNodeVarTypes(Node $node, array $varTypes): Node
     {
-        $typesAsString = implode('|', $varTypes);
-
-        $this->docBlockManipulator->changeVarTag($node, $typesAsString);
+        $this->docBlockManipulator->changeVarTag($node, $varTypes);
 
         return $node;
     }
