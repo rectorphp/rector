@@ -4,17 +4,8 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarati
 
 use Doctrine\ORM\Mapping as ORM;
 
-class DoctrineRelated
-{
-}
-
 class DoctrineRelationToOne
 {
-    /**
-     * @ORM\OneToOne(targetEntity="DoctrineRelated")
-     */
-    private $related;
-
     /**
      * @ORM\ManyToOne(targetEntity="App\Company\Entity\Company", inversedBy="userBuildings")
      */
@@ -58,18 +49,8 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarati
 
 use Doctrine\ORM\Mapping as ORM;
 
-class DoctrineRelated
-{
-}
-
 class DoctrineRelationToOne
 {
-    /**
-     * @ORM\OneToOne(targetEntity="DoctrineRelated")
-     * @var \Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture\DoctrineRelated
-     */
-    private $related;
-
     /**
      * @ORM\ManyToOne(targetEntity="App\Company\Entity\Company", inversedBy="userBuildings")
      * @var \App\Company\Entity\Company|null
