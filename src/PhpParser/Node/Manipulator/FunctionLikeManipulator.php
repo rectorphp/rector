@@ -134,7 +134,7 @@ final class FunctionLikeManipulator
         $types = [];
 
         $type = $node instanceof NullableType ? $node->type : $node;
-        $result = $this->nameResolver->resolve($type);
+        $result = $this->nameResolver->getName($type);
         if ($result !== null) {
             $types[] = $result;
         }

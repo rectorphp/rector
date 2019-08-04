@@ -64,7 +64,7 @@ final class ClassConstManipulator
 
     private function isNameMatch(Node $node, ClassConst $classConst): bool
     {
-        return $this->nameResolver->resolve($node) === 'self::' . $this->nameResolver->resolve($classConst)
-            || $this->nameResolver->resolve($node) === 'static::' . $this->nameResolver->resolve($classConst);
+        return $this->nameResolver->getName($node) === 'self::' . $this->nameResolver->getName($classConst)
+            || $this->nameResolver->getName($node) === 'static::' . $this->nameResolver->getName($classConst);
     }
 }

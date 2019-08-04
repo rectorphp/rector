@@ -46,7 +46,7 @@ final class IdentifierManipulator
     {
         $this->ensureNodeHasIdentifier($node);
 
-        $oldNodeMethodName = $this->nameResolver->resolve($node);
+        $oldNodeMethodName = $this->nameResolver->getName($node);
         if ($oldNodeMethodName === null) {
             return;
         }
@@ -61,7 +61,7 @@ final class IdentifierManipulator
     {
         $this->ensureNodeHasIdentifier($node);
 
-        $name = $this->nameResolver->resolve($node);
+        $name = $this->nameResolver->getName($node);
         if ($name === null) {
             return;
         }

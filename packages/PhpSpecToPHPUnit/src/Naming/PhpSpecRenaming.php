@@ -36,7 +36,7 @@ final class PhpSpecRenaming
 
     public function renameMethod(ClassMethod $classMethod): void
     {
-        $name = $this->nameResolver->resolve($classMethod);
+        $name = $this->nameResolver->getName($classMethod);
         if ($name === null) {
             return;
         }

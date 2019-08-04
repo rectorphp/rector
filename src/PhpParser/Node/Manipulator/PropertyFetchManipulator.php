@@ -77,7 +77,7 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        $nodeName = $this->nameResolver->resolve($node);
+        $nodeName = $this->nameResolver->getName($node);
         if ($nodeName === null) {
             return false;
         }

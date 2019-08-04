@@ -77,7 +77,7 @@ final class FactoryClassPrinter
         }
 
         $directoryPath = Strings::before($classFileInfo->getRealPath(), DIRECTORY_SEPARATOR, -1);
-        $resolvedOldClass = $this->nameResolver->resolve($oldClass);
+        $resolvedOldClass = $this->nameResolver->getName($oldClass);
         if ($resolvedOldClass === null) {
             throw new ShouldNotHappenException();
         }

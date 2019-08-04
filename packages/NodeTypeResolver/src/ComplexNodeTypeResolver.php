@@ -73,7 +73,7 @@ final class ComplexNodeTypeResolver
             throw new ShouldNotHappenException();
         }
 
-        $propertyName = $this->nameResolver->resolve($property);
+        $propertyName = $this->nameResolver->getName($property);
         if ($propertyName === null) {
             return null;
         }

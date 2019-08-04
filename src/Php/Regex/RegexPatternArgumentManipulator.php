@@ -207,7 +207,7 @@ final class RegexPatternArgumentManipulator
             return [];
         }
 
-        $constantName = $this->nameResolver->resolve($classConstFetch->name);
+        $constantName = $this->nameResolver->getName($classConstFetch->name);
 
         if ($constantName === null) {
             return [];

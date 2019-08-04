@@ -131,7 +131,7 @@ final class NodeRemovingCommander implements CommanderInterface
                         continue;
                     }
 
-                    $methodName = $this->nameResolver->resolve($node->name);
+                    $methodName = $this->nameResolver->getName($node->name);
                     if ($methodName === null) {
                         continue;
                     }

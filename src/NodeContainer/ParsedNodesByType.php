@@ -229,7 +229,7 @@ final class ParsedNodesByType
             }
 
             foreach ($stmt->traits as $trait) {
-                $traitName = $this->nameResolver->resolve($trait);
+                $traitName = $this->nameResolver->getName($trait);
                 if ($traitName === null) {
                     continue;
                 }
@@ -373,7 +373,7 @@ final class ParsedNodesByType
         }
 
         if ($node instanceof Interface_ || $node instanceof Trait_ || $node instanceof Function_) {
-            $name = $this->nameResolver->resolve($node);
+            $name = $this->nameResolver->getName($node);
             if ($name === null) {
                 throw new ShouldNotHappenException();
             }
@@ -434,7 +434,7 @@ final class ParsedNodesByType
             return [];
         }
 
-        $methodName = $this->nameResolver->resolve($classMethod);
+        $methodName = $this->nameResolver->getName($classMethod);
         if ($methodName === null) {
             return [];
         }
@@ -486,21 +486,21 @@ final class ParsedNodesByType
             throw new ShouldNotHappenException();
         }
 
-        $constantName = $this->nameResolver->resolve($classConst);
+        $constantName = $this->nameResolver->getName($classConst);
 
         $this->constantsByType[$className][$constantName] = $classConst;
     }
 
     private function addClassConstantFetch(ClassConstFetch $classConstFetch): void
     {
-        $constantName = $this->nameResolver->resolve($classConstFetch->name);
+        $constantName = $this->nameResolver->getName($classConstFetch->name);
 
         if ($constantName === 'class' || $constantName === null) {
             // this is not a manual constant
             return;
         }
 
-        $className = $this->nameResolver->resolve($classConstFetch->class);
+        $className = $this->nameResolver->getName($classConstFetch->class);
 
         if (in_array($className, ['static', 'self', 'parent'], true)) {
             $resolvedClassTypes = $this->nodeTypeResolver->resolve($classConstFetch->class);
@@ -535,7 +535,7 @@ final class ParsedNodesByType
             return;
         }
 
-        $methodName = $this->nameResolver->resolve($classMethod);
+        $methodName = $this->nameResolver->getName($classMethod);
 
         $this->methodsByType[$className][$methodName] = $classMethod;
     }
@@ -596,7 +596,7 @@ final class ParsedNodesByType
             return;
         }
 
-        $methodName = $this->nameResolver->resolve($node);
+        $methodName = $this->nameResolver->getName($node);
         if ($methodName === null) {
             return;
         }

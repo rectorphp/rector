@@ -65,7 +65,7 @@ final class UsedImportsResolver
 
         // add class itself
         if ($class !== null) {
-            $className = $this->nameResolver->resolve($class);
+            $className = $this->nameResolver->getName($class);
             if ($className !== null) {
                 $usedImports[] = $className;
             }

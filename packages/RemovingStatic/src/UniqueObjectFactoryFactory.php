@@ -61,7 +61,7 @@ final class UniqueObjectFactoryFactory
      */
     public function createFactoryClass(Class_ $class, array $staticTypesInClass): Class_
     {
-        $className = $this->nameResolver->resolve($class);
+        $className = $this->nameResolver->getName($class);
         $name = $className . 'Factory';
 
         $shortName = $this->resolveClassShortName($name);
@@ -145,7 +145,7 @@ final class UniqueObjectFactoryFactory
         }
 
         foreach ($properties as $property) {
-            $propertyFetch = new PropertyFetch(new Variable('this'), $this->nameResolver->resolve($property));
+            $propertyFetch = new PropertyFetch(new Variable('this'), $this->nameResolver->getName($property));
             $new->args[] = new Arg($propertyFetch);
         }
 

@@ -66,7 +66,7 @@ final class ValueResolver
         }
 
         if ($expr instanceof ConstFetch) {
-            return $this->nameResolver->resolve($expr);
+            return $this->nameResolver->getName($expr);
         }
 
         $nodeStaticType = $this->nodeTypeResolver->getNodeStaticType($expr);
@@ -135,8 +135,8 @@ final class ValueResolver
      */
     private function resolveClassConstFetch(ClassConstFetch $classConstFetch)
     {
-        $class = $this->nameResolver->resolve($classConstFetch->class);
-        $constant = $this->nameResolver->resolve($classConstFetch->name);
+        $class = $this->nameResolver->getName($classConstFetch->class);
+        $constant = $this->nameResolver->getName($classConstFetch->name);
 
         if ($class === null) {
             throw new ShouldNotHappenException();

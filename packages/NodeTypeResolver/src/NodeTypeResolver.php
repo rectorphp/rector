@@ -440,7 +440,7 @@ final class NodeTypeResolver
     private function resolveStaticCall(StaticCall $staticCall): array
     {
         $classTypes = $this->resolve($staticCall->class);
-        $methodName = $this->nameResolver->resolve($staticCall->name);
+        $methodName = $this->nameResolver->getName($staticCall->name);
 
         // no specific method found, return class types, e.g. <ClassType>::$method()
         if (! is_string($methodName)) {
@@ -533,7 +533,7 @@ final class NodeTypeResolver
         /** @var Class_ $classNode */
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
 
-        $propertyName = $this->nameResolver->resolve($node->name);
+        $propertyName = $this->nameResolver->getName($node->name);
         if ($propertyName === null) {
             return false;
         }
@@ -569,7 +569,7 @@ final class NodeTypeResolver
             return false;
         }
 
-        $className = $this->nameResolver->resolve($node);
+        $className = $this->nameResolver->getName($node);
 
         return $className === null || Strings::contains($className, 'AnonymousClass');
     }

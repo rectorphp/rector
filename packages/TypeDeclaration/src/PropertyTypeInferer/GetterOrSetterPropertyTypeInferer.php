@@ -32,7 +32,7 @@ final class GetterOrSetterPropertyTypeInferer extends AbstractPropertyTypeInfere
         $class = $property->getAttribute(AttributeKey::CLASS_NODE);
 
         /** @var string $propertyName */
-        $propertyName = $this->nameResolver->resolve($property);
+        $propertyName = $this->nameResolver->getName($property);
 
         foreach ($class->getMethods() as $classMethod) {
             if (! $this->hasClassMethodOnlyStatementReturnOfPropertyFetch($classMethod, $propertyName)) {

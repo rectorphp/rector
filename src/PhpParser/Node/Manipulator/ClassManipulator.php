@@ -160,7 +160,7 @@ final class ClassManipulator
             }
 
             foreach ($stmt->traits as $trait) {
-                $traitName = $this->nameResolver->resolve($trait);
+                $traitName = $this->nameResolver->getName($trait);
                 if ($traitName !== null) {
                     $usedTraits[$traitName] = $trait;
                 }
@@ -374,7 +374,7 @@ final class ClassManipulator
 
         $classMethodNodes = $this->betterNodeFinder->findInstanceOf($classNode->stmts, ClassMethod::class);
         foreach ($classMethodNodes as $classMethodNode) {
-            $classMethodNames[] = $this->nameResolver->resolve($classMethodNode);
+            $classMethodNames[] = $this->nameResolver->getName($classMethodNode);
         }
 
         return $classMethodNames;
