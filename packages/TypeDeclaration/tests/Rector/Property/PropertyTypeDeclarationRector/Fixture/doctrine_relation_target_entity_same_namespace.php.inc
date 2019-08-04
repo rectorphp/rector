@@ -32,7 +32,7 @@ class DoctrineRelationTargetEntitySameNamespace
 {
     /**
      * @ORM\OneToOne(targetEntity="DoctrineRelated")
-     * @var \Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture\DoctrineRelated
+     * @var \Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture\DoctrineRelated|null
      */
     private $related;
 }

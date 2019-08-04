@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\NamespaceAnalyzer;
 use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
 
 final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererInterface
@@ -37,9 +38,15 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
      */
     private $docBlockManipulator;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator)
+    /**
+     * @var NamespaceAnalyzer
+     */
+    private $namespaceAnalyzer;
+
+    public function __construct(DocBlockManipulator $docBlockManipulator, NamespaceAnalyzer $namespaceAnalyzer)
     {
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->namespaceAnalyzer = $namespaceAnalyzer;
     }
 
     /**
@@ -96,7 +103,6 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         $types = [];
 
         $relationType = $this->resolveRelationType($property, $doctrineRelationAnnotation);
-
         if ($relationType) {
             $types[] = $relationType;
         }
@@ -122,6 +128,11 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         if ($relationTag->value instanceof GenericTagValueNode) {
             $resolveTargetType = $this->resolveTargetEntity($relationTag->value);
             if ($resolveTargetType) {
+                // is FQN?
+                if (! class_exists($resolveTargetType)) {
+                    return $this->namespaceAnalyzer->resolveTypeToFullyQualified($resolveTargetType, $property);
+                }
+
                 return $resolveTargetType;
             }
         }
