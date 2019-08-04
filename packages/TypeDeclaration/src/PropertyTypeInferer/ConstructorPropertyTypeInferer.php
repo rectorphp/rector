@@ -46,8 +46,7 @@ final class ConstructorPropertyTypeInferer extends AbstractPropertyTypeInferer i
 
             // it's an array - annotation → make type more precise, if possible
             if ($type === 'array') {
-                $paramStaticTypeAsString = $this->getResolveParamStaticTypeAsString($classMethod, $propertyName);
-                $types[] = $paramStaticTypeAsString ?? 'array';
+                $types = $this->resolveMoreSpecificArrayType($classMethod, $propertyName);
             } else {
                 $types[] = $type;
             }
@@ -56,7 +55,7 @@ final class ConstructorPropertyTypeInferer extends AbstractPropertyTypeInferer i
                 $types[] = 'null';
             }
 
-            return $types;
+            return array_unique($types);
         }
 
         return [];
@@ -186,5 +185,18 @@ final class ConstructorPropertyTypeInferer extends AbstractPropertyTypeInferer i
         }
 
         return $this->nameResolver->resolve($param->type);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveMoreSpecificArrayType(ClassMethod $classMethod, string $propertyName): array
+    {
+        $paramStaticTypeAsString = $this->getResolveParamStaticTypeAsString($classMethod, $propertyName);
+        if ($paramStaticTypeAsString) {
+            return explode('|', $paramStaticTypeAsString);
+        }
+
+        return ['array'];
     }
 }

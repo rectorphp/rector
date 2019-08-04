@@ -132,6 +132,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     private function isNullableOneRelation(Node $node): bool
     {
         if (! $this->docBlockManipulator->hasTag($node, self::JOIN_COLUMN_ANNOTATION)) {
+            // @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/annotations-reference.html#joincolumn
             return true;
         }
 

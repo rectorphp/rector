@@ -103,6 +103,7 @@ final class PropertyTypeDeclarationRector extends AbstractRector
         }
 
         $alreadySetPropertyTypeInferer = $this->propertyTypeInferers[$propertyTypeInferer->getPriority()];
+
         throw new ConflictingPriorityException($propertyTypeInferer, $alreadySetPropertyTypeInferer);
     }
 }
