@@ -76,7 +76,7 @@ final class SingleMethodAssignedNodePropertyTypeInferer implements PropertyTypeI
             return [];
         }
 
-        return $stringTypes;
+        return array_unique($stringTypes);
     }
 
     public function getPriority(): int
