@@ -39,6 +39,7 @@ use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
 use Rector\Php\TypeAnalyzer;
+use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 
 final class DocBlockManipulator
 {
@@ -256,7 +257,10 @@ final class DocBlockManipulator
         return $phpDocInfo->getTagsByName($name);
     }
 
-    public function changeVarTag(Node $node, string $type): void
+    /**
+     * @param string|string[]|IdentifierValueObject|IdentifierValueObject[] $type
+     */
+    public function changeVarTag(Node $node, $type): void
     {
         $this->removeTagFromNode($node, 'var', true);
         $this->addTypeSpecificTag($node, 'var', $type);
@@ -547,11 +551,20 @@ final class DocBlockManipulator
     /**
      * All class-type tags are FQN by default to keep default convention through the code.
      * Some people prefer FQN, some short. FQN can be shorten with \Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector later, while short prolonged not
+     * @param string|string[]|IdentifierValueObject|IdentifierValueObject[] $type
      */
-    private function addTypeSpecificTag(Node $node, string $name, string $type): void
+    private function addTypeSpecificTag(Node $node, string $name, $type): void
     {
-        // preffix possible class name
-        $type = $this->preslashFullyQualifiedNames($type);
+        if (! is_array($type)) {
+            $type = [$type];
+        }
+
+        foreach ($type as $key => $singleType) {
+            // prefix possible class name
+            $type[$key] = $this->preslashFullyQualifiedNames($singleType);
+        }
+
+        $type = implode('|', $type);
 
         // there might be no phpdoc at all
         if ($node->getDocComment() !== null) {
@@ -681,8 +694,19 @@ final class DocBlockManipulator
         return $attributeAwareNode;
     }
 
-    private function preslashFullyQualifiedNames(string $type): string
+    /**
+     * @param string|IdentifierValueObject $type
+     */
+    private function preslashFullyQualifiedNames($type): string
     {
+        if ($type instanceof IdentifierValueObject) {
+            if ($type->isAlias()) {
+                return $type->getName();
+            }
+
+            $type = $type->getName();
+        }
+
         $joinChar = '|'; // default
         if (Strings::contains($type, '|')) { // intersection
             $types = explode('|', $type);

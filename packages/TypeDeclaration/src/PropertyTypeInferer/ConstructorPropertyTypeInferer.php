@@ -2,6 +2,7 @@
 
 namespace Rector\TypeDeclaration\PropertyTypeInferer;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
@@ -12,11 +13,12 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 
 final class ConstructorPropertyTypeInferer extends AbstractPropertyTypeInferer implements PropertyTypeInfererInterface
 {
     /**
-     * @return string[]
+     * @return string[]|IdentifierValueObject[]
      */
     public function inferProperty(Node\Stmt\Property $property): array
     {
@@ -174,7 +176,10 @@ final class ConstructorPropertyTypeInferer extends AbstractPropertyTypeInferer i
         return false;
     }
 
-    private function resolveParamTypeToString(Node\Param $param): ?string
+    /**
+     * @return IdentifierValueObject|string|null
+     */
+    private function resolveParamTypeToString(Node\Param $param)
     {
         if ($param->type === null) {
             return null;
@@ -182,6 +187,19 @@ final class ConstructorPropertyTypeInferer extends AbstractPropertyTypeInferer i
 
         if ($param->type instanceof NullableType) {
             return $this->nameResolver->resolve($param->type->type);
+        }
+
+        // special case for alias
+        if ($param->type instanceof Node\Name\FullyQualified) {
+            $fullyQualifiedName = $param->type->toString();
+            $originalName = $param->type->getAttribute('originalName');
+
+            if ($fullyQualifiedName && $originalName instanceof Node\Name) {
+                // if the FQN has different ending than the original, it was aliased and we need to return the alias
+                if (! Strings::endsWith($fullyQualifiedName, '\\' . $originalName->toString())) {
+                    return new IdentifierValueObject($originalName->toString(), true);
+                }
+            }
         }
 
         return $this->nameResolver->resolve($param->type);

@@ -128,6 +128,10 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         if ($relationTag->value instanceof GenericTagValueNode) {
             $resolveTargetType = $this->resolveTargetEntity($relationTag->value);
             if ($resolveTargetType) {
+                if (Strings::contains($resolveTargetType, '\\')) {
+                    return $resolveTargetType;
+                }
+
                 // is FQN?
                 if (! class_exists($resolveTargetType)) {
                     return $this->namespaceAnalyzer->resolveTypeToFullyQualified($resolveTargetType, $property);
