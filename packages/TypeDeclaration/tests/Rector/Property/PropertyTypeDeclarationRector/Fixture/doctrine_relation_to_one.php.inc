@@ -8,22 +8,12 @@ class DoctrineRelated
 {
 }
 
-class DoctrineRelation
+class DoctrineRelationToOne
 {
-    /**
-     * @ORM\OneToMany(targetEntity="App\Product")
-     */
-    private $products;
-
     /**
      * @ORM\OneToOne(targetEntity="DoctrineRelated")
      */
     private $related;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Car")
-     */
-    private $cars;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Company\Entity\Company", inversedBy="userBuildings")
@@ -72,25 +62,13 @@ class DoctrineRelated
 {
 }
 
-class DoctrineRelation
+class DoctrineRelationToOne
 {
-    /**
-     * @ORM\OneToMany(targetEntity="App\Product")
-     * @var \App\Product[]|\Doctrine\Common\Collections\Collection
-     */
-    private $products;
-
     /**
      * @ORM\OneToOne(targetEntity="DoctrineRelated")
      * @var \Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture\DoctrineRelated
      */
     private $related;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Car")
-     * @var \App\Car[]|\Doctrine\Common\Collections\Collection
-     */
-    private $cars;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Company\Entity\Company", inversedBy="userBuildings")
