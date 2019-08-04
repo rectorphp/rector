@@ -2,6 +2,7 @@
 
 namespace Rector\PhpParser\Node\Manipulator;
 
+use Iterator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
@@ -15,6 +16,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
+use Rector\Php\PhpVersionProvider;
 use Rector\Php\TypeAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -42,16 +44,28 @@ final class FunctionLikeManipulator
      */
     private $nameResolver;
 
+    /**
+     * @var bool
+     */
+    private $isVoid = false;
+
+    /**
+     * @var PhpVersionProvider
+     */
+    private $phpVersionProvider;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         TypeAnalyzer $typeAnalyzer,
         NodeTypeResolver $nodeTypeResolver,
-        NameResolver $nameResolver
+        NameResolver $nameResolver,
+        PhpVersionProvider $phpVersionProvider
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nameResolver = $nameResolver;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
 
     /**
@@ -76,23 +90,17 @@ final class FunctionLikeManipulator
             }
         }
 
+        $this->isVoid = true;
+
         // B. resolve from return $x nodes
-        /** @var Return_[] $returnNodes */
-        $returnNodes = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Return_::class);
+        $types = $this->resolveTypesFromReturnNodes($functionLike);
 
-        $isVoid = true;
-
-        $types = [];
-        foreach ($returnNodes as $returnNode) {
-            if ($returnNode->expr === null) {
-                continue;
-            }
-
-            $types = array_merge($types, $this->nodeTypeResolver->resolveSingleTypeToStrings($returnNode->expr));
-            $isVoid = false;
+        // C. resolve from yields
+        if ($types === []) {
+            $types = $this->resolveFromYieldNodes($functionLike);
         }
 
-        if ($isVoid) {
+        if ($this->isVoid) {
             return new ReturnTypeInfo(['void'], $this->typeAnalyzer);
         }
 
@@ -136,5 +144,50 @@ final class FunctionLikeManipulator
         }
 
         return $types;
+    }
+
+    /**
+     * @param ClassMethod|Function_|Closure $functionLike
+     * @return string[]
+     */
+    private function resolveTypesFromReturnNodes(FunctionLike $functionLike): array
+    {
+        /** @var Return_[] $returnNodes */
+        $returnNodes = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Return_::class);
+
+        $types = [];
+        foreach ($returnNodes as $returnNode) {
+            if ($returnNode->expr === null) {
+                continue;
+            }
+
+            $types = array_merge($types, $this->nodeTypeResolver->resolveSingleTypeToStrings($returnNode->expr));
+            $this->isVoid = false;
+        }
+
+        return $types;
+    }
+
+    /**
+     * @param ClassMethod|Function_|Closure $functionLike
+     * @return string[]
+     */
+    private function resolveFromYieldNodes(FunctionLike $functionLike): array
+    {
+        /** @var Node\Expr\Yield_[] $yieldNodes */
+        $yieldNodes = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Node\Expr\Yield_::class);
+
+        if (count($yieldNodes)) {
+            $this->isVoid = false;
+
+            if ($this->phpVersionProvider->isAtLeast('7.1')) {
+                // @see https://www.php.net/manual/en/language.types.iterable.php
+                return ['iterable'];
+            }
+
+            return [Iterator::class];
+        }
+
+        return [];
     }
 }
