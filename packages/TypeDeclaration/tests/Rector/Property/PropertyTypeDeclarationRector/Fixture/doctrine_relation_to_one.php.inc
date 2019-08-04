@@ -7,13 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 class DoctrineRelationToOne
 {
     /**
-     * @ORM\ManyToOne(targetEntity="App\Company\Entity\Company", inversedBy="userBuildings")
+     * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
      */
     private $company;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Company\Entity\Company", inversedBy="userBuildings")
-     * @ORM\JoinColumn(name="company_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="company_id", nullable=true, referencedColumnName="id")
      */
     private $company2;
 
@@ -22,23 +22,6 @@ class DoctrineRelationToOne
      * @ORM\JoinColumn(name="company_id", referencedColumnName="id", nullable=false)
      */
     private $company3;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
-     */
-    private $company4;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $company5;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $company6;
 }
 
 ?>
@@ -52,14 +35,14 @@ use Doctrine\ORM\Mapping as ORM;
 class DoctrineRelationToOne
 {
     /**
-     * @ORM\ManyToOne(targetEntity="App\Company\Entity\Company", inversedBy="userBuildings")
+     * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
      * @var \App\Company\Entity\Company|null
      */
     private $company;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Company\Entity\Company", inversedBy="userBuildings")
-     * @ORM\JoinColumn(name="company_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="company_id", nullable=true, referencedColumnName="id")
      * @var \App\Company\Entity\Company|null
      */
     private $company2;
@@ -70,26 +53,6 @@ class DoctrineRelationToOne
      * @var \App\Company\Entity\Company
      */
     private $company3;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
-     * @var \App\Company\Entity\Company|null
-     */
-    private $company4;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
-     * @ORM\JoinColumn(nullable=true)
-     * @var \App\Company\Entity\Company|null
-     */
-    private $company5;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
-     * @ORM\JoinColumn(nullable=false)
-     * @var \App\Company\Entity\Company
-     */
-    private $company6;
 }
 
 ?>
