@@ -50,7 +50,7 @@ final class IsArrayAndDualCheckToAble
         }
 
         /** @var FuncCall $funcCallNode */
-        if ($this->nameResolver->resolve($funcCallNode) !== 'is_array') {
+        if ($this->nameResolver->getName($funcCallNode) !== 'is_array') {
             return null;
         }
 

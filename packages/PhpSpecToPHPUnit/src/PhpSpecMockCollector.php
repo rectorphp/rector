@@ -50,7 +50,7 @@ final class PhpSpecMockCollector
      */
     public function resolveClassMocksFromParam(Class_ $class): array
     {
-        $className = $this->nameResolver->resolve($class);
+        $className = $this->nameResolver->getName($class);
 
         if (isset($this->mocks[$className])) {
             return $this->mocks[$className];
@@ -80,7 +80,7 @@ final class PhpSpecMockCollector
 
     public function isVariableMockInProperty(Variable $variable): bool
     {
-        $variableName = $this->nameResolver->resolve($variable);
+        $variableName = $this->nameResolver->getName($variable);
         $className = $variable->getAttribute(AttributeKey::CLASS_NAME);
 
         return in_array($variableName, $this->propertyMocksByClass[$className] ?? [], true);
@@ -88,7 +88,7 @@ final class PhpSpecMockCollector
 
     public function getTypeForClassAndVariable(Class_ $node, string $variable): string
     {
-        $className = $this->nameResolver->resolve($node);
+        $className = $this->nameResolver->getName($node);
 
         if (! isset($this->mocksWithsTypes[$className][$variable])) {
             throw new ShouldNotHappenException();
@@ -104,7 +104,7 @@ final class PhpSpecMockCollector
 
     private function addMockFromParam(Param $param): void
     {
-        $variable = $this->nameResolver->resolve($param->var);
+        $variable = $this->nameResolver->getName($param->var);
 
         /** @var string $class */
         $class = $param->getAttribute(AttributeKey::CLASS_NAME);

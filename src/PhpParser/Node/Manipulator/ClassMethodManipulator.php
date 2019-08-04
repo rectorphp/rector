@@ -139,7 +139,7 @@ final class ClassMethodManipulator
             return [];
         }
 
-        $fqnTypeName = $this->nameResolver->resolve($getFqnTypeNode);
+        $fqnTypeName = $this->nameResolver->getName($getFqnTypeNode);
         if ($fqnTypeName === null) {
             return [];
         }
@@ -174,7 +174,7 @@ final class ClassMethodManipulator
 
         foreach ($classMethodNode->params as $paramNode) {
             if ($this->nodeTypeResolver->isType($paramNode, $type)) {
-                return $this->nameResolver->resolve($paramNode);
+                return $this->nameResolver->getName($paramNode);
             }
         }
 

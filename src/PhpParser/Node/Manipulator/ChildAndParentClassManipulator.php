@@ -67,7 +67,7 @@ final class ChildAndParentClassManipulator
 
     public function completeChildConstructors(Class_ $classNode, ClassMethod $constructorClassMethod): void
     {
-        $className = $this->nameResolver->resolve($classNode);
+        $className = $this->nameResolver->getName($classNode);
         if ($className === null) {
             return;
         }

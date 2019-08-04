@@ -26,7 +26,7 @@ final class ClassNaming
     public function getShortName($name): string
     {
         if ($name instanceof Name) {
-            $name = $this->nameResolver->resolve($name);
+            $name = $this->nameResolver->getName($name);
             if ($name === null) {
                 throw new ShouldNotHappenException();
             }

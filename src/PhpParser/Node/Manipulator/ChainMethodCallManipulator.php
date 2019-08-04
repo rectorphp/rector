@@ -44,7 +44,7 @@ final class ChainMethodCallManipulator
         $methods = array_reverse($methods);
 
         foreach ($methods as $method) {
-            $activeMethodName = $this->nameResolver->resolve($node);
+            $activeMethodName = $this->nameResolver->getName($node);
             if ($activeMethodName !== $method) {
                 return false;
             }

@@ -98,7 +98,7 @@ final class RouteInfoFactory
 
             // SomePresenter::class
             if ($this->nameResolver->isName($controllerMethodNode->name, 'class')) {
-                $presenterClass = $this->nameResolver->resolve($controllerMethodNode->class);
+                $presenterClass = $this->nameResolver->getName($controllerMethodNode->class);
                 if ($presenterClass === null) {
                     return null;
                 }
@@ -135,7 +135,7 @@ final class RouteInfoFactory
                 return null;
             }
 
-            $controllerClass = $this->nameResolver->resolve($classNode);
+            $controllerClass = $this->nameResolver->getName($classNode);
             if ($controllerClass === null) {
                 return null;
             }

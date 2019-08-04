@@ -14,6 +14,6 @@ final class NameResolverReturnTypeExtension extends AbstractResolvedNameReturnTy
 
     public function isMethodSupported(MethodReflection $methodReflection): bool
     {
-        return $methodReflection->getName() === 'resolve';
+        return $methodReflection->getName() === 'getName';
     }
 }

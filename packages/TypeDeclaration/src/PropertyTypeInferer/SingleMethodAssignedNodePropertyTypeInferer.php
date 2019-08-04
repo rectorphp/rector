@@ -62,7 +62,7 @@ final class SingleMethodAssignedNodePropertyTypeInferer implements PropertyTypeI
             return [];
         }
 
-        $propertyName = $this->nameResolver->resolve($property);
+        $propertyName = $this->nameResolver->getName($property);
 
         $assignedNode = $this->resolveAssignedNodeToProperty($classMethod, $propertyName);
         if ($assignedNode === null) {

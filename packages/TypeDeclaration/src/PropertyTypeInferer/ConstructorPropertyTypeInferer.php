@@ -30,7 +30,7 @@ final class ConstructorPropertyTypeInferer extends AbstractPropertyTypeInferer i
             return [];
         }
 
-        $propertyName = $this->nameResolver->resolve($property);
+        $propertyName = $this->nameResolver->getName($property);
 
         $param = $this->resolveParamForPropertyFetch($classMethod, $propertyName);
         if ($param === null) {
@@ -133,7 +133,7 @@ final class ConstructorPropertyTypeInferer extends AbstractPropertyTypeInferer i
                 return null;
             }
 
-            $assignedParamName = $this->nameResolver->resolve($node->expr);
+            $assignedParamName = $this->nameResolver->getName($node->expr);
 
             return NodeTraverser::STOP_TRAVERSAL;
         });
@@ -186,7 +186,7 @@ final class ConstructorPropertyTypeInferer extends AbstractPropertyTypeInferer i
         }
 
         if ($param->type instanceof NullableType) {
-            return $this->nameResolver->resolve($param->type->type);
+            return $this->nameResolver->getName($param->type->type);
         }
 
         // special case for alias
@@ -202,7 +202,7 @@ final class ConstructorPropertyTypeInferer extends AbstractPropertyTypeInferer i
             }
         }
 
-        return $this->nameResolver->resolve($param->type);
+        return $this->nameResolver->getName($param->type);
     }
 
     /**

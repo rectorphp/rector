@@ -44,7 +44,7 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
     public function resolve(Node $paramNode): array
     {
         if ($paramNode->type !== null) {
-            $resolveTypeName = $this->nameResolver->resolve($paramNode->type);
+            $resolveTypeName = $this->nameResolver->getName($paramNode->type);
             if ($resolveTypeName) {
                 return [$resolveTypeName];
             }
@@ -64,7 +64,7 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
         $paramTypeInfos = $this->docBlockManipulator->getParamTypeInfos($functionLike);
 
         /** @var string $paramName */
-        $paramName = $this->nameResolver->resolve($param->var);
+        $paramName = $this->nameResolver->getName($param->var);
         if (! isset($paramTypeInfos[$paramName])) {
             return [];
         }

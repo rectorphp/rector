@@ -42,7 +42,7 @@ final class UseImportsTraverser
             }
 
             foreach ($node->uses as $useUse) {
-                $name = $this->nameResolver->resolve($useUse);
+                $name = $this->nameResolver->getName($useUse);
                 $callable($useUse, $name);
             }
         });

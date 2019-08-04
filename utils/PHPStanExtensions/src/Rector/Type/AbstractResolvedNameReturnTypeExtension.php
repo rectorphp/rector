@@ -19,12 +19,10 @@ use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\Rector\NameResolverTrait;
 
 /**
- * @see NameResolver::resolve()
- * @see NameResolverTrait::getName()
+ * @see \Rector\PhpParser\Node\Resolver\NameResolver::getName()
+ * @see \Rector\Rector\AbstractRector\NameResolverTrait::getName()
  *
  * These returns always strings for nodes with required names, e.g. for @see ClassMethod
  */

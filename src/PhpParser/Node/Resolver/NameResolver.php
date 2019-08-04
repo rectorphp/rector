@@ -39,24 +39,24 @@ final class NameResolver
                     return null;
                 }
 
-                return $this->resolve($classConstNode->consts[0]);
+                return $this->getName($classConstNode->consts[0]);
             },
             function (Property $propertyNode): ?string {
                 if (count($propertyNode->props) === 0) {
                     return null;
                 }
 
-                return $this->resolve($propertyNode->props[0]);
+                return $this->getName($propertyNode->props[0]);
             },
             function (Use_ $useNode): ?string {
                 if (count($useNode->uses) === 0) {
                     return null;
                 }
 
-                return $this->resolve($useNode->uses[0]);
+                return $this->getName($useNode->uses[0]);
             },
             function (Param $paramNode): ?string {
-                return $this->resolve($paramNode->var);
+                return $this->getName($paramNode->var);
             },
             function (Name $nameNode): string {
                 $resolvedName = $nameNode->getAttribute(AttributeKey::RESOLVED_NAME);
@@ -74,7 +74,7 @@ final class NameResolver
                     return null;
                 }
 
-                return $this->resolve($classNode->name);
+                return $this->getName($classNode->name);
             },
             function (Interface_ $interface): ?string {
                 return $this->resolveNamespacedNameAwareNode($interface);
@@ -83,8 +83,8 @@ final class NameResolver
                 return $this->resolveNamespacedNameAwareNode($trait);
             },
             function (ClassConstFetch $classConstFetch): ?string {
-                $class = $this->resolve($classConstFetch->class);
-                $name = $this->resolve($classConstFetch->name);
+                $class = $this->getName($classConstFetch->class);
+                $name = $this->getName($classConstFetch->name);
 
                 if ($class === null || $name === null) {
                     return null;
@@ -113,7 +113,7 @@ final class NameResolver
 
     public function isNameInsensitive(Node $node, string $name): bool
     {
-        return strtolower((string) $this->resolve($node)) === strtolower($name);
+        return strtolower((string) $this->getName($node)) === strtolower($name);
     }
 
     /**
@@ -132,7 +132,7 @@ final class NameResolver
 
     public function isName(Node $node, string $name): bool
     {
-        $resolvedName = $this->resolve($node);
+        $resolvedName = $this->getName($node);
         if ($resolvedName === null) {
             return false;
         }
@@ -159,10 +159,10 @@ final class NameResolver
      */
     public function isNames(Node $node, array $names): bool
     {
-        return in_array($this->resolve($node), $names, true);
+        return in_array($this->getName($node), $names, true);
     }
 
-    public function resolve(Node $node): ?string
+    public function getName(Node $node): ?string
     {
         foreach ($this->nameResolversPerNode as $type => $nameResolver) {
             if (is_a($node, $type, true)) {
@@ -192,7 +192,7 @@ final class NameResolver
 
     public function areNamesEqual(Node $firstNode, Node $secondNode): bool
     {
-        return $this->resolve($firstNode) === $this->resolve($secondNode);
+        return $this->getName($firstNode) === $this->getName($secondNode);
     }
 
     /**
@@ -208,6 +208,6 @@ final class NameResolver
             return null;
         }
 
-        return $this->resolve($classLike->name);
+        return $this->getName($classLike->name);
     }
 }

@@ -32,7 +32,7 @@ final class TemplateGuesser
             throw new ShouldNotHappenException();
         }
 
-        $method = $this->nameResolver->resolve($classMethod);
+        $method = $this->nameResolver->getName($classMethod);
         if ($method === null) {
             throw new ShouldNotHappenException();
         }

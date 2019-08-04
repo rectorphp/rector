@@ -25,7 +25,7 @@ final class AllAssignNodePropertyTypeInferer extends AbstractPropertyTypeInferer
         /** @var ClassLike $class */
         $class = $property->getAttribute(AttributeKey::CLASS_NODE);
 
-        $propertyName = $this->nameResolver->resolve($property);
+        $propertyName = $this->nameResolver->getName($property);
 
         $assignedExprStaticTypes = $this->collectAllPropertyAsignExprStaticTypes($class, $propertyName);
         if ($assignedExprStaticTypes === []) {

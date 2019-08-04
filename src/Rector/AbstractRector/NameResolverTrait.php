@@ -65,6 +65,6 @@ trait NameResolverTrait
 
     public function getName(Node $node): ?string
     {
-        return $this->nameResolver->resolve($node);
+        return $this->nameResolver->getName($node);
     }
 }
