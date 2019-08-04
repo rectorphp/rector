@@ -143,8 +143,13 @@ CODE_SAMPLE
      */
     private function createReturnCoalesceNode(array $coalescingNodes): Return_
     {
-        $coalesceNode = new Coalesce(array_shift($coalescingNodes), array_shift($coalescingNodes));
+        /** @var Expr $left */
+        $left = array_shift($coalescingNodes);
 
+        /** @var Expr $right */
+        $right = array_shift($coalescingNodes);
+
+        $coalesceNode = new Coalesce($left, $right);
         foreach ($coalescingNodes as $nextCoalescingNode) {
             $coalesceNode = new Coalesce($coalesceNode, $nextCoalescingNode);
         }

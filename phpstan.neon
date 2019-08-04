@@ -50,9 +50,7 @@ parameters:
 
         # false positive - type is set by annotation above
         - '#Array \(array<PhpParser\\Node\\Stmt>\) does not accept PhpParser\\Node#'
-        - '#Method Rector\\Php\\Rector\\TryCatch\\MultiExceptionCatchRector\:\:collectCatchKeysByContent\(\) should return array<array<int\>\> but returns array<string, array<int, int\|string\>\>#'
         - '#Method Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockManipulator::getTagByName\(\) should return PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|null#'
-        - '#Parameter \#1 \$expr of class PhpParser\\Node\\Expr\\BooleanNot constructor expects PhpParser\\Node\\Expr, PhpParser\\Node given#'
         - '#Parameter \#1 \$node of method Rector\\PhpParser\\Node\\Commander\\NodeAddingCommander::wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
 
         # irrelevant
@@ -86,7 +84,6 @@ parameters:
         - '#Method Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser::getRectors\(\) should return array<Rector\\Contract\\Rector\\PhpRectorInterface> but returns array<PhpParser\\NodeVisitor>#'
 
         # known values
-        - '#Parameter \#1 \$stack of function array_shift expects array, \(array<PhpParser\\Node\|null>\)\|PhpParser\\Node\|null given#'
 
         - '#Cannot access property \$value on PhpParser\\Node\\Expr\\ArrayItem\|null#'
         - '#Method Rector\\Symfony\\Rector\\New_\\StringToArrayArgumentProcessRector::findPreviousNodeAssign\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
@@ -95,7 +92,6 @@ parameters:
         - '#Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser::__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
 
         # known values
-        - '#Parameter \#(1|2) \$(left|right) of class PhpParser\\Node\\Expr\\BinaryOp\\Coalesce constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
         - '#Strict comparison using === between PhpParser\\Node\\Expr and null will always evaluate to false#'
 
         # known values
@@ -121,7 +117,6 @@ parameters:
         - '#Class Manual\\Twig\\TwigFilter not found#'
         - '#Class Manual_Twig_Filter not found#'
 
-        - '#Parameter \#1 \$binaryOp of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyConditionsRector\:\:createInversedBooleanOp\(\) expects PhpParser\\Node\\Expr\\BinaryOp, PhpParser\\Node given#'
 
         - '#Rector\\NetteToSymfony\\Annotation\\SymfonyRoutePhpDocTagNode\:\:__construct\(\) does not call parent constructor from PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode#'
 
@@ -138,7 +133,6 @@ parameters:
         - '#Method Rector\\PHPUnit\\Rector\\MethodCall\\ReplaceAssertArraySubsetRector\:\:matchArray\(\) should return PhpParser\\Node\\Expr\\Array_\|null but returns PhpParser\\Node\\Expr#'
 
         - '#Parameter \#2 \$classMethod of method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolvePathFromClassAndMethodNodes\(\) expects PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node\\Stmt given#'
-        - '#Parameter \#2 \$constFetch of method Rector\\CodeQuality\\Rector\\Identical\\SimplifyArraySearchRector\:\:resolveIsNot\(\) expects PhpParser\\Node\\Expr\\ConstFetch, PhpParser\\Node given#'
         - '#(.*?)PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable given#'
 
         # false positive 0.11.5
@@ -175,15 +169,9 @@ parameters:
         - '#Empty catch block\. If you are sure this is meant to be empty, please add a "// @ignoreException" comment in the catch block#'
 
         - '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\)\|null, Closure\(mixed, mixed, mixed, mixed\)\: void given#'
-        - '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\)\|null, callable given#'
-        - '#Method Rector\\NodeTypeResolver\\PerNodeTypeResolver\\NameTypeResolver\:\:resolveFullyQualifiedName\(\) should return string\|null but returns PhpParser\\Node\\Name\|null#'
-        - '#Parameter \#1 \$json of static method Nette\\Utils\\Json\:\:decode\(\) expects string, array<PhpParser\\Node\\Expr\>\|string given#'
-        - '#Parameter \#1 \$stringValue of method Rector\\CodingStyle\\Rector\\String_\\ManualJsonStringToJsonEncodeArrayRector\:\:isJsonString\(\) expects string, array<PhpParser\\Node\\Expr\>\|string given#'
         - '#In method "Rector\\(.*?)", (.*?) is "array"\. Please provide a (.*?) annotation to further specify the type of the array\. For instance\: (.*?). More info\: http\://bit\.ly/typehintarray#'
         - '#Method Rector\\Rector\\AbstractRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
-        - '#Parameter \#1 \$node of method Rector\\Rector\\AbstractRector\:\:getNextExpression\(\) expects PhpParser\\Node, PhpParser\\Node\|null given#'
         - '#Parameter \#2 \$currentNode of method Rector\\CodingStyle\\Rector\\String_\\ManualJsonStringToJsonEncodeArrayRector\:\:matchNextExpressionAssignConcatToSameVariable\(\) expects PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Expr\\AssignOp\\Concat, PhpParser\\Node given#'
-        - '#Parameter \#1 \$nodes of method Rector\\Rector\\AbstractRector\:\:removeNodes\(\) expects array<PhpParser\\Node\>, array<PhpParser\\Node\|null\> given#'
         - '#Parameter \#1 \$node of method Rector\\CodingStyle\\ValueObject\\ConcatExpressionJoinData\:\:addNodeToRemove\(\) expects PhpParser\\Node, PhpParser\\Node\|null given#'
         - '#Method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
 
