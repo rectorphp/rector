@@ -18,7 +18,9 @@ final class PropertyTypeDeclarationRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/phpunit_setup.php.inc',
             __DIR__ . '/Fixture/default_value.php.inc',
             __DIR__ . '/Fixture/doctrine_column.php.inc',
-            __DIR__ . '/Fixture/doctrine_relation.php.inc',
+            __DIR__ . '/Fixture/doctrine_relation_to_many.php.inc',
+            __DIR__ . '/Fixture/doctrine_relation_to_one.php.inc',
+            //            __DIR__ . '/Fixture/doctrine_relation_target_entity_same_namespace.php.inc',
             // get and set
             __DIR__ . '/Fixture/complex.php.inc',
             __DIR__ . '/Fixture/single_nullable_return.php.inc',

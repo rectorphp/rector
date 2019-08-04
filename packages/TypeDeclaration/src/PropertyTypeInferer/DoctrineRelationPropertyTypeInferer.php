@@ -14,12 +14,13 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     /**
      * @var string[]
      */
-    private const MANY_RELATIONS_ANNOTATIONS = ['Doctrine\ORM\Mapping\OneToMany', 'Doctrine\ORM\Mapping\ManyToMany'];
+    private const TO_MANY_ANNOTATIONS = ['Doctrine\ORM\Mapping\OneToMany', 'Doctrine\ORM\Mapping\ManyToMany'];
 
     /**
+     * Nullable by default, @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/annotations-reference.html#joincolumn - "JoinColumn" and nullable=true
      * @var string[]
      */
-    private const ONE_RELATION_ANNOTATIONS = ['Doctrine\ORM\Mapping\ManyToOne', 'Doctrine\ORM\Mapping\OneToOne'];
+    private const TO_ONE_ANNOTATIONS = ['Doctrine\ORM\Mapping\ManyToOne', 'Doctrine\ORM\Mapping\OneToOne'];
 
     /**
      * @var string
@@ -46,20 +47,20 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
      */
     public function inferProperty(Property $property): array
     {
-        foreach (self::MANY_RELATIONS_ANNOTATIONS as $doctrineRelationAnnotation) {
+        foreach (self::TO_MANY_ANNOTATIONS as $doctrineRelationAnnotation) {
             if (! $this->docBlockManipulator->hasTag($property, $doctrineRelationAnnotation)) {
                 continue;
             }
 
-            return $this->processManyRelation($property, $doctrineRelationAnnotation);
+            return $this->processToManyRelation($property, $doctrineRelationAnnotation);
         }
 
-        foreach (self::ONE_RELATION_ANNOTATIONS as $doctrineRelationAnnotation) {
+        foreach (self::TO_ONE_ANNOTATIONS as $doctrineRelationAnnotation) {
             if (! $this->docBlockManipulator->hasTag($property, $doctrineRelationAnnotation)) {
                 continue;
             }
 
-            return $this->processOneRelation($property, $doctrineRelationAnnotation);
+            return $this->processToOneRelation($property, $doctrineRelationAnnotation);
         }
 
         return [];
@@ -73,7 +74,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     /**
      * @return string[]
      */
-    private function processManyRelation(Property $property, string $doctrineRelationAnnotation): array
+    private function processToManyRelation(Property $property, string $doctrineRelationAnnotation): array
     {
         $types = [];
 
@@ -90,7 +91,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     /**
      * @return string[]
      */
-    private function processOneRelation(Property $property, string $doctrineRelationAnnotation): array
+    private function processToOneRelation(Property $property, string $doctrineRelationAnnotation): array
     {
         $types = [];
 
@@ -131,7 +132,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     private function isNullableOneRelation(Node $node): bool
     {
         if (! $this->docBlockManipulator->hasTag($node, self::JOIN_COLUMN_ANNOTATION)) {
-            return false;
+            return true;
         }
 
         $joinColumnTag = $this->docBlockManipulator->getTagByName($node, self::JOIN_COLUMN_ANNOTATION);
