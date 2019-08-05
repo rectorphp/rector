@@ -27,3 +27,8 @@ trait SkipTraitCalledMethod
         $entity->getName();
     }
 }
+
+class SkipTraitCalledMethodAddict
+{
+    use SkipTraitCalledMethod;
+}

@@ -459,6 +459,7 @@ final class NodeTypeResolver
             }
 
             $type = $nodeScope->getType($staticCall);
+
             if ($type instanceof ObjectType) {
                 return [$type->getClassName()];
             }
