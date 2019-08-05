@@ -30,8 +30,6 @@ parameters:
         # part of composer
         - 'tests/Composer/AutoloadWrongCasesEventSubscriber.php'
         - '*/tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Expected/Just*ExceptionWithoutNamespace.php'
-        # used in external project
-        - '*/packages/NodeTypeResolver/src/PHPStanOverride/*'
 
     ignoreErrors:
         # false positive
@@ -184,3 +182,8 @@ parameters:
 
         # known value
         - '#Method Rector\\PhpParser\\Node\\Manipulator\\ClassMethodManipulator\:\:addMethodParameterIfMissing\(\) should return string but returns string\|null#'
+
+        # symfony future compatibility
+        - '#Call to an undefined static method Symfony\\Component\\EventDispatcher\\EventDispatcher\:\:__construct\(\)#'
+        - '#Rector\\EventDispatcher\\AutowiredEventDispatcher\:\:__construct\(\) calls parent constructor but parent does not have one#'
+        - '#Method Rector\\NodeTypeResolver\\PHPStanOverride\\Analyser\\StandaloneTraitAwarePHPStanNodeScopeResolver\:\:getPhpDocs\(\) should return array\(array<PHPStan\\Type\\Type\>, PHPStan\\Type\\Type\|null, PHPStan\\Type\\Type\|null, string\|null, bool, bool, bool\) but returns array#'

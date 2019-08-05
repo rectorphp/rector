@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver\PHPStanOverride\DependencyInjection;
 
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\Reference;
+use Nette\DI\Definitions\ServiceDefinition;
 use Nette\DI\Definitions\Statement;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\PhpDoc\PhpDocStringResolver;
@@ -28,6 +29,7 @@ final class ReplaceNodeScopeResolverClassCompilerExtension extends CompilerExten
 
     public function beforeCompile(): void
     {
+        /** @var ServiceDefinition $nodeScopeResolver */
         $nodeScopeResolver = $this->getContainerBuilder()->getDefinitionByType(NodeScopeResolver::class);
 
         // @see https://github.com/nette/di/blob/47bf203c9ae0f3ccf51de9e5ea309a1cdff4d5e9/src/DI/Definitions/ServiceDefinition.php
@@ -37,6 +39,7 @@ final class ReplaceNodeScopeResolverClassCompilerExtension extends CompilerExten
         $serviceArguments = $factory->arguments;
         // new extra dependency
         $serviceArguments['phpDocStringResolver'] = new Reference(PhpDocStringResolver::class);
+        $serviceArguments['allowVarTagAboveStatements'] = true;
 
         $nodeScopeResolver->setFactory(StandaloneTraitAwarePHPStanNodeScopeResolver::class, $serviceArguments);
     }

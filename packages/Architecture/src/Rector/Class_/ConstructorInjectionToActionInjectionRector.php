@@ -301,6 +301,10 @@ CODE_SAMPLE
         }
     }
 
+    /**
+     * @param Node $node
+     * @return string[]|null
+     */
     private function resolveAssignPropertyToVariableOrNull(Node $node): ?array
     {
         if ($node instanceof Expression) {

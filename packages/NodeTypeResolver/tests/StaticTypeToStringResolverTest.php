@@ -26,6 +26,7 @@ final class StaticTypeToStringResolverTest extends AbstractKernelTestCase
 
     /**
      * @dataProvider provideStaticTypesToStrings()
+     * @param string[] $expectedStrings
      */
     public function test(Type $type, array $expectedStrings): void
     {

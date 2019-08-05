@@ -36,7 +36,7 @@ final class ScopeTraitNodeVisitor extends NodeVisitorAbstract
         $this->nodeCallback = $nodeCallback;
     }
 
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): ?Node
     {
         if ($this->nodeCallback === null) {
             throw new ShouldNotHappenException(sprintf(

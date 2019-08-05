@@ -93,6 +93,7 @@ final class StandaloneTraitAwarePHPStanNodeScopeResolver extends NodeScopeResolv
             foreach ($useNode->uses as $useUserNode) {
                 $useImport = $useUserNode->name->toString();
 
+                /** @var string $alias */
                 $alias = $useUserNode->alias ? (string) $useUserNode->alias : Strings::after($useImport, '\\', -1);
 
                 $phpstanAlias = strtolower($alias);
@@ -107,12 +108,13 @@ final class StandaloneTraitAwarePHPStanNodeScopeResolver extends NodeScopeResolv
 
     /**
      * Copy pasted from last part of @see \PHPStan\Analyser\NodeScopeResolver::getPhpDocs()
+     * @return mixed[]
      */
     private function convertResolvedPhpDocToArray(
         ResolvedPhpDocBlock $resolvedPhpDocBlock,
         FunctionLike $functionLike,
         Scope $scope
-    ) {
+    ): array {
         $phpDocParameterTypes = $this->resolvePhpDocParameterTypes($resolvedPhpDocBlock);
 
         $nativeReturnType = $scope->getFunctionType($functionLike->getReturnType(), false, false);
@@ -132,17 +134,20 @@ final class StandaloneTraitAwarePHPStanNodeScopeResolver extends NodeScopeResolv
         ];
     }
 
-    private function resolvePhpDocReturnType(ResolvedPhpDocBlock $resolvedPhpDocBlock, Type $nativeReturnType)
+    private function resolvePhpDocReturnType(ResolvedPhpDocBlock $resolvedPhpDocBlock, Type $nativeReturnType): ?Type
     {
-        $phpDocReturnType = null;
         if ($resolvedPhpDocBlock->getReturnTag() !== null && (
             $nativeReturnType->isSuperTypeOf($resolvedPhpDocBlock->getReturnTag()->getType())->yes()
             )) {
-            $phpDocReturnType = $resolvedPhpDocBlock->getReturnTag()->getType();
+            return $resolvedPhpDocBlock->getReturnTag()->getType();
         }
-        return $phpDocReturnType;
+
+        return null;
     }
 
+    /**
+     * @return Type[]
+     */
     private function resolvePhpDocParameterTypes(ResolvedPhpDocBlock $resolvedPhpDocBlock): array
     {
         return array_map(static function (ParamTag $tag): Type {
