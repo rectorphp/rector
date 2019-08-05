@@ -575,6 +575,12 @@ final class ParsedNodesByType
      */
     private function addCall(Node $node): void
     {
+        if ($node->name->name === 'getStatus') {
+            //dump($node);
+            dump($classTypes = $this->resolveNodeClassTypes($node));
+            die;
+        }
+
         // one node can be of multiple-class types
         $classTypes = $this->resolveNodeClassTypes($node);
         if ($classTypes === []) { // anonymous
