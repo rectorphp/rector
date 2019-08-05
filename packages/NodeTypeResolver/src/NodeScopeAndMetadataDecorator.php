@@ -13,6 +13,7 @@ use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
+use Rector\PhpParser\Node\BetterNodeFinder;
 
 final class NodeScopeAndMetadataDecorator
 {
@@ -56,6 +57,11 @@ final class NodeScopeAndMetadataDecorator
      */
     private $nodeCollectorNodeVisitor;
 
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
     public function __construct(
         NodeScopeResolver $nodeScopeResolver,
         ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
@@ -64,7 +70,8 @@ final class NodeScopeAndMetadataDecorator
         NamespaceNodeVisitor $namespaceNodeVisitor,
         ExpressionNodeVisitor $expressionNodeVisitor,
         FileInfoNodeVisitor $fileInfoNodeVisitor,
-        NodeCollectorNodeVisitor $nodeCollectorNodeVisitor
+        NodeCollectorNodeVisitor $nodeCollectorNodeVisitor,
+        BetterNodeFinder $betterNodeFinder
     ) {
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;
@@ -74,6 +81,7 @@ final class NodeScopeAndMetadataDecorator
         $this->expressionNodeVisitor = $expressionNodeVisitor;
         $this->fileInfoNodeVisitor = $fileInfoNodeVisitor;
         $this->nodeCollectorNodeVisitor = $nodeCollectorNodeVisitor;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**
@@ -88,6 +96,15 @@ final class NodeScopeAndMetadataDecorator
             'replaceNodes' => true, // required by PHPStan
         ]));
         $nodes = $nodeTraverser->traverse($nodes);
+
+        // dual run of these is conflicting with anonymous classes, e.g. in \Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector; solve later
+        if ($this->betterNodeFinder->findFirstInstanceOf($nodes, Node\Stmt\Trait_::class)) {
+            // needed for trait scoping
+            $nodeTraverser = new NodeTraverser();
+            $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
+            $nodeTraverser->addVisitor($this->classAndMethodNodeVisitor);
+            $nodes = $nodeTraverser->traverse($nodes);
+        }
 
         $nodes = $this->nodeScopeResolver->processNodes($nodes, $filePath);
 

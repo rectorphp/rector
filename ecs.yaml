@@ -39,6 +39,7 @@ services:
             - 'Symplify\PackageBuilder\*'
             - 'Symfony\Component\Console\Input\*Input'
             - '*ValueObject'
+            - 'PHPStan\Analyser\NameScope'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:

@@ -5,7 +5,7 @@ services:
 
     Rector\NodeTypeResolver\:
         resource: '../src'
-        exclude: '../src/{Contract,Php/*Info.php}'
+        exclude: '../src/{Contract,Php/*Info.php,PHPStanOverride/*}'
 
     Rector\Php\TypeAnalyzer: ~
     Rector\FileSystem\FilesFinder: ~

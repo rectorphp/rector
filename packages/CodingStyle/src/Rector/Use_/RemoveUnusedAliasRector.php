@@ -37,19 +37,19 @@ final class RemoveUnusedAliasRector extends AbstractRector
     private $resolvedDocPossibleAliases = [];
 
     /**
-     * @var ShortNameResolver
-     */
-    private $shortNameResolver;
-
-    /**
      * @var ClassNaming
      */
     private $classNaming;
 
-    public function __construct(ShortNameResolver $shortNameResolver, ClassNaming $classNaming)
+    /**
+     * @var ShortNameResolver
+     */
+    private $shortNameResolver;
+
+    public function __construct(ClassNaming $classNaming, ShortNameResolver $shortNameResolver)
     {
-        $this->shortNameResolver = $shortNameResolver;
         $this->classNaming = $classNaming;
+        $this->shortNameResolver = $shortNameResolver;
     }
 
     public function getDefinition(): RectorDefinition

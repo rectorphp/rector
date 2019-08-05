@@ -52,7 +52,7 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if ($node instanceof Class_ && $this->isClassAnonymous($node)) {
+        if ($this->isClassAnonymous($node)) {
             return null;
         }
 
@@ -108,17 +108,21 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
         $node->setAttribute(AttributeKey::PARENT_CLASS_NAME, $parentClassResolvedName);
     }
 
-    private function isClassAnonymous(Class_ $classNode): bool
+    private function isClassAnonymous(Node $node): bool
     {
-        if ($classNode->isAnonymous()) {
+        if (! $node instanceof Class_) {
+            return false;
+        }
+
+        if ($node->isAnonymous()) {
             return true;
         }
 
-        if ($classNode->name === null) {
+        if ($node->name === null) {
             return true;
         }
 
         // PHPStan polution
-        return Strings::startsWith($classNode->name->toString(), 'AnonymousClass');
+        return Strings::startsWith($node->name->toString(), 'AnonymousClass');
     }
 }

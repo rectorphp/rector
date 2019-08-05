@@ -2,11 +2,11 @@
 
 namespace Rector\PHPUnit\Rector;
 
-use phpDocumentor\Reflection\DocBlock\Tags\Generic;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -93,7 +93,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            /** @var Generic[] $tags */
+            /** @var GenericTagValueNode[] $tags */
             $tags = $this->docBlockManipulator->getTagsByName($node, $annotation);
 
             $methodCallExpressions = array_map(function (PhpDocTagNode $phpDocTagNode) use ($method): Expression {

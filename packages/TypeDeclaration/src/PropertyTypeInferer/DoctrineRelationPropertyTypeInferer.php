@@ -2,12 +2,9 @@
 
 namespace Rector\TypeDeclaration\PropertyTypeInferer;
 
-use Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\NamespaceAnalyzer;
 use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
 
 final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererInterface
@@ -26,11 +23,6 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     /**
      * @var string
      */
-    private const JOIN_COLUMN_ANNOTATION = 'Doctrine\ORM\Mapping\JoinColumn';
-
-    /**
-     * @var string
-     */
     private const COLLECTION_TYPE = 'Doctrine\Common\Collections\Collection';
 
     /**
@@ -39,14 +31,16 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     private $docBlockManipulator;
 
     /**
-     * @var NamespaceAnalyzer
+     * @var DoctrineEntityManipulator
      */
-    private $namespaceAnalyzer;
+    private $doctrineEntityManipulator;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator, NamespaceAnalyzer $namespaceAnalyzer)
-    {
+    public function __construct(
+        DocBlockManipulator $docBlockManipulator,
+        DoctrineEntityManipulator $doctrineEntityManipulator
+    ) {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->namespaceAnalyzer = $namespaceAnalyzer;
+        $this->doctrineEntityManipulator = $doctrineEntityManipulator;
     }
 
     /**
@@ -59,7 +53,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
                 continue;
             }
 
-            return $this->processToManyRelation($property, $doctrineRelationAnnotation);
+            return $this->processToManyRelation($property);
         }
 
         foreach (self::TO_ONE_ANNOTATIONS as $doctrineRelationAnnotation) {
@@ -67,7 +61,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
                 continue;
             }
 
-            return $this->processToOneRelation($property, $doctrineRelationAnnotation);
+            return $this->processToOneRelation($property);
         }
 
         return [];
@@ -81,12 +75,12 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     /**
      * @return string[]
      */
-    private function processToManyRelation(Property $property, string $doctrineRelationAnnotation): array
+    private function processToManyRelation(Property $property): array
     {
         $types = [];
 
-        $relationType = $this->resolveRelationType($property, $doctrineRelationAnnotation);
-        if ($relationType) {
+        $relationType = $this->doctrineEntityManipulator->resolveTargetClass($property);
+        if ($relationType !== null) {
             $types[] = $relationType . '[]';
         }
 
@@ -98,65 +92,19 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     /**
      * @return string[]
      */
-    private function processToOneRelation(Property $property, string $doctrineRelationAnnotation): array
+    private function processToOneRelation(Property $property): array
     {
         $types = [];
 
-        $relationType = $this->resolveRelationType($property, $doctrineRelationAnnotation);
-        if ($relationType) {
+        $relationType = $this->doctrineEntityManipulator->resolveTargetClass($property);
+        if ($relationType !== null) {
             $types[] = $relationType;
         }
 
-        if ($this->isNullableOneRelation($property)) {
+        if ($this->doctrineEntityManipulator->isNullableRelation($property)) {
             $types[] = 'null';
         }
 
         return $types;
-    }
-
-    private function resolveTargetEntity(GenericTagValueNode $genericTagValueNode): ?string
-    {
-        $match = Strings::match($genericTagValueNode->value, '#targetEntity=\"(?<targetEntity>.*?)\"#');
-
-        return $match['targetEntity'] ?? null;
-    }
-
-    private function resolveRelationType(Property $property, string $doctrineRelationAnnotation): ?string
-    {
-        $relationTag = $this->docBlockManipulator->getTagByName($property, $doctrineRelationAnnotation);
-
-        if ($relationTag->value instanceof GenericTagValueNode) {
-            $resolveTargetType = $this->resolveTargetEntity($relationTag->value);
-            if ($resolveTargetType) {
-                if (Strings::contains($resolveTargetType, '\\')) {
-                    return $resolveTargetType;
-                }
-
-                // is FQN?
-                if (! class_exists($resolveTargetType)) {
-                    return $this->namespaceAnalyzer->resolveTypeToFullyQualified($resolveTargetType, $property);
-                }
-
-                return $resolveTargetType;
-            }
-        }
-
-        return null;
-    }
-
-    private function isNullableOneRelation(Node $node): bool
-    {
-        if (! $this->docBlockManipulator->hasTag($node, self::JOIN_COLUMN_ANNOTATION)) {
-            // @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/annotations-reference.html#joincolumn
-            return true;
-        }
-
-        $joinColumnTag = $this->docBlockManipulator->getTagByName($node, self::JOIN_COLUMN_ANNOTATION);
-
-        if ($joinColumnTag->value instanceof GenericTagValueNode) {
-            return (bool) Strings::match($joinColumnTag->value->value, '#nullable=true#');
-        }
-
-        return false;
     }
 }

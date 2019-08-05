@@ -5,6 +5,7 @@ namespace Rector\PhpParser\Node\Manipulator;
 use Iterator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -174,8 +175,8 @@ final class FunctionLikeManipulator
      */
     private function resolveFromYieldNodes(FunctionLike $functionLike): array
     {
-        /** @var Node\Expr\Yield_[] $yieldNodes */
-        $yieldNodes = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Node\Expr\Yield_::class);
+        /** @var Yield_[] $yieldNodes */
+        $yieldNodes = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Yield_::class);
 
         if (count($yieldNodes)) {
             $this->isVoid = false;
