@@ -6,10 +6,10 @@ use Closure;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeVisitorAbstract;
-use PHPStan\Analyser\NodeScopeResolver as PHPStanNodeScopeResolver;
+use PHPStan\Analyser\NodeScopeResolver;
+use PHPStan\Analyser\Scope;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 /**
  * Adds scope to all nodes inside trait even without class that is using it (that what PHPStan needs to add a scope to them)
@@ -17,24 +17,18 @@ use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 final class ScopeTraitNodeVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var PHPStanNodeScopeResolver
+     * @var NodeScopeResolver
      */
-    private $phpStanNodeScopeResolver;
+    private $nodeScopeResolver;
 
     /**
      * @var Closure
      */
     private $nodeCallback;
 
-    /**
-     * @var PrivatesCaller
-     */
-    private $privatesCaller;
-
-    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, PrivatesCaller $privatesCaller)
+    public function __construct(NodeScopeResolver $nodeScopeResolver)
     {
-        $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
-        $this->privatesCaller = $privatesCaller;
+        $this->nodeScopeResolver = $nodeScopeResolver;
     }
 
     public function setNodeCallback(Closure $nodeCallback): void
@@ -45,23 +39,23 @@ final class ScopeTraitNodeVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         if ($this->nodeCallback === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(sprintf(
+                'Set "$nodeCallback" property via "setNodeCallback()" on "%s" first',
+                self::class
+            ));
         }
 
         if (! $node instanceof Trait_) {
             return null;
         }
 
+        /** @var Scope|null $traitScope */
         $traitScope = $node->getAttribute(AttributeKey::SCOPE);
+        if ($traitScope === null) {
+            throw new ShouldNotHappenException(sprintf('A trait "%s" is missing a scope', (string) $node->name));
+        }
 
-        $this->privatesCaller->callPrivateMethod(
-            $this->phpStanNodeScopeResolver,
-            'processStmtNodes',
-            $node,
-            $node->stmts,
-            $traitScope,
-            $this->nodeCallback
-        );
+        $this->nodeScopeResolver->processStmtNodes($node, $node->stmts, $traitScope, $this->nodeCallback);
 
         return $node;
     }

@@ -113,7 +113,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        if (! $classNode instanceof Class_ || $classNode->isAnonymous()) {
             return null;
         }
 

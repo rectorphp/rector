@@ -82,6 +82,7 @@ final class NodeScopeResolver
         $this->removeDeepChainMethodCallNodes($nodes);
 
         $this->phpStanNodeScopeResolver->setAnalysedFiles([$filePath]);
+        $scope = $this->scopeFactory->createFromFile($filePath);
 
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
         $nodeCallback = function (Node $node, Scope $scope): void {
@@ -96,12 +97,9 @@ final class NodeScopeResolver
             $node->setAttribute(AttributeKey::SCOPE, $scope);
         };
 
-        $scope = $this->scopeFactory->createFromFile($filePath);
         $this->phpStanNodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
 
-        $this->resolveScopeInTrait($nodes, $nodeCallback);
-
-        return $nodes;
+        return $this->resolveScopeInTrait($nodes, $nodeCallback);
     }
 
     /**
@@ -149,7 +147,7 @@ final class NodeScopeResolver
         /** @var ScopeContext $scopeContext */
         $scopeContext = $this->privatesAccessor->getPrivateProperty($scope, 'context');
 
-        // we need to emulate class reflection, because PHPStan is unable to analyze trait without it
+        // we need to emulate class reflection, because PHPStan is unable to analyze bare trait without it
         $classReflection = new ReflectionClass(ClassReflectionForUnusedTrait::class);
         $phpstanClassReflection = $this->broker->getClassFromReflection(
             $classReflection,
@@ -161,6 +159,8 @@ final class NodeScopeResolver
         $this->privatesAccessor->setPrivateProperty($scopeContext, 'classReflection', $phpstanClassReflection);
 
         $traitScope = $scope->enterTrait($traitReflection);
+
+        // clear stub
         $this->privatesAccessor->setPrivateProperty($scopeContext, 'classReflection', null);
 
         return $traitScope;
@@ -168,14 +168,15 @@ final class NodeScopeResolver
 
     /**
      * @param Node[] $nodes
+     * @return Node[]
      */
-    private function resolveScopeInTrait(array $nodes, Closure $nodeCallback): void
+    private function resolveScopeInTrait(array $nodes, Closure $nodeCallback): array
     {
         $traitNodeTraverser = new NodeTraverser();
 
         $this->scopeTraitNodeVisitor->setNodeCallback($nodeCallback);
         $traitNodeTraverser->addVisitor($this->scopeTraitNodeVisitor);
 
-        $traitNodeTraverser->traverse($nodes);
+        return $traitNodeTraverser->traverse($nodes);
     }
 }
