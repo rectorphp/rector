@@ -5,7 +5,7 @@ namespace Rector\Php\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
 class FuncGetArg
 {
     public function __construct() {
-        self::("aa", "bb", "cc");
+        self::dumpArgs("aa", "bb", "cc");
     }
     
     static public function dumpArgs() {
@@ -23,7 +23,7 @@ namespace Rector\Php\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
 class FuncGetArg
 {
     public function __construct() {
-        self::("aa", "bb", "cc");
+        self::dumpArgs("aa", "bb", "cc");
     }
     
     static public function dumpArgs() {
