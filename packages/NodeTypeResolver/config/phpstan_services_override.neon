@@ -1,2 +1,0 @@
-extensions:
-    - Rector\NodeTypeResolver\PHPStanOverride\DependencyInjection\ReplaceNodeScopeResolverClassCompilerExtension

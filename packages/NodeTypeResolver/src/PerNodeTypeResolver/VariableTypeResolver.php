@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\ThisType;
@@ -13,6 +14,7 @@ use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInte
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeToStringResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -38,14 +40,21 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var TraitNodeScopeCollector
+     */
+    private $traitNodeScopeCollector;
+
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
         StaticTypeToStringResolver $staticTypeToStringResolver,
-        NameResolver $nameResolver
+        NameResolver $nameResolver,
+        TraitNodeScopeCollector $traitNodeScopeCollector
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->staticTypeToStringResolver = $staticTypeToStringResolver;
         $this->nameResolver = $nameResolver;
+        $this->traitNodeScopeCollector = $traitNodeScopeCollector;
     }
 
     /**
@@ -93,33 +102,31 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    private function resolveNodeScope(Node $variableNode): ?Scope
+    private function resolveNodeScope(Node $node): ?Scope
     {
         /** @var Scope|null $nodeScope */
-        $nodeScope = $variableNode->getAttribute(AttributeKey::SCOPE);
-        if ($nodeScope instanceof Scope) {
-            return $nodeScope;
+        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
+
+        // is node in trait
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classNode instanceof Trait_) {
+            /** @var string $traitName */
+            $traitName = $node->getAttribute(AttributeKey::CLASS_NAME);
+            $traitNodeScope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $node);
         }
 
-        $parentNode = $variableNode->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Node) {
-            $nodeScope = $parentNode->getAttribute(AttributeKey::SCOPE);
-            if ($nodeScope instanceof Scope) {
-                return $nodeScope;
-            }
+            $parentNodeScope = $parentNode->getAttribute(AttributeKey::SCOPE);
         }
 
         // get nearest variable scope
-        $method = $variableNode->getAttribute(AttributeKey::METHOD_NODE);
+        $method = $node->getAttribute(AttributeKey::METHOD_NODE);
         if ($method instanceof Node) {
-            $nodeScope = $method->getAttribute(AttributeKey::SCOPE);
-            if ($nodeScope instanceof Scope) {
-                return $nodeScope;
-            }
+            $methodNodeScope = $method->getAttribute(AttributeKey::SCOPE);
         }
 
-        // unknown scope
-        return null;
+        return $nodeScope ?? $traitNodeScope ?? $parentNodeScope ?? $methodNodeScope ?? null;
     }
 
     /**

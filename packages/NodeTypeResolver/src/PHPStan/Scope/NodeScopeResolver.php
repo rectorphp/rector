@@ -2,7 +2,6 @@
 
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
-use Closure;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -11,15 +10,11 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\NodeScopeResolver as PHPStanNodeScopeResolver;
 use PHPStan\Analyser\Scope;
-use PHPStan\Analyser\ScopeContext;
 use PHPStan\Broker\Broker;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\ScopeTraitNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\Stub\ClassReflectionForUnusedTrait;
-use ReflectionClass;
-use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
@@ -48,29 +43,22 @@ final class NodeScopeResolver
     private $removeDeepChainMethodCallNodeVisitor;
 
     /**
-     * @var PrivatesAccessor
+     * @var TraitNodeScopeCollector
      */
-    private $privatesAccessor;
-
-    /**
-     * @var ScopeTraitNodeVisitor
-     */
-    private $scopeTraitNodeVisitor;
+    private $traitNodeScopeCollector;
 
     public function __construct(
         ScopeFactory $scopeFactory,
         PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
         Broker $broker,
         RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor,
-        PrivatesAccessor $privatesAccessor,
-        ScopeTraitNodeVisitor $scopeTraitNodeVisitor
+        TraitNodeScopeCollector $traitNodeScopeCollector
     ) {
         $this->scopeFactory = $scopeFactory;
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->broker = $broker;
         $this->removeDeepChainMethodCallNodeVisitor = $removeDeepChainMethodCallNodeVisitor;
-        $this->privatesAccessor = $privatesAccessor;
-        $this->scopeTraitNodeVisitor = $scopeTraitNodeVisitor;
+        $this->traitNodeScopeCollector = $traitNodeScopeCollector;
     }
 
     /**
@@ -90,8 +78,14 @@ final class NodeScopeResolver
             // so we need to get it from the first after this one
             if ($node instanceof Class_ || $node instanceof Interface_) {
                 $scope = $this->resolveClassOrInterfaceScope($node, $scope);
-            } elseif ($node instanceof Trait_) {
-                $scope = $this->resolveTraitScope($node, $scope);
+            }
+
+            // traversing trait inside class that is using it scope (from referenced) - the trait traversed by Rector is different (directly from parsed file)
+            if ($scope->isInTrait()) {
+                $traitName = $scope->getTraitReflection()->getName();
+                $this->traitNodeScopeCollector->addForTraitAndNode($traitName, $node, $scope);
+
+                return;
             }
 
             $node->setAttribute(AttributeKey::SCOPE, $scope);
@@ -99,7 +93,7 @@ final class NodeScopeResolver
 
         $this->phpStanNodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
 
-        return $this->resolveScopeInTrait($nodes, $nodeCallback);
+        return $nodes;
     }
 
     /**
@@ -137,46 +131,5 @@ final class NodeScopeResolver
         }
 
         return $classOrInterfaceNode->name->toString();
-    }
-
-    private function resolveTraitScope(Trait_ $trait, Scope $scope): Scope
-    {
-        $traitName = $this->resolveClassName($trait);
-        $traitReflection = $this->broker->getClass($traitName);
-
-        /** @var ScopeContext $scopeContext */
-        $scopeContext = $this->privatesAccessor->getPrivateProperty($scope, 'context');
-
-        // we need to emulate class reflection, because PHPStan is unable to analyze bare trait without it
-        $classReflection = new ReflectionClass(ClassReflectionForUnusedTrait::class);
-        $phpstanClassReflection = $this->broker->getClassFromReflection(
-            $classReflection,
-            ClassReflectionForUnusedTrait::class,
-            null
-        );
-
-        // set stub
-        $this->privatesAccessor->setPrivateProperty($scopeContext, 'classReflection', $phpstanClassReflection);
-
-        $traitScope = $scope->enterTrait($traitReflection);
-
-        // clear stub
-        $this->privatesAccessor->setPrivateProperty($scopeContext, 'classReflection', null);
-
-        return $traitScope;
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @return Node[]
-     */
-    private function resolveScopeInTrait(array $nodes, Closure $nodeCallback): array
-    {
-        $traitNodeTraverser = new NodeTraverser();
-
-        $this->scopeTraitNodeVisitor->setNodeCallback($nodeCallback);
-        $traitNodeTraverser->addVisitor($this->scopeTraitNodeVisitor);
-
-        return $traitNodeTraverser->traverse($nodes);
     }
 }

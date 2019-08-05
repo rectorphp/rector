@@ -125,14 +125,6 @@ final class ParsedNodesByType
     }
 
     /**
-     * @return StaticCall[]
-     */
-    public function getStaticCallNodes(): array
-    {
-        return $this->simpleParsedNodesByType[StaticCall::class] ?? [];
-    }
-
-    /**
      * Due to circular reference
      * @required
      */
@@ -536,7 +528,6 @@ final class ParsedNodesByType
         }
 
         $methodName = $this->nameResolver->getName($classMethod);
-
         $this->methodsByType[$className][$methodName] = $classMethod;
     }
 

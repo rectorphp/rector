@@ -27,8 +27,6 @@ final class PHPStanServicesFactory
             $additionalConfigFiles[] = $phpstanPhpunitExtensionConfig;
         }
 
-        $additionalConfigFiles[] = __DIR__ . '/../../config/phpstan_services_override.neon';
-
         $this->container = $containerFactory->create(sys_get_temp_dir(), $additionalConfigFiles, []);
     }
 
