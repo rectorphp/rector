@@ -1,10 +1,11 @@
-# All 312 Rectors Overview
+# All 329 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
 
 ## Projects
 
+- [Architecture](#architecture)
 - [CakePHP](#cakephp)
 - [Celebrity](#celebrity)
 - [CodeQuality](#codequality)
@@ -22,19 +23,72 @@
 - [NetteToSymfony](#nettetosymfony)
 - [PHPStan](#phpstan)
 - [PHPUnit](#phpunit)
+- [PHPUnitSymfony](#phpunitsymfony)
 - [Php](#php)
 - [PhpParser](#phpparser)
 - [PhpSpecToPHPUnit](#phpspectophpunit)
 - [RemovingStatic](#removingstatic)
+- [Restoration](#restoration)
 - [SOLID](#solid)
 - [Sensio](#sensio)
 - [Shopware](#shopware)
 - [Silverstripe](#silverstripe)
 - [Sylius](#sylius)
 - [Symfony](#symfony)
+- [SymfonyCodeQuality](#symfonycodequality)
 - [SymfonyPHPUnit](#symfonyphpunit)
 - [Twig](#twig)
 - [TypeDeclaration](#typedeclaration)
+
+## Architecture
+
+### `ConstructorInjectionToActionInjectionRector`
+
+- class: `Rector\Architecture\Rector\Class_\ConstructorInjectionToActionInjectionRector`
+
+```diff
+ final class SomeController
+ {
+-    /**
+-     * @var ProductRepository
+-     */
+-    private $productRepository;
+-
+-    public function __construct(ProductRepository $productRepository)
++    public function default(ProductRepository $productRepository)
+     {
+-        $this->productRepository = $productRepository;
+-    }
+-
+-    public function default()
+-    {
+-        $products = $this->productRepository->fetchAll();
++        $products = $productRepository->fetchAll();
+     }
+ }
+```
+
+<br>
+
+### `RemoveRepositoryFromEntityAnnotationRector`
+
+- class: `Rector\Architecture\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector`
+
+Removes repository class from @Entity annotation
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+- * @ORM\Entity(repositoryClass="ProductRepository")
++ * @ORM\Entity
+  */
+ class Product
+ {
+ }
+```
+
+<br>
 
 ## CakePHP
 
@@ -395,6 +449,23 @@ Simplify `in_array` and `array_keys` functions combination into `array_key_exist
 
 <br>
 
+### `IsAWithStringWithThirdArgumentRector`
+
+- class: `Rector\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector`
+
+```diff
+ class SomeClass
+ {
+     public function __construct(string $value)
+     {
+-        return is_a($value, 'stdClass');
++        return is_a($value, 'stdClass', true);
+     }
+ }
+```
+
+<br>
+
 ### `JoinStringConcatRector`
 
 - class: `Rector\CodeQuality\Rector\Concat\JoinStringConcatRector`
@@ -408,6 +479,34 @@ Joins concat of 2 strings
      {
 -        $name = 'Hi' . ' Tom';
 +        $name = 'Hi Tom';
+     }
+ }
+```
+
+<br>
+
+### `RemoveAlwaysTrueConditionSetInConstructorRector`
+
+- class: `Rector\CodeQuality\Rector\If_\RemoveAlwaysTrueConditionSetInConstructorRector`
+
+If conditions is always true, perform the content right away
+
+```diff
+ final class SomeClass
+ {
+     private $value;
+
+     public function __construct($value)
+     {
+         $this->value = $value;
+     }
+
+     public function go()
+     {
+-        if ($this->value) {
+-            return 'yes';
+-        }
++        return 'yes';
      }
  }
 ```
@@ -743,6 +842,23 @@ Changes in_array() with single element to ===
 
 <br>
 
+### `StrlenZeroToIdenticalEmptyStringRector`
+
+- class: `Rector\CodeQuality\Rector\FuncCall\StrlenZeroToIdenticalEmptyStringRector`
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+-        $empty = strlen($value) === 0;
++        $empty = $value === '';
+     }
+ }
+```
+
+<br>
+
 ### `TernaryToElvisRector`
 
 - class: `Rector\CodeQuality\Rector\Ternary\TernaryToElvisRector`
@@ -754,6 +870,29 @@ Use ?: instead of ?, where useful
  {
 -    $value = $a ? $a : false;
 +    $value = $a ?: false;
+ }
+```
+
+<br>
+
+### `ThrowWithPreviousExceptionRector`
+
+- class: `Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector`
+
+When throwing into a catch block, checks that the previous exception is passed to the new throw clause
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         try {
+             $someCode = 1;
+         } catch (Throwable $throwable) {
+-            throw new AnotherException('ups');
++            throw new AnotherException('ups', $throwable->getCode(), $throwable);
+         }
+     }
  }
 ```
 
@@ -911,6 +1050,25 @@ Replace PREG delimiter with configured one
 
 <br>
 
+### `EncapsedStringsToSprintfRector`
+
+- class: `Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector`
+
+Convert enscaped {$string} to more readable sprintf
+
+```diff
+ final class SomeClass
+ {
+     public function run(string $format)
+     {
+-        return "Unsupported format {$format}";
++        return sprintf('Unsupported format %s', $format);
+     }
+ }
+```
+
+<br>
+
 ### `FollowRequireByDirRector`
 
 - class: `Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector`
@@ -958,6 +1116,52 @@ Import fully qualified names to use statements
      {
 -          return SomeAnother\AnotherClass;
 +          return AnotherClass;
+     }
+ }
+```
+
+<br>
+
+### `ManualJsonStringToJsonEncodeArrayRector`
+
+- class: `Rector\CodingStyle\Rector\String_\ManualJsonStringToJsonEncodeArrayRector`
+
+Add extra space before new assign set
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        $someJsonAsString = '{"role_name":"admin","numberz":{"id":"10"}}';
++        $data = [
++            'role_name' => 'admin',
++            'numberz' => ['id' => 10]
++        ];
++
++        $someJsonAsString = json_encode($data);
+     }
+ }
+```
+
+<br>
+
+### `NewlineBeforeNewAssignSetRector`
+
+- class: `Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector`
+
+Add extra space before new assign set
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+         $value = new Value;
+         $value->setValue(5);
++
+         $value2 = new Value;
+         $value2->setValue(1);
      }
  }
 ```
@@ -1419,6 +1623,33 @@ Remove duplicated key in defined arrays.
 
 <br>
 
+### `RemoveDuplicatedCaseInSwitchRector`
+
+- class: `Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector`
+
+2 following switch keys with identical  will be reduced to one result
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         switch ($name) {
+              case 'clearHeader':
+                  return $this->modifyHeader($node, 'remove');
+              case 'clearAllHeaders':
+-                 return $this->modifyHeader($node, 'replace');
+              case 'clearRawHeaders':
+                  return $this->modifyHeader($node, 'replace');
+              case '...':
+                  return 5;
+         }
+     }
+ }
+```
+
+<br>
+
 ### `RemoveDuplicatedInstanceOfRector`
 
 - class: `Rector\DeadCode\Rector\Instanceof_\RemoveDuplicatedInstanceOfRector`
@@ -1488,6 +1719,39 @@ Remove unused parent call with no parent class
      {
 -         parent::__construct();
      }
+ }
+```
+
+<br>
+
+### `RemoveUnusedDoctrineEntityMethodAndPropertyRector`
+
+- class: `Rector\DeadCode\Rector\Class_\RemoveUnusedDoctrineEntityMethodAndPropertyRector`
+
+Removes unused methods and properties from Doctrine entity classes
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity
+  */
+ class UserEntity
+ {
+-    /**
+-     * @ORM\Column
+-     */
+-    private $name;
+-
+-    public function getName()
+-    {
+-        return $this->name;
+-    }
+-
+-    public function setName($name)
+-    {
+-        $this->name = $name;
+-    }
  }
 ```
 
@@ -2357,6 +2621,25 @@ Removes recasting of the same type
 
 <br>
 
+### `RemoveNonExistingVarAnnotationRector`
+
+- class: `Rector\PHPStan\Rector\Node\RemoveNonExistingVarAnnotationRector`
+
+Removes non-existing @var annotations above the code
+
+```diff
+ class SomeClass
+ {
+     public function get()
+     {
+-        /** @var Training[] $trainings */
+         return $this->getData();
+     }
+ }
+```
+
+<br>
+
 ## PHPUnit
 
 ### `AssertCompareToSpecificMethodRector`
@@ -2858,6 +3141,33 @@ Changes ->will($this->xxx()) to one specific method
 -            ->will($this->returnValue('translated max {{ max }}!'));
 +            ->with('old max {{ max }}!')
 +            ->willReturnValue('translated max {{ max }}!');
+     }
+ }
+```
+
+<br>
+
+## PHPUnitSymfony
+
+### `AddMessageToEqualsResponseCodeRector`
+
+- class: `Rector\PHPUnitSymfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector`
+
+Add response content to response code assert, so it is easier to debug
+
+```diff
+ use PHPUnit\Framework\TestCase;
+ use Symfony\Component\HttpFoundation\Response;
+
+ final class SomeClassTest extends TestCase
+ {
+     public function test(Response $response)
+     {
+         $this->assertEquals(
+             Response::HTTP_NO_CONTENT,
+             $response->getStatusCode()
++            $response->getContent()
+         );
      }
  }
 ```
@@ -3547,7 +3857,7 @@ services:
 
 - class: `Rector\Php\Rector\FuncCall\PregReplaceEModifierRector`
 
-The /e modifier is no longer supported, use preg_replace_callback instead
+The /e modifier is no longer supported, use preg_replace_callback instead 
 
 ```diff
  class SomeClass
@@ -4563,6 +4873,39 @@ services:
 
 <br>
 
+## Restoration
+
+### `CompleteImportForPartialAnnotationRector`
+
+- class: `Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector`
+
+In case you have accidentally removed use imports but code still contains partial use statements, this will save you
+
+```yaml
+services:
+    Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector:
+        $useImportToRestore:
+            -
+                - Doctrine\ORM\Mapping
+                - ORM
+```
+
+↓
+
+```diff
++use Doctrine\ORM\Mapping as ORM;
++
+ class SomeClass
+ {
+     /**
+      * @ORM\Id
+      */
+     public $id;
+ }
+```
+
+<br>
+
 ## SOLID
 
 ### `FinalizeClassesWithoutChildrenRector`
@@ -5272,6 +5615,45 @@ Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Valid
 
 <br>
 
+## SymfonyCodeQuality
+
+### `EventListenerToEventSubscriberRector`
+
+- class: `Rector\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector`
+
+Change Symfony Event listener class to Event Subscriber based on configuration in service.yaml file
+
+```diff
+ <?php
+
+-class SomeListener
++use Symfony\Component\EventDispatcher\EventSubscriberInterface;
++
++class SomeEventSubscriber implements EventSubscriberInterface
+ {
++     /**
++      * @return string[]
++      */
++     public static function getSubscribedEvents(): array
++     {
++         return ['some_event' => 'methodToBeCalled'];
++     }
++
+      public function methodToBeCalled()
+      {
+      }
+-}
+-
+-// in config.yaml
+-services:
+-    SomeListener:
+-        tags:
+-            - { name: kernel.event_listener, event: 'some_event', method: 'methodToBeCalled' }
++}
+```
+
+<br>
+
 ## SymfonyPHPUnit
 
 ### `MultipleServiceGetToSetUpMethodRector`
@@ -5404,6 +5786,14 @@ Change @param types to type declarations if not a BC-break
      }
  }
 ```
+
+<br>
+
+### `PropertyTypeDeclarationRector`
+
+- class: `Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector`
+
+Add missing @var to properties that are missing it
 
 <br>
 
@@ -6654,6 +7044,70 @@ services:
      public function otherFunction()
      {
 -        return $this;
+     }
+ }
+```
+
+<br>
+
+### `ServiceGetterToConstructorInjectionRector`
+
+- class: `Rector\Rector\MethodCall\ServiceGetterToConstructorInjectionRector`
+
+Get service call to constructor injection
+
+```yaml
+services:
+    Rector\Rector\MethodCall\ServiceGetterToConstructorInjectionRector:
+        $methodNamesByTypesToServiceTypes:
+            FirstService:
+                getAnotherService: AnotherService
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     /**
+      * @var FirstService
+      */
+     private $firstService;
+-
+-    public function __construct(FirstService $firstService)
+-    {
+-        $this->firstService = $firstService;
+-    }
+-
+-    public function run()
+-    {
+-        $anotherService = $this->firstService->getAnotherService();
+-        $anotherService->run();
+-    }
+-}
+-
+-class FirstService
+-{
++
+     /**
+      * @var AnotherService
+      */
+     private $anotherService;
+-
+-    public function __construct(AnotherService $anotherService)
++
++    public function __construct(FirstService $firstService, AnotherService $anotherService)
+     {
++        $this->firstService = $firstService;
+         $this->anotherService = $anotherService;
+     }
+
+-    public function getAnotherService(): AnotherService
++    public function run()
+     {
+-         return $this->anotherService;
++        $anotherService = $this->anotherService;
++        $anotherService->run();
      }
  }
 ```
