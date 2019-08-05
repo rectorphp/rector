@@ -23,7 +23,7 @@ final class PHPStanServicesFactory
 
         // possible path collision for Docker
         $phpstanPhpunitExtensionConfig = getcwd() . '/vendor/phpstan/phpstan-phpunit/extension.neon';
-        if (file_exists($phpstanPhpunitExtensionConfig)) {
+        if (file_exists($phpstanPhpunitExtensionConfig) && class_exists('PHPUnit\\Framework\\TestCase')) {
             $additionalConfigFiles[] = $phpstanPhpunitExtensionConfig;
         }
 
