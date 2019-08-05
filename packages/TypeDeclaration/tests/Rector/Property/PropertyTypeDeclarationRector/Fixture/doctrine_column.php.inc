@@ -15,6 +15,11 @@ class DoctrineColumn
      * @ORM\Column(type="string", nullable=true)
      */
     private $surname;
+
+    /**
+     * @ORM\Column(name="date", type="decimal", scale=2, nullable=true)
+     */
+    private $rate;
 }
 
 ?>
@@ -38,6 +43,12 @@ class DoctrineColumn
      * @var string|null
      */
     private $surname;
+
+    /**
+     * @ORM\Column(name="date", type="decimal", scale=2, nullable=true)
+     * @var float|null
+     */
+    private $rate;
 }
 
 ?>
