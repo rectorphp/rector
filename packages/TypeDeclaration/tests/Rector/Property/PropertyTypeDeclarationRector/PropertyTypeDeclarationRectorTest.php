@@ -20,6 +20,7 @@ final class PropertyTypeDeclarationRectorTest extends AbstractRectorTestCase
      */
     public function provideDataForTest(): iterable
     {
+        yield [__DIR__ . '/Fixture/anonymous_class.php.inc'];
         yield [__DIR__ . '/Fixture/constructor_param.php.inc'];
         yield [__DIR__ . '/Fixture/constructor_param_with_aliased_param.php.inc'];
         yield [__DIR__ . '/Fixture/complex.php.inc'];
