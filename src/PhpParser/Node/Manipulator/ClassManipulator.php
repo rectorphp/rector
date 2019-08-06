@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TraitUse;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\PhpParser\Node\NodeFactory;
@@ -58,13 +59,19 @@ final class ClassManipulator
      */
     private $nodeRemovingCommander;
 
+    /**
+     * @var DocBlockManipulator
+     */
+    private $docBlockManipulator;
+
     public function __construct(
         NameResolver $nameResolver,
         NodeFactory $nodeFactory,
         ChildAndParentClassManipulator $childAndParentClassManipulator,
         BetterNodeFinder $betterNodeFinder,
         CallableNodeTraverser $callableNodeTraverser,
-        NodeRemovingCommander $nodeRemovingCommander
+        NodeRemovingCommander $nodeRemovingCommander,
+        DocBlockManipulator $docBlockManipulator
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nameResolver = $nameResolver;
@@ -72,6 +79,7 @@ final class ClassManipulator
         $this->betterNodeFinder = $betterNodeFinder;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeRemovingCommander = $nodeRemovingCommander;
+        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function addConstructorDependency(Class_ $classNode, VariableInfo $variableInfo): void
@@ -367,7 +375,10 @@ final class ClassManipulator
             $propertyNonAssignNames[] = $this->nameResolver->getName($node);
         });
 
-        return array_diff($privatePropertyNames, $propertyNonAssignNames);
+        // skip serializable properties, because they are probably used in serialization even though assign only
+        $serializablePropertyNames = $this->getSerializablePropertyNames($node);
+
+        return array_diff($privatePropertyNames, $propertyNonAssignNames, $serializablePropertyNames);
     }
 
     /**
@@ -525,5 +536,28 @@ final class ClassManipulator
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         return $parentNode instanceof Assign && $parentNode->var === $node;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getSerializablePropertyNames(Class_ $node): array
+    {
+        $serializablePropertyNames = [];
+        $this->callableNodeTraverser->traverseNodesWithCallable([$node], function (Node $node) use (
+            &$serializablePropertyNames
+        ): void {
+            if (! $node instanceof Property) {
+                return;
+            }
+
+            if (! $this->docBlockManipulator->hasTag($node, 'JMS\Serializer\Annotation\Type')) {
+                return;
+            }
+
+            $serializablePropertyNames[] = $this->nameResolver->getName($node);
+        });
+
+        return $serializablePropertyNames;
     }
 }

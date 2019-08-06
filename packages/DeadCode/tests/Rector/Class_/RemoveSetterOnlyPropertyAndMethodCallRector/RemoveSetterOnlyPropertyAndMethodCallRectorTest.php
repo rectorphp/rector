@@ -14,6 +14,7 @@ final class RemoveSetterOnlyPropertyAndMethodCallRectorTest extends AbstractRect
             __DIR__ . '/Fixture/in_constructor.php.inc',
             __DIR__ . '/Fixture/keep_static_property.php.inc',
             __DIR__ . '/Fixture/keep_public_property.php.inc',
+            __DIR__ . '/Fixture/keep_serializable_object.php.inc',
         ]);
     }
 
