@@ -166,6 +166,10 @@ CODE_SAMPLE
             return false;
         }
 
+        if ($this->isName($node, '__construct')) {
+            return false;
+        }
+
         if (count((array) $node->stmts) !== 1) {
             return false;
         }
