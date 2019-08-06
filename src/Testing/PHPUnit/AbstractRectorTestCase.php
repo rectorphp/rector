@@ -3,6 +3,7 @@
 namespace Rector\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
+use PHPStan\Analyser\NodeScopeResolver;
 use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
 use Rector\Configuration\Option;
@@ -45,6 +46,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      */
     private static $allRectorContainer;
 
+    /**
+     * @var NodeScopeResolver
+     */
+    private $nodeScopeResolver;
+
     protected function setUp(): void
     {
         $this->fixtureSplitter = new FixtureSplitter($this->getTempPath());
@@ -79,6 +85,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
         $this->fileProcessor = static::$container->get(FileProcessor::class);
         $this->parameterProvider = static::$container->get(ParameterProvider::class);
+
+        // needed for PHPStan, because the analyzed file is just create in /temp
+        $this->nodeScopeResolver = static::$container->get(NodeScopeResolver::class);
     }
 
     /**
@@ -123,6 +132,9 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
                 $smartFileInfo,
                 $this->autoloadTestFixture
             );
+
+            $this->nodeScopeResolver->setAnalysedFiles([$originalFile]);
+
             $this->doTestFileMatchesExpectedContent($originalFile, $changedFile, $smartFileInfo->getRealPath());
         }
 
