@@ -186,3 +186,6 @@ parameters:
         # symfony future compatibility
         - '#Call to an undefined static method Symfony\\Component\\EventDispatcher\\EventDispatcher\:\:__construct\(\)#'
         - '#Rector\\EventDispatcher\\AutowiredEventDispatcher\:\:__construct\(\) calls parent constructor but parent does not have one#'
+        - '#In method "Rector\\Rector\\AbstractRector\:\:traverseNodesWithCallable", parameter \$nodes has no type\-hint and no @param annotation\. More info\: http\://bit\.ly/usetypehint#'
+        - '#In method "Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:traverseNodesWithCallable", parameter \$nodes has no type\-hint and no @param annotation\. More info\: http\://bit\.ly/usetypehint#'
+        - '#Ternary operator condition is always true#'

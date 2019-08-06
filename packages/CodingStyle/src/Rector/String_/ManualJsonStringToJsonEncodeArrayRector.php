@@ -190,7 +190,7 @@ CODE_SAMPLE
     private function replaceNodeObjectHashPlaceholdersWithNodes(Array_ $array, array $placeholderNodes): void
     {
         // traverse and replace placeholdes by original nodes
-        $this->traverseNodesWithCallable([$array], function (Node $node) use ($placeholderNodes): ?Expr {
+        $this->traverseNodesWithCallable($array, function (Node $node) use ($placeholderNodes): ?Expr {
             if (! $node instanceof String_) {
                 return null;
             }

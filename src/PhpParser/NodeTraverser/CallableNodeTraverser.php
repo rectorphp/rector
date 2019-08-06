@@ -10,10 +10,14 @@ use PhpParser\NodeVisitorAbstract;
 final class CallableNodeTraverser
 {
     /**
-     * @param Node[] $nodes
+     * @param Node|Node[] $nodes
      */
-    public function traverseNodesWithCallable(array $nodes, callable $callable): void
+    public function traverseNodesWithCallable($nodes, callable $callable): void
     {
+        if (! is_array($nodes)) {
+            $nodes = $nodes ? [$nodes] : [];
+        }
+
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->createNodeVisitor($callable));
         $nodeTraverser->traverse($nodes);

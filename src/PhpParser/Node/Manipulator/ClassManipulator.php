@@ -5,6 +5,7 @@ namespace Rector\PhpParser\Node\Manipulator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
@@ -17,10 +18,13 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TraitUse;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Node\VariableInfo;
+use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class ClassManipulator
 {
@@ -44,16 +48,30 @@ final class ClassManipulator
      */
     private $betterNodeFinder;
 
+    /**
+     * @var CallableNodeTraverser
+     */
+    private $callableNodeTraverser;
+
+    /**
+     * @var NodeRemovingCommander
+     */
+    private $nodeRemovingCommander;
+
     public function __construct(
         NameResolver $nameResolver,
         NodeFactory $nodeFactory,
         ChildAndParentClassManipulator $childAndParentClassManipulator,
-        BetterNodeFinder $betterNodeFinder
+        BetterNodeFinder $betterNodeFinder,
+        CallableNodeTraverser $callableNodeTraverser,
+        NodeRemovingCommander $nodeRemovingCommander
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nameResolver = $nameResolver;
         $this->childAndParentClassManipulator = $childAndParentClassManipulator;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->nodeRemovingCommander = $nodeRemovingCommander;
     }
 
     public function addConstructorDependency(Class_ $classNode, VariableInfo $variableInfo): void
@@ -263,18 +281,7 @@ final class ClassManipulator
 
     public function removeProperty(Class_ $class, string $propertyName): void
     {
-        foreach ($class->stmts as $key => $classStmt) {
-            if (! $classStmt instanceof Property) {
-                continue;
-            }
-
-            if (! $this->nameResolver->isName($classStmt, $propertyName)) {
-                continue;
-            }
-
-            unset($class->stmts[$key]);
-            break;
-        }
+        $this->removeProperties($class, [$propertyName]);
     }
 
     public function findMethodParamByName(ClassMethod $classMethod, string $name): ?Param
@@ -335,6 +342,50 @@ final class ClassManipulator
         }
 
         return $publicMethodNames;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAssignOnlyPrivatePropertyNames(Class_ $node): array
+    {
+        $privatePropertyNames = $this->getPrivatePropertyNames($node);
+
+        $propertyNonAssignNames = [];
+
+        $this->callableNodeTraverser->traverseNodesWithCallable([$node], function (Node $node) use (
+            &$propertyNonAssignNames
+        ): void {
+            if (! $node instanceof PropertyFetch && ! $node instanceof StaticPropertyFetch) {
+                return;
+            }
+
+            if (! $this->isNonAssignPropertyFetch($node)) {
+                return;
+            }
+
+            $propertyNonAssignNames[] = $this->nameResolver->getName($node);
+        });
+
+        return array_diff($privatePropertyNames, $propertyNonAssignNames);
+    }
+
+    /**
+     * @param string[] $propertyNames
+     */
+    public function removeProperties(Class_ $class, array $propertyNames): void
+    {
+        $this->callableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use ($propertyNames) {
+            if (! $node instanceof Property) {
+                return null;
+            }
+
+            if (! $this->nameResolver->isNames($node, $propertyNames)) {
+                return null;
+            }
+
+            $this->removeNode($node);
+        });
     }
 
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
@@ -436,5 +487,43 @@ final class ClassManipulator
         }
 
         return false;
+    }
+
+    private function removeNode(Node $node): void
+    {
+        $this->nodeRemovingCommander->addNode($node);
+    }
+
+    /**
+     * @param PropertyFetch|StaticPropertyFetch $node
+     */
+    private function isNonAssignPropertyFetch(Node $node): bool
+    {
+        if ($node instanceof PropertyFetch) {
+            if (! $this->nameResolver->isName($node->var, 'this')) {
+                return false;
+            }
+
+            // is "$this->property = x;" assign
+            return ! $this->isNodeLeftPartOfAssign($node);
+        }
+
+        if ($node instanceof StaticPropertyFetch) {
+            if (! $this->nameResolver->isName($node->class, 'self')) {
+                return false;
+            }
+
+            // is "self::$property = x;" assign
+            return ! $this->isNodeLeftPartOfAssign($node);
+        }
+
+        return false;
+    }
+
+    private function isNodeLeftPartOfAssign(Node $node): bool
+    {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        return $parentNode instanceof Assign && $parentNode->var === $node;
     }
 }

@@ -20,7 +20,7 @@ abstract class AbstractCommand extends Command
     /**
      * @required
      */
-    public function setDescriptor(TextDescriptor $textDescriptor): void
+    public function autowireDescriptor(TextDescriptor $textDescriptor): void
     {
         $this->textDescriptor = $textDescriptor;
     }

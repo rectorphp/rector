@@ -15,6 +15,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\Reporting\RemovedNodesCollector;
 
 final class NodeRemovingCommander implements CommanderInterface
 {
@@ -33,14 +34,25 @@ final class NodeRemovingCommander implements CommanderInterface
      */
     private $nameResolver;
 
-    public function __construct(NodeFactory $nodeFactory, NameResolver $nameResolver)
-    {
+    /**
+     * @var RemovedNodesCollector
+     */
+    private $removedNodesCollector;
+
+    public function __construct(
+        NodeFactory $nodeFactory,
+        NameResolver $nameResolver,
+        RemovedNodesCollector $removedNodesCollector
+    ) {
         $this->nodeFactory = $nodeFactory;
         $this->nameResolver = $nameResolver;
+        $this->removedNodesCollector = $removedNodesCollector;
     }
 
     public function addNode(Node $node): void
     {
+        $this->removedNodesCollector->collect($node);
+
         // chain call: "->method()->another()"
         if ($node instanceof MethodCall && $node->var instanceof MethodCall) {
             throw new ShouldNotHappenException(

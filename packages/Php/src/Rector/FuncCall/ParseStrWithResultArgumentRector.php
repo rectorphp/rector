@@ -70,9 +70,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->traverseNodesWithCallable([$nextExpression], function (Node $node) use (
-            $resultVariable
-        ): ?Variable {
+        $this->traverseNodesWithCallable($nextExpression, function (Node $node) use ($resultVariable): ?Variable {
             if ($node instanceof FuncCall) {
                 if ($this->isName($node, 'get_defined_vars')) {
                     return $resultVariable;
