@@ -3,6 +3,7 @@
 namespace Rector\Application;
 
 use PHPStan\AnalysedCodeException;
+use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Configuration\Configuration;
@@ -68,6 +69,11 @@ final class RectorApplication
      */
     private $enabledRectorsProvider;
 
+    /**
+     * @var NodeScopeResolver
+     */
+    private $nodeScopeResolver;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         FileSystemFileProcessor $fileSystemFileProcessor,
@@ -76,7 +82,8 @@ final class RectorApplication
         FileProcessor $fileProcessor,
         EnabledRectorsProvider $enabledRectorsProvider,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor
+        RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
+        NodeScopeResolver $nodeScopeResolver
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
@@ -86,6 +93,7 @@ final class RectorApplication
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->enabledRectorsProvider = $enabledRectorsProvider;
+        $this->nodeScopeResolver = $nodeScopeResolver;
     }
 
     /**
@@ -102,6 +110,9 @@ final class RectorApplication
             // why 3? one for each cycle, so user sees some activity all the time
             $this->symfonyStyle->progressStart($fileCount * 3);
         }
+
+        // PHPStan has to know about all files!
+        $this->configurePHPStanNodeScopeResolver($fileInfos);
 
         // 1. parse files to nodes
         foreach ($fileInfos as $fileInfo) {
@@ -191,5 +202,18 @@ final class RectorApplication
         } elseif ($this->configuration->showProgressBar()) {
             $this->symfonyStyle->progressAdvance();
         }
+    }
+
+    /**
+     * @param SmartFileInfo[] $fileInfos
+     */
+    private function configurePHPStanNodeScopeResolver(array $fileInfos): void
+    {
+        $filePaths = [];
+        foreach ($fileInfos as $fileInfo) {
+            $filePaths[] = $fileInfo->getRealPath();
+        }
+
+        $this->nodeScopeResolver->setAnalysedFiles($filePaths);
     }
 }

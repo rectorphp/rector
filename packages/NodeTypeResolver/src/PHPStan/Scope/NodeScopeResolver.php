@@ -69,7 +69,6 @@ final class NodeScopeResolver
     {
         $this->removeDeepChainMethodCallNodes($nodes);
 
-        $this->phpStanNodeScopeResolver->setAnalysedFiles([$filePath]);
         $scope = $this->scopeFactory->createFromFile($filePath);
 
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
