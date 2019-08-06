@@ -19,6 +19,7 @@ final class RemoveUnusedDoctrineEntityMethodAndPropertyRectorTest extends Abstra
             __DIR__ . '/Fixture/skip_trait_called_method.php.inc',
             __DIR__ . '/Fixture/skip_trait_doc_typed.php.inc',
             __DIR__ . '/Fixture/skip_trait_complex.php.inc',
+            __DIR__ . '/Fixture/skip_abstract_parent.php.inc',
         ]);
     }
 
