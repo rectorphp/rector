@@ -13,6 +13,7 @@ final class PrivatizeLocalClassConstantRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/skip_multi_overcomplex.php.inc',
             __DIR__ . '/Fixture/keep_public.php.inc',
+            __DIR__ . '/Fixture/keep_public_parsing_order.php.inc',
             __DIR__ . '/Fixture/protected.php.inc',
             __DIR__ . '/Fixture/protected_parent_parent.php.inc',
             __DIR__ . '/Fixture/in_interface.php.inc',
