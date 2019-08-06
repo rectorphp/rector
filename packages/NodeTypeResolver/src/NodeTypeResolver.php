@@ -400,7 +400,6 @@ final class NodeTypeResolver
     {
         // nodes that cannot be resolver by PHPStan
         $nodeClass = get_class($node);
-
         if (isset($this->perNodeTypeResolvers[$nodeClass])) {
             return $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
         }
