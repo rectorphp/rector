@@ -7,6 +7,7 @@ use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Error\ExceptionCorrector;
 use Rector\Reporting\FileDiff;
+use Rector\Reporting\RemovedNodesCollector;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Throwable;
 
@@ -42,16 +43,23 @@ final class ErrorAndDiffCollector
      */
     private $removedAndAddedFilesCollector;
 
+    /**
+     * @var RemovedNodesCollector
+     */
+    private $removedNodesCollector;
+
     public function __construct(
         DifferAndFormatter $differAndFormatter,
         AppliedRectorCollector $appliedRectorCollector,
         ExceptionCorrector $exceptionCorrector,
-        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
+        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
+        RemovedNodesCollector $removedNodesCollector
     ) {
         $this->differAndFormatter = $differAndFormatter;
         $this->appliedRectorCollector = $appliedRectorCollector;
         $this->exceptionCorrector = $exceptionCorrector;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
+        $this->removedNodesCollector = $removedNodesCollector;
     }
 
     public function addError(Error $error): void
@@ -70,6 +78,11 @@ final class ErrorAndDiffCollector
     public function getRemovedAndAddedFilesCount(): int
     {
         return $this->removedAndAddedFilesCollector->getAffectedFilesCount();
+    }
+
+    public function getRemovedNodeCount(): int
+    {
+        return $this->removedNodesCollector->getCount();
     }
 
     public function addFileDiff(SmartFileInfo $smartFileInfo, string $newContent, string $oldContent): void
