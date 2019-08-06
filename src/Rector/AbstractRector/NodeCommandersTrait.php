@@ -10,6 +10,7 @@ use Rector\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\PhpParser\Node\Commander\PropertyAddingCommander;
 use Rector\PhpParser\Node\VariableInfo;
+use Rector\Reporting\RemovedNodesCollector;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -40,18 +41,25 @@ trait NodeCommandersTrait
     private $useAddingCommander;
 
     /**
+     * @var RemovedNodesCollector
+     */
+    private $removedNodesCollector;
+
+    /**
      * @required
      */
-    public function setRequiredCommanders(
+    public function autowireNodeCommandersTrait(
         NodeRemovingCommander $nodeRemovingCommander,
         NodeAddingCommander $nodeAddingCommander,
         PropertyAddingCommander $propertyAddingCommander,
-        UseAddingCommander $useAddingCommander
+        UseAddingCommander $useAddingCommander,
+        RemovedNodesCollector $removedNodesCollector
     ): void {
         $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->nodeAddingCommander = $nodeAddingCommander;
         $this->propertyAddingCommander = $propertyAddingCommander;
         $this->useAddingCommander = $useAddingCommander;
+        $this->removedNodesCollector = $removedNodesCollector;
     }
 
     protected function addNodeAfterNode(Node $newNode, Node $positionNode): void
@@ -81,6 +89,8 @@ trait NodeCommandersTrait
         $this->nodeRemovingCommander->addNode($node);
 
         $this->notifyNodeChangeFileInfo($node);
+
+        $this->removedNodesCollector->collect($node);
     }
 
     protected function isNodeRemoved(Node $node): bool

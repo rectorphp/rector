@@ -29,6 +29,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     {
         $this->reportFileDiffs($errorAndDiffCollector->getFileDiffs());
         $this->reportErrors($errorAndDiffCollector->getErrors());
+        $this->reportRemovedFilesAndNodes($errorAndDiffCollector);
 
         if ($errorAndDiffCollector->getErrors() !== []) {
             return;
@@ -98,6 +99,19 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             }
 
             $this->symfonyStyle->error($message);
+        }
+    }
+
+    private function reportRemovedFilesAndNodes(ErrorAndDiffCollector $errorAndDiffCollector): void
+    {
+        if ($errorAndDiffCollector->getRemovedAndAddedFilesCount()) {
+            $this->symfonyStyle->note(
+                sprintf('%d files were added/removed', $errorAndDiffCollector->getRemovedAndAddedFilesCount())
+            );
+        }
+
+        if ($errorAndDiffCollector->getRemovedNodeCount()) {
+            $this->symfonyStyle->note(sprintf('%d nodes were removed', $errorAndDiffCollector->getRemovedNodeCount()));
         }
     }
 }

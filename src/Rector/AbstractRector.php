@@ -51,7 +51,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     /**
      * @required
      */
-    public function setAbstractRectorDependencies(
+    public function autowireAbstractRectorDependencies(
         SymfonyStyle $symfonyStyle,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         PhpVersionProvider $phpVersionProvider,

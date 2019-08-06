@@ -48,6 +48,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
             'totals' => [
                 'changed_files' => count($fileDiffs),
                 'removed_and_added_files_count' => $errorAndDiffCollector->getRemovedAndAddedFilesCount(),
+                'removed_node_count' => $errorAndDiffCollector->getRemovedNodeCount(),
             ],
         ];
 
