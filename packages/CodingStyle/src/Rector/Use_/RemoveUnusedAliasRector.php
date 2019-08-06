@@ -298,7 +298,7 @@ CODE_SAMPLE
 
     private function resolveDocPossibleAliases(Node $searchNode): void
     {
-        $this->traverseNodesWithCallable([$searchNode], function (Node $node): void {
+        $this->traverseNodesWithCallable($searchNode, function (Node $node): void {
             if ($node->getDocComment() === null) {
                 return;
             }

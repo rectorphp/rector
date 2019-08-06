@@ -23,17 +23,6 @@ final class Configuration
     private $hideAutoloadErrors = false;
 
     /**
-     * Files and directories to by analysed
-     * @var string[]
-     */
-    private $source = [];
-
-    /**
-     * @var string
-     */
-    private $outputFormat;
-
-    /**
      * @var string|null
      */
     private $configFilePath;
@@ -54,9 +43,7 @@ final class Configuration
     public function resolveFromInput(InputInterface $input): void
     {
         $this->isDryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
-        $this->source = (array) $input->getArgument(Option::SOURCE);
         $this->hideAutoloadErrors = (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS);
-        $this->outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
         $this->showProgressBar = $this->canShowProgressBar($input);
 
         $this->setRule($input->getOption(Option::OPTION_RULE));
@@ -82,11 +69,6 @@ final class Configuration
         return $this->configFilePath;
     }
 
-    public function getOutputFormat(): string
-    {
-        return $this->outputFormat;
-    }
-
     public function getPrettyVersion(): string
     {
         $version = PrettyVersions::getVersion('rector/rector');
@@ -105,14 +87,6 @@ final class Configuration
     public function isDryRun(): bool
     {
         return $this->isDryRun;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getSource(): array
-    {
-        return $this->source;
     }
 
     public function shouldHideAutoloadErrors(): bool

@@ -25,9 +25,9 @@ trait CallableNodeTraverserTrait
     }
 
     /**
-     * @param Node[] $nodes
+     * @param Node|Node[] $nodes
      */
-    public function traverseNodesWithCallable(array $nodes, callable $callable): void
+    public function traverseNodesWithCallable($nodes, callable $callable): void
     {
         $this->callableNodeTraverser->traverseNodesWithCallable($nodes, $callable);
     }

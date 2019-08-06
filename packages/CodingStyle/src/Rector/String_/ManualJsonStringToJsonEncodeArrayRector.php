@@ -22,6 +22,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
+ * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
  * @see \Rector\CodingStyle\Tests\Rector\String_\ManualJsonStringToJsonEncodeArrayRector\ManualJsonStringToJsonEncodeArrayRectorTest
  */
 final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
@@ -190,7 +191,7 @@ CODE_SAMPLE
     private function replaceNodeObjectHashPlaceholdersWithNodes(Array_ $array, array $placeholderNodes): void
     {
         // traverse and replace placeholdes by original nodes
-        $this->traverseNodesWithCallable([$array], function (Node $node) use ($placeholderNodes): ?Expr {
+        $this->traverseNodesWithCallable($array, function (Node $node) use ($placeholderNodes): ?Expr {
             if (! $node instanceof String_) {
                 return null;
             }

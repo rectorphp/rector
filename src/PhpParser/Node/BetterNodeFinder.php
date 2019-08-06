@@ -3,16 +3,12 @@
 namespace Rector\PhpParser\Node;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class BetterNodeFinder
 {
@@ -21,15 +17,9 @@ final class BetterNodeFinder
      */
     private $nodeFinder;
 
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    public function __construct(NodeFinder $nodeFinder, BetterStandardPrinter $betterStandardPrinter)
+    public function __construct(NodeFinder $nodeFinder)
     {
         $this->nodeFinder = $nodeFinder;
-        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     /**
@@ -183,26 +173,6 @@ final class BetterNodeFinder
         }
 
         return $this->findFirstPrevious($previousExpression, $filter);
-    }
-
-    /**
-     * @return Assign[]
-     */
-    public function findAssignsOfVariable(Node $node, Variable $variable): array
-    {
-        $assignNodes = $this->findInstanceOf($node, Assign::class);
-
-        return array_filter($assignNodes, function (Assign $assign) use ($variable): bool {
-            if ($this->betterStandardPrinter->areNodesEqual($assign->var, $variable)) {
-                return true;
-            }
-
-            if ($assign->var instanceof ArrayDimFetch) {
-                return $this->betterStandardPrinter->areNodesEqual($assign->var->var, $variable);
-            }
-
-            return false;
-        });
     }
 
     /**

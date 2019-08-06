@@ -10,13 +10,6 @@ final class Attribute
     public const HAS_DESCRIPTION_WITH_ORIGINAL_SPACES = 'has_description_with_restored_spaces';
 
     /**
-     * Fully-qualified name
-     *
-     * @var string
-     */
-    public const FQN_NAME = 'fqn_name';
-
-    /**
      * @var string
      */
     public const PHP_DOC_NODE_INFO = 'php_doc_node_info';

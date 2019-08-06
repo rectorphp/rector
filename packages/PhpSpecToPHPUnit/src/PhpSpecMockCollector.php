@@ -56,7 +56,7 @@ final class PhpSpecMockCollector
             return $this->mocks[$className];
         }
 
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $class->stmts, function (Node $node): void {
+        $this->callableNodeTraverser->traverseNodesWithCallable($class, function (Node $node): void {
             if (! $node instanceof ClassMethod) {
                 return;
             }

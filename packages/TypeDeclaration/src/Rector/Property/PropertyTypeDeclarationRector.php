@@ -13,6 +13,9 @@ use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\Exception\ConflictingPriorityException;
 use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 
+/**
+ * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ */
 final class PropertyTypeDeclarationRector extends AbstractRector
 {
     /**

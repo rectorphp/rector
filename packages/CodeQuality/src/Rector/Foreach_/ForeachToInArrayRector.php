@@ -219,7 +219,7 @@ CODE_SAMPLE
      */
     private function combineCommentsToNode(Node $originalNode, Node $newNode): void
     {
-        $this->traverseNodesWithCallable([$originalNode], function (Node $node): void {
+        $this->traverseNodesWithCallable($originalNode, function (Node $node): void {
             if ($node->hasAttribute('comments')) {
                 $this->comments = array_merge($this->comments, $node->getComments());
             }

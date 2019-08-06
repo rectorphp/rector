@@ -48,7 +48,7 @@ final class ConcatManipulator
         $newConcat = clone $concat;
         $firstConcatItem = $this->getFirstConcatItem($concat);
 
-        $this->callableNodeTraverser->traverseNodesWithCallable([$newConcat], function (Node $node) use (
+        $this->callableNodeTraverser->traverseNodesWithCallable($newConcat, function (Node $node) use (
             $firstConcatItem
         ): ?Expr {
             if (! $node instanceof Concat) {

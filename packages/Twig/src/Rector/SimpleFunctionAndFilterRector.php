@@ -124,7 +124,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->traverseNodesWithCallable([$node->expr], function (Node $node): ?Node {
+        $this->traverseNodesWithCallable($node->expr, function (Node $node): ?Node {
             if (! $node instanceof ArrayItem) {
                 return null;
             }
