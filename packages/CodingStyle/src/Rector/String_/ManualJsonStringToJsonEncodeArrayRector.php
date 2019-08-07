@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\AssignOp\Concat as ConcatAssign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Expression;
 use Rector\CodingStyle\Node\ConcatJoiner;
 use Rector\CodingStyle\Node\ConcatManipulator;
 use Rector\CodingStyle\ValueObject\ConcatExpressionJoinData;
@@ -190,15 +191,18 @@ CODE_SAMPLE
      */
     private function replaceNodeObjectHashPlaceholdersWithNodes(Array_ $array, array $placeholderNodes): void
     {
-        // traverse and replace placeholdes by original nodes
+        // traverse and replace placeholder by original nodes
         $this->traverseNodesWithCallable($array, function (Node $node) use ($placeholderNodes): ?Expr {
-            if (! $node instanceof String_) {
-                return null;
+            if ($node instanceof Array_ && count($node->items) === 1) {
+                $placeholderNode = $this->matchPlaceholderNode($node->items[0]->value, $placeholderNodes);
+
+                if ($placeholderNode && $this->isImplodeToJson($placeholderNode)) {
+                    /** @var Expr\FuncCall $placeholderNode */
+                    return $placeholderNode->args[1]->value;
+                }
             }
 
-            $stringValue = $node->value;
-
-            return $placeholderNodes[$stringValue] ?? null;
+            return $this->matchPlaceholderNode($node, $placeholderNodes);
         });
     }
 
@@ -209,7 +213,7 @@ CODE_SAMPLE
     private function matchNextExpressionAssignConcatToSameVariable(Expr $expr, Node $currentNode): ?array
     {
         $nextExpression = $this->getNextExpression($currentNode);
-        if (! $nextExpression instanceof Node\Stmt\Expression) {
+        if (! $nextExpression instanceof Expression) {
             return null;
         }
 
@@ -297,5 +301,44 @@ CODE_SAMPLE
         }
 
         return $concatExpressionJoinData;
+    }
+
+    /**
+     * Matches: "implode('","', $items)"
+     */
+    private function isImplodeToJson(Node $node): bool
+    {
+        if (! $node instanceof Expr\FuncCall) {
+            return false;
+        }
+
+        if (! $this->isName($node, 'implode')) {
+            return false;
+        }
+
+        if (! isset($node->args[1])) {
+            return false;
+        }
+
+        $firstArgumentValue = $node->args[0]->value;
+        if ($firstArgumentValue instanceof String_) {
+            if ($firstArgumentValue->value !== '","') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param Expr[] $placeholderNodes
+     */
+    private function matchPlaceholderNode(Node $node, array $placeholderNodes): ?Expr
+    {
+        if (! $node instanceof String_) {
+            return null;
+        }
+
+        return $placeholderNodes[$node->value] ?? null;
     }
 }
