@@ -6,13 +6,10 @@ services:
         unlink: ['Nette\Utils\FileSystem', 'delete']
         rmdir: ['Nette\Utils\FileSystem', 'delete']
 
-        # json
-        json_decode: ['Nette\Utils\Json', 'decode']
-        json_encode: ['Nette\Utils\Json', 'encode']
-
     # strings
     Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector: ~
     Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector: ~
     Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector: ~
     Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector: ~
     Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector: ~
+    Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector: ~
