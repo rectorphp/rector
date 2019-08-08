@@ -69,7 +69,7 @@ final class SomeClass
             'numberz' => ['id' => 10]
         ];
 
-        $someJsonAsString = json_encode($data);
+        $someJsonAsString = Nette\Utils\Json::encode($data);
     }
 }
 CODE_SAMPLE
