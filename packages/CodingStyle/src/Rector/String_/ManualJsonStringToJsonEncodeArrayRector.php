@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp\Concat as ConcatAssign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
@@ -98,13 +99,8 @@ CODE_SAMPLE
                 return $this->processJsonString($node, $stringValue);
             }
 
-            // B. just start of a json?
-            $currentNode = $node;
-
-            $concatExpressionJoinData = $this->collectContentAndPlaceholderNodesFromNextExpressions(
-                $node,
-                $currentNode
-            );
+            // B. just start of a json? join with all the strings that concat so same variable
+            $concatExpressionJoinData = $this->collectContentAndPlaceholderNodesFromNextExpressions($node);
 
             $stringValue .= $concatExpressionJoinData->getString();
             if (! $this->isJsonString($stringValue)) {
@@ -126,21 +122,29 @@ CODE_SAMPLE
 
         if ($node->expr instanceof Concat) {
             // process only first concat
-            $concatParentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($concatParentNode instanceof Concat) {
+            if ($node->getAttribute(AttributeKey::PARENT_NODE) instanceof Concat) {
                 return null;
             }
 
             /** @var Expr[] $placeholderNodes */
-            [$content, $placeholderNodes] = $this->concatJoiner->joinToStringAndPlaceholderNodes($node->expr);
+            [$stringValue, $placeholderNodes] = $this->concatJoiner->joinToStringAndPlaceholderNodes($node->expr);
 
-            /** @var string $content */
-            if (! $this->isJsonString($content)) {
+            // B. just start of a json? join with all the strings that concat so same variable
+            $concatExpressionJoinData = $this->collectContentAndPlaceholderNodesFromNextExpressions($node);
+
+            $placeholderNodes = array_merge($placeholderNodes, $concatExpressionJoinData->getPlaceholdersToNodes());
+
+            /** @var string $stringValue */
+            $stringValue .= $concatExpressionJoinData->getString();
+
+            if (! $this->isJsonString($stringValue)) {
                 return null;
             }
 
-            $jsonArray = $this->createArrayNodeFromJsonString($content);
+            $jsonArray = $this->createArrayNodeFromJsonString($stringValue);
             $this->replaceNodeObjectHashPlaceholdersWithNodes($jsonArray, $placeholderNodes);
+
+            $this->removeNodes($concatExpressionJoinData->getNodesToRemove());
 
             return $this->createAndReturnJsonEncodeFromArray($node, $jsonArray);
         }
@@ -197,7 +201,7 @@ CODE_SAMPLE
                 $placeholderNode = $this->matchPlaceholderNode($node->items[0]->value, $placeholderNodes);
 
                 if ($placeholderNode && $this->isImplodeToJson($placeholderNode)) {
-                    /** @var Expr\FuncCall $placeholderNode */
+                    /** @var FuncCall $placeholderNode */
                     return $placeholderNode->args[1]->value;
                 }
             }
@@ -263,11 +267,11 @@ CODE_SAMPLE
         return $this->createArray($array);
     }
 
-    private function collectContentAndPlaceholderNodesFromNextExpressions(
-        Assign $assign,
-        Node $currentNode
-    ): ConcatExpressionJoinData {
+    private function collectContentAndPlaceholderNodesFromNextExpressions(Assign $assign): ConcatExpressionJoinData
+    {
         $concatExpressionJoinData = new ConcatExpressionJoinData();
+
+        $currentNode = $assign;
 
         while ([$nodeToRemove, $valueNode] = $this->matchNextExpressionAssignConcatToSameVariable(
             $assign->var,
@@ -308,7 +312,7 @@ CODE_SAMPLE
      */
     private function isImplodeToJson(Node $node): bool
     {
-        if (! $node instanceof Expr\FuncCall) {
+        if (! $node instanceof FuncCall) {
             return false;
         }
 
