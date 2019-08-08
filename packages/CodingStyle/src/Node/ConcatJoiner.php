@@ -44,7 +44,7 @@ final class ConcatJoiner
         } elseif ($expr instanceof Concat) {
             $this->joinToStringAndPlaceholderNodes($expr);
         } else {
-            $objectHash = spl_object_hash($expr);
+            $objectHash = '____' . spl_object_hash($expr) . '____';
             $this->placeholderNodes[$objectHash] = $expr;
 
             $this->content .= $objectHash;
