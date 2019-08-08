@@ -103,21 +103,13 @@ CODE_SAMPLE
             $concatExpressionJoinData = $this->collectContentAndPlaceholderNodesFromNextExpressions($node);
 
             $stringValue .= $concatExpressionJoinData->getString();
-            if (! $this->isJsonString($stringValue)) {
-                return null;
-            }
 
-            // remove nodes
-            $this->removeNodes($concatExpressionJoinData->getNodesToRemove());
-
-            $jsonArray = $this->createArrayNodeFromJsonString($stringValue);
-
-            $this->replaceNodeObjectHashPlaceholdersWithNodes(
-                $jsonArray,
-                $concatExpressionJoinData->getPlaceholdersToNodes()
+            return $this->removeNodesAndCreateJsonEncodeFromStringValue(
+                $concatExpressionJoinData->getNodesToRemove(),
+                $stringValue,
+                $concatExpressionJoinData->getPlaceholdersToNodes(),
+                $node
             );
-
-            return $this->createAndReturnJsonEncodeFromArray($node, $jsonArray);
         }
 
         if ($node->expr instanceof Concat) {
@@ -137,16 +129,12 @@ CODE_SAMPLE
             /** @var string $stringValue */
             $stringValue .= $concatExpressionJoinData->getString();
 
-            if (! $this->isJsonString($stringValue)) {
-                return null;
-            }
-
-            $jsonArray = $this->createArrayNodeFromJsonString($stringValue);
-            $this->replaceNodeObjectHashPlaceholdersWithNodes($jsonArray, $placeholderNodes);
-
-            $this->removeNodes($concatExpressionJoinData->getNodesToRemove());
-
-            return $this->createAndReturnJsonEncodeFromArray($node, $jsonArray);
+            return $this->removeNodesAndCreateJsonEncodeFromStringValue(
+                $concatExpressionJoinData->getNodesToRemove(),
+                $stringValue,
+                $placeholderNodes,
+                $node
+            );
         }
 
         return null;
@@ -290,7 +278,8 @@ CODE_SAMPLE
                     $concatExpressionJoinData->addPlaceholderToNode($placeholder, $expr);
                 }
             } elseif ($valueNode instanceof Expr) {
-                $objectHash = spl_object_hash($valueNode);
+                $objectHash = '____' . spl_object_hash($valueNode) . '____';
+
                 $concatExpressionJoinData->addString($objectHash);
                 $concatExpressionJoinData->addPlaceholderToNode($objectHash, $valueNode);
             }
@@ -344,5 +333,29 @@ CODE_SAMPLE
         }
 
         return $placeholderNodes[$node->value] ?? null;
+    }
+
+    /**
+     * @param Node[] $nodesToRemove
+     * @param Expr[] $placeholderNodes
+     */
+    private function removeNodesAndCreateJsonEncodeFromStringValue(
+        array $nodesToRemove,
+        string $stringValue,
+        array $placeholderNodes,
+        Assign $assign
+    ): ?Assign {
+        // quote object hashes if needed - https://regex101.com/r/85PZHm/1
+        $stringValue = Strings::replace($stringValue, '#(?<start>[^\"])(?<hash>____\w+____)#', '$1"$2"');
+        if (! $this->isJsonString($stringValue)) {
+            return null;
+        }
+
+        $this->removeNodes($nodesToRemove);
+
+        $jsonArray = $this->createArrayNodeFromJsonString($stringValue);
+        $this->replaceNodeObjectHashPlaceholdersWithNodes($jsonArray, $placeholderNodes);
+
+        return $this->createAndReturnJsonEncodeFromArray($assign, $jsonArray);
     }
 }
