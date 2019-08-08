@@ -5,10 +5,10 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 class ImportParamDoc
 {
     /**
-     * @param \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\AlreadyClassName $alreadyClassName
-     * @return \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\AlreadyClassName
+     * @param \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\NormalParamClass $alreadyClassName
+     * @return \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\NormalParamClass
      */
-    public function create(\Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\AlreadyClassName $alreadyClassName)
+    public function create(\Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\NormalParamClass $alreadyClassName)
     {
     }
 }
@@ -19,14 +19,14 @@ class ImportParamDoc
 
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\AlreadyClassName;
+use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\NormalParamClass;
 class ImportParamDoc
 {
     /**
-     * @param AlreadyClassName $alreadyClassName
-     * @return AlreadyClassName
+     * @param NormalParamClass $alreadyClassName
+     * @return NormalParamClass
      */
-    public function create(AlreadyClassName $alreadyClassName)
+    public function create(NormalParamClass $alreadyClassName)
     {
     }
 }

@@ -35,6 +35,7 @@ use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
@@ -680,6 +681,14 @@ final class DocBlockManipulator
         string $shortName,
         string $fullyQualifiedName
     ): AttributeAwareNodeInterface {
+        // the name is already in the same namespace implicitly
+        $namespaceName = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
+
+        // the class in the same namespace as differnt file can se used in this code, the short names would colide → skip
+        if (class_exists($namespaceName . '\\' . $shortName)) {
+            return $attributeAwareNode;
+        }
+
         if ($this->useAddingCommander->isShortImported($node, $fullyQualifiedName)) {
             if ($this->useAddingCommander->isImportShortable($node, $fullyQualifiedName)) {
                 $attributeAwareNode->name = $shortName;
