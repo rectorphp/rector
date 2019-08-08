@@ -149,7 +149,7 @@ CODE_SAMPLE
 
     private function isJsonString(string $stringValue): bool
     {
-        if (! (bool) Strings::match($stringValue, '#{(.*?\:.*?)}#')) {
+        if (! (bool) Strings::match($stringValue, '#{(.*?\:.*?)}#s')) {
             return false;
         }
 
