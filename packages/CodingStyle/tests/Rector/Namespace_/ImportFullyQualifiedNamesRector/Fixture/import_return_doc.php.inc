@@ -7,7 +7,7 @@ use Rector\CodingStyle\Tests\Rector\Namespace_;
 class ImportReturnDoc
 {
     /**
-     * @return Namespace_\ImportFullyQualifiedNamesRector\Source\AlreadyClassName
+     * @return Namespace_\ImportFullyQualifiedNamesRector\Source\NormalReturnClass
      */
     public function create()
     {
@@ -20,13 +20,13 @@ class ImportReturnDoc
 
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\AlreadyClassName;
+use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\NormalReturnClass;
 use Rector\CodingStyle\Tests\Rector\Namespace_;
 
 class ImportReturnDoc
 {
     /**
-     * @return AlreadyClassName
+     * @return NormalReturnClass
      */
     public function create()
     {
