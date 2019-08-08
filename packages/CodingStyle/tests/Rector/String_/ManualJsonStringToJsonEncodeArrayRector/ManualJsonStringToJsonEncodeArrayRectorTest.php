@@ -16,6 +16,7 @@ final class ManualJsonStringToJsonEncodeArrayRectorTest extends AbstractRectorTe
             __DIR__ . '/Fixture/tripleline_multiline_concat_json.php.inc',
             __DIR__ . '/Fixture/assign_with_concat.php.inc',
             __DIR__ . '/Fixture/with_implode.php.inc',
+            __DIR__ . '/Fixture/without_assign.php.inc',
         ]);
     }
 
