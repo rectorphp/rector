@@ -132,7 +132,8 @@
             "packages/NodeTypeResolver/tests/PerNodeTypeResolver/PropertyTypeResolver/Source",
             "tests/Source",
             "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source",
-            "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source"
+            "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source",
+            "test-me"
         ],
         "files": [
             "packages/DeadCode/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php"

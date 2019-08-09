@@ -162,6 +162,9 @@ final class NodeRemovingCommander implements CommanderInterface
             public function leaveNode(Node $node)
             {
                 foreach ($this->nodesToRemove as $key => $nodeToRemove) {
+
+                    dump(get_class($nodeToRemove));
+
                     if ($node === $nodeToRemove) {
                         unset($this->nodesToRemove[$key]);
 

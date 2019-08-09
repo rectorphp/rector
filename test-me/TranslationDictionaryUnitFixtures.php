@@ -6,14 +6,9 @@ use stdClass;
 
 final class TranslationDictionaryUnitFixtures
 {
-    public function getTranslationDictionary()
+    public function run()
     {
-        $translationDictionary = new stdClass();
-
         $enTranslation = new Translation();
-        $enTranslation->setTranslationsDictionary($translationDictionary);
-
-        $csTranslation = new Translation();
-        $csTranslation->setTranslationsDictionary($translationDictionary);
+        $enTranslation->setTranslationsDictionary(new stdClass());
     }
 }

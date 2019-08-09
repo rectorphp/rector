@@ -4,15 +4,8 @@ namespace Buggy;
 
 use stdClass;
 
-/**
- * @ORM\Table(name="translations")
- * @ORM\Entity()
- */
 class Translation
 {
-    /**
-     * @var stdClass
-     */
     private $translationsDictionary;
 
     public function setTranslationsDictionary(stdClass $translationsDictionary): void
