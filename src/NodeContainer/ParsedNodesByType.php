@@ -576,7 +576,12 @@ final class ParsedNodesByType
     private function addCall(Node $node): void
     {
         // one node can be of multiple-class types
-        $classTypes = $this->resolveNodeClassTypes($node);
+        if ($node instanceof MethodCall) {
+            $classTypes = $this->resolveNodeClassTypes($node->var);
+        } else {
+            $classTypes = $this->resolveNodeClassTypes($node->class);
+        }
+
         if ($classTypes === []) { // anonymous
             return;
         }
