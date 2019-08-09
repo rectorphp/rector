@@ -82,7 +82,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($methodNode)) {
+        $calledMethodName = $this->getName($node->name);
+        if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($methodNode, $calledMethodName)) {
             return null;
         }
 

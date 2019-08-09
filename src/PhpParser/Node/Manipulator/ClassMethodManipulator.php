@@ -90,15 +90,12 @@ final class ClassMethodManipulator
         return $this->nameResolver->isNames($param, $arguments);
     }
 
-    public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod): bool
+    public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod, ?string $methodName = null): bool
     {
+        $methodName = $methodName ?? $this->nameResolver->getName($classMethod->name);
+
         $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
         if (! is_string($class)) {
-            return false;
-        }
-
-        $method = $classMethod->getAttribute(AttributeKey::METHOD_NAME);
-        if (! is_string($method)) {
             return false;
         }
 
@@ -106,13 +103,17 @@ final class ClassMethodManipulator
             return false;
         }
 
-        if ($this->isMethodInParent($class, $method)) {
+        if (! is_string($methodName)) {
+            return false;
+        }
+
+        if ($this->isMethodInParent($class, $methodName)) {
             return true;
         }
 
         $implementedInterfaces = class_implements($class);
         foreach ($implementedInterfaces as $implementedInterface) {
-            if (method_exists($implementedInterface, $method)) {
+            if (method_exists($implementedInterface, $methodName)) {
                 return true;
             }
         }
@@ -186,9 +187,7 @@ final class ClassMethodManipulator
 
     private function isMethodInParent(string $class, string $method): bool
     {
-        $parentClass = $class;
-
-        while ($parentClass = get_parent_class($parentClass)) {
+        foreach (class_parents($class) as $parentClass) {
             if (method_exists($parentClass, $method)) {
                 return true;
             }
