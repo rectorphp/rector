@@ -109,9 +109,32 @@ CODE_SAMPLE
             return false;
         }
 
-        // are arguments the same?
-        if (count($staticCall->args) !== count($classMethod->params)) {
+        if (! $this->areArgsAndParamsEqual($staticCall->args, $classMethod->params)) {
             return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param Node\Arg[] $args
+     * @param Node\Param[] $params
+     */
+    private function areArgsAndParamsEqual(array $args, array $params): bool
+    {
+        if (count($args) !== count($params)) {
+            return false;
+        }
+
+        foreach ($args as $key => $arg) {
+            if (! isset($params[$key])) {
+                return false;
+            }
+
+            $param = $params[$key];
+            if (! $this->areNamesEqual($param->var, $arg->value)) {
+                return false;
+            }
         }
 
         return true;
