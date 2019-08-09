@@ -577,16 +577,20 @@ final class ParsedNodesByType
     {
         // one node can be of multiple-class types
         if ($node instanceof MethodCall) {
-            $classTypes = $this->resolveNodeClassTypes($node->var);
+            if ($node->var instanceof MethodCall) {
+                $classTypes = $this->resolveNodeClassTypes($node);
+            } else {
+                $classTypes = $this->resolveNodeClassTypes($node->var);
+            }
         } else {
             $classTypes = $this->resolveNodeClassTypes($node->class);
         }
 
+        $methodName = $this->nameResolver->getName($node);
         if ($classTypes === []) { // anonymous
             return;
         }
 
-        $methodName = $this->nameResolver->getName($node);
         if ($methodName === null) {
             return;
         }
