@@ -80,9 +80,6 @@ final class NodeRemovingCommander implements CommanderInterface
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->createNodeVisitor());
 
-        // new nodes to remove are always per traverse
-        $this->nodesToRemove = [];
-
         return $nodeTraverser->traverse($nodes);
     }
 

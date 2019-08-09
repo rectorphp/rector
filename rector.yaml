@@ -18,4 +18,5 @@ parameters:
 
 services:
 #    Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector: ~
-    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
+#    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
+    Rector\DeadCode\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector: ~
