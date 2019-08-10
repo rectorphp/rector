@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -41,16 +42,23 @@ final class SetterOnlyMethodAnalyzer
      */
     private $propertiesAndMethodsToRemoveByType = [];
 
+    /**
+     * @var DoctrineEntityManipulator
+     */
+    private $doctrineEntityManipulator;
+
     public function __construct(
         ParsedNodesByType $parsedNodesByType,
         ClassManipulator $classManipulator,
         NameResolver $nameResolver,
-        CallableNodeTraverser $callableNodeTraverser
+        CallableNodeTraverser $callableNodeTraverser,
+        DoctrineEntityManipulator $doctrineEntityManipulator
     ) {
         $this->parsedNodesByType = $parsedNodesByType;
         $this->classManipulator = $classManipulator;
         $this->nameResolver = $nameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->doctrineEntityManipulator = $doctrineEntityManipulator;
     }
 
     /**
@@ -68,6 +76,10 @@ final class SetterOnlyMethodAnalyzer
 
             // 1. setter only properties by class
             $assignOnlyPrivatePropertyNames = $this->classManipulator->getAssignOnlyPrivatePropertyNames($class);
+
+            // filter out ManyToOne entities
+            $manyToOnePropertyNames = $this->doctrineEntityManipulator->resolveManyToOnePropertyNames($class);
+            $assignOnlyPrivatePropertyNames = array_diff($assignOnlyPrivatePropertyNames, $manyToOnePropertyNames);
             if ($assignOnlyPrivatePropertyNames) {
                 $this->propertiesAndMethodsToRemoveByType[$type]['properties'] = $assignOnlyPrivatePropertyNames;
             }
