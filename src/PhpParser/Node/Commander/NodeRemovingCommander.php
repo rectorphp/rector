@@ -3,19 +3,14 @@
 namespace Rector\PhpParser\Node\Commander;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor;
-use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\NodeFactory;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\Reporting\RemovedNodesCollector;
+use Rector\PhpParser\Node\NodeVisitorFactory\NodeRemovingNodeVisitorFactory;
 
 final class NodeRemovingCommander implements CommanderInterface
 {
@@ -25,46 +20,24 @@ final class NodeRemovingCommander implements CommanderInterface
     private $nodesToRemove = [];
 
     /**
-     * @var NodeFactory
+     * @var NodeRemovingNodeVisitorFactory
      */
-    private $nodeFactory;
+    private $nodeRemovingNodeVisitorFactory;
 
-    /**
-     * @var NameResolver
-     */
-    private $nameResolver;
-
-    /**
-     * @var RemovedNodesCollector
-     */
-    private $removedNodesCollector;
-
-    public function __construct(
-        NodeFactory $nodeFactory,
-        NameResolver $nameResolver,
-        RemovedNodesCollector $removedNodesCollector
-    ) {
-        $this->nodeFactory = $nodeFactory;
-        $this->nameResolver = $nameResolver;
-        $this->removedNodesCollector = $removedNodesCollector;
+    public function __construct(NodeRemovingNodeVisitorFactory $nodeRemovingNodeVisitorFactory)
+    {
+        $this->nodeRemovingNodeVisitorFactory = $nodeRemovingNodeVisitorFactory;
     }
 
     public function addNode(Node $node): void
     {
-        $this->removedNodesCollector->collect($node);
-
         // chain call: "->method()->another()"
-        if ($node instanceof MethodCall && $node->var instanceof MethodCall) {
-            throw new ShouldNotHappenException(
-                'Chain method calls cannot be removed this way. It would remove the whole tree of calls. Remove them manually by creating new parent node with no following method.'
-            );
-        }
+        $this->ensureIsNotPartOfChainMethodCall($node);
 
-        if (! $node instanceof Expression && ($node->getAttribute(
-            AttributeKey::PARENT_NODE
-        ) instanceof Expression)) {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $node instanceof Expression && $parentNode instanceof Expression) {
             // only expressions can be removed
-            $node = $node->getAttribute(AttributeKey::PARENT_NODE);
+            $node = $parentNode;
         }
 
         /** @var Stmt $node */
@@ -78,14 +51,11 @@ final class NodeRemovingCommander implements CommanderInterface
     public function traverseNodes(array $nodes): array
     {
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->createNodeVisitor());
+
+        $nodeRemovingNodeVisitor = $this->nodeRemovingNodeVisitorFactory->createFromNodesToRemove($this->nodesToRemove);
+        $nodeTraverser->addVisitor($nodeRemovingNodeVisitor);
 
         return $nodeTraverser->traverse($nodes);
-    }
-
-    public function isActive(): bool
-    {
-        return count($this->nodesToRemove) > 0;
     }
 
     public function isNodeRemoved(Node $node): bool
@@ -93,81 +63,36 @@ final class NodeRemovingCommander implements CommanderInterface
         return in_array($node, $this->nodesToRemove, true);
     }
 
-    private function createNodeVisitor(): NodeVisitor
+    public function isActive(): bool
     {
-        return new class($this->nodesToRemove, $this->nodeFactory, $this->nameResolver) extends NodeVisitorAbstract {
-            /**
-             * @var Stmt[]|Expr[]
-             */
-            private $nodesToRemove = [];
+        return $this->getCount() > 0;
+    }
 
-            /**
-             * @var NodeFactory
-             */
-            private $nodeFactory;
+    public function getCount(): int
+    {
+        return count($this->nodesToRemove);
+    }
 
-            /**
-             * @var NameResolver
-             */
-            private $nameResolver;
+    /**
+     * @return Node[]
+     */
+    public function getNodesToRemove(): array
+    {
+        return $this->nodesToRemove;
+    }
 
-            /**
-             * @param Stmt[] $nodesToRemove
-             */
-            public function __construct(array $nodesToRemove, NodeFactory $nodeFactory, NameResolver $nameResolver)
-            {
-                $this->nodesToRemove = $nodesToRemove;
-                $this->nodeFactory = $nodeFactory;
-                $this->nameResolver = $nameResolver;
-            }
+    private function ensureIsNotPartOfChainMethodCall(Node $node): void
+    {
+        if (! $node instanceof MethodCall) {
+            return;
+        }
 
-            /**
-             * @return int|Node|null
-             */
-            public function enterNode(Node $node)
-            {
-                // special case for fluent methods
-                foreach ($this->nodesToRemove as $key => $nodeToRemove) {
-                    if (! $nodeToRemove instanceof MethodCall) {
-                        continue;
-                    }
+        if (! $node->var instanceof MethodCall) {
+            return;
+        }
 
-                    if (! $node instanceof MethodCall || ! $node->var instanceof MethodCall) {
-                        continue;
-                    }
-
-                    if ($nodeToRemove !== $node->var) {
-                        continue;
-                    }
-
-                    $methodName = $this->nameResolver->getName($node->name);
-                    if ($methodName === null) {
-                        continue;
-                    }
-
-                    unset($this->nodesToRemove[$key]);
-
-                    return $this->nodeFactory->createMethodCall($node->var->var, $methodName, $node->args);
-                }
-
-                return null;
-            }
-
-            /**
-             * @return int|Node|Node[]|null
-             */
-            public function leaveNode(Node $node)
-            {
-                foreach ($this->nodesToRemove as $key => $nodeToRemove) {
-                    if ($node === $nodeToRemove) {
-                        unset($this->nodesToRemove[$key]);
-
-                        return NodeTraverser::REMOVE_NODE;
-                    }
-                }
-
-                return $node;
-            }
-        };
+        throw new ShouldNotHappenException(
+            'Chain method calls cannot be removed this way. It would remove the whole tree of calls. Remove them manually by creating new parent node with no following method.'
+        );
     }
 }

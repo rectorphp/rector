@@ -123,6 +123,7 @@ CODE_SAMPLE
                 $this->methodCallNamesToBeRemoved[] = $classMethodName;
 
                 $this->removeNode($node);
+
                 return;
             }
 
