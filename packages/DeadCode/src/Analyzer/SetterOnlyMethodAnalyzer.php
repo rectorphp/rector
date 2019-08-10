@@ -12,6 +12,7 @@ use Rector\NodeContainer\ParsedNodesByType;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Testing\PHPUnit\PHPUnitEnvironment;
 
 final class SetterOnlyMethodAnalyzer
 {
@@ -58,7 +59,7 @@ final class SetterOnlyMethodAnalyzer
      */
     public function provideSetterOnlyPropertiesAndMethodsByType(): array
     {
-        if ($this->propertiesAndMethodsToRemoveByType !== []) {
+        if ($this->propertiesAndMethodsToRemoveByType !== [] && ! PHPUnitEnvironment::isPHPUnitRun()) {
             return $this->propertiesAndMethodsToRemoveByType;
         }
 

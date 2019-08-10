@@ -3,6 +3,7 @@
 namespace Rector\Php;
 
 use Rector\Configuration\Option;
+use Rector\Testing\PHPUnit\PHPUnitEnvironment;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class PhpVersionProvider
@@ -26,7 +27,7 @@ final class PhpVersionProvider
         }
 
         // for tests
-        if (defined('PHPUNIT_COMPOSER_INSTALL') || defined('__PHPUNIT_PHAR__')) {
+        if (PHPUnitEnvironment::isPHPUnitRun()) {
             return '7.5';
         }
 

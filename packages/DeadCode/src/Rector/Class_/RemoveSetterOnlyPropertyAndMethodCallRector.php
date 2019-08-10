@@ -3,7 +3,10 @@
 namespace Rector\DeadCode\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\DeadCode\Analyzer\SetterOnlyMethodAnalyzer;
@@ -75,11 +78,11 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Property::class, MethodCall::class, ClassMethod::class];
+        return [Property::class, MethodCall::class, ClassMethod::class, Assign::class];
     }
 
     /**
-     * @param Property|MethodCall|ClassMethod $node
+     * @param Property|MethodCall|ClassMethod|Assign $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -88,47 +91,92 @@ CODE_SAMPLE
             return null;
         }
 
-        // 1. remove class properties
-        if ($node instanceof Property) {
-            if ($this->isNames($node, $setterOnlyPropertiesAndMethods['properties'] ?? [])) {
-                $this->removeNode($node);
-            }
-        }
-
-        // 2. remove class methods
-        if ($node instanceof ClassMethod) {
-            if ($this->isNames($node, $setterOnlyPropertiesAndMethods['methods'] ?? [])) {
-                $this->removeNode($node);
-            }
-        }
-
-        // 3. remove method calls
+        // remove method calls
         if ($node instanceof MethodCall) {
             if ($this->isNames($node->name, $setterOnlyPropertiesAndMethods['methods'] ?? [])) {
                 $this->removeNode($node);
             }
+
+            return null;
         }
+
+        $this->processClassStmts($node, $setterOnlyPropertiesAndMethods);
 
         return null;
     }
 
     /**
-     * @param Property|ClassMethod|MethodCall $node
+     * @param Property|ClassMethod|MethodCall|Assign $node
      * @return string[][]][]|null
      */
     private function resolveSetterOnlyPropertiesAndMethodsForClass(Node $node): ?array
     {
-        if ($node instanceof Property || $node instanceof ClassMethod) {
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-        } elseif ($node instanceof MethodCall) {
+        if ($node instanceof MethodCall) {
             $className = $this->getTypes($node->var)[0] ?? null;
             if ($className === null) {
                 return null;
             }
+        } else {
+            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         }
 
         $setterOnlyPropertiesAndMethodsByType = $this->setterOnlyMethodAnalyzer->provideSetterOnlyPropertiesAndMethodsByType();
 
         return $setterOnlyPropertiesAndMethodsByType[$className] ?? null;
+    }
+
+    /**
+     * @param Property|Assign|ClassMethod $node
+     * @param string[][] $setterOnlyPropertiesAndMethods
+     */
+    private function processClassStmts(Node $node, array $setterOnlyPropertiesAndMethods): void
+    {
+        $propertyNames = $setterOnlyPropertiesAndMethods['properties'] ?? [];
+        $methodNames = $setterOnlyPropertiesAndMethods['methods'] ?? [];
+
+        // 1. remove class properties
+        if ($node instanceof Property) {
+            if ($this->isNames($node, $propertyNames)) {
+                $this->removeNode($node);
+            }
+        }
+
+        // 2. remove class inner assigns
+        if ($this->isThisVariableAssign($node)) {
+            /** @var Assign $node */
+            $propertyFetch = $node->var;
+            /** @var PropertyFetch $propertyFetch */
+            if ($this->isNames($propertyFetch->name, $propertyNames)) {
+                $this->removeNode($node);
+            }
+        }
+
+        // 3. remove class methods
+        if ($node instanceof ClassMethod) {
+            if ($this->isNames($node, $methodNames)) {
+                $this->removeNode($node);
+            }
+        }
+    }
+
+    /**
+     * Checks:
+     * $this->x = y;
+     */
+    private function isThisVariableAssign(Node $node): bool
+    {
+        if (! $node instanceof Assign) {
+            return false;
+        }
+
+        if (! $node->var instanceof PropertyFetch) {
+            return false;
+        }
+
+        if (! $node->var->var instanceof Variable) {
+            return false;
+        }
+
+        return $this->isName($node->var->var, 'this');
     }
 }
