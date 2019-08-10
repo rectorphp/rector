@@ -4,12 +4,13 @@ namespace Rector\DeadCode\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use Rector\NodeContainer\ParsedNodesByType;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
+use PhpParser\Node\Stmt\Property;
+use Rector\DeadCode\Analyzer\SetterOnlyMethodAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,24 +22,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RemoveSetterOnlyPropertyAndMethodCallRector extends AbstractRector
 {
     /**
-     * @var ClassManipulator
+     * @var SetterOnlyMethodAnalyzer
      */
-    private $classManipulator;
+    private $setterOnlyMethodAnalyzer;
 
-    /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
-     * @var string[]
-     */
-    private $methodCallNamesToBeRemoved = [];
-
-    public function __construct(ClassManipulator $classManipulator, ParsedNodesByType $parsedNodesByType)
+    public function __construct(SetterOnlyMethodAnalyzer $setterOnlyMethodAnalyzer)
     {
-        $this->classManipulator = $classManipulator;
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->setterOnlyMethodAnalyzer = $setterOnlyMethodAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -88,111 +78,92 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [Class_::class];
+        return [Property::class, MethodCall::class, ClassMethod::class, Assign::class];
     }
 
     /**
-     * @param Class_ $node
+     * @param Property|MethodCall|ClassMethod|Assign $node
      */
     public function refactor(Node $node): ?Node
     {
-        $this->methodCallNamesToBeRemoved = [];
+        $setterOnlyPropertiesAndMethods = $this->resolveSetterOnlyPropertiesAndMethodsForClass($node);
+        if ($setterOnlyPropertiesAndMethods === null) {
+            return null;
+        }
 
-        // 1. get assign only private properties
-        $assignOnlyPrivatePropertyNames = $this->classManipulator->getAssignOnlyPrivatePropertyNames($node);
-        $this->classManipulator->removeProperties($node, $assignOnlyPrivatePropertyNames);
-
-        // 2. remove assigns + class methods with only setter assign
-        $this->removePropertyAssigns($node, $assignOnlyPrivatePropertyNames);
-
-        // 3. remove setter method calls
-        $this->removeSetterMethodCalls($node);
-
-        return $node;
-    }
-
-    /**
-     * @param string[] $assignOnlyPrivatePropertyNames
-     */
-    private function removePropertyAssigns(Class_ $class, array $assignOnlyPrivatePropertyNames): void
-    {
-        $this->traverseNodesWithCallable($class, function (Node $node) use ($assignOnlyPrivatePropertyNames): void {
-            if ($this->isClassMethodWithSinglePropertyAssignOfNames($node, $assignOnlyPrivatePropertyNames)) {
-                /** @var string $classMethodName */
-                $classMethodName = $this->getName($node);
-                $this->methodCallNamesToBeRemoved[] = $classMethodName;
-
-                $this->removeNode($node);
-
-                return;
-            }
-
-            if ($this->isPropertyAssignWithPropertyNames($node, $assignOnlyPrivatePropertyNames)) {
+        // remove method calls
+        if ($node instanceof MethodCall) {
+            if ($this->isNames($node->name, $setterOnlyPropertiesAndMethods['methods'] ?? [])) {
                 $this->removeNode($node);
             }
-        });
+
+            return null;
+        }
+
+        $this->processClassStmts($node, $setterOnlyPropertiesAndMethods);
+
+        return null;
     }
 
-    private function removeSetterMethodCalls(Node $node): void
+    /**
+     * @param Property|ClassMethod|MethodCall|Assign $node
+     * @return string[][]][]|null
+     */
+    private function resolveSetterOnlyPropertiesAndMethodsForClass(Node $node): ?array
     {
-        /** @var string $className */
-        $className = $this->getName($node);
-        $methodCallsByMethodName = $this->parsedNodesByType->findMethodCallsOnClass($className);
-
-        /** @var string $methodName */
-        foreach ($methodCallsByMethodName as $methodName => $classMethodCalls) {
-            if (! in_array($methodName, $this->methodCallNamesToBeRemoved, true)) {
-                continue;
+        if ($node instanceof MethodCall) {
+            $className = $this->getTypes($node->var)[0] ?? null;
+            if ($className === null) {
+                return null;
             }
+        } else {
+            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        }
 
-            foreach ($classMethodCalls as $classMethodCall) {
-                $this->removeNode($classMethodCall);
+        $setterOnlyPropertiesAndMethodsByType = $this->setterOnlyMethodAnalyzer->provideSetterOnlyPropertiesAndMethodsByType();
+
+        return $setterOnlyPropertiesAndMethodsByType[$className] ?? null;
+    }
+
+    /**
+     * @param Property|Assign|ClassMethod $node
+     * @param string[][] $setterOnlyPropertiesAndMethods
+     */
+    private function processClassStmts(Node $node, array $setterOnlyPropertiesAndMethods): void
+    {
+        $propertyNames = $setterOnlyPropertiesAndMethods['properties'] ?? [];
+        $methodNames = $setterOnlyPropertiesAndMethods['methods'] ?? [];
+
+        // 1. remove class properties
+        if ($node instanceof Property) {
+            if ($this->isNames($node, $propertyNames)) {
+                $this->removeNode($node);
+            }
+        }
+
+        // 2. remove class inner assigns
+        if ($this->isThisVariableAssign($node)) {
+            /** @var Assign $node */
+            $propertyFetch = $node->var;
+            /** @var PropertyFetch $propertyFetch */
+            if ($this->isNames($propertyFetch->name, $propertyNames)) {
+                $this->removeNode($node);
+            }
+        }
+
+        // 3. remove class methods
+        if ($node instanceof ClassMethod) {
+            if ($this->isNames($node, $methodNames)) {
+                $this->removeNode($node);
             }
         }
     }
 
     /**
-     * Looks for:
-     *
-     * public function <someMethod>($value)
-     * {
-     *     $this->value = $value
-     * }
-     *
-     * @param string[] $propertyNames
+     * Checks:
+     * $this->x = y;
      */
-    private function isClassMethodWithSinglePropertyAssignOfNames(Node $node, array $propertyNames): bool
-    {
-        if (! $node instanceof ClassMethod) {
-            return false;
-        }
-
-        if ($this->isName($node, '__construct')) {
-            return false;
-        }
-
-        if (count((array) $node->stmts) !== 1) {
-            return false;
-        }
-
-        if (! $node->stmts[0] instanceof Expression) {
-            return false;
-        }
-
-        /** @var Expression $onlyExpression */
-        $onlyExpression = $node->stmts[0];
-
-        $onlyStmt = $onlyExpression->expr;
-
-        return $this->isPropertyAssignWithPropertyNames($onlyStmt, $propertyNames);
-    }
-
-    /**
-     * Is: "$this->value = <$value>"
-     *
-     * @param string[] $propertyNames
-     */
-    private function isPropertyAssignWithPropertyNames(Node $node, array $propertyNames): bool
+    private function isThisVariableAssign(Node $node): bool
     {
         if (! $node instanceof Assign) {
             return false;
@@ -202,11 +173,10 @@ CODE_SAMPLE
             return false;
         }
 
-        $propertyFetch = $node->var;
-        if (! $this->isName($propertyFetch->var, 'this')) {
+        if (! $node->var->var instanceof Variable) {
             return false;
         }
 
-        return $this->isNames($propertyFetch->name, $propertyNames);
+        return $this->isName($node->var->var, 'this');
     }
 }

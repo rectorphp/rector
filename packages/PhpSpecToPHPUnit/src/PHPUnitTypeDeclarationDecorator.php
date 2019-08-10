@@ -4,6 +4,7 @@ namespace Rector\PhpSpecToPHPUnit;
 
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Testing\PHPUnit\PHPUnitEnvironment;
 use ReflectionMethod;
 
 /**
@@ -18,7 +19,7 @@ final class PHPUnitTypeDeclarationDecorator
         }
 
         // skip test run
-        if (defined('PHPUNIT_COMPOSER_INSTALL')) {
+        if (PHPUnitEnvironment::isPHPUnitRun()) {
             return;
         }
 
