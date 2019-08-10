@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\NamespaceAnalyzer;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class DoctrineEntityManipulator
 {
@@ -28,10 +29,15 @@ final class DoctrineEntityManipulator
      */
     private const RELATION_ANNOTATIONS = [
         'Doctrine\ORM\Mapping\OneToMany',
-        'Doctrine\ORM\Mapping\ManyToOne',
+        self::MANY_TO_ONE_ANNOTATION,
         'Doctrine\ORM\Mapping\OneToOne',
         'Doctrine\ORM\Mapping\ManyToMany',
     ];
+
+    /**
+     * @var string
+     */
+    private const MANY_TO_ONE_ANNOTATION = 'Doctrine\ORM\Mapping\ManyToOne';
 
     /**
      * @var string
@@ -53,10 +59,19 @@ final class DoctrineEntityManipulator
      */
     private $namespaceAnalyzer;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator, NamespaceAnalyzer $namespaceAnalyzer)
-    {
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    public function __construct(
+        DocBlockManipulator $docBlockManipulator,
+        NamespaceAnalyzer $namespaceAnalyzer,
+        NameResolver $nameResolver
+    ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->namespaceAnalyzer = $namespaceAnalyzer;
+        $this->nameResolver = $nameResolver;
     }
 
     public function resolveTargetClass(Property $property): ?string
@@ -163,5 +178,27 @@ final class DoctrineEntityManipulator
         }
 
         return false;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function resolveManyToOnePropertyNames(Class_ $class): array
+    {
+        $manyToOnePropertyNames = [];
+
+        foreach ($class->stmts as $stmt) {
+            if (! $stmt instanceof Property) {
+                continue;
+            }
+
+            if (! $this->docBlockManipulator->hasTag($stmt, self::MANY_TO_ONE_ANNOTATION)) {
+                continue;
+            }
+
+            $manyToOnePropertyNames[] = $this->nameResolver->getName($stmt);
+        }
+
+        return $manyToOnePropertyNames;
     }
 }
