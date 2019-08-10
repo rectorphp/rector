@@ -118,7 +118,7 @@ final class RectorApplication
         foreach ($fileInfos as $fileInfo) {
             $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
-            });
+            }, 'parsing');
         }
 
         // active only one rule
@@ -131,14 +131,14 @@ final class RectorApplication
         foreach ($fileInfos as $fileInfo) {
             $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->fileProcessor->refactor($smartFileInfo);
-            });
+            }, 'refactoring');
         }
 
         // 3. print to file or string
         foreach ($fileInfos as $fileInfo) {
             $this->tryCatchWrapper($fileInfo, function (SmartFileInfo $smartFileInfo): void {
                 $this->processFileInfo($smartFileInfo);
-            });
+            }, 'printing');
         }
 
         if ($this->configuration->showProgressBar()) {
@@ -149,9 +149,9 @@ final class RectorApplication
         $this->removedAndAddedFilesProcessor->run();
     }
 
-    private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback): void
+    private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback, string $phase): void
     {
-        $this->advance($smartFileInfo);
+        $this->advance($smartFileInfo, $phase);
 
         try {
             if (in_array($smartFileInfo, $this->notParsedFiles, true)) {
@@ -195,10 +195,10 @@ final class RectorApplication
         $this->fileSystemFileProcessor->processFileInfo($fileInfo);
     }
 
-    private function advance(SmartFileInfo $smartFileInfo): void
+    private function advance(SmartFileInfo $smartFileInfo, string $phase): void
     {
         if ($this->symfonyStyle->isVerbose()) {
-            $this->symfonyStyle->writeln('[parsing] ' . $smartFileInfo->getRealPath());
+            $this->symfonyStyle->writeln(sprintf('[%s] %s', $phase, $smartFileInfo->getRealPath()));
         } elseif ($this->configuration->showProgressBar()) {
             $this->symfonyStyle->progressAdvance();
         }
