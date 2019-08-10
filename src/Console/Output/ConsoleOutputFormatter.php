@@ -2,11 +2,15 @@
 
 namespace Rector\Console\Output;
 
+use Nette\Utils\Strings;
 use Rector\Application\Error;
 use Rector\Application\ErrorAndDiffCollector;
 use Rector\Contract\Console\Output\OutputFormatterInterface;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Reporting\FileDiff;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class ConsoleOutputFormatter implements OutputFormatterInterface
 {
@@ -20,9 +24,15 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
      */
     private $symfonyStyle;
 
-    public function __construct(SymfonyStyle $symfonyStyle)
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    public function __construct(SymfonyStyle $symfonyStyle, BetterStandardPrinter $betterStandardPrinter)
     {
         $this->symfonyStyle = $symfonyStyle;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
@@ -110,8 +120,44 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             );
         }
 
-        if ($errorAndDiffCollector->getRemovedNodeCount()) {
-            $this->symfonyStyle->note(sprintf('%d nodes were removed', $errorAndDiffCollector->getRemovedNodeCount()));
+        $this->reportRemovedNodes($errorAndDiffCollector);
+    }
+
+    private function reportRemovedNodes(ErrorAndDiffCollector $errorAndDiffCollector): void
+    {
+        if ($errorAndDiffCollector->getRemovedNodeCount() === 0) {
+            return;
         }
+
+        $this->symfonyStyle->warning(sprintf('%d nodes were removed', $errorAndDiffCollector->getRemovedNodeCount()));
+
+        if ($this->symfonyStyle->isVeryVerbose()) {
+            $i = 0;
+            foreach ($errorAndDiffCollector->getRemovedNodes() as $removedNode) {
+                /** @var SmartFileInfo $fileInfo */
+                $fileInfo = $removedNode->getAttribute(AttributeKey::FILE_INFO);
+
+                $this->symfonyStyle->writeln(sprintf(
+                    '<options=bold>%d) %s:%d</>',
+                    ++$i,
+                    $fileInfo->getRelativeFilePath(),
+                    $removedNode->getStartLine()
+                ));
+
+                $printedNode = $this->betterStandardPrinter->print($removedNode);
+
+                // color red + prefix with "-" to visually demonstrate removal
+                $printedNode = '-' . Strings::replace($printedNode, '#\n#', "\n-");
+                $printedNode = $this->colorTextToRed($printedNode);
+
+                $this->symfonyStyle->writeln($printedNode);
+                $this->symfonyStyle->newLine(1);
+            }
+        }
+    }
+
+    private function colorTextToRed(string $text): string
+    {
+        return '<fg=red>' . $text . '</fg=red>';
     }
 }

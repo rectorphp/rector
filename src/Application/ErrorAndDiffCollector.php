@@ -2,12 +2,13 @@
 
 namespace Rector\Application;
 
+use PhpParser\Node;
 use PHPStan\AnalysedCodeException;
 use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Error\ExceptionCorrector;
+use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Reporting\FileDiff;
-use Rector\Reporting\RemovedNodesCollector;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Throwable;
 
@@ -44,22 +45,22 @@ final class ErrorAndDiffCollector
     private $removedAndAddedFilesCollector;
 
     /**
-     * @var RemovedNodesCollector
+     * @var NodeRemovingCommander
      */
-    private $removedNodesCollector;
+    private $nodeRemovingCommander;
 
     public function __construct(
         DifferAndFormatter $differAndFormatter,
         AppliedRectorCollector $appliedRectorCollector,
         ExceptionCorrector $exceptionCorrector,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        RemovedNodesCollector $removedNodesCollector
+        NodeRemovingCommander $nodeRemovingCommander
     ) {
         $this->differAndFormatter = $differAndFormatter;
         $this->appliedRectorCollector = $appliedRectorCollector;
         $this->exceptionCorrector = $exceptionCorrector;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
-        $this->removedNodesCollector = $removedNodesCollector;
+        $this->nodeRemovingCommander = $nodeRemovingCommander;
     }
 
     public function addError(Error $error): void
@@ -82,7 +83,15 @@ final class ErrorAndDiffCollector
 
     public function getRemovedNodeCount(): int
     {
-        return $this->removedNodesCollector->getCount();
+        return $this->nodeRemovingCommander->getCount();
+    }
+
+    /**
+     * @return Node[]
+     */
+    public function getRemovedNodes(): array
+    {
+        return $this->nodeRemovingCommander->getNodesToRemove();
     }
 
     public function addFileDiff(SmartFileInfo $smartFileInfo, string $newContent, string $oldContent): void
