@@ -65,6 +65,11 @@ final class ParsedNodesByType
     private $constantsByType = [];
 
     /**
+     * @var ClassConstFetch[]
+     */
+    private $classConstantFetches = [];
+
+    /**
      * @var string[][][]
      */
     private $classConstantFetchByClassAndName = [];
@@ -297,6 +302,8 @@ final class ParsedNodesByType
      */
     public function findClassConstantFetches(string $className, string $constantName): ?array
     {
+        $this->processClassConstantFetches();
+
         return $this->classConstantFetchByClassAndName[$className][$constantName] ?? null;
     }
 
@@ -484,6 +491,21 @@ final class ParsedNodesByType
     }
 
     private function addClassConstantFetch(ClassConstFetch $classConstFetch): void
+    {
+        $this->classConstantFetches[] = $classConstFetch;
+    }
+
+    private function processClassConstantFetches(): void
+    {
+        if ($this->classConstantFetches) {
+            foreach ($this->classConstantFetches as $rawClassConstantFetch) {
+                $this->processClassConstantFetch($rawClassConstantFetch);
+            }
+            $this->classConstantFetches = [];
+        }
+    }
+
+    private function processClassConstantFetch(ClassConstFetch $classConstFetch): void
     {
         $constantName = $this->nameResolver->getName($classConstFetch->name);
 
