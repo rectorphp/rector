@@ -15,9 +15,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TraitUse;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -196,17 +196,20 @@ final class ClassManipulator
         return $usedTraits;
     }
 
-    public function getProperty(Class_ $class, string $name): ?PropertyProperty
+    public function getProperty(Class_ $class, string $name): ?Property
     {
         foreach ($class->stmts as $stmt) {
             if (! $stmt instanceof Property) {
                 continue;
             }
 
-            foreach ($stmt->props as $propertyProperty) {
-                if ($this->nameResolver->isName($propertyProperty, $name)) {
-                    return $propertyProperty;
-                }
+            if (count($stmt->props) > 1) {
+                // usually full property is needed to have all the docs values
+                throw new ShouldNotHappenException();
+            }
+
+            if ($this->nameResolver->isName($stmt, $name)) {
+                return $stmt;
             }
         }
 

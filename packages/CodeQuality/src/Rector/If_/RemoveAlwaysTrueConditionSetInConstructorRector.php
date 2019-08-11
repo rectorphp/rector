@@ -137,13 +137,11 @@ CODE_SAMPLE
             return [];
         }
 
-        $propertyProperty = $this->classManipulator->getProperty($class, $propertyName);
-        if ($propertyProperty === null) {
+        $property = $this->classManipulator->getProperty($class, $propertyName);
+        if ($property === null) {
             return [];
         }
 
-        /** @var Property $property */
-        $property = $propertyProperty->getAttribute(AttributeKey::PARENT_NODE);
         // anything but private can be changed from outer scope
         if (! $property->isPrivate()) {
             return [];
