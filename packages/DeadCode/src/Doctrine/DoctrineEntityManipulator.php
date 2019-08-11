@@ -4,6 +4,7 @@ namespace Rector\DeadCode\Doctrine;
 
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
+use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
@@ -183,7 +184,7 @@ final class DoctrineEntityManipulator
     /**
      * @return string[]
      */
-    public function resolveManyToOnePropertyNames(Class_ $class): array
+    public function resolveRelationPropertyNames(Class_ $class): array
     {
         $manyToOnePropertyNames = [];
 
@@ -192,7 +193,7 @@ final class DoctrineEntityManipulator
                 continue;
             }
 
-            if (! $this->docBlockManipulator->hasTag($stmt, self::MANY_TO_ONE_ANNOTATION)) {
+            if (! $this->isRelationProperty($stmt)) {
                 continue;
             }
 
@@ -200,5 +201,16 @@ final class DoctrineEntityManipulator
         }
 
         return $manyToOnePropertyNames;
+    }
+
+    private function isRelationProperty(Node $node): bool
+    {
+        foreach (self::RELATION_ANNOTATIONS as $relationAnnotation) {
+            if ($this->docBlockManipulator->hasTag($node, $relationAnnotation)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
