@@ -23,7 +23,7 @@ namespace Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector
 
 interface InterfaceWithConstant
 {
-    protected const LOCAL_ONLY = true;
+    public const LOCAL_ONLY = true;
 }
 
 class ClassExtendingInterface implements InterfaceWithConstant
