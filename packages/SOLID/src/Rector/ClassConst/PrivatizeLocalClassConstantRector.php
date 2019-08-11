@@ -77,23 +77,29 @@ CODE_SAMPLE
         /** @var string $class */
         $class = $node->getAttribute(AttributeKey::CLASS_NAME);
 
+        // 0. constants declared in interfaces have to be public
+        if ($this->parsedNodesByType->findInterface($class) !== null) {
+            $this->makePublic($node);
+            return $node;
+        }
+
         /** @var string $constant */
         $constant = $this->getName($node);
         $useClasses = $this->parsedNodesByType->findClassConstantFetches($class, $constant);
 
-        // 0. is actually never used (@todo use in "dead-code" set)
+        // 1. is actually never used (@todo use in "dead-code" set)
         if ($useClasses === null) {
             $this->makePrivate($node);
             return $node;
         }
 
-        // 1. is only local use? → private
+        // 2. is only local use? → private
         if ($useClasses === [$class]) {
             $this->makePrivate($node);
             return $node;
         }
 
-        // 2. used by children → protected
+        // 3. used by children → protected
         if ($this->isUsedByChildrenOnly($useClasses, $class)) {
             $this->makeProtected($node);
         } else {
