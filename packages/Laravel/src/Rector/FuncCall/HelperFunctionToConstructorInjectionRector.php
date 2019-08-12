@@ -25,6 +25,7 @@ final class HelperFunctionToConstructorInjectionRector extends AbstractRector
         // set/get
         'config' => [
             'type' => 'Illuminate\Contracts\Config\Repository',
+            'property' => 'configRepository',
             'array_method' => 'set',
             'non_array_method' => 'get',
         ],
