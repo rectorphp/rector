@@ -107,6 +107,7 @@ final class HelperFunctionToConstructorInjectionRector extends AbstractRector
             'type' => 'Illuminate\Routing\Redirector',
             'property' => 'redirector',
             'method_if_args' => 'back',
+            'method_if_no_args' => 'back',
         ],
         'broadcast' => [
             'type' => 'Illuminate\Contracts\Broadcasting\Factory',
@@ -231,6 +232,10 @@ CODE_SAMPLE
             $propertyFetchNode = $this->createPropertyFetch('this', $service['property']);
 
             if (count($node->args) === 0) {
+                if (isset($service['method_if_no_args'])) {
+                    return new MethodCall($propertyFetchNode, $service['method_if_no_args'], $node->args);
+                }
+
                 return $propertyFetchNode;
             }
 
