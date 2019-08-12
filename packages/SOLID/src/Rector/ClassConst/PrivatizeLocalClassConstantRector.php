@@ -13,6 +13,8 @@ use Rector\SOLID\Analyzer\ClassConstantFetchAnalyzer;
 
 final class PrivatizeLocalClassConstantRector extends AbstractRector
 {
+    const HAS_NEW_ACCESS_LEVEL = 'has_new_access_level';
+
     /**
      * @var ParsedNodesByType
      */
@@ -75,6 +77,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->getAttribute(self::HAS_NEW_ACCESS_LEVEL)) {
+            return null;
+        }
+
         if (! $this->isAtLeastPhpVersion('7.1')) {
             return null;
         }
@@ -82,6 +88,9 @@ CODE_SAMPLE
         if (count($node->consts) > 1) {
             return null;
         }
+
+        // Remember when we have already processed this constant recursively
+        $node->setAttribute(self::HAS_NEW_ACCESS_LEVEL, true);
 
         /** @var string $class */
         $class = $node->getAttribute(AttributeKey::CLASS_NAME);
@@ -94,17 +103,50 @@ CODE_SAMPLE
 
         /** @var string $constant */
         $constant = $this->getName($node);
+        $classNode = $this->parsedNodesByType->findClass($class);
+        $mustBeAtLeastProtected = false;
+
+        if ($classNode !== null && $classNode->hasAttribute(AttributeKey::PARENT_CLASS_NAME)) {
+            /** @var string $parentClassName */
+            $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+            if ($parentClassName) {
+                $parentClassConstant = $this->parsedNodesByType->findClassConstant($parentClassName, $constant);
+                if ($parentClassConstant) {
+                    $this->refactor($parentClassConstant);
+
+                    // The parent's constant is public, so this one must become public too
+                    if ($parentClassConstant->isPublic()) {
+                        $this->makePublic($node);
+                        return $node;
+                    }
+
+                    // The parent's constant is protected, so this one must become protected or weaker
+                    if ($parentClassConstant->isProtected()) {
+                        $mustBeAtLeastProtected = true;
+                    }
+                }
+            }
+        }
+
         $useClasses = $this->findClassConstantFetches($class, $constant);
 
         // 1. is actually never used (@todo use in "dead-code" set)
         if ($useClasses === null) {
-            $this->makePrivate($node);
+            if ($mustBeAtLeastProtected) {
+                $this->makeProtected($node);
+            } else {
+                $this->makePrivate($node);
+            }
             return $node;
         }
 
         // 2. is only local use? → private
         if ($useClasses === [$class]) {
-            $this->makePrivate($node);
+            if ($mustBeAtLeastProtected) {
+                $this->makeProtected($node);
+            } else {
+                $this->makePrivate($node);
+            }
             return $node;
         }
 
