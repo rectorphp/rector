@@ -7,6 +7,7 @@ use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Configuration\Configuration;
+use Rector\Extension\RectorFinishExtensionRunner;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\Testing\Application\EnabledRectorsProvider;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -74,6 +75,11 @@ final class RectorApplication
      */
     private $nodeScopeResolver;
 
+    /**
+     * @var RectorFinishExtensionRunner
+     */
+    private $rectorFinishExtensionRunner;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         FileSystemFileProcessor $fileSystemFileProcessor,
@@ -83,7 +89,8 @@ final class RectorApplication
         EnabledRectorsProvider $enabledRectorsProvider,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
-        NodeScopeResolver $nodeScopeResolver
+        NodeScopeResolver $nodeScopeResolver,
+        RectorFinishExtensionRunner $rectorFinishExtensionRunner
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
@@ -94,6 +101,7 @@ final class RectorApplication
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->enabledRectorsProvider = $enabledRectorsProvider;
         $this->nodeScopeResolver = $nodeScopeResolver;
+        $this->rectorFinishExtensionRunner = $rectorFinishExtensionRunner;
     }
 
     /**
@@ -147,6 +155,9 @@ final class RectorApplication
 
         // 4. remove and add files
         $this->removedAndAddedFilesProcessor->run();
+
+        // 5. on finish
+        $this->rectorFinishExtensionRunner->run();
     }
 
     private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback, string $phase): void
