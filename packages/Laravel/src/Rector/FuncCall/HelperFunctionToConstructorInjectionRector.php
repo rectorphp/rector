@@ -233,7 +233,7 @@ CODE_SAMPLE
 
             if (count($node->args) === 0) {
                 if (isset($service['method_if_no_args'])) {
-                    return new MethodCall($propertyFetchNode, $service['method_if_no_args'], $node->args);
+                    return new MethodCall($propertyFetchNode, $service['method_if_no_args']);
                 }
 
                 return $propertyFetchNode;
