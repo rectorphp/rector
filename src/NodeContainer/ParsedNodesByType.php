@@ -70,11 +70,6 @@ final class ParsedNodesByType
     private $classConstantFetches = [];
 
     /**
-     * @var string[][][]
-     */
-    private $classConstantFetchByClassAndName = [];
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
@@ -298,13 +293,11 @@ final class ParsedNodesByType
     }
 
     /**
-     * @return string[]|null
+     * @return ClassConstFetch[]
      */
-    public function findClassConstantFetches(string $className, string $constantName): ?array
+    public function getClassConstantFetches(): array
     {
-        $this->processClassConstantFetches();
-
-        return $this->classConstantFetchByClassAndName[$className][$constantName] ?? null;
+        return $this->classConstantFetches;
     }
 
     public function findFunction(string $name): ?Function_
@@ -495,53 +488,6 @@ final class ParsedNodesByType
         $this->classConstantFetches[] = $classConstFetch;
     }
 
-    private function processClassConstantFetches(): void
-    {
-        if ($this->classConstantFetches) {
-            foreach ($this->classConstantFetches as $rawClassConstantFetch) {
-                $this->processClassConstantFetch($rawClassConstantFetch);
-            }
-            $this->classConstantFetches = [];
-        }
-    }
-
-    private function processClassConstantFetch(ClassConstFetch $classConstFetch): void
-    {
-        $constantName = $this->nameResolver->getName($classConstFetch->name);
-
-        if ($constantName === 'class' || $constantName === null) {
-            // this is not a manual constant
-            return;
-        }
-
-        $className = $this->nameResolver->getName($classConstFetch->class);
-
-        if (in_array($className, ['static', 'self', 'parent'], true)) {
-            $resolvedClassTypes = $this->nodeTypeResolver->resolve($classConstFetch->class);
-
-            $className = $this->matchClassTypeThatContainsConstant($resolvedClassTypes, $constantName);
-            if ($className === null) {
-                return;
-            }
-        } else {
-            $resolvedClassTypes = $this->nodeTypeResolver->resolve($classConstFetch->class);
-            $className = $this->matchClassTypeThatContainsConstant($resolvedClassTypes, $constantName);
-
-            if ($className === null) {
-                return;
-            }
-        }
-
-        // current class
-        $classOfUse = $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
-
-        $this->classConstantFetchByClassAndName[$className][$constantName][] = $classOfUse;
-
-        $this->classConstantFetchByClassAndName[$className][$constantName] = array_unique(
-            $this->classConstantFetchByClassAndName[$className][$constantName]
-        );
-    }
-
     private function addMethod(ClassMethod $classMethod): void
     {
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
@@ -551,35 +497,6 @@ final class ParsedNodesByType
 
         $methodName = $this->nameResolver->getName($classMethod);
         $this->methodsByType[$className][$methodName] = $classMethod;
-    }
-
-    /**
-     * @param string[] $resolvedClassTypes
-     */
-    private function matchClassTypeThatContainsConstant(array $resolvedClassTypes, string $constant): ?string
-    {
-        if (count($resolvedClassTypes) === 1) {
-            return $resolvedClassTypes[0];
-        }
-
-        foreach ($resolvedClassTypes as $resolvedClassType) {
-            $classOrInterface = $this->findClassOrInterface($resolvedClassType);
-            if ($classOrInterface === null) {
-                continue;
-            }
-
-            foreach ($classOrInterface->stmts as $stmt) {
-                if (! $stmt instanceof ClassConst) {
-                    continue;
-                }
-
-                if ($this->nameResolver->isName($stmt, $constant)) {
-                    return $resolvedClassType;
-                }
-            }
-        }
-
-        return null;
     }
 
     private function isClassAnonymous(Class_ $classNode): bool
