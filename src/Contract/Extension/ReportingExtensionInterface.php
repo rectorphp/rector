@@ -2,7 +2,7 @@
 
 namespace Rector\Contract\Extension;
 
-interface RectorFinishExtensionInterface
+interface ReportingExtensionInterface
 {
     public function run(): void;
 }

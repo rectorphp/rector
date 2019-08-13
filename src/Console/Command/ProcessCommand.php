@@ -10,6 +10,7 @@ use Rector\Configuration\Option;
 use Rector\Console\Output\ConsoleOutputFormatter;
 use Rector\Console\Output\OutputFormatterCollector;
 use Rector\Console\Shell;
+use Rector\Extension\ReportingExtensionRunner;
 use Rector\FileSystem\FilesFinder;
 use Rector\Guard\RectorGuard;
 use Symfony\Component\Console\Input\InputArgument;
@@ -61,6 +62,11 @@ final class ProcessCommand extends AbstractCommand
     private $outputFormatterCollector;
 
     /**
+     * @var ReportingExtensionRunner
+     */
+    private $reportingExtensionRunner;
+
+    /**
      * @param string[] $fileExtensions
      */
     public function __construct(
@@ -71,6 +77,7 @@ final class ProcessCommand extends AbstractCommand
         Configuration $configuration,
         RectorApplication $rectorApplication,
         OutputFormatterCollector $outputFormatterCollector,
+        ReportingExtensionRunner $reportingExtensionRunner,
         array $fileExtensions
     ) {
         $this->filesFinder = $phpFilesFinder;
@@ -81,6 +88,7 @@ final class ProcessCommand extends AbstractCommand
         $this->rectorApplication = $rectorApplication;
         $this->fileExtensions = $fileExtensions;
         $this->outputFormatterCollector = $outputFormatterCollector;
+        $this->reportingExtensionRunner = $reportingExtensionRunner;
 
         parent::__construct();
     }
@@ -144,6 +152,8 @@ final class ProcessCommand extends AbstractCommand
         $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
         $outputFormatter->report($this->errorAndDiffCollector);
+
+        $this->reportingExtensionRunner->run();
 
         // some errors were found → fail
         if ($this->errorAndDiffCollector->getErrors() !== []) {
