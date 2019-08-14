@@ -19,3 +19,4 @@ services:
     Rector\Rector\Property\RenamePropertyRector:
         Illuminate\Routing\UrlGenerator:
             cachedSchema: 'cachedScheme'
+    Rector\Laravel\Rector\FuncCall\ArrayHelperToIlluminateSupportClassRector: ~
