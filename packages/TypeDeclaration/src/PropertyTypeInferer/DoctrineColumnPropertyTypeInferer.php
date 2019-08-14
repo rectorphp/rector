@@ -28,7 +28,7 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
         'int' => 'int',
         'integer' => 'int',
         'bigint' => 'int',
-        'decimal' => 'int',
+        'decimal' => 'float',
         'numeric' => 'int',
         'float' => 'float',
         'double' => 'float',
