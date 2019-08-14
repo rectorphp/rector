@@ -14,6 +14,7 @@ final class FluentReplaceRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/some_command.php.inc',
             __DIR__ . '/Fixture/multiple_some_command.php.inc',
+            __DIR__ . '/Fixture/skip_date_time_modify_command.php.inc',
         ]);
     }
 

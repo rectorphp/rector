@@ -94,7 +94,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $type = $this->getTypes($methodCall->var)[0] ?? null;
+        $type = $this->getTypes($methodCall)[0] ?? null;
         if ($type === null) {
             return false;
         }
@@ -110,7 +110,7 @@ CODE_SAMPLE
             }
         }
 
-        return true;
+        return false;
     }
 
     /**
