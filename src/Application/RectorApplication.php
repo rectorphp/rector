@@ -7,7 +7,7 @@ use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Configuration\Configuration;
-use Rector\Extension\RectorFinishExtensionRunner;
+use Rector\Extension\FinishingExtensionRunner;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\Testing\Application\EnabledRectorsProvider;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -76,9 +76,9 @@ final class RectorApplication
     private $nodeScopeResolver;
 
     /**
-     * @var RectorFinishExtensionRunner
+     * @var FinishingExtensionRunner
      */
-    private $rectorFinishExtensionRunner;
+    private $finishingExtensionRunner;
 
     public function __construct(
         SymfonyStyle $symfonyStyle,
@@ -90,7 +90,7 @@ final class RectorApplication
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         NodeScopeResolver $nodeScopeResolver,
-        RectorFinishExtensionRunner $rectorFinishExtensionRunner
+        FinishingExtensionRunner $finishingExtensionRunner
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
@@ -101,7 +101,7 @@ final class RectorApplication
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->enabledRectorsProvider = $enabledRectorsProvider;
         $this->nodeScopeResolver = $nodeScopeResolver;
-        $this->rectorFinishExtensionRunner = $rectorFinishExtensionRunner;
+        $this->finishingExtensionRunner = $finishingExtensionRunner;
     }
 
     /**
@@ -156,8 +156,8 @@ final class RectorApplication
         // 4. remove and add files
         $this->removedAndAddedFilesProcessor->run();
 
-        // 5. on finish
-        $this->rectorFinishExtensionRunner->run();
+        // 5. extensions on finish
+        $this->finishingExtensionRunner->run();
     }
 
     private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback, string $phase): void
