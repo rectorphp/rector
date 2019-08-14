@@ -150,13 +150,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->helpersToFunction as $helperFunction => $classFunction) {
-            if (! $this->isName($node, $helperFunction)) {
-                continue;
-            }
-
-            return new StaticCall(new Name($this->supportClass), new Identifier($classFunction), $node->args);
+        $name = $this->getName($node);
+        if (!array_key_exists($name, $this->helpersToFunction)) {
+            return null;
         }
-        return $node;
+        return new StaticCall(new Name($this->supportClass), new Identifier($this->helpersToFunction[$name]), $node->args);
     }
 }
