@@ -7,6 +7,7 @@ use PHPStan\Analyser\ScopeContext;
 use PHPStan\Analyser\ScopeFactory as PHPStanScopeFactory;
 use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Broker\Broker;
+use PHPStan\Rules\Properties\PropertyReflectionFinder;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class ScopeFactory
@@ -50,6 +51,7 @@ final class ScopeFactory
             $this->broker,
             $this->betterStandardPrinter,
             $this->typeSpecifier,
+            new PropertyReflectionFinder(),
             ScopeContext::create($filePath)
         );
     }
