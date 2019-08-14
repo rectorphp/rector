@@ -2,8 +2,11 @@
 
 namespace Rector\Rector\MethodBody;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -39,7 +42,9 @@ $someClass->someFunction();
 $someClass->otherFunction();
 CODE_SAMPLE
                 ,
-                [['SomeExampleClass']]
+                [
+                    '$classesToDefluent' => ['SomeExampleClass'],
+                ]
             ),
         ]);
     }
@@ -57,33 +62,134 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // is chain method call
-        if (! $node->var instanceof MethodCall) {
+        if (! $this->isLastMethodCallInChainCall($node)) {
             return null;
         }
 
-        // is matching type
-        if (! $this->isTypes($node->var, $this->classesToDefluent)) {
+        $chainMethodCalls = $this->collectAllMethodCallsInChain($node);
+        if (! $this->areChainMethodCallsMatching($chainMethodCalls)) {
             return null;
         }
 
-        /** @var MethodCall $innerMethodCallNode */
-        $innerMethodCallNode = $node->var;
+        $decoupledMethodCalls = $this->createNonFluentMethodCalls($chainMethodCalls);
 
-        $this->decoupleMethodCall($node, $innerMethodCallNode);
+        $currentOne = array_pop($decoupledMethodCalls);
 
-        return $innerMethodCallNode;
+        // add separated method calls
+        /** @var MethodCall[] $decoupledMethodCalls */
+        $decoupledMethodCalls = array_reverse($decoupledMethodCalls);
+        foreach ($decoupledMethodCalls as $decoupledMethodCall) {
+            // needed to remove weird spacing
+            $decoupledMethodCall->setAttribute('origNode', null);
+
+            $this->addNodeAfterNode($decoupledMethodCall, $node);
+        }
+
+        return $currentOne;
     }
 
-    private function decoupleMethodCall(MethodCall $outerMethodCallNode, MethodCall $innerMethodCallNode): void
+    private function isMatchingMethodCall(MethodCall $methodCall): bool
     {
-        $outerMethodName = $this->getName($outerMethodCallNode);
-        if ($outerMethodName === null) {
-            return;
+        if ($this->isTypes($methodCall->var, $this->classesToDefluent)) {
+            return true;
         }
 
-        $nextMethodCallNode = $this->createMethodCall($innerMethodCallNode->var, $outerMethodName);
+        $type = $this->getTypes($methodCall->var)[0] ?? null;
+        if ($type === null) {
+            return false;
+        }
 
-        $this->addNodeAfterNode($nextMethodCallNode, $innerMethodCallNode);
+        // asterisk * match
+        foreach ($this->classesToDefluent as $classToDefluent) {
+            if (! Strings::contains($classToDefluent, '*')) {
+                continue;
+            }
+
+            if (fnmatch($classToDefluent, $type)) {
+                return true;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param MethodCall[] $methodCalls
+     * @return Node\Expr\Variable|Node\Expr\PropertyFetch
+     */
+    private function extractRootVariable(array $methodCalls): Node\Expr
+    {
+        foreach ($methodCalls as $methodCall) {
+            if ($methodCall->var instanceof Node\Expr\Variable) {
+                return $methodCall->var;
+            }
+
+            if ($methodCall->var instanceof Node\Expr\PropertyFetch) {
+                return $methodCall->var;
+            }
+        }
+
+        throw new ShouldNotHappenException();
+    }
+
+    private function isLastMethodCallInChainCall(MethodCall $methodCall): bool
+    {
+        // is chain method call
+        if (! $methodCall->var instanceof MethodCall) {
+            return false;
+        }
+
+        $nextNode = $methodCall->getAttribute(AttributeKey::NEXT_NODE);
+
+        // is last chain call
+        return $nextNode === null;
+    }
+
+    /**
+     * @return MethodCall[]
+     */
+    private function collectAllMethodCallsInChain(MethodCall $methodCall): array
+    {
+        $chainMethodCalls = [$methodCall];
+
+        $currentNode = $methodCall->var;
+        while ($currentNode instanceof MethodCall) {
+            $chainMethodCalls[] = $currentNode;
+            $currentNode = $currentNode->var;
+        }
+
+        return $chainMethodCalls;
+    }
+
+    /**
+     * @param MethodCall[] $chainMethodCalls
+     */
+    private function areChainMethodCallsMatching(array $chainMethodCalls): bool
+    {
+        // is matching type all the way?
+        foreach ($chainMethodCalls as $chainMethodCall) {
+            if (! $this->isMatchingMethodCall($chainMethodCall)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param MethodCall[] $chainMethodCalls
+     * @return MethodCall[]
+     */
+    private function createNonFluentMethodCalls(array $chainMethodCalls): array
+    {
+        $rootVariable = $this->extractRootVariable($chainMethodCalls);
+
+        $decoupledMethodCalls = [];
+        foreach ($chainMethodCalls as $chainMethodCall) {
+            $chainMethodCall->var = $rootVariable;
+            $decoupledMethodCalls[] = $chainMethodCall;
+        }
+
+        return $decoupledMethodCalls;
     }
 }
