@@ -9,6 +9,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\SOLID\Analyzer\ClassConstantFetchAnalyzer;
 
 final class PrivatizeLocalClassConstantRector extends AbstractRector
 {
@@ -17,9 +18,15 @@ final class PrivatizeLocalClassConstantRector extends AbstractRector
      */
     private $parsedNodesByType;
 
-    public function __construct(ParsedNodesByType $parsedNodesByType)
+    /**
+     * @var ClassConstantFetchAnalyzer
+     */
+    private $constFetchAnalyzer;
+
+    public function __construct(ParsedNodesByType $parsedNodesByType, ClassConstantFetchAnalyzer $constFetchAnalyzer)
     {
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->parsedNodesByType = $parsedNodesByType;;
+        $this->constFetchAnalyzer = $constFetchAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -85,7 +92,7 @@ CODE_SAMPLE
 
         /** @var string $constant */
         $constant = $this->getName($node);
-        $useClasses = $this->parsedNodesByType->findClassConstantFetches($class, $constant);
+        $useClasses = $this->findClassConstantFetches($class, $constant);
 
         // 1. is actually never used (@todo use in "dead-code" set)
         if ($useClasses === null) {
@@ -126,5 +133,12 @@ CODE_SAMPLE
         }
 
         return $isChild;
+    }
+
+    private function findClassConstantFetches(string $className, string $constantName): ?array
+    {
+        $classConstantFetchByClassAndName = $this->constFetchAnalyzer->provideClassConstantFetchByClassAndName();
+
+        return $classConstantFetchByClassAndName[$className][$constantName] ?? null;
     }
 }
