@@ -151,9 +151,12 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $name = $this->getName($node);
-        if (!array_key_exists($name, $this->helpersToFunction)) {
+
+        if (! isset($this->helpersToFunction[$name])) {
             return null;
         }
-        return new StaticCall(new Name($this->supportClass), new Identifier($this->helpersToFunction[$name]), $node->args);
+        return new StaticCall(new Name($this->supportClass), new Identifier(
+            $this->helpersToFunction[$name]
+        ), $node->args);
     }
 }
