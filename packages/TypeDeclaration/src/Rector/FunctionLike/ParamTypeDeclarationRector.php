@@ -4,6 +4,7 @@ namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -153,8 +154,9 @@ CODE_SAMPLE
             } else {
                 $paramNode->type = $paramTypeInfo->getTypeNode();
 
+                $paramNodeType = $paramNode->type instanceof NullableType ? $paramNode->type->type : $paramNode->type;
                 // "resource" is valid phpdoc type, but it's not implemented in PHP
-                if ($paramNode->type instanceof Name && reset($paramNode->type->parts) === 'resource') {
+                if ($paramNodeType instanceof Name && reset($paramNodeType->parts) === 'resource') {
                     $paramNode->type = null;
 
                     continue;
