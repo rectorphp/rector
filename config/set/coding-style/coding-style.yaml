@@ -26,3 +26,4 @@ services:
     Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector: ~
     Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector: ~
     Rector\CodingStyle\Rector\String_\ManualJsonStringToJsonEncodeArrayRector: ~
+    Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector: ~
