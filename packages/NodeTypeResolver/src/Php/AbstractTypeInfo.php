@@ -101,6 +101,11 @@ abstract class AbstractTypeInfo
             throw new ShouldNotHappenException();
         }
 
+        // normalize for type-declaration
+        if (Strings::endsWith($type, '[]')) {
+            $type = 'array';
+        }
+
         if ($this->typeAnalyzer->isPhpReservedType($type)) {
             if ($this->isNullable) {
                 return new NullableType($type);
@@ -133,6 +138,7 @@ abstract class AbstractTypeInfo
         }
 
         $typeCount = count($this->types);
+
         if ($typeCount >= 2 && $this->isArraySubtype($this->types)) {
             return true;
         }
@@ -225,8 +231,19 @@ abstract class AbstractTypeInfo
      */
     private function isArraySubtype(array $types): bool
     {
-        $arraySubtypeGroup = ['array', 'iterable'];
-        return $this->areArraysEqual($types, $arraySubtypeGroup);
+        foreach ($types as $type) {
+            if (in_array($type, ['array', 'iterable'], true)) {
+                continue;
+            }
+
+            if (Strings::endsWith($type, '[]')) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     private function normalizeNullable(string $type): string
@@ -291,18 +308,6 @@ abstract class AbstractTypeInfo
         $types[] = 'iterable';
 
         return $types;
-    }
-
-    /**
-     * @param mixed[] $types
-     * @param mixed[] $arraySubtypeGroup
-     */
-    private function areArraysEqual(array $types, array $arraySubtypeGroup): bool
-    {
-        sort($types);
-        sort($arraySubtypeGroup);
-
-        return $types === $arraySubtypeGroup;
     }
 
     /**

@@ -5,56 +5,22 @@ namespace Rector\TypeDeclaration\PropertyTypeInferer;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\StaticTypeToStringResolver;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
-final class SingleMethodAssignedNodePropertyTypeInferer implements PropertyTypeInfererInterface
+final class SingleMethodAssignedNodePropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
 {
-    /**
-     * @var NameResolver
-     */
-    private $nameResolver;
-
-    /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-
-    /**
-     * @var StaticTypeToStringResolver
-     */
-    private $staticTypeToStringResolver;
-
-    public function __construct(
-        NameResolver $nameResolver,
-        CallableNodeTraverser $callableNodeTraverser,
-        NodeTypeResolver $nodeTypeResolver,
-        StaticTypeToStringResolver $staticTypeToStringResolver
-    ) {
-        $this->nameResolver = $nameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->staticTypeToStringResolver = $staticTypeToStringResolver;
-    }
-
     /**
      * @return string[]
      */
     public function inferProperty(Property $property): array
     {
-        /** @var Node\Stmt\Class_ $class */
+        /** @var Class_ $class */
         $class = $property->getAttribute(AttributeKey::CLASS_NODE);
 
         $classMethod = $class->getMethod('__construct');

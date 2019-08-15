@@ -13,9 +13,10 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 
-final class ConstructorPropertyTypeInferer extends AbstractPropertyTypeInferer implements PropertyTypeInfererInterface
+final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
 {
     /**
      * @return string[]|IdentifierValueObject[]
