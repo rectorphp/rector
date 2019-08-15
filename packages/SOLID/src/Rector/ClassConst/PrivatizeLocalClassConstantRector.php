@@ -21,12 +21,14 @@ final class PrivatizeLocalClassConstantRector extends AbstractRector
     /**
      * @var ClassConstantFetchAnalyzer
      */
-    private $constFetchAnalyzer;
+    private $classConstantFetchAnalyzer;
 
-    public function __construct(ParsedNodesByType $parsedNodesByType, ClassConstantFetchAnalyzer $constFetchAnalyzer)
-    {
-        $this->parsedNodesByType = $parsedNodesByType;;
-        $this->constFetchAnalyzer = $constFetchAnalyzer;
+    public function __construct(
+        ParsedNodesByType $parsedNodesByType,
+        ClassConstantFetchAnalyzer $classConstantFetchAnalyzer
+    ) {
+        $this->parsedNodesByType = $parsedNodesByType;
+        $this->classConstantFetchAnalyzer = $classConstantFetchAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -137,7 +139,7 @@ CODE_SAMPLE
 
     private function findClassConstantFetches(string $className, string $constantName): ?array
     {
-        $classConstantFetchByClassAndName = $this->constFetchAnalyzer->provideClassConstantFetchByClassAndName();
+        $classConstantFetchByClassAndName = $this->classConstantFetchAnalyzer->provideClassConstantFetchByClassAndName();
 
         return $classConstantFetchByClassAndName[$className][$constantName] ?? null;
     }
