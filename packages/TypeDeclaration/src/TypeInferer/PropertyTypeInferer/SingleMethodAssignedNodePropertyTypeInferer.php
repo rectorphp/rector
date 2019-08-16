@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\PropertyTypeInferer;
+namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
 final class SingleMethodAssignedNodePropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface

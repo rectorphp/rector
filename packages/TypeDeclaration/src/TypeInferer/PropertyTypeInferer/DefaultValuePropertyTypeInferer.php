@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\PropertyTypeInferer;
+namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use PhpParser\Node\Stmt\Property;
-use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
 final class DefaultValuePropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface

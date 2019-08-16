@@ -160,12 +160,20 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        // must be local property
-        if (! $this->nameResolver->isName($expr->var, 'this')) {
+        if (! $this->isLocalProperty($expr)) {
             return false;
         }
 
         return $this->nameResolver->isNames($expr->name, $propertyNames);
+    }
+
+    public function isLocalProperty(Node $node): bool
+    {
+        if (! $node instanceof PropertyFetch) {
+            return false;
+        }
+
+        return $this->nameResolver->isName($node->var, 'this');
     }
 
     private function hasPublicProperty(PropertyFetch $propertyFetch, string $propertyName): bool

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\PropertyTypeInferer;
+namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -9,44 +9,15 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\ErrorType;
-use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
-use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
-final class AllAssignNodePropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
+final class AssignToPropertyTypeInferer extends AbstractTypeInferer
 {
-    /**
-     * @return string[]
-     */
-    public function inferProperty(Node\Stmt\Property $property): array
-    {
-        /** @var ClassLike $class */
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-
-        $propertyName = $this->nameResolver->getName($property);
-
-        $assignedExprStaticTypes = $this->collectAllPropertyAsignExprStaticTypes($class, $propertyName);
-        if ($assignedExprStaticTypes === []) {
-            return [];
-        }
-
-        $assignedExprStaticType = new IntersectionType($assignedExprStaticTypes);
-
-        return $this->staticTypeToStringResolver->resolveObjectType($assignedExprStaticType);
-    }
-
-    public function getPriority(): int
-    {
-        return 500;
-    }
-
     /**
      * @return Type[]
      */
-    private function collectAllPropertyAsignExprStaticTypes(ClassLike $classLike, string $propertyName): array
+    public function inferPropertyInClassLike(string $propertyName, ClassLike $classLike): array
     {
         $assignedExprStaticTypes = [];
 

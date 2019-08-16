@@ -47,6 +47,11 @@ final class SetterOnlyMethodAnalyzer
      */
     private $doctrineEntityManipulator;
 
+    /**
+     * @var bool
+     */
+    private $isSetterOnlyPropertiesAndMethodsByTypeAnalyzed = false;
+
     public function __construct(
         ParsedNodesByType $parsedNodesByType,
         ClassManipulator $classManipulator,
@@ -67,7 +72,7 @@ final class SetterOnlyMethodAnalyzer
      */
     public function provideSetterOnlyPropertiesAndMethodsByType(): array
     {
-        if ($this->propertiesAndMethodsToRemoveByType !== [] && ! PHPUnitEnvironment::isPHPUnitRun()) {
+        if ($this->isSetterOnlyPropertiesAndMethodsByTypeAnalyzed && ! PHPUnitEnvironment::isPHPUnitRun()) {
             return $this->propertiesAndMethodsToRemoveByType;
         }
 
@@ -91,6 +96,8 @@ final class SetterOnlyMethodAnalyzer
                 $this->propertiesAndMethodsToRemoveByType[$type]['methods'] = $setterOnlyMethodNames;
             }
         }
+
+        $this->isSetterOnlyPropertiesAndMethodsByTypeAnalyzed = true;
 
         return $this->propertiesAndMethodsToRemoveByType;
     }

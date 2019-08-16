@@ -21,6 +21,7 @@ use Rector\Php\PhpVersionProvider;
 use Rector\Php\TypeAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\TypeDeclaration\Rector\FunctionLike\AbstractTypeDeclarationRector;
 
 final class FunctionLikeManipulator
@@ -55,18 +56,32 @@ final class FunctionLikeManipulator
      */
     private $phpVersionProvider;
 
+    /**
+     * @var CallableNodeTraverser
+     */
+    private $callableNodeTraverser;
+
+    /**
+     * @var PropertyFetchManipulator
+     */
+    private $propertyFetchManipulator;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         TypeAnalyzer $typeAnalyzer,
         NodeTypeResolver $nodeTypeResolver,
         NameResolver $nameResolver,
-        PhpVersionProvider $phpVersionProvider
+        PhpVersionProvider $phpVersionProvider,
+        CallableNodeTraverser $callableNodeTraverser,
+        PropertyFetchManipulator $propertyFetchManipulator
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nameResolver = $nameResolver;
         $this->phpVersionProvider = $phpVersionProvider;
+        $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->propertyFetchManipulator = $propertyFetchManipulator;
     }
 
     /**
@@ -80,14 +95,14 @@ final class FunctionLikeManipulator
         }
 
         // A. resolve from function return type
-        if ($functionLike->returnType !== null) {
+        // skip "array" to get more precise types
+        if ($functionLike->returnType !== null && ! $this->nameResolver->isName($functionLike->returnType, 'array')) {
             $types = $this->resolveReturnTypeToString($functionLike->returnType);
-
             // do not override freshly added type declaration
             if (! $functionLike->returnType->getAttribute(
                 AbstractTypeDeclarationRector::HAS_NEW_INHERITED_TYPE
             ) && $types !== []) {
-                return new ReturnTypeInfo($types, $this->typeAnalyzer);
+                return new ReturnTypeInfo($types, $this->typeAnalyzer, $types, true);
             }
         }
 
@@ -102,12 +117,45 @@ final class FunctionLikeManipulator
         }
 
         if ($this->isVoid) {
-            return new ReturnTypeInfo(['void'], $this->typeAnalyzer);
+            return new ReturnTypeInfo(['void'], $this->typeAnalyzer, ['void'], true);
         }
 
         $types = array_filter($types);
 
-        return new ReturnTypeInfo($types, $this->typeAnalyzer);
+        return new ReturnTypeInfo($types, $this->typeAnalyzer, $types, true);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getReturnedLocalPropertyNames(FunctionLike $functionLike): array
+    {
+        // process only class methods
+        if ($functionLike instanceof Function_) {
+            return [];
+        }
+
+        $returnedLocalPropertyNames = [];
+        $this->callableNodeTraverser->traverseNodesWithCallable($functionLike, function (Node $node) use (
+            &$returnedLocalPropertyNames
+        ) {
+            if (! $node instanceof Return_ || $node->expr === null) {
+                return null;
+            }
+
+            if (! $this->propertyFetchManipulator->isLocalProperty($node->expr)) {
+                return null;
+            }
+
+            $propertyName = $this->nameResolver->getName($node->expr);
+            if ($propertyName === null) {
+                return null;
+            }
+
+            $returnedLocalPropertyNames[] = $propertyName;
+        });
+
+        return $returnedLocalPropertyNames;
     }
 
     private function shouldSkip(FunctionLike $functionLike): bool
