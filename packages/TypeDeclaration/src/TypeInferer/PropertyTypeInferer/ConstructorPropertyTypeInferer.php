@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\PropertyTypeInferer;
+namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -12,7 +12,7 @@ use PhpParser\NodeTraverser;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 

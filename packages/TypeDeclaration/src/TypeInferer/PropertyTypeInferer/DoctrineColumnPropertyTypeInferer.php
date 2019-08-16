@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\PropertyTypeInferer;
+namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use DateTimeInterface;
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 
 final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInterface
 {

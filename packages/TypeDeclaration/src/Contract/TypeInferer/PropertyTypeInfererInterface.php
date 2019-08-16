@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Contract;
+namespace Rector\TypeDeclaration\Contract\TypeInferer;
 
 use PhpParser\Node\Stmt\Property;
 use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;

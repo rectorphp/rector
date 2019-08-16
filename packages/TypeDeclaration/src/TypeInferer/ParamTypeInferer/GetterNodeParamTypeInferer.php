@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\ParamTypeInferer;
+namespace Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
@@ -12,7 +12,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
-use Rector\TypeDeclaration\Contract\ParamTypeInfererInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
 final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements ParamTypeInfererInterface

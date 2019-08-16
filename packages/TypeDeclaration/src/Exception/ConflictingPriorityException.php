@@ -3,7 +3,7 @@
 namespace Rector\TypeDeclaration\Exception;
 
 use Exception;
-use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 
 final class ConflictingPriorityException extends Exception
 {

@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\Exception\ConflictingPriorityException;
 use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 
