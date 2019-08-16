@@ -52,21 +52,17 @@ abstract class AbstractTypeInfo
      * @param string[] $types
      * @param string[] $fqnTypes
      */
-    public function __construct(
-        array $types,
-        TypeAnalyzer $typeAnalyzer,
-        array $fqnTypes = [],
-        bool $allowTypedArrays = false
-    ) {
+    public function __construct(array $types, TypeAnalyzer $typeAnalyzer, array $fqnTypes = [])
+    {
         $this->typeAnalyzer = $typeAnalyzer;
-        $this->types = $this->analyzeAndNormalizeTypes($types, $allowTypedArrays);
+        $this->types = $this->analyzeAndNormalizeTypes($types);
 
         // fallback
         if ($fqnTypes === []) {
             $fqnTypes = $types;
         }
 
-        $this->fqnTypes = $this->analyzeAndNormalizeTypes($fqnTypes, $allowTypedArrays);
+        $this->fqnTypes = $this->analyzeAndNormalizeTypes($fqnTypes);
     }
 
     public function isNullable(): bool
@@ -166,10 +162,34 @@ abstract class AbstractTypeInfo
     }
 
     /**
+     * @param string[] $types
+     */
+    protected function isArraySubtype(array $types): bool
+    {
+        if ($types === []) {
+            return false;
+        }
+
+        foreach ($types as $type) {
+            if (in_array($type, ['array', 'iterable'], true)) {
+                continue;
+            }
+
+            if (Strings::endsWith($type, '[]')) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param string|string[] $types
      * @return string[]
      */
-    private function analyzeAndNormalizeTypes($types, bool $allowTypedArrays = false): array
+    private function analyzeAndNormalizeTypes($types): array
     {
         $types = (array) $types;
 
@@ -207,7 +227,7 @@ abstract class AbstractTypeInfo
                 continue;
             }
 
-            $types[$i] = $this->typeAnalyzer->normalizeType($type, $allowTypedArrays);
+            $types[$i] = $this->typeAnalyzer->normalizeType($type);
         }
 
         // remove undesired types
@@ -224,26 +244,6 @@ abstract class AbstractTypeInfo
     private function hasRemovedTypes(): bool
     {
         return count($this->removedTypes) > 1;
-    }
-
-    /**
-     * @param string[] $types
-     */
-    private function isArraySubtype(array $types): bool
-    {
-        foreach ($types as $type) {
-            if (in_array($type, ['array', 'iterable'], true)) {
-                continue;
-            }
-
-            if (Strings::endsWith($type, '[]')) {
-                continue;
-            }
-
-            return false;
-        }
-
-        return true;
     }
 
     private function normalizeNullable(string $type): string

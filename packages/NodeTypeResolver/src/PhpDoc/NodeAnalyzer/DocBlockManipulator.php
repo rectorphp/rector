@@ -203,7 +203,7 @@ final class DocBlockManipulator
 
         $fqnTypes = $phpDocInfo->getReturnTypes();
 
-        return new ReturnTypeInfo($types, $this->typeAnalyzer, $fqnTypes, true);
+        return new ReturnTypeInfo($types, $this->typeAnalyzer, $fqnTypes);
     }
 
     /**

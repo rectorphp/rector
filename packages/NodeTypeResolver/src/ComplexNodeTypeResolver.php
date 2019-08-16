@@ -99,6 +99,6 @@ final class ComplexNodeTypeResolver
 
         $types = array_filter($types);
 
-        return new VarTypeInfo($types, $this->typeAnalyzer, $types, true);
+        return new VarTypeInfo($types, $this->typeAnalyzer, $types);
     }
 }

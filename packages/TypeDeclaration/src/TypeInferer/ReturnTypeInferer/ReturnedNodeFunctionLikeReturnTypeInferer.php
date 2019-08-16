@@ -29,10 +29,7 @@ final class ReturnedNodeFunctionLikeReturnTypeInferer extends AbstractTypeInfere
     public function inferFunctionLike(FunctionLike $functionLike): array
     {
         $resolvedReturnTypeInfo = $this->functionLikeManipulator->resolveStaticReturnTypeInfo($functionLike);
-        if ($resolvedReturnTypeInfo === null) {
-            return [];
-        }
 
-        return $resolvedReturnTypeInfo->getDocTypes();
+        return $resolvedReturnTypeInfo ? $resolvedReturnTypeInfo->getDocTypes() : [];
     }
 }
