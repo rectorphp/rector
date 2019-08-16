@@ -10,8 +10,9 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\ReturnTypeResolver\ReturnTypeResolver;
+use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
-final class GetterOrSetterPropertyTypeInferer extends AbstractPropertyTypeInferer implements PropertyTypeInfererInterface
+final class GetterOrSetterPropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
 {
     /**
      * @var ReturnTypeResolver

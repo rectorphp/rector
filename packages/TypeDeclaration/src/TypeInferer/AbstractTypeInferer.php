@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\PropertyTypeInferer;
+namespace Rector\TypeDeclaration\TypeInferer;
 
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\StaticTypeToStringResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
-abstract class AbstractPropertyTypeInferer
+abstract class AbstractTypeInferer
 {
     /**
      * @var CallableNodeTraverser
@@ -32,7 +32,7 @@ abstract class AbstractPropertyTypeInferer
     /**
      * @required
      */
-    public function autowireAbstractPropertyTypeInferer(
+    public function autowireAbstractTypeInferer(
         CallableNodeTraverser $callableNodeTraverser,
         NameResolver $nameResolver,
         NodeTypeResolver $nodeTypeResolver,

@@ -14,8 +14,9 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
-final class AllAssignNodePropertyTypeInferer extends AbstractPropertyTypeInferer implements PropertyTypeInfererInterface
+final class AllAssignNodePropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
 {
     /**
      * @return string[]

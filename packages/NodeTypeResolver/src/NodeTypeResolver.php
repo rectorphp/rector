@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -22,6 +23,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\Type\Accessory\HasOffsetType;
@@ -45,6 +47,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeToStringResolver as TypeToStringResolver;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class NodeTypeResolver
@@ -85,6 +88,11 @@ final class NodeTypeResolver
     private $typeToStringResolver;
 
     /**
+     * @var CallableNodeTraverser
+     */
+    private $callableNodeTraverser;
+
+    /**
      * @param PerNodeTypeResolverInterface[] $perNodeTypeResolvers
      */
     public function __construct(
@@ -94,6 +102,7 @@ final class NodeTypeResolver
         TypeToStringResolver $typeToStringResolver,
         Broker $broker,
         ClassReflectionTypesResolver $classReflectionTypesResolver,
+        CallableNodeTraverser $callableNodeTraverser,
         array $perNodeTypeResolvers
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -106,6 +115,7 @@ final class NodeTypeResolver
         foreach ($perNodeTypeResolvers as $perNodeTypeResolver) {
             $this->addPerNodeTypeResolver($perNodeTypeResolver);
         }
+        $this->callableNodeTraverser = $callableNodeTraverser;
     }
 
     public function isType(Node $node, string $type): bool
@@ -290,6 +300,13 @@ final class NodeTypeResolver
     {
         if ($node instanceof String_) {
             return new ConstantStringType($node->value);
+        }
+
+        if ($node instanceof Param) {
+            $paramStaticType = $this->resolveParamStaticType($node);
+            if ($paramStaticType !== null) {
+                return $paramStaticType;
+            }
         }
 
         /** @var Scope|null $nodeScope */
@@ -572,5 +589,37 @@ final class NodeTypeResolver
         $className = $this->nameResolver->getName($node);
 
         return $className === null || Strings::contains($className, 'AnonymousClass');
+    }
+
+    private function resolveParamStaticType(Node $node): ?Type
+    {
+        $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+        if ($classMethod === null) {
+            return null;
+        }
+
+        /** @var string $paramName */
+        $paramName = $this->nameResolver->getName($node);
+        $paramStaticType = null;
+
+        // special case for param inside method/function
+        $this->callableNodeTraverser->traverseNodesWithCallable(
+            (array) $classMethod->stmts,
+            function (Node $node) use ($paramName, &$paramStaticType): ?int {
+                if (! $node instanceof Node\Expr\Variable) {
+                    return null;
+                }
+
+                if (! $this->nameResolver->isName($node, $paramName)) {
+                    return null;
+                }
+
+                $paramStaticType = $this->getNodeStaticType($node);
+
+                return NodeTraverser::STOP_TRAVERSAL;
+            }
+        );
+
+        return $paramStaticType;
     }
 }

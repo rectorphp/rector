@@ -4,8 +4,9 @@ namespace Rector\TypeDeclaration\PropertyTypeInferer;
 
 use PhpParser\Node\Stmt\Property;
 use Rector\TypeDeclaration\Contract\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
-final class DefaultValuePropertyTypeInferer extends AbstractPropertyTypeInferer implements PropertyTypeInfererInterface
+final class DefaultValuePropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
 {
     /**
      * @return string[]

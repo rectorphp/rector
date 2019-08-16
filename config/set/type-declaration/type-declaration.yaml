@@ -3,3 +3,4 @@ services:
     Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector: ~
     Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector: ~
     Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector: ~
+    Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector: ~
