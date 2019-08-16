@@ -102,7 +102,7 @@ final class FunctionLikeManipulator
             if (! $functionLike->returnType->getAttribute(
                 AbstractTypeDeclarationRector::HAS_NEW_INHERITED_TYPE
             ) && $types !== []) {
-                return new ReturnTypeInfo($types, $this->typeAnalyzer, $types, true);
+                return new ReturnTypeInfo($types, $this->typeAnalyzer, $types);
             }
         }
 
@@ -117,12 +117,12 @@ final class FunctionLikeManipulator
         }
 
         if ($this->isVoid) {
-            return new ReturnTypeInfo(['void'], $this->typeAnalyzer, ['void'], true);
+            return new ReturnTypeInfo(['void'], $this->typeAnalyzer, ['void']);
         }
 
         $types = array_filter($types);
 
-        return new ReturnTypeInfo($types, $this->typeAnalyzer, $types, true);
+        return new ReturnTypeInfo($types, $this->typeAnalyzer, $types);
     }
 
     /**

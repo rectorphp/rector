@@ -203,7 +203,7 @@ final class DocBlockManipulator
 
         $fqnTypes = $phpDocInfo->getReturnTypes();
 
-        return new ReturnTypeInfo($types, $this->typeAnalyzer, $fqnTypes, true);
+        return new ReturnTypeInfo($types, $this->typeAnalyzer, $fqnTypes);
     }
 
     /**
@@ -300,7 +300,7 @@ final class DocBlockManipulator
 
         $fqnTypes = $phpDocInfo->getVarTypes();
 
-        return new VarTypeInfo($types, $this->typeAnalyzer, $fqnTypes, true);
+        return new VarTypeInfo($types, $this->typeAnalyzer, $fqnTypes);
     }
 
     public function removeTagByName(PhpDocInfo $phpDocInfo, string $tagName): void
