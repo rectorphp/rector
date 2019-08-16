@@ -257,15 +257,14 @@ abstract class AbstractTypeInfo
 
     private function normalizeCasing(string $type): string
     {
-        if ($this->typeAnalyzer->isPhpReservedType($type)) {
-            return strtolower($type);
+        $types = explode('|', $type);
+        foreach ($types as $key => $singleType) {
+            if ($this->typeAnalyzer->isPhpReservedType($singleType) || strtolower($singleType) === '$this') {
+                $types[$key] = strtolower($singleType);
+            }
         }
 
-        if (strtolower($type) === '$this') {
-            return strtolower($type);
-        }
-
-        return $type;
+        return implode($types, '|');
     }
 
     /**
