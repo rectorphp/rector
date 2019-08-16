@@ -51,16 +51,6 @@ final class VarTypeInfo extends AbstractTypeInfo
 
     public function isIterable(): bool
     {
-        if ($this->types === []) {
-            return false;
-        }
-
-        foreach ($this->types as $type) {
-            if ($type !== 'array') {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->isArraySubtype($this->types);
     }
 }

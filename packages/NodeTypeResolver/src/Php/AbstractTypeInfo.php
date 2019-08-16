@@ -166,6 +166,30 @@ abstract class AbstractTypeInfo
     }
 
     /**
+     * @param string[] $types
+     */
+    protected function isArraySubtype(array $types): bool
+    {
+        if ($types === []) {
+            return false;
+        }
+
+        foreach ($types as $type) {
+            if (in_array($type, ['array', 'iterable'], true)) {
+                continue;
+            }
+
+            if (Strings::endsWith($type, '[]')) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param string|string[] $types
      * @return string[]
      */
@@ -224,26 +248,6 @@ abstract class AbstractTypeInfo
     private function hasRemovedTypes(): bool
     {
         return count($this->removedTypes) > 1;
-    }
-
-    /**
-     * @param string[] $types
-     */
-    private function isArraySubtype(array $types): bool
-    {
-        foreach ($types as $type) {
-            if (in_array($type, ['array', 'iterable'], true)) {
-                continue;
-            }
-
-            if (Strings::endsWith($type, '[]')) {
-                continue;
-            }
-
-            return false;
-        }
-
-        return true;
     }
 
     private function normalizeNullable(string $type): string

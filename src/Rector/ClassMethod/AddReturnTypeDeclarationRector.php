@@ -103,7 +103,7 @@ CODE_SAMPLE
         if ($newType === '') {
             $classMethod->returnType = null;
         } else {
-            $returnTypeInfo = new ReturnTypeInfo([$newType], $this->typeAnalyzer);
+            $returnTypeInfo = new ReturnTypeInfo([$newType], $this->typeAnalyzer, [$newType], true);
             $classMethod->returnType = $returnTypeInfo->getFqnTypeNode();
         }
 
