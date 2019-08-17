@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\IntegerType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
@@ -71,8 +70,10 @@ final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements 
 
         if ($propertyStaticTypes[0] instanceof ArrayType) {
             $itemType = $propertyStaticTypes[0]->getItemType();
-            if ($itemType instanceof IntegerType) {
-                return ['int'];
+
+            $resolvedType = $this->staticTypeToStringResolver->resolveObjectType($itemType);
+            if (isset($resolvedType[0])) {
+                return [$resolvedType[0]];
             }
         }
 
