@@ -13,7 +13,10 @@ use Rector\SOLID\Analyzer\ClassConstantFetchAnalyzer;
 
 final class PrivatizeLocalClassConstantRector extends AbstractRector
 {
-    const HAS_NEW_ACCESS_LEVEL = 'has_new_access_level';
+    /**
+     * @var string
+     */
+    public const HAS_NEW_ACCESS_LEVEL = 'has_new_access_level';
 
     /**
      * @var ParsedNodesByType
@@ -118,26 +121,7 @@ CODE_SAMPLE
 
         $useClasses = $this->findClassConstantFetches($class, $constant);
 
-        // 1. is actually never used (@todo use in "dead-code" set)
-        if ($useClasses === null) {
-            $this->makePrivateOrWeaker($node, $parentConstIsProtected);
-            return $node;
-        }
-
-        // 2. is only local use? → private
-        if ($useClasses === [$class]) {
-            $this->makePrivateOrWeaker($node, $parentConstIsProtected);
-            return $node;
-        }
-
-        // 3. used by children → protected
-        if ($this->isUsedByChildrenOnly($useClasses, $class)) {
-            $this->makeProtected($node);
-        } else {
-            $this->makePublic($node);
-        }
-
-        return $node;
+        return $this->changeConstantVisibility($node, $useClasses, $parentConstIsProtected, $class);
     }
 
     private function findParentClassConstant(string $class, string $constant): ?ClassConst
@@ -160,12 +144,12 @@ CODE_SAMPLE
         return null;
     }
 
-    private function makePrivateOrWeaker(ClassConst $node, bool $protectedRequired): void
+    private function makePrivateOrWeaker(ClassConst $classConst, bool $protectedRequired): void
     {
         if ($protectedRequired) {
-            $this->makeProtected($node);
+            $this->makeProtected($classConst);
         } else {
-            $this->makePrivate($node);
+            $this->makePrivate($classConst);
         }
     }
 
@@ -193,5 +177,36 @@ CODE_SAMPLE
         $classConstantFetchByClassAndName = $this->classConstantFetchAnalyzer->provideClassConstantFetchByClassAndName();
 
         return $classConstantFetchByClassAndName[$className][$constantName] ?? null;
+    }
+
+    /**
+     * @param string[]|null $useClasses
+     */
+    private function changeConstantVisibility(
+        ClassConst $classConst,
+        ?array $useClasses,
+        bool $parentConstIsProtected,
+        string $class
+    ): Node {
+        // 1. is actually never used (@todo use in "dead-code" set)
+        if ($useClasses === null) {
+            $this->makePrivateOrWeaker($classConst, $parentConstIsProtected);
+            return $classConst;
+        }
+
+        // 2. is only local use? → private
+        if ($useClasses === [$class]) {
+            $this->makePrivateOrWeaker($classConst, $parentConstIsProtected);
+            return $classConst;
+        }
+
+        // 3. used by children → protected
+        if ($this->isUsedByChildrenOnly($useClasses, $class)) {
+            $this->makeProtected($classConst);
+        } else {
+            $this->makePublic($classConst);
+        }
+
+        return $classConst;
     }
 }
