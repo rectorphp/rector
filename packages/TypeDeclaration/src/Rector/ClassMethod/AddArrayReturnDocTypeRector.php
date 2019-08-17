@@ -111,17 +111,16 @@ CODE_SAMPLE
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
-        if ($classMethod->returnType === null) {
+        if ($this->isName($classMethod->name, '__*')) {
             return true;
         }
 
-        if (! $this->isName($classMethod->returnType, 'array')) {
-            return true;
+        if ($classMethod->returnType) {
+            if (! $this->isNames($classMethod->returnType, ['array', 'iterable'])) {
+                return true;
+            }
         }
 
-        $returnTypeInfo = $this->docBlockManipulator->getReturnTypeInfo($classMethod);
-
-        // already has return type info, skip
-        return $returnTypeInfo !== null;
+        return false;
     }
 }

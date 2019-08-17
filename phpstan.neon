@@ -190,3 +190,4 @@ parameters:
         - '#In method "Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:traverseNodesWithCallable", parameter \$nodes has no type\-hint and no @param annotation\. More info\: http\://bit\.ly/usetypehint#'
         - '#Ternary operator condition is always true#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Property\:\:\$var#'
+        - '#Parameter \#1 \$node of method Rector\\NodeTypeResolver\\NodeTypeResolver\:\:resolveSingleTypeToStrings\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr\|null given#'

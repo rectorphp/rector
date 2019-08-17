@@ -110,16 +110,39 @@ final class FqnNamePhpDocNodeDecorator implements PhpDocNodeDecoratorInterface
             foreach ($typeNode->types as $subtype) {
                 $resolvedNames = array_merge($resolvedNames, $this->collectResolvedNames($subtype));
             }
-        } elseif ($typeNode instanceof AttributeAwareArrayTypeNode || $typeNode instanceof AttributeAwareThisTypeNode) {
+        } elseif ($typeNode instanceof AttributeAwareThisTypeNode) {
             $resolvedNames[] = $typeNode->getAttribute(Attribute::TYPE_AS_STRING);
-        } elseif ($typeNode instanceof AttributeAwareIdentifierTypeNode) {
-            if ($typeNode->getAttribute(Attribute::RESOLVED_NAME)) {
-                $resolvedNames[] = $typeNode->getAttribute(Attribute::RESOLVED_NAME);
-            } elseif ($typeNode->getAttribute(Attribute::TYPE_AS_STRING)) {
+        } elseif ($typeNode instanceof AttributeAwareArrayTypeNode) {
+            $resolved = false;
+            if ($typeNode->type instanceof AttributeAwareIdentifierTypeNode) {
+                $resolvedType = $this->resolveIdentifierType($typeNode->type);
+                if ($resolvedType) {
+                    $resolvedNames[] = $resolvedType . '[]';
+                    $resolved = true;
+                }
+            }
+
+            if ($resolved === false) {
                 $resolvedNames[] = $typeNode->getAttribute(Attribute::TYPE_AS_STRING);
+            }
+        } elseif ($typeNode instanceof AttributeAwareIdentifierTypeNode) {
+            $resolvedType = $this->resolveIdentifierType($typeNode);
+            if ($resolvedType) {
+                $resolvedNames[] = $resolvedType;
             }
         }
 
         return array_filter($resolvedNames);
+    }
+
+    private function resolveIdentifierType(AttributeAwareIdentifierTypeNode $attributeAwareIdentifierTypeNode): ?string
+    {
+        if ($attributeAwareIdentifierTypeNode->getAttribute(Attribute::RESOLVED_NAME)) {
+            return $attributeAwareIdentifierTypeNode->getAttribute(Attribute::RESOLVED_NAME);
+        } elseif ($attributeAwareIdentifierTypeNode->getAttribute(Attribute::TYPE_AS_STRING)) {
+            return $attributeAwareIdentifierTypeNode->getAttribute(Attribute::TYPE_AS_STRING);
+        }
+
+        return null;
     }
 }

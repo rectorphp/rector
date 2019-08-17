@@ -5,6 +5,7 @@ namespace Rector\DeadCode\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
@@ -100,7 +101,7 @@ CODE_SAMPLE
      * Matches all-only: "$this->property = x"
      * If these is ANY OTHER use of property, e.g. process($this->property), it returns []
      *
-     * @param PropertyFetch[] $propertyFetches
+     * @param PropertyFetch[]|StaticPropertyFetch[] $propertyFetches
      * @return Assign[]
      */
     private function resolveUselessAssignNode(array $propertyFetches): array

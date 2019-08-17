@@ -26,7 +26,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationR
  * @param Foo[]|Bar[][]|Baz[][][][] $four
  * @param Foo[]|iterable $five
  */
-function someFunction(?array $one, ?array $two, array $three, array $four, array $five)
+function someFunction(?array $one, ?array $two, array $three, array $four, iterable $five)
 {
 }
 

@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
@@ -96,8 +97,12 @@ final class FunctionLikeManipulator
 
         // A. resolve from function return type
         // skip "array" to get more precise types
-        if ($functionLike->returnType !== null && ! $this->nameResolver->isName($functionLike->returnType, 'array')) {
+        if ($functionLike->returnType !== null && ! $this->nameResolver->isNames(
+            $functionLike->returnType,
+            ['array', 'iterable']
+        )) {
             $types = $this->resolveReturnTypeToString($functionLike->returnType);
+
             // do not override freshly added type declaration
             if (! $functionLike->returnType->getAttribute(
                 AbstractTypeDeclarationRector::HAS_NEW_INHERITED_TYPE
@@ -201,16 +206,35 @@ final class FunctionLikeManipulator
      */
     private function resolveTypesFromReturnNodes(FunctionLike $functionLike): array
     {
-        /** @var Return_[] $returnNodes */
-        $returnNodes = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Return_::class);
+        // local
+        /** @var Return_[] $localReturnNodes */
+        $localReturnNodes = [];
 
-        $types = [];
-        foreach ($returnNodes as $returnNode) {
-            if ($returnNode->expr === null) {
-                continue;
+        $this->callableNodeTraverser->traverseNodesWithCallable((array) $functionLike->stmts, function (Node $node) use (
+            &$localReturnNodes
+        ): ?int {
+            if ($node instanceof Function_ || $node instanceof Closure || $node instanceof Node\Expr\ArrowFunction) {
+                // skip Return_ nodes in nested functions
+                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
 
-            $types = array_merge($types, $this->nodeTypeResolver->resolveSingleTypeToStrings($returnNode->expr));
+            if (! $node instanceof Return_) {
+                return null;
+            }
+
+            // skip void returns
+            if ($node->expr === null) {
+                return null;
+            }
+
+            $localReturnNodes[] = $node;
+
+            return null;
+        });
+
+        $types = [];
+        foreach ($localReturnNodes as $localReturnNode) {
+            $types = array_merge($types, $this->nodeTypeResolver->resolveSingleTypeToStrings($localReturnNode->expr));
             $this->isVoid = false;
         }
 
@@ -226,17 +250,29 @@ final class FunctionLikeManipulator
         /** @var Yield_[] $yieldNodes */
         $yieldNodes = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Yield_::class);
 
+        $types = [];
         if (count($yieldNodes)) {
             $this->isVoid = false;
 
-            if ($this->phpVersionProvider->isAtLeast('7.1')) {
-                // @see https://www.php.net/manual/en/language.types.iterable.php
-                return ['iterable'];
+            foreach ($yieldNodes as $yieldNode) {
+                if ($yieldNode->value === null) {
+                    continue;
+                }
+
+                $resolvedTypes = $this->nodeTypeResolver->resolveSingleTypeToStrings($yieldNode->value);
+                foreach ($resolvedTypes as $resolvedType) {
+                    $types[] = $resolvedType . '[]';
+                }
             }
 
-            return [Iterator::class];
+            if ($this->phpVersionProvider->isAtLeast('7.1')) {
+                // @see https://www.php.net/manual/en/language.types.iterable.php
+                $types[] = 'iterable';
+            } else {
+                $types[] = Iterator::class;
+            }
         }
 
-        return [];
+        return array_unique($types);
     }
 }

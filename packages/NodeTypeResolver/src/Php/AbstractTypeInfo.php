@@ -145,15 +145,38 @@ abstract class AbstractTypeInfo
     /**
      * @return string[]
      */
+    public function getFqnTypes(): array
+    {
+        return $this->fqnTypes;
+    }
+
+    /**
+     * @return string[]
+     */
     public function getDocTypes(): array
     {
         $allTypes = array_merge($this->types, $this->removedTypes);
+        $types = array_filter(array_unique($allTypes));
 
         if ($this->isNullable) {
-            $allTypes[] = 'null';
+            $types[] = 'null';
         }
 
-        return array_filter(array_unique($allTypes));
+        $types = $this->removeIterableTypeIfTraversableType($types);
+
+        // use mixed[] over array, that is more explicit about implicitnes
+        if ($types === ['array']) {
+            return ['mixed[]'];
+        }
+
+        // remove void types, as its useless in annotation
+        foreach ($types as $key => $value) {
+            if ($value === 'void') {
+                unset($types[$key]);
+            }
+        }
+
+        return $types;
     }
 
     protected function normalizeName(string $name): string
@@ -345,6 +368,10 @@ abstract class AbstractTypeInfo
             return $this->resolveMutualObjectSubtype($this->types);
         }
 
+        if (in_array('iterable', $this->types, true)) {
+            return 'iterable';
+        }
+
         $types = $forceFqn ? $this->fqnTypes : $this->types;
 
         return $types[0];
@@ -353,5 +380,34 @@ abstract class AbstractTypeInfo
     private function classLikeExists(string $type): bool
     {
         return ! class_exists($type) && ! interface_exists($type) && ! trait_exists($type);
+    }
+
+    /**
+     * @param string[] $types
+     * @return string[]
+     */
+    private function removeIterableTypeIfTraversableType(array $types): array
+    {
+        $hasTraversableType = false;
+
+        foreach ($types as $type) {
+            if (Strings::endsWith($type, '[]')) {
+                $hasTraversableType = true;
+                break;
+            }
+        }
+
+        if (! $hasTraversableType) {
+            return $types;
+        }
+
+        foreach ($types as $key => $uniqeueType) {
+            // remove iterable if other types are provided
+            if (in_array($uniqeueType, ['iterable', 'array'], true)) {
+                unset($types[$key]);
+            }
+        }
+
+        return $types;
     }
 }

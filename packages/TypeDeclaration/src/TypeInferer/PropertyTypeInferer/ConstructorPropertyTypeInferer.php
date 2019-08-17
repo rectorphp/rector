@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\NullType;
@@ -118,7 +119,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
      * ↓
      * $anotherValue param
      */
-    private function resolveParamForPropertyFetch(ClassMethod $classMethod, string $propertyName): ?Node\Param
+    private function resolveParamForPropertyFetch(ClassMethod $classMethod, string $propertyName): ?Param
     {
         $assignedParamName = null;
 
@@ -144,7 +145,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
             return null;
         }
 
-        /** @var Node\Param $param */
+        /** @var Param $param */
         foreach ((array) $classMethod->params as $param) {
             if (! $this->nameResolver->isName($param, $assignedParamName)) {
                 continue;
@@ -161,7 +162,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         return ltrim($content, '\\');
     }
 
-    private function isParamNullable(Node\Param $param): bool
+    private function isParamNullable(Param $param): bool
     {
         if ($param->type instanceof NullableType) {
             return true;
@@ -180,7 +181,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
     /**
      * @return IdentifierValueObject|string|null
      */
-    private function resolveParamTypeToString(Node\Param $param)
+    private function resolveParamTypeToString(Param $param)
     {
         if ($param->type === null) {
             return null;
