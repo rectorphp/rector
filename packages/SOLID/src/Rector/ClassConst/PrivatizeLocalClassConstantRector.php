@@ -103,50 +103,30 @@ CODE_SAMPLE
 
         /** @var string $constant */
         $constant = $this->getName($node);
-        $classNode = $this->parsedNodesByType->findClass($class);
-        $mustBeAtLeastProtected = false;
+        $parentConstIsProtected = false;
 
-        if ($classNode !== null && $classNode->hasAttribute(AttributeKey::PARENT_CLASS_NAME)) {
-            /** @var string $parentClassName */
-            $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-            if ($parentClassName) {
-                $parentClassConstant = $this->parsedNodesByType->findClassConstant($parentClassName, $constant);
-                if ($parentClassConstant) {
-                    $this->refactor($parentClassConstant);
-
-                    // The parent's constant is public, so this one must become public too
-                    if ($parentClassConstant->isPublic()) {
-                        $this->makePublic($node);
-                        return $node;
-                    }
-
-                    // The parent's constant is protected, so this one must become protected or weaker
-                    if ($parentClassConstant->isProtected()) {
-                        $mustBeAtLeastProtected = true;
-                    }
-                }
+        $parentClassConstant = $this->findParentClassConstant($class, $constant);
+        if ($parentClassConstant !== null) {
+            // The parent's constant is public, so this one must become public too
+            if ($parentClassConstant->isPublic()) {
+                $this->makePublic($node);
+                return $node;
             }
+
+            $parentConstIsProtected = $parentClassConstant->isProtected();
         }
 
         $useClasses = $this->findClassConstantFetches($class, $constant);
 
         // 1. is actually never used (@todo use in "dead-code" set)
         if ($useClasses === null) {
-            if ($mustBeAtLeastProtected) {
-                $this->makeProtected($node);
-            } else {
-                $this->makePrivate($node);
-            }
+            $this->makePrivateOrWeaker($node, $parentConstIsProtected);
             return $node;
         }
 
         // 2. is only local use? → private
         if ($useClasses === [$class]) {
-            if ($mustBeAtLeastProtected) {
-                $this->makeProtected($node);
-            } else {
-                $this->makePrivate($node);
-            }
+            $this->makePrivateOrWeaker($node, $parentConstIsProtected);
             return $node;
         }
 
@@ -158,6 +138,35 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    private function findParentClassConstant(string $class, string $constant): ?ClassConst
+    {
+        $classNode = $this->parsedNodesByType->findClass($class);
+        if ($classNode !== null && $classNode->hasAttribute(AttributeKey::PARENT_CLASS_NAME)) {
+            /** @var string $parentClassName */
+            $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+            if ($parentClassName) {
+                $parentClassConstant = $this->parsedNodesByType->findClassConstant($parentClassName, $constant);
+                if ($parentClassConstant) {
+                    // Make sure the parent's constant has been refactored
+                    $this->refactor($parentClassConstant);
+
+                    return $parentClassConstant;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private function makePrivateOrWeaker(ClassConst $node, bool $protectedRequired): void
+    {
+        if ($protectedRequired) {
+            $this->makeProtected($node);
+        } else {
+            $this->makePrivate($node);
+        }
     }
 
     /**
