@@ -17,4 +17,4 @@ parameters:
     php_version_features: '7.1'
 
 services:
-    Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector:
+#    Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector:

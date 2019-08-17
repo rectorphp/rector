@@ -21,6 +21,7 @@ final class AddArrayReturnDocTypeRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/skip_constructor.php.inc',
             __DIR__ . '/Fixture/skip_array_after_array_type.php.inc',
             __DIR__ . '/Fixture/skip_shorten_class_name.php.inc',
+            __DIR__ . '/Fixture/skip_inner_function_return.php.inc',
         ]);
     }
 
