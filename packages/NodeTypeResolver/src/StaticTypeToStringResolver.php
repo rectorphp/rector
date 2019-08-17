@@ -88,7 +88,9 @@ final class StaticTypeToStringResolver
 
         foreach ($this->resolversByArgumentType as $type => $resolverCallable) {
             if (is_a($staticType, $type, true)) {
-                return $resolverCallable($staticType);
+                $types = $resolverCallable($staticType);
+
+                return array_unique($types);
             }
         }
 

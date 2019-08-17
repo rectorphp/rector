@@ -269,6 +269,15 @@ final class DocBlockManipulator
 
     public function addReturnTag(Node $node, string $type): void
     {
+        // make sure the tags are not identical, e.g imported class vs FQN class
+        $returnTypeInfo = $this->getReturnTypeInfo($node);
+        if ($returnTypeInfo) {
+            // already added
+            if ([ltrim($type, '\\')] === $returnTypeInfo->getFqnTypes()) {
+                return;
+            }
+        }
+
         $this->removeTagFromNode($node, 'return');
         $this->addTypeSpecificTag($node, 'return', $type);
     }

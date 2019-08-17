@@ -145,6 +145,14 @@ abstract class AbstractTypeInfo
     /**
      * @return string[]
      */
+    public function getFqnTypes(): array
+    {
+        return $this->fqnTypes;
+    }
+
+    /**
+     * @return string[]
+     */
     public function getDocTypes(): array
     {
         $allTypes = array_merge($this->types, $this->removedTypes);
