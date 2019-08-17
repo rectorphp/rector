@@ -111,6 +111,10 @@ CODE_SAMPLE
 
     private function shouldSkip(ClassMethod $classMethod): bool
     {
+        if ($this->isName($classMethod->name, '__*')) {
+            return true;
+        }
+
         if ($classMethod->returnType) {
             if (! $this->isNames($classMethod->returnType, ['array', 'iterable'])) {
                 return true;
