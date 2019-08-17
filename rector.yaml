@@ -17,4 +17,4 @@ parameters:
     php_version_features: '7.1'
 
 services:
-    Rector\DeadCode\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector: ~
+    Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector:

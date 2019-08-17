@@ -380,13 +380,22 @@ abstract class AbstractTypeInfo
      */
     private function removeIterableTypeIfTraversableType(array $types): array
     {
-        if (count($types) <= 1) {
+        $hasTraversableType = false;
+
+        foreach ($types as $type) {
+            if (Strings::endsWith($type, '[]')) {
+                $hasTraversableType = true;
+                break;
+            }
+        }
+
+        if (! $hasTraversableType) {
             return $types;
         }
 
         foreach ($types as $key => $uniqeueType) {
             // remove iterable if other types are provided
-            if ($uniqeueType === 'iterable') {
+            if (in_array($uniqeueType, ['iterable', 'array'], true)) {
                 unset($types[$key]);
             }
         }

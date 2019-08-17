@@ -17,6 +17,7 @@ final class AddArrayReturnDocTypeRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/simple_array.php.inc',
             __DIR__ . '/Fixture/add_without_return_type_declaration.php.inc',
             __DIR__ . '/Fixture/fix_incorrect_array.php.inc',
+            __DIR__ . '/Fixture/skip_array_after_array_type.php.inc',
         ]);
     }
 
