@@ -269,6 +269,7 @@ final class DocBlockManipulator
 
     public function addReturnTag(Node $node, string $type): void
     {
+        $this->removeTagFromNode($node, 'return');
         $this->addTypeSpecificTag($node, 'return', $type);
     }
 

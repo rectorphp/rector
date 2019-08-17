@@ -148,28 +148,27 @@ abstract class AbstractTypeInfo
     public function getDocTypes(): array
     {
         $allTypes = array_merge($this->types, $this->removedTypes);
+        $types = array_filter(array_unique($allTypes));
 
         if ($this->isNullable) {
-            $allTypes[] = 'null';
+            $types[] = 'null';
         }
 
-        $uniqeueTypes = array_filter(array_unique($allTypes));
-
-        $uniqeueTypes = $this->removeIterableTypeIfTraversableType($uniqeueTypes);
+        $types = $this->removeIterableTypeIfTraversableType($types);
 
         // use mixed[] over array, that is more explicit about implicitnes
-        if ($uniqeueTypes === ['array']) {
+        if ($types === ['array']) {
             return ['mixed[]'];
         }
 
         // remove void types, as its useless in annotation
-        foreach ($uniqeueTypes as $key => $value) {
+        foreach ($types as $key => $value) {
             if ($value === 'void') {
-                unset($uniqeueTypes[$key]);
+                unset($types[$key]);
             }
         }
 
-        return $uniqeueTypes;
+        return $types;
     }
 
     protected function normalizeName(string $name): string

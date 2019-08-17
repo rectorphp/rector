@@ -117,9 +117,6 @@ CODE_SAMPLE
             }
         }
 
-        $returnTypeInfo = $this->docBlockManipulator->getReturnTypeInfo($classMethod);
-
-        // already has return type info, skip
-        return $returnTypeInfo !== null;
+        return false;
     }
 }

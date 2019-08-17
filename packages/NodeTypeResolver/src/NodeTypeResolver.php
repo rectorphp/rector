@@ -333,6 +333,9 @@ final class NodeTypeResolver
             $arrayType = $this->getNodeStaticType($node);
             if ($arrayType instanceof ArrayType) {
                 $itemTypes = $this->staticTypeToStringResolver->resolveObjectType($arrayType->getItemType());
+
+                $itemTypes = array_unique($itemTypes);
+
                 foreach ($itemTypes as $key => $itemType) {
                     $itemTypes[$key] = $itemType . '[]';
                 }
