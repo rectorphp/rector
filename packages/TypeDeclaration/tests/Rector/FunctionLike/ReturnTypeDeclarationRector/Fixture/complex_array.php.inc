@@ -51,7 +51,7 @@ function someFunction2($value): float
 /**
  * @return Foo[]|iterable
  */
-function someFunction3($value): array
+function someFunction3($value): iterable
 {
     return $value;
 }

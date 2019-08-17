@@ -115,7 +115,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->isName($classMethod->returnType, 'array')) {
+        if (! $this->isNames($classMethod->returnType, ['array', 'iterable'])) {
             return true;
         }
 

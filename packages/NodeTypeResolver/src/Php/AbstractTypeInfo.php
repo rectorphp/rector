@@ -153,7 +153,18 @@ abstract class AbstractTypeInfo
             $allTypes[] = 'null';
         }
 
-        return array_filter(array_unique($allTypes));
+        $uniqeueTypes = array_filter(array_unique($allTypes));
+
+        if (count($uniqeueTypes) > 1) {
+            foreach ($uniqeueTypes as $key => $uniqeueType) {
+                // remove iterable if other types are provided
+                if ($uniqeueType === 'iterable') {
+                    unset($uniqeueTypes[$key]);
+                }
+            }
+        }
+
+        return $uniqeueTypes;
     }
 
     protected function normalizeName(string $name): string
@@ -343,6 +354,10 @@ abstract class AbstractTypeInfo
     {
         if ($this->areMutualObjectSubtypes($this->types)) {
             return $this->resolveMutualObjectSubtype($this->types);
+        }
+
+        if (in_array('iterable', $this->types, true)) {
+            return 'iterable';
         }
 
         $types = $forceFqn ? $this->fqnTypes : $this->types;

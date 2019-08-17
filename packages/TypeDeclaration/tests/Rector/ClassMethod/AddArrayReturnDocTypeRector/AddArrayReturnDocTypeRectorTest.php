@@ -13,6 +13,7 @@ final class AddArrayReturnDocTypeRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/setter_based.php.inc',
             __DIR__ . '/Fixture/fully_qualified_name.php.inc',
+            __DIR__ . '/Fixture/yield_strings.php.inc',
         ]);
     }
 

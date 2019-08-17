@@ -96,8 +96,12 @@ final class FunctionLikeManipulator
 
         // A. resolve from function return type
         // skip "array" to get more precise types
-        if ($functionLike->returnType !== null && ! $this->nameResolver->isName($functionLike->returnType, 'array')) {
+        if ($functionLike->returnType !== null && ! $this->nameResolver->isNames(
+            $functionLike->returnType,
+            ['array', 'iterable']
+        )) {
             $types = $this->resolveReturnTypeToString($functionLike->returnType);
+
             // do not override freshly added type declaration
             if (! $functionLike->returnType->getAttribute(
                 AbstractTypeDeclarationRector::HAS_NEW_INHERITED_TYPE
@@ -226,17 +230,29 @@ final class FunctionLikeManipulator
         /** @var Yield_[] $yieldNodes */
         $yieldNodes = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Yield_::class);
 
+        $types = [];
         if (count($yieldNodes)) {
             $this->isVoid = false;
 
-            if ($this->phpVersionProvider->isAtLeast('7.1')) {
-                // @see https://www.php.net/manual/en/language.types.iterable.php
-                return ['iterable'];
+            foreach ($yieldNodes as $yieldNode) {
+                if ($yieldNode->value === null) {
+                    continue;
+                }
+
+                $resolvedTypes = $this->nodeTypeResolver->resolveSingleTypeToStrings($yieldNode->value);
+                foreach ($resolvedTypes as $resolvedType) {
+                    $types[] = $resolvedType . '[]';
+                }
             }
 
-            return [Iterator::class];
+            if ($this->phpVersionProvider->isAtLeast('7.1')) {
+                // @see https://www.php.net/manual/en/language.types.iterable.php
+                $types[] = 'iterable';
+            } else {
+                $types[] = Iterator::class;
+            }
         }
 
-        return [];
+        return array_unique($types);
     }
 }

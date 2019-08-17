@@ -94,8 +94,7 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
         $types = [$scalarType];
 
         // is nullable?
-        $isNullable = $this->isNullable($columnTag->value->value);
-        if ($isNullable) {
+        if ($this->isNullable($columnTag->value->value)) {
             $types[] = 'null';
         }
 
