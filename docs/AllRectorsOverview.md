@@ -1,4 +1,4 @@
-# All 329 Rectors Overview
+# All 333 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -934,11 +934,11 @@ Use ===/!== over ==/!=, it values have the same type
 
 ## CodingStyle
 
-### `ArrayPropertyDefaultValueRector`
+### `AddArrayDefaultToArrayPropertyRector`
 
-- class: `Rector\CodingStyle\Rector\Property\ArrayPropertyDefaultValueRector`
+- class: `Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector`
 
-Array property should have default value, to prevent undefined array issues
+Adds array default value to property to prevent foreach over null error
 
 ```diff
  class SomeClass
@@ -946,13 +946,13 @@ Array property should have default value, to prevent undefined array issues
      /**
       * @var int[]
       */
--    private $items;
-+    private $items = [];
+-    private $values;
++    private $values = [];
 
-     public function run()
+     public function isEmpty()
      {
-         foreach ($items as $item) {
-         }
+-        return $this->values === null;
++        return $this->values === [];
      }
  }
 ```
@@ -1139,7 +1139,7 @@ Add extra space before new assign set
 +            'numberz' => ['id' => 10]
 +        ];
 +
-+        $someJsonAsString = json_encode($data);
++        $someJsonAsString = Nette\Utils\Json::encode($data);
      }
  }
 ```
@@ -1724,6 +1724,35 @@ Remove unused parent call with no parent class
 
 <br>
 
+### `RemoveSetterOnlyPropertyAndMethodCallRector`
+
+- class: `Rector\DeadCode\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector`
+
+Removes method that set values that are never used
+
+```diff
+ class SomeClass
+ {
+-    private $name;
+-
+-    public function setName($name)
+-    {
+-        $this->name = $name;
+-    }
+ }
+
+ class ActiveOnlySetter
+ {
+     public function run()
+     {
+         $someClass = new SomeClass();
+-        $someClass->setName('Tom');
+     }
+ }
+```
+
+<br>
+
 ### `RemoveUnusedDoctrineEntityMethodAndPropertyRector`
 
 - class: `Rector\DeadCode\Rector\Class_\RemoveUnusedDoctrineEntityMethodAndPropertyRector`
@@ -2254,6 +2283,39 @@ Use Nette\Utils\Strings over bare string-functions
 -        $no = $needle !== substr($content, -strlen($needle));
 +        $yes = \Nette\Utils\Strings::endsWith($content, $needle);
 +        $no = !\Nette\Utils\Strings::endsWith($content, $needle);
+     }
+ }
+```
+
+<br>
+
+### `JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector`
+
+- class: `Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector`
+
+Changes json_encode()/json_decode() to safer and more verbose Nette\Utils\Json::encode()/decode() calls
+
+```diff
+ class SomeClass
+ {
+     public function decodeJson(string $jsonString)
+     {
+-        $stdClass = json_decode($jsonString);
++        $stdClass = \Nette\Utils\Json::decode($jsonString);
+
+-        $array = json_decode($jsonString, true);
+-        $array = json_decode($jsonString, false);
++        $array = \Nette\Utils\Json::decode($jsonString, \Nette\Utils\Json::FORCE_ARRAY);
++        $array = \Nette\Utils\Json::decode($jsonString);
+     }
+
+     public function encodeJson(array $data)
+     {
+-        $jsonString = json_encode($data);
++        $jsonString = \Nette\Utils\Json::encode($data);
+
+-        $prettyJsonString = json_encode($data, JSON_PRETTY_PRINT);
++        $prettyJsonString = \Nette\Utils\Json::encode($data, \Nette\Utils\Json::PRETTY);
      }
  }
 ```
@@ -5728,6 +5790,58 @@ Changes Twig_Function_Method to Twig_SimpleFunction calls in TwigExtension.
 
 ## TypeDeclaration
 
+### `AddArrayParamDocTypeRector`
+
+- class: `Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector`
+
+Adds @param annotation to array parameters inferred from the rest of the code
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @var int[]
+      */
+     private $values;
+
++    /**
++     * @param int[] $values
++     */
+     public function __construct(array $values)
+     {
+         $this->values = $values;
+     }
+ }
+```
+
+<br>
+
+### `AddArrayReturnDocTypeRector`
+
+- class: `Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector`
+
+Adds @return annotation to array parameters inferred from the rest of the code
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @var int[]
+      */
+     private $values;
+
++    /**
++     * @return int[]
++     */
+     public function getValues(): array
+     {
+         return $this->values;
+     }
+ }
+```
+
+<br>
+
 ### `AddClosureReturnTypeRector`
 
 - class: `Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector`
@@ -6136,7 +6250,7 @@ Turns fluent interface calls to classic ones.
 ```yaml
 services:
     Rector\Rector\MethodBody\FluentReplaceRector:
-        -
+        $classesToDefluent:
             - SomeExampleClass
 ```
 
