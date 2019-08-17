@@ -9,6 +9,9 @@ class SkipNullableArray
      */
     private $values;
 
+    /** @var string[]|null */
+    public $anArrayVariable;
+
     public function isEmpty()
     {
         return $this->values === null;
