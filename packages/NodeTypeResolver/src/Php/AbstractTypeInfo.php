@@ -164,6 +164,11 @@ abstract class AbstractTypeInfo
             }
         }
 
+        // use mixed[] over array, that is more explicit about implicitnes
+        if ($uniqeueTypes === ['array']) {
+            return ['mixed[]'];
+        }
+
         return $uniqeueTypes;
     }
 
