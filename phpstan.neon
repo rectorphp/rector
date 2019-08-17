@@ -191,3 +191,5 @@ parameters:
         - '#Ternary operator condition is always true#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Property\:\:\$var#'
         - '#Parameter \#1 \$node of method Rector\\NodeTypeResolver\\NodeTypeResolver\:\:resolveSingleTypeToStrings\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr\|null given#'
+        - '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\(int, string, string, int, array\)\: bool\)\|null, Closure\(int, string, int, array\)\: bool given#'
+        - '#Parameter \#1 \$name of class ReflectionFunction constructor expects Closure\|string, callable\(\)\: mixed given#'

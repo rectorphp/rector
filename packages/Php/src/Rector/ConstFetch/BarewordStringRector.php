@@ -55,12 +55,16 @@ final class BarewordStringRector extends AbstractRector
         }
 
         $this->undefinedConstants = [];
-        $previousErrorHandler = set_error_handler(function ($severity, $message, $file, $line): void {
-            $match = Strings::match($message, '#Use of undefined constant (?<constant>\w+)#');
-            if ($match) {
-                $this->undefinedConstants[] = $match['constant'];
+        $previousErrorHandler = set_error_handler(
+            function (int $severity, string $message, string $file, int $line): bool {
+                $match = Strings::match($message, '#Use of undefined constant (?<constant>\w+)#');
+                if ($match) {
+                    $this->undefinedConstants[] = $match['constant'];
+                }
+
+                return true;
             }
-        });
+        );
 
         // this duplicates the way composer handles it
         // @see https://github.com/composer/composer/issues/6232

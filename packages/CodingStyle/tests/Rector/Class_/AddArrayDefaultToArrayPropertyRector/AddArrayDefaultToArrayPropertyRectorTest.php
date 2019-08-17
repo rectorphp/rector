@@ -11,8 +11,12 @@ final class AddArrayDefaultToArrayPropertyRectorTest extends AbstractRectorTestC
     {
         $this->doTestFiles([
             __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/fixture_2.php.inc',
             __DIR__ . '/Fixture/count_on_null.php.inc',
+
+            // new
             __DIR__ . '/Fixture/skip_nullable_array.php.inc',
+            __DIR__ . '/Fixture/skip.php.inc',
         ]);
     }
 
