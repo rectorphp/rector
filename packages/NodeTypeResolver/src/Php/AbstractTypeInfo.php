@@ -155,18 +155,18 @@ abstract class AbstractTypeInfo
 
         $uniqeueTypes = array_filter(array_unique($allTypes));
 
-        if (count($uniqeueTypes) > 1) {
-            foreach ($uniqeueTypes as $key => $uniqeueType) {
-                // remove iterable if other types are provided
-                if ($uniqeueType === 'iterable') {
-                    unset($uniqeueTypes[$key]);
-                }
-            }
-        }
+        $uniqeueTypes = $this->removeIterableTypeIfTraversableType($uniqeueTypes);
 
         // use mixed[] over array, that is more explicit about implicitnes
         if ($uniqeueTypes === ['array']) {
             return ['mixed[]'];
+        }
+
+        // remove void types, as its useless in annotation
+        foreach ($uniqeueTypes as $key => $value) {
+            if ($value === 'void') {
+                unset($uniqeueTypes[$key]);
+            }
         }
 
         return $uniqeueTypes;
@@ -373,5 +373,25 @@ abstract class AbstractTypeInfo
     private function classLikeExists(string $type): bool
     {
         return ! class_exists($type) && ! interface_exists($type) && ! trait_exists($type);
+    }
+
+    /**
+     * @param string[] $types
+     * @return string[]
+     */
+    private function removeIterableTypeIfTraversableType(array $types): array
+    {
+        if (count($types) <= 1) {
+            return $types;
+        }
+
+        foreach ($types as $key => $uniqeueType) {
+            // remove iterable if other types are provided
+            if ($uniqeueType === 'iterable') {
+                unset($types[$key]);
+            }
+        }
+
+        return $types;
     }
 }
