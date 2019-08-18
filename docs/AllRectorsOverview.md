@@ -1,4 +1,4 @@
-# All 333 Rectors Overview
+# All 334 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -24,6 +24,7 @@
 - [PHPStan](#phpstan)
 - [PHPUnit](#phpunit)
 - [PHPUnitSymfony](#phpunitsymfony)
+- [PSR4](#psr4)
 - [Php](#php)
 - [PhpParser](#phpparser)
 - [PhpSpecToPHPUnit](#phpspectophpunit)
@@ -3233,6 +3234,16 @@ Add response content to response code assert, so it is easier to debug
      }
  }
 ```
+
+<br>
+
+## PSR4
+
+### `NormalizeNamespaceByPSR4ComposerAutoloadRector`
+
+- class: `Rector\PSR4\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector`
+
+Changes namespace and class names to match PSR-4 in composer.json autoload section
 
 <br>
 
