@@ -97,7 +97,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Assign) {
-            if ($node->var instanceof PropertyFetch) {
+            if ($node->var instanceof PropertyFetch || $node->var instanceof Node\Expr\StaticPropertyFetch) {
                 return $this->processMagicSet($node);
             }
 

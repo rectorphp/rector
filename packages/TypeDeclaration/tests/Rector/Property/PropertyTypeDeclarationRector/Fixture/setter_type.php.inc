@@ -19,7 +19,7 @@ final class SetterType
      */
     public function setName($name)
     {
-        return $this->name = $name;
+        $this->name = $name;
     }
 }
 
@@ -52,7 +52,7 @@ final class SetterType
      */
     public function setName($name)
     {
-        return $this->name = $name;
+        $this->name = $name;
     }
 }
 

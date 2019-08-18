@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\While_;
+use Rector\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,6 +19,16 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class WhileEachToForeachRector extends AbstractRector
 {
+    /**
+     * @var AssignManipulator
+     */
+    private $assignManipulator;
+
+    public function __construct(AssignManipulator $assignManipulator)
+    {
+        $this->assignManipulator = $assignManipulator;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -72,7 +83,7 @@ CODE_SAMPLE
 
         /** @var Assign $assignNode */
         $assignNode = $node->cond;
-        if (! $this->isListToEachAssign($assignNode)) {
+        if (! $this->assignManipulator->isListToEachAssign($assignNode)) {
             return null;
         }
 
@@ -101,14 +112,5 @@ CODE_SAMPLE
         }
 
         return $foreachNode;
-    }
-
-    private function isListToEachAssign(Assign $assign): bool
-    {
-        if (! $assign->var instanceof List_) {
-            return false;
-        }
-
-        return $assign->expr instanceof FuncCall && $this->isName($assign->expr, 'each');
     }
 }

@@ -7,7 +7,11 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\NodeTraverser;
+use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
@@ -50,18 +54,25 @@ final class PropertyFetchManipulator
      */
     private $callableNodeTraverser;
 
+    /**
+     * @var AssignManipulator
+     */
+    private $assignManipulator;
+
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         Broker $broker,
         NameResolver $nameResolver,
         ClassManipulator $classManipulator,
-        CallableNodeTraverser $callableNodeTraverser
+        CallableNodeTraverser $callableNodeTraverser,
+        AssignManipulator $assignManipulator
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->broker = $broker;
         $this->nameResolver = $nameResolver;
         $this->classManipulator = $classManipulator;
         $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->assignManipulator = $assignManipulator;
     }
 
     public function isPropertyToSelf(PropertyFetch $propertyFetch): bool
@@ -169,14 +180,11 @@ final class PropertyFetchManipulator
      */
     public function isLocalPropertyOfNames(Expr $expr, array $propertyNames): bool
     {
-        if (! $expr instanceof PropertyFetch) {
-            return false;
-        }
-
         if (! $this->isLocalProperty($expr)) {
             return false;
         }
 
+        /** @var PropertyFetch $expr */
         return $this->nameResolver->isNames($expr->name, $propertyNames);
     }
 
@@ -187,6 +195,105 @@ final class PropertyFetchManipulator
         }
 
         return $this->nameResolver->isName($node->var, 'this');
+    }
+
+    public function getFirstVariableAssignedToPropertyOfName(
+        ClassMethod $classMethod,
+        string $propertyName
+    ): ?Variable {
+        $variable = null;
+
+        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
+            $propertyName,
+            &$variable
+        ): ?int {
+            if (! $node instanceof Assign) {
+                return null;
+            }
+
+            if (! $this->isLocalPropertyOfNames($node->var, [$propertyName])) {
+                return null;
+            }
+
+            if (! $node->expr instanceof Variable) {
+                return null;
+            }
+
+            $variable = $node->expr;
+
+            return NodeTraverser::STOP_TRAVERSAL;
+        });
+
+        return $variable;
+    }
+
+    /**
+     * @return Expr[]
+     */
+    public function getExprsAssignedToPropertyName(ClassMethod $classMethod, string $propertyName): array
+    {
+        $assignedExprs = [];
+
+        $this->callableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
+            $propertyName,
+            &$assignedExprs
+        ) {
+            if (! $this->assignManipulator->isLocalPropertyAssignWithPropertyNames($node, [$propertyName])) {
+                return null;
+            }
+
+            /** @var Assign $node */
+            $assignedExprs[] = $node->expr;
+        });
+
+        return $assignedExprs;
+    }
+
+    /**
+     * In case the property name is different to param name:
+     *
+     * E.g.:
+     * (SomeType $anotherValue)
+     * $this->value = $anotherValue;
+     * ↓
+     * (SomeType $anotherValue)
+     */
+    public function resolveParamForPropertyFetch(ClassMethod $classMethod, string $propertyName): ?Param
+    {
+        $assignedParamName = null;
+
+        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
+            $propertyName,
+            &$assignedParamName
+        ): ?int {
+            if (! $node instanceof Assign) {
+                return null;
+            }
+
+            if (! $this->nameResolver->isName($node->var, $propertyName)) {
+                return null;
+            }
+
+            $assignedParamName = $this->nameResolver->getName($node->expr);
+
+            return NodeTraverser::STOP_TRAVERSAL;
+        });
+
+        /** @var string|null $assignedParamName */
+        if ($assignedParamName === null) {
+            return null;
+        }
+
+        /** @var Param $param */
+        foreach ((array) $classMethod->params as $param) {
+            if (! $this->nameResolver->isName($param, $assignedParamName)) {
+                continue;
+            }
+
+            return $param;
+        }
+
+        return null;
     }
 
     private function hasPublicProperty(PropertyFetch $propertyFetch, string $propertyName): bool

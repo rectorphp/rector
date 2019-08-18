@@ -108,8 +108,13 @@ CODE_SAMPLE
             }
 
             // add all matching fluent calls
-            $this->collectedMethodCalls[$i] = $stmt->expr;
-            $this->collectedMethodCalls[$i - 1] = $prevStmt->expr;
+            /** @var MethodCall $currentMethodCall */
+            $currentMethodCall = $stmt->expr;
+            $this->collectedMethodCalls[$i] = $currentMethodCall;
+
+            /** @var MethodCall $previousMethodCall */
+            $previousMethodCall = $prevStmt->expr;
+            $this->collectedMethodCalls[$i - 1] = $previousMethodCall;
         }
 
         return $node;

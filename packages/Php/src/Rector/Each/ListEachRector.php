@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,6 +19,16 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class ListEachRector extends AbstractRector
 {
+    /**
+     * @var AssignManipulator
+     */
+    private $assignManipulator;
+
+    public function __construct(AssignManipulator $assignManipulator)
+    {
+        $this->assignManipulator = $assignManipulator;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -95,7 +106,7 @@ CODE_SAMPLE
 
     private function shouldSkip(Assign $assign): bool
     {
-        if (! $this->isListToEachAssign($assign)) {
+        if (! $this->assignManipulator->isListToEachAssign($assign)) {
             return true;
         }
 
@@ -129,14 +140,5 @@ CODE_SAMPLE
         $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
 
         return $parentParentNode instanceof Do_;
-    }
-
-    private function isListToEachAssign(Assign $assign): bool
-    {
-        if (! $assign->var instanceof List_) {
-            return false;
-        }
-
-        return $assign->expr instanceof FuncCall && $this->isName($assign->expr, 'each');
     }
 }

@@ -5,7 +5,8 @@ services:
 
     Rector\NodeTypeResolver\:
         resource: '../src'
-        exclude: '../src/{Contract,Php/*Info.php,PHPStanOverride/*}'
+        # "Type" is because the file is needed for PHPStan container only
+        exclude: '../src/{Contract,Php/*Info.php,PHPStanOverride/*,Type}'
 
     Rector\Php\TypeAnalyzer: ~
     Rector\FileSystem\FilesFinder: ~
