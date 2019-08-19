@@ -19,7 +19,7 @@ Check out [Rector's Patreon](https://www.patreon.com/rectorphp). One-time donati
 
 Thank you:
 
-<a href="https://spaceflow.io/en"><img src="/docs/images/php.png"></a>
+<a href="https://spaceflow.io/en"><img src="/docs/images/spaceflow.png"></a>
 
 <br>
 
