@@ -9,6 +9,112 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+## [v0.5.10] - 2019-08-19
+
+### Added
+
+- [#1855] [CodingStyle] Add `AddArrayDefaultToArrayPropertyRector`
+- [#1800] [DeadCode] Add `RemoveUnusedDoctrineEntityMethodAndPropertyRector`
+- [#1819] [DeadCode] Add `RemoveSetterOnlyPropertyAndMethodCallRector`
+- [#1823] [Nette] Add `JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector`
+- [#1857] [TypeDeclaration] Add `AddArrayReturnDocTypeRector`
+- [#1856] [TypeDeclaration] Add `AddArrayParamDocTypeRector`
+- [#1850] add reporting extension, rename rector finish to finishing
+- [#1818] add removed nodes collector
+- [#1826] add concat + multiline case to `ManualJsonStringToJsonEncodeArrayRector`
+- [#1825] add implode support to `ManualJsonStringToJsonEncodeArrayRector`
+- [#1802] add iterable return type for yield values in `ReturnTypeDeclarationRector`
+- [#1822] Add test for [#1816]: Resolving constant fetches is unsafe, Thanks to [@scheb]
+- [#1851] Fix FluentReplaceRector for more than 2 calls + add * matching support
+- [#1807] add alias support to PropertyTypeDeclarationRector
+- [#1844] add RectorFinishExtensionRunner
+
+### Changed
+
+- [#1828] allow multiline empty spaces strings
+- [#1841] class manipulator now returns Property on property name search
+- [#1814] Improve PHPStan trait scope resolving
+- [#1799] Falling test: Iterable return type in function when yield used, Thanks to [@snapshotpl]
+- [#1862] [TypeDeclaration] Various `AddArrayReturnDocTypeRector` improvements
+- [#1805] resolve target entity from same namespace
+- [#1798] Falling test: invalid alias import to `@var`, Thanks to [@snapshotpl]
+- [#1858] Always keeps array in `*TypeInfo`
+- [#1854] Ignores resource also when type is nullable, Thanks to [@tigitz]
+- [#1793] Break class name in `@var` when relation is defined in same namespace, Thanks to [@snapshotpl]
+- [#1852] Fix decimal to float
+- [#1796] failing testcase for `PropertyTypeDeclarationRector`, Thanks to [@bendavies]
+- [#1797] Falling test: nullable array param generate wrong @var, Thanks to [@snapshotpl]
+- [#1806] use DateTimeInterface over `DateTime`
+- [#1839] skip ManyToOne properties in `SetterOnlyMethodAnalyzer` ([#1838])
+- [#1829] skip same-namespace-short name in `ImportFullyQualifiedNamesRector`
+- [#1827] simplify `ManualJsonStringToJsonEncodeArrayRector`
+- [#1821] skip abstract parent methods in `RemoveUnusedDoctrineEntityMethodAndPropertyRector`
+- [#1838] skip ManyToOne properties in `SetterOnlyMethodAnalyzer`
+- [#1840] Constants declared in interfaces have to be public, Thanks to [@scheb]
+- [#1863] merge ArrayPropertyDefaultValueRector to superior `AddArrayDefaultToArrayPropertyRector`
+- [#1842] Overriding constants require at least the parent's visibility, Thanks to [@scheb]
+- [#1813] dont load phpstan-phpunit if phpunit not installed, Thanks to [@slepic]
+- [#1808] Correct `NameResolver::getName()` + cleanup static analysis
+
+### Fixed
+
+- [#1830] Fix non-same parent method name for RemoveParentCallWithoutParentRector
+- [#1804] Fix nullable array type param for PropertyTypeDeclarationRector
+- [#1803] Fix nullable for xToOne annotation by default
+- [#1794] Fix method call type
+- [#1864] Fix type resolutoin in PropertyNodeParamTypeInferer
+- [#1817] Fix analysed files for PHPStan scope resolver
+- [#1831] Fix unused method type for return type
+- [#1837] Fix RemoveSetterOnlyPropertyAndMethodCallRector race condition
+- [#1853] Fix different method call return in FluentReplaceRector
+- [#1859] Fix lowercase of union fqn types
+- [#1832] Fix args miss-match in RemoveDelegatingParentCallRector
+- [#1845] HelperFunctionToDependencyInjectionRector fix, Thanks to [@sashabeton]
+- [#1836] Fixing NodeRemovingVisitor
+- [#1835] Fix reseting of removed nodes
+- [#1833] Fix var/method call resolver
+
+
+## [v0.5.9] - 2019-08-01
+
+### Added
+
+- [#1761] [CodeQuality] Add ThrowWithPreviousExceptionRector
+- [#1762] [CodingStyle] Add ManualJsonStringToJsonEncodeArrayRector
+- [#1760] [DeadCode] Add RemoveDuplicatedCaseInSwitchRector
+- [#1776] [NodeTypeResolver] Add phpunit extension
+- [#1781] [TypeDeclaration] Add PropertyTypeDeclarationRector
+- [#1774] add empty array to static type to string resolver
+- [#1786] add priority to PropertyTypeInfererInterface and put doctrine infering first
+- [#1789] add xToOne relation support to Doctrine var type resolver
+- [#1787] add return nullable type to GetterOrSetterPropertyTypeInferer
+
+### Changed
+
+- [#1769] [Restoration] Return removed class annotations
+- [#1788] infer from [@return] doc type in PropertyTypeDeclaratoin
+
+### Fixed
+
+- [#1782] [Symfony] Fix frozen parameter bag in DefaultAnalyzedSymfonyApplicationContainer
+- [#1779] FIXED: Catastrophic backtracking in regular expression if the current…, Thanks to [@hernst42]
+- [#1772] fix type analyzer for FQN
+- [#1790] fix laravel53 config
+
+### Removed
+
+- [#1791] [CodingStyle] remove extra break from BinarySwitchToIfElseRector
+- [#1780] [NodeTypeResolver] drop duplicated generic array type
+
+### Unknown Category
+
+- [#1764] [Symfony] Use Symfony bridge interface for `doctrine` service, Thanks to [@stloyd]
+- [#1759] [SymfonyCodeQuality] From listener to subscriber
+- [#1777] make constant array types unique
+- [#1771] skip non-annotation prefix
+
+<!-- dumped content end -->
+
 ## [v0.5.8] - 2019-07-21
 
 ### Added
@@ -634,3 +740,88 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@holtkamp]: https://github.com/holtkamp
 [@aboks]: https://github.com/aboks
 [v0.5.6]: https://github.com/rectorphp/rector/compare/v0.5.5...v0.5.6
+[#1864]: https://github.com/rectorphp/rector/pull/1864
+[#1863]: https://github.com/rectorphp/rector/pull/1863
+[#1862]: https://github.com/rectorphp/rector/pull/1862
+[#1859]: https://github.com/rectorphp/rector/pull/1859
+[#1858]: https://github.com/rectorphp/rector/pull/1858
+[#1857]: https://github.com/rectorphp/rector/pull/1857
+[#1856]: https://github.com/rectorphp/rector/pull/1856
+[#1855]: https://github.com/rectorphp/rector/pull/1855
+[#1854]: https://github.com/rectorphp/rector/pull/1854
+[#1853]: https://github.com/rectorphp/rector/pull/1853
+[#1852]: https://github.com/rectorphp/rector/pull/1852
+[#1851]: https://github.com/rectorphp/rector/pull/1851
+[#1850]: https://github.com/rectorphp/rector/pull/1850
+[#1845]: https://github.com/rectorphp/rector/pull/1845
+[#1844]: https://github.com/rectorphp/rector/pull/1844
+[#1842]: https://github.com/rectorphp/rector/pull/1842
+[#1841]: https://github.com/rectorphp/rector/pull/1841
+[#1840]: https://github.com/rectorphp/rector/pull/1840
+[#1839]: https://github.com/rectorphp/rector/pull/1839
+[#1838]: https://github.com/rectorphp/rector/pull/1838
+[#1837]: https://github.com/rectorphp/rector/pull/1837
+[#1836]: https://github.com/rectorphp/rector/pull/1836
+[#1835]: https://github.com/rectorphp/rector/pull/1835
+[#1833]: https://github.com/rectorphp/rector/pull/1833
+[#1832]: https://github.com/rectorphp/rector/pull/1832
+[#1831]: https://github.com/rectorphp/rector/pull/1831
+[#1830]: https://github.com/rectorphp/rector/pull/1830
+[#1829]: https://github.com/rectorphp/rector/pull/1829
+[#1828]: https://github.com/rectorphp/rector/pull/1828
+[#1827]: https://github.com/rectorphp/rector/pull/1827
+[#1826]: https://github.com/rectorphp/rector/pull/1826
+[#1825]: https://github.com/rectorphp/rector/pull/1825
+[#1823]: https://github.com/rectorphp/rector/pull/1823
+[#1822]: https://github.com/rectorphp/rector/pull/1822
+[#1821]: https://github.com/rectorphp/rector/pull/1821
+[#1819]: https://github.com/rectorphp/rector/pull/1819
+[#1818]: https://github.com/rectorphp/rector/pull/1818
+[#1817]: https://github.com/rectorphp/rector/pull/1817
+[#1816]: https://github.com/rectorphp/rector/pull/1816
+[#1814]: https://github.com/rectorphp/rector/pull/1814
+[#1813]: https://github.com/rectorphp/rector/pull/1813
+[#1810]: https://github.com/rectorphp/rector/pull/1810
+[#1808]: https://github.com/rectorphp/rector/pull/1808
+[#1807]: https://github.com/rectorphp/rector/pull/1807
+[#1806]: https://github.com/rectorphp/rector/pull/1806
+[#1805]: https://github.com/rectorphp/rector/pull/1805
+[#1804]: https://github.com/rectorphp/rector/pull/1804
+[#1803]: https://github.com/rectorphp/rector/pull/1803
+[#1802]: https://github.com/rectorphp/rector/pull/1802
+[#1800]: https://github.com/rectorphp/rector/pull/1800
+[#1799]: https://github.com/rectorphp/rector/pull/1799
+[#1798]: https://github.com/rectorphp/rector/pull/1798
+[#1797]: https://github.com/rectorphp/rector/pull/1797
+[#1796]: https://github.com/rectorphp/rector/pull/1796
+[#1794]: https://github.com/rectorphp/rector/pull/1794
+[#1793]: https://github.com/rectorphp/rector/pull/1793
+[#1791]: https://github.com/rectorphp/rector/pull/1791
+[#1790]: https://github.com/rectorphp/rector/pull/1790
+[#1789]: https://github.com/rectorphp/rector/pull/1789
+[#1788]: https://github.com/rectorphp/rector/pull/1788
+[#1787]: https://github.com/rectorphp/rector/pull/1787
+[#1786]: https://github.com/rectorphp/rector/pull/1786
+[#1782]: https://github.com/rectorphp/rector/pull/1782
+[#1781]: https://github.com/rectorphp/rector/pull/1781
+[#1780]: https://github.com/rectorphp/rector/pull/1780
+[#1779]: https://github.com/rectorphp/rector/pull/1779
+[#1777]: https://github.com/rectorphp/rector/pull/1777
+[#1776]: https://github.com/rectorphp/rector/pull/1776
+[#1774]: https://github.com/rectorphp/rector/pull/1774
+[#1772]: https://github.com/rectorphp/rector/pull/1772
+[#1771]: https://github.com/rectorphp/rector/pull/1771
+[#1769]: https://github.com/rectorphp/rector/pull/1769
+[#1764]: https://github.com/rectorphp/rector/pull/1764
+[#1762]: https://github.com/rectorphp/rector/pull/1762
+[#1761]: https://github.com/rectorphp/rector/pull/1761
+[#1760]: https://github.com/rectorphp/rector/pull/1760
+[#1759]: https://github.com/rectorphp/rector/pull/1759
+[@snapshotpl]: https://github.com/snapshotpl
+[@slepic]: https://github.com/slepic
+[@scheb]: https://github.com/scheb
+[@sashabeton]: https://github.com/sashabeton
+[@return]: https://github.com/return
+[@hernst42]: https://github.com/hernst42
+[@bendavies]: https://github.com/bendavies
+[v0.5.9]: https://github.com/rectorphp/rector/compare/v0.5.8...v0.5.9
