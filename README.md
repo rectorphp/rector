@@ -17,6 +17,10 @@ Why doing it manually if 80% Rector can handle for you?
 Rector grows faster with your help, the more you help the more work it saves you.
 Check out [Rector's Patreon](https://www.patreon.com/rectorphp). One-time donation is welcomed [trough PayPal](https://www.paypal.me/rectorphp).
 
+Thank you:
+
+<a href="https://spaceflow.io/en"><img src="/docs/images/php.png"></a>
+
 <br>
 
 ## Open-Source First
