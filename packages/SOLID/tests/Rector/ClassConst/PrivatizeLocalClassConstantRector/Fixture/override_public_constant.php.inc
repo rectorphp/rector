@@ -2,7 +2,11 @@
 
 namespace Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
 
-class OverridingPublicConstantClass extends DeclaringPublicConstantClass
+class MiddleExtendingClass extends DeclaringPublicConstantClass
+{
+}
+
+class OverridingPublicConstantClass extends MiddleExtendingClass
 {
     const PUBLIC_CONSTANT = false;
 }
@@ -26,7 +30,11 @@ class PublicConstantUser
 
 namespace Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\Fixture;
 
-class OverridingPublicConstantClass extends DeclaringPublicConstantClass
+class MiddleExtendingClass extends DeclaringPublicConstantClass
+{
+}
+
+class OverridingPublicConstantClass extends MiddleExtendingClass
 {
     public const PUBLIC_CONSTANT = false;
 }
