@@ -43,6 +43,11 @@ final class RenamedClassesCollector
         return $this->sortClassRenamedByLeftClassPriorityStack($this->classRenames, $leftClassPriorityStack);
     }
 
+    public function hasClassRenames(): bool
+    {
+        return $this->classRenames !== [];
+    }
+
     /**
      * Returns all parent classes, implemented interfaces and used traits by specific class
      *
@@ -116,10 +121,5 @@ final class RenamedClassesCollector
         });
 
         return $classRenames;
-    }
-
-    public function hasClassRenames(): bool
-    {
-        return $this->classRenames !== [];
     }
 }

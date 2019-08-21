@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Property;
+namespace Rector\DeadCode\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
@@ -8,8 +8,9 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use function strtolower;
 
-final class RemoveDeadInitializationRector extends AbstractRector
+final class RemoveNullPropertyInitializationRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
@@ -50,11 +51,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if (!($defaultValueNode instanceof ConstFetch)) {
+        if (! ($defaultValueNode instanceof ConstFetch)) {
             return null;
         }
 
-        if (\strtolower((string) $defaultValueNode->name) !== 'null') {
+        if (strtolower((string) $defaultValueNode->name) !== 'null') {
             return null;
         }
 
