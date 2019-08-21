@@ -17,15 +17,12 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function provideFunctions(): Iterator
-    {
-        yield [__DIR__ . '/Fixture/import_function.php.inc'];
-        yield [__DIR__ . '/Fixture/import_function_no_class.php.inc'];
-        yield [__DIR__ . '/Fixture/import_return_doc.php.inc'];
-    }
-
     public function provideNamespacedClasses(): Iterator
     {
+        // same short class with namespace
+        yield [__DIR__ . '/Fixture/same_namespaced_class.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_same_namespaced_used_class.php.inc'];
+
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/double_import.php.inc'];
         yield [__DIR__ . '/Fixture/double_import_with_existing.php.inc'];
@@ -50,6 +47,13 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/keep_static_method.php.inc'];
         yield [__DIR__ . '/Fixture/keep_various_request.php.inc'];
         yield [__DIR__ . '/Fixture/instance_of.php.inc'];
+    }
+
+    public function provideFunctions(): Iterator
+    {
+        yield [__DIR__ . '/Fixture/import_function.php.inc'];
+        yield [__DIR__ . '/Fixture/import_function_no_class.php.inc'];
+        yield [__DIR__ . '/Fixture/import_return_doc.php.inc'];
     }
 
     protected function getRectorClass(): string
