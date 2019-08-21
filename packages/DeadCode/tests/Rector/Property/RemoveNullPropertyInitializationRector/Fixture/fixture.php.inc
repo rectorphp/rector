@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Property\RemoveDeadInitializationRector\Fixture;
+namespace Rector\Tests\Rector\Property\RemoveNullPropertyInitializationRector\Fixture;
 
 class SomeClass
 {
@@ -25,7 +25,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Rector\Property\RemoveDeadInitializationRector\Fixture;
+namespace Rector\Tests\Rector\Property\RemoveNullPropertyInitializationRector\Fixture;
 
 class SomeClass
 {

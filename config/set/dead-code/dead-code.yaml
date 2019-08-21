@@ -26,3 +26,5 @@ services:
     Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector: ~
     Rector\DeadCode\Rector\Class_\RemoveUnusedDoctrineEntityMethodAndPropertyRector: ~
     Rector\DeadCode\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector: ~
+
+    Rector\DeadCode\Rector\Property\RemoveNullPropertyInitializationRector: ~
