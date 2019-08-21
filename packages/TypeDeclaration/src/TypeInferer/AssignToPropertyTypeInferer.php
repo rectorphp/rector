@@ -3,6 +3,7 @@
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -60,7 +61,7 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
      * - $this->propertyName = $expr;
      * - $this->propertyName[] = $expr;
      */
-    private function matchPropertyAssignExpr(Assign $assign, string $propertyName): ?Node\Expr
+    private function matchPropertyAssignExpr(Assign $assign, string $propertyName): ?Expr
     {
         if ($assign->var instanceof PropertyFetch) {
             if (! $this->nameResolver->isName($assign->var, $propertyName)) {

@@ -3,7 +3,9 @@
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
@@ -117,8 +119,8 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Node\Arg[] $args
-     * @param Node\Param[] $params
+     * @param Arg[] $args
+     * @param Param[] $params
      */
     private function areArgsAndParamsEqual(array $args, array $params): bool
     {

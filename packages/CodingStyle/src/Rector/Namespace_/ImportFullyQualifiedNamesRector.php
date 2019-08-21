@@ -4,6 +4,7 @@ namespace Rector\CodingStyle\Rector\Namespace_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
@@ -202,7 +203,7 @@ CODE_SAMPLE
         $shortName = $this->classNaming->getShortName($fullyQualifiedName);
 
         $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Node\Expr\ConstFetch) { // is true, false, null etc.
+        if ($parentNode instanceof ConstFetch) { // is true, false, null etc.
             return true;
         }
 

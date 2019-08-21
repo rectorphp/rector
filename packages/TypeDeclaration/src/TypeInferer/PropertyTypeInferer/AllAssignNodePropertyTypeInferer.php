@@ -2,8 +2,8 @@
 
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\IntersectionType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
@@ -25,7 +25,7 @@ final class AllAssignNodePropertyTypeInferer extends AbstractTypeInferer impleme
     /**
      * @return string[]
      */
-    public function inferProperty(Node\Stmt\Property $property): array
+    public function inferProperty(Property $property): array
     {
         /** @var ClassLike $class */
         $class = $property->getAttribute(AttributeKey::CLASS_NODE);

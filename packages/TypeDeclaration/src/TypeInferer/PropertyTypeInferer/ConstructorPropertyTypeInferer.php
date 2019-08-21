@@ -6,9 +6,13 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
@@ -22,9 +26,9 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
     /**
      * @return string[]|IdentifierValueObject[]
      */
-    public function inferProperty(Node\Stmt\Property $property): array
+    public function inferProperty(Property $property): array
     {
-        /** @var Node\Stmt\Class_ $class */
+        /** @var Class_ $class */
         $class = $property->getAttribute(AttributeKey::CLASS_NODE);
 
         $classMethod = $class->getMethod('__construct');
@@ -192,11 +196,11 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         }
 
         // special case for alias
-        if ($param->type instanceof Node\Name\FullyQualified) {
+        if ($param->type instanceof FullyQualified) {
             $fullyQualifiedName = $param->type->toString();
             $originalName = $param->type->getAttribute('originalName');
 
-            if ($fullyQualifiedName && $originalName instanceof Node\Name) {
+            if ($fullyQualifiedName && $originalName instanceof Name) {
                 // if the FQN has different ending than the original, it was aliased and we need to return the alias
                 if (! Strings::endsWith($fullyQualifiedName, '\\' . $originalName->toString())) {
                     return new IdentifierValueObject($originalName->toString(), true);

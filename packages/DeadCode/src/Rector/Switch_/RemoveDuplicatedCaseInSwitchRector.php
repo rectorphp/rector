@@ -3,6 +3,7 @@
 namespace Rector\DeadCode\Rector\Switch_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -74,7 +75,7 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var Node\Stmt\Case_|null $previousCase */
+        /** @var Case_|null $previousCase */
         $previousCase = null;
         foreach ($node->cases as $case) {
             if ($previousCase && $this->areNodesEqual($case->stmts, $previousCase->stmts)) {

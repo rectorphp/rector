@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
@@ -607,7 +608,7 @@ final class NodeTypeResolver
         $this->callableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->stmts,
             function (Node $node) use ($paramName, &$paramStaticType): ?int {
-                if (! $node instanceof Node\Expr\Variable) {
+                if (! $node instanceof Variable) {
                     return null;
                 }
 
