@@ -2,6 +2,8 @@
 
 namespace Rector\Rector\Class_;
 
+use Nette\Utils\Strings;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\FunctionLike;
@@ -120,6 +122,8 @@ CODE_SAMPLE
                 $this->docBlockManipulator->changeType($node, $oldClass, $newClass);
             }
         }
+
+        $this->changeTypeInAnnotationTypes($node);
 
         if ($node instanceof Name) {
             return $this->refactorName($node);
@@ -296,5 +300,40 @@ CODE_SAMPLE
         }
 
         return new FullyQualified($newName);
+    }
+
+    /**
+     * Covers annotations like @ORM, @Serializer, @Assert etc
+     * See https://github.com/rectorphp/rector/issues/1872
+     */
+    private function changeTypeInAnnotationTypes(Node $node): void
+    {
+        $docComment = $node->getDocComment();
+        if ($docComment === null) {
+            return;
+        }
+
+        $textDocComment = $docComment->getText();
+
+        $oldTypes = array_keys($this->oldToNewClasses);
+
+        $oldTypesPregQuoted = [];
+        foreach ($oldTypes as $oldType) {
+            $oldTypesPregQuoted[] = '\b' . preg_quote($oldType) . '\b';
+        }
+
+        $oldTypesPattern = '#(?|' . implode('|', $oldTypesPregQuoted) . ')#x';
+
+        $match = Strings::match($textDocComment, $oldTypesPattern);
+        if ($match === null) {
+            return;
+        }
+
+        foreach ($match as $matchedOldType) {
+            $newType = $this->oldToNewClasses[$matchedOldType];
+            $textDocComment = Strings::replace($textDocComment, '#\b' . preg_quote($matchedOldType) . '\b#', $newType);
+        }
+
+        $node->setDocComment(new Doc($textDocComment));
     }
 }

@@ -500,11 +500,6 @@ final class DocBlockManipulator
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
-    public function resetImportedNames(): void
-    {
-        $this->importedNames = [];
-    }
-
     /**
      * For better performance
      */
