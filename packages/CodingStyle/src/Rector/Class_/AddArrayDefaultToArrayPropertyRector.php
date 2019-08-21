@@ -8,8 +8,10 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -129,7 +131,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            /** @var Node\Stmt\Property $property */
+            /** @var Property $property */
             $property = $node->getAttribute(AttributeKey::PARENT_NODE);
 
             // we need docblock
@@ -222,7 +224,7 @@ CODE_SAMPLE
             $isNextNodeCountingProperty = (bool) $this->betterNodeFinder->findFirst($node->right, function (Node $node) use (
                 $propertyNames
             ): ?bool {
-                if (! $node instanceof Expr\FuncCall) {
+                if (! $node instanceof FuncCall) {
                     return null;
                 }
 

@@ -4,6 +4,7 @@ namespace Rector\PhpParser\Node\Manipulator;
 
 use Iterator;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\FunctionLike;
@@ -213,7 +214,7 @@ final class FunctionLikeManipulator
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $functionLike->stmts, function (Node $node) use (
             &$localReturnNodes
         ): ?int {
-            if ($node instanceof Function_ || $node instanceof Closure || $node instanceof Node\Expr\ArrowFunction) {
+            if ($node instanceof Function_ || $node instanceof Closure || $node instanceof ArrowFunction) {
                 // skip Return_ nodes in nested functions
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }

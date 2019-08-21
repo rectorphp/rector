@@ -35,6 +35,7 @@ final class StockRepository
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source;
 
 use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Stock\Query;
+use InvalidArgumentException;
 use Doctrine\DBAL\Connection;
 final class StockRepository
 {
@@ -44,7 +45,7 @@ final class StockRepository
         $query = 5;
 
         if (!($query instanceof Stock\Querying\Query)) {
-            throw new \InvalidArgumentException('Wrong query provided');
+            throw new InvalidArgumentException('Wrong query provided');
         }
 
         /** @var Querying\Query $query */

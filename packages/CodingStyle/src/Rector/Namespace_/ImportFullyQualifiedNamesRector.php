@@ -4,6 +4,7 @@ namespace Rector\CodingStyle\Rector\Namespace_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
@@ -150,12 +151,7 @@ CODE_SAMPLE
     {
         $originalName = $name->getAttribute('originalName');
 
-        if ($originalName instanceof Name) {
-            // already short
-            if (! Strings::contains($originalName->toString(), '\\')) {
-                return null;
-            }
-        } else {
+        if (! $originalName instanceof Name) {
             // not sure what to do
             return null;
         }
@@ -163,6 +159,7 @@ CODE_SAMPLE
         // the short name is already used, skip it
         // @todo this is duplicated check of - $this->useAddingCommander->isShortImported?
         $shortName = $this->classNaming->getShortName($name->toString());
+
         if ($this->isShortNameAlreadyUsedForDifferentFqn($name, $shortName)) {
             return null;
         }
@@ -203,16 +200,25 @@ CODE_SAMPLE
     // 1. name is fully qualified → import it
     private function shouldSkipName(Name $name, string $fullyQualifiedName): bool
     {
-        // not namespaced class
-        if (! Strings::contains($fullyQualifiedName, '\\')) {
+        $shortName = $this->classNaming->getShortName($fullyQualifiedName);
+
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof ConstFetch) { // is true, false, null etc.
             return true;
         }
 
-        $shortName = $this->classNaming->getShortName($fullyQualifiedName);
+        if ($this->isNames($name, ['self', 'parent', 'static'])) {
+            return true;
+        }
+
+        // skip native function calls
+        if ($parentNode instanceof FuncCall && ! Strings::contains($fullyQualifiedName, '\\')) {
+            return true;
+        }
 
         // nothing to change
         if ($shortName === $fullyQualifiedName) {
-            return true;
+            return false;
         }
 
         return $this->useAddingCommander->canImportBeAdded($name, $fullyQualifiedName);

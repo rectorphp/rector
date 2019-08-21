@@ -3,7 +3,12 @@
 namespace Rector\CodeQuality\Rector\Catch_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Catch_;
+use PhpParser\Node\Stmt\Throw_;
 use PhpParser\NodeTraverser;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -69,15 +74,15 @@ CODE_SAMPLE
         $catchedThrowableVariable = $node->var;
 
         $this->traverseNodesWithCallable($node->stmts, function (Node $node) use ($catchedThrowableVariable): ?int {
-            if (! $node instanceof Node\Stmt\Throw_) {
+            if (! $node instanceof Throw_) {
                 return null;
             }
 
-            if (! $node->expr instanceof Node\Expr\New_) {
+            if (! $node->expr instanceof New_) {
                 return null;
             }
 
-            if (! $node->expr->class instanceof Node\Name) {
+            if (! $node->expr->class instanceof Name) {
                 return null;
             }
 
@@ -88,10 +93,10 @@ CODE_SAMPLE
 
             if (! isset($node->expr->args[1])) {
                 // get previous code
-                $node->expr->args[1] = new Node\Arg(new Node\Expr\MethodCall($catchedThrowableVariable, 'getCode'));
+                $node->expr->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'));
             }
 
-            $node->expr->args[2] = new Node\Arg($catchedThrowableVariable);
+            $node->expr->args[2] = new Arg($catchedThrowableVariable);
 
             // nothing more to add
             return NodeTraverser::STOP_TRAVERSAL;

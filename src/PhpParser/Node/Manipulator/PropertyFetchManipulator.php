@@ -4,7 +4,9 @@ namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
@@ -109,7 +111,7 @@ final class PropertyFetchManipulator
                 return null;
             }
 
-            /** @var Node\Expr\Assign $node */
+            /** @var Assign $node */
             $propertyName = $this->nameResolver->getName($node->expr);
             if ($propertyName) {
                 $propertyNames[] = $propertyName;
@@ -127,11 +129,11 @@ final class PropertyFetchManipulator
      */
     public function isVariableAssignToThisPropertyFetch(Node $node, string $variableName): bool
     {
-        if (! $node instanceof Node\Expr\Assign) {
+        if (! $node instanceof Assign) {
             return false;
         }
 
-        if (! $node->expr instanceof Node\Expr\Variable) {
+        if (! $node->expr instanceof Variable) {
             return false;
         }
 

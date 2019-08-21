@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -38,7 +39,7 @@ final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements 
 
         $paramName = $this->nameResolver->getName($param);
 
-        /** @var Node\Stmt\ClassMethod $classMethod */
+        /** @var ClassMethod $classMethod */
         $classMethod = $param->getAttribute(AttributeKey::PARENT_NODE);
 
         $propertyStaticTypes = [];

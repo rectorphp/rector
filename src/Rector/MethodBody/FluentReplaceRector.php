@@ -4,7 +4,10 @@ namespace Rector\Rector\MethodBody;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -115,16 +118,16 @@ CODE_SAMPLE
 
     /**
      * @param MethodCall[] $methodCalls
-     * @return Node\Expr\Variable|Node\Expr\PropertyFetch
+     * @return Variable|PropertyFetch
      */
-    private function extractRootVariable(array $methodCalls): Node\Expr
+    private function extractRootVariable(array $methodCalls): Expr
     {
         foreach ($methodCalls as $methodCall) {
-            if ($methodCall->var instanceof Node\Expr\Variable) {
+            if ($methodCall->var instanceof Variable) {
                 return $methodCall->var;
             }
 
-            if ($methodCall->var instanceof Node\Expr\PropertyFetch) {
+            if ($methodCall->var instanceof PropertyFetch) {
                 return $methodCall->var;
             }
         }

@@ -32,6 +32,7 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/already_with_use.php.inc'];
         yield [__DIR__ . '/Fixture/already_class_name.php.inc'];
         yield [__DIR__ . '/Fixture/no_class.php.inc'];
+        yield [__DIR__ . '/Fixture/short.php.inc'];
 
         // keep
         yield [__DIR__ . '/Fixture/keep.php.inc'];

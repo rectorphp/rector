@@ -3,7 +3,9 @@
 namespace Rector\Nette\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\StaticCall;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -89,7 +91,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function refactorJsonEncode(Node\Expr\FuncCall $funcCall): Node\Expr\StaticCall
+    private function refactorJsonEncode(FuncCall $funcCall): StaticCall
     {
         $args = $funcCall->args;
         if (isset($args[1])) {
@@ -97,14 +99,14 @@ CODE_SAMPLE
 
             if ($this->isName($secondArgumentValue, 'JSON_PRETTY_PRINT')) {
                 $prettyClassConstant = $this->createClassConstant('Nette\Utils\Json', 'PRETTY');
-                $args[1] = new Node\Arg($prettyClassConstant);
+                $args[1] = new Arg($prettyClassConstant);
             }
         }
 
         return $this->createStaticCall('Nette\Utils\Json', 'encode', $args);
     }
 
-    private function refactorJsonDecode(Node\Expr\FuncCall $funcCall): Node\Expr\StaticCall
+    private function refactorJsonDecode(FuncCall $funcCall): StaticCall
     {
         $args = $funcCall->args;
 
@@ -115,7 +117,7 @@ CODE_SAMPLE
                 unset($args[1]);
             } elseif ($this->isTrue($secondArgumentValue)) {
                 $forceArrayClassConstant = $this->createClassConstant('Nette\Utils\Json', 'FORCE_ARRAY');
-                $args[1] = new Node\Arg($forceArrayClassConstant);
+                $args[1] = new Arg($forceArrayClassConstant);
             }
         }
 
