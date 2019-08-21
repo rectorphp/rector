@@ -137,6 +137,9 @@ CODE_SAMPLE
                     $this->refactor($parentClassConstant);
 
                     return $parentClassConstant;
+                } else {
+                    // If the constant isn't declared in the parent, it might be declared in the parent's parent
+                    return $this->findParentClassConstant($parentClassName, $constant);
                 }
             }
         }
