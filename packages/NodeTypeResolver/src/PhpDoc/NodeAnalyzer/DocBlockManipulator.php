@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -40,10 +41,17 @@ use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
 use Rector\Php\TypeAnalyzer;
+use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 
 final class DocBlockManipulator
 {
+    /**
+     * @var bool[][]
+     */
+    private $usedShortNameByClasses = [];
+
     /**
      * @var PhpDocInfoFactory
      */
@@ -84,6 +92,16 @@ final class DocBlockManipulator
      */
     private $useAddingCommander;
 
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
@@ -91,7 +109,9 @@ final class DocBlockManipulator
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
         StringsTypePhpDocNodeDecorator $stringsTypePhpDocNodeDecorator,
         NodeTraverser $nodeTraverser,
-        UseAddingCommander $useAddingCommander
+        NameResolver $nameResolver,
+        UseAddingCommander $useAddingCommander,
+        BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
@@ -100,6 +120,8 @@ final class DocBlockManipulator
         $this->stringsTypePhpDocNodeDecorator = $stringsTypePhpDocNodeDecorator;
         $this->nodeTraverser = $nodeTraverser;
         $this->useAddingCommander = $useAddingCommander;
+        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nameResolver = $nameResolver;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -689,9 +711,15 @@ final class DocBlockManipulator
         // the name is already in the same namespace implicitly
         $namespaceName = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
 
-        // the class in the same namespace as differnt file can se used in this code, the short names would colide → skip
+        // the class in the same namespace as different file can se used in this code, the short names would colide → skip
         if (class_exists($namespaceName . '\\' . $shortName)) {
-            return $attributeAwareNode;
+            if ($this->isCurrentNamespaceSameShortClassAlreadyUsed(
+                $node,
+                $namespaceName . '\\' . $shortName,
+                $shortName
+            )) {
+                return $attributeAwareNode;
+            }
         }
 
         if ($this->useAddingCommander->isShortImported($node, $fullyQualifiedName)) {
@@ -741,5 +769,39 @@ final class DocBlockManipulator
         }
 
         return implode($joinChar, $types);
+    }
+
+    private function isCurrentNamespaceSameShortClassAlreadyUsed(
+        Node $node,
+        string $fullyQualifiedName,
+        string $shortName
+    ): bool {
+        /** @var ClassLike|null $classNode */
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classNode === null) {
+            // cannot say, so rather yes
+            return true;
+        }
+
+        $className = $this->nameResolver->getName($classNode);
+
+        if (isset($this->usedShortNameByClasses[$className][$shortName])) {
+            return $this->usedShortNameByClasses[$className][$shortName];
+        }
+
+        $printedClass = $this->betterStandardPrinter->print($classNode->stmts);
+
+        // short with space " Type"| fqn
+        $shortNameOrFullyQualifiedNamePattern = sprintf(
+            '#(\s%s\b|\b%s\b)#',
+            preg_quote($shortName),
+            preg_quote($fullyQualifiedName)
+        );
+
+        $isShortClassUsed = (bool) Strings::match($printedClass, $shortNameOrFullyQualifiedNamePattern);
+
+        $this->usedShortNameByClasses[$className][$shortName] = $isShortClassUsed;
+
+        return $isShortClassUsed;
     }
 }
