@@ -43,6 +43,9 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/rename_trait.php.inc'];
         yield [__DIR__ . '/Fixture/rename_class_without_namespace_to_class_without_namespace.php.inc'];
         yield [__DIR__ . '/Fixture/rename_class_to_class_without_namespace.php.inc'];
+
+        // Symfony/Validator + Doctrine + JMS/Serializer annotations
+        yield [__DIR__ . '/Fixture/class_annotations.php.inc'];
     }
 
     /**
