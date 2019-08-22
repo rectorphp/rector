@@ -5,6 +5,7 @@ namespace Rector\CodingStyle\Imports;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class AliasUsesResolver
 {
@@ -23,6 +24,10 @@ final class AliasUsesResolver
      */
     public function resolveForNode(Node $node): array
     {
+        if (! $node instanceof Namespace_) {
+            $node = $node->getAttribute(AttributeKey::NAMESPACE_NODE);
+        }
+
         if ($node instanceof Namespace_) {
             return $this->resolveForNamespace($node);
         }

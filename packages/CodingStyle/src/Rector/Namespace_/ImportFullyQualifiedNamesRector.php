@@ -221,6 +221,13 @@ CODE_SAMPLE
             return false;
         }
 
+        foreach ($this->aliasedUses as $aliasedUse) {
+            // its aliased, we cannot just rename it
+            if (Strings::endsWith($aliasedUse, '\\' . $shortName)) {
+                return true;
+            }
+        }
+
         return $this->useAddingCommander->canImportBeAdded($name, $fullyQualifiedName);
     }
 
@@ -237,7 +244,6 @@ CODE_SAMPLE
     private function canBeNameImported(Name $name): bool
     {
         $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-
         if ($parentNode instanceof Namespace_) {
             return false;
         }
