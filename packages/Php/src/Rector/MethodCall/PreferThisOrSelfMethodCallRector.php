@@ -82,7 +82,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->ensurePreferceIsValid($preference);
+            $this->ensurePreferenceIsValid($preference);
 
             if ($preference === self::PREFER_SELF) {
                 return $this->processToSelf($node);
@@ -99,7 +99,7 @@ CODE_SAMPLE
     /**
      * @param mixed $preference
      */
-    private function ensurePreferceIsValid($preference): void
+    private function ensurePreferenceIsValid($preference): void
     {
         $allowedPreferences = [self::PREFER_THIS, self::PREFER_SELF];
         if (in_array($preference, $allowedPreferences, true)) {
@@ -132,7 +132,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->createStaticCall('self', $name);
+        return $this->createStaticCall('self', $name, $node->args);
     }
 
     /**
@@ -153,6 +153,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->createMethodCall('this', $name);
+        return $this->createMethodCall('this', $name, $node->args);
     }
 }
