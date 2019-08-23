@@ -2,8 +2,6 @@
 
 namespace Rector\Architecture\Rector\Class_;
 
-use Nette\Utils\Strings;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Architecture\Tests\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector\RemoveRepositoryFromEntityAnnotationRectorTest;
@@ -75,14 +73,16 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($node);
-        if (! $phpDocInfo->hasTag(self::DOCTRINE_ORM_MAPPING_ENTITY)) {
+
+        $doctrineEntityTag = $phpDocInfo->getByType(EntityTagValueNode::class);
+        if ($doctrineEntityTag === null) {
             return null;
         }
 
-        $docCommentText = $node->getDocComment()->getText();
-        $newDocCommentText = Strings::replace($docCommentText, '#\(repositoryClass="(.*?)"\)#');
+        $doctrineEntityTag->removeRepositoryClass();
 
-        $node->setDocComment(new Doc($newDocCommentText));
+        // save the entity tag
+        $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $phpDocInfo);
 
         return $node;
     }
