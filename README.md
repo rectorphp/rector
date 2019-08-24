@@ -77,8 +77,7 @@ composer require rector/rector --dev
 
 **Do you have conflicts on `composer require` or on run?**
 
-- use [Docker image](#run-rector-in-docker) or
-- install [prefixed version](https://github.com/rectorphp/rector-prefixed) with isolated dependencies (currently [looking for maintainer](https://github.com/rectorphp/prefixer/issues/1))
+- Use [Docker image](#run-rector-in-docker)!
 
 ### Extra Autoloading
 
