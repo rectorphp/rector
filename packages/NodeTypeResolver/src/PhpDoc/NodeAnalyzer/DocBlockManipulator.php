@@ -712,13 +712,17 @@ final class DocBlockManipulator
         $namespaceName = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
 
         // the class in the same namespace as different file can se used in this code, the short names would colide → skip
-        if (class_exists($namespaceName . '\\' . $shortName)) {
-            if ($this->isCurrentNamespaceSameShortClassAlreadyUsed(
-                $node,
-                $namespaceName . '\\' . $shortName,
-                $shortName
-            )) {
-                return $attributeAwareNode;
+        $currentNamespaceShortName = $namespaceName . '\\' . $shortName;
+
+        if (class_exists($currentNamespaceShortName)) {
+            if ($currentNamespaceShortName !== $fullyQualifiedName) {
+                if ($this->isCurrentNamespaceSameShortClassAlreadyUsed(
+                    $node,
+                    $currentNamespaceShortName,
+                    $shortName
+                )) {
+                    return $attributeAwareNode;
+                }
             }
         }
 
@@ -751,11 +755,11 @@ final class DocBlockManipulator
 
         $joinChar = '|'; // default
         if (Strings::contains($type, '|')) { // intersection
-            $types = explode('|', $type);
             $joinChar = '|';
+            $types = explode($joinChar, $type);
         } elseif (Strings::contains($type, '&')) { // union
-            $types = explode('&', $type);
             $joinChar = '&';
+            $types = explode($joinChar, $type);
         } else {
             $types = [$type];
         }

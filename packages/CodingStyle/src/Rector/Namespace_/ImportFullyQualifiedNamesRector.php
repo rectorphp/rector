@@ -13,12 +13,16 @@ use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\CodingStyle\Imports\AliasUsesResolver;
 use Rector\CodingStyle\Imports\ShortNameResolver;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\ImportFullyQualifiedNamesRectorTest;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see ImportFullyQualifiedNamesRectorTest
+ */
 final class ImportFullyQualifiedNamesRector extends AbstractRector
 {
     /**
