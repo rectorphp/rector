@@ -1,0 +1,26 @@
+# source: https://book.cakephp.org/4.0/en/appendices/4-0-migration-guide.html
+
+services:
+    Rector\Rector\MethodCall\RenameMethodRector:
+        Cake\Form\Form:
+            'errors': 'getErrors'
+        Cake\Mailer\Email:
+            'set': 'setViewVars'
+
+    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
+        Cake\Http\BaseApplication:
+            bootstrap: 'void'
+            bootstrapCli: 'void'
+            middleware: 'Cake\Http\MiddlewareQueue'
+        Cake\Console\Shell:
+            initialize: 'void'
+        Cake\Controller\Controller:
+            initialize: 'void'
+            render: 'Cake\Http\Response'
+        Cake\ORM\Table:
+            initialize: 'void'
+            updateAll: 'int'
+            deleteAll: 'int'
+            validationDefault: 'Cake\Validation\Validator'
+        Cake\View\Helper:
+            initialize: 'void'
