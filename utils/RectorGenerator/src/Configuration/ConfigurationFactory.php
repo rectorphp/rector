@@ -7,6 +7,7 @@ use PhpParser\Node;
 use Rector\Exception\FileSystem\FileNotFoundException;
 use Rector\Utils\RectorGenerator\Exception\ConfigurationException;
 use Rector\Utils\RectorGenerator\Node\NodeClassProvider;
+use Rector\Utils\RectorGenerator\ValueObject\Configuration;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Yaml\Yaml;

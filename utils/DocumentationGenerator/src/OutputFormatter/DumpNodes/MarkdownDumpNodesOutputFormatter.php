@@ -3,8 +3,8 @@
 namespace Rector\Utils\DocumentationGenerator\OutputFormatter\DumpNodes;
 
 use Rector\Utils\DocumentationGenerator\Contract\OutputFormatter\DumpNodesOutputFormatterInterface;
-use Rector\Utils\DocumentationGenerator\Node\NodeInfo;
 use Rector\Utils\DocumentationGenerator\Node\NodeInfoResult;
+use Rector\Utils\DocumentationGenerator\ValueObject\NodeInfo;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class MarkdownDumpNodesOutputFormatter implements DumpNodesOutputFormatterInterface

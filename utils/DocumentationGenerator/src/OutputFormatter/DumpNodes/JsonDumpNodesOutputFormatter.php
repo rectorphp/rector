@@ -4,8 +4,8 @@ namespace Rector\Utils\DocumentationGenerator\OutputFormatter\DumpNodes;
 
 use Nette\Utils\Json;
 use Rector\Utils\DocumentationGenerator\Contract\OutputFormatter\DumpNodesOutputFormatterInterface;
-use Rector\Utils\DocumentationGenerator\Node\NodeInfo;
 use Rector\Utils\DocumentationGenerator\Node\NodeInfoResult;
+use Rector\Utils\DocumentationGenerator\ValueObject\NodeInfo;
 
 final class JsonDumpNodesOutputFormatter implements DumpNodesOutputFormatterInterface
 {

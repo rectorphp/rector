@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Utils\RectorGenerator\Configuration;
+namespace Rector\Utils\RectorGenerator\ValueObject;
 
 use Nette\Utils\Strings;
 

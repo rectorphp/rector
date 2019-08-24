@@ -2,6 +2,8 @@
 
 namespace Rector\Utils\DocumentationGenerator\Node;
 
+use Rector\Utils\DocumentationGenerator\ValueObject\NodeInfo;
+
 final class NodeInfoResult
 {
     /**

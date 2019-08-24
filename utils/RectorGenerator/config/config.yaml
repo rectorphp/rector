@@ -6,4 +6,4 @@ services:
 
     Rector\Utils\RectorGenerator\:
         resource: '../src'
-        exclude: '../src/{Exception,Configuration/Configuration.php}'
+        exclude: '../src/{Exception/*,ValueObject/*}'

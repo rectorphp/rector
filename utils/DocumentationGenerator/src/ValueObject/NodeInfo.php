@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Utils\DocumentationGenerator\Node;
+namespace Rector\Utils\DocumentationGenerator\ValueObject;
 
 final class NodeInfo
 {
