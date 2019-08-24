@@ -22,6 +22,7 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
         // same short class with namespace
         yield [__DIR__ . '/Fixture/same_namespaced_class.php.inc'];
         yield [__DIR__ . '/Fixture/skip_same_namespaced_used_class.php.inc'];
+        yield [__DIR__ . '/Fixture/include_used_local_class.php.inc'];
 
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/double_import.php.inc'];
