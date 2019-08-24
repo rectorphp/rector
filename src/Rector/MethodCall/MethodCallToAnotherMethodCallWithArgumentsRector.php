@@ -26,7 +26,7 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns old method call with specfici type to new one with arguments', [
+        return new RectorDefinition('Turns old method call with specific types to new one with arguments', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 $serviceDefinition = new Nette\DI\ServiceDefinition;
