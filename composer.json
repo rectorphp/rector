@@ -69,7 +69,6 @@
             "Rector\\PhpParser\\": "packages/PhpParser/src",
             "Rector\\Doctrine\\": "packages/Doctrine/src",
             "Rector\\FileSystemRector\\": "packages/FileSystemRector/src",
-            "Rector\\ContributorTools\\": "packages/ContributorTools/src",
             "Rector\\Laravel\\": "packages/Laravel/src",
             "Rector\\PhpSpecToPHPUnit\\": "packages/PhpSpecToPHPUnit/src",
             "Rector\\Shopware\\": "packages/Shopware/src",
@@ -82,13 +81,14 @@
             "Rector\\Architecture\\": "packages/Architecture/src",
             "Rector\\PHPUnitSymfony\\": "packages/PHPUnitSymfony/src",
             "Rector\\SymfonyCodeQuality\\": "packages/SymfonyCodeQuality/src",
-            "Rector\\Restoration\\": "packages/Restoration/src"
+            "Rector\\Restoration\\": "packages/Restoration/src",
+            "Rector\\Utils\\ContributorTools\\": "utils/ContributorTools/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\Celebrity\\Tests\\": "packages/Celebrity/tests",
             "Rector\\Tests\\": "tests",
+            "Rector\\Celebrity\\Tests\\": "packages/Celebrity/tests",
             "Rector\\BetterPhpDocParser\\Tests\\": "packages/BetterPhpDocParser/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
             "Rector\\CakePHP\\Tests\\": "packages/CakePHP/tests",
@@ -113,7 +113,6 @@
             "Rector\\Doctrine\\Tests\\": "packages/Doctrine/tests",
             "Rector\\Laravel\\Tests\\": "packages/Laravel/tests",
             "Rector\\PhpSpecToPHPUnit\\Tests\\": "packages/PhpSpecToPHPUnit/tests",
-            "Rector\\PHPStanExtensions\\": "utils/PHPStanExtensions/src",
             "Rector\\Shopware\\Tests\\": "packages/Shopware/tests",
             "Rector\\NetteTesterToPHPUnit\\Tests\\": "packages/NetteTesterToPHPUnit/tests",
             "Rector\\Nette\\Tests\\": "packages/Nette/tests",
@@ -124,7 +123,8 @@
             "Rector\\Architecture\\Tests\\": "packages/Architecture/tests",
             "Rector\\PHPUnitSymfony\\Tests\\": "packages/PHPUnitSymfony/tests",
             "Rector\\SymfonyCodeQuality\\Tests\\": "packages/SymfonyCodeQuality/tests",
-            "Rector\\Restoration\\Tests\\": "packages/Restoration/tests"
+            "Rector\\Restoration\\Tests\\": "packages/Restoration/tests",
+            "Rector\\PHPStanExtensions\\": "utils/PHPStanExtensions/src"
         },
         "classmap": [
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
