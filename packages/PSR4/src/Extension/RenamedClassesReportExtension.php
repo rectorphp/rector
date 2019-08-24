@@ -51,15 +51,15 @@ final class RenamedClassesReportExtension implements ReportingExtensionInterface
 
         // 1. dump rector config for RenameClassRector
         $rectorYamlContent = $this->createRectorYamlContent();
-        FileSystem::write(getcwd() . '/rename-classes-rector.yaml', $rectorYamlContent);
+        FileSystem::write(getcwd() . DIRECTORY_SEPARATOR . 'renames-rector.yaml', $rectorYamlContent);
 
         // 2. dump class aliases
         $renameClassesAliasesContent = $this->createRenameClassAliasContent();
-        FileSystem::write(getcwd() . DIRECTORY_SEPARATOR . 'rename-classes-aliases.php', $renameClassesAliasesContent);
+        FileSystem::write(getcwd() . DIRECTORY_SEPARATOR . 'class-aliases.php', $renameClassesAliasesContent);
 
         // 3. tell user what to do next
         $this->symfonyStyle->warning(
-            'Run: "vendor/bin/rector process src tests --config rename-classes-rector.yaml --autoload-file rename-classes-aliases.php" to finish the process'
+            'Now rename classes: "vendor/bin/rector process src tests -c renames-rector.yaml -a class-aliases.php"'
         );
     }
 
