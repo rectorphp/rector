@@ -1,9 +1,0 @@
-services:
-    _defaults:
-        public: true
-        autowire: true
-        autoconfigure: true
-
-    Rector\Utils\ContributorTools\:
-        resource: '../src'
-        exclude: '../src/{Exception,Configuration/Configuration.php,Node/*Info.php}'

@@ -120,7 +120,7 @@ parameters:
             - 'src/Rector/MethodBody/NormalToFluentRector.php'
             - 'packages/CodingStyle/src/Rector/Use_/RemoveUnusedAliasRector.php'
             - 'packages/NetteToSymfony/src/Route/RouteInfoFactory.php'
-            - 'utils/ContributorTools/src/Command/DumpNodesCommand.php'
+            - 'utils/*/DumpNodesCommand.php'
             - 'packages/CodeQuality/src/Rector/Identical/SimplifyBoolIdenticalTrueRector.php'
             - 'packages/BetterPhpDocParser/src/Attributes/Ast/AttributeAwareNodeFactory.php'
             - 'packages/Laravel/src/Rector/FuncCall/HelperFunctionToConstructorInjectionRector.php'

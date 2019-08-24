@@ -82,7 +82,8 @@
             "Rector\\PHPUnitSymfony\\": "packages/PHPUnitSymfony/src",
             "Rector\\SymfonyCodeQuality\\": "packages/SymfonyCodeQuality/src",
             "Rector\\Restoration\\": "packages/Restoration/src",
-            "Rector\\Utils\\ContributorTools\\": "utils/ContributorTools/src"
+            "Rector\\Utils\\RectorGenerator\\": "utils/RectorGenerator/src",
+            "Rector\\Utils\\DocumentationGenerator\\": "utils/DocumentationGenerator/src"
         }
     },
     "autoload-dev": {

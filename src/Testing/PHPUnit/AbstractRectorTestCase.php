@@ -10,7 +10,7 @@ use Rector\Configuration\Option;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\HttpKernel\RectorKernel;
 use Rector\Testing\Application\EnabledRectorsProvider;
-use Rector\Utils\ContributorTools\Finder\RectorsFinder;
+use Rector\Testing\Finder\RectorsFinder;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Container;
