@@ -1,4 +1,4 @@
-# All 334 Rectors Overview
+# All 336 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -1687,6 +1687,22 @@ Remove empty method calls not required by parents
 
 <br>
 
+### `RemoveNullPropertyInitializationRector`
+
+- class: `Rector\DeadCode\Rector\Property\RemoveNullPropertyInitializationRector`
+
+Remove initialization with null value from property declarations
+
+```diff
+ class SunshineCommand extends ParentClassWithNewConstructor
+ {
+-    private $myVar = null;
++    private $myVar;
+ }
+```
+
+<br>
+
 ### `RemoveOverriddenValuesRector`
 
 - class: `Rector\DeadCode\Rector\ClassMethod\RemoveOverriddenValuesRector`
@@ -3265,6 +3281,27 @@ Adds default value for undefined variable
              $a = 5;
          }
          echo $a;
+     }
+ }
+```
+
+<br>
+
+### `AddLiteralSeparatorToNumberRector`
+
+- class: `Rector\Php\Rector\LNumber\AddLiteralSeparatorToNumberRector`
+
+Add "_" as thousands separator in numbers
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $int = 1000;
+-        $float = 1000500.001;
++        $int = 1_000;
++        $float = 1_000_500.001;
      }
  }
 ```
@@ -6443,7 +6480,7 @@ services:
 
 - class: `Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector`
 
-Turns old method call with specfici type to new one with arguments
+Turns old method call with specific types to new one with arguments
 
 ```yaml
 services:
