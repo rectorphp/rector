@@ -131,19 +131,19 @@ parameters:
 Featured open-source projects have **prepared sets**. You'll find them in [`/config/set`](/config/set) or by calling:
 
 ```bash
-vendor/bin/rector levels
+vendor/bin/rector sets
 ```
 
-Let's say you pick `symfony40` level and you want to upgrade your `/src` directory:
+Let's say you pick `symfony40` set and you want to upgrade your `/src` directory:
 
 ```bash
 # show known changes in Symfony 4.0
-vendor/bin/rector process src --level symfony40 --dry-run
+vendor/bin/rector process src --set symfony40 --dry-run
 ```
 
 ```bash
 # apply
-vendor/bin/rector process src --level symfony40
+vendor/bin/rector process src --set symfony40
 ```
 
 ### B. Custom Sets
@@ -287,7 +287,7 @@ We would be happy to merge your feature then.
 With this command, you can process your project with rector from docker:
 
 ```bash
-docker run -v $(pwd):/project rector/rector:latest process /project/src --level symfony40 --dry-run
+docker run -v $(pwd):/project rector/rector:latest process /project/src --set symfony40 --dry-run
 
 # Note that a volume is mounted from `pwd` into `/project` which can be accessed later.
 ```

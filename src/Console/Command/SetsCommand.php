@@ -11,7 +11,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
-final class LevelsCommand extends AbstractCommand
+final class SetsCommand extends AbstractCommand
 {
     /**
      * @var SymfonyStyle
@@ -28,20 +28,20 @@ final class LevelsCommand extends AbstractCommand
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('List available levels');
-        $this->addArgument('name', InputArgument::OPTIONAL, 'Filter levels by provded name');
+        $this->setDescription('List available sets');
+        $this->addArgument('name', InputArgument::OPTIONAL, 'Filter sets by provided name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $levels = $this->getAvailbleLevels();
+        $sets = $this->getAvailbleSets();
 
         if ($input->getArgument('name')) {
-            $levels = $this->filterLevelsByName($input, $levels);
+            $sets = $this->filterSetsByName($input, $sets);
         }
 
-        $this->symfonyStyle->title(sprintf('%d available levels:', count($levels)));
-        $this->symfonyStyle->listing($levels);
+        $this->symfonyStyle->title(sprintf('%d available sets:', count($sets)));
+        $this->symfonyStyle->listing($sets);
 
         return Shell::CODE_SUCCESS;
     }
@@ -49,31 +49,31 @@ final class LevelsCommand extends AbstractCommand
     /**
      * @return string[]
      */
-    private function getAvailbleLevels(): array
+    private function getAvailbleSets(): array
     {
         $finder = Finder::create()->files()
             ->in(__DIR__ . '/../../../config/set');
 
-        $levels = [];
+        $sets = [];
         foreach ($finder->getIterator() as $fileInfo) {
-            $levels[] = $fileInfo->getBasename('.' . $fileInfo->getExtension());
+            $sets[] = $fileInfo->getBasename('.' . $fileInfo->getExtension());
         }
 
-        sort($levels);
+        sort($sets);
 
-        return array_unique($levels);
+        return array_unique($sets);
     }
 
     /**
-     * @param string[] $levels
+     * @param string[] $sets
      * @return string[]
      */
-    private function filterLevelsByName(InputInterface $input, array $levels): array
+    private function filterSetsByName(InputInterface $input, array $sets): array
     {
         $name = (string) $input->getArgument('name');
 
-        return array_filter($levels, function (string $level) use ($name): bool {
-            return (bool) Strings::match($level, sprintf('#%s#', $name));
+        return array_filter($sets, function (string $set) use ($name): bool {
+            return (bool) Strings::match($set, sprintf('#%s#', $name));
         });
     }
 }
