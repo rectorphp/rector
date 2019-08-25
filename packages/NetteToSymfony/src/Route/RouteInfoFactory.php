@@ -55,7 +55,7 @@ final class RouteInfoFactory
                 return null;
             }
 
-            $method = $this->nameResolver->matchNameInsensitiveInMap($node, [
+            $method = $this->nameResolver->matchNameInMap($node, [
                 'get' => 'GET',
                 'head' => 'HEAD',
                 'post' => 'POST',

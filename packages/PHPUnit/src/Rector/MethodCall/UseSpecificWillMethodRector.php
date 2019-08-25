@@ -84,11 +84,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isNameInsensitive($node, 'with')) {
+        if ($this->isName($node, 'with')) {
             return $this->processWithCall($node);
         }
 
-        if ($this->isNameInsensitive($node, 'will')) {
+        if ($this->isName($node, 'will')) {
             return $this->processWillCall($node);
         }
 
@@ -123,7 +123,7 @@ CODE_SAMPLE
         $nestedMethodCall = $node->args[0]->value;
 
         foreach ($this->nestedMethodToRenameMap as $oldMethodName => $newParentMethodName) {
-            if ($this->isNameInsensitive($nestedMethodCall, $oldMethodName)) {
+            if ($this->isName($nestedMethodCall, $oldMethodName)) {
                 $node->name = new Identifier($newParentMethodName);
 
                 // move args up

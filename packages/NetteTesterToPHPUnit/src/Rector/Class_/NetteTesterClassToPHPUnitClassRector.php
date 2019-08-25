@@ -135,7 +135,7 @@ CODE_SAMPLE
         $methods = $this->classManipulator->getMethods($class);
 
         foreach ($methods as $method) {
-            if ($this->isNamesInsensitive($method, ['setUp', 'tearDown'])) {
+            if ($this->isNames($method, ['setUp', 'tearDown'])) {
                 $this->makeProtected($method);
             }
         }

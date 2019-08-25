@@ -73,7 +73,7 @@ CODE_SAMPLE
             }
 
             foreach ($oldToNewConstants as $oldConstant => $newConstant) {
-                if (! $this->isNameInsensitive($node->name, $oldConstant)) {
+                if (! $this->isName($node->name, $oldConstant)) {
                     continue;
                 }
 

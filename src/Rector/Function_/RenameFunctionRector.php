@@ -54,7 +54,7 @@ final class RenameFunctionRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         foreach ($this->oldFunctionToNewFunction as $oldFunction => $newFunction) {
-            if (! $this->isNameInsensitive($node, $oldFunction)) {
+            if (! $this->isName($node, $oldFunction)) {
                 continue;
             }
 
