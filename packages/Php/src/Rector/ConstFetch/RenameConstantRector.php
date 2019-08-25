@@ -65,7 +65,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->oldToNewConstants as $oldConstant => $newConstant) {
-            if (! $this->isNameInsensitive($node, $oldConstant)) {
+            if (! $this->isName($node, $oldConstant)) {
                 continue;
             }
 

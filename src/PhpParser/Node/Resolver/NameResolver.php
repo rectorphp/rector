@@ -100,10 +100,10 @@ final class NameResolver
     /**
      * @param string[] $map
      */
-    public function matchNameInsensitiveInMap(Node $node, array $map): ?string
+    public function matchNameInMap(Node $node, array $map): ?string
     {
         foreach ($map as $nameToMatch => $return) {
-            if ($this->isNameInsensitive($node, $nameToMatch)) {
+            if ($this->isName($node, $nameToMatch)) {
                 return $return;
             }
         }
@@ -111,18 +111,13 @@ final class NameResolver
         return null;
     }
 
-    public function isNameInsensitive(Node $node, string $name): bool
-    {
-        return strtolower((string) $this->getName($node)) === strtolower($name);
-    }
-
     /**
      * @param string[] $names
      */
-    public function isNamesInsensitive(Node $node, array $names): bool
+    public function isNames(Node $node, array $names): bool
     {
         foreach ($names as $name) {
-            if ($this->isNameInsensitive($node, $name)) {
+            if ($this->isName($node, $name)) {
                 return true;
             }
         }
@@ -151,15 +146,12 @@ final class NameResolver
             return fnmatch($name, $resolvedName, FNM_NOESCAPE);
         }
 
-        return $resolvedName === $name;
-    }
+        // special case
+        if ($name === 'Object') {
+            return $name === $resolvedName;
+        }
 
-    /**
-     * @param string[] $names
-     */
-    public function isNames(Node $node, array $names): bool
-    {
-        return in_array($this->getName($node), $names, true);
+        return strtolower($resolvedName) === strtolower($name);
     }
 
     public function getName(Node $node): ?string

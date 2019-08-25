@@ -34,31 +34,12 @@ trait NameResolverTrait
         return $this->nameResolver->areNamesEqual($firstNode, $secondNode);
     }
 
-    public function isNameInsensitive(Node $node, string $name): bool
-    {
-        return $this->nameResolver->isNameInsensitive($node, $name);
-    }
-
-    /**
-     * @param string[] $names
-     */
-    public function isNamesInsensitive(Node $node, array $names): bool
-    {
-        return $this->nameResolver->isNamesInsensitive($node, $names);
-    }
-
     /**
      * @param string[] $names
      */
     public function isNames(Node $node, array $names): bool
     {
-        foreach ($names as $name) {
-            if ($this->isName($node, $name)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->nameResolver->isNames($node, $names);
     }
 
     public function getName(Node $node): ?string
