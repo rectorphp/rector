@@ -84,7 +84,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->flags |= Class_::MODIFIER_FINAL;
+        $this->makeFinal($node);
 
         return $node;
     }

@@ -20,10 +20,7 @@ ksort($jsonContent['autoload']['psr-4']);
 ksort($jsonContent['autoload-dev']['psr-4']);
 
 // 3. make core first
-$jsonContent['autoload']['psr-4'] = array_merge(
-    ['Rector\\' => 'src'],
-    $jsonContent['autoload']['psr-4']
-);
+$jsonContent['autoload']['psr-4'] = array_merge(['Rector\\' => 'src'], $jsonContent['autoload']['psr-4']);
 $jsonContent['autoload-dev']['psr-4'] = array_merge(
     ['Rector\\Tests\\' => 'tests'],
     $jsonContent['autoload-dev']['psr-4']
@@ -39,7 +36,8 @@ echo 'DONE';
 
 
 // used from: https://github.com/Symplify/Symplify/blob/64e1e07c87b1ec5551df07482d68c5085e76824a/packages/MonorepoBuilder/src/FileSystem/JsonFileManager.php#L70
-function inlineSections(string $jsonContent, array $inlineSections): string {
+function inlineSections(string $jsonContent, array $inlineSections): string
+{
     foreach ($inlineSections as $inlineSection) {
         $pattern = '#("' . preg_quote($inlineSection, '#') . '": )\[(.*?)\](,)#ms';
         $jsonContent = Strings::replace($jsonContent, $pattern, function (array $match): string {
@@ -54,7 +52,8 @@ function inlineSections(string $jsonContent, array $inlineSections): string {
     return $jsonContent;
 }
 
-function inlineAuthorSection(string $jsonContent): string {
+function inlineAuthorSection(string $jsonContent): string
+{
     $authorsPattern = '#("authors":\s+\[)(?<authors>.*?)(\])#s';
 
     $match = Strings::match($jsonContent, $authorsPattern);
