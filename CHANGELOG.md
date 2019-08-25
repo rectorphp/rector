@@ -9,6 +9,36 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+## [v0.5.11] - 2019-08-25
+
+### Added
+
+- [#1880] [DeadCode] Add RemoveNullPropertyInitializationRector to dead-code set
+- [#1865] [PSR4] Add NormalizeNamespaceByPSR4ComposerAutoloadRector
+- [#1895] add makeFinal() method to AbstractRector
+- [#1889] Add cakephp3.8 target and fix a typo, Thanks to [@markstory]
+- [#1847] [PHP 7.4] Add literal thousand superator
+
+### Changed
+
+- [#1878] [PSR4] Improve renamed classes collector to sort by highest parent
+- [#1894] rename levels command to sets
+
+### Fixed
+
+- [#1885] [CodingStyle] Fix ImportFullyQualifiedNamesRector for imported namespace
+- [#1888] Fix missing args in PreferThisOrSelfMethodCallRector
+- [#1891] Fix fqn doc with alraedy PHP imported namespace
+- [#1882] [CodingStyle] Import short classes as well [ref #1877]
+- [#1883] [CodingStyle] Make import `ImportFullyQualifiedNamesRector` include same short class in same namespace
+- [#1881] [RenameClassRector] Include [@ORM], [@Assert], [@Serializer] etc annotations
+- [#1884] Parent constant visibility when it is declared in a super-superclass, Thanks to [@scheb]
+
+### Removed
+
+- [#1870] [DeadCode] Remove null value from property, Thanks to [@jacekll]
+- [#1875] Remove default excluded file patterns (closes [#1815]), Thanks to [@scheb]
+
 ## [v0.5.10] - 2019-08-19
 
 ### Added
@@ -24,7 +54,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 - [#1826] add concat + multiline case to `ManualJsonStringToJsonEncodeArrayRector`
 - [#1825] add implode support to `ManualJsonStringToJsonEncodeArrayRector`
 - [#1802] add iterable return type for yield values in `ReturnTypeDeclarationRector`
-- [#1822] Add test for [#1816]: Resolving constant fetches is unsafe, Thanks to [@scheb]
 - [#1851] Fix FluentReplaceRector for more than 2 calls + add * matching support
 - [#1807] add alias support to PropertyTypeDeclarationRector
 - [#1844] add RectorFinishExtensionRunner
@@ -34,16 +63,12 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 - [#1828] allow multiline empty spaces strings
 - [#1841] class manipulator now returns Property on property name search
 - [#1814] Improve PHPStan trait scope resolving
-- [#1799] Falling test: Iterable return type in function when yield used, Thanks to [@snapshotpl]
 - [#1862] [TypeDeclaration] Various `AddArrayReturnDocTypeRector` improvements
 - [#1805] resolve target entity from same namespace
-- [#1798] Falling test: invalid alias import to `@var`, Thanks to [@snapshotpl]
 - [#1858] Always keeps array in `*TypeInfo`
 - [#1854] Ignores resource also when type is nullable, Thanks to [@tigitz]
 - [#1793] Break class name in `@var` when relation is defined in same namespace, Thanks to [@snapshotpl]
 - [#1852] Fix decimal to float
-- [#1796] failing testcase for `PropertyTypeDeclarationRector`, Thanks to [@bendavies]
-- [#1797] Falling test: nullable array param generate wrong @var, Thanks to [@snapshotpl]
 - [#1806] use DateTimeInterface over `DateTime`
 - [#1839] skip ManyToOne properties in `SetterOnlyMethodAnalyzer` ([#1838])
 - [#1829] skip same-namespace-short name in `ImportFullyQualifiedNamesRector`
@@ -134,7 +159,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 - [#1696] [PHPUnit][Symfony] Add `AddMessageToEqualsResponseCodeRector`
 - [#1744] add reference support to `ParamTypeDeclarationRector`
 - [#1694] Add `rector.yaml` to `.dockerignore`, Thanks to [@aboks]
-- [#1731] Add failing test to demonstrate difference in import order, Thanks to [@holtkamp]
 - [#1674] Add Polyfil function support
 - [#1681] Add `parent::__construct()` to command dependencies
 
@@ -154,7 +178,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 - [#1684] fix new phpstan reports
 - [#1702] Fixed some issues for `RemoveZeroAndOneBinaryRector`, Thanks to [@jeroensmit]
 - [#1703] Fixed unintended removal of properties when used inside a trait, Thanks to [@jeroensmit]
-- [#1704] Fixed failing unit test when `sys_get_temp_dir()` != '/tmp', Thanks to [@jeroensmit]
 - [#1738] Fix InjectAnnotationClassRector with aliases
 - [#1705] Fixed wrong naming of docs script in composer.json, Thanks to [@jeroensmit]
 - [#1712] Fix tests according to review and a few typos, Thanks to [@ravanscafi]
@@ -217,7 +240,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 - [#1615] add exclude to typical reported typos
 - [#1610] Add shopware version const rector, Thanks to [@shyim]
 - [#1640] Add `--rule` option to process only single rule from set
-- [#1641] Add test case for [#1630]
 
 ### Changed
 
@@ -408,7 +430,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 - [#1347] [RemovingStatic] Add new level
 - [#1333] Add PrivatizeLocalClassConstantRector to SOLID, Thanks to [@mxr576]
 - [#1362] [PHP 7.4] Add ReservedFnFunctionRector
-- [#1346] Add test case for [#1286]
 
 ### Changed
 
@@ -825,3 +846,30 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@hernst42]: https://github.com/hernst42
 [@bendavies]: https://github.com/bendavies
 [v0.5.9]: https://github.com/rectorphp/rector/compare/v0.5.8...v0.5.9
+[#1895]: https://github.com/rectorphp/rector/pull/1895
+[#1894]: https://github.com/rectorphp/rector/pull/1894
+[#1892]: https://github.com/rectorphp/rector/pull/1892
+[#1891]: https://github.com/rectorphp/rector/pull/1891
+[#1890]: https://github.com/rectorphp/rector/pull/1890
+[#1889]: https://github.com/rectorphp/rector/pull/1889
+[#1888]: https://github.com/rectorphp/rector/pull/1888
+[#1885]: https://github.com/rectorphp/rector/pull/1885
+[#1884]: https://github.com/rectorphp/rector/pull/1884
+[#1883]: https://github.com/rectorphp/rector/pull/1883
+[#1882]: https://github.com/rectorphp/rector/pull/1882
+[#1881]: https://github.com/rectorphp/rector/pull/1881
+[#1880]: https://github.com/rectorphp/rector/pull/1880
+[#1879]: https://github.com/rectorphp/rector/pull/1879
+[#1878]: https://github.com/rectorphp/rector/pull/1878
+[#1875]: https://github.com/rectorphp/rector/pull/1875
+[#1870]: https://github.com/rectorphp/rector/pull/1870
+[#1867]: https://github.com/rectorphp/rector/pull/1867
+[#1865]: https://github.com/rectorphp/rector/pull/1865
+[#1847]: https://github.com/rectorphp/rector/pull/1847
+[#1815]: https://github.com/rectorphp/rector/pull/1815
+[@markstory]: https://github.com/markstory
+[@jacekll]: https://github.com/jacekll
+[@Serializer]: https://github.com/Serializer
+[@ORM]: https://github.com/ORM
+[@Assert]: https://github.com/Assert
+[v0.5.10]: https://github.com/rectorphp/rector/compare/v0.5.9...v0.5.10
