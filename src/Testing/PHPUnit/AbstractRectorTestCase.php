@@ -56,27 +56,31 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->fixtureSplitter = new FixtureSplitter($this->getTempPath());
 
         // defined in phpunit.xml
-        if (defined('RECTOR_REPOSITORY') && $this->provideConfig() === '') {
-            if (self::$allRectorContainer === null) {
-                $this->createContainerWithAllRectors();
-
-                self::$allRectorContainer = self::$container;
-            } else {
-                // load from cache
-                self::$container = self::$allRectorContainer;
-            }
-
-            $enabledRectorsProvider = static::$container->get(EnabledRectorsProvider::class);
-            $enabledRectorsProvider->reset();
-            $this->configureEnabledRectors($enabledRectorsProvider);
-        } elseif ($this->provideConfig() !== '') {
+        if ($this->provideConfig() !== '') {
             $this->ensureConfigFileExists();
             $this->bootKernelWithConfigs(RectorKernel::class, [$this->provideConfig()]);
 
             $enabledRectorsProvider = static::$container->get(EnabledRectorsProvider::class);
             $enabledRectorsProvider->reset();
         } else {
-            throw new ShouldNotHappenException();
+            // repare contains with all rectors
+            // cache only rector tests - defined in phpunit.xml
+            if (defined('RECTOR_REPOSITORY')) {
+                if (self::$allRectorContainer === null) {
+                    $this->createContainerWithAllRectors();
+
+                    self::$allRectorContainer = self::$container;
+                } else {
+                    // load from cache
+                    self::$container = self::$allRectorContainer;
+                }
+            } else {
+                $this->bootKernelWithConfigs(RectorKernel::class, [$this->provideConfig()]);
+            }
+
+            $enabledRectorsProvider = self::$container->get(EnabledRectorsProvider::class);
+            $enabledRectorsProvider->reset();
+            $this->configureEnabledRectors($enabledRectorsProvider);
         }
 
         // disable any output
@@ -183,8 +187,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
     private function createContainerWithAllRectors(): void
     {
-        $allRectorClasses = (new RectorsFinder())->findCoreRectorClasses();
+        $coreRectorClasses = (new RectorsFinder())->findCoreRectorClasses();
+
         $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/all_rectors.yaml');
+
+        $allRectorClasses = array_merge($coreRectorClasses, $this->getCurrentTestRectorClasses());
 
         $listForConfig = [];
         foreach ($allRectorClasses as $rectorClass) {
@@ -199,6 +206,18 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
         $configFile = $configFileTempPath;
         $this->bootKernelWithConfigs(RectorKernel::class, [$configFile]);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getCurrentTestRectorClasses(): array
+    {
+        if ($this->getRectorsWithConfiguration() !== []) {
+            return array_keys($this->getRectorsWithConfiguration());
+        }
+
+        return [$this->getRectorClass()];
     }
 
     private function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
