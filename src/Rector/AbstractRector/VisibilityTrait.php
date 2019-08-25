@@ -91,4 +91,9 @@ trait VisibilityTrait
     {
         $this->visibilityManipulator->makeStatic($node);
     }
+
+    public function makeFinal(Class_ $class): void
+    {
+        $this->visibilityManipulator->makeFinal($class);
+    }
 }
