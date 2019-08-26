@@ -76,6 +76,10 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
             ), $throwable->getCode(), $throwable);
         }
 
+        if ($service === null) {
+            return null;
+        }
+
         $serviceClass = get_class($service);
         if ($container->has($serviceClass)) {
             return $serviceClass;

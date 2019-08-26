@@ -52,6 +52,10 @@ abstract class AbstractCommand extends Command
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         if ($input->getOption('debug')) {
+            if ($this->getApplication() === null) {
+                return;
+            }
+
             $this->getApplication()->setCatchExceptions(false);
         }
     }

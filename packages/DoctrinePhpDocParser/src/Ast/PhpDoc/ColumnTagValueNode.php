@@ -122,4 +122,17 @@ final class ColumnTagValueNode implements PhpDocTagValueNode, AttributeAwareNode
 
         return '(' . implode(', ', $contentItems) . ')';
     }
+
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function isNullable(): bool
+    {
+        return $this->nullable;
+    }
 }

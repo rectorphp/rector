@@ -13,6 +13,7 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareReturnTagValue
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\ColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\EntityTagValueNode;
 
 final class PhpDocInfo
@@ -170,9 +171,22 @@ final class PhpDocInfo
 
     public function getDoctrineEntityTag(): ?EntityTagValueNode
     {
-        foreach ($this->getPhpDocNode()->children as $phpDocChildNode) {
+        foreach ($this->phpDocNode->children as $phpDocChildNode) {
             if ($phpDocChildNode instanceof PhpDocTagNode) {
                 if ($phpDocChildNode->value instanceof EntityTagValueNode) {
+                    return $phpDocChildNode->value;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public function getDoctrineColumnTagValueNode(): ?ColumnTagValueNode
+    {
+        foreach ($this->phpDocNode->children as $phpDocChildNode) {
+            if ($phpDocChildNode instanceof PhpDocTagNode) {
+                if ($phpDocChildNode->value instanceof ColumnTagValueNode) {
                     return $phpDocChildNode->value;
                 }
             }
