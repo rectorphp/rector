@@ -96,6 +96,8 @@ parameters:
             - 'src/Util/*.php'
             - 'packages/BetterPhpDocParser/src/Annotation/AnnotationNaming.php'
             - 'src/Testing/PHPUnit/PHPUnitEnvironment.php'
+            # honesty first
+            - 'src/*StaticHelper.php'
 
         Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
             - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'

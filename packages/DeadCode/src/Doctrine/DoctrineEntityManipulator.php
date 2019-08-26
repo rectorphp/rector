@@ -2,6 +2,13 @@
 
 namespace Rector\DeadCode\Doctrine;
 
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\InheritanceType;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OneToOne;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
@@ -29,16 +36,16 @@ final class DoctrineEntityManipulator
      * @var string[]
      */
     private const RELATION_ANNOTATIONS = [
-        'Doctrine\ORM\Mapping\OneToMany',
+        OneToMany::class,
         self::MANY_TO_ONE_ANNOTATION,
-        'Doctrine\ORM\Mapping\OneToOne',
-        'Doctrine\ORM\Mapping\ManyToMany',
+        OneToOne::class,
+        ManyToMany::class,
     ];
 
     /**
      * @var string
      */
-    private const MANY_TO_ONE_ANNOTATION = 'Doctrine\ORM\Mapping\ManyToOne';
+    private const MANY_TO_ONE_ANNOTATION = ManyToOne::class;
 
     /**
      * @var string
@@ -48,7 +55,7 @@ final class DoctrineEntityManipulator
     /**
      * @var string
      */
-    private const JOIN_COLUMN_ANNOTATION = 'Doctrine\ORM\Mapping\JoinColumn';
+    private const JOIN_COLUMN_ANNOTATION = JoinColumn::class;
 
     /**
      * @var DocBlockManipulator
@@ -140,11 +147,11 @@ final class DoctrineEntityManipulator
         }
 
         // is parent entity
-        if ($this->docBlockManipulator->hasTag($class, 'Doctrine\ORM\Mapping\InheritanceType')) {
+        if ($this->docBlockManipulator->hasTag($class, InheritanceType::class)) {
             return false;
         }
 
-        return $this->docBlockManipulator->hasTag($class, 'Doctrine\ORM\Mapping\Entity');
+        return $this->docBlockManipulator->hasTag($class, Entity::class);
     }
 
     public function removeMappedByOrInversedByFromProperty(Property $property): void

@@ -78,6 +78,7 @@ final class PhpDocInfoPrinter
     {
         $this->attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
         $this->tokens = $phpDocInfo->getTokens();
+
         $this->tokenCount = count($phpDocInfo->getTokens());
         $this->phpDocInfo = $phpDocInfo;
 
@@ -154,16 +155,17 @@ final class PhpDocInfoPrinter
             $this->currentTokenPosition = $startEndInfo->getEnd();
         }
 
-        if ($attributeAwareNode instanceof PhpDocTagNode && $startEndInfo) {
-            return $this->printPhpDocTagNode($attributeAwareNode, $startEndInfo, $output);
-        }
-
         if ($attributeAwareNode instanceof PhpDocTagNode) {
+            if ($startEndInfo) {
+                return $this->printPhpDocTagNode($attributeAwareNode, $startEndInfo, $output);
+            }
+
             return $output . PHP_EOL . '     * ' . $attributeAwareNode;
         }
 
         if (! $attributeAwareNode instanceof PhpDocTextNode && ! $attributeAwareNode instanceof GenericTagValueNode && $startEndInfo) {
             return $this->originalSpacingRestorer->restoreInOutputWithTokensStartAndEndPosition(
+                $attributeAwareNode,
                 (string) $attributeAwareNode,
                 $this->tokens,
                 $startEndInfo

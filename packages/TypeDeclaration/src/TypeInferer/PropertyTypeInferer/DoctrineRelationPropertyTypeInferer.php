@@ -2,6 +2,11 @@
 
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OneToOne;
 use PhpParser\Node\Stmt\Property;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -12,18 +17,18 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     /**
      * @var string[]
      */
-    private const TO_MANY_ANNOTATIONS = ['Doctrine\ORM\Mapping\OneToMany', 'Doctrine\ORM\Mapping\ManyToMany'];
+    private const TO_MANY_ANNOTATIONS = [OneToMany::class, ManyToMany::class];
 
     /**
      * Nullable by default, @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/annotations-reference.html#joincolumn - "JoinColumn" and nullable=true
      * @var string[]
      */
-    private const TO_ONE_ANNOTATIONS = ['Doctrine\ORM\Mapping\ManyToOne', 'Doctrine\ORM\Mapping\OneToOne'];
+    private const TO_ONE_ANNOTATIONS = [ManyToOne::class, OneToOne::class];
 
     /**
      * @var string
      */
-    private const COLLECTION_TYPE = 'Doctrine\Common\Collections\Collection';
+    private const COLLECTION_TYPE = Collection::class;
 
     /**
      * @var DocBlockManipulator

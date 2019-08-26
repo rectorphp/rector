@@ -48,8 +48,8 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareNullableT
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareThisTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
-use Rector\BetterPhpDocParser\Exception\NotImplementedYetException;
-use Rector\BetterPhpDocParser\Exception\ShouldNotHappenException;
+use Rector\Exception\NotImplementedYetException;
+use Rector\Exception\ShouldNotHappenException;
 
 final class AttributeAwareNodeFactory
 {
@@ -125,7 +125,8 @@ final class AttributeAwareNodeFactory
                 $typeNode,
                 $phpDocTagValueNode->isVariadic,
                 $phpDocTagValueNode->parameterName,
-                $phpDocTagValueNode->description
+                $phpDocTagValueNode->description,
+                false // @todo maybe solve better
             );
         }
 

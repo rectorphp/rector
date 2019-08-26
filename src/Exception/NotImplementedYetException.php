@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Exception;
+namespace Rector\Exception;
 
 use Exception;
 

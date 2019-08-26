@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Bridge;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Configuration\Option;
 use Rector\Exception\ShouldNotHappenException;
@@ -39,8 +40,8 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
      */
     private $commonNamesToTypes = [
         'doctrine' => 'Symfony\Bridge\Doctrine\RegistryInterface',
-        'doctrine.orm.entity_manager' => 'Doctrine\ORM\EntityManagerInterface',
-        'doctrine.orm.default_entity_manager' => 'Doctrine\ORM\EntityManagerInterface',
+        'doctrine.orm.entity_manager' => EntityManagerInterface::class,
+        'doctrine.orm.default_entity_manager' => EntityManagerInterface::class,
     ];
 
     public function __construct(
@@ -73,6 +74,10 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
                 'Service type for "%s" name was not found in container of your Symfony application.',
                 $name
             ), $throwable->getCode(), $throwable);
+        }
+
+        if ($service === null) {
+            return null;
         }
 
         $serviceClass = get_class($service);

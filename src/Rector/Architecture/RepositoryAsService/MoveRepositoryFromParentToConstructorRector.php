@@ -2,6 +2,8 @@
 
 namespace Rector\Rector\Architecture\RepositoryAsService;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -41,8 +43,8 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
     public function __construct(
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
         ClassManipulator $classManipulator,
-        string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository',
-        string $entityManagerClass = 'Doctrine\ORM\EntityManager'
+        string $entityRepositoryClass = EntityRepository::class,
+        string $entityManagerClass = EntityManager::class
     ) {
         $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
         $this->entityRepositoryClass = $entityRepositoryClass;
@@ -84,8 +86,8 @@ final class PostRepository
 CODE_SAMPLE
                 ,
                 [
-                    '$entityRepositoryClass' => 'Doctrine\ORM\EntityRepository',
-                    '$entityManagerClass' => 'Doctrine\ORM\EntityManager',
+                    '$entityRepositoryClass' => EntityRepository::class,
+                    '$entityManagerClass' => EntityManager::class,
                 ]
             ),
         ]);
