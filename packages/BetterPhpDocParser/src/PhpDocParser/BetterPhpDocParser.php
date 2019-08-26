@@ -7,6 +7,7 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
@@ -20,6 +21,7 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Data\StartEndInfo;
 use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
+use Rector\DoctrinePhpDocParser\PhpDocParser\OrmTagParser;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -50,11 +52,17 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     private $multilineSpaceFormatPreserver;
 
+    /**
+     * @var OrmTagParser
+     */
+    private $ormTagParser;
+
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
-        MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver
+        MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
+        OrmTagParser $ormTagParser
     ) {
         parent::__construct($typeParser, $constExprParser);
 
@@ -62,6 +70,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->privatesAccessor = new PrivatesAccessor();
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
+        $this->ormTagParser = $ormTagParser;
     }
 
     /**
@@ -101,8 +110,28 @@ final class BetterPhpDocParser extends PhpDocParser
         return $this->attributeAwareNodeFactory->createFromNode($phpDocNode);
     }
 
+    public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
+    {
+        $tag = $tokenIterator->currentTokenValue();
+        $tokenIterator->next();
+
+        if ($tag === '@ORM') {
+            $tag .= $tokenIterator->currentTokenValue();
+            $tokenIterator->next();
+        }
+
+        $value = $this->parseTagValue($tokenIterator, $tag);
+
+        return new PhpDocTagNode($tag, $value);
+    }
+
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
+        // @todo do via extension :)
+        if (in_array($tag, ['@ORM\Entity', '@ORM\Column'], true)) {
+            return $this->ormTagParser->parse($tokenIterator, $tag);
+        }
+
         // needed for reference support in params, see https://github.com/rectorphp/rector/issues/1734
         if ($tag === '@param') {
             try {

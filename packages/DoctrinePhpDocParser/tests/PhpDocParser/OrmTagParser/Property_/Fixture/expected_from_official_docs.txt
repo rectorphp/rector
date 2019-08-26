@@ -1,0 +1,3 @@
+/**
+     * @ORM\Column(type="integer", name="login_count", nullable=false, options={"unsigned":true, "default":0}, columnDefinition="CHAR(2) NOT NULL")
+     */

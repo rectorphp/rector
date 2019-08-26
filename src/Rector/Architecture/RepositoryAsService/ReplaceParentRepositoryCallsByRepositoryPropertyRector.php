@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Architecture\RepositoryAsService;
 
+use Doctrine\ORM\EntityRepository;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -32,7 +33,7 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
         'matching',
     ];
 
-    public function __construct(string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository')
+    public function __construct(string $entityRepositoryClass = EntityRepository::class)
     {
         $this->entityRepositoryClass = $entityRepositoryClass;
     }

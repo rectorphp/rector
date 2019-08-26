@@ -1,0 +1,4 @@
+/**
+     * @ORM\Column(type="string", name="hey")
+     * @ORM\Column(name="hey", type="string")
+     */

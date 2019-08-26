@@ -3,6 +3,7 @@
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use DateTimeInterface;
+use Doctrine\ORM\Mapping\Column;
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
@@ -14,7 +15,7 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
     /**
      * @var string
      */
-    private const COLUMN_ANNOTATION = 'Doctrine\ORM\Mapping\Column';
+    private const COLUMN_ANNOTATION = Column::class;
 
     /**
      * @var string[]
