@@ -75,7 +75,7 @@ final class ParseFileRector extends AbstractRector
         // try to detect current value
         $nodeScope = $possibleFileNode->getAttribute(AttributeKey::SCOPE);
         if ($nodeScope === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $nodeType = $nodeScope->getType($possibleFileNode);

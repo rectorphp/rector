@@ -354,7 +354,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     private function processDuring(MethodCall $methodCall): MethodCall
     {
         if (! isset($methodCall->args[0])) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $name = $this->getValue($methodCall->args[0]->value);

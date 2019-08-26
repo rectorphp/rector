@@ -95,7 +95,7 @@ CODE_SAMPLE
         foreach ($this->typehintForArgumentByMethodAndClass as $type => $methodToArgumentToTypes) {
             $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
             if ($classNode === null) {
-                throw new ShouldNotHappenException();
+                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
             }
 
             if (! $this->isType($classNode, $type)) {

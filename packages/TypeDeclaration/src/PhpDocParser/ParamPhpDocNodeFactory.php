@@ -38,7 +38,7 @@ final class ParamPhpDocNodeFactory
         } elseif (count($types) === 1) {
             $typeNode = new IdentifierTypeNode($types[0]);
         } else {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $arrayTypeNode = new ArrayTypeNode($typeNode);

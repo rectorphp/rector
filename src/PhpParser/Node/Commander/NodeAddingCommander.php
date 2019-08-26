@@ -96,7 +96,7 @@ final class NodeAddingCommander implements CommanderInterface
             if ($parentNode instanceof ClassLike) {
                 $foundNode = $node;
             } else {
-                throw new ShouldNotHappenException();
+                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
             }
         }
 

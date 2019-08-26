@@ -188,7 +188,7 @@ CODE_SAMPLE
             if ($hasTypes) {
                 $name = $this->getName($class);
                 if ($name === null) {
-                    throw new ShouldNotHappenException();
+                    throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
                 }
                 $this->classesUsingTypes[] = $name;
             }

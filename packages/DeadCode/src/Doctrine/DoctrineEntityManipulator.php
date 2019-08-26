@@ -84,7 +84,7 @@ final class DoctrineEntityManipulator
 
             $relationTag = $this->docBlockManipulator->getTagByName($property, $relationAnnotation);
             if (! $relationTag->value instanceof GenericTagValueNode) {
-                throw new ShouldNotHappenException();
+                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
             }
 
             $match = Strings::match($relationTag->value->value, self::TARGET_ENTITY_PATTERN);
@@ -118,7 +118,7 @@ final class DoctrineEntityManipulator
 
             $relationTag = $this->docBlockManipulator->getTagByName($property, $relationAnnotation);
             if (! $relationTag->value instanceof GenericTagValueNode) {
-                throw new ShouldNotHappenException();
+                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
             }
 
             $match = Strings::match($relationTag->value->value, self::TARGET_PROPERTY_PATTERN);

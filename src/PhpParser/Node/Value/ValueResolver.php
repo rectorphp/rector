@@ -114,7 +114,7 @@ final class ValueResolver
     {
         $fileInfo = $dir->getAttribute(AttributeKey::FILE_INFO);
         if (! $fileInfo instanceof SmartFileInfo) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         return $fileInfo->getPath();
@@ -124,7 +124,7 @@ final class ValueResolver
     {
         $fileInfo = $file->getAttribute(AttributeKey::FILE_INFO);
         if (! $fileInfo instanceof SmartFileInfo) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         return $fileInfo->getPathname();
@@ -139,11 +139,11 @@ final class ValueResolver
         $constant = $this->nameResolver->getName($classConstFetch->name);
 
         if ($class === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         if ($constant === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         if ($class === 'self') {
