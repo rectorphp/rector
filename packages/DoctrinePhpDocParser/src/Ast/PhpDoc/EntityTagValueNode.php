@@ -53,4 +53,14 @@ final class EntityTagValueNode implements PhpDocTagValueNode, AttributeAwareNode
 
         return '(' . implode(', ', $contentItems) . ')';
     }
+
+    public function removeRepositoryClass(): void
+    {
+        $itemPosition = array_search('repositoryClass', $this->orderedVisibleItems, true);
+        if ($itemPosition !== null) {
+            unset($this->orderedVisibleItems[$itemPosition]);
+        }
+
+        $this->repositoryClass = null;
+    }
 }

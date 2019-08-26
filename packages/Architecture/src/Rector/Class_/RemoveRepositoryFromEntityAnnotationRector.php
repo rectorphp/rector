@@ -2,10 +2,8 @@
 
 namespace Rector\Architecture\Rector\Class_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use Rector\Architecture\Tests\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector\RemoveRepositoryFromEntityAnnotationRectorTest;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
@@ -17,11 +15,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class RemoveRepositoryFromEntityAnnotationRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const DOCTRINE_ORM_MAPPING_ENTITY = 'Doctrine\ORM\Mapping\Entity';
-
     /**
      * @var DocBlockManipulator
      */
@@ -79,21 +72,13 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($node);
-        if (! $phpDocInfo->hasTag(self::DOCTRINE_ORM_MAPPING_ENTITY)) {
+
+        $doctrineEntityTag = $phpDocInfo->getDoctrineEntityTag();
+        if ($doctrineEntityTag === null) {
             return null;
         }
 
-        $entityTags = $phpDocInfo->getTagsByName(self::DOCTRINE_ORM_MAPPING_ENTITY);
-        if ($entityTags === []) {
-            return null;
-        }
-
-        $entityTag = $entityTags[0];
-        if (! $entityTag->value instanceof GenericTagValueNode) {
-            return null;
-        }
-
-        $entityTag->value->value = Strings::replace($entityTag->value->value, '#\(repositoryClass="(.*?)"\)#');
+        $doctrineEntityTag->removeRepositoryClass();
 
         // save the entity tag
         $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $phpDocInfo);
