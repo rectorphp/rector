@@ -9,6 +9,20 @@ namespace Rector\DoctrinePhpDocParser\Array_;
 final class ArrayItemStaticHelper
 {
     /**
+     * @param string[] $items
+     * @return string[]
+     */
+    public static function removeItemFromArray(array $items, string $itemToRemove): array
+    {
+        $itemPosition = array_search($itemToRemove, $items, true);
+        if ($itemPosition !== null) {
+            unset($items[$itemPosition]);
+        }
+
+        return $items;
+    }
+
+    /**
      * @param string[] $contentItems
      * @param string[] $orderedVisibleItems
      * @return string[]

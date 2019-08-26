@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc;
+namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
@@ -21,11 +21,6 @@ final class EntityTagValueNode implements PhpDocTagValueNode, AttributeAwareNode
      * @var bool
      */
     private $readOnly = false;
-
-    /**
-     * @var string[]
-     */
-    private $orderedVisibleItems = [];
 
     /**
      * @param string[] $orderedVisibleItems

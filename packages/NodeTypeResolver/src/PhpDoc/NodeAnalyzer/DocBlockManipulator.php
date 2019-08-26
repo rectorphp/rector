@@ -564,6 +564,22 @@ final class DocBlockManipulator
         return true;
     }
 
+    public function getDoctrineFqnTargetEntity(Node $node): ?string
+    {
+        if ($node->getDocComment() === null) {
+            return null;
+        }
+
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+
+        $relationTagValueNode = $phpDocInfo->getRelationTagValueNode();
+        if ($relationTagValueNode === null) {
+            return null;
+        }
+
+        return $relationTagValueNode->getFqnTargetEntity();
+    }
+
     public function createPhpDocInfoFromNode(Node $node): PhpDocInfo
     {
         if ($node->getDocComment() === null) {

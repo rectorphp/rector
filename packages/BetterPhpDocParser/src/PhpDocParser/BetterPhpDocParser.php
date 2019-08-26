@@ -19,9 +19,9 @@ use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
+use Rector\BetterPhpDocParser\Contract\PhpDocParserExtensionInterface;
 use Rector\BetterPhpDocParser\Data\StartEndInfo;
 use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
-use Rector\DoctrinePhpDocParser\PhpDocParser\OrmTagParser;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -53,16 +53,19 @@ final class BetterPhpDocParser extends PhpDocParser
     private $multilineSpaceFormatPreserver;
 
     /**
-     * @var OrmTagParser
+     * @var PhpDocParserExtensionInterface[]
      */
-    private $ormTagParser;
+    private $phpDocParserExtensions = [];
 
+    /**
+     * @param PhpDocParserExtensionInterface[] $phpDocParserExtensions
+     */
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
         MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
-        OrmTagParser $ormTagParser
+        array $phpDocParserExtensions = []
     ) {
         parent::__construct($typeParser, $constExprParser);
 
@@ -70,7 +73,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->privatesAccessor = new PrivatesAccessor();
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
-        $this->ormTagParser = $ormTagParser;
+        $this->phpDocParserExtensions = $phpDocParserExtensions;
     }
 
     /**
@@ -115,6 +118,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $tag = $tokenIterator->currentTokenValue();
         $tokenIterator->next();
 
+        // @todo somehow decouple to tag pre-processor
         if ($tag === '@ORM') {
             $tag .= $tokenIterator->currentTokenValue();
             $tokenIterator->next();
@@ -127,9 +131,10 @@ final class BetterPhpDocParser extends PhpDocParser
 
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
-        // @todo do via extension :)
-        if (in_array($tag, ['@ORM\Entity', '@ORM\Column'], true)) {
-            return $this->ormTagParser->parse($tokenIterator, $tag);
+        foreach ($this->phpDocParserExtensions as $phpDocParserExtension) {
+            if ($phpDocParserExtension->matchTag($tag)) {
+                return $phpDocParserExtension->parse($tokenIterator, $tag);
+            }
         }
 
         // needed for reference support in params, see https://github.com/rectorphp/rector/issues/1734

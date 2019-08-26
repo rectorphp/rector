@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc;
+namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_;
 
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
@@ -58,11 +58,6 @@ final class ColumnTagValueNode implements PhpDocTagValueNode, AttributeAwareNode
      * @var string|null
      */
     private $columnDefinition;
-
-    /**
-     * @var string[]
-     */
-    private $orderedVisibleItems = [];
 
     /**
      * @param mixed[] $options

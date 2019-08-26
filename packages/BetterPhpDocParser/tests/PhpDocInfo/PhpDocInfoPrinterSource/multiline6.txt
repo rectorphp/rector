@@ -5,4 +5,4 @@
  *     inverseJoinColumns={@ORM\JoinColumn(referencedColumnName="id")}
  * )
  */
-protected $groups;
+protected $someProperty;
