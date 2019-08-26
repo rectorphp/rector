@@ -47,7 +47,7 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
         $classNode = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $this->addPropertyToClass($classNode, $serviceType, $propertyName);

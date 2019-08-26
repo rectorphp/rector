@@ -61,6 +61,6 @@ final class FunctionReflectionResolver
             }
         }
 
-        throw new ShouldNotHappenException();
+        throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
     }
 }

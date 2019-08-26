@@ -170,7 +170,7 @@ final class ClassMethodManipulator
         $classMethodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
         if (! $classMethodNode instanceof ClassMethod) {
             // or null?
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         foreach ($classMethodNode->params as $paramNode) {
@@ -211,7 +211,7 @@ final class ClassMethodManipulator
             return $possibleName;
         }
 
-        throw new ShouldNotHappenException();
+        throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
     }
 
     /**

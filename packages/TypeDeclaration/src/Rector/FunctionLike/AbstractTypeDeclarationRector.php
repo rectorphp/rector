@@ -184,7 +184,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         if ($nakedType->toString() === 'self') {
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
             if ($className === null) {
-                throw new ShouldNotHappenException();
+                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
             }
 
             $type = new FullyQualified($className);
@@ -195,7 +195,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         if ($nakedType->toString() === 'parent') {
             $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
             if ($parentClassName === null) {
-                throw new ShouldNotHappenException();
+                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
             }
 
             $type = new FullyQualified($parentClassName);

@@ -252,7 +252,7 @@ CODE_SAMPLE
                 return new MethodCall($propertyFetchNode, $service['non_array_method'], $node->args);
             }
 
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         return null;

@@ -28,7 +28,7 @@ final class ClassNaming
         if ($name instanceof Name) {
             $name = $this->nameResolver->getName($name);
             if ($name === null) {
-                throw new ShouldNotHappenException();
+                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
             }
         }
 

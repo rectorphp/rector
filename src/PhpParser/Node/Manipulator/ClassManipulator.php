@@ -205,7 +205,7 @@ final class ClassManipulator
 
             if (count($stmt->props) > 1) {
                 // usually full property is needed to have all the docs values
-                throw new ShouldNotHappenException();
+                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
             }
 
             if ($this->nameResolver->isName($stmt, $name)) {

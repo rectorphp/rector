@@ -110,7 +110,7 @@ CODE_SAMPLE
     {
         if (! $expr instanceof String_) {
             // not supported yet
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $phpCode = '<?php ' . $expr->value . ';';

@@ -94,7 +94,7 @@ abstract class AbstractTypeInfo
 
         $type = $this->resolveTypeForTypehint($forceFqn);
         if ($type === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         // normalize for type-declaration

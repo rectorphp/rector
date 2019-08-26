@@ -243,7 +243,7 @@ CODE_SAMPLE
     private function useForeachVariableInStmts(Expr $expr, array $stmts): void
     {
         if ($this->keyValueName === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $this->traverseNodesWithCallable($stmts, function (Node $node) use ($expr): ?Expr {

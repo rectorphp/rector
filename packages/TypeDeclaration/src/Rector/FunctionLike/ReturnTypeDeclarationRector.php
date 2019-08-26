@@ -145,12 +145,12 @@ CODE_SAMPLE
 
         $methodName = $this->getName($node);
         if ($methodName === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         if (! is_string($className)) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $childrenClassLikes = $this->parsedNodesByType->findClassesAndInterfacesByType($className);

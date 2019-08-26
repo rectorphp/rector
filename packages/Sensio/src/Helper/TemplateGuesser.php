@@ -24,17 +24,17 @@ final class TemplateGuesser
     {
         $namespace = $classMethod->getAttribute(AttributeKey::NAMESPACE_NAME);
         if (! is_string($namespace)) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
         if (! is_string($class)) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $method = $this->nameResolver->getName($classMethod);
         if ($method === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         if ($version === 3) {
