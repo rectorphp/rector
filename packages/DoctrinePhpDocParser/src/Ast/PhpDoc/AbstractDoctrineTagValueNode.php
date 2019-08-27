@@ -10,7 +10,7 @@ use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterfac
 use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineTagNodeInterface;
 
-abstract class AbstractDoctrineTagValueNode implements PhpDocTagValueNode, AttributeAwareNodeInterface, DoctrineTagNodeInterface
+abstract class AbstractDoctrineTagValueNode implements AttributeAwareNodeInterface, DoctrineTagNodeInterface
 {
     use AttributeTrait;
 
