@@ -6,6 +6,7 @@ use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Data\StartEndInfo;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineTagNodeInterface;
 
@@ -29,8 +30,10 @@ final class OriginalSpacingRestorer
 
         $newNodeOutput = '';
         $i = 0;
-        // replace system whitespace by old ones
-        foreach (Strings::split($nodeOutput, '#\s+#') as $nodeOutputPart) {
+
+        // replace system whitespace by old ones, include \n*
+        $nodeOutputParts = Strings::split($nodeOutput, '#\s+#');
+        foreach ($nodeOutputParts as $nodeOutputPart) {
             $newNodeOutput .= ($oldWhitespaces[$i] ?? '') . $nodeOutputPart;
             ++$i;
         }
@@ -47,20 +50,32 @@ final class OriginalSpacingRestorer
     {
         $oldWhitespaces = [];
 
+
         $start = $startEndInfo->getStart();
+        // this is needed, because of 1 token taken from tokens and added annotation name: "ORM" + "\X" → "ORM\X"
+        // todo, this might be needed to be dynamic, based on taken tokens count (some Collector?)
         if ($node instanceof DoctrineTagNodeInterface) {
             --$start;
         }
 
         for ($i = $start; $i < $startEndInfo->getEnd(); ++$i) {
             if ($tokens[$i][1] === Lexer::TOKEN_HORIZONTAL_WS) {
-                $oldWhitespaces[] = $tokens[$i][0];
+                $value = $tokens[$i][0];
+
+                // give back "\s+\*" as well
+                if (isset($tokens[$i - 1]) && $tokens[$i - 1][1] === Lexer::TOKEN_PHPDOC_EOL) {
+                    $previousTokenValue = $tokens[$i - 1][0];
+                    if (Strings::match($previousTokenValue,'#\s+\*#m')) {
+                        $value = $previousTokenValue . $value;
+                    }
+                }
+
+                $oldWhitespaces[] = $value;
             }
 
             // quoted string with spaces?
             if ($this->isQuotedStringWithSpaces($tokens, $i)) {
                 $matches = Strings::matchAll($tokens[$i][0], '#\s+#m');
-
                 if ($matches !== []) {
                     $oldWhitespaces = array_merge($oldWhitespaces, Arrays::flatten($matches));
                 }

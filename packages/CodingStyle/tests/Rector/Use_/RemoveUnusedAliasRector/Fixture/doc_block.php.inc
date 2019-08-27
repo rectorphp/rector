@@ -8,7 +8,6 @@ class DocBlock
 {
     /**
      * @ORM\Id
-     * @ORM\Pod
      */
     protected $id;
 }

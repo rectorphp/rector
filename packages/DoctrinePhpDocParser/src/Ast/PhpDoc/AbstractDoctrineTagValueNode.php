@@ -31,6 +31,9 @@ abstract class AbstractDoctrineTagValueNode implements PhpDocTagValueNode, Attri
         return sprintf('cascade=%s', $json);
     }
 
+    /**
+     * @param string[] $contentItems
+     */
     protected function printContentItems(array $contentItems): string
     {
         $contentItems = ArrayItemStaticHelper::filterAndSortVisibleItems($contentItems, $this->orderedVisibleItems);
@@ -39,5 +42,22 @@ abstract class AbstractDoctrineTagValueNode implements PhpDocTagValueNode, Attri
         }
 
         return '(' . implode(', ', $contentItems) . ')';
+    }
+
+    /**
+     * @param PhpDocTagValueNode[] $tagValueNodes
+     */
+    protected function printTagValueNodesSeparatedByComma(array $tagValueNodes, string $prefix = ''): string
+    {
+        if ($tagValueNodes === []) {
+            return '';
+        }
+
+        $itemsAsStrings = [];
+        foreach ($tagValueNodes as $tagValueNode) {
+            $itemsAsStrings[] = $prefix . (string) $tagValueNode;
+        }
+
+        return implode(', ', $itemsAsStrings);
     }
 }

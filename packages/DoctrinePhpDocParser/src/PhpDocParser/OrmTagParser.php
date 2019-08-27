@@ -63,12 +63,23 @@ final class OrmTagParser
         /** @var Class_|Property $node */
         $node = $this->currentNodeProvider->getNode();
 
-        // skip all tokens for this annotation, so next annotation can work with tokens after this one
-        $annotationContent = $tokenIterator->joinUntil(
+        $clonedTokenIterator = clone $tokenIterator;
+
+        $singleLineContent = $clonedTokenIterator->joinUntil(
             Lexer::TOKEN_END,
             Lexer::TOKEN_PHPDOC_EOL,
             Lexer::TOKEN_CLOSE_PHPDOC
         );
+
+        if ($singleLineContent === '' || Strings::match($singleLineContent, '#^\((.*?)\)$#m')) {
+            $annotationContent = $singleLineContent;
+            $tokenIterator->joinUntil(Lexer::TOKEN_END, Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_CLOSE_PHPDOC);
+        } else { // multiline - content
+            // skip all tokens for this annotation, so next annotation can work with tokens after this one
+            $annotationContent = $tokenIterator->joinUntil(Lexer::TOKEN_END, Lexer::TOKEN_CLOSE_PHPDOC);
+        }
+
+        $annotationContent = $this->cleanMultilineAnnotationContent($annotationContent);
 
         // Entity tags
         if ($node instanceof Class_) {
@@ -79,10 +90,6 @@ final class OrmTagParser
 
         // Property tags
         if ($node instanceof Property) {
-
-            dump($annotationContent);
-            die;
-
             return $this->createPropertyTagValueNode($tag, $node, $annotationContent);
         }
 
@@ -90,7 +97,7 @@ final class OrmTagParser
     }
 
     /**
-     * @return ColumnTagValueNode|JoinColumnTagValueNode|OneToManyTagValueNode|ManyToManyTagValueNode|OneToOneTagValueNode|ManyToOneTagValueNode|OrderByTagValueNode|IdTagValueNode
+     * @return ColumnTagValueNode|JoinColumnTagValueNode|OneToManyTagValueNode|ManyToManyTagValueNode|OneToOneTagValueNode|ManyToOneTagValueNode|OrderByTagValueNode|IdTagValueNode|JoinTableTagValueNode
      */
     private function createPropertyTagValueNode(
         string $tag,
@@ -253,26 +260,40 @@ final class OrmTagParser
         /** @var JoinTable $joinTable */
         $joinTable = $this->nodeAnnotationReader->readDoctrinePropertyAnnotation($property, JoinTable::class);
 
+        $joinColumnContents = Strings::matchAll(
+            $annotationContent,
+            '#joinColumns=\{(\@ORM\\\\JoinColumn\((?<singleJoinColumn>.*?)\))+\}#'
+        );
+
         $joinColumnValuesTags = [];
-        foreach ($joinTable->joinColumns as $joinColumn) {
-            dump($annotationContent);
-            die;
+        foreach ($joinTable->joinColumns as $key => $joinColumn) {
+            $currentJoinColumnContent = $joinColumnContents[$key]['singleJoinColumn'];
 
-            $joinColumn = $this->createJoinColumnTagValueNodeFromJoinColumnAnnotation($joinColumn, $annotationContent);
-
-            $joinColumnValuesTags[] = $this->createJoinColumnTagValueNode($joinColumn);
+            $joinColumnValuesTags[] = $this->createJoinColumnTagValueNodeFromJoinColumnAnnotation(
+                $joinColumn,
+                $currentJoinColumnContent
+            );
         }
 
-        $inversedJoinColumnValuesTags = [];
-        foreach ($joinTable->inversedJoinColumns as $inversedJoinColumn) {
-            $inversedJoinColumnValuesTags[] = $this->createJoinColumnTagValueNode($inversedJoinColumn);
+        $inverseJoinColumnContents = Strings::matchAll(
+            $annotationContent,
+            '#inverseJoinColumns=\{(\@ORM\\\\JoinColumn\((?<singleJoinColumn>.*?)\))+\}#'
+        );
+
+        $inverseJoinColumnValuesTags = [];
+        foreach ($joinTable->inverseJoinColumns as $key => $inverseJoinColumn) {
+            $currentInverseJoinColumnContent = $inverseJoinColumnContents[$key]['singleJoinColumn'];
+            $inverseJoinColumnValuesTags[] = $this->createJoinColumnTagValueNodeFromJoinColumnAnnotation(
+                $inverseJoinColumn,
+                $currentInverseJoinColumnContent
+            );
         }
 
         return new JoinTableTagValueNode(
             $joinTable->name,
             $joinTable->schema,
             $joinColumnValuesTags,
-            $joinTable->inverseJoinColumns,
+            $inverseJoinColumnValuesTags,
             $this->resolveAnnotationItemsOrder($annotationContent)
         );
     }
@@ -311,8 +332,10 @@ final class OrmTagParser
         return $targetEntity;
     }
 
-    private function createJoinColumnTagValueNodeFromJoinColumnAnnotation(JoinColumn $joinColumn, string $annotationContent): JoinColumnTagValueNode
-    {
+    private function createJoinColumnTagValueNodeFromJoinColumnAnnotation(
+        JoinColumn $joinColumn,
+        string $annotationContent
+    ): JoinColumnTagValueNode {
         return new JoinColumnTagValueNode(
             $joinColumn->name,
             $joinColumn->referencedColumnName,
@@ -323,5 +346,11 @@ final class OrmTagParser
             $joinColumn->fieldName,
             $this->resolveAnnotationItemsOrder($annotationContent)
         );
+    }
+
+    private function cleanMultilineAnnotationContent(string $annotationContent): string
+    {
+        // @todo record for original * content restoration
+        return Strings::replace($annotationContent, '#(\s+)\*(\s+)#m', '$1$3');
     }
 }

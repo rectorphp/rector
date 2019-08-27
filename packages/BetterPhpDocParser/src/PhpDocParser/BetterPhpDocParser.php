@@ -132,9 +132,11 @@ final class BetterPhpDocParser extends PhpDocParser
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
         foreach ($this->phpDocParserExtensions as $phpDocParserExtension) {
-            if ($phpDocParserExtension->matchTag($tag)) {
-                return $phpDocParserExtension->parse($tokenIterator, $tag);
+            if (! $phpDocParserExtension->matchTag($tag)) {
+                continue;
             }
+
+            return $phpDocParserExtension->parse($tokenIterator, $tag);
         }
 
         // needed for reference support in params, see https://github.com/rectorphp/rector/issues/1734
