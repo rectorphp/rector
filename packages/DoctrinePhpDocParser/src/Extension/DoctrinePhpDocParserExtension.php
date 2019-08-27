@@ -25,7 +25,7 @@ final class DoctrinePhpDocParserExtension implements PhpDocParserExtensionInterf
         return (bool) Strings::match($tag, '#^@ORM\\\\(\w+)$#');
     }
 
-    public function parse(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
+    public function parse(TokenIterator $tokenIterator, string $tag): ?PhpDocTagValueNode
     {
         return $this->ormTagParser->parse($tokenIterator, $tag);
     }

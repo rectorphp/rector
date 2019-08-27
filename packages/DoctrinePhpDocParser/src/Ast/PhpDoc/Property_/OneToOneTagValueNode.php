@@ -78,7 +78,7 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
         $contentItems['inversedBy'] = sprintf('inversedBy="%s"', $this->inversedBy);
 
         if ($this->cascade) {
-            $contentItems['cascade'] = $this->printCascadeItem($this->cascade);
+            $contentItems['cascade'] = $this->printArrayItem($this->cascade, 'cascade');
         }
 
         $contentItems['fetch'] = sprintf('fetch="%s"', $this->fetch);

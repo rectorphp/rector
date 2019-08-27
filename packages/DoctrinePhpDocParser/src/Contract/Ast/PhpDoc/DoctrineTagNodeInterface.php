@@ -2,6 +2,8 @@
 
 namespace Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc;
 
-interface DoctrineTagNodeInterface
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+
+interface DoctrineTagNodeInterface extends PhpDocTagValueNode
 {
 }

@@ -75,7 +75,7 @@ final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implement
         $contentItems['targetEntity'] = sprintf('targetEntity="%s"', $this->targetEntity);
 
         if ($this->cascade) {
-            $contentItems['cascade'] = $this->printCascadeItem($this->cascade);
+            $contentItems['cascade'] = $this->printArrayItem($this->cascade, 'cascade');
         }
         $contentItems['fetch'] = sprintf('fetch="%s"', $this->fetch);
         $contentItems['orphanRemoval'] = sprintf('orphanRemoval=%s', $this->orphanRemoval ? 'true' : 'false');
