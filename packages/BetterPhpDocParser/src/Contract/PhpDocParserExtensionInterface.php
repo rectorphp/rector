@@ -9,5 +9,5 @@ interface PhpDocParserExtensionInterface
 {
     public function matchTag(string $tag): bool;
 
-    public function parse(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode;
+    public function parse(TokenIterator $tokenIterator, string $tag): ?PhpDocTagValueNode;
 }

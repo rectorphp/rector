@@ -20,15 +20,15 @@ abstract class AbstractDoctrineTagValueNode implements PhpDocTagValueNode, Attri
     protected $orderedVisibleItems = [];
 
     /**
-     * @param mixed[] $cascade
+     * @param mixed[] $item
      */
-    protected function printCascadeItem(array $cascade): string
+    protected function printArrayItem(array $item, string $key): string
     {
-        $json = Json::encode($cascade);
+        $json = Json::encode($item);
         $json = Strings::replace($json, '#,#', ', ');
         $json = Strings::replace($json, '#\[(.*?)\]#', '{$1}');
 
-        return sprintf('cascade=%s', $json);
+        return sprintf('%s=%s', $key, $json);
     }
 
     /**

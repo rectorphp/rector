@@ -31,8 +31,6 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode
         $contentItems = [];
 
         $contentItems['repositoryClass'] = sprintf('repositoryClass="%s"', $this->repositoryClass);
-
-        // default value
         $contentItems['readOnly'] = sprintf('readOnly=%s', $this->readOnly ? 'true' : 'false');
 
         return $this->printContentItems($contentItems);

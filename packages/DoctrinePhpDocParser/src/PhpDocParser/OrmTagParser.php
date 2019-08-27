@@ -58,7 +58,7 @@ final class OrmTagParser
         $this->nodeAnnotationReader = $nodeAnnotationReader;
     }
 
-    public function parse(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
+    public function parse(TokenIterator $tokenIterator, string $tag): ?PhpDocTagValueNode
     {
         /** @var Class_|Property $node */
         $node = $this->currentNodeProvider->getNode();
@@ -93,7 +93,7 @@ final class OrmTagParser
             return $this->createPropertyTagValueNode($tag, $node, $annotationContent);
         }
 
-        throw new NotImplementedException(__METHOD__ . ' ' . $tag);
+        return null;
     }
 
     /**
@@ -350,7 +350,6 @@ final class OrmTagParser
 
     private function cleanMultilineAnnotationContent(string $annotationContent): string
     {
-        // @todo record for original * content restoration
         return Strings::replace($annotationContent, '#(\s+)\*(\s+)#m', '$1$3');
     }
 }
