@@ -37,7 +37,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         }
 
         $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
-        $relationTagValueNode = $phpDocInfo->getRelationTagValueNode();
+        $relationTagValueNode = $phpDocInfo->getDoctrineRelationTagValueNode();
         if ($relationTagValueNode === null) {
             return [];
         }

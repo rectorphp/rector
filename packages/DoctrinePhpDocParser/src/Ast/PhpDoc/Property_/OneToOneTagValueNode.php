@@ -2,7 +2,6 @@
 
 namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_;
 
-use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\InversedByNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\MappedByNodeInterface;
@@ -10,6 +9,11 @@ use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToOneTagNodeInterface;
 
 final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements ToOneTagNodeInterface, MappedByNodeInterface, InversedByNodeInterface
 {
+    /**
+     * @var string
+     */
+    public const SHORT_NAME = '@ORM\OneToOne';
+
     /**
      * @var string
      */
@@ -74,8 +78,14 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
         $contentItems = [];
 
         $contentItems['targetEntity'] = sprintf('targetEntity="%s"', $this->targetEntity);
-        $contentItems['mappedBy'] = sprintf('mappedBy="%s"', $this->mappedBy);
-        $contentItems['inversedBy'] = sprintf('inversedBy="%s"', $this->inversedBy);
+
+        if ($this->mappedBy !== null) {
+            $contentItems['mappedBy'] = sprintf('mappedBy="%s"', $this->mappedBy);
+        }
+
+        if ($this->inversedBy !== null) {
+            $contentItems['inversedBy'] = sprintf('inversedBy="%s"', $this->inversedBy);
+        }
 
         if ($this->cascade) {
             $contentItems['cascade'] = $this->printArrayItem($this->cascade, 'cascade');
@@ -109,21 +119,11 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
 
     public function removeInversedBy(): void
     {
-        $this->orderedVisibleItems = ArrayItemStaticHelper::removeItemFromArray(
-            $this->orderedVisibleItems,
-            'inversedBy'
-        );
-
         $this->inversedBy = null;
     }
 
     public function removeMappedBy(): void
     {
-        $this->orderedVisibleItems = ArrayItemStaticHelper::removeItemFromArray(
-            $this->orderedVisibleItems,
-            'mappedBy'
-        );
-
         $this->mappedBy = null;
     }
 }

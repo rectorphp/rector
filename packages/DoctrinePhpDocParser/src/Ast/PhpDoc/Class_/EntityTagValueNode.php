@@ -30,7 +30,10 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode
     {
         $contentItems = [];
 
-        $contentItems['repositoryClass'] = sprintf('repositoryClass="%s"', $this->repositoryClass);
+        if ($this->repositoryClass !== null) {
+            $contentItems['repositoryClass'] = sprintf('repositoryClass="%s"', $this->repositoryClass);
+        }
+
         $contentItems['readOnly'] = sprintf('readOnly=%s', $this->readOnly ? 'true' : 'false');
 
         return $this->printContentItems($contentItems);
@@ -38,11 +41,6 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode
 
     public function removeRepositoryClass(): void
     {
-        $itemPosition = array_search('repositoryClass', $this->orderedVisibleItems, true);
-        if ($itemPosition !== null) {
-            unset($this->orderedVisibleItems[$itemPosition]);
-        }
-
         $this->repositoryClass = null;
     }
 }

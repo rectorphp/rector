@@ -7,6 +7,11 @@ final class DoctrineClass
     /**
      * @var string
      */
+    public const RAMSEY_UUID_INTERFACE = 'Ramsey\Uuid\UuidInterface';
+
+    /**
+     * @var string
+     */
     public const MANAGER_REGISTRY = 'Doctrine\Common\Persistence\ManagerRegistry';
 
     /**

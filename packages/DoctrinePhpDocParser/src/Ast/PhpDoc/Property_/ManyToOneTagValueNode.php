@@ -2,13 +2,17 @@
 
 namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_;
 
-use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\InversedByNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToOneTagNodeInterface;
 
 final class ManyToOneTagValueNode extends AbstractDoctrineTagValueNode implements ToOneTagNodeInterface, InversedByNodeInterface
 {
+    /**
+     * @var string
+     */
+    public const SHORT_NAME = '@ORM\ManyToOne';
+
     /**
      * @var string
      */
@@ -84,11 +88,6 @@ final class ManyToOneTagValueNode extends AbstractDoctrineTagValueNode implement
 
     public function removeInversedBy(): void
     {
-        $this->orderedVisibleItems = ArrayItemStaticHelper::removeItemFromArray(
-            $this->orderedVisibleItems,
-            'inversedBy'
-        );
-
         $this->inversedBy = null;
     }
 }
