@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\OrderBy;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -22,16 +21,13 @@ use Rector\Configuration\CurrentNodeProvider;
 use Rector\DoctrinePhpDocParser\AnnotationReader\NodeAnnotationReader;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\IdTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinTableTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToManyTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToOneTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToManyTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToOneTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OrderByTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineTagNodeInterface;
-use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -97,17 +93,13 @@ final class OrmTagParser
     }
 
     /**
-     * @return ColumnTagValueNode|JoinColumnTagValueNode|OneToManyTagValueNode|ManyToManyTagValueNode|OneToOneTagValueNode|ManyToOneTagValueNode|OrderByTagValueNode|IdTagValueNode|JoinTableTagValueNode
+     * @return ColumnTagValueNode|JoinColumnTagValueNode|OneToManyTagValueNode|ManyToManyTagValueNode|OneToOneTagValueNode|ManyToOneTagValueNode|JoinTableTagValueNode
      */
     private function createPropertyTagValueNode(
         string $tag,
         Property $property,
         string $annotationContent
-    ): DoctrineTagNodeInterface {
-        if ($tag === '@ORM\Id') {
-            return $this->createIdTagValueNode();
-        }
-
+    ): ?DoctrineTagNodeInterface {
         if ($tag === '@ORM\Column') {
             return $this->createColumnTagValueNode($property, $annotationContent);
         }
@@ -132,15 +124,11 @@ final class OrmTagParser
             return $this->createOneToManyTagValueNode($property, $annotationContent);
         }
 
-        if ($tag === '@ORM\OrderBy') {
-            return $this->createOrderByTagValeNode($property);
-        }
-
         if ($tag === '@ORM\JoinTable') {
             return $this->createJoinTableTagValeNode($property, $annotationContent);
         }
 
-        throw new NotImplementedException(__METHOD__ . ' - ' . $tag);
+        return null;
     }
 
     private function createEntityTagValueNode(Class_ $node, string $annotationContent): EntityTagValueNode
@@ -247,14 +235,6 @@ final class OrmTagParser
         return $this->createJoinColumnTagValueNodeFromJoinColumnAnnotation($joinColumn, $annotationContent);
     }
 
-    private function createOrderByTagValeNode(Property $property): OrderByTagValueNode
-    {
-        /** @var OrderBy $orderBy */
-        $orderBy = $this->nodeAnnotationReader->readDoctrinePropertyAnnotation($property, OrderBy::class);
-
-        return new OrderByTagValueNode($orderBy->value);
-    }
-
     private function createJoinTableTagValeNode(Property $property, string $annotationContent): JoinTableTagValueNode
     {
         /** @var JoinTable $joinTable */
@@ -262,7 +242,7 @@ final class OrmTagParser
 
         $joinColumnContents = Strings::matchAll(
             $annotationContent,
-            '#joinColumns=\{(\@ORM\\\\JoinColumn\((?<singleJoinColumn>.*?)\))+\}#'
+            '#joinColumns=\{(\@ORM\\\\JoinColumn\((?<singleJoinColumn>.*?)\))+\}#s'
         );
 
         $joinColumnValuesTags = [];
@@ -296,11 +276,6 @@ final class OrmTagParser
             $inverseJoinColumnValuesTags,
             $this->resolveAnnotationItemsOrder($annotationContent)
         );
-    }
-
-    private function createIdTagValueNode(): IdTagValueNode
-    {
-        return new IdTagValueNode();
     }
 
     /**
