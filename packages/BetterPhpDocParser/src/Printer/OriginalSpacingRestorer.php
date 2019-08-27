@@ -28,11 +28,28 @@ final class OriginalSpacingRestorer
         }
 
         $newNodeOutput = '';
-        $i = 0;
-        // replace system whitespace by old ones
-        foreach (Strings::split($nodeOutput, '#\s+#') as $nodeOutputPart) {
-            $newNodeOutput .= ($oldWhitespaces[$i] ?? '') . $nodeOutputPart;
-            ++$i;
+
+        // replace system whitespace by old ones, include \n*
+        $nodeOutputParts = Strings::split($nodeOutput, '#\s+#');
+        $hasAsterixMultiline = false;
+        foreach ($nodeOutputParts as $key => $nodeOutputPart) {
+            if (isset($oldWhitespaces[$key])) {
+                $oldWhitespace = $oldWhitespaces[$key];
+                if (Strings::match($oldWhitespace, "#\n#")) {
+                    $hasAsterixMultiline = true;
+                }
+            } else {
+                $oldWhitespace = '';
+            }
+            $newNodeOutput .= $oldWhitespace . $nodeOutputPart;
+        }
+
+        // add probably missing last token newline
+        if ($hasAsterixMultiline && $node instanceof DoctrineTagNodeInterface) { // basically any custom tag that steals token to get name
+            // last space to left
+            // experimental newline of the last )
+            $newNodeOutput = Strings::replace($newNodeOutput, '#\)$#', "\n * )");
+            $newNodeOutput .= PHP_EOL . ' ';
         }
 
         // remove first space, added by the printer above
@@ -48,19 +65,34 @@ final class OriginalSpacingRestorer
         $oldWhitespaces = [];
 
         $start = $startEndInfo->getStart();
+        // this is needed, because of 1 token taken from tokens and added annotation name: "ORM" + "\X" → "ORM\X"
+        // todo, this might be needed to be dynamic, based on taken tokens count (some Collector?)
         if ($node instanceof DoctrineTagNodeInterface) {
             --$start;
         }
 
         for ($i = $start; $i < $startEndInfo->getEnd(); ++$i) {
             if ($tokens[$i][1] === Lexer::TOKEN_HORIZONTAL_WS) {
-                $oldWhitespaces[] = $tokens[$i][0];
+                $value = $tokens[$i][0];
+
+                if ($node instanceof DoctrineTagNodeInterface) {
+                    // give back "\s+\*" as well
+                    if (($i - 1) > $start) { // do not overlap to previous node
+                        if (isset($tokens[$i - 1]) && $tokens[$i - 1][1] === Lexer::TOKEN_PHPDOC_EOL) {
+                            $previousTokenValue = $tokens[$i - 1][0];
+                            if (Strings::match($previousTokenValue, '#\s+\*#m')) {
+                                $value = $previousTokenValue . $value;
+                            }
+                        }
+                    }
+                }
+
+                $oldWhitespaces[] = $value;
             }
 
             // quoted string with spaces?
             if ($this->isQuotedStringWithSpaces($tokens, $i)) {
                 $matches = Strings::matchAll($tokens[$i][0], '#\s+#m');
-
                 if ($matches !== []) {
                     $oldWhitespaces = array_merge($oldWhitespaces, Arrays::flatten($matches));
                 }

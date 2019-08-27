@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Tests\PhpDocInfo;
+namespace Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfo;
 
 use Nette\Utils\FileSystem;
 use PhpParser\Comment\Doc;
@@ -40,7 +40,7 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/PhpDocInfoSource/doc.txt');
+        $this->phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/Source/doc.txt');
 
         $this->phpDocInfoPrinter = self::$container->get(PhpDocInfoPrinter::class);
         $this->docBlockManipulator = self::$container->get(DocBlockManipulator::class);
@@ -83,7 +83,7 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
 
     public function testReplaceTagByAnother(): void
     {
-        $phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/PhpDocInfoSource/test-tag.txt');
+        $phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/Source/test-tag.txt');
 
         $this->assertFalse($phpDocInfo->hasTag('flow'));
         $this->assertTrue($phpDocInfo->hasTag('test'));
@@ -94,7 +94,7 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
         $this->assertTrue($phpDocInfo->hasTag('flow'));
 
         $this->assertStringEqualsFile(
-            __DIR__ . '/PhpDocInfoSource/expected-replaced-tag.txt',
+            __DIR__ . '/Source/expected-replaced-tag.txt',
             $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo)
         );
     }

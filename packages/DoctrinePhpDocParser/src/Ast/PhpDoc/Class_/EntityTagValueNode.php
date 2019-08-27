@@ -1,17 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc;
+namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_;
 
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
-use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
-use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineTagNodeInterface;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
 
-final class EntityTagValueNode implements PhpDocTagValueNode, AttributeAwareNodeInterface, DoctrineTagNodeInterface
+final class EntityTagValueNode extends AbstractDoctrineTagValueNode
 {
-    use AttributeTrait;
-
     /**
      * @var string|null
      */
@@ -21,11 +15,6 @@ final class EntityTagValueNode implements PhpDocTagValueNode, AttributeAwareNode
      * @var bool
      */
     private $readOnly = false;
-
-    /**
-     * @var string[]
-     */
-    private $orderedVisibleItems = [];
 
     /**
      * @param string[] $orderedVisibleItems
@@ -46,12 +35,7 @@ final class EntityTagValueNode implements PhpDocTagValueNode, AttributeAwareNode
         // default value
         $contentItems['readOnly'] = sprintf('readOnly=%s', $this->readOnly ? 'true' : 'false');
 
-        $contentItems = ArrayItemStaticHelper::filterAndSortVisibleItems($contentItems, $this->orderedVisibleItems);
-        if ($contentItems === []) {
-            return '';
-        }
-
-        return '(' . implode(', ', $contentItems) . ')';
+        return $this->printContentItems($contentItems);
     }
 
     public function removeRepositoryClass(): void

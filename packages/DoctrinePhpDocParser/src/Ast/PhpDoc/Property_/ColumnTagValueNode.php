@@ -1,19 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc;
+namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_;
 
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
-use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
-use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineTagNodeInterface;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
 
-final class ColumnTagValueNode implements PhpDocTagValueNode, AttributeAwareNodeInterface, DoctrineTagNodeInterface
+final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
 {
-    use AttributeTrait;
-
     /**
      * @var string|null
      */
@@ -58,11 +52,6 @@ final class ColumnTagValueNode implements PhpDocTagValueNode, AttributeAwareNode
      * @var string|null
      */
     private $columnDefinition;
-
-    /**
-     * @var string[]
-     */
-    private $orderedVisibleItems = [];
 
     /**
      * @param mixed[] $options
@@ -115,12 +104,7 @@ final class ColumnTagValueNode implements PhpDocTagValueNode, AttributeAwareNode
 
         $contentItems['columnDefinition'] = sprintf('columnDefinition="%s"', $this->columnDefinition);
 
-        $contentItems = ArrayItemStaticHelper::filterAndSortVisibleItems($contentItems, $this->orderedVisibleItems);
-        if ($contentItems === []) {
-            return '';
-        }
-
-        return '(' . implode(', ', $contentItems) . ')';
+        return $this->printContentItems($contentItems);
     }
 
     /**

@@ -13,6 +13,7 @@ use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\DeadCode\UnusedNodeResolver\ClassUnusedPrivateClassMethodResolver;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -49,16 +50,23 @@ final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRe
      */
     private $doctrineEntityManipulator;
 
+    /**
+     * @var DocBlockManipulator
+     */
+    private $docBlockManipulator;
+
     public function __construct(
         ParsedNodesByType $parsedNodesByType,
         ClassUnusedPrivateClassMethodResolver $classUnusedPrivateClassMethodResolver,
         ClassManipulator $classManipulator,
+        DocBlockManipulator $docBlockManipulator,
         DoctrineEntityManipulator $doctrineEntityManipulator
     ) {
         $this->parsedNodesByType = $parsedNodesByType;
         $this->classUnusedPrivateClassMethodResolver = $classUnusedPrivateClassMethodResolver;
         $this->classManipulator = $classManipulator;
         $this->doctrineEntityManipulator = $doctrineEntityManipulator;
+        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -117,7 +125,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->doctrineEntityManipulator->isStandaloneDoctrineEntityClass($node)) {
+        if (! $this->doctrineEntityManipulator->isNonAbstractDoctrineEntityClass($node)) {
             return null;
         }
 
@@ -197,15 +205,18 @@ CODE_SAMPLE
 
     private function getOtherRelationProperty(Property $property): ?Property
     {
-        $targetClass = $this->doctrineEntityManipulator->resolveTargetClass($property);
-        $otherProperty = $this->doctrineEntityManipulator->resolveOtherProperty($property);
+        $targetEntity = $this->docBlockManipulator->getDoctrineFqnTargetEntity($property);
+        if ($targetEntity === null) {
+            return null;
+        }
 
-        if ($targetClass === null || $otherProperty === null) {
+        $otherProperty = $this->doctrineEntityManipulator->resolveOtherProperty($property);
+        if ($otherProperty === null) {
             return null;
         }
 
         // get the class property and remove "mappedBy/inversedBy" from annotation
-        $relatedEntityClass = $this->parsedNodesByType->findClass($targetClass);
+        $relatedEntityClass = $this->parsedNodesByType->findClass($targetEntity);
         if (! $relatedEntityClass instanceof Class_) {
             return null;
         }

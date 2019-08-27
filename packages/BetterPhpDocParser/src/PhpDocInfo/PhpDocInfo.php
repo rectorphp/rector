@@ -13,8 +13,14 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareReturnTagValue
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\ColumnTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\EntityTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinColumnTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToManyTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToOneTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToManyTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToOneTagValueNode;
+use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\RelationTagValueNodeInterface;
 
 final class PhpDocInfo
 {
@@ -169,30 +175,39 @@ final class PhpDocInfo
         return $this->getResolvedTypesAttribute($varTagValue);
     }
 
+    public function getDoctrineManyToManyTagValueNode(): ?ManyToManyTagValueNode
+    {
+        return $this->matchChildValueNodeOfType(ManyToManyTagValueNode::class);
+    }
+
+    public function getDoctrineManyToOneTagValueNode(): ?ManyToOneTagValueNode
+    {
+        return $this->matchChildValueNodeOfType(ManyToOneTagValueNode::class);
+    }
+
+    public function getDoctrineOneToOneTagValueNode(): ?OneToOneTagValueNode
+    {
+        return $this->matchChildValueNodeOfType(OneToOneTagValueNode::class);
+    }
+
+    public function getDoctrineOneToManyTagValueNode(): ?OneToManyTagValueNode
+    {
+        return $this->matchChildValueNodeOfType(OneToManyTagValueNode::class);
+    }
+
     public function getDoctrineEntityTag(): ?EntityTagValueNode
     {
-        foreach ($this->phpDocNode->children as $phpDocChildNode) {
-            if ($phpDocChildNode instanceof PhpDocTagNode) {
-                if ($phpDocChildNode->value instanceof EntityTagValueNode) {
-                    return $phpDocChildNode->value;
-                }
-            }
-        }
-
-        return null;
+        return $this->matchChildValueNodeOfType(EntityTagValueNode::class);
     }
 
     public function getDoctrineColumnTagValueNode(): ?ColumnTagValueNode
     {
-        foreach ($this->phpDocNode->children as $phpDocChildNode) {
-            if ($phpDocChildNode instanceof PhpDocTagNode) {
-                if ($phpDocChildNode->value instanceof ColumnTagValueNode) {
-                    return $phpDocChildNode->value;
-                }
-            }
-        }
+        return $this->matchChildValueNodeOfType(ColumnTagValueNode::class);
+    }
 
-        return null;
+    public function getDoctrineJoinColumnTagValueNode(): ?JoinColumnTagValueNode
+    {
+        return $this->matchChildValueNodeOfType(JoinColumnTagValueNode::class);
     }
 
     /**
@@ -234,6 +249,14 @@ final class PhpDocInfo
         return $this->getResolvedTypesAttribute($returnTypeValueNode);
     }
 
+    public function getRelationTagValueNode(): ?RelationTagValueNodeInterface
+    {
+        return $this->getDoctrineManyToManyTagValueNode() ??
+            $this->getDoctrineOneToManyTagValueNode() ??
+            $this->getDoctrineOneToOneTagValueNode() ??
+            $this->getDoctrineManyToOneTagValueNode() ?? null;
+    }
+
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
         $phpDocNode = $this->getPhpDocNode();
@@ -259,5 +282,21 @@ final class PhpDocInfo
         }
 
         return $phpDocTagValueNode->getAttribute(Attribute::TYPE_AS_ARRAY);
+    }
+
+    /**
+     * @param string $type
+     */
+    private function matchChildValueNodeOfType(string $type): ?PhpDocTagValueNode
+    {
+        foreach ($this->phpDocNode->children as $phpDocChildNode) {
+            if ($phpDocChildNode instanceof PhpDocTagNode) {
+                if (is_a($phpDocChildNode->value, $type, true)) {
+                    return $phpDocChildNode->value;
+                }
+            }
+        }
+
+        return null;
     }
 }

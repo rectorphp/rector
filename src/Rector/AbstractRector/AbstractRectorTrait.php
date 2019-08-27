@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 trait AbstractRectorTrait
 {
     use AppliedRectorCollectorTrait;
+    use DocBlockManipulatorTrait;
     use NodeTypeResolverTrait;
     use NameResolverTrait;
     use ConstFetchAnalyzerTrait;

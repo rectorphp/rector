@@ -64,6 +64,14 @@ final class NodeAnnotationReader
         /** @var string $className */
         $className = $property->getAttribute(AttributeKey::CLASS_NAME);
 
+        if ($className === null || ! class_exists($className)) {
+            throw new ShouldNotHappenException(sprintf(
+                'Class "%s" for property "%s" was not found.',
+                (string) $className,
+                $propertyName
+            ));
+        }
+
         return new ReflectionProperty($className, $propertyName);
     }
 
