@@ -6,7 +6,6 @@ use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Lexer\Lexer;
-use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Data\StartEndInfo;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineTagNodeInterface;
 
@@ -29,13 +28,28 @@ final class OriginalSpacingRestorer
         }
 
         $newNodeOutput = '';
-        $i = 0;
 
         // replace system whitespace by old ones, include \n*
         $nodeOutputParts = Strings::split($nodeOutput, '#\s+#');
-        foreach ($nodeOutputParts as $nodeOutputPart) {
-            $newNodeOutput .= ($oldWhitespaces[$i] ?? '') . $nodeOutputPart;
-            ++$i;
+        $hasAsterixMultiline = false;
+        foreach ($nodeOutputParts as $key => $nodeOutputPart) {
+            if (isset($oldWhitespaces[$key])) {
+                $oldWhitespace = $oldWhitespaces[$key];
+                if (Strings::match($oldWhitespace, "#\n#")) {
+                    $hasAsterixMultiline = true;
+                }
+            } else {
+                $oldWhitespace = '';
+            }
+            $newNodeOutput .= $oldWhitespace . $nodeOutputPart;
+        }
+
+        // add probably missing last token newline
+        if ($hasAsterixMultiline && $node instanceof DoctrineTagNodeInterface) { // basically any custom tag that steals token to get name
+            // last space to left
+            // experimental newline of the last )
+            $newNodeOutput = Strings::replace($newNodeOutput, '#\)$#', "\n * )");
+            $newNodeOutput .= PHP_EOL . ' ';
         }
 
         // remove first space, added by the printer above
@@ -50,7 +64,6 @@ final class OriginalSpacingRestorer
     {
         $oldWhitespaces = [];
 
-
         $start = $startEndInfo->getStart();
         // this is needed, because of 1 token taken from tokens and added annotation name: "ORM" + "\X" → "ORM\X"
         // todo, this might be needed to be dynamic, based on taken tokens count (some Collector?)
@@ -62,11 +75,15 @@ final class OriginalSpacingRestorer
             if ($tokens[$i][1] === Lexer::TOKEN_HORIZONTAL_WS) {
                 $value = $tokens[$i][0];
 
-                // give back "\s+\*" as well
-                if (isset($tokens[$i - 1]) && $tokens[$i - 1][1] === Lexer::TOKEN_PHPDOC_EOL) {
-                    $previousTokenValue = $tokens[$i - 1][0];
-                    if (Strings::match($previousTokenValue,'#\s+\*#m')) {
-                        $value = $previousTokenValue . $value;
+                if ($node instanceof DoctrineTagNodeInterface) {
+                    // give back "\s+\*" as well
+                    if (($i - 1) > $start) { // do not overlap to previous node
+                        if (isset($tokens[$i - 1]) && $tokens[$i - 1][1] === Lexer::TOKEN_PHPDOC_EOL) {
+                            $previousTokenValue = $tokens[$i - 1][0];
+                            if (Strings::match($previousTokenValue, '#\s+\*#m')) {
+                                $value = $previousTokenValue . $value;
+                            }
+                        }
                     }
                 }
 

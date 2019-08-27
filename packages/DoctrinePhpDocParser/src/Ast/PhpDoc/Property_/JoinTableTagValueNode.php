@@ -53,14 +53,14 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
         $contentItems['schema'] = sprintf('schema="%s"', $this->schema);
 
         if ($this->joinColumns) {
-            $joinColumnsAsString = $this->printTagValueNodesSeparatedByComma($this->joinColumns, '@ORM\JoinCOlumn');
+            $joinColumnsAsString = $this->printTagValueNodesSeparatedByComma($this->joinColumns, '@ORM\JoinColumn');
             $contentItems['joinColumns'] = sprintf('joinColumns={%s}', $joinColumnsAsString);
         }
 
         if ($this->inverseJoinColumns) {
             $inverseJoinColumnsAsString = $this->printTagValueNodesSeparatedByComma(
                 $this->inverseJoinColumns,
-                '@ORM\JoinCOlumn'
+                '@ORM\JoinColumn'
             );
             $contentItems['inverseJoinColumns'] = sprintf('inverseJoinColumns={%s}', $inverseJoinColumnsAsString);
         }

@@ -12,29 +12,29 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class MultilineTest extends AbstractPhpDocInfoPrinterTest
 {
-//    /**
-//     * @dataProvider provideData()
-//     */
-//    public function test(string $docFilePath): void
-//    {
-//        $docComment = FileSystem::read($docFilePath);
-//        $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, new Nop());
-//
-//        $this->assertSame(
-//            $docComment,
-//            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo),
-//            'Caused in ' . $docFilePath
-//        );
-//    }
-//
-//    public function provideData(): Iterator
-//    {
-//        yield [__DIR__ . '/Source/Multiline/multiline1.txt'];
-//        yield [__DIR__ . '/Source/Multiline/multiline2.txt'];
-//        yield [__DIR__ . '/Source/Multiline/multiline3.txt'];
-//        yield [__DIR__ . '/Source/Multiline/multiline4.txt'];
-//        yield [__DIR__ . '/Source/Multiline/multiline5.txt'];
-//    }
+    /**
+     * @dataProvider provideData()
+     */
+    public function test(string $docFilePath): void
+    {
+        $docComment = FileSystem::read($docFilePath);
+        $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, new Nop());
+
+        $this->assertSame(
+            $docComment,
+            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo),
+            'Caused in ' . $docFilePath
+        );
+    }
+
+    public function provideData(): Iterator
+    {
+        yield [__DIR__ . '/Source/Multiline/multiline1.txt'];
+        yield [__DIR__ . '/Source/Multiline/multiline2.txt'];
+        yield [__DIR__ . '/Source/Multiline/multiline3.txt'];
+        yield [__DIR__ . '/Source/Multiline/multiline4.txt'];
+        yield [__DIR__ . '/Source/Multiline/multiline5.txt'];
+    }
 
     public function testDoctrine(): void
     {
