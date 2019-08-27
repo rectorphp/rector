@@ -14,27 +14,13 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
+use Rector\Doctrine\ValueObject\DoctrineClass;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class ManagerRegistryGetManagerToEntityManagerRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const MANAGER_REGISTRY_CLASS = 'Doctrine\Common\Persistence\ManagerRegistry';
-
-    /**
-     * @var string
-     */
-    private const ENTITY_MANAGER_CLASS = 'Doctrine\ORM\EntityManagerInterface';
-
-    /**
-     * @var string
-     */
-    private const OBJECT_MANAGER_CLASS = 'Doctrine\Common\Persistence\ObjectManager';
-
     /**
      * @var string
      */
@@ -46,8 +32,8 @@ final class ManagerRegistryGetManagerToEntityManagerRector extends AbstractRecto
     private $objectManagerClass;
 
     public function __construct(
-        string $managerRegistryClass = self::MANAGER_REGISTRY_CLASS,
-        string $objectManagerClass = self::OBJECT_MANAGER_CLASS
+        string $managerRegistryClass = DoctrineClass::MANAGER_REGISTRY,
+        string $objectManagerClass = DoctrineClass::OBJECT_MANAGER
     ) {
         $this->managerRegistryClass = $managerRegistryClass;
         $this->objectManagerClass = $objectManagerClass;
@@ -143,7 +129,7 @@ CODE_SAMPLE
             $node,
             $constructMethodNode,
             'entityManager',
-            self::ENTITY_MANAGER_CLASS
+            DoctrineClass::ENTITY_MANAGER
         );
 
         if ($shouldRemoveManagerRegistryProperty === true) {
@@ -202,7 +188,7 @@ CODE_SAMPLE
 
     private function createEntityManagerParam(): Param
     {
-        return new Param(new Variable('entityManager'), null, new FullyQualified(self::ENTITY_MANAGER_CLASS));
+        return new Param(new Variable('entityManager'), null, new FullyQualified(DoctrineClass::ENTITY_MANAGER));
     }
 
     /**

@@ -75,6 +75,7 @@ parameters:
 
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
+            - 'packages/*Class.php'
             - 'bin/bootstrap.php'
             - '*/packages/*/src/Rector/*Rector.php'
             - 'src/Rector/MethodCall/MethodCallToAnotherMethodCallWithArgumentsRector.php'
