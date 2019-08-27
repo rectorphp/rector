@@ -242,7 +242,7 @@ final class OrmTagParser
 
         $joinColumnContents = Strings::matchAll(
             $annotationContent,
-            '#joinColumns=\{(\@ORM\\\\JoinColumn\((?<singleJoinColumn>.*?)\))+\}#'
+            '#joinColumns=\{(\@ORM\\\\JoinColumn\((?<singleJoinColumn>.*?)\))+\}#s'
         );
 
         $joinColumnValuesTags = [];
