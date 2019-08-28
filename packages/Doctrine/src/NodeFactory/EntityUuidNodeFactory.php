@@ -12,11 +12,14 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 
 final class EntityUuidNodeFactory
@@ -78,10 +81,16 @@ final class EntityUuidNodeFactory
      *     $this->uid = \Ramsey\Uuid\Uuid::uuid4();
      * }
      */
-    public function createConstructorWithUuidPropertyDefaultValueAssign(): ClassMethod
+    public function createConstructorWithUuidInitialization(Class_ $class): ClassMethod
     {
         $classMethodBuilder = $this->builderFactory->method('__construct');
         $classMethodBuilder->makePublic();
+
+        // keep parent constructor call
+        if ($this->hasParentClassConstructor($class)) {
+            $parentClassCall = $this->createParentConstructCall();
+            $classMethodBuilder->addStmt($parentClassCall);
+        }
 
         $assign = $this->createUuidPropertyDefaultValueAssign();
         $classMethodBuilder->addStmt($assign);
@@ -138,5 +147,20 @@ final class EntityUuidNodeFactory
         );
 
         $node->setDocComment(new Doc($stringTypeText));
+    }
+
+    private function hasParentClassConstructor(Class_ $class): bool
+    {
+        $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        if ($parentClassName === null) {
+            return false;
+        }
+
+        return method_exists($parentClassName, '__construct');
+    }
+
+    private function createParentConstructCall(): StaticCall
+    {
+        return new StaticCall(new Name('parent'), '__construct');
     }
 }
