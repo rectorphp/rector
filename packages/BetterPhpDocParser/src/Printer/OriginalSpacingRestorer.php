@@ -31,6 +31,12 @@ final class OriginalSpacingRestorer
 
         // replace system whitespace by old ones, include \n*
         $nodeOutputParts = Strings::split($nodeOutput, '#\s+#');
+
+        // new nodes were probably added, skip them
+        if (count($oldWhitespaces) < count($nodeOutputParts)) {
+            return $nodeOutput;
+        }
+
         $hasAsterixMultiline = false;
         foreach ($nodeOutputParts as $key => $nodeOutputPart) {
             if (isset($oldWhitespaces[$key])) {

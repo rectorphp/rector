@@ -37,7 +37,7 @@ final class DoctrineEntityManipulator
 
         $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
 
-        $relationTagValueNode = $phpDocInfo->getRelationTagValueNode();
+        $relationTagValueNode = $phpDocInfo->getDoctrineRelationTagValueNode();
         if ($relationTagValueNode === null) {
             return null;
         }
@@ -84,7 +84,7 @@ final class DoctrineEntityManipulator
         }
 
         $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
-        $relationTagValueNode = $phpDocInfo->getRelationTagValueNode();
+        $relationTagValueNode = $phpDocInfo->getDoctrineRelationTagValueNode();
 
         $shouldUpdate = false;
         if ($relationTagValueNode instanceof MappedByNodeInterface) {
@@ -125,7 +125,7 @@ final class DoctrineEntityManipulator
             }
 
             $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($stmt);
-            if ($phpDocInfo->getRelationTagValueNode() === null) {
+            if ($phpDocInfo->getDoctrineRelationTagValueNode() === null) {
                 continue;
             }
 

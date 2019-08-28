@@ -15,9 +15,9 @@ abstract class AbstractDoctrineTagValueNode implements AttributeAwareNodeInterfa
     use AttributeTrait;
 
     /**
-     * @var string[]
+     * @var string[]|null
      */
-    protected $orderedVisibleItems = [];
+    protected $orderedVisibleItems;
 
     /**
      * @param mixed[] $item
@@ -36,7 +36,10 @@ abstract class AbstractDoctrineTagValueNode implements AttributeAwareNodeInterfa
      */
     protected function printContentItems(array $contentItems): string
     {
-        $contentItems = ArrayItemStaticHelper::filterAndSortVisibleItems($contentItems, $this->orderedVisibleItems);
+        if ($this->orderedVisibleItems !== null) {
+            $contentItems = ArrayItemStaticHelper::filterAndSortVisibleItems($contentItems, $this->orderedVisibleItems);
+        }
+
         if ($contentItems === []) {
             return '';
         }

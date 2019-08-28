@@ -9,6 +9,11 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
     /**
      * @var string
      */
+    public const SHORT_NAME = '@ORM\JoinTable';
+
+    /**
+     * @var string
+     */
     private $name;
 
     /**
@@ -17,14 +22,14 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
     private $schema;
 
     /**
-     * @var JoinColumnTagValueNode[]
+     * @var JoinColumnTagValueNode[]|null
      */
-    private $joinColumns = [];
+    private $joinColumns;
 
     /**
-     * @var JoinColumnTagValueNode[]
+     * @var JoinColumnTagValueNode[]|null
      */
-    private $inverseJoinColumns = [];
+    private $inverseJoinColumns;
 
     /**
      * @param string[] $orderedVisibleItems
@@ -33,10 +38,10 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
      */
     public function __construct(
         string $name,
-        ?string $schema,
-        array $joinColumns,
-        array $inverseJoinColumns,
-        array $orderedVisibleItems
+        ?string $schema = null,
+        ?array $joinColumns = null,
+        ?array $inverseJoinColumns = null,
+        ?array $orderedVisibleItems = null
     ) {
         $this->name = $name;
         $this->schema = $schema;
@@ -50,17 +55,23 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
         $contentItems = [];
 
         $contentItems['name'] = sprintf('name="%s"', $this->name);
-        $contentItems['schema'] = sprintf('schema="%s"', $this->schema);
+
+        if ($this->schema !== null) {
+            $contentItems['schema'] = sprintf('schema="%s"', $this->schema);
+        }
 
         if ($this->joinColumns) {
-            $joinColumnsAsString = $this->printTagValueNodesSeparatedByComma($this->joinColumns, '@ORM\JoinColumn');
+            $joinColumnsAsString = $this->printTagValueNodesSeparatedByComma(
+                $this->joinColumns,
+                JoinColumnTagValueNode::SHORT_NAME
+            );
             $contentItems['joinColumns'] = sprintf('joinColumns={%s}', $joinColumnsAsString);
         }
 
         if ($this->inverseJoinColumns) {
             $inverseJoinColumnsAsString = $this->printTagValueNodesSeparatedByComma(
                 $this->inverseJoinColumns,
-                '@ORM\JoinColumn'
+                JoinColumnTagValueNode::SHORT_NAME
             );
             $contentItems['inverseJoinColumns'] = sprintf('inverseJoinColumns={%s}', $inverseJoinColumnsAsString);
         }

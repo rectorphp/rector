@@ -572,7 +572,7 @@ final class DocBlockManipulator
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        $relationTagValueNode = $phpDocInfo->getRelationTagValueNode();
+        $relationTagValueNode = $phpDocInfo->getDoctrineRelationTagValueNode();
         if ($relationTagValueNode === null) {
             return null;
         }

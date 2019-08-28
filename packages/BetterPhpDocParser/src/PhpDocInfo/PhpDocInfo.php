@@ -15,12 +15,13 @@ use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\IdTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToManyTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToOneTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToManyTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToOneTagValueNode;
-use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\RelationTagValueNodeInterface;
+use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 
 final class PhpDocInfo
 {
@@ -175,6 +176,11 @@ final class PhpDocInfo
         return $this->getResolvedTypesAttribute($varTagValue);
     }
 
+    public function getDoctrineIdTagValueNode(): ?IdTagValueNode
+    {
+        return $this->matchChildValueNodeOfType(IdTagValueNode::class);
+    }
+
     public function getDoctrineManyToManyTagValueNode(): ?ManyToManyTagValueNode
     {
         return $this->matchChildValueNodeOfType(ManyToManyTagValueNode::class);
@@ -249,12 +255,25 @@ final class PhpDocInfo
         return $this->getResolvedTypesAttribute($returnTypeValueNode);
     }
 
-    public function getRelationTagValueNode(): ?RelationTagValueNodeInterface
+    public function getDoctrineRelationTagValueNode(): ?DoctrineRelationTagValueNodeInterface
     {
         return $this->getDoctrineManyToManyTagValueNode() ??
             $this->getDoctrineOneToManyTagValueNode() ??
             $this->getDoctrineOneToOneTagValueNode() ??
             $this->getDoctrineManyToOneTagValueNode() ?? null;
+    }
+
+    public function removeTagValueNodeFromNode(PhpDocTagValueNode $phpDocTagValueNode): void
+    {
+        foreach ($this->phpDocNode->children as $key => $phpDocChildNode) {
+            if ($phpDocChildNode instanceof PhpDocTagNode) {
+                if ($phpDocChildNode->value !== $phpDocTagValueNode) {
+                    continue;
+                }
+
+                unset($this->phpDocNode->children[$key]);
+            }
+        }
     }
 
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode

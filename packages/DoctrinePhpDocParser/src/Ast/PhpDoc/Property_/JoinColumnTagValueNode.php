@@ -2,14 +2,20 @@
 
 namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_;
 
+use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
 
 final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode
 {
     /**
-     * @var bool
+     * @var string
      */
-    private $nullable = false;
+    public const SHORT_NAME = '@ORM\JoinColumn';
+
+    /**
+     * @var bool|null
+     */
+    private $nullable;
 
     /**
      * @var string|null
@@ -17,14 +23,14 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $referencedColumnName;
 
     /**
-     * @var bool
+     * @var bool|null
      */
-    private $unique = false;
+    private $unique;
 
     /**
      * @var string|null
@@ -41,20 +47,16 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode
      */
     private $fieldName;
 
-    /**
-     * @param string[] $orderedVisibleItems
-     */
     public function __construct(
         ?string $name,
         string $referencedColumnName,
-        bool $unique,
-        bool $nullable,
-        ?string $onDelete,
-        ?string $columnDefinition,
-        ?string $fieldName,
-        array $orderedVisibleItems
+        ?bool $unique = null,
+        ?bool $nullable = null,
+        ?string $onDelete = null,
+        ?string $columnDefinition = null,
+        ?string $fieldName = null,
+        ?string $originalContent = null
     ) {
-        $this->orderedVisibleItems = $orderedVisibleItems;
         $this->nullable = $nullable;
         $this->name = $name;
         $this->referencedColumnName = $referencedColumnName;
@@ -62,26 +64,63 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode
         $this->onDelete = $onDelete;
         $this->columnDefinition = $columnDefinition;
         $this->fieldName = $fieldName;
+
+        if ($originalContent !== null) {
+            $this->orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($originalContent);
+        }
     }
 
     public function __toString(): string
     {
         $contentItems = [];
 
-        $contentItems['nullable'] = sprintf('nullable=%s', $this->nullable ? 'true' : 'false');
+        if ($this->nullable !== null) {
+            $contentItems['nullable'] = sprintf('nullable=%s', $this->nullable ? 'true' : 'false');
+        }
 
-        $contentItems['name'] = sprintf('name="%s"', $this->name);
-        $contentItems['referencedColumnName'] = sprintf('referencedColumnName="%s"', $this->referencedColumnName);
-        $contentItems['unique'] = sprintf('unique=%s', $this->unique ? 'true' : 'false');
-        $contentItems['nullable'] = sprintf('nullable=%s', $this->nullable ? 'true' : 'false');
-        $contentItems['onDelete'] = sprintf('onDelete="%s"', $this->onDelete);
-        $contentItems['columnDefinition'] = sprintf('columnDefinition="%s"', $this->columnDefinition);
-        $contentItems['fieldName'] = sprintf('fieldName="%s"', $this->fieldName);
+        if ($this->name !== null) {
+            $contentItems['name'] = sprintf('name="%s"', $this->name);
+        }
+
+        if ($this->referencedColumnName !== null) {
+            $contentItems['referencedColumnName'] = sprintf('referencedColumnName="%s"', $this->referencedColumnName);
+        }
+
+        if ($this->unique !== null) {
+            $contentItems['unique'] = sprintf('unique=%s', $this->unique ? 'true' : 'false');
+        }
+
+        if ($this->nullable !== null) {
+            $contentItems['nullable'] = sprintf('nullable=%s', $this->nullable ? 'true' : 'false');
+        }
+
+        if ($this->onDelete !== null) {
+            $contentItems['onDelete'] = sprintf('onDelete="%s"', $this->onDelete);
+        }
+
+        if ($this->columnDefinition !== null) {
+            $contentItems['columnDefinition'] = sprintf('columnDefinition="%s"', $this->columnDefinition);
+        }
+
+        if ($this->fieldName !== null) {
+            $contentItems['fieldName'] = sprintf('fieldName="%s"', $this->fieldName);
+        }
 
         return $this->printContentItems($contentItems);
     }
 
-    public function isNullable(): bool
+    public function changeNullable(bool $nullable): void
+    {
+        $this->nullable = $nullable;
+    }
+
+    public function changeReferencedColumnName(string $referencedColumnName): void
+    {
+        $this->orderedVisibleItems[] = 'referencedColumnName';
+        $this->referencedColumnName = $referencedColumnName;
+    }
+
+    public function isNullable(): ?bool
     {
         return $this->nullable;
     }

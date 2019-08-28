@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Post;
-use Rector\Doctrine\Tests\Rector\AliasToClassRector\Source\DoctrineEntityManager;
+use Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantReferenceRector\Source\DoctrineEntityManager;
 
 final class PostRepository
 {
@@ -24,7 +24,7 @@ final class PostRepository
 namespace App\Repository;
 
 use App\Entity\Post;
-use Rector\Doctrine\Tests\Rector\AliasToClassRector\Source\DoctrineEntityManager;
+use Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantReferenceRector\Source\DoctrineEntityManager;
 
 final class PostRepository
 {

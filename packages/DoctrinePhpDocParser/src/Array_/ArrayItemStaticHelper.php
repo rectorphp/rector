@@ -2,6 +2,8 @@
 
 namespace Rector\DoctrinePhpDocParser\Array_;
 
+use Nette\Utils\Strings;
+
 /**
  * Helpers class for ordering items in values objects on call.
  * Beware of static methods as they might doom you on the edge of life.
@@ -9,17 +11,17 @@ namespace Rector\DoctrinePhpDocParser\Array_;
 final class ArrayItemStaticHelper
 {
     /**
-     * @param string[] $items
      * @return string[]
      */
-    public static function removeItemFromArray(array $items, string $itemToRemove): array
+    public static function resolveAnnotationItemsOrder(string $content): array
     {
-        $itemPosition = array_search($itemToRemove, $items, true);
-        if ($itemPosition !== null) {
-            unset($items[$itemPosition]);
+        $itemsOrder = [];
+        $matches = Strings::matchAll($content, '#(?<item>\w+)=#m');
+        foreach ($matches as $match) {
+            $itemsOrder[] = $match['item'];
         }
 
-        return $items;
+        return $itemsOrder;
     }
 
     /**

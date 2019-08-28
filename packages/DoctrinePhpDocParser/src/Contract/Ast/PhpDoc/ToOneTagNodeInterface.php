@@ -2,6 +2,6 @@
 
 namespace Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc;
 
-interface ToOneTagNodeInterface extends RelationTagValueNodeInterface
+interface ToOneTagNodeInterface extends DoctrineRelationTagValueNodeInterface
 {
 }

@@ -2,13 +2,17 @@
 
 namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_;
 
-use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\MappedByNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToManyTagNodeInterface;
 
 final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implements ToManyTagNodeInterface, MappedByNodeInterface
 {
+    /**
+     * @var string
+     */
+    public const SHORT_NAME = '@ORM\OneToMany';
+
     /**
      * @var string|null
      */
@@ -101,11 +105,6 @@ final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implement
 
     public function removeMappedBy(): void
     {
-        $this->orderedVisibleItems = ArrayItemStaticHelper::removeItemFromArray(
-            $this->orderedVisibleItems,
-            'mappedBy'
-        );
-
         $this->mappedBy = null;
     }
 }

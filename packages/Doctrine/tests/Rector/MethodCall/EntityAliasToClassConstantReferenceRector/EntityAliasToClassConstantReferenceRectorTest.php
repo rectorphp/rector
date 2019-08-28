@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Doctrine\Tests\Rector\AliasToClassRector;
+namespace Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantReferenceRector;
 
-use Rector\Doctrine\Rector\AliasToClassRector;
-use Rector\Doctrine\Tests\Rector\AliasToClassRector\Source\DoctrineEntityManager;
+use Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector;
+use Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantReferenceRector\Source\DoctrineEntityManager;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class AliasToClassRectorTest extends AbstractRectorTestCase
+final class EntityAliasToClassConstantReferenceRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -19,7 +19,7 @@ final class AliasToClassRectorTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            AliasToClassRector::class => [
+            EntityAliasToClassConstantReferenceRector::class => [
                 '$aliasesToNamespaces' => [
                     'App' => 'App\Entity',
                 ],

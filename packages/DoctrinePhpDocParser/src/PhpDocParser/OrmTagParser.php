@@ -21,6 +21,7 @@ use Rector\Configuration\CurrentNodeProvider;
 use Rector\DoctrinePhpDocParser\AnnotationReader\NodeAnnotationReader;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\IdTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinTableTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToManyTagValueNode;
@@ -100,32 +101,36 @@ final class OrmTagParser
         Property $property,
         string $annotationContent
     ): ?DoctrineTagNodeInterface {
-        if ($tag === '@ORM\Column') {
+        if ($tag === ColumnTagValueNode::SHORT_NAME) {
             return $this->createColumnTagValueNode($property, $annotationContent);
         }
 
-        if ($tag === '@ORM\JoinColumn') {
+        if ($tag === JoinColumnTagValueNode::SHORT_NAME) {
             return $this->createJoinColumnTagValueNode($property, $annotationContent);
         }
 
-        if ($tag === '@ORM\ManyToMany') {
+        if ($tag === ManyToManyTagValueNode::SHORT_NAME) {
             return $this->createManyToManyTagValueNode($property, $annotationContent);
         }
 
-        if ($tag === '@ORM\ManyToOne') {
+        if ($tag === ManyToOneTagValueNode::SHORT_NAME) {
             return $this->createManyToOneTagValueNode($property, $annotationContent);
         }
 
-        if ($tag === '@ORM\OneToOne') {
+        if ($tag === OneToOneTagValueNode::SHORT_NAME) {
             return $this->createOneToOneTagValueNode($property, $annotationContent);
         }
 
-        if ($tag === '@ORM\OneToMany') {
+        if ($tag === OneToManyTagValueNode::SHORT_NAME) {
             return $this->createOneToManyTagValueNode($property, $annotationContent);
         }
 
-        if ($tag === '@ORM\JoinTable') {
+        if ($tag === JoinTableTagValueNode::SHORT_NAME) {
             return $this->createJoinTableTagValeNode($property, $annotationContent);
+        }
+
+        if ($tag === IdTagValueNode::SHORT_NAME) {
+            return $this->createIdTagValueNode();
         }
 
         return null;
@@ -156,7 +161,7 @@ final class OrmTagParser
             $column->nullable,
             $column->options,
             $column->columnDefinition,
-            $this->resolveAnnotationItemsOrder($annotationContent)
+            $annotationContent
         );
     }
 
@@ -319,12 +324,17 @@ final class OrmTagParser
             $joinColumn->onDelete,
             $joinColumn->columnDefinition,
             $joinColumn->fieldName,
-            $this->resolveAnnotationItemsOrder($annotationContent)
+            $annotationContent
         );
     }
 
     private function cleanMultilineAnnotationContent(string $annotationContent): string
     {
         return Strings::replace($annotationContent, '#(\s+)\*(\s+)#m', '$1$3');
+    }
+
+    private function createIdTagValueNode(): IdTagValueNode
+    {
+        return new IdTagValueNode();
     }
 }
