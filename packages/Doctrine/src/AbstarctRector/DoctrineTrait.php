@@ -4,40 +4,30 @@ namespace Rector\Doctrine\AbstarctRector;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
-use Rector\Rector\AbstractRector\DocBlockManipulatorTrait;
+use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 
 trait DoctrineTrait
 {
-    use DocBlockManipulatorTrait;
+    /**
+     * @var DoctrineDocBlockResolver
+     */
+    private $doctrineDocBlockResolver;
+
+    /**
+     * @required
+     */
+    public function autowireDoctrineTrait(DoctrineDocBlockResolver $doctrineDocBlockResolver): void
+    {
+        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
+    }
 
     protected function isDoctrineEntityClass(Class_ $class): bool
     {
-        $classPhpDocInfo = $this->getPhpDocInfo($class);
-        if ($classPhpDocInfo === null) {
-            return false;
-        }
-
-        return (bool) $classPhpDocInfo->getDoctrineEntityTag();
+        return $this->doctrineDocBlockResolver->isDoctrineEntityClass($class);
     }
 
     protected function getTargetEntity(Property $property): ?string
     {
-        $doctrineRelationTagValueNode = $this->getDoctrineRelationTagValueNode($property);
-        if ($doctrineRelationTagValueNode === null) {
-            return null;
-        }
-
-        return $doctrineRelationTagValueNode->getTargetEntity();
-    }
-
-    protected function getDoctrineRelationTagValueNode(Property $property): ?DoctrineRelationTagValueNodeInterface
-    {
-        $propertyPhpDocInfo = $this->getPhpDocInfo($property);
-        if ($propertyPhpDocInfo === null) {
-            return null;
-        }
-
-        return $propertyPhpDocInfo->getDoctrineRelationTagValueNode();
+        return $this->doctrineDocBlockResolver->getTargetEntity($property);
     }
 }
