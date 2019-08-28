@@ -21,6 +21,16 @@ trait DoctrineTrait
         return (bool) $classPhpDocInfo->getDoctrineEntityTag();
     }
 
+    protected function getTargetEntity(Property $property): ?string
+    {
+        $doctrineRelationTagValueNode = $this->getDoctrineRelationTagValueNode($property);
+        if ($doctrineRelationTagValueNode === null) {
+            return null;
+        }
+
+        return $doctrineRelationTagValueNode->getTargetEntity();
+    }
+
     protected function getDoctrineRelationTagValueNode(Property $property): ?DoctrineRelationTagValueNodeInterface
     {
         $propertyPhpDocInfo = $this->getPhpDocInfo($property);

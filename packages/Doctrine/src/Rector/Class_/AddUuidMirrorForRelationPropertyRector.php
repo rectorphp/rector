@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Doctrine\Rector\Class_;
 
 use Nette\Utils\Strings;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
@@ -71,24 +70,8 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
                 continue;
             }
 
-            // this relation already is or has uuid property
-            if ($this->isName($classStmt, '*Uuid')) {
+            if ($this->shouldSkipProperty($node, $classStmt)) {
                 continue;
-            }
-
-            $uuidPropertyName = $this->getName($classStmt) . 'Uuid';
-
-            if ($this->hasClassPropertyName($node, $uuidPropertyName)) {
-                continue;
-            }
-
-            $doctrineRelationTagValueNode = $this->getDoctrineRelationTagValueNode($classStmt);
-            if ($doctrineRelationTagValueNode === null) {
-                continue;
-            }
-
-            if ($doctrineRelationTagValueNode->getTargetEntity() === null) {
-                throw new ShouldNotHappenException();
             }
 
             $node->stmts[] = $this->createMirrorNullable($classStmt);
@@ -223,5 +206,31 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
         $joinColumnTagValueNode = new JoinColumnTagValueNode(null, 'uuid', null, false);
 
         return new AttributeAwarePhpDocTagNode(JoinColumnTagValueNode::SHORT_NAME, $joinColumnTagValueNode);
+    }
+
+    private function shouldSkipProperty(Class_ $class, Property $property): bool
+    {
+        // this relation already is or has uuid property
+        if ($this->isName($property, '*Uuid')) {
+            return true;
+        }
+
+        $uuidPropertyName = $this->getName($property) . 'Uuid';
+
+        if ($this->hasClassPropertyName($class, $uuidPropertyName)) {
+            return true;
+        }
+
+        $targetEntity = $this->getTargetEntity($property);
+        if ($targetEntity === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        // the remote property has to have $uuid property, from @see \Rector\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector
+        if (! property_exists($targetEntity, 'uuid')) {
+            return true;
+        }
+
+        return false;
     }
 }
