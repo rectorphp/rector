@@ -14,7 +14,6 @@ use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToManyTagNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToOneTagNodeInterface;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
@@ -180,7 +179,7 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
 
         $targetEntity = $this->getTargetEntity($property);
         if ($targetEntity === null) {
-            throw new ShouldNotHappenException();
+            return true;
         }
 
         // the remote property has to have $uuid property, from @see \Rector\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector
