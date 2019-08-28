@@ -60,12 +60,12 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $className = $this->getName($node);
-        if (!is_subclass_of($className, 'Illuminate\Foundation\Http\FormRequest', true)) {
+        if ($className === null || !is_subclass_of($className, 'Illuminate\Foundation\Http\FormRequest', true)) {
             return null;
         }
 
         $rules = $node->getMethod('rules');
-        if ($rules === null) {
+        if ($rules === null || $rules->stmts === null) {
             return null;
         }
 
@@ -116,19 +116,32 @@ CODE_SAMPLE
                     );
                 }
 
-                $item->value = new Node\Expr\Array_($newRules);
+                $item->value = new Node\Expr\Array_(
+                    array_map(function (Node\Expr $rule): Node\Expr\ArrayItem {
+                        return new Node\Expr\ArrayItem($rule);
+                    }, $newRules)
+                );
             }
         }
 
         return $node;
     }
 
+    /**
+     * @param Node\Expr $expr
+     * @return Node\Expr[]
+     */
     private function transformRulesSet(Node\Expr $expr): array
     {
         if ($expr instanceof Node\Scalar\String_) {
+            $parts = preg_split('/\|/', $expr->value);
+            if ($parts === false) {
+                throw new \InvalidArgumentException("Failed to split string {$expr->value} with regex");
+            }
+
             return array_map(static function (string $value): Node\Scalar\String_ {
                 return new Node\Scalar\String_($value);
-            }, preg_split('/\|/', $expr->value));
+            }, $parts);
         } elseif ($expr instanceof Node\Expr\BinaryOp\Concat) {
             $left = $this->transformRulesSet($expr->left);
             $expr->left = $left[count($left ) - 1];
