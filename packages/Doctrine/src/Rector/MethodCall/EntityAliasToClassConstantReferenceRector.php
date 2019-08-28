@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Doctrine\Rector;
+namespace Rector\Doctrine\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -9,7 +9,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-final class AliasToClassRector extends AbstractRector
+final class EntityAliasToClassConstantReferenceRector extends AbstractRector
 {
     /**
      * @var string[]
