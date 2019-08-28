@@ -42,13 +42,10 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
             return [];
         }
 
-        $joinColumnTagValueNode = $phpDocInfo->getDoctrineJoinColumnTagValueNode();
-
         if ($relationTagValueNode instanceof ToManyTagNodeInterface) {
             return $this->processToManyRelation($relationTagValueNode);
-        }
-
-        if ($relationTagValueNode instanceof ToOneTagNodeInterface) {
+        } elseif ($relationTagValueNode instanceof ToOneTagNodeInterface) {
+            $joinColumnTagValueNode = $phpDocInfo->getDoctrineJoinColumnTagValueNode();
             return $this->processToOneRelation($relationTagValueNode, $joinColumnTagValueNode);
         }
 

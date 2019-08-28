@@ -16,14 +16,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use Rector\Doctrine\ValueObject\DoctrineClass;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\CustomIdGeneratorTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\GeneratedValueTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\IdTagValueNode;
+use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 
 final class EntityUuidNodeFactory
@@ -39,25 +32,25 @@ final class EntityUuidNodeFactory
     private $builderFactory;
 
     /**
-     * @var string
+     * @var PhpDocTagNodeFactory
      */
-    private $doctrineUuidGeneratorClass;
+    private $phpDocTagNodeFactory;
 
     public function __construct(
-        string $doctrineUuidGeneratorClass,
         DocBlockManipulator $docBlockManipulator,
-        BuilderFactory $builderFactory
+        BuilderFactory $builderFactory,
+        PhpDocTagNodeFactory $phpDocTagNodeFactory
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->builderFactory = $builderFactory;
-        $this->doctrineUuidGeneratorClass = $doctrineUuidGeneratorClass;
+        $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
     }
 
     public function createTemporaryUuidProperty(): Property
     {
-        $uuidProperty = $this->builderFactory->property('uuid')
-            ->makePrivate()
-            ->getNode();
+        $uuidPropertyBuilder = $this->builderFactory->property('uuid');
+        $uuidPropertyBuilder->makePrivate();
+        $uuidProperty = $uuidPropertyBuilder->getNode();
 
         $this->decoratePropertyWithUuidAnnotations($uuidProperty, true, false);
 
@@ -65,7 +58,8 @@ final class EntityUuidNodeFactory
     }
 
     /**
-     * Creates: "$this->uid = \Ramsey\Uuid\Uuid::uuid4();"
+     * Creates:
+     * $this->uid = \Ramsey\Uuid\Uuid::uuid4();
      */
     public function createUuidPropertyDefaultValueAssign(): Expression
     {
@@ -77,6 +71,13 @@ final class EntityUuidNodeFactory
         return new Expression($assign);
     }
 
+    /**
+     * Creates:
+     * public function __construct()
+     * {
+     *     $this->uid = \Ramsey\Uuid\Uuid::uuid4();
+     * }
+     */
     public function createConstructorWithUuidPropertyDefaultValueAssign(): ClassMethod
     {
         $classMethodBuilder = $this->builderFactory->method('__construct');
@@ -88,6 +89,27 @@ final class EntityUuidNodeFactory
         return $classMethodBuilder->getNode();
     }
 
+    private function decoratePropertyWithUuidAnnotations(Property $property, bool $isNullable, bool $isId): void
+    {
+        $this->clearVarAndOrmAnnotations($property);
+        $this->replaceIntSerializerTypeWithString($property);
+
+        // add @var
+        $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createVarTagUuidInterface());
+
+        if ($isId) {
+            // add @ORM\Id
+            $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createIdTag());
+        }
+
+        $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createUuidColumnTag($isNullable));
+
+        if ($isId) {
+            $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createGeneratedValueTag());
+            $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createCustomIdGeneratorTag());
+        }
+    }
+
     private function clearVarAndOrmAnnotations(Node $node): void
     {
         $docComment = $node->getDocComment();
@@ -96,29 +118,7 @@ final class EntityUuidNodeFactory
         }
 
         $clearedDocCommentText = Strings::replace($docComment->getText(), '#^(\s+)\*(\s+)\@(var|ORM)(.*?)$#ms');
-
         $node->setDocComment(new Doc($clearedDocCommentText));
-    }
-
-    private function decoratePropertyWithUuidAnnotations(Property $property, bool $isNullable, bool $isId): void
-    {
-        $this->clearVarAndOrmAnnotations($property);
-        $this->replaceIntSerializerTypeWithString($property);
-
-        // add @var
-        $this->docBlockManipulator->addTag($property, $this->createVarTagUuidInterface());
-
-        if ($isId) {
-            // add @ORM\Id
-            $this->docBlockManipulator->addTag($property, $this->createIdTag());
-        }
-
-        $this->docBlockManipulator->addTag($property, $this->createUuidColumnTag($isNullable));
-
-        if ($isId) {
-            $this->docBlockManipulator->addTag($property, $this->createGeneratedValueTag());
-            $this->docBlockManipulator->addTag($property, $this->createCustomIdGeneratorTag());
-        }
     }
 
     /**
@@ -138,47 +138,5 @@ final class EntityUuidNodeFactory
         );
 
         $node->setDocComment(new Doc($stringTypeText));
-    }
-
-    private function createVarTagUuidInterface(): PhpDocTagNode
-    {
-        $varTagValueNode = new VarTagValueNode(new IdentifierTypeNode(
-            '\\' . DoctrineClass::RAMSEY_UUID_INTERFACE
-        ), '', '');
-
-        return new PhpDocTagNode('@var', $varTagValueNode);
-    }
-
-    private function createIdTag(): PhpDocTagNode
-    {
-        return new PhpDocTagNode(IdTagValueNode::SHORT_NAME, new IdTagValueNode());
-    }
-
-    private function createUuidColumnTag(bool $isNullable): PhpDocTagNode
-    {
-        $columnTagValueNode = new ColumnTagValueNode(
-            null,
-            'uuid_binary',
-            null,
-            null,
-            null,
-            true,
-            $isNullable ? true : null
-        );
-
-        return new PhpDocTagNode($columnTagValueNode::SHORT_NAME, $columnTagValueNode);
-    }
-
-    private function createGeneratedValueTag(): PhpDocTagNode
-    {
-        return new PhpDocTagNode(GeneratedValueTagValueNode::SHORT_NAME, new GeneratedValueTagValueNode('CUSTOM'));
-    }
-
-    private function createCustomIdGeneratorTag(): PhpDocTagNode
-    {
-        return new PhpDocTagNode(
-            CustomIdGeneratorTagValueNode::SHORT_NAME,
-            new CustomIdGeneratorTagValueNode($this->doctrineUuidGeneratorClass)
-        );
     }
 }

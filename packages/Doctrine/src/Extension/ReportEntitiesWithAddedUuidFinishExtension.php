@@ -30,9 +30,11 @@ final class ReportEntitiesWithAddedUuidFinishExtension implements FinishingExten
     {
         $classes = $this->entitiesWithAddedUuidPropertyCollector->getClasses();
 
-        if (count($classes)) {
-            $this->symfonyStyle->section('Entities with new nullable $uuid property');
-            $this->symfonyStyle->listing($classes);
+        if ($classes === []) {
+            return;
         }
+
+        $this->symfonyStyle->section('Entities with new nullable $uuid property');
+        $this->symfonyStyle->listing($classes);
     }
 }
