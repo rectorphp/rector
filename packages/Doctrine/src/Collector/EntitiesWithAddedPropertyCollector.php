@@ -5,7 +5,7 @@ namespace Rector\Doctrine\Collector;
 final class EntitiesWithAddedPropertyCollector
 {
     /**
-     * @var string[]
+     * @var string[][]
      */
     private $propertiesByClasses = [];
 
@@ -15,7 +15,7 @@ final class EntitiesWithAddedPropertyCollector
     }
 
     /**
-     * @return string[]
+     * @return string[][]
      */
     public function getPropertiesByClasses(): array
     {

@@ -66,12 +66,7 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isDoctrineEntityClass($node)) {
-            return null;
-        }
-
-        // id is needed
-        if (! $this->classManipulator->getProperty($node, 'id')) {
+        if (! $this->isDoctrineEntityClassWithIdProperty($node)) {
             return null;
         }
 

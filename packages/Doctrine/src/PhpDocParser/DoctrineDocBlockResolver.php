@@ -41,6 +41,16 @@ final class DoctrineDocBlockResolver
         return $doctrineRelationTagValueNode->getTargetEntity();
     }
 
+    public function hasPropertyDoctrineIdTag(Property $property): bool
+    {
+        $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+        if ($propertyPhpDocInfo === null) {
+            return false;
+        }
+
+        return (bool) $propertyPhpDocInfo->getDoctrineIdTagValueNode();
+    }
+
     public function getDoctrineRelationTagValueNode(Property $property): ?DoctrineRelationTagValueNodeInterface
     {
         $propertyPhpDocInfo = $this->getPhpDocInfo($property);

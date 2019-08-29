@@ -26,6 +26,25 @@ trait DoctrineTrait
         return $this->doctrineDocBlockResolver->isDoctrineEntityClass($class);
     }
 
+    protected function isDoctrineEntityClassWithIdProperty(Class_ $class): bool
+    {
+        if (! $this->doctrineDocBlockResolver->isDoctrineEntityClass($class)) {
+            return false;
+        }
+
+        foreach ($class->stmts as $classStmt) {
+            if (! $classStmt instanceof Property) {
+                continue;
+            }
+
+            if ($this->doctrineDocBlockResolver->hasPropertyDoctrineIdTag($classStmt)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected function getTargetEntity(Property $property): ?string
     {
         return $this->doctrineDocBlockResolver->getTargetEntity($property);

@@ -101,6 +101,10 @@ final class OrmTagParser
         Property $property,
         string $annotationContent
     ): ?DoctrineTagNodeInterface {
+        if ($tag === IdTagValueNode::SHORT_NAME) {
+            return $this->createIdTagValueNode();
+        }
+
         if ($tag === ColumnTagValueNode::SHORT_NAME) {
             return $this->createColumnTagValueNode($property, $annotationContent);
         }
@@ -127,10 +131,6 @@ final class OrmTagParser
 
         if ($tag === JoinTableTagValueNode::SHORT_NAME) {
             return $this->createJoinTableTagValeNode($property, $annotationContent);
-        }
-
-        if ($tag === IdTagValueNode::SHORT_NAME) {
-            return $this->createIdTagValueNode();
         }
 
         return null;

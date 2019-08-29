@@ -15,7 +15,8 @@ final class AddUuidToEntityWhereMissingRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/process_string_id.php.inc',
             __DIR__ . '/Fixture/with_parent_constructor.php.inc',
             __DIR__ . '/Fixture/add_single_table_inheritance.php.inc',
-            // skip
+            __DIR__ . '/Fixture/add_single_table_inheritance_with_identifier.php.inc',
+            //             skip
             __DIR__ . '/Fixture/skip_id_with_uuid_type.php.inc',
             __DIR__ . '/Fixture/skip_id_with_uuid_binary_type.php.inc',
         ]);
