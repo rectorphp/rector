@@ -186,7 +186,8 @@ CODE_SAMPLE
         }
 
         if (! $this->useAddingCommander->hasImport($name, $fullyQualifiedName)) {
-            if ($name->getAttribute(AttributeKey::PARENT_NODE) instanceof FuncCall) {
+            $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof FuncCall) {
                 $this->useAddingCommander->addFunctionUseImport($name, $fullyQualifiedName);
             } else {
                 $this->useAddingCommander->addUseImport($name, $fullyQualifiedName);

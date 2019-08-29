@@ -1,25 +1,25 @@
 <?php declare(strict_types=1);
 
-use Rector\Console\Option\LevelOptionResolver;
+use Rector\Console\Option\SetOptionResolver;
+use Rector\Exception\Configuration\SetNotFoundException;
 use Rector\HttpKernel\RectorKernel;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symplify\PackageBuilder\Configuration\ConfigFileFinder;
 use Symplify\PackageBuilder\Console\Input\InputDetector;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use Symplify\PackageBuilder\Exception\Configuration\LevelNotFoundException;
 
 $configFiles = [];
 
-// Detect configuration from --level
+// Detect configuration from --set
 try {
-    $configFiles[] = (new LevelOptionResolver())->detectFromInputAndDirectory(
+    $configFiles[] = (new SetOptionResolver())->detectFromInputAndDirectory(
         new ArgvInput(),
         __DIR__ . '/../config/set'
     );
-} catch (LevelNotFoundException $levelNotFoundException) {
+} catch (SetNotFoundException $setNotFoundException) {
     $symfonyStyle = (new SymfonyStyleFactory())->create();
-    $symfonyStyle->error($levelNotFoundException->getMessage());
+    $symfonyStyle->error($setNotFoundException->getMessage());
     exit(ShellCode::ERROR);
 }
 

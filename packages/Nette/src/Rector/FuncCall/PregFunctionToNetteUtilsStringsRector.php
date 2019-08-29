@@ -78,8 +78,9 @@ CODE_SAMPLE
         $methodName = $this->functionNameToMethodName[$this->getName($node)];
         $matchStaticCall = $this->createMatchStaticCall($node, $methodName);
 
-        // skip assigns, might be used with differnt return value
-        if ($node->getAttribute(AttributeKey::PARENT_NODE) instanceof Assign) {
+        // skip assigns, might be used with different return value
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Assign) {
             if ($methodName === 'matchAll') {
                 // use count
                 return new FuncCall(new Name('count'), [new Arg($matchStaticCall)]);
