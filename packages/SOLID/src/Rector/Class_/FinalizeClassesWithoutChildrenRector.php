@@ -2,7 +2,6 @@
 
 namespace Rector\SOLID\Rector\Class_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\NodeContainer\ParsedNodesByType;
@@ -74,7 +73,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isDoctrineEntity($node)) {
+        if ($this->isDoctrineEntityClass($node)) {
             return null;
         }
 
@@ -87,14 +86,5 @@ CODE_SAMPLE
         $this->makeFinal($node);
 
         return $node;
-    }
-
-    private function isDoctrineEntity(Node $node): bool
-    {
-        if ($node->getDocComment() === null) {
-            return false;
-        }
-
-        return Strings::contains($node->getDocComment()->getText(), 'Entity');
     }
 }
