@@ -22,6 +22,11 @@ trait DoctrineTrait
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
     }
 
+    protected function isDoctrineProperty(Property $property): bool
+    {
+        return $this->doctrineDocBlockResolver->isDoctrineProperty($property);
+    }
+
     protected function isDoctrineEntityClass(Class_ $class): bool
     {
         return $this->doctrineDocBlockResolver->isDoctrineEntityClass($class);

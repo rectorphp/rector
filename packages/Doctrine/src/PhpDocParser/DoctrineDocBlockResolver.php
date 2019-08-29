@@ -72,6 +72,24 @@ final class DoctrineDocBlockResolver
         return $classPhpDocInfo->getDoctrineTableTagValueNode();
     }
 
+    public function isDoctrineProperty(Property $property): bool
+    {
+        $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+        if ($propertyPhpDocInfo === null) {
+            return false;
+        }
+
+        if ($propertyPhpDocInfo->getDoctrineColumnTagValueNode()) {
+            return true;
+        }
+
+        if ($propertyPhpDocInfo->getDoctrineRelationTagValueNode()) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function getPhpDocInfo(Node $node): ?PhpDocInfo
     {
         if ($node->getDocComment() === null) {
