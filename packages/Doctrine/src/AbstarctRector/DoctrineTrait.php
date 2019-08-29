@@ -5,6 +5,7 @@ namespace Rector\Doctrine\AbstarctRector;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
+use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 
 trait DoctrineTrait
 {
@@ -48,5 +49,10 @@ trait DoctrineTrait
     protected function getTargetEntity(Property $property): ?string
     {
         return $this->doctrineDocBlockResolver->getTargetEntity($property);
+    }
+
+    protected function getDoctrineRelationTagValueNode(Property $property): ?DoctrineRelationTagValueNodeInterface
+    {
+        return $this->doctrineDocBlockResolver->getDoctrineRelationTagValueNode($property);
     }
 }

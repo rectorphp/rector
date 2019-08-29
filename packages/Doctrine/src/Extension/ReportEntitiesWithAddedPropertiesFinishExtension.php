@@ -2,16 +2,17 @@
 
 namespace Rector\Doctrine\Extension;
 
+use Nette\Utils\Json;
 use Rector\Contract\Extension\FinishingExtensionInterface;
-use Rector\Doctrine\Collector\EntitiesWithAddedPropertyCollector;
+use Rector\Doctrine\Collector\EntityWithAddedPropertyCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class ReportEntitiesWithAddedPropertiesFinishExtension implements FinishingExtensionInterface
 {
     /**
-     * @var EntitiesWithAddedPropertyCollector
+     * @var EntityWithAddedPropertyCollector
      */
-    private $entitiesWithAddedPropertyCollector;
+    private $entityWithAddedPropertyCollector;
 
     /**
      * @var SymfonyStyle
@@ -19,27 +20,27 @@ final class ReportEntitiesWithAddedPropertiesFinishExtension implements Finishin
     private $symfonyStyle;
 
     public function __construct(
-        EntitiesWithAddedPropertyCollector $entitiesWithAddedPropertyCollector,
+        EntityWithAddedPropertyCollector $entityWithAddedPropertyCollector,
         SymfonyStyle $symfonyStyle
     ) {
-        $this->entitiesWithAddedPropertyCollector = $entitiesWithAddedPropertyCollector;
+        $this->entityWithAddedPropertyCollector = $entityWithAddedPropertyCollector;
         $this->symfonyStyle = $symfonyStyle;
     }
 
     public function run(): void
     {
-        $classes = $this->entitiesWithAddedPropertyCollector->getPropertiesByClasses();
-
-        if ($classes === []) {
+        $propertiesByClass = $this->entityWithAddedPropertyCollector->getPropertiesByClass();
+        if ($propertiesByClass === []) {
             return;
         }
 
-        $this->symfonyStyle->title('Entities with new properties');
+        $data = [
+            'title' => 'Entities with new properties',
+            'added_properties_by_class' => $propertiesByClass,
+        ];
 
-        foreach ($this->entitiesWithAddedPropertyCollector->getPropertiesByClasses() as $class => $properties) {
-            $this->symfonyStyle->section($class);
-            $this->symfonyStyle->listing($properties);
-            $this->symfonyStyle->newLine(1);
-        }
+        $jsonContent = Json::encode($data, Json::PRETTY);
+
+        $this->symfonyStyle->writeln($jsonContent);
     }
 }
