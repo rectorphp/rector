@@ -70,6 +70,11 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
             return null;
         }
 
+        // id is needed
+        if (! $this->classManipulator->getProperty($node, 'id')) {
+            return null;
+        }
+
         // already has $uuid property
         if ($this->classManipulator->getProperty($node, 'uuid')) {
             return null;
