@@ -10,8 +10,9 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Doctrine\Collector\EntityWithAddedPropertyCollector;
+use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
+use Rector\Doctrine\Uuid\UuidTableNameResolver;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToManyTagNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToOneTagNodeInterface;
@@ -36,18 +37,25 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
     private $phpDocTagNodeFactory;
 
     /**
-     * @var EntityWithAddedPropertyCollector
+     * @var UuidMigrationDataCollector
      */
-    private $entityWithAddedPropertyCollector;
+    private $uuidMigrationDataCollector;
+
+    /**
+     * @var UuidTableNameResolver
+     */
+    private $uuidTableNameResolver;
 
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
         PhpDocTagNodeFactory $phpDocTagNodeFactory,
-        EntityWithAddedPropertyCollector $entityWithAddedPropertyCollector
+        UuidMigrationDataCollector $uuidMigrationDataCollector,
+        UuidTableNameResolver $uuidTableNameResolver
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
-        $this->entityWithAddedPropertyCollector = $entityWithAddedPropertyCollector;
+        $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;
+        $this->uuidTableNameResolver = $uuidTableNameResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -139,9 +147,8 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
             $propertyPhpDocInfo->removeTagValueNodeFromNode($doctrineJoinColumnTagValueNode);
         }
 
-        $propertyPhpDocInfo->getPhpDocNode()->children[] = $this->phpDocTagNodeFactory->createJoinTableTagNode(
-            $property
-        );
+        $joinTableTagNode = $this->phpDocTagNodeFactory->createJoinTableTagNode($property);
+        $propertyPhpDocInfo->getPhpDocNode()->children[] = $joinTableTagNode;
     }
 
     private function refactorToOnePropertyPhpDocInfo(PhpDocInfo $propertyPhpDocInfo): void
@@ -207,10 +214,16 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
         /** @var DoctrineRelationTagValueNodeInterface $doctrineRelationTagValueNode */
         $doctrineRelationTagValueNode = $this->getDoctrineRelationTagValueNode($property);
 
+        $joinTableName = $this->uuidTableNameResolver->resolveManyToManyTableNameForProperty($property);
+
         if ($doctrineRelationTagValueNode instanceof ToManyTagNodeInterface) {
-            $this->entityWithAddedPropertyCollector->addClassToManyRelationProperty($className, $propertyName);
+            $this->uuidMigrationDataCollector->addClassToManyRelationProperty(
+                $className,
+                $propertyName,
+                $joinTableName
+            );
         } elseif ($doctrineRelationTagValueNode instanceof ToOneTagNodeInterface) {
-            $this->entityWithAddedPropertyCollector->addClassToOneRelationProperty($className, $propertyName);
+            $this->uuidMigrationDataCollector->addClassToOneRelationProperty($className, $propertyName);
         }
     }
 }

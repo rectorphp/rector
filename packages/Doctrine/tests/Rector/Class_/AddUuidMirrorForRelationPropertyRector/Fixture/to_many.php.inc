@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
+ * @ORM\Table(name="wohoo")
  */
 class ToMany
 {
@@ -25,6 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
+ * @ORM\Table(name="wohoo")
  */
 class ToMany
 {
@@ -34,7 +36,7 @@ class ToMany
     private $amenity;
     /**
      * @ORM\ManyToMany(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Source\AnotherEntity", cascade={"persist", "merge"})
-     * @ORM\JoinTable (name="tomany_uuid_anotherentity_uuid", joinColumns={@ORM\JoinColumn(referencedColumnName="uuid")}, inverseJoinColumns={@ORM\JoinColumn(referencedColumnName="uuid")})
+     * @ORM\JoinTable (name="wohoo_anotherentity_uuid", joinColumns={@ORM\JoinColumn(referencedColumnName="uuid")}, inverseJoinColumns={@ORM\JoinColumn(referencedColumnName="uuid")})
      */
     private $amenityUuid;
 }

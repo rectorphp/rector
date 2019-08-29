@@ -4,15 +4,15 @@ namespace Rector\Doctrine\Extension;
 
 use Nette\Utils\Json;
 use Rector\Contract\Extension\FinishingExtensionInterface;
-use Rector\Doctrine\Collector\EntityWithAddedPropertyCollector;
+use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class ReportEntitiesWithAddedPropertiesFinishExtension implements FinishingExtensionInterface
 {
     /**
-     * @var EntityWithAddedPropertyCollector
+     * @var UuidMigrationDataCollector
      */
-    private $entityWithAddedPropertyCollector;
+    private $uuidMigrationDataCollector;
 
     /**
      * @var SymfonyStyle
@@ -20,16 +20,16 @@ final class ReportEntitiesWithAddedPropertiesFinishExtension implements Finishin
     private $symfonyStyle;
 
     public function __construct(
-        EntityWithAddedPropertyCollector $entityWithAddedPropertyCollector,
+        UuidMigrationDataCollector $uuidMigrationDataCollector,
         SymfonyStyle $symfonyStyle
     ) {
-        $this->entityWithAddedPropertyCollector = $entityWithAddedPropertyCollector;
+        $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;
         $this->symfonyStyle = $symfonyStyle;
     }
 
     public function run(): void
     {
-        $propertiesByClass = $this->entityWithAddedPropertyCollector->getPropertiesByClass();
+        $propertiesByClass = $this->uuidMigrationDataCollector->getPropertiesByClass();
         if ($propertiesByClass === []) {
             return;
         }

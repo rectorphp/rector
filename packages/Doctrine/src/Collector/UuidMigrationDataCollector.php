@@ -2,10 +2,10 @@
 
 namespace Rector\Doctrine\Collector;
 
-final class EntityWithAddedPropertyCollector
+final class UuidMigrationDataCollector
 {
     /**
-     * @var string[][][]
+     * @var mixed[]
      */
     private $propertiesByClass = [];
 
@@ -14,9 +14,12 @@ final class EntityWithAddedPropertyCollector
         $this->propertiesByClass[$class]['properties'][] = $property;
     }
 
-    public function addClassToManyRelationProperty(string $class, string $property): void
+    public function addClassToManyRelationProperty(string $class, string $property, string $tableName): void
     {
-        $this->propertiesByClass[$class]['to_many_relations'][] = $property;
+        $this->propertiesByClass[$class]['to_many_relations'][] = [
+            'property' => $property,
+            'table_name' => $tableName,
+        ];
     }
 
     public function addClassToOneRelationProperty(string $class, string $property): void

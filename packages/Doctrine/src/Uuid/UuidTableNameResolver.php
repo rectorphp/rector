@@ -3,9 +3,11 @@
 namespace Rector\Doctrine\Uuid;
 
 use Nette\Utils\Strings;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class UuidTableNameResolver
@@ -15,9 +17,17 @@ final class UuidTableNameResolver
      */
     private $doctrineDocBlockResolver;
 
-    public function __construct(DoctrineDocBlockResolver $doctrineDocBlockResolver)
-    {
+    /**
+     * @var ParsedNodesByType
+     */
+    private $parsedNodesByType;
+
+    public function __construct(
+        DoctrineDocBlockResolver $doctrineDocBlockResolver,
+        ParsedNodesByType $parsedNodesByType
+    ) {
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
+        $this->parsedNodesByType = $parsedNodesByType;
     }
 
     /**
@@ -25,18 +35,24 @@ final class UuidTableNameResolver
      */
     public function resolveManyToManyTableNameForProperty(Property $property): string
     {
-        /** @var string $currentClass */
-        $currentClass = $property->getAttribute(AttributeKey::CLASS_NAME);
-        $shortCurrentClass = $this->resolveShortClassName($currentClass);
+        /** @var Class_ $currentClass */
+        $currentClass = $property->getAttribute(AttributeKey::CLASS_NODE);
+        $currentTableName = $this->resolveTableNameFromClass($currentClass);
 
         $targetEntity = $this->doctrineDocBlockResolver->getTargetEntity($property);
         if ($targetEntity === null) {
             throw new ShouldNotHappenException(__METHOD__);
         }
 
-        $shortTargetEntity = $this->resolveShortClassName($targetEntity);
+        $targetEntityClass = $this->parsedNodesByType->findClass($targetEntity);
+        if ($targetEntityClass === null) {
+            // dummy fallback
+            $targetTableName = $this->resolveShortClassName($targetEntity);
+        } else {
+            $targetTableName = $this->resolveTableNameFromClass($targetEntityClass);
+        }
 
-        return strtolower($shortCurrentClass . '_uuid_' . $shortTargetEntity . '_uuid');
+        return strtolower($currentTableName . '_' . $targetTableName . '_uuid');
     }
 
     private function resolveShortClassName(string $currentClass): string
@@ -46,5 +62,21 @@ final class UuidTableNameResolver
         }
 
         return (string) Strings::after($currentClass, '\\', -1);
+    }
+
+    private function resolveTableNameFromClass(Class_ $class): string
+    {
+        $tableTagValueNode = $this->doctrineDocBlockResolver->getDoctrineTableTagValueNode($class);
+        if ($tableTagValueNode !== null) {
+            $tableName = $tableTagValueNode->getName();
+            if ($tableName !== null) {
+                return $tableName;
+            }
+        }
+
+        /** @var string $className */
+        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
+
+        return $this->resolveShortClassName($className);
     }
 }

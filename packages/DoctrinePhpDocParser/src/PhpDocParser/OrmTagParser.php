@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\Table;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -28,6 +29,7 @@ use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToManyTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToOneTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToManyTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToOneTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\TableTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineTagNodeInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -80,8 +82,12 @@ final class OrmTagParser
 
         // Entity tags
         if ($node instanceof Class_) {
-            if ($tag === '@ORM\Entity') {
+            if ($tag === EntityTagValueNode::SHORT_NAME) {
                 return $this->createEntityTagValueNode($node, $annotationContent);
+            }
+
+            if ($tag === TableTagValueNode::SHORT_NAME) {
+                return $this->createTableTagValueNode($node, $annotationContent);
             }
         }
 
@@ -144,6 +150,21 @@ final class OrmTagParser
         return new EntityTagValueNode($entity->repositoryClass, $entity->readOnly, $this->resolveAnnotationItemsOrder(
             $annotationContent
         ));
+    }
+
+    private function createTableTagValueNode(Class_ $node, string $annotationContent): TableTagValueNode
+    {
+        /** @var Table $table */
+        $table = $this->nodeAnnotationReader->readDoctrineClassAnnotation($node, Table::class);
+
+        return new TableTagValueNode(
+            $table->name,
+            $table->schema,
+            $table->indexes,
+            $table->uniqueConstraints,
+            $table->options,
+            $annotationContent
+        );
     }
 
     private function createColumnTagValueNode(Property $property, string $annotationContent): ColumnTagValueNode

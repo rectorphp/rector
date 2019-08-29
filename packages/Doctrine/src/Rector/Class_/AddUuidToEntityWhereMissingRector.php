@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use Rector\Doctrine\Collector\EntityWithAddedPropertyCollector;
+use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
@@ -30,18 +30,18 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
     private $classManipulator;
 
     /**
-     * @var EntityWithAddedPropertyCollector
+     * @var UuidMigrationDataCollector
      */
-    private $entityWithAddedPropertyCollector;
+    private $uuidMigrationDataCollector;
 
     public function __construct(
         EntityUuidNodeFactory $entityUuidNodeFactory,
         ClassManipulator $classManipulator,
-        EntityWithAddedPropertyCollector $entityWithAddedPropertyCollector
+        UuidMigrationDataCollector $uuidMigrationDataCollector
     ) {
         $this->entityUuidNodeFactory = $entityUuidNodeFactory;
         $this->classManipulator = $classManipulator;
-        $this->entityWithAddedPropertyCollector = $entityWithAddedPropertyCollector;
+        $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -95,7 +95,7 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
 
         /** @var string $class */
         $class = $this->getName($node);
-        $this->entityWithAddedPropertyCollector->addClassAndProperty($class, 'uuid');
+        $this->uuidMigrationDataCollector->addClassAndProperty($class, 'uuid');
 
         return $node;
     }

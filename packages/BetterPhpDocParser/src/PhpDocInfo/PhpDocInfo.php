@@ -21,6 +21,7 @@ use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToManyTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToOneTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToManyTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToOneTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\TableTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 
 final class PhpDocInfo
@@ -179,6 +180,11 @@ final class PhpDocInfo
     public function getDoctrineIdTagValueNode(): ?IdTagValueNode
     {
         return $this->matchChildValueNodeOfType(IdTagValueNode::class);
+    }
+
+    public function getDoctrineTableTagValueNode(): ?TableTagValueNode
+    {
+        return $this->matchChildValueNodeOfType(TableTagValueNode::class);
     }
 
     public function getDoctrineManyToManyTagValueNode(): ?ManyToManyTagValueNode
