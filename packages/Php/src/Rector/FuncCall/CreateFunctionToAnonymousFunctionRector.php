@@ -168,7 +168,8 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($variableNode->getAttribute(AttributeKey::PARENT_NODE) instanceof Assign) {
+            $parentNode = $variableNode->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof Assign) {
                 $alreadyAssignedVariables[] = $variableName;
             }
 

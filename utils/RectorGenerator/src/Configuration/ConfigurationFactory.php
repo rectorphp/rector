@@ -17,7 +17,7 @@ final class ConfigurationFactory
     /**
      * @var string
      */
-    private $levelsDirectory;
+    private $setsDirectory;
 
     /**
      * @var NodeClassProvider
@@ -26,7 +26,7 @@ final class ConfigurationFactory
 
     public function __construct(NodeClassProvider $nodeClassProvider)
     {
-        $this->levelsDirectory = __DIR__ . '/../../../../config/set';
+        $this->setsDirectory = __DIR__ . '/../../../../config/set';
         $this->nodeClassProvider = $nodeClassProvider;
     }
 
@@ -49,7 +49,7 @@ final class ConfigurationFactory
             trim(ltrim($config['code_before'], '<?php')),
             trim(ltrim($config['code_after'], '<?php')),
             array_filter((array) $config['source']),
-            $this->resolveLevelConfig($config['level'])
+            $this->resolveSetConfig($config['set'])
         );
     }
 
@@ -130,7 +130,7 @@ final class ConfigurationFactory
         return Strings::after($fqnNodeTypes[0], '\\', -1);
     }
 
-    private function resolveLevelConfig(string $level): ?string
+    private function resolveSetConfig(string $level): ?string
     {
         if ($level === '') {
             return null;
@@ -138,7 +138,7 @@ final class ConfigurationFactory
 
         $fileLevel = sprintf('#^%s(\.yaml)?$#', $level);
         $finder = Finder::create()->files()
-            ->in($this->levelsDirectory)
+            ->in($this->setsDirectory)
             ->name($fileLevel);
 
         /** @var SplFileInfo[] $fileInfos */
@@ -147,7 +147,7 @@ final class ConfigurationFactory
             // assume new one is created
             $match = Strings::match($level, '#\/(?<name>[a-zA-Z_-]+])#');
             if (isset($match['name'])) {
-                return $this->levelsDirectory . '/' . $match['name'] . '/' . $level;
+                return $this->setsDirectory . '/' . $match['name'] . '/' . $level;
             }
 
             return null;

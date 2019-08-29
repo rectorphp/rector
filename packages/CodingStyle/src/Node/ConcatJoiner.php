@@ -27,7 +27,8 @@ final class ConcatJoiner
      */
     public function joinToStringAndPlaceholderNodes(Concat $concat): array
     {
-        if (! $concat->getAttribute(AttributeKey::PARENT_NODE) instanceof Concat) {
+        $parentNode = $concat->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Concat) {
             $this->reset();
         }
 

@@ -100,7 +100,8 @@ CODE_SAMPLE
     private function resolveAssignedVariables(FunctionLike $functionLike): array
     {
         return $this->betterNodeFinder->find($functionLike, function (Node $node): bool {
-            if (! $node->getAttribute(AttributeKey::PARENT_NODE) instanceof Assign) {
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $parentNode instanceof Assign) {
                 return false;
             }
 
