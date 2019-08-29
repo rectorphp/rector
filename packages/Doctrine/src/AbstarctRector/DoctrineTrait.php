@@ -5,6 +5,7 @@ namespace Rector\Doctrine\AbstarctRector;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
+use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 
 trait DoctrineTrait
 {
@@ -26,8 +27,32 @@ trait DoctrineTrait
         return $this->doctrineDocBlockResolver->isDoctrineEntityClass($class);
     }
 
+    protected function isDoctrineEntityClassWithIdProperty(Class_ $class): bool
+    {
+        if (! $this->doctrineDocBlockResolver->isDoctrineEntityClass($class)) {
+            return false;
+        }
+
+        foreach ($class->stmts as $classStmt) {
+            if (! $classStmt instanceof Property) {
+                continue;
+            }
+
+            if ($this->doctrineDocBlockResolver->hasPropertyDoctrineIdTag($classStmt)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected function getTargetEntity(Property $property): ?string
     {
         return $this->doctrineDocBlockResolver->getTargetEntity($property);
+    }
+
+    protected function getDoctrineRelationTagValueNode(Property $property): ?DoctrineRelationTagValueNodeInterface
+    {
+        return $this->doctrineDocBlockResolver->getDoctrineRelationTagValueNode($property);
     }
 }

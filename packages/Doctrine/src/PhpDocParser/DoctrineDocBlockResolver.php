@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\TableTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 
@@ -41,6 +42,16 @@ final class DoctrineDocBlockResolver
         return $doctrineRelationTagValueNode->getTargetEntity();
     }
 
+    public function hasPropertyDoctrineIdTag(Property $property): bool
+    {
+        $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+        if ($propertyPhpDocInfo === null) {
+            return false;
+        }
+
+        return (bool) $propertyPhpDocInfo->getDoctrineIdTagValueNode();
+    }
+
     public function getDoctrineRelationTagValueNode(Property $property): ?DoctrineRelationTagValueNodeInterface
     {
         $propertyPhpDocInfo = $this->getPhpDocInfo($property);
@@ -49,6 +60,16 @@ final class DoctrineDocBlockResolver
         }
 
         return $propertyPhpDocInfo->getDoctrineRelationTagValueNode();
+    }
+
+    public function getDoctrineTableTagValueNode(Class_ $class): ?TableTagValueNode
+    {
+        $classPhpDocInfo = $this->getPhpDocInfo($class);
+        if ($classPhpDocInfo === null) {
+            return null;
+        }
+
+        return $classPhpDocInfo->getDoctrineTableTagValueNode();
     }
 
     private function getPhpDocInfo(Node $node): ?PhpDocInfo

@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use Rector\Doctrine\Collector\EntitiesWithAddedUuidPropertyCollector;
+use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
@@ -30,18 +30,18 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
     private $classManipulator;
 
     /**
-     * @var EntitiesWithAddedUuidPropertyCollector
+     * @var UuidMigrationDataCollector
      */
-    private $entitiesWithAddedUuidPropertyCollector;
+    private $uuidMigrationDataCollector;
 
     public function __construct(
         EntityUuidNodeFactory $entityUuidNodeFactory,
         ClassManipulator $classManipulator,
-        EntitiesWithAddedUuidPropertyCollector $entitiesWithAddedUuidPropertyCollector
+        UuidMigrationDataCollector $uuidMigrationDataCollector
     ) {
         $this->entityUuidNodeFactory = $entityUuidNodeFactory;
         $this->classManipulator = $classManipulator;
-        $this->entitiesWithAddedUuidPropertyCollector = $entitiesWithAddedUuidPropertyCollector;
+        $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -66,7 +66,7 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isDoctrineEntityClass($node)) {
+        if (! $this->isDoctrineEntityClassWithIdProperty($node)) {
             return null;
         }
 
@@ -95,7 +95,7 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
 
         /** @var string $class */
         $class = $this->getName($node);
-        $this->entitiesWithAddedUuidPropertyCollector->addClass($class);
+        $this->uuidMigrationDataCollector->addClassAndProperty($class, 'uuid');
 
         return $node;
     }

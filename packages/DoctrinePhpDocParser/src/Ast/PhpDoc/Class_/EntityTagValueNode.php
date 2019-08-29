@@ -7,6 +7,11 @@ use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
 final class EntityTagValueNode extends AbstractDoctrineTagValueNode
 {
     /**
+     * @var string
+     */
+    public const SHORT_NAME = '@ORM\Entity';
+
+    /**
      * @var string|null
      */
     private $repositoryClass;
