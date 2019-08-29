@@ -6,15 +6,30 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeContainer\ParsedNodesByType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use ReflectionMethod;
 
 final class RemoveDelegatingParentCallRector extends AbstractRector
 {
+    /**
+     * @var ParsedNodesByType
+     */
+    private $parsedNodesByType;
+
+    public function __construct(ParsedNodesByType $parsedNodesByType)
+    {
+        $this->parsedNodesByType = $parsedNodesByType;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('', [
@@ -51,6 +66,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
+            return null;
+        }
+
+        if ($classNode->extends === null) {
+            return null;
+        }
+
         if (count((array) $node->stmts) !== 1) {
             return null;
         }
@@ -115,6 +139,10 @@ CODE_SAMPLE
             return false;
         }
 
+        if ($this->isParentClassMethodVisibilityOverride($classMethod, $staticCall)) {
+            return false;
+        }
+
         return true;
     }
 
@@ -140,5 +168,35 @@ CODE_SAMPLE
         }
 
         return true;
+    }
+
+    private function isParentClassMethodVisibilityOverride(ClassMethod $classMethod, StaticCall $staticCall): bool
+    {
+        /** @var string $className */
+        $className = $staticCall->getAttribute(AttributeKey::CLASS_NAME);
+
+        $parentClassName = get_parent_class($className);
+        if ($parentClassName === false) {
+            throw new ShouldNotHappenException(__METHOD__);
+        }
+
+        /** @var string $methodName */
+        $methodName = $this->getName($staticCall);
+        $parentClassMethod = $this->parsedNodesByType->findMethod($methodName, $parentClassName);
+        if ($parentClassMethod !== null) {
+            if ($parentClassMethod->isProtected() && $classMethod->isPublic()) {
+                return true;
+            }
+        }
+
+        // 3rd party code
+        if (method_exists($parentClassName, $methodName)) {
+            $parentMethodReflection = new ReflectionMethod($parentClassName, $methodName);
+            if ($parentMethodReflection->isProtected() && $classMethod->isPublic()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
