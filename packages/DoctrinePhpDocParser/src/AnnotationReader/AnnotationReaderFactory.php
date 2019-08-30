@@ -18,6 +18,7 @@ final class AnnotationReaderFactory
         // and run "composer dump-autoload", because the directory is loaded by classmap
         $annotationReader::addGlobalIgnoredName('ORM\GeneratedValue');
         $annotationReader::addGlobalIgnoredName('ORM\InheritanceType');
+        $annotationReader::addGlobalIgnoredName('ORM\OrderBy');
 
         return $annotationReader;
     }

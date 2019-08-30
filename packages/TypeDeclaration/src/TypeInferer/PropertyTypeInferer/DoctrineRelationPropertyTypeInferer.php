@@ -2,7 +2,6 @@
 
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-use Doctrine\Common\Collections\Collection;
 use PhpParser\Node\Stmt\Property;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToManyTagNodeInterface;
@@ -15,7 +14,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     /**
      * @var string
      */
-    private const COLLECTION_TYPE = Collection::class;
+    private const COLLECTION_TYPE = 'Doctrine\Common\Collections\Collection';
 
     /**
      * @var DocBlockManipulator
