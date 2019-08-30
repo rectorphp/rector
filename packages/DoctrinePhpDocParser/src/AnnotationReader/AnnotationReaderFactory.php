@@ -11,6 +11,14 @@ final class AnnotationReaderFactory
     {
         AnnotationRegistry::registerLoader('class_exists');
 
-        return new AnnotationReader();
+        $annotationReader = new AnnotationReader();
+
+        // without this the reader will try to resolve them and fails with an exception
+        // don't forget to add it to "stubs/Doctrine/Empty" directory, because the class needs to exists
+        // and run "composer dump-autoload", because the directory is loaded by classmap
+        $annotationReader::addGlobalIgnoredName('ORM\GeneratedValue');
+        $annotationReader::addGlobalIgnoredName('ORM\InheritanceType');
+
+        return $annotationReader;
     }
 }
