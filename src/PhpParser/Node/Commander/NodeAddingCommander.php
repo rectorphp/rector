@@ -52,7 +52,6 @@ final class NodeAddingCommander implements CommanderInterface
     {
         $position = $this->resolveNearestExpressionPosition($positionNode);
 
-        // dump($this->wrapToExpression($addedNode));
         $this->nodesToAddBefore[$position][] = $this->wrapToExpression($addedNode);
     }
 

@@ -177,49 +177,49 @@ final class PhpDocInfo
         return $this->getResolvedTypesAttribute($varTagValue);
     }
 
-    public function getDoctrineIdTagValueNode(): ?IdTagValueNode
+    public function getDoctrineId(): ?IdTagValueNode
     {
-        return $this->matchChildValueNodeOfType(IdTagValueNode::class);
+        return $this->getByType(IdTagValueNode::class);
     }
 
-    public function getDoctrineTableTagValueNode(): ?TableTagValueNode
+    public function getDoctrineTable(): ?TableTagValueNode
     {
-        return $this->matchChildValueNodeOfType(TableTagValueNode::class);
+        return $this->getByType(TableTagValueNode::class);
     }
 
-    public function getDoctrineManyToManyTagValueNode(): ?ManyToManyTagValueNode
+    public function getDoctrineManyToMany(): ?ManyToManyTagValueNode
     {
-        return $this->matchChildValueNodeOfType(ManyToManyTagValueNode::class);
+        return $this->getByType(ManyToManyTagValueNode::class);
     }
 
-    public function getDoctrineManyToOneTagValueNode(): ?ManyToOneTagValueNode
+    public function getDoctrineManyToOne(): ?ManyToOneTagValueNode
     {
-        return $this->matchChildValueNodeOfType(ManyToOneTagValueNode::class);
+        return $this->getByType(ManyToOneTagValueNode::class);
     }
 
-    public function getDoctrineOneToOneTagValueNode(): ?OneToOneTagValueNode
+    public function getDoctrineOneToOne(): ?OneToOneTagValueNode
     {
-        return $this->matchChildValueNodeOfType(OneToOneTagValueNode::class);
+        return $this->getByType(OneToOneTagValueNode::class);
     }
 
-    public function getDoctrineOneToManyTagValueNode(): ?OneToManyTagValueNode
+    public function getDoctrineOneToMany(): ?OneToManyTagValueNode
     {
-        return $this->matchChildValueNodeOfType(OneToManyTagValueNode::class);
+        return $this->getByType(OneToManyTagValueNode::class);
     }
 
-    public function getDoctrineEntityTag(): ?EntityTagValueNode
+    public function getDoctrineEntity(): ?EntityTagValueNode
     {
-        return $this->matchChildValueNodeOfType(EntityTagValueNode::class);
+        return $this->getByType(EntityTagValueNode::class);
     }
 
-    public function getDoctrineColumnTagValueNode(): ?ColumnTagValueNode
+    public function getDoctrineColumn(): ?ColumnTagValueNode
     {
-        return $this->matchChildValueNodeOfType(ColumnTagValueNode::class);
+        return $this->getByType(ColumnTagValueNode::class);
     }
 
     public function getDoctrineJoinColumnTagValueNode(): ?JoinColumnTagValueNode
     {
-        return $this->matchChildValueNodeOfType(JoinColumnTagValueNode::class);
+        return $this->getByType(JoinColumnTagValueNode::class);
     }
 
     /**
@@ -263,10 +263,10 @@ final class PhpDocInfo
 
     public function getDoctrineRelationTagValueNode(): ?DoctrineRelationTagValueNodeInterface
     {
-        return $this->getDoctrineManyToManyTagValueNode() ??
-            $this->getDoctrineOneToManyTagValueNode() ??
-            $this->getDoctrineOneToOneTagValueNode() ??
-            $this->getDoctrineManyToOneTagValueNode() ?? null;
+        return $this->getDoctrineManyToMany() ??
+            $this->getDoctrineOneToMany() ??
+            $this->getDoctrineOneToOne() ??
+            $this->getDoctrineManyToOne() ?? null;
     }
 
     public function removeTagValueNodeFromNode(PhpDocTagValueNode $phpDocTagValueNode): void
@@ -285,7 +285,7 @@ final class PhpDocInfo
     /**
      * @param string $type
      */
-    public function matchChildValueNodeOfType(string $type): ?PhpDocTagValueNode
+    public function getByType(string $type): ?PhpDocTagValueNode
     {
         foreach ($this->phpDocNode->children as $phpDocChildNode) {
             if ($phpDocChildNode instanceof PhpDocTagNode) {

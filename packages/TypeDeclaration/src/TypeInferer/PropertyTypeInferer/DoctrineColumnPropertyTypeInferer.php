@@ -68,7 +68,7 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
         }
 
         $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
-        $doctrineColumnTagValueNode = $phpDocInfo->getDoctrineColumnTagValueNode();
+        $doctrineColumnTagValueNode = $phpDocInfo->getDoctrineColumn();
         if ($doctrineColumnTagValueNode === null) {
             return [];
         }

@@ -90,4 +90,9 @@ final class ManyToOneTagValueNode extends AbstractDoctrineTagValueNode implement
     {
         $this->inversedBy = null;
     }
+
+    public function changeTargetEntity(string $targetEntity): void
+    {
+        $this->targetEntity = $targetEntity;
+    }
 }

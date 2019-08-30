@@ -119,7 +119,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokenIterator->next();
 
         // @todo somehow decouple to tag pre-processor
-        if ($tag === '@ORM') {
+        if (Strings::match($tag, '#@(ORM|Assert|Serializer)$#')) {
             $tag .= $tokenIterator->currentTokenValue();
             $tokenIterator->next();
         }
