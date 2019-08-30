@@ -14,6 +14,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Validator\Constraint;
 
 final class NodeAnnotationReader
 {
@@ -46,7 +47,7 @@ final class NodeAnnotationReader
         return $this->annotationReader->getMethodAnnotation($reflectionMethod, $annotationClassName);
     }
 
-    public function readDoctrineClassAnnotation(Class_ $class, string $annotationClassName): Annotation
+    public function readClassAnnotation(Class_ $class, string $annotationClassName): Annotation
     {
         $classReflection = $this->createClassReflectionFromNode($class);
 
@@ -59,7 +60,10 @@ final class NodeAnnotationReader
         return $classAnnotation;
     }
 
-    public function readDoctrinePropertyAnnotation(Property $property, string $annotationClassName): Annotation
+    /**
+     * @return Annotation|Constraint|null
+     */
+    public function readPropertyAnnotation(Property $property, string $annotationClassName)
     {
         $propertyReflection = $this->createPropertyReflectionFromPropertyNode($property);
 

@@ -73,7 +73,7 @@ CODE_SAMPLE
 
         $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($node);
 
-        $doctrineEntityTag = $phpDocInfo->getDoctrineEntityTag();
+        $doctrineEntityTag = $phpDocInfo->getDoctrineEntity();
         if ($doctrineEntityTag === null) {
             return null;
         }

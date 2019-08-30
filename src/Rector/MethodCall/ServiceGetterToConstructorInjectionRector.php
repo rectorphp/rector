@@ -150,8 +150,6 @@ CODE_SAMPLE
 
                 $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
 
-                // add property via constructor
-
                 /** @var Class_ $classNode */
                 $this->addPropertyToClass($classNode, $serviceType, $propertyName);
 

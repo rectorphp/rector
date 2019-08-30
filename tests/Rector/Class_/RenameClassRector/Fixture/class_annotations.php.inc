@@ -24,12 +24,6 @@ class ClassAnnotations
     public $keepThis;
 
     /**
-     * @Serializer\Type("array<Rector\Tests\Rector\Class_\RenameClassRector\Source\OldClass>")
-     * @Serializer\Type("iterable<key, Rector\Tests\Rector\Class_\RenameClassRector\Source\OldClass>")
-     */
-    public $flights = [];
-
-    /**
      * @ORM\OneToMany(targetEntity="Rector\Tests\Rector\Class_\RenameClassRector\Source\OldClass")
      */
     public $entityProperty;
@@ -61,12 +55,6 @@ class ClassAnnotations
      * @Serializer\Type("Rector\Tests\Rector\Class_\RenameClassRector\Source\OldClassy")
      */
     public $keepThis;
-
-    /**
-     * @Serializer\Type("array<Rector\Tests\Rector\Class_\RenameClassRector\Source\NewClass>")
-     * @Serializer\Type("iterable<key, Rector\Tests\Rector\Class_\RenameClassRector\Source\NewClass>")
-     */
-    public $flights = [];
 
     /**
      * @ORM\OneToMany(targetEntity="Rector\Tests\Rector\Class_\RenameClassRector\Source\NewClass")

@@ -135,7 +135,7 @@ CODE_SAMPLE
         $classMethodPhpDocInfo = $this->getPhpDocInfo($classMethod);
 
         /** @var TemplateTagValueNode|null $templateTagValueNode */
-        $templateTagValueNode = $classMethodPhpDocInfo->matchChildValueNodeOfType(TemplateTagValueNode::class);
+        $templateTagValueNode = $classMethodPhpDocInfo->getByType(TemplateTagValueNode::class);
         if ($templateTagValueNode === null) {
             throw new ShouldNotHappenException(__METHOD__);
         }

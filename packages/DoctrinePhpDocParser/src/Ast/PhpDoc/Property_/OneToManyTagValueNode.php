@@ -107,4 +107,9 @@ final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implement
     {
         $this->mappedBy = null;
     }
+
+    public function changeTargetEntity(string $targetEntity): void
+    {
+        $this->targetEntity = $targetEntity;
+    }
 }

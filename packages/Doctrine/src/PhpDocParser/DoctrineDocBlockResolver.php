@@ -29,7 +29,7 @@ final class DoctrineDocBlockResolver
             return false;
         }
 
-        return (bool) $classPhpDocInfo->getDoctrineEntityTag();
+        return (bool) $classPhpDocInfo->getDoctrineEntity();
     }
 
     public function getTargetEntity(Property $property): ?string
@@ -49,7 +49,7 @@ final class DoctrineDocBlockResolver
             return false;
         }
 
-        return (bool) $propertyPhpDocInfo->getDoctrineIdTagValueNode();
+        return (bool) $propertyPhpDocInfo->getDoctrineId();
     }
 
     public function getDoctrineRelationTagValueNode(Property $property): ?DoctrineRelationTagValueNodeInterface
@@ -69,7 +69,7 @@ final class DoctrineDocBlockResolver
             return null;
         }
 
-        return $classPhpDocInfo->getDoctrineTableTagValueNode();
+        return $classPhpDocInfo->getDoctrineTable();
     }
 
     public function isDoctrineProperty(Property $property): bool
@@ -79,7 +79,7 @@ final class DoctrineDocBlockResolver
             return false;
         }
 
-        if ($propertyPhpDocInfo->getDoctrineColumnTagValueNode()) {
+        if ($propertyPhpDocInfo->getDoctrineColumn()) {
             return true;
         }
 

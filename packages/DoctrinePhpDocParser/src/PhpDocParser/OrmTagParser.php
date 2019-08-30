@@ -113,7 +113,7 @@ final class OrmTagParser extends AbstractPhpDocParser
     private function createEntityTagValueNode(Class_ $class, string $annotationContent): EntityTagValueNode
     {
         /** @var Entity $entity */
-        $entity = $this->nodeAnnotationReader->readDoctrineClassAnnotation($class, Entity::class);
+        $entity = $this->nodeAnnotationReader->readClassAnnotation($class, Entity::class);
 
         return new EntityTagValueNode($entity->repositoryClass, $entity->readOnly, $this->resolveAnnotationItemsOrder(
             $annotationContent
@@ -123,7 +123,7 @@ final class OrmTagParser extends AbstractPhpDocParser
     private function createTableTagValueNode(Class_ $class, string $annotationContent): TableTagValueNode
     {
         /** @var Table $table */
-        $table = $this->nodeAnnotationReader->readDoctrineClassAnnotation($class, Table::class);
+        $table = $this->nodeAnnotationReader->readClassAnnotation($class, Table::class);
 
         return new TableTagValueNode(
             $table->name,
@@ -138,7 +138,7 @@ final class OrmTagParser extends AbstractPhpDocParser
     private function createColumnTagValueNode(Property $property, string $annotationContent): ColumnTagValueNode
     {
         /** @var Column $column */
-        $column = $this->nodeAnnotationReader->readDoctrinePropertyAnnotation($property, Column::class);
+        $column = $this->nodeAnnotationReader->readPropertyAnnotation($property, Column::class);
 
         return new ColumnTagValueNode(
             $column->name,
@@ -157,7 +157,7 @@ final class OrmTagParser extends AbstractPhpDocParser
     private function createManyToManyTagValueNode(Property $property, string $annotationContent): ManyToManyTagValueNode
     {
         /** @var ManyToMany $manyToMany */
-        $manyToMany = $this->nodeAnnotationReader->readDoctrinePropertyAnnotation($property, ManyToMany::class);
+        $manyToMany = $this->nodeAnnotationReader->readPropertyAnnotation($property, ManyToMany::class);
 
         return new ManyToManyTagValueNode(
             $manyToMany->targetEntity,
@@ -175,7 +175,7 @@ final class OrmTagParser extends AbstractPhpDocParser
     private function createManyToOneTagValueNode(Property $property, string $annotationContent): ManyToOneTagValueNode
     {
         /** @var ManyToOne $manyToOne */
-        $manyToOne = $this->nodeAnnotationReader->readDoctrinePropertyAnnotation($property, ManyToOne::class);
+        $manyToOne = $this->nodeAnnotationReader->readPropertyAnnotation($property, ManyToOne::class);
 
         return new ManyToOneTagValueNode(
             $manyToOne->targetEntity,
@@ -190,7 +190,7 @@ final class OrmTagParser extends AbstractPhpDocParser
     private function createOneToOneTagValueNode(Property $property, string $annotationContent): OneToOneTagValueNode
     {
         /** @var OneToOne $oneToOne */
-        $oneToOne = $this->nodeAnnotationReader->readDoctrinePropertyAnnotation($property, OneToOne::class);
+        $oneToOne = $this->nodeAnnotationReader->readPropertyAnnotation($property, OneToOne::class);
 
         return new OneToOneTagValueNode(
             $oneToOne->targetEntity,
@@ -207,7 +207,7 @@ final class OrmTagParser extends AbstractPhpDocParser
     private function createOneToManyTagValueNode(Property $property, string $annotationContent): OneToManyTagValueNode
     {
         /** @var OneToMany $oneToMany */
-        $oneToMany = $this->nodeAnnotationReader->readDoctrinePropertyAnnotation($property, OneToMany::class);
+        $oneToMany = $this->nodeAnnotationReader->readPropertyAnnotation($property, OneToMany::class);
 
         return new OneToManyTagValueNode(
             $oneToMany->mappedBy,
@@ -224,7 +224,7 @@ final class OrmTagParser extends AbstractPhpDocParser
     private function createJoinColumnTagValueNode(Property $property, string $annotationContent): JoinColumnTagValueNode
     {
         /** @var JoinColumn $joinColumn */
-        $joinColumn = $this->nodeAnnotationReader->readDoctrinePropertyAnnotation($property, JoinColumn::class);
+        $joinColumn = $this->nodeAnnotationReader->readPropertyAnnotation($property, JoinColumn::class);
 
         return $this->createJoinColumnTagValueNodeFromJoinColumnAnnotation($joinColumn, $annotationContent);
     }
@@ -232,7 +232,7 @@ final class OrmTagParser extends AbstractPhpDocParser
     private function createJoinTableTagValeNode(Property $property, string $annotationContent): JoinTableTagValueNode
     {
         /** @var JoinTable $joinTable */
-        $joinTable = $this->nodeAnnotationReader->readDoctrinePropertyAnnotation($property, JoinTable::class);
+        $joinTable = $this->nodeAnnotationReader->readPropertyAnnotation($property, JoinTable::class);
 
         $joinColumnContents = Strings::matchAll(
             $annotationContent,

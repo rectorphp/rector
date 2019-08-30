@@ -116,13 +116,13 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
                 return false;
             }
 
-            $idTagValueNode = $propertyPhpDocInfo->getDoctrineIdTagValueNode();
+            $idTagValueNode = $propertyPhpDocInfo->getDoctrineId();
             if ($idTagValueNode === null) {
                 return false;
             }
 
             // get column!
-            $columnTagValueNode = $propertyPhpDocInfo->getDoctrineColumnTagValueNode();
+            $columnTagValueNode = $propertyPhpDocInfo->getDoctrineColumn();
             if ($columnTagValueNode === null) {
                 return false;
             }

@@ -46,6 +46,7 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
 
         // Symfony/Validator + Doctrine + JMS/Serializer annotations
         yield [__DIR__ . '/Fixture/class_annotations.php.inc'];
+        yield [__DIR__ . '/Fixture/class_annotations_serializer_type.php.inc'];
     }
 
     /**

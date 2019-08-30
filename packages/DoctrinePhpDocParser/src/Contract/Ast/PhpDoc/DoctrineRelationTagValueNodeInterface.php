@@ -7,4 +7,6 @@ interface DoctrineRelationTagValueNodeInterface
     public function getTargetEntity(): ?string;
 
     public function getFqnTargetEntity(): ?string;
+
+    public function changeTargetEntity(string $targetEntity): void;
 }
