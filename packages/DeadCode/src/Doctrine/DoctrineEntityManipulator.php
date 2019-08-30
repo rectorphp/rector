@@ -115,21 +115,17 @@ final class DoctrineEntityManipulator
     {
         $manyToOnePropertyNames = [];
 
-        foreach ($class->stmts as $stmt) {
-            if (! $stmt instanceof Property) {
+        foreach ($class->getProperties() as $property) {
+            if ($property->getDocComment() === null) {
                 continue;
             }
 
-            if ($stmt->getDocComment() === null) {
-                continue;
-            }
-
-            $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($stmt);
+            $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
             if ($phpDocInfo->getDoctrineRelationTagValueNode() === null) {
                 continue;
             }
 
-            $manyToOnePropertyNames[] = $this->nameResolver->getName($stmt);
+            $manyToOnePropertyNames[] = $this->nameResolver->getName($property);
         }
 
         return $manyToOnePropertyNames;

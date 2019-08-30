@@ -3,7 +3,6 @@
 namespace Rector\SOLID\Analyzer;
 
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Stmt\ClassConst;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -111,12 +110,8 @@ final class ClassConstantFetchAnalyzer
                 continue;
             }
 
-            foreach ($classOrInterface->stmts as $stmt) {
-                if (! $stmt instanceof ClassConst) {
-                    continue;
-                }
-
-                if ($this->nameResolver->isName($stmt, $constant)) {
+            foreach ($classOrInterface->getConstants() as $classConstant) {
+                if ($this->nameResolver->isName($classConstant, $constant)) {
                     return $resolvedClassType;
                 }
             }

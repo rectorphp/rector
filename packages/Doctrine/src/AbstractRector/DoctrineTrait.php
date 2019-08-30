@@ -32,6 +32,24 @@ trait DoctrineTrait
         return $this->doctrineDocBlockResolver->isDoctrineEntityClass($class);
     }
 
+<<<<<<< HEAD:packages/Doctrine/src/AbstractRector/DoctrineTrait.php
+=======
+    protected function isDoctrineEntityClassWithIdProperty(Class_ $class): bool
+    {
+        if (! $this->doctrineDocBlockResolver->isDoctrineEntityClass($class)) {
+            return false;
+        }
+
+        foreach ($class->getProperties() as $property) {
+            if ($this->doctrineDocBlockResolver->hasPropertyDoctrineIdTag($property)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+>>>>>>> make use of getProperties():packages/Doctrine/src/AbstarctRector/DoctrineTrait.php
     protected function getTargetEntity(Property $property): ?string
     {
         return $this->doctrineDocBlockResolver->getTargetEntity($property);

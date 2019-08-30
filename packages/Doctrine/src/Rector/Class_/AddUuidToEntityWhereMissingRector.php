@@ -89,4 +89,33 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
 
         return $node;
     }
+
+    private function hasClassIdPropertyWithUuidType(Class_ $class): bool
+    {
+        foreach ($class->getProperties() as $property) {
+            if (! $this->isName($property, 'id')) {
+                continue;
+            }
+
+            $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+            if ($propertyPhpDocInfo === null) {
+                return false;
+            }
+
+            $idTagValueNode = $propertyPhpDocInfo->getDoctrineId();
+            if ($idTagValueNode === null) {
+                return false;
+            }
+
+            // get column!
+            $columnTagValueNode = $propertyPhpDocInfo->getDoctrineColumn();
+            if ($columnTagValueNode === null) {
+                return false;
+            }
+
+            return (bool) Strings::match((string) $columnTagValueNode->getType(), '#^uuid(_binary)?$#');
+        }
+
+        return false;
+    }
 }

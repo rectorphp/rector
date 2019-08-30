@@ -93,16 +93,12 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
         }
 
         // traverse relations and see which of them have freshly added uuid on the other side
-        foreach ($node->stmts as $classStmt) {
-            if (! $classStmt instanceof Property) {
+        foreach ($node->getProperties() as $property) {
+            if ($this->shouldSkipProperty($node, $property)) {
                 continue;
             }
 
-            if ($this->shouldSkipProperty($node, $classStmt)) {
-                continue;
-            }
-
-            $node->stmts[] = $this->createMirrorNullable($classStmt);
+            $node->stmts[] = $this->createMirrorNullable($property);
         }
 
         return $node;
@@ -173,12 +169,8 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
 
     private function hasClassPropertyName(Class_ $node, string $uuidPropertyName): bool
     {
-        foreach ($node->stmts as $stmt) {
-            if (! $stmt instanceof Property) {
-                continue;
-            }
-
-            if (! $this->isName($stmt, $uuidPropertyName)) {
+        foreach ($node->getProperties() as $property) {
+            if (! $this->isName($property, $uuidPropertyName)) {
                 continue;
             }
 

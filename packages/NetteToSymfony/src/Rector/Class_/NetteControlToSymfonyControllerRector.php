@@ -17,7 +17,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -35,11 +34,6 @@ final class NetteControlToSymfonyControllerRector extends AbstractRector
     private $netteControlClass;
 
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
      * @var Expr|null
      */
     private $templateFileExpr;
@@ -49,11 +43,8 @@ final class NetteControlToSymfonyControllerRector extends AbstractRector
      */
     private $templateVariables = [];
 
-    public function __construct(
-        ClassManipulator $classManipulator,
-        string $netteControlClass = 'Nette\Application\UI\Control'
-    ) {
-        $this->classManipulator = $classManipulator;
+    public function __construct(string $netteControlClass = 'Nette\Application\UI\Control')
+    {
         $this->netteControlClass = $netteControlClass;
     }
 
@@ -122,7 +113,7 @@ CODE_SAMPLE
 
         $node->extends = new FullyQualified('Symfony\Bundle\FrameworkBundle\Controller\AbstractController');
 
-        $renderMethod = $this->classManipulator->getMethod($node, 'render');
+        $renderMethod = $node->getMethod('render');
         if ($renderMethod !== null) {
             $this->processRenderMethod($renderMethod);
         }

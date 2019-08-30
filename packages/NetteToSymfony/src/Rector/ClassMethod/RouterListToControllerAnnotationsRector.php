@@ -14,7 +14,6 @@ use Rector\NetteToSymfony\Route\RouteInfo;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -49,11 +48,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $parsedNodesByType;
 
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
      * @var DocBlockManipulator
      */
     private $docBlockManipulator;
@@ -70,7 +64,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
 
     public function __construct(
         ParsedNodesByType $parsedNodesByType,
-        ClassManipulator $classManipulator,
         ClassMethodManipulator $classMethodManipulator,
         DocBlockManipulator $docBlockManipulator,
         RouteInfoFactory $routeInfoFactory,
@@ -81,7 +74,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
         $this->routeListClass = $routeListClass;
         $this->routerClass = $routerClass;
         $this->parsedNodesByType = $parsedNodesByType;
-        $this->classManipulator = $classManipulator;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->routeAnnotationClass = $routeAnnotationClass;
         $this->routeInfoFactory = $routeInfoFactory;
@@ -260,7 +252,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->classManipulator->getMethod($classNode, $routeInfo->getMethod());
+        return $classNode->getMethod($routeInfo->getMethod());
     }
 
     private function completeImplicitRoutes(): void
@@ -268,16 +260,15 @@ CODE_SAMPLE
         $presenterClasses = $this->parsedNodesByType->findClassesBySuffix('Presenter');
 
         foreach ($presenterClasses as $presenterClass) {
-            foreach ((array) $presenterClass->stmts as $classStmt) {
-                if ($this->shouldSkipClassStmt($classStmt)) {
+            foreach ($presenterClass->getMethods() as $classMethod) {
+                if ($this->shouldSkipClassStmt($classMethod)) {
                     continue;
                 }
 
-                /** @var ClassMethod $classStmt */
-                $path = $this->resolvePathFromClassAndMethodNodes($presenterClass, $classStmt);
+                $path = $this->resolvePathFromClassAndMethodNodes($presenterClass, $classMethod);
                 $phpDocTagNode = new SymfonyRoutePhpDocTagNode($this->routeAnnotationClass, $path);
 
-                $this->docBlockManipulator->addTag($classStmt, $phpDocTagNode);
+                $this->docBlockManipulator->addTag($classMethod, $phpDocTagNode);
             }
         }
     }

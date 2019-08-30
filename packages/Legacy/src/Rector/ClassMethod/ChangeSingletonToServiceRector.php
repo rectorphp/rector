@@ -97,19 +97,17 @@ CODE_SAMPLE
      */
     private function matchStaticPropertyFetchAndGetSingletonMethodName(Class_ $class): ?array
     {
-        foreach ((array) $class->stmts as $classStmt) {
-            if ($classStmt instanceof ClassMethod) {
-                if (! $classStmt->isStatic()) {
-                    continue;
-                }
-
-                $staticPropertyFetch = $this->singletonClassMethodAnalyzer->matchStaticPropertyFetch($classStmt);
-                if ($staticPropertyFetch === null) {
-                    return null;
-                }
-
-                return [$this->getName($staticPropertyFetch), $this->getName($classStmt)];
+        foreach ($class->getMethods() as $classMethod) {
+            if (! $classMethod->isStatic()) {
+                continue;
             }
+
+            $staticPropertyFetch = $this->singletonClassMethodAnalyzer->matchStaticPropertyFetch($classMethod);
+            if ($staticPropertyFetch === null) {
+                return null;
+            }
+
+            return [$this->getName($staticPropertyFetch), $this->getName($classMethod)];
         }
 
         return null;

@@ -87,10 +87,8 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($node->stmts as $stmt) {
-            if ($stmt instanceof ClassMethod) {
-                $this->processClassMethod($node, $stmt);
-            }
+        foreach ($node->getMethods() as $classMethod) {
+            $this->processClassMethod($node, $classMethod);
         }
 
         return $node;
