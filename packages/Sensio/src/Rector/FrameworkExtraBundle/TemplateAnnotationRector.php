@@ -2,18 +2,20 @@
 
 namespace Rector\Sensio\Rector\FrameworkExtraBundle;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Sensio\Helper\TemplateGuesser;
+use Rector\Sensio\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 
 final class TemplateAnnotationRector extends AbstractRector
 {
@@ -81,7 +83,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->docBlockManipulator->hasTag($node, 'Template')) {
+        if (! $this->docBlockManipulator->hasTag($node, TemplateTagValueNode::CLASS_NAME)) {
             return null;
         }
 
@@ -103,7 +105,7 @@ CODE_SAMPLE
         }
 
         // remove annotation
-        $this->docBlockManipulator->removeTagFromNode($node, 'Template');
+        $this->docBlockManipulator->removeTagFromNode($node, TemplateTagValueNode::CLASS_NAME);
 
         return $node;
     }
@@ -122,19 +124,24 @@ CODE_SAMPLE
             $arguments[] = $returnNode->expr;
         }
 
-        $arguments = array_merge($arguments, $this->resolveArgumentsFromMethodCall($returnNode));
+        $arguments = array_merge($arguments, $this->resolveArrayArgumentsFromMethodCall($returnNode));
 
         return $this->createArgs($arguments);
     }
 
     private function resolveTemplateName(ClassMethod $classMethod): string
     {
-        $templateTag = $this->docBlockManipulator->getTagByName($classMethod, 'Template');
-        $content = (string) $templateTag;
+        /** @var PhpDocInfo $classMethodPhpDocInfo */
+        $classMethodPhpDocInfo = $this->getPhpDocInfo($classMethod);
 
-        $annotationContent = Strings::match($content, '#\(("|\')(?<filename>.*?)("|\')\)#');
-        if (isset($annotationContent['filename'])) {
-            return $annotationContent['filename'];
+        /** @var TemplateTagValueNode|null $templateTagValueNode */
+        $templateTagValueNode = $classMethodPhpDocInfo->matchChildValueNodeOfType(TemplateTagValueNode::class);
+        if ($templateTagValueNode === null) {
+            throw new ShouldNotHappenException(__METHOD__);
+        }
+
+        if ($templateTagValueNode->getTemplate() !== null) {
+            return $templateTagValueNode->getTemplate();
         }
 
         return $this->templateGuesser->resolveFromClassMethodNode($classMethod, $this->version);
@@ -142,17 +149,21 @@ CODE_SAMPLE
 
     /**
      * Already existing method call
-     * @return mixed[]
+     * @return Array_[]
      */
-    private function resolveArgumentsFromMethodCall(Return_ $returnNode): array
+    private function resolveArrayArgumentsFromMethodCall(Return_ $returnNode): array
     {
+        if (! $returnNode->expr instanceof MethodCall) {
+            return [];
+        }
+
         $arguments = [];
-        if ($returnNode->expr instanceof MethodCall) {
-            foreach ($returnNode->expr->args as $arg) {
-                if ($arg->value instanceof Array_) {
-                    $arguments[] = $arg->value;
-                }
+        foreach ($returnNode->expr->args as $arg) {
+            if (! $arg->value instanceof Array_) {
+                continue;
             }
+
+            $arguments[] = $arg->value;
         }
 
         return $arguments;

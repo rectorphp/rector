@@ -5,12 +5,15 @@ namespace Rector\DoctrinePhpDocParser\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\Annotation;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use ReflectionClass;
+use ReflectionMethod;
 use ReflectionProperty;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 final class NodeAnnotationReader
 {
@@ -28,6 +31,19 @@ final class NodeAnnotationReader
     {
         $this->annotationReader = $annotationReader;
         $this->nameResolver = $nameResolver;
+    }
+
+    public function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName): Template
+    {
+        /** @var string $className */
+        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+
+        /** @var string $methodName */
+        $methodName = $this->nameResolver->getName($classMethod);
+
+        $reflectionMethod = new ReflectionMethod($className, $methodName);
+
+        return $this->annotationReader->getMethodAnnotation($reflectionMethod, $annotationClassName);
     }
 
     public function readDoctrineClassAnnotation(Class_ $class, string $annotationClassName): Annotation
