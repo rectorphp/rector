@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\Source\SymfonyController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class ClassWithNamedService45Controller extends SymfonyController
 {
@@ -15,15 +16,6 @@ class ClassWithNamedService45Controller extends SymfonyController
             'form' => $form->createView(),
         ));
     }
-
-    /**
-     * @Template()
-     * @Route("/", name="homepage")
-     */
-    public function index()
-    {
-        return [];
-    }
 }
 
 ?>
@@ -33,6 +25,7 @@ class ClassWithNamedService45Controller extends SymfonyController
 namespace App\Controller;
 
 use Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\Source\SymfonyController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class ClassWithNamedService45Controller extends SymfonyController
 {
@@ -41,14 +34,6 @@ class ClassWithNamedService45Controller extends SymfonyController
         return $this->render('payment/new.html.twig', array(
             'form' => $form->createView(),
         ));
-    }
-
-    /**
-     * @Route("/", name="homepage")
-     */
-    public function index()
-    {
-        return $this->render('class_with_named_service45/index.html.twig');
     }
 }
 

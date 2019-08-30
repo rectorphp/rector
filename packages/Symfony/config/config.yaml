@@ -11,4 +11,4 @@ services:
 
     Rector\Symfony\:
         resource: '../src/'
-        exclude: '../src/{Rector/**/*Rector.php}'
+        exclude: '../src/{Rector/**/*Rector.php,PhpDocParser/Ast/PhpDoc/*}'

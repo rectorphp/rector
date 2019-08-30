@@ -16,10 +16,8 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
-use Rector\Configuration\CurrentNodeProvider;
-use Rector\DoctrinePhpDocParser\AnnotationReader\NodeAnnotationReader;
+use Rector\BetterPhpDocParser\PhpDocParser\AbstractPhpDocParser;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\IdTagValueNode;
@@ -34,66 +32,31 @@ use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineTagNodeInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * Parses following ORM annotations:
- * - ORM\Entity
+ * Parses various ORM annotations
  */
-final class OrmTagParser
+final class OrmTagParser extends AbstractPhpDocParser
 {
-    /**
-     * @var CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-
-    /**
-     * @var NodeAnnotationReader
-     */
-    private $nodeAnnotationReader;
-
-    public function __construct(
-        CurrentNodeProvider $currentNodeProvider,
-        NodeAnnotationReader $nodeAnnotationReader
-    ) {
-        $this->currentNodeProvider = $currentNodeProvider;
-        $this->nodeAnnotationReader = $nodeAnnotationReader;
-    }
-
     public function parse(TokenIterator $tokenIterator, string $tag): ?PhpDocTagValueNode
     {
-        /** @var Class_|Property $node */
-        $node = $this->currentNodeProvider->getNode();
+        /** @var Class_|Property $currentPhpNode */
+        $currentPhpNode = $this->getCurrentPhpNode();
 
-        $clonedTokenIterator = clone $tokenIterator;
-
-        $singleLineContent = $clonedTokenIterator->joinUntil(
-            Lexer::TOKEN_END,
-            Lexer::TOKEN_PHPDOC_EOL,
-            Lexer::TOKEN_CLOSE_PHPDOC
-        );
-
-        if ($singleLineContent === '' || Strings::match($singleLineContent, '#^\((.*?)\)$#m')) {
-            $annotationContent = $singleLineContent;
-            $tokenIterator->joinUntil(Lexer::TOKEN_END, Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_CLOSE_PHPDOC);
-        } else { // multiline - content
-            // skip all tokens for this annotation, so next annotation can work with tokens after this one
-            $annotationContent = $tokenIterator->joinUntil(Lexer::TOKEN_END, Lexer::TOKEN_CLOSE_PHPDOC);
-        }
-
-        $annotationContent = $this->cleanMultilineAnnotationContent($annotationContent);
+        $annotationContent = $this->resolveAnnotationContent($tokenIterator);
 
         // Entity tags
-        if ($node instanceof Class_) {
+        if ($currentPhpNode instanceof Class_) {
             if ($tag === EntityTagValueNode::SHORT_NAME) {
-                return $this->createEntityTagValueNode($node, $annotationContent);
+                return $this->createEntityTagValueNode($currentPhpNode, $annotationContent);
             }
 
             if ($tag === TableTagValueNode::SHORT_NAME) {
-                return $this->createTableTagValueNode($node, $annotationContent);
+                return $this->createTableTagValueNode($currentPhpNode, $annotationContent);
             }
         }
 
         // Property tags
-        if ($node instanceof Property) {
-            return $this->createPropertyTagValueNode($tag, $node, $annotationContent);
+        if ($currentPhpNode instanceof Property) {
+            return $this->createPropertyTagValueNode($tag, $currentPhpNode, $annotationContent);
         }
 
         return null;
@@ -142,20 +105,25 @@ final class OrmTagParser
         return null;
     }
 
-    private function createEntityTagValueNode(Class_ $node, string $annotationContent): EntityTagValueNode
+    private function createIdTagValueNode(): IdTagValueNode
+    {
+        return new IdTagValueNode();
+    }
+
+    private function createEntityTagValueNode(Class_ $class, string $annotationContent): EntityTagValueNode
     {
         /** @var Entity $entity */
-        $entity = $this->nodeAnnotationReader->readDoctrineClassAnnotation($node, Entity::class);
+        $entity = $this->nodeAnnotationReader->readDoctrineClassAnnotation($class, Entity::class);
 
         return new EntityTagValueNode($entity->repositoryClass, $entity->readOnly, $this->resolveAnnotationItemsOrder(
             $annotationContent
         ));
     }
 
-    private function createTableTagValueNode(Class_ $node, string $annotationContent): TableTagValueNode
+    private function createTableTagValueNode(Class_ $class, string $annotationContent): TableTagValueNode
     {
         /** @var Table $table */
-        $table = $this->nodeAnnotationReader->readDoctrineClassAnnotation($node, Table::class);
+        $table = $this->nodeAnnotationReader->readDoctrineClassAnnotation($class, Table::class);
 
         return new TableTagValueNode(
             $table->name,
@@ -347,15 +315,5 @@ final class OrmTagParser
             $joinColumn->fieldName,
             $annotationContent
         );
-    }
-
-    private function cleanMultilineAnnotationContent(string $annotationContent): string
-    {
-        return Strings::replace($annotationContent, '#(\s+)\*(\s+)#m', '$1$3');
-    }
-
-    private function createIdTagValueNode(): IdTagValueNode
-    {
-        return new IdTagValueNode();
     }
 }

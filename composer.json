@@ -87,7 +87,10 @@
             "Rector\\TypeDeclaration\\": "packages/TypeDeclaration/src",
             "Rector\\Utils\\DocumentationGenerator\\": "utils/DocumentationGenerator/src",
             "Rector\\Utils\\RectorGenerator\\": "utils/RectorGenerator/src"
-        }
+        },
+        "classmap": [
+            "stubs"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

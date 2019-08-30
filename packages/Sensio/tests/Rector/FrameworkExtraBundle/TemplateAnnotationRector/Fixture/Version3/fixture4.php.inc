@@ -1,6 +1,7 @@
 <?php declare (strict_types=1);
 
 use Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\Source\SymfonyController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class ClassWithNamedService43 extends SymfonyController
 {
@@ -20,6 +21,7 @@ class ClassWithNamedService43 extends SymfonyController
 <?php declare (strict_types=1);
 
 use Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\Source\SymfonyController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class ClassWithNamedService43 extends SymfonyController
 {

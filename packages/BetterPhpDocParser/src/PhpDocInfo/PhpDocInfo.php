@@ -282,6 +282,22 @@ final class PhpDocInfo
         }
     }
 
+    /**
+     * @param string $type
+     */
+    public function matchChildValueNodeOfType(string $type): ?PhpDocTagValueNode
+    {
+        foreach ($this->phpDocNode->children as $phpDocChildNode) {
+            if ($phpDocChildNode instanceof PhpDocTagNode) {
+                if (is_a($phpDocChildNode->value, $type, true)) {
+                    return $phpDocChildNode->value;
+                }
+            }
+        }
+
+        return null;
+    }
+
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
         $phpDocNode = $this->getPhpDocNode();
@@ -307,21 +323,5 @@ final class PhpDocInfo
         }
 
         return $phpDocTagValueNode->getAttribute(Attribute::TYPE_AS_ARRAY);
-    }
-
-    /**
-     * @param string $type
-     */
-    private function matchChildValueNodeOfType(string $type): ?PhpDocTagValueNode
-    {
-        foreach ($this->phpDocNode->children as $phpDocChildNode) {
-            if ($phpDocChildNode instanceof PhpDocTagNode) {
-                if (is_a($phpDocChildNode->value, $type, true)) {
-                    return $phpDocChildNode->value;
-                }
-            }
-        }
-
-        return null;
     }
 }
