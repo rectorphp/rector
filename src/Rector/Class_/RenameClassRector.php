@@ -2,8 +2,6 @@
 
 namespace Rector\Rector\Class_;
 
-use Nette\Utils\Strings;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\FunctionLike;
@@ -20,6 +18,7 @@ use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\PhpDoc\PhpDocClassRenamer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -47,16 +46,23 @@ final class RenameClassRector extends AbstractRector
     private $classNaming;
 
     /**
+     * @var PhpDocClassRenamer
+     */
+    private $phpDocClassRenamer;
+
+    /**
      * @param string[] $oldToNewClasses
      */
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
         ClassNaming $classNaming,
+        PhpDocClassRenamer $phpDocClassRenamer,
         array $oldToNewClasses = []
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->classNaming = $classNaming;
         $this->oldToNewClasses = $oldToNewClasses;
+        $this->phpDocClassRenamer = $phpDocClassRenamer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -90,7 +96,9 @@ function someFunction(SomeNewClass $someOldClass): SomeNewClass
 CODE_SAMPLE
                 ,
                 [
-                    'App\SomeOldClass' => 'App\SomeNewClass',
+                    '$oldToNewClasses' => [
+                        'App\SomeOldClass' => 'App\SomeNewClass',
+                    ],
                 ]
             ),
         ]);
@@ -123,7 +131,7 @@ CODE_SAMPLE
             }
         }
 
-        $this->changeTypeInAnnotationTypes($node);
+        $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $this->oldToNewClasses);
 
         if ($node instanceof Name) {
             return $this->refactorName($node);
@@ -300,40 +308,5 @@ CODE_SAMPLE
         }
 
         return new FullyQualified($newName);
-    }
-
-    /**
-     * Covers annotations like @ORM, @Serializer, @Assert etc
-     * See https://github.com/rectorphp/rector/issues/1872
-     */
-    private function changeTypeInAnnotationTypes(Node $node): void
-    {
-        $docComment = $node->getDocComment();
-        if ($docComment === null) {
-            return;
-        }
-
-        $textDocComment = $docComment->getText();
-
-        $oldTypes = array_keys($this->oldToNewClasses);
-
-        $oldTypesPregQuoted = [];
-        foreach ($oldTypes as $oldType) {
-            $oldTypesPregQuoted[] = '\b' . preg_quote($oldType) . '\b';
-        }
-
-        $oldTypesPattern = '#(?|' . implode('|', $oldTypesPregQuoted) . ')#x';
-
-        $match = Strings::match($textDocComment, $oldTypesPattern);
-        if ($match === null) {
-            return;
-        }
-
-        foreach ($match as $matchedOldType) {
-            $newType = $this->oldToNewClasses[$matchedOldType];
-            $textDocComment = Strings::replace($textDocComment, '#\b' . preg_quote($matchedOldType) . '\b#', $newType);
-        }
-
-        $node->setDocComment(new Doc($textDocComment));
     }
 }
