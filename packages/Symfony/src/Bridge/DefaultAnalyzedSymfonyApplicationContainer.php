@@ -2,7 +2,6 @@
 
 namespace Rector\Symfony\Bridge;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Configuration\Option;
 use Rector\Exception\ShouldNotHappenException;
@@ -40,8 +39,8 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
      */
     private $commonNamesToTypes = [
         'doctrine' => 'Symfony\Bridge\Doctrine\RegistryInterface',
-        'doctrine.orm.entity_manager' => EntityManagerInterface::class,
-        'doctrine.orm.default_entity_manager' => EntityManagerInterface::class,
+        'doctrine.orm.entity_manager' => 'Doctrine\ORM\EntityManagerInterface',
+        'doctrine.orm.default_entity_manager' => 'Doctrine\ORM\EntityManagerInterface',
     ];
 
     public function __construct(
