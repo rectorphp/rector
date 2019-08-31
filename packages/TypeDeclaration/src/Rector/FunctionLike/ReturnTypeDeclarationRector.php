@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
+use Rector\Php\TypeAnalyzer;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\ReturnTypeResolver\ReturnTypeResolver;
@@ -32,10 +33,19 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
      */
     private $returnTypeInferer;
 
-    public function __construct(ReturnTypeResolver $returnTypeResolver, ReturnTypeInferer $returnTypeInferer)
-    {
+    /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    public function __construct(
+        ReturnTypeResolver $returnTypeResolver,
+        ReturnTypeInferer $returnTypeInferer,
+        TypeAnalyzer $typeAnalyzer
+    ) {
         $this->returnTypeResolver = $returnTypeResolver;
         $this->returnTypeInferer = $returnTypeInferer;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -128,11 +138,12 @@ CODE_SAMPLE
                 }
             }
         } else {
-            $inferedTypes = $this->returnTypeInferer->inferFunctionLike($node);
-            dump($inferedTypes);
-
-            dump($returnTypeInfo->getTypeNode());
-            die;
+            if ($returnTypeInfo->getTypeNode() === null) {
+                $inferedTypes = $this->returnTypeInferer->inferFunctionLike($node);
+                if ($inferedTypes) {
+                    $returnTypeInfo = new ReturnTypeInfo($inferedTypes, $this->typeAnalyzer, $inferedTypes);
+                }
+            }
 
             $node->returnType = $returnTypeInfo->getTypeNode();
         }

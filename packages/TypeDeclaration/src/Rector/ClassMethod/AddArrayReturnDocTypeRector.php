@@ -8,7 +8,6 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 /**
@@ -27,9 +26,6 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
      */
     private $returnTypeInferer;
 
-    /**
-     * @param ReturnTypeInfererInterface[] $docBlockManipulator
-     */
     public function __construct(DocBlockManipulator $docBlockManipulator, ReturnTypeInferer $returnTypeInferer)
     {
         $this->docBlockManipulator = $docBlockManipulator;

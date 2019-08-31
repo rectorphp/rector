@@ -9,8 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
-use Rector\TypeDeclaration\Exception\ConflictingPriorityException;
+use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 
 /**
@@ -24,18 +23,14 @@ final class PropertyTypeDeclarationRector extends AbstractRector
     private $docBlockManipulator;
 
     /**
-     * @var PropertyTypeInfererInterface[]
+     * @var PropertyTypeInferer
      */
-    private $propertyTypeInferers = [];
+    private $propertyTypeInferer;
 
-    /**
-     * @param PropertyTypeInfererInterface[] $propertyTypeInferers
-     */
-    public function __construct(DocBlockManipulator $docBlockManipulator, array $propertyTypeInferers = [])
+    public function __construct(DocBlockManipulator $docBlockManipulator, PropertyTypeInferer $propertyTypeInferer)
     {
         $this->docBlockManipulator = $docBlockManipulator;
-
-        $this->sortAndSetPropertyTypeInferers($propertyTypeInferers);
+        $this->propertyTypeInferer = $propertyTypeInferer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -64,12 +59,10 @@ final class PropertyTypeDeclarationRector extends AbstractRector
             return null;
         }
 
-        foreach ($this->propertyTypeInferers as $propertyTypeInferer) {
-            $types = $propertyTypeInferer->inferProperty($node);
-            if ($types) {
-                $this->setNodeVarTypes($node, $types);
-                return $node;
-            }
+        $types = $this->propertyTypeInferer->inferProperty($node);
+        if ($types) {
+            $this->setNodeVarTypes($node, $types);
+            return $node;
         }
 
         return null;
@@ -83,29 +76,5 @@ final class PropertyTypeDeclarationRector extends AbstractRector
         $this->docBlockManipulator->changeVarTag($node, $varTypes);
 
         return $node;
-    }
-
-    /**
-     * @param PropertyTypeInfererInterface[] $propertyTypeInferers
-     */
-    private function sortAndSetPropertyTypeInferers(array $propertyTypeInferers): void
-    {
-        foreach ($propertyTypeInferers as $propertyTypeInferer) {
-            $this->ensurePriorityIsUnique($propertyTypeInferer);
-            $this->propertyTypeInferers[$propertyTypeInferer->getPriority()] = $propertyTypeInferer;
-        }
-
-        krsort($this->propertyTypeInferers);
-    }
-
-    private function ensurePriorityIsUnique(PropertyTypeInfererInterface $propertyTypeInferer): void
-    {
-        if (! isset($this->propertyTypeInferers[$propertyTypeInferer->getPriority()])) {
-            return;
-        }
-
-        $alreadySetPropertyTypeInferer = $this->propertyTypeInferers[$propertyTypeInferer->getPriority()];
-
-        throw new ConflictingPriorityException($propertyTypeInferer, $alreadySetPropertyTypeInferer);
     }
 }
