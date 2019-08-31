@@ -12,8 +12,8 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
+use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -27,26 +27,23 @@ final class AddArrayParamDocTypeRector extends AbstractRector
     private $docBlockManipulator;
 
     /**
-     * @var ParamTypeInfererInterface[]
-     */
-    private $paramTypeInferers = [];
-
-    /**
      * @var ParamPhpDocNodeFactory
      */
     private $paramPhpDocNodeFactory;
 
     /**
-     * @param ParamTypeInfererInterface[] $paramTypeInferers
+     * @var ParamTypeInferer
      */
+    private $paramTypeInferer;
+
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
-        array $paramTypeInferers,
-        ParamPhpDocNodeFactory $paramPhpDocNodeFactory
+        ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
+        ParamTypeInferer $paramTypeInferer
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->paramTypeInferers = $paramTypeInferers;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
+        $this->paramTypeInferer = $paramTypeInferer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -114,15 +111,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $types = [];
-            foreach ($this->paramTypeInferers as $paramTypeInferer) {
-                $types = $paramTypeInferer->inferParam($param);
-                if ($types !== []) {
-                    break;
-                }
-            }
-
-            // no types :/
+            $types = $this->paramTypeInferer->inferParam($param);
             if ($types === []) {
                 return null;
             }

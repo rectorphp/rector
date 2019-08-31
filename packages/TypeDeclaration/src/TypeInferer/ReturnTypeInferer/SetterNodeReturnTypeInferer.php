@@ -6,11 +6,11 @@ use PhpParser\Node\FunctionLike;
 use PHPStan\Type\IntersectionType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\FunctionLikeManipulator;
-use Rector\TypeDeclaration\Contract\TypeInferer\FunctionLikeReturnTypeInfererInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 
-final class SetterNodeFunctionLikeReturnTypeInferer extends AbstractTypeInferer implements FunctionLikeReturnTypeInfererInterface
+final class SetterNodeReturnTypeInferer extends AbstractTypeInferer implements ReturnTypeInfererInterface
 {
     /**
      * @var FunctionLikeManipulator

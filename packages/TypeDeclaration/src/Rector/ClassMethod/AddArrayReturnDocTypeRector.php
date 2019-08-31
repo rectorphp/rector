@@ -8,7 +8,7 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\TypeDeclaration\Contract\TypeInferer\FunctionLikeReturnTypeInfererInterface;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -22,17 +22,14 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
     private $docBlockManipulator;
 
     /**
-     * @var FunctionLikeReturnTypeInfererInterface[]
+     * @var ReturnTypeInferer
      */
-    private $functionLikeReturnTypeInferers = [];
+    private $returnTypeInferer;
 
-    /**
-     * @param FunctionLikeReturnTypeInfererInterface[] $functionLikeReturnTypeInferers
-     */
-    public function __construct(DocBlockManipulator $docBlockManipulator, array $functionLikeReturnTypeInferers)
+    public function __construct(DocBlockManipulator $docBlockManipulator, ReturnTypeInferer $returnTypeInferer)
     {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->functionLikeReturnTypeInferers = $functionLikeReturnTypeInferers;
+        $this->returnTypeInferer = $returnTypeInferer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -92,14 +89,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $docTypes = [];
-        foreach ($this->functionLikeReturnTypeInferers as $functionLikeReturnTypeInferer) {
-            $docTypes = $functionLikeReturnTypeInferer->inferFunctionLike($node);
-            if ($docTypes !== []) {
-                break;
-            }
-        }
-
+        $docTypes = $this->returnTypeInferer->inferFunctionLike($node);
         if ($docTypes !== []) {
             $docType = implode('|', $docTypes);
 
