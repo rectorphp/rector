@@ -30,12 +30,23 @@ use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToOneTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\TableTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineTagNodeInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 
 /**
  * Parses various ORM annotations
  */
 final class OrmTagParser extends AbstractPhpDocParser
 {
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    public function __construct(NameResolver $nameResolver)
+    {
+        $this->nameResolver = $nameResolver;
+    }
+
     public function parse(TokenIterator $tokenIterator, string $tag): ?PhpDocTagValueNode
     {
         /** @var Class_|Property $currentPhpNode */
@@ -56,6 +67,10 @@ final class OrmTagParser extends AbstractPhpDocParser
 
         // Property tags
         if ($currentPhpNode instanceof Property) {
+            if ($this->shouldSkipProperty($currentPhpNode)) {
+                return null;
+            }
+
             return $this->createPropertyTagValueNode($tag, $currentPhpNode, $annotationContent);
         }
 
@@ -315,5 +330,19 @@ final class OrmTagParser extends AbstractPhpDocParser
             $joinColumn->fieldName,
             $annotationContent
         );
+    }
+
+    private function shouldSkipProperty(Property $property): bool
+    {
+        // required attribute for further reflection, probably new node → skip
+        if ($property->getAttribute(AttributeKey::CLASS_NAME) === null) {
+            return true;
+        }
+
+        // be sure the property exists → if not, this node was probably just added
+        $className = $property->getAttribute(AttributeKey::CLASS_NAME);
+        $propertyName = $this->nameResolver->getName($property);
+
+        return ! property_exists($className, $propertyName);
     }
 }

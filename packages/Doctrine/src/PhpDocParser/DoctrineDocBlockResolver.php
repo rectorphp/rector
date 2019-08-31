@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\TableTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -30,6 +31,25 @@ final class DoctrineDocBlockResolver
         }
 
         return (bool) $classPhpDocInfo->getDoctrineEntity();
+    }
+
+    public function isDoctrineEntityClassWithIdProperty(Class_ $class): bool
+    {
+        if (! $this->isDoctrineEntityClass($class)) {
+            return false;
+        }
+
+        foreach ($class->stmts as $classStmt) {
+            if (! $classStmt instanceof Property) {
+                continue;
+            }
+
+            if ($this->hasPropertyDoctrineIdTag($classStmt)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getTargetEntity(Property $property): ?string
@@ -79,7 +99,7 @@ final class DoctrineDocBlockResolver
             return false;
         }
 
-        if ($propertyPhpDocInfo->getDoctrineColumn()) {
+        if ($propertyPhpDocInfo->getByType(ColumnTagValueNode::class)) {
             return true;
         }
 

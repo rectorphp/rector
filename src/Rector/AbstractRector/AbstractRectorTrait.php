@@ -5,7 +5,7 @@ namespace Rector\Rector\AbstractRector;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Doctrine\AbstarctRector\DoctrineTrait;
+use Rector\Doctrine\AbstractRector\DoctrineTrait;
 
 trait AbstractRectorTrait
 {

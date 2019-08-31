@@ -11,9 +11,23 @@ use Doctrine\ORM\Mapping as ORM;
 class ToMany
 {
     /**
-     * @ORM\ManyToMany(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Source\AnotherEntity", cascade={"persist", "merge"})
+     * @ORM\ManyToMany(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\FooEntity", cascade={"persist", "merge"})
      */
     private $amenity;
+}
+
+/**
+ * @ORM\Entity
+ */
+class FooEntity
+{
+    /**
+     * @var int
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
 }
 
 ?>
@@ -31,14 +45,28 @@ use Doctrine\ORM\Mapping as ORM;
 class ToMany
 {
     /**
-     * @ORM\ManyToMany(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Source\AnotherEntity", cascade={"persist", "merge"})
+     * @ORM\ManyToMany(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\FooEntity", cascade={"persist", "merge"})
      */
     private $amenity;
     /**
-     * @ORM\ManyToMany(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Source\AnotherEntity", cascade={"persist", "merge"})
-     * @ORM\JoinTable (name="wohoo_anotherentity_uuid", joinColumns={@ORM\JoinColumn(referencedColumnName="uuid")}, inverseJoinColumns={@ORM\JoinColumn(referencedColumnName="uuid")})
+     * @ORM\ManyToMany(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\FooEntity", cascade={"persist", "merge"})
+     * @ORM\JoinTable (name="wohoo_fooentity_uuid", joinColumns={@ORM\JoinColumn(referencedColumnName="uuid")}, inverseJoinColumns={@ORM\JoinColumn(referencedColumnName="uuid")})
      */
     private $amenityUuid;
+}
+
+/**
+ * @ORM\Entity
+ */
+class FooEntity
+{
+    /**
+     * @var int
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
 }
 
 ?>

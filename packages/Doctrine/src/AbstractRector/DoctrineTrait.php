@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Doctrine\AbstarctRector;
+namespace Rector\Doctrine\AbstractRector;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
@@ -30,25 +30,6 @@ trait DoctrineTrait
     protected function isDoctrineEntityClass(Class_ $class): bool
     {
         return $this->doctrineDocBlockResolver->isDoctrineEntityClass($class);
-    }
-
-    protected function isDoctrineEntityClassWithIdProperty(Class_ $class): bool
-    {
-        if (! $this->doctrineDocBlockResolver->isDoctrineEntityClass($class)) {
-            return false;
-        }
-
-        foreach ($class->stmts as $classStmt) {
-            if (! $classStmt instanceof Property) {
-                continue;
-            }
-
-            if ($this->doctrineDocBlockResolver->hasPropertyDoctrineIdTag($classStmt)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     protected function getTargetEntity(Property $property): ?string

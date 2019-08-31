@@ -4,6 +4,7 @@ namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use DateTimeInterface;
 use PhpParser\Node\Stmt\Property;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 
@@ -68,7 +69,9 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
         }
 
         $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
-        $doctrineColumnTagValueNode = $phpDocInfo->getDoctrineColumn();
+
+        /** @var ColumnTagValueNode|null $doctrineColumnTagValueNode */
+        $doctrineColumnTagValueNode = $phpDocInfo->getByType(ColumnTagValueNode::class);
         if ($doctrineColumnTagValueNode === null) {
             return [];
         }

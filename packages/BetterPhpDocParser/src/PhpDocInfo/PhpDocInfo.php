@@ -14,7 +14,6 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNod
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\IdTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToManyTagValueNode;
@@ -210,11 +209,6 @@ final class PhpDocInfo
     public function getDoctrineEntity(): ?EntityTagValueNode
     {
         return $this->getByType(EntityTagValueNode::class);
-    }
-
-    public function getDoctrineColumn(): ?ColumnTagValueNode
-    {
-        return $this->getByType(ColumnTagValueNode::class);
     }
 
     public function getDoctrineJoinColumnTagValueNode(): ?JoinColumnTagValueNode
