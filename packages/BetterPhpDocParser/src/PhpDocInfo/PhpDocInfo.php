@@ -13,14 +13,6 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareReturnTagValue
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\IdTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinColumnTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToManyTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToOneTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToManyTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToOneTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\TableTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 
 final class PhpDocInfo
@@ -176,46 +168,6 @@ final class PhpDocInfo
         return $this->getResolvedTypesAttribute($varTagValue);
     }
 
-    public function getDoctrineId(): ?IdTagValueNode
-    {
-        return $this->getByType(IdTagValueNode::class);
-    }
-
-    public function getDoctrineTable(): ?TableTagValueNode
-    {
-        return $this->getByType(TableTagValueNode::class);
-    }
-
-    public function getDoctrineManyToMany(): ?ManyToManyTagValueNode
-    {
-        return $this->getByType(ManyToManyTagValueNode::class);
-    }
-
-    public function getDoctrineManyToOne(): ?ManyToOneTagValueNode
-    {
-        return $this->getByType(ManyToOneTagValueNode::class);
-    }
-
-    public function getDoctrineOneToOne(): ?OneToOneTagValueNode
-    {
-        return $this->getByType(OneToOneTagValueNode::class);
-    }
-
-    public function getDoctrineOneToMany(): ?OneToManyTagValueNode
-    {
-        return $this->getByType(OneToManyTagValueNode::class);
-    }
-
-    public function getDoctrineEntity(): ?EntityTagValueNode
-    {
-        return $this->getByType(EntityTagValueNode::class);
-    }
-
-    public function getDoctrineJoinColumnTagValueNode(): ?JoinColumnTagValueNode
-    {
-        return $this->getByType(JoinColumnTagValueNode::class);
-    }
-
     /**
      * @return string[]
      */
@@ -257,10 +209,7 @@ final class PhpDocInfo
 
     public function getDoctrineRelationTagValueNode(): ?DoctrineRelationTagValueNodeInterface
     {
-        return $this->getDoctrineManyToMany() ??
-            $this->getDoctrineOneToMany() ??
-            $this->getDoctrineOneToOne() ??
-            $this->getDoctrineManyToOne() ?? null;
+        return $this->getByType(DoctrineRelationTagValueNodeInterface::class);
     }
 
     public function removeTagValueNodeFromNode(PhpDocTagValueNode $phpDocTagValueNode): void

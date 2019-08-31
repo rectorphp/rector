@@ -14,6 +14,7 @@ use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
 use Rector\Doctrine\Provider\EntityWithMissingUuidProvider;
 use Rector\Doctrine\Uuid\JoinTableNameResolver;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToManyTagNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToOneTagNodeInterface;
@@ -148,8 +149,7 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
 
     private function refactorToManyPropertyPhpDocInfo(PhpDocInfo $propertyPhpDocInfo, Property $property): void
     {
-        $doctrineJoinColumnTagValueNode = $propertyPhpDocInfo->getDoctrineJoinColumnTagValueNode();
-
+        $doctrineJoinColumnTagValueNode = $propertyPhpDocInfo->getByType(JoinColumnTagValueNode::class);
         if ($doctrineJoinColumnTagValueNode) {
             // replace @ORM\JoinColumn with @ORM\JoinTable
             $propertyPhpDocInfo->removeTagValueNodeFromNode($doctrineJoinColumnTagValueNode);
@@ -161,7 +161,7 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
 
     private function refactorToOnePropertyPhpDocInfo(PhpDocInfo $propertyPhpDocInfo): void
     {
-        $joinColumnTagValueNode = $propertyPhpDocInfo->getDoctrineJoinColumnTagValueNode();
+        $joinColumnTagValueNode = $propertyPhpDocInfo->getByType(JoinColumnTagValueNode::class);
 
         if ($joinColumnTagValueNode) {
             $joinColumnTagValueNode->changeNullable(true);

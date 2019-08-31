@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\IdTagValueNode;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -111,12 +112,11 @@ final class EntityWithMissingUuidProvider
     {
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
 
-        $idTagValueNode = $propertyPhpDocInfo->getDoctrineId();
+        $idTagValueNode = $propertyPhpDocInfo->getByType(IdTagValueNode::class);
         if ($idTagValueNode === null) {
             return false;
         }
 
-        /** @var ColumnTagValueNode|null $columnTagValueNode */
         $columnTagValueNode = $propertyPhpDocInfo->getByType(ColumnTagValueNode::class);
         if ($columnTagValueNode === null) {
             return false;
