@@ -13,6 +13,7 @@ use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\ReturnTypeResolver\ReturnTypeResolver;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
 {
@@ -26,9 +27,15 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
      */
     private $returnTypeResolver;
 
-    public function __construct(ReturnTypeResolver $returnTypeResolver)
+    /**
+     * @var ReturnTypeInferer
+     */
+    private $returnTypeInferer;
+
+    public function __construct(ReturnTypeResolver $returnTypeResolver, ReturnTypeInferer $returnTypeInferer)
     {
         $this->returnTypeResolver = $returnTypeResolver;
+        $this->returnTypeInferer = $returnTypeInferer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -78,18 +85,13 @@ CODE_SAMPLE
             return null;
         }
 
-        // skip excluded methods
-        if ($node instanceof ClassMethod && $this->isNames($node, self::EXCLUDED_METHOD_NAMES)) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
-        // already set → skip
         $hasNewType = false;
         if ($node->returnType !== null) {
             $hasNewType = $node->returnType->getAttribute(self::HAS_NEW_INHERITED_TYPE, false);
-            if (! $hasNewType) {
-                return null;
-            }
         }
 
         $returnTypeInfo = $this->returnTypeResolver->resolveFunctionLikeReturnType($node);
@@ -126,6 +128,12 @@ CODE_SAMPLE
                 }
             }
         } else {
+            $inferedTypes = $this->returnTypeInferer->inferFunctionLike($node);
+            dump($inferedTypes);
+
+            dump($returnTypeInfo->getTypeNode());
+            die;
+
             $node->returnType = $returnTypeInfo->getTypeNode();
         }
 
@@ -202,5 +210,17 @@ CODE_SAMPLE
         $classMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
 
         $this->notifyNodeChangeFileInfo($classMethod);
+    }
+
+    /**
+     * @param ClassMethod|Function_ $node
+     */
+    private function shouldSkip(Node $node): bool
+    {
+        if (! $node instanceof ClassMethod) {
+            return false;
+        }
+
+        return $this->isNames($node, self::EXCLUDED_METHOD_NAMES);
     }
 }
