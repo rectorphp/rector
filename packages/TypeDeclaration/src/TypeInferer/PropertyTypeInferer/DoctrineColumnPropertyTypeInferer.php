@@ -70,13 +70,17 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
 
         $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
 
-        /** @var ColumnTagValueNode|null $doctrineColumnTagValueNode */
         $doctrineColumnTagValueNode = $phpDocInfo->getByType(ColumnTagValueNode::class);
         if ($doctrineColumnTagValueNode === null) {
             return [];
         }
 
-        $scalarType = $this->doctrineTypeToScalarType[$doctrineColumnTagValueNode->getType()] ?? null;
+        $type = $doctrineColumnTagValueNode->getType();
+        if ($type === null) {
+            return [];
+        }
+
+        $scalarType = $this->doctrineTypeToScalarType[$type] ?? null;
         if ($scalarType === null) {
             return [];
         }

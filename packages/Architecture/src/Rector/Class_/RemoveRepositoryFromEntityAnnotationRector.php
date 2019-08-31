@@ -5,6 +5,7 @@ namespace Rector\Architecture\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Architecture\Tests\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector\RemoveRepositoryFromEntityAnnotationRectorTest;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -73,7 +74,7 @@ CODE_SAMPLE
 
         $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($node);
 
-        $doctrineEntityTag = $phpDocInfo->getDoctrineEntity();
+        $doctrineEntityTag = $phpDocInfo->getByType(EntityTagValueNode::class);
         if ($doctrineEntityTag === null) {
             return null;
         }

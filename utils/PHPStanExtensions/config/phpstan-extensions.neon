@@ -1,7 +1,7 @@
 services:
     - Rector\PHPStanExtensions\Utils\PHPStanValueResolver
 
-    # $node->geAttribute($1) => Type|null by $1
+    # $node->getAttribute($1) => Type|null by $1
     - { class: Rector\PHPStanExtensions\Rector\Type\GetAttributeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
 
     # $nameResolver->getName() => in some cases always string
@@ -11,3 +11,6 @@ services:
 
     # $betterNodeFinder->findByInstance(..., $1) => $1[]
     - { class: Rector\PHPStanExtensions\Rector\Type\BetterNodeFinderReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
+
+    # $phpDocInfo->getByType($1) => Type|null by $1
+    - { class: Rector\PHPStanExtensions\Rector\Type\PhpDocInfoGetByTypeReturnTypeExtension, tags: [phpstan.broker.dynamicMethodReturnTypeExtension] }
