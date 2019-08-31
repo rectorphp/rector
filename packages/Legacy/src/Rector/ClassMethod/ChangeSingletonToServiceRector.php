@@ -120,30 +120,40 @@ CODE_SAMPLE
         string $getSingletonMethodName,
         string $singletonPropertyName
     ): Class_ {
-        foreach ((array) $node->stmts as $key => $classStmt) {
-            if ($classStmt instanceof ClassMethod) {
-                if ($this->isName($classStmt, $getSingletonMethodName)) {
-                    unset($node->stmts[$key]);
-                    continue;
-                }
+        foreach ($node->stmts as $classStmt) {
+            if (! $classStmt instanceof ClassMethod) {
+                continue;
+            }
 
-                if (! $this->isNames($classStmt, ['__construct', '__clone', '__wakeup'])) {
-                    continue;
-                }
+            if ($this->isName($classStmt, $getSingletonMethodName)) {
+                $this->removeNodeFromStatements($node, $classStmt);
+                continue;
+            }
 
-                if (! $classStmt->isPublic()) {
-                    // remove non-public empty
-                    if ($classStmt->stmts === []) {
-                        unset($node->stmts[$key]);
-                    } else {
-                        $this->makePublic($classStmt);
-                    }
-                }
-            } elseif ($classStmt instanceof Property) {
-                if ($this->isName($classStmt, $singletonPropertyName)) {
-                    unset($node->stmts[$key]);
+            if (! $this->isNames($classStmt, ['__construct', '__clone', '__wakeup'])) {
+                continue;
+            }
+
+            if (! $classStmt->isPublic()) {
+                // remove non-public empty
+                if ($classStmt->stmts === []) {
+                    $this->removeNodeFromStatements($node, $classStmt);
+                } else {
+                    $this->makePublic($classStmt);
                 }
             }
+        }
+
+        foreach ($node->stmts as $classStmt) {
+            if (! $classStmt instanceof Property) {
+                continue;
+            }
+
+            if (! $this->isName($classStmt, $singletonPropertyName)) {
+                continue;
+            }
+
+            $this->removeNodeFromStatements($node, $classStmt);
         }
 
         return $node;

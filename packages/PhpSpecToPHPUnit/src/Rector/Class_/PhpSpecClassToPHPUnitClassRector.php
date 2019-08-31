@@ -119,7 +119,7 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
      */
     private function removeSelfTypeMethod(Class_ $node): Class_
     {
-        foreach ((array) $node->stmts as $key => $stmt) {
+        foreach ((array) $node->stmts as $stmt) {
             if (! $stmt instanceof ClassMethod) {
                 continue;
             }
@@ -129,7 +129,6 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
             }
 
             $innerClassMethodStmt = $stmt->stmts[0] instanceof Expression ? $stmt->stmts[0]->expr : $stmt->stmts[0];
-
             if (! $innerClassMethodStmt instanceof MethodCall) {
                 continue;
             }
@@ -144,7 +143,7 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
             }
 
             // remove it
-            unset($node->stmts[$key]);
+            $this->removeNodeFromStatements($node, $stmt);
         }
 
         return $node;

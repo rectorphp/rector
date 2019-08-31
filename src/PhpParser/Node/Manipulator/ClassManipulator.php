@@ -2,6 +2,7 @@
 
 namespace Rector\PhpParser\Node\Manipulator;
 
+use JMS\Serializer\Annotation\Type;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -404,8 +405,8 @@ final class ClassManipulator
 
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
     {
-        foreach ($classNode->stmts as $key => $classElementNode) {
-            if ($classElementNode instanceof ClassMethod) {
+        foreach ($classNode->stmts as $key => $classStmt) {
+            if ($classStmt instanceof ClassMethod) {
                 $classNode->stmts = $this->insertBefore($classNode->stmts, $stmt, $key);
 
                 return true;
@@ -418,14 +419,14 @@ final class ClassManipulator
     private function tryInsertAfterLastProperty(Class_ $classNode, Stmt $stmt): bool
     {
         $previousElement = null;
-        foreach ($classNode->stmts as $key => $classElementNode) {
-            if ($previousElement instanceof Property && ! $classElementNode instanceof Property) {
+        foreach ($classNode->stmts as $key => $classStmt) {
+            if ($previousElement instanceof Property && ! $classStmt instanceof Property) {
                 $classNode->stmts = $this->insertBefore($classNode->stmts, $stmt, $key);
 
                 return true;
             }
 
-            $previousElement = $classElementNode;
+            $previousElement = $classStmt;
         }
 
         return false;
@@ -437,8 +438,8 @@ final class ClassManipulator
     private function addStatementToClassBeforeTypes(Class_ $classNode, Stmt $stmt, string ...$types): void
     {
         foreach ($types as $type) {
-            foreach ($classNode->stmts as $key => $classElementNode) {
-                if ($classElementNode instanceof $type) {
+            foreach ($classNode->stmts as $key => $classStmt) {
+                if ($classStmt instanceof $type) {
                     $classNode->stmts = $this->insertBefore($classNode->stmts, $stmt, $key);
 
                     return;
@@ -554,7 +555,7 @@ final class ClassManipulator
                 return;
             }
 
-            if (! $this->docBlockManipulator->hasTag($node, 'JMS\Serializer\Annotation\Type')) {
+            if (! $this->docBlockManipulator->hasTag($node, Type::class)) {
                 return;
             }
 

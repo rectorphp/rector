@@ -3,7 +3,9 @@
 namespace Rector\Rector\AbstractRector;
 
 use PhpParser\Node;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use Rector\Application\AppliedRectorCollector;
 use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeAddingCommander;
@@ -81,6 +83,21 @@ trait NodeCommandersTrait
         $this->nodeRemovingCommander->addNode($node);
 
         $this->notifyNodeChangeFileInfo($node);
+    }
+
+    /**
+     * @param ClassLike|FunctionLike $nodeWithStatements
+     */
+    protected function removeNodeFromStatements(Node $nodeWithStatements, Node $nodeToRemove): void
+    {
+        foreach ($nodeWithStatements->stmts as $key => $stmt) {
+            if ($nodeToRemove !== $stmt) {
+                continue;
+            }
+
+            unset($nodeWithStatements->stmts[$key]);
+            break;
+        }
     }
 
     protected function isNodeRemoved(Node $node): bool

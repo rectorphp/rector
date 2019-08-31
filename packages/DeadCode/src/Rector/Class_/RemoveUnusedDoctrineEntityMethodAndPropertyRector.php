@@ -26,6 +26,11 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRector
 {
     /**
+     * @var string
+     */
+    private const ARRAY_COLLECTION_CLASS = 'Doctrine\Common\Collections\ArrayCollection';
+
+    /**
      * @var ParsedNodesByType
      */
     private $parsedNodesByType;
@@ -148,15 +153,16 @@ CODE_SAMPLE
      */
     private function removeClassMethodsByNames(Class_ $class, array $unusedMethodNames): Class_
     {
-        foreach ($class->stmts as $key => $classStmt) {
+        foreach ($class->stmts as $classStmt) {
             if (! $classStmt instanceof ClassMethod) {
                 continue;
             }
 
-            if ($this->isNames($classStmt, $unusedMethodNames)) {
-                // remove immediately
-                unset($class->stmts[$key]);
+            if (! $this->isNames($classStmt, $unusedMethodNames)) {
+                continue;
             }
+
+            $this->removeNodeFromStatements($class, $classStmt);
         }
 
         return $class;
@@ -178,9 +184,9 @@ CODE_SAMPLE
     /**
      * @param string[] $unusedPropertyNames
      */
-    private function removeClassPrivatePropertiesByNames(Class_ $node, array $unusedPropertyNames): Class_
+    private function removeClassPrivatePropertiesByNames(Class_ $class, array $unusedPropertyNames): Class_
     {
-        foreach ($node->stmts as $key => $stmt) {
+        foreach ($class->stmts as $stmt) {
             if (! $stmt instanceof Property) {
                 continue;
             }
@@ -189,7 +195,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            unset($node->stmts[$key]);
+            $this->removeNodeFromStatements($class, $stmt);
 
             // remove "$this->someProperty = new ArrayCollection()"
             $propertyName = $this->getName($stmt);
@@ -200,7 +206,7 @@ CODE_SAMPLE
             $this->removeInversedByOrMappedByOnRelatedProperty($stmt);
         }
 
-        return $node;
+        return $class;
     }
 
     private function getOtherRelationProperty(Property $property): ?Property
@@ -260,7 +266,7 @@ CODE_SAMPLE
         /** @var New_ $new */
         $new = $parentNode->expr;
 
-        return $this->isName($new->class, 'Doctrine\Common\Collections\ArrayCollection');
+        return $this->isName($new->class, self::ARRAY_COLLECTION_CLASS);
     }
 
     /**

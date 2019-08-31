@@ -294,7 +294,7 @@ CODE_SAMPLE
 
     private function removeRegistryDependencyAssign(Class_ $class, ClassMethod $classMethod, Param $registryParam): void
     {
-        foreach ((array) $classMethod->stmts as $key => $constructorMethodStmt) {
+        foreach ((array) $classMethod->stmts as $constructorMethodStmt) {
             if (! $constructorMethodStmt instanceof Expression && ! $constructorMethodStmt->expr instanceof Assign) {
                 continue;
             }
@@ -308,7 +308,7 @@ CODE_SAMPLE
             $this->removeManagerRegistryProperty($class, $assign);
 
             // remove assign
-            unset($classMethod->stmts[$key]);
+            $this->removeNodeFromStatements($classMethod, $constructorMethodStmt);
 
             break;
         }
