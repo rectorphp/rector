@@ -156,44 +156,6 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function getPositionStmtByTypeAndName(Class_ $node, string $name, string $type): ?int
-    {
-        foreach ($node->stmts as $key => $stmt) {
-            if (! is_a($stmt, $type, true)) {
-                continue;
-            }
-
-            if (! $this->isName($stmt, $name)) {
-                continue;
-            }
-
-            return $key;
-        }
-
-        return null;
-    }
-
-    private function removeEmptyConstruct(Class_ $class, ClassMethod $constructClassMethod): void
-    {
-        if ($constructClassMethod->stmts !== []) {
-            return;
-        }
-
-        /** @var int $constructMethodPosition */
-        $constructMethodPosition = $this->getPositionStmtByTypeAndName($class, '__construct', ClassMethod::class);
-        if ($constructMethodPosition) {
-            unset($class->stmts[$constructMethodPosition]);
-        }
-    }
-
-    private function removeUnusedProperties(Class_ $class): void
-    {
-        foreach (array_keys($this->propertyFetchToParamsToRemoveFromConstructor) as $propertyFetchName) {
-            /** @var string $propertyFetchName */
-            $this->classManipulator->removeProperty($class, $propertyFetchName);
-        }
-    }
-
     private function replacePropertyFetchByInjectedVariables(ClassMethod $classMethod): void
     {
         $currentlyAddedLocalVariables = [];
@@ -272,35 +234,6 @@ CODE_SAMPLE
         $this->propertyFetchToParamsToRemoveFromConstructor = [];
     }
 
-    private function removeAssignsAndParamsFromConstructor(ClassMethod $classMethod): void
-    {
-        foreach ($this->propertyFetchToParamsToRemoveFromConstructor as $propertyFetchToRemove => $paramToRemove) {
-            // remove unused params in constructor
-            foreach ($classMethod->params as $key => $constructorParam) {
-                if (! $this->areNamesEqual($constructorParam, $paramToRemove)) {
-                    continue;
-                }
-
-                unset($classMethod->params[$key]);
-            }
-
-            foreach ((array) $classMethod->stmts as $key => $constructorStmt) {
-                $propertyFetchToVariable = $this->resolveAssignPropertyToVariableOrNull($constructorStmt);
-                if ($propertyFetchToVariable === null) {
-                    continue;
-                }
-
-                [$propertyFetchName, ] = $propertyFetchToVariable;
-                if ($propertyFetchName !== $propertyFetchToRemove) {
-                    continue;
-                }
-
-                // remove the assign
-                unset($classMethod->stmts[$key]);
-            }
-        }
-    }
-
     /**
      * @param Node $node
      * @return string[]|null
@@ -345,5 +278,51 @@ CODE_SAMPLE
         $this->removeAssignsAndParamsFromConstructor($classMethod);
         $this->removeUnusedProperties($class);
         $this->removeEmptyConstruct($class, $classMethod);
+    }
+
+    private function removeAssignsAndParamsFromConstructor(ClassMethod $classMethod): void
+    {
+        foreach ($this->propertyFetchToParamsToRemoveFromConstructor as $propertyFetchToRemove => $paramToRemove) {
+            // remove unused params in constructor
+            foreach ($classMethod->params as $key => $constructorParam) {
+                if (! $this->areNamesEqual($constructorParam, $paramToRemove)) {
+                    continue;
+                }
+
+                unset($classMethod->params[$key]);
+            }
+
+            foreach ((array) $classMethod->stmts as $key => $constructorStmt) {
+                $propertyFetchToVariable = $this->resolveAssignPropertyToVariableOrNull($constructorStmt);
+                if ($propertyFetchToVariable === null) {
+                    continue;
+                }
+
+                [$propertyFetchName, ] = $propertyFetchToVariable;
+                if ($propertyFetchName !== $propertyFetchToRemove) {
+                    continue;
+                }
+
+                // remove the assign
+                unset($classMethod->stmts[$key]);
+            }
+        }
+    }
+
+    private function removeUnusedProperties(Class_ $class): void
+    {
+        foreach (array_keys($this->propertyFetchToParamsToRemoveFromConstructor) as $propertyFetchName) {
+            /** @var string $propertyFetchName */
+            $this->classManipulator->removeProperty($class, $propertyFetchName);
+        }
+    }
+
+    private function removeEmptyConstruct(Class_ $class, ClassMethod $constructClassMethod): void
+    {
+        if ($constructClassMethod->stmts !== []) {
+            return;
+        }
+
+        $this->removeNodeFromStatements($class, $constructClassMethod);
     }
 }
