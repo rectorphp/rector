@@ -18,7 +18,7 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
     private $name;
 
     /**
-     * @var mixed
+     * @var string|null
      */
     private $type;
 
@@ -59,12 +59,11 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
 
     /**
      * @param mixed[] $options
-     * @param mixed $type
      * @param mixed|null $length
      */
     public function __construct(
         ?string $name,
-        $type,
+        ?string $type,
         $length,
         ?int $precision = null,
         ?int $scale = null,
@@ -132,10 +131,7 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
         return $this->printContentItems($contentItems);
     }
 
-    /**
-     * @return mixed|null
-     */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }

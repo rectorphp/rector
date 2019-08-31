@@ -12,7 +12,8 @@ use PhpParser\Node\VarLikeIdentifier;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
-use Rector\Doctrine\Uuid\UuidTableNameResolver;
+use Rector\Doctrine\Provider\EntityWithMissingUuidProvider;
+use Rector\Doctrine\Uuid\JoinTableNameResolver;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToManyTagNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToOneTagNodeInterface;
@@ -42,20 +43,27 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
     private $uuidMigrationDataCollector;
 
     /**
-     * @var UuidTableNameResolver
+     * @var JoinTableNameResolver
      */
-    private $uuidTableNameResolver;
+    private $joinTableNameResolver;
+
+    /**
+     * @var EntityWithMissingUuidProvider
+     */
+    private $entityWithMissingUuidProvider;
 
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
         PhpDocTagNodeFactory $phpDocTagNodeFactory,
         UuidMigrationDataCollector $uuidMigrationDataCollector,
-        UuidTableNameResolver $uuidTableNameResolver
+        JoinTableNameResolver $joinTableNameResolver,
+        EntityWithMissingUuidProvider $entityWithMissingUuidProvider
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
         $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;
-        $this->uuidTableNameResolver = $uuidTableNameResolver;
+        $this->joinTableNameResolver = $joinTableNameResolver;
+        $this->entityWithMissingUuidProvider = $entityWithMissingUuidProvider;
     }
 
     public function getDefinition(): RectorDefinition
@@ -198,8 +206,7 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
             return true;
         }
 
-        // the remote property has to have $uuid property, from @see \Rector\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector
-        if (! property_exists($targetEntity, 'uuid')) {
+        if (! $this->isTargetClassEntityWithMissingUuid($targetEntity)) {
             return true;
         }
 
@@ -214,16 +221,29 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
         /** @var DoctrineRelationTagValueNodeInterface $doctrineRelationTagValueNode */
         $doctrineRelationTagValueNode = $this->getDoctrineRelationTagValueNode($property);
 
-        $joinTableName = $this->uuidTableNameResolver->resolveManyToManyTableNameForProperty($property);
+        $currentJoinTableName = $this->joinTableNameResolver->resolveManyToManyTableNameForProperty($property);
+        $uuidJoinTableName = $currentJoinTableName . '_uuid';
 
         if ($doctrineRelationTagValueNode instanceof ToManyTagNodeInterface) {
             $this->uuidMigrationDataCollector->addClassToManyRelationProperty(
                 $className,
                 $propertyName,
-                $joinTableName
+                $currentJoinTableName,
+                $uuidJoinTableName
             );
         } elseif ($doctrineRelationTagValueNode instanceof ToOneTagNodeInterface) {
             $this->uuidMigrationDataCollector->addClassToOneRelationProperty($className, $propertyName);
         }
+    }
+
+    private function isTargetClassEntityWithMissingUuid(string $targetEntity): bool
+    {
+        foreach ($this->entityWithMissingUuidProvider->provide() as $entityWithMissingUuid) {
+            if ($this->isName($entityWithMissingUuid, $targetEntity)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

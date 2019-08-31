@@ -5,7 +5,7 @@ namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRe
 use Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class AddUuidToEntityWhereMissingRectorTest extends AbstractRectorTestCase
+final class AddUuidMirrorForRelationPropertyRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
@@ -13,7 +13,6 @@ final class AddUuidToEntityWhereMissingRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/skip_already_added.php.inc',
             __DIR__ . '/Fixture/to_many.php.inc',
-            __DIR__ . '/Fixture/skip_if_target_entity_has_not_uuid_property.php.inc',
         ]);
     }
 

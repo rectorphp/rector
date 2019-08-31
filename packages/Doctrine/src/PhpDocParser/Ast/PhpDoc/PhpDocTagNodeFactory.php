@@ -7,7 +7,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
-use Rector\Doctrine\Uuid\UuidTableNameResolver;
+use Rector\Doctrine\Uuid\JoinTableNameResolver;
 use Rector\Doctrine\ValueObject\DoctrineClass;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\CustomIdGeneratorTagValueNode;
@@ -24,14 +24,14 @@ final class PhpDocTagNodeFactory
     private $doctrineUuidGeneratorClass;
 
     /**
-     * @var UuidTableNameResolver
+     * @var JoinTableNameResolver
      */
-    private $uuidTableNameResolver;
+    private $joinTableNameResolver;
 
-    public function __construct(string $doctrineUuidGeneratorClass, UuidTableNameResolver $uuidTableNameResolver)
+    public function __construct(string $doctrineUuidGeneratorClass, JoinTableNameResolver $joinTableNameResolver)
     {
         $this->doctrineUuidGeneratorClass = $doctrineUuidGeneratorClass;
-        $this->uuidTableNameResolver = $uuidTableNameResolver;
+        $this->joinTableNameResolver = $joinTableNameResolver;
     }
 
     public function createVarTagUuidInterface(): PhpDocTagNode
@@ -78,9 +78,10 @@ final class PhpDocTagNodeFactory
 
     public function createJoinTableTagNode(Property $property): PhpDocTagNode
     {
-        $joinTableName = $this->uuidTableNameResolver->resolveManyToManyTableNameForProperty($property);
+        $joinTableName = $this->joinTableNameResolver->resolveManyToManyTableNameForProperty($property);
+        $uuidJoinTable = $joinTableName . '_uuid';
 
-        $joinTableTagValueNode = new JoinTableTagValueNode($joinTableName, null, [
+        $joinTableTagValueNode = new JoinTableTagValueNode($uuidJoinTable, null, [
             new JoinColumnTagValueNode(null, 'uuid'),
         ], [new JoinColumnTagValueNode(null, 'uuid')]);
 
