@@ -181,11 +181,7 @@ final class ClassManipulator
     public function getUsedTraits(ClassLike $classLike): array
     {
         $usedTraits = [];
-        foreach ($classLike->stmts as $stmt) {
-            if (! $stmt instanceof TraitUse) {
-                continue;
-            }
-
+        foreach ($classLike->getTraitUses() as $stmt) {
             foreach ($stmt->traits as $trait) {
                 $traitName = $this->nameResolver->getName($trait);
                 if ($traitName !== null) {
