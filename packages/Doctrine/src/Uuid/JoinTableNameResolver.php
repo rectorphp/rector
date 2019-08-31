@@ -10,7 +10,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-final class UuidTableNameResolver
+final class JoinTableNameResolver
 {
     /**
      * @var DoctrineDocBlockResolver
@@ -31,7 +31,7 @@ final class UuidTableNameResolver
     }
 
     /**
-     * Creates unique many-to-many table name like: first_table_uuid_second_table_uuid
+     * Guessed many-to-many table name like: first_table_second_table
      */
     public function resolveManyToManyTableNameForProperty(Property $property): string
     {
@@ -52,7 +52,7 @@ final class UuidTableNameResolver
             $targetTableName = $this->resolveTableNameFromClass($targetEntityClass);
         }
 
-        return strtolower($currentTableName . '_' . $targetTableName . '_uuid');
+        return strtolower($currentTableName . '_' . $targetTableName);
     }
 
     private function resolveShortClassName(string $currentClass): string

@@ -2,6 +2,7 @@
 
 namespace Rector\Doctrine\Extension;
 
+use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Rector\Contract\Extension\FinishingExtensionInterface;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
@@ -41,6 +42,11 @@ final class ReportEntitiesWithAddedPropertiesFinishExtension implements Finishin
 
         $jsonContent = Json::encode($data, Json::PRETTY);
 
-        $this->symfonyStyle->writeln($jsonContent);
+        $filePath = getcwd() . '/uuid-migration.json';
+        FileSystem::write($filePath, $jsonContent);
+
+        $this->symfonyStyle->warning(
+            'See freshly created "uuid-migration.json" file for changes on entities and further SQL migration steps'
+        );
     }
 }
