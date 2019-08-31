@@ -1,8 +1,6 @@
 services:
-    # first, run this Rule
+    # first, run these rules
     Rector\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector: ~
-
-    # then run this Rule
     Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector: ~
 
-    # then run: bin/console doctrine:schema:update --dump-sql
+    # then run this to validate the change: bin/console doctrine:schema:update --dump-sql
