@@ -110,6 +110,8 @@ abstract class AbstractTypeInfo
             return new Identifier($type);
         }
 
+        $type = ltrim($type, '\\');
+
         $name = $forceFqn ? new FullyQualified($type) : new Name($type);
 
         if ($this->isNullable) {

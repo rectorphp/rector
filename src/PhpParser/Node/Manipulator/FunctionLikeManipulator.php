@@ -96,6 +96,8 @@ final class FunctionLikeManipulator
             return null;
         }
 
+        // @todo decouple to return type inferer B-)
+
         // A. resolve from function return type
         // skip "array" to get more precise types
         if ($functionLike->returnType !== null && ! $this->nameResolver->isNames(
@@ -202,6 +204,7 @@ final class FunctionLikeManipulator
     }
 
     /**
+     * @covered
      * @param ClassMethod|Function_|Closure $functionLike
      * @return string[]
      */

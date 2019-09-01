@@ -105,6 +105,7 @@ CODE_SAMPLE
         }
 
         $returnTypeInfo = $this->returnTypeResolver->resolveFunctionLikeReturnType($node);
+
         if ($returnTypeInfo === null) {
             return null;
         }
@@ -114,13 +115,15 @@ CODE_SAMPLE
             if ($returnTypeInfo->getTypeCount() !== 0) {
                 return null;
             }
-
             // use
             $returnTypeInfo = $this->functionLikeManipulator->resolveStaticReturnTypeInfo($node);
             if ($returnTypeInfo === null) {
                 return null;
             }
         }
+
+//        $inferedTypes = $this->returnTypeInferer->inferFunctionLike($node);
+//        $inferedReturnTypeInfo = new ReturnTypeInfo($inferedTypes, $this->typeAnalyzer, $inferedTypes);
 
         // @todo is it violation?
         if ($hasNewType) {
@@ -145,7 +148,11 @@ CODE_SAMPLE
                 }
             }
 
-            $node->returnType = $returnTypeInfo->getTypeNode();
+            if ($this->isReturnTypeAlreadyAdded($node, $returnTypeInfo)) {
+                return null;
+            }
+
+            $node->returnType = $returnTypeInfo->getFqnTypeNode();
         }
 
         $this->populateChildren($node, $returnTypeInfo);
@@ -154,7 +161,7 @@ CODE_SAMPLE
     }
 
     /**
-     * Add typehint to all children
+     * Add typehint to all children class methods
      */
     private function populateChildren(Node $node, ReturnTypeInfo $returnTypeInfo): void
     {
@@ -233,5 +240,20 @@ CODE_SAMPLE
         }
 
         return $this->isNames($node, self::EXCLUDED_METHOD_NAMES);
+    }
+
+    /**
+     * @param ClassMethod|Function_ $node
+     */
+    private function isReturnTypeAlreadyAdded(Node $node, ReturnTypeInfo $returnTypeInfo): bool
+    {
+//        dump($this->print($node->returnType), '\\');
+//        dump($this->print($returnTypeInfo->getTypeNode()));
+
+        if (ltrim($this->print($node->returnType), '\\') === $this->print($returnTypeInfo->getTypeNode())) {
+            return true;
+        }
+
+        return false;
     }
 }

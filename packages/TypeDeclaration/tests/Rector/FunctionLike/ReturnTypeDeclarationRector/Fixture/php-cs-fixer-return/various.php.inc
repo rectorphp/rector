@@ -24,10 +24,10 @@ interface Foo {
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Various;
 
-/** @return Bar */ function my_foo($value): Bar {
+/** @return Bar */ function my_foo($value): \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Various\Bar {
     return $value;
 }
-/** @return My\Bar */ function my_foo2($value): My\Bar {
+/** @return My\Bar */ function my_foo2($value): \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Various\My\Bar {
     return $value;
 }
 /** @return \My\Bar */ function my_foo3($value): \My\Bar {
@@ -35,7 +35,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationR
 }
 interface Foo {
     /** @return Bar */
-    function my_foo4($value): Bar;
+    function my_foo4($value): \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Various\Bar;
 }
 /** @return void */ function my_foo5(): void {
 }
