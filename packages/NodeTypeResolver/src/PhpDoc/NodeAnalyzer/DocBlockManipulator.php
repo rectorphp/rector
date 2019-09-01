@@ -5,7 +5,11 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -231,15 +235,16 @@ final class DocBlockManipulator
     /**
      * With "name" as key
      *
+     * @param Function_|ClassMethod|Closure  $functionLike
      * @return ParamTypeInfo[]
      */
-    public function getParamTypeInfos(Node $node): array
+    public function getParamTypeInfos(FunctionLike $functionLike): array
     {
-        if ($node->getDocComment() === null) {
+        if ($functionLike->getDocComment() === null) {
             return [];
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $phpDocInfo = $this->createPhpDocInfoFromNode($functionLike);
         $types = $phpDocInfo->getParamTagValues();
         if ($types === []) {
             return [];
@@ -251,12 +256,14 @@ final class DocBlockManipulator
         /** @var AttributeAwareParamTagValueNode $paramTagValueNode */
         foreach ($types as $i => $paramTagValueNode) {
             $fqnParamTagValueNode = $fqnTypes[$i];
+            $isAlias = $this->isAlias((string) $paramTagValueNode->type, $functionLike);
 
             $paramTypeInfo = new ParamTypeInfo(
                 $paramTagValueNode->parameterName,
                 $this->typeAnalyzer,
                 $paramTagValueNode->getAttribute(Attribute::TYPE_AS_ARRAY),
-                $fqnParamTagValueNode->getAttribute(Attribute::RESOLVED_NAMES)
+                $fqnParamTagValueNode->getAttribute(Attribute::RESOLVED_NAMES),
+                $isAlias
             );
 
             $paramTypeInfos[$paramTypeInfo->getName()] = $paramTypeInfo;
@@ -298,6 +305,11 @@ final class DocBlockManipulator
             if ([ltrim($type, '\\')] === $returnTypeInfo->getFqnTypes()) {
                 return;
             }
+        }
+
+        $returnTypeInfo = new ReturnTypeInfo(explode('|', $type), $this->typeAnalyzer);
+        if ($returnTypeInfo) {
+            $type = implode('|', $returnTypeInfo->getDocTypes());
         }
 
         $this->removeTagFromNode($node, 'return');
@@ -823,5 +835,28 @@ final class DocBlockManipulator
         $this->usedShortNameByClasses[$className][$shortName] = $isShortClassUsed;
 
         return $isShortClassUsed;
+    }
+
+    private function isAlias(string $paramType, Node $node): bool
+    {
+        /** @var Node\Stmt\Use_[]|null $useNodes */
+        $useNodes = $node->getAttribute(AttributeKey::USE_NODES);
+        if ($useNodes === null) {
+            return false;
+        }
+
+        foreach ($useNodes as $useNode) {
+            foreach ($useNode->uses as $useUse) {
+                if ($useUse->alias === null) {
+                    continue;
+                }
+
+                if ((string) $useUse->alias === $paramType) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

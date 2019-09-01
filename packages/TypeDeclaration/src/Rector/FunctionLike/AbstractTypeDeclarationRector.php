@@ -18,7 +18,6 @@ use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\Php\AbstractTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\PhpParser\Node\Manipulator\FunctionLikeManipulator;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -45,21 +44,14 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     protected $parsedNodesByType;
 
     /**
-     * @var FunctionLikeManipulator
-     */
-    protected $functionLikeManipulator;
-
-    /**
      * @required
      */
     public function autowireAbstractTypeDeclarationRector(
         DocBlockManipulator $docBlockManipulator,
-        ParsedNodesByType $parsedNodesByType,
-        FunctionLikeManipulator $functionLikeManipulator
+        ParsedNodesByType $parsedNodesByType
     ): void {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->parsedNodesByType = $parsedNodesByType;
-        $this->functionLikeManipulator = $functionLikeManipulator;
     }
 
     /**
@@ -136,7 +128,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
      * @param Name|NullableType|Identifier $possibleSubtype
      * @param Name|NullableType|Identifier $type
      */
-    protected function isSubtypeOf(Node $possibleSubtype, Node $type): bool
+    protected function isSubtypeOf(Node $possibleSubtype, Node $type, string $kind): bool
     {
         $type = $type instanceof NullableType ? $type->type : $type;
 
@@ -147,8 +139,17 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         $possibleSubtype = $possibleSubtype->toString();
         $type = $type->toString();
 
-        if (is_a($possibleSubtype, $type, true)) {
-            return true;
+        if ($kind === 'return') {
+            if ($this->isAtLeastPhpVersion('7.4')) {
+                // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
+                if (is_a($possibleSubtype, $type, true)) {
+                    return true;
+                }
+            }
+        } elseif ($kind === 'param') {
+            if (is_a($possibleSubtype, $type, true)) {
+                return true;
+            }
         }
 
         if (in_array($possibleSubtype, ['array', 'Traversable'], true) && $type === 'iterable') {
@@ -167,14 +168,11 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     }
 
     /**
-     * @param ClassMethod|Param $childClassMethodOrParam
+     * @param ClassMethod|Param $node
      * @return Name|NullableType|Identifier|null
      */
-    protected function resolveChildType(
-        AbstractTypeInfo $returnTypeInfo,
-        Node $node,
-        Node $childClassMethodOrParam
-    ): ?Node {
+    protected function resolveChildType(AbstractTypeInfo $returnTypeInfo, Node $node): ?Node
+    {
         $nakedType = $returnTypeInfo->getTypeNode() instanceof NullableType ? $returnTypeInfo->getTypeNode()->type : $returnTypeInfo->getTypeNode();
 
         if ($nakedType === null) {
@@ -201,11 +199,6 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
             $type = new FullyQualified($parentClassName);
 
             return $returnTypeInfo->isNullable() ? new NullableType($type) : $type;
-        }
-
-        // is namespace the same? use short name
-        if ($this->haveSameNamespace($node, $childClassMethodOrParam)) {
-            return $returnTypeInfo->getTypeNode();
         }
 
         // are namespaces different? → FQN name
@@ -263,11 +256,5 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         }
 
         return $interfaces;
-    }
-
-    private function haveSameNamespace(Node $firstNode, Node $secondNode): bool
-    {
-        return $firstNode->getAttribute(AttributeKey::NAMESPACE_NAME)
-            === $secondNode->getAttribute(AttributeKey::NAMESPACE_NAME);
     }
 }

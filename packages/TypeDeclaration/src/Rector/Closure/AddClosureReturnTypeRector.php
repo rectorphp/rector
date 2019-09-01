@@ -86,7 +86,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $returnTypeNode = $staticReturnType->getTypeNode();
+        $returnTypeNode = $staticReturnType->getFqnTypeNode();
         if ($returnTypeNode === null) {
             return null;
         }

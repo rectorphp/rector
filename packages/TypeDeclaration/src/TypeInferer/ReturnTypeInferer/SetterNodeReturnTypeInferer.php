@@ -55,4 +55,9 @@ final class SetterNodeReturnTypeInferer extends AbstractTypeInferer implements R
 
         return $this->staticTypeToStringResolver->resolveObjectType($assignedExprStaticType);
     }
+
+    public function getPriority(): int
+    {
+        return 600;
+    }
 }

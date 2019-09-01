@@ -4,7 +4,7 @@ namespace Rector\TypeDeclaration\Contract\TypeInferer;
 
 use PhpParser\Node\FunctionLike;
 
-interface ReturnTypeInfererInterface
+interface ReturnTypeInfererInterface extends PriorityAwareTypeInfererInterface
 {
     /**
      * @return string[]

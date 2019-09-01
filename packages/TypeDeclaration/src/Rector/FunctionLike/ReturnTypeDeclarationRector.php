@@ -13,7 +13,6 @@ use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\Php\TypeAnalyzer;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\TypeDeclaration\ReturnTypeResolver\ReturnTypeResolver;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
@@ -22,11 +21,6 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
      * @var string[]
      */
     private const EXCLUDED_METHOD_NAMES = ['__construct', '__destruct', '__clone'];
-
-    /**
-     * @var ReturnTypeResolver
-     */
-    private $returnTypeResolver;
 
     /**
      * @var ReturnTypeInferer
@@ -38,12 +32,8 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
      */
     private $typeAnalyzer;
 
-    public function __construct(
-        ReturnTypeResolver $returnTypeResolver,
-        ReturnTypeInferer $returnTypeInferer,
-        TypeAnalyzer $typeAnalyzer
-    ) {
-        $this->returnTypeResolver = $returnTypeResolver;
+    public function __construct(ReturnTypeInferer $returnTypeInferer, TypeAnalyzer $typeAnalyzer)
+    {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->typeAnalyzer = $typeAnalyzer;
     }
@@ -104,50 +94,28 @@ CODE_SAMPLE
             $hasNewType = $node->returnType->getAttribute(self::HAS_NEW_INHERITED_TYPE, false);
         }
 
-        $returnTypeInfo = $this->returnTypeResolver->resolveFunctionLikeReturnType($node);
-
-        if ($returnTypeInfo === null) {
+        $inferedTypes = $this->returnTypeInferer->inferFunctionLike($node);
+        if ($inferedTypes === []) {
             return null;
         }
 
-        // this could be void
-        if ($returnTypeInfo->getTypeNode() === null) {
-            if ($returnTypeInfo->getTypeCount() !== 0) {
-                return null;
-            }
-            // use
-            $returnTypeInfo = $this->functionLikeManipulator->resolveStaticReturnTypeInfo($node);
-            if ($returnTypeInfo === null) {
-                return null;
-            }
-        }
-
-//        $inferedTypes = $this->returnTypeInferer->inferFunctionLike($node);
-//        $inferedReturnTypeInfo = new ReturnTypeInfo($inferedTypes, $this->typeAnalyzer, $inferedTypes);
+        $returnTypeInfo = new ReturnTypeInfo($inferedTypes, $this->typeAnalyzer, $inferedTypes);
 
         // @todo is it violation?
         if ($hasNewType) {
             // should override - is it subtype?
-            $possibleOverrideNewReturnType = $returnTypeInfo->getTypeNode();
-
+            $possibleOverrideNewReturnType = $returnTypeInfo->getFqnTypeNode();
             if ($possibleOverrideNewReturnType !== null) {
                 if ($node->returnType !== null) {
-                    if ($this->isSubtypeOf($possibleOverrideNewReturnType, $node->returnType)) {
+                    if ($this->isSubtypeOf($possibleOverrideNewReturnType, $node->returnType, 'return')) {
                         // allow override
-                        $node->returnType = $returnTypeInfo->getTypeNode();
+                        $node->returnType = $returnTypeInfo->getFqnTypeNode();
                     }
                 } else {
-                    $node->returnType = $returnTypeInfo->getTypeNode();
+                    $node->returnType = $returnTypeInfo->getFqnTypeNode();
                 }
             }
         } else {
-            if ($returnTypeInfo->getTypeNode() === null) {
-                $inferedTypes = $this->returnTypeInferer->inferFunctionLike($node);
-                if ($inferedTypes) {
-                    $returnTypeInfo = new ReturnTypeInfo($inferedTypes, $this->typeAnalyzer, $inferedTypes);
-                }
-            }
-
             if ($this->isReturnTypeAlreadyAdded($node, $returnTypeInfo)) {
                 return null;
             }
@@ -189,45 +157,41 @@ CODE_SAMPLE
 
             $usedTraits = $this->parsedNodesByType->findUsedTraitsInClass($childClassLike);
             foreach ($usedTraits as $trait) {
-                $this->addReturnTypeToMethod($trait, $methodName, $node, $returnTypeInfo);
+                $this->addReturnTypeToMethod($trait, $node, $returnTypeInfo);
             }
 
-            $this->addReturnTypeToMethod($childClassLike, $methodName, $node, $returnTypeInfo);
+            $this->addReturnTypeToMethod($childClassLike, $node, $returnTypeInfo);
         }
     }
 
     private function addReturnTypeToMethod(
         ClassLike $classLike,
-        string $methodName,
-        Node $node,
+        ClassMethod $classMethod,
         ReturnTypeInfo $returnTypeInfo
     ): void {
-        $classMethod = $classLike->getMethod($methodName);
-        if ($classMethod === null) {
+        $methodName = $this->getName($classMethod);
+
+        $currentClassMethod = $classLike->getMethod($methodName);
+        if ($currentClassMethod === null) {
             return;
         }
 
         // already has a type
-        if ($classMethod->returnType !== null) {
+        if ($currentClassMethod->returnType !== null) {
             return;
         }
 
-        $resolvedChildType = $this->resolveChildType($returnTypeInfo, $node, $classMethod);
+        $resolvedChildType = $this->resolveChildType($returnTypeInfo, $classMethod);
         if ($resolvedChildType === null) {
             return;
         }
 
-        $resolvedChildType = $this->resolveChildType($returnTypeInfo, $node, $classMethod);
-        if ($resolvedChildType === null) {
-            return;
-        }
-
-        $classMethod->returnType = $resolvedChildType;
+        $currentClassMethod->returnType = $resolvedChildType;
 
         // let the method now it was changed now
-        $classMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
+        $currentClassMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
 
-        $this->notifyNodeChangeFileInfo($classMethod);
+        $this->notifyNodeChangeFileInfo($currentClassMethod);
     }
 
     /**
@@ -247,9 +211,6 @@ CODE_SAMPLE
      */
     private function isReturnTypeAlreadyAdded(Node $node, ReturnTypeInfo $returnTypeInfo): bool
     {
-//        dump($this->print($node->returnType), '\\');
-//        dump($this->print($returnTypeInfo->getTypeNode()));
-
         if (ltrim($this->print($node->returnType), '\\') === $this->print($returnTypeInfo->getTypeNode())) {
             return true;
         }

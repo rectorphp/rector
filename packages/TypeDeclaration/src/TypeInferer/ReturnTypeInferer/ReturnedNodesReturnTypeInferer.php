@@ -6,10 +6,14 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
@@ -21,8 +25,21 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
      */
     public function inferFunctionLike(FunctionLike $functionLike): array
     {
+        /** @var Class_|Trait_|Interface_|null $classLike */
+        $classLike = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
+        if ($functionLike instanceof ClassMethod) {
+            if ($classLike instanceof Interface_) {
+                return [];
+            }
+        }
+
         $localReturnNodes = $this->collectReturns($functionLike);
         if ($localReturnNodes === []) {
+            // void type
+            if ($functionLike instanceof ClassMethod && ! $functionLike->isAbstract()) {
+                return ['void'];
+            }
+
             return [];
         }
 
@@ -35,8 +52,13 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
         return $types;
     }
 
+    public function getPriority(): int
+    {
+        return 1000;
+    }
+
     /**
-     * @param ClassMethod|Function_ $functionLike
+     * @param ClassMethod|Closure|Function_ $functionLike
      * @return Return_[]
      */
     private function collectReturns(FunctionLike $functionLike): array

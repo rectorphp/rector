@@ -32,4 +32,9 @@ final class ReturnedNodeReturnTypeInferer extends AbstractTypeInferer implements
 
         return $resolvedReturnTypeInfo ? $resolvedReturnTypeInfo->getDocTypes() : [];
     }
+
+    public function getPriority(): int
+    {
+        return 500;
+    }
 }

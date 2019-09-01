@@ -24,7 +24,7 @@ use Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector
 
 class SkipOverrideOfTheSameClass
 {
-    public function getReturnedClass(): RealReturnedClass
+    public function getReturnedClass(): \Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\RealReturnedClass
     {
         return new RealReturnedClass();
     }

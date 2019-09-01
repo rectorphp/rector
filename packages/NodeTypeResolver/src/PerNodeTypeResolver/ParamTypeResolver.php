@@ -10,7 +10,12 @@ use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInte
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
+/**
+ * @todo move to
+ * @see ParamTypeInferer
+ */
 final class ParamTypeResolver implements PerNodeTypeResolverInterface
 {
     /**

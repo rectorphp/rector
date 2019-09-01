@@ -89,10 +89,13 @@ CODE_SAMPLE
             return null;
         }
 
-        $docTypes = $this->returnTypeInferer->inferFunctionLike($node);
-        if ($docTypes !== []) {
-            $docType = implode('|', $docTypes);
+        $inferedTypes = $this->returnTypeInferer->inferFunctionLike($node);
+        if ($inferedTypes === ['void']) {
+            return null;
+        }
 
+        if ($inferedTypes !== []) {
+            $docType = implode('|', $inferedTypes);
             $this->docBlockManipulator->addReturnTag($node, $docType);
         }
 

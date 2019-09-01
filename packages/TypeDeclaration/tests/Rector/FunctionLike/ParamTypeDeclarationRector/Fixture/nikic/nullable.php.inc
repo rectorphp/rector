@@ -18,6 +18,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRe
  * @param Foo|null $a
  * @param Bar|null $b
  */
-function test2(?Foo $a, ?Bar $b = null) {}
+function test2(?\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\Nikic\Nullable\Foo $a, ?\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\Nikic\Nullable\Bar $b = null) {}
 
 ?>

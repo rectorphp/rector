@@ -5,15 +5,10 @@ namespace Rector\TypeDeclaration\Contract\TypeInferer;
 use PhpParser\Node\Stmt\Property;
 use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 
-interface PropertyTypeInfererInterface
+interface PropertyTypeInfererInterface extends PriorityAwareTypeInfererInterface
 {
     /**
      * @return string[]|IdentifierValueObject[]
      */
     public function inferProperty(Property $property): array;
-
-    /**
-     * Higher priority goes first.
-     */
-    public function getPriority(): int;
 }

@@ -19,6 +19,11 @@ abstract class AbstractTypeInfo
     protected $isNullable = false;
 
     /**
+     * @var bool
+     */
+    protected $isAlias = false;
+
+    /**
      * @var string[]
      */
     protected $types = [];
@@ -112,7 +117,11 @@ abstract class AbstractTypeInfo
 
         $type = ltrim($type, '\\');
 
-        $name = $forceFqn ? new FullyQualified($type) : new Name($type);
+        if ($this->isAlias || $forceFqn === false) {
+            $name = new Name($type);
+        } else {
+            $name = new FullyQualified($type);
+        }
 
         if ($this->isNullable) {
             return new NullableType($name);
