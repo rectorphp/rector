@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -115,9 +114,9 @@ CODE_SAMPLE
 
     private function getExistingFactoryPropertyName(Class_ $classNode, string $factoryClass): ?string
     {
-        foreach ($classNode->stmts as $node) {
-            if ($node instanceof Property && $this->isType($node, $factoryClass)) {
-                return (string) $node->props[0]->name;
+        foreach ($classNode->getProperties() as $property) {
+            if ($this->isType($property, $factoryClass)) {
+                return (string) $property->props[0]->name;
             }
         }
 

@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,16 +19,8 @@ final class NetteTesterClassToPHPUnitClassRector extends AbstractRector
      */
     private $netteTesterTestCaseClass;
 
-    /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    public function __construct(
-        ClassManipulator $classManipulator,
-        string $netteTesterTestCaseClass = 'Tester\TestCase'
-    ) {
-        $this->classManipulator = $classManipulator;
+    public function __construct(string $netteTesterTestCaseClass = 'Tester\TestCase')
+    {
         $this->netteTesterTestCaseClass = $netteTesterTestCaseClass;
     }
 
@@ -132,11 +123,9 @@ CODE_SAMPLE
 
     private function processMethods(Class_ $class): void
     {
-        $methods = $this->classManipulator->getMethods($class);
-
-        foreach ($methods as $method) {
-            if ($this->isNames($method, ['setUp', 'tearDown'])) {
-                $this->makeProtected($method);
+        foreach ($class->getMethods() as $classMethod) {
+            if ($this->isNames($classMethod, ['setUp', 'tearDown'])) {
+                $this->makeProtected($classMethod);
             }
         }
     }

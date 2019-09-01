@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\DeadCode\UnusedNodeResolver\ClassUnusedPrivateClassMethodResolver;
@@ -153,16 +152,12 @@ CODE_SAMPLE
      */
     private function removeClassMethodsByNames(Class_ $class, array $unusedMethodNames): Class_
     {
-        foreach ($class->stmts as $classStmt) {
-            if (! $classStmt instanceof ClassMethod) {
+        foreach ($class->getMethods() as $classMethod) {
+            if (! $this->isNames($classMethod, $unusedMethodNames)) {
                 continue;
             }
 
-            if (! $this->isNames($classStmt, $unusedMethodNames)) {
-                continue;
-            }
-
-            $this->removeNodeFromStatements($class, $classStmt);
+            $this->removeNodeFromStatements($class, $classMethod);
         }
 
         return $class;
@@ -186,24 +181,20 @@ CODE_SAMPLE
      */
     private function removeClassPrivatePropertiesByNames(Class_ $class, array $unusedPropertyNames): Class_
     {
-        foreach ($class->stmts as $stmt) {
-            if (! $stmt instanceof Property) {
+        foreach ($class->getProperties() as $property) {
+            if (! $this->isNames($property, $unusedPropertyNames)) {
                 continue;
             }
 
-            if (! $this->isNames($stmt, $unusedPropertyNames)) {
-                continue;
-            }
-
-            $this->removeNodeFromStatements($class, $stmt);
+            $this->removeNodeFromStatements($class, $property);
 
             // remove "$this->someProperty = new ArrayCollection()"
-            $propertyName = $this->getName($stmt);
+            $propertyName = $this->getName($property);
             if (isset($this->collectionByPropertyName[$propertyName])) {
                 $this->removeNode($this->collectionByPropertyName[$propertyName]);
             }
 
-            $this->removeInversedByOrMappedByOnRelatedProperty($stmt);
+            $this->removeInversedByOrMappedByOnRelatedProperty($property);
         }
 
         return $class;
@@ -227,11 +218,7 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($relatedEntityClass->stmts as $relatedEntityClassStmt) {
-            if (! $relatedEntityClassStmt instanceof Property) {
-                continue;
-            }
-
+        foreach ($relatedEntityClass->getProperties() as $relatedEntityClassStmt) {
             if (! $this->isName($relatedEntityClassStmt, $otherProperty)) {
                 continue;
             }

@@ -18,7 +18,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\Node\Stmt\TraitUse;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -215,12 +214,8 @@ final class ParsedNodesByType
     {
         $traits = [];
 
-        foreach ($classLike->stmts as $stmt) {
-            if (! $stmt instanceof TraitUse) {
-                continue;
-            }
-
-            foreach ($stmt->traits as $trait) {
+        foreach ($classLike->getTraitUses() as $traitUse) {
+            foreach ($traitUse->traits as $trait) {
                 $traitName = $this->nameResolver->getName($trait);
                 if ($traitName === null) {
                     continue;

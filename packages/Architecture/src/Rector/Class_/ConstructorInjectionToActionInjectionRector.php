@@ -116,20 +116,16 @@ CODE_SAMPLE
         $this->collectPropertyFetchToParams($constructMethod);
 
         // replace them in property fetches with particular class methods and use variable instead
-        foreach ($node->stmts as $classStmt) {
-            if (! $classStmt instanceof ClassMethod) {
+        foreach ($node->getMethods() as $classMethod) {
+            if ($this->isName($classMethod, '__construct')) {
                 continue;
             }
 
-            if ($this->isName($classStmt, '__construct')) {
+            if (! $classMethod->isPublic()) {
                 continue;
             }
 
-            if (! $classStmt->isPublic()) {
-                continue;
-            }
-
-            $this->replacePropertyFetchByInjectedVariables($classStmt);
+            $this->replacePropertyFetchByInjectedVariables($classMethod);
         }
 
         // collect all property fetches that are relevant to original constructor properties

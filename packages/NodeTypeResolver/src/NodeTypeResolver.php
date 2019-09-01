@@ -22,7 +22,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
@@ -567,12 +566,8 @@ final class NodeTypeResolver
 
     private function getClassNodeProperty(Class_ $class, string $name): ?PropertyProperty
     {
-        foreach ($class->stmts as $stmt) {
-            if (! $stmt instanceof Property) {
-                continue;
-            }
-
-            foreach ($stmt->props as $propertyProperty) {
+        foreach ($class->getProperties() as $property) {
+            foreach ($property->props as $propertyProperty) {
                 if ($this->nameResolver->isName($propertyProperty, $name)) {
                     return $propertyProperty;
                 }
