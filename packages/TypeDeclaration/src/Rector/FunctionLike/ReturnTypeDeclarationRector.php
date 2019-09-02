@@ -222,6 +222,15 @@ CODE_SAMPLE
             return true;
         }
 
+        // prevent overriding self with itself
+        if ($this->print($node->returnType) === 'self') {
+            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+
+            if (ltrim($this->print($returnTypeInfo->getFqnTypeNode()), '\\') === $className) {
+                return true;
+            }
+        }
+
         return false;
     }
 }

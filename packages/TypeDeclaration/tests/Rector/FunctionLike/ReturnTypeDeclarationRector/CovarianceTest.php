@@ -16,6 +16,17 @@ final class CovarianceTest extends AbstractRectorTestCase
         $parameterProvider->changeParameter('php_version_features', '7.0');
     }
 
+    /**
+     * Needed to restore previous version
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $parameterProvider = self::$container->get(ParameterProvider::class);
+        $parameterProvider->changeParameter('php_version_features', '10.0');
+    }
+
     public function test(): void
     {
         $this->doTestFiles([
@@ -28,16 +39,5 @@ final class CovarianceTest extends AbstractRectorTestCase
     protected function getRectorClass(): string
     {
         return ReturnTypeDeclarationRector::class;
-    }
-
-    /**
-     * Needed to restore previous version
-     */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $parameterProvider = self::$container->get(ParameterProvider::class);
-        $parameterProvider->changeParameter('php_version_features', '10.0');
     }
 }

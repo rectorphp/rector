@@ -10,6 +10,7 @@ final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $files = [
+            __DIR__ . '/Fixture/skip_self.php.inc',
             // static types
             __DIR__ . '/Fixture/void_type.php.inc',
             __DIR__ . '/Fixture/no_void_abstract.php.inc',
