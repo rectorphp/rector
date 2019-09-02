@@ -3,7 +3,6 @@
 namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -113,41 +112,22 @@ CODE_SAMPLE
 
         $returnTypeInfo = new ReturnTypeInfo($inferedTypes, $this->typeAnalyzer, $inferedTypes);
 
-        // @todo is it violation?
-        if ($this->hasNewTypeFromPreviousIteration($node)) {
-            // should override - is it subtype?
-            $possibleOverrideNewReturnType = $returnTypeInfo->getFqnTypeNode();
-            if ($possibleOverrideNewReturnType !== null) {
-                if ($node->returnType !== null) {
-                    $isSubtype = $this->isSubtypeOf($possibleOverrideNewReturnType, $node->returnType);
+        if ($this->isReturnTypeAlreadyAdded($node, $returnTypeInfo)) {
+            return null;
+        }
 
-                    // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
-                    if ($isSubtype && $this->isAtLeastPhpVersion('7.4')) {
-                        // allow override
-                        $node->returnType = $returnTypeInfo->getFqnTypeNode();
-                    }
-                } else {
-                    $node->returnType = $returnTypeInfo->getFqnTypeNode();
-                }
-            }
-        } else {
-            if ($this->isReturnTypeAlreadyAdded($node, $returnTypeInfo)) {
-                return null;
-            }
+        // should be previous overridden?
+        if ($node->returnType !== null && $returnTypeInfo->getFqnTypeNode() !== null) {
+            $isSubtype = $this->isSubtypeOf($returnTypeInfo->getFqnTypeNode(), $node->returnType);
 
-            // should be previosu node overriden?
-            if ($node->returnType !== null && $returnTypeInfo->getFqnTypeNode() !== null) {
-                $isSubtype = $this->isSubtypeOf($returnTypeInfo->getFqnTypeNode(), $node->returnType);
-
-                // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
-                if ($this->isAtLeastPhpVersion('7.4') && $isSubtype) {
-                    $node->returnType = $returnTypeInfo->getFqnTypeNode();
-                } elseif ($isSubtype === false) {
-                    $node->returnType = $returnTypeInfo->getFqnTypeNode();
-                }
-            } else {
+            // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
+            if ($this->isAtLeastPhpVersion('7.4') && $isSubtype) {
+                $node->returnType = $returnTypeInfo->getFqnTypeNode();
+            } elseif ($isSubtype === false) {
                 $node->returnType = $returnTypeInfo->getFqnTypeNode();
             }
+        } else {
+            $node->returnType = $returnTypeInfo->getFqnTypeNode();
         }
 
         $this->populateChildren($node, $returnTypeInfo);
@@ -211,9 +191,6 @@ CODE_SAMPLE
 
         $currentClassMethod->returnType = $resolvedChildType;
 
-        // let the method now it was changed now
-        $currentClassMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
-
         $this->notifyNodeChangeFileInfo($currentClassMethod);
     }
 
@@ -245,17 +222,5 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    /**
-     * @param ClassMethod|Function_ $functionLike
-     */
-    private function hasNewTypeFromPreviousIteration(FunctionLike $functionLike): bool
-    {
-        if ($functionLike->returnType === null) {
-            return false;
-        }
-
-        return (bool) $functionLike->returnType->getAttribute(self::HAS_NEW_INHERITED_TYPE, false);
     }
 }
