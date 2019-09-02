@@ -2,21 +2,28 @@
 
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
+use Rector\TypeDeclaration\TypeDeclarationToStringConverter;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
 final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
 {
+    /**
+     * @var TypeDeclarationToStringConverter
+     */
+    private $typeDeclarationToStringConverter;
+
+    public function __construct(TypeDeclarationToStringConverter $typeDeclarationToStringConverter)
+    {
+        $this->typeDeclarationToStringConverter = $typeDeclarationToStringConverter;
+    }
+
     /**
      * @return string[]
      */
@@ -33,7 +40,7 @@ final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer
                 continue;
             }
 
-            $returnTypes = $this->resolveReturnTypeToString($classMethod);
+            $returnTypes = $this->typeDeclarationToStringConverter->resolveFunctionLikeReturnTypeToString($classMethod);
             // let PhpDoc solve that later for more precise type
             if ($returnTypes === ['array']) {
                 return [];
@@ -73,32 +80,5 @@ final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer
         }
 
         return $this->nameResolver->isName($return->expr, $propertyName);
-    }
-
-    /**
-     * @param Function_|ClassMethod|Closure $functionLike
-     * @return string[]
-     */
-    private function resolveReturnTypeToString(FunctionLike $functionLike): array
-    {
-        if ($functionLike->getReturnType() === null) {
-            return [];
-        }
-
-        $returnType = $functionLike->getReturnType();
-
-        $types = [];
-
-        $type = $returnType instanceof NullableType ? $returnType->type : $returnType;
-        $result = $this->nameResolver->getName($type);
-        if ($result !== null) {
-            $types[] = $result;
-        }
-
-        if ($returnType instanceof NullableType) {
-            $types[] = 'null';
-        }
-
-        return $types;
     }
 }

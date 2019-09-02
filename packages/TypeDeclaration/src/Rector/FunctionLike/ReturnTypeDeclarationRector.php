@@ -14,6 +14,7 @@ use Rector\Php\TypeAnalyzer;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer;
 
 final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
 {
@@ -94,7 +95,11 @@ CODE_SAMPLE
             $hasNewType = $node->returnType->getAttribute(self::HAS_NEW_INHERITED_TYPE, false);
         }
 
-        $inferedTypes = $this->returnTypeInferer->inferFunctionLike($node);
+        $inferedTypes = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
+            $node,
+            [ReturnTypeDeclarationReturnTypeInferer::class]
+        );
+
         if ($inferedTypes === []) {
             return null;
         }
