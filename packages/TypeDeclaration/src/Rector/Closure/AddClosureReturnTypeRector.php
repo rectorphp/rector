@@ -6,21 +6,29 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Manipulator\FunctionLikeManipulator;
+use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
+use Rector\Php\TypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 final class AddClosureReturnTypeRector extends AbstractRector
 {
     /**
-     * @var FunctionLikeManipulator
+     * @var ReturnTypeInferer
      */
-    private $functionLikeManipulator;
+    private $returnTypeInferer;
 
-    public function __construct(FunctionLikeManipulator $functionLikeManipulator)
+    /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    public function __construct(ReturnTypeInferer $returnTypeInferer, TypeAnalyzer $typeAnalyzer)
     {
-        $this->functionLikeManipulator = $functionLikeManipulator;
+        $this->returnTypeInferer = $returnTypeInferer;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -81,12 +89,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $staticReturnType = $this->functionLikeManipulator->resolveStaticReturnTypeInfo($node);
-        if ($staticReturnType === null) {
-            return null;
-        }
+        $inferedReturnTypes = $this->returnTypeInferer->inferFunctionLike($node);
+        $returnTypeInfo = new ReturnTypeInfo($inferedReturnTypes, $this->typeAnalyzer, $inferedReturnTypes);
 
-        $returnTypeNode = $staticReturnType->getFqnTypeNode();
+        $returnTypeNode = $returnTypeInfo->getFqnTypeNode();
         if ($returnTypeNode === null) {
             return null;
         }
