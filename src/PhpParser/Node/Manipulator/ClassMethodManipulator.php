@@ -34,11 +34,6 @@ final class ClassMethodManipulator
     private $nodeTypeResolver;
 
     /**
-     * @var FunctionLikeManipulator
-     */
-    private $functionLikeManipulator;
-
-    /**
      * @var NameResolver
      */
     private $nameResolver;
@@ -52,14 +47,12 @@ final class ClassMethodManipulator
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         NodeTypeResolver $nodeTypeResolver,
-        FunctionLikeManipulator $functionLikeManipulator,
         NameResolver $nameResolver,
         ValueResolver $valueResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->functionLikeManipulator = $functionLikeManipulator;
         $this->nameResolver = $nameResolver;
         $this->valueResolver = $valueResolver;
     }
@@ -119,33 +112,6 @@ final class ClassMethodManipulator
         }
 
         return false;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function resolveReturnType(ClassMethod $classMethod): array
-    {
-        if ($classMethod->returnType !== null) {
-            return $this->nodeTypeResolver->resolve($classMethod->returnType);
-        }
-
-        $staticReturnType = $this->functionLikeManipulator->resolveStaticReturnTypeInfo($classMethod);
-        if ($staticReturnType === null) {
-            return [];
-        }
-
-        $getFqnTypeNode = $staticReturnType->getFqnTypeNode();
-        if ($getFqnTypeNode === null) {
-            return [];
-        }
-
-        $fqnTypeName = $this->nameResolver->getName($getFqnTypeNode);
-        if ($fqnTypeName === null) {
-            return [];
-        }
-
-        return [$fqnTypeName];
     }
 
     /**

@@ -9,6 +9,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -89,15 +90,21 @@ CODE_SAMPLE
             return null;
         }
 
-        $inferedTypes = $this->returnTypeInferer->inferFunctionLike($node);
+        $inferedTypes = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
+            $node,
+            [ReturnTypeDeclarationReturnTypeInferer::class]
+        );
         if ($inferedTypes === ['void']) {
             return null;
         }
 
-        if ($inferedTypes !== []) {
-            $docType = implode('|', $inferedTypes);
-            $this->docBlockManipulator->addReturnTag($node, $docType);
+        if ($inferedTypes === []) {
+            return null;
         }
+
+        $docType = implode('|', $inferedTypes);
+
+        $this->docBlockManipulator->addReturnTag($node, $docType);
 
         return $node;
     }

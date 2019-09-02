@@ -25,8 +25,30 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
      */
     public function inferFunctionLike(FunctionLike $functionLike): array
     {
-        foreach ($this->returnTypeInferers as $returnTypeInferers) {
-            $types = $returnTypeInferers->inferFunctionLike($functionLike);
+        foreach ($this->returnTypeInferers as $returnTypeInferer) {
+            $types = $returnTypeInferer->inferFunctionLike($functionLike);
+            if ($types !== []) {
+                return $types;
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * @param string[] $excludedInferers
+     * @return string[]
+     */
+    public function inferFunctionLikeWithExcludedInferers(FunctionLike $functionLike, array $excludedInferers): array
+    {
+        foreach ($this->returnTypeInferers as $returnTypeInferer) {
+            foreach ($excludedInferers as $excludedInferer) {
+                if (is_a($returnTypeInferer, $excludedInferer, true)) {
+                    continue 2;
+                }
+            }
+
+            $types = $returnTypeInferer->inferFunctionLike($functionLike);
             if ($types !== []) {
                 return $types;
             }
