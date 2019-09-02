@@ -143,7 +143,7 @@ CODE_SAMPLE
                 $possibleOverrideNewReturnType = $paramTypeInfo->getFqnTypeNode();
                 if ($possibleOverrideNewReturnType !== null) {
                     if ($paramNode->type !== null) {
-                        if ($this->isSubtypeOf($possibleOverrideNewReturnType, $paramNode->type, 'param')) {
+                        if ($this->isSubtypeOf($possibleOverrideNewReturnType, $paramNode->type)) {
                             // allow override
                             $paramNode->type = $paramTypeInfo->getFqnTypeNode();
                         }

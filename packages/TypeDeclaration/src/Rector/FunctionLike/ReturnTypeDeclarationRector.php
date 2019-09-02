@@ -119,7 +119,7 @@ CODE_SAMPLE
             $possibleOverrideNewReturnType = $returnTypeInfo->getFqnTypeNode();
             if ($possibleOverrideNewReturnType !== null) {
                 if ($node->returnType !== null) {
-                    $isSubtype = $this->isSubtypeOf($possibleOverrideNewReturnType, $node->returnType, 'return');
+                    $isSubtype = $this->isSubtypeOf($possibleOverrideNewReturnType, $node->returnType);
 
                     // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
                     if ($isSubtype && $this->isAtLeastPhpVersion('7.4')) {
@@ -137,7 +137,7 @@ CODE_SAMPLE
 
             // should be previosu node overriden?
             if ($node->returnType !== null && $returnTypeInfo->getFqnTypeNode() !== null) {
-                $isSubtype = $this->isSubtypeOf($returnTypeInfo->getFqnTypeNode(), $node->returnType, 'return');
+                $isSubtype = $this->isSubtypeOf($returnTypeInfo->getFqnTypeNode(), $node->returnType);
 
                 // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
                 if ($this->isAtLeastPhpVersion('7.4') && $isSubtype) {
