@@ -3,6 +3,7 @@
 namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -33,10 +34,16 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
      */
     private $typeAnalyzer;
 
-    public function __construct(ReturnTypeInferer $returnTypeInferer, TypeAnalyzer $typeAnalyzer)
+    /**
+     * @var bool
+     */
+    private $overrideExistingReturnTypes = true;
+
+    public function __construct(ReturnTypeInferer $returnTypeInferer, TypeAnalyzer $typeAnalyzer, bool $overrideExistingReturnTypes = true)
     {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->overrideExistingReturnTypes = $overrideExistingReturnTypes;
     }
 
     public function getDefinition(): RectorDefinition
@@ -90,11 +97,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $hasNewType = false;
-        if ($node->returnType !== null) {
-            $hasNewType = $node->returnType->getAttribute(self::HAS_NEW_INHERITED_TYPE, false);
-        }
-
         $inferedTypes = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
             $node,
             [ReturnTypeDeclarationReturnTypeInferer::class]
@@ -107,7 +109,7 @@ CODE_SAMPLE
         $returnTypeInfo = new ReturnTypeInfo($inferedTypes, $this->typeAnalyzer, $inferedTypes);
 
         // @todo is it violation?
-        if ($hasNewType) {
+        if ($this->hasNewTypeFromPreviousIteration($node)) {
             // should override - is it subtype?
             $possibleOverrideNewReturnType = $returnTypeInfo->getFqnTypeNode();
             if ($possibleOverrideNewReturnType !== null) {
@@ -208,6 +210,12 @@ CODE_SAMPLE
             return false;
         }
 
+        if ($this->overrideExistingReturnTypes === false) {
+            if ($node->returnType) {
+                return true;
+            }
+        }
+
         return $this->isNames($node, self::EXCLUDED_METHOD_NAMES);
     }
 
@@ -221,5 +229,17 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     */
+    private function hasNewTypeFromPreviousIteration(FunctionLike $functionLike): bool
+    {
+        if ($functionLike->returnType === null) {
+            return false;
+        }
+
+        return (bool) $functionLike->returnType->getAttribute(self::HAS_NEW_INHERITED_TYPE, false);
     }
 }
