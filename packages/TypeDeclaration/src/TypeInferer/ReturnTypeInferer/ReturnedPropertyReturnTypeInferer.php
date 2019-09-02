@@ -57,6 +57,11 @@ final class ReturnedPropertyReturnTypeInferer extends AbstractTypeInferer implem
         return $this->propertyTypeInferer->inferProperty($property);
     }
 
+    public function getPriority(): int
+    {
+        return 700;
+    }
+
     private function matchSingleStmtReturnPropertyFetch(ClassMethod $classMethod): ?PropertyFetch
     {
         if (count((array) $classMethod->stmts) !== 1) {

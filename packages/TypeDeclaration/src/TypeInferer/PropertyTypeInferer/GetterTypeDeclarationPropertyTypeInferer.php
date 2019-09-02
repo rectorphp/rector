@@ -2,28 +2,21 @@
 
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
-use Rector\TypeDeclaration\ReturnTypeResolver\ReturnTypeResolver;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
-final class GetterOrSetterPropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
+final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
 {
-    /**
-     * @var ReturnTypeResolver
-     */
-    private $returnTypeResolver;
-
-    public function __construct(ReturnTypeResolver $returnTypeResolver)
-    {
-        $this->returnTypeResolver = $returnTypeResolver;
-    }
-
     /**
      * @return string[]
      */
@@ -40,7 +33,12 @@ final class GetterOrSetterPropertyTypeInferer extends AbstractTypeInferer implem
                 continue;
             }
 
-            $returnTypes = $this->resolveClassMethodReturnTypes($classMethod);
+            $returnTypes = $this->resolveReturnTypeToString($classMethod);
+            // let PhpDoc solve that later for more precise type
+            if ($returnTypes === ['array']) {
+                return [];
+            }
+
             if ($returnTypes !== []) {
                 return $returnTypes;
             }
@@ -51,7 +49,7 @@ final class GetterOrSetterPropertyTypeInferer extends AbstractTypeInferer implem
 
     public function getPriority(): int
     {
-        return 600;
+        return 630;
     }
 
     private function hasClassMethodOnlyStatementReturnOfPropertyFetch(
@@ -78,15 +76,29 @@ final class GetterOrSetterPropertyTypeInferer extends AbstractTypeInferer implem
     }
 
     /**
+     * @param Function_|ClassMethod|Closure $functionLike
      * @return string[]
      */
-    private function resolveClassMethodReturnTypes(ClassMethod $classMethod): array
+    private function resolveReturnTypeToString(FunctionLike $functionLike): array
     {
-        $returnType = $this->returnTypeResolver->resolveFunctionLikeReturnType($classMethod);
-        if ($returnType === null) {
+        if ($functionLike->getReturnType() === null) {
             return [];
         }
 
-        return $returnType->getDocTypes();
+        $returnType = $functionLike->getReturnType();
+
+        $types = [];
+
+        $type = $returnType instanceof NullableType ? $returnType->type : $returnType;
+        $result = $this->nameResolver->getName($type);
+        if ($result !== null) {
+            $types[] = $result;
+        }
+
+        if ($returnType instanceof NullableType) {
+            $types[] = 'null';
+        }
+
+        return $types;
     }
 }

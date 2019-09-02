@@ -44,6 +44,6 @@ final class AllAssignNodePropertyTypeInferer extends AbstractTypeInferer impleme
 
     public function getPriority(): int
     {
-        return 500;
+        return 610;
     }
 }

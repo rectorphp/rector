@@ -24,6 +24,6 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRe
  */
 function my_foo(string $bar, int $baz, float $tab) {}
 
-/** @param My\Bar $foo */ function my_foo2(My\Bar $foo) {}
+/** @param My\Bar $foo */ function my_foo2(\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\PhpCsFixerParam\TypehintAlreadyDefinedWithWrongPhpdocTypehint\My\Bar $foo) {}
 
 ?>

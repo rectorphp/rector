@@ -28,7 +28,7 @@ class A {
 }
 class B extends A {
     /** @return Foo */
-    public function getObject($value): Foo {
+    public function getObject($value): \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\ObjectPhp72\Foo {
         return $value;
     }
 }

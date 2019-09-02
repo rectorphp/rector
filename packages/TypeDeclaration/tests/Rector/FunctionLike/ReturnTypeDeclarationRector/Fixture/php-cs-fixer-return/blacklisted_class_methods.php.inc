@@ -34,7 +34,7 @@ class Foo
 }
 
 /** @return Bar */
-function __construct($value): Bar {
+function __construct($value): \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\BlacklistedClassMethods\Bar {
     return $value;
 }
 

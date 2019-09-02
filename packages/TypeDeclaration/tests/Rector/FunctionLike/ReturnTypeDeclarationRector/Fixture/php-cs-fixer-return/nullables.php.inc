@@ -26,11 +26,11 @@ function my_foo4($value) {
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Nullables;
 
 /** @return null|Bar */
-function my_foo($value): ?Bar {
+function my_foo($value): ?\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Nullables\Bar {
     return $value;
 }
 /** @return Bar|null */
-function my_foo2($value): ?Bar {
+function my_foo2($value): ?\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Nullables\Bar {
     return $value;
 }
 /** @return null|array */

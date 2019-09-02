@@ -12,6 +12,11 @@ final class ParamTypeInfo extends AbstractTypeInfo
     protected $typesToRemove = ['void', 'real'];
 
     /**
+     * @var bool
+     */
+    protected $isAlias = false;
+
+    /**
      * @var string
      */
     private $name;
@@ -20,9 +25,15 @@ final class ParamTypeInfo extends AbstractTypeInfo
      * @param string[] $types
      * @param string[] $fqnTypes
      */
-    public function __construct(string $name, TypeAnalyzer $typeAnalyzer, array $types, array $fqnTypes = [])
-    {
+    public function __construct(
+        string $name,
+        TypeAnalyzer $typeAnalyzer,
+        array $types,
+        array $fqnTypes = [],
+        bool $isAlias = false
+    ) {
         $this->name = $this->normalizeName($name);
+        $this->isAlias = $isAlias;
 
         parent::__construct($types, $typeAnalyzer, $fqnTypes);
     }

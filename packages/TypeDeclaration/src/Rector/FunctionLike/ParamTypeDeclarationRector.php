@@ -140,19 +140,19 @@ CODE_SAMPLE
 
             if ($hasNewType) {
                 // should override - is it subtype?
-                $possibleOverrideNewReturnType = $paramTypeInfo->getTypeNode();
+                $possibleOverrideNewReturnType = $paramTypeInfo->getFqnTypeNode();
                 if ($possibleOverrideNewReturnType !== null) {
                     if ($paramNode->type !== null) {
-                        if ($this->isSubtypeOf($possibleOverrideNewReturnType, $paramNode->type)) {
+                        if ($this->isSubtypeOf($possibleOverrideNewReturnType, $paramNode->type, 'param')) {
                             // allow override
-                            $paramNode->type = $paramTypeInfo->getTypeNode();
+                            $paramNode->type = $paramTypeInfo->getFqnTypeNode();
                         }
                     } else {
                         $paramNode->type = $paramTypeInfo->getTypeNode();
                     }
                 }
             } else {
-                $paramNode->type = $paramTypeInfo->getTypeNode();
+                $paramNode->type = $paramTypeInfo->getFqnTypeNode();
 
                 $paramNodeType = $paramNode->type instanceof NullableType ? $paramNode->type->type : $paramNode->type;
                 // "resource" is valid phpdoc type, but it's not implemented in PHP
@@ -171,15 +171,13 @@ CODE_SAMPLE
 
     /**
      * Add typehint to all children
+     * @param ClassMethod|Function_ $node
      */
     private function populateChildren(Node $node, int $position, ParamTypeInfo $paramTypeInfo): void
     {
         if (! $node instanceof ClassMethod) {
             return;
         }
-
-        /** @var string $methodName */
-        $methodName = $this->getName($node);
 
         /** @var string $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
@@ -196,38 +194,39 @@ CODE_SAMPLE
                 $usedTraits = $this->parsedNodesByType->findUsedTraitsInClass($childClassLike);
 
                 foreach ($usedTraits as $trait) {
-                    $this->addParamTypeToMethod($trait, $methodName, $position, $node, $paramTypeInfo);
+                    $this->addParamTypeToMethod($trait, $position, $node, $paramTypeInfo);
                 }
             }
 
-            $this->addParamTypeToMethod($childClassLike, $methodName, $position, $node, $paramTypeInfo);
+            $this->addParamTypeToMethod($childClassLike, $position, $node, $paramTypeInfo);
         }
     }
 
     private function addParamTypeToMethod(
         ClassLike $classLike,
-        string $methodName,
         int $position,
-        Node $node,
+        ClassMethod $classMethod,
         ParamTypeInfo $paramTypeInfo
     ): void {
-        $classMethod = $classLike->getMethod($methodName);
-        if ($classMethod === null) {
+        $methodName = $this->getName($classMethod);
+
+        $currentClassMethod = $classLike->getMethod($methodName);
+        if ($currentClassMethod === null) {
             return;
         }
 
-        if (! isset($classMethod->params[$position])) {
+        if (! isset($currentClassMethod->params[$position])) {
             return;
         }
 
-        $paramNode = $classMethod->params[$position];
+        $paramNode = $currentClassMethod->params[$position];
 
         // already has a type
         if ($paramNode->type !== null) {
             return;
         }
 
-        $resolvedChildType = $this->resolveChildType($paramTypeInfo, $node, $classMethod);
+        $resolvedChildType = $this->resolveChildType($paramTypeInfo, $classMethod);
         if ($resolvedChildType === null) {
             return;
         }

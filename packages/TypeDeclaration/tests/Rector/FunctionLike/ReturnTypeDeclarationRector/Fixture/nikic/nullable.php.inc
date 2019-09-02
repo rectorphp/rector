@@ -14,7 +14,7 @@ function test($value) {
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Nikic\Nullable;
 
 /** @return Foo|null */
-function test($value): ?Foo {
+function test($value): ?\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Nikic\Nullable\Foo {
     return $value;
 }
 

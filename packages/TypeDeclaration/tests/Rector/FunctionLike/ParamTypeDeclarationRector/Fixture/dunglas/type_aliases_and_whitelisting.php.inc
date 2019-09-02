@@ -11,7 +11,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRe
  * @param void $void
  * @param mixed $mixed
  * @param unknown $unknown
- * @param Class $class
+ * @param AnyClass $class
  */
 function aliases($integer, $boolean, $real, $double, $callback, $void, $mixed, $unkown, $class) {
 }
@@ -30,8 +30,8 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRe
  * @param void $void
  * @param mixed $mixed
  * @param unknown $unknown
- * @param Class $class
+ * @param AnyClass $class
  */
-function aliases(int $integer, bool $boolean, float $real, float $double, callable $callback, $void, $mixed, $unkown, Class $class) {
+function aliases(int $integer, bool $boolean, float $real, float $double, callable $callback, $void, $mixed, $unkown, \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\Dunglas\AnyClass $class) {
 }
 ?>
