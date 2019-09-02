@@ -140,11 +140,8 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         $type = $type->toString();
 
         if ($kind === 'return') {
-            if ($this->isAtLeastPhpVersion('7.4')) {
-                // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
-                if (is_a($possibleSubtype, $type, true)) {
-                    return true;
-                }
+            if (is_a($possibleSubtype, $type, true)) {
+                return true;
             }
         } elseif ($kind === 'param') {
             if (is_a($possibleSubtype, $type, true)) {

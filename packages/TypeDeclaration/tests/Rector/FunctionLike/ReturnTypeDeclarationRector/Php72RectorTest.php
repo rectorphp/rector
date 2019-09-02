@@ -13,12 +13,27 @@ final class Php72RectorTest extends AbstractRectorTestCase
         parent::setUp();
 
         $parameterProvider = self::$container->get(ParameterProvider::class);
-        $parameterProvider->changeParameter('    php_version_features', '7.0');
+        $parameterProvider->changeParameter('php_version_features', '7.0');
+    }
+
+    /**
+     * Needed to restore previous version
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $parameterProvider = self::$container->get(ParameterProvider::class);
+        $parameterProvider->changeParameter('php_version_features', '10.0');
     }
 
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/nikic/object_php72.php.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/nikic/object_php72.php.inc',
+            __DIR__ . '/Fixture/nikic/inheritance_covariance.php.inc',
+            __DIR__ . '/Fixture/Covariance/return_interface_to_class.php.inc',
+        ]);
     }
 
     protected function getRectorClass(): string

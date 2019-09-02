@@ -4,7 +4,6 @@ namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -17,6 +16,9 @@ use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer;
 
+/**
+ * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ */
 final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
 {
     /**
@@ -39,8 +41,11 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
      */
     private $overrideExistingReturnTypes = true;
 
-    public function __construct(ReturnTypeInferer $returnTypeInferer, TypeAnalyzer $typeAnalyzer, bool $overrideExistingReturnTypes = true)
-    {
+    public function __construct(
+        ReturnTypeInferer $returnTypeInferer,
+        TypeAnalyzer $typeAnalyzer,
+        bool $overrideExistingReturnTypes = true
+    ) {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->overrideExistingReturnTypes = $overrideExistingReturnTypes;
@@ -114,7 +119,10 @@ CODE_SAMPLE
             $possibleOverrideNewReturnType = $returnTypeInfo->getFqnTypeNode();
             if ($possibleOverrideNewReturnType !== null) {
                 if ($node->returnType !== null) {
-                    if ($this->isSubtypeOf($possibleOverrideNewReturnType, $node->returnType, 'return')) {
+                    $isSubtype = $this->isSubtypeOf($possibleOverrideNewReturnType, $node->returnType, 'return');
+
+                    // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
+                    if ($isSubtype && $this->isAtLeastPhpVersion('7.4')) {
                         // allow override
                         $node->returnType = $returnTypeInfo->getFqnTypeNode();
                     }
@@ -127,7 +135,19 @@ CODE_SAMPLE
                 return null;
             }
 
-            $node->returnType = $returnTypeInfo->getFqnTypeNode();
+            // should be previosu node overriden?
+            if ($node->returnType !== null && $returnTypeInfo->getFqnTypeNode() !== null) {
+                $isSubtype = $this->isSubtypeOf($returnTypeInfo->getFqnTypeNode(), $node->returnType, 'return');
+
+                // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
+                if ($this->isAtLeastPhpVersion('7.4') && $isSubtype) {
+                    $node->returnType = $returnTypeInfo->getFqnTypeNode();
+                } elseif ($isSubtype === false) {
+                    $node->returnType = $returnTypeInfo->getFqnTypeNode();
+                }
+            } else {
+                $node->returnType = $returnTypeInfo->getFqnTypeNode();
+            }
         }
 
         $this->populateChildren($node, $returnTypeInfo);

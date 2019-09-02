@@ -5,7 +5,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationR
 use Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\RealReturnedClass;
 use Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\ReturnedClass;
 
-class SkipOverrideOfTheSameClass
+class PrefixFqn
 {
     public function getReturnedClass(): ReturnedClass
     {
@@ -22,7 +22,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationR
 use Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\RealReturnedClass;
 use Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\ReturnedClass;
 
-class SkipOverrideOfTheSameClass
+class PrefixFqn
 {
     public function getReturnedClass(): \Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\Source\RealReturnedClass
     {
