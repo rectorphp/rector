@@ -154,14 +154,10 @@ CODE_SAMPLE
             throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
-        $childrenClassLikes = $this->parsedNodesByType->findClassesAndInterfacesByType($className);
+        $childrenClassLikes = $this->parsedNodesByType->findChildrenOfClass($className);
 
         // update their methods as well
         foreach ($childrenClassLikes as $childClassLike) {
-            if (! $childClassLike instanceof Class_) {
-                continue;
-            }
-
             $usedTraits = $this->parsedNodesByType->findUsedTraitsInClass($childClassLike);
             foreach ($usedTraits as $trait) {
                 $this->addReturnTypeToMethod($trait, $node, $returnTypeInfo);
