@@ -111,7 +111,6 @@ CODE_SAMPLE
         }
 
         $returnTypeInfo = new ReturnTypeInfo($inferedTypes, $this->typeAnalyzer, $inferedTypes);
-
         if ($this->isReturnTypeAlreadyAdded($node, $returnTypeInfo)) {
             return null;
         }
@@ -127,7 +126,9 @@ CODE_SAMPLE
                 $node->returnType = $returnTypeInfo->getFqnTypeNode();
             }
         } else {
-            $node->returnType = $returnTypeInfo->getFqnTypeNode();
+            if ($returnTypeInfo->getFqnTypeNode() !== null) {
+                $node->returnType = $returnTypeInfo->getFqnTypeNode();
+            }
         }
 
         $this->populateChildren($node, $returnTypeInfo);
