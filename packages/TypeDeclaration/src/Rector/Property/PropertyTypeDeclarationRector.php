@@ -10,7 +10,6 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
-use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -61,20 +60,10 @@ final class PropertyTypeDeclarationRector extends AbstractRector
 
         $types = $this->propertyTypeInferer->inferProperty($node);
         if ($types) {
-            $this->setNodeVarTypes($node, $types);
+            $this->docBlockManipulator->changeVarTag($node, $types);
             return $node;
         }
 
         return null;
-    }
-
-    /**
-     * @param string[]|IdentifierValueObject[] $varTypes
-     */
-    private function setNodeVarTypes(Node $node, array $varTypes): Node
-    {
-        $this->docBlockManipulator->changeVarTag($node, $varTypes);
-
-        return $node;
     }
 }

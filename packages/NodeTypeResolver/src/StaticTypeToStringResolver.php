@@ -10,6 +10,7 @@ use PHPStan\Type\ClosureType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
@@ -36,6 +37,7 @@ final class StaticTypeToStringResolver
             BooleanType::class => ['bool'],
             StringType::class => ['string'],
             NullType::class => ['null'],
+            MixedType::class => ['mixed'],
 
             // more complex callables
             function (ArrayType $arrayType): array {
@@ -69,8 +71,7 @@ final class StaticTypeToStringResolver
                 return $this->removeGenericArrayTypeIfThereIsSpecificArrayType($types);
             },
             function (ObjectType $objectType): array {
-                // the must be absolute, since we have no other way to check absolute/local path
-                return ['\\' . $objectType->getClassName()];
+                return [$objectType->getClassName()];
             },
         ];
 

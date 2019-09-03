@@ -58,16 +58,15 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
     }
 
     /**
-     * @param ClassMethod|Closure|Function_ $functionLike
      * @return Return_[]
      */
     private function collectReturns(FunctionLike $functionLike): array
     {
         $returns = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $functionLike->stmts, function (Node $node) use (
-            &$returns
-        ): ?int {
+        $this->callableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (
+            Node $node
+        ) use (&$returns): ?int {
             if ($node instanceof Function_ || $node instanceof Closure || $node instanceof ArrowFunction) {
                 // skip Return_ nodes in nested functions
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;

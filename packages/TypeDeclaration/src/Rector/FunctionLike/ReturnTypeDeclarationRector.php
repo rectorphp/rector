@@ -115,23 +115,27 @@ CODE_SAMPLE
             return null;
         }
 
+        $shouldPopulateChildren = false;
         // should be previous overridden?
         if ($node->returnType !== null && $returnTypeInfo->getFqnTypeNode() !== null) {
             $isSubtype = $this->isSubtypeOf($returnTypeInfo->getFqnTypeNode(), $node->returnType);
 
             // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
             if ($this->isAtLeastPhpVersion('7.4') && $isSubtype) {
+                $shouldPopulateChildren = true;
                 $node->returnType = $returnTypeInfo->getFqnTypeNode();
-            } elseif ($isSubtype === false) {
-                $node->returnType = $returnTypeInfo->getFqnTypeNode();
-            }
-        } else {
-            if ($returnTypeInfo->getFqnTypeNode() !== null) {
+            } elseif ($isSubtype === false) { // type override
+                $shouldPopulateChildren = true;
                 $node->returnType = $returnTypeInfo->getFqnTypeNode();
             }
+        } elseif ($returnTypeInfo->getFqnTypeNode() !== null) {
+            $shouldPopulateChildren = true;
+            $node->returnType = $returnTypeInfo->getFqnTypeNode();
         }
 
-        $this->populateChildren($node, $returnTypeInfo);
+        if ($shouldPopulateChildren) {
+            $this->populateChildren($node, $returnTypeInfo);
+        }
 
         return $node;
     }
@@ -200,14 +204,14 @@ CODE_SAMPLE
      */
     private function shouldSkip(Node $node): bool
     {
-        if (! $node instanceof ClassMethod) {
-            return false;
-        }
-
         if ($this->overrideExistingReturnTypes === false) {
             if ($node->returnType) {
                 return true;
             }
+        }
+
+        if (! $node instanceof ClassMethod) {
+            return false;
         }
 
         return $this->isNames($node, self::EXCLUDED_METHOD_NAMES);

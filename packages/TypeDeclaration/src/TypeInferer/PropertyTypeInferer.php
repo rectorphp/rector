@@ -26,9 +26,9 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
      */
     public function inferProperty(Property $property): array
     {
-        foreach ($this->propertyTypeInferers as $propertyTypeInferers) {
-            $types = $propertyTypeInferers->inferProperty($property);
-            if ($types !== []) {
+        foreach ($this->propertyTypeInferers as $propertyTypeInferer) {
+            $types = $propertyTypeInferer->inferProperty($property);
+            if ($types !== [] && $types !== ['mixed']) {
                 return $types;
             }
         }

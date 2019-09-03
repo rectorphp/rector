@@ -31,12 +31,12 @@ final class ParamPhpDocNodeFactory
         if (count($types) > 1) {
             $unionedTypes = [];
             foreach ($types as $type) {
-                $unionedTypes[] = new IdentifierTypeNode($type);
+                $unionedTypes[] = $this->createIdentifierTypeNode($type);
             }
 
             $typeNode = new UnionTypeNode($unionedTypes);
         } elseif (count($types) === 1) {
-            $typeNode = new IdentifierTypeNode($types[0]);
+            $typeNode = $this->createIdentifierTypeNode($types[0]);
         } else {
             throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
@@ -52,5 +52,15 @@ final class ParamPhpDocNodeFactory
         );
 
         return new AttributeAwarePhpDocTagNode('@param', $paramTagValueNode);
+    }
+
+    private function createIdentifierTypeNode(string $type): IdentifierTypeNode
+    {
+        if (class_exists($type)) {
+            // FQN class name
+            $type = '\\' . $type;
+        }
+
+        return new IdentifierTypeNode($type);
     }
 }

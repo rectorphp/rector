@@ -58,7 +58,7 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
             }
 
             $returnTypes = $this->inferClassMethodReturnTypes($classMethod);
-            if ($returnTypes !== []) {
+            if ($returnTypes !== [] && $returnTypes !== ['mixed']) {
                 return $returnTypes;
             }
         }
@@ -107,7 +107,7 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
         }
 
         $inferedTypes = $this->returnedNodesReturnTypeInferer->inferFunctionLike($classMethod);
-        if ($inferedTypes) {
+        if ($inferedTypes !== [] && $inferedTypes !== ['mixed']) {
             return $inferedTypes;
         }
 

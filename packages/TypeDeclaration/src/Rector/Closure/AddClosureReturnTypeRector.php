@@ -90,8 +90,8 @@ CODE_SAMPLE
         }
 
         $inferedReturnTypes = $this->returnTypeInferer->inferFunctionLike($node);
-        $returnTypeInfo = new ReturnTypeInfo($inferedReturnTypes, $this->typeAnalyzer, $inferedReturnTypes);
 
+        $returnTypeInfo = new ReturnTypeInfo($inferedReturnTypes, $this->typeAnalyzer, $inferedReturnTypes);
         $returnTypeNode = $returnTypeInfo->getFqnTypeNode();
         if ($returnTypeNode === null) {
             return null;
