@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\NullType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -87,7 +88,7 @@ CODE_SAMPLE
         }
 
         $valueNode = $node->args[0]->value;
-        if (! $this->isNullableType($valueNode) && ! $this->isNullType($valueNode)) {
+        if (! $this->isNullableType($valueNode) && ! $this->isStaticType($valueNode, NullType::class)) {
             return null;
         }
 

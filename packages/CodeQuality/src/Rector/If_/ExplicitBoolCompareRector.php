@@ -17,6 +17,9 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -84,7 +87,7 @@ CODE_SAMPLE
             $isNegated = false;
         }
 
-        if ($this->isBoolType($conditionNode)) {
+        if ($this->isStaticType($conditionNode, BooleanType::class)) {
             return null;
         }
 
@@ -113,11 +116,11 @@ CODE_SAMPLE
             return $this->resolveString($isNegated, $expr);
         }
 
-        if ($this->isIntegerType($expr)) {
+        if ($this->isStaticType($expr, IntegerType::class)) {
             return $this->resolveInteger($isNegated, $expr);
         }
 
-        if ($this->isFloatType($expr)) {
+        if ($this->isStaticType($expr, FloatType::class)) {
             return $this->resolveFloat($isNegated, $expr);
         }
 

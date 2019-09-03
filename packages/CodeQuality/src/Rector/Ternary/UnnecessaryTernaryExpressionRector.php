@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\Ternary;
+use PHPStan\Type\BooleanType;
 use Rector\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -89,7 +90,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
     private function processNonBinaryCondition(Expr $ifExpression, Expr $elseExpression, Expr $condition): ?Node
     {
         if ($this->isTrue($ifExpression) && $this->isFalse($elseExpression)) {
-            if ($this->isBoolType($condition)) {
+            if ($this->isStaticType($condition, BooleanType::class)) {
                 return $condition;
             }
 
@@ -97,7 +98,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         }
 
         if ($this->isFalse($ifExpression) && $this->isTrue($elseExpression)) {
-            if ($this->isBoolType($condition)) {
+            if ($this->isStaticType($condition, BooleanType::class)) {
                 return new BooleanNot($condition);
             }
 

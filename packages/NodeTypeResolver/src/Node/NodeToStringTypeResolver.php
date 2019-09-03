@@ -6,6 +6,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\StringType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Manipulator\ConstFetchManipulator;
 
@@ -41,11 +43,11 @@ final class NodeToStringTypeResolver
             return 'float';
         }
 
-        if ($this->nodeTypeResolver->isIntType($node)) {
+        if ($this->nodeTypeResolver->isStaticType($node, IntegerType::class)) {
             return 'int';
         }
 
-        if ($this->nodeTypeResolver->isStringType($node)) {
+        if ($this->nodeTypeResolver->isStaticType($node, StringType::class)) {
             return 'string';
         }
 

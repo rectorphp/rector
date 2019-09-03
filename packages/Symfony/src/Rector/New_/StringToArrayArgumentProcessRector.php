@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\StringType;
 use Rector\PhpParser\NodeTransformer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -103,7 +104,7 @@ CODE_SAMPLE
         }
 
         // type analyzer
-        if ($this->isStringType($firstArgument)) {
+        if ($this->isStaticType($firstArgument, StringType::class)) {
             $this->processStringType($node, $argumentPosition, $firstArgument);
         }
 

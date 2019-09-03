@@ -13,6 +13,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
+use PHPStan\Type\BooleanType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -218,7 +219,7 @@ final class AssertManipulator
             $call->name = new Identifier($method);
         }
 
-        if (! $this->nodeTypeResolver->isBoolType($staticCall->args[0]->value)) {
+        if (! $this->nodeTypeResolver->isStaticType($staticCall->args[0]->value, BooleanType::class)) {
             $call->args[0]->value = new Bool_($staticCall->args[0]->value);
         }
 

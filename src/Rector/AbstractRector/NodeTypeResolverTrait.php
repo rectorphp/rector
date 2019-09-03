@@ -39,28 +39,9 @@ trait NodeTypeResolverTrait
         return (bool) array_intersect($types, $nodeTypes);
     }
 
-    /**
-     * @param string[] $types
-     * @return string[]
-     */
-    protected function matchTypes(Node $node, array $types): array
-    {
-        return $this->isTypes($node, $types) ? $this->getTypes($node) : [];
-    }
-
-    protected function isStringType(Node $node): bool
-    {
-        return $this->nodeTypeResolver->isStringType($node);
-    }
-
     protected function isStringyType(Node $node): bool
     {
         return $this->nodeTypeResolver->isStringyType($node);
-    }
-
-    protected function isIntegerType(Node $node): bool
-    {
-        return $this->nodeTypeResolver->isIntType($node);
     }
 
     protected function isNumberType(Node $node): bool
@@ -68,9 +49,9 @@ trait NodeTypeResolverTrait
         return $this->nodeTypeResolver->isNumberType($node);
     }
 
-    protected function isFloatType(Node $node): bool
+    protected function isStaticType(Node $node, string $staticTypeClass): bool
     {
-        return $this->nodeTypeResolver->isFloatType($node);
+        return $this->nodeTypeResolver->isStaticType($node, $staticTypeClass);
     }
 
     protected function getStaticType(Node $node): ?Type
@@ -86,16 +67,6 @@ trait NodeTypeResolverTrait
     protected function isNullableObjectType(Node $node): bool
     {
         return $this->nodeTypeResolver->isNullableObjectType($node);
-    }
-
-    protected function isNullType(Node $node): bool
-    {
-        return $this->nodeTypeResolver->isNullType($node);
-    }
-
-    protected function isBoolType(Node $node): bool
-    {
-        return $this->nodeTypeResolver->isBoolType($node);
     }
 
     protected function isCountableType(Node $node): bool
