@@ -8,7 +8,7 @@ final class Issue835Test extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture835.php']);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture835.php.inc']);
     }
 
     protected function provideConfig(): string
