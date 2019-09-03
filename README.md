@@ -15,7 +15,7 @@ Why doing it manually if 80% Rector can handle for you?
 ## Sponsors
 
 Rector grows faster with your help, the more you help the more work it saves you.
-Check out [Rector's Patreon](https://www.patreon.com/rectorphp). One-time donation is welcomed [trough PayPal](https://www.paypal.me/rectorphp).
+Check out [Rector's Patreon](https://www.patreon.com/rectorphp). One-time donation is welcomed [through PayPal](https://www.paypal.me/rectorphp).
 
 Thank you:
 
@@ -25,7 +25,7 @@ Thank you:
 
 ## Open-Source First
 
-Rector **instantly upgrades and instantly refactors PHP code of your application**. It covers many open-source projects and PHP changes itself:
+Rector **instantly upgrades and instantly refactors the PHP code of your application**. It covers many open-source projects and PHP changes itself:
 
 <br>
 
@@ -61,11 +61,11 @@ Rector **instantly upgrades and instantly refactors PHP code of your application
 - [Turn Laravel static to Dependency Injection](https://www.tomasvotruba.cz/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
 - And much more...
 
-...**look at overview of [all available Rectors](/docs/AllRectorsOverview.md)** with before/after diffs and configuration examples. You can use them to build your own sets.
+...**look at the overview of [all available Rectors](/docs/AllRectorsOverview.md)** with before/after diffs and configuration examples. You can use them to build your own sets.
 
 ## How to Apply Coding Standards?
 
-AST libraries that Rector use, doesn't work well with coding standards, so it's better to let coding standard tools do that.
+The AST libraries that Rector uses, don't work well with coding standards, so it's better to let coding standard tools do that.
 
 Your project doesn't have one? Consider adding [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard), [PHP CS Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) or [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer).
 
@@ -81,7 +81,7 @@ composer require rector/rector --dev
 
 ### Extra Autoloading
 
-Rector relies on project and autoloading of its classes. To specify own autoload file, use `--autoload-file` option:
+Rector relies on project and autoloading of its classes. To specify your own autoload file, use `--autoload-file` option:
 
 ```bash
 vendor/bin/rector process ../project --autoload-file ../project/vendor/autoload.php
@@ -108,7 +108,7 @@ parameters:
         - '*/src/*/Tests/*'
 ```
 
-Do you want to use whole set, except that one rule? Exclude it:
+Do you want to use a whole set, except that one rule? Exclude it:
 
 ```yaml
 # rector.yaml
@@ -134,7 +134,7 @@ Featured open-source projects have **prepared sets**. You'll find them in [`/con
 vendor/bin/rector sets
 ```
 
-Let's say you pick `symfony40` set and you want to upgrade your `/src` directory:
+Let's say you pick the `symfony40` set and you want to upgrade your `/src` directory:
 
 ```bash
 # show known changes in Symfony 4.0
@@ -178,7 +178,7 @@ Let's say we want to **change method calls from `set*` to `change*`**.
 
 ### 1. Create New Rector and Implement Methods
 
-Create class that extends [`Rector\Rector\AbstractRector`](/src/Rector/AbstractRector.php). It has useful methods like checking node type and name. Just run `$this->` and let PHPStorm show you all possible methods.
+Create a class that extends [`Rector\Rector\AbstractRector`](/src/Rector/AbstractRector.php). It has useful methods like checking node type and name. Just run `$this->` and let PHPStorm show you all possible methods.
 
 ```php
 <?php declare(strict_types=1);
@@ -267,14 +267,14 @@ That's it!
 Just follow 3 rules:
 
 - **1 feature per pull-request**
-- **New feature needs tests**
+- **New features need tests**
 - Tests, coding standards and PHPStan **checks must pass**:
 
     ```bash
     composer complete-check
     ```
 
-    Don you need to fix coding standards? Run:
+    Do you need to fix coding standards? Run:
 
     ```bash
     composer fix-cs
@@ -284,7 +284,7 @@ We would be happy to merge your feature then.
 
 ## Run Rector in Docker
 
-With this command, you can process your project with rector from docker:
+With this command, you can process your project with Rector from docker:
 
 ```bash
 docker run -v $(pwd):/project rector/rector:latest process /project/src --set symfony40 --dry-run
