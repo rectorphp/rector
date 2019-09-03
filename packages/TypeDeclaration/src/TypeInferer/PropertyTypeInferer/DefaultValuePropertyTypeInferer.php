@@ -18,7 +18,7 @@ final class DefaultValuePropertyTypeInferer extends AbstractTypeInferer implemen
             return [];
         }
 
-        $nodeStaticType = $this->nodeTypeResolver->getNodeStaticType($propertyProperty->default);
+        $nodeStaticType = $this->nodeTypeResolver->getStaticType($propertyProperty->default);
         if ($nodeStaticType === null) {
             return [];
         }

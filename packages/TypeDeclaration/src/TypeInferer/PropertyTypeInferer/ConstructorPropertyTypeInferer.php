@@ -106,7 +106,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
                 return null;
             }
 
-            $paramStaticType = $this->nodeTypeResolver->getNodeStaticType($node);
+            $paramStaticType = $this->nodeTypeResolver->getStaticType($node);
 
             return NodeTraverser::STOP_TRAVERSAL;
         });
@@ -173,7 +173,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         }
 
         if ($param->default) {
-            $defaultValueStaticType = $this->nodeTypeResolver->getNodeStaticType($param->default);
+            $defaultValueStaticType = $this->nodeTypeResolver->getStaticType($param->default);
             if ($defaultValueStaticType instanceof NullType) {
                 return true;
             }

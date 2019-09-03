@@ -193,7 +193,7 @@ final class NodeTypeResolver
 
     public function isStringyType(Node $node): bool
     {
-        $nodeType = $this->getNodeStaticType($node);
+        $nodeType = $this->getStaticType($node);
         if ($nodeType instanceof StringType) {
             return true;
         }
@@ -216,7 +216,7 @@ final class NodeTypeResolver
      */
     public function isNullableType(Node $node): bool
     {
-        $nodeType = $this->getNodeStaticType($node);
+        $nodeType = $this->getStaticType($node);
         if (! $nodeType instanceof UnionType) {
             return false;
         }
@@ -226,7 +226,7 @@ final class NodeTypeResolver
 
     public function isCountableType(Node $node): bool
     {
-        $nodeType = $this->getNodeStaticType($node);
+        $nodeType = $this->getStaticType($node);
         if ($nodeType === null) {
             return false;
         }
@@ -241,7 +241,7 @@ final class NodeTypeResolver
 
     public function isArrayType(Node $node): bool
     {
-        $nodeStaticType = $this->getNodeStaticType($node);
+        $nodeStaticType = $this->getStaticType($node);
         if ($nodeStaticType === null) {
             return false;
         }
@@ -271,7 +271,7 @@ final class NodeTypeResolver
         return $nodeStaticType instanceof ArrayType;
     }
 
-    public function getNodeStaticType(Node $node): ?Type
+    public function getStaticType(Node $node): ?Type
     {
         if ($node instanceof String_) {
             return new ConstantStringType($node->value);
@@ -305,7 +305,7 @@ final class NodeTypeResolver
     public function resolveSingleTypeToStrings(Node $node): array
     {
         if ($this->isArrayType($node)) {
-            $arrayType = $this->getNodeStaticType($node);
+            $arrayType = $this->getStaticType($node);
             if ($arrayType instanceof ArrayType) {
                 $itemTypes = $this->staticTypeToStringResolver->resolveObjectType($arrayType->getItemType());
 
@@ -325,14 +325,14 @@ final class NodeTypeResolver
             return ['string'];
         }
 
-        $nodeStaticType = $this->getNodeStaticType($node);
+        $nodeStaticType = $this->getStaticType($node);
 
         return $this->staticTypeToStringResolver->resolveObjectType($nodeStaticType);
     }
 
     public function isNullableObjectType(Node $node): bool
     {
-        $nodeType = $this->getNodeStaticType($node);
+        $nodeType = $this->getStaticType($node);
         if (! $nodeType instanceof UnionType) {
             return false;
         }
@@ -370,7 +370,7 @@ final class NodeTypeResolver
             ));
         }
 
-        $nodeStaticType = $this->getNodeStaticType($node);
+        $nodeStaticType = $this->getStaticType($node);
         if ($nodeStaticType === null) {
             return false;
         }
@@ -605,7 +605,7 @@ final class NodeTypeResolver
                     return null;
                 }
 
-                $paramStaticType = $this->getNodeStaticType($node);
+                $paramStaticType = $this->getStaticType($node);
 
                 return NodeTraverser::STOP_TRAVERSAL;
             }

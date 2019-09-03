@@ -56,7 +56,7 @@ trait NodeTypeResolverTrait
 
     protected function getStaticType(Node $node): ?Type
     {
-        return $this->nodeTypeResolver->getNodeStaticType($node);
+        return $this->nodeTypeResolver->getStaticType($node);
     }
 
     protected function isNullableType(Node $node): bool
