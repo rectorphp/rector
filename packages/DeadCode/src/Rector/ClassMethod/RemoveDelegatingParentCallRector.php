@@ -18,6 +18,9 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use ReflectionMethod;
 
+/**
+ * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector\RemoveDelegatingParentCallRectorTest
+ */
 final class RemoveDelegatingParentCallRector extends AbstractRector
 {
     /**

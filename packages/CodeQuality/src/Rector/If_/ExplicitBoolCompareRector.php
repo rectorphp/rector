@@ -27,6 +27,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://www.reddit.com/r/PHP/comments/aqk01p/is_there_a_situation_in_which_if_countarray_0/
  * @see https://3v4l.org/UCd1b
+ * @see \Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\ExplicitBoolCompareRectorTest
  */
 final class ExplicitBoolCompareRector extends AbstractRector
 {

@@ -11,6 +11,9 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\SOLID\Analyzer\ClassConstantFetchAnalyzer;
 
+/**
+ * @see \Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\PrivatizeLocalClassConstantRectorTest
+ */
 final class PrivatizeLocalClassConstantRector extends AbstractRector
 {
     /**

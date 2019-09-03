@@ -13,5 +13,7 @@ parameters:
     php_version_features: '7.1'
 
 services:
-    Rector\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector: ~
-    Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector: ~
+#    Rector\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector: ~
+#    Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector: ~
+    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
+#    Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector: ~

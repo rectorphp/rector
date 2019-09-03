@@ -16,6 +16,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Shopware\Tests\Rector\MethodCall\ReplaceEnlightResponseWithSymfonyResponseRector\ReplaceEnlightResponseWithSymfonyResponseRectorTest
+ */
 final class ReplaceEnlightResponseWithSymfonyResponseRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

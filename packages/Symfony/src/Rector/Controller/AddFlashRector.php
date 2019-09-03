@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\Controller\AddFlashRector\AddFlashRectorTest
+ */
 final class AddFlashRector extends AbstractRector
 {
     /**

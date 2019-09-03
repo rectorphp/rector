@@ -14,6 +14,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://stackoverflow.com/a/34041762/1348344
+ * @see \Rector\MysqlToMysqli\Tests\Rector\FuncCall\MysqlPConnectToMysqliConnectRector\MysqlPConnectToMysqliConnectRectorTest
  */
 final class MysqlPConnectToMysqliConnectRector extends AbstractRector
 {

@@ -11,6 +11,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://stackoverflow.com/a/4294663/1348344
+ * @see \Rector\Celebrity\Tests\Rector\NotEqual\CommonNotEqualRector\CommonNotEqualRectorTest
  */
 final class CommonNotEqualRector extends AbstractRector
 {

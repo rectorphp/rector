@@ -19,6 +19,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector\PseudoNamespaceToNamespaceRectorTest
+ */
 final class PseudoNamespaceToNamespaceRector extends AbstractRector
 {
     /**

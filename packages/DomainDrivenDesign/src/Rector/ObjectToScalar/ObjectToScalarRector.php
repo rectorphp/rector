@@ -12,6 +12,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarRector\ObjectToScalarRectorTest
+ */
 final class ObjectToScalarRector extends AbstractObjectToScalarRector
 {
     public function getDefinition(): RectorDefinition

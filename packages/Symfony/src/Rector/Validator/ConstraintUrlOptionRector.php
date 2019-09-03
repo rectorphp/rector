@@ -12,6 +12,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#validator
+ * @see \Rector\Symfony\Tests\Rector\Validator\ConstraintUrlOptionRector\ConstraintUrlOptionRectorTest
  */
 final class ConstraintUrlOptionRector extends AbstractRector
 {

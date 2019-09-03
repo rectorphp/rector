@@ -23,6 +23,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://stackoverflow.com/q/19245205/1348344
+ * @see \Rector\Php\Tests\Rector\FuncCall\PregReplaceEModifierRector\PregReplaceEModifierRectorTest
  */
 final class PregReplaceEModifierRector extends AbstractRector
 {

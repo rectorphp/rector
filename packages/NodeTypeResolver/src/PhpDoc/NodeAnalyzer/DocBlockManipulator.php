@@ -49,6 +49,9 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 
+/**
+ * @see \Rector\NodeTypeResolver\Tests\PhpDoc\NodeAnalyzer\DocBlockManipulatorTest
+ */
 final class DocBlockManipulator
 {
     /**

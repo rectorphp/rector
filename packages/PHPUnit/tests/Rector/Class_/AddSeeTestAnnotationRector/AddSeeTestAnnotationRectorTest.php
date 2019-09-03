@@ -10,7 +10,6 @@ final class AddSeeTestAnnotationRectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/different_namespace.php.inc',
             __DIR__ . '/Fixture/add_to_doc_block.php.inc',
             // skip

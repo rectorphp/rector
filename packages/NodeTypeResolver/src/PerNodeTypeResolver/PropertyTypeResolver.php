@@ -11,6 +11,9 @@ use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInte
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
+/**
+ * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\PropertyTypeResolverTest
+ */
 final class PropertyTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
 {
     /**

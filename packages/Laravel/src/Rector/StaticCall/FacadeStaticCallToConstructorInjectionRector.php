@@ -15,6 +15,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://medium.freecodecamp.org/moving-away-from-magic-or-why-i-dont-want-to-use-laravel-anymore-2ce098c979bd
  * @see https://laravel.com/docs/5.7/facades#facades-vs-dependency-injection
+ * @see \Rector\Laravel\Tests\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector\FacadeStaticCallToConstructorInjectionRectorTest
  */
 final class FacadeStaticCallToConstructorInjectionRector extends AbstractRector
 {

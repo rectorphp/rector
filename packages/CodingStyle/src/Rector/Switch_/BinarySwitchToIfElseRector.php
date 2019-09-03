@@ -16,6 +16,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector\BinarySwitchToIfElseRectorTest
+ */
 final class BinarySwitchToIfElseRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

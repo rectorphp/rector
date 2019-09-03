@@ -11,6 +11,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Argument\ArgumentRemoverRector\ArgumentRemoverRectorTest
+ */
 final class ArgumentRemoverRector extends AbstractRector
 {
     /**

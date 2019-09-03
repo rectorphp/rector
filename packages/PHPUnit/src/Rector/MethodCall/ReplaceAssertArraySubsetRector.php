@@ -20,6 +20,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://github.com/sebastianbergmann/phpunit/issues/3494
  * @see https://github.com/sebastianbergmann/phpunit/issues/3495
+ * @see \Rector\PHPUnit\Tests\Rector\MethodCall\ReplaceAssertArraySubsetRector\ReplaceAssertArraySubsetRectorTest
  */
 final class ReplaceAssertArraySubsetRector extends AbstractPHPUnitRector
 {

@@ -27,6 +27,9 @@ use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\TypeAnalyzer;
 
+/**
+ * @see \Rector\Tests\PhpParser\Node\NodeFactoryTest
+ */
 final class NodeFactory
 {
     /**

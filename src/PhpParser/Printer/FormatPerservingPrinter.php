@@ -7,6 +7,9 @@ use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
+/**
+ * @see \Rector\Tests\PhpParser\Printer\FormatPerservingPrinterTest
+ */
 final class FormatPerservingPrinter
 {
     /**

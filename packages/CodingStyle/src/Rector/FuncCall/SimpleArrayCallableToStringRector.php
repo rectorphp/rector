@@ -12,6 +12,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodingStyle\Tests\Rector\FuncCall\SimpleArrayCallableToStringRector\SimpleArrayCallableToStringRectorTest
+ */
 final class SimpleArrayCallableToStringRector extends AbstractRector
 {
     /**

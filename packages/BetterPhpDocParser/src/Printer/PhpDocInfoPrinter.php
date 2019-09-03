@@ -14,6 +14,9 @@ use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterfac
 use Rector\BetterPhpDocParser\Data\StartEndInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 
+/**
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\PhpDocInfoPrinterTest
+ */
 final class PhpDocInfoPrinter
 {
     /**

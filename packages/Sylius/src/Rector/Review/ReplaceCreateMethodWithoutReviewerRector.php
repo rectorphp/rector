@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Sylius\Tests\Rector\Review\ReplaceCreateMethodWithoutReviewerRectorTest
+ */
 final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
 {
     /**

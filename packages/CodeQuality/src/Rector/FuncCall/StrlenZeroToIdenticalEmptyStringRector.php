@@ -11,6 +11,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodeQuality\Tests\Rector\FuncCall\StrlenZeroToIdenticalEmptyStringRector\StrlenZeroToIdenticalEmptyStringRectorTest
+ */
 final class StrlenZeroToIdenticalEmptyStringRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

@@ -12,6 +12,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_3#string_search_functions_with_integer_needle
+ * @see \Rector\Php\Tests\Rector\FuncCall\StringifyStrNeedlesRector\StringifyStrNeedlesRectorTest
  */
 final class StringifyStrNeedlesRector extends AbstractRector
 {

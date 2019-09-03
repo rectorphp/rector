@@ -22,6 +22,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://www.phpclasses.org/blog/package/9199/post/3-Smoothly-Migrate-your-PHP-Code-using-the-Old-MySQL-extension-to-MySQLi.html
+ * @see \Rector\MysqlToMysqli\Tests\Rector\Assign\MysqlAssignToMysqliRector\MysqlAssignToMysqliRectorTest
  */
 final class MysqlAssignToMysqliRector extends AbstractRector
 {

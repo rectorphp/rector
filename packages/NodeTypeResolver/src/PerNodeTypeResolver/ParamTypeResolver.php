@@ -15,6 +15,7 @@ use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 /**
  * @todo move to
  * @see ParamTypeInferer
+ * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver\ParamTypeResolverTest
  */
 final class ParamTypeResolver implements PerNodeTypeResolverInterface
 {

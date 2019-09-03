@@ -18,6 +18,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://wiki.php.net/rfc/spread_operator_for_array
  * @see https://twitter.com/nikita_ppv/status/1126470222838366209
+ * @see \Rector\Php\Tests\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\ArraySpreadInsteadOfArrayMergeRectorTest
  */
 final class ArraySpreadInsteadOfArrayMergeRector extends AbstractRector
 {

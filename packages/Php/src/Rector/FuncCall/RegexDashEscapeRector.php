@@ -15,6 +15,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://3v4l.org/dRG8U
+ * @see \Rector\Php\Tests\Rector\FuncCall\RegexDashEscapeRector\RegexDashEscapeRectorTest
  */
 final class RegexDashEscapeRector extends AbstractRector
 {

@@ -13,6 +13,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\DeadCode\Tests\Rector\For_\RemoveDeadIfForeachForRector\RemoveDeadIfForeachForRectorTest
+ */
 final class RemoveDeadIfForeachForRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

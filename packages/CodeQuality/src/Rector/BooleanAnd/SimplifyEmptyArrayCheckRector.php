@@ -16,6 +16,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://3v4l.org/EZ2P4
  * @see https://3v4l.org/egtb5
+ * @see \Rector\CodeQuality\Tests\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector\SimplifyEmptyArrayCheckRectorTest
  */
 final class SimplifyEmptyArrayCheckRector extends AbstractRector
 {

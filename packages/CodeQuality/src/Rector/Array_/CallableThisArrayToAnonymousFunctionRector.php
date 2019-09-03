@@ -25,6 +25,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see https://www.php.net/manual/en/language.types.callable.php#117260
  * @see https://3v4l.org/MsMbQ
  * @see https://3v4l.org/KM1Ji
+ * @see \Rector\CodeQuality\Tests\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\CallableThisArrayToAnonymousFunctionRectorTest
  */
 final class CallableThisArrayToAnonymousFunctionRector extends AbstractRector
 {

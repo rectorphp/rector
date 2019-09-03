@@ -13,6 +13,7 @@ use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ * @see \Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector\PropertyTypeDeclarationRectorTest
  */
 final class PropertyTypeDeclarationRector extends AbstractRector
 {

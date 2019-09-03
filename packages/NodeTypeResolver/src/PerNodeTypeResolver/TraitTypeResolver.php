@@ -7,6 +7,9 @@ use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use ReflectionClass;
 
+/**
+ * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\TraitTypeResolverTest
+ */
 final class TraitTypeResolver implements PerNodeTypeResolverInterface
 {
     /**

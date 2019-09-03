@@ -11,6 +11,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodingStyle\Tests\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector\SplitGroupedConstantsAndPropertiesRectorTest
+ */
 final class SplitGroupedConstantsAndPropertiesRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

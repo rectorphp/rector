@@ -10,6 +10,9 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\Controller\ActionSuffixRemoverRector\ActionSuffixRemoverRectorTest
+ */
 final class ActionSuffixRemoverRector extends AbstractRector
 {
     /**

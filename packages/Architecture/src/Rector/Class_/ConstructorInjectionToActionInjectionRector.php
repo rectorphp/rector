@@ -17,6 +17,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Architecture\Tests\Rector\Class_\ConstructorInjectionToActionInjectionRector\ConstructorInjectionToActionInjectionRectorTest
+ */
 final class ConstructorInjectionToActionInjectionRector extends AbstractRector
 {
     /**

@@ -13,6 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/sebastianbergmann/phpunit/blob/master/ChangeLog-8.0.md
+ * @see \Rector\PHPUnit\Tests\Rector\MethodCall\SpecificAssertContainsRector\SpecificAssertContainsRectorTest
  */
 final class SpecificAssertContainsRector extends AbstractPHPUnitRector
 {

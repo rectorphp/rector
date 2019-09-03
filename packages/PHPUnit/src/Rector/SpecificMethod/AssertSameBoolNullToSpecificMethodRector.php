@@ -12,6 +12,9 @@ use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector\AssertSameBoolNullToSpecificMethodRectorTest
+ */
 final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**

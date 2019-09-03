@@ -13,6 +13,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\DeadCode\Tests\Rector\FunctionLike\RemoveCodeAfterReturnRector\RemoveCodeAfterReturnRectorTest
+ */
 final class RemoveCodeAfterReturnRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

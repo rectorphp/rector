@@ -12,6 +12,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodeQuality\Tests\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector\UseIdenticalOverEqualWithSameTypeRectorTest
+ */
 final class UseIdenticalOverEqualWithSameTypeRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

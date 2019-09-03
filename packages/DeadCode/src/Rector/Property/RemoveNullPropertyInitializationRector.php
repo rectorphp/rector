@@ -10,6 +10,9 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use function strtolower;
 
+/**
+ * @see \Rector\DeadCode\Tests\Rector\Property\RemoveNullPropertyInitializationRector\RemoveNullPropertyInitializationRectorTest
+ */
 final class RemoveNullPropertyInitializationRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

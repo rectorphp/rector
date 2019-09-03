@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\MethodCall\RenameStaticMethodRector\RenameStaticMethodRectorTest
+ */
 final class RenameStaticMethodRector extends AbstractRector
 {
     /**

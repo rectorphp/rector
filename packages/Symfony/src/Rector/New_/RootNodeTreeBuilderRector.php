@@ -14,6 +14,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/symfony/symfony/pull/27476
+ * @see \Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\RootNodeTreeBuilderRectorTest
  */
 final class RootNodeTreeBuilderRector extends AbstractRector
 {

@@ -13,6 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
  * @see https://3v4l.org/INd7o
+ * @see \Rector\Php\Tests\Rector\MagicConstClass\ClassConstantToSelfClassRector\ClassConstantToSelfClassRectorTest
  */
 final class ClassConstantToSelfClassRector extends AbstractRector
 {

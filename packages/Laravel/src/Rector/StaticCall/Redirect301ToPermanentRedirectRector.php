@@ -11,6 +11,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://laravel.com/docs/5.7/upgrade
+ * @see \Rector\Laravel\Tests\Rector\StaticCall\Redirect301ToPermanentRedirectRector\Redirect301ToPermanentRedirectRectorTest
  */
 final class Redirect301ToPermanentRedirectRector extends AbstractRector
 {

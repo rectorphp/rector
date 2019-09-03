@@ -2,6 +2,7 @@
 
 namespace Rector\PHPUnit\Rector\Class_;
 
+use Nette\Loaders\RobotLoader;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -12,12 +13,20 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\PHPUnit\Tests\Rector\Class_\AddSeeTestAnnotationRector\AddSeeTestAnnotationRectorTest
+ */
 final class AddSeeTestAnnotationRector extends AbstractRector
 {
     /**
      * @var DocBlockManipulator
      */
     private $docBlockManipulator;
+
+    /**
+     * @var string[]
+     */
+    private $phpUnitTestCaseClasses = [];
 
     public function __construct(DocBlockManipulator $docBlockManipulator)
     {
@@ -96,8 +105,8 @@ CODE_SAMPLE
         $shortClassName = Strings::after($className, '\\', -1);
         $testShortClassName = $shortClassName . 'Test';
 
-        $declaredClasses = get_declared_classes();
-        foreach ($declaredClasses as $declaredClass) {
+        $phpUnitTestCaseClasses = $this->getPhpUnitTestCaseClasses();
+        foreach ($phpUnitTestCaseClasses as $declaredClass) {
             if (Strings::endsWith($declaredClass, '\\' . $testShortClassName)) {
                 return $declaredClass;
             }
@@ -129,8 +138,12 @@ CODE_SAMPLE
 
         // is the @see annotation already added
         if ($class->getDocComment()) {
+            /** @var string $docCommentText */
             $docCommentText = $class->getDocComment()->getText();
-            $seeClassPattern = '#@see (.*?)' . preg_quote($className, '#') . 'Test#';
+
+            /** @var string $shortClassName */
+            $shortClassName = Strings::after($className, '\\', -1);
+            $seeClassPattern = '#@see (.*?)' . preg_quote($shortClassName, '#') . 'Test#m';
 
             if (Strings::match($docCommentText, $seeClassPattern)) {
                 return true;
@@ -138,5 +151,37 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getPhpUnitTestCaseClasses(): array
+    {
+        if ($this->phpUnitTestCaseClasses) {
+            return $this->phpUnitTestCaseClasses;
+        }
+
+        $robotLoader = new RobotLoader();
+
+        // @todo make configurable + load from compsoer.json
+        $robotLoader->addDirectory(getcwd() . '/src');
+        $robotLoader->addDirectory(getcwd() . '/packages');
+        $robotLoader->addDirectory(getcwd() . '/tests');
+
+        $robotLoader->ignoreDirs[] = '*Expected*';
+        $robotLoader->ignoreDirs[] = '*Fixture*';
+        $robotLoader->ignoreDirs[] = '*vendor*';
+        $robotLoader->rebuild();
+
+        foreach (array_keys($robotLoader->getIndexedClasses()) as $class) {
+            if (! Strings::endsWith($class, 'Test')) {
+                continue;
+            }
+
+            $this->phpUnitTestCaseClasses[] = $class;
+        }
+
+        return $this->phpUnitTestCaseClasses;
     }
 }

@@ -19,6 +19,9 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Collector\CallableCollectorPopulator;
 
+/**
+ * @see \Rector\NodeTypeResolver\Tests\StaticTypeToStringResolverTest
+ */
 final class StaticTypeToStringResolver
 {
     /**

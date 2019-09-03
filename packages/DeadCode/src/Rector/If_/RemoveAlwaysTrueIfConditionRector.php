@@ -9,6 +9,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\DeadCode\Tests\Rector\If_\RemoveAlwaysTrueIfConditionRector\RemoveAlwaysTrueIfConditionRectorTest
+ */
 final class RemoveAlwaysTrueIfConditionRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

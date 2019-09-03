@@ -20,6 +20,7 @@ use Rector\Util\RectorStrings;
 
 /**
  * @see https://github.com/symfony/symfony/pull/27821/files
+ * @see \Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\StringToArrayArgumentProcessRectorTest
  */
 final class StringToArrayArgumentProcessRector extends AbstractRector
 {

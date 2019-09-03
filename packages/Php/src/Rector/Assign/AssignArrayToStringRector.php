@@ -27,6 +27,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://3v4l.org/ABDNv
  * @see https://stackoverflow.com/a/41000866/1348344
+ * @see \Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\AssignArrayToStringRectorTest
  */
 final class AssignArrayToStringRector extends AbstractRector
 {

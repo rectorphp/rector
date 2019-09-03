@@ -16,6 +16,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/laravel/framework/pull/27276
+ * @see \Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\MinutesToSecondsInCacheRectorTest
  */
 final class MinutesToSecondsInCacheRector extends AbstractRector
 {

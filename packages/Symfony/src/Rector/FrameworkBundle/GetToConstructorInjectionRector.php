@@ -7,6 +7,9 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\GetToConstructorInjectionRectorTest
+ */
 final class GetToConstructorInjectionRector extends AbstractToConstructorInjectionRector
 {
     /**

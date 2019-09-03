@@ -6,6 +6,9 @@ use Nette\Utils\Strings;
 use Symfony\Component\Console\Input\StringInput;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
+/**
+ * @see \Rector\Tests\Util\RectorStringsTest
+ */
 final class RectorStrings
 {
     /**

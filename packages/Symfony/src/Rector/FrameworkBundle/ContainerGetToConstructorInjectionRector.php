@@ -10,6 +10,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#console
+ * @see \Rector\Symfony\Tests\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector\ContainerGetToConstructorInjectionRectorTest
  */
 final class ContainerGetToConstructorInjectionRector extends AbstractToConstructorInjectionRector
 {

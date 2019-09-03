@@ -10,6 +10,9 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
+/**
+ * @see \Rector\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
+ */
 final class BetterNodeFinder
 {
     /**

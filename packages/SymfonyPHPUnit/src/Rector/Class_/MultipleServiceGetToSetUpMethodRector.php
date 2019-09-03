@@ -25,6 +25,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector\MultipleServiceGetToSetUpMethodRectorTest
+ */
 final class MultipleServiceGetToSetUpMethodRector extends AbstractRector
 {
     /**

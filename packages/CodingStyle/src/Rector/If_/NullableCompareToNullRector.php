@@ -17,6 +17,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodingStyle\Tests\Rector\If_\NullableCompareToNullRector\NullableCompareToNullRectorTest
+ */
 final class NullableCompareToNullRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

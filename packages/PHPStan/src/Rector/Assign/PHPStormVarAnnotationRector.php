@@ -15,6 +15,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/shopsys/shopsys/pull/524
+ * @see \Rector\PHPStan\Tests\Rector\Assign\PHPStormVarAnnotationRector\PHPStormVarAnnotationRectorTest
  */
 final class PHPStormVarAnnotationRector extends AbstractRector
 {

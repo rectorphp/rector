@@ -14,6 +14,9 @@ use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertIssetToSpecificMethodRector\AssertIssetToSpecificMethodRectorTest
+ */
 final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**

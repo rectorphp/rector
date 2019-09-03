@@ -12,6 +12,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodeQuality\Tests\Rector\Identical\SimplifyBoolIdenticalTrueRector\SimplifyBoolIdenticalTrueRectorTest
+ */
 final class SimplifyBoolIdenticalTrueRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

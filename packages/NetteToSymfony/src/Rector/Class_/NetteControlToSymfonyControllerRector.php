@@ -25,6 +25,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see https://doc.nette.org/en/2.4/components
  * ↓
  * @see https://symfony.com/doc/current/controller.html
+ * @see \Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControllerRector\NetteControlToSymfonyControllerRectorTest
  */
 final class NetteControlToSymfonyControllerRector extends AbstractRector
 {

@@ -11,6 +11,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodeQuality\Tests\Rector\FuncCall\SingleInArrayToCompareRector\SingleInArrayToCompareRectorTest
+ */
 final class SingleInArrayToCompareRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
