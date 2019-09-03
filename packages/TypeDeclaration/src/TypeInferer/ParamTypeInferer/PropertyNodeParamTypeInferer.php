@@ -53,7 +53,7 @@ final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements 
             }
 
             /** @var Assign $node */
-            $staticType = $this->nodeTypeResolver->getNodeStaticType($node->var);
+            $staticType = $this->nodeTypeResolver->getStaticType($node->var);
 
             /** @var Type|null $staticType */
             if ($staticType) {

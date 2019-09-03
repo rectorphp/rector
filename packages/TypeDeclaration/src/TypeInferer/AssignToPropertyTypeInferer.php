@@ -35,7 +35,7 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
                 return null;
             }
 
-            $exprStaticType = $this->nodeTypeResolver->getNodeStaticType($node->expr);
+            $exprStaticType = $this->nodeTypeResolver->getStaticType($node->expr);
             if ($exprStaticType === null) {
                 return null;
             }

@@ -29,7 +29,6 @@ use PHPStan\Broker\Broker;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -41,6 +40,7 @@ use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -191,24 +191,9 @@ final class NodeTypeResolver
         return $types;
     }
 
-    public function isStringType(Node $node): bool
-    {
-        return $this->getNodeStaticType($node) instanceof StringType;
-    }
-
-    public function isIntType(Node $node): bool
-    {
-        return $this->getNodeStaticType($node) instanceof IntegerType;
-    }
-
-    public function isFloatType(Node $node): bool
-    {
-        return $this->getNodeStaticType($node) instanceof FloatType;
-    }
-
     public function isStringyType(Node $node): bool
     {
-        $nodeType = $this->getNodeStaticType($node);
+        $nodeType = $this->getStaticType($node);
         if ($nodeType instanceof StringType) {
             return true;
         }
@@ -226,17 +211,12 @@ final class NodeTypeResolver
         return false;
     }
 
-    public function isNullType(Node $node): bool
-    {
-        return $this->getNodeStaticType($node) instanceof NullType;
-    }
-
     /**
      * e.g. string|null, ObjectNull|null
      */
     public function isNullableType(Node $node): bool
     {
-        $nodeType = $this->getNodeStaticType($node);
+        $nodeType = $this->getStaticType($node);
         if (! $nodeType instanceof UnionType) {
             return false;
         }
@@ -244,14 +224,9 @@ final class NodeTypeResolver
         return $nodeType->isSuperTypeOf(new NullType())->yes();
     }
 
-    public function isBoolType(Node $node): bool
-    {
-        return $this->getNodeStaticType($node) instanceof BooleanType;
-    }
-
     public function isCountableType(Node $node): bool
     {
-        $nodeType = $this->getNodeStaticType($node);
+        $nodeType = $this->getStaticType($node);
         if ($nodeType === null) {
             return false;
         }
@@ -266,7 +241,7 @@ final class NodeTypeResolver
 
     public function isArrayType(Node $node): bool
     {
-        $nodeStaticType = $this->getNodeStaticType($node);
+        $nodeStaticType = $this->getStaticType($node);
         if ($nodeStaticType === null) {
             return false;
         }
@@ -296,7 +271,7 @@ final class NodeTypeResolver
         return $nodeStaticType instanceof ArrayType;
     }
 
-    public function getNodeStaticType(Node $node): ?Type
+    public function getStaticType(Node $node): ?Type
     {
         if ($node instanceof String_) {
             return new ConstantStringType($node->value);
@@ -330,7 +305,7 @@ final class NodeTypeResolver
     public function resolveSingleTypeToStrings(Node $node): array
     {
         if ($this->isArrayType($node)) {
-            $arrayType = $this->getNodeStaticType($node);
+            $arrayType = $this->getStaticType($node);
             if ($arrayType instanceof ArrayType) {
                 $itemTypes = $this->staticTypeToStringResolver->resolveObjectType($arrayType->getItemType());
 
@@ -350,14 +325,14 @@ final class NodeTypeResolver
             return ['string'];
         }
 
-        $nodeStaticType = $this->getNodeStaticType($node);
+        $nodeStaticType = $this->getStaticType($node);
 
         return $this->staticTypeToStringResolver->resolveObjectType($nodeStaticType);
     }
 
     public function isNullableObjectType(Node $node): bool
     {
-        $nodeType = $this->getNodeStaticType($node);
+        $nodeType = $this->getStaticType($node);
         if (! $nodeType instanceof UnionType) {
             return false;
         }
@@ -381,7 +356,26 @@ final class NodeTypeResolver
 
     public function isNumberType(Node $node): bool
     {
-        return $this->isIntType($node) || $this->isFloatType($node);
+        return $this->isStaticType($node, IntegerType::class) || $this->isStaticType($node, FloatType::class);
+    }
+
+    public function isStaticType(Node $node, string $staticTypeClass): bool
+    {
+        if (! is_a($staticTypeClass, Type::class, true)) {
+            throw new ShouldNotHappenException(sprintf(
+                '"%s" in "%s()" must be type of "%s"',
+                $staticTypeClass,
+                __METHOD__,
+                Type::class
+            ));
+        }
+
+        $nodeStaticType = $this->getStaticType($node);
+        if ($nodeStaticType === null) {
+            return false;
+        }
+
+        return is_a($nodeStaticType, $staticTypeClass);
     }
 
     private function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
@@ -611,7 +605,7 @@ final class NodeTypeResolver
                     return null;
                 }
 
-                $paramStaticType = $this->getNodeStaticType($node);
+                $paramStaticType = $this->getStaticType($node);
 
                 return NodeTraverser::STOP_TRAVERSAL;
             }

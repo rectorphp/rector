@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PHPStan\Type\StringType;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -78,7 +79,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isStringType($node->args[1]->value)) {
+        if (! $this->isStaticType($node->args[1]->value, StringType::class)) {
             return null;
         }
 

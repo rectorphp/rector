@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
+use PHPStan\Type\NullType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -71,7 +72,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isNullableType($countedNode) || $this->isNullType($countedNode)) {
+        if ($this->isNullableType($countedNode) || $this->isStaticType($countedNode, NullType::class)) {
             $identicalNode = new Identical($countedNode, $this->createNull());
             $ternaryNode = new Ternary($identicalNode, new LNumber(0), $node);
         } else {

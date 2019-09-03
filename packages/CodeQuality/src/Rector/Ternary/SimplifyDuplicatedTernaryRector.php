@@ -4,6 +4,7 @@ namespace Rector\CodeQuality\Rector\Ternary;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Ternary;
+use PHPStan\Type\BooleanType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -52,7 +53,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isBoolType($node->cond)) {
+        if (! $this->isStaticType($node->cond, BooleanType::class)) {
             return null;
         }
 
