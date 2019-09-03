@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\PHPUnit\Composer\ComposerAutoloadedDirectoryProvider;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,18 +20,26 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AddSeeTestAnnotationRector extends AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private $phpUnitTestCaseClasses = [];
+
+    /**
      * @var DocBlockManipulator
      */
     private $docBlockManipulator;
 
     /**
-     * @var string[]
+     * @var ComposerAutoloadedDirectoryProvider
      */
-    private $phpUnitTestCaseClasses = [];
+    private $composerAutoloadedDirectoryProvider;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator)
-    {
+    public function __construct(
+        DocBlockManipulator $docBlockManipulator,
+        ComposerAutoloadedDirectoryProvider $composerAutoloadedDirectoryProvider
+    ) {
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->composerAutoloadedDirectoryProvider = $composerAutoloadedDirectoryProvider;
     }
 
     public function getDefinition(): RectorDefinition
@@ -162,26 +171,27 @@ CODE_SAMPLE
             return $this->phpUnitTestCaseClasses;
         }
 
-        $robotLoader = new RobotLoader();
-
-        // @todo make configurable + load from compsoer.json
-        $robotLoader->addDirectory(getcwd() . '/src');
-        $robotLoader->addDirectory(getcwd() . '/packages');
-        $robotLoader->addDirectory(getcwd() . '/tests');
-
-        $robotLoader->ignoreDirs[] = '*Expected*';
-        $robotLoader->ignoreDirs[] = '*Fixture*';
-        $robotLoader->ignoreDirs[] = '*vendor*';
+        $robotLoader = $this->createRobotLoadForDirectories();
         $robotLoader->rebuild();
 
-        foreach (array_keys($robotLoader->getIndexedClasses()) as $class) {
-            if (! Strings::endsWith($class, 'Test')) {
-                continue;
-            }
-
-            $this->phpUnitTestCaseClasses[] = $class;
-        }
+        $this->phpUnitTestCaseClasses = array_keys($robotLoader->getIndexedClasses());
 
         return $this->phpUnitTestCaseClasses;
+    }
+
+    private function createRobotLoadForDirectories(): RobotLoader
+    {
+        $robotLoader = new RobotLoader();
+
+        $directories = $this->composerAutoloadedDirectoryProvider->provide();
+        foreach ($directories as $directory) {
+            $robotLoader->addDirectory($directory);
+        }
+
+        $robotLoader->acceptFiles = ['*Test.php'];
+        $robotLoader->ignoreDirs[] = '*Expected*';
+        $robotLoader->ignoreDirs[] = '*Fixture*';
+
+        return $robotLoader;
     }
 }
