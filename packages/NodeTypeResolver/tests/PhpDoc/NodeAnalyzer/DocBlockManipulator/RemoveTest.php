@@ -56,30 +56,6 @@ final class RemoveTest extends AbstractKernelTestCase
         yield [__DIR__ . '/RemoveSource/before.txt', '', '@var'];
     }
 
-    /**
-     * @dataProvider provideDataForRemoveParamTagByParameter()
-     */
-    public function testRemoveParamTagByParameter(
-        string $phpDocBeforeFilePath,
-        string $phpDocAfterFilePath,
-        string $parameterName
-    ): void {
-        $phpDocInfo = $this->createPhpDocInfoFromFile($phpDocBeforeFilePath);
-
-        $this->docBlockManipulator->removeParamTagByParameter($phpDocInfo, $parameterName);
-
-        $this->assertStringEqualsFile(
-            $phpDocAfterFilePath,
-            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo)
-        );
-    }
-
-    public function provideDataForRemoveParamTagByParameter(): Iterator
-    {
-        yield [__DIR__ . '/RemoveSource/before3.txt', __DIR__ . '/RemoveSource/after3.txt', 'paramName'];
-        yield [__DIR__ . '/RemoveSource/before3.txt', __DIR__ . '/RemoveSource/after3.txt', '$paramName'];
-    }
-
     private function createPhpDocInfoFromFile(string $phpDocBeforeFilePath): PhpDocInfo
     {
         $phpDocBefore = FileSystem::read($phpDocBeforeFilePath);

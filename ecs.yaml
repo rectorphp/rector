@@ -28,6 +28,8 @@ services:
             - 'PhpParser\NodeVisitor\NameResolver'
             - 'PhpParser\Node\*'
             - '*Data'
+            - '*Recipe'
+            - '*ValueObject'
             - 'PhpParser\Comment'
             - 'PhpParser\Lexer'
             - 'PhpParser\Comment\Doc'
@@ -38,7 +40,6 @@ services:
             - 'Rector\DependencyInjection\Loader\*'
             - 'Symplify\PackageBuilder\*'
             - 'Symfony\Component\Console\Input\*Input'
-            - '*ValueObject'
             - 'PHPStan\Analyser\NameScope'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
@@ -110,10 +111,12 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # tough logic
+            - 'packages/PHPUnit/src/Rector/Class_/ArrayArgumentInTestToDataProviderRector.php'
             - 'packages/DoctrinePhpDocParser/src/Ast/PhpDoc/*/*TagValueNode.php'
             - 'packages/NodeTypeResolver/src/PhpDoc/NodeAnalyzer/FqnNamePhpDocNodeDecorator.php'
             - 'packages/NodeTypeResolver/src/PHPStan/Type/StaticTypeAnalyzer.php'
             - 'src/NodeContainer/ParsedNodesByType.php'
+            - 'packages/NodeTypeResolver/src/StaticTypeMapper.php'
             - 'packages/PHPStan/src/Rector/Node/RemoveNonExistingVarAnnotationRector.php'
             - 'packages/Architecture/src/Rector/Class_/ConstructorInjectionToActionInjectionRector.php'
             - 'src/PhpParser/Node/Commander/NodeRemovingCommander.php'

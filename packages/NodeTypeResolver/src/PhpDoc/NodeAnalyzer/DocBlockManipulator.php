@@ -10,7 +10,6 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -147,18 +146,6 @@ final class DocBlockManipulator
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         return $phpDocInfo->hasTag($name);
-    }
-
-    public function removeParamTagByName(Node $node, string $name): void
-    {
-        if ($node->getDocComment() === null) {
-            return;
-        }
-
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $this->removeParamTagByParameter($phpDocInfo, $name);
-
-        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
     public function addTag(Node $node, PhpDocChildNode $phpDocChildNode): void
@@ -360,31 +347,6 @@ final class DocBlockManipulator
 
         foreach ($phpDocTagNodes as $phpDocTagNode) {
             $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
-        }
-    }
-
-    public function removeParamTagByParameter(PhpDocInfo $phpDocInfo, string $parameterName): void
-    {
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
-
-        /** @var PhpDocTagNode[] $phpDocTagNodes */
-        $phpDocTagNodes = $phpDocNode->getTagsByName('@param');
-
-        foreach ($phpDocTagNodes as $phpDocTagNode) {
-            /** @var ParamTagValueNode|InvalidTagValueNode $paramTagValueNode */
-            $paramTagValueNode = $phpDocTagNode->value;
-
-            $parameterName = '$' . ltrim($parameterName, '$');
-
-            // process invalid tag values
-            if ($paramTagValueNode instanceof InvalidTagValueNode) {
-                if ($paramTagValueNode->value === $parameterName) {
-                    $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
-                }
-                // process normal tag
-            } elseif ($paramTagValueNode->parameterName === $parameterName) {
-                $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
-            }
         }
     }
 

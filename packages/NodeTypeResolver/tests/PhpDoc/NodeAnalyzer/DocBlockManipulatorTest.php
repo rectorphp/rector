@@ -30,31 +30,6 @@ final class DocBlockManipulatorTest extends AbstractKernelTestCase
         $this->assertFalse($this->docBlockManipulator->hasTag($node, 'var'));
     }
 
-    public function testRemoveAnnotationFromNode(): void
-    {
-        $node = $this->createNodeWithDoc('@param ParamType $paramName');
-
-        $this->assertNotSame('', $node->getDocComment()->getText());
-
-        $this->docBlockManipulator->removeTagFromNode($node, 'param');
-        $this->assertNull($node->getDocComment());
-
-        $initDoc = <<<'CODE_SAMPLE'
- * @param ParamType $paramName
- * @param AnotherValue $anotherValue
-CODE_SAMPLE;
-        $node = $this->createNodeWithDoc($initDoc);
-
-        $this->docBlockManipulator->removeParamTagByName($node, 'paramName');
-
-        $expectedDoc = <<<'CODE_SAMPLE'
-/**
- * @param AnotherValue $anotherValue
- */
-CODE_SAMPLE;
-        $this->assertSame($expectedDoc, $node->getDocComment()->getText());
-    }
-
     private function createNodeWithDoc(string $doc): String_
     {
         $node = new String_('string');

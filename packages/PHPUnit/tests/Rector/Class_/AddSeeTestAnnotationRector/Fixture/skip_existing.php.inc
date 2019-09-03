@@ -8,5 +8,3 @@ namespace Rector\PHPUnit\Tests\Rector\Class_\AddSeeTestAnnotationRector\Fixture;
 class SomeExisting
 {
 }
-
-
