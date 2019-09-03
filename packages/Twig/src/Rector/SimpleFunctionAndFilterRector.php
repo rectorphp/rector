@@ -17,6 +17,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Covers https://twig.symfony.com/doc/1.x/deprecated.html#function
+ * @see \Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\SimpleFunctionAndFilterRectorTest
  */
 final class SimpleFunctionAndFilterRector extends AbstractRector
 {

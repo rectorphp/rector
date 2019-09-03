@@ -16,6 +16,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodeQuality\Tests\Rector\Foreach_\SimplifyForeachToArrayFilterRector\SimplifyForeachToArrayFilterRectorTest
+ */
 final class SimplifyForeachToArrayFilterRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

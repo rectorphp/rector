@@ -8,6 +8,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\DeadCode\Tests\Rector\Foreach_\RemoveUnusedForeachKeyRector\RemoveUnusedForeachKeyRectorTest
+ */
 final class RemoveUnusedForeachKeyRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

@@ -14,6 +14,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveOverriddenValuesRector\RemoveOverriddenValuesRectorTest
+ */
 final class RemoveOverriddenValuesRector extends AbstractRector
 {
     /**

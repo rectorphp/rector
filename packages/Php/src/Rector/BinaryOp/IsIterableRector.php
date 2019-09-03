@@ -9,6 +9,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Php\Tests\Rector\BinaryOp\IsIterableRector\IsIterableRectorTest
+ */
 final class IsIterableRector extends AbstractRector
 {
     /**

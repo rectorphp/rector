@@ -12,6 +12,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\ClassLike\RemoveTraitRector\RemoveTraitRectorTest
+ */
 final class RemoveTraitRector extends AbstractRector
 {
     /**

@@ -15,6 +15,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://github.com/laravel/framework/blob/78828bc779e410e03cc6465f002b834eadf160d2/src/Illuminate/Foundation/helpers.php#L959
  * @see https://gist.github.com/barryvdh/bb6ffc5d11e0a75dba67
+ * @see \Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInjectionRector\HelperFunctionToConstructorInjectionRectorTest
  */
 final class HelperFunctionToConstructorInjectionRector extends AbstractRector
 {

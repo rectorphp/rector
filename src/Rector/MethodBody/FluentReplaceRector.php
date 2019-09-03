@@ -14,6 +14,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\MethodBody\FluentReplaceRector\FluentReplaceRectorTest
+ */
 final class FluentReplaceRector extends AbstractRector
 {
     /**

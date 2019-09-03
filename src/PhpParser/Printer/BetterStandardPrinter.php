@@ -18,6 +18,9 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
+/**
+ * @see \Rector\Tests\PhpParser\Printer\BetterStandardPrinterTest
+ */
 final class BetterStandardPrinter extends Standard
 {
     /**

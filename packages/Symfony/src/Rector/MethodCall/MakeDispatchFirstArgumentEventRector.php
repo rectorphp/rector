@@ -12,6 +12,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
+ * @see \Rector\Symfony\Tests\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\MakeDispatchFirstArgumentEventRectorTest
  */
 final class MakeDispatchFirstArgumentEventRector extends AbstractRector
 {

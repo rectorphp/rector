@@ -14,6 +14,9 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
+/**
+ * @see \Rector\Tests\Rector\Psr4\MultipleClassFileToPsr4ClassesRector\MultipleClassFileToPsr4ClassesRectorTest
+ */
 final class MultipleClassFileToPsr4ClassesRector extends AbstractFileSystemRector
 {
     /**

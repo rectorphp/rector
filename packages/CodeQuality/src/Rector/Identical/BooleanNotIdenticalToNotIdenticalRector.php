@@ -13,6 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://3v4l.org/GoEPq
+ * @see \Rector\CodeQuality\Tests\Rector\Identical\BooleanNotIdenticalToNotIdenticalRector\BooleanNotIdenticalToNotIdenticalRectorTest
  */
 final class BooleanNotIdenticalToNotIdenticalRector extends AbstractRector
 {

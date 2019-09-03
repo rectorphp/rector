@@ -18,6 +18,9 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
+/**
+ * @see \Rector\Tests\PhpParser\Node\Value\ValueResolverTest
+ */
 final class ValueResolver
 {
     /**

@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Silverstripe\Tests\Rector\DefineConstantToStaticCallRector\DefineConstantToStaticCallRectorTest
+ */
 final class DefineConstantToStaticCallRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

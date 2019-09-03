@@ -51,6 +51,9 @@ use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterfac
 use Rector\Exception\NotImplementedYetException;
 use Rector\Exception\ShouldNotHappenException;
 
+/**
+ * @see \Rector\BetterPhpDocParser\Tests\Attributes\Ast\AttributeAwareNodeFactoryTest
+ */
 final class AttributeAwareNodeFactory
 {
     /**

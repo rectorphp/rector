@@ -18,6 +18,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://gist.github.com/mickaelandrieu/5d27a2ffafcbdd64912f549aaf2a6df9#stuck-with-forms
+ * @see \Rector\Symfony\Tests\Rector\MethodCall\CascadeValidationFormBuilderRector\CascadeValidationFormBuilderRectorTest
  */
 final class CascadeValidationFormBuilderRector extends AbstractRector
 {

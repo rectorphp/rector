@@ -16,6 +16,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/nette/utils/blob/master/src/Utils/Strings.php
+ * @see \Rector\Nette\Tests\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector\EndsWithFunctionToNetteUtilsStringsRectorTest
  */
 final class EndsWithFunctionToNetteUtilsStringsRector extends AbstractRector
 {

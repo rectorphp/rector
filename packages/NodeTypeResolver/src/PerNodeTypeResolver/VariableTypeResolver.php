@@ -18,6 +18,9 @@ use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeToStringResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
+/**
+ * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\VariableTypeResolverTest
+ */
 final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
 {
     /**

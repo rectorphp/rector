@@ -12,6 +12,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Covers: https://github.com/nikic/PHP-Parser/commit/987c61e935a7d73485b4d73aef7a17a4c1e2e325
+ * @see \Rector\PhpParser\Tests\Rector\RemoveNodeRector\RemoveNodeRectorTest
  */
 final class RemoveNodeRector extends AbstractRector
 {

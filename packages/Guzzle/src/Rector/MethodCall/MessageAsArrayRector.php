@@ -12,6 +12,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://github.com/guzzle/guzzle/blob/master/UPGRADING.md#updates-to-http-messages
  * @see https://github.com/guzzle/guzzle/commit/244bf0228e7e09740c9fb2d2fe77956a2c793eaa
+ * @see \Rector\Guzzle\Tests\Rector\MethodCall\MessageAsArrayRector\MessageAsArrayRectorTest
  */
 final class MessageAsArrayRector extends AbstractRector
 {

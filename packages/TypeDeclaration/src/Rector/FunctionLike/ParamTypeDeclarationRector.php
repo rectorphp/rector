@@ -14,6 +14,9 @@ use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\ParamTypeDeclarationRectorTest
+ */
 final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
 {
     public function getDefinition(): RectorDefinition

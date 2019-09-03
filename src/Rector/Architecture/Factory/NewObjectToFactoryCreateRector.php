@@ -15,6 +15,9 @@ use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use ReflectionClass;
 
+/**
+ * @see \Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\NewObjectToFactoryCreateRectorTest
+ */
 final class NewObjectToFactoryCreateRector extends AbstractRector
 {
     /**

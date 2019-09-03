@@ -9,6 +9,9 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
+/**
+ * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\NameTypeResolver\NameTypeResolverTest
+ */
 final class NameTypeResolver implements PerNodeTypeResolverInterface
 {
     /**

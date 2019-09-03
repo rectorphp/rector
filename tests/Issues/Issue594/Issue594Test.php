@@ -9,7 +9,7 @@ final class Issue594Test extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture594.php']);
+        $this->doTestFiles([__DIR__ . '/Fixture/fixture594.php.inc']);
     }
 
     public function getRectorClass(): string

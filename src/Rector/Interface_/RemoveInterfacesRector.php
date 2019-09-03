@@ -8,6 +8,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Interface_\RemoveInterfacesRector\RemoveInterfacesRectorTest
+ */
 final class RemoveInterfacesRector extends AbstractRector
 {
     /**

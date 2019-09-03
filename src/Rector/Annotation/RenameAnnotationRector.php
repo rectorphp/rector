@@ -12,6 +12,9 @@ use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Annotation\RenameAnnotationRector\RenameAnnotationRectorTest
+ */
 final class RenameAnnotationRector extends AbstractPHPUnitRector
 {
     /**

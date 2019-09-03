@@ -22,6 +22,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see https://3v4l.org/GL6II
  * @see https://3v4l.org/eTrhZ
  * @see https://3v4l.org/C554W
+ * @see \Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector\CompleteDynamicPropertiesRectorTest
  */
 final class CompleteDynamicPropertiesRector extends AbstractRector
 {

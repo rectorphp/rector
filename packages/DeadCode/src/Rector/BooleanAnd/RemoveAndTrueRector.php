@@ -8,6 +8,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\DeadCode\Tests\Rector\BooleanAnd\RemoveAndTrueRector\RemoveAndTrueRectorTest
+ */
 final class RemoveAndTrueRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

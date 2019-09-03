@@ -20,6 +20,7 @@ use Throwable;
 
 /**
  * @see https://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations#inject
+ * @see \Rector\Tests\Rector\Property\InjectAnnotationClassRector\InjectAnnotationClassRectorTest
  */
 final class InjectAnnotationClassRector extends AbstractRector
 {

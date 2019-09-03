@@ -17,6 +17,7 @@ use ReflectionMethod;
 /**
  * @see https://www.reddit.com/r/PHP/comments/a1ie7g/is_there_a_linter_for_argumentcounterror_for_php/
  * @see http://php.net/manual/en/class.argumentcounterror.php
+ * @see \Rector\Php\Tests\Rector\FuncCall\RemoveExtraParametersRector\RemoveExtraParametersRectorTest
  */
 final class RemoveExtraParametersRector extends AbstractRector
 {

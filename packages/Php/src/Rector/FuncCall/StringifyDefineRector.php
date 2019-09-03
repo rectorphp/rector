@@ -12,6 +12,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://3v4l.org/YiTeP
+ * @see \Rector\Php\Tests\Rector\FuncCall\StringifyDefineRector\StringifyDefineRectorTest
  */
 final class StringifyDefineRector extends AbstractRector
 {

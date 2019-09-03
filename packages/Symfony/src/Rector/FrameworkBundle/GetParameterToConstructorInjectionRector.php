@@ -12,6 +12,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector\GetParameterToConstructorInjectionRectorTest
+ */
 final class GetParameterToConstructorInjectionRector extends AbstractRector
 {
     /**

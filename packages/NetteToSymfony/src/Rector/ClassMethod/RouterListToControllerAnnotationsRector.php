@@ -24,6 +24,7 @@ use ReflectionMethod;
 /**
  * @see https://doc.nette.org/en/2.4/routing
  * @see https://symfony.com/doc/current/routing.html
+ * @see \Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\RouterListToControllerAnnotationsRectorTest
  */
 final class RouterListToControllerAnnotationsRector extends AbstractRector
 {

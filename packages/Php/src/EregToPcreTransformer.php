@@ -8,6 +8,7 @@ use Rector\Php\Exception\InvalidEregException;
 /**
  * @author Kang Seonghoon <public+ere2pcre@mearie.org>
  * @source https://gist.github.com/lifthrasiir/704754/7e486f43e62fd1c9d3669330c251f8ca4a59a3f8
+ * @see \Rector\Php\Tests\EregToPcreTransformerTest
  */
 final class EregToPcreTransformer
 {

@@ -8,6 +8,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector\ProcessBuilderGetProcessRectorTest
+ */
 final class ProcessBuilderGetProcessRector extends AbstractRector
 {
     /**

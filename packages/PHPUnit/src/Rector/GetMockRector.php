@@ -10,6 +10,9 @@ use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\PHPUnit\Tests\Rector\GetMockRector\GetMockRectorTest
+ */
 final class GetMockRector extends AbstractPHPUnitRector
 {
     public function getDefinition(): RectorDefinition

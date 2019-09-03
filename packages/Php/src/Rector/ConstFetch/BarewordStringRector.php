@@ -15,6 +15,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://wiki.php.net/rfc/deprecate-bareword-strings
  * @see https://3v4l.org/56ZAu
+ * @see \Rector\Php\Tests\Rector\ConstFetch\BarewordStringRector\BarewordStringRectorTest
  */
 final class BarewordStringRector extends AbstractRector
 {

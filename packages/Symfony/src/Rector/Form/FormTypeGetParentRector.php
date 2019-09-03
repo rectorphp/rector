@@ -10,6 +10,9 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\FormTypeGetParentRectorTest
+ */
 final class FormTypeGetParentRector extends AbstractRector
 {
     /**

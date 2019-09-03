@@ -9,6 +9,9 @@ use Symplify\PackageBuilder\FileSystem\FileSystem;
 use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
+/**
+ * @see \Rector\Tests\FileSystem\FilesFinder\FilesFinderTest
+ */
 final class FilesFinder
 {
     /**

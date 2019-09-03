@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\PhpParser\Tests\Rector\SetLineRector\SetLineRectorTest
+ */
 final class SetLineRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

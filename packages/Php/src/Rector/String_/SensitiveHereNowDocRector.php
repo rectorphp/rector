@@ -12,6 +12,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/flexible_heredoc_nowdoc_syntaxes
+ * @see \Rector\Php\Tests\Rector\String_\SensitiveHereNowDocRector\SensitiveHereNowDocRectorTest
  */
 final class SensitiveHereNowDocRector extends AbstractRector
 {

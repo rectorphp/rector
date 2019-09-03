@@ -15,6 +15,9 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\HttpKernel\GetRequestRector\GetRequestRectorTest
+ */
 final class GetRequestRector extends AbstractRector
 {
     /**

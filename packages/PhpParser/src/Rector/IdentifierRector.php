@@ -12,6 +12,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Covers part of https://github.com/nikic/PHP-Parser/blob/master/UPGRADE-4.0.md
+ * @see \Rector\PhpParser\Tests\Rector\IdentifierRector\IdentifierRectorTest
  */
 final class IdentifierRector extends AbstractRector
 {

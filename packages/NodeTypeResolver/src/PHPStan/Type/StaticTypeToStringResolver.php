@@ -13,6 +13,9 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 
+/**
+ * @see \Rector\NodeTypeResolver\Tests\StaticTypeToStringResolverTest
+ */
 final class StaticTypeToStringResolver
 {
     /**

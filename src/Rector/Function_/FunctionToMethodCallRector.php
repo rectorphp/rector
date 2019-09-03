@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Function_\FunctionToMethodCallRector\FunctionToMethodCallRectorTest
+ */
 final class FunctionToMethodCallRector extends AbstractRector
 {
     /**

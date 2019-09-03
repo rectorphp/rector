@@ -14,6 +14,7 @@ use Rector\RectorDefinition\RectorDefinition;
  *
  * This needs to removed 1 floor above, because only nodes in arrays can be removed why traversing,
  * see https://github.com/nikic/PHP-Parser/issues/389
+ * @see \Rector\Php\Tests\Rector\FuncCall\ArrayKeyFirstLastRector\ArrayKeyFirstLastRectorTest
  */
 final class ArrayKeyFirstLastRector extends AbstractRector
 {

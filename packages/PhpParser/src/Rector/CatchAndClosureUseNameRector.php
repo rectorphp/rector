@@ -11,6 +11,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\PhpParser\Tests\Rector\CatchAndClosureUseNameRector\CatchAndClosureUseNameRectorTest
+ */
 final class CatchAndClosureUseNameRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

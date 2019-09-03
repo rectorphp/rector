@@ -13,6 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see http://php.net/manual/en/migration72.incompatible.php#migration72.incompatible.is_object-on-incomplete_class
  * @see https://3v4l.org/SpiE6
+ * @see \Rector\Php\Tests\Rector\FuncCall\IsObjectOnIncompleteClassRector\IsObjectOnIncompleteClassRectorTest
  */
 final class IsObjectOnIncompleteClassRector extends AbstractRector
 {

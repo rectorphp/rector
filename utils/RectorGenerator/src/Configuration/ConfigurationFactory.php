@@ -75,7 +75,7 @@ final class ConfigurationFactory
             'code_after',
             'description',
             'source',
-            'level',
+            'set',
         ];
 
         if (count(array_intersect(array_keys($config), $requiredKeys)) === count($requiredKeys)) {
@@ -130,33 +130,33 @@ final class ConfigurationFactory
         return Strings::after($fqnNodeTypes[0], '\\', -1);
     }
 
-    private function resolveSetConfig(string $level): ?string
+    private function resolveSetConfig(string $set): ?string
     {
-        if ($level === '') {
+        if ($set === '') {
             return null;
         }
 
-        $fileLevel = sprintf('#^%s(\.yaml)?$#', $level);
+        $fileSet = sprintf('#^%s(\.yaml)?$#', $set);
         $finder = Finder::create()->files()
             ->in($this->setsDirectory)
-            ->name($fileLevel);
+            ->name($fileSet);
 
         /** @var SplFileInfo[] $fileInfos */
         $fileInfos = iterator_to_array($finder->getIterator());
         if (count($fileInfos) === 0) {
             // assume new one is created
-            $match = Strings::match($level, '#\/(?<name>[a-zA-Z_-]+])#');
+            $match = Strings::match($set, '#\/(?<name>[a-zA-Z_-]+])#');
             if (isset($match['name'])) {
-                return $this->setsDirectory . '/' . $match['name'] . '/' . $level;
+                return $this->setsDirectory . '/' . $match['name'] . '/' . $set;
             }
 
             return null;
         }
 
-        /** @var SplFileInfo $foundLevelConfigFileInfo */
-        $foundLevelConfigFileInfo = array_pop($fileInfos);
+        /** @var SplFileInfo $foundSetConfigFileInfo */
+        $foundSetConfigFileInfo = array_pop($fileInfos);
 
-        return $foundLevelConfigFileInfo->getRealPath();
+        return $foundSetConfigFileInfo->getRealPath();
     }
 
     private function isNodeClassMatch(string $nodeClass, string $nodeType): bool

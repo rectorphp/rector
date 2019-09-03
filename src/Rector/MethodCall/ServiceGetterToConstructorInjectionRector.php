@@ -16,6 +16,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
+ * @see \Rector\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
  */
 final class ServiceGetterToConstructorInjectionRector extends AbstractRector
 {

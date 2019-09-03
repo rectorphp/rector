@@ -13,6 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @source http://php.net/manual/en/migration70.incompatible.php#migration70.incompatible.variable-handling.list
+ * @see \Rector\Php\Tests\Rector\List_\ListSwapArrayOrderRector\ListSwapArrayOrderRectorTest
  */
 final class ListSwapArrayOrderRector extends AbstractRector
 {

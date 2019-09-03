@@ -17,6 +17,7 @@ use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationRe
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ * @see \Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector\ReturnTypeDeclarationRectorTest
  */
 final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
 {

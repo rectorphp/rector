@@ -4,6 +4,9 @@ namespace Rector\RectorDefinition;
 
 use Rector\Contract\RectorDefinition\CodeSampleInterface;
 
+/**
+ * @see \Rector\Tests\RectorDefinition\RectorDefinitionTest
+ */
 final class RectorDefinition
 {
     /**

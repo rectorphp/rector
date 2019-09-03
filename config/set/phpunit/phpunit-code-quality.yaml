@@ -1,2 +1,3 @@
 services:
     Rector\PHPUnit\Rector\MethodCall\RemoveExpectAnyFromMockRector: ~
+    Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector: ~

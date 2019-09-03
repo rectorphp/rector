@@ -16,6 +16,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodingStyle\Tests\Rector\Identical\IdenticalFalseToBooleanNotRector\IdenticalFalseToBooleanNotRectorTest
+ */
 final class IdenticalFalseToBooleanNotRector extends AbstractRector
 {
     /**
