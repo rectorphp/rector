@@ -99,14 +99,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Param[] $params */
-        $params = (array) $node->params;
-
-        if (count($params) === 0) {
+        if (count($node->getParams()) === 0) {
             return null;
         }
 
-        foreach ($params as $param) {
+        foreach ($node->getParams() as $param) {
             if ($this->shouldSkipParam($param)) {
                 return null;
             }
@@ -116,7 +113,8 @@ CODE_SAMPLE
                 return null;
             }
 
-            $this->docBlockManipulator->addTag($node, $this->paramPhpDocNodeFactory->create($types, $param));
+            $paramTagNode = $this->paramPhpDocNodeFactory->create($types, $param);
+            $this->docBlockManipulator->addTag($node, $paramTagNode);
         }
 
         return $node;

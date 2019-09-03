@@ -3,7 +3,6 @@
 namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -16,6 +15,9 @@ use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer;
 
+/**
+ * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ */
 final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
 {
     /**
@@ -33,10 +35,19 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
      */
     private $typeAnalyzer;
 
-    public function __construct(ReturnTypeInferer $returnTypeInferer, TypeAnalyzer $typeAnalyzer)
-    {
+    /**
+     * @var bool
+     */
+    private $overrideExistingReturnTypes = true;
+
+    public function __construct(
+        ReturnTypeInferer $returnTypeInferer,
+        TypeAnalyzer $typeAnalyzer,
+        bool $overrideExistingReturnTypes = true
+    ) {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->overrideExistingReturnTypes = $overrideExistingReturnTypes;
     }
 
     public function getDefinition(): RectorDefinition
@@ -90,11 +101,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $hasNewType = false;
-        if ($node->returnType !== null) {
-            $hasNewType = $node->returnType->getAttribute(self::HAS_NEW_INHERITED_TYPE, false);
-        }
-
         $inferedTypes = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
             $node,
             [ReturnTypeDeclarationReturnTypeInferer::class]
@@ -105,30 +111,31 @@ CODE_SAMPLE
         }
 
         $returnTypeInfo = new ReturnTypeInfo($inferedTypes, $this->typeAnalyzer, $inferedTypes);
+        if ($this->isReturnTypeAlreadyAdded($node, $returnTypeInfo)) {
+            return null;
+        }
 
-        // @todo is it violation?
-        if ($hasNewType) {
-            // should override - is it subtype?
-            $possibleOverrideNewReturnType = $returnTypeInfo->getFqnTypeNode();
-            if ($possibleOverrideNewReturnType !== null) {
-                if ($node->returnType !== null) {
-                    if ($this->isSubtypeOf($possibleOverrideNewReturnType, $node->returnType, 'return')) {
-                        // allow override
-                        $node->returnType = $returnTypeInfo->getFqnTypeNode();
-                    }
-                } else {
-                    $node->returnType = $returnTypeInfo->getFqnTypeNode();
-                }
-            }
-        } else {
-            if ($this->isReturnTypeAlreadyAdded($node, $returnTypeInfo)) {
-                return null;
-            }
+        $shouldPopulateChildren = false;
+        // should be previous overridden?
+        if ($node->returnType !== null && $returnTypeInfo->getFqnTypeNode() !== null) {
+            $isSubtype = $this->isSubtypeOf($returnTypeInfo->getFqnTypeNode(), $node->returnType);
 
+            // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
+            if ($this->isAtLeastPhpVersion('7.4') && $isSubtype) {
+                $shouldPopulateChildren = true;
+                $node->returnType = $returnTypeInfo->getFqnTypeNode();
+            } elseif ($isSubtype === false) { // type override
+                $shouldPopulateChildren = true;
+                $node->returnType = $returnTypeInfo->getFqnTypeNode();
+            }
+        } elseif ($returnTypeInfo->getFqnTypeNode() !== null) {
+            $shouldPopulateChildren = true;
             $node->returnType = $returnTypeInfo->getFqnTypeNode();
         }
 
-        $this->populateChildren($node, $returnTypeInfo);
+        if ($shouldPopulateChildren) {
+            $this->populateChildren($node, $returnTypeInfo);
+        }
 
         return $node;
     }
@@ -152,14 +159,10 @@ CODE_SAMPLE
             throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
-        $childrenClassLikes = $this->parsedNodesByType->findClassesAndInterfacesByType($className);
+        $childrenClassLikes = $this->parsedNodesByType->findChildrenOfClass($className);
 
         // update their methods as well
         foreach ($childrenClassLikes as $childClassLike) {
-            if (! $childClassLike instanceof Class_) {
-                continue;
-            }
-
             $usedTraits = $this->parsedNodesByType->findUsedTraitsInClass($childClassLike);
             foreach ($usedTraits as $trait) {
                 $this->addReturnTypeToMethod($trait, $node, $returnTypeInfo);
@@ -193,9 +196,6 @@ CODE_SAMPLE
 
         $currentClassMethod->returnType = $resolvedChildType;
 
-        // let the method now it was changed now
-        $currentClassMethod->returnType->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
-
         $this->notifyNodeChangeFileInfo($currentClassMethod);
     }
 
@@ -204,6 +204,12 @@ CODE_SAMPLE
      */
     private function shouldSkip(Node $node): bool
     {
+        if ($this->overrideExistingReturnTypes === false) {
+            if ($node->returnType) {
+                return true;
+            }
+        }
+
         if (! $node instanceof ClassMethod) {
             return false;
         }
@@ -218,6 +224,15 @@ CODE_SAMPLE
     {
         if (ltrim($this->print($node->returnType), '\\') === $this->print($returnTypeInfo->getTypeNode())) {
             return true;
+        }
+
+        // prevent overriding self with itself
+        if ($this->print($node->returnType) === 'self') {
+            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+
+            if (ltrim($this->print($returnTypeInfo->getFqnTypeNode()), '\\') === $className) {
+                return true;
+            }
         }
 
         return false;

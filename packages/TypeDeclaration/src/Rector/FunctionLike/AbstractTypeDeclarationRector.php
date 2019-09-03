@@ -128,7 +128,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
      * @param Name|NullableType|Identifier $possibleSubtype
      * @param Name|NullableType|Identifier $type
      */
-    protected function isSubtypeOf(Node $possibleSubtype, Node $type, string $kind): bool
+    protected function isSubtypeOf(Node $possibleSubtype, Node $type): bool
     {
         $type = $type instanceof NullableType ? $type->type : $type;
 
@@ -139,17 +139,8 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         $possibleSubtype = $possibleSubtype->toString();
         $type = $type->toString();
 
-        if ($kind === 'return') {
-            if ($this->isAtLeastPhpVersion('7.4')) {
-                // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
-                if (is_a($possibleSubtype, $type, true)) {
-                    return true;
-                }
-            }
-        } elseif ($kind === 'param') {
-            if (is_a($possibleSubtype, $type, true)) {
-                return true;
-            }
+        if (is_a($possibleSubtype, $type, true)) {
+            return true;
         }
 
         if (in_array($possibleSubtype, ['array', 'Traversable'], true) && $type === 'iterable') {

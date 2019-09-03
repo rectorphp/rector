@@ -21,7 +21,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarati
 class ConstructorArrayParamWithNullable
 {
     /**
-     * @var array|null
+     * @var mixed[]|null
      */
     private $data;
 

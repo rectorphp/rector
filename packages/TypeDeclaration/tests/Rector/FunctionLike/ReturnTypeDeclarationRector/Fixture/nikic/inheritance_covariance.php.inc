@@ -41,7 +41,7 @@ class CCovariance extends ACovariance {
      *
      * @return CCovariance
      */
-    public function test(): \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Inheritance\CCovariance {
+    public function test(): \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Inheritance\ACovariance {
         return $this;
     }
 }

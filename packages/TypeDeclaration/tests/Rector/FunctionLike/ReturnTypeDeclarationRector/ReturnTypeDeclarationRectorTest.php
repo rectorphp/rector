@@ -5,14 +5,13 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclaration
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 
-/**
- * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
- */
 final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
         $files = [
+            __DIR__ . '/Fixture/skip_mixed_and_string.php.inc',
+            __DIR__ . '/Fixture/skip_self.php.inc',
             // static types
             __DIR__ . '/Fixture/void_type.php.inc',
             __DIR__ . '/Fixture/no_void_abstract.php.inc',
@@ -67,7 +66,6 @@ final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
     {
         $files = [
             __DIR__ . '/Fixture/nikic/inheritance.php.inc',
-            __DIR__ . '/Fixture/nikic/inheritance_covariance.php.inc',
             __DIR__ . '/Fixture/nikic/nullable_inheritance.php.inc',
         ];
 
