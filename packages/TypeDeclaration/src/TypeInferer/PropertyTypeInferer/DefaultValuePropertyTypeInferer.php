@@ -23,7 +23,7 @@ final class DefaultValuePropertyTypeInferer extends AbstractTypeInferer implemen
             return [];
         }
 
-        return $this->staticTypeToStringResolver->resolveObjectType($nodeStaticType);
+        return $this->staticTypeMapper->mapPHPStanTypeToStrings($nodeStaticType);
     }
 
     public function getPriority(): int

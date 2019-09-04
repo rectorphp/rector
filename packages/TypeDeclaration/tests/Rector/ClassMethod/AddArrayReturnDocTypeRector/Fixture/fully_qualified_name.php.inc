@@ -42,7 +42,7 @@ final class FullyQualifiedName
     }
 
     /**
-     * @return string[][]|\Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Source\ValidationResult[][]
+     * @return \Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Source\ValidationResult[][]|string[][]
      */
     public function getValidationErrorMessagesAsStringDataProvider(): array
     {

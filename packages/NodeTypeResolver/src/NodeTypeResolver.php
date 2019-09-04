@@ -44,7 +44,6 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeToStringResolver as TypeToStringResolver;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -78,14 +77,9 @@ final class NodeTypeResolver
     private $betterStandardPrinter;
 
     /**
-     * @var StaticTypeToStringResolver
+     * @var StaticTypeMapper
      */
-    private $staticTypeToStringResolver;
-
-    /**
-     * @var TypeToStringResolver
-     */
-    private $typeToStringResolver;
+    private $staticTypeMapper;
 
     /**
      * @var CallableNodeTraverser
@@ -96,19 +90,17 @@ final class NodeTypeResolver
      * @param PerNodeTypeResolverInterface[] $perNodeTypeResolvers
      */
     public function __construct(
+        StaticTypeMapper $staticTypeMapper,
         BetterStandardPrinter $betterStandardPrinter,
         NameResolver $nameResolver,
-        StaticTypeToStringResolver $staticTypeToStringResolver,
-        TypeToStringResolver $typeToStringResolver,
         Broker $broker,
         ClassReflectionTypesResolver $classReflectionTypesResolver,
         CallableNodeTraverser $callableNodeTraverser,
         array $perNodeTypeResolvers
     ) {
+        $this->staticTypeMapper = $staticTypeMapper;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nameResolver = $nameResolver;
-        $this->staticTypeToStringResolver = $staticTypeToStringResolver;
-        $this->typeToStringResolver = $typeToStringResolver;
         $this->broker = $broker;
         $this->classReflectionTypesResolver = $classReflectionTypesResolver;
 
@@ -191,7 +183,7 @@ final class NodeTypeResolver
         return $types;
     }
 
-    public function isStringyType(Node $node): bool
+    public function isStringOrUnionStringType(Node $node): bool
     {
         $nodeType = $this->getStaticType($node);
         if ($nodeType instanceof StringType) {
@@ -307,7 +299,7 @@ final class NodeTypeResolver
         if ($this->isArrayType($node)) {
             $arrayType = $this->getStaticType($node);
             if ($arrayType instanceof ArrayType) {
-                $itemTypes = $this->staticTypeToStringResolver->resolveObjectType($arrayType->getItemType());
+                $itemTypes = $this->staticTypeMapper->mapPHPStanTypeToStrings($arrayType->getItemType());
 
                 foreach ($itemTypes as $key => $itemType) {
                     $itemTypes[$key] = $itemType . '[]';
@@ -321,13 +313,16 @@ final class NodeTypeResolver
             return ['array'];
         }
 
-        if ($this->isStringyType($node)) {
+        if ($this->isStringOrUnionStringType($node)) {
             return ['string'];
         }
 
         $nodeStaticType = $this->getStaticType($node);
+        if ($nodeStaticType === null) {
+            return [];
+        }
 
-        return $this->staticTypeToStringResolver->resolveObjectType($nodeStaticType);
+        return $this->staticTypeMapper->mapPHPStanTypeToStrings($nodeStaticType);
     }
 
     public function isNullableObjectType(Node $node): bool
@@ -412,6 +407,7 @@ final class NodeTypeResolver
     {
         // nodes that cannot be resolver by PHPStan
         $nodeClass = get_class($node);
+
         if (isset($this->perNodeTypeResolvers[$nodeClass])) {
             return $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
         }
@@ -435,7 +431,7 @@ final class NodeTypeResolver
 
         $type = $nodeScope->getType($node);
 
-        $typesInStrings = $this->typeToStringResolver->resolveAnyType($type);
+        $typesInStrings = $this->staticTypeMapper->mapPHPStanTypeToStrings($type);
 
         // hot fix for phpstan not resolving chain method calls
         if ($node instanceof MethodCall && ! $typesInStrings) {

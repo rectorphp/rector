@@ -7,33 +7,33 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Type;
 use Rector\HttpKernel\RectorKernel;
-use Rector\NodeTypeResolver\StaticTypeToStringResolver;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-final class StaticTypeToStringResolverTest extends AbstractKernelTestCase
+final class StaticTypeMapperTest extends AbstractKernelTestCase
 {
     /**
-     * @var StaticTypeToStringResolver
+     * @var StaticTypeMapper
      */
-    private $staticTypeToStringResolver;
+    private $staticTypeMapper;
 
     protected function setUp(): void
     {
         $this->bootKernel(RectorKernel::class);
 
-        $this->staticTypeToStringResolver = self::$container->get(StaticTypeToStringResolver::class);
+        $this->staticTypeMapper = self::$container->get(StaticTypeMapper::class);
     }
 
     /**
-     * @dataProvider provideStaticTypesToStrings()
+     * @dataProvider provideDataForTestMapPHPStanTypeToStrings()
      * @param string[] $expectedStrings
      */
-    public function test(Type $type, array $expectedStrings): void
+    public function testMapPHPStanTypeToStrings(Type $type, array $expectedStrings): void
     {
-        $this->assertSame($expectedStrings, $this->staticTypeToStringResolver->resolveObjectType($type));
+        $this->assertSame($expectedStrings, $this->staticTypeMapper->mapPHPStanTypeToStrings($type));
     }
 
-    public function provideStaticTypesToStrings(): Iterator
+    public function provideDataForTestMapPHPStanTypeToStrings(): Iterator
     {
         $constantArrayType = new ConstantArrayType([], [new ConstantStringType('a'), new ConstantStringType('b')]);
 

@@ -5,7 +5,7 @@ namespace Rector\CodingStyle\Rector\ClassConst;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeToStringResolver;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,16 +21,14 @@ final class VarConstantCommentRector extends AbstractRector
     private $docBlockManipulator;
 
     /**
-     * @var StaticTypeToStringResolver
+     * @var StaticTypeMapper
      */
-    private $staticTypeToStringResolver;
+    private $staticTypeMapper;
 
-    public function __construct(
-        DocBlockManipulator $docBlockManipulator,
-        StaticTypeToStringResolver $staticTypeToStringResolver
-    ) {
+    public function __construct(DocBlockManipulator $docBlockManipulator, StaticTypeMapper $staticTypeMapper)
+    {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->staticTypeToStringResolver = $staticTypeToStringResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     public function getDefinition(): RectorDefinition
@@ -79,7 +77,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $staticTypesInStrings = $this->staticTypeToStringResolver->resolveAnyType($constStaticType);
+        $staticTypesInStrings = $this->staticTypeMapper->mapPHPStanTypeToStrings($constStaticType);
 
         // nothing we can do
         if ($staticTypesInStrings === []) {

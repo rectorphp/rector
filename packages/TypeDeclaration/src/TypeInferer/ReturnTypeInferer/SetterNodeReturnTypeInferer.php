@@ -53,7 +53,7 @@ final class SetterNodeReturnTypeInferer extends AbstractTypeInferer implements R
 
         $assignedExprStaticType = new IntersectionType($types);
 
-        return $this->staticTypeToStringResolver->resolveObjectType($assignedExprStaticType);
+        return $this->staticTypeMapper->mapPHPStanTypeToStrings($assignedExprStaticType);
     }
 
     public function getPriority(): int

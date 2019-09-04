@@ -6,6 +6,9 @@ use Closure;
 use Rector\Exception\DependencyInjection\CallableCollectorException;
 use ReflectionFunction;
 
+/**
+ * @deprecated Too much magic and hard to understand without personal explanation (= bad code), use clear "if (x) instead"
+ */
 final class CallableCollectorPopulator
 {
     /**

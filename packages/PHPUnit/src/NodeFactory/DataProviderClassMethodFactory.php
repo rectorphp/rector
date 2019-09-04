@@ -9,7 +9,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\NodeTypeResolver\StaticTypeToStringResolver;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
 
 final class DataProviderClassMethodFactory
@@ -20,9 +20,9 @@ final class DataProviderClassMethodFactory
     private $builderFactory;
 
     /**
-     * @var StaticTypeToStringResolver
+     * @var StaticTypeMapper
      */
-    private $staticTypeToStringResolver;
+    private $staticTypeMapper;
 
     /**
      * @var DocBlockManipulator
@@ -31,11 +31,11 @@ final class DataProviderClassMethodFactory
 
     public function __construct(
         BuilderFactory $builderFactory,
-        StaticTypeToStringResolver $staticTypeToStringResolver,
+        StaticTypeMapper $staticTypeMapper,
         DocBlockManipulator $docBlockManipulator
     ) {
         $this->builderFactory = $builderFactory;
-        $this->staticTypeToStringResolver = $staticTypeToStringResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
         $this->docBlockManipulator = $docBlockManipulator;
     }
 
@@ -72,7 +72,7 @@ final class DataProviderClassMethodFactory
             return;
         }
 
-        $typesAsStrings = $this->staticTypeToStringResolver->resolveTypes([$providedType]);
+        $typesAsStrings = $this->staticTypeMapper->mapPHPStanTypeToStrings($providedType);
         $this->docBlockManipulator->addReturnTag($classMethod, implode('|', $typesAsStrings));
     }
 }

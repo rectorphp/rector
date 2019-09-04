@@ -62,16 +62,6 @@ final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
         $this->doTestFiles($files);
     }
 
-    public function testInheritance(): void
-    {
-        $files = [
-            __DIR__ . '/Fixture/nikic/inheritance.php.inc',
-            __DIR__ . '/Fixture/nikic/nullable_inheritance.php.inc',
-        ];
-
-        $this->doTestFiles($files);
-    }
-
     protected function getRectorClass(): string
     {
         return ReturnTypeDeclarationRector::class;

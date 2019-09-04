@@ -15,7 +15,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
-use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeToStringResolver;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 /**
@@ -29,9 +29,9 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
     private $docBlockManipulator;
 
     /**
-     * @var StaticTypeToStringResolver
+     * @var StaticTypeMapper
      */
-    private $staticTypeToStringResolver;
+    private $staticTypeMapper;
 
     /**
      * @var NameResolver
@@ -50,12 +50,12 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
 
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
-        StaticTypeToStringResolver $staticTypeToStringResolver,
+        StaticTypeMapper $staticTypeMapper,
         NameResolver $nameResolver,
         TraitNodeScopeCollector $traitNodeScopeCollector
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->staticTypeToStringResolver = $staticTypeToStringResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
         $this->nameResolver = $nameResolver;
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
     }
@@ -153,6 +153,6 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
             return [$nodeScope->getClassReflection()->getName()];
         }
 
-        return $this->staticTypeToStringResolver->resolveAnyType($type);
+        return $this->staticTypeMapper->mapPHPStanTypeToStrings($type);
     }
 }

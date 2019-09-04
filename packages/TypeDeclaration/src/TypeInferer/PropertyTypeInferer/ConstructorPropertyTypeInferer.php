@@ -81,7 +81,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
             return null;
         }
 
-        $typesAsStrings = $this->staticTypeToStringResolver->resolveObjectType($paramStaticType);
+        $typesAsStrings = $this->staticTypeMapper->mapPHPStanTypeToStrings($paramStaticType);
 
         foreach ($typesAsStrings as $i => $typesAsString) {
             $typesAsStrings[$i] = $this->removePreSlash($typesAsString);

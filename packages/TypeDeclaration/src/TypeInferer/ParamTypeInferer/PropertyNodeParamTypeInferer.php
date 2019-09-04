@@ -72,7 +72,7 @@ final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements 
         if ($propertyStaticTypes[0] instanceof ArrayType) {
             $itemType = $propertyStaticTypes[0]->getItemType();
 
-            $resolvedType = $this->staticTypeToStringResolver->resolveObjectType($itemType);
+            $resolvedType = $this->staticTypeMapper->mapPHPStanTypeToStrings($itemType);
             if (isset($resolvedType[0])) {
                 return [$resolvedType[0]];
             }

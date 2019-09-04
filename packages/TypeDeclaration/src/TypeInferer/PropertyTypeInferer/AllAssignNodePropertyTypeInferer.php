@@ -39,7 +39,7 @@ final class AllAssignNodePropertyTypeInferer extends AbstractTypeInferer impleme
 
         $assignedExprStaticType = new IntersectionType($assignedExprStaticTypes);
 
-        return $this->staticTypeToStringResolver->resolveObjectType($assignedExprStaticType);
+        return $this->staticTypeMapper->mapPHPStanTypeToStrings($assignedExprStaticType);
     }
 
     public function getPriority(): int

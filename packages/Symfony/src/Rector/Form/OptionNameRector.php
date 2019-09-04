@@ -63,11 +63,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, 'add')) {
+        if (! $this->isName($node->name, 'add')) {
             return null;
         }
 
-        if (! $this->isType($node, $this->formBuilderType)) {
+        if (! $this->isType($node->var, $this->formBuilderType)) {
             return null;
         }
 
