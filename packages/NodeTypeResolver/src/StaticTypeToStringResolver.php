@@ -82,6 +82,21 @@ final class StaticTypeToStringResolver
     }
 
     /**
+     * @param Type[] $staticTypes
+     * @return string[]
+     */
+    public function resolveTypes(array $staticTypes): array
+    {
+        $typesAsStrings = [];
+        foreach ($staticTypes as $staticType) {
+            $currentTypesAsStrings = $this->resolveObjectType($staticType);
+            $typesAsStrings = array_merge($typesAsStrings, $currentTypesAsStrings);
+        }
+
+        return array_unique($typesAsStrings);
+    }
+
+    /**
      * @return string[]
      */
     public function resolveObjectType(?Type $staticType): array
