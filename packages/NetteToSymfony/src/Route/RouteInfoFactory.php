@@ -55,18 +55,17 @@ final class RouteInfoFactory
                 return null;
             }
 
-            $method = $this->nameResolver->matchNameInMap($node, [
-                'get' => 'GET',
-                'head' => 'HEAD',
-                'post' => 'POST',
-                'put' => 'PUT',
-                'patch' => 'PATCH',
-                'delete' => 'DELETE',
-            ]);
+            if (! $this->nameResolver->isNames($node, ['get', 'head', 'post', 'put', 'patch', 'delete'])) {
+                return null;
+            }
+
+            /** @var string $methodName */
+            $methodName = $this->nameResolver->getName($node);
+            $uppercasedMethodName = strtoupper($methodName);
 
             $methods = [];
-            if ($method !== null) {
-                $methods[] = $method;
+            if ($uppercasedMethodName !== null) {
+                $methods[] = $uppercasedMethodName;
             }
 
             return $this->createRouteInfoFromArgs($node, $methods);
