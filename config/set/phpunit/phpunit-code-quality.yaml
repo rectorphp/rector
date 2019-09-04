@@ -1,4 +1,6 @@
 services:
     Rector\PHPUnit\Rector\MethodCall\RemoveExpectAnyFromMockRector: ~
     Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector: ~
-    Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector: ~
+
+    # [configurable]
+    # Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector: ~

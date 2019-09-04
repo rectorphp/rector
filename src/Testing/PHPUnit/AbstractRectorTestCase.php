@@ -7,6 +7,7 @@ use PHPStan\Analyser\NodeScopeResolver;
 use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
 use Rector\Configuration\Option;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\HttpKernel\RectorKernel;
 use Rector\Testing\Application\EnabledRectorsProvider;
@@ -217,17 +218,39 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             return array_keys($this->getRectorsWithConfiguration());
         }
 
-        return [$this->getRectorClass()];
+        $rectorClass = $this->getRectorClass();
+        $this->ensureRectorClassIsValid($rectorClass, 'getRectorClass');
+
+        return [$rectorClass];
     }
 
     private function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
     {
         if ($this->getRectorsWithConfiguration() !== []) {
             foreach ($this->getRectorsWithConfiguration() as $rectorClass => $rectorConfiguration) {
+                $this->ensureRectorClassIsValid($rectorClass, 'getRectorsWithConfiguration');
+
                 $enabledRectorsProvider->addEnabledRector($rectorClass, $rectorConfiguration);
             }
         } else {
-            $enabledRectorsProvider->addEnabledRector($this->getRectorClass(), []);
+            $rectorClass = $this->getRectorClass();
+            $this->ensureRectorClassIsValid($rectorClass, 'getRectorClass');
+
+            $enabledRectorsProvider->addEnabledRector($rectorClass, []);
         }
+    }
+
+    private function ensureRectorClassIsValid(string $rectorClass, string $methodName): void
+    {
+        if (is_a($rectorClass, RectorInterface::class, true)) {
+            return;
+        }
+
+        throw new ShouldNotHappenException(sprintf(
+            'Class "%s" in "%s()" method must be type of "%s"',
+            $rectorClass,
+            $methodName,
+            RectorInterface::class
+        ));
     }
 }
