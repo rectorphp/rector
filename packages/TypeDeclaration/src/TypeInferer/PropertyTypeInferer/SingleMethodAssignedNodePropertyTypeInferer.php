@@ -36,8 +36,11 @@ final class SingleMethodAssignedNodePropertyTypeInferer extends AbstractTypeInfe
         }
 
         $nodeStaticType = $this->nodeTypeResolver->getStaticType($assignedNode);
+        if ($nodeStaticType === null) {
+            return [];
+        }
 
-        $stringTypes = $this->staticTypeToStringResolver->resolveObjectType($nodeStaticType);
+        $stringTypes = $this->staticTypeMapper->mapPHPStanTypeToStrings($nodeStaticType);
         if ($stringTypes === []) {
             return [];
         }

@@ -3,7 +3,7 @@
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\StaticTypeToStringResolver;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
@@ -25,9 +25,9 @@ abstract class AbstractTypeInferer
     protected $nodeTypeResolver;
 
     /**
-     * @var StaticTypeToStringResolver
+     * @var StaticTypeMapper
      */
-    protected $staticTypeToStringResolver;
+    protected $staticTypeMapper;
 
     /**
      * @required
@@ -36,11 +36,11 @@ abstract class AbstractTypeInferer
         CallableNodeTraverser $callableNodeTraverser,
         NameResolver $nameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        StaticTypeToStringResolver $staticTypeToStringResolver
+        StaticTypeMapper $staticTypeMapper
     ): void {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nameResolver = $nameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->staticTypeToStringResolver = $staticTypeToStringResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 }

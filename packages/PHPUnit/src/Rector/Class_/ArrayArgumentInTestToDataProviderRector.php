@@ -23,7 +23,6 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\StaticTypeMapper;
-use Rector\NodeTypeResolver\StaticTypeToStringResolver;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
 use Rector\PHPUnit\ValueObject\ParamAndArgValueObject;
@@ -47,11 +46,6 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
     private $docBlockManipulator;
 
     /**
-     * @var StaticTypeToStringResolver
-     */
-    private $staticTypeToStringResolver;
-
-    /**
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
@@ -71,13 +65,11 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
      */
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
-        StaticTypeToStringResolver $staticTypeToStringResolver,
         StaticTypeMapper $staticTypeMapper,
         DataProviderClassMethodFactory $dataProviderClassMethodFactory,
         array $configuration = []
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->staticTypeToStringResolver = $staticTypeToStringResolver;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->dataProviderClassMethodFactory = $dataProviderClassMethodFactory;
         $this->configuration = $configuration;
@@ -234,7 +226,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $valueObjectHash = implode('_', $this->staticTypeToStringResolver->resolveObjectType($arrayItemStaticType));
+            $valueObjectHash = implode('_', $this->staticTypeMapper->mapPHPStanTypeToStrings($arrayItemStaticType));
 
             $itemStaticTypes[$valueObjectHash] = new ArrayType(new MixedType(), $arrayItemStaticType);
         }
@@ -351,7 +343,7 @@ CODE_SAMPLE
     {
         $uniqueStaticTypes = [];
         foreach ($itemsStaticTypes as $itemsStaticType) {
-            $uniqueHash = implode('_', $this->staticTypeToStringResolver->resolveObjectType($itemsStaticType));
+            $uniqueHash = implode('_', $this->staticTypeMapper->mapPHPStanTypeToStrings($itemsStaticType));
             $uniqueHash = md5($uniqueHash);
 
             $uniqueStaticTypes[$uniqueHash] = $itemsStaticType;

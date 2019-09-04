@@ -259,7 +259,7 @@ final class AssertManipulator
 
     private function processContainsCall(StaticCall $staticCall): void
     {
-        if ($this->nodeTypeResolver->isStringyType($staticCall->args[1]->value)) {
+        if ($this->nodeTypeResolver->isStringOrUnionStringType($staticCall->args[1]->value)) {
             $name = $this->nameResolver->isName(
                 $staticCall,
                 'contains'

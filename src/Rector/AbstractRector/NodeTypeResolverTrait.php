@@ -41,7 +41,7 @@ trait NodeTypeResolverTrait
 
     protected function isStringyType(Node $node): bool
     {
-        return $this->nodeTypeResolver->isStringyType($node);
+        return $this->nodeTypeResolver->isStringOrUnionStringType($node);
     }
 
     protected function isNumberType(Node $node): bool
