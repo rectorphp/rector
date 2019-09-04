@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\ObjectType;
 use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -113,6 +114,7 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var string|null $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
             return null;
@@ -126,13 +128,13 @@ CODE_SAMPLE
         $node->extends = null;
 
         // add $repository property
-        $propertyInfo = new VariableInfo('repository', $this->entityRepositoryClass);
+        $propertyInfo = new VariableInfo('repository', new ObjectType($this->entityRepositoryClass));
         $this->classManipulator->addPropertyToClass($node, $propertyInfo);
 
         // add $entityManager and assign to constuctor
         $this->classManipulator->addConstructorDependencyWithCustomAssign(
             $node,
-            new VariableInfo('entityManager', $this->entityManagerClass),
+            new VariableInfo('entityManager', new ObjectType($this->entityManagerClass)),
             $this->createRepositoryAssign($node)
         );
 

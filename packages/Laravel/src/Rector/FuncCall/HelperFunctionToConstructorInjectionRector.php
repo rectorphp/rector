@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -15,6 +16,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://github.com/laravel/framework/blob/78828bc779e410e03cc6465f002b834eadf160d2/src/Illuminate/Foundation/helpers.php#L959
  * @see https://gist.github.com/barryvdh/bb6ffc5d11e0a75dba67
+ *
  * @see \Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInjectionRector\HelperFunctionToConstructorInjectionRectorTest
  */
 final class HelperFunctionToConstructorInjectionRector extends AbstractRector
@@ -230,7 +232,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->addPropertyToClass($classNode, $service['type'], $service['property']);
+            $this->addPropertyToClass($classNode, new FullyQualifiedObjectType($service['type']), $service['property']);
             $propertyFetchNode = $this->createPropertyFetch('this', $service['property']);
 
             if (count($node->args) === 0) {

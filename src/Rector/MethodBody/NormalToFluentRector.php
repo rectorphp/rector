@@ -175,7 +175,7 @@ CODE_SAMPLE
     private function matchMethodCall(MethodCall $methodCall): ?string
     {
         foreach ($this->fluentMethodsByType as $type => $methodNames) {
-            if (! $this->isType($methodCall, $type)) {
+            if (! $this->isObjectType($methodCall, $type)) {
                 continue;
             }
 

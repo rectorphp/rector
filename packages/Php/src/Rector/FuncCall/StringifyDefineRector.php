@@ -62,7 +62,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isStringyType($node->args[0]->value)) {
+        if ($this->isStringOrUnionStringOnlyType($node->args[0]->value)) {
             return null;
         }
 

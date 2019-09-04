@@ -67,7 +67,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, 'ONGR\ElasticsearchDSL\Search')) {
+        if (! $this->isObjectType($node, 'ONGR\ElasticsearchDSL\Search')) {
             return null;
         }
 

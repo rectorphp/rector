@@ -6,6 +6,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\PhpParser\Node\Manipulator\CallManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -17,6 +20,7 @@ use ReflectionMethod;
 /**
  * @see https://www.reddit.com/r/PHP/comments/a1ie7g/is_there_a_linter_for_argumentcounterror_for_php/
  * @see http://php.net/manual/en/class.argumentcounterror.php
+ *
  * @see \Rector\Php\Tests\Rector\FuncCall\RemoveExtraParametersRector\RemoveExtraParametersRectorTest
  */
 final class RemoveExtraParametersRector extends AbstractRector
@@ -69,7 +73,10 @@ final class RemoveExtraParametersRector extends AbstractRector
             return null;
         }
 
-        for ($i = $reflectionFunctionLike->getNumberOfParameters(), $iMax = count($node->args); $i <= $iMax; $i++) {
+        $numberOfParameters = $reflectionFunctionLike->getNumberOfParameters();
+        $numberOfArguments = count($node->args);
+
+        for ($i = $numberOfParameters; $i <= $numberOfArguments; $i++) {
             unset($node->args[$i]);
         }
 
@@ -77,6 +84,7 @@ final class RemoveExtraParametersRector extends AbstractRector
     }
 
     /**
+     * @param FuncCall|MethodCall|StaticCall $node
      * @return ReflectionFunction|ReflectionMethod
      */
     private function resolveReflectionFunctionLike(Node $node): ?ReflectionFunctionAbstract
@@ -94,10 +102,16 @@ final class RemoveExtraParametersRector extends AbstractRector
             return new ReflectionFunction($functionName);
         }
 
-        $nodeTypes = $this->getTypes($node);
+        if ($node instanceof StaticCall) {
+            $objectType = $this->getObjectType($node->class);
+        } elseif ($node instanceof MethodCall) {
+            $objectType = $this->getObjectType($node->var);
+        } else {
+            return null;
+        }
 
         // unable to resolve
-        if (! isset($nodeTypes[0])) {
+        if (! $objectType instanceof ObjectType && ! $objectType instanceof UnionType) {
             return null;
         }
 
@@ -106,36 +120,42 @@ final class RemoveExtraParametersRector extends AbstractRector
             return null;
         }
 
-        $priorityType = $this->resolvePriorityType($nodeTypes);
+        $priorityType = $this->resolvePriorityType($objectType);
         if ($priorityType === null) {
             return null;
         }
 
-        if (! method_exists($priorityType, $methodName)) {
+        if (! method_exists($priorityType->getClassName(), $methodName)) {
             return null;
         }
 
-        return new ReflectionMethod($priorityType, $methodName);
+        return new ReflectionMethod($priorityType->getClassName(), $methodName);
     }
 
     /**
-     * Give class priority, because it can change the interface signature,
+     * Give class priority over interface, because it can change the interface signature
      * @see https://github.com/rectorphp/rector/issues/1593#issuecomment-502404580
-     *
-     * @param string[] $nodeTypes
      */
-    private function resolvePriorityType(array $nodeTypes): ?string
+    private function resolvePriorityType(Type $type): ?ObjectType
     {
-        $priorityType = null;
-        foreach ($nodeTypes as $nodeType) {
-            if (class_exists($nodeType)) {
-                $priorityType = $nodeType;
-                break;
+        if ($type instanceof ObjectType) {
+            if (class_exists($type->getClassName())) {
+                return $type;
             }
 
-            $priorityType = $nodeType;
+            return null;
         }
 
-        return $priorityType;
+        if ($type instanceof UnionType) {
+            foreach ($type->getTypes() as $unionedType) {
+                if ($unionedType instanceof ObjectType) {
+                    if (class_exists($unionedType->getClassName())) {
+                        return $unionedType;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 }

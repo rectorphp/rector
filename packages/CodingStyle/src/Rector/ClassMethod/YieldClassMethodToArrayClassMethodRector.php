@@ -84,7 +84,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->methodsByType as $type => $methods) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isObjectType($node, $type)) {
                 continue;
             }
 

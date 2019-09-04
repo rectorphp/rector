@@ -4,6 +4,7 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTyp
 
 use Iterator;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\AnotherTrait;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\ClassWithParentClass;
@@ -12,46 +13,62 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResol
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\ClassWithTrait;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\ParentClass;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\SomeInterface;
+use Rector\PHPStan\TypeFactoryStaticHelper;
 
 /**
- * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\ClassAndInterfaceTypeResolver
+ * @see \Rector\NodeTypeResolver\PerNodeTypeResolver\ClassAndInterfaceTypeResolver
  */
 final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     /**
      * @dataProvider dataProvider()
-     * @param string[] $expectedTypes
      */
-    public function test(string $file, int $nodePosition, array $expectedTypes): void
+    public function test(string $file, int $nodePosition, Type $expectedType): void
     {
         $variableNodes = $this->getNodesForFileOfType($file, Class_::class);
 
-        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
+        $this->assertEquals($expectedType, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
     }
 
     public function dataProvider(): Iterator
     {
-        yield [__DIR__ . '/Source/ClassWithParentInterface.php', 0, [
-            ClassWithParentInterface::class,
-            SomeInterface::class,
-        ]];
+        yield [
+            __DIR__ . '/Source/ClassWithParentInterface.php',
+            0,
+            TypeFactoryStaticHelper::createUnionObjectType([ClassWithParentInterface::class, SomeInterface::class]),
+        ];
 
-        yield [__DIR__ . '/Source/ClassWithParentClass.php', 0, [
-            ClassWithParentClass::class,
-            ParentClass::class,
-        ]];
+        yield [
+            __DIR__ . '/Source/ClassWithParentClass.php',
+            0,
+            TypeFactoryStaticHelper::createUnionObjectType([ClassWithParentClass::class, ParentClass::class]),
+        ];
 
-        yield [__DIR__ . '/Source/ClassWithTrait.php', 0, [ClassWithTrait::class, AnotherTrait::class]];
+        yield [
+            __DIR__ . '/Source/ClassWithTrait.php',
+            0,
+            TypeFactoryStaticHelper::createUnionObjectType([ClassWithTrait::class, AnotherTrait::class]),
+        ];
 
         yield [
             __DIR__ . '/Source/ClassWithParentTrait.php',
             0,
-            [ClassWithParentTrait::class, ClassWithTrait::class, AnotherTrait::class],
+            TypeFactoryStaticHelper::createUnionObjectType(
+                [ClassWithParentTrait::class, ClassWithTrait::class, AnotherTrait::class]
+            ),
         ];
+
         yield [
             __DIR__ . '/Source/AnonymousClass.php',
             0,
-            [ParentClass::class, SomeInterface::class, AnotherTrait::class],
+            TypeFactoryStaticHelper::createUnionObjectType(
+                [
+                    'AnonymousClass06034401da58dec7c1cba7dbc513a1b7',
+                    ParentClass::class,
+                    SomeInterface::class,
+                    AnotherTrait::class,
+                ]
+            ),
         ];
     }
 }

@@ -36,7 +36,7 @@ final class CatchAndClosureUseNameRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isTypes($node->var, ['PhpParser\Node\Stmt\Catch_', 'PhpParser\Node\Expr\ClosureUse'])) {
+        if (! $this->isObjectTypes($node->var, ['PhpParser\Node\Stmt\Catch_', 'PhpParser\Node\Expr\ClosureUse'])) {
             return null;
         }
 

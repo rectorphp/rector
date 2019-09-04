@@ -113,7 +113,7 @@ CODE_SAMPLE
             return $this->resolveArray($isNegated, $expr);
         }
 
-        if ($this->isStringyType($expr)) {
+        if ($this->isStringOrUnionStringOnlyType($expr)) {
             return $this->resolveString($isNegated, $expr);
         }
 

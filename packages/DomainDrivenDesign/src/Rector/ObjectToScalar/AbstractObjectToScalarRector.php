@@ -2,7 +2,6 @@
 
 namespace Rector\DomainDrivenDesign\Rector\ObjectToScalar;
 
-use PhpParser\Node;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\NamespaceAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -41,7 +40,7 @@ abstract class AbstractObjectToScalarRector extends AbstractRector
     /**
      * @required
      */
-    public function setAbstractObjectToScalarRectorDependencies(
+    public function autowireAbstractObjectToScalarRectorDependencies(
         DocBlockManipulator $docBlockManipulator,
         BetterNodeFinder $betterNodeFinder,
         NamespaceAnalyzer $namespaceAnalyzer
@@ -49,34 +48,5 @@ abstract class AbstractObjectToScalarRector extends AbstractRector
         $this->docBlockManipulator = $docBlockManipulator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->namespaceAnalyzer = $namespaceAnalyzer;
-    }
-
-    protected function matchNewType(Node $node): ?string
-    {
-        foreach ($this->getTypes($node) as $nodeType) {
-            if (! isset($this->valueObjectsToSimpleTypes[$nodeType])) {
-                continue;
-            }
-
-            return $this->valueObjectsToSimpleTypes[$nodeType];
-        }
-
-        return null;
-    }
-
-    /**
-     * @return string[]|null
-     */
-    protected function matchOriginAndNewType(Node $node): ?array
-    {
-        foreach ($this->getTypes($node) as $nodeType) {
-            if (! isset($this->valueObjectsToSimpleTypes[$nodeType])) {
-                continue;
-            }
-
-            return [$nodeType, $this->valueObjectsToSimpleTypes[$nodeType]];
-        }
-
-        return null;
     }
 }

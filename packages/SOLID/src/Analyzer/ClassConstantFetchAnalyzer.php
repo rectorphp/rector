@@ -3,6 +3,9 @@
 namespace Rector\SOLID\Analyzer;
 
 use PhpParser\Node\Expr\ClassConstFetch;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -67,52 +70,44 @@ final class ClassConstantFetchAnalyzer
             return;
         }
 
-        $className = $this->nameResolver->getName($classConstFetch->class);
+        $resolvedClassType = $this->nodeTypeResolver->resolve($classConstFetch->class);
 
-        if (in_array($className, ['static', 'self', 'parent'], true)) {
-            $resolvedClassTypes = $this->nodeTypeResolver->resolve($classConstFetch->class);
-
-            $className = $this->matchClassTypeThatContainsConstant($resolvedClassTypes, $constantName);
-            if ($className === null) {
-                return;
-            }
-        } else {
-            $resolvedClassTypes = $this->nodeTypeResolver->resolve($classConstFetch->class);
-            $className = $this->matchClassTypeThatContainsConstant($resolvedClassTypes, $constantName);
-
-            if ($className === null) {
-                return;
-            }
+        $classType = $this->matchClassTypeThatContainsConstant($resolvedClassType, $constantName);
+        if ($classType === null) {
+            return;
         }
 
         // current class
         $classOfUse = $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
 
-        $this->classConstantFetchByClassAndName[$className][$constantName][] = $classOfUse;
+        $this->classConstantFetchByClassAndName[$classType->getClassName()][$constantName][] = $classOfUse;
 
-        $this->classConstantFetchByClassAndName[$className][$constantName] = array_unique(
-            $this->classConstantFetchByClassAndName[$className][$constantName]
+        $this->classConstantFetchByClassAndName[$classType->getClassName()][$constantName] = array_unique(
+            $this->classConstantFetchByClassAndName[$classType->getClassName()][$constantName]
         );
     }
 
-    /**
-     * @param string[] $resolvedClassTypes
-     */
-    private function matchClassTypeThatContainsConstant(array $resolvedClassTypes, string $constant): ?string
+    private function matchClassTypeThatContainsConstant(?Type $type, string $constant): ?ObjectType
     {
-        if (count($resolvedClassTypes) === 1) {
-            return $resolvedClassTypes[0];
+        if ($type instanceof ObjectType) {
+            return $type;
         }
 
-        foreach ($resolvedClassTypes as $resolvedClassType) {
-            $classOrInterface = $this->parsedNodesByType->findClassOrInterface($resolvedClassType);
-            if ($classOrInterface === null) {
-                continue;
-            }
+        if ($type instanceof UnionType) {
+            foreach ($type->getTypes() as $unionedType) {
+                if (! $unionedType instanceof ObjectType) {
+                    continue;
+                }
 
-            foreach ($classOrInterface->getConstants() as $classConstant) {
-                if ($this->nameResolver->isName($classConstant, $constant)) {
-                    return $resolvedClassType;
+                $classOrInterface = $this->parsedNodesByType->findClassOrInterface($unionedType->getClassName());
+                if ($classOrInterface === null) {
+                    continue;
+                }
+
+                foreach ($classOrInterface->getConstants() as $classConstant) {
+                    if ($this->nameResolver->isName($classConstant, $constant)) {
+                        return $unionedType;
+                    }
                 }
             }
         }

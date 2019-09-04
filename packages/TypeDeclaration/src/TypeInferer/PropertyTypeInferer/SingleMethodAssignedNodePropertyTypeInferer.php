@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
+use PHPStan\Type\MixedType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
@@ -36,7 +37,7 @@ final class SingleMethodAssignedNodePropertyTypeInferer extends AbstractTypeInfe
         }
 
         $nodeStaticType = $this->nodeTypeResolver->getStaticType($assignedNode);
-        if ($nodeStaticType === null) {
+        if ($nodeStaticType instanceof MixedType) {
             return [];
         }
 

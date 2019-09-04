@@ -65,7 +65,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($node, 'Shopware\Models\Shop\Shop')) {
+        if (! $this->isObjectType($node, 'Shopware\Models\Shop\Shop')) {
             return null;
         }
 

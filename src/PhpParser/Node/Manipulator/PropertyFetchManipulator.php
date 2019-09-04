@@ -8,9 +8,11 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
+use PHPStan\Type\ErrorType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -77,14 +79,23 @@ final class PropertyFetchManipulator
         return $this->classManipulator->hasPropertyFetchAsProperty($class, $propertyFetch);
     }
 
-    public function isMagicOnType(Node $node, string $type): bool
+    public function isMagicOnType(Node $node, Type $type): bool
     {
         if (! $node instanceof PropertyFetch) {
             return false;
         }
 
-        $varNodeTypes = $this->nodeTypeResolver->resolve($node->var);
-        if (! in_array($type, $varNodeTypes, true)) {
+        $varNodeType = $this->nodeTypeResolver->resolve($node);
+
+        if ($varNodeType instanceof ErrorType) {
+            return true;
+        }
+
+        if ($varNodeType instanceof MixedType) {
+            return false;
+        }
+
+        if ($varNodeType->isSuperTypeOf($type)) {
             return false;
         }
 

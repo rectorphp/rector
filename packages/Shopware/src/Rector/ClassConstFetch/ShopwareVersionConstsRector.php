@@ -60,7 +60,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, 'Shopware')) {
+        if (! $this->isObjectType($node, 'Shopware')) {
             return null;
         }
 

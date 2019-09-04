@@ -77,6 +77,6 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isType($classNode, $this->objectBehaviorClass);
+        return $this->isObjectType($classNode, $this->objectBehaviorClass);
     }
 }

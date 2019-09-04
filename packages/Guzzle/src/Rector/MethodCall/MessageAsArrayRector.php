@@ -56,7 +56,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->messageType)) {
+        if (! $this->isObjectType($node, $this->messageType)) {
             return null;
         }
 

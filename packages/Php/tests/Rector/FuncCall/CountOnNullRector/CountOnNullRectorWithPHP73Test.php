@@ -2,11 +2,9 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\CountOnNullRector;
 
+use Rector\Php\Rector\FuncCall\CountOnNullRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-/**
- * @covers \Rector\Php\Rector\FuncCall\CountOnNullRector
- */
 final class CountOnNullRectorWithPHP73Test extends AbstractRectorTestCase
 {
     public function test(): void
@@ -14,8 +12,13 @@ final class CountOnNullRectorWithPHP73Test extends AbstractRectorTestCase
         $this->doTestFiles([__DIR__ . '/Fixture/is_countable.php.inc']);
     }
 
-    protected function provideConfig(): string
+    protected function getRectorClass(): string
     {
-        return __DIR__ . '/rector_with_php73.yaml';
+        return CountOnNullRector::class;
+    }
+
+    protected function getPhpVersion(): string
+    {
+        return '7.3';
     }
 }

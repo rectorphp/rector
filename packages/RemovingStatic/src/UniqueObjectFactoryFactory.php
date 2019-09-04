@@ -17,9 +17,11 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class UniqueObjectFactoryFactory
@@ -44,41 +46,45 @@ final class UniqueObjectFactoryFactory
      */
     private $docBlockManipulator;
 
+    /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
     public function __construct(
         NameResolver $nameResolver,
         BuilderFactory $builderFactory,
         PropertyNaming $propertyNaming,
-        DocBlockManipulator $docBlockManipulator
+        DocBlockManipulator $docBlockManipulator,
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->nameResolver = $nameResolver;
         $this->builderFactory = $builderFactory;
         $this->propertyNaming = $propertyNaming;
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
-    /**
-     * @param mixed[] $staticTypesInClass
-     */
-    public function createFactoryClass(Class_ $class, array $staticTypesInClass): Class_
+    public function createFactoryClass(Class_ $class, ObjectType $objectType): Class_
     {
         $className = $this->nameResolver->getName($class);
+        if ($className === null) {
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+        }
+
         $name = $className . 'Factory';
 
         $shortName = $this->resolveClassShortName($name);
 
-        $factoryClassBuilder = $this->builderFactory->class($shortName)
-            ->makeFinal();
+        $factoryClassBuilder = $this->builderFactory->class($shortName);
+        $factoryClassBuilder->makeFinal();
 
-        $properties = $this->createPropertiesFromTypes($staticTypesInClass);
+        $properties = $this->createPropertiesFromTypes($objectType);
         $factoryClassBuilder->addStmts($properties);
 
         // constructor
-        $constructMethod = $this->createConstructMethod($staticTypesInClass);
+        $constructMethod = $this->createConstructMethod($objectType);
         $factoryClassBuilder->addStmt($constructMethod);
-
-        if ($className === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
-        }
 
         // create
         $createMethod = $this->createCreateMethod($class, $className, $properties);
@@ -105,27 +111,26 @@ final class UniqueObjectFactoryFactory
         return $assigns;
     }
 
-    /**
-     * @param string[] $types
-     */
-    private function createConstructMethod(array $types): ClassMethod
+    private function createConstructMethod(ObjectType $objectType): ClassMethod
     {
-        $params = [];
-        foreach ($types as $type) {
-            $propertyName = $this->propertyNaming->fqnToVariableName($type);
-            $params[] = $this->builderFactory->param($propertyName)
-                ->setType(new FullyQualified($type))
-                ->getNode();
+        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
+        $paramBuilder = $this->builderFactory->param($propertyName);
+
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType);
+        if ($typeNode) {
+            $paramBuilder->setType($typeNode);
         }
+
+        $params = [$paramBuilder->getNode()];
 
         $assigns = $this->createAssignsFromParams($params);
 
-        // add assigns
-        return $this->builderFactory->method('__construct')
-            ->makePublic()
-            ->addParams($params)
-            ->addStmts($assigns)
-            ->getNode();
+        $methodBuilder = $this->builderFactory->method('__construct');
+        $methodBuilder->makePublic();
+        $methodBuilder->addParams($params);
+        $methodBuilder->addStmts($assigns);
+
+        return $methodBuilder->getNode();
     }
 
     /**
@@ -151,33 +156,31 @@ final class UniqueObjectFactoryFactory
 
         $return = new Return_($new);
 
-        return $this->builderFactory->method('create')
-            ->setReturnType(new FullyQualified($className))
-            ->makePublic()
-            ->addStmt($return)
-            ->addParams($params)
-            ->getNode();
+        $builderMethod = $this->builderFactory->method('create');
+        $builderMethod->setReturnType(new FullyQualified($className));
+        $builderMethod->makePublic();
+        $builderMethod->addStmt($return);
+        $builderMethod->addParams($params);
+
+        return $builderMethod->getNode();
     }
 
     /**
-     * @param string[] $types
-     *
      * @return Property[]
      */
-    private function createPropertiesFromTypes(array $types): array
+    private function createPropertiesFromTypes(ObjectType $objectType): array
     {
         $properties = [];
 
-        foreach ($types as $type) {
-            $propertyName = $this->propertyNaming->fqnToVariableName($type);
-            $property = $this->builderFactory->property($propertyName)
-                ->makePrivate()
-                ->getNode();
+        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
+        $propertyBuilder = $this->builderFactory->property($propertyName);
+        $propertyBuilder->makePrivate();
 
-            // add doc block
-            $this->docBlockManipulator->changeVarTag($property, '\\' . $type);
-            $properties[] = $property;
-        }
+        $property = $propertyBuilder->getNode();
+
+        $this->docBlockManipulator->changeVarTag($property, $objectType);
+
+        $properties[] = $property;
 
         return $properties;
     }

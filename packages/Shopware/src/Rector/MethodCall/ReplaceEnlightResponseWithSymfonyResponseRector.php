@@ -61,7 +61,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, 'Enlight_Controller_Response_Response')) {
+        if (! $this->isObjectType($node, 'Enlight_Controller_Response_Response')) {
             return null;
         }
 

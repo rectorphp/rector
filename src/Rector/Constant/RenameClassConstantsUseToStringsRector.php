@@ -57,7 +57,7 @@ final class RenameClassConstantsUseToStringsRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         foreach ($this->oldConstantsToNewValuesByType as $type => $oldConstantsToNewValues) {
-            if (! $this->isType($node->class, $type)) {
+            if (! $this->isObjectType($node->class, $type)) {
                 continue;
             }
 

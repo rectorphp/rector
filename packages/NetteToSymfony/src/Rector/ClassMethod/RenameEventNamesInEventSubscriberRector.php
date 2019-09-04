@@ -98,7 +98,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($class, self::EVENT_SUBSCRIBER_INTERFACE)) {
+        if (! $this->isObjectType($class, self::EVENT_SUBSCRIBER_INTERFACE)) {
             return null;
         }
 

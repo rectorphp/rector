@@ -87,7 +87,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($node, $this->netteTesterTestCaseClass)) {
+        if (! $this->isObjectType($node, $this->netteTesterTestCaseClass)) {
             return null;
         }
 

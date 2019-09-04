@@ -68,7 +68,7 @@ final class RenameStaticMethodRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         foreach ($this->oldToNewMethodByClasses as $type => $oldToNewMethods) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isObjectType($node->class, $type)) {
                 continue;
             }
 

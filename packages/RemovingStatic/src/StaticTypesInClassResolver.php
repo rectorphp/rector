@@ -7,16 +7,13 @@ namespace Rector\RemovingStatic;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 final class StaticTypesInClassResolver
 {
-    /**
-     * @var string[]
-     */
-    private $staticTypesInClass = [];
-
     /**
      * @var CallableNodeTraverser
      */
@@ -35,26 +32,29 @@ final class StaticTypesInClassResolver
 
     /**
      * @param string[] $types
-     * @return string[]
+     * @return ObjectType[]
      */
     public function collectStaticCallTypeInClass(Class_ $node, array $types): array
     {
-        $this->staticTypesInClass = [];
+        $staticTypesInClass = [];
 
-        $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node) use ($types) {
+        $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node) use (
+            $types,
+            &$staticTypesInClass
+        ) {
             if (! $node instanceof StaticCall) {
                 return null;
             }
 
             foreach ($types as $type) {
-                if ($this->nodeTypeResolver->isType($node, $type)) {
-                    $this->staticTypesInClass[] = $type;
+                if ($this->nodeTypeResolver->isObjectType($node->class, $type)) {
+                    $staticTypesInClass[] = new FullyQualifiedObjectType($type);
                 }
             }
 
             return null;
         });
 
-        return $this->staticTypesInClass;
+        return $staticTypesInClass;
     }
 }

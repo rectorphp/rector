@@ -14,6 +14,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Rector\AbstractRector;
@@ -79,7 +80,7 @@ CODE_SAMPLE
         }
 
         $nodeType = $this->getStaticType($node->expr);
-        if ($nodeType === null) {
+        if ($nodeType instanceof MixedType) {
             return null;
         }
 

@@ -65,7 +65,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->entityManagerClass)) {
+        if (! $this->isObjectType($node, $this->entityManagerClass)) {
             return null;
         }
 

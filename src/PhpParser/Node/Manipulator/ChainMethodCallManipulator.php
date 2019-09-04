@@ -4,6 +4,8 @@ namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -34,7 +36,7 @@ final class ChainMethodCallManipulator
      *
      * @param string[] $methods
      */
-    public function isTypeAndChainCalls(Node $node, string $type, array $methods): bool
+    public function isTypeAndChainCalls(Node $node, Type $type, array $methods): bool
     {
         if (! $node instanceof MethodCall) {
             return false;
@@ -55,8 +57,11 @@ final class ChainMethodCallManipulator
             }
         }
 
-        $variableTypes = $this->nodeTypeResolver->resolve($node);
+        $variableType = $this->nodeTypeResolver->resolve($node);
+        if ($variableType instanceof MixedType) {
+            return false;
+        }
 
-        return in_array($type, $variableTypes, true);
+        return $variableType->isSuperTypeOf($type)->yes();
     }
 }

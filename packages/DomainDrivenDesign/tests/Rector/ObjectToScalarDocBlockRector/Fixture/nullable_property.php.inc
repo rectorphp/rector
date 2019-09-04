@@ -4,19 +4,12 @@ namespace Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarDocBlockRector\Fi
 
 use Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarDocBlockRector\Source\SomeChildOfValueObject;
 
-class FirstActionClass
+class NullableProperty
 {
     /**
      * @var SomeChildOfValueObject|null
      */
     private $someChildValueObject;
-
-    public function someFunction()
-    {
-        $this->someChildValueObject = new SomeChildOfValueObject('value');
-
-        $someChildValueObject = new SomeChildOfValueObject();
-    }
 }
 
 ?>
@@ -27,19 +20,12 @@ namespace Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarDocBlockRector\Fi
 
 use Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarDocBlockRector\Source\SomeChildOfValueObject;
 
-class FirstActionClass
+class NullableProperty
 {
     /**
      * @var string|null
      */
     private $someChildValueObject;
-
-    public function someFunction()
-    {
-        $this->someChildValueObject = new SomeChildOfValueObject('value');
-
-        $someChildValueObject = new SomeChildOfValueObject();
-    }
 }
 
 ?>

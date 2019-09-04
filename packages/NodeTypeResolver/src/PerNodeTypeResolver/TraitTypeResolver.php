@@ -4,6 +4,10 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use ReflectionClass;
 
@@ -22,19 +26,26 @@ final class TraitTypeResolver implements PerNodeTypeResolverInterface
 
     /**
      * @param Trait_ $traitNode
-     * @return string[]
      */
-    public function resolve(Node $traitNode): array
+    public function resolve(Node $traitNode): Type
     {
         $traitReflection = new ReflectionClass((string) $traitNode->namespacedName);
 
         $types = [];
-        $types[] = $traitReflection->getName();
+        $types[] = new ObjectType($traitReflection->getName());
 
         foreach ($traitReflection->getTraits() as $usedTraitReflection) {
-            $types[] = $usedTraitReflection->getName();
+            $types[] = new ObjectType($usedTraitReflection->getName());
         }
 
-        return $types;
+        if (count($types) === 1) {
+            return $types[0];
+        }
+
+        if (count($types) > 1) {
+            return new UnionType($types);
+        }
+
+        return new MixedType();
     }
 }

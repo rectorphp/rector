@@ -2,7 +2,8 @@
 
 namespace Rector\PhpParser\Node;
 
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Type;
+use PHPStan\Type\VerbosityLevel;
 
 final class VariableInfo
 {
@@ -12,14 +13,11 @@ final class VariableInfo
     private $name;
 
     /**
-     * @var string|TypeNode
+     * @var Type
      */
     private $type;
 
-    /**
-     * @param string|TypeNode $type
-     */
-    public function __construct(string $name, $type)
+    public function __construct(string $name, Type $type)
     {
         $this->name = $name;
         $this->type = $type;
@@ -30,20 +28,13 @@ final class VariableInfo
         return $this->name;
     }
 
-    /**
-     * @return TypeNode|string
-     */
-    public function getType()
+    public function getType(): Type
     {
         return $this->type;
     }
 
     public function getTypeAsString(): string
     {
-        if (is_string($this->type)) {
-            return $this->type;
-        }
-
-        return (string) $this->type;
+        return $this->type->describe(VerbosityLevel::typeOnly());
     }
 }

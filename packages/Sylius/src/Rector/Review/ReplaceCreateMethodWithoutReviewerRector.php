@@ -52,7 +52,7 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->reviewFactoryInterface)) {
+        if (! $this->isObjectType($node, $this->reviewFactoryInterface)) {
             return null;
         }
 

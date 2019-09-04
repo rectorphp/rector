@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
+use PhpParser\Node\Stmt\Use_;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
@@ -22,6 +23,7 @@ use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Ast\NodeTraverser;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
@@ -43,6 +45,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\Php\TypeAnalyzer;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
@@ -108,6 +111,11 @@ final class DocBlockManipulator
      */
     private $nameResolver;
 
+    /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
@@ -117,7 +125,8 @@ final class DocBlockManipulator
         NodeTraverser $nodeTraverser,
         NameResolver $nameResolver,
         UseAddingCommander $useAddingCommander,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
@@ -128,6 +137,7 @@ final class DocBlockManipulator
         $this->useAddingCommander = $useAddingCommander;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nameResolver = $nameResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -278,11 +288,16 @@ final class DocBlockManipulator
     }
 
     /**
-     * @param string|string[]|IdentifierValueObject|IdentifierValueObject[] $type
+     * @param string|string[]|IdentifierValueObject|IdentifierValueObject[]|Type $type
      */
     public function changeVarTag(Node $node, $type): void
     {
         $this->removeTagFromNode($node, 'var', true);
+
+        if ($type instanceof Type) {
+            $type = implode('|', $this->staticTypeMapper->mapPHPStanTypeToStrings($type));
+        }
+
         $this->addTypeSpecificTag($node, 'var', $type);
     }
 
@@ -804,7 +819,7 @@ final class DocBlockManipulator
 
     private function isAlias(string $paramType, Node $node): bool
     {
-        /** @var Node\Stmt\Use_[]|null $useNodes */
+        /** @var Use_[]|null $useNodes */
         $useNodes = $node->getAttribute(AttributeKey::USE_NODES);
         if ($useNodes === null) {
             return false;

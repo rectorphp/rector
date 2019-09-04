@@ -202,7 +202,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            if ($this->isType($classMethod->expr, $this->routerClass)) {
+            if ($this->isObjectType($classMethod->expr, $this->routerClass)) {
                 return true;
             }
 

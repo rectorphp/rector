@@ -37,7 +37,7 @@ abstract class AbstractPHPUnitRector extends AbstractRector
             return false;
         }
 
-        return $this->isTypes($classNode, ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase']);
+        return $this->isObjectTypes($classNode, ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase']);
     }
 
     /**

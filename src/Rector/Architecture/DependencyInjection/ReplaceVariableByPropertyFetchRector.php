@@ -96,7 +96,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $this->isType($node, $variableInfo->getTypeAsString())) {
+            if (! $this->isObjectType($node, $variableInfo->getTypeAsString())) {
                 continue;
             }
 

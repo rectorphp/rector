@@ -49,7 +49,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [New_::class, Property::class, Name::class, NullableType::class];
+        return [New_::class, /*Property::class,*/ Name::class, NullableType::class];
     }
 
     /**
@@ -59,10 +59,6 @@ CODE_SAMPLE
     {
         if ($node instanceof New_ && $this->processNewCandidate($node)) {
             return $node->args[0];
-        }
-
-        if ($node instanceof Property && $this->isTypes($node, array_keys($this->valueObjectsToSimpleTypes))) {
-            return $this->refactorProperty($node);
         }
 
         if ($node instanceof Name) {
@@ -87,36 +83,32 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isTypes($newNode->class, array_keys($this->valueObjectsToSimpleTypes));
+        return $this->isObjectTypes($newNode->class, array_keys($this->valueObjectsToSimpleTypes));
     }
 
-    private function refactorProperty(Property $property): Property
+    private function refactorName(Name $name): ?Name
     {
-        $newType = $this->matchNewType($property);
-        if ($newType === null) {
-            return $property;
+        foreach ($this->valueObjectsToSimpleTypes as $valueObject => $simpleType) {
+            if (! is_a((string) $name, $valueObject, true)) {
+                continue;
+            }
+
+            return new Name($simpleType);
         }
 
-        return $property;
+        return null;
     }
 
-    private function refactorName(Node $nameNode): ?Name
+    private function refactorNullableType(NullableType $nullableType): ?NullableType
     {
-        $newType = $this->matchNewType($nameNode);
-        if ($newType === null) {
-            return null;
+        foreach ($this->valueObjectsToSimpleTypes as $valueObject => $simpleType) {
+            if (! is_a((string) $nullableType->type, $valueObject, true)) {
+                continue;
+            }
+
+            return new NullableType($simpleType);
         }
 
-        return new Name($newType);
-    }
-
-    private function refactorNullableType(NullableType $nullableType): NullableType
-    {
-        $newType = $this->matchNewType($nullableType->type);
-        if (! $newType) {
-            return $nullableType;
-        }
-
-        return new NullableType($newType);
+        return null;
     }
 }

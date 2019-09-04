@@ -73,7 +73,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->typeToPropertiesMap as $type => $properties) {
-            if (! $this->isType($node->var, $type)) {
+            if (! $this->isObjectType($node->var, $type)) {
                 continue;
             }
 

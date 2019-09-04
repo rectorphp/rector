@@ -81,7 +81,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($node, 'PHPUnit\Framework\MockObject\Builder\InvocationMocker')) {
+        if (! $this->isObjectType($node, 'PHPUnit\Framework\MockObject\Builder\InvocationMocker')) {
             return null;
         }
 

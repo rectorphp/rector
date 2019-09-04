@@ -65,7 +65,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node->class, $this->treeBuilderClass)) {
+        if (! $this->isObjectType($node->class, $this->treeBuilderClass)) {
             return null;
         }
 
@@ -109,7 +109,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            if (! $this->isType($node, $this->treeBuilderClass)) {
+            if (! $this->isObjectType($node, $this->treeBuilderClass)) {
                 return false;
             }
 

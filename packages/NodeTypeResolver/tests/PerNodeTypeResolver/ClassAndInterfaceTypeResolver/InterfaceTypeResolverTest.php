@@ -4,9 +4,11 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTyp
 
 use Iterator;
 use PhpParser\Node\Stmt\Interface_;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\SomeInterfaceWithParentInterface;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\Source\SomeParentInterface;
+use Rector\PHPStan\TypeFactoryStaticHelper;
 
 /**
  * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\ClassAndInterfaceTypeResolver
@@ -15,21 +17,20 @@ final class InterfaceTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     /**
      * @dataProvider dataProvider()
-     * @param string[] $expectedTypes
      */
-    public function test(string $file, int $nodePosition, array $expectedTypes): void
+    public function test(string $file, int $nodePosition, Type $expectedType): void
     {
         $variableNodes = $this->getNodesForFileOfType($file, Interface_::class);
 
-        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
+        $this->assertEquals($expectedType, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
     }
 
     public function dataProvider(): Iterator
     {
-        yield [
-            __DIR__ . '/Source/SomeInterfaceWithParentInterface.php',
-            0,
-            [SomeInterfaceWithParentInterface::class, SomeParentInterface::class],
-        ];
+        $unionType = TypeFactoryStaticHelper::createUnionObjectType(
+            [SomeInterfaceWithParentInterface::class, SomeParentInterface::class]
+        );
+
+        yield [__DIR__ . '/Source/SomeInterfaceWithParentInterface.php', 0, $unionType];
     }
 }

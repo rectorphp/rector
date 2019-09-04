@@ -76,7 +76,7 @@ CODE_SAMPLE
     private function processStringNode(String_ $stringNode): ?Node
     {
         foreach ($this->methodNamesByType as $type => $methodName) {
-            if (! $this->isType($stringNode, $type)) {
+            if (! $this->isObjectType($stringNode, $type)) {
                 continue;
             }
 
@@ -89,7 +89,7 @@ CODE_SAMPLE
     private function processMethodCall(MethodCall $methodCall): ?Node
     {
         foreach ($this->methodNamesByType as $type => $methodName) {
-            if (! $this->isType($methodCall, $type)) {
+            if (! $this->isObjectType($methodCall, $type)) {
                 continue;
             }
 

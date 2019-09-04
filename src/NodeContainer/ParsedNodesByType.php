@@ -18,6 +18,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -512,16 +516,16 @@ final class ParsedNodesByType
         // one node can be of multiple-class types
         if ($node instanceof MethodCall) {
             if ($node->var instanceof MethodCall) {
-                $classTypes = $this->resolveNodeClassTypes($node);
+                $classType = $this->resolveNodeClassTypes($node);
             } else {
-                $classTypes = $this->resolveNodeClassTypes($node->var);
+                $classType = $this->resolveNodeClassTypes($node->var);
             }
         } else {
-            $classTypes = $this->resolveNodeClassTypes($node->class);
+            $classType = $this->resolveNodeClassTypes($node->class);
         }
 
         $methodName = $this->nameResolver->getName($node);
-        if ($classTypes === []) { // anonymous
+        if ($classType instanceof MixedType) { // anonymous
             return;
         }
 
@@ -529,8 +533,18 @@ final class ParsedNodesByType
             return;
         }
 
-        foreach ($classTypes as $classType) {
-            $this->methodsCallsByTypeAndMethod[$classType][$methodName][] = $node;
+        if ($classType instanceof ObjectType) {
+            $this->methodsCallsByTypeAndMethod[$classType->getClassName()][$methodName][] = $node;
+        }
+
+        if ($classType instanceof UnionType) {
+            foreach ($classType->getTypes() as $unionedType) {
+                if (! $unionedType instanceof ObjectType) {
+                    continue;
+                }
+
+                $this->methodsCallsByTypeAndMethod[$unionedType->getClassName()][$methodName][] = $node;
+            }
         }
     }
 
@@ -600,14 +614,17 @@ final class ParsedNodesByType
         return false;
     }
 
-    /**
-     * @return string[]
-     */
-    private function resolveNodeClassTypes(Node $node): array
+    private function resolveNodeClassTypes(Node $node): Type
     {
         if ($node instanceof MethodCall && $node->var instanceof Variable && $node->var->name === 'this') {
+            /** @var string|null $className */
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-            return $className ? [$className] : [];
+
+            if ($className) {
+                return new ObjectType($className);
+            }
+
+            return new MixedType();
         }
 
         if ($node instanceof MethodCall) {

@@ -2,8 +2,8 @@
 
 namespace Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector\Fixture;
 
-use ItemRepository;
 use Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector\Source\DummyKernelTestCase;
+use Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector\Source\ItemRepository;
 
 class InstantCall extends DummyKernelTestCase
 {
@@ -24,19 +24,19 @@ class InstantCall extends DummyKernelTestCase
 
 namespace Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector\Fixture;
 
-use ItemRepository;
 use Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector\Source\DummyKernelTestCase;
+use Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector\Source\ItemRepository;
 
 class InstantCall extends DummyKernelTestCase
 {
     /**
-     * @var \ItemRepository
+     * @var \Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector\Source\ItemRepository
      */
     private $itemRepository;
     protected function setUp()
     {
         parent::setUp();
-        $this->itemRepository = self::$container->get(\ItemRepository::class);
+        $this->itemRepository = self::$container->get(\Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector\Source\ItemRepository::class);
     }
     public function testOne()
     {

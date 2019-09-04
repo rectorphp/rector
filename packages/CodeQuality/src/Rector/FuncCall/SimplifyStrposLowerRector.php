@@ -31,7 +31,7 @@ final class SimplifyStrposLowerRector extends AbstractRector
     }
 
     /**
-     * @param FuncCall $node;
+     * @param FuncCall $node ;
      */
     public function refactor(Node $node): ?Node
     {

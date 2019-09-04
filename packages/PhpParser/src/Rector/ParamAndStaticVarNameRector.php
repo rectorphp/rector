@@ -35,7 +35,7 @@ final class ParamAndStaticVarNameRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isTypes($node->var, ['PhpParser\Node\Param', 'PhpParser\Node\Stmt\StaticVar'])) {
+        if (! $this->isObjectTypes($node->var, ['PhpParser\Node\Param', 'PhpParser\Node\Stmt\StaticVar'])) {
             return null;
         }
 

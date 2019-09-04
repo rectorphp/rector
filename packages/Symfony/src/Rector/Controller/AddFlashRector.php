@@ -4,6 +4,7 @@ namespace Rector\Symfony\Rector\Controller;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ChainMethodCallManipulator;
 use Rector\Rector\AbstractRector;
@@ -80,7 +81,7 @@ CODE_SAMPLE
 
         if (! $this->chainMethodCallManipulator->isTypeAndChainCalls(
             $node,
-            'Symfony\Component\HttpFoundation\Request',
+            new ObjectType('Symfony\Component\HttpFoundation\Request'),
             ['getSession', 'getFlashBag', 'add']
         )
         ) {

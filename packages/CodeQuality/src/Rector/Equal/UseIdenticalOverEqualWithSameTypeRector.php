@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -67,7 +68,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($leftStaticType === null || $rightStaticType === null) {
+        if ($leftStaticType instanceof MixedType || $rightStaticType instanceof MixedType) {
             return null;
         }
 

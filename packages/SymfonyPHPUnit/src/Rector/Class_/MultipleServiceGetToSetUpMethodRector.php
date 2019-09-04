@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\ObjectType;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\VariableInfo;
@@ -133,7 +134,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($node, $this->kernelTestCaseClass)) {
+        if (! $this->isObjectType($node, $this->kernelTestCaseClass)) {
             return null;
         }
 
@@ -201,10 +202,10 @@ CODE_SAMPLE
 
         $stmts = array_merge([new StaticCall(new Name('parent'), 'setUp')], $assigns);
 
-        $classMethod = $this->builderFactory->method('setUp')
-            ->makeProtected()
-            ->addStmts($stmts)
-            ->getNode();
+        $classMethodBuilder = $this->builderFactory->method('setUp');
+        $classMethodBuilder->makeProtected();
+        $classMethodBuilder->addStmts($stmts);
+        $classMethod = $classMethodBuilder->getNode();
 
         $this->phpUnitTypeDeclarationDecorator->decorate($classMethod);
 
@@ -216,7 +217,7 @@ CODE_SAMPLE
         $staticPropertyFetch = new StaticPropertyFetch(new Name('self'), 'container');
 
         $methodCall = new MethodCall($staticPropertyFetch, 'get');
-        if (Strings::contains($serviceType, '_')) {
+        if (Strings::contains($serviceType, '_') && ! Strings::contains($serviceType, '\\')) {
             // keep string
             $getArgumentValue = new String_($serviceType);
         } else {
@@ -263,7 +264,6 @@ CODE_SAMPLE
 
     /**
      * @param string[] $serviceTypes
-     *
      * @return Property[]
      */
     private function createPrivatePropertiesFromTypes(Class_ $class, array $serviceTypes): array
@@ -281,7 +281,8 @@ CODE_SAMPLE
                 continue;
             }
 
-            $variableInfo = new VariableInfo($propertyName, $serviceType);
+            $variableInfo = new VariableInfo($propertyName, new ObjectType($serviceType));
+
             $properties[] = $this->nodeFactory->createPrivatePropertyFromVariableInfo($variableInfo);
         }
 
@@ -406,10 +407,10 @@ CODE_SAMPLE
 
     private function resolvePropertyNameFromServiceType(string $serviceType): string
     {
-        if (Strings::contains($serviceType, '_')) {
+        if (Strings::contains($serviceType, '_') && ! Strings::contains($serviceType, '\\')) {
             return $this->propertyNaming->underscoreToName($serviceType);
         }
 
-        return $this->propertyNaming->fqnToVariableName($serviceType);
+        return $this->propertyNaming->fqnToVariableName(new ObjectType($serviceType));
     }
 }

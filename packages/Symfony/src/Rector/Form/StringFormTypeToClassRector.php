@@ -70,7 +70,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->formBuilderClass)) {
+        if (! $this->isObjectType($node, $this->formBuilderClass)) {
             return null;
         }
 

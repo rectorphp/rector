@@ -3,6 +3,7 @@
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\MixedType;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
@@ -19,7 +20,7 @@ final class DefaultValuePropertyTypeInferer extends AbstractTypeInferer implemen
         }
 
         $nodeStaticType = $this->nodeTypeResolver->getStaticType($propertyProperty->default);
-        if ($nodeStaticType === null) {
+        if ($nodeStaticType instanceof MixedType) {
             return [];
         }
 

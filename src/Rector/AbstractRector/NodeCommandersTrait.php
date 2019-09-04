@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PHPStan\Type\Type;
 use Rector\Application\AppliedRectorCollector;
 use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeAddingCommander;
@@ -70,9 +71,10 @@ trait NodeCommandersTrait
         $this->notifyNodeChangeFileInfo($positionNode);
     }
 
-    protected function addPropertyToClass(Class_ $classNode, string $propertyType, string $propertyName): void
+    protected function addPropertyToClass(Class_ $classNode, Type $propertyType, string $propertyName): void
     {
         $variableInfo = new VariableInfo($propertyName, $propertyType);
+
         $this->propertyAddingCommander->addPropertyToClass($variableInfo, $classNode);
 
         $this->notifyNodeChangeFileInfo($classNode);

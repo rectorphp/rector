@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\MethodCall\PhpSpecToPHPUnitRector\Fixture;
+namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
 use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
 
@@ -57,18 +57,18 @@ class RatesSpec extends DummyObjectBehavior
 -----
 <?php
 
-namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\MethodCall\PhpSpecToPHPUnitRector\Fixture;
+namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
 use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
 
 class RatesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\MethodCall\PhpSpecToPHPUnitRector\Fixture\Rates
+     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Rates
      */
     private $rates;
     /**
-     * @var Provider|\PHPUnit\Framework\MockObject\MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|Provider
      */
     private $provider;
     protected function setUp()
@@ -80,7 +80,7 @@ class RatesTest extends \PHPUnit\Framework\TestCase
             Austrálie|dolar|1|AUD|16,362
             Velká Británie|libra|1|GBP|29,194'
         );
-        $this->rates = new \Rector\PhpSpecToPHPUnit\Tests\Rector\MethodCall\PhpSpecToPHPUnitRector\Fixture\Rates($this->provider);
+        $this->rates = new \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\Rates($this->provider);
     }
 
     public function testInitializable()

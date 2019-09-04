@@ -76,7 +76,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($node, $this->formBuilderType)) {
+        if (! $this->isObjectType($node, $this->formBuilderType)) {
             return null;
         }
 

@@ -59,7 +59,7 @@ final class StaticCallToFunctionRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         foreach ($this->staticCallToFunctionByType as $type => $methodNamesToFunctions) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isObjectType($node, $type)) {
                 continue;
             }
 

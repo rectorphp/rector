@@ -6,15 +6,17 @@ use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
 /**
- * @todo move to
- * @see ParamTypeInferer
  * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver\ParamTypeResolverTest
  */
 final class ParamTypeResolver implements PerNodeTypeResolverInterface
@@ -45,14 +47,14 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
 
     /**
      * @param Param $paramNode
-     * @return string[]
      */
-    public function resolve(Node $paramNode): array
+    public function resolve(Node $paramNode): Type
     {
         if ($paramNode->type !== null) {
             $resolveTypeName = $this->nameResolver->getName($paramNode->type);
             if ($resolveTypeName) {
-                return [$resolveTypeName];
+                // @todo map the other way every type :)
+                return new ObjectType($resolveTypeName);
             }
         }
 
@@ -62,25 +64,24 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
         return $this->resolveTypesFromFunctionDocBlock($paramNode, $parentNode);
     }
 
-    /**
-     * @return string[]
-     */
-    private function resolveTypesFromFunctionDocBlock(Param $param, FunctionLike $functionLike): array
+    private function resolveTypesFromFunctionDocBlock(Param $param, FunctionLike $functionLike): Type
     {
         $paramTypeInfos = $this->docBlockManipulator->getParamTypeInfos($functionLike);
 
         /** @var string $paramName */
         $paramName = $this->nameResolver->getName($param->var);
         if (! isset($paramTypeInfos[$paramName])) {
-            return [];
+            return new MixedType();
         }
 
         $fqnTypeNode = $paramTypeInfos[$paramName]->getFqnTypeNode();
 
         if ($fqnTypeNode instanceof NullableType) {
-            return ['null', (string) $fqnTypeNode->type];
+            $objectType = new ObjectType((string) $fqnTypeNode->type);
+
+            return new UnionType([$objectType, new NullType()]);
         }
 
-        return [(string) $fqnTypeNode];
+        return new ObjectType((string) $fqnTypeNode);
     }
 }

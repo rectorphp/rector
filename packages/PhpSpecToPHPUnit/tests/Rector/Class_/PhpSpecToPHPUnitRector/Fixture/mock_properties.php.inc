@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\MethodCall\PhpSpecToPHPUnitRector\Fixture;
+namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
 use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
 
@@ -22,14 +22,14 @@ class MockPropertiesSpec extends DummyObjectBehavior
 -----
 <?php
 
-namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\MethodCall\PhpSpecToPHPUnitRector\Fixture;
+namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
 use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
 
 class MockPropertiesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\MethodCall\PhpSpecToPHPUnitRector\Fixture\MockProperties
+     * @var \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\MockProperties
      */
     private $mockProperties;
     /**
@@ -39,7 +39,7 @@ class MockPropertiesTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->factory = $this->createMock(OrderFactory::class);
-        $this->mockProperties = new \Rector\PhpSpecToPHPUnit\Tests\Rector\MethodCall\PhpSpecToPHPUnitRector\Fixture\MockProperties($this->factory);
+        $this->mockProperties = new \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture\MockProperties($this->factory);
     }
 
     public function testLetItGo()

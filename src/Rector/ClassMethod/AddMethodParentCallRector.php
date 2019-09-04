@@ -82,7 +82,7 @@ CODE_SAMPLE
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         foreach ($this->methodsByParentTypes as $type => $methods) {
-            if (! $this->isType($class, $type)) {
+            if (! $this->isObjectType($class, $type)) {
                 continue;
             }
 

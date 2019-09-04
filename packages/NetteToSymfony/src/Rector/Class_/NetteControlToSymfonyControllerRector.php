@@ -99,7 +99,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($node, $this->netteControlClass)) {
+        if (! $this->isObjectType($node, $this->netteControlClass)) {
             return null;
         }
 

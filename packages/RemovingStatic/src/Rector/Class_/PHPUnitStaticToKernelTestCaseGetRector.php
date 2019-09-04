@@ -19,14 +19,19 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\ObjectType;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\VariableInfo;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\RemovingStatic\ValueObject\PHPUnitClass;
+use Rector\Symfony\ValueObject\SymfonyClass;
 
 /**
  * @see \Rector\RemovingStatic\Tests\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\PHPUnitStaticToKernelTestCaseGetRectorTest
@@ -44,7 +49,7 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector
     private $propertyNaming;
 
     /**
-     * @var string[]
+     * @var ObjectType[]
      */
     private $newProperties = [];
 
@@ -64,20 +69,27 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector
     private $phpUnitTypeDeclarationDecorator;
 
     /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
+    /**
      * @param string[] $staticClassTypes
      */
     public function __construct(
         PropertyNaming $propertyNaming,
         ClassManipulator $classManipulator,
         PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
+        StaticTypeMapper $staticTypeMapper,
         array $staticClassTypes = [],
-        string $kernelTestCaseClass = 'Symfony\Bundle\FrameworkBundle\Test\KernelTestCase'
+        string $kernelTestCaseClass = SymfonyClass::KERNEL_TEST_CASE
     ) {
         $this->staticClassTypes = $staticClassTypes;
         $this->propertyNaming = $propertyNaming;
         $this->kernelTestCaseClass = $kernelTestCaseClass;
         $this->classManipulator = $classManipulator;
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     public function getDefinition(): RectorDefinition
@@ -145,7 +157,7 @@ CODE_SAMPLE
         $this->newProperties = [];
 
         if ($node instanceof Class_) {
-            if ($this->isTypes($node, $this->staticClassTypes)) {
+            if ($this->isObjectTypes($node, $this->staticClassTypes)) {
                 return null;
             }
 
@@ -157,7 +169,7 @@ CODE_SAMPLE
 
     private function processClass(Class_ $class): ?Class_
     {
-        if ($this->isType($class, 'PHPUnit\Framework\TestCase')) {
+        if ($this->isObjectType($class, PHPUnitClass::TEST_CASE)) {
             return $this->processPHPUnitClass($class);
         }
 
@@ -185,18 +197,19 @@ CODE_SAMPLE
         }
 
         foreach ($this->staticClassTypes as $type) {
-            if (! $this->isType($staticCall, $type)) {
+            $objectType = new ObjectType($type);
+            if (! $this->isObjectType($staticCall->class, $objectType)) {
                 continue;
             }
 
-            return $this->convertStaticCallToPropertyMethodCall($staticCall, $type);
+            return $this->convertStaticCallToPropertyMethodCall($staticCall, $objectType);
         }
 
         return null;
     }
 
     /**
-     * @return string[]
+     * @return ObjectType[]
      */
     private function collectNewProperties(Class_ $class): array
     {
@@ -208,11 +221,12 @@ CODE_SAMPLE
             }
 
             foreach ($this->staticClassTypes as $type) {
-                if (! $this->isType($node, $type)) {
+                $objectType = new ObjectType($type);
+                if (! $this->isObjectType($node->class, $objectType)) {
                     continue;
                 }
 
-                $this->newProperties[] = $type;
+                $this->newProperties[] = $objectType;
             }
         });
 
@@ -221,17 +235,17 @@ CODE_SAMPLE
         return $this->newProperties;
     }
 
-    private function createPropertyFromType(string $type): Property
+    private function createPropertyFromType(ObjectType $objectType): Property
     {
-        $propertyName = $this->propertyNaming->fqnToVariableName($type);
+        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
 
-        return $this->nodeFactory->createPrivatePropertyFromVariableInfo(new VariableInfo($propertyName, $type));
+        return $this->nodeFactory->createPrivatePropertyFromVariableInfo(new VariableInfo($propertyName, $objectType));
     }
 
-    private function convertStaticCallToPropertyMethodCall(StaticCall $staticCall, string $type): MethodCall
+    private function convertStaticCallToPropertyMethodCall(StaticCall $staticCall, ObjectType $objectType): MethodCall
     {
         // create "$this->someService" instead
-        $propertyName = $this->propertyNaming->fqnToVariableName($type);
+        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
         $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
 
         // turn static call to method on property call
@@ -241,23 +255,29 @@ CODE_SAMPLE
         return $methodCall;
     }
 
-    private function createContainerGetTypeMethodCall(string $type): MethodCall
+    private function createContainerGetTypeMethodCall(ObjectType $objectType): MethodCall
     {
         $containerProperty = new StaticPropertyFetch(new Name('self'), 'container');
         $getMethodCall = new MethodCall($containerProperty, 'get');
-        $getMethodCall->args[] = new Arg(new ClassConstFetch(new FullyQualified($type), 'class'));
+
+        $className = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType);
+        if (! $className instanceof Name) {
+            throw new ShouldNotHappenException();
+        }
+
+        $getMethodCall->args[] = new Arg(new ClassConstFetch($className, 'class'));
 
         return $getMethodCall;
     }
 
     /**
-     * @param string[] $newProperties
+     * @param ObjectType[] $newProperties
      */
     private function addNewPropertiesToClass(Class_ $class, array $newProperties): Class_
     {
         $properties = [];
-        foreach ($newProperties as $type) {
-            $properties[] = $this->createPropertyFromType($type);
+        foreach ($newProperties as $objectType) {
+            $properties[] = $this->createPropertyFromType($objectType);
         }
 
         // add property to the start of the class
@@ -266,11 +286,11 @@ CODE_SAMPLE
         return $class;
     }
 
-    private function createContainerGetTypeToPropertyAssign(string $type): Expression
+    private function createContainerGetTypeToPropertyAssign(ObjectType $objectType): Expression
     {
-        $getMethodCall = $this->createContainerGetTypeMethodCall($type);
+        $getMethodCall = $this->createContainerGetTypeMethodCall($objectType);
 
-        $propertyName = $this->propertyNaming->fqnToVariableName($type);
+        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
         $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
 
         $assign = new Assign($propertyFetch, $getMethodCall);
@@ -336,7 +356,7 @@ CODE_SAMPLE
         }
 
         // update parent clsas if not already
-        if (! $this->isType($class, $this->kernelTestCaseClass)) {
+        if (! $this->isObjectType($class, $this->kernelTestCaseClass)) {
             $class->extends = new FullyQualified($this->kernelTestCaseClass);
         }
 
@@ -345,9 +365,8 @@ CODE_SAMPLE
 
     private function createSetUpMethod(Expression $parentSetupStaticCall, Expression $assign): ClassMethod
     {
-        $classMethodBuilder = $this->builderFactory->method('setUp')
-            ->makeProtected();
-
+        $classMethodBuilder = $this->builderFactory->method('setUp');
+        $classMethodBuilder->makeProtected();
         $classMethodBuilder->addStmt($parentSetupStaticCall);
         $classMethodBuilder->addStmt($assign);
 

@@ -50,7 +50,7 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->containerBuilderClass)) {
+        if (! $this->isObjectType($node, $this->containerBuilderClass)) {
             return null;
         }
 

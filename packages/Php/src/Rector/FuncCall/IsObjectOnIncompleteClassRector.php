@@ -5,6 +5,7 @@ namespace Rector\Php\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
+use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -13,6 +14,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see http://php.net/manual/en/migration72.incompatible.php#migration72.incompatible.is_object-on-incomplete_class
  * @see https://3v4l.org/SpiE6
+ *
  * @see \Rector\Php\Tests\Rector\FuncCall\IsObjectOnIncompleteClassRector\IsObjectOnIncompleteClassRectorTest
  */
 final class IsObjectOnIncompleteClassRector extends AbstractRector
@@ -51,8 +53,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $types = $this->getTypes($node->args[0]->value);
-        if ($types !== ['__PHP_Incomplete_Class']) {
+        $incompleteClassObjectType = new ObjectType('__PHP_Incomplete_Class');
+        if (! $this->isObjectType($node->args[0]->value, $incompleteClassObjectType)) {
             return null;
         }
 

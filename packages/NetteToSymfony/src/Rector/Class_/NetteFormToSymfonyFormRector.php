@@ -125,7 +125,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($classNode, $this->presenterClass)) {
+        if (! $this->isObjectType($classNode, $this->presenterClass)) {
             return null;
         }
 
@@ -134,7 +134,7 @@ CODE_SAMPLE
         }
 
         /** @var MethodCall $node */
-        if (! $this->isType($node->var, 'Nette\Application\UI\Form')) {
+        if (! $this->isObjectType($node->var, 'Nette\Application\UI\Form')) {
             return null;
         }
 

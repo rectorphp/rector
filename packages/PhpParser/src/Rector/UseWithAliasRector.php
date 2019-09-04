@@ -38,7 +38,7 @@ final class UseWithAliasRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node->var, 'PhpParser\Node\Stmt\UseUse')) {
+        if (! $this->isObjectType($node->var, 'PhpParser\Node\Stmt\UseUse')) {
             return null;
         }
 

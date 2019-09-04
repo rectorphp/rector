@@ -101,7 +101,7 @@ CODE_SAMPLE
                 throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
             }
 
-            if (! $this->isType($classNode, $type)) {
+            if (! $this->isObjectType($classNode, $type)) {
                 continue;
             }
 

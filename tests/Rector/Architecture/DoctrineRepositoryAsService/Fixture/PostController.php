@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Fixture;
 
-use AppBundle\Entity\Post;
+use Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\Entity\Post;
 use Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\SymfonyController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,17 +23,17 @@ final class PostController extends SymfonyController
 
 namespace Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Fixture;
 
-use AppBundle\Entity\Post;
+use Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\Entity\Post;
 use Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\SymfonyController;
 use Symfony\Component\HttpFoundation\Response;
 
 final class PostController extends SymfonyController
 {
     /**
-     * @var \AppBundle\Repository\PostRepository
+     * @var \Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\Repository\PostRepository
      */
     private $postRepository;
-    public function __construct(\AppBundle\Repository\PostRepository $postRepository)
+    public function __construct(\Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\Repository\PostRepository $postRepository)
     {
         $this->postRepository = $postRepository;
     }

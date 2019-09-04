@@ -17,6 +17,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ *
  * @see \Rector\DeadCode\Tests\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector\RemoveSetterOnlyPropertyAndMethodCallRectorTest
  */
 final class RemoveSetterOnlyPropertyAndMethodCallRector extends AbstractRector
@@ -107,22 +108,28 @@ CODE_SAMPLE
 
     /**
      * @param Property|ClassMethod|MethodCall|Assign $node
-     * @return string[][]][]|null
+     * @return string[][] ][]|null
      */
     private function resolveSetterOnlyPropertiesAndMethodsForClass(Node $node): ?array
     {
-        if ($node instanceof MethodCall) {
-            $className = $this->getTypes($node->var)[0] ?? null;
-            if ($className === null) {
-                return null;
-            }
-        } else {
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-        }
-
         $setterOnlyPropertiesAndMethodsByType = $this->setterOnlyMethodAnalyzer->provideSetterOnlyPropertiesAndMethodsByType();
 
-        return $setterOnlyPropertiesAndMethodsByType[$className] ?? null;
+        foreach ($setterOnlyPropertiesAndMethodsByType as $type => $setterOnlyPropertiesAndMethods) {
+            if ($node instanceof MethodCall) {
+                if (! $this->isObjectType($node->var, $type)) {
+                    continue;
+                }
+
+                return $setterOnlyPropertiesAndMethods;
+            }
+
+            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+            if ($className === $type) {
+                return $setterOnlyPropertiesAndMethods;
+            }
+        }
+
+        return null;
     }
 
     /**

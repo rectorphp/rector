@@ -7,8 +7,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 
 final class ClassAndInterfaceTypeResolver implements PerNodeTypeResolverInterface
@@ -18,9 +20,15 @@ final class ClassAndInterfaceTypeResolver implements PerNodeTypeResolverInterfac
      */
     private $classReflectionTypesResolver;
 
-    public function __construct(ClassReflectionTypesResolver $classReflectionTypesResolver)
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    public function __construct(ClassReflectionTypesResolver $classReflectionTypesResolver, TypeFactory $typeFactory)
     {
         $this->classReflectionTypesResolver = $classReflectionTypesResolver;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
@@ -33,9 +41,8 @@ final class ClassAndInterfaceTypeResolver implements PerNodeTypeResolverInterfac
 
     /**
      * @param Class_|Interface_ $node
-     * @return string[]
      */
-    public function resolve(Node $node): array
+    public function resolve(Node $node): Type
     {
         /** @var Scope $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
@@ -43,6 +50,8 @@ final class ClassAndInterfaceTypeResolver implements PerNodeTypeResolverInterfac
         /** @var ClassReflection $classReflection */
         $classReflection = $nodeScope->getClassReflection();
 
-        return $this->classReflectionTypesResolver->resolve($classReflection);
+        $classTypes = $this->classReflectionTypesResolver->resolve($classReflection);
+
+        return $this->typeFactory->createObjectTypeOrUnionType($classTypes);
     }
 }

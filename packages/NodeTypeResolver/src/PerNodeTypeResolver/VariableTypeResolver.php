@@ -7,15 +7,15 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
-use PHPStan\TrinaryLogic;
-use PHPStan\Type\ThisType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
-use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 /**
@@ -27,11 +27,6 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
      * @var DocBlockManipulator
      */
     private $docBlockManipulator;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
 
     /**
      * @var NameResolver
@@ -50,12 +45,10 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
 
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
-        StaticTypeMapper $staticTypeMapper,
         NameResolver $nameResolver,
         TraitNodeScopeCollector $traitNodeScopeCollector
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->nameResolver = $nameResolver;
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
     }
@@ -70,9 +63,8 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
 
     /**
      * @param Variable $variableNode
-     * @return string[]
      */
-    public function resolve(Node $variableNode): array
+    public function resolve(Node $variableNode): Type
     {
         $parentNode = $variableNode->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Param) {
@@ -81,23 +73,28 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
 
         $variableName = $this->nameResolver->getName($variableNode);
         if ($variableName === null) {
-            return [];
+            return new MixedType();
         }
 
         $scopeType = $this->resolveTypesFromScope($variableNode, $variableName);
-        if ($scopeType !== []) {
+        if (! $scopeType instanceof MixedType) {
             return $scopeType;
         }
 
         // get from annotation
         $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($variableNode);
         if ($varTypeInfo === null) {
-            return [];
+            return new MixedType();
         }
 
         $varType = $varTypeInfo->getFqnType();
 
-        return $varType === null ? [] : [$varType];
+        if ($varType) {
+            // @todo this can be anything :/
+            return new ObjectType($varType);
+        }
+
+        return new MixedType();
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
@@ -109,6 +106,9 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
     {
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
+        if ($nodeScope) {
+            return $nodeScope;
+        }
 
         // is node in trait
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
@@ -116,43 +116,43 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
             /** @var string $traitName */
             $traitName = $node->getAttribute(AttributeKey::CLASS_NAME);
             $traitNodeScope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $node);
+            if ($traitNodeScope) {
+                return $traitNodeScope;
+            }
         }
 
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Node) {
             $parentNodeScope = $parentNode->getAttribute(AttributeKey::SCOPE);
+            if ($parentNodeScope) {
+                return $parentNodeScope;
+            }
         }
 
         // get nearest variable scope
         $method = $node->getAttribute(AttributeKey::METHOD_NODE);
         if ($method instanceof Node) {
             $methodNodeScope = $method->getAttribute(AttributeKey::SCOPE);
+            if ($methodNodeScope) {
+                return $methodNodeScope;
+            }
         }
 
-        return $nodeScope ?? $traitNodeScope ?? $parentNodeScope ?? $methodNodeScope ?? null;
+        return null;
     }
 
-    /**
-     * @return string[]
-     */
-    private function resolveTypesFromScope(Variable $variable, string $variableName): array
+    private function resolveTypesFromScope(Variable $variable, string $variableName): Type
     {
         $nodeScope = $this->resolveNodeScope($variable);
         if ($nodeScope === null) {
-            return [];
+            return new MixedType();
         }
 
-        if ($nodeScope->hasVariableType($variableName) !== TrinaryLogic::createYes()) {
-            return [];
+        if (! $nodeScope->hasVariableType($variableName)->yes()) {
+            return new MixedType();
         }
 
-        $type = $nodeScope->getVariableType($variableName);
-
-        // this
-        if ($type instanceof ThisType) {
-            return [$nodeScope->getClassReflection()->getName()];
-        }
-
-        return $this->staticTypeMapper->mapPHPStanTypeToStrings($type);
+        // this → object type is easier to work with and consistent with the rest of the code
+        return $nodeScope->getVariableType($variableName);
     }
 }
