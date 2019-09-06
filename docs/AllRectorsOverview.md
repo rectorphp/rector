@@ -5402,8 +5402,7 @@ Changes createForm(new FormType), add(new FormType) to ones with "FormType::clas
 +        $form = $this->createForm(TeamType::class, $entity, [
              'action' => $this->generateUrl('teams_update', ['id' => $entity->getId()]),
              'method' => 'PUT',
--        ]);
-+        ));
+        ]);
      }
  }
 ```
@@ -5595,7 +5594,7 @@ Change "read_only" option in form to attribute
  function buildForm(FormBuilderInterface $builder, array $options)
  {
 -    $builder->add('cuid', TextType::class, ['read_only' => true]);
-+    $builder->add('cuid', TextType::class, ['attr' => [read_only' => true]]);
++    $builder->add('cuid', TextType::class, ['attr' => ['read_only' => true]]);
  }
 ```
 
@@ -5698,7 +5697,7 @@ Turns string Form Type references to their CONSTANT alternatives in FormTypes in
 ```diff
  $formBuilder = new Symfony\Component\Form\FormBuilder;
 -$formBuilder->add('name', 'form.type.text');
-+$form->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
++$formBuilder->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
 ```
 
 <br>

@@ -52,7 +52,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 function buildForm(FormBuilderInterface $builder, array $options)
 {
-    $builder->add('cuid', TextType::class, ['attr' => [read_only' => true]]);
+    $builder->add('cuid', TextType::class, ['attr' => ['read_only' => true]]);
 }
 CODE_SAMPLE
             ),

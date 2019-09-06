@@ -50,7 +50,7 @@ CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
 $formBuilder = new Symfony\Component\Form\FormBuilder;
-$form->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
+$formBuilder->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
 CODE_SAMPLE
                 ),
             ]
