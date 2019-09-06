@@ -5,7 +5,6 @@ namespace Rector\TypeDeclaration\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -13,11 +12,14 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
-use Rector\Exception\ShouldNotHappenException;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\StaticType;
+use PHPStan\Type\Type;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\Php\AbstractTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\PHPStan\Type\SelfObjectType;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -159,41 +161,21 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     }
 
     /**
-     * @param ClassMethod|Param $node
      * @return Name|NullableType|Identifier|null
      */
-    protected function resolveChildType(AbstractTypeInfo $returnTypeInfo, Node $node): ?Node
+    protected function resolveChildTypeNode(Type $type): ?Node
     {
-        $nakedType = $returnTypeInfo->getTypeNode() instanceof NullableType ? $returnTypeInfo->getTypeNode()->type : $returnTypeInfo->getTypeNode();
-
-        if ($nakedType === null) {
+        if ($type instanceof MixedType) {
             return null;
         }
 
-        if ($nakedType->toString() === 'self') {
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-            if ($className === null) {
-                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
-            }
-
-            $type = new FullyQualified($className);
-
-            return $returnTypeInfo->isNullable() ? new NullableType($type) : $type;
+        if ($type instanceof SelfObjectType) {
+            $type = new ObjectType($type->getClassName());
+        } elseif ($type instanceof StaticType) {
+            $type = new ObjectType($type->getClassName());
         }
 
-        if ($nakedType->toString() === 'parent') {
-            $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-            if ($parentClassName === null) {
-                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
-            }
-
-            $type = new FullyQualified($parentClassName);
-
-            return $returnTypeInfo->isNullable() ? new NullableType($type) : $type;
-        }
-
-        // are namespaces different? → FQN name
-        return $returnTypeInfo->getFqnTypeNode();
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
     }
 
     private function hasParentClassOrImplementsInterface(ClassMethod $classMethod): bool

@@ -108,12 +108,12 @@ CODE_SAMPLE
                 return null;
             }
 
-            $types = $this->paramTypeInferer->inferParam($param);
-            if ($types === []) {
+            $type = $this->paramTypeInferer->inferParam($param);
+            if ($type instanceof MixedType) {
                 return null;
             }
 
-            $paramTagNode = $this->paramPhpDocNodeFactory->create($types, $param);
+            $paramTagNode = $this->paramPhpDocNodeFactory->create($type, $param);
             $this->docBlockManipulator->addTag($node, $paramTagNode);
         }
 

@@ -69,7 +69,6 @@
             "Rector\\PHPUnitSymfony\\": "packages/PHPUnitSymfony/src",
             "Rector\\PHPUnit\\": "packages/PHPUnit/src",
             "Rector\\PSR4\\": "packages/PSR4/src",
-            "Rector\\PhpParser\\": "packages/PhpParser/src",
             "Rector\\PhpSpecToPHPUnit\\": "packages/PhpSpecToPHPUnit/src",
             "Rector\\Php\\": "packages/Php/src",
             "Rector\\RemovingStatic\\": "packages/RemovingStatic/src",
@@ -114,7 +113,6 @@
             "Rector\\PHPStan\\Tests\\": "packages/PHPStan/tests",
             "Rector\\PHPUnitSymfony\\Tests\\": "packages/PHPUnitSymfony/tests",
             "Rector\\PHPUnit\\Tests\\": "packages/PHPUnit/tests",
-            "Rector\\PhpParser\\Tests\\": "packages/PhpParser/tests",
             "Rector\\PhpSpecToPHPUnit\\Tests\\": "packages/PhpSpecToPHPUnit/tests",
             "Rector\\Php\\Tests\\": "packages/Php/tests",
             "Rector\\RemovingStatic\\Tests\\": "packages/RemovingStatic/tests",
@@ -140,7 +138,15 @@
             "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source"
         ],
         "files": [
-            "packages/DeadCode/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php"
+            "packages/DeadCode/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",
+            "packages/Php/tests/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php",
+            "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source/ChangeMeAnotherNamespace.php",
+            "tests/Issues/Issue1243/Source/Twig_Environment.php",
+            "tests/Issues/Issue1243/Source/Twig_Error_Loader.php",
+            "tests/Issues/Issue1243/Source/Twig_Error_Syntax.php",
+            "tests/Issues/Issue1243/Source/Twig_Error_Runtime.php",
+            "tests/Issues/Issue1243/Source/Twig_Loader_Array.php",
+            "packages/TypeDeclaration/tests/Rector/FunctionLike/ReturnTypeDeclarationRector/Source/MyBar.php"
         ]
     },
     "scripts": {

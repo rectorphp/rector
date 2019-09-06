@@ -20,16 +20,16 @@ final class DataProviderClassMethodRecipe
     /**
      * @var Type|null
      */
-    private $providedType;
+    private $type;
 
     /**
      * @param Arg[] $args
      */
-    public function __construct(string $methodName, array $args, ?Type $providedType)
+    public function __construct(string $methodName, array $args, ?Type $type)
     {
         $this->methodName = $methodName;
         $this->args = $args;
-        $this->providedType = $providedType;
+        $this->type = $type;
     }
 
     public function getMethodName(): string
@@ -45,8 +45,8 @@ final class DataProviderClassMethodRecipe
         return $this->args;
     }
 
-    public function getProvidedType(): ?Type
+    public function getType(): ?Type
     {
-        return $this->providedType;
+        return $this->type;
     }
 }

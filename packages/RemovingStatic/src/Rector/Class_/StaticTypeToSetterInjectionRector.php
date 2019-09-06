@@ -176,7 +176,7 @@ CODE_SAMPLE
             $entityFactoryPropertyBuilder->makePrivate();
             $entityFactoryProperty = $entityFactoryPropertyBuilder->getNode();
 
-            $this->docBlockManipulator->changeVarTag($entityFactoryProperty, $staticType);
+            $this->docBlockManipulator->changeVarTag($entityFactoryProperty, $objectType);
 
             $class->stmts = array_merge([$entityFactoryProperty, $setEntityFactoryMethod], $class->stmts);
 

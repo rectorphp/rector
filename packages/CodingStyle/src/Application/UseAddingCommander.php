@@ -11,19 +11,20 @@ use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class UseAddingCommander implements CommanderInterface
 {
     /**
-     * @var string[][]
+     * @var FullyQualifiedObjectType[][]
      */
-    private $useImportsInFilePath = [];
+    private $useImportTypesInFilePath = [];
 
     /**
-     * @var string[][]
+     * @var FullyQualifiedObjectType[][]
      */
-    private $functionUseImportsInFilePath = [];
+    private $functionUseImportTypesInFilePath = [];
 
     /**
      * @var UseImportsAdder
@@ -57,7 +58,7 @@ final class UseAddingCommander implements CommanderInterface
         $this->betterNodeFinder = $betterNodeFinder;
     }
 
-    public function addUseImport(Node $node, string $useImport): void
+    public function addUseImport(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
         /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
@@ -66,14 +67,14 @@ final class UseAddingCommander implements CommanderInterface
             return;
         }
 
-        $this->useImportsInFilePath[$fileInfo->getRealPath()][] = $useImport;
+        $this->useImportTypesInFilePath[$fileInfo->getRealPath()][] = $fullyQualifiedObjectType;
     }
 
-    public function addFunctionUseImport(Node $node, string $functionUseImport): void
+    public function addFunctionUseImport(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
         /** @var SmartFileInfo $fileInfo */
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        $this->functionUseImportsInFilePath[$fileInfo->getRealPath()][] = $functionUseImport;
+        $this->functionUseImportTypesInFilePath[$fileInfo->getRealPath()][] = $fullyQualifiedObjectType;
     }
 
     /**
@@ -89,50 +90,48 @@ final class UseAddingCommander implements CommanderInterface
 
         $filePath = $this->getRealPathFromNode($nodes[0]);
 
-        $useImports = $this->useImportsInFilePath[$filePath] ?? [];
-        $functionUseImports = $this->functionUseImportsInFilePath[$filePath] ?? [];
+        $useImportTypes = $this->useImportTypesInFilePath[$filePath] ?? [];
+        $functionUseImportTypes = $this->functionUseImportTypesInFilePath[$filePath] ?? [];
 
         // nothing to import
-        if ($useImports === [] && $functionUseImports === []) {
+        if ($useImportTypes === [] && $functionUseImportTypes === []) {
             return $nodes;
         }
 
         // clear applied imports, so isActive() doesn't return any false positives
-        unset($this->useImportsInFilePath[$filePath], $this->functionUseImportsInFilePath[$filePath]);
+        unset($this->useImportTypesInFilePath[$filePath], $this->functionUseImportTypesInFilePath[$filePath]);
 
         // A. has namespace? add under it
         $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
         if ($namespace instanceof Namespace_) {
-            $this->useImportsAdder->addImportsToNamespace($namespace, $useImports, $functionUseImports);
+            $this->useImportsAdder->addImportsToNamespace($namespace, $useImportTypes, $functionUseImportTypes);
             return $nodes;
         }
 
         // B. no namespace? add in the top
-        return $this->useImportsAdder->addImportsToStmts($nodes, $useImports, $functionUseImports);
+        return $this->useImportsAdder->addImportsToStmts($nodes, $useImportTypes, $functionUseImportTypes);
     }
 
     public function isActive(): bool
     {
-        return count($this->useImportsInFilePath) > 0 || count($this->functionUseImportsInFilePath) > 0;
+        return count($this->useImportTypesInFilePath) > 0 || count($this->functionUseImportTypesInFilePath) > 0;
     }
 
-    public function isShortImported(Node $node, string $fullyQualifiedName): bool
+    public function isShortImported(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
         $filePath = $this->getRealPathFromNode($node);
-        $shortName = $this->classNaming->getShortName($fullyQualifiedName);
+        $shortName = $fullyQualifiedObjectType->getShortName();
 
-        $fileUseImports = $this->useImportsInFilePath[$filePath] ?? [];
+        $fileUseImports = $this->useImportTypesInFilePath[$filePath] ?? [];
         foreach ($fileUseImports as $fileUseImport) {
-            $shortFileUseImport = $this->classNaming->getShortName($fileUseImport);
-            if ($shortFileUseImport === $shortName) {
+            if ($fileUseImport->getShortName() === $shortName) {
                 return true;
             }
         }
 
-        $fileFunctionUseImports = $this->functionUseImportsInFilePath[$filePath] ?? [];
-        foreach ($fileFunctionUseImports as $fileFunctionUseImport) {
-            $shortFileFunctionUseImport = $this->classNaming->getShortName($fileFunctionUseImport);
-            if ($shortFileFunctionUseImport === $shortName) {
+        $fileFunctionUseImportTypes = $this->functionUseImportTypesInFilePath[$filePath] ?? [];
+        foreach ($fileFunctionUseImportTypes as $fileFunctionUseImportType) {
+            if ($fileFunctionUseImportType->getShortName() === $fullyQualifiedObjectType->getShortName()) {
                 return true;
             }
         }
@@ -140,21 +139,33 @@ final class UseAddingCommander implements CommanderInterface
         return false;
     }
 
-    public function isImportShortable(Node $node, string $fullyQualifiedName): bool
+    public function isImportShortable(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
         $filePath = $this->getRealPathFromNode($node);
 
-        $fileUseImports = $this->useImportsInFilePath[$filePath] ?? [];
-        if (in_array($fullyQualifiedName, $fileUseImports, true)) {
-            return true;
-        }
+        $fileUseImportTypes = $this->useImportTypesInFilePath[$filePath] ?? [];
 
-        $functionUseImports = $this->functionUseImportsInFilePath[$filePath] ?? [];
-        if (in_array($fullyQualifiedName, $functionUseImports, true)) {
-            return true;
+        foreach ($fileUseImportTypes as $useImportType) {
+            if ($fullyQualifiedObjectType->equals($useImportType)) {
+                return true;
+            }
         }
 
         return false;
+//        dump($fileUseImportTypes);
+//        dump($fullyQualifiedObjectType);
+//        die;
+//
+//        if (in_array($fullyQualifiedObjectType, $fileUseImportTypes, true)) {
+//            return true;
+//        }
+//
+//        $functionUseImports = $this->functionUseImportsInFilePath[$filePath] ?? [];
+//        if (in_array($fullyQualifiedObjectType, $functionUseImports, true)) {
+//            return true;
+//        }
+//
+//        return false;
     }
 
     public function analyseFileInfoUseStatements(Node $node): void
@@ -162,34 +173,35 @@ final class UseAddingCommander implements CommanderInterface
         $filePath = $this->getRealPathFromNode($node);
 
         // already analysed
-        if (isset($this->useImportsInFilePath[$filePath])) {
+        if (isset($this->useImportTypesInFilePath[$filePath])) {
             return;
         }
 
         $usedImports = $this->usedImportsResolver->resolveForNode($node);
 
         foreach ($usedImports as $usedImport) {
-            $this->useImportsInFilePath[$filePath][] = $usedImport;
+            $this->useImportTypesInFilePath[$filePath][] = $usedImport;
         }
     }
 
-    public function hasImport(Name $name, string $fullyQualifiedName): bool
+    public function hasImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
         $filePath = $this->getRealPathFromNode($name);
 
-        return in_array($fullyQualifiedName, $this->useImportsInFilePath[$filePath] ?? [], true);
+        return in_array($fullyQualifiedObjectType, $this->useImportTypesInFilePath[$filePath] ?? [], true);
     }
 
-    public function canImportBeAdded(Name $name, string $import): bool
+    public function canImportBeAdded(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
-        $shortImport = $this->classNaming->getShortName($import);
+        $shortImport = $fullyQualifiedObjectType->getShortName();
 
         $filePath = $this->getRealPathFromNode($name);
 
-        foreach ($this->useImportsInFilePath[$filePath] ?? [] as $importsInClass) {
-            $shortImportInClass = $this->classNaming->getShortName($importsInClass);
-            if ($importsInClass !== $import && $shortImportInClass === $shortImport) {
-                return true;
+        foreach ($this->useImportTypesInFilePath[$filePath] ?? [] as $importsInClass) {
+            if ($importsInClass !== $fullyQualifiedObjectType) {
+                if ($importsInClass->getShortName() === $shortImport) {
+                    return true;
+                }
             }
         }
 

@@ -113,6 +113,7 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     {
         $this->autoloadTestFixture = false;
         $this->doTestFiles($files);
+        $this->autoloadTestFixture = true;
     }
 
     protected function provideConfig(): string
@@ -141,25 +142,21 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
      */
     protected function doTestFiles(array $files): void
     {
-        // 1. original to changed content
         foreach ($files as $file) {
-            $smartFileInfo = new SmartFileInfo($file);
-            [$originalFile, $changedFile] = $this->fixtureSplitter->splitContentToOriginalFileAndExpectedFile(
-                $smartFileInfo,
-                $this->autoloadTestFixture
-            );
-
-            $this->nodeScopeResolver->setAnalysedFiles([$originalFile]);
-
-            $this->doTestFileMatchesExpectedContent($originalFile, $changedFile, $smartFileInfo->getRealPath());
+            $this->doTestFile($file);
         }
-
-        $this->autoloadTestFixture = true;
     }
 
     protected function doTestFile(string $file): void
     {
-        $this->doTestFiles([$file]);
+        $smartFileInfo = new SmartFileInfo($file);
+        [$originalFile, $changedFile] = $this->fixtureSplitter->splitContentToOriginalFileAndExpectedFile(
+            $smartFileInfo,
+            $this->autoloadTestFixture
+        );
+
+        $this->nodeScopeResolver->setAnalysedFiles([$originalFile]);
+        $this->doTestFileMatchesExpectedContent($originalFile, $changedFile, $smartFileInfo->getRealPath());
     }
 
     protected function getTempPath(): string

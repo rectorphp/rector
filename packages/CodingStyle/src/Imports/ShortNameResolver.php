@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class ShortNameResolver
@@ -21,9 +22,15 @@ final class ShortNameResolver
      */
     private $shortNamesByNamespaceObjectHash = [];
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser)
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    public function __construct(CallableNodeTraverser $callableNodeTraverser, NameResolver $nameResolver)
     {
         $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->nameResolver = $nameResolver;
     }
 
     /**
@@ -33,23 +40,20 @@ final class ShortNameResolver
     {
         /** @var Namespace_|null $namespace */
         $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NODE);
-
         if ($namespace === null) {
             return [];
         }
 
-        $namespaceHash = spl_object_hash($namespace);
-        if (isset($this->shortNamesByNamespaceObjectHash[$namespaceHash])) {
-            return $this->shortNamesByNamespaceObjectHash[$namespaceHash];
+        $namespaceName = $this->nameResolver->getName($namespace);
+
+        if (isset($this->shortNamesByNamespaceObjectHash[$namespaceName])) {
+            return $this->shortNamesByNamespaceObjectHash[$namespaceName];
         }
 
-        if ($namespace instanceof Namespace_) {
-            $shortNames = $this->resolveForNamespace($namespace);
-            $this->shortNamesByNamespaceObjectHash[$namespaceHash] = $shortNames;
-            return $shortNames;
-        }
+        $shortNames = $this->resolveForNamespace($namespace);
+        $this->shortNamesByNamespaceObjectHash[$namespaceName] = $shortNames;
 
-        return [];
+        return $shortNames;
     }
 
     /**

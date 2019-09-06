@@ -8,6 +8,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -80,12 +82,15 @@ CODE_SAMPLE
 
     private function refactorProperty(Property $property): ?Property
     {
-        foreach ($this->valueObjectsToSimpleTypes as $valueObject => $simpleType) {
-            if (! $this->isObjectType($property, $valueObject)) {
+        foreach ($this->valueObjectsToSimpleTypes as $oldType => $newSimpleType) {
+            $oldObjectType = new ObjectType($oldType);
+            if (! $this->isObjectType($property, $oldObjectType)) {
                 continue;
             }
 
-            $this->docBlockManipulator->changeTypeIncludingChildren($property, $valueObject, $simpleType);
+            $newSimpleType = $this->staticTypeMapper->mapStringToPHPStanType($newSimpleType);
+
+            $this->docBlockManipulator->changeType($property, $oldObjectType, $newSimpleType);
 
             return $property;
         }
@@ -95,21 +100,20 @@ CODE_SAMPLE
 
     private function refactorNullableType(NullableType $nullableType): ?NullableType
     {
-        foreach ($this->valueObjectsToSimpleTypes as $valueObject => $simpleType) {
-            $typeName = $this->getName($nullableType->type);
-            if ($typeName === null) {
-                continue;
-            }
+        foreach ($this->valueObjectsToSimpleTypes as $valueObject => $newSimpleType) {
+            $newSimpleType = $this->staticTypeMapper->mapStringToPHPStanType($newSimpleType);
 
-            /** @var string $valueObject */
-            if (! is_a($typeName, $valueObject, true)) {
+            $nullableStaticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($nullableType->type);
+            $valueObjectType = new ObjectType($valueObject);
+
+            if (! $valueObjectType->equals($nullableStaticType)) {
                 continue;
             }
 
             // in method parameter update docs as well
             $parentNode = $nullableType->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof Param) {
-                $this->processParamNode($nullableType, $parentNode, $simpleType);
+                $this->processParamNode($nullableType, $parentNode, $newSimpleType);
             }
 
             return $nullableType;
@@ -120,8 +124,8 @@ CODE_SAMPLE
 
     private function refactorVariableNode(Variable $variable): ?Variable
     {
-        foreach ($this->valueObjectsToSimpleTypes as $valueObject => $simpleType) {
-            if (! $this->isObjectType($variable, $valueObject)) {
+        foreach ($this->valueObjectsToSimpleTypes as $oldObject => $simpleType) {
+            if (! $this->isObjectType($variable, $oldObject)) {
                 continue;
             }
 
@@ -135,7 +139,10 @@ CODE_SAMPLE
                 return null;
             }
 
-            $this->docBlockManipulator->changeTypeIncludingChildren($node, $valueObject, $simpleType);
+            $oldObjectType = new ObjectType($oldObject);
+            $newSimpleType = $this->staticTypeMapper->mapStringToPHPStanType($simpleType);
+
+            $this->docBlockManipulator->changeType($node, $oldObjectType, $newSimpleType);
 
             return $variable;
         }
@@ -143,15 +150,18 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processParamNode(NullableType $nullableType, Param $param, string $newType): void
+    private function processParamNode(NullableType $nullableType, Param $param, Type $newType): void
     {
         $classMethodNode = $param->getAttribute(AttributeKey::PARENT_NODE);
         if ($classMethodNode === null) {
             return;
         }
 
-        $oldType = $this->namespaceAnalyzer->resolveTypeToFullyQualified((string) $nullableType->type, $nullableType);
+        $paramStaticType = $this->getStaticType($param);
+        if (! $paramStaticType instanceof ObjectType) {
+            return;
+        }
 
-        $this->docBlockManipulator->changeTypeIncludingChildren($classMethodNode, $oldType, $newType);
+        $this->docBlockManipulator->changeType($classMethodNode, $paramStaticType, $newType);
     }
 }

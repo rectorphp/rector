@@ -50,6 +50,7 @@ use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
+use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
 final class NodeTypeResolver
 {
@@ -67,11 +68,6 @@ final class NodeTypeResolver
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
 
     /**
      * @var CallableNodeTraverser
@@ -94,29 +90,35 @@ final class NodeTypeResolver
     private $typeFactory;
 
     /**
+     * @var ObjectTypeSpecifier
+     */
+    private $objectTypeSpecifier;
+
+    /**
      * @param PerNodeTypeResolverInterface[] $perNodeTypeResolvers
      */
     public function __construct(
-        StaticTypeMapper $staticTypeMapper,
         BetterStandardPrinter $betterStandardPrinter,
         NameResolver $nameResolver,
         CallableNodeTraverser $callableNodeTraverser,
         ClassReflectionTypesResolver $classReflectionTypesResolver,
         Broker $broker,
         TypeFactory $typeFactory,
+        ObjectTypeSpecifier $objectTypeSpecifier,
         array $perNodeTypeResolvers
     ) {
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nameResolver = $nameResolver;
 
         foreach ($perNodeTypeResolvers as $perNodeTypeResolver) {
             $this->addPerNodeTypeResolver($perNodeTypeResolver);
         }
+
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->classReflectionTypesResolver = $classReflectionTypesResolver;
         $this->broker = $broker;
         $this->typeFactory = $typeFactory;
+        $this->objectTypeSpecifier = $objectTypeSpecifier;
     }
 
     /**
@@ -295,41 +297,32 @@ final class NodeTypeResolver
             }
         }
 
-        return $nodeScope->getType($node);
+        // make object type specific to alias or FQN
+        $staticType = $nodeScope->getType($node);
+
+        if (! $staticType instanceof ObjectType) {
+            return $staticType;
+        }
+
+        return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType($node, $staticType);
     }
 
-    /**
-     * @return string[]
-     */
-    public function resolveSingleTypeToStrings(Node $node): array
+    public function resolveNodeToPHPStanType(Expr $expr): Type
     {
-        if ($this->isArrayType($node)) {
-            $arrayType = $this->getStaticType($node);
+        if ($this->isArrayType($expr)) {
+            $arrayType = $this->getStaticType($expr);
             if ($arrayType instanceof ArrayType) {
-                $itemTypes = $this->staticTypeMapper->mapPHPStanTypeToStrings($arrayType->getItemType());
-
-                foreach ($itemTypes as $key => $itemType) {
-                    $itemTypes[$key] = $itemType . '[]';
-                }
-
-                if (count($itemTypes) > 0) {
-                    return [implode('|', $itemTypes)];
-                }
+                return $arrayType;
             }
 
-            return ['array'];
+            return new ArrayType(new MixedType(), new MixedType());
         }
 
-        if ($this->isStringOrUnionStringOnlyType($node)) {
-            return ['string'];
+        if ($this->isStringOrUnionStringOnlyType($expr)) {
+            return new StringType();
         }
 
-        $nodeStaticType = $this->getStaticType($node);
-        if ($nodeStaticType instanceof MixedType) {
-            return ['mixed'];
-        }
-
-        return $this->staticTypeMapper->mapPHPStanTypeToStrings($nodeStaticType);
+        return $this->getStaticType($expr);
     }
 
     public function isNullableObjectType(Node $node): bool

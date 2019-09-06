@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\UseUse;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 final class UsedImportsResolver
 {
@@ -40,7 +41,7 @@ final class UsedImportsResolver
     }
 
     /**
-     * @return string[]
+     * @return FullyQualifiedObjectType[]
      */
     public function resolveForNode(Node $node): array
     {
@@ -54,7 +55,7 @@ final class UsedImportsResolver
 
     /**
      * @param Stmt[] $stmts
-     * @return string[]
+     * @return FullyQualifiedObjectType[]
      */
     public function resolveForStmts(array $stmts): array
     {
@@ -67,7 +68,7 @@ final class UsedImportsResolver
         if ($class !== null) {
             $className = $this->nameResolver->getName($class);
             if ($className !== null) {
-                $usedImports[] = $className;
+                $usedImports[] = new FullyQualifiedObjectType($className);
             }
         }
 
@@ -75,7 +76,7 @@ final class UsedImportsResolver
             UseUse $useUse,
             string $name
         ) use (&$usedImports): void {
-            $usedImports[] = $name;
+            $usedImports[] = new FullyQualifiedObjectType($name);
         });
 
         return $usedImports;
@@ -83,7 +84,7 @@ final class UsedImportsResolver
 
     /**
      * @param Stmt[] $stmts
-     * @return string[]
+     * @return FullyQualifiedObjectType[]
      */
     public function resolveFunctionImportsForStmts(array $stmts): array
     {
@@ -93,22 +94,14 @@ final class UsedImportsResolver
             UseUse $useUse,
             string $name
         ) use (&$usedFunctionImports): void {
-            $usedFunctionImports[] = $name;
+            $usedFunctionImports[] = new FullyQualifiedObjectType($name);
         }, Use_::TYPE_FUNCTION);
 
         return $usedFunctionImports;
     }
 
     /**
-     * @return string[]
-     */
-    public function resolveFunctionImportsForNode(Namespace_ $namespace): array
-    {
-        return $this->resolveFunctionImportsForStmts($namespace->stmts);
-    }
-
-    /**
-     * @return string[]
+     * @return FullyQualifiedObjectType[]
      */
     private function resolveForNamespace(Namespace_ $node): array
     {

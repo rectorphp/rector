@@ -13,6 +13,8 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\IterableType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
@@ -139,17 +141,8 @@ CODE_SAMPLE
                 return null;
             }
 
-            $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($property);
-            if ($varTypeInfo === null) {
-                return null;
-            }
-
-            if (! $varTypeInfo->isIterable()) {
-                return null;
-            }
-
-            // skip nullable
-            if ($varTypeInfo->isNullable()) {
+            $varType = $this->docBlockManipulator->getVarType($property);
+            if (! $varType instanceof ArrayType && ! $varType instanceof IterableType) {
                 return null;
             }
 

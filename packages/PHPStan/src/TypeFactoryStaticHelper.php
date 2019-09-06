@@ -2,8 +2,8 @@
 
 namespace Rector\PHPStan;
 
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use ReflectionClass;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -11,13 +11,13 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class TypeFactoryStaticHelper
 {
     /**
-     * @param string[]|NullType[] $types
+     * @param string[]|Type[] $types
      */
     public static function createUnionObjectType(array $types): UnionType
     {
         $objectTypes = [];
         foreach ($types as $type) {
-            if ($type instanceof NullType) {
+            if ($type instanceof Type) {
                 $objectTypes[] = $type;
             } else {
                 $objectTypes[] = new ObjectType($type);

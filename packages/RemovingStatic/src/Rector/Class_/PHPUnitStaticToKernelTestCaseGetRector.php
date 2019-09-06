@@ -23,9 +23,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\PhpParser\Node\VariableInfo;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -69,18 +67,12 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector
     private $phpUnitTypeDeclarationDecorator;
 
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
      * @param string[] $staticClassTypes
      */
     public function __construct(
         PropertyNaming $propertyNaming,
         ClassManipulator $classManipulator,
         PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
-        StaticTypeMapper $staticTypeMapper,
         array $staticClassTypes = [],
         string $kernelTestCaseClass = SymfonyClass::KERNEL_TEST_CASE
     ) {
@@ -89,7 +81,6 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector
         $this->kernelTestCaseClass = $kernelTestCaseClass;
         $this->classManipulator = $classManipulator;
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
-        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     public function getDefinition(): RectorDefinition
@@ -239,7 +230,7 @@ CODE_SAMPLE
     {
         $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
 
-        return $this->nodeFactory->createPrivatePropertyFromVariableInfo(new VariableInfo($propertyName, $objectType));
+        return $this->nodeFactory->createPrivatePropertyFromNameAndType($propertyName, $objectType);
     }
 
     private function convertStaticCallToPropertyMethodCall(StaticCall $staticCall, ObjectType $objectType): MethodCall

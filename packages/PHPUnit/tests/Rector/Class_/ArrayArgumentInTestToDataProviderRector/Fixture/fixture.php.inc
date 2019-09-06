@@ -26,7 +26,7 @@ class SomeServiceTest extends \PHPUnit\Framework\TestCase
         $this->doTestSingle($variable);
     }
     /**
-     * @return int[]
+     * @return int
      */
     public function provideDataForTest(): iterable
     {

@@ -7,8 +7,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\Php\ParamTypeInfo;
-use Rector\Php\TypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -30,16 +28,10 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     private $typehintForArgumentByMethodAndClass = [];
 
     /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    /**
      * @param mixed[] $typehintForArgumentByMethodAndClass
      */
-    public function __construct(TypeAnalyzer $typeAnalyzer, array $typehintForArgumentByMethodAndClass = [])
+    public function __construct(array $typehintForArgumentByMethodAndClass = [])
     {
-        $this->typeAnalyzer = $typeAnalyzer;
         $this->typehintForArgumentByMethodAndClass = $typehintForArgumentByMethodAndClass;
     }
 
@@ -72,9 +64,11 @@ class SomeClass implements SomeInterface
 CODE_SAMPLE
                 ,
                 [
-                    'SomeInterface' => [
-                        'read' => [
-                            '$content' => 'string',
+                    '$typehintForArgumentByMethodAndClass' => [
+                        'SomeInterface' => [
+                            'read' => [
+                                '$content' => 'string',
+                            ],
                         ],
                     ],
                 ]
@@ -128,8 +122,8 @@ CODE_SAMPLE
                 if ($type === '') { // remove type
                     $param->type = null;
                 } else {
-                    $paramTypeInfo = new ParamTypeInfo($parameter, $this->typeAnalyzer, [$type]);
-                    $param->type = $paramTypeInfo->getFqnTypeNode();
+//                    // @todo use mapper
+                    $param->type = $this->staticTypeMapper->mapStringToPhpParserNode($type);
                 }
             }
         }

@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
 
-class VoidType
+class TestVoidType
 {
     /**
      * @return false
@@ -18,7 +18,7 @@ class VoidType
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
 
-class VoidType
+class TestVoidType
 {
     /**
      * @return false

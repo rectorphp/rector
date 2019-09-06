@@ -13,16 +13,6 @@ class KnownStaticNullable
         return [];
     }
 
-    public function getFloating()
-    {
-        if (true) {
-            return 5.2;
-        }
-
-        $value = 5.3;
-        return $value;
-    }
-
     public function getStringNull()
     {
         /** @var string|null $value */
@@ -47,16 +37,6 @@ class KnownStaticNullable
         }
 
         return [];
-    }
-
-    public function getFloating(): float
-    {
-        if (true) {
-            return 5.2;
-        }
-
-        $value = 5.3;
-        return $value;
     }
 
     public function getStringNull(): ?string

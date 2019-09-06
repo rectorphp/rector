@@ -2,16 +2,19 @@
 
 namespace Rector\Rector\Property;
 
-use Nette\Utils\Strings;
+use DI\Annotation\Inject as PHPDIInject;
+use JMS\DiExtraBundle\Annotation\Inject as JMSInject;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Application\ErrorAndDiffCollector;
+use Rector\BetterPhpDocParser\Ast\PhpDoc\JMS\JMSInjectTagValueNode;
+use Rector\BetterPhpDocParser\Ast\PhpDoc\PHPDI\PHPDIInjectTagValueNode;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
+use Rector\Exception\NotImplementedException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -23,6 +26,7 @@ use Throwable;
 
 /**
  * @see https://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations#inject
+ *
  * @see \Rector\Tests\Rector\Property\InjectAnnotationClassRector\InjectAnnotationClassRectorTest
  */
 final class InjectAnnotationClassRector extends AbstractRector
@@ -31,6 +35,14 @@ final class InjectAnnotationClassRector extends AbstractRector
      * @var DocBlockManipulator
      */
     private $docBlockManipulator;
+
+    /**
+     * @var string[]
+     */
+    private $annotationToTagClass = [
+        PHPDIInject::class => PHPDIInjectTagValueNode::class,
+        JMSInject::class => JMSInjectTagValueNode::class,
+    ];
 
     /**
      * @var AnalyzedApplicationContainerInterface
@@ -98,7 +110,7 @@ class SomeController
 CODE_SAMPLE
                     ,
                     [
-                        '$annotationClasses' => ['JMS\DiExtraBundle\Annotation\Inject'],
+                        '$annotationClasses' => [PHPDIInject::class, JMSInject::class],
                     ]
                 ),
             ]
@@ -118,22 +130,60 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->getDocComment() === null) {
+            return null;
+        }
+
+        $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($node);
+
         foreach ($this->annotationClasses as $annotationClass) {
-            if (! $this->docBlockManipulator->hasTag($node, $annotationClass)) {
+            $this->ensureAnnotationClassIsSupported($annotationClass);
+
+            $tagClass = $this->annotationToTagClass[$annotationClass];
+
+            $injectTagValueNode = $phpDocInfo->getByType($tagClass);
+            if ($injectTagValueNode === null) {
                 continue;
             }
 
-            return $this->refactorPropertyWithAnnotation($node, $annotationClass);
+            $type = $this->resolveType($node, $injectTagValueNode);
+
+            return $this->refactorPropertyWithAnnotation($node, $type, $tagClass);
         }
 
         return null;
     }
 
-    private function resolveType(Node $node, string $annotationClass): Type
+    private function refactorPropertyWithAnnotation(Property $property, Type $type, string $tagClass): ?Property
     {
-        $injectTagNode = $this->docBlockManipulator->getTagByName($node, $annotationClass);
+        if ($type instanceof MixedType) {
+            return null;
+        }
 
-        $serviceName = $this->resolveServiceName($injectTagNode, $node);
+        $name = $this->getName($property);
+        if ($name === null) {
+            return null;
+        }
+
+        if (! $this->docBlockManipulator->hasTag($property, 'var')) {
+            $this->docBlockManipulator->changeVarTag($property, $type);
+        }
+
+        $this->docBlockManipulator->removeTagFromNode($property, $tagClass);
+
+        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+        }
+
+        $this->addPropertyToClass($classNode, $type, $name);
+
+        return $property;
+    }
+
+    private function resolveJMSDIInjectType(Node $node, JMSInjectTagValueNode $jmsInjectTagValueNode): Type
+    {
+        $serviceName = $jmsInjectTagValueNode->getServiceName();
         if ($serviceName) {
             try {
                 if ($this->analyzedApplicationContainer->hasService($serviceName)) {
@@ -144,12 +194,9 @@ CODE_SAMPLE
             }
         }
 
-        $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($node);
-        if ($varTypeInfo !== null && $varTypeInfo->getFqnType() !== null) {
-            // @todo resolve to property PHPStan type
-            $cleanType = ltrim($varTypeInfo->getFqnType(), '\\');
-
-            return new ObjectType($cleanType);
+        $varType = $this->docBlockManipulator->getVarType($node);
+        if (! $varType instanceof MixedType) {
+            return $varType;
         }
 
         // the @var is missing and service name was not found → report it
@@ -167,48 +214,29 @@ CODE_SAMPLE
         return new MixedType();
     }
 
-    private function resolveServiceName(PhpDocTagNode $phpDocTagNode, Node $node): ?string
+    private function ensureAnnotationClassIsSupported(string $annotationClass): void
     {
-        $injectTagContent = (string) $phpDocTagNode->value;
-        $match = Strings::match($injectTagContent, '#(\'|")(?<serviceName>.*?)(\'|")#');
-        if ($match['serviceName']) {
-            return $match['serviceName'];
+        if (isset($this->annotationToTagClass[$annotationClass])) {
+            return;
         }
 
-        $match = Strings::match($injectTagContent, '#(\'|")%(?<parameterName>.*?)%(\'|")#');
-        // it's parameter, we don't resolve that here
-        if (isset($match['parameterName'])) {
-            return null;
-        }
-
-        return $this->getName($node);
+        throw new NotImplementedException(sprintf(
+            'Annotation class "%s" is not implemented yet. Use one of "%s" or add custom tag for it to Rector.',
+            $annotationClass,
+            implode('", "', array_keys($this->annotationToTagClass))
+        ));
     }
 
-    private function refactorPropertyWithAnnotation(Property $property, string $annotationClass): ?Property
+    private function resolveType(Node $node, PhpDocTagValueNode $phpDocTagValueNode): Type
     {
-        $type = $this->resolveType($property, $annotationClass);
-        if ($type instanceof MixedType) {
-            return null;
+        if ($phpDocTagValueNode instanceof JMSInjectTagValueNode) {
+            return $this->resolveJMSDIInjectType($node, $phpDocTagValueNode);
         }
 
-        $name = $this->getName($property);
-        if ($name === null) {
-            return null;
+        if ($phpDocTagValueNode instanceof PHPDIInjectTagValueNode) {
+            return $this->docBlockManipulator->getVarType($node);
         }
 
-        if (! $this->docBlockManipulator->hasTag($property, 'var')) {
-            $this->docBlockManipulator->changeVarTag($property, $type);
-        }
-
-        $this->docBlockManipulator->removeTagFromNode($property, $annotationClass);
-
-        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
-        }
-
-        $this->addPropertyToClass($classNode, $type, $name);
-
-        return $property;
+        throw new ShouldNotHappenException();
     }
 }

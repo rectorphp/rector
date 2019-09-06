@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\InheritanceType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\InversedByNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\MappedByNodeInterface;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -37,7 +38,7 @@ final class DoctrineEntityManipulator
 
         $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
 
-        $relationTagValueNode = $phpDocInfo->getDoctrineRelationTagValueNode();
+        $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
         if ($relationTagValueNode === null) {
             return null;
         }
@@ -84,7 +85,7 @@ final class DoctrineEntityManipulator
         }
 
         $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
-        $relationTagValueNode = $phpDocInfo->getDoctrineRelationTagValueNode();
+        $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
 
         $shouldUpdate = false;
         if ($relationTagValueNode instanceof MappedByNodeInterface) {
@@ -121,7 +122,7 @@ final class DoctrineEntityManipulator
             }
 
             $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
-            if ($phpDocInfo->getDoctrineRelationTagValueNode() === null) {
+            if ($phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class) === null) {
                 continue;
             }
 

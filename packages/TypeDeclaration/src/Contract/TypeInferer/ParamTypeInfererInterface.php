@@ -3,11 +3,9 @@
 namespace Rector\TypeDeclaration\Contract\TypeInferer;
 
 use PhpParser\Node\Param;
+use PHPStan\Type\Type;
 
 interface ParamTypeInfererInterface
 {
-    /**
-     * @return string[]
-     */
-    public function inferParam(Param $param): array;
+    public function inferParam(Param $param): Type;
 }

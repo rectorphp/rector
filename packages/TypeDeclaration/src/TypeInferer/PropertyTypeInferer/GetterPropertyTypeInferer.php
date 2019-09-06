@@ -7,6 +7,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\TypeDeclarationToStringConverter;
@@ -41,10 +43,7 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
         $this->typeDeclarationToStringConverter = $typeDeclarationToStringConverter;
     }
 
-    /**
-     * @return string[]
-     */
-    public function inferProperty(Property $property): array
+    public function inferProperty(Property $property): Type
     {
         /** @var Class_ $class */
         $class = $property->getAttribute(AttributeKey::CLASS_NODE);
@@ -57,18 +56,19 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
                 continue;
             }
 
-            $returnTypes = $this->inferClassMethodReturnTypes($classMethod);
-            if ($returnTypes !== [] && $returnTypes !== ['mixed']) {
-                return $returnTypes;
+            $returnType = $this->inferClassMethodReturnType($classMethod);
+
+            if (! $returnType instanceof MixedType) {
+                return $returnType;
             }
         }
 
-        return [];
+        return new MixedType();
     }
 
     public function getPriority(): int
     {
-        return 600;
+        return 1700;
     }
 
     private function hasClassMethodOnlyStatementReturnOfPropertyFetch(
@@ -94,21 +94,19 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
         return $this->nameResolver->isName($return->expr, $propertyName);
     }
 
-    /**
-     * @return string[]
-     */
-    private function inferClassMethodReturnTypes(ClassMethod $classMethod): array
+    private function inferClassMethodReturnType(ClassMethod $classMethod): Type
     {
-        $returnTypeDeclarationTypes = $this->typeDeclarationToStringConverter->resolveFunctionLikeReturnTypeToString(
+        $returnTypeDeclarationType = $this->typeDeclarationToStringConverter->resolveFunctionLikeReturnTypeToPHPStanType(
             $classMethod
         );
-        if ($returnTypeDeclarationTypes) {
-            return $returnTypeDeclarationTypes;
+
+        if (! $returnTypeDeclarationType instanceof MixedType) {
+            return $returnTypeDeclarationType;
         }
 
-        $inferedTypes = $this->returnedNodesReturnTypeInferer->inferFunctionLike($classMethod);
-        if ($inferedTypes !== [] && $inferedTypes !== ['mixed']) {
-            return $inferedTypes;
+        $inferedType = $this->returnedNodesReturnTypeInferer->inferFunctionLike($classMethod);
+        if (! $inferedType instanceof MixedType) {
+            return $inferedType;
         }
 
         return $this->returnTagReturnTypeInferer->inferFunctionLike($classMethod);

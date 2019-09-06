@@ -8,8 +8,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
@@ -35,15 +36,12 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
         $this->docBlockManipulator = $docBlockManipulator;
     }
 
-    /**
-     * @return string[]
-     */
-    public function inferParam(Param $param): array
+    public function inferParam(Param $param): Type
     {
         /** @var Class_|null $classNode */
         $classNode = $param->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
-            return [];
+            return new MixedType();
         }
 
         /** @var ClassMethod $classMethod */
@@ -54,15 +52,15 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
 
         $propertyNames = $this->propertyFetchManipulator->getPropertyNamesOfAssignOfVariable($classMethod, $paramName);
         if ($propertyNames === []) {
-            return [];
+            return new MixedType();
         }
 
-        $returnTypeInfo = null;
+        $returnType = new MixedType();
 
         // resolve property assigns
         $this->callableNodeTraverser->traverseNodesWithCallable($classNode, function (Node $node) use (
             $propertyNames,
-            &$returnTypeInfo
+            &$returnType
         ): ?int {
             if (! $node instanceof Return_ || $node->expr === null) {
                 return null;
@@ -80,28 +78,16 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
                 return null;
             }
 
-            $methodReturnTypeInfo = $this->docBlockManipulator->getReturnTypeInfo($methodNode);
-            if ($methodReturnTypeInfo === null) {
+            $methodReturnType = $this->docBlockManipulator->getReturnType($methodNode);
+            if ($methodReturnType instanceof MixedType) {
                 return null;
             }
 
-            $returnTypeInfo = $methodReturnTypeInfo;
+            $returnType = $methodReturnType;
 
             return NodeTraverser::STOP_TRAVERSAL;
         });
 
-        /** @var ReturnTypeInfo|null $returnTypeInfo */
-        if ($returnTypeInfo === null) {
-            return [];
-        }
-
-        $docTypes = $returnTypeInfo->getDocTypes();
-
-        // remove "[]" for the php doc nodes, as they will be already arrayed
-        foreach ($docTypes as $key => $docType) {
-            $docTypes[$key] = rtrim($docType, '[]');
-        }
-
-        return $docTypes;
+        return $returnType;
     }
 }

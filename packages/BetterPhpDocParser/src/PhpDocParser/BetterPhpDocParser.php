@@ -119,9 +119,11 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokenIterator->next();
 
         // @todo somehow decouple to tag pre-processor
-        if (Strings::match($tag, '#@(ORM|Assert|Serializer)$#')) {
-            $tag .= $tokenIterator->currentTokenValue();
-            $tokenIterator->next();
+        if (Strings::match($tag, '#@(ORM|Assert|Serializer|DI|Inject)$#')) {
+            if ($tag !== '@Inject') {
+                $tag .= $tokenIterator->currentTokenValue();
+                $tokenIterator->next();
+            }
         }
 
         $value = $this->parseTagValue($tokenIterator, $tag);
@@ -201,9 +203,6 @@ final class BetterPhpDocParser extends PhpDocParser
         return $attributeAwareNode;
     }
 
-    /**
-     * @todo cache per tokens array hash
-     */
     private function getOriginalContentFromTokenIterator(TokenIterator $tokenIterator): string
     {
         $originalTokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');

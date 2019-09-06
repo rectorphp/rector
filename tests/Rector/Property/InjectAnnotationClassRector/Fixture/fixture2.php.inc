@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
+
 use Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeInterface;
 use JMS\DiExtraBundle\Annotation as DI;
 use Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface;
@@ -22,6 +24,8 @@ class ClassWithInjects7
 ?>
 -----
 <?php
+
+namespace Rector\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
 
 use Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeInterface;
 use JMS\DiExtraBundle\Annotation as DI;

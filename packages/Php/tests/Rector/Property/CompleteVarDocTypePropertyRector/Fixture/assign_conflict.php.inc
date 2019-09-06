@@ -2,6 +2,11 @@
 
 namespace Rector\Php\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Fixture;
 
+class Robocop
+{
+
+}
+
 final class AssignConflict
 {
     private $eventDispatcher;
@@ -11,7 +16,7 @@ final class AssignConflict
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function run(\Robocop $stdClass)
+    public function run(Robocop $stdClass)
     {
         $this->eventDispatcher = $stdClass;
     }
@@ -23,10 +28,15 @@ final class AssignConflict
 
 namespace Rector\Php\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Fixture;
 
+class Robocop
+{
+
+}
+
 final class AssignConflict
 {
     /**
-     * @var \EventDispatcher|\Robocop
+     * @var \EventDispatcher|\Rector\Php\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Fixture\Robocop
      */
     private $eventDispatcher;
 
@@ -35,7 +45,7 @@ final class AssignConflict
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function run(\Robocop $stdClass)
+    public function run(Robocop $stdClass)
     {
         $this->eventDispatcher = $stdClass;
     }

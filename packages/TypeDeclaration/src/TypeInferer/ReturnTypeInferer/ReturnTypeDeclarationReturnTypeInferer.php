@@ -3,6 +3,8 @@
 namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 use PhpParser\Node\FunctionLike;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeDeclarationToStringConverter;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
@@ -19,21 +21,18 @@ final class ReturnTypeDeclarationReturnTypeInferer extends AbstractTypeInferer i
         $this->typeDeclarationToStringConverter = $typeDeclarationToStringConverter;
     }
 
-    /**
-     * @return string[]
-     */
-    public function inferFunctionLike(FunctionLike $functionLike): array
+    public function inferFunctionLike(FunctionLike $functionLike): Type
     {
         if ($functionLike->getReturnType() === null) {
-            return [];
+            return new MixedType();
         }
 
         // resolve later with more precise type, e.g. Type[]
         if ($this->nameResolver->isNames($functionLike->getReturnType(), ['array', 'iterable'])) {
-            return [];
+            return new MixedType();
         }
 
-        return $this->typeDeclarationToStringConverter->resolveFunctionLikeReturnTypeToString($functionLike);
+        return $this->typeDeclarationToStringConverter->resolveFunctionLikeReturnTypeToPHPStanType($functionLike);
     }
 
     public function getPriority(): int

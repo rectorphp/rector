@@ -4,12 +4,13 @@ namespace Rector\Php\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeTypeResolver\ComplexNodeTypeResolver;
+use PHPStan\Type\MixedType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 /**
  * @see \Rector\Php\Tests\Rector\Property\CompleteVarDocTypePropertyRector\CompleteVarDocTypePropertyRectorTest
@@ -22,16 +23,16 @@ final class CompleteVarDocTypePropertyRector extends AbstractRector
     private $docBlockManipulator;
 
     /**
-     * @var ComplexNodeTypeResolver
+     * @var PropertyTypeInferer
      */
-    private $complexNodeTypeResolver;
+    private $propertyTypeInferer;
 
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
-        ComplexNodeTypeResolver $complexNodeTypeResolver
+        PropertyTypeInferer $propertyTypeInferer
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->complexNodeTypeResolver = $complexNodeTypeResolver;
+        $this->propertyTypeInferer = $propertyTypeInferer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -81,21 +82,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($node);
-        if ($varTypeInfo !== null) {
+        // @todo use property type resolver
+        $varType = $this->docBlockManipulator->getVarType($node);
+
+        // already completed
+        if (! $varType instanceof MixedType) {
             return null;
         }
 
-        $varTypeInfo = $this->complexNodeTypeResolver->resolvePropertyTypeInfo($node);
-        if ($varTypeInfo === null) {
+        $varType = $this->propertyTypeInferer->inferProperty($node);
+        if ($varType instanceof MixedType) {
             return null;
         }
-
-        if ($varTypeInfo->getDocTypes() === []) {
-            return null;
-        }
-
-        $varType = implode('|', $varTypeInfo->getDocTypes());
 
         $this->docBlockManipulator->changeVarTag($node, $varType);
 

@@ -23,7 +23,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationR
 
 class A {
     /** @return A */
-    public function test(): \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Inheritance\A {
+    public function test(): self {
         return $this;
     }
 }

@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\NetteToSymfony\Annotation\SymfonyRoutePhpDocTagNode;
 use Rector\NetteToSymfony\Route\RouteInfo;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
@@ -24,6 +25,7 @@ use ReflectionMethod;
 /**
  * @see https://doc.nette.org/en/2.4/routing
  * @see https://symfony.com/doc/current/routing.html
+ *
  * @see \Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\RouterListToControllerAnnotationsRectorTest
  */
 final class RouterListToControllerAnnotationsRector extends AbstractRector
@@ -154,8 +156,11 @@ CODE_SAMPLE
             return null;
         }
 
-        $inferedReturnTypes = $this->returnTypeInferer->inferFunctionLike($node);
-        if (! in_array($this->routeListClass, $inferedReturnTypes, true)) {
+        $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
+
+        $routeListObjectType = new ObjectType($this->routeListClass);
+
+        if (! $inferedReturnType->isSuperTypeOf($routeListObjectType)->yes()) {
             return null;
         }
 

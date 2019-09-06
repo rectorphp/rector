@@ -6,10 +6,10 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
-use Rector\Php\TypeAnalyzer;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -28,27 +28,23 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
     private const EXCLUDED_METHOD_NAMES = ['__construct', '__destruct', '__clone'];
 
     /**
+     * @var string
+     */
+    private const DO_NOT_CHANGE = 'do_not_change';
+
+    /**
      * @var ReturnTypeInferer
      */
     private $returnTypeInferer;
-
-    /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
 
     /**
      * @var bool
      */
     private $overrideExistingReturnTypes = true;
 
-    public function __construct(
-        ReturnTypeInferer $returnTypeInferer,
-        TypeAnalyzer $typeAnalyzer,
-        bool $overrideExistingReturnTypes = true
-    ) {
+    public function __construct(ReturnTypeInferer $returnTypeInferer, bool $overrideExistingReturnTypes = true)
+    {
         $this->returnTypeInferer = $returnTypeInferer;
-        $this->typeAnalyzer = $typeAnalyzer;
         $this->overrideExistingReturnTypes = $overrideExistingReturnTypes;
     }
 
@@ -103,40 +99,45 @@ CODE_SAMPLE
             return null;
         }
 
-        $inferedTypes = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
+        $inferedType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
             $node,
             [ReturnTypeDeclarationReturnTypeInferer::class]
         );
-
-        if ($inferedTypes === []) {
+        if ($inferedType instanceof MixedType) {
             return null;
         }
 
-        $returnTypeInfo = new ReturnTypeInfo($inferedTypes, $this->typeAnalyzer, $inferedTypes);
-        if ($this->isReturnTypeAlreadyAdded($node, $returnTypeInfo)) {
+        if ($this->isReturnTypeAlreadyAdded($node, $inferedType)) {
+            return null;
+        }
+
+        $inferredReturnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType);
+
+        // already overridden by previous populateChild() method run
+        if ($node->returnType && $node->returnType->getAttribute(self::DO_NOT_CHANGE)) {
             return null;
         }
 
         $shouldPopulateChildren = false;
         // should be previous overridden?
-        if ($node->returnType !== null && $returnTypeInfo->getFqnTypeNode() !== null) {
-            $isSubtype = $this->isSubtypeOf($returnTypeInfo->getFqnTypeNode(), $node->returnType);
+        if ($node->returnType !== null && $inferredReturnNode !== null) {
+            $isSubtype = $this->isSubtypeOf($inferredReturnNode, $node->returnType);
 
             // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
             if ($this->isAtLeastPhpVersion('7.4') && $isSubtype) {
                 $shouldPopulateChildren = true;
-                $node->returnType = $returnTypeInfo->getFqnTypeNode();
+                $node->returnType = $inferredReturnNode;
             } elseif ($isSubtype === false) { // type override
                 $shouldPopulateChildren = true;
-                $node->returnType = $returnTypeInfo->getFqnTypeNode();
+                $node->returnType = $inferredReturnNode;
             }
-        } elseif ($returnTypeInfo->getFqnTypeNode() !== null) {
+        } elseif ($inferredReturnNode !== null) {
             $shouldPopulateChildren = true;
-            $node->returnType = $returnTypeInfo->getFqnTypeNode();
+            $node->returnType = $inferredReturnNode;
         }
 
-        if ($shouldPopulateChildren) {
-            $this->populateChildren($node, $returnTypeInfo);
+        if ($shouldPopulateChildren && $node instanceof ClassMethod) {
+            $this->populateChildren($node, $inferedType);
         }
 
         return $node;
@@ -145,18 +146,14 @@ CODE_SAMPLE
     /**
      * Add typehint to all children class methods
      */
-    private function populateChildren(Node $node, ReturnTypeInfo $returnTypeInfo): void
+    private function populateChildren(ClassMethod $classMethod, Type $returnType): void
     {
-        if (! $node instanceof ClassMethod) {
-            return;
-        }
-
-        $methodName = $this->getName($node);
+        $methodName = $this->getName($classMethod);
         if ($methodName === null) {
             throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
-        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
         if (! is_string($className)) {
             throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
@@ -167,17 +164,17 @@ CODE_SAMPLE
         foreach ($childrenClassLikes as $childClassLike) {
             $usedTraits = $this->parsedNodesByType->findUsedTraitsInClass($childClassLike);
             foreach ($usedTraits as $trait) {
-                $this->addReturnTypeToMethod($trait, $node, $returnTypeInfo);
+                $this->addReturnTypeToChildMethod($trait, $classMethod, $returnType);
             }
 
-            $this->addReturnTypeToMethod($childClassLike, $node, $returnTypeInfo);
+            $this->addReturnTypeToChildMethod($childClassLike, $classMethod, $returnType);
         }
     }
 
-    private function addReturnTypeToMethod(
+    private function addReturnTypeToChildMethod(
         ClassLike $classLike,
         ClassMethod $classMethod,
-        ReturnTypeInfo $returnTypeInfo
+        Type $returnType
     ): void {
         $methodName = $this->getName($classMethod);
 
@@ -191,12 +188,15 @@ CODE_SAMPLE
             return;
         }
 
-        $resolvedChildType = $this->resolveChildType($returnTypeInfo, $classMethod);
-        if ($resolvedChildType === null) {
+        $resolvedChildTypeNode = $this->resolveChildTypeNode($returnType);
+        if ($resolvedChildTypeNode === null) {
             return;
         }
 
-        $currentClassMethod->returnType = $resolvedChildType;
+        $currentClassMethod->returnType = $resolvedChildTypeNode;
+
+        // make sure the type is not overridden
+        $currentClassMethod->returnType->setAttribute(self::DO_NOT_CHANGE, true);
 
         $this->notifyNodeChangeFileInfo($currentClassMethod);
     }
@@ -222,17 +222,22 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_ $node
      */
-    private function isReturnTypeAlreadyAdded(Node $node, ReturnTypeInfo $returnTypeInfo): bool
+    private function isReturnTypeAlreadyAdded(Node $node, Type $returnType): bool
     {
-        if (ltrim($this->print($node->returnType), '\\') === $this->print($returnTypeInfo->getTypeNode())) {
+        $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
+
+        if ($node->returnType === null) {
+            return false;
+        }
+
+        if ($this->print($node->returnType) === $this->print($returnNode)) {
             return true;
         }
 
         // prevent overriding self with itself
         if ($this->print($node->returnType) === 'self') {
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-
-            if (ltrim($this->print($returnTypeInfo->getFqnTypeNode()), '\\') === $className) {
+            if (ltrim($this->print($returnNode), '\\') === $className) {
                 return true;
             }
         }

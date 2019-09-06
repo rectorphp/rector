@@ -22,7 +22,7 @@ use PHPStan\Type\UnionType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\NodeTypeResolver\StaticTypeMapper;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
 use Rector\PHPUnit\ValueObject\ParamAndArgValueObject;
@@ -48,11 +48,6 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
     private $docBlockManipulator;
 
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
      * @var DataProviderClassMethodRecipe[]
      */
     private $dataProviderClassMethodRecipes = [];
@@ -63,17 +58,22 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
     private $dataProviderClassMethodFactory;
 
     /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
      * @param mixed[] $configuration
      */
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
-        StaticTypeMapper $staticTypeMapper,
         DataProviderClassMethodFactory $dataProviderClassMethodFactory,
+        TypeFactory $typeFactory,
         array $configuration = []
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->dataProviderClassMethodFactory = $dataProviderClassMethodFactory;
+        $this->typeFactory = $typeFactory;
         $this->configuration = $configuration;
     }
 
@@ -219,7 +219,7 @@ CODE_SAMPLE
         return new PhpDocTagNode('@param', new ParamTagValueNode($typeNode, false, '$' . $name, ''));
     }
 
-    private function resolveUniqueArrayStaticTypes(Array_ $array): ?Type
+    private function resolveUniqueArrayStaticTypes(Array_ $array): Type
     {
         $itemStaticTypes = [];
         foreach ($array->items as $arrayItem) {
@@ -228,22 +228,10 @@ CODE_SAMPLE
                 continue;
             }
 
-            $valueObjectHash = implode('_', $this->staticTypeMapper->mapPHPStanTypeToStrings($arrayItemStaticType));
-
-            $itemStaticTypes[$valueObjectHash] = new ArrayType(new MixedType(), $arrayItemStaticType);
+            $itemStaticTypes[] = $arrayItemStaticType;
         }
 
-        $itemStaticTypes = array_values($itemStaticTypes);
-
-        if (count($itemStaticTypes) > 1) {
-            return new UnionType($itemStaticTypes);
-        }
-
-        if (count($itemStaticTypes) === 1) {
-            return $itemStaticTypes[0];
-        }
-
-        return null;
+        return $this->typeFactory->createMixedPassedOrUnionType($itemStaticTypes);
     }
 
     private function createDataProviderMethodName(Node $node): string
@@ -337,46 +325,19 @@ CODE_SAMPLE
         return $params;
     }
 
-    /**
-     * @param Type[] $itemsStaticTypes
-     * @return Type[]
-     */
-    private function filterUniqueStaticTypes(array $itemsStaticTypes): array
+    private function resolveItemStaticType(Array_ $array, bool $isNestedArray): Type
     {
-        $uniqueStaticTypes = [];
-        foreach ($itemsStaticTypes as $itemsStaticType) {
-            $uniqueHash = implode('_', $this->staticTypeMapper->mapPHPStanTypeToStrings($itemsStaticType));
-            $uniqueHash = md5($uniqueHash);
-
-            $uniqueStaticTypes[$uniqueHash] = $itemsStaticType;
-        }
-
-        return array_values($uniqueStaticTypes);
-    }
-
-    private function resolveItemStaticType(Array_ $array, bool $isNestedArray): ?Type
-    {
-        $itemsStaticTypes = [];
+        $staticTypes = [];
         if ($isNestedArray === false) {
             foreach ($array->items as $arrayItem) {
                 $arrayItemStaticType = $this->getStaticType($arrayItem->value);
                 if ($arrayItemStaticType) {
-                    $itemsStaticTypes[] = $arrayItemStaticType;
+                    $staticTypes[] = $arrayItemStaticType;
                 }
             }
         }
 
-        $itemsStaticTypes = $this->filterUniqueStaticTypes($itemsStaticTypes);
-
-        if ($itemsStaticTypes !== null && count($itemsStaticTypes) > 1) {
-            return new UnionType($itemsStaticTypes);
-        }
-
-        if (count($itemsStaticTypes) === 1) {
-            return $itemsStaticTypes[0];
-        }
-
-        return null;
+        return $this->typeFactory->createMixedPassedOrUnionType($staticTypes);
     }
 
     private function isNestedArray(Array_ $array): bool
@@ -402,7 +363,7 @@ CODE_SAMPLE
         return $this->isName($methodCall->name, $singleConfiguration['old_method']);
     }
 
-    private function resolveUniqueArrayStaticType(Array_ $array): ?Type
+    private function resolveUniqueArrayStaticType(Array_ $array): Type
     {
         $isNestedArray = $this->isNestedArray($array);
 

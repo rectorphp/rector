@@ -7,9 +7,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
+use PHPStan\Type\Type;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\PhpParser\Node\VariableInfo;
 
 /**
  * Adds new private properties to class + to constructor
@@ -17,7 +17,7 @@ use Rector\PhpParser\Node\VariableInfo;
 final class PropertyAddingCommander implements CommanderInterface
 {
     /**
-     * @var VariableInfo[][]
+     * @var Type[][]
      */
     private $propertiesByClass = [];
 
@@ -31,9 +31,9 @@ final class PropertyAddingCommander implements CommanderInterface
         $this->classManipulator = $classManipulator;
     }
 
-    public function addPropertyToClass(VariableInfo $variableInfo, Class_ $classNode): void
+    public function addPropertyToClass(string $propertyName, Type $propertyType, Class_ $classNode): void
     {
-        $this->propertiesByClass[spl_object_hash($classNode)][] = $variableInfo;
+        $this->propertiesByClass[spl_object_hash($classNode)][$propertyName] = $propertyType;
     }
 
     /**
@@ -60,7 +60,7 @@ final class PropertyAddingCommander implements CommanderInterface
     {
         return new class($this->classManipulator, $this->propertiesByClass) extends NodeVisitorAbstract {
             /**
-             * @var VariableInfo[][]
+             * @var Type[][]
              */
             private $propertiesByClass = [];
 
@@ -70,7 +70,7 @@ final class PropertyAddingCommander implements CommanderInterface
             private $classManipulator;
 
             /**
-             * @param VariableInfo[][] $propertiesByClass
+             * @param Type[][] $propertiesByClass
              */
             public function __construct(ClassManipulator $classManipulator, array $propertiesByClass)
             {
@@ -89,9 +89,9 @@ final class PropertyAddingCommander implements CommanderInterface
 
             private function processClassNode(Class_ $classNode): Class_
             {
-                $variableInfos = $this->propertiesByClass[spl_object_hash($classNode)] ?? [];
-                foreach ($variableInfos as $propertyInfo) {
-                    $this->classManipulator->addConstructorDependency($classNode, $propertyInfo);
+                $classProperties = $this->propertiesByClass[spl_object_hash($classNode)] ?? [];
+                foreach ($classProperties as $propertyName => $propertyType) {
+                    $this->classManipulator->addConstructorDependency($classNode, $propertyName, $propertyType);
                 }
 
                 return $classNode;

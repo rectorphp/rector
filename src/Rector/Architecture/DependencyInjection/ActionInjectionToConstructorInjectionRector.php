@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
-use Rector\PhpParser\Node\VariableInfo;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -114,8 +113,7 @@ CODE_SAMPLE
             // remove arguments
             unset($classMethod->params[$key]);
 
-            $variableInfo = new VariableInfo($paramName, $paramNodeType);
-            $this->variablesToPropertyFetchCollection->addVariableInfo($variableInfo);
+            $this->variablesToPropertyFetchCollection->addVariableNameAndType($paramName, $paramNodeType);
         }
     }
 

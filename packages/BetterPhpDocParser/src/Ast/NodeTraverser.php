@@ -55,7 +55,7 @@ final class NodeTraverser
     {
         $typeNode = $callable($typeNode);
 
-        if ($typeNode instanceof ArrayTypeNode) {
+        if ($typeNode instanceof ArrayTypeNode || $typeNode instanceof NullableTypeNode) {
             $typeNode->type = $this->traverseTypeNode($typeNode->type, $callable);
         }
 
@@ -63,10 +63,6 @@ final class NodeTraverser
             foreach ($typeNode->types as $key => $subTypeNode) {
                 $typeNode->types[$key] = $this->traverseTypeNode($subTypeNode, $callable);
             }
-        }
-
-        if ($typeNode instanceof NullableTypeNode) {
-            $typeNode->type = $this->traverseTypeNode($typeNode->type, $callable);
         }
 
         return $typeNode;

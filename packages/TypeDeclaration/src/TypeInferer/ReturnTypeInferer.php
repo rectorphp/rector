@@ -3,6 +3,8 @@
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node\FunctionLike;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 
@@ -21,32 +23,28 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
         $this->returnTypeInferers = $this->sortTypeInferersByPriority($returnTypeInferers);
     }
 
-    /**
-     * @return string[]
-     */
-    public function inferFunctionLike(FunctionLike $functionLike): array
+    public function inferFunctionLike(FunctionLike $functionLike): Type
     {
         return $this->inferFunctionLikeWithExcludedInferers($functionLike, []);
     }
 
     /**
      * @param string[] $excludedInferers
-     * @return string[]
      */
-    public function inferFunctionLikeWithExcludedInferers(FunctionLike $functionLike, array $excludedInferers): array
+    public function inferFunctionLikeWithExcludedInferers(FunctionLike $functionLike, array $excludedInferers): Type
     {
         foreach ($this->returnTypeInferers as $returnTypeInferer) {
             if ($this->shouldSkipExcludedTypeInferer($returnTypeInferer, $excludedInferers)) {
                 continue;
             }
 
-            $types = $returnTypeInferer->inferFunctionLike($functionLike);
-            if ($types !== [] && $types !== ['mixed']) {
-                return $types;
+            $type = $returnTypeInferer->inferFunctionLike($functionLike);
+            if (! $type instanceof MixedType) {
+                return $type;
             }
         }
 
-        return [];
+        return new MixedType();
     }
 
     /**

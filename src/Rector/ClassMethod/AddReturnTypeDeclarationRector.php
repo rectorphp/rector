@@ -4,8 +4,6 @@ namespace Rector\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
-use Rector\Php\TypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -25,17 +23,11 @@ final class AddReturnTypeDeclarationRector extends AbstractRector
     private $typehintForMethodByClass = [];
 
     /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    /**
      * @param mixed[] $typehintForMethodByClass
      */
-    public function __construct(TypeAnalyzer $typeAnalyzer, array $typehintForMethodByClass = [])
+    public function __construct(array $typehintForMethodByClass = [])
     {
         $this->typehintForMethodByClass = $typehintForMethodByClass;
-        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -57,8 +49,10 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 [
-                    'SomeClass' => [
-                        'getData' => 'array',
+                    '$typehintForMethodByClass' => [
+                        'SomeClass' => [
+                            'getData' => 'array',
+                        ],
                     ],
                 ]
             ),
@@ -88,28 +82,33 @@ CODE_SAMPLE
                     continue;
                 }
 
-                return $this->processClassMethodNodeWithTypehints($node, $typehint);
+                $this->processClassMethodNodeWithTypehints($node, $typehint);
+
+                return $node;
             }
         }
 
         return null;
     }
 
-    private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, string $newType): ?ClassMethod
+    private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, string $newType): void
     {
         // already set → no change
         if ($classMethod->returnType && $this->isName($classMethod->returnType, $newType)) {
-            return null;
+            return;
         }
 
         // remove it
         if ($newType === '') {
             $classMethod->returnType = null;
-        } else {
-            $returnTypeInfo = new ReturnTypeInfo([$newType], $this->typeAnalyzer, [$newType]);
-            $classMethod->returnType = $returnTypeInfo->getFqnTypeNode();
+            return;
         }
 
-        return $classMethod;
+        $returnTypeNode = $this->staticTypeMapper->mapStringToPhpParserNode($newType);
+        if ($returnTypeNode === null) {
+            return;
+        }
+
+        $classMethod->returnType = $returnTypeNode;
     }
 }
