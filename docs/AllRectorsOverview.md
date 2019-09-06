@@ -1,4 +1,4 @@
-# All 336 Rectors Overview
+# All 335 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -26,7 +26,6 @@
 - [PHPUnitSymfony](#phpunitsymfony)
 - [PSR4](#psr4)
 - [Php](#php)
-- [PhpParser](#phpparser)
 - [PhpSpecToPHPUnit](#phpspectophpunit)
 - [RemovingStatic](#removingstatic)
 - [Restoration](#restoration)
@@ -1390,6 +1389,29 @@ services:
 
 ## DeadCode
 
+### `RemoveAlwaysTrueIfConditionRector`
+
+- class: `Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector`
+
+Remove if condition that is always true
+
+```diff
+ final class SomeClass
+ {
+     public function go()
+     {
+-        if (1 === 1) {
+-            return 'yes';
+-        }
++        return 'yes';
+
+         return 'no';
+     }
+ }
+```
+
+<br>
+
 ### `RemoveAndTrueRector`
 
 - class: `Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector`
@@ -1928,9 +1950,25 @@ Removes unneeded $a = $a assigns
 
 ## Doctrine
 
-### `AliasToClassRector`
+### `AddUuidMirrorForRelationPropertyRector`
 
-- class: `Rector\Doctrine\Rector\AliasToClassRector`
+- class: `Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector`
+
+Adds $uuid property to entities, that already have $id with integer type.Require for step-by-step migration from int to uuid.
+
+<br>
+
+### `AddUuidToEntityWhereMissingRector`
+
+- class: `Rector\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector`
+
+Adds $uuid property to entities, that already have $id with integer type.Require for step-by-step migration from int to uuid. In following step it should be renamed to $id and replace it
+
+<br>
+
+### `EntityAliasToClassConstantReferenceRector`
+
+- class: `Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector`
 
 Replaces doctrine alias with class.
 
@@ -2720,6 +2758,72 @@ Removes non-existing @var annotations above the code
 <br>
 
 ## PHPUnit
+
+### `AddSeeTestAnnotationRector`
+
+- class: `Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector`
+
+Add @see annotation test of the class for faster jump to test. Make it FQN, so it stays in the annotation, not in the PHP source code.
+
+```diff
++/**
++ * @see \SomeServiceTest
++ */
+ class SomeService
+ {
+ }
+
+ class SomeServiceTest extends \PHPUnit\Framework\TestCase
+ {
+ }
+```
+
+<br>
+
+### `ArrayArgumentInTestToDataProviderRector`
+
+- class: `Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector`
+
+Move array argument from tests into data provider [configurable]
+
+```yaml
+services:
+    Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector:
+        $configuration:
+            -
+                class: PHPUnit\Framework\TestCase
+                old_method: doTestMultiple
+                new_method: doTestSingle
+```
+
+↓
+
+```diff
+ class SomeServiceTest extends \PHPUnit\Framework\TestCase
+ {
+-    public function test()
++    /**
++     * @dataProvider provideDataForTest()
++     */
++    public function test(int $value)
+     {
+-        $this->doTestMultiple([1, 2, 3]);
++        $this->doTestSingle($value);
++    }
++
++    /**
++     * @return int[]
++     */
++    public function provideDataForTest(): iterable
++    {
++        yield 1;
++        yield 2;
++        yield 3;
+     }
+ }
+```
+
+<br>
 
 ### `AssertCompareToSpecificMethodRector`
 
@@ -4482,100 +4586,6 @@ each() function is deprecated, use foreach() instead.
 +foreach (array_keys($callbacks) as $key) {
      // ...
  }
-```
-
-<br>
-
-## PhpParser
-
-### `CatchAndClosureUseNameRector`
-
-- class: `Rector\PhpParser\Rector\CatchAndClosureUseNameRector`
-
-Turns `$catchNode->var` to its new `name` property in php-parser
-
-```diff
--$catchNode->var;
-+$catchNode->var->name
-```
-
-<br>
-
-### `IdentifierRector`
-
-- class: `Rector\PhpParser\Rector\IdentifierRector`
-
-Turns node string names to Identifier object in php-parser
-
-```diff
- $constNode = new PhpParser\Node\Const_;
--$name = $constNode->name;
-+$name = $constNode->name->toString();'
-```
-
-<br>
-
-### `ParamAndStaticVarNameRector`
-
-- class: `Rector\PhpParser\Rector\ParamAndStaticVarNameRector`
-
-Turns old string `var` to `var->name` sub-variable in Node of PHP-Parser
-
-```diff
--$paramNode->name;
-+$paramNode->var->name;
-```
-
-```diff
--$staticVarNode->name;
-+$staticVarNode->var->name;
-```
-
-<br>
-
-### `RemoveNodeRector`
-
-- class: `Rector\PhpParser\Rector\RemoveNodeRector`
-
-Turns integer return to remove node to constant in NodeVisitor of PHP-Parser
-
-```diff
- public function leaveNode()
- {
--    return false;
-+    return NodeTraverser::REMOVE_NODE;
- }
-```
-
-<br>
-
-### `SetLineRector`
-
-- class: `Rector\PhpParser\Rector\SetLineRector`
-
-Turns standalone line method to attribute in Node of PHP-Parser
-
-```diff
--$node->setLine(5);
-+$node->setAttribute("line", 5);
-```
-
-<br>
-
-### `UseWithAliasRector`
-
-- class: `Rector\PhpParser\Rector\UseWithAliasRector`
-
-Turns use property to method and `$node->alias` to last name in UseAlias Node of PHP-Parser
-
-```diff
--$node->alias;
-+$node->getAlias();
-```
-
-```diff
--$node->name->getLast();
-+$node->alias
 ```
 
 <br>
@@ -6874,8 +6884,9 @@ Turns defined annotations above properties and methods to their new values.
 ```yaml
 services:
     Rector\Rector\Annotation\RenameAnnotationRector:
-        PHPUnit\Framework\TestCase:
-            test: scenario
+        $classToAnnotationMap:
+            PHPUnit\Framework\TestCase:
+                test: scenario
 ```
 
 ↓
@@ -6953,7 +6964,8 @@ Replaces defined classes by new ones.
 ```yaml
 services:
     Rector\Rector\Class_\RenameClassRector:
-        App\SomeOldClass: App\SomeNewClass
+        $oldToNewClasses:
+            App\SomeOldClass: App\SomeNewClass
 ```
 
 ↓

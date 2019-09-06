@@ -2,11 +2,11 @@
 
 namespace Rector\Rector\AbstractRector;
 
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
