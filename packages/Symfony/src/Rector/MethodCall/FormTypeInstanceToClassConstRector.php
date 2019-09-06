@@ -94,7 +94,7 @@ class SomeController
         $form = $this->createForm(TeamType::class, $entity, [
             'action' => $this->generateUrl('teams_update', ['id' => $entity->getId()]),
             'method' => 'PUT',
-        ));
+        ]);
     }
 }
 CODE_SAMPLE
