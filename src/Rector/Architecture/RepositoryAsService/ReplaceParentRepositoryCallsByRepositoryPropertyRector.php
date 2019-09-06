@@ -92,7 +92,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($node->var, $this->entityRepositoryClass)) {
+        if (! $this->isObjectType($node->var, $this->entityRepositoryClass)) {
             return null;
         }
 

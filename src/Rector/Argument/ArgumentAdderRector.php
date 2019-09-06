@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Argument;
 
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -12,6 +13,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -103,7 +105,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->positionWithDefaultValueByMethodNamesByClassTypes as $type => $positionWithDefaultValueByMethodNames) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isObjectTypeMatch($node, $type)) {
                 continue;
             }
 
@@ -209,6 +211,29 @@ CODE_SAMPLE
 
         if ($node instanceof MethodCall) {
             return in_array('method_call', $scope, true);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param MethodCall|StaticCall|ClassMethod $node
+     */
+    private function isObjectTypeMatch(Node $node, string $type): bool
+    {
+        if ($node instanceof MethodCall) {
+            return $this->isObjectType($node->var, $type);
+        }
+
+        if ($node instanceof StaticCall) {
+            return $this->isObjectType($node->class, $type);
+        }
+
+        if ($node instanceof ClassMethod) {
+            /** @var Class_ $class */
+            $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+
+            return $this->isObjectType($class, $type);
         }
 
         return false;

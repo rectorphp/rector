@@ -39,11 +39,13 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -55,16 +57,6 @@ final class NodeTypeResolver
      * @var PerNodeTypeResolverInterface[]
      */
     private $perNodeTypeResolvers = [];
-
-    /**
-     * @var Broker
-     */
-    private $broker;
-
-    /**
-     * @var ClassReflectionTypesResolver
-     */
-    private $classReflectionTypesResolver;
 
     /**
      * @var NameResolver
@@ -87,51 +79,88 @@ final class NodeTypeResolver
     private $callableNodeTraverser;
 
     /**
+     * @var ClassReflectionTypesResolver
+     */
+    private $classReflectionTypesResolver;
+
+    /**
+     * @var Broker
+     */
+    private $broker;
+
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
      * @param PerNodeTypeResolverInterface[] $perNodeTypeResolvers
      */
     public function __construct(
         StaticTypeMapper $staticTypeMapper,
         BetterStandardPrinter $betterStandardPrinter,
         NameResolver $nameResolver,
-        Broker $broker,
-        ClassReflectionTypesResolver $classReflectionTypesResolver,
         CallableNodeTraverser $callableNodeTraverser,
+        ClassReflectionTypesResolver $classReflectionTypesResolver,
+        Broker $broker,
+        TypeFactory $typeFactory,
         array $perNodeTypeResolvers
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nameResolver = $nameResolver;
-        $this->broker = $broker;
-        $this->classReflectionTypesResolver = $classReflectionTypesResolver;
 
         foreach ($perNodeTypeResolvers as $perNodeTypeResolver) {
             $this->addPerNodeTypeResolver($perNodeTypeResolver);
         }
         $this->callableNodeTraverser = $callableNodeTraverser;
-    }
-
-    public function isType(Node $node, string $type): bool
-    {
-        $resolvedNodeTypes = $this->getTypes($node);
-
-        // fnmatch support
-        if (Strings::contains($type, '*')) {
-            foreach ($resolvedNodeTypes as $nodeType) {
-                if (fnmatch($type, $nodeType, FNM_NOESCAPE)) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        return in_array($type, $resolvedNodeTypes, true);
+        $this->classReflectionTypesResolver = $classReflectionTypesResolver;
+        $this->broker = $broker;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
-     * @return string[]
+     * @param ObjectType|string $requiredType
      */
-    public function getTypes(Node $node): array
+    public function isObjectType(Node $node, $requiredType): bool
+    {
+        if (is_string($requiredType)) {
+            if (Strings::contains($requiredType, '*')) {
+                return $this->isFnMatch($node, $requiredType);
+            }
+        }
+
+        $resolvedType = $this->getObjectType($node);
+
+        if ($resolvedType instanceof MixedType) {
+            return false;
+        }
+
+        // this should also work with ObjectType and UnionType with ObjectType
+        // use PHPStan types here
+
+        if (is_string($requiredType)) {
+            $requiredType = new ObjectType($requiredType);
+        }
+
+        if ($resolvedType->equals($requiredType)) {
+            return true;
+        }
+
+        if ($resolvedType instanceof ObjectType) {
+            if (is_a($resolvedType->getClassName(), $requiredType->getClassName(), true)) {
+                return true;
+            }
+        }
+
+        if ($this->isUnionNullTypeOfRequiredType($requiredType, $resolvedType)) {
+            return true;
+        }
+
+        return $resolvedType->isSuperTypeOf($requiredType)->yes();
+    }
+
+    public function getObjectType(Node $node): Type
     {
         // @todo should be resolved by NodeTypeResolver internally
         if ($node instanceof MethodCall || $node instanceof ArrayDimFetch) {
@@ -141,17 +170,14 @@ final class NodeTypeResolver
         return $this->resolve($node);
     }
 
-    /**
-     * @return string[]
-     */
-    public function resolve(Node $node): array
+    public function resolve(Node $node): Type
     {
         if ($node instanceof ClassMethod || $node instanceof ClassConst) {
             return $this->resolveClassNode($node);
         }
 
         if ($node instanceof StaticCall) {
-            return $this->resolveStaticCall($node);
+            return $this->resolveStaticCallType($node);
         }
 
         if ($node instanceof ClassConstFetch) {
@@ -162,28 +188,15 @@ final class NodeTypeResolver
             return $this->resolve($node->expr);
         }
 
-        $types = $this->resolveFirstTypes($node);
-        if ($types === []) {
-            return $types;
+        $type = $this->resolveFirstType($node);
+        if (! $type instanceof TypeWithClassName) {
+            return $type;
         }
 
-        // complete parent types - parent classes, interfaces and traits
-        foreach ($types as $i => $type) {
-            // remove scalar types and other non-existing ones
-            if ($type === 'null' || $type === null) {
-                unset($types[$i]);
-                continue;
-            }
-
-            if (class_exists($type)) {
-                $types += $this->classReflectionTypesResolver->resolve($this->broker->getClass($type));
-            }
-        }
-
-        return $types;
+        return $this->unionWithParentClassesInterfacesAndUsedTraits($type);
     }
 
-    public function isStringOrUnionStringType(Node $node): bool
+    public function isStringOrUnionStringOnlyType(Node $node): bool
     {
         $nodeType = $this->getStaticType($node);
         if ($nodeType instanceof StringType) {
@@ -219,9 +232,6 @@ final class NodeTypeResolver
     public function isCountableType(Node $node): bool
     {
         $nodeType = $this->getStaticType($node);
-        if ($nodeType === null) {
-            return false;
-        }
 
         $nodeType = $this->correctPregMatchType($node, $nodeType);
         if ($nodeType instanceof ObjectType) {
@@ -234,9 +244,6 @@ final class NodeTypeResolver
     public function isArrayType(Node $node): bool
     {
         $nodeStaticType = $this->getStaticType($node);
-        if ($nodeStaticType === null) {
-            return false;
-        }
 
         $nodeStaticType = $this->correctPregMatchType($node, $nodeStaticType);
         if ($this->isIntersectionArrayType($nodeStaticType)) {
@@ -263,7 +270,7 @@ final class NodeTypeResolver
         return $nodeStaticType instanceof ArrayType;
     }
 
-    public function getStaticType(Node $node): ?Type
+    public function getStaticType(Node $node): Type
     {
         if ($node instanceof String_) {
             return new ConstantStringType($node->value);
@@ -279,7 +286,7 @@ final class NodeTypeResolver
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $node instanceof Expr || $nodeScope === null) {
-            return null;
+            return new MixedType();
         }
 
         if ($node instanceof New_) {
@@ -313,13 +320,13 @@ final class NodeTypeResolver
             return ['array'];
         }
 
-        if ($this->isStringOrUnionStringType($node)) {
+        if ($this->isStringOrUnionStringOnlyType($node)) {
             return ['string'];
         }
 
         $nodeStaticType = $this->getStaticType($node);
-        if ($nodeStaticType === null) {
-            return [];
+        if ($nodeStaticType instanceof MixedType) {
+            return ['mixed'];
         }
 
         return $this->staticTypeMapper->mapPHPStanTypeToStrings($nodeStaticType);
@@ -365,12 +372,7 @@ final class NodeTypeResolver
             ));
         }
 
-        $nodeStaticType = $this->getStaticType($node);
-        if ($nodeStaticType === null) {
-            return false;
-        }
-
-        return is_a($nodeStaticType, $staticTypeClass);
+        return is_a($this->getStaticType($node), $staticTypeClass);
     }
 
     private function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
@@ -387,23 +389,19 @@ final class NodeTypeResolver
 
     /**
      * @param ClassConst|ClassMethod $node
-     * @return string[]
      */
-    private function resolveClassNode(Node $node): array
+    private function resolveClassNode(Node $node): Type
     {
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             // anonymous class
-            return [];
+            return new ObjectWithoutClassType();
         }
 
         return $this->resolve($classNode);
     }
 
-    /**
-     * @return string[]
-     */
-    private function resolveFirstTypes(Node $node): array
+    private function resolveFirstType(Node $node): Type
     {
         // nodes that cannot be resolver by PHPStan
         $nodeClass = get_class($node);
@@ -414,65 +412,68 @@ final class NodeTypeResolver
 
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
+
         if ($nodeScope === null) {
-            return [];
+            return new MixedType();
         }
 
         if (! $node instanceof Expr) {
-            return [];
+            return new MixedType();
         }
 
         // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
         if ($node instanceof New_) {
             if ($this->isAnonymousClass($node->class)) {
-                return [];
+                return new ObjectWithoutClassType();
             }
         }
 
         $type = $nodeScope->getType($node);
 
-        $typesInStrings = $this->staticTypeMapper->mapPHPStanTypeToStrings($type);
-
         // hot fix for phpstan not resolving chain method calls
-        if ($node instanceof MethodCall && ! $typesInStrings) {
-            return $this->resolveFirstTypes($node->var);
+        if ($node instanceof MethodCall && $type instanceof MixedType) {
+            return $this->resolveFirstType($node->var);
         }
 
-        return $typesInStrings;
+        return $type;
     }
 
-    /**
-     * @return string[]
-     */
-    private function resolveStaticCall(StaticCall $staticCall): array
+    private function resolveStaticCallType(StaticCall $staticCall): Type
     {
-        $classTypes = $this->resolve($staticCall->class);
+        $classType = $this->resolve($staticCall->class);
         $methodName = $this->nameResolver->getName($staticCall->name);
 
         // no specific method found, return class types, e.g. <ClassType>::$method()
         if (! is_string($methodName)) {
-            return $classTypes;
+            return $classType;
+        }
+
+        $classTypes = [];
+        if ($classType instanceof ObjectType) {
+            $classTypes[] = $classType;
+        } elseif ($classType instanceof UnionType) {
+            foreach ($classType->getTypes() as $unionedType) {
+                if ($unionedType instanceof ObjectType) {
+                    $classTypes[] = $unionedType;
+                }
+            }
         }
 
         foreach ($classTypes as $classType) {
-            if (! method_exists($classType, $methodName)) {
+            if (! method_exists($classType->getClassName(), $methodName)) {
                 continue;
             }
 
             /** @var Scope|null $nodeScope */
             $nodeScope = $staticCall->getAttribute(AttributeKey::SCOPE);
             if ($nodeScope === null) {
-                return $classTypes;
+                return $classType;
             }
 
-            $type = $nodeScope->getType($staticCall);
-
-            if ($type instanceof ObjectType) {
-                return [$type->getClassName()];
-            }
+            return $nodeScope->getType($staticCall);
         }
 
-        return $classTypes;
+        return $classType;
     }
 
     /**
@@ -578,16 +579,16 @@ final class NodeTypeResolver
         return $className === null || Strings::contains($className, 'AnonymousClass');
     }
 
-    private function resolveParamStaticType(Node $node): ?Type
+    private function resolveParamStaticType(Node $node): Type
     {
         $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
         if ($classMethod === null) {
-            return null;
+            return new MixedType();
         }
 
         /** @var string $paramName */
         $paramName = $this->nameResolver->getName($node);
-        $paramStaticType = null;
+        $paramStaticType = new MixedType();
 
         // special case for param inside method/function
         $this->callableNodeTraverser->traverseNodesWithCallable(
@@ -608,5 +609,109 @@ final class NodeTypeResolver
         );
 
         return $paramStaticType;
+    }
+
+    private function isUnionNullTypeOfRequiredType(ObjectType $objectType, Type $resolvedType): bool
+    {
+        if (! $resolvedType instanceof UnionType) {
+            return false;
+        }
+
+        if (count($resolvedType->getTypes()) !== 2) {
+            return false;
+        }
+
+        $firstType = $resolvedType->getTypes()[0];
+        $secondType = $resolvedType->getTypes()[1];
+
+        if ($firstType instanceof NullType && $secondType instanceof ObjectType) {
+            $resolvedType = $secondType;
+        } elseif ($secondType instanceof NullType && $firstType instanceof ObjectType) {
+            $resolvedType = $firstType;
+        } else {
+            return false;
+        }
+
+        return is_a($resolvedType->getClassName(), $objectType->getClassName(), true);
+    }
+
+    private function isFnMatch(Node $node, string $requiredType): bool
+    {
+        $resolvedType = $this->getObjectType($node);
+
+        if ($resolvedType instanceof TypeWithClassName) {
+            return $this->isObjectTypeFnMatch($resolvedType, $requiredType);
+        }
+
+        if ($resolvedType instanceof UnionType) {
+            foreach ($resolvedType->getTypes() as $unionedType) {
+                if (! $unionedType instanceof TypeWithClassName) {
+                    continue;
+                }
+
+                if ($this->isObjectTypeFnMatch($unionedType, $requiredType)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private function isObjectTypeFnMatch(TypeWithClassName $typeWithClassName, string $requiredType): bool
+    {
+        return fnmatch($requiredType, $typeWithClassName->getClassName(), FNM_NOESCAPE);
+    }
+
+    private function unionWithParentClassesInterfacesAndUsedTraits(Type $type): Type
+    {
+        if ($type instanceof TypeWithClassName) {
+            if (! $this->classLikeTypeExists($type)) {
+                return $type;
+            }
+
+            $classReflection = $this->broker->getClass($type->getClassName());
+
+            $allTypes = $this->classReflectionTypesResolver->resolve($classReflection);
+            $allTypes = array_unique($allTypes);
+
+            return $this->typeFactory->createObjectTypeOrUnionType($allTypes);
+        }
+
+        if ($type instanceof UnionType) {
+            $allTypes = [];
+
+            foreach ($type->getTypes() as $unionedType) {
+                if ($unionedType instanceof TypeWithClassName) {
+                    if (! $this->classLikeTypeExists($unionedType)) {
+                        continue;
+                    }
+
+                    $classReflection = $this->broker->getClass($unionedType->getClassName());
+
+                    $allTypes = array_merge(
+                        $allTypes,
+                        $this->classReflectionTypesResolver->resolve($classReflection)
+                    );
+                }
+            }
+
+            return $this->typeFactory->createObjectTypeOrUnionType($allTypes);
+        }
+
+        return $type;
+    }
+
+    private function classLikeTypeExists(TypeWithClassName $typeWithClassName): bool
+    {
+        if (class_exists($typeWithClassName->getClassName())) {
+            return true;
+        }
+
+        if (interface_exists($typeWithClassName->getClassName())) {
+            return true;
+        }
+
+        return trait_exists($typeWithClassName->getClassName());
     }
 }

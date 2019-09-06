@@ -93,7 +93,7 @@ CODE_SAMPLE
         foreach ($this->methodNamesByTypes as $type => $methodNamesToGetAndSetNames) {
             /** @var string[] $methodNames */
             $methodNames = array_keys($methodNamesToGetAndSetNames);
-            if (! $this->isType($methodCall, $type)) {
+            if (! $this->isObjectType($methodCall, $type)) {
                 continue;
             }
 

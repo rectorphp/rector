@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -84,7 +85,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->objectToFactoryMethod as $object => $factoryInfo) {
-            if (! $this->isType($node, $object)) {
+            if (! $this->isObjectType($node, $object)) {
                 continue;
             }
 
@@ -102,7 +103,9 @@ CODE_SAMPLE
             if ($propertyName === null) {
                 $propertyName = $this->getFactoryPropertyName($factoryClass);
 
-                $this->addPropertyToClass($classNode, $factoryClass, $propertyName);
+                $factoryObjectType = new ObjectType($factoryClass);
+
+                $this->addPropertyToClass($classNode, $factoryObjectType, $propertyName);
             }
 
             return new MethodCall(
@@ -118,7 +121,7 @@ CODE_SAMPLE
     private function getExistingFactoryPropertyName(Class_ $classNode, string $factoryClass): ?string
     {
         foreach ($classNode->getProperties() as $property) {
-            if ($this->isType($property, $factoryClass)) {
+            if ($this->isObjectType($property, $factoryClass)) {
                 return (string) $property->props[0]->name;
             }
         }

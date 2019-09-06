@@ -82,7 +82,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, 'Symfony\Component\DependencyInjection\ContainerInterface')) {
+        if (! $this->isObjectType($node, 'Symfony\Component\DependencyInjection\ContainerInterface')) {
             return null;
         }
 

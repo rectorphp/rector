@@ -39,6 +39,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\PhpVersionProvider;
 use Rector\PhpParser\Node\Manipulator\ConstFetchManipulator;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 /**
  * Maps PhpParser <=> PHPStan <=> PHPStan doc <=> string type nodes to between all possible formats
@@ -69,12 +70,18 @@ final class StaticTypeMapper
     }
 
     /**
+     * @todo this should return only single string
      * @return string[]
      */
-    public function mapPHPStanTypeToStrings(Type $currentPHPStanType): array
+    public function mapPHPStanTypeToStrings(Type $currentPHPStanType, bool $preslashObjectType = false): array
     {
         if ($currentPHPStanType instanceof ObjectType) {
-            return [$currentPHPStanType->getClassName()];
+            $className = $currentPHPStanType->getClassName();
+            if ($preslashObjectType) {
+                $className = '\\' . $className;
+            }
+
+            return [$className];
         }
 
         if ($currentPHPStanType instanceof IntegerType) {
@@ -285,6 +292,41 @@ final class StaticTypeMapper
         }
 
         return '';
+    }
+
+    public function mapPHPStanTypeToDocString(Type $phpStanType): string
+    {
+        if ($phpStanType instanceof UnionType) {
+            $stringTypes = [];
+
+            foreach ($phpStanType->getTypes() as $unionedType) {
+                if ($unionedType instanceof ObjectType) {
+                    $stringTypes[] = $this->mapPHPStanTypeToDocString($unionedType);
+                }
+            }
+
+            return implode('|', $stringTypes);
+        }
+
+        if ($phpStanType instanceof FullyQualifiedObjectType) {
+            // always prefixed with \\
+            return '\\' . $phpStanType->getClassName();
+        }
+
+        if ($phpStanType instanceof ObjectType) {
+            if (class_exists($phpStanType->getClassName()) || interface_exists(
+                $phpStanType->getClassName()
+            ) || trait_exists($phpStanType->getClassName())) {
+                return '\\' . $phpStanType->getClassName();
+            }
+            return $phpStanType->getClassName();
+        }
+
+        if ($phpStanType instanceof StringType) {
+            return 'string';
+        }
+
+        throw new NotImplementedException();
     }
 
     /**

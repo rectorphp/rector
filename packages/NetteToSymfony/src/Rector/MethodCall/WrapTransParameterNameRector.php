@@ -81,7 +81,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->translatorClass)) {
+        if (! $this->isObjectType($node, $this->translatorClass)) {
             return null;
         }
 

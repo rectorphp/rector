@@ -71,7 +71,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->eventDispatcherClass)) {
+        if (! $this->isObjectType($node, $this->eventDispatcherClass)) {
             return null;
         }
 
@@ -83,7 +83,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isStringyType($node->args[0]->value)) {
+        if (! $this->isStringOrUnionStringOnlyType($node->args[0]->value)) {
             return null;
         }
 

@@ -63,7 +63,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($node, $this->formClass)) {
+        if (! $this->isObjectType($node, $this->formClass)) {
             return null;
         }
 

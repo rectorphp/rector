@@ -79,11 +79,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isType($node, $this->processClass)) {
+        if ($this->isObjectType($node, $this->processClass)) {
             return $this->processArgumentPosition($node, 0);
         }
 
-        if ($this->isType($node, $this->processHelperClass)) {
+        if ($this->isObjectType($node, $this->processHelperClass)) {
             return $this->processArgumentPosition($node, 1);
         }
 

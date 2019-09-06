@@ -222,7 +222,7 @@ CODE_SAMPLE
         $itemStaticTypes = [];
         foreach ($array->items as $arrayItem) {
             $arrayItemStaticType = $this->getStaticType($arrayItem->value);
-            if ($arrayItemStaticType === null) {
+            if ($arrayItemStaticType instanceof MixedType) {
                 continue;
             }
 
@@ -393,7 +393,7 @@ CODE_SAMPLE
      */
     private function isMethodCallMatch(MethodCall $methodCall, array $singleConfiguration): bool
     {
-        if (! $this->isType($methodCall->var, $singleConfiguration['class'])) {
+        if (! $this->isObjectType($methodCall->var, $singleConfiguration['class'])) {
             return false;
         }
 

@@ -6,8 +6,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\ObjectType;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -15,6 +17,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://medium.freecodecamp.org/moving-away-from-magic-or-why-i-dont-want-to-use-laravel-anymore-2ce098c979bd
  * @see https://laravel.com/docs/5.7/facades#facades-vs-dependency-injection
+ *
  * @see \Rector\Laravel\Tests\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector\FacadeStaticCallToConstructorInjectionRectorTest
  */
 final class FacadeStaticCallToConstructorInjectionRector extends AbstractRector
@@ -128,12 +131,15 @@ CODE_SAMPLE
         }
 
         foreach ($this->facadeToServiceMap as $facadeClass => $serviceClass) {
-            if (! $this->isType($node, $facadeClass)) {
+            $facadeObjectType = new ObjectType($facadeClass);
+            if (! $this->isObjectType($node->class, $facadeObjectType)) {
                 continue;
             }
 
-            $propertyName = $this->propertyNaming->fqnToVariableName($serviceClass);
-            $this->addPropertyToClass($classNode, $serviceClass, $propertyName);
+            $serviceObjectType = new FullyQualifiedObjectType($serviceClass);
+
+            $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
+            $this->addPropertyToClass($classNode, $serviceObjectType, $propertyName);
 
             $propertyFetchNode = $this->createPropertyFetch('this', $propertyName);
             return new MethodCall($propertyFetchNode, $node->name, $node->args);

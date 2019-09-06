@@ -144,12 +144,12 @@ CODE_SAMPLE
             $propertyTypes = Arrays::flatten($propertyTypes);
             $propertyTypesAsString = implode('|', $propertyTypes);
 
-            $propertyBuilder = $this->builderFactory->property($propertyName)
-                ->makePublic();
+            $propertyBuilder = $this->builderFactory->property($propertyName);
+            $propertyBuilder->makePublic();
 
             if ($this->isAtLeastPhpVersion('7.4') && count($propertyTypes) === 1) {
-                $newProperty = $propertyBuilder->setType($propertyTypes[0])
-                    ->getNode();
+                $propertyBuilder->setType($propertyTypes[0]);
+                $newProperty = $propertyBuilder->getNode();
             } else {
                 $newProperty = $propertyBuilder->getNode();
                 if ($propertyTypesAsString) {

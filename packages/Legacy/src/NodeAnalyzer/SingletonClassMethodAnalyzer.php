@@ -89,10 +89,11 @@ final class SingletonClassMethodAnalyzer
             return null;
         }
 
+        /** @var string $class */
         $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
 
         // the "self" class is created
-        if ($this->nodeTypeResolver->getTypes($stmt->expr->class) !== [$class]) {
+        if (! $this->nodeTypeResolver->isObjectType($stmt->expr->class, $class)) {
             return null;
         }
 

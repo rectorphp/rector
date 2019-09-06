@@ -24,6 +24,7 @@ services:
     Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
         extra_allowed_classes:
             - 'PHPStan\Type\*'
+            - '*Type'
             - 'PHPStan\Analyser\Scope'
             - 'PhpParser\NodeVisitor\NameResolver'
             - 'PhpParser\Node\*'
@@ -110,6 +111,10 @@ parameters:
             - 'src/Rector/AbstractRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+            - 'packages/NodeTypeResolver/src/NodeTypeResolver.php'
+            - 'packages/NodeTypeResolver/src/PerNodeTypeResolver/VariableTypeResolver.php'
+            - 'packages/Php/src/Rector/FuncCall/RemoveExtraParametersRector.php'
+            - 'packages/SOLID/src/Analyzer/ClassConstantFetchAnalyzer.php'
             # tough logic
             - 'packages/PHPUnit/src/Rector/Class_/ArrayArgumentInTestToDataProviderRector.php'
             - 'packages/DoctrinePhpDocParser/src/Ast/PhpDoc/*/*TagValueNode.php'
@@ -171,5 +176,6 @@ parameters:
             - 'src/PhpParser/Node/Value/ValueResolver.php'
 
         PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer:
-            # intentional equals
+            # intentional "assertEquals()"
             - 'tests/PhpParser/Node/NodeFactoryTest.php'
+            - '*TypeResolverTest.php'

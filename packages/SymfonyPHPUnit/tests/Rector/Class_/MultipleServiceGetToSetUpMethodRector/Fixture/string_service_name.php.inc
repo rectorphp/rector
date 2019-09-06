@@ -2,7 +2,6 @@
 
 namespace Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector\Fixture;
 
-use ItemRepository;
 use Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector\Source\DummyKernelTestCase;
 
 class StringServiceName extends DummyKernelTestCase
@@ -26,13 +25,12 @@ class StringServiceName extends DummyKernelTestCase
 
 namespace Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector\Fixture;
 
-use ItemRepository;
 use Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector\Source\DummyKernelTestCase;
 
 class StringServiceName extends DummyKernelTestCase
 {
     /**
-     * @var \some_value
+     * @var some_value
      */
     private $someValue;
     protected function setUp()

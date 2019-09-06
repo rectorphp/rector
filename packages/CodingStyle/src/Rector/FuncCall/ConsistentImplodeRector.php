@@ -76,7 +76,7 @@ CODE_SAMPLE
         }
 
         if (count($node->args) === 2) {
-            if ($this->isStringyType($node->args[1]->value)) {
+            if ($this->isStringOrUnionStringOnlyType($node->args[1]->value)) {
                 $node->args = array_reverse($node->args);
             }
         }

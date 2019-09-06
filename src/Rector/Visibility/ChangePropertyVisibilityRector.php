@@ -84,7 +84,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $this->isType($classNode, $type)) {
+            if (! $this->isObjectType($classNode, $type)) {
                 continue;
             }
 

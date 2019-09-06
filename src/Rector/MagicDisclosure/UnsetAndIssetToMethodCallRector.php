@@ -89,7 +89,7 @@ CODE_SAMPLE
             }
 
             foreach ($this->typeToMethodCalls as $type => $transformation) {
-                if (! $this->isType($arrayDimFetchNode, $type)) {
+                if (! $this->isObjectType($arrayDimFetchNode, $type)) {
                     continue;
                 }
 

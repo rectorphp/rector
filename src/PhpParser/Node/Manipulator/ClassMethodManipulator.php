@@ -140,7 +140,7 @@ final class ClassMethodManipulator
         }
 
         foreach ($classMethodNode->params as $paramNode) {
-            if ($this->nodeTypeResolver->isType($paramNode, $type)) {
+            if ($this->nodeTypeResolver->isObjectType($paramNode, $type)) {
                 return $this->nameResolver->getName($paramNode);
             }
         }

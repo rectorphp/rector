@@ -63,70 +63,84 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof Property && $this->isTypes($node, array_keys($this->valueObjectsToSimpleTypes))) {
-            $this->refactorProperty($node);
-            return $node;
+        if ($node instanceof Property) {
+            return $this->refactorProperty($node);
         }
 
         if ($node instanceof NullableType) {
-            $this->refactorNullableType($node);
-            return $node;
+            return $this->refactorNullableType($node);
         }
 
         if ($node instanceof Variable) {
-            $this->refactorVariableNode($node);
-            return $node;
+            return $this->refactorVariableNode($node);
         }
 
         return null;
     }
 
-    private function refactorProperty(Property $property): void
+    private function refactorProperty(Property $property): ?Property
     {
-        $match = $this->matchOriginAndNewType($property);
-        if ($match === null) {
-            return;
+        foreach ($this->valueObjectsToSimpleTypes as $valueObject => $simpleType) {
+            if (! $this->isObjectType($property, $valueObject)) {
+                continue;
+            }
+
+            $this->docBlockManipulator->changeTypeIncludingChildren($property, $valueObject, $simpleType);
+
+            return $property;
         }
 
-        [$oldType, $newType] = $match;
-
-        $this->docBlockManipulator->changeTypeIncludingChildren($property, $oldType, $newType);
+        return null;
     }
 
-    private function refactorNullableType(NullableType $nullableType): void
+    private function refactorNullableType(NullableType $nullableType): ?NullableType
     {
-        $newType = $this->matchNewType($nullableType->type);
-        if ($newType === null) {
-            return;
+        foreach ($this->valueObjectsToSimpleTypes as $valueObject => $simpleType) {
+            $typeName = $this->getName($nullableType->type);
+            if ($typeName === null) {
+                continue;
+            }
+
+            /** @var string $valueObject */
+            if (! is_a($typeName, $valueObject, true)) {
+                continue;
+            }
+
+            // in method parameter update docs as well
+            $parentNode = $nullableType->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof Param) {
+                $this->processParamNode($nullableType, $parentNode, $simpleType);
+            }
+
+            return $nullableType;
         }
 
-        // in method parameter update docs as well
-        $parentNode = $nullableType->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Param) {
-            $this->processParamNode($nullableType, $parentNode, $newType);
-        }
+        return null;
     }
 
-    private function refactorVariableNode(Variable $variable): void
+    private function refactorVariableNode(Variable $variable): ?Variable
     {
-        $match = $this->matchOriginAndNewType($variable);
-        if (! $match) {
-            return;
+        foreach ($this->valueObjectsToSimpleTypes as $valueObject => $simpleType) {
+            if (! $this->isObjectType($variable, $valueObject)) {
+                continue;
+            }
+
+            $exprNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($variable, Expr::class);
+            $node = $variable;
+            if ($exprNode && $exprNode->getAttribute(AttributeKey::PARENT_NODE)) {
+                $node = $exprNode->getAttribute(AttributeKey::PARENT_NODE);
+            }
+
+            if ($node === null) {
+                return null;
+            }
+
+            $this->docBlockManipulator->changeTypeIncludingChildren($node, $valueObject, $simpleType);
+
+            return $variable;
         }
 
-        [$oldType, $newType] = $match;
-
-        $exprNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($variable, Expr::class);
-        $node = $variable;
-        if ($exprNode && $exprNode->getAttribute(AttributeKey::PARENT_NODE)) {
-            $node = $exprNode->getAttribute(AttributeKey::PARENT_NODE);
-        }
-
-        if ($node === null) {
-            return;
-        }
-
-        $this->docBlockManipulator->changeTypeIncludingChildren($node, $oldType, $newType);
+        return null;
     }
 
     private function processParamNode(NullableType $nullableType, Param $param, string $newType): void

@@ -138,7 +138,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->testListenerClass)) {
+        if (! $this->isObjectType($node, $this->testListenerClass)) {
             return null;
         }
 

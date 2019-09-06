@@ -20,6 +20,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://3v4l.org/Bndc9
+ *
  * @see \Rector\Php\Tests\Rector\FuncCall\CountOnNullRector\CountOnNullRectorTest
  */
 final class CountOnNullRector extends AbstractRector

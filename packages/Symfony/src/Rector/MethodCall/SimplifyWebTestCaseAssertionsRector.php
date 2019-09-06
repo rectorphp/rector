@@ -141,7 +141,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isType($class, $this->webTestCaseClass);
+        return $this->isObjectType($class, $this->webTestCaseClass);
     }
 
     /**

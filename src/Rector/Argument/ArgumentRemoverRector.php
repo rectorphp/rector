@@ -73,7 +73,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->positionsByMethodNameByClassType as $type => $positionByMethodName) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $type)) {
                 continue;
             }
 

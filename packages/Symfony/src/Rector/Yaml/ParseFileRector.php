@@ -45,7 +45,7 @@ final class ParseFileRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isType($node->class, 'Symfony\Component\Yaml\Yaml')) {
+        if (! $this->isObjectType($node->class, 'Symfony\Component\Yaml\Yaml')) {
             return null;
         }
 

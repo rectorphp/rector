@@ -2,10 +2,10 @@
 
 namespace Rector\Rector\Annotation;
 
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -21,11 +21,6 @@ final class RenameAnnotationRector extends AbstractPHPUnitRector
      * @var string[][]
      */
     private $classToAnnotationMap = [];
-
-    /**
-     * @var string[]
-     */
-    private $activeAnnotationMap = [];
 
     /**
      * @var DocBlockManipulator
@@ -72,8 +67,10 @@ class SomeTest extends PHPUnit\Framework\TestCase
 CODE_SAMPLE
                     ,
                     [
-                        'PHPUnit\Framework\TestCase' => [
-                            'test' => 'scenario',
+                        '$classToAnnotationMap' => [
+                            'PHPUnit\Framework\TestCase' => [
+                                'test' => 'scenario',
+                            ],
                         ],
                     ]
                 ),
@@ -94,54 +91,24 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
-            return null;
-        }
+        /** @var Class_ $class */
+        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
 
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
-        }
-
-        $parentNodeTypes = $this->getTypes($parentNode);
         foreach ($this->classToAnnotationMap as $type => $annotationMap) {
-            if (! in_array($type, $parentNodeTypes, true)) {
+            /** @var string $type */
+            if (! $this->isObjectType($class, $type)) {
                 continue;
             }
 
-            $this->activeAnnotationMap = $annotationMap;
+            foreach ($annotationMap as $oldAnnotation => $newAnnotation) {
+                if (! $this->docBlockManipulator->hasTag($node, $oldAnnotation)) {
+                    continue;
+                }
 
-            if (! $this->hasAnyAnnotation($node)) {
-                return null;
+                $this->docBlockManipulator->replaceAnnotationInNode($node, $oldAnnotation, $newAnnotation);
             }
-        }
-
-        foreach ($this->activeAnnotationMap as $oldAnnotation => $newAnnotation) {
-            $this->docBlockManipulator->replaceAnnotationInNode($node, $oldAnnotation, $newAnnotation);
         }
 
         return $node;
-    }
-
-    private function shouldSkip(Node $node): bool
-    {
-        if (! $node instanceof ClassMethod && ! $node instanceof Property) {
-            return true;
-        }
-
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-        return $parentNode === null;
-    }
-
-    private function hasAnyAnnotation(Node $node): bool
-    {
-        foreach (array_keys($this->activeAnnotationMap) as $oldAnnotation) {
-            if ($this->docBlockManipulator->hasTag($node, $oldAnnotation)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

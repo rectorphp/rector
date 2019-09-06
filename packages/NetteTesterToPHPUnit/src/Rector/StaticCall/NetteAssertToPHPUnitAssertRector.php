@@ -59,7 +59,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, 'Tester\Assert')) {
+        if (! $this->isObjectType($node, 'Tester\Assert')) {
             return null;
         }
 

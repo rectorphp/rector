@@ -94,7 +94,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isTypes($node->expr, $this->classesToDefluent)) {
+        if (! $this->isObjectTypes($node->expr, $this->classesToDefluent)) {
             return null;
         }
 

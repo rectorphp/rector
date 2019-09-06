@@ -4,6 +4,7 @@ namespace Rector\CodingStyle\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
+use PHPStan\Type\MixedType;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\Rector\AbstractRector;
@@ -73,7 +74,7 @@ CODE_SAMPLE
         }
 
         $constStaticType = $this->getStaticType($node->consts[0]->value);
-        if ($constStaticType === null) {
+        if ($constStaticType instanceof MixedType) {
             return null;
         }
 

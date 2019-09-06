@@ -93,6 +93,17 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
         // needed for PHPStan, because the analyzed file is just create in /temp
         $this->nodeScopeResolver = static::$container->get(NodeScopeResolver::class);
+
+        $this->configurePhpVersionFeatures();
+    }
+
+    protected function tearDown(): void
+    {
+        // restore PHP version
+        if ($this->getPhpVersion()) {
+            $parameterProvider = self::$container->get(ParameterProvider::class);
+            $parameterProvider->changeParameter('php_version_features', '10.0');
+        }
     }
 
     /**
@@ -154,6 +165,12 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected function getTempPath(): string
     {
         return sys_get_temp_dir() . '/rector_temp_tests';
+    }
+
+    protected function getPhpVersion(): string
+    {
+        // to be implemented
+        return '';
     }
 
     private function doTestFileMatchesExpectedContent(
@@ -252,5 +269,15 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             $methodName,
             RectorInterface::class
         ));
+    }
+
+    private function configurePhpVersionFeatures(): void
+    {
+        if ($this->getPhpVersion() === '') {
+            return;
+        }
+
+        $parameterProvider = self::$container->get(ParameterProvider::class);
+        $parameterProvider->changeParameter('php_version_features', $this->getPhpVersion());
     }
 }

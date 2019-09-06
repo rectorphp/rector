@@ -14,3 +14,8 @@ final class MethodWithFuncGetArgs
         $us = better_func_get_args();
     }
 }
+
+function better_func_get_args()
+{
+    return 5;
+}

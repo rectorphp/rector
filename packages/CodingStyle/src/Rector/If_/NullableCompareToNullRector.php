@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
@@ -81,7 +82,7 @@ CODE_SAMPLE
     private function isNullableNonScalarType(Node $node): bool
     {
         $staticType = $this->getStaticType($node);
-        if ($staticType === null) {
+        if ($staticType instanceof MixedType) {
             return false;
         }
 

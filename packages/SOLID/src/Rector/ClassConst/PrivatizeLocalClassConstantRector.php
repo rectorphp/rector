@@ -83,15 +83,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->getAttribute(self::HAS_NEW_ACCESS_LEVEL)) {
-            return null;
-        }
-
-        if (! $this->isAtLeastPhpVersion('7.1')) {
-            return null;
-        }
-
-        if (count($node->consts) > 1) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -213,5 +205,18 @@ CODE_SAMPLE
         }
 
         return $classConst;
+    }
+
+    private function shouldSkip(ClassConst $classConst): bool
+    {
+        if ($classConst->getAttribute(self::HAS_NEW_ACCESS_LEVEL)) {
+            return true;
+        }
+
+        if (! $this->isAtLeastPhpVersion('7.1')) {
+            return true;
+        }
+
+        return count($classConst->consts) !== 1;
     }
 }

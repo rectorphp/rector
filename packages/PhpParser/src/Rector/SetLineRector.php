@@ -35,7 +35,7 @@ final class SetLineRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, 'PhpParser\Node')) {
+        if (! $this->isObjectType($node->var, 'PhpParser\Node')) {
             return null;
         }
 

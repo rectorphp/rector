@@ -71,7 +71,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->netteRequestClass)) {
+        if (! $this->isObjectType($node, $this->netteRequestClass)) {
             return null;
         }
 

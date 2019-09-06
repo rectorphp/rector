@@ -55,11 +55,11 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->traitName)) {
+        if (! $this->isObjectType($node->var, $this->traitName)) {
             return null;
         }
 
-        if (! $this->isNames($node, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {
+        if (! $this->isNames($node->name, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {
             return null;
         }
 

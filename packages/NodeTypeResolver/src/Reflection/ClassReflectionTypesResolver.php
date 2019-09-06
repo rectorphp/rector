@@ -18,20 +18,23 @@ final class ClassReflectionTypesResolver
     }
 
     /**
+     * Warning: Includes original class as well to normalize all types to strings!
+     *
      * @return string[]
      */
     public function resolve(ClassReflection $classReflection): array
     {
-        $types = [];
-
-        if (! $classReflection->isAnonymous()) {
-            $types[] = $classReflection->getName();
-        }
+        // current class
+        $types = [$classReflection->getName()];
 
         // parent classes
         $types = array_merge($types, $classReflection->getParentClassesNames());
 
         // interfaces
+        foreach ($classReflection->getInterfaces() as $interfaceReflection) {
+            $types[] = $interfaceReflection->getName();
+        }
+
         foreach ($classReflection->getInterfaces() as $interfaceReflection) {
             $types[] = $interfaceReflection->getName();
         }
@@ -50,6 +53,6 @@ final class ClassReflectionTypesResolver
             }
         }
 
-        return $types;
+        return array_unique($types);
     }
 }

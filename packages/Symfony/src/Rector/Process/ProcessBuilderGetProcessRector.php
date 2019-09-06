@@ -58,7 +58,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->processBuilderClass)) {
+        if (! $this->isObjectType($node, $this->processBuilderClass)) {
             return null;
         }
 

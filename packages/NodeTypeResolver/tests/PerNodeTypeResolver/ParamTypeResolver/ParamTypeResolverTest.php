@@ -4,6 +4,8 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver;
 
 use Iterator;
 use PhpParser\Node\Expr\Variable;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver\Source\Html;
 
@@ -14,18 +16,19 @@ final class ParamTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     /**
      * @dataProvider provideData()
-     * @param string[] $expectedTypes
      */
-    public function test(string $file, int $nodePosition, array $expectedTypes): void
+    public function test(string $file, int $nodePosition, Type $expectedType): void
     {
         $variableNodes = $this->getNodesForFileOfType($file, Variable::class);
 
-        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
+        $this->assertEquals($expectedType, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
     }
 
     public function provideData(): Iterator
     {
-        yield [__DIR__ . '/Source/MethodParamTypeHint.php', 0, [Html::class]];
-        yield [__DIR__ . '/Source/MethodParamDocBlock.php', 0, [Html::class]];
+        $objectType = new ObjectType(Html::class);
+
+        yield [__DIR__ . '/Source/MethodParamTypeHint.php', 0, $objectType];
+        yield [__DIR__ . '/Source/MethodParamDocBlock.php', 0, $objectType];
     }
 }

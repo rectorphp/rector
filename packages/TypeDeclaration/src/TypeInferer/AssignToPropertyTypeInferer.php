@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 
@@ -36,11 +35,7 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
             }
 
             $exprStaticType = $this->nodeTypeResolver->getStaticType($node->expr);
-            if ($exprStaticType === null) {
-                return null;
-            }
-
-            if ($exprStaticType instanceof ErrorType) {
+            if ($exprStaticType instanceof MixedType) {
                 return null;
             }
 

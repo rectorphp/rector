@@ -2,7 +2,6 @@
 
 namespace Rector\Rector\MethodBody;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
@@ -96,22 +95,8 @@ CODE_SAMPLE
 
     private function isMatchingMethodCall(MethodCall $methodCall): bool
     {
-        if ($this->isTypes($methodCall->var, $this->classesToDefluent)) {
-            return true;
-        }
-
-        $type = $this->getTypes($methodCall)[0] ?? null;
-        if ($type === null) {
-            return false;
-        }
-
-        // asterisk * match
         foreach ($this->classesToDefluent as $classToDefluent) {
-            if (! Strings::contains($classToDefluent, '*')) {
-                continue;
-            }
-
-            if (fnmatch($classToDefluent, $type)) {
+            if ($this->isObjectType($methodCall, $classToDefluent)) {
                 return true;
             }
         }

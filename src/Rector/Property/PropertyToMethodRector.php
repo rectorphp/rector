@@ -163,7 +163,7 @@ CODE_SAMPLE
         foreach ($this->perClassPropertyToMethods as $type => $propertyToMethods) {
             $properties = array_keys($propertyToMethods);
 
-            if (! $this->isType($propertyFetch->var, $type)) {
+            if (! $this->isObjectType($propertyFetch->var, $type)) {
                 continue;
             }
 

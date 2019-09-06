@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Fixture;
 
-use App\Service\Anything;
+use Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\Anything;
 use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 
 class ClassWithNamedService2 extends SymfonyController
@@ -10,7 +10,7 @@ class ClassWithNamedService2 extends SymfonyController
     public function render()
     {
         $this->renderTwig([
-            'posts' => $this->get(\App\Service\Something::class)->callMe(),
+            'posts' => $this->get(\Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\Something::class)->callMe(),
             'comments' => $this->get(Anything::class)->callMe(),
         ]);
     }
@@ -22,20 +22,20 @@ class ClassWithNamedService2 extends SymfonyController
 
 namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Fixture;
 
-use App\Service\Anything;
+use Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\Anything;
 use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 
 class ClassWithNamedService2 extends SymfonyController
 {
     /**
-     * @var \App\Service\Something
+     * @var \Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\Something
      */
     private $something;
     /**
-     * @var \App\Service\Anything
+     * @var \Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\Anything
      */
     private $anything;
-    public function __construct(\App\Service\Something $something, \App\Service\Anything $anything)
+    public function __construct(\Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\Something $something, \Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\Anything $anything)
     {
         $this->something = $something;
         $this->anything = $anything;
