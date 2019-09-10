@@ -32,6 +32,8 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\Class_\ArrayArgumentInTestToDataProviderRector\ArrayArgumentInTestToDataProviderRectorTest
+ *
+ * @see why → https://blog.martinhujer.cz/how-to-use-data-providers-in-phpunit/
  */
 final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRector
 {
