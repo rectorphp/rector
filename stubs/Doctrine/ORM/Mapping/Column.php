@@ -2,7 +2,7 @@
 
 namespace Doctrine\ORM\Mapping;
 
-if (interface_exists('Doctrine\ORM\Mapping\Column')) {
+if (class_exists('Doctrine\ORM\Mapping\Column')) {
     return;
 }
 
@@ -10,7 +10,7 @@ if (interface_exists('Doctrine\ORM\Mapping\Column')) {
  * @Annotation
  * @Target({"PROPERTY","ANNOTATION"})
  */
-final class Column implements Annotation
+class Column implements Annotation
 {
     /**
      * @var string

@@ -50,7 +50,7 @@ class ToMany
     private $amenity;
     /**
      * @ORM\ManyToMany(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\FooEntity", cascade={"persist", "merge"})
-     * @ORM\JoinTable (name="wohoo_fooentity_uuid", joinColumns={@ORM\JoinColumn(referencedColumnName="uuid")}, inverseJoinColumns={@ORM\JoinColumn(referencedColumnName="uuid")})
+     * @ORM\JoinTable (name="tomany_fooentity_uuid", joinColumns={@ORM\JoinColumn(referencedColumnName="uuid")}, inverseJoinColumns={@ORM\JoinColumn(referencedColumnName="uuid")})
      */
     private $amenityUuid;
 }

@@ -2,7 +2,7 @@
 
 namespace Doctrine\ORM\Mapping;
 
-if (interface_exists('Doctrine\ORM\Mapping\OneToOne')) {
+if (class_exists('Doctrine\ORM\Mapping\OneToMany')) {
     return;
 }
 
@@ -10,13 +10,8 @@ if (interface_exists('Doctrine\ORM\Mapping\OneToOne')) {
  * @Annotation
  * @Target("PROPERTY")
  */
-final class OneToOne implements Annotation
+class OneToMany implements Annotation
 {
-    /**
-     * @var string
-     */
-    public $targetEntity;
-
     /**
      * @var string
      */
@@ -25,7 +20,7 @@ final class OneToOne implements Annotation
     /**
      * @var string
      */
-    public $inversedBy;
+    public $targetEntity;
 
     /**
      * @var array<string>
@@ -45,4 +40,9 @@ final class OneToOne implements Annotation
      * @var boolean
      */
     public $orphanRemoval = false;
+
+    /**
+     * @var string
+     */
+    public $indexBy;
 }

@@ -2,7 +2,7 @@
 
 namespace Doctrine\ORM\Mapping;
 
-if (interface_exists('Doctrine\ORM\Mapping\ManyToMany')) {
+if (class_exists('Doctrine\ORM\Mapping\ManyToOne')) {
     return;
 }
 
@@ -10,22 +10,12 @@ if (interface_exists('Doctrine\ORM\Mapping\ManyToMany')) {
  * @Annotation
  * @Target("PROPERTY")
  */
-final class ManyToMany implements Annotation
+class ManyToOne implements Annotation
 {
     /**
      * @var string
      */
     public $targetEntity;
-
-    /**
-     * @var string
-     */
-    public $mappedBy;
-
-    /**
-     * @var string
-     */
-    public $inversedBy;
 
     /**
      * @var array<string>
@@ -42,12 +32,7 @@ final class ManyToMany implements Annotation
     public $fetch = 'LAZY';
 
     /**
-     * @var boolean
-     */
-    public $orphanRemoval = false;
-
-    /**
      * @var string
      */
-    public $indexBy;
+    public $inversedBy;
 }
