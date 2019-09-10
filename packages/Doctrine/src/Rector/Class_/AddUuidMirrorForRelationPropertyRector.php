@@ -200,14 +200,11 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
         /** @var DoctrineRelationTagValueNodeInterface $doctrineRelationTagValueNode */
         $doctrineRelationTagValueNode = $this->getDoctrineRelationTagValueNode($property);
 
-        if ($doctrineRelationTagValueNode instanceof ToManyTagNodeInterface) {
-            $this->uuidMigrationDataCollector->addClassToManyRelationProperty(
-                $className,
-                $oldPropertyName,
-                $uuidPropertyName
-            );
-        } elseif ($doctrineRelationTagValueNode instanceof ToOneTagNodeInterface) {
-            $this->uuidMigrationDataCollector->addClassToOneRelationProperty($className, $uuidPropertyName);
-        }
+        $this->uuidMigrationDataCollector->addClassToManyRelationProperty(
+            $className,
+            $oldPropertyName,
+            $uuidPropertyName,
+            $doctrineRelationTagValueNode
+        );
     }
 }
