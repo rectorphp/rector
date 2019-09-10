@@ -3,9 +3,13 @@
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node\FunctionLike;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 
 final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
@@ -16,11 +20,17 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
     private $returnTypeInferers = [];
 
     /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
      * @param ReturnTypeInfererInterface[] $returnTypeInferers
      */
-    public function __construct(array $returnTypeInferers)
+    public function __construct(TypeFactory $typeFactory, array $returnTypeInferers)
     {
         $this->returnTypeInferers = $this->sortTypeInferersByPriority($returnTypeInferers);
+        $this->typeFactory = $typeFactory;
     }
 
     public function inferFunctionLike(FunctionLike $functionLike): Type
@@ -39,6 +49,8 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
             }
 
             $type = $returnTypeInferer->inferFunctionLike($functionLike);
+            $type = $this->normalizeArrayTypeAndArrayNever($type);
+
             if (! $type instanceof MixedType) {
                 return $type;
             }
@@ -72,5 +84,30 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
         }
 
         throw new ShouldNotHappenException();
+    }
+
+    /**
+     * From "string[]|mixed[]" based on empty array to to "string[]"
+     */
+    private function normalizeArrayTypeAndArrayNever(Type $type): Type
+    {
+        if (! $type instanceof UnionType) {
+            return $type;
+        }
+
+        $nonNeverTypes = [];
+        foreach ($type->getTypes() as $unionedType) {
+            if (! $unionedType instanceof ArrayType) {
+                return $type;
+            }
+
+            if ($unionedType->getItemType() instanceof NeverType) {
+                continue;
+            }
+
+            $nonNeverTypes[] = $unionedType;
+        }
+
+        return $this->typeFactory->createMixedPassedOrUnionType($nonNeverTypes);
     }
 }

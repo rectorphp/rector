@@ -10,6 +10,14 @@ class TestVoidType
     function someFunction()
     {
     }
+
+    /**
+     * @return void
+     */
+    function anotherFunction()
+    {
+        return;
+    }
 }
 
 ?>
@@ -25,6 +33,14 @@ class TestVoidType
      */
     function someFunction(): void
     {
+    }
+
+    /**
+     * @return void
+     */
+    function anotherFunction(): void
+    {
+        return;
     }
 }
 

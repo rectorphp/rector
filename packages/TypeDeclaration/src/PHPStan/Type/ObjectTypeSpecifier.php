@@ -2,10 +2,13 @@
 
 namespace Rector\TypeDeclaration\PHPStan\Type;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -40,18 +43,12 @@ final class ObjectTypeSpecifier
         }
 
         $className = ltrim($objectType->getClassName(), '\\');
-
-        if ($this->isExistingClassLike($className)) {
+        if (ClassExistenceStaticHelper::doesClassLikeExist($className)) {
             return new FullyQualifiedObjectType($className);
         }
 
         // invalid type
         return new MixedType();
-    }
-
-    private function isExistingClassLike(string $classLike): bool
-    {
-        return class_exists($classLike) || interface_exists($classLike) || trait_exists($classLike);
     }
 
     private function matchAliasedObjectType(Node $node, ObjectType $objectType): ?AliasedObjectType
@@ -94,12 +91,14 @@ final class ObjectTypeSpecifier
                     continue;
                 }
 
-                if ($useUse->name->getLast() !== $objectType->getClassName()) {
-                    continue;
+                $partialNamespaceObjectType = $this->matchPartialNamespaceObjectType($objectType, $useUse);
+                if ($partialNamespaceObjectType) {
+                    return $partialNamespaceObjectType;
                 }
 
-                if ($this->isExistingClassLike($useUse->name->toString())) {
-                    return new ShortenedObjectType($objectType->getClassName(), $useUse->name->toString());
+                $partialNamespaceObjectType = $this->matchClassWithLastUseImportPart($objectType, $useUse);
+                if ($partialNamespaceObjectType) {
+                    return $partialNamespaceObjectType;
                 }
             }
         }
@@ -116,10 +115,40 @@ final class ObjectTypeSpecifier
 
         $namespacedObject = $namespaceName . '\\' . $objectType->getClassName();
 
-        if ($this->isExistingClassLike($namespacedObject)) {
+        if (ClassExistenceStaticHelper::doesClassLikeExist($namespacedObject)) {
             return new FullyQualifiedObjectType($namespacedObject);
         }
 
         return null;
+    }
+
+    private function matchPartialNamespaceObjectType(ObjectType $objectType, UseUse $useUse): ?ShortenedObjectType
+    {
+        // partial namespace
+        if (! Strings::startsWith($objectType->getClassName(), $useUse->name->getLast() . '\\')) {
+            return null;
+        }
+
+        $classNameWithoutLastUsePart = Strings::after($objectType->getClassName(), '\\', 1);
+
+        $connectedClassName = $useUse->name->toString() . '\\' . $classNameWithoutLastUsePart;
+        if (! ClassExistenceStaticHelper::doesClassLikeExist($connectedClassName)) {
+            return null;
+        }
+
+        return new ShortenedObjectType($objectType->getClassName(), $connectedClassName);
+    }
+
+    private function matchClassWithLastUseImportPart(ObjectType $objectType, UseUse $useUse): ?ShortenedObjectType
+    {
+        if ($useUse->name->getLast() !== $objectType->getClassName()) {
+            return null;
+        }
+
+        if (! ClassExistenceStaticHelper::doesClassLikeExist($useUse->name->toString())) {
+            return null;
+        }
+
+        return new ShortenedObjectType($objectType->getClassName(), $useUse->name->toString());
     }
 }

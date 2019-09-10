@@ -10,6 +10,6 @@ if (class_exists('JMS\DiExtraBundle\Annotation\Inject')) {
  * @Annotation
  * @Target({"PROPERTY", "ANNOTATION"})
  */
-final class Inject extends Reference
+class Inject extends Reference
 {
 }

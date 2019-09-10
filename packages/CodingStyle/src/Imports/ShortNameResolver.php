@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class ShortNameResolver
@@ -22,15 +21,9 @@ final class ShortNameResolver
      */
     private $shortNamesByNamespaceObjectHash = [];
 
-    /**
-     * @var NameResolver
-     */
-    private $nameResolver;
-
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, NameResolver $nameResolver)
+    public function __construct(CallableNodeTraverser $callableNodeTraverser)
     {
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->nameResolver = $nameResolver;
     }
 
     /**
@@ -44,14 +37,14 @@ final class ShortNameResolver
             return [];
         }
 
-        $namespaceName = $this->nameResolver->getName($namespace);
-
-        if (isset($this->shortNamesByNamespaceObjectHash[$namespaceName])) {
-            return $this->shortNamesByNamespaceObjectHash[$namespaceName];
+        // must be hash → unique per file
+        $namespaceHash = spl_object_hash($namespace);
+        if (isset($this->shortNamesByNamespaceObjectHash[$namespaceHash])) {
+            return $this->shortNamesByNamespaceObjectHash[$namespaceHash];
         }
 
         $shortNames = $this->resolveForNamespace($namespace);
-        $this->shortNamesByNamespaceObjectHash[$namespaceName] = $shortNames;
+        $this->shortNamesByNamespaceObjectHash[$namespaceHash] = $shortNames;
 
         return $shortNames;
     }

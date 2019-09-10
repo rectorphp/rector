@@ -2,6 +2,9 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Nullables;
 
+class Bar {}
+class Foo {}
+
 /** @return null|Bar */
 function my_foo($value) {
     return $value;
@@ -24,6 +27,9 @@ function my_foo4($value) {
 <?php
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Nullables;
+
+class Bar {}
+class Foo {}
 
 /** @return null|Bar */
 function my_foo($value): ?\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\PhpCsFixerReturn\Nullables\Bar {

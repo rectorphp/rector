@@ -10,10 +10,9 @@ final class AddArrayReturnDocTypeRectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFiles([
-            // fix these 2
+            __DIR__ . '/Fixture/setter_based.php.inc',
             __DIR__ . '/Fixture/simple_array.php.inc',
             __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/setter_based.php.inc',
             __DIR__ . '/Fixture/fully_qualified_name.php.inc',
             __DIR__ . '/Fixture/fully_qualified_name_nested_array.php.inc',
             __DIR__ . '/Fixture/yield_strings.php.inc',

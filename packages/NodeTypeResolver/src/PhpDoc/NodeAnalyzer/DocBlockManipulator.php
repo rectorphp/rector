@@ -30,8 +30,10 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\CodingStyle\Application\UseAddingCommander;
+use Rector\CodingStyle\Imports\ImportSkipper;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
@@ -70,11 +72,6 @@ final class DocBlockManipulator
      */
     private $nodeTraverser;
 
-//    /**
-//     * @var FullyQualifiedObjectType[]
-//     */
-//    private $importedNames = [];
-
     /**
      * @var UseAddingCommander
      */
@@ -100,6 +97,11 @@ final class DocBlockManipulator
      */
     private $hasPhpDocChanged = false;
 
+    /**
+     * @var ImportSkipper
+     */
+    private $importSkipper;
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
@@ -108,7 +110,8 @@ final class DocBlockManipulator
         NameResolver $nameResolver,
         UseAddingCommander $useAddingCommander,
         BetterStandardPrinter $betterStandardPrinter,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        ImportSkipper $importSkipper
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
@@ -118,6 +121,7 @@ final class DocBlockManipulator
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nameResolver = $nameResolver;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->importSkipper = $importSkipper;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -376,10 +380,6 @@ final class DocBlockManipulator
                         throw new ShouldNotHappenException();
                     }
 
-                    if ($newIdentifierType instanceof IdentifierTypeNode) {
-                        throw new ShouldNotHappenException();
-                    }
-
                     //                    $node->name = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
                     $this->hasPhpDocChanged = true;
                     return $newIdentifierType;
@@ -414,8 +414,6 @@ final class DocBlockManipulator
             }
 
             $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($docNode, $phpParserNode);
-
-            // already imported
             if (! $staticType instanceof FullyQualifiedObjectType) {
                 return $docNode;
             }
@@ -428,7 +426,6 @@ final class DocBlockManipulator
         }
 
         return [];
-//        return $this->importedNames;
     }
 
     /**
@@ -564,6 +561,9 @@ final class DocBlockManipulator
     private function addTypeSpecificTag(Node $node, string $name, Type $type): void
     {
         $docStringType = $this->staticTypeMapper->mapPHPStanTypeToDocString($type);
+        if ($docStringType === '') {
+            return;
+        }
 
         // there might be no phpdoc at all
         if ($node->getDocComment() !== null) {
@@ -590,6 +590,10 @@ final class DocBlockManipulator
     ): PhpDocParserNode {
         // nothing to be changed → skip
         if ($this->hasTheSameShortClassInCurrentNamespace($node, $fullyQualifiedObjectType)) {
+            return $identifierTypeNode;
+        }
+
+        if ($this->importSkipper->shouldSkipName($node, $fullyQualifiedObjectType)) {
             return $identifierTypeNode;
         }
 
@@ -667,7 +671,7 @@ final class DocBlockManipulator
         $namespaceName = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
         $currentNamespaceShortName = $namespaceName . '\\' . $fullyQualifiedObjectType->getShortName();
 
-        if ($this->doesClassLikeExist($currentNamespaceShortName)) {
+        if (ClassExistenceStaticHelper::doesClassLikeExist($currentNamespaceShortName)) {
             return false;
         }
 
@@ -680,10 +684,5 @@ final class DocBlockManipulator
             $currentNamespaceShortName,
             $fullyQualifiedObjectType->getShortNameType()
         );
-    }
-
-    private function doesClassLikeExist(string $classLike): bool
-    {
-        return class_exists($classLike) || interface_exists($classLike) || trait_exists($classLike);
     }
 }

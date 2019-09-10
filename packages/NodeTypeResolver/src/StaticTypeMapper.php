@@ -323,7 +323,7 @@ final class StaticTypeMapper
         }
 
         if ($phpStanType instanceof ObjectType) {
-            if ($this->isExistingClassLike($phpStanType->getClassName())) {
+            if (ClassExistenceStaticHelper::doesClassLikeExist($phpStanType->getClassName())) {
                 return '\\' . $phpStanType->getClassName();
             }
 
@@ -442,7 +442,7 @@ final class StaticTypeMapper
 
         if ($node instanceof Name) {
             $name = $node->toString();
-            if ($this->isExistingClassLike($name)) {
+            if (ClassExistenceStaticHelper::doesClassLikeExist($name)) {
                 return new FullyQualifiedObjectType($node->toString());
             }
 
@@ -693,15 +693,13 @@ final class StaticTypeMapper
     private function matchTypeForUnionedObjectTypes(UnionType $unionType): ?Node
     {
         // we need exactly one type
-        if (count($unionType->getReferencedClasses()) !== 1) {
-            return null;
-        }
-
         foreach ($unionType->getTypes() as $unionedType) {
             if (! $unionedType instanceof TypeWithClassName) {
                 return null;
             }
         }
+
+        // @todo the type should be compatible with all other types, check with is_a()?
 
         /** @var TypeWithClassName $firstObjectType */
         $firstObjectType = $unionType->getTypes()[0];
@@ -745,10 +743,5 @@ final class StaticTypeMapper
         }
 
         return new Identifier($type);
-    }
-
-    private function isExistingClassLike(string $classLike): bool
-    {
-        return class_exists($classLike) || interface_exists($classLike) || trait_exists($classLike);
     }
 }

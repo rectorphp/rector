@@ -659,7 +659,7 @@ final class NodeTypeResolver
     private function unionWithParentClassesInterfacesAndUsedTraits(Type $type): Type
     {
         if ($type instanceof TypeWithClassName) {
-            if (! $this->classLikeTypeExists($type)) {
+            if (! ClassExistenceStaticHelper::doesClassLikeExist($type->getClassName())) {
                 return $type;
             }
 
@@ -676,7 +676,7 @@ final class NodeTypeResolver
 
             foreach ($type->getTypes() as $unionedType) {
                 if ($unionedType instanceof TypeWithClassName) {
-                    if (! $this->classLikeTypeExists($unionedType)) {
+                    if (! ClassExistenceStaticHelper::doesClassLikeExist($unionedType->getClassName())) {
                         continue;
                     }
 
@@ -693,18 +693,5 @@ final class NodeTypeResolver
         }
 
         return $type;
-    }
-
-    private function classLikeTypeExists(TypeWithClassName $typeWithClassName): bool
-    {
-        if (class_exists($typeWithClassName->getClassName())) {
-            return true;
-        }
-
-        if (interface_exists($typeWithClassName->getClassName())) {
-            return true;
-        }
-
-        return trait_exists($typeWithClassName->getClassName());
     }
 }

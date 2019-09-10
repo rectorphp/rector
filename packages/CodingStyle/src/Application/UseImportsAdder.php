@@ -58,7 +58,6 @@ final class UseImportsAdder
         $existingFunctionUseImportTypes = $this->usedImportsResolver->resolveFunctionImportsForStmts($namespace->stmts);
 
         $useImportTypes = $this->diffFullyQualifiedObjectTypes($useImportTypes, $existingUseImportTypes);
-
         $functionUseImportTypes = $this->diffFullyQualifiedObjectTypes(
             $functionUseImportTypes,
             $existingFunctionUseImportTypes
@@ -101,6 +100,7 @@ final class UseImportsAdder
     private function createUses(array $useImportTypes, array $functionUseImportTypes, ?string $namespaceName): array
     {
         if ($namespaceName === null) {
+            // not supported yet
             return [];
         }
 

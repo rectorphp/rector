@@ -3,11 +3,9 @@
 namespace Rector\CodingStyle\Application;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Imports\UsedImportsResolver;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -32,11 +30,6 @@ final class UseAddingCommander implements CommanderInterface
     private $useImportsAdder;
 
     /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    /**
      * @var UsedImportsResolver
      */
     private $usedImportsResolver;
@@ -48,12 +41,10 @@ final class UseAddingCommander implements CommanderInterface
 
     public function __construct(
         UseImportsAdder $useImportsAdder,
-        ClassNaming $classNaming,
         UsedImportsResolver $usedImportsResolver,
         BetterNodeFinder $betterNodeFinder
     ) {
         $this->useImportsAdder = $useImportsAdder;
-        $this->classNaming = $classNaming;
         $this->usedImportsResolver = $usedImportsResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
@@ -152,20 +143,6 @@ final class UseAddingCommander implements CommanderInterface
         }
 
         return false;
-//        dump($fileUseImportTypes);
-//        dump($fullyQualifiedObjectType);
-//        die;
-//
-//        if (in_array($fullyQualifiedObjectType, $fileUseImportTypes, true)) {
-//            return true;
-//        }
-//
-//        $functionUseImports = $this->functionUseImportsInFilePath[$filePath] ?? [];
-//        if (in_array($fullyQualifiedObjectType, $functionUseImports, true)) {
-//            return true;
-//        }
-//
-//        return false;
     }
 
     public function analyseFileInfoUseStatements(Node $node): void
@@ -177,35 +154,59 @@ final class UseAddingCommander implements CommanderInterface
             return;
         }
 
-        $usedImports = $this->usedImportsResolver->resolveForNode($node);
-
-        foreach ($usedImports as $usedImport) {
-            $this->useImportTypesInFilePath[$filePath][] = $usedImport;
+        $usedImportTypes = $this->usedImportsResolver->resolveForNode($node);
+        foreach ($usedImportTypes as $usedImportType) {
+            $this->useImportTypesInFilePath[$filePath][] = $usedImportType;
         }
     }
 
-    public function hasImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
+    public function hasImport(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
     {
-        $filePath = $this->getRealPathFromNode($name);
+        $useImports = $this->getUseImportTypesByNode($node);
 
-        return in_array($fullyQualifiedObjectType, $this->useImportTypesInFilePath[$filePath] ?? [], true);
-    }
-
-    public function canImportBeAdded(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
-    {
-        $shortImport = $fullyQualifiedObjectType->getShortName();
-
-        $filePath = $this->getRealPathFromNode($name);
-
-        foreach ($this->useImportTypesInFilePath[$filePath] ?? [] as $importsInClass) {
-            if ($importsInClass !== $fullyQualifiedObjectType) {
-                if ($importsInClass->getShortName() === $shortImport) {
-                    return true;
-                }
+        foreach ($useImports as $useImport) {
+            if ($useImport->equals($fullyQualifiedObjectType)) {
+                return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * This prevents importing:
+     * - App\Some\Product
+     *
+     * if there is already:
+     * - use App\Another\Product
+     */
+    public function canImportBeAdded(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
+    {
+        $useImportTypes = $this->getUseImportTypesByNode($node);
+
+        foreach ($useImportTypes as $useImportType) {
+            if (! $useImportType->equals($fullyQualifiedObjectType)) {
+                if ($useImportType->areShortNamesEqual($fullyQualifiedObjectType)) {
+                    return false;
+                }
+            }
+
+            if ($useImportType->equals($fullyQualifiedObjectType)) {
+                return true;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return FullyQualifiedObjectType[]
+     */
+    private function getUseImportTypesByNode(Node $node): array
+    {
+        $filePath = $this->getRealPathFromNode($node);
+
+        return $this->useImportTypesInFilePath[$filePath] ?? [];
     }
 
     private function getRealPathFromNode(Node $node): ?string

@@ -20,10 +20,10 @@ final class StockRepository
 
     public function multiDoc()
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
+        /** @var \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Connection $connection */
         $connection = $this->registry->getConnection();
 
-        /** @var \Doctrine\DBAL\Connection $connection */
+        /** @var \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Connection $connection */
         $connection = $this->registry->getConnection();
     }
 }
@@ -36,7 +36,6 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 
 use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Stock\Query;
 use InvalidArgumentException;
-use Doctrine\DBAL\Connection;
 final class StockRepository
 {
     public function filter(Query $query)

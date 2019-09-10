@@ -2,6 +2,10 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\Nikic\Null_;
 
+class A
+{
+}
+
 /** @return null */
 function foo() {
     return null;
@@ -21,6 +25,10 @@ function foo4($a) {}
 <?php
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\Nikic\Null_;
+
+class A
+{
+}
 
 /** @return null */
 function foo() {

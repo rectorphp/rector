@@ -15,6 +15,11 @@ final class FullyQualifiedObjectType extends ObjectType
         return new ShortenedObjectType($this->getShortName(), $this->getClassName());
     }
 
+    public function areShortNamesEqual(self $compoaredFullyQualifiedObjectType): bool
+    {
+        return $this->getShortName() === $compoaredFullyQualifiedObjectType->getShortName();
+    }
+
     public function getShortName(): string
     {
         if (! Strings::contains($this->getClassName(), '\\')) {
@@ -22,6 +27,11 @@ final class FullyQualifiedObjectType extends ObjectType
         }
 
         return (string) Strings::after($this->getClassName(), '\\', -1);
+    }
+
+    public function getShortNameNode(): Name
+    {
+        return new Name($this->getShortName());
     }
 
     public function getUseNode(): Use_
