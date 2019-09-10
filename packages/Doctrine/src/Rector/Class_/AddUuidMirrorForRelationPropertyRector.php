@@ -96,7 +96,7 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
      */
     private function createMirrorNullable(Property $property): Property
     {
-        $oldProperytName = $this->getName($property);
+        $oldPropertyName = $this->getName($property);
 
         $propertyWithUuid = clone $property;
 
@@ -105,11 +105,11 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
 
         // name must be changed after the doc comment update, because the reflection annotation needed for update of doc comment
         // would miss non existing *Uuid property
-        $uuidPropertyName = $oldProperytName . 'Uuid';
+        $uuidPropertyName = $oldPropertyName . 'Uuid';
         $newPropertyProperty = new PropertyProperty(new VarLikeIdentifier($uuidPropertyName));
         $propertyWithUuid->props = [$newPropertyProperty];
 
-        $this->addNewPropertyToCollector($property, $oldProperytName, $uuidPropertyName);
+        $this->addNewPropertyToCollector($property, $oldPropertyName, $uuidPropertyName);
 
         return $propertyWithUuid;
     }
@@ -183,6 +183,10 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
 
         $targetEntity = $this->getTargetEntity($property);
         if ($targetEntity === null) {
+            return true;
+        }
+
+        if (! property_exists($targetEntity, 'uuid')) {
             return true;
         }
 
