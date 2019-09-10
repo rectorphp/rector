@@ -105,11 +105,7 @@ final class DoctrineDocBlockResolver
             return true;
         }
 
-        if ($propertyPhpDocInfo->getDoctrineRelationTagValueNode()) {
-            return true;
-        }
-
-        return false;
+        return (bool) $propertyPhpDocInfo->getDoctrineRelationTagValueNode();
     }
 
     private function getPhpDocInfo(Node $node): ?PhpDocInfo

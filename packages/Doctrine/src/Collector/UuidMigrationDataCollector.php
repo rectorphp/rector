@@ -16,14 +16,12 @@ final class UuidMigrationDataCollector
 
     public function addClassToManyRelationProperty(
         string $class,
-        string $property,
-        string $currentTableName,
-        string $uuidTableName
+        string $oldPropertyName,
+        string $uuidPropertyName
     ): void {
         $this->propertiesByClass[$class]['to_many_relations'][] = [
-            'property' => $property,
-            'current_table_name' => $currentTableName,
-            'uuid_table_name' => $uuidTableName,
+            'property_name' => $oldPropertyName,
+            'uuid_property_name' => $uuidPropertyName,
         ];
     }
 
