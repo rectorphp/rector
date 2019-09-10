@@ -4,8 +4,6 @@ namespace Rector\Legacy\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
 use Rector\Legacy\NodeAnalyzer\SingletonClassMethodAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -15,6 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see https://3v4l.org/lifbH
  * @see https://stackoverflow.com/a/203359/1348344
  * @see http://cleancode.blog/2017/07/20/how-to-avoid-many-instances-in-singleton-pattern/
+ * @see \Rector\Legacy\Tests\Rector\ClassMethod\ChangeSingletonToServiceRector\ChangeSingletonToServiceRectorTest
  */
 final class ChangeSingletonToServiceRector extends AbstractRector
 {
@@ -97,19 +96,17 @@ CODE_SAMPLE
      */
     private function matchStaticPropertyFetchAndGetSingletonMethodName(Class_ $class): ?array
     {
-        foreach ((array) $class->stmts as $classStmt) {
-            if ($classStmt instanceof ClassMethod) {
-                if (! $classStmt->isStatic()) {
-                    continue;
-                }
-
-                $staticPropertyFetch = $this->singletonClassMethodAnalyzer->matchStaticPropertyFetch($classStmt);
-                if ($staticPropertyFetch === null) {
-                    return null;
-                }
-
-                return [$this->getName($staticPropertyFetch), $this->getName($classStmt)];
+        foreach ($class->getMethods() as $classMethod) {
+            if (! $classMethod->isStatic()) {
+                continue;
             }
+
+            $staticPropertyFetch = $this->singletonClassMethodAnalyzer->matchStaticPropertyFetch($classMethod);
+            if ($staticPropertyFetch === null) {
+                return null;
+            }
+
+            return [$this->getName($staticPropertyFetch), $this->getName($classMethod)];
         }
 
         return null;
@@ -120,30 +117,32 @@ CODE_SAMPLE
         string $getSingletonMethodName,
         string $singletonPropertyName
     ): Class_ {
-        foreach ((array) $node->stmts as $key => $classStmt) {
-            if ($classStmt instanceof ClassMethod) {
-                if ($this->isName($classStmt, $getSingletonMethodName)) {
-                    unset($node->stmts[$key]);
-                    continue;
-                }
+        foreach ($node->getMethods() as $property) {
+            if ($this->isName($property, $getSingletonMethodName)) {
+                $this->removeNodeFromStatements($node, $property);
+                continue;
+            }
 
-                if (! $this->isNames($classStmt, ['__construct', '__clone', '__wakeup'])) {
-                    continue;
-                }
+            if (! $this->isNames($property, ['__construct', '__clone', '__wakeup'])) {
+                continue;
+            }
 
-                if (! $classStmt->isPublic()) {
-                    // remove non-public empty
-                    if ($classStmt->stmts === []) {
-                        unset($node->stmts[$key]);
-                    } else {
-                        $this->makePublic($classStmt);
-                    }
-                }
-            } elseif ($classStmt instanceof Property) {
-                if ($this->isName($classStmt, $singletonPropertyName)) {
-                    unset($node->stmts[$key]);
+            if (! $property->isPublic()) {
+                // remove non-public empty
+                if ($property->stmts === []) {
+                    $this->removeNodeFromStatements($node, $property);
+                } else {
+                    $this->makePublic($property);
                 }
             }
+        }
+
+        foreach ($node->getProperties() as $property) {
+            if (! $this->isName($property, $singletonPropertyName)) {
+                continue;
+            }
+
+            $this->removeNodeFromStatements($node, $property);
         }
 
         return $node;

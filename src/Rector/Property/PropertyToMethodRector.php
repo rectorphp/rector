@@ -11,6 +11,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Property\PropertyToMethodRector\PropertyToMethodRectorTest
+ */
 final class PropertyToMethodRector extends AbstractRector
 {
     /**
@@ -160,7 +163,7 @@ CODE_SAMPLE
         foreach ($this->perClassPropertyToMethods as $type => $propertyToMethods) {
             $properties = array_keys($propertyToMethods);
 
-            if (! $this->isType($propertyFetch->var, $type)) {
+            if (! $this->isObjectType($propertyFetch->var, $type)) {
                 continue;
             }
 

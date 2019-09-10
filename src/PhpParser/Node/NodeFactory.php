@@ -22,11 +22,14 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Type;
 use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php\TypeAnalyzer;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 
+/**
+ * @see \Rector\Tests\PhpParser\Node\NodeFactoryTest
+ */
 final class NodeFactory
 {
     /**
@@ -35,14 +38,14 @@ final class NodeFactory
     private $builderFactory;
 
     /**
-     * @var TypeAnalyzer
+     * @var StaticTypeMapper
      */
-    private $typeAnalyzer;
+    private $staticTypeMapper;
 
-    public function __construct(BuilderFactory $builderFactory, TypeAnalyzer $typeAnalyzer)
+    public function __construct(BuilderFactory $builderFactory, StaticTypeMapper $staticTypeMapper)
     {
         $this->builderFactory = $builderFactory;
-        $this->typeAnalyzer = $typeAnalyzer;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     /**
@@ -130,22 +133,21 @@ final class NodeFactory
 
     public function createPublicMethod(string $name): ClassMethod
     {
-        return $this->builderFactory->method($name)
-            ->makePublic()
-            ->getNode();
+        $methodBuilder = $this->builderFactory->method($name);
+        $methodBuilder->makePublic();
+
+        return $methodBuilder->getNode();
     }
 
     public function createParamFromVariableInfo(VariableInfo $variableInfo): Param
     {
         $paramBuild = $this->builderFactory->param($variableInfo->getName());
 
-        if (is_string($variableInfo->getType())) {
-            $type = $this->createTypeName($variableInfo->getType());
-        } else {
-            $type = new Name((string) $variableInfo->getType());
-        }
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($variableInfo->getType());
 
-        $paramBuild->setType($type);
+        if ($typeNode) {
+            $paramBuild->setType($typeNode);
+        }
 
         return $paramBuild->getNode();
     }
@@ -154,20 +156,11 @@ final class NodeFactory
     {
         $docComment = $this->createVarDoc($variableInfo->getType());
 
-        $propertyBuilder = $this->builderFactory->property($variableInfo->getName())
-            ->makePrivate()
-            ->setDocComment($docComment);
+        $propertyBuilder = $this->builderFactory->property($variableInfo->getName());
+        $propertyBuilder->makePrivate();
+        $propertyBuilder->setDocComment($docComment);
 
         return $propertyBuilder->getNode();
-    }
-
-    public function createTypeName(string $name): Name
-    {
-        if ($this->typeAnalyzer->isPhpReservedType($name)) {
-            return new Name($name);
-        }
-
-        return new FullyQualified($name);
     }
 
     /**
@@ -257,19 +250,11 @@ final class NodeFactory
         ));
     }
 
-    /**
-     * @param string|TypeNode $type
-     * @return Doc
-     */
-    private function createVarDoc($type): Doc
+    private function createVarDoc(Type $type): Doc
     {
-        if (is_string($type)) {
-            $type = $this->typeAnalyzer->isPhpReservedType($type) ? $type : '\\' . $type;
-        } else {
-            $type = (string) $type;
-        }
+        $docString = $this->staticTypeMapper->mapPHPStanTypeToDocString($type);
 
-        return new Doc(sprintf('/**%s * @var %s%s */', PHP_EOL, $type, PHP_EOL));
+        return new Doc(sprintf('/**%s * @var %s%s */', PHP_EOL, $docString, PHP_EOL));
     }
 
     /**
@@ -278,11 +263,11 @@ final class NodeFactory
      */
     private function convertParamNodesToArgNodes(array $paramNodes): array
     {
-        $argNodes = [];
+        $args = [];
         foreach ($paramNodes as $paramNode) {
-            $argNodes[] = new Arg($paramNode->var);
+            $args[] = new Arg($paramNode->var);
         }
 
-        return $argNodes;
+        return $args;
     }
 }

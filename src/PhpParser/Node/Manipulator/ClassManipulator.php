@@ -2,6 +2,7 @@
 
 namespace Rector\PhpParser\Node\Manipulator;
 
+use JMS\Serializer\Annotation\Type;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -180,11 +181,7 @@ final class ClassManipulator
     public function getUsedTraits(ClassLike $classLike): array
     {
         $usedTraits = [];
-        foreach ($classLike->stmts as $stmt) {
-            if (! $stmt instanceof TraitUse) {
-                continue;
-            }
-
+        foreach ($classLike->getTraitUses() as $stmt) {
             foreach ($stmt->traits as $trait) {
                 $traitName = $this->nameResolver->getName($trait);
                 if ($traitName !== null) {
@@ -198,18 +195,14 @@ final class ClassManipulator
 
     public function getProperty(Class_ $class, string $name): ?Property
     {
-        foreach ($class->stmts as $stmt) {
-            if (! $stmt instanceof Property) {
-                continue;
-            }
-
-            if (count($stmt->props) > 1) {
+        foreach ($class->getProperties() as $property) {
+            if (count($property->props) > 1) {
                 // usually full property is needed to have all the docs values
-                throw new ShouldNotHappenException();
+                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
             }
 
-            if ($this->nameResolver->isName($stmt, $name)) {
-                return $stmt;
+            if ($this->nameResolver->isName($property, $name)) {
+                return $property;
             }
         }
 
@@ -246,43 +239,14 @@ final class ClassManipulator
         return in_array($methodName, $methodNames, true);
     }
 
-    public function getMethod(Class_ $classNode, string $methodName): ?ClassMethod
-    {
-        foreach ($classNode->stmts as $stmt) {
-            if (! $stmt instanceof ClassMethod) {
-                continue;
-            }
-
-            if ($this->nameResolver->isName($stmt, $methodName)) {
-                return $stmt;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @return ClassMethod[]
-     */
-    public function getMethods(Class_ $class): array
-    {
-        return array_filter($class->stmts, function (Node $node): bool {
-            return $node instanceof ClassMethod;
-        });
-    }
-
     public function hasPropertyFetchAsProperty(Class_ $class, PropertyFetch $propertyFetch): bool
     {
         if (! $this->nameResolver->isName($propertyFetch->var, 'this')) {
             return false;
         }
 
-        foreach ((array) $class->stmts as $classStmt) {
-            if (! $classStmt instanceof Property) {
-                continue;
-            }
-
-            if ($this->nameResolver->areNamesEqual($classStmt->props[0], $propertyFetch)) {
+        foreach ($class->getProperties() as $property) {
+            if ($this->nameResolver->areNamesEqual($property->props[0], $propertyFetch)) {
                 return true;
             }
         }
@@ -314,17 +278,13 @@ final class ClassManipulator
     public function getPrivatePropertyNames(Class_ $class): array
     {
         $privatePropertyNames = [];
-        foreach ($class->stmts as $stmt) {
-            if (! $stmt instanceof Property) {
-                continue;
-            }
-
-            if (! $stmt->isPrivate()) {
+        foreach ($class->getProperties() as $property) {
+            if (! $property->isPrivate()) {
                 continue;
             }
 
             /** @var string $propertyName */
-            $propertyName = $this->nameResolver->getName($stmt);
+            $propertyName = $this->nameResolver->getName($property);
             $privatePropertyNames[] = $propertyName;
         }
 
@@ -404,10 +364,9 @@ final class ClassManipulator
 
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
     {
-        foreach ($classNode->stmts as $key => $classElementNode) {
-            if ($classElementNode instanceof ClassMethod) {
+        foreach ($classNode->stmts as $key => $classStmt) {
+            if ($classStmt instanceof ClassMethod) {
                 $classNode->stmts = $this->insertBefore($classNode->stmts, $stmt, $key);
-
                 return true;
             }
         }
@@ -418,14 +377,14 @@ final class ClassManipulator
     private function tryInsertAfterLastProperty(Class_ $classNode, Stmt $stmt): bool
     {
         $previousElement = null;
-        foreach ($classNode->stmts as $key => $classElementNode) {
-            if ($previousElement instanceof Property && ! $classElementNode instanceof Property) {
+        foreach ($classNode->stmts as $key => $classStmt) {
+            if ($previousElement instanceof Property && ! $classStmt instanceof Property) {
                 $classNode->stmts = $this->insertBefore($classNode->stmts, $stmt, $key);
 
                 return true;
             }
 
-            $previousElement = $classElementNode;
+            $previousElement = $classStmt;
         }
 
         return false;
@@ -437,8 +396,8 @@ final class ClassManipulator
     private function addStatementToClassBeforeTypes(Class_ $classNode, Stmt $stmt, string ...$types): void
     {
         foreach ($types as $type) {
-            foreach ($classNode->stmts as $key => $classElementNode) {
-                if ($classElementNode instanceof $type) {
+            foreach ($classNode->stmts as $key => $classStmt) {
+                if ($classStmt instanceof $type) {
                     $classNode->stmts = $this->insertBefore($classNode->stmts, $stmt, $key);
 
                     return;
@@ -451,12 +410,8 @@ final class ClassManipulator
 
     private function hasClassProperty(Class_ $classNode, string $name): bool
     {
-        foreach ($classNode->stmts as $inClassNode) {
-            if (! $inClassNode instanceof Property) {
-                continue;
-            }
-
-            if ($this->nameResolver->isName($inClassNode, $name)) {
+        foreach ($classNode->getProperties() as $property) {
+            if ($this->nameResolver->isName($property, $name)) {
                 return true;
             }
         }
@@ -554,7 +509,7 @@ final class ClassManipulator
                 return;
             }
 
-            if (! $this->docBlockManipulator->hasTag($node, 'JMS\Serializer\Annotation\Type')) {
+            if (! $this->docBlockManipulator->hasTag($node, Type::class)) {
                 return;
             }
 

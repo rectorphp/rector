@@ -62,6 +62,7 @@ final class AdditionalAutoloader
 
         // the scanned file needs to be autoloaded
         [$files, $directories] = $this->fileSystem->separateFilesAndDirectories($source);
+        $this->autoloadFiles($files);
 
         foreach ($directories as $directory) {
             // load project autoload
@@ -69,8 +70,6 @@ final class AdditionalAutoloader
                 require_once $directory . '/vendor/autoload.php';
             }
         }
-
-        $this->autoloadFiles($files);
     }
 
     private function autoloadFileFromInput(InputInterface $input): void

@@ -7,12 +7,12 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\DeadCode\UnusedNodeResolver\ClassUnusedPrivateClassMethodResolver;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -24,6 +24,11 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const ARRAY_COLLECTION_CLASS = 'Doctrine\Common\Collections\ArrayCollection';
+
     /**
      * @var ParsedNodesByType
      */
@@ -49,16 +54,23 @@ final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRe
      */
     private $doctrineEntityManipulator;
 
+    /**
+     * @var DocBlockManipulator
+     */
+    private $docBlockManipulator;
+
     public function __construct(
         ParsedNodesByType $parsedNodesByType,
         ClassUnusedPrivateClassMethodResolver $classUnusedPrivateClassMethodResolver,
         ClassManipulator $classManipulator,
+        DocBlockManipulator $docBlockManipulator,
         DoctrineEntityManipulator $doctrineEntityManipulator
     ) {
         $this->parsedNodesByType = $parsedNodesByType;
         $this->classUnusedPrivateClassMethodResolver = $classUnusedPrivateClassMethodResolver;
         $this->classManipulator = $classManipulator;
         $this->doctrineEntityManipulator = $doctrineEntityManipulator;
+        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -117,7 +129,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->doctrineEntityManipulator->isStandaloneDoctrineEntityClass($node)) {
+        if (! $this->doctrineEntityManipulator->isNonAbstractDoctrineEntityClass($node)) {
             return null;
         }
 
@@ -140,15 +152,12 @@ CODE_SAMPLE
      */
     private function removeClassMethodsByNames(Class_ $class, array $unusedMethodNames): Class_
     {
-        foreach ($class->stmts as $key => $classStmt) {
-            if (! $classStmt instanceof ClassMethod) {
+        foreach ($class->getMethods() as $classMethod) {
+            if (! $this->isNames($classMethod, $unusedMethodNames)) {
                 continue;
             }
 
-            if ($this->isNames($classStmt, $unusedMethodNames)) {
-                // remove immediately
-                unset($class->stmts[$key]);
-            }
+            $this->removeNodeFromStatements($class, $classMethod);
         }
 
         return $class;
@@ -170,51 +179,46 @@ CODE_SAMPLE
     /**
      * @param string[] $unusedPropertyNames
      */
-    private function removeClassPrivatePropertiesByNames(Class_ $node, array $unusedPropertyNames): Class_
+    private function removeClassPrivatePropertiesByNames(Class_ $class, array $unusedPropertyNames): Class_
     {
-        foreach ($node->stmts as $key => $stmt) {
-            if (! $stmt instanceof Property) {
+        foreach ($class->getProperties() as $property) {
+            if (! $this->isNames($property, $unusedPropertyNames)) {
                 continue;
             }
 
-            if (! $this->isNames($stmt, $unusedPropertyNames)) {
-                continue;
-            }
-
-            unset($node->stmts[$key]);
+            $this->removeNodeFromStatements($class, $property);
 
             // remove "$this->someProperty = new ArrayCollection()"
-            $propertyName = $this->getName($stmt);
+            $propertyName = $this->getName($property);
             if (isset($this->collectionByPropertyName[$propertyName])) {
                 $this->removeNode($this->collectionByPropertyName[$propertyName]);
             }
 
-            $this->removeInversedByOrMappedByOnRelatedProperty($stmt);
+            $this->removeInversedByOrMappedByOnRelatedProperty($property);
         }
 
-        return $node;
+        return $class;
     }
 
     private function getOtherRelationProperty(Property $property): ?Property
     {
-        $targetClass = $this->doctrineEntityManipulator->resolveTargetClass($property);
-        $otherProperty = $this->doctrineEntityManipulator->resolveOtherProperty($property);
+        $targetEntity = $this->docBlockManipulator->getDoctrineFqnTargetEntity($property);
+        if ($targetEntity === null) {
+            return null;
+        }
 
-        if ($targetClass === null || $otherProperty === null) {
+        $otherProperty = $this->doctrineEntityManipulator->resolveOtherProperty($property);
+        if ($otherProperty === null) {
             return null;
         }
 
         // get the class property and remove "mappedBy/inversedBy" from annotation
-        $relatedEntityClass = $this->parsedNodesByType->findClass($targetClass);
+        $relatedEntityClass = $this->parsedNodesByType->findClass($targetEntity);
         if (! $relatedEntityClass instanceof Class_) {
             return null;
         }
 
-        foreach ($relatedEntityClass->stmts as $relatedEntityClassStmt) {
-            if (! $relatedEntityClassStmt instanceof Property) {
-                continue;
-            }
-
+        foreach ($relatedEntityClass->getProperties() as $relatedEntityClassStmt) {
             if (! $this->isName($relatedEntityClassStmt, $otherProperty)) {
                 continue;
             }
@@ -249,7 +253,7 @@ CODE_SAMPLE
         /** @var New_ $new */
         $new = $parentNode->expr;
 
-        return $this->isName($new->class, 'Doctrine\Common\Collections\ArrayCollection');
+        return $this->isName($new->class, self::ARRAY_COLLECTION_CLASS);
     }
 
     /**

@@ -11,6 +11,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\DeadCode\Tests\Rector\Instanceof_\RemoveDuplicatedInstanceOfRector\RemoveDuplicatedInstanceOfRectorTest
+ */
 final class RemoveDuplicatedInstanceOfRector extends AbstractRector
 {
     /**

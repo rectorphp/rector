@@ -9,5 +9,5 @@ interface Foo { /** @param Bar $bar */ function my_foo($bar); }
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\PhpCsFixerParam\Interface_;
 
-interface Foo { /** @param Bar $bar */ function my_foo(Bar $bar); }
+interface Foo { /** @param Bar $bar */ function my_foo(\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\PhpCsFixerParam\Interface_\Bar $bar); }
 ?>

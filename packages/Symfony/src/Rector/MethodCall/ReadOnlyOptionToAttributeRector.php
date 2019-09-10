@@ -11,6 +11,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector\ReadOnlyOptionToAttributeRectorTest
+ */
 final class ReadOnlyOptionToAttributeRector extends AbstractRector
 {
     /**
@@ -49,7 +52,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 function buildForm(FormBuilderInterface $builder, array $options)
 {
-    $builder->add('cuid', TextType::class, ['attr' => [read_only' => true]]);
+    $builder->add('cuid', TextType::class, ['attr' => ['read_only' => true]]);
 }
 CODE_SAMPLE
             ),
@@ -73,7 +76,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($node, $this->formBuilderType)) {
+        if (! $this->isObjectType($node, $this->formBuilderType)) {
             return null;
         }
 

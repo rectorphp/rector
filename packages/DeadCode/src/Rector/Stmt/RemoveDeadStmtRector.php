@@ -13,6 +13,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\DeadCode\Tests\Rector\Stmt\RemoveDeadStmtRector\RemoveDeadStmtRectorTest
+ */
 final class RemoveDeadStmtRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

@@ -15,6 +15,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/shopware/shopware/blob/5.6/UPGRADE-5.6.md
+ * @see \Rector\Shopware\Tests\Rector\MethodCall\ShopRegistrationServiceRector\ShopRegistrationServiceRectorTest
  */
 final class ShopRegistrationServiceRector extends AbstractRector
 {
@@ -64,7 +65,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($node, 'Shopware\Models\Shop\Shop')) {
+        if (! $this->isObjectType($node, 'Shopware\Models\Shop\Shop')) {
             return null;
         }
 

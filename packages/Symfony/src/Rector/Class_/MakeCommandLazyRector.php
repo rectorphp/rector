@@ -7,25 +7,21 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\StringType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Symfony\ValueObject\SymfonyClass;
 
 /**
  * @see https://symfony.com/doc/current/console/commands_as_services.html
  * @sponsor Thanks https://www.musement.com/ for sponsoring this rule; initiated by https://github.com/stloyd
+ * @see \Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\MakeCommandLazyRectorTest
  */
 final class MakeCommandLazyRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const COMMAND_CLASS = 'Symfony\Component\Console\Command\Command';
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Make Symfony commands lazy', [
@@ -70,7 +66,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, self::COMMAND_CLASS)) {
+        if (! $this->isObjectType($node, SymfonyClass::COMMAND)) {
             return null;
         }
 
@@ -80,6 +76,7 @@ CODE_SAMPLE
         }
 
         $defaultNameProperty = $this->createDefaultNameProperty($commandName);
+
         $node->stmts = array_merge([$defaultNameProperty], (array) $node->stmts);
 
         return $node;
@@ -87,19 +84,21 @@ CODE_SAMPLE
 
     private function createDefaultNameProperty(Node $commandNameNode): Property
     {
-        return $this->builderFactory->property('defaultName')
-            ->makeProtected()
-            ->makeStatic()
-            ->setDefault($commandNameNode)
-            ->getNode();
+        $propertyBuilder = $this->builderFactory->property('defaultName');
+        $propertyBuilder->makeProtected();
+        $propertyBuilder->makeStatic();
+        $propertyBuilder->setDefault($commandNameNode);
+
+        return $propertyBuilder->getNode();
     }
 
     private function resolveCommandNameAndRemove(Class_ $class): ?Node
     {
         $commandName = null;
+
         $this->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (&$commandName) {
             if ($node instanceof MethodCall) {
-                if (! $this->isType($node->var, self::COMMAND_CLASS)) {
+                if (! $this->isObjectType($node->var, SymfonyClass::COMMAND)) {
                     return null;
                 }
 
@@ -116,28 +115,8 @@ CODE_SAMPLE
                 $this->removeNode($node);
             }
 
-            if ($node instanceof ClassMethod && $this->isName($node, '__construct')) {
-                if (count((array) $node->stmts) !== 1) {
-                    return null;
-                }
-
-                $onlyNode = $node->stmts[0];
-                if ($onlyNode instanceof Expression) {
-                    $onlyNode = $onlyNode->expr;
-
-                    $commandName = $this->matchCommandNameNodeInConstruct($onlyNode);
-                    if ($commandName === null) {
-                        return null;
-                    }
-
-                    if (count($node->params) === 0) {
-                        $this->removeNode($node);
-                    }
-                }
-            }
-
             if ($node instanceof StaticCall) {
-                if (! $this->isType($node, self::COMMAND_CLASS)) {
+                if (! $this->isObjectType($node->class, SymfonyClass::COMMAND)) {
                     return null;
                 }
 
@@ -149,6 +128,8 @@ CODE_SAMPLE
                 array_shift($node->args);
             }
         });
+
+        $this->removeConstructorIfHasOnlySetNameMethodCall($class);
 
         return $commandName;
     }
@@ -173,5 +154,37 @@ CODE_SAMPLE
         }
 
         return $expr->args[0]->value;
+    }
+
+    private function removeConstructorIfHasOnlySetNameMethodCall(Class_ $class): void
+    {
+        $constructClassMethod = $class->getMethod('__construct');
+        if ($constructClassMethod === null) {
+            return;
+        }
+
+        if (count((array) $constructClassMethod->stmts) !== 1) {
+            return;
+        }
+
+        $onlyNode = $constructClassMethod->stmts[0];
+        if ($onlyNode instanceof Expression) {
+            $onlyNode = $onlyNode->expr;
+        }
+
+        /** @var Expr|null $onlyNode */
+        if ($onlyNode === null) {
+            return;
+        }
+
+        if (! $onlyNode instanceof StaticCall) {
+            return;
+        }
+
+        if ($onlyNode->args !== []) {
+            return;
+        }
+
+        $this->removeNode($constructClassMethod);
     }
 }

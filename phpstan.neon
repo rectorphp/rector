@@ -30,6 +30,8 @@ parameters:
         # part of composer
         - 'tests/Composer/AutoloadWrongCasesEventSubscriber.php'
         - '*/tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Expected/Just*ExceptionWithoutNamespace.php'
+        # stubs
+        - 'stubs/*'
 
     ignoreErrors:
         # false positive
@@ -55,12 +57,10 @@ parameters:
 
         # irrelevant
         - '#Call to function in_array\(\) with arguments string, (.*?) and true will always evaluate to false#'
-        - '#Parameter \#1 \$name of class ReflectionFunction constructor expects Closure\|string, callable given#'
 
         # known values
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$left#'
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$right#'
-        - '#Method Rector\\ContributorTools\\Configuration\\ConfigurationFactory\:\:resolveCategoryFromFqnNodeTypes\(\) should return string but returns string\|null#'
 
         - '#Array \(array<PhpParser\\Node\\Expr\\MethodCall>\) does not accept PhpParser\\Node\\Expr#'
         - '#Cannot access property \$expr on PhpParser\\Node\\Stmt\|null#'
@@ -68,7 +68,6 @@ parameters:
         - '#Cannot call method getName\(\) on PHPStan\\Reflection\\ClassReflection\|null#'
 
         - '#Cannot call method getText\(\) on PhpParser\\Comment\\Doc\|null#'
-        - '#Method Rector\\PhpParser\\Node\\Manipulator\\PropertyManipulator::getAllPropertyFetch\(\) should return array<PhpParser\\Node\\Expr\\PropertyFetch> but returns array<PhpParser\\Node>#'
 
         # false positive, has annotation type above
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
@@ -168,8 +167,6 @@ parameters:
         - '#In method "Rector\\Rector\\Property\\InjectAnnotationClassRector\:\:resolveType", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
         - '#Empty catch block\. If you are sure this is meant to be empty, please add a "// @ignoreException" comment in the catch block#'
 
-        - '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\)\|null, Closure\(mixed, mixed, mixed, mixed\)\: void given#'
-        - '#In method "Rector\\(.*?)", (.*?) is "array"\. Please provide a (.*?) annotation to further specify the type of the array\. For instance\: (.*?). More info\: http\://bit\.ly/typehintarray#'
         - '#Method Rector\\Rector\\AbstractRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
         - '#Parameter \#2 \$currentNode of method Rector\\CodingStyle\\Rector\\String_\\ManualJsonStringToJsonEncodeArrayRector\:\:matchNextExpressionAssignConcatToSameVariable\(\) expects PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Expr\\AssignOp\\Concat, PhpParser\\Node given#'
         - '#Parameter \#1 \$node of method Rector\\CodingStyle\\ValueObject\\ConcatExpressionJoinData\:\:addNodeToRemove\(\) expects PhpParser\\Node, PhpParser\\Node\|null given#'
@@ -180,13 +177,33 @@ parameters:
         - '#Parameter \#1 \$kernelClass of method Rector\\Symfony\\Bridge\\DependencyInjection\\SymfonyContainerFactory\:\:createFromKernelClass\(\) expects string, string\|null given#'
         - '#If condition is always true#'
 
-        # known value
-        - '#Method Rector\\PhpParser\\Node\\Manipulator\\ClassMethodManipulator\:\:addMethodParameterIfMissing\(\) should return string but returns string\|null#'
-
         # symfony future compatibility
         - '#Call to an undefined static method Symfony\\Component\\EventDispatcher\\EventDispatcher\:\:__construct\(\)#'
         - '#Rector\\EventDispatcher\\AutowiredEventDispatcher\:\:__construct\(\) calls parent constructor but parent does not have one#'
-        - '#In method "Rector\\Rector\\AbstractRector\:\:traverseNodesWithCallable", parameter \$nodes has no type\-hint and no @param annotation\. More info\: http\://bit\.ly/usetypehint#'
-        - '#In method "Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:traverseNodesWithCallable", parameter \$nodes has no type\-hint and no @param annotation\. More info\: http\://bit\.ly/usetypehint#'
         - '#Ternary operator condition is always true#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Property\:\:\$var#'
+        - '#Parameter \#1 \$node of method Rector\\NodeTypeResolver\\NodeTypeResolver\:\:resolveSingleTypeToStrings\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr\|null given#'
+        - '#Parameter \#1 \$name of class ReflectionFunction constructor expects Closure\|string, callable\(\)\: mixed given#'
+
+        - '#Method Rector\\DoctrinePhpDocParser\\Tests\\PhpDocParser\\OrmTagParser\\AbstractOrmTagParserTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
+        - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer\:\:getService\(\) should return object but returns object\|null#'
+        - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:(.*?)\(\) should return Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\(.*?)\|null but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\|null#'
+        - '#Call to function property_exists\(\) with string and (.*?) will always evaluate to false#'
+        - '#Method Rector\\Console\\Option\\SetOptionResolver\:\:separateVersionedAndUnversionedSets\(\) should return array<array<string\>\> but returns array<int, array<int\|string, array<int, string\>\|string\>\>#'
+        - '#Method Rector\\DoctrinePhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:readMethodAnnotation\(\) should return Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template but returns object\|null#'
+        - '#PHPDoc tag @param for parameter \$nodeWithStatements with type PhpParser\\Builder\\FunctionLike\|PhpParser\\Node\\Stmt\\ClassLike is not subtype of native type PhpParser\\Node#'
+        - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\ClassLike\:\:\$stmts#'
+
+        - '#Property Rector\\TypeDeclaration\\TypeInferer\\(.*?)\:\:\$(.*?)TypeInferers \(array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\(.*?)TypeInfererInterface\>\) does not accept array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface\>#'
+        # sense-less errors
+        - '#Parameter \#1 \$functionLike of method Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockManipulator\:\:getParamTypeInfos\(\) expects PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_, PhpParser\\Node\\FunctionLike given#'
+        - '#Parameter \#1 \$classLike of method Rector\\PhpParser\\Node\\Resolver\\NameResolver\:\:resolveNamespacedNameAwareNode\(\) expects PhpParser\\Node\\Stmt\\ClassLike, \(PhpParser\\Builder\\Trait_&PhpParser\\Node\)\|PhpParser\\Node\\Stmt\\Interface_ given#'
+
+        - '#In method "Rector\\(.*?)\:\:isType", parameter \$type has no type\-hint and no @param annotation\. More info\: http\://bit\.ly/usetypehint#'
+        - '#In method "Rector\\(.*?)\:\:isTypes", parameter \$requiredTypes type is "array"\. (.*?)#'
+        - '#Parameter \#1 \$type of method PhpParser\\Builder\\Param\:\:setType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType given#'
+        - '#Generator expects value type string, array<int, string\> given#'
+
+        # PHP 7.4 1_000 support
+        - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\) does not accept string#'
+        - '#Call to function is_string\(\) with float will always evaluate to false#'

@@ -5,6 +5,7 @@ namespace Rector\Rector\Architecture\DependencyInjection;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
@@ -17,6 +18,8 @@ use Rector\RectorDefinition\RectorDefinition;
  * - https://github.com/Kdyby/Autowired/blob/master/docs/en/index.md#autowired-properties
  * - http://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations
  * - https://github.com/rectorphp/rector/issues/700#issue-370301169
+ *
+ * @see \Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\AnnotatedPropertyInjectToConstructorInjectionRectorTest
  */
 final class AnnotatedPropertyInjectToConstructorInjectionRector extends AbstractRector
 {
@@ -95,6 +98,7 @@ CODE_SAMPLE
         $this->docBlockManipulator->removeTagFromNode($node, $this->annotation);
 
         // set to private
+        $this->makePrivate($node);
         $node->flags = Class_::MODIFIER_PRIVATE;
 
         $this->addPropertyToCollector($node);
@@ -109,8 +113,15 @@ CODE_SAMPLE
             return;
         }
 
-        $mainPropertyType = $this->getTypes($property)[0] ?? 'mixed';
+        $propertyType = $this->getObjectType($property);
+
+        // use first type
+        if ($propertyType instanceof UnionType) {
+            $propertyType = $propertyType->getTypes()[0];
+        }
+
         $propertyName = $this->getName($property);
-        $this->addPropertyToClass($classNode, $mainPropertyType, $propertyName);
+
+        $this->addPropertyToClass($classNode, $propertyType, $propertyName);
     }
 }

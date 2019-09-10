@@ -10,6 +10,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/symfony/symfony/pull/30813/files#r270879504
+ * @see \Rector\PHPUnit\Tests\Rector\MethodCall\RemoveExpectAnyFromMockRector\RemoveExpectAnyFromMockRectorTest
  */
 final class RemoveExpectAnyFromMockRector extends AbstractPHPUnitRector
 {

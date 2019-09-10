@@ -16,6 +16,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Shopware\Tests\Rector\MethodCall\ReplaceEnlightResponseWithSymfonyResponseRector\ReplaceEnlightResponseWithSymfonyResponseRectorTest
+ */
 final class ReplaceEnlightResponseWithSymfonyResponseRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
@@ -58,7 +61,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, 'Enlight_Controller_Response_Response')) {
+        if (! $this->isObjectType($node, 'Enlight_Controller_Response_Response')) {
             return null;
         }
 

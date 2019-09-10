@@ -7,6 +7,7 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
@@ -18,6 +19,7 @@ use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
+use Rector\BetterPhpDocParser\Contract\PhpDocParserExtensionInterface;
 use Rector\BetterPhpDocParser\Data\StartEndInfo;
 use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -50,11 +52,20 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     private $multilineSpaceFormatPreserver;
 
+    /**
+     * @var PhpDocParserExtensionInterface[]
+     */
+    private $phpDocParserExtensions = [];
+
+    /**
+     * @param PhpDocParserExtensionInterface[] $phpDocParserExtensions
+     */
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
-        MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver
+        MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
+        array $phpDocParserExtensions = []
     ) {
         parent::__construct($typeParser, $constExprParser);
 
@@ -62,6 +73,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->privatesAccessor = new PrivatesAccessor();
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
+        $this->phpDocParserExtensions = $phpDocParserExtensions;
     }
 
     /**
@@ -101,8 +113,40 @@ final class BetterPhpDocParser extends PhpDocParser
         return $this->attributeAwareNodeFactory->createFromNode($phpDocNode);
     }
 
+    public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
+    {
+        $tag = $tokenIterator->currentTokenValue();
+        $tokenIterator->next();
+
+        // @todo somehow decouple to tag pre-processor
+        if (Strings::match($tag, '#@(ORM|Assert|Serializer)$#')) {
+            $tag .= $tokenIterator->currentTokenValue();
+            $tokenIterator->next();
+        }
+
+        $value = $this->parseTagValue($tokenIterator, $tag);
+
+        return new PhpDocTagNode($tag, $value);
+    }
+
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
+        $tokenIteratorBackup = clone $tokenIterator;
+
+        foreach ($this->phpDocParserExtensions as $phpDocParserExtension) {
+            if (! $phpDocParserExtension->matchTag($tag)) {
+                continue;
+            }
+
+            $phpDocTagValueNode = $phpDocParserExtension->parse($tokenIterator, $tag);
+            if ($phpDocTagValueNode !== null) {
+                return $phpDocTagValueNode;
+            }
+            // return back
+            $tokenIterator = $tokenIteratorBackup;
+            break;
+        }
+
         // needed for reference support in params, see https://github.com/rectorphp/rector/issues/1734
         if ($tag === '@param') {
             try {

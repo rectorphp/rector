@@ -13,6 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://3v4l.org/XPEEl
  * @see https://3v4l.org/ObNQZ
+ * @see \Rector\Php\Tests\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector\BinaryOpBetweenNumberAndStringRectorTest
  */
 final class BinaryOpBetweenNumberAndStringRector extends AbstractRector
 {
@@ -71,13 +72,13 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isStringyType($node->left) && $this->isNumberType($node->right)) {
+        if ($this->isStringOrUnionStringOnlyType($node->left) && $this->isNumberType($node->right)) {
             $node->left = new LNumber(0);
 
             return $node;
         }
 
-        if ($this->isStringyType($node->right) && $this->isNumberType($node->left)) {
+        if ($this->isStringOrUnionStringOnlyType($node->right) && $this->isNumberType($node->left)) {
             $node->right = new LNumber(0);
 
             return $node;

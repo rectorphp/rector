@@ -17,6 +17,9 @@ use Rector\RectorDefinition\RectorDefinition;
 use Rector\Reflection\FunctionReflectionResolver;
 use ReflectionFunction;
 
+/**
+ * @see \Rector\DeadCode\Tests\Rector\MethodCall\RemoveDefaultArgumentValueRector\RemoveDefaultArgumentValueRectorTest
+ */
 final class RemoveDefaultArgumentValueRector extends AbstractRector
 {
     /**

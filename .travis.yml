@@ -45,15 +45,15 @@ script:
     # Rector demo run
     - |
       if [[ $RUN_RECTOR == true ]]; then
-          bin/rector process src --level symfony40 --dry-run
+          bin/rector process src --set symfony40 --dry-run
           composer docs
       fi
 
     # Eat your own dog food
     - |
       if [[ $DOG_FOOD == true ]]; then
-          bin/rector process src packages --level dead-code --dry-run
-          bin/rector process src packages --level code-quality --dry-run
+          bin/rector process src packages --set dead-code --dry-run
+          bin/rector process src packages --set code-quality --dry-run
       fi
 
     # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
@@ -79,7 +79,7 @@ script:
           ../rector-dir/vendor/bin/rector
 
           # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
-          ../rector-dir/vendor/bin/rector process src --level code-quality --hide-autoload-errors --dry-run
+          ../rector-dir/vendor/bin/rector process src --set code-quality --hide-autoload-errors --dry-run
       fi
 
 after_script:

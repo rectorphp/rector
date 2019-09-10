@@ -28,7 +28,7 @@ final class PhpVersionProvider
 
         // for tests
         if (PHPUnitEnvironment::isPHPUnitRun()) {
-            return '7.5';
+            return '10.0'; // so we don't have to up
         }
 
         return PHP_VERSION;

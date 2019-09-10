@@ -20,14 +20,6 @@ final class FileSystemFileProcessor
         $this->fileSystemRectors = $fileSystemRectors;
     }
 
-    /**
-     * @return FileSystemRectorInterface[]
-     */
-    public function getFileSystemRectors(): array
-    {
-        return $this->fileSystemRectors;
-    }
-
     public function processFileInfo(SmartFileInfo $smartFileInfo): void
     {
         foreach ($this->fileSystemRectors as $fileSystemRector) {

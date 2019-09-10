@@ -19,6 +19,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @source https://wiki.php.net/rfc/typed_properties_v2#proposal
+ * @see \Rector\Php\Tests\Rector\Property\TypedPropertyRector\TypedPropertyRectorTest
  */
 final class TypedPropertyRector extends AbstractRector
 {

@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\FuncCall\FunctionToNewRector\FunctionToNewRectorTest
+ */
 final class FunctionToNewRector extends AbstractRector
 {
     /**

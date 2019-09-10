@@ -6,7 +6,11 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Symfony\ValueObject\SymfonyClass;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\GetToConstructorInjectionRectorTest
+ */
 final class GetToConstructorInjectionRector extends AbstractToConstructorInjectionRector
 {
     /**
@@ -17,11 +21,9 @@ final class GetToConstructorInjectionRector extends AbstractToConstructorInjecti
     /**
      * @param string[] $getMethodAwareTypes
      */
-    public function __construct(array $getMethodAwareTypes = [
-        'Symfony\Bundle\FrameworkBundle\Controller\Controller',
-        'Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait',
-    ])
-    {
+    public function __construct(
+        array $getMethodAwareTypes = [SymfonyClass::CONTROLLER, SymfonyClass::CONTROLLER_TRAIT]
+    ) {
         $this->getMethodAwareTypes = $getMethodAwareTypes;
     }
 
@@ -74,7 +76,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isTypes($node, $this->getMethodAwareTypes)) {
+        if (! $this->isObjectTypes($node->var, $this->getMethodAwareTypes)) {
             return null;
         }
 

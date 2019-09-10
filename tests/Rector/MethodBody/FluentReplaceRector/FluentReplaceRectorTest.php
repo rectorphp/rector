@@ -10,7 +10,12 @@ final class FluentReplaceRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
+        $this->doTestFiles([
+            __DIR__ . '/Fixture/fixture.php.inc',
+            __DIR__ . '/Fixture/some_command.php.inc',
+            __DIR__ . '/Fixture/multiple_some_command.php.inc',
+            __DIR__ . '/Fixture/skip_date_time_modify_command.php.inc',
+        ]);
     }
 
     /**
@@ -20,7 +25,7 @@ final class FluentReplaceRectorTest extends AbstractRectorTestCase
     {
         return [
             FluentReplaceRector::class => [
-                '$classesToDefluent' => [FluentInterfaceClass::class],
+                '$classesToDefluent' => [FluentInterfaceClass::class, '*Command'],
             ],
         ];
     }

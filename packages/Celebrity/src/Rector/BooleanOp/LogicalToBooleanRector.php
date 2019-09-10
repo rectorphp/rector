@@ -14,6 +14,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://stackoverflow.com/questions/5998309/logical-operators-or-or
  * @see https://stackoverflow.com/questions/9454870/php-xor-how-to-use-with-if
+ * @see \Rector\Celebrity\Tests\Rector\BooleanOp\LogicalToBooleanRector\LogicalToBooleanRectorTest
  */
 final class LogicalToBooleanRector extends AbstractRector
 {

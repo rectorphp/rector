@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeToStringResolver;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -22,6 +22,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see https://3v4l.org/GL6II
  * @see https://3v4l.org/eTrhZ
  * @see https://3v4l.org/C554W
+ * @see \Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector\CompleteDynamicPropertiesRectorTest
  */
 final class CompleteDynamicPropertiesRector extends AbstractRector
 {
@@ -31,20 +32,18 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
     private const LARAVEL_COLLECTION_CLASS = 'Illuminate\Support\Collection';
 
     /**
-     * @var StaticTypeToStringResolver
+     * @var StaticTypeMapper
      */
-    private $staticTypeToStringResolver;
+    private $staticTypeMapper;
 
     /**
      * @var DocBlockManipulator
      */
     private $docBlockManipulator;
 
-    public function __construct(
-        StaticTypeToStringResolver $staticTypeToStringResolver,
-        DocBlockManipulator $docBlockManipulator
-    ) {
-        $this->staticTypeToStringResolver = $staticTypeToStringResolver;
+    public function __construct(StaticTypeMapper $staticTypeMapper, DocBlockManipulator $docBlockManipulator)
+    {
+        $this->staticTypeMapper = $staticTypeMapper;
         $this->docBlockManipulator = $docBlockManipulator;
     }
 
@@ -145,12 +144,12 @@ CODE_SAMPLE
             $propertyTypes = Arrays::flatten($propertyTypes);
             $propertyTypesAsString = implode('|', $propertyTypes);
 
-            $propertyBuilder = $this->builderFactory->property($propertyName)
-                ->makePublic();
+            $propertyBuilder = $this->builderFactory->property($propertyName);
+            $propertyBuilder->makePublic();
 
             if ($this->isAtLeastPhpVersion('7.4') && count($propertyTypes) === 1) {
-                $newProperty = $propertyBuilder->setType($propertyTypes[0])
-                    ->getNode();
+                $propertyBuilder->setType($propertyTypes[0]);
+                $newProperty = $propertyBuilder->getNode();
             } else {
                 $newProperty = $propertyBuilder->getNode();
                 if ($propertyTypesAsString) {
@@ -232,7 +231,7 @@ CODE_SAMPLE
         if ($parentNode instanceof Assign) {
             $assignedValueStaticType = $this->getStaticType($parentNode->expr);
             if ($assignedValueStaticType) {
-                return $this->staticTypeToStringResolver->resolveAnyType($assignedValueStaticType);
+                return $this->staticTypeMapper->mapPHPStanTypeToStrings($assignedValueStaticType);
             }
         }
 

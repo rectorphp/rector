@@ -24,6 +24,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\RemoveUnusedAliasRectorTest
+ */
 final class RemoveUnusedAliasRector extends AbstractRector
 {
     /**
@@ -263,7 +266,7 @@ CODE_SAMPLE
 
             $parentNode = $nameNode->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode === null) {
-                throw new ShouldNotHappenException();
+                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
             }
 
             $this->resolvedNodeNames[$originalName->toString()][] = [$nameNode, $parentNode];

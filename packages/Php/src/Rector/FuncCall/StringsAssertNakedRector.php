@@ -15,6 +15,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://3v4l.org/lB5fR
  * @see https://github.com/simplesamlphp/simplesamlphp/pull/708/files
+ * @see \Rector\Php\Tests\Rector\FuncCall\StringsAssertNakedRector\StringsAssertNakedRectorTest
  */
 final class StringsAssertNakedRector extends AbstractRector
 {

@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\MethodBody\NormalToFluentRector\NormalToFluentRectorTest
+ */
 final class NormalToFluentRector extends AbstractRector
 {
     /**
@@ -172,7 +175,7 @@ CODE_SAMPLE
     private function matchMethodCall(MethodCall $methodCall): ?string
     {
         foreach ($this->fluentMethodsByType as $type => $methodNames) {
-            if (! $this->isType($methodCall, $type)) {
+            if (! $this->isObjectType($methodCall, $type)) {
                 continue;
             }
 

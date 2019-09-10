@@ -114,7 +114,8 @@ CODE_SAMPLE
 
         if ($node->expr instanceof Concat) {
             // process only first concat
-            if ($node->getAttribute(AttributeKey::PARENT_NODE) instanceof Concat) {
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof Concat) {
                 return null;
             }
 

@@ -14,6 +14,8 @@ final class HelperFunctionToConstructorInjectionRectorTest extends AbstractRecto
             __DIR__ . '/Fixture/broadcast.php.inc',
             __DIR__ . '/Fixture/session.php.inc',
             __DIR__ . '/Fixture/route.php.inc',
+            __DIR__ . '/Fixture/config.php.inc',
+            __DIR__ . '/Fixture/back.php.inc',
         ]);
     }
 

@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\Form\FormIsValidRector\FormIsValidRectorTest
+ */
 final class FormIsValidRector extends AbstractRector
 {
     /**
@@ -60,7 +63,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($node, $this->formClass)) {
+        if (! $this->isObjectType($node, $this->formClass)) {
             return null;
         }
 

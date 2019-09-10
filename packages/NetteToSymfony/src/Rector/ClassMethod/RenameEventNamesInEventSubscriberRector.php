@@ -24,6 +24,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see https://symfony.com/doc/current/reference/events.html
  * @see https://symfony.com/doc/current/components/http_kernel.html#creating-an-event-listener
  * @see https://github.com/symfony/symfony/blob/master/src/Symfony/Component/HttpKernel/KernelEvents.php
+ * @see \Rector\NetteToSymfony\Tests\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector\RenameEventNamesInEventSubscriberRectorTest
  */
 final class RenameEventNamesInEventSubscriberRector extends AbstractRector
 {
@@ -97,7 +98,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($class, self::EVENT_SUBSCRIBER_INTERFACE)) {
+        if (! $this->isObjectType($class, self::EVENT_SUBSCRIBER_INTERFACE)) {
             return null;
         }
 

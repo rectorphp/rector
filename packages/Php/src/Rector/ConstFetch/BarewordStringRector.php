@@ -15,6 +15,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://wiki.php.net/rfc/deprecate-bareword-strings
  * @see https://3v4l.org/56ZAu
+ * @see \Rector\Php\Tests\Rector\ConstFetch\BarewordStringRector\BarewordStringRectorTest
  */
 final class BarewordStringRector extends AbstractRector
 {
@@ -51,16 +52,20 @@ final class BarewordStringRector extends AbstractRector
         // load the file!
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
         if ($fileInfo === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $this->undefinedConstants = [];
-        $previousErrorHandler = set_error_handler(function ($severity, $message, $file, $line): void {
-            $match = Strings::match($message, '#Use of undefined constant (?<constant>\w+)#');
-            if ($match) {
-                $this->undefinedConstants[] = $match['constant'];
+        $previousErrorHandler = set_error_handler(
+            function (int $severity, string $message, string $file, int $line): bool {
+                $match = Strings::match($message, '#Use of undefined constant (?<constant>\w+)#');
+                if ($match) {
+                    $this->undefinedConstants[] = $match['constant'];
+                }
+
+                return true;
             }
-        });
+        );
 
         // this duplicates the way composer handles it
         // @see https://github.com/composer/composer/issues/6232

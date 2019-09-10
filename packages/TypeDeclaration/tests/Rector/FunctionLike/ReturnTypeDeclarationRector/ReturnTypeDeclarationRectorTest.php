@@ -9,7 +9,9 @@ final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $integrationFiles = [
+        $files = [
+            __DIR__ . '/Fixture/skip_mixed_and_string.php.inc',
+            __DIR__ . '/Fixture/skip_self.php.inc',
             // static types
             __DIR__ . '/Fixture/void_type.php.inc',
             __DIR__ . '/Fixture/no_void_abstract.php.inc',
@@ -38,12 +40,11 @@ final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/php-cs-fixer-return/skip.php.inc',
             __DIR__ . '/Fixture/php-cs-fixer-return/nullables.php.inc',
             // nikic set - https://github.com/nikic/TypeUtil/
-            __DIR__ . '/Fixture/nikic/inheritance.php.inc',
+
             __DIR__ . '/Fixture/nikic/iterable.php.inc',
             __DIR__ . '/Fixture/nikic/name_resolution.php.inc',
             __DIR__ . '/Fixture/nikic/null.php.inc',
             __DIR__ . '/Fixture/nikic/nullable.php.inc',
-            __DIR__ . '/Fixture/nikic/nullable_inheritance.php.inc',
             __DIR__ . '/Fixture/nikic/object.php.inc',
             __DIR__ . '/Fixture/nikic/return_type_position.php.inc',
             __DIR__ . '/Fixture/nikic/self_inheritance.php.inc',
@@ -58,7 +59,7 @@ final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/a_new_class.php.inc',
         ];
 
-        $this->doTestFiles($integrationFiles);
+        $this->doTestFiles($files);
     }
 
     protected function getRectorClass(): string

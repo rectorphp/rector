@@ -16,6 +16,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -25,6 +26,8 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see https://www.php.net/manual/en/language.types.callable.php#117260
  * @see https://3v4l.org/MsMbQ
  * @see https://3v4l.org/KM1Ji
+ *
+ * @see \Rector\CodeQuality\Tests\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\CallableThisArrayToAnonymousFunctionRectorTest
  */
 final class CallableThisArrayToAnonymousFunctionRector extends AbstractRector
 {
@@ -138,27 +141,29 @@ CODE_SAMPLE
     private function matchCallableMethod(Expr $objectExpr, String_ $methodExpr): ?ClassMethod
     {
         $methodName = $this->getValue($methodExpr);
+        $objectType = $this->getObjectType($objectExpr);
 
-        foreach ($this->getTypes($objectExpr) as $type) {
-            $class = $this->parsedNodesByType->findClass($type);
+        if ($objectType instanceof ObjectType) {
+            $class = $this->parsedNodesByType->findClass($objectType->getClassName());
+
             if ($class === null) {
-                continue;
+                return null;
             }
 
             $classMethod = $class->getMethod($methodName);
+
             if ($classMethod === null) {
-                continue;
+                return null;
             }
 
             if ($this->isName($objectExpr, 'this')) {
                 return $classMethod;
             }
 
+            // is public method of another service
             if ($classMethod->isPublic()) {
                 return $classMethod;
             }
-
-            return null;
         }
 
         return null;

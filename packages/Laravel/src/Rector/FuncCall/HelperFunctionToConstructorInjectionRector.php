@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -15,6 +16,8 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://github.com/laravel/framework/blob/78828bc779e410e03cc6465f002b834eadf160d2/src/Illuminate/Foundation/helpers.php#L959
  * @see https://gist.github.com/barryvdh/bb6ffc5d11e0a75dba67
+ *
+ * @see \Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInjectionRector\HelperFunctionToConstructorInjectionRectorTest
  */
 final class HelperFunctionToConstructorInjectionRector extends AbstractRector
 {
@@ -25,6 +28,7 @@ final class HelperFunctionToConstructorInjectionRector extends AbstractRector
         // set/get
         'config' => [
             'type' => 'Illuminate\Contracts\Config\Repository',
+            'property' => 'configRepository',
             'array_method' => 'set',
             'non_array_method' => 'get',
         ],
@@ -107,6 +111,7 @@ final class HelperFunctionToConstructorInjectionRector extends AbstractRector
             'type' => 'Illuminate\Routing\Redirector',
             'property' => 'redirector',
             'method_if_args' => 'back',
+            'method_if_no_args' => 'back',
         ],
         'broadcast' => [
             'type' => 'Illuminate\Contracts\Broadcasting\Factory',
@@ -227,10 +232,14 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->addPropertyToClass($classNode, $service['type'], $service['property']);
+            $this->addPropertyToClass($classNode, new FullyQualifiedObjectType($service['type']), $service['property']);
             $propertyFetchNode = $this->createPropertyFetch('this', $service['property']);
 
             if (count($node->args) === 0) {
+                if (isset($service['method_if_no_args'])) {
+                    return new MethodCall($propertyFetchNode, $service['method_if_no_args']);
+                }
+
                 return $propertyFetchNode;
             }
 
@@ -246,7 +255,7 @@ CODE_SAMPLE
                 return new MethodCall($propertyFetchNode, $service['non_array_method'], $node->args);
             }
 
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         return null;

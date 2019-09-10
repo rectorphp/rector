@@ -3,7 +3,14 @@
 namespace Rector\Rector\AbstractRector;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
@@ -25,42 +32,31 @@ trait NodeTypeResolverTrait
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    protected function isType(Node $node, string $type): bool
+    /**
+     * @param ObjectType|string $type
+     */
+    protected function isObjectType(Node $node, $type): bool
     {
-        return $this->nodeTypeResolver->isType($node, $type);
+        return $this->nodeTypeResolver->isObjectType($node, $type);
     }
 
     /**
-     * @param string[] $types
+     * @param string[] $requiredTypes
      */
-    protected function isTypes(Node $node, array $types): bool
+    protected function isObjectTypes(Node $node, array $requiredTypes): bool
     {
-        $nodeTypes = $this->getTypes($node);
-        return (bool) array_intersect($types, $nodeTypes);
+        foreach ($requiredTypes as $requiredType) {
+            if ($this->isObjectType($node, $requiredType)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    /**
-     * @param string[] $types
-     * @return string[]
-     */
-    protected function matchTypes(Node $node, array $types): array
+    protected function isStringOrUnionStringOnlyType(Node $node): bool
     {
-        return $this->isTypes($node, $types) ? $this->getTypes($node) : [];
-    }
-
-    protected function isStringType(Node $node): bool
-    {
-        return $this->nodeTypeResolver->isStringType($node);
-    }
-
-    protected function isStringyType(Node $node): bool
-    {
-        return $this->nodeTypeResolver->isStringyType($node);
-    }
-
-    protected function isIntegerType(Node $node): bool
-    {
-        return $this->nodeTypeResolver->isIntType($node);
+        return $this->nodeTypeResolver->isStringOrUnionStringOnlyType($node);
     }
 
     protected function isNumberType(Node $node): bool
@@ -68,14 +64,14 @@ trait NodeTypeResolverTrait
         return $this->nodeTypeResolver->isNumberType($node);
     }
 
-    protected function isFloatType(Node $node): bool
+    protected function isStaticType(Node $node, string $staticTypeClass): bool
     {
-        return $this->nodeTypeResolver->isFloatType($node);
+        return $this->nodeTypeResolver->isStaticType($node, $staticTypeClass);
     }
 
-    protected function getStaticType(Node $node): ?Type
+    protected function getStaticType(Node $node): Type
     {
-        return $this->nodeTypeResolver->getNodeStaticType($node);
+        return $this->nodeTypeResolver->getStaticType($node);
     }
 
     protected function isNullableType(Node $node): bool
@@ -88,16 +84,6 @@ trait NodeTypeResolverTrait
         return $this->nodeTypeResolver->isNullableObjectType($node);
     }
 
-    protected function isNullType(Node $node): bool
-    {
-        return $this->nodeTypeResolver->isNullType($node);
-    }
-
-    protected function isBoolType(Node $node): bool
-    {
-        return $this->nodeTypeResolver->isBoolType($node);
-    }
-
     protected function isCountableType(Node $node): bool
     {
         return $this->nodeTypeResolver->isCountableType($node);
@@ -108,11 +94,39 @@ trait NodeTypeResolverTrait
         return $this->nodeTypeResolver->isArrayType($node);
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getTypes(Node $node): array
+    protected function getObjectType(Node $node): Type
     {
-        return $this->nodeTypeResolver->getTypes($node);
+        return $this->nodeTypeResolver->getObjectType($node);
+    }
+
+    /**
+     * @param MethodCall|StaticCall|ClassMethod $node
+     */
+    protected function isMethodStaticCallOrClassMethodObjectType(Node $node, string $type): bool
+    {
+        if ($node instanceof MethodCall) {
+            if ($node->var instanceof Variable) {
+                return $this->isObjectType($node->var, $type);
+            }
+
+            // method call is variable return
+            return $this->isObjectType($node, $type);
+        }
+
+        if ($node instanceof StaticCall) {
+            return $this->isObjectType($node->class, $type);
+        }
+
+        if ($node instanceof ClassMethod) {
+            /** @var Class_|null $class */
+            $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+            if ($class === null) {
+                return false;
+            }
+
+            return $this->isObjectType($class, $type);
+        }
+
+        return false;
     }
 }

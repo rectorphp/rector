@@ -18,8 +18,6 @@ final class HeaderControl
 
     public function getTitle()
     {
-        count($this->titles);
-
         $this->titles = null;
         $titleCount = count($this->titles);
 
@@ -51,8 +49,6 @@ final class HeaderControl
 
     public function getTitle()
     {
-        count($this->titles);
-
         $this->titles = null;
         $titleCount = $this->titles === null ? 0 : count($this->titles);
 

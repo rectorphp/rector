@@ -6,7 +6,12 @@ class SomeBackController
 {
     public function action()
     {
-        return back('template.blade');
+        return back();
+    }
+
+    public function actionWithParams()
+    {
+        return back(200);
     }
 }
 
@@ -19,16 +24,21 @@ namespace Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInject
 class SomeBackController
 {
     /**
-     * @var \Illuminate\Routing\UrlGenerator
+     * @var \Illuminate\Routing\Redirector
      */
-    private $urlGenerator;
-    public function __construct(\Illuminate\Routing\UrlGenerator $urlGenerator)
+    private $redirector;
+    public function __construct(\Illuminate\Routing\Redirector $redirector)
     {
-        $this->urlGenerator = $urlGenerator;
+        $this->redirector = $redirector;
     }
     public function action()
     {
-        return $this->urlGenerator->route('template.blade');
+        return $this->redirector->back();
+    }
+
+    public function actionWithParams()
+    {
+        return $this->redirector->back(200);
     }
 }
 

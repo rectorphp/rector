@@ -1,3 +1,6 @@
+parameters:
+    doctrine_uuid_generator_class: 'Ramsey\Uuid\Doctrine\UuidGenerator'
+
 services:
     _defaults:
         autowire: true
@@ -5,4 +8,4 @@ services:
 
     Rector\Doctrine\:
         resource: '../src'
-        exclude: '../src/{Rector/**/*Rector.php}'
+        exclude: '../src/{Rector/**/*Rector.php,ValueObject/*}'

@@ -8,6 +8,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\New_\NewToStaticCallRector\NewToStaticCallRectorTest
+ */
 final class NewToStaticCallRector extends AbstractRector
 {
     /**
@@ -68,7 +71,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->typeToStaticCalls as $type => $staticCall) {
-            if (! $this->isType($node->class, $type)) {
+            if (! $this->isObjectType($node->class, $type)) {
                 continue;
             }
 

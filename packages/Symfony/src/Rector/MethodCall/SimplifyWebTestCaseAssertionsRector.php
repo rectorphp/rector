@@ -18,6 +18,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
  * @see https://github.com/symfony/symfony/pull/30813/files
+ * @see \Rector\Symfony\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\SimplifyWebTestCaseAssertionsRectorTest
  */
 final class SimplifyWebTestCaseAssertionsRector extends AbstractRector
 {
@@ -140,7 +141,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isType($class, $this->webTestCaseClass);
+        return $this->isObjectType($class, $this->webTestCaseClass);
     }
 
     /**

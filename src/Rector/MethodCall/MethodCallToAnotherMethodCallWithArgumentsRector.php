@@ -9,6 +9,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector\MethodCallToAnotherMethodCallWithArgumentsRectorTest
+ */
 final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRector
 {
     /**
@@ -26,7 +29,7 @@ final class MethodCallToAnotherMethodCallWithArgumentsRector extends AbstractRec
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns old method call with specfici type to new one with arguments', [
+        return new RectorDefinition('Turns old method call with specific types to new one with arguments', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 $serviceDefinition = new Nette\DI\ServiceDefinition;
@@ -61,7 +64,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->oldMethodsToNewMethodsWithArgsByType as $type => $oldMethodsToNewMethodsWithArgs) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isObjectType($node, $type)) {
                 continue;
             }
 

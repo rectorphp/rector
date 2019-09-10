@@ -14,6 +14,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\Yaml\ParseFileRector\ParseFileRectorTest
+ */
 final class ParseFileRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
@@ -42,7 +45,7 @@ final class ParseFileRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isType($node->class, 'Symfony\Component\Yaml\Yaml')) {
+        if (! $this->isObjectType($node->class, 'Symfony\Component\Yaml\Yaml')) {
             return null;
         }
 
@@ -75,7 +78,7 @@ final class ParseFileRector extends AbstractRector
         // try to detect current value
         $nodeScope = $possibleFileNode->getAttribute(AttributeKey::SCOPE);
         if ($nodeScope === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $nodeType = $nodeScope->getType($possibleFileNode);

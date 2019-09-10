@@ -9,6 +9,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\ChangePropertyVisibilityRectorTest
+ */
 final class ChangePropertyVisibilityRector extends AbstractRector
 {
     /**
@@ -81,7 +84,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $this->isType($classNode, $type)) {
+            if (! $this->isObjectType($classNode, $type)) {
                 continue;
             }
 

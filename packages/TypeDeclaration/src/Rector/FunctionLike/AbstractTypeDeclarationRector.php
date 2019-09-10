@@ -18,7 +18,6 @@ use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\Php\AbstractTypeInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\PhpParser\Node\Manipulator\FunctionLikeManipulator;
 use Rector\Rector\AbstractRector;
 
 /**
@@ -45,21 +44,14 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     protected $parsedNodesByType;
 
     /**
-     * @var FunctionLikeManipulator
-     */
-    protected $functionLikeManipulator;
-
-    /**
      * @required
      */
     public function autowireAbstractTypeDeclarationRector(
         DocBlockManipulator $docBlockManipulator,
-        ParsedNodesByType $parsedNodesByType,
-        FunctionLikeManipulator $functionLikeManipulator
+        ParsedNodesByType $parsedNodesByType
     ): void {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->parsedNodesByType = $parsedNodesByType;
-        $this->functionLikeManipulator = $functionLikeManipulator;
     }
 
     /**
@@ -167,14 +159,11 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     }
 
     /**
-     * @param ClassMethod|Param $childClassMethodOrParam
+     * @param ClassMethod|Param $node
      * @return Name|NullableType|Identifier|null
      */
-    protected function resolveChildType(
-        AbstractTypeInfo $returnTypeInfo,
-        Node $node,
-        Node $childClassMethodOrParam
-    ): ?Node {
+    protected function resolveChildType(AbstractTypeInfo $returnTypeInfo, Node $node): ?Node
+    {
         $nakedType = $returnTypeInfo->getTypeNode() instanceof NullableType ? $returnTypeInfo->getTypeNode()->type : $returnTypeInfo->getTypeNode();
 
         if ($nakedType === null) {
@@ -184,7 +173,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         if ($nakedType->toString() === 'self') {
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
             if ($className === null) {
-                throw new ShouldNotHappenException();
+                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
             }
 
             $type = new FullyQualified($className);
@@ -195,17 +184,12 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         if ($nakedType->toString() === 'parent') {
             $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
             if ($parentClassName === null) {
-                throw new ShouldNotHappenException();
+                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
             }
 
             $type = new FullyQualified($parentClassName);
 
             return $returnTypeInfo->isNullable() ? new NullableType($type) : $type;
-        }
-
-        // is namespace the same? use short name
-        if ($this->haveSameNamespace($node, $childClassMethodOrParam)) {
-            return $returnTypeInfo->getTypeNode();
         }
 
         // are namespaces different? → FQN name
@@ -263,11 +247,5 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         }
 
         return $interfaces;
-    }
-
-    private function haveSameNamespace(Node $firstNode, Node $secondNode): bool
-    {
-        return $firstNode->getAttribute(AttributeKey::NAMESPACE_NAME)
-            === $secondNode->getAttribute(AttributeKey::NAMESPACE_NAME);
     }
 }

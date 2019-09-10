@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
 use Rector\PhpParser\Node\VariableInfo;
@@ -14,6 +15,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\ActionInjectionToConstructorInjectionRectorTest
+ */
 final class ActionInjectionToConstructorInjectionRector extends AbstractRector
 {
     /**
@@ -87,10 +91,8 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($node->stmts as $stmt) {
-            if ($stmt instanceof ClassMethod) {
-                $this->processClassMethod($node, $stmt);
-            }
+        foreach ($node->getMethods() as $classMethod) {
+            $this->processClassMethod($node, $classMethod);
         }
 
         return $node;
@@ -103,8 +105,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $paramNodeTypes = $this->getTypes($paramNode);
-            $paramNodeType = $paramNodeTypes[0] ?? 'mixed';
+            $paramNodeType = $this->getObjectType($paramNode);
 
             /** @var string $paramName */
             $paramName = $this->getName($paramNode->var);
@@ -113,7 +114,7 @@ CODE_SAMPLE
             // remove arguments
             unset($classMethod->params[$key]);
 
-            $variableInfo = new VariableInfo($paramName, $paramNodeTypes[0]);
+            $variableInfo = new VariableInfo($paramName, $paramNodeType);
             $this->variablesToPropertyFetchCollection->addVariableInfo($variableInfo);
         }
     }
@@ -129,17 +130,12 @@ CODE_SAMPLE
             return false;
         }
 
-        $typehint = $this->getTypes($param)[0] ?? null;
-        if ($typehint === null) {
-            return false;
-        }
-
-        // skip non-classy types
-        if (! ctype_upper($typehint[0])) {
+        $paramStaticType = $this->getObjectType($param);
+        if (! $paramStaticType instanceof ObjectType) {
             return false;
         }
 
         /** @var string $typehint */
-        return $this->analyzedApplicationContainer->hasService($typehint);
+        return $this->analyzedApplicationContainer->hasService($paramStaticType->getClassName());
     }
 }

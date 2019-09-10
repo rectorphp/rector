@@ -52,15 +52,8 @@ final class TypeAnalyzer
         return false;
     }
 
-    public function normalizeType(string $type, bool $allowTypedArrays = false): string
+    public function normalizeType(string $type): string
     {
-        // reduction needed for typehint
-        if (! $allowTypedArrays) {
-            if (Strings::endsWith($type, '[]')) {
-                return 'array';
-            }
-        }
-
         if (strtolower($type) === 'boolean') {
             return 'bool';
         }

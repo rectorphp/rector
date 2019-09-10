@@ -17,7 +17,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -26,6 +25,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see https://doc.nette.org/en/2.4/components
  * ↓
  * @see https://symfony.com/doc/current/controller.html
+ * @see \Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControllerRector\NetteControlToSymfonyControllerRectorTest
  */
 final class NetteControlToSymfonyControllerRector extends AbstractRector
 {
@@ -33,11 +33,6 @@ final class NetteControlToSymfonyControllerRector extends AbstractRector
      * @var string
      */
     private $netteControlClass;
-
-    /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
 
     /**
      * @var Expr|null
@@ -49,11 +44,8 @@ final class NetteControlToSymfonyControllerRector extends AbstractRector
      */
     private $templateVariables = [];
 
-    public function __construct(
-        ClassManipulator $classManipulator,
-        string $netteControlClass = 'Nette\Application\UI\Control'
-    ) {
-        $this->classManipulator = $classManipulator;
+    public function __construct(string $netteControlClass = 'Nette\Application\UI\Control')
+    {
         $this->netteControlClass = $netteControlClass;
     }
 
@@ -107,7 +99,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($node, $this->netteControlClass)) {
+        if (! $this->isObjectType($node, $this->netteControlClass)) {
             return null;
         }
 
@@ -122,7 +114,7 @@ CODE_SAMPLE
 
         $node->extends = new FullyQualified('Symfony\Bundle\FrameworkBundle\Controller\AbstractController');
 
-        $renderMethod = $this->classManipulator->getMethod($node, 'render');
+        $renderMethod = $node->getMethod('render');
         if ($renderMethod !== null) {
             $this->processRenderMethod($renderMethod);
         }

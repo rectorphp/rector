@@ -22,6 +22,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://www.phpclasses.org/blog/package/9199/post/3-Smoothly-Migrate-your-PHP-Code-using-the-Old-MySQL-extension-to-MySQLi.html
+ * @see \Rector\MysqlToMysqli\Tests\Rector\Assign\MysqlAssignToMysqliRector\MysqlAssignToMysqliRectorTest
  */
 final class MysqlAssignToMysqliRector extends AbstractRector
 {
@@ -153,7 +154,7 @@ CODE_SAMPLE
 
         $previousExpression = $assign->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
         if ($previousExpression === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $this->addNodeAfterNode($forNode, $previousExpression);
@@ -165,7 +166,8 @@ CODE_SAMPLE
     {
         foreach ($this->fieldToFieldDirect as $funcName => $property) {
             if ($this->isName($funcCall, $funcName)) {
-                if ($funcCall->getAttribute(AttributeKey::PARENT_NODE) instanceof PropertyFetch) {
+                $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+                if ($parentNode instanceof PropertyFetch) {
                     continue;
                 }
 

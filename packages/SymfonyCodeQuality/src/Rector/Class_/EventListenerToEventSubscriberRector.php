@@ -4,11 +4,13 @@ namespace Rector\SymfonyCodeQuality\Rector\Class_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -306,7 +308,7 @@ CODE_SAMPLE
      */
     private function createSingleMethod(
         array $methodNamesWithPriorities,
-        Node\Expr $expr,
+        Expr $expr,
         Array_ $eventsToMethodsArray
     ): void {
         [$methodName, $priority] = $methodNamesWithPriorities[0];
@@ -314,7 +316,7 @@ CODE_SAMPLE
         if ($priority) {
             $methodNameWithPriorityArray = new Array_();
             $methodNameWithPriorityArray->items[] = new ArrayItem(new String_($methodName));
-            $methodNameWithPriorityArray->items[] = new ArrayItem(new Node\Scalar\LNumber((int) $priority));
+            $methodNameWithPriorityArray->items[] = new ArrayItem(new LNumber((int) $priority));
 
             $eventsToMethodsArray->items[] = new ArrayItem($methodNameWithPriorityArray, $expr);
         } else {
@@ -328,7 +330,7 @@ CODE_SAMPLE
      */
     private function createMultipleMethods(
         array $methodNamesWithPriorities,
-        Node\Expr $expr,
+        Expr $expr,
         Array_ $eventsToMethodsArray
     ): void {
         $multipleMethodsArray = new Array_();
@@ -339,7 +341,7 @@ CODE_SAMPLE
             if ($priority) {
                 $methodNameWithPriorityArray = new Array_();
                 $methodNameWithPriorityArray->items[] = new ArrayItem(new String_($methodName));
-                $methodNameWithPriorityArray->items[] = new ArrayItem(new Node\Scalar\LNumber((int) $priority));
+                $methodNameWithPriorityArray->items[] = new ArrayItem(new LNumber((int) $priority));
 
                 $multipleMethodsArray->items[] = new ArrayItem($methodNameWithPriorityArray);
             } else {

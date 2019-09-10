@@ -15,6 +15,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see http://wiki.php.net/rfc/json_throw_on_error
  * @see https://3v4l.org/5HMVE
+ * @see \Rector\Php\Tests\Rector\FuncCall\JsonThrowOnErrorRector\JsonThrowOnErrorRectorTest
  */
 final class JsonThrowOnErrorRector extends AbstractRector
 {

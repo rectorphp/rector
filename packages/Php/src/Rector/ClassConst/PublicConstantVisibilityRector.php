@@ -3,12 +3,14 @@
 namespace Rector\Php\Rector\ClassConst;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Php\Tests\Rector\ClassConst\PublicConstantVisibilityRector\PublicConstantVisibilityRectorTest
+ */
 final class PublicConstantVisibilityRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
@@ -58,7 +60,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->flags = Class_::MODIFIER_PUBLIC;
+        $this->makePublic($node);
 
         return $node;
     }

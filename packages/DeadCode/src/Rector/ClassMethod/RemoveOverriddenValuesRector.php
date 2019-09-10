@@ -14,6 +14,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveOverriddenValuesRector\RemoveOverriddenValuesRectorTest
+ */
 final class RemoveOverriddenValuesRector extends AbstractRector
 {
     /**
@@ -100,7 +103,8 @@ CODE_SAMPLE
     private function resolveAssignedVariables(FunctionLike $functionLike): array
     {
         return $this->betterNodeFinder->find($functionLike, function (Node $node): bool {
-            if (! $node->getAttribute(AttributeKey::PARENT_NODE) instanceof Assign) {
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $parentNode instanceof Assign) {
                 return false;
             }
 

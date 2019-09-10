@@ -11,6 +11,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Argument\ArgumentRemoverRector\ArgumentRemoverRectorTest
+ */
 final class ArgumentRemoverRector extends AbstractRector
 {
     /**
@@ -70,7 +73,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->positionsByMethodNameByClassType as $type => $positionByMethodName) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $type)) {
                 continue;
             }
 

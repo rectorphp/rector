@@ -8,15 +8,9 @@ parameters:
 
         # autoload-buggy cases
         - "*.php.inc"
-        # string might not exist for SplitStringClassConstantToClassConstFetchRector
-        - "packages/Symfony/src/Rector/Console/ConsoleExceptionToErrorEventConstantRector.php"
-        - "tests/Rector/Argument/ArgumentRemoverRector/ArgumentRemoverRectorTest.php"
-        - "tests/Rector/Argument/ArgumentDefaultValueReplacerRector/ArgumentDefaultValueReplacerRectorTest.php"
 
     # so Rector code is still PHP 7.1 compatible
     php_version_features: '7.1'
 
 services:
-#    Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector: ~
-#    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
-    Rector\DeadCode\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector: ~
+    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~

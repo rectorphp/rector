@@ -10,9 +10,11 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\ObjectType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeContainer\ParsedNodesByType;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,13 +23,15 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 /**
  * Depends on @see PassFactoryToUniqueObjectRector
+ *
+ * @see \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\PassFactoryToEntityRectorTest
  */
 final class NewUniqueObjectToEntityFactoryRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var ObjectType[]
      */
-    private $matchedTypes = [];
+    private $matchedObjectTypes = [];
 
     /**
      * @var PropertyNaming
@@ -55,18 +59,25 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector
     private $classesUsingTypes = [];
 
     /**
+     * @var PrivatesAccessor
+     */
+    private $privatesAccessor;
+
+    /**
      * @param string[] $typesToServices
      */
     public function __construct(
         PropertyNaming $propertyNaming,
         ParsedNodesByType $parsedNodesByType,
         StaticTypesInClassResolver $staticTypesInClassResolver,
+        PrivatesAccessor $privatesAccessor,
         array $typesToServices = []
     ) {
-        $this->propertyNaming = $propertyNaming;
         $this->typesToServices = $typesToServices;
+        $this->propertyNaming = $propertyNaming;
         $this->parsedNodesByType = $parsedNodesByType;
         $this->staticTypesInClassResolver = $staticTypesInClassResolver;
+        $this->privatesAccessor = $privatesAccessor;
     }
 
     public function getDefinition(): RectorDefinition
@@ -131,7 +142,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->matchedTypes = [];
+        $this->matchedObjectTypes = [];
 
         // collect classes with new to factory in all classes
         $classesUsingTypes = $this->resolveClassesUsingTypes();
@@ -144,22 +155,24 @@ CODE_SAMPLE
             }
 
             $class = $this->getName($node->class);
-
             if (! in_array($class, $classesUsingTypes, true)) {
                 return null;
             }
 
-            $this->matchedTypes[] = $class;
+            $objectType = new FullyQualifiedObjectType($class);
+            $this->matchedObjectTypes[] = $objectType;
 
-            $propertyName = $this->propertyNaming->fqnToVariableName($class) . 'Factory';
+            $propertyName = $this->propertyNaming->fqnToVariableName($objectType) . 'Factory';
             $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
 
             return new MethodCall($propertyFetch, 'create', $node->args);
         });
 
-        foreach ($this->matchedTypes as $matchedType) {
-            $propertyName = $this->propertyNaming->fqnToVariableName($matchedType) . 'Factory';
-            $this->addPropertyToClass($node, $matchedType . 'Factory', $propertyName);
+        foreach ($this->matchedObjectTypes as $matchedObjectType) {
+            $propertyName = $this->propertyNaming->fqnToVariableName($matchedObjectType) . 'Factory';
+            $propertyType = new FullyQualifiedObjectType($matchedObjectType->getClassName() . 'Factory');
+
+            $this->addPropertyToClass($node, $propertyType, $propertyName);
         }
 
         return $node;
@@ -175,7 +188,7 @@ CODE_SAMPLE
         }
 
         // temporary
-        $classes = (new PrivatesAccessor())->getPrivateProperty($this->parsedNodesByType, 'classes');
+        $classes = $this->privatesAccessor->getPrivateProperty($this->parsedNodesByType, 'classes');
         if ($classes === []) {
             return [];
         }
@@ -188,7 +201,7 @@ CODE_SAMPLE
             if ($hasTypes) {
                 $name = $this->getName($class);
                 if ($name === null) {
-                    throw new ShouldNotHappenException();
+                    throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
                 }
                 $this->classesUsingTypes[] = $name;
             }

@@ -15,6 +15,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * Can handle cases like:
  * - https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
  * - https://github.com/silverstripe/silverstripe-upgrader/issues/71#issue-320145944
+ * @see \Rector\Tests\Rector\Class_\ParentClassToTraitsRector\ParentClassToTraitsRectorTest
  */
 final class ParentClassToTraitsRector extends AbstractRector
 {

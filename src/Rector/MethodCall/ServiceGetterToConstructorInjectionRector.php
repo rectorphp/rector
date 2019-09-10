@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\ObjectType;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -15,6 +16,7 @@ use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
+ * @see \Rector\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
  * @see \Rector\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
  */
 final class ServiceGetterToConstructorInjectionRector extends AbstractRector
@@ -139,7 +141,7 @@ CODE_SAMPLE
         }
 
         foreach ($this->methodNamesByTypesToServiceTypes as $type => $methodNamesToServiceTypes) {
-            if (! $this->isType($node->var, $type)) {
+            if (! $this->isObjectType($node->var, $type)) {
                 continue;
             }
 
@@ -148,12 +150,12 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
+                $serviceObjectType = new ObjectType($serviceType);
 
-                // add property via constructor
+                $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
 
                 /** @var Class_ $classNode */
-                $this->addPropertyToClass($classNode, $serviceType, $propertyName);
+                $this->addPropertyToClass($classNode, $serviceObjectType, $propertyName);
 
                 return new PropertyFetch(new Variable('this'), new Identifier($propertyName));
             }

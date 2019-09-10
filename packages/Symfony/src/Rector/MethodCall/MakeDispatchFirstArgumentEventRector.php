@@ -12,6 +12,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
+ * @see \Rector\Symfony\Tests\Rector\MethodCall\MakeDispatchFirstArgumentEventRector\MakeDispatchFirstArgumentEventRectorTest
  */
 final class MakeDispatchFirstArgumentEventRector extends AbstractRector
 {
@@ -70,7 +71,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->eventDispatcherClass)) {
+        if (! $this->isObjectType($node, $this->eventDispatcherClass)) {
             return null;
         }
 
@@ -82,7 +83,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isStringyType($node->args[0]->value)) {
+        if (! $this->isStringOrUnionStringOnlyType($node->args[0]->value)) {
             return null;
         }
 

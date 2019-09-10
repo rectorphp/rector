@@ -19,7 +19,7 @@ trait NameResolverTrait
     /**
      * @required
      */
-    public function setNameResolver(NameResolver $nameResolver): void
+    public function autowireNameResolverTrait(NameResolver $nameResolver): void
     {
         $this->nameResolver = $nameResolver;
     }
@@ -34,33 +34,12 @@ trait NameResolverTrait
         return $this->nameResolver->areNamesEqual($firstNode, $secondNode);
     }
 
-    public function isNameInsensitive(Node $node, string $name): bool
-    {
-        return $this->nameResolver->isNameInsensitive($node, $name);
-    }
-
-    /**
-     * @param string[] $names
-     */
-    public function isNamesInsensitive(Node $node, array $names): bool
-    {
-        return $this->nameResolver->isNamesInsensitive($node, $names);
-    }
-
-    /**
-     * @param string[] $map
-     */
-    public function matchNameInsensitiveInMap(Node $node, array $map): ?string
-    {
-        return $this->nameResolver->matchNameInsensitiveInMap($node, $map);
-    }
-
     /**
      * @param string[] $names
      */
     public function isNames(Node $node, array $names): bool
     {
-        return in_array($this->getName($node), $names, true);
+        return $this->nameResolver->isNames($node, $names);
     }
 
     public function getName(Node $node): ?string

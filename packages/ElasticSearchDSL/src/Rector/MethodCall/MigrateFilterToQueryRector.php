@@ -14,6 +14,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/ongr-io/ElasticsearchDSL/blob/5.x/CHANGELOG.md
+ * @see \Rector\ElasticSearchDSL\Tests\Rector\MethodCall\MigrateFilterToQueryRector\MigrateFilterToQueryRectorTest
  */
 final class MigrateFilterToQueryRector extends AbstractRector
 {
@@ -66,7 +67,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, 'ONGR\ElasticsearchDSL\Search')) {
+        if (! $this->isObjectType($node, 'ONGR\ElasticsearchDSL\Search')) {
             return null;
         }
 

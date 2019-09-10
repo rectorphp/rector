@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\StringType;
 use Rector\PhpParser\NodeTransformer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -19,6 +20,7 @@ use Rector\Util\RectorStrings;
 
 /**
  * @see https://github.com/symfony/symfony/pull/27821/files
+ * @see \Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\StringToArrayArgumentProcessRectorTest
  */
 final class StringToArrayArgumentProcessRector extends AbstractRector
 {
@@ -77,11 +79,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isType($node, $this->processClass)) {
+        if ($this->isObjectType($node, $this->processClass)) {
             return $this->processArgumentPosition($node, 0);
         }
 
-        if ($this->isType($node, $this->processHelperClass)) {
+        if ($this->isObjectType($node, $this->processHelperClass)) {
             return $this->processArgumentPosition($node, 1);
         }
 
@@ -103,7 +105,7 @@ CODE_SAMPLE
         }
 
         // type analyzer
-        if ($this->isStringType($firstArgument)) {
+        if ($this->isStaticType($firstArgument, StringType::class)) {
             $this->processStringType($node, $argumentPosition, $firstArgument);
         }
 

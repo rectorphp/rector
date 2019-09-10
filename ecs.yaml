@@ -24,10 +24,13 @@ services:
     Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
         extra_allowed_classes:
             - 'PHPStan\Type\*'
+            - '*Type'
             - 'PHPStan\Analyser\Scope'
             - 'PhpParser\NodeVisitor\NameResolver'
             - 'PhpParser\Node\*'
             - '*Data'
+            - '*Recipe'
+            - '*ValueObject'
             - 'PhpParser\Comment'
             - 'PhpParser\Lexer'
             - 'PhpParser\Comment\Doc'
@@ -38,7 +41,6 @@ services:
             - 'Rector\DependencyInjection\Loader\*'
             - 'Symplify\PackageBuilder\*'
             - 'Symfony\Component\Console\Input\*Input'
-            - '*ValueObject'
             - 'PHPStan\Analyser\NameScope'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
@@ -57,6 +59,7 @@ parameters:
         - '*tests/*/Fixture/*'
         - '*tests/*/Expected/*'
         - '*utils/ContributorTools/templates/*'
+        - 'stubs/*'
 
     skip:
         PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff.Underscore: ~
@@ -75,6 +78,7 @@ parameters:
 
         Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
             # classes might not exist
+            - 'packages/*Class.php'
             - 'bin/bootstrap.php'
             - '*/packages/*/src/Rector/*Rector.php'
             - 'src/Rector/MethodCall/MethodCallToAnotherMethodCallWithArgumentsRector.php'
@@ -96,6 +100,8 @@ parameters:
             - 'src/Util/*.php'
             - 'packages/BetterPhpDocParser/src/Annotation/AnnotationNaming.php'
             - 'src/Testing/PHPUnit/PHPUnitEnvironment.php'
+            # honesty first
+            - 'src/*StaticHelper.php'
 
         Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
             - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'
@@ -105,9 +111,17 @@ parameters:
             - 'src/Rector/AbstractRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+            - 'packages/NodeTypeResolver/src/NodeTypeResolver.php'
+            - 'packages/NodeTypeResolver/src/PerNodeTypeResolver/VariableTypeResolver.php'
+            - 'packages/Php/src/Rector/FuncCall/RemoveExtraParametersRector.php'
+            - 'packages/SOLID/src/Analyzer/ClassConstantFetchAnalyzer.php'
             # tough logic
+            - 'packages/PHPUnit/src/Rector/Class_/ArrayArgumentInTestToDataProviderRector.php'
+            - 'packages/DoctrinePhpDocParser/src/Ast/PhpDoc/*/*TagValueNode.php'
+            - 'packages/NodeTypeResolver/src/PhpDoc/NodeAnalyzer/FqnNamePhpDocNodeDecorator.php'
             - 'packages/NodeTypeResolver/src/PHPStan/Type/StaticTypeAnalyzer.php'
             - 'src/NodeContainer/ParsedNodesByType.php'
+            - 'packages/NodeTypeResolver/src/StaticTypeMapper.php'
             - 'packages/PHPStan/src/Rector/Node/RemoveNonExistingVarAnnotationRector.php'
             - 'packages/Architecture/src/Rector/Class_/ConstructorInjectionToActionInjectionRector.php'
             - 'src/PhpParser/Node/Commander/NodeRemovingCommander.php'
@@ -119,7 +133,7 @@ parameters:
             - 'src/Rector/MethodBody/NormalToFluentRector.php'
             - 'packages/CodingStyle/src/Rector/Use_/RemoveUnusedAliasRector.php'
             - 'packages/NetteToSymfony/src/Route/RouteInfoFactory.php'
-            - 'packages/ContributorTools/src/Command/DumpNodesCommand.php'
+            - 'utils/*/DumpNodesCommand.php'
             - 'packages/CodeQuality/src/Rector/Identical/SimplifyBoolIdenticalTrueRector.php'
             - 'packages/BetterPhpDocParser/src/Attributes/Ast/AttributeAwareNodeFactory.php'
             - 'packages/Laravel/src/Rector/FuncCall/HelperFunctionToConstructorInjectionRector.php'
@@ -162,5 +176,6 @@ parameters:
             - 'src/PhpParser/Node/Value/ValueResolver.php'
 
         PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer:
-            # intentional equals
+            # intentional "assertEquals()"
             - 'tests/PhpParser/Node/NodeFactoryTest.php'
+            - '*TypeResolverTest.php'

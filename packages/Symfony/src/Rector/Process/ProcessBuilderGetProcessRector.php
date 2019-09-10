@@ -8,6 +8,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector\ProcessBuilderGetProcessRectorTest
+ */
 final class ProcessBuilderGetProcessRector extends AbstractRector
 {
     /**
@@ -55,7 +58,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->processBuilderClass)) {
+        if (! $this->isObjectType($node, $this->processBuilderClass)) {
             return null;
         }
 

@@ -13,6 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/4160
  * @see https://github.com/symfony/symfony/pull/29685/files
+ * @see \Rector\PHPUnit\Tests\Rector\MethodCall\UseSpecificWillMethodRector\UseSpecificWillMethodRectorTest
  */
 final class UseSpecificWillMethodRector extends AbstractPHPUnitRector
 {
@@ -80,15 +81,15 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($node, 'PHPUnit\Framework\MockObject\Builder\InvocationMocker')) {
+        if (! $this->isObjectType($node, 'PHPUnit\Framework\MockObject\Builder\InvocationMocker')) {
             return null;
         }
 
-        if ($this->isNameInsensitive($node, 'with')) {
+        if ($this->isName($node, 'with')) {
             return $this->processWithCall($node);
         }
 
-        if ($this->isNameInsensitive($node, 'will')) {
+        if ($this->isName($node, 'will')) {
             return $this->processWillCall($node);
         }
 
@@ -123,7 +124,7 @@ CODE_SAMPLE
         $nestedMethodCall = $node->args[0]->value;
 
         foreach ($this->nestedMethodToRenameMap as $oldMethodName => $newParentMethodName) {
-            if ($this->isNameInsensitive($nestedMethodCall, $oldMethodName)) {
+            if ($this->isName($nestedMethodCall, $oldMethodName)) {
                 $node->name = new Identifier($newParentMethodName);
 
                 // move args up

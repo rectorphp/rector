@@ -28,7 +28,7 @@ class A {
 }
 class B extends A {
     /** @return Foo */
-    public function getObject($value): Foo {
+    public function getObject($value): object {
         return $value;
     }
 }

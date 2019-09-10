@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
@@ -17,6 +18,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodingStyle\Tests\Rector\If_\NullableCompareToNullRector\NullableCompareToNullRectorTest
+ */
 final class NullableCompareToNullRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
@@ -78,7 +82,7 @@ CODE_SAMPLE
     private function isNullableNonScalarType(Node $node): bool
     {
         $staticType = $this->getStaticType($node);
-        if ($staticType === null) {
+        if ($staticType instanceof MixedType) {
             return false;
         }
 

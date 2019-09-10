@@ -18,10 +18,14 @@ use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\PhpDoc\PhpDocClassRenamer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Class_\RenameClassRector\RenameClassRectorTest
+ */
 final class RenameClassRector extends AbstractRector
 {
     /**
@@ -45,16 +49,23 @@ final class RenameClassRector extends AbstractRector
     private $classNaming;
 
     /**
+     * @var PhpDocClassRenamer
+     */
+    private $phpDocClassRenamer;
+
+    /**
      * @param string[] $oldToNewClasses
      */
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
         ClassNaming $classNaming,
+        PhpDocClassRenamer $phpDocClassRenamer,
         array $oldToNewClasses = []
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->classNaming = $classNaming;
         $this->oldToNewClasses = $oldToNewClasses;
+        $this->phpDocClassRenamer = $phpDocClassRenamer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -88,7 +99,9 @@ function someFunction(SomeNewClass $someOldClass): SomeNewClass
 CODE_SAMPLE
                 ,
                 [
-                    'App\SomeOldClass' => 'App\SomeNewClass',
+                    '$oldToNewClasses' => [
+                        'App\SomeOldClass' => 'App\SomeNewClass',
+                    ],
                 ]
             ),
         ]);
@@ -120,6 +133,8 @@ CODE_SAMPLE
                 $this->docBlockManipulator->changeType($node, $oldClass, $newClass);
             }
         }
+
+        $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $this->oldToNewClasses);
 
         if ($node instanceof Name) {
             return $this->refactorName($node);

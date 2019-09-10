@@ -14,12 +14,16 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\PHPStan\Tests\Rector\Cast\RecastingRemovalRector\RecastingRemovalRectorTest
+ */
 final class RecastingRemovalRector extends AbstractRector
 {
     /**
@@ -76,7 +80,7 @@ CODE_SAMPLE
         }
 
         $nodeType = $this->getStaticType($node->expr);
-        if ($nodeType === null) {
+        if ($nodeType instanceof MixedType) {
             return null;
         }
 

@@ -9,6 +9,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Php\Tests\Rector\ConstFetch\RenameConstantRector\RenameConstantRectorTest
+ */
 final class RenameConstantRector extends AbstractRector
 {
     /**
@@ -65,7 +68,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->oldToNewConstants as $oldConstant => $newConstant) {
-            if (! $this->isNameInsensitive($node, $oldConstant)) {
+            if (! $this->isName($node, $oldConstant)) {
                 continue;
             }
 

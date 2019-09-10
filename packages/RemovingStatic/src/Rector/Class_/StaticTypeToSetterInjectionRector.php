@@ -11,13 +11,19 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\RemovingStatic\Tests\Rector\Class_\StaticTypeToSetterInjectionRector\StaticTypeToSetterInjectionRectorTest
+ */
 final class StaticTypeToSetterInjectionRector extends AbstractRector
 {
     /**
@@ -112,11 +118,12 @@ CODE_SAMPLE
         }
 
         foreach ($this->staticTypes as $staticType) {
-            if (! $this->isType($node->class, $staticType)) {
+            $objectType = new ObjectType($staticType);
+            if (! $this->isObjectType($node->class, $objectType)) {
                 continue;
             }
 
-            $variableName = $this->propertyNaming->fqnToVariableName($staticType);
+            $variableName = $this->propertyNaming->fqnToVariableName($objectType);
             $propertyFetch = new PropertyFetch(new Variable('this'), $variableName);
 
             return new MethodCall($propertyFetch, $node->name, $node->args);
@@ -125,22 +132,24 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isEntityFactoryStaticCall(Node $node, string $staticType): bool
+    private function isEntityFactoryStaticCall(Node $node, ObjectType $objectType): bool
     {
         if (! $node instanceof StaticCall) {
             return false;
         }
 
-        return $this->isType($node->class, $staticType);
+        return $this->isObjectType($node->class, $objectType);
     }
 
     private function processClass(Class_ $class): Class_
     {
         foreach ($this->staticTypes as $implements => $staticType) {
+            $objectType = new ObjectType($staticType);
+
             $containsEntityFactoryStaticCall = (bool) $this->betterNodeFinder->findFirst(
                 $class->stmts,
-                function (Node $node) use ($staticType): bool {
-                    return $this->isEntityFactoryStaticCall($node, $staticType);
+                function (Node $node) use ($objectType): bool {
+                    return $this->isEntityFactoryStaticCall($node, $objectType);
                 }
             );
 
@@ -152,29 +161,22 @@ CODE_SAMPLE
                 $class->implements[] = new FullyQualified($implements);
             }
 
-            $variableName = $this->propertyNaming->fqnToVariableName($staticType);
+            $variableName = $this->propertyNaming->fqnToVariableName($objectType);
 
-            $param = $this->builderFactory->param($variableName)
-                ->setType(new FullyQualified($staticType))
-                ->getNode();
+            $paramBuilder = $this->builderFactory->param($variableName);
+            $paramBuilder->setType(new FullyQualified($staticType));
+            $param = $paramBuilder->getNode();
 
             $propertyFetch = new PropertyFetch(new Variable('this'), $variableName);
             $assign = new Assign($propertyFetch, new Variable($variableName));
 
-            $setMethodName = 'set' . ucfirst($variableName);
+            $setEntityFactoryMethod = $this->createSetEntityFactoryClassMethod($variableName, $param, $assign);
 
-            $setEntityFactoryMethod = $this->builderFactory->method($setMethodName)
-                ->setReturnType('void')
-                ->addParam($param)
-                ->addStmt($assign)
-                ->makePublic()
-                ->getNode();
+            $entityFactoryPropertyBuilder = $this->builderFactory->property($variableName);
+            $entityFactoryPropertyBuilder->makePrivate();
+            $entityFactoryProperty = $entityFactoryPropertyBuilder->getNode();
 
-            $entityFactoryProperty = $this->builderFactory->property($variableName)
-                ->makePrivate()
-                ->getNode();
-
-            $this->docBlockManipulator->changeVarTag($entityFactoryProperty, '\\' . $staticType);
+            $this->docBlockManipulator->changeVarTag($entityFactoryProperty, $staticType);
 
             $class->stmts = array_merge([$entityFactoryProperty, $setEntityFactoryMethod], $class->stmts);
 
@@ -182,5 +184,21 @@ CODE_SAMPLE
         }
 
         return $class;
+    }
+
+    private function createSetEntityFactoryClassMethod(
+        string $variableName,
+        Param $param,
+        Assign $assign
+    ): ClassMethod {
+        $setMethodName = 'set' . ucfirst($variableName);
+
+        $setEntityFactoryMethodBuilder = $this->builderFactory->method($setMethodName);
+        $setEntityFactoryMethodBuilder->makePublic();
+        $setEntityFactoryMethodBuilder->addParam($param);
+        $setEntityFactoryMethodBuilder->setReturnType('void');
+        $setEntityFactoryMethodBuilder->addStmt($assign);
+
+        return $setEntityFactoryMethodBuilder->getNode();
     }
 }

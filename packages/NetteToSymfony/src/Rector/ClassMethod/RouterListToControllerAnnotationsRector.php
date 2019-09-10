@@ -14,17 +14,17 @@ use Rector\NetteToSymfony\Route\RouteInfo;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\Util\RectorStrings;
 use ReflectionMethod;
 
 /**
  * @see https://doc.nette.org/en/2.4/routing
  * @see https://symfony.com/doc/current/routing.html
+ * @see \Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\RouterListToControllerAnnotationsRectorTest
  */
 final class RouterListToControllerAnnotationsRector extends AbstractRector
 {
@@ -49,11 +49,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $parsedNodesByType;
 
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
      * @var DocBlockManipulator
      */
     private $docBlockManipulator;
@@ -64,16 +59,15 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $routeInfoFactory;
 
     /**
-     * @var ClassMethodManipulator
+     * @var ReturnTypeInferer
      */
-    private $classMethodManipulator;
+    private $returnTypeInferer;
 
     public function __construct(
         ParsedNodesByType $parsedNodesByType,
-        ClassManipulator $classManipulator,
-        ClassMethodManipulator $classMethodManipulator,
         DocBlockManipulator $docBlockManipulator,
         RouteInfoFactory $routeInfoFactory,
+        ReturnTypeInferer $returnTypeInferer,
         string $routeListClass = 'Nette\Application\Routers\RouteList',
         string $routerClass = 'Nette\Application\IRouter',
         string $routeAnnotationClass = 'Symfony\Component\Routing\Annotation\Route'
@@ -81,11 +75,10 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
         $this->routeListClass = $routeListClass;
         $this->routerClass = $routerClass;
         $this->parsedNodesByType = $parsedNodesByType;
-        $this->classManipulator = $classManipulator;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->routeAnnotationClass = $routeAnnotationClass;
         $this->routeInfoFactory = $routeInfoFactory;
-        $this->classMethodManipulator = $classMethodManipulator;
+        $this->returnTypeInferer = $returnTypeInferer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -161,12 +154,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $nodeReturnTypes = $this->classMethodManipulator->resolveReturnType($node);
-        if ($nodeReturnTypes === []) {
-            return null;
-        }
-
-        if (! in_array($this->routeListClass, $nodeReturnTypes, true)) {
+        $inferedReturnTypes = $this->returnTypeInferer->inferFunctionLike($node);
+        if (! in_array($this->routeListClass, $inferedReturnTypes, true)) {
             return null;
         }
 
@@ -184,13 +173,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $phpDocTagNode = new SymfonyRoutePhpDocTagNode(
-                $this->routeAnnotationClass,
-                $routeInfo->getPath(),
-                null,
-                $routeInfo->getHttpMethods()
-            );
-
+            $phpDocTagNode = $this->createSymfonyRoutePhpDocTagNode($routeInfo);
             $this->docBlockManipulator->addTag($classMethod, $phpDocTagNode);
         }
 
@@ -219,7 +202,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            if ($this->isType($classMethod->expr, $this->routerClass)) {
+            if ($this->isObjectType($classMethod->expr, $this->routerClass)) {
                 return true;
             }
 
@@ -260,7 +243,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->classManipulator->getMethod($classNode, $routeInfo->getMethod());
+        return $classNode->getMethod($routeInfo->getMethod());
     }
 
     private function completeImplicitRoutes(): void
@@ -268,16 +251,15 @@ CODE_SAMPLE
         $presenterClasses = $this->parsedNodesByType->findClassesBySuffix('Presenter');
 
         foreach ($presenterClasses as $presenterClass) {
-            foreach ((array) $presenterClass->stmts as $classStmt) {
-                if ($this->shouldSkipClassStmt($classStmt)) {
+            foreach ($presenterClass->getMethods() as $classMethod) {
+                if ($this->shouldSkipClassStmt($classMethod)) {
                     continue;
                 }
 
-                /** @var ClassMethod $classStmt */
-                $path = $this->resolvePathFromClassAndMethodNodes($presenterClass, $classStmt);
+                $path = $this->resolvePathFromClassAndMethodNodes($presenterClass, $classMethod);
                 $phpDocTagNode = new SymfonyRoutePhpDocTagNode($this->routeAnnotationClass, $path);
 
-                $this->docBlockManipulator->addTag($classStmt, $phpDocTagNode);
+                $this->docBlockManipulator->addTag($classMethod, $phpDocTagNode);
             }
         }
     }
@@ -346,5 +328,15 @@ CODE_SAMPLE
         $actionPart = lcfirst($match['short_action_name']);
 
         return $presenterPart . '/' . $actionPart;
+    }
+
+    private function createSymfonyRoutePhpDocTagNode(RouteInfo $routeInfo): SymfonyRoutePhpDocTagNode
+    {
+        return new SymfonyRoutePhpDocTagNode(
+            $this->routeAnnotationClass,
+            $routeInfo->getPath(),
+            null,
+            $routeInfo->getHttpMethods()
+        );
     }
 }

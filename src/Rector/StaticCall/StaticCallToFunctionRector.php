@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\StaticCall\StaticCallToFunctionRector\StaticCallToFunctionRectorTest
+ */
 final class StaticCallToFunctionRector extends AbstractRector
 {
     /**
@@ -56,7 +59,7 @@ final class StaticCallToFunctionRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         foreach ($this->staticCallToFunctionByType as $type => $methodNamesToFunctions) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isObjectType($node, $type)) {
                 continue;
             }
 

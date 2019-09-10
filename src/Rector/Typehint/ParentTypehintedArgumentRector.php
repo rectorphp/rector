@@ -13,6 +13,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\ParentTypehintedArgumentRectorTest
+ */
 final class ParentTypehintedArgumentRector extends AbstractRector
 {
     /**
@@ -95,10 +98,10 @@ CODE_SAMPLE
         foreach ($this->typehintForArgumentByMethodAndClass as $type => $methodToArgumentToTypes) {
             $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
             if ($classNode === null) {
-                throw new ShouldNotHappenException();
+                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
             }
 
-            if (! $this->isType($classNode, $type)) {
+            if (! $this->isObjectType($classNode, $type)) {
                 continue;
             }
 

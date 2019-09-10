@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector\UnsetAndIssetToMethodCallRectorTest
+ */
 final class UnsetAndIssetToMethodCallRector extends AbstractRector
 {
     /**
@@ -86,7 +89,7 @@ CODE_SAMPLE
             }
 
             foreach ($this->typeToMethodCalls as $type => $transformation) {
-                if (! $this->isType($arrayDimFetchNode, $type)) {
+                if (! $this->isObjectType($arrayDimFetchNode, $type)) {
                     continue;
                 }
 

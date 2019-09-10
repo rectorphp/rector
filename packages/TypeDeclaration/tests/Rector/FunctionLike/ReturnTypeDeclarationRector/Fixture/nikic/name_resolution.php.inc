@@ -50,27 +50,27 @@ function test1($value): \Bar {
 }
 
 /** @return Bar */
-function test2($value): Bar {
+function test2($value): \Foo\Bar {
     return $value;
 }
 
 /** @return Bar\Baz */
-function test3($value): Bar\Baz {
+function test3($value): \Foo\Bar\Baz {
     return $value;
 }
 
 /** @return Baz */
-function test4($value): Baz {
+function test4($value): \ABC\Baz {
     return $value;
 }
 
 /** @return Baz\Foo */
-function test5($value): Baz\Foo {
+function test5($value): \ABC\Baz\Foo {
     return $value;
 }
 
 /** @return XYZ */
-function test6($value): XYZ {
+function test6($value): \Foo\XYZ {
     return $value;
 }
 

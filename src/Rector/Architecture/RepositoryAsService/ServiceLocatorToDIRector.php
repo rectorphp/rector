@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\ObjectType;
 use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\Exception\ShouldNotHappenException;
@@ -97,6 +98,7 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var string|null $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
             return null;
@@ -122,22 +124,24 @@ CODE_SAMPLE
             return null;
         }
 
-        $repositoryFqn = $this->repositoryFqn($node);
+        $repositoryFqn = $this->resolveRepositoryFqnFromGetRepositoryMethodCall($node);
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {
             return null;
         }
 
+        $repositoryObjectType = new ObjectType($repositoryFqn);
+
         $this->addPropertyToClass(
             $classNode,
-            $repositoryFqn,
-            $this->propertyNaming->fqnToVariableName($repositoryFqn)
+            $repositoryObjectType,
+            $this->propertyNaming->fqnToVariableName($repositoryObjectType)
         );
 
-        return $this->createPropertyFetch('this', $this->propertyNaming->fqnToVariableName($repositoryFqn));
+        return $this->createPropertyFetch('this', $this->propertyNaming->fqnToVariableName($repositoryObjectType));
     }
 
-    private function repositoryFqn(MethodCall $methodCall): string
+    private function resolveRepositoryFqnFromGetRepositoryMethodCall(MethodCall $methodCall): string
     {
         $entityFqnOrAlias = $this->entityFqnOrAlias($methodCall);
 

@@ -2,9 +2,11 @@
 
 namespace Rector\Bridge\Contract;
 
+use PHPStan\Type\Type;
+
 interface AnalyzedApplicationContainerInterface
 {
-    public function getTypeForName(string $name): ?string;
+    public function getTypeForName(string $name): Type;
 
     public function hasService(string $name): bool;
 

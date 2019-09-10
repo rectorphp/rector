@@ -10,6 +10,8 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -17,6 +19,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Covers https://twig.symfony.com/doc/1.x/deprecated.html#function
+ * @see \Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\SimpleFunctionAndFilterRectorTest
  */
 final class SimpleFunctionAndFilterRector extends AbstractRector
 {
@@ -114,7 +117,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isTypes($classNode, [$this->twigExtensionClass])) {
+        if (! $this->isObjectTypes($classNode, [$this->twigExtensionClass])) {
             return null;
         }
 
@@ -133,56 +136,67 @@ CODE_SAMPLE
                 return null;
             }
 
-            $newNodeTypes = $this->getTypes($node->value);
-
-            return $this->processArrayItem($node, $newNodeTypes);
+            return $this->processArrayItem($node, $this->getObjectType($node->value));
         });
 
         return $node;
     }
 
-    /**
-     * @param string[] $newNodeTypes
-     */
-    private function processArrayItem(ArrayItem $arrayItem, array $newNodeTypes): ?Node
+    private function processArrayItem(ArrayItem $arrayItem, Type $newNodeType): ArrayItem
     {
-        $matchedOldClasses = array_intersect(array_keys($this->oldToNewClasses), $newNodeTypes);
-        if ($matchedOldClasses === []) {
-            return null;
+        foreach ($this->oldToNewClasses as $oldClass => $newClass) {
+            $oldClassObjectType = new ObjectType($oldClass);
+            if (! $oldClassObjectType->equals($newNodeType)) {
+                continue;
+            }
+
+            if (! $arrayItem->key instanceof String_) {
+                continue;
+            }
+
+            if (! $arrayItem->value instanceof New_) {
+                continue;
+            }
+
+            // match!
+            $filterName = $this->getValue($arrayItem->key);
+
+            $arrayItem->key = null;
+            $arrayItem->value->class = new FullyQualified($newClass);
+
+            $oldArguments = $arrayItem->value->args;
+
+            $this->createNewArrayItem($arrayItem, $oldArguments, $filterName);
+
+            return $arrayItem;
         }
 
-        $matchedOldClass = array_pop($matchedOldClasses);
-        $matchedNewClass = $this->oldToNewClasses[$matchedOldClass];
+        return $arrayItem;
+    }
 
-        if (! $arrayItem->key instanceof String_) {
-            return null;
-        }
-
-        if (! $arrayItem->value instanceof New_) {
-            return null;
-        }
-
-        // match!
-        $filterName = $arrayItem->key->value;
-
-        $arrayItem->key = null;
-        $arrayItem->value->class = new FullyQualified($matchedNewClass);
-
-        $oldArguments = $arrayItem->value->args;
+    /**
+     * @param Arg[] $oldArguments
+     */
+    private function createNewArrayItem(ArrayItem $arrayItem, array $oldArguments, string $filterName): ArrayItem
+    {
+        /** @var New_ $new */
+        $new = $arrayItem->value;
 
         if ($oldArguments[0]->value instanceof Array_) {
             // already array, just shift it
-            $arrayItem->value->args = array_merge([new Arg(new String_($filterName))], $oldArguments);
-        } else {
-            // not array yet, wrap to one
-            $arrayItems = [];
-            foreach ($oldArguments as $oldArgument) {
-                $arrayItems[] = new ArrayItem($oldArgument->value);
-            }
+            $new->args = array_merge([new Arg(new String_($filterName))], $oldArguments);
 
-            $arrayItem->value->args[0] = new Arg(new String_($filterName));
-            $arrayItem->value->args[1] = new Arg(new Array_($arrayItems));
+            return $arrayItem;
         }
+
+        // not array yet, wrap to one
+        $arrayItems = [];
+        foreach ($oldArguments as $oldArgument) {
+            $arrayItems[] = new ArrayItem($oldArgument->value);
+        }
+
+        $new->args[0] = new Arg(new String_($filterName));
+        $new->args[1] = new Arg(new Array_($arrayItems));
 
         return $arrayItem;
     }

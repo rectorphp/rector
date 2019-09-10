@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\Node\NodeToStringTypeResolver;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
 use Rector\Php\TypeAnalyzer;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -17,11 +16,6 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class ComplexNodeTypeResolver
 {
-    /**
-     * @var NodeToStringTypeResolver
-     */
-    private $nodeToStringTypeResolver;
-
     /**
      * @var NameResolver
      */
@@ -42,14 +36,19 @@ final class ComplexNodeTypeResolver
      */
     private $typeAnalyzer;
 
+    /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
     public function __construct(
-        NodeToStringTypeResolver $nodeToStringTypeResolver,
+        StaticTypeMapper $staticTypeMapper,
         NameResolver $nameResolver,
         BetterNodeFinder $betterNodeFinder,
         NodeTypeResolver $nodeTypeResolver,
         TypeAnalyzer $typeAnalyzer
     ) {
-        $this->nodeToStringTypeResolver = $nodeToStringTypeResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
         $this->nameResolver = $nameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -65,12 +64,12 @@ final class ComplexNodeTypeResolver
 
         $propertyDefault = $property->props[0]->default;
         if ($propertyDefault !== null) {
-            $types[] = $this->nodeToStringTypeResolver->resolver($propertyDefault);
+            $types[] = $this->staticTypeMapper->mapPhpParserNodeToString($propertyDefault);
         }
 
         $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $propertyName = $this->nameResolver->getName($property);
@@ -99,6 +98,6 @@ final class ComplexNodeTypeResolver
 
         $types = array_filter($types);
 
-        return new VarTypeInfo($types, $this->typeAnalyzer, $types, true);
+        return new VarTypeInfo($types, $this->typeAnalyzer, $types);
     }
 }

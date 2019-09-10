@@ -14,6 +14,9 @@ use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertRegExpRector\AssertRegExpRectorTest
+ */
 final class AssertRegExpRector extends AbstractPHPUnitRector
 {
     public function getDefinition(): RectorDefinition

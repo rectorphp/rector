@@ -12,6 +12,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\BinaryOp\ResponseStatusCodeRector\ResponseStatusCodeRectorTest
+ */
 final class ResponseStatusCodeRector extends AbstractRector
 {
     /**
@@ -143,7 +146,7 @@ CODE_SAMPLE
 
     private function processMethodCall(MethodCall $methodCall): ?MethodCall
     {
-        if (! $this->isType($methodCall->var, self::RESPONSE_CLASS)) {
+        if (! $this->isObjectType($methodCall->var, self::RESPONSE_CLASS)) {
             return null;
         }
 
@@ -194,7 +197,7 @@ CODE_SAMPLE
             return false;
         }
 
-        if (! $this->isType($node, self::RESPONSE_CLASS)) {
+        if (! $this->isObjectType($node, self::RESPONSE_CLASS)) {
             return false;
         }
 

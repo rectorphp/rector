@@ -16,6 +16,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/laravel/framework/pull/27276
+ * @see \Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\MinutesToSecondsInCacheRectorTest
  */
 final class MinutesToSecondsInCacheRector extends AbstractRector
 {
@@ -73,7 +74,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->getTypesToMethods() as $type => $methodsToArguments) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isObjectType($node, $type)) {
                 continue;
             }
 

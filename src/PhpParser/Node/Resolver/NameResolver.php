@@ -3,7 +3,6 @@
 namespace Rector\PhpParser\Node\Resolver;
 
 use Nette\Utils\Strings;
-use PhpParser\Builder\Trait_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -18,111 +17,19 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\Use_;
-use Rector\Collector\CallableCollectorPopulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class NameResolver
 {
     /**
-     * @var callable[]
-     */
-    private $nameResolversPerNode = [];
-
-    public function __construct(CallableCollectorPopulator $callableCollectorPopulator)
-    {
-        $resolvers = [
-            Empty_::class => 'empty',
-            // more complex
-            function (ClassConst $classConstNode): ?string {
-                if (count($classConstNode->consts) === 0) {
-                    return null;
-                }
-
-                return $this->getName($classConstNode->consts[0]);
-            },
-            function (Property $propertyNode): ?string {
-                if (count($propertyNode->props) === 0) {
-                    return null;
-                }
-
-                return $this->getName($propertyNode->props[0]);
-            },
-            function (Use_ $useNode): ?string {
-                if (count($useNode->uses) === 0) {
-                    return null;
-                }
-
-                return $this->getName($useNode->uses[0]);
-            },
-            function (Param $paramNode): ?string {
-                return $this->getName($paramNode->var);
-            },
-            function (Name $nameNode): string {
-                $resolvedName = $nameNode->getAttribute(AttributeKey::RESOLVED_NAME);
-                if ($resolvedName instanceof FullyQualified) {
-                    return $resolvedName->toString();
-                }
-
-                return $nameNode->toString();
-            },
-            function (Class_ $classNode): ?string {
-                if (isset($classNode->namespacedName)) {
-                    return $classNode->namespacedName->toString();
-                }
-                if ($classNode->name === null) {
-                    return null;
-                }
-
-                return $this->getName($classNode->name);
-            },
-            function (Interface_ $interface): ?string {
-                return $this->resolveNamespacedNameAwareNode($interface);
-            },
-            function (Node\Stmt\Trait_ $trait): ?string {
-                return $this->resolveNamespacedNameAwareNode($trait);
-            },
-            function (ClassConstFetch $classConstFetch): ?string {
-                $class = $this->getName($classConstFetch->class);
-                $name = $this->getName($classConstFetch->name);
-
-                if ($class === null || $name === null) {
-                    return null;
-                }
-
-                return $class . '::' . $name;
-            },
-        ];
-
-        $this->nameResolversPerNode = $callableCollectorPopulator->populate($resolvers);
-    }
-
-    /**
-     * @param string[] $map
-     */
-    public function matchNameInsensitiveInMap(Node $node, array $map): ?string
-    {
-        foreach ($map as $nameToMatch => $return) {
-            if ($this->isNameInsensitive($node, $nameToMatch)) {
-                return $return;
-            }
-        }
-
-        return null;
-    }
-
-    public function isNameInsensitive(Node $node, string $name): bool
-    {
-        return strtolower((string) $this->getName($node)) === strtolower($name);
-    }
-
-    /**
      * @param string[] $names
      */
-    public function isNamesInsensitive(Node $node, array $names): bool
+    public function isNames(Node $node, array $names): bool
     {
         foreach ($names as $name) {
-            if ($this->isNameInsensitive($node, $name)) {
+            if ($this->isName($node, $name)) {
                 return true;
             }
         }
@@ -151,23 +58,82 @@ final class NameResolver
             return fnmatch($name, $resolvedName, FNM_NOESCAPE);
         }
 
-        return $resolvedName === $name;
-    }
+        // special case
+        if ($name === 'Object') {
+            return $name === $resolvedName;
+        }
 
-    /**
-     * @param string[] $names
-     */
-    public function isNames(Node $node, array $names): bool
-    {
-        return in_array($this->getName($node), $names, true);
+        return strtolower($resolvedName) === strtolower($name);
     }
 
     public function getName(Node $node): ?string
     {
-        foreach ($this->nameResolversPerNode as $type => $nameResolver) {
-            if (is_a($node, $type, true)) {
-                return $nameResolver($node);
+        if ($node instanceof Empty_) {
+            return 'empty';
+        }
+
+        // more complex
+        if ($node instanceof ClassConst) {
+            if (count($node->consts) === 0) {
+                return null;
             }
+
+            return $this->getName($node->consts[0]);
+        }
+
+        if ($node instanceof Property) {
+            if (count($node->props) === 0) {
+                return null;
+            }
+
+            return $this->getName($node->props[0]);
+        }
+
+        if ($node instanceof Use_) {
+            if (count($node->uses) === 0) {
+                return null;
+            }
+
+            return $this->getName($node->uses[0]);
+        }
+
+        if ($node instanceof Param) {
+            return $this->getName($node->var);
+        }
+
+        if ($node instanceof Name) {
+            $resolvedName = $node->getAttribute(AttributeKey::RESOLVED_NAME);
+            if ($resolvedName instanceof FullyQualified) {
+                return $resolvedName->toString();
+            }
+
+            return $node->toString();
+        }
+
+        if ($node instanceof Class_) {
+            if (isset($node->namespacedName)) {
+                return $node->namespacedName->toString();
+            }
+            if ($node->name === null) {
+                return null;
+            }
+
+            return $this->getName($node->name);
+        }
+
+        if ($node instanceof Interface_ || $node instanceof Trait_) {
+            return $this->resolveNamespacedNameAwareNode($node);
+        }
+
+        if ($node instanceof ClassConstFetch) {
+            $class = $this->getName($node->class);
+            $name = $this->getName($node->name);
+
+            if ($class === null || $name === null) {
+                return null;
+            }
+
+            return $class . '::' . $name;
         }
 
         if (! property_exists($node, 'name')) {

@@ -5,6 +5,7 @@ namespace Rector\DeadCode\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
@@ -15,6 +16,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\DeadCode\Tests\Rector\Property\RemoveUnusedPrivatePropertyRector\RemoveUnusedPrivatePropertyRectorTest
+ */
 final class RemoveUnusedPrivatePropertyRector extends AbstractRector
 {
     /**
@@ -60,21 +64,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->isPrivate()) {
-            return null;
-        }
-
-        /** @var Class_|Interface_|Trait_|null $classNode */
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null || $classNode instanceof Trait_ || $classNode instanceof Interface_) {
-            return null;
-        }
-
-        if ($classNode->isAnonymous()) {
-            return null;
-        }
-
-        if (count($node->props) !== 1) {
+        if ($this->shouldSkipProperty($node)) {
             return null;
         }
 
@@ -100,7 +90,7 @@ CODE_SAMPLE
      * Matches all-only: "$this->property = x"
      * If these is ANY OTHER use of property, e.g. process($this->property), it returns []
      *
-     * @param PropertyFetch[] $propertyFetches
+     * @param PropertyFetch[]|StaticPropertyFetch[] $propertyFetches
      * @return Assign[]
      */
     private function resolveUselessAssignNode(array $propertyFetches): array
@@ -119,5 +109,33 @@ CODE_SAMPLE
         }
 
         return $uselessAssigns;
+    }
+
+    private function shouldSkipProperty(Property $property): bool
+    {
+        if (! $property->isPrivate()) {
+            return true;
+        }
+
+        /** @var Class_|Interface_|Trait_|null $classNode */
+        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
+
+        if ($classNode === null || $classNode instanceof Trait_ || $classNode instanceof Interface_) {
+            return true;
+        }
+
+        if ($this->isDoctrineProperty($property)) {
+            return true;
+        }
+
+        if ($classNode->isAnonymous()) {
+            return true;
+        }
+
+        if (count($property->props) !== 1) {
+            return true;
+        }
+
+        return false;
     }
 }

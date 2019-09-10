@@ -8,6 +8,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector\ContainerBuilderCompileEnvArgumentRectorTest
+ */
 final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
 {
     /**
@@ -47,7 +50,7 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->containerBuilderClass)) {
+        if (! $this->isObjectType($node, $this->containerBuilderClass)) {
             return null;
         }
 

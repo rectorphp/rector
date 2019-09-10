@@ -100,7 +100,8 @@ CODE_SAMPLE
         }
 
         // assign should be top level, e.g. not in a while loop
-        if (! $assign->getAttribute(AttributeKey::PARENT_NODE) instanceof Expression) {
+        $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Expression) {
             return true;
         }
 

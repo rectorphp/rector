@@ -6,12 +6,14 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
+use PHPStan\Type\BooleanType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://3v4l.org/GoEPq
+ * @see \Rector\CodeQuality\Tests\Rector\Identical\BooleanNotIdenticalToNotIdenticalRector\BooleanNotIdenticalToNotIdenticalRectorTest
  */
 final class BooleanNotIdenticalToNotIdenticalRector extends AbstractRector
 {
@@ -74,11 +76,11 @@ CODE_SAMPLE
 
         if ($node->expr instanceof Identical) {
             $identical = $node->expr;
-            if (! $this->isBoolType($identical->left)) {
+            if (! $this->isStaticType($identical->left, BooleanType::class)) {
                 return null;
             }
 
-            if (! $this->isBoolType($identical->right)) {
+            if (! $this->isStaticType($identical->right, BooleanType::class)) {
                 return null;
             }
 
@@ -90,11 +92,11 @@ CODE_SAMPLE
 
     private function processIdentical(Identical $identical): ?NotIdentical
     {
-        if (! $this->isBoolType($identical->left)) {
+        if (! $this->isStaticType($identical->left, BooleanType::class)) {
             return null;
         }
 
-        if (! $this->isBoolType($identical->right)) {
+        if (! $this->isStaticType($identical->right, BooleanType::class)) {
             return null;
         }
 

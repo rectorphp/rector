@@ -1,4 +1,4 @@
-# All 329 Rectors Overview
+# All 335 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -24,8 +24,8 @@
 - [PHPStan](#phpstan)
 - [PHPUnit](#phpunit)
 - [PHPUnitSymfony](#phpunitsymfony)
+- [PSR4](#psr4)
 - [Php](#php)
-- [PhpParser](#phpparser)
 - [PhpSpecToPHPUnit](#phpspectophpunit)
 - [RemovingStatic](#removingstatic)
 - [Restoration](#restoration)
@@ -934,11 +934,11 @@ Use ===/!== over ==/!=, it values have the same type
 
 ## CodingStyle
 
-### `ArrayPropertyDefaultValueRector`
+### `AddArrayDefaultToArrayPropertyRector`
 
-- class: `Rector\CodingStyle\Rector\Property\ArrayPropertyDefaultValueRector`
+- class: `Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector`
 
-Array property should have default value, to prevent undefined array issues
+Adds array default value to property to prevent foreach over null error
 
 ```diff
  class SomeClass
@@ -946,13 +946,13 @@ Array property should have default value, to prevent undefined array issues
      /**
       * @var int[]
       */
--    private $items;
-+    private $items = [];
+-    private $values;
++    private $values = [];
 
-     public function run()
+     public function isEmpty()
      {
-         foreach ($items as $item) {
-         }
+-        return $this->values === null;
++        return $this->values === [];
      }
  }
 ```
@@ -1139,7 +1139,7 @@ Add extra space before new assign set
 +            'numberz' => ['id' => 10]
 +        ];
 +
-+        $someJsonAsString = json_encode($data);
++        $someJsonAsString = Nette\Utils\Json::encode($data);
      }
  }
 ```
@@ -1388,6 +1388,29 @@ services:
 <br>
 
 ## DeadCode
+
+### `RemoveAlwaysTrueIfConditionRector`
+
+- class: `Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector`
+
+Remove if condition that is always true
+
+```diff
+ final class SomeClass
+ {
+     public function go()
+     {
+-        if (1 === 1) {
+-            return 'yes';
+-        }
++        return 'yes';
+
+         return 'no';
+     }
+ }
+```
+
+<br>
 
 ### `RemoveAndTrueRector`
 
@@ -1686,6 +1709,22 @@ Remove empty method calls not required by parents
 
 <br>
 
+### `RemoveNullPropertyInitializationRector`
+
+- class: `Rector\DeadCode\Rector\Property\RemoveNullPropertyInitializationRector`
+
+Remove initialization with null value from property declarations
+
+```diff
+ class SunshineCommand extends ParentClassWithNewConstructor
+ {
+-    private $myVar = null;
++    private $myVar;
+ }
+```
+
+<br>
+
 ### `RemoveOverriddenValuesRector`
 
 - class: `Rector\DeadCode\Rector\ClassMethod\RemoveOverriddenValuesRector`
@@ -1718,6 +1757,35 @@ Remove unused parent call with no parent class
      public function __construct()
      {
 -         parent::__construct();
+     }
+ }
+```
+
+<br>
+
+### `RemoveSetterOnlyPropertyAndMethodCallRector`
+
+- class: `Rector\DeadCode\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector`
+
+Removes method that set values that are never used
+
+```diff
+ class SomeClass
+ {
+-    private $name;
+-
+-    public function setName($name)
+-    {
+-        $this->name = $name;
+-    }
+ }
+
+ class ActiveOnlySetter
+ {
+     public function run()
+     {
+         $someClass = new SomeClass();
+-        $someClass->setName('Tom');
      }
  }
 ```
@@ -1882,9 +1950,25 @@ Removes unneeded $a = $a assigns
 
 ## Doctrine
 
-### `AliasToClassRector`
+### `AddUuidMirrorForRelationPropertyRector`
 
-- class: `Rector\Doctrine\Rector\AliasToClassRector`
+- class: `Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector`
+
+Adds $uuid property to entities, that already have $id with integer type.Require for step-by-step migration from int to uuid.
+
+<br>
+
+### `AddUuidToEntityWhereMissingRector`
+
+- class: `Rector\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector`
+
+Adds $uuid property to entities, that already have $id with integer type.Require for step-by-step migration from int to uuid. In following step it should be renamed to $id and replace it
+
+<br>
+
+### `EntityAliasToClassConstantReferenceRector`
+
+- class: `Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector`
 
 Replaces doctrine alias with class.
 
@@ -2254,6 +2338,39 @@ Use Nette\Utils\Strings over bare string-functions
 -        $no = $needle !== substr($content, -strlen($needle));
 +        $yes = \Nette\Utils\Strings::endsWith($content, $needle);
 +        $no = !\Nette\Utils\Strings::endsWith($content, $needle);
+     }
+ }
+```
+
+<br>
+
+### `JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector`
+
+- class: `Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector`
+
+Changes json_encode()/json_decode() to safer and more verbose Nette\Utils\Json::encode()/decode() calls
+
+```diff
+ class SomeClass
+ {
+     public function decodeJson(string $jsonString)
+     {
+-        $stdClass = json_decode($jsonString);
++        $stdClass = \Nette\Utils\Json::decode($jsonString);
+
+-        $array = json_decode($jsonString, true);
+-        $array = json_decode($jsonString, false);
++        $array = \Nette\Utils\Json::decode($jsonString, \Nette\Utils\Json::FORCE_ARRAY);
++        $array = \Nette\Utils\Json::decode($jsonString);
+     }
+
+     public function encodeJson(array $data)
+     {
+-        $jsonString = json_encode($data);
++        $jsonString = \Nette\Utils\Json::encode($data);
+
+-        $prettyJsonString = json_encode($data, JSON_PRETTY_PRINT);
++        $prettyJsonString = \Nette\Utils\Json::encode($data, \Nette\Utils\Json::PRETTY);
      }
  }
 ```
@@ -2641,6 +2758,72 @@ Removes non-existing @var annotations above the code
 <br>
 
 ## PHPUnit
+
+### `AddSeeTestAnnotationRector`
+
+- class: `Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector`
+
+Add @see annotation test of the class for faster jump to test. Make it FQN, so it stays in the annotation, not in the PHP source code.
+
+```diff
++/**
++ * @see \SomeServiceTest
++ */
+ class SomeService
+ {
+ }
+
+ class SomeServiceTest extends \PHPUnit\Framework\TestCase
+ {
+ }
+```
+
+<br>
+
+### `ArrayArgumentInTestToDataProviderRector`
+
+- class: `Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector`
+
+Move array argument from tests into data provider [configurable]
+
+```yaml
+services:
+    Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector:
+        $configuration:
+            -
+                class: PHPUnit\Framework\TestCase
+                old_method: doTestMultiple
+                new_method: doTestSingle
+```
+
+↓
+
+```diff
+ class SomeServiceTest extends \PHPUnit\Framework\TestCase
+ {
+-    public function test()
++    /**
++     * @dataProvider provideDataForTest()
++     */
++    public function test(int $value)
+     {
+-        $this->doTestMultiple([1, 2, 3]);
++        $this->doTestSingle($value);
++    }
++
++    /**
++     * @return int[]
++     */
++    public function provideDataForTest(): iterable
++    {
++        yield 1;
++        yield 2;
++        yield 3;
+     }
+ }
+```
+
+<br>
 
 ### `AssertCompareToSpecificMethodRector`
 
@@ -3174,6 +3357,16 @@ Add response content to response code assert, so it is easier to debug
 
 <br>
 
+## PSR4
+
+### `NormalizeNamespaceByPSR4ComposerAutoloadRector`
+
+- class: `Rector\PSR4\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector`
+
+Changes namespace and class names to match PSR-4 in composer.json autoload section
+
+<br>
+
 ## Php
 
 ### `AddDefaultValueForUndefinedVariableRector`
@@ -3192,6 +3385,27 @@ Adds default value for undefined variable
              $a = 5;
          }
          echo $a;
+     }
+ }
+```
+
+<br>
+
+### `AddLiteralSeparatorToNumberRector`
+
+- class: `Rector\Php\Rector\LNumber\AddLiteralSeparatorToNumberRector`
+
+Add "_" as thousands separator in numbers
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $int = 1000;
+-        $float = 1000500.001;
++        $int = 1_000;
++        $float = 1_000_500.001;
      }
  }
 ```
@@ -4376,100 +4590,6 @@ each() function is deprecated, use foreach() instead.
 
 <br>
 
-## PhpParser
-
-### `CatchAndClosureUseNameRector`
-
-- class: `Rector\PhpParser\Rector\CatchAndClosureUseNameRector`
-
-Turns `$catchNode->var` to its new `name` property in php-parser
-
-```diff
--$catchNode->var;
-+$catchNode->var->name
-```
-
-<br>
-
-### `IdentifierRector`
-
-- class: `Rector\PhpParser\Rector\IdentifierRector`
-
-Turns node string names to Identifier object in php-parser
-
-```diff
- $constNode = new PhpParser\Node\Const_;
--$name = $constNode->name;
-+$name = $constNode->name->toString();'
-```
-
-<br>
-
-### `ParamAndStaticVarNameRector`
-
-- class: `Rector\PhpParser\Rector\ParamAndStaticVarNameRector`
-
-Turns old string `var` to `var->name` sub-variable in Node of PHP-Parser
-
-```diff
--$paramNode->name;
-+$paramNode->var->name;
-```
-
-```diff
--$staticVarNode->name;
-+$staticVarNode->var->name;
-```
-
-<br>
-
-### `RemoveNodeRector`
-
-- class: `Rector\PhpParser\Rector\RemoveNodeRector`
-
-Turns integer return to remove node to constant in NodeVisitor of PHP-Parser
-
-```diff
- public function leaveNode()
- {
--    return false;
-+    return NodeTraverser::REMOVE_NODE;
- }
-```
-
-<br>
-
-### `SetLineRector`
-
-- class: `Rector\PhpParser\Rector\SetLineRector`
-
-Turns standalone line method to attribute in Node of PHP-Parser
-
-```diff
--$node->setLine(5);
-+$node->setAttribute("line", 5);
-```
-
-<br>
-
-### `UseWithAliasRector`
-
-- class: `Rector\PhpParser\Rector\UseWithAliasRector`
-
-Turns use property to method and `$node->alias` to last name in UseAlias Node of PHP-Parser
-
-```diff
--$node->alias;
-+$node->getAlias();
-```
-
-```diff
--$node->name->getLast();
-+$node->alias
-```
-
-<br>
-
 ## PhpSpecToPHPUnit
 
 ### `AddMockPropertiesRector`
@@ -5282,8 +5402,7 @@ Changes createForm(new FormType), add(new FormType) to ones with "FormType::clas
 +        $form = $this->createForm(TeamType::class, $entity, [
              'action' => $this->generateUrl('teams_update', ['id' => $entity->getId()]),
              'method' => 'PUT',
--        ]);
-+        ));
+        ]);
      }
  }
 ```
@@ -5475,7 +5594,7 @@ Change "read_only" option in form to attribute
  function buildForm(FormBuilderInterface $builder, array $options)
  {
 -    $builder->add('cuid', TextType::class, ['read_only' => true]);
-+    $builder->add('cuid', TextType::class, ['attr' => [read_only' => true]]);
++    $builder->add('cuid', TextType::class, ['attr' => ['read_only' => true]]);
  }
 ```
 
@@ -5578,7 +5697,7 @@ Turns string Form Type references to their CONSTANT alternatives in FormTypes in
 ```diff
  $formBuilder = new Symfony\Component\Form\FormBuilder;
 -$formBuilder->add('name', 'form.type.text');
-+$form->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
++$formBuilder->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
 ```
 
 <br>
@@ -5727,6 +5846,58 @@ Changes Twig_Function_Method to Twig_SimpleFunction calls in TwigExtension.
 <br>
 
 ## TypeDeclaration
+
+### `AddArrayParamDocTypeRector`
+
+- class: `Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector`
+
+Adds @param annotation to array parameters inferred from the rest of the code
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @var int[]
+      */
+     private $values;
+
++    /**
++     * @param int[] $values
++     */
+     public function __construct(array $values)
+     {
+         $this->values = $values;
+     }
+ }
+```
+
+<br>
+
+### `AddArrayReturnDocTypeRector`
+
+- class: `Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector`
+
+Adds @return annotation to array parameters inferred from the rest of the code
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @var int[]
+      */
+     private $values;
+
++    /**
++     * @return int[]
++     */
+     public function getValues(): array
+     {
+         return $this->values;
+     }
+ }
+```
+
+<br>
 
 ### `AddClosureReturnTypeRector`
 
@@ -6136,7 +6307,7 @@ Turns fluent interface calls to classic ones.
 ```yaml
 services:
     Rector\Rector\MethodBody\FluentReplaceRector:
-        -
+        $classesToDefluent:
             - SomeExampleClass
 ```
 
@@ -6318,7 +6489,7 @@ services:
 
 - class: `Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector`
 
-Turns old method call with specfici type to new one with arguments
+Turns old method call with specific types to new one with arguments
 
 ```yaml
 services:
@@ -6712,8 +6883,9 @@ Turns defined annotations above properties and methods to their new values.
 ```yaml
 services:
     Rector\Rector\Annotation\RenameAnnotationRector:
-        PHPUnit\Framework\TestCase:
-            test: scenario
+        $classToAnnotationMap:
+            PHPUnit\Framework\TestCase:
+                test: scenario
 ```
 
 ↓
@@ -6791,7 +6963,8 @@ Replaces defined classes by new ones.
 ```yaml
 services:
     Rector\Rector\Class_\RenameClassRector:
-        App\SomeOldClass: App\SomeNewClass
+        $oldToNewClasses:
+            App\SomeOldClass: App\SomeNewClass
 ```
 
 ↓

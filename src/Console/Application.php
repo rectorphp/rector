@@ -5,10 +5,10 @@ namespace Rector\Console;
 use Jean85\PrettyVersions;
 use Rector\Configuration\Configuration;
 use Rector\Console\Output\JsonOutputFormatter;
-use Rector\ContributorTools\Command\DumpNodesCommand;
-use Rector\ContributorTools\Command\DumpRectorsCommand;
-use Rector\ContributorTools\Exception\Command\ContributorCommandInterface;
 use Rector\Exception\Configuration\InvalidConfigurationException;
+use Rector\Utils\DocumentationGenerator\Command\DumpNodesCommand;
+use Rector\Utils\DocumentationGenerator\Command\DumpRectorsCommand;
+use Rector\Utils\RectorGenerator\Contract\ContributorCommandInterface;
 use RuntimeException;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Command\Command;
@@ -155,14 +155,6 @@ final class Application extends SymfonyApplication
         $inputDefinition->addOption(new InputOption(
             'set',
             's',
-            InputOption::VALUE_REQUIRED,
-            'Finds config by shortcut name'
-        ));
-
-        // same as "set", for BC
-        $inputDefinition->addOption(new InputOption(
-            'level',
-            'l',
             InputOption::VALUE_REQUIRED,
             'Finds config by shortcut name'
         ));

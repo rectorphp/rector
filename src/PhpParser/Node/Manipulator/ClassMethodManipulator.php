@@ -34,11 +34,6 @@ final class ClassMethodManipulator
     private $nodeTypeResolver;
 
     /**
-     * @var FunctionLikeManipulator
-     */
-    private $functionLikeManipulator;
-
-    /**
      * @var NameResolver
      */
     private $nameResolver;
@@ -52,14 +47,12 @@ final class ClassMethodManipulator
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         NodeTypeResolver $nodeTypeResolver,
-        FunctionLikeManipulator $functionLikeManipulator,
         NameResolver $nameResolver,
         ValueResolver $valueResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->functionLikeManipulator = $functionLikeManipulator;
         $this->nameResolver = $nameResolver;
         $this->valueResolver = $valueResolver;
     }
@@ -122,33 +115,6 @@ final class ClassMethodManipulator
     }
 
     /**
-     * @return string[]
-     */
-    public function resolveReturnType(ClassMethod $classMethod): array
-    {
-        if ($classMethod->returnType !== null) {
-            return $this->nodeTypeResolver->resolve($classMethod->returnType);
-        }
-
-        $staticReturnType = $this->functionLikeManipulator->resolveStaticReturnTypeInfo($classMethod);
-        if ($staticReturnType === null) {
-            return [];
-        }
-
-        $getFqnTypeNode = $staticReturnType->getFqnTypeNode();
-        if ($getFqnTypeNode === null) {
-            return [];
-        }
-
-        $fqnTypeName = $this->nameResolver->getName($getFqnTypeNode);
-        if ($fqnTypeName === null) {
-            return [];
-        }
-
-        return [$fqnTypeName];
-    }
-
-    /**
      * Is method actually static, or has some $this-> calls?
      */
     public function isStaticClassMethod(ClassMethod $classMethod): bool
@@ -170,11 +136,11 @@ final class ClassMethodManipulator
         $classMethodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
         if (! $classMethodNode instanceof ClassMethod) {
             // or null?
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         foreach ($classMethodNode->params as $paramNode) {
-            if ($this->nodeTypeResolver->isType($paramNode, $type)) {
+            if ($this->nodeTypeResolver->isObjectType($paramNode, $type)) {
                 return $this->nameResolver->getName($paramNode);
             }
         }
@@ -211,7 +177,7 @@ final class ClassMethodManipulator
             return $possibleName;
         }
 
-        throw new ShouldNotHappenException();
+        throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
     }
 
     /**

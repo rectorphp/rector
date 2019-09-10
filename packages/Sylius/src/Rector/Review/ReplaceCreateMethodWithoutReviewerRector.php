@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Sylius\Tests\Rector\Review\ReplaceCreateMethodWithoutReviewerRectorTest
+ */
 final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
 {
     /**
@@ -49,7 +52,7 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->reviewFactoryInterface)) {
+        if (! $this->isObjectType($node, $this->reviewFactoryInterface)) {
             return null;
         }
 

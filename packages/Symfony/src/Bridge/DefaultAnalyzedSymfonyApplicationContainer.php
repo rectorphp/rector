@@ -2,6 +2,9 @@
 
 namespace Rector\Symfony\Bridge;
 
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Configuration\Option;
 use Rector\Exception\ShouldNotHappenException;
@@ -53,17 +56,17 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
         $this->parameterProvider = $parameterProvider;
     }
 
-    public function getTypeForName(string $name): ?string
+    public function getTypeForName(string $name): Type
     {
         if (isset($this->commonNamesToTypes[$name])) {
-            return $this->commonNamesToTypes[$name];
+            return new ObjectType($this->commonNamesToTypes[$name]);
         }
 
         // get known Symfony  types
         $container = $this->getContainer($name);
 
         if (! $container->has($name)) {
-            return null;
+            return new MixedType();
         }
 
         try {
@@ -75,21 +78,25 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
             ), $throwable->getCode(), $throwable);
         }
 
+        if ($service === null) {
+            return new MixedType();
+        }
+
         $serviceClass = get_class($service);
         if ($container->has($serviceClass)) {
-            return $serviceClass;
+            return new ObjectType($serviceClass);
         }
 
         // the type was not found in container → use it's interface or parent
         // mimics: \Symfony\Component\DependencyInjection\Compiler\AutowirePass::getAliasesSuggestionForType()
         foreach (class_implements($serviceClass) + class_parents($serviceClass) as $parent) {
             if ($container->has($parent) && ! $container->findDefinition($parent)->isAbstract()) {
-                return $parent;
+                return new ObjectType($parent);
             }
         }
 
         // make an assumption
-        return get_class($service);
+        return new ObjectType(get_class($service));
     }
 
     public function hasService(string $name): bool

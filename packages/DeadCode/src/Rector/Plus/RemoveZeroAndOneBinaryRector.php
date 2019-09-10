@@ -16,6 +16,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://3v4l.org/I0BGs
+ * @see \Rector\DeadCode\Tests\Rector\Plus\RemoveZeroAndOneBinaryRector\RemoveZeroAndOneBinaryRectorTest
  */
 final class RemoveZeroAndOneBinaryRector extends AbstractRector
 {

@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
@@ -17,6 +18,9 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
+/**
+ * @see \Rector\Tests\PhpParser\Printer\BetterStandardPrinterTest
+ */
 final class BetterStandardPrinter extends Standard
 {
     /**
@@ -112,6 +116,18 @@ final class BetterStandardPrinter extends Standard
     protected function pSingleQuotedString(string $string): string
     {
         return "'" . Strings::replace($string, "#'|\\\\(?=[\\\\']|$)#", '\\\\$0') . "'";
+    }
+
+    /**
+     * Emulates 1_000 in PHP 7.3- version
+     */
+    protected function pScalar_DNumber(DNumber $DNumber): string
+    {
+        if (is_string($DNumber->value)) {
+            return $DNumber->value;
+        }
+
+        return parent::pScalar_DNumber($DNumber);
     }
 
     /**

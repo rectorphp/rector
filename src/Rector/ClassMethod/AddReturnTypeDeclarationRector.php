@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\AddReturnTypeDeclarationRectorTest
+ */
 final class AddReturnTypeDeclarationRector extends AbstractRector
 {
     /**
@@ -76,7 +79,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->typehintForMethodByClass as $type => $methodsToTypehints) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isObjectType($node, $type)) {
                 continue;
             }
 
@@ -103,7 +106,7 @@ CODE_SAMPLE
         if ($newType === '') {
             $classMethod->returnType = null;
         } else {
-            $returnTypeInfo = new ReturnTypeInfo([$newType], $this->typeAnalyzer);
+            $returnTypeInfo = new ReturnTypeInfo([$newType], $this->typeAnalyzer, [$newType]);
             $classMethod->returnType = $returnTypeInfo->getFqnTypeNode();
         }
 

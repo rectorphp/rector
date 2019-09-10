@@ -13,7 +13,11 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareReturnTagValue
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
+use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 
+/**
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
+ */
 final class PhpDocInfo
 {
     /**
@@ -204,6 +208,40 @@ final class PhpDocInfo
         }
 
         return $this->getResolvedTypesAttribute($returnTypeValueNode);
+    }
+
+    public function getDoctrineRelationTagValueNode(): ?DoctrineRelationTagValueNodeInterface
+    {
+        return $this->getByType(DoctrineRelationTagValueNodeInterface::class);
+    }
+
+    public function removeTagValueNodeFromNode(PhpDocTagValueNode $phpDocTagValueNode): void
+    {
+        foreach ($this->phpDocNode->children as $key => $phpDocChildNode) {
+            if ($phpDocChildNode instanceof PhpDocTagNode) {
+                if ($phpDocChildNode->value !== $phpDocTagValueNode) {
+                    continue;
+                }
+
+                unset($this->phpDocNode->children[$key]);
+            }
+        }
+    }
+
+    /**
+     * @param string $type
+     */
+    public function getByType(string $type): ?PhpDocTagValueNode
+    {
+        foreach ($this->phpDocNode->children as $phpDocChildNode) {
+            if ($phpDocChildNode instanceof PhpDocTagNode) {
+                if (is_a($phpDocChildNode->value, $type, true)) {
+                    return $phpDocChildNode->value;
+                }
+            }
+        }
+
+        return null;
     }
 
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode

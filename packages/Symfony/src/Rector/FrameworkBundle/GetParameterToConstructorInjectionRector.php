@@ -6,12 +6,16 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\StringType;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector\GetParameterToConstructorInjectionRectorTest
+ */
 final class GetParameterToConstructorInjectionRector extends AbstractRector
 {
     /**
@@ -82,7 +86,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->controllerClass)) {
+        if (! $this->isObjectType($node, $this->controllerClass)) {
             return null;
         }
 
@@ -102,7 +106,7 @@ CODE_SAMPLE
 
         $this->addPropertyToClass(
             $classNode,
-            'string', // @todo: resolve type from container provider? see parameter autowire compiler pass
+            new StringType(), // @todo: resolve type from container provider? see parameter autowire compiler pass
             $propertyName
         );
 

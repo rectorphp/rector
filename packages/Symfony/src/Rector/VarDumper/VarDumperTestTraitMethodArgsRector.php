@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\VarDumper\VarDumperTestTraitMethodArgsRector\VarDumperTestTraitMethodArgsRectorTest
+ */
 final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 {
     /**
@@ -52,11 +55,11 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->traitName)) {
+        if (! $this->isObjectType($node->var, $this->traitName)) {
             return null;
         }
 
-        if (! $this->isNames($node, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {
+        if (! $this->isNames($node->name, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {
             return null;
         }
 

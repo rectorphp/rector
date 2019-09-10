@@ -12,6 +12,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Function_\RenameFunctionRector\RenameFunctionRectorTest
+ */
 final class RenameFunctionRector extends AbstractRector
 {
     /**
@@ -54,7 +57,7 @@ final class RenameFunctionRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         foreach ($this->oldFunctionToNewFunction as $oldFunction => $newFunction) {
-            if (! $this->isNameInsensitive($node, $oldFunction)) {
+            if (! $this->isName($node, $oldFunction)) {
                 continue;
             }
 

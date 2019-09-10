@@ -13,6 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see http://php.net/manual/en/function.implode.php#refsect1-function.implode-description
  * @see https://3v4l.org/iYTgh
+ * @see \Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentImplodeRector\ConsistentImplodeRectorTest
  */
 final class ConsistentImplodeRector extends AbstractRector
 {
@@ -75,7 +76,7 @@ CODE_SAMPLE
         }
 
         if (count($node->args) === 2) {
-            if ($this->isStringyType($node->args[1]->value)) {
+            if ($this->isStringOrUnionStringOnlyType($node->args[1]->value)) {
                 $node->args = array_reverse($node->args);
             }
         }

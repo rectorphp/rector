@@ -5,10 +5,13 @@ namespace Rector\Rector\AbstractRector;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Doctrine\AbstractRector\DoctrineTrait;
 
 trait AbstractRectorTrait
 {
     use AppliedRectorCollectorTrait;
+    use DocBlockManipulatorTrait;
+    use DoctrineTrait;
     use NodeTypeResolverTrait;
     use NameResolverTrait;
     use ConstFetchAnalyzerTrait;

@@ -19,10 +19,10 @@ services:
     Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector: ~
     Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector: ~
     Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector: ~
-    Rector\CodingStyle\Rector\Property\ArrayPropertyDefaultValueRector: ~
     Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector: ~
 
     Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector: ~
     Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector: ~
     Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector: ~
     Rector\CodingStyle\Rector\String_\ManualJsonStringToJsonEncodeArrayRector: ~
+    Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector: ~

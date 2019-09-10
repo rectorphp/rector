@@ -19,6 +19,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/remove_php4_constructors
+ * @see \Rector\Php\Tests\Rector\FunctionLike\Php4ConstructorRector\Php4ConstructorRectorTest
  */
 final class Php4ConstructorRector extends AbstractRector
 {
@@ -86,7 +87,7 @@ CODE_SAMPLE
         $this->processClassMethodStatementsForParentConstructorCalls($node);
 
         // not PSR-4 constructor
-        if (! $this->isNameInsensitive($classNode, $this->getName($node))) {
+        if (! $this->isName($classNode, $this->getName($node))) {
             return null;
         }
 
@@ -193,7 +194,7 @@ CODE_SAMPLE
         }
 
         // it's not a parent PHP 4 constructor call
-        if (! $this->isNameInsensitive($node, $parentClassName)) {
+        if (! $this->isName($node, $parentClassName)) {
             return;
         }
 

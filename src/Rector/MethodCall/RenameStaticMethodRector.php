@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\MethodCall\RenameStaticMethodRector\RenameStaticMethodRectorTest
+ */
 final class RenameStaticMethodRector extends AbstractRector
 {
     /**
@@ -65,12 +68,12 @@ final class RenameStaticMethodRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         foreach ($this->oldToNewMethodByClasses as $type => $oldToNewMethods) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isObjectType($node->class, $type)) {
                 continue;
             }
 
             foreach ($oldToNewMethods as $oldMethod => $newMethod) {
-                if (! $this->isNameInsensitive($node, $oldMethod)) {
+                if (! $this->isName($node, $oldMethod)) {
                     continue;
                 }
 

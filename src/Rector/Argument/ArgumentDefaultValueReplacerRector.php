@@ -13,6 +13,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Argument\ArgumentDefaultValueReplacerRector\ArgumentDefaultValueReplacerRectorTest
+ */
 final class ArgumentDefaultValueReplacerRector extends AbstractRector
 {
     /**
@@ -75,7 +78,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->replacesByMethodAndTypes as $type => $replacesByMethods) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isMethodStaticCallOrClassMethodObjectType($node, $type)) {
                 continue;
             }
 

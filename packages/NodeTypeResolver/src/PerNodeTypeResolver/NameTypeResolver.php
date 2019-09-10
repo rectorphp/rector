@@ -5,10 +5,16 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use Rector\Exception\ShouldNotHappenException;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
+/**
+ * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\NameTypeResolver\NameTypeResolverTest
+ */
 final class NameTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
@@ -21,25 +27,21 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
 
     /**
      * @param Name $nameNode
-     * @return string[]
      */
-    public function resolve(Node $nameNode): array
+    public function resolve(Node $nameNode): Type
     {
-        if ($nameNode->toString() === 'parent') {
-            $parentClassName = $nameNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-            if ($parentClassName === null) {
-                return [];
-            }
+        $name = $nameNode->toString();
 
-            return [$parentClassName];
+        if ($name === 'parent') {
+            return $this->resolveParent($nameNode);
         }
 
-        $fullyQualifiedName = $this->resolveFullyQualifiedName($nameNode, $nameNode->toString());
+        $fullyQualifiedName = $this->resolveFullyQualifiedName($nameNode, $name);
         if ($fullyQualifiedName === null) {
-            return [];
+            return new MixedType();
         }
 
-        return [$fullyQualifiedName];
+        return new ObjectType($fullyQualifiedName);
     }
 
     private function resolveFullyQualifiedName(Node $nameNode, string $name): string
@@ -48,18 +50,8 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
             /** @var string|null $class */
             $class = $nameNode->getAttribute(AttributeKey::CLASS_NAME);
             if ($class === null) {
-                throw new ShouldNotHappenException();
-            }
-
-            return $class;
-        }
-
-        if ($name === 'parent') {
-            // @todo not sure which parent though
-            /** @var string|null $class */
-            $class = $nameNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-            if ($class === null) {
-                throw new ShouldNotHappenException();
+                // anonymous class probably
+                return 'Anonymous';
             }
 
             return $class;
@@ -72,5 +64,29 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
         }
 
         return $name;
+    }
+
+    /**
+     * @return ObjectType|UnionType|MixedType
+     */
+    private function resolveParent(Name $name): Type
+    {
+        /** @var string|null $parentClassName */
+        $parentClassName = $name->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+
+        // missing parent class, probably unused parent:: call
+        if ($parentClassName === null) {
+            return new MixedType();
+        }
+
+        $type = new ObjectType($parentClassName);
+
+        // @todo abstract
+        $parentParentClass = get_parent_class($parentClassName);
+        if ($parentParentClass) {
+            $type = new UnionType([$type, new ObjectType($parentParentClass)]);
+        }
+
+        return $type;
     }
 }

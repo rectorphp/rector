@@ -7,10 +7,11 @@ use PHPStan\Analyser\NodeScopeResolver;
 use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
 use Rector\Configuration\Option;
-use Rector\ContributorTools\Finder\RectorsFinder;
+use Rector\Contract\Rector\RectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\HttpKernel\RectorKernel;
 use Rector\Testing\Application\EnabledRectorsProvider;
+use Rector\Testing\Finder\RectorsFinder;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Container;
@@ -56,27 +57,31 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->fixtureSplitter = new FixtureSplitter($this->getTempPath());
 
         // defined in phpunit.xml
-        if (defined('RECTOR_REPOSITORY') && $this->provideConfig() === '') {
-            if (self::$allRectorContainer === null) {
-                $this->createContainerWithAllRectors();
-
-                self::$allRectorContainer = self::$container;
-            } else {
-                // load from cache
-                self::$container = self::$allRectorContainer;
-            }
-
-            $enabledRectorsProvider = static::$container->get(EnabledRectorsProvider::class);
-            $enabledRectorsProvider->reset();
-            $this->configureEnabledRectors($enabledRectorsProvider);
-        } elseif ($this->provideConfig() !== '') {
+        if ($this->provideConfig() !== '') {
             $this->ensureConfigFileExists();
             $this->bootKernelWithConfigs(RectorKernel::class, [$this->provideConfig()]);
 
             $enabledRectorsProvider = static::$container->get(EnabledRectorsProvider::class);
             $enabledRectorsProvider->reset();
         } else {
-            throw new ShouldNotHappenException();
+            // repare contains with all rectors
+            // cache only rector tests - defined in phpunit.xml
+            if (defined('RECTOR_REPOSITORY')) {
+                if (self::$allRectorContainer === null) {
+                    $this->createContainerWithAllRectors();
+
+                    self::$allRectorContainer = self::$container;
+                } else {
+                    // load from cache
+                    self::$container = self::$allRectorContainer;
+                }
+            } else {
+                $this->bootKernelWithConfigs(RectorKernel::class, [$this->provideConfig()]);
+            }
+
+            $enabledRectorsProvider = self::$container->get(EnabledRectorsProvider::class);
+            $enabledRectorsProvider->reset();
+            $this->configureEnabledRectors($enabledRectorsProvider);
         }
 
         // disable any output
@@ -88,6 +93,17 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
         // needed for PHPStan, because the analyzed file is just create in /temp
         $this->nodeScopeResolver = static::$container->get(NodeScopeResolver::class);
+
+        $this->configurePhpVersionFeatures();
+    }
+
+    protected function tearDown(): void
+    {
+        // restore PHP version
+        if ($this->getPhpVersion()) {
+            $parameterProvider = self::$container->get(ParameterProvider::class);
+            $parameterProvider->changeParameter('php_version_features', '10.0');
+        }
     }
 
     /**
@@ -151,6 +167,12 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         return sys_get_temp_dir() . '/rector_temp_tests';
     }
 
+    protected function getPhpVersion(): string
+    {
+        // to be implemented
+        return '';
+    }
+
     private function doTestFileMatchesExpectedContent(
         string $originalFile,
         string $expectedFile,
@@ -183,8 +205,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
 
     private function createContainerWithAllRectors(): void
     {
-        $allRectorClasses = (new RectorsFinder())->findCoreRectorClasses();
+        $coreRectorClasses = (new RectorsFinder())->findCoreRectorClasses();
+
         $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/all_rectors.yaml');
+
+        $allRectorClasses = array_merge($coreRectorClasses, $this->getCurrentTestRectorClasses());
 
         $listForConfig = [];
         foreach ($allRectorClasses as $rectorClass) {
@@ -201,14 +226,58 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         $this->bootKernelWithConfigs(RectorKernel::class, [$configFile]);
     }
 
+    /**
+     * @return string[]
+     */
+    private function getCurrentTestRectorClasses(): array
+    {
+        if ($this->getRectorsWithConfiguration() !== []) {
+            return array_keys($this->getRectorsWithConfiguration());
+        }
+
+        $rectorClass = $this->getRectorClass();
+        $this->ensureRectorClassIsValid($rectorClass, 'getRectorClass');
+
+        return [$rectorClass];
+    }
+
     private function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
     {
         if ($this->getRectorsWithConfiguration() !== []) {
             foreach ($this->getRectorsWithConfiguration() as $rectorClass => $rectorConfiguration) {
+                $this->ensureRectorClassIsValid($rectorClass, 'getRectorsWithConfiguration');
+
                 $enabledRectorsProvider->addEnabledRector($rectorClass, $rectorConfiguration);
             }
         } else {
-            $enabledRectorsProvider->addEnabledRector($this->getRectorClass(), []);
+            $rectorClass = $this->getRectorClass();
+            $this->ensureRectorClassIsValid($rectorClass, 'getRectorClass');
+
+            $enabledRectorsProvider->addEnabledRector($rectorClass, []);
         }
+    }
+
+    private function ensureRectorClassIsValid(string $rectorClass, string $methodName): void
+    {
+        if (is_a($rectorClass, RectorInterface::class, true)) {
+            return;
+        }
+
+        throw new ShouldNotHappenException(sprintf(
+            'Class "%s" in "%s()" method must be type of "%s"',
+            $rectorClass,
+            $methodName,
+            RectorInterface::class
+        ));
+    }
+
+    private function configurePhpVersionFeatures(): void
+    {
+        if ($this->getPhpVersion() === '') {
+            return;
+        }
+
+        $parameterProvider = self::$container->get(ParameterProvider::class);
+        $parameterProvider->changeParameter('php_version_features', $this->getPhpVersion());
     }
 }

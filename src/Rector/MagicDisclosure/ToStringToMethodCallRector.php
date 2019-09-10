@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\MagicDisclosure\ToStringToMethodCallRector\ToStringToMethodCallRectorTest
+ */
 final class ToStringToMethodCallRector extends AbstractRector
 {
     /**
@@ -73,7 +76,7 @@ CODE_SAMPLE
     private function processStringNode(String_ $stringNode): ?Node
     {
         foreach ($this->methodNamesByType as $type => $methodName) {
-            if (! $this->isType($stringNode, $type)) {
+            if (! $this->isObjectType($stringNode, $type)) {
                 continue;
             }
 
@@ -86,7 +89,7 @@ CODE_SAMPLE
     private function processMethodCall(MethodCall $methodCall): ?Node
     {
         foreach ($this->methodNamesByType as $type => $methodName) {
-            if (! $this->isType($methodCall, $type)) {
+            if (! $this->isObjectType($methodCall, $type)) {
                 continue;
             }
 

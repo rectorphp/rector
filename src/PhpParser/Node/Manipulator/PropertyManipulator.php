@@ -5,6 +5,7 @@ namespace Rector\PhpParser\Node\Manipulator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -50,10 +51,11 @@ final class PropertyManipulator
     }
 
     /**
-     * @return PropertyFetch[]
+     * @return PropertyFetch[]|StaticPropertyFetch[]
      */
     public function getAllPropertyFetch(Property $property): array
     {
+        /** @var Class_|null $classNode */
         $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return [];
@@ -62,7 +64,8 @@ final class PropertyManipulator
         $nodesToSearch = $this->parsedNodesByType->findUsedTraitsInClass($classNode);
         $nodesToSearch[] = $classNode;
 
-        return $this->betterNodeFinder->find($nodesToSearch, function (Node $node) use ($property) {
+        /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
+        $propertyFetches = $this->betterNodeFinder->find($nodesToSearch, function (Node $node) use ($property) {
             // property + static fetch
             if (! $node instanceof PropertyFetch && ! $node instanceof StaticPropertyFetch) {
                 return null;
@@ -80,5 +83,7 @@ final class PropertyManipulator
 
             return $node;
         });
+
+        return $propertyFetches;
     }
 }

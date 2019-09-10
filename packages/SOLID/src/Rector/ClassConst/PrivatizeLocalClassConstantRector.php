@@ -9,17 +9,34 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\SOLID\Analyzer\ClassConstantFetchAnalyzer;
 
+/**
+ * @see \Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\PrivatizeLocalClassConstantRectorTest
+ */
 final class PrivatizeLocalClassConstantRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    public const HAS_NEW_ACCESS_LEVEL = 'has_new_access_level';
+
     /**
      * @var ParsedNodesByType
      */
     private $parsedNodesByType;
 
-    public function __construct(ParsedNodesByType $parsedNodesByType)
-    {
+    /**
+     * @var ClassConstantFetchAnalyzer
+     */
+    private $classConstantFetchAnalyzer;
+
+    public function __construct(
+        ParsedNodesByType $parsedNodesByType,
+        ClassConstantFetchAnalyzer $classConstantFetchAnalyzer
+    ) {
         $this->parsedNodesByType = $parsedNodesByType;
+        $this->classConstantFetchAnalyzer = $classConstantFetchAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -66,13 +83,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion('7.1')) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
-        if (count($node->consts) > 1) {
-            return null;
-        }
+        // Remember when we have already processed this constant recursively
+        $node->setAttribute(self::HAS_NEW_ACCESS_LEVEL, true);
 
         /** @var string $class */
         $class = $node->getAttribute(AttributeKey::CLASS_NAME);
@@ -85,28 +101,53 @@ CODE_SAMPLE
 
         /** @var string $constant */
         $constant = $this->getName($node);
-        $useClasses = $this->parsedNodesByType->findClassConstantFetches($class, $constant);
+        $parentConstIsProtected = false;
 
-        // 1. is actually never used (@todo use in "dead-code" set)
-        if ($useClasses === null) {
-            $this->makePrivate($node);
-            return $node;
+        $parentClassConstant = $this->findParentClassConstant($class, $constant);
+        if ($parentClassConstant !== null) {
+            // The parent's constant is public, so this one must become public too
+            if ($parentClassConstant->isPublic()) {
+                $this->makePublic($node);
+                return $node;
+            }
+
+            $parentConstIsProtected = $parentClassConstant->isProtected();
         }
 
-        // 2. is only local use? → private
-        if ($useClasses === [$class]) {
-            $this->makePrivate($node);
-            return $node;
+        $useClasses = $this->findClassConstantFetches($class, $constant);
+
+        return $this->changeConstantVisibility($node, $useClasses, $parentConstIsProtected, $class);
+    }
+
+    private function findParentClassConstant(string $class, string $constant): ?ClassConst
+    {
+        $classNode = $this->parsedNodesByType->findClass($class);
+        if ($classNode !== null && $classNode->hasAttribute(AttributeKey::PARENT_CLASS_NAME)) {
+            /** @var string $parentClassName */
+            $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+            if ($parentClassName) {
+                $parentClassConstant = $this->parsedNodesByType->findClassConstant($parentClassName, $constant);
+                if ($parentClassConstant) {
+                    // Make sure the parent's constant has been refactored
+                    $this->refactor($parentClassConstant);
+
+                    return $parentClassConstant;
+                }
+                // If the constant isn't declared in the parent, it might be declared in the parent's parent
+                return $this->findParentClassConstant($parentClassName, $constant);
+            }
         }
 
-        // 3. used by children → protected
-        if ($this->isUsedByChildrenOnly($useClasses, $class)) {
-            $this->makeProtected($node);
+        return null;
+    }
+
+    private function makePrivateOrWeaker(ClassConst $classConst, bool $protectedRequired): void
+    {
+        if ($protectedRequired) {
+            $this->makeProtected($classConst);
         } else {
-            $this->makePublic($node);
+            $this->makePrivate($classConst);
         }
-
-        return $node;
     }
 
     /**
@@ -126,5 +167,56 @@ CODE_SAMPLE
         }
 
         return $isChild;
+    }
+
+    private function findClassConstantFetches(string $className, string $constantName): ?array
+    {
+        $classConstantFetchByClassAndName = $this->classConstantFetchAnalyzer->provideClassConstantFetchByClassAndName();
+
+        return $classConstantFetchByClassAndName[$className][$constantName] ?? null;
+    }
+
+    /**
+     * @param string[]|null $useClasses
+     */
+    private function changeConstantVisibility(
+        ClassConst $classConst,
+        ?array $useClasses,
+        bool $parentConstIsProtected,
+        string $class
+    ): Node {
+        // 1. is actually never used (@todo use in "dead-code" set)
+        if ($useClasses === null) {
+            $this->makePrivateOrWeaker($classConst, $parentConstIsProtected);
+            return $classConst;
+        }
+
+        // 2. is only local use? → private
+        if ($useClasses === [$class]) {
+            $this->makePrivateOrWeaker($classConst, $parentConstIsProtected);
+            return $classConst;
+        }
+
+        // 3. used by children → protected
+        if ($this->isUsedByChildrenOnly($useClasses, $class)) {
+            $this->makeProtected($classConst);
+        } else {
+            $this->makePublic($classConst);
+        }
+
+        return $classConst;
+    }
+
+    private function shouldSkip(ClassConst $classConst): bool
+    {
+        if ($classConst->getAttribute(self::HAS_NEW_ACCESS_LEVEL)) {
+            return true;
+        }
+
+        if (! $this->isAtLeastPhpVersion('7.1')) {
+            return true;
+        }
+
+        return count($classConst->consts) !== 1;
     }
 }

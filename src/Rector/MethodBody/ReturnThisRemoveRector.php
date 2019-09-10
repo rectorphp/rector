@@ -12,6 +12,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\ReturnThisRemoveRectorTest
+ */
 final class ReturnThisRemoveRector extends AbstractRector
 {
     /**
@@ -91,7 +94,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isTypes($node->expr, $this->classesToDefluent)) {
+        if (! $this->isObjectTypes($node->expr, $this->classesToDefluent)) {
             return null;
         }
 
@@ -99,7 +102,7 @@ CODE_SAMPLE
 
         $methodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
         if ($methodNode === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $this->docBlockManipulator->removeTagFromNode($methodNode, 'return');

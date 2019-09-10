@@ -7,6 +7,9 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\Application\ErrorAndDiffCollector;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Exception\ShouldNotHappenException;
@@ -20,6 +23,7 @@ use Throwable;
 
 /**
  * @see https://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations#inject
+ * @see \Rector\Tests\Rector\Property\InjectAnnotationClassRector\InjectAnnotationClassRectorTest
  */
 final class InjectAnnotationClassRector extends AbstractRector
 {
@@ -125,7 +129,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function resolveType(Node $node, string $annotationClass): ?string
+    private function resolveType(Node $node, string $annotationClass): Type
     {
         $injectTagNode = $this->docBlockManipulator->getTagByName($node, $annotationClass);
 
@@ -142,7 +146,10 @@ CODE_SAMPLE
 
         $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($node);
         if ($varTypeInfo !== null && $varTypeInfo->getFqnType() !== null) {
-            return ltrim($varTypeInfo->getFqnType(), '\\');
+            // @todo resolve to property PHPStan type
+            $cleanType = ltrim($varTypeInfo->getFqnType(), '\\');
+
+            return new ObjectType($cleanType);
         }
 
         // the @var is missing and service name was not found → report it
@@ -157,7 +164,7 @@ CODE_SAMPLE
             );
         }
 
-        return null;
+        return new MixedType();
     }
 
     private function resolveServiceName(PhpDocTagNode $phpDocTagNode, Node $node): ?string
@@ -180,7 +187,7 @@ CODE_SAMPLE
     private function refactorPropertyWithAnnotation(Property $property, string $annotationClass): ?Property
     {
         $type = $this->resolveType($property, $annotationClass);
-        if ($type === null) {
+        if ($type instanceof MixedType) {
             return null;
         }
 
@@ -197,7 +204,7 @@ CODE_SAMPLE
 
         $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $this->addPropertyToClass($classNode, $type, $name);

@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Symfony\Tests\Rector\Form\OptionNameRector\OptionNameRectorTest
+ */
 final class OptionNameRector extends AbstractRector
 {
     /**
@@ -60,11 +63,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, 'add')) {
+        if (! $this->isName($node->name, 'add')) {
             return null;
         }
 
-        if (! $this->isType($node, $this->formBuilderType)) {
+        if (! $this->isObjectType($node->var, $this->formBuilderType)) {
             return null;
         }
 

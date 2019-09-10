@@ -13,6 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * Covers:
  * - https://github.com/symfony/symfony/pull/22441/files
  * - https://github.com/symfony/symfony/blob/master/UPGRADE-3.3.md#console
+ * @see \Rector\Symfony\Tests\Rector\Console\ConsoleExceptionToErrorEventConstantRector\ConsoleExceptionToErrorEventConstantRectorTest
  */
 final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
 {
@@ -46,7 +47,7 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof ClassConstFetch) {
-            if ($this->isType($node, self::CONSOLE_EVENTS_CLASS) && $this->isName($node->name, 'EXCEPTION')) {
+            if ($this->isObjectType($node, self::CONSOLE_EVENTS_CLASS) && $this->isName($node->name, 'EXCEPTION')) {
                 return $this->createClassConstant(self::CONSOLE_EVENTS_CLASS, 'ERROR');
             }
         }

@@ -7,10 +7,14 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
+use PHPStan\Type\BooleanType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodeQuality\Tests\Rector\Identical\SimplifyBoolIdenticalTrueRector\SimplifyBoolIdenticalTrueRectorTest
+ */
 final class SimplifyBoolIdenticalTrueRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
@@ -55,11 +59,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isBoolType($node->left) && ! $this->isBool($node->left)) {
+        if ($this->isStaticType($node->left, BooleanType::class) && ! $this->isBool($node->left)) {
             return $this->processBoolTypeToNotBool($node, $node->left, $node->right);
         }
 
-        if ($this->isBoolType($node->right) && ! $this->isBool($node->right)) {
+        if ($this->isStaticType($node->right, BooleanType::class) && ! $this->isBool($node->right)) {
             return $this->processBoolTypeToNotBool($node, $node->right, $node->left);
         }
 

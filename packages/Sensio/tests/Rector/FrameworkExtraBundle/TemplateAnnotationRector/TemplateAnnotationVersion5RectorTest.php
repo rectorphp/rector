@@ -14,6 +14,7 @@ final class TemplateAnnotationVersion5RectorTest extends AbstractRectorTestCase
             __DIR__ . '/Fixture/Version5/fixture2.php.inc',
             __DIR__ . '/Fixture/Version5/fixture3.php.inc',
             __DIR__ . '/Fixture/Version5/fixture4.php.inc',
+            __DIR__ . '/Fixture/Version5/fixture5.php.inc',
         ]);
     }
 

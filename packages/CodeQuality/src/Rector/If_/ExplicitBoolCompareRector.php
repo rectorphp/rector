@@ -17,6 +17,9 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -24,6 +27,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://www.reddit.com/r/PHP/comments/aqk01p/is_there_a_situation_in_which_if_countarray_0/
  * @see https://3v4l.org/UCd1b
+ * @see \Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\ExplicitBoolCompareRectorTest
  */
 final class ExplicitBoolCompareRector extends AbstractRector
 {
@@ -84,7 +88,7 @@ CODE_SAMPLE
             $isNegated = false;
         }
 
-        if ($this->isBoolType($conditionNode)) {
+        if ($this->isStaticType($conditionNode, BooleanType::class)) {
             return null;
         }
 
@@ -109,15 +113,15 @@ CODE_SAMPLE
             return $this->resolveArray($isNegated, $expr);
         }
 
-        if ($this->isStringyType($expr)) {
+        if ($this->isStringOrUnionStringOnlyType($expr)) {
             return $this->resolveString($isNegated, $expr);
         }
 
-        if ($this->isIntegerType($expr)) {
+        if ($this->isStaticType($expr, IntegerType::class)) {
             return $this->resolveInteger($isNegated, $expr);
         }
 
-        if ($this->isFloatType($expr)) {
+        if ($this->isStaticType($expr, FloatType::class)) {
             return $this->resolveFloat($isNegated, $expr);
         }
 

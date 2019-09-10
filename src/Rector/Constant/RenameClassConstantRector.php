@@ -11,6 +11,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Constant\RenameClassConstantRector\RenameClassConstantRectorTest
+ */
 final class RenameClassConstantRector extends AbstractRector
 {
     /**
@@ -68,12 +71,12 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->oldToNewConstantsByClass as $type => $oldToNewConstants) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isObjectType($node, $type)) {
                 continue;
             }
 
             foreach ($oldToNewConstants as $oldConstant => $newConstant) {
-                if (! $this->isNameInsensitive($node->name, $oldConstant)) {
+                if (! $this->isName($node->name, $oldConstant)) {
                     continue;
                 }
 

@@ -19,6 +19,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://medium.com/tech-tajawal/use-memory-gently-with-yield-in-php-7e62e2480b8d
  * @see https://3v4l.org/5PJid
+ * @see \Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\ReturnArrayClassMethodToYieldRectorTest
  */
 final class ReturnArrayClassMethodToYieldRector extends AbstractRector
 {
@@ -95,7 +96,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->methodsByType as $type => $methods) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isObjectType($node, $type)) {
                 continue;
             }
 
@@ -140,7 +141,7 @@ CODE_SAMPLE
         // remove whole return node
         $parentNode = $arrayNode->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $this->removeNode($parentNode);

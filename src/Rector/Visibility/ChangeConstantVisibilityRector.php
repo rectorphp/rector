@@ -8,6 +8,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Visibility\ChangeConstantVisibilityRector\ChangeConstantVisibilityRectorTest
+ */
 final class ChangeConstantVisibilityRector extends AbstractRector
 {
     /**
@@ -75,7 +78,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->constantToVisibilityByClass as $class => $constantsToVisibility) {
-            if (! $this->isType($node, $class)) {
+            if (! $this->isObjectType($node, $class)) {
                 continue;
             }
 

@@ -5,7 +5,12 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Use_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -18,6 +23,7 @@ use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Ast\NodeTraverser;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
@@ -39,11 +45,22 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\Php\ParamTypeInfo;
 use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
 use Rector\NodeTypeResolver\Php\VarTypeInfo;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\Php\TypeAnalyzer;
+use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 
+/**
+ * @see \Rector\NodeTypeResolver\Tests\PhpDoc\NodeAnalyzer\DocBlockManipulatorTest
+ */
 final class DocBlockManipulator
 {
+    /**
+     * @var bool[][]
+     */
+    private $usedShortNameByClasses = [];
+
     /**
      * @var PhpDocInfoFactory
      */
@@ -84,6 +101,21 @@ final class DocBlockManipulator
      */
     private $useAddingCommander;
 
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
@@ -91,7 +123,10 @@ final class DocBlockManipulator
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
         StringsTypePhpDocNodeDecorator $stringsTypePhpDocNodeDecorator,
         NodeTraverser $nodeTraverser,
-        UseAddingCommander $useAddingCommander
+        NameResolver $nameResolver,
+        UseAddingCommander $useAddingCommander,
+        BetterStandardPrinter $betterStandardPrinter,
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
@@ -100,6 +135,9 @@ final class DocBlockManipulator
         $this->stringsTypePhpDocNodeDecorator = $stringsTypePhpDocNodeDecorator;
         $this->nodeTraverser = $nodeTraverser;
         $this->useAddingCommander = $useAddingCommander;
+        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nameResolver = $nameResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -118,18 +156,6 @@ final class DocBlockManipulator
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         return $phpDocInfo->hasTag($name);
-    }
-
-    public function removeParamTagByName(Node $node, string $name): void
-    {
-        if ($node->getDocComment() === null) {
-            return;
-        }
-
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $this->removeParamTagByParameter($phpDocInfo, $name);
-
-        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
     public function addTag(Node $node, PhpDocChildNode $phpDocChildNode): void
@@ -209,15 +235,16 @@ final class DocBlockManipulator
     /**
      * With "name" as key
      *
+     * @param Function_|ClassMethod|Closure  $functionLike
      * @return ParamTypeInfo[]
      */
-    public function getParamTypeInfos(Node $node): array
+    public function getParamTypeInfos(FunctionLike $functionLike): array
     {
-        if ($node->getDocComment() === null) {
+        if ($functionLike->getDocComment() === null) {
             return [];
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $phpDocInfo = $this->createPhpDocInfoFromNode($functionLike);
         $types = $phpDocInfo->getParamTagValues();
         if ($types === []) {
             return [];
@@ -229,12 +256,14 @@ final class DocBlockManipulator
         /** @var AttributeAwareParamTagValueNode $paramTagValueNode */
         foreach ($types as $i => $paramTagValueNode) {
             $fqnParamTagValueNode = $fqnTypes[$i];
+            $isAlias = $this->isAlias((string) $paramTagValueNode->type, $functionLike);
 
             $paramTypeInfo = new ParamTypeInfo(
                 $paramTagValueNode->parameterName,
                 $this->typeAnalyzer,
                 $paramTagValueNode->getAttribute(Attribute::TYPE_AS_ARRAY),
-                $fqnParamTagValueNode->getAttribute(Attribute::RESOLVED_NAMES)
+                $fqnParamTagValueNode->getAttribute(Attribute::RESOLVED_NAMES),
+                $isAlias
             );
 
             $paramTypeInfos[$paramTypeInfo->getName()] = $paramTypeInfo;
@@ -259,16 +288,36 @@ final class DocBlockManipulator
     }
 
     /**
-     * @param string|string[]|IdentifierValueObject|IdentifierValueObject[] $type
+     * @param string|string[]|IdentifierValueObject|IdentifierValueObject[]|Type $type
      */
     public function changeVarTag(Node $node, $type): void
     {
         $this->removeTagFromNode($node, 'var', true);
+
+        if ($type instanceof Type) {
+            $type = implode('|', $this->staticTypeMapper->mapPHPStanTypeToStrings($type));
+        }
+
         $this->addTypeSpecificTag($node, 'var', $type);
     }
 
     public function addReturnTag(Node $node, string $type): void
     {
+        // make sure the tags are not identical, e.g imported class vs FQN class
+        $returnTypeInfo = $this->getReturnTypeInfo($node);
+        if ($returnTypeInfo) {
+            // already added
+            if ([ltrim($type, '\\')] === $returnTypeInfo->getFqnTypes()) {
+                return;
+            }
+        }
+
+        $returnTypeInfo = new ReturnTypeInfo(explode('|', $type), $this->typeAnalyzer);
+        if ($returnTypeInfo) {
+            $type = implode('|', $returnTypeInfo->getDocTypes());
+        }
+
+        $this->removeTagFromNode($node, 'return');
         $this->addTypeSpecificTag($node, 'return', $type);
     }
 
@@ -313,31 +362,6 @@ final class DocBlockManipulator
 
         foreach ($phpDocTagNodes as $phpDocTagNode) {
             $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
-        }
-    }
-
-    public function removeParamTagByParameter(PhpDocInfo $phpDocInfo, string $parameterName): void
-    {
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
-
-        /** @var PhpDocTagNode[] $phpDocTagNodes */
-        $phpDocTagNodes = $phpDocNode->getTagsByName('@param');
-
-        foreach ($phpDocTagNodes as $phpDocTagNode) {
-            /** @var ParamTagValueNode|InvalidTagValueNode $paramTagValueNode */
-            $paramTagValueNode = $phpDocTagNode->value;
-
-            $parameterName = '$' . ltrim($parameterName, '$');
-
-            // process invalid tag values
-            if ($paramTagValueNode instanceof InvalidTagValueNode) {
-                if ($paramTagValueNode->value === $parameterName) {
-                    $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
-                }
-                // process normal tag
-            } elseif ($paramTagValueNode->parameterName === $parameterName) {
-                $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
-            }
         }
     }
 
@@ -490,11 +514,6 @@ final class DocBlockManipulator
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
-    public function resetImportedNames(): void
-    {
-        $this->importedNames = [];
-    }
-
     /**
      * For better performance
      */
@@ -535,6 +554,22 @@ final class DocBlockManipulator
         $node->setAttribute('comments', null);
 
         return true;
+    }
+
+    public function getDoctrineFqnTargetEntity(Node $node): ?string
+    {
+        if ($node->getDocComment() === null) {
+            return null;
+        }
+
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+
+        $relationTagValueNode = $phpDocInfo->getDoctrineRelationTagValueNode();
+        if ($relationTagValueNode === null) {
+            return null;
+        }
+
+        return $relationTagValueNode->getFqnTargetEntity();
     }
 
     public function createPhpDocInfoFromNode(Node $node): PhpDocInfo
@@ -684,9 +719,19 @@ final class DocBlockManipulator
         // the name is already in the same namespace implicitly
         $namespaceName = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
 
-        // the class in the same namespace as differnt file can se used in this code, the short names would colide → skip
-        if (class_exists($namespaceName . '\\' . $shortName)) {
-            return $attributeAwareNode;
+        // the class in the same namespace as different file can se used in this code, the short names would colide → skip
+        $currentNamespaceShortName = $namespaceName . '\\' . $shortName;
+
+        if (class_exists($currentNamespaceShortName)) {
+            if ($currentNamespaceShortName !== $fullyQualifiedName) {
+                if ($this->isCurrentNamespaceSameShortClassAlreadyUsed(
+                    $node,
+                    $currentNamespaceShortName,
+                    $shortName
+                )) {
+                    return $attributeAwareNode;
+                }
+            }
         }
 
         if ($this->useAddingCommander->isShortImported($node, $fullyQualifiedName)) {
@@ -718,11 +763,11 @@ final class DocBlockManipulator
 
         $joinChar = '|'; // default
         if (Strings::contains($type, '|')) { // intersection
-            $types = explode('|', $type);
             $joinChar = '|';
+            $types = explode($joinChar, $type);
         } elseif (Strings::contains($type, '&')) { // union
-            $types = explode('&', $type);
             $joinChar = '&';
+            $types = explode($joinChar, $type);
         } else {
             $types = [$type];
         }
@@ -736,5 +781,62 @@ final class DocBlockManipulator
         }
 
         return implode($joinChar, $types);
+    }
+
+    private function isCurrentNamespaceSameShortClassAlreadyUsed(
+        Node $node,
+        string $fullyQualifiedName,
+        string $shortName
+    ): bool {
+        /** @var ClassLike|null $classNode */
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classNode === null) {
+            // cannot say, so rather yes
+            return true;
+        }
+
+        $className = $this->nameResolver->getName($classNode);
+
+        if (isset($this->usedShortNameByClasses[$className][$shortName])) {
+            return $this->usedShortNameByClasses[$className][$shortName];
+        }
+
+        $printedClass = $this->betterStandardPrinter->print($classNode->stmts);
+
+        // short with space " Type"| fqn
+        $shortNameOrFullyQualifiedNamePattern = sprintf(
+            '#(\s%s\b|\b%s\b)#',
+            preg_quote($shortName),
+            preg_quote($fullyQualifiedName)
+        );
+
+        $isShortClassUsed = (bool) Strings::match($printedClass, $shortNameOrFullyQualifiedNamePattern);
+
+        $this->usedShortNameByClasses[$className][$shortName] = $isShortClassUsed;
+
+        return $isShortClassUsed;
+    }
+
+    private function isAlias(string $paramType, Node $node): bool
+    {
+        /** @var Use_[]|null $useNodes */
+        $useNodes = $node->getAttribute(AttributeKey::USE_NODES);
+        if ($useNodes === null) {
+            return false;
+        }
+
+        foreach ($useNodes as $useNode) {
+            foreach ($useNode->uses as $useUse) {
+                if ($useUse->alias === null) {
+                    continue;
+                }
+
+                if ((string) $useUse->alias === $paramType) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

@@ -19,6 +19,11 @@ abstract class AbstractTypeInfo
     protected $isNullable = false;
 
     /**
+     * @var bool
+     */
+    protected $isAlias = false;
+
+    /**
      * @var string[]
      */
     protected $types = [];
@@ -52,21 +57,17 @@ abstract class AbstractTypeInfo
      * @param string[] $types
      * @param string[] $fqnTypes
      */
-    public function __construct(
-        array $types,
-        TypeAnalyzer $typeAnalyzer,
-        array $fqnTypes = [],
-        bool $allowTypedArrays = false
-    ) {
+    public function __construct(array $types, TypeAnalyzer $typeAnalyzer, array $fqnTypes = [])
+    {
         $this->typeAnalyzer = $typeAnalyzer;
-        $this->types = $this->analyzeAndNormalizeTypes($types, $allowTypedArrays);
+        $this->types = $this->analyzeAndNormalizeTypes($types);
 
         // fallback
         if ($fqnTypes === []) {
             $fqnTypes = $types;
         }
 
-        $this->fqnTypes = $this->analyzeAndNormalizeTypes($fqnTypes, $allowTypedArrays);
+        $this->fqnTypes = $this->analyzeAndNormalizeTypes($fqnTypes);
     }
 
     public function isNullable(): bool
@@ -98,7 +99,12 @@ abstract class AbstractTypeInfo
 
         $type = $this->resolveTypeForTypehint($forceFqn);
         if ($type === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+        }
+
+        // normalize for type-declaration
+        if (Strings::endsWith($type, '[]')) {
+            $type = 'array';
         }
 
         if ($this->typeAnalyzer->isPhpReservedType($type)) {
@@ -109,7 +115,13 @@ abstract class AbstractTypeInfo
             return new Identifier($type);
         }
 
-        $name = $forceFqn ? new FullyQualified($type) : new Name($type);
+        $type = ltrim($type, '\\');
+
+        if ($this->isAlias || $forceFqn === false) {
+            $name = new Name($type);
+        } else {
+            $name = new FullyQualified($type);
+        }
 
         if ($this->isNullable) {
             return new NullableType($name);
@@ -133,6 +145,7 @@ abstract class AbstractTypeInfo
         }
 
         $typeCount = count($this->types);
+
         if ($typeCount >= 2 && $this->isArraySubtype($this->types)) {
             return true;
         }
@@ -143,15 +156,38 @@ abstract class AbstractTypeInfo
     /**
      * @return string[]
      */
+    public function getFqnTypes(): array
+    {
+        return $this->fqnTypes;
+    }
+
+    /**
+     * @return string[]
+     */
     public function getDocTypes(): array
     {
         $allTypes = array_merge($this->types, $this->removedTypes);
+        $types = array_filter(array_unique($allTypes));
 
         if ($this->isNullable) {
-            $allTypes[] = 'null';
+            $types[] = 'null';
         }
 
-        return array_filter(array_unique($allTypes));
+        $types = $this->removeIterableTypeIfTraversableType($types);
+
+        // use mixed[] over array, that is more explicit about implicitnes
+        if ($types === ['array']) {
+            return ['mixed[]'];
+        }
+
+        // remove void types, as its useless in annotation
+        foreach ($types as $key => $value) {
+            if ($value === 'void') {
+                unset($types[$key]);
+            }
+        }
+
+        return $types;
     }
 
     protected function normalizeName(string $name): string
@@ -160,10 +196,34 @@ abstract class AbstractTypeInfo
     }
 
     /**
+     * @param string[] $types
+     */
+    protected function isArraySubtype(array $types): bool
+    {
+        if ($types === []) {
+            return false;
+        }
+
+        foreach ($types as $type) {
+            if (in_array($type, ['array', 'iterable'], true)) {
+                continue;
+            }
+
+            if (Strings::endsWith($type, '[]')) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param string|string[] $types
      * @return string[]
      */
-    private function analyzeAndNormalizeTypes($types, bool $allowTypedArrays = false): array
+    private function analyzeAndNormalizeTypes($types): array
     {
         $types = (array) $types;
 
@@ -201,7 +261,7 @@ abstract class AbstractTypeInfo
                 continue;
             }
 
-            $types[$i] = $this->typeAnalyzer->normalizeType($type, $allowTypedArrays);
+            $types[$i] = $this->typeAnalyzer->normalizeType($type);
         }
 
         // remove undesired types
@@ -220,15 +280,6 @@ abstract class AbstractTypeInfo
         return count($this->removedTypes) > 1;
     }
 
-    /**
-     * @param string[] $types
-     */
-    private function isArraySubtype(array $types): bool
-    {
-        $arraySubtypeGroup = ['array', 'iterable'];
-        return $this->areArraysEqual($types, $arraySubtypeGroup);
-    }
-
     private function normalizeNullable(string $type): string
     {
         if (Strings::startsWith($type, '?')) {
@@ -240,15 +291,14 @@ abstract class AbstractTypeInfo
 
     private function normalizeCasing(string $type): string
     {
-        if ($this->typeAnalyzer->isPhpReservedType($type)) {
-            return strtolower($type);
+        $types = explode('|', $type);
+        foreach ($types as $key => $singleType) {
+            if ($this->typeAnalyzer->isPhpReservedType($singleType) || strtolower($singleType) === '$this') {
+                $types[$key] = strtolower($singleType);
+            }
         }
 
-        if (strtolower($type) === '$this') {
-            return strtolower($type);
-        }
-
-        return $type;
+        return implode($types, '|');
     }
 
     /**
@@ -294,18 +344,6 @@ abstract class AbstractTypeInfo
     }
 
     /**
-     * @param mixed[] $types
-     * @param mixed[] $arraySubtypeGroup
-     */
-    private function areArraysEqual(array $types, array $arraySubtypeGroup): bool
-    {
-        sort($types);
-        sort($arraySubtypeGroup);
-
-        return $types === $arraySubtypeGroup;
-    }
-
-    /**
      * @param string[] $types
      */
     private function areMutualObjectSubtypes(array $types): bool
@@ -341,6 +379,10 @@ abstract class AbstractTypeInfo
             return $this->resolveMutualObjectSubtype($this->types);
         }
 
+        if (in_array('iterable', $this->types, true)) {
+            return 'iterable';
+        }
+
         $types = $forceFqn ? $this->fqnTypes : $this->types;
 
         return $types[0];
@@ -349,5 +391,34 @@ abstract class AbstractTypeInfo
     private function classLikeExists(string $type): bool
     {
         return ! class_exists($type) && ! interface_exists($type) && ! trait_exists($type);
+    }
+
+    /**
+     * @param string[] $types
+     * @return string[]
+     */
+    private function removeIterableTypeIfTraversableType(array $types): array
+    {
+        $hasTraversableType = false;
+
+        foreach ($types as $type) {
+            if (Strings::endsWith($type, '[]')) {
+                $hasTraversableType = true;
+                break;
+            }
+        }
+
+        if (! $hasTraversableType) {
+            return $types;
+        }
+
+        foreach ($types as $key => $uniqeueType) {
+            // remove iterable if other types are provided
+            if (in_array($uniqeueType, ['iterable', 'array'], true)) {
+                unset($types[$key]);
+            }
+        }
+
+        return $types;
     }
 }

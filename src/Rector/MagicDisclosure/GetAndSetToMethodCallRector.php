@@ -7,12 +7,17 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\GetAndSetToMethodCallRectorTest
+ */
 final class GetAndSetToMethodCallRector extends AbstractRector
 {
     /**
@@ -108,7 +113,8 @@ CODE_SAMPLE
         $propertyFetchNode = $assign->var;
 
         foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if ($this->shouldSkipPropertyFetch($propertyFetchNode, $type)) {
+            $objectType = new ObjectType($type);
+            if ($this->shouldSkipPropertyFetch($propertyFetchNode, $objectType)) {
                 continue;
             }
 
@@ -120,6 +126,20 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch, ObjectType $objectType): bool
+    {
+        if (! $this->isObjectType($propertyFetch->var, $objectType)) {
+            return true;
+        }
+
+        if (! $this->propertyFetchManipulator->isMagicOnType($propertyFetch, $objectType)) {
+            return true;
+        }
+
+        // $this->value = $value
+        return $this->propertyFetchManipulator->isPropertyToSelf($propertyFetch);
     }
 
     private function createMethodCallNodeFromPropertyFetchNode(
@@ -143,24 +163,11 @@ CODE_SAMPLE
         return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetch), $node]);
     }
 
-    private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch, string $type): bool
-    {
-        if (! $this->isType($propertyFetch->var, $type)) {
-            return true;
-        }
-
-        if (! $this->propertyFetchManipulator->isMagicOnType($propertyFetch, $type)) {
-            return true;
-        }
-
-        // $this->value = $value
-        return $this->propertyFetchManipulator->isPropertyToSelf($propertyFetch);
-    }
-
     private function processPropertyFetch(PropertyFetch $propertyFetch): ?MethodCall
     {
         foreach ($this->typeToMethodCalls as $type => $transformation) {
-            if ($this->shouldSkipPropertyFetch($propertyFetch, $type)) {
+            $objectType = new ObjectType($type);
+            if ($this->shouldSkipPropertyFetch($propertyFetch, $objectType)) {
                 continue;
             }
 

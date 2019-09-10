@@ -3,12 +3,13 @@
 namespace Rector\Naming;
 
 use Nette\Utils\Strings;
+use PHPStan\Type\ObjectType;
 
 final class PropertyNaming
 {
-    public function fqnToVariableName(string $fqn): string
+    public function fqnToVariableName(ObjectType $objectType): string
     {
-        return lcfirst($this->fqnToShortName($fqn));
+        return lcfirst($this->fqnToShortName($objectType->getClassName()));
     }
 
     /**

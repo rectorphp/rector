@@ -110,7 +110,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->isType($node->class, self::RESPONSE_CLASS);
+        return $this->isObjectType($node->class, self::RESPONSE_CLASS);
     }
 
     /**

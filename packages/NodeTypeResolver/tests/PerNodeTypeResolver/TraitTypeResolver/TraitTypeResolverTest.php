@@ -4,28 +4,33 @@ namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver;
 
 use Iterator;
 use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\Source\AnotherTrait;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\Source\TraitWithTrait;
+use Rector\PHPStan\TypeFactoryStaticHelper;
 
 /**
- * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\TraitTypeResolver
+ * @see \Rector\NodeTypeResolver\PerNodeTypeResolver\TraitTypeResolver
  */
 final class TraitTypeResolverTest extends AbstractNodeTypeResolverTest
 {
     /**
      * @dataProvider provideData()
-     * @param string[] $expectedTypes
      */
-    public function test(string $file, int $nodePosition, array $expectedTypes): void
+    public function test(string $file, int $nodePosition, Type $expectedType): void
     {
         $variableNodes = $this->getNodesForFileOfType($file, Trait_::class);
 
-        $this->assertSame($expectedTypes, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
+        $this->assertEquals($expectedType, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
     }
 
     public function provideData(): Iterator
     {
-        yield [__DIR__ . '/Source/TraitWithTrait.php', 0, [TraitWithTrait::class, AnotherTrait::class]];
+        yield [
+            __DIR__ . '/Source/TraitWithTrait.php',
+            0,
+            TypeFactoryStaticHelper::createUnionObjectType([AnotherTrait::class, TraitWithTrait::class]),
+        ];
     }
 }

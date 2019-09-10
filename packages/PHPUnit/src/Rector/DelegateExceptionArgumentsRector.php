@@ -10,6 +10,9 @@ use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\PHPUnit\Tests\Rector\DelegateExceptionArgumentsRector\DelegateExceptionArgumentsRectorTest
+ */
 final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
 {
     /**

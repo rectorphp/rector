@@ -17,6 +17,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/laravel/framework/pull/27276
+ * @see \Rector\Laravel\Tests\Rector\StaticCall\RequestStaticValidateToInjectRector\RequestStaticValidateToInjectRectorTest
  */
 final class RequestStaticValidateToInjectRector extends AbstractRector
 {
@@ -113,7 +114,7 @@ CODE_SAMPLE
     private function shouldSkip(Node $node): bool
     {
         if ($node instanceof StaticCall) {
-            return ! $this->isTypes($node, $this->requestTypes);
+            return ! $this->isObjectTypes($node, $this->requestTypes);
         }
 
         $class = $node->getAttribute(AttributeKey::CLASS_NODE);

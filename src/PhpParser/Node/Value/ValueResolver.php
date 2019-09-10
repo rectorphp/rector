@@ -18,6 +18,9 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
+/**
+ * @see \Rector\Tests\PhpParser\Node\Value\ValueResolverTest
+ */
 final class ValueResolver
 {
     /**
@@ -69,7 +72,7 @@ final class ValueResolver
             return $this->nameResolver->getName($expr);
         }
 
-        $nodeStaticType = $this->nodeTypeResolver->getNodeStaticType($expr);
+        $nodeStaticType = $this->nodeTypeResolver->getStaticType($expr);
 
         if ($nodeStaticType instanceof ConstantArrayType) {
             return $this->extractConstantArrayTypeValue($nodeStaticType);
@@ -114,7 +117,7 @@ final class ValueResolver
     {
         $fileInfo = $dir->getAttribute(AttributeKey::FILE_INFO);
         if (! $fileInfo instanceof SmartFileInfo) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         return $fileInfo->getPath();
@@ -124,7 +127,7 @@ final class ValueResolver
     {
         $fileInfo = $file->getAttribute(AttributeKey::FILE_INFO);
         if (! $fileInfo instanceof SmartFileInfo) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         return $fileInfo->getPathname();
@@ -139,11 +142,11 @@ final class ValueResolver
         $constant = $this->nameResolver->getName($classConstFetch->name);
 
         if ($class === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         if ($constant === null) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         if ($class === 'self') {

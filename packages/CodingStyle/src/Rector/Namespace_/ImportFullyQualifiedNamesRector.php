@@ -4,6 +4,7 @@ namespace Rector\CodingStyle\Rector\Namespace_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
@@ -12,12 +13,16 @@ use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\CodingStyle\Imports\AliasUsesResolver;
 use Rector\CodingStyle\Imports\ShortNameResolver;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\ImportFullyQualifiedNamesRectorTest;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see ImportFullyQualifiedNamesRectorTest
+ */
 final class ImportFullyQualifiedNamesRector extends AbstractRector
 {
     /**
@@ -150,12 +155,7 @@ CODE_SAMPLE
     {
         $originalName = $name->getAttribute('originalName');
 
-        if ($originalName instanceof Name) {
-            // already short
-            if (! Strings::contains($originalName->toString(), '\\')) {
-                return null;
-            }
-        } else {
+        if (! $originalName instanceof Name) {
             // not sure what to do
             return null;
         }
@@ -163,6 +163,7 @@ CODE_SAMPLE
         // the short name is already used, skip it
         // @todo this is duplicated check of - $this->useAddingCommander->isShortImported?
         $shortName = $this->classNaming->getShortName($name->toString());
+
         if ($this->isShortNameAlreadyUsedForDifferentFqn($name, $shortName)) {
             return null;
         }
@@ -185,7 +186,8 @@ CODE_SAMPLE
         }
 
         if (! $this->useAddingCommander->hasImport($name, $fullyQualifiedName)) {
-            if ($name->getAttribute(AttributeKey::PARENT_NODE) instanceof FuncCall) {
+            $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof FuncCall) {
                 $this->useAddingCommander->addFunctionUseImport($name, $fullyQualifiedName);
             } else {
                 $this->useAddingCommander->addUseImport($name, $fullyQualifiedName);
@@ -203,16 +205,32 @@ CODE_SAMPLE
     // 1. name is fully qualified → import it
     private function shouldSkipName(Name $name, string $fullyQualifiedName): bool
     {
-        // not namespaced class
-        if (! Strings::contains($fullyQualifiedName, '\\')) {
+        $shortName = $this->classNaming->getShortName($fullyQualifiedName);
+
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof ConstFetch) { // is true, false, null etc.
             return true;
         }
 
-        $shortName = $this->classNaming->getShortName($fullyQualifiedName);
+        if ($this->isNames($name, ['self', 'parent', 'static'])) {
+            return true;
+        }
+
+        // skip native function calls
+        if ($parentNode instanceof FuncCall && ! Strings::contains($fullyQualifiedName, '\\')) {
+            return true;
+        }
 
         // nothing to change
         if ($shortName === $fullyQualifiedName) {
-            return true;
+            return false;
+        }
+
+        foreach ($this->aliasedUses as $aliasedUse) {
+            // its aliased, we cannot just rename it
+            if (Strings::endsWith($aliasedUse, '\\' . $shortName)) {
+                return true;
+            }
         }
 
         return $this->useAddingCommander->canImportBeAdded($name, $fullyQualifiedName);
@@ -231,7 +249,6 @@ CODE_SAMPLE
     private function canBeNameImported(Name $name): bool
     {
         $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-
         if ($parentNode instanceof Namespace_) {
             return false;
         }

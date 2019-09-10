@@ -11,6 +11,7 @@ final class ToThis extends BeLocalClass
         $this->assertThis();
         self::assertThis();
         parent::assertThis();
+        self::assertThisAndThat(1, 2);
     }
 }
 
@@ -29,6 +30,7 @@ final class ToThis extends BeLocalClass
         $this->assertThis();
         $this->assertThis();
         parent::assertThis();
+        $this->assertThisAndThat(1, 2);
     }
 }
 

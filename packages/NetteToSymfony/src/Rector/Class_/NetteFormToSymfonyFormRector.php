@@ -23,6 +23,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see https://github.com/nette/forms/blob/master/src/Forms/Container.php
  * ↓
  * @see https://github.com/symfony/symfony/tree/master/src/Symfony/Component/Form/Extension/Core/Type
+ * @see \Rector\NetteToSymfony\Tests\Rector\Class_\NetteFormToSymfonyFormRector\NetteFormToSymfonyFormRectorTest
  */
 final class NetteFormToSymfonyFormRector extends AbstractRector
 {
@@ -124,7 +125,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isType($classNode, $this->presenterClass)) {
+        if (! $this->isObjectType($classNode, $this->presenterClass)) {
             return null;
         }
 
@@ -133,7 +134,7 @@ CODE_SAMPLE
         }
 
         /** @var MethodCall $node */
-        if (! $this->isType($node->var, 'Nette\Application\UI\Form')) {
+        if (! $this->isObjectType($node->var, 'Nette\Application\UI\Form')) {
             return null;
         }
 

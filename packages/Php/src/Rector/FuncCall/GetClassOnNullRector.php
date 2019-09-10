@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\NullType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -19,6 +20,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see http://php.net/manual/en/migration72.incompatible.php#migration72.incompatible.no-null-to-get_class
  * @see https://3v4l.org/sk0fp
+ * @see \Rector\Php\Tests\Rector\FuncCall\GetClassOnNullRector\GetClassOnNullRectorTest
  */
 final class GetClassOnNullRector extends AbstractRector
 {
@@ -87,7 +89,7 @@ CODE_SAMPLE
         }
 
         $valueNode = $node->args[0]->value;
-        if (! $this->isNullableType($valueNode) && ! $this->isNullType($valueNode)) {
+        if (! $this->isNullableType($valueNode) && ! $this->isStaticType($valueNode, NullType::class)) {
             return null;
         }
 

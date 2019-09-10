@@ -8,6 +8,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
@@ -40,14 +43,14 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
     protected function processMethodCallNode(MethodCall $methodCall): ?Node
     {
         $serviceType = $this->getServiceTypeFromMethodCallArgument($methodCall);
-        if ($serviceType === null) {
+        if (! $serviceType instanceof ObjectType) {
             return null;
         }
 
         $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
         $classNode = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {
-            throw new ShouldNotHappenException();
+            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
         }
 
         $this->addPropertyToClass($classNode, $serviceType, $propertyName);
@@ -58,27 +61,30 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
     /**
      * @param MethodCall $methodCallNode
      */
-    private function getServiceTypeFromMethodCallArgument(Node $methodCallNode): ?string
+    private function getServiceTypeFromMethodCallArgument(Node $methodCallNode): Type
     {
         if (! isset($methodCallNode->args[0])) {
-            return null;
+            return new MixedType();
         }
 
         $argument = $methodCallNode->args[0]->value;
 
         if ($argument instanceof String_) {
             $serviceName = $argument->value;
+
             return $this->analyzedApplicationContainer->getTypeForName($serviceName);
         }
 
         if (! $argument instanceof ClassConstFetch) {
-            return null;
+            return new MixedType();
         }
 
         if ($argument->class instanceof Name) {
-            return $this->getName($argument->class);
+            $className = $this->getName($argument->class);
+
+            return new ObjectType($className);
         }
 
-        return null;
+        return new MixedType();
     }
 }

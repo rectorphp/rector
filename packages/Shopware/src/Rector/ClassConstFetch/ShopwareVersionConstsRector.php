@@ -16,6 +16,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/shopware/shopware/blob/5.6/UPGRADE-5.6.md
+ * @see \Rector\Shopware\Tests\Rector\ClassConstFetch\ShopwareVersionConstsRector\ShopwareVersionConstsRectorTest
  */
 final class ShopwareVersionConstsRector extends AbstractRector
 {
@@ -59,7 +60,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, 'Shopware')) {
+        if (! $this->isObjectType($node, 'Shopware')) {
             return null;
         }
 

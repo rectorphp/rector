@@ -15,7 +15,7 @@ abstract class AbstractPHPUnitRector extends AbstractRector
             return false;
         }
 
-        return $this->isNameInsensitive($node, $name);
+        return $this->isName($node, $name);
     }
 
     /**
@@ -27,7 +27,7 @@ abstract class AbstractPHPUnitRector extends AbstractRector
             return false;
         }
 
-        return $this->isNamesInsensitive($node, $names);
+        return $this->isNames($node, $names);
     }
 
     protected function isInTestClass(Node $node): bool
@@ -37,7 +37,7 @@ abstract class AbstractPHPUnitRector extends AbstractRector
             return false;
         }
 
-        return $this->isTypes($classNode, ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase']);
+        return $this->isObjectTypes($classNode, ['PHPUnit\Framework\TestCase', 'PHPUnit_Framework_TestCase']);
     }
 
     /**

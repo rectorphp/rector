@@ -13,6 +13,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\ClassMethod\AddMethodParentCallRector\AddMethodParentCallRectorTest
+ */
 final class AddMethodParentCallRector extends AbstractRector
 {
     /**
@@ -79,7 +82,7 @@ CODE_SAMPLE
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         foreach ($this->methodsByParentTypes as $type => $methods) {
-            if (! $this->isType($class, $type)) {
+            if (! $this->isObjectType($class, $type)) {
                 continue;
             }
 

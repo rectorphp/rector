@@ -2,7 +2,6 @@
 
 namespace Rector\SOLID\Rector\Class_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\NodeContainer\ParsedNodesByType;
@@ -10,6 +9,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\SOLID\Tests\Rector\Class_\FinalizeClassesWithoutChildrenRector\FinalizeClassesWithoutChildrenRectorTest
+ */
 final class FinalizeClassesWithoutChildrenRector extends AbstractRector
 {
     /**
@@ -74,7 +76,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isDoctrineEntity($node)) {
+        if ($this->isDoctrineEntityClass($node)) {
             return null;
         }
 
@@ -84,17 +86,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $node->flags |= Class_::MODIFIER_FINAL;
+        $this->makeFinal($node);
 
         return $node;
-    }
-
-    private function isDoctrineEntity(Node $node): bool
-    {
-        if ($node->getDocComment() === null) {
-            return false;
-        }
-
-        return Strings::contains($node->getDocComment()->getText(), 'Entity');
     }
 }

@@ -12,6 +12,7 @@ use Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider;
 
 /**
  * Covers https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#frameworkbundle
+ * @see \Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\StringFormTypeToClassRectorTest
  */
 final class StringFormTypeToClassRector extends AbstractRector
 {
@@ -49,7 +50,7 @@ CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
 $formBuilder = new Symfony\Component\Form\FormBuilder;
-$form->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
+$formBuilder->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
 CODE_SAMPLE
                 ),
             ]
@@ -69,7 +70,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, $this->formBuilderClass)) {
+        if (! $this->isObjectType($node, $this->formBuilderClass)) {
             return null;
         }
 

@@ -14,6 +14,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://github.com/symfony/symfony/pull/27476
+ * @see \Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\RootNodeTreeBuilderRectorTest
  */
 final class RootNodeTreeBuilderRector extends AbstractRector
 {
@@ -64,7 +65,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node->class, $this->treeBuilderClass)) {
+        if (! $this->isObjectType($node->class, $this->treeBuilderClass)) {
             return null;
         }
 
@@ -108,7 +109,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            if (! $this->isType($node, $this->treeBuilderClass)) {
+            if (! $this->isObjectType($node, $this->treeBuilderClass)) {
                 return false;
             }
 

@@ -9,6 +9,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Tests\Rector\Property\RenamePropertyRector\RenamePropertyRectorTest
+ */
 final class RenamePropertyRector extends AbstractRector
 {
     /**
@@ -59,12 +62,12 @@ final class RenamePropertyRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         foreach ($this->oldToNewPropertyByTypes as $type => $oldToNewProperties) {
-            if (! $this->isType($node->var, $type)) {
+            if (! $this->isObjectType($node->var, $type)) {
                 continue;
             }
 
             foreach ($oldToNewProperties as $oldProperty => $newProperty) {
-                if (! $this->isNameInsensitive($node, $oldProperty)) {
+                if (! $this->isName($node, $oldProperty)) {
                     continue;
                 }
 

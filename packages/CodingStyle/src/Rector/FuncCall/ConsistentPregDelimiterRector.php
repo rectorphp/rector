@@ -12,6 +12,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentPregDelimiterRector\ConsistentPregDelimiterRectorTest
+ */
 final class ConsistentPregDelimiterRector extends AbstractRector
 {
     /**
@@ -105,7 +108,7 @@ CODE_SAMPLE
         }
 
         foreach (self::STATIC_METHODS_WITH_REGEX_PATTERN as $type => $methodsToPositions) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isObjectType($node->class, $type)) {
                 continue;
             }
 

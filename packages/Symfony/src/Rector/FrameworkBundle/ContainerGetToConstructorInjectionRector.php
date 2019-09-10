@@ -10,6 +10,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#console
+ * @see \Rector\Symfony\Tests\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector\ContainerGetToConstructorInjectionRectorTest
  */
 final class ContainerGetToConstructorInjectionRector extends AbstractToConstructorInjectionRector
 {
@@ -81,7 +82,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isType($node, 'Symfony\Component\DependencyInjection\ContainerInterface')) {
+        if (! $this->isObjectType($node, 'Symfony\Component\DependencyInjection\ContainerInterface')) {
             return null;
         }
 

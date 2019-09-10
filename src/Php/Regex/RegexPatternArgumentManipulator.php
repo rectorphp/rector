@@ -126,7 +126,7 @@ final class RegexPatternArgumentManipulator
     private function processStaticCall(StaticCall $staticCall): array
     {
         foreach ($this->staticMethodsWithPatternsToArgumentPosition as $type => $methodNamesToArgumentPosition) {
-            if (! $this->nodeTypeResolver->isType($staticCall, $type)) {
+            if (! $this->nodeTypeResolver->isObjectType($staticCall->class, $type)) {
                 continue;
             }
 

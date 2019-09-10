@@ -9,6 +9,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyStrposLowerRector\SimplifyStrposLowerRectorTest
+ */
 final class SimplifyStrposLowerRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
@@ -28,7 +31,7 @@ final class SimplifyStrposLowerRector extends AbstractRector
     }
 
     /**
-     * @param FuncCall $node;
+     * @param FuncCall $node ;
      */
     public function refactor(Node $node): ?Node
     {

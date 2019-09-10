@@ -12,6 +12,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://3v4l.org/YiTeP
+ * @see \Rector\Php\Tests\Rector\FuncCall\StringifyDefineRector\StringifyDefineRectorTest
  */
 final class StringifyDefineRector extends AbstractRector
 {
@@ -61,7 +62,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isStringyType($node->args[0]->value)) {
+        if ($this->isStringOrUnionStringOnlyType($node->args[0]->value)) {
             return null;
         }
 

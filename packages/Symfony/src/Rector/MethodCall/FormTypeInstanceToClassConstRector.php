@@ -31,6 +31,7 @@ use ReflectionClass;
  * @see http://www.keganv.com/passing-arguments-controller-file-type-symfony-3/
  * @see https://stackoverflow.com/questions/34027711/passing-data-to-buildform-in-symfony-2-8-3-0
  * @see https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
+ * @see \Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\FormTypeInstanceToClassConstRectorTest
  */
 final class FormTypeInstanceToClassConstRector extends AbstractRector
 {
@@ -93,7 +94,7 @@ class SomeController
         $form = $this->createForm(TeamType::class, $entity, [
             'action' => $this->generateUrl('teams_update', ['id' => $entity->getId()]),
             'method' => 'PUT',
-        ));
+        ]);
     }
 }
 CODE_SAMPLE
@@ -115,11 +116,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isType($node, $this->controllerClass) && $this->isName($node, 'createForm')) {
+        if ($this->isObjectType($node, $this->controllerClass) && $this->isName($node, 'createForm')) {
             return $this->processNewInstance($node, 0, 2);
         }
 
-        if ($this->isTypes($node, [$this->formBuilderType, $this->formType]) && $this->isName($node, 'add')) {
+        if ($this->isObjectTypes($node, [$this->formBuilderType, $this->formType]) && $this->isName($node, 'add')) {
             return $this->processNewInstance($node, 1, 2);
         }
 
@@ -241,22 +242,20 @@ CODE_SAMPLE
             return;
         }
 
-        $formBuilderParamNode = $this->builderFactory->param('builder')
-            ->setType(new FullyQualified($this->formBuilderType))
-            ->getNode();
+        $formBuilderParamBuilder = $this->builderFactory->param('builder');
+        $formBuilderParamBuilder->setType(new FullyQualified($this->formBuilderType));
+        $formBuilderParam = $formBuilderParamBuilder->getNode();
 
-        $optionsParamNode = $this->builderFactory->param('options')
-            ->setType('array')
-            ->getNode();
+        $optionsParamBuilder = $this->builderFactory->param('options');
+        $optionsParamBuilder->setType('array');
+        $optionsParam = $optionsParamBuilder->getNode();
 
         $buildFormClassMethodNode = $this->builderFactory->method('buildForm')
             ->makePublic()
-            ->addParam($formBuilderParamNode)
-            ->addParam($optionsParamNode)
+            ->addParam($formBuilderParam)
+            ->addParam($optionsParam)
             // raw copy stmts from ctor @todo improve
-            ->addStmts(
-                $this->replaceParameterAssignWithOptionAssign((array) $classMethod->stmts, $optionsParamNode)
-            )
+            ->addStmts($this->replaceParameterAssignWithOptionAssign((array) $classMethod->stmts, $optionsParam))
             ->getNode();
 
         $classNode->stmts[] = $buildFormClassMethodNode;
@@ -272,9 +271,9 @@ CODE_SAMPLE
             return;
         }
 
-        $resolverParamNode = $this->builderFactory->param('resolver')
-            ->setType(new FullyQualified('Symfony\Component\OptionsResolver\OptionsResolver'))
-            ->getNode();
+        $resolverParamBuilder = $this->builderFactory->param('resolver');
+        $resolverParamBuilder->setType(new FullyQualified('Symfony\Component\OptionsResolver\OptionsResolver'));
+        $resolverParam = $resolverParamBuilder->getNode();
 
         $optionsDefaults = new Array_();
 
@@ -282,17 +281,17 @@ CODE_SAMPLE
             $optionsDefaults->items[] = new ArrayItem($this->createNull(), new String_($optionName));
         }
 
-        $setDefaultsMethodCall = new MethodCall($resolverParamNode->var, new Identifier('setDefaults'), [
+        $setDefaultsMethodCall = new MethodCall($resolverParam->var, new Identifier('setDefaults'), [
             new Arg($optionsDefaults),
         ]);
 
-        $configureOptionsClassMethodNode = $this->builderFactory->method('configureOptions')
-            ->makePublic()
-            ->addParam($resolverParamNode)
-            ->addStmt($setDefaultsMethodCall)
-            ->getNode();
+        $configureOptionsClassMethodBuilder = $this->builderFactory->method('configureOptions');
+        $configureOptionsClassMethodBuilder->makePublic();
+        $configureOptionsClassMethodBuilder->addParam($resolverParam);
+        $configureOptionsClassMethodBuilder->addStmt($setDefaultsMethodCall);
+        $configureOptionsClassMethod = $configureOptionsClassMethodBuilder->getNode();
 
-        $classNode->stmts[] = $configureOptionsClassMethodNode;
+        $classNode->stmts[] = $configureOptionsClassMethod;
     }
 
     /**

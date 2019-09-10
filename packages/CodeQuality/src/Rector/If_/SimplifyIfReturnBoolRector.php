@@ -11,11 +11,15 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\BooleanType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\SimplifyIfReturnBoolRectorTest
+ */
 final class SimplifyIfReturnBoolRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
@@ -168,7 +172,7 @@ CODE_SAMPLE
             return $expr;
         }
 
-        if ($this->isBoolType($expr)) {
+        if ($this->isStaticType($expr, BooleanType::class)) {
             return $expr;
         }
 

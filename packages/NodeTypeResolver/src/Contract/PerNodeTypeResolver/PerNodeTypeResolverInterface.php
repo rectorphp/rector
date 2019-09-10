@@ -3,6 +3,7 @@
 namespace Rector\NodeTypeResolver\Contract\PerNodeTypeResolver;
 
 use PhpParser\Node;
+use PHPStan\Type\Type;
 
 interface PerNodeTypeResolverInterface
 {
@@ -11,8 +12,5 @@ interface PerNodeTypeResolverInterface
      */
     public function getNodeClasses(): array;
 
-    /**
-     * @return string[]
-     */
-    public function resolve(Node $node): array;
+    public function resolve(Node $node): Type;
 }

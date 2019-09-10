@@ -16,6 +16,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://thephp.cc/news/2016/02/questioning-phpunit-best-practices
  * @see https://github.com/sebastianbergmann/phpunit/commit/17c09b33ac5d9cad1459ace0ae7b1f942d1e9afd
+ * @see \Rector\PHPUnit\Tests\Rector\ExceptionAnnotationRector\ExceptionAnnotationRectorTest
  */
 final class ExceptionAnnotationRector extends AbstractPHPUnitRector
 {

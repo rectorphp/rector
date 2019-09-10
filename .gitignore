@@ -15,3 +15,5 @@ phpstan-paths.txt
 
 # tests - travis
 /laravel-dir
+
+uuid-migration.json

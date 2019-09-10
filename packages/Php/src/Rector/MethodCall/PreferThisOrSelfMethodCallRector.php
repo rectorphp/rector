@@ -10,6 +10,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Php\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\PreferThisOrSelfMethodCallRectorTest
+ */
 final class PreferThisOrSelfMethodCallRector extends AbstractRector
 {
     /**
@@ -78,11 +81,11 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         foreach ($this->typeToPreference as $type => $preference) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isObjectType($node, $type)) {
                 continue;
             }
 
-            $this->ensurePreferceIsValid($preference);
+            $this->ensurePreferenceIsValid($preference);
 
             if ($preference === self::PREFER_SELF) {
                 return $this->processToSelf($node);
@@ -99,7 +102,7 @@ CODE_SAMPLE
     /**
      * @param mixed $preference
      */
-    private function ensurePreferceIsValid($preference): void
+    private function ensurePreferenceIsValid($preference): void
     {
         $allowedPreferences = [self::PREFER_THIS, self::PREFER_SELF];
         if (in_array($preference, $allowedPreferences, true)) {
@@ -132,7 +135,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->createStaticCall('self', $name);
+        return $this->createStaticCall('self', $name, $node->args);
     }
 
     /**
@@ -153,6 +156,6 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->createMethodCall('this', $name);
+        return $this->createMethodCall('this', $name, $node->args);
     }
 }

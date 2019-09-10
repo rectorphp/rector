@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Naming\PropertyNaming;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,6 +20,9 @@ use Rector\RemovingStatic\StaticTypesInClassResolver;
 use Rector\RemovingStatic\UniqueObjectFactoryFactory;
 use Rector\RemovingStatic\UniqueObjectOrServiceDetector;
 
+/**
+ * @see \Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\PassFactoryToEntityRectorTest
+ */
 final class PassFactoryToUniqueObjectRector extends AbstractRector
 {
     /**
@@ -62,12 +66,12 @@ final class PassFactoryToUniqueObjectRector extends AbstractRector
         FactoryClassPrinter $factoryClassPrinter,
         array $typesToServices = []
     ) {
-        $this->typesToServices = $typesToServices;
         $this->propertyNaming = $propertyNaming;
         $this->uniqueObjectOrServiceDetector = $uniqueObjectOrServiceDetector;
         $this->uniqueObjectFactoryFactory = $uniqueObjectFactoryFactory;
         $this->factoryClassPrinter = $factoryClassPrinter;
         $this->staticTypesInClassResolver = $staticTypesInClassResolver;
+        $this->typesToServices = $typesToServices;
     }
 
     public function getDefinition(): RectorDefinition
@@ -160,44 +164,46 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Class_) {
-            $staticTypesInClass = $this->staticTypesInClassResolver->collectStaticCallTypeInClass(
-                $node,
-                $this->typesToServices
-            );
-
-            // nothing here
-            if ($staticTypesInClass === []) {
-                return null;
-            }
-
-            foreach ($staticTypesInClass as $staticTypeInClass) {
-                $variableName = $this->propertyNaming->fqnToVariableName($staticTypeInClass);
-                $this->addPropertyToClass($node, $staticTypeInClass, $variableName);
-            }
-
-            // is this an object? create factory for it next to this :)
-            if ($this->uniqueObjectOrServiceDetector->isUniqueObject()) {
-                $factoryClass = $this->uniqueObjectFactoryFactory->createFactoryClass($node, $staticTypesInClass);
-
-                $this->factoryClassPrinter->printFactoryForClass($factoryClass, $node);
-            }
-
-            // @todo 3. iterate parents with same effect etc.
-            return $node;
+            return $this->refactorClass($node);
         }
 
         foreach ($this->typesToServices as $type) {
-            if (! $this->isType($node, $type)) {
+            if (! $this->isObjectType($node->class, $type)) {
                 continue;
             }
 
+            $objectType = new FullyQualifiedObjectType($type);
+
             // is this object created via new somewhere else? use factory!
-            $variableName = $this->propertyNaming->fqnToVariableName($type);
+            $variableName = $this->propertyNaming->fqnToVariableName($objectType);
             $thisPropertyFetch = new PropertyFetch(new Variable('this'), $variableName);
 
             return new MethodCall($thisPropertyFetch, $node->name, $node->args);
         }
 
         return $node;
+    }
+
+    private function refactorClass(Class_ $class): Class_
+    {
+        $staticTypesInClass = $this->staticTypesInClassResolver->collectStaticCallTypeInClass(
+            $class,
+            $this->typesToServices
+        );
+
+        foreach ($staticTypesInClass as $staticType) {
+            $variableName = $this->propertyNaming->fqnToVariableName($staticType);
+            $this->addPropertyToClass($class, $staticType, $variableName);
+
+            // is this an object? create factory for it next to this :)
+            if ($this->uniqueObjectOrServiceDetector->isUniqueObject()) {
+                $factoryClass = $this->uniqueObjectFactoryFactory->createFactoryClass($class, $staticType);
+
+                $this->factoryClassPrinter->printFactoryForClass($factoryClass, $class);
+            }
+        }
+
+        // @todo 3. iterate parents with same effect etc.
+        return $class;
     }
 }

@@ -10,6 +10,8 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeDecoratorInterface;
+use Rector\BetterPhpDocParser\PhpDocParser\OrmTagParser;
+use Rector\Configuration\CurrentNodeProvider;
 
 final class PhpDocInfoFactory
 {
@@ -29,20 +31,30 @@ final class PhpDocInfoFactory
     private $lexer;
 
     /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
+    /**
      * @param PhpDocNodeDecoratorInterface[] $phpDocNodeDecoratorInterfacenodeDecorators
      */
     public function __construct(
         PhpDocParser $phpDocParser,
         Lexer $lexer,
-        array $phpDocNodeDecoratorInterfacenodeDecorators
+        array $phpDocNodeDecoratorInterfacenodeDecorators,
+        CurrentNodeProvider $currentNodeProvider
     ) {
         $this->phpDocParser = $phpDocParser;
         $this->lexer = $lexer;
         $this->phpDocNodeDecoratorInterfaces = $phpDocNodeDecoratorInterfacenodeDecorators;
+        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     public function createFromNode(Node $node): PhpDocInfo
     {
+        /** needed for @see OrmTagParser */
+        $this->currentNodeProvider->setNode($node);
+
         $content = $node->getDocComment()->getText();
         $tokens = $this->lexer->tokenize($content);
 
