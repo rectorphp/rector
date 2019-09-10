@@ -10,6 +10,9 @@ parameters:
     reportUnmatchedIgnoredErrors: false
     level: max
 
+    autoload_directories:
+        - stubs
+
     excludes_analyse:
         # complex printer
         - "packages/ContributorTools/src/Command/DumpNodesCommand.php"

@@ -2,7 +2,7 @@
 
 namespace Doctrine\ORM\Mapping;
 
-if (interface_exists('Doctrine\ORM\Mapping\JoinTable')) {
+if (class_exists('Doctrine\ORM\Mapping\JoinTable')) {
     return;
 }
 
@@ -10,7 +10,7 @@ if (interface_exists('Doctrine\ORM\Mapping\JoinTable')) {
  * @Annotation
  * @Target({"PROPERTY","ANNOTATION"})
  */
-final class JoinTable implements Annotation
+class JoinTable implements Annotation
 {
     /**
      * @var string

@@ -2,39 +2,58 @@
 
 namespace Rector\Doctrine\Collector;
 
+use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
+use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToManyTagNodeInterface;
+
 final class UuidMigrationDataCollector
 {
     /**
-     * @var mixed[]
+     * @var string[][][]
      */
-    private $propertiesByClass = [];
+    private $columnPropertiesByClass = [];
 
-    public function addClassAndProperty(string $class, string $property): void
+    /**
+     * @var string[][][][]
+     */
+    private $relationPropertiesByClass = [];
+
+    public function addClassAndColumnProperty(string $class, string $propertyName): void
     {
-        $this->propertiesByClass[$class]['properties'][] = $property;
+        $this->columnPropertiesByClass[$class]['properties'][] = $propertyName;
     }
 
     public function addClassToManyRelationProperty(
         string $class,
         string $oldPropertyName,
-        string $uuidPropertyName
+        string $uuidPropertyName,
+        DoctrineRelationTagValueNodeInterface $doctrineRelationTagValueNode
     ): void {
-        $this->propertiesByClass[$class]['to_many_relations'][] = [
+        $kind = $this->resolveKind($doctrineRelationTagValueNode);
+
+        $this->relationPropertiesByClass[$class][$kind][] = [
             'property_name' => $oldPropertyName,
             'uuid_property_name' => $uuidPropertyName,
         ];
     }
 
-    public function addClassToOneRelationProperty(string $class, string $property): void
-    {
-        $this->propertiesByClass[$class]['to_one_relations'][] = $property;
-    }
-
     /**
      * @return string[][][]
      */
-    public function getPropertiesByClass(): array
+    public function getColumnPropertiesByClass(): array
     {
-        return $this->propertiesByClass;
+        return $this->columnPropertiesByClass;
+    }
+
+    /**
+     * @return string[][][][]
+     */
+    public function getRelationPropertiesByClass(): array
+    {
+        return $this->relationPropertiesByClass;
+    }
+
+    private function resolveKind(DoctrineRelationTagValueNodeInterface $doctrineRelationTagValueNode): string
+    {
+        return $doctrineRelationTagValueNode instanceof ToManyTagNodeInterface ? 'to_many_relations' : 'to_one_relations';
     }
 }

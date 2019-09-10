@@ -2,7 +2,7 @@
 
 namespace Doctrine\ORM\Mapping;
 
-if (interface_exists('Doctrine\ORM\Mapping\JoinColumn')) {
+if (class_exists('Doctrine\ORM\Mapping\JoinColumn')) {
     return;
 }
 
@@ -10,7 +10,7 @@ if (interface_exists('Doctrine\ORM\Mapping\JoinColumn')) {
  * @Annotation
  * @Target({"PROPERTY","ANNOTATION"})
  */
-final class JoinColumn implements Annotation
+class JoinColumn implements Annotation
 {
     /**
      * @var string

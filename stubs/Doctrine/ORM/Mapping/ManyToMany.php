@@ -2,7 +2,7 @@
 
 namespace Doctrine\ORM\Mapping;
 
-if (interface_exists('Doctrine\ORM\Mapping\OneToMany')) {
+if (class_exists('Doctrine\ORM\Mapping\ManyToMany')) {
     return;
 }
 
@@ -10,8 +10,13 @@ if (interface_exists('Doctrine\ORM\Mapping\OneToMany')) {
  * @Annotation
  * @Target("PROPERTY")
  */
-final class OneToMany implements Annotation
+class ManyToMany implements Annotation
 {
+    /**
+     * @var string
+     */
+    public $targetEntity;
+
     /**
      * @var string
      */
@@ -20,7 +25,7 @@ final class OneToMany implements Annotation
     /**
      * @var string
      */
-    public $targetEntity;
+    public $inversedBy;
 
     /**
      * @var array<string>

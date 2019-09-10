@@ -2,7 +2,7 @@
 
 namespace Doctrine\ORM\Mapping;
 
-if (interface_exists('Doctrine\ORM\Mapping\Id')) {
+if (class_exists('Doctrine\ORM\Mapping\Id')) {
     return;
 }
 
@@ -10,6 +10,6 @@ if (interface_exists('Doctrine\ORM\Mapping\Id')) {
  * @Annotation
  * @Target("PROPERTY")
  */
-final class Id implements Annotation
+class Id implements Annotation
 {
 }

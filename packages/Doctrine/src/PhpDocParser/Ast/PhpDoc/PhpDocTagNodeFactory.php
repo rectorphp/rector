@@ -36,9 +36,8 @@ final class PhpDocTagNodeFactory
 
     public function createVarTagUuidInterface(): PhpDocTagNode
     {
-        $varTagValueNode = new VarTagValueNode(new IdentifierTypeNode(
-            '\\' . DoctrineClass::RAMSEY_UUID_INTERFACE
-        ), '', '');
+        $identifierTypeNode = new IdentifierTypeNode('\\' . DoctrineClass::RAMSEY_UUID_INTERFACE);
+        $varTagValueNode = new VarTagValueNode($identifierTypeNode, '', '');
 
         return new PhpDocTagNode('@var', $varTagValueNode);
     }
@@ -78,12 +77,14 @@ final class PhpDocTagNodeFactory
 
     public function createJoinTableTagNode(Property $property): PhpDocTagNode
     {
-        $joinTableName = $this->joinTableNameResolver->resolveManyToManyTableNameForProperty($property);
-        $uuidJoinTable = $joinTableName . '_uuid';
+        $uuidJoinTable = $this->joinTableNameResolver->resolveManyToManyUuidTableNameForProperty($property);
 
-        $joinTableTagValueNode = new JoinTableTagValueNode($uuidJoinTable, null, [
-            new JoinColumnTagValueNode(null, 'uuid'),
-        ], [new JoinColumnTagValueNode(null, 'uuid')]);
+        $joinTableTagValueNode = new JoinTableTagValueNode(
+            $uuidJoinTable,
+            null,
+            [new JoinColumnTagValueNode(null, 'uuid')],
+            [new JoinColumnTagValueNode(null, 'uuid')]
+        );
 
         return new AttributeAwarePhpDocTagNode(JoinTableTagValueNode::SHORT_NAME, $joinTableTagValueNode);
     }

@@ -2,7 +2,7 @@
 
 namespace Doctrine\ORM\Mapping;
 
-if (interface_exists('Doctrine\ORM\Mapping\Table')) {
+if (class_exists('Doctrine\ORM\Mapping\Table')) {
     return;
 }
 
@@ -10,7 +10,7 @@ if (interface_exists('Doctrine\ORM\Mapping\Table')) {
  * @Annotation
  * @Target("CLASS")
  */
-final class Table implements Annotation
+class Table implements Annotation
 {
     /**
      * @var string

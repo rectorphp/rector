@@ -30,23 +30,31 @@ final class ReportEntitiesWithAddedPropertiesFinishExtension implements Finishin
 
     public function run(): void
     {
-        $propertiesByClass = $this->uuidMigrationDataCollector->getPropertiesByClass();
-        if ($propertiesByClass === []) {
+        $this->generatePropertiesJsonWithFileName(
+            'uuid-migration-new-column-properties.json',
+            $this->uuidMigrationDataCollector->getColumnPropertiesByClass()
+        );
+
+        $this->generatePropertiesJsonWithFileName(
+            'uuid-migration-new-relation-properties.json',
+            $this->uuidMigrationDataCollector->getRelationPropertiesByClass()
+        );
+    }
+
+    /**
+     * @param mixed[] $data
+     */
+    private function generatePropertiesJsonWithFileName(string $fileName, array $data): void
+    {
+        if ($data === []) {
             return;
         }
 
-        $data = [
-            'title' => 'Entities with new properties',
-            'added_properties_by_class' => $propertiesByClass,
-        ];
+        $jsonContent = Json::encode(['new_columns_by_class' => $data], Json::PRETTY);
 
-        $jsonContent = Json::encode($data, Json::PRETTY);
-
-        $filePath = getcwd() . '/uuid-migration.json';
+        $filePath = getcwd() . '/' . $fileName;
         FileSystem::write($filePath, $jsonContent);
 
-        $this->symfonyStyle->warning(
-            'See freshly created "uuid-migration.json" file for changes on entities and further SQL migration steps'
-        );
+        $this->symfonyStyle->warning(sprintf('See freshly created "%s" file for changes on entities', $fileName));
     }
 }
