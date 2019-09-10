@@ -223,7 +223,12 @@ final class NodeFactory
     {
         $arrayItem = null;
 
-        if ($item instanceof Variable) {
+        if ($item instanceof Variable
+            || $item instanceof String_
+            || $item instanceof MethodCall
+            || $item instanceof StaticCall
+            || $item instanceof Expr\FuncCall
+        ) {
             $arrayItem = new ArrayItem($item);
         } elseif ($item instanceof Identifier) {
             $string = new String_($item->toString());

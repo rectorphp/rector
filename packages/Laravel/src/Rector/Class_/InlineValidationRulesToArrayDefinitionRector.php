@@ -59,8 +59,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $className = $this->getName($node);
-        if ($className === null || !is_subclass_of($className, 'Illuminate\Foundation\Http\FormRequest', true)) {
+        if ($this->isType($node, 'Illuminate\Foundation\Http\FormRequest') === false) {
             return null;
         }
 
@@ -101,26 +100,25 @@ CODE_SAMPLE
                         continue;
                     }
 
+                    $ruleClass = $matches[1];
+                    $ruleAttribute = $matches[2];
+
                     $newRule = new Node\Expr\StaticCall(
                         new Node\Name('\Illuminate\Validation\Rule'),
                         'exists',
                         [
                             new Node\Arg(
                                 new Node\Expr\ClassConstFetch(
-                                    new Node\Name($matches[1]),
+                                    new Node\Name($ruleClass),
                                     'class'
                                 )
                             ),
-                            new Node\Arg(new Node\Scalar\String_($matches[2])),
+                            new Node\Arg(new Node\Scalar\String_($ruleAttribute)),
                         ]
                     );
                 }
 
-                $item->value = new Node\Expr\Array_(
-                    array_map(function (Node\Expr $rule): Node\Expr\ArrayItem {
-                        return new Node\Expr\ArrayItem($rule);
-                    }, $newRules)
-                );
+                $item->value = $this->createArray($newRules);
             }
         }
 
@@ -134,9 +132,9 @@ CODE_SAMPLE
     private function transformRulesSet(Node\Expr $expr): array
     {
         if ($expr instanceof Node\Scalar\String_) {
-            $parts = preg_split('/\|/', $expr->value);
+            $parts = explode('|', $expr->value);
             if ($parts === false) {
-                throw new \InvalidArgumentException("Failed to split string {$expr->value} with regex");
+                throw new \InvalidArgumentException("Failed to explode string {$expr->value} with regex");
             }
 
             return array_map(static function (string $value): Node\Scalar\String_ {
