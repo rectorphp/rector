@@ -83,14 +83,14 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $newRules = $this->transformRulesSet($item->value);
+                $newRules = $this->transformRulesSetToExpressionsArray($item->value);
                 foreach ($newRules as &$newRule) {
                     if (!($newRule instanceof Node\Expr\BinaryOp\Concat)) {
                         continue;
                     }
 
                     try {
-                        $fullString = $this->transformConcatExpression($newRule);
+                        $fullString = $this->transformConcatExpressionToSingleString($newRule);
                     } catch (\LogicException $exception) {
                         continue;
                     }
@@ -129,7 +129,7 @@ CODE_SAMPLE
      * @param Node\Expr $expr
      * @return Node\Expr[]
      */
-    private function transformRulesSet(Node\Expr $expr): array
+    private function transformRulesSetToExpressionsArray(Node\Expr $expr): array
     {
         if ($expr instanceof Node\Scalar\String_) {
             $parts = explode('|', $expr->value);
@@ -141,10 +141,10 @@ CODE_SAMPLE
                 return new Node\Scalar\String_($value);
             }, $parts);
         } elseif ($expr instanceof Node\Expr\BinaryOp\Concat) {
-            $left = $this->transformRulesSet($expr->left);
+            $left = $this->transformRulesSetToExpressionsArray($expr->left);
             $expr->left = $left[count($left ) - 1];
 
-            $right = $this->transformRulesSet($expr->right);
+            $right = $this->transformRulesSetToExpressionsArray($expr->right);
             $expr->right = $right [0];
 
             return array_merge(array_slice($left, 0, -1), [$expr], array_slice($right, 1));
@@ -158,7 +158,7 @@ CODE_SAMPLE
         throw new \InvalidArgumentException('Unexpected call ' . get_class($expr));
     }
 
-    private function transformConcatExpression(Node\Expr\BinaryOp\Concat $expression): string
+    private function transformConcatExpressionToSingleString(Node\Expr\BinaryOp\Concat $expression): string
     {
         $output = '';
 
@@ -166,7 +166,7 @@ CODE_SAMPLE
             if ($expressionPart instanceof Node\Scalar\String_) {
                 $output .= $expressionPart->value;
             } elseif ($expressionPart instanceof Node\Expr\BinaryOp\Concat) {
-                $output .= $this->transformConcatExpression($expressionPart);
+                $output .= $this->transformConcatExpressionToSingleString($expressionPart);
             } elseif ($expressionPart instanceof Node\Expr\ClassConstFetch) {
                 /** @var Node\Name $name */
                 $name = $expressionPart->class->getAttribute('originalName');
