@@ -28,6 +28,7 @@ final class ArrayArgumentInTestToDataProviderRectorTest extends AbstractRectorTe
                         'class' => 'PHPUnit\Framework\TestCase',
                         'old_method' => 'doTestMultiple',
                         'new_method' => 'doTestSingle',
+                        'variable_name' => 'variable',
                     ],
                 ],
             ],

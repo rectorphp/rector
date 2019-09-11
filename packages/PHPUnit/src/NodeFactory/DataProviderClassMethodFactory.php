@@ -40,7 +40,7 @@ final class DataProviderClassMethodFactory
             $value = $arg->value;
             if ($value instanceof Array_) {
                 foreach ($value->items as $arrayItem) {
-                    $returnStatement = new Yield_($arrayItem->value);
+                    $returnStatement = new Yield_(new Array_([$arrayItem->value]));
                     $classMethod->stmts[] = new Expression($returnStatement);
                 }
             }
