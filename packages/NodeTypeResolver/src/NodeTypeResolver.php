@@ -299,7 +299,6 @@ final class NodeTypeResolver
 
         // make object type specific to alias or FQN
         $staticType = $nodeScope->getType($node);
-
         if (! $staticType instanceof ObjectType) {
             return $staticType;
         }

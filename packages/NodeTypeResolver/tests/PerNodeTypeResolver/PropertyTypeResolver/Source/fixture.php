@@ -2,19 +2,19 @@
 
 namespace Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarDocBlockRector;
 
-use Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarDocBlockRector\Source\SomeChildOfValueObject;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\SomeChild;
 
 class ActionClass
 {
     /**
-     * @var SomeChildOfValueObject|null
+     * @var SomeChild|null
      */
     private $someChildValueObject;
 
     public function someFunction()
     {
-        $this->someChildValueObject = new SomeChildOfValueObject('value');
+        $this->someChildValueObject = new SomeChild('value');
 
-        $someChildValueObject = new SomeChildOfValueObject();
+        $someChildValueObject = new SomeChild();
     }
 }
