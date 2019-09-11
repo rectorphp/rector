@@ -165,7 +165,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->docBlockManipulator->hasTag($property, 'var')) {
+        if (! $this->docBlockManipulator->getVarType()) {
             $this->docBlockManipulator->changeVarTag($property, $type);
         }
 

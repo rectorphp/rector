@@ -15,6 +15,7 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 
 /**
@@ -189,6 +190,8 @@ final class PhpDocInfo
 
     public function getByType(string $type): ?PhpDocTagValueNode
     {
+        $this->ensureTypeIsTagValueNode($type, __METHOD__);
+
         foreach ($this->phpDocNode->children as $phpDocChildNode) {
             if ($phpDocChildNode instanceof PhpDocTagNode) {
                 if (is_a($phpDocChildNode->value, $type, true)) {
@@ -212,5 +215,19 @@ final class PhpDocInfo
         }
 
         return null;
+    }
+
+    private function ensureTypeIsTagValueNode(string $type, string $location): void
+    {
+        if (is_a($type, PhpDocTagValueNode::class, true)) {
+            return;
+        }
+
+        throw new ShouldNotHappenException(sprintf(
+            'Type "%s" passed to "%s()" method must be child of "%s"',
+            $type,
+            $location,
+            PhpDocTagValueNode::class
+        ));
     }
 }

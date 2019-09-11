@@ -57,7 +57,9 @@ final class PropertyTypeDeclarationRector extends AbstractRector
             return null;
         }
 
-        if ($this->docBlockManipulator->hasTag($node, '@var')) {
+        // is already set
+        $currentVarType = $this->docBlockManipulator->getVarType($node);
+        if (! $currentVarType instanceof MixedType) {
             return null;
         }
 
