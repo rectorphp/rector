@@ -3,7 +3,7 @@
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver;
 
 use Iterator;
-use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
@@ -19,9 +19,10 @@ final class ParamTypeResolverTest extends AbstractNodeTypeResolverTest
      */
     public function test(string $file, int $nodePosition, Type $expectedType): void
     {
-        $variableNodes = $this->getNodesForFileOfType($file, Variable::class);
+        $variableNodes = $this->getNodesForFileOfType($file, Param::class);
 
-        $this->assertEquals($expectedType, $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]));
+        $resolvedType = $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]);
+        $this->assertEquals($expectedType, $resolvedType);
     }
 
     public function provideData(): Iterator

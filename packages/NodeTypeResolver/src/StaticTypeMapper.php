@@ -313,8 +313,7 @@ final class StaticTypeMapper
         }
 
         if ($phpStanType instanceof ShortenedObjectType) {
-            // no preslash for alias
-            return $phpStanType->getFullyQualifiedName();
+            return '\\' . $phpStanType->getFullyQualifiedName();
         }
 
         if ($phpStanType instanceof FullyQualifiedObjectType) {
@@ -463,6 +462,10 @@ final class StaticTypeMapper
 
     public function createTypeHash(Type $type): string
     {
+        if ($type instanceof MixedType) {
+            return serialize($type);
+        }
+
         if ($type instanceof ArrayType) {
             // @todo sort to make different order identical
             return $this->createTypeHash($type->getItemType()) . '[]';

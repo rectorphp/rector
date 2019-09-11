@@ -42,9 +42,6 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/class_annotations_serializer_type.php.inc'];
     }
 
-    /**
-     * @return string[]
-     */
     public function provideDataForTestWithNamespaceRename(): Iterator
     {
         yield [__DIR__ . '/Fixture/rename_class_without_namespace.php.inc'];

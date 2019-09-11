@@ -65,6 +65,6 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
         /** @var string $paramName */
         $paramName = $this->nameResolver->getName($param);
 
-        return $this->docBlockManipulator->getParamTypeByName($functionLike, $paramName);
+        return $this->docBlockManipulator->getParamTypeByName($functionLike, '$' . $paramName);
     }
 }

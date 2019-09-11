@@ -127,11 +127,7 @@ CODE_SAMPLE
 
         // process doc blocks
         if ($this->shouldImportDocBlocks) {
-            $useImports = $this->docBlockManipulator->importNames($node);
-            foreach ($useImports as $useImport) {
-                $this->useAddingCommander->addUseImport($node, $useImport);
-            }
-
+            $this->docBlockManipulator->importNames($node);
             return $node;
         }
 

@@ -7,7 +7,6 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
@@ -20,7 +19,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use Rector\BetterPhpDocParser\Ast\NodeTraverser;
+use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
@@ -29,29 +28,17 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareIdentifie
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Rector\CodingStyle\Application\UseAddingCommander;
-use Rector\CodingStyle\Imports\ImportSkipper;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
-use Rector\PHPStan\Type\ShortenedObjectType;
 
 /**
  * @see \Rector\NodeTypeResolver\Tests\PhpDoc\NodeAnalyzer\DocBlockManipulatorTest
  */
 final class DocBlockManipulator
 {
-    /**
-     * @var bool[][]
-     */
-    private $usedShortNameByClasses = [];
-
     /**
      * @var PhpDocInfoFactory
      */
@@ -68,24 +55,9 @@ final class DocBlockManipulator
     private $attributeAwareNodeFactory;
 
     /**
-     * @var NodeTraverser
+     * @var PhpDocNodeTraverser
      */
-    private $nodeTraverser;
-
-    /**
-     * @var UseAddingCommander
-     */
-    private $useAddingCommander;
-
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
-     * @var NameResolver
-     */
-    private $nameResolver;
+    private $phpDocNodeTraverser;
 
     /**
      * @var StaticTypeMapper
@@ -98,30 +70,31 @@ final class DocBlockManipulator
     private $hasPhpDocChanged = false;
 
     /**
-     * @var ImportSkipper
+     * @var DocBlockClassRenamer
      */
-    private $importSkipper;
+    private $docBlockClassRenamer;
+
+    /**
+     * @var DocBlockNameImporter
+     */
+    private $docBlockNameImporter;
 
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
-        NodeTraverser $nodeTraverser,
-        NameResolver $nameResolver,
-        UseAddingCommander $useAddingCommander,
-        BetterStandardPrinter $betterStandardPrinter,
+        PhpDocNodeTraverser $phpDocNodeTraverser,
         StaticTypeMapper $staticTypeMapper,
-        ImportSkipper $importSkipper
+        DocBlockClassRenamer $docBlockClassRenamer,
+        DocBlockNameImporter $docBlockNameImporter
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
-        $this->nodeTraverser = $nodeTraverser;
-        $this->useAddingCommander = $useAddingCommander;
-        $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->nameResolver = $nameResolver;
+        $this->phpDocNodeTraverser = $phpDocNodeTraverser;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->importSkipper = $importSkipper;
+        $this->docBlockClassRenamer = $docBlockClassRenamer;
+        $this->docBlockNameImporter = $docBlockNameImporter;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -176,13 +149,16 @@ final class DocBlockManipulator
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $this->renamePhpDocType($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
+        $hasNodeChanged = $this->docBlockClassRenamer->renamePhpDocType(
+            $phpDocInfo->getPhpDocNode(),
+            $oldType,
+            $newType,
+            $node
+        );
 
-        if ($this->hasPhpDocChanged === false) {
-            return;
+        if ($hasNodeChanged) {
+            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
         }
-
-        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
     public function replaceAnnotationInNode(Node $node, string $oldAnnotation, string $newAnnotation): void
@@ -262,6 +238,9 @@ final class DocBlockManipulator
 
         $this->removeTagFromNode($node, 'var', true);
         $this->addTypeSpecificTag($node, 'var', $newType);
+
+        // to invoke the node override
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
     }
 
     public function addReturnTag(Node $node, Type $newType): void
@@ -361,71 +340,18 @@ final class DocBlockManipulator
         }
     }
 
-    public function renamePhpDocType(PhpDocNode $phpDocNode, Type $oldType, Type $newType, Node $node): PhpDocNode
-    {
-        $phpParserNode = $node;
-
-        $this->nodeTraverser->traverseWithCallable(
-            $phpDocNode,
-            function (PhpDocParserNode $node) use ($phpParserNode, $oldType, $newType): PhpDocParserNode {
-                if (! $node instanceof IdentifierTypeNode) {
-                    return $node;
-                }
-
-                $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($node, $phpParserNode);
-                if ($staticType->equals($oldType)) {
-                    $newIdentifierType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
-
-                    if ($newIdentifierType === null) {
-                        throw new ShouldNotHappenException();
-                    }
-
-                    //                    $node->name = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
-                    $this->hasPhpDocChanged = true;
-                    return $newIdentifierType;
-                }
-
-                return $node;
-            }
-        );
-
-        return $phpDocNode;
-    }
-
-    /**
-     * @return FullyQualifiedObjectType[]
-     */
-    public function importNames(Node $node): array
+    public function importNames(Node $node): void
     {
         if ($node->getDocComment() === null) {
-            return [];
+            return;
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
-        $phpParserNode = $node;
+        $hasNodeChanged = $this->docBlockNameImporter->importNames($phpDocInfo, $node);
 
-        $this->nodeTraverser->traverseWithCallable($phpDocNode, function (PhpDocParserNode $docNode) use (
-            $node,
-            $phpParserNode
-        ): PhpDocParserNode {
-            if (! $docNode instanceof IdentifierTypeNode) {
-                return $docNode;
-            }
-
-            $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($docNode, $phpParserNode);
-            if (! $staticType instanceof FullyQualifiedObjectType) {
-                return $docNode;
-            }
-
-            return $this->processFqnNameImport($node, $docNode, $staticType);
-        });
-
-        if ($this->hasPhpDocChanged) {
+        if ($hasNodeChanged) {
             $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
         }
-
-        return [];
     }
 
     /**
@@ -441,7 +367,7 @@ final class DocBlockManipulator
         $phpDocNode = $phpDocInfo->getPhpDocNode();
         $phpParserNode = $node;
 
-        $this->nodeTraverser->traverseWithCallable($phpDocNode, function (PhpDocParserNode $node) use (
+        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, function (PhpDocParserNode $node) use (
             $namespacePrefix,
             $excludedClasses,
             $phpParserNode
@@ -490,7 +416,24 @@ final class DocBlockManipulator
             return false;
         }
 
-        return (bool) Strings::match($docComment->getText(), '#\@(param|throws|return|var)\b#');
+        if ((bool) Strings::match($docComment->getText(), '#\@(param|throws|return|var)\b#')) {
+            return true;
+        }
+
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+
+        // has any type node?
+
+        foreach ($phpDocInfo->getPhpDocNode()->children as $phpDocChildNode) {
+            if ($phpDocChildNode instanceof PhpDocTagNode) {
+                // is custom class, it can contain some type info
+                if (Strings::startsWith(get_class($phpDocChildNode->value), 'Rector\\')) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public function updateNodeWithPhpDocInfo(
@@ -550,6 +493,8 @@ final class DocBlockManipulator
 
     public function getParamTypeByName(FunctionLike $functionLike, string $paramName): Type
     {
+        $this->ensureParamNameStartsWithDollar($paramName, __METHOD__);
+
         $paramTypes = $this->getParamTypesByName($functionLike);
         return $paramTypes[$paramName] ?? new MixedType();
     }
@@ -583,70 +528,6 @@ final class DocBlockManipulator
         }
     }
 
-    private function processFqnNameImport(
-        Node $node,
-        IdentifierTypeNode $identifierTypeNode,
-        FullyQualifiedObjectType $fullyQualifiedObjectType
-    ): PhpDocParserNode {
-        // nothing to be changed → skip
-        if ($this->hasTheSameShortClassInCurrentNamespace($node, $fullyQualifiedObjectType)) {
-            return $identifierTypeNode;
-        }
-
-        if ($this->importSkipper->shouldSkipName($node, $fullyQualifiedObjectType)) {
-            return $identifierTypeNode;
-        }
-
-        if ($this->useAddingCommander->isShortImported($node, $fullyQualifiedObjectType)) {
-            if ($this->useAddingCommander->isImportShortable($node, $fullyQualifiedObjectType)) {
-                $identifierTypeNode->name = $fullyQualifiedObjectType->getShortName();
-                $this->hasPhpDocChanged = true;
-            }
-
-            return $identifierTypeNode;
-        }
-
-        $identifierTypeNode->name = $fullyQualifiedObjectType->getShortName();
-        $this->hasPhpDocChanged = true;
-        $this->useAddingCommander->addUseImport($node, $fullyQualifiedObjectType);
-
-        return $identifierTypeNode;
-    }
-
-    private function isCurrentNamespaceSameShortClassAlreadyUsed(
-        Node $node,
-        string $fullyQualifiedName,
-        ShortenedObjectType $shortenedObjectType
-    ): bool {
-        /** @var ClassLike|null $classNode */
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
-            // cannot say, so rather yes
-            return true;
-        }
-
-        $className = $this->nameResolver->getName($classNode);
-
-        if (isset($this->usedShortNameByClasses[$className][$shortenedObjectType->getShortName()])) {
-            return $this->usedShortNameByClasses[$className][$shortenedObjectType->getShortName()];
-        }
-
-        $printedClass = $this->betterStandardPrinter->print($classNode->stmts);
-
-        // short with space " Type"| fqn
-        $shortNameOrFullyQualifiedNamePattern = sprintf(
-            '#(\s%s\b|\b%s\b)#',
-            preg_quote($shortenedObjectType->getShortName()),
-            preg_quote($fullyQualifiedName)
-        );
-
-        $isShortClassUsed = (bool) Strings::match($printedClass, $shortNameOrFullyQualifiedNamePattern);
-
-        $this->usedShortNameByClasses[$className][$shortenedObjectType->getShortName()] = $isShortClassUsed;
-
-        return $isShortClassUsed;
-    }
-
     private function areTypesEquals(Type $firstType, Type $secondType): bool
     {
         return $this->staticTypeMapper->createTypeHash($firstType) === $this->staticTypeMapper->createTypeHash(
@@ -654,35 +535,16 @@ final class DocBlockManipulator
         );
     }
 
-    /**
-     * The class in the same namespace as different file can se used in this code, the short names would colide → skip
-     *
-     * E.g. this namespace:
-     * App\Product
-     *
-     * And the FQN:
-     * App\SomeNesting\Product
-     */
-    private function hasTheSameShortClassInCurrentNamespace(
-        Node $node,
-        FullyQualifiedObjectType $fullyQualifiedObjectType
-    ): bool {
-        // the name is already in the same namespace implicitly
-        $namespaceName = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
-        $currentNamespaceShortName = $namespaceName . '\\' . $fullyQualifiedObjectType->getShortName();
-
-        if (ClassExistenceStaticHelper::doesClassLikeExist($currentNamespaceShortName)) {
-            return false;
+    private function ensureParamNameStartsWithDollar(string $paramName, string $location): void
+    {
+        if (Strings::startsWith($paramName, '$')) {
+            return;
         }
 
-        if ($currentNamespaceShortName === $fullyQualifiedObjectType->getClassName()) {
-            return false;
-        }
-
-        return $this->isCurrentNamespaceSameShortClassAlreadyUsed(
-            $node,
-            $currentNamespaceShortName,
-            $fullyQualifiedObjectType->getShortNameType()
-        );
+        throw new ShouldNotHappenException(sprintf(
+            'Param name "%s" must start with "$" in "%s()" method.',
+            $paramName,
+            $location
+        ));
     }
 }

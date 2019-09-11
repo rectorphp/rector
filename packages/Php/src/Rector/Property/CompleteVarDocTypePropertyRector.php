@@ -5,7 +5,6 @@ namespace Rector\Php\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -37,7 +36,7 @@ final class CompleteVarDocTypePropertyRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Complete property `@var` annotations for missing one, yet known.', [
+        return new RectorDefinition('Complete property `@var` annotations or correct the old ones', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass
@@ -82,22 +81,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        // @todo use property type resolver
-        $varType = $this->docBlockManipulator->getVarType($node);
-
-        // already completed
-        if (! $varType instanceof MixedType) {
+        $propertyType = $this->propertyTypeInferer->inferProperty($node);
+        if ($propertyType instanceof MixedType) {
             return null;
         }
 
-        $varType = $this->propertyTypeInferer->inferProperty($node);
-        if ($varType instanceof MixedType) {
-            return null;
-        }
-
-        $this->docBlockManipulator->changeVarTag($node, $varType);
-
-        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $this->docBlockManipulator->changeVarTag($node, $propertyType);
 
         return $node;
     }
