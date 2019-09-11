@@ -109,6 +109,11 @@ final class DocBlockManipulator
             return true;
         }
 
+        // allow only class nodes further
+        if (! class_exists($name)) {
+            return false;
+        }
+
         // advanced check, e.g. for "Namespaced\Annotations\DI"
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 

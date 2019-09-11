@@ -3,10 +3,10 @@
 namespace Rector\DeadCode\Doctrine;
 
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\InheritanceType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\InheritanceTypeTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\InversedByNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\MappedByNodeInterface;
@@ -71,7 +71,7 @@ final class DoctrineEntityManipulator
         }
 
         // is parent entity
-        if ($this->docBlockManipulator->hasTag($class, InheritanceType::class)) {
+        if ($this->docBlockManipulator->hasTag($class, InheritanceTypeTagValueNode::class)) {
             return false;
         }
 

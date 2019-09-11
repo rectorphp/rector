@@ -142,6 +142,7 @@ CODE_SAMPLE
             $tagClass = $this->annotationToTagClass[$annotationClass];
 
             $injectTagValueNode = $phpDocInfo->getByType($tagClass);
+
             if ($injectTagValueNode === null) {
                 continue;
             }
@@ -165,10 +166,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->docBlockManipulator->hasTag($property, 'var')) {
-            $this->docBlockManipulator->changeVarTag($property, $type);
-        }
-
+        $this->docBlockManipulator->changeVarTag($property, $type);
         $this->docBlockManipulator->removeTagFromNode($property, $tagClass);
 
         $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
