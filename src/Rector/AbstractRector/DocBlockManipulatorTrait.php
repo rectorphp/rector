@@ -5,6 +5,7 @@ namespace Rector\Rector\AbstractRector;
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -13,6 +14,11 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 trait DocBlockManipulatorTrait
 {
     /**
+     * @var StaticTypeMapper
+     */
+    protected $staticTypeMapper;
+
+    /**
      * @var DocBlockManipulator
      */
     private $docBlockManipulator;
@@ -20,9 +26,12 @@ trait DocBlockManipulatorTrait
     /**
      * @required
      */
-    public function autowireDocBlockManipulatorTrait(DocBlockManipulator $docBlockManipulator): void
-    {
+    public function autowireDocBlockManipulatorTrait(
+        DocBlockManipulator $docBlockManipulator,
+        StaticTypeMapper $staticTypeMapper
+    ): void {
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     protected function getPhpDocInfo(Node $node): ?PhpDocInfo

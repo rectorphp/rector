@@ -12,13 +12,6 @@ final class FullyQualifiedName
             new ValidationResult(), true,
         ];
     }
-
-    public function getValidationErrorMessagesAsStringDataProvider(): array
-    {
-        return [
-            'no_errors' => [new ValidationResult(), 'ha_ja'],
-        ];
-    }
 }
 
 ?>
@@ -38,16 +31,6 @@ final class FullyQualifiedName
     {
         return [
             new ValidationResult(), true,
-        ];
-    }
-
-    /**
-     * @return \Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Source\ValidationResult[][]|string[][]
-     */
-    public function getValidationErrorMessagesAsStringDataProvider(): array
-    {
-        return [
-            'no_errors' => [new ValidationResult(), 'ha_ja'],
         ];
     }
 }

@@ -8,6 +8,11 @@ use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\IterableType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\Php\PhpVersionProvider;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
@@ -33,9 +38,8 @@ final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements R
 
     /**
      * @param ClassMethod|Function_|Closure $functionLike
-     * @return string[]
      */
-    public function inferFunctionLike(FunctionLike $functionLike): array
+    public function inferFunctionLike(FunctionLike $functionLike): Type
     {
         /** @var Yield_[] $yieldNodes */
         $yieldNodes = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Yield_::class);
@@ -47,21 +51,19 @@ final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements R
                     continue;
                 }
 
-                $resolvedTypes = $this->nodeTypeResolver->resolveSingleTypeToStrings($yieldNode->value);
-                foreach ($resolvedTypes as $resolvedType) {
-                    $types[] = $resolvedType . '[]';
-                }
+                $yieldValueStaticType = $this->nodeTypeResolver->resolveNodeToPHPStanType($yieldNode->value);
+                $types[] = new ArrayType(new MixedType(), $yieldValueStaticType);
             }
 
             if ($this->phpVersionProvider->isAtLeast('7.1')) {
                 // @see https://www.php.net/manual/en/language.types.iterable.php
-                $types[] = 'iterable';
+                $types[] = new IterableType(new MixedType(), new MixedType());
             } else {
-                $types[] = Iterator::class;
+                $types[] = new ObjectType(Iterator::class);
             }
         }
 
-        return array_unique($types);
+        return $this->typeFactory->createMixedPassedOrUnionType($types);
     }
 
     public function getPriority(): int

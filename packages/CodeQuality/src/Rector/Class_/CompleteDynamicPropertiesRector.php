@@ -2,7 +2,6 @@
 
 namespace Rector\CodeQuality\Rector\Class_;
 
-use Nette\Utils\Arrays;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -11,9 +10,11 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\NodeTypeResolver\StaticTypeMapper;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -22,6 +23,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see https://3v4l.org/GL6II
  * @see https://3v4l.org/eTrhZ
  * @see https://3v4l.org/C554W
+ *
  * @see \Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector\CompleteDynamicPropertiesRectorTest
  */
 final class CompleteDynamicPropertiesRector extends AbstractRector
@@ -32,19 +34,19 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
     private const LARAVEL_COLLECTION_CLASS = 'Illuminate\Support\Collection';
 
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
      * @var DocBlockManipulator
      */
     private $docBlockManipulator;
 
-    public function __construct(StaticTypeMapper $staticTypeMapper, DocBlockManipulator $docBlockManipulator)
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    public function __construct(DocBlockManipulator $docBlockManipulator, TypeFactory $typeFactory)
     {
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->typeFactory = $typeFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -103,7 +105,7 @@ CODE_SAMPLE
         }
 
         // special case for Laravel Collection macro magic
-        $fetchedLocalPropertyNameToTypes = $this->resolveFetchedLocalPropertyNameToTypes($node);
+        $fetchedLocalPropertyNameToTypes = $this->resolveFetchedLocalPropertyNameToType($node);
 
         $propertyNames = $this->getClassPropertyNames($node);
 
@@ -123,49 +125,50 @@ CODE_SAMPLE
 
         $newProperties = $this->createNewProperties($fetchedLocalPropertyNameToTypes, $propertiesToComplete);
 
-        $node->stmts = array_merge_recursive($newProperties, $node->stmts);
+        $node->stmts = array_merge($newProperties, $node->stmts);
 
         return $node;
     }
 
     /**
-     * @param string[][][] $fetchedLocalPropertyNameToTypes
+     * @param Type[] $fetchedLocalPropertyNameToTypes
      * @param string[] $propertiesToComplete
      * @return Property[]
      */
     private function createNewProperties(array $fetchedLocalPropertyNameToTypes, array $propertiesToComplete): array
     {
         $newProperties = [];
-        foreach ($fetchedLocalPropertyNameToTypes as $propertyName => $propertyTypes) {
+        foreach ($fetchedLocalPropertyNameToTypes as $propertyName => $propertyType) {
             if (! in_array($propertyName, $propertiesToComplete, true)) {
                 continue;
             }
 
-            $propertyTypes = Arrays::flatten($propertyTypes);
-            $propertyTypesAsString = implode('|', $propertyTypes);
-
             $propertyBuilder = $this->builderFactory->property($propertyName);
             $propertyBuilder->makePublic();
+            $property = $propertyBuilder->getNode();
 
-            if ($this->isAtLeastPhpVersion('7.4') && count($propertyTypes) === 1) {
-                $propertyBuilder->setType($propertyTypes[0]);
-                $newProperty = $propertyBuilder->getNode();
-            } else {
-                $newProperty = $propertyBuilder->getNode();
-                if ($propertyTypesAsString) {
-                    $this->docBlockManipulator->changeVarTag($newProperty, $propertyTypesAsString);
+            if ($this->isAtLeastPhpVersion('7.4')) {
+                $phpStanNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
+                if ($phpStanNode) {
+                    $property->type = $phpStanNode;
+                } else {
+                    // fallback to doc type in PHP 7.4
+                    $this->docBlockManipulator->changeVarTag($property, $propertyType);
                 }
+            } else {
+                $this->docBlockManipulator->changeVarTag($property, $propertyType);
             }
 
-            $newProperties[] = $newProperty;
+            $newProperties[] = $property;
         }
+
         return $newProperties;
     }
 
     /**
-     * @return string[][][]
+     * @return Type[]
      */
-    private function resolveFetchedLocalPropertyNameToTypes(Class_ $class): array
+    private function resolveFetchedLocalPropertyNameToType(Class_ $class): array
     {
         $fetchedLocalPropertyNameToTypes = [];
 
@@ -199,7 +202,13 @@ CODE_SAMPLE
             $fetchedLocalPropertyNameToTypes[$propertyName][] = $propertyFetchType;
         });
 
-        return $fetchedLocalPropertyNameToTypes;
+        // normalize types to union
+        $fetchedLocalPropertyNameToType = [];
+        foreach ($fetchedLocalPropertyNameToTypes as $name => $types) {
+            $fetchedLocalPropertyNameToType[$name] = $this->typeFactory->createMixedPassedOrUnionType($types);
+        }
+
+        return $fetchedLocalPropertyNameToType;
     }
 
     /**
@@ -209,34 +218,23 @@ CODE_SAMPLE
     {
         $propertyNames = [];
 
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (&$propertyNames) {
-            if (! $node instanceof Property) {
-                return null;
-            }
-
-            $propertyNames[] = $this->getName($node);
-        });
+        foreach ($class->getProperties() as $property) {
+            $propertyNames[] = $this->getName($property);
+        }
 
         return $propertyNames;
     }
 
-    /**
-     * @return string[]
-     */
-    private function resolvePropertyFetchType(Node $node): array
+    private function resolvePropertyFetchType(Node $node): Type
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         // possible get type
         if ($parentNode instanceof Assign) {
-            $assignedValueStaticType = $this->getStaticType($parentNode->expr);
-            if ($assignedValueStaticType) {
-                return $this->staticTypeMapper->mapPHPStanTypeToStrings($assignedValueStaticType);
-            }
+            return $this->getStaticType($parentNode->expr);
         }
 
-        // fallback type
-        return ['mixed'];
+        return new MixedType();
     }
 
     private function shouldSkipForLaravelCollection(Node $node): bool

@@ -26,7 +26,7 @@ use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use Rector\BetterPhpDocParser\Ast\NodeTraverser;
+use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareDeprecatedTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareInvalidTagValueNode;
@@ -57,13 +57,13 @@ use Rector\Exception\ShouldNotHappenException;
 final class AttributeAwareNodeFactory
 {
     /**
-     * @var NodeTraverser
+     * @var PhpDocNodeTraverser
      */
-    private $nodeTraverser;
+    private $phpDocNodeTraverser;
 
-    public function __construct(NodeTraverser $nodeTraverser)
+    public function __construct(PhpDocNodeTraverser $phpDocNodeTraverser)
     {
-        $this->nodeTraverser = $nodeTraverser;
+        $this->phpDocNodeTraverser = $phpDocNodeTraverser;
     }
 
     /**
@@ -76,7 +76,7 @@ final class AttributeAwareNodeFactory
         }
 
         if ($node instanceof PhpDocNode) {
-            $this->nodeTraverser->traverseWithCallable($node, function (Node $node): AttributeAwareNodeInterface {
+            $this->phpDocNodeTraverser->traverseWithCallable($node, function (Node $node): AttributeAwareNodeInterface {
                 if ($node instanceof AttributeAwareNodeInterface) {
                     return $node;
                 }

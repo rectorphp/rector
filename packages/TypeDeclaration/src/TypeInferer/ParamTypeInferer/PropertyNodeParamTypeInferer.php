@@ -7,7 +7,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
@@ -26,15 +26,12 @@ final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements 
         $this->propertyFetchManipulator = $propertyFetchManipulator;
     }
 
-    /**
-     * @return string[]
-     */
-    public function inferParam(Param $param): array
+    public function inferParam(Param $param): Type
     {
         /** @var Class_|null $classNode */
         $classNode = $param->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
-            return [];
+            return new MixedType();
         }
 
         $paramName = $this->nameResolver->getName($param);
@@ -56,28 +53,13 @@ final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements 
             $staticType = $this->nodeTypeResolver->getStaticType($node->var);
 
             /** @var Type|null $staticType */
-            if ($staticType) {
+            if ($staticType !== null) {
                 $propertyStaticTypes[] = $staticType;
             }
 
             return null;
         });
 
-        $propertyStaticTypes = array_unique($propertyStaticTypes);
-
-        if ($propertyStaticTypes === []) {
-            return [];
-        }
-
-        if ($propertyStaticTypes[0] instanceof ArrayType) {
-            $itemType = $propertyStaticTypes[0]->getItemType();
-
-            $resolvedType = $this->staticTypeMapper->mapPHPStanTypeToStrings($itemType);
-            if (isset($resolvedType[0])) {
-                return [$resolvedType[0]];
-            }
-        }
-
-        return [];
+        return $this->typeFactory->createMixedPassedOrUnionType($propertyStaticTypes);
     }
 }

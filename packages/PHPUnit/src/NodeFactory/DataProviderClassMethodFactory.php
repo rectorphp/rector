@@ -9,7 +9,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
 
 final class DataProviderClassMethodFactory
@@ -20,22 +19,13 @@ final class DataProviderClassMethodFactory
     private $builderFactory;
 
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
      * @var DocBlockManipulator
      */
     private $docBlockManipulator;
 
-    public function __construct(
-        BuilderFactory $builderFactory,
-        StaticTypeMapper $staticTypeMapper,
-        DocBlockManipulator $docBlockManipulator
-    ) {
+    public function __construct(BuilderFactory $builderFactory, DocBlockManipulator $docBlockManipulator)
+    {
         $this->builderFactory = $builderFactory;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->docBlockManipulator = $docBlockManipulator;
     }
 
@@ -67,12 +57,11 @@ final class DataProviderClassMethodFactory
     ): void {
         $classMethod->returnType = new Identifier('iterable');
 
-        $providedType = $dataProviderClassMethodRecipe->getProvidedType();
-        if ($providedType === null) {
+        $type = $dataProviderClassMethodRecipe->getType();
+        if ($type === null) {
             return;
         }
 
-        $typesAsStrings = $this->staticTypeMapper->mapPHPStanTypeToStrings($providedType);
-        $this->docBlockManipulator->addReturnTag($classMethod, implode('|', $typesAsStrings));
+        $this->docBlockManipulator->addReturnTag($classMethod, $type);
     }
 }

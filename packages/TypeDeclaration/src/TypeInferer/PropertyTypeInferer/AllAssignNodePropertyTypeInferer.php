@@ -4,7 +4,7 @@ namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\IntersectionType;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
@@ -22,28 +22,18 @@ final class AllAssignNodePropertyTypeInferer extends AbstractTypeInferer impleme
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
     }
 
-    /**
-     * @return string[]
-     */
-    public function inferProperty(Property $property): array
+    public function inferProperty(Property $property): Type
     {
         /** @var ClassLike $class */
         $class = $property->getAttribute(AttributeKey::CLASS_NODE);
 
         $propertyName = $this->nameResolver->getName($property);
 
-        $assignedExprStaticTypes = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($propertyName, $class);
-        if ($assignedExprStaticTypes === []) {
-            return [];
-        }
-
-        $assignedExprStaticType = new IntersectionType($assignedExprStaticTypes);
-
-        return $this->staticTypeMapper->mapPHPStanTypeToStrings($assignedExprStaticType);
+        return $this->assignToPropertyTypeInferer->inferPropertyInClassLike($propertyName, $class);
     }
 
     public function getPriority(): int
     {
-        return 610;
+        return 1500;
     }
 }

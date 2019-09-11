@@ -3,17 +3,19 @@
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use Nette\Utils\Strings;
+use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
-use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
@@ -41,17 +43,31 @@ final class PhpDocInfo
     private $originalPhpDocNode;
 
     /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
+    /**
+     * @var Node
+     */
+    private $node;
+
+    /**
      * @param mixed[] $tokens
      */
     public function __construct(
         AttributeAwarePhpDocNode $attributeAwarePhpDocNode,
         array $tokens,
-        string $originalContent
+        string $originalContent,
+        StaticTypeMapper $staticTypeMapper,
+        Node $node
     ) {
         $this->phpDocNode = $attributeAwarePhpDocNode;
         $this->tokens = $tokens;
         $this->originalPhpDocNode = clone $attributeAwarePhpDocNode;
         $this->originalContent = $originalContent;
+        $this->staticTypeMapper = $staticTypeMapper;
+        $this->node = $node;
     }
 
     public function getOriginalContent(): string
@@ -95,11 +111,6 @@ final class PhpDocInfo
         return $this->getPhpDocNode()->getParamTagValues();
     }
 
-    public function hasTag(string $name): bool
-    {
-        return (bool) $this->getTagsByName($name);
-    }
-
     /**
      * @return PhpDocTagNode[]
      */
@@ -111,17 +122,7 @@ final class PhpDocInfo
         $tags = $this->phpDocNode->getTags();
 
         $tags = array_filter($tags, function (PhpDocTagNode $tag) use ($name): bool {
-            if ($tag->name === $name) {
-                return true;
-            }
-
-            /** @var PhpDocTagNode|AttributeAwareNodeInterface $tag */
-            $annotationClass = $tag->getAttribute(Attribute::ANNOTATION_CLASS);
-            if ($annotationClass === null) {
-                return false;
-            }
-
-            return AnnotationNaming::normalizeName($annotationClass) === $name;
+            return $tag->name === $name;
         });
 
         return array_values($tags);
@@ -143,76 +144,34 @@ final class PhpDocInfo
         return null;
     }
 
-    // types
-
-    /**
-     * @return string[]
-     */
-    public function getParamTypes(string $name): array
+    public function getParamType(string $name): Type
     {
         $paramTagValue = $this->getParamTagValueByName($name);
         if ($paramTagValue === null) {
-            return [];
+            return new MixedType();
         }
 
-        return $this->getResolvedTypesAttribute($paramTagValue);
+        return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($paramTagValue, $this->node);
     }
 
-    /**
-     * @return string[]
-     */
-    public function getVarTypes(): array
+    public function getVarType(): Type
     {
         $varTagValue = $this->getVarTagValue();
         if ($varTagValue === null) {
-            return [];
+            return new MixedType();
         }
 
-        return $this->getResolvedTypesAttribute($varTagValue);
+        return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($varTagValue, $this->node);
     }
 
-    /**
-     * @return string[]
-     */
-    public function getShortVarTypes(): array
-    {
-        $varTagValue = $this->getVarTagValue();
-        if ($varTagValue === null) {
-            return [];
-        }
-
-        return $varTagValue->getAttribute(Attribute::TYPE_AS_ARRAY) ?: [];
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getShortReturnTypes(): array
+    public function getReturnType(): Type
     {
         $returnTypeValueNode = $this->getReturnTagValue();
         if ($returnTypeValueNode === null) {
-            return [];
+            return new MixedType();
         }
 
-        return $returnTypeValueNode->getAttribute(Attribute::TYPE_AS_ARRAY) ?: [];
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getReturnTypes(): array
-    {
-        $returnTypeValueNode = $this->getReturnTagValue();
-        if ($returnTypeValueNode === null) {
-            return [];
-        }
-
-        return $this->getResolvedTypesAttribute($returnTypeValueNode);
-    }
-
-    public function getDoctrineRelationTagValueNode(): ?DoctrineRelationTagValueNodeInterface
-    {
-        return $this->getByType(DoctrineRelationTagValueNodeInterface::class);
+        return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($returnTypeValueNode, $this->node);
     }
 
     public function removeTagValueNodeFromNode(PhpDocTagValueNode $phpDocTagValueNode): void
@@ -228,9 +187,6 @@ final class PhpDocInfo
         }
     }
 
-    /**
-     * @param string $type
-     */
     public function getByType(string $type): ?PhpDocTagValueNode
     {
         foreach ($this->phpDocNode->children as $phpDocChildNode) {
@@ -256,18 +212,5 @@ final class PhpDocInfo
         }
 
         return null;
-    }
-
-    /**
-     * @param PhpDocTagValueNode|AttributeAwareNodeInterface $phpDocTagValueNode
-     * @return string[]
-     */
-    private function getResolvedTypesAttribute(PhpDocTagValueNode $phpDocTagValueNode): array
-    {
-        if ($phpDocTagValueNode->getAttribute(Attribute::RESOLVED_NAMES)) {
-            return $phpDocTagValueNode->getAttribute(Attribute::RESOLVED_NAMES);
-        }
-
-        return $phpDocTagValueNode->getAttribute(Attribute::TYPE_AS_ARRAY);
     }
 }

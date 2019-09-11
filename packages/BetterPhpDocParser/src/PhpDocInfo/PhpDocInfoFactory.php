@@ -12,6 +12,7 @@ use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterfac
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeDecoratorInterface;
 use Rector\BetterPhpDocParser\PhpDocParser\OrmTagParser;
 use Rector\Configuration\CurrentNodeProvider;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 
 final class PhpDocInfoFactory
 {
@@ -36,18 +37,25 @@ final class PhpDocInfoFactory
     private $currentNodeProvider;
 
     /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
+    /**
      * @param PhpDocNodeDecoratorInterface[] $phpDocNodeDecoratorInterfacenodeDecorators
      */
     public function __construct(
         PhpDocParser $phpDocParser,
         Lexer $lexer,
         array $phpDocNodeDecoratorInterfacenodeDecorators,
-        CurrentNodeProvider $currentNodeProvider
+        CurrentNodeProvider $currentNodeProvider,
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->phpDocParser = $phpDocParser;
         $this->lexer = $lexer;
         $this->phpDocNodeDecoratorInterfaces = $phpDocNodeDecoratorInterfacenodeDecorators;
         $this->currentNodeProvider = $currentNodeProvider;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     public function createFromNode(Node $node): PhpDocInfo
@@ -67,7 +75,7 @@ final class PhpDocInfoFactory
 
         $phpDocNode = $this->setPositionOfLastToken($phpDocNode);
 
-        return new PhpDocInfo($phpDocNode, $tokens, $content);
+        return new PhpDocInfo($phpDocNode, $tokens, $content, $this->staticTypeMapper, $node);
     }
 
     /**

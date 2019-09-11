@@ -3,7 +3,8 @@
 namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 use PhpParser\Node\FunctionLike;
-use PHPStan\Type\IntersectionType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\FunctionLikeManipulator;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
@@ -30,30 +31,21 @@ final class SetterNodeReturnTypeInferer extends AbstractTypeInferer implements R
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
     }
 
-    /**
-     * @return string[]
-     */
-    public function inferFunctionLike(FunctionLike $functionLike): array
+    public function inferFunctionLike(FunctionLike $functionLike): Type
     {
         $classNode = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
-            return [];
+            return new MixedType();
         }
 
         $returnedPropertyNames = $this->functionLikeManipulator->getReturnedLocalPropertyNames($functionLike);
 
         $types = [];
         foreach ($returnedPropertyNames as $returnedPropertyName) {
-            $freshTypes = $this->assignToPropertyTypeInferer->inferPropertyInClassLike(
-                $returnedPropertyName,
-                $classNode
-            );
-            $types = array_merge($types, $freshTypes);
+            $types[] = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($returnedPropertyName, $classNode);
         }
 
-        $assignedExprStaticType = new IntersectionType($types);
-
-        return $this->staticTypeMapper->mapPHPStanTypeToStrings($assignedExprStaticType);
+        return $this->typeFactory->createMixedPassedOrUnionType($types);
     }
 
     public function getPriority(): int

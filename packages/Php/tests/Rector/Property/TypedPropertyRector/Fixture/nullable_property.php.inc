@@ -9,7 +9,7 @@ final class ClassWithNullableProperty
     /**
      * @var AnotherClass|null
      */
-    private $anotherClass = null;
+    private $nullableClassWithDefaultNull = null;
 
     /**
      * @var null|AnotherClass
@@ -30,12 +30,12 @@ final class ClassWithNullableProperty
     /**
      * @var AnotherClass|null
      */
-    private ?AnotherClass $anotherClass = null;
+    private ?\Rector\Php\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $nullableClassWithDefaultNull = null;
 
     /**
      * @var null|AnotherClass
      */
-    private ?AnotherClass $yetAnotherClass;
+    private ?\Rector\Php\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $yetAnotherClass;
 }
 
 ?>

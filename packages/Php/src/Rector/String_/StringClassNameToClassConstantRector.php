@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -112,7 +113,7 @@ CODE_SAMPLE
 
     private function classLikeSensitiveExists(string $classLikeName): bool
     {
-        if (! $this->classLikeInsensitiveExists($classLikeName)) {
+        if (! ClassExistenceStaticHelper::doesClassLikeExist($classLikeName)) {
             return false;
         }
 
@@ -134,18 +135,5 @@ CODE_SAMPLE
 
         $this->sensitiveExistingClasses[] = $classLikeName;
         return true;
-    }
-
-    private function classLikeInsensitiveExists(string $classLikeName): bool
-    {
-        if (class_exists($classLikeName)) {
-            return true;
-        }
-
-        if (interface_exists($classLikeName)) {
-            return true;
-        }
-
-        return trait_exists($classLikeName);
     }
 }

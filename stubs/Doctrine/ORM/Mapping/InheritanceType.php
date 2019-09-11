@@ -6,7 +6,14 @@ if (class_exists('Doctrine\ORM\Mapping\InheritanceType')) {
     return;
 }
 
-class InheritanceType
+/**
+ * @Annotation
+ * @Target("CLASS")
+ */
+class InheritanceType implements Annotation
 {
-
+    /**
+     * @Enum({"NONE", "JOINED", "SINGLE_TABLE", "TABLE_PER_CLASS"})
+     */
+    public $value;
 }

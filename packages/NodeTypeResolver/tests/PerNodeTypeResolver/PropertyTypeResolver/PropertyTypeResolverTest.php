@@ -7,10 +7,10 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\DomainDrivenDesign\Tests\Rector\ObjectToScalarDocBlockRector\Source\SomeChildOfValueObject;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\ClassThatExtendsHtml;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\Html;
+use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\SomeChild;
 use Rector\PHPStan\TypeFactoryStaticHelper;
 
 /**
@@ -39,9 +39,7 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
         ];
 
         // mimics failing test from DomainDrivenDesign set
-        $unionType = TypeFactoryStaticHelper::createUnionObjectType(
-            [SomeChildOfValueObject::class, new NullType()]
-        );
+        $unionType = TypeFactoryStaticHelper::createUnionObjectType([SomeChild::class, new NullType()]);
         yield [__DIR__ . '/Source/fixture.php', 0, $unionType];
     }
 }

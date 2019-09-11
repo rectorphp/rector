@@ -12,6 +12,9 @@ final class InheritanceTest extends AbstractRectorTestCase
         $this->doTestFiles([
             __DIR__ . '/Fixture/nikic/inheritance.php.inc',
             __DIR__ . '/Fixture/nikic/nullable_inheritance.php.inc',
+            __DIR__ . '/Fixture/PhpCsFixerReturn/self_static.php.inc',
+            __DIR__ . '/Fixture/nikic/self_parent_static.php.inc',
+            __DIR__ . '/Fixture/nikic/self_inheritance.php.inc',
         ]);
     }
 

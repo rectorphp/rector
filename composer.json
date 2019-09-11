@@ -54,7 +54,6 @@
             "Rector\\DeadCode\\": "packages/DeadCode/src",
             "Rector\\Doctrine\\": "packages/Doctrine/src",
             "Rector\\DoctrinePhpDocParser\\": "packages/DoctrinePhpDocParser/src",
-            "Rector\\DomainDrivenDesign\\": "packages/DomainDrivenDesign/src",
             "Rector\\ElasticSearchDSL\\": "packages/ElasticSearchDSL/src",
             "Rector\\FileSystemRector\\": "packages/FileSystemRector/src",
             "Rector\\Guzzle\\": "packages/Guzzle/src",
@@ -69,7 +68,6 @@
             "Rector\\PHPUnitSymfony\\": "packages/PHPUnitSymfony/src",
             "Rector\\PHPUnit\\": "packages/PHPUnit/src",
             "Rector\\PSR4\\": "packages/PSR4/src",
-            "Rector\\PhpParser\\": "packages/PhpParser/src",
             "Rector\\PhpSpecToPHPUnit\\": "packages/PhpSpecToPHPUnit/src",
             "Rector\\Php\\": "packages/Php/src",
             "Rector\\RemovingStatic\\": "packages/RemovingStatic/src",
@@ -100,7 +98,6 @@
             "Rector\\DeadCode\\Tests\\": "packages/DeadCode/tests",
             "Rector\\Doctrine\\Tests\\": "packages/Doctrine/tests",
             "Rector\\DoctrinePhpDocParser\\Tests\\": "packages/DoctrinePhpDocParser/tests",
-            "Rector\\DomainDrivenDesign\\Tests\\": "packages/DomainDrivenDesign/tests",
             "Rector\\ElasticSearchDSL\\Tests\\": "packages/ElasticSearchDSL/tests",
             "Rector\\Guzzle\\Tests\\": "packages/Guzzle/tests",
             "Rector\\Laravel\\Tests\\": "packages/Laravel/tests",
@@ -114,7 +111,6 @@
             "Rector\\PHPStan\\Tests\\": "packages/PHPStan/tests",
             "Rector\\PHPUnitSymfony\\Tests\\": "packages/PHPUnitSymfony/tests",
             "Rector\\PHPUnit\\Tests\\": "packages/PHPUnit/tests",
-            "Rector\\PhpParser\\Tests\\": "packages/PhpParser/tests",
             "Rector\\PhpSpecToPHPUnit\\Tests\\": "packages/PhpSpecToPHPUnit/tests",
             "Rector\\Php\\Tests\\": "packages/Php/tests",
             "Rector\\RemovingStatic\\Tests\\": "packages/RemovingStatic/tests",
@@ -137,10 +133,16 @@
             "packages/NodeTypeResolver/tests/PerNodeTypeResolver/PropertyTypeResolver/Source",
             "tests/Source",
             "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source",
-            "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source"
+            "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source",
+            "stubs",
+            "tests/Issues/Issue1243/Source"
         ],
         "files": [
-            "packages/DeadCode/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php"
+            "packages/DeadCode/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",
+            "packages/Php/tests/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php",
+            "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source/ChangeMeAnotherNamespace.php",
+            "packages/TypeDeclaration/tests/Rector/FunctionLike/ReturnTypeDeclarationRector/Source/MyBar.php",
+            "tests/Rector/Class_/RenameClassRector/Source/Twig_Extension_Sandbox.php"
         ]
     },
     "scripts": {

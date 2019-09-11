@@ -15,6 +15,8 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
@@ -299,7 +301,8 @@ CODE_SAMPLE
             $classMethod->returnType = new Identifier('array');
         }
 
-        $this->docBlockManipulator->addReturnTag($classMethod, 'mixed[]');
+        $arrayMixedType = new ArrayType(new MixedType(), new MixedType(true));
+        $this->docBlockManipulator->addReturnTag($classMethod, $arrayMixedType);
     }
 
     /**

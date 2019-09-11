@@ -4,13 +4,9 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -66,22 +62,9 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
 
     private function resolveTypesFromFunctionDocBlock(Param $param, FunctionLike $functionLike): Type
     {
-        $paramTypeInfos = $this->docBlockManipulator->getParamTypeInfos($functionLike);
-
         /** @var string $paramName */
-        $paramName = $this->nameResolver->getName($param->var);
-        if (! isset($paramTypeInfos[$paramName])) {
-            return new MixedType();
-        }
+        $paramName = $this->nameResolver->getName($param);
 
-        $fqnTypeNode = $paramTypeInfos[$paramName]->getFqnTypeNode();
-
-        if ($fqnTypeNode instanceof NullableType) {
-            $objectType = new ObjectType((string) $fqnTypeNode->type);
-
-            return new UnionType([$objectType, new NullType()]);
-        }
-
-        return new ObjectType((string) $fqnTypeNode);
+        return $this->docBlockManipulator->getParamTypeByName($functionLike, '$' . $paramName);
     }
 }

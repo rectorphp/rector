@@ -12,7 +12,6 @@ use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\PhpParser\Node\Commander\PropertyAddingCommander;
-use Rector\PhpParser\Node\VariableInfo;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -73,9 +72,7 @@ trait NodeCommandersTrait
 
     protected function addPropertyToClass(Class_ $classNode, Type $propertyType, string $propertyName): void
     {
-        $variableInfo = new VariableInfo($propertyName, $propertyType);
-
-        $this->propertyAddingCommander->addPropertyToClass($variableInfo, $classNode);
+        $this->propertyAddingCommander->addPropertyToClass($propertyName, $propertyType, $classNode);
 
         $this->notifyNodeChangeFileInfo($classNode);
     }

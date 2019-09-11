@@ -48,11 +48,6 @@ final class MatchTypes
      * @var self
      */
     private $i;
-
-    /**
-     * @var parent
-     */
-    private $j;
 }
 
 ?>
@@ -107,11 +102,6 @@ final class MatchTypes
      * @var self
      */
     private self $i;
-
-    /**
-     * @var parent
-     */
-    private parent $j;
 }
 
 ?>

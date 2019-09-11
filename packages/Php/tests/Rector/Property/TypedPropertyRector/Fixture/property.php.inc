@@ -15,12 +15,6 @@ final class ClassWithProperty
     private $multiCount;
 
     /**
-     * @var bool
-     * another comment
-     */
-    private $isTrue = false;
-
-    /**
      * @var void
      */
     private $shouldBeSkipped;
@@ -29,11 +23,6 @@ final class ClassWithProperty
      * @var callable
      */
     private $shouldBeSkippedToo;
-
-    /**
-     * @var invalid
-     */
-    private $cantTouchThis;
 }
 
 ?>
@@ -55,12 +44,6 @@ final class ClassWithProperty
     private $multiCount;
 
     /**
-     * @var bool
-     * another comment
-     */
-    private bool $isTrue = false;
-
-    /**
      * @var void
      */
     private $shouldBeSkipped;
@@ -69,11 +52,6 @@ final class ClassWithProperty
      * @var callable
      */
     private $shouldBeSkippedToo;
-
-    /**
-     * @var invalid
-     */
-    private $cantTouchThis;
 }
 
 ?>

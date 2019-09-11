@@ -22,14 +22,15 @@ final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
     public function test(): void
     {
         $this->doTestFiles([
+            // JMS
             __DIR__ . '/Fixture/fixture.php.inc',
             __DIR__ . '/Fixture/fixture2.php.inc',
             __DIR__ . '/Fixture/fixture3.php.inc',
             __DIR__ . '/Fixture/fixture4.php.inc',
             __DIR__ . '/Fixture/fixture5.php.inc',
+            // PHP DI
             __DIR__ . '/Fixture/inject_from_var.php.inc',
             __DIR__ . '/Fixture/inject_from_var2.php.inc',
-            // alias order
             __DIR__ . '/Fixture/inject_from_var3.php.inc',
         ]);
     }
@@ -41,7 +42,7 @@ final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
     {
         return [
             InjectAnnotationClassRector::class => [
-                '$annotationClasses' => ['JMS\DiExtraBundle\Annotation\Inject', 'Inject'],
+                '$annotationClasses' => ['JMS\DiExtraBundle\Annotation\Inject', 'DI\Annotation\Inject'],
             ],
         ];
     }

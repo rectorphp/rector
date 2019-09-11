@@ -7,49 +7,32 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Use_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use Rector\BetterPhpDocParser\Ast\NodeTraverser;
+use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
-use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareIdentifierTypeNode;
-use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
-use Rector\BetterPhpDocParser\NodeDecorator\StringsTypePhpDocNodeDecorator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Rector\CodingStyle\Application\UseAddingCommander;
+use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\Php\ParamTypeInfo;
-use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
-use Rector\NodeTypeResolver\Php\VarTypeInfo;
 use Rector\NodeTypeResolver\StaticTypeMapper;
-use Rector\Php\TypeAnalyzer;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
-use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 
 /**
  * @see \Rector\NodeTypeResolver\Tests\PhpDoc\NodeAnalyzer\DocBlockManipulatorTest
@@ -57,19 +40,9 @@ use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
 final class DocBlockManipulator
 {
     /**
-     * @var bool[][]
-     */
-    private $usedShortNameByClasses = [];
-
-    /**
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-
-    /**
-     * @var StringsTypePhpDocNodeDecorator
-     */
-    private $stringsTypePhpDocNodeDecorator;
 
     /**
      * @var PhpDocInfoPrinter
@@ -77,67 +50,51 @@ final class DocBlockManipulator
     private $phpDocInfoPrinter;
 
     /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    /**
      * @var AttributeAwareNodeFactory
      */
     private $attributeAwareNodeFactory;
 
     /**
-     * @var NodeTraverser
+     * @var PhpDocNodeTraverser
      */
-    private $nodeTraverser;
-
-    /**
-     * @var string[]
-     */
-    private $importedNames = [];
-
-    /**
-     * @var UseAddingCommander
-     */
-    private $useAddingCommander;
-
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
-     * @var NameResolver
-     */
-    private $nameResolver;
+    private $phpDocNodeTraverser;
 
     /**
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
 
+    /**
+     * @var bool
+     */
+    private $hasPhpDocChanged = false;
+
+    /**
+     * @var DocBlockClassRenamer
+     */
+    private $docBlockClassRenamer;
+
+    /**
+     * @var DocBlockNameImporter
+     */
+    private $docBlockNameImporter;
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
-        TypeAnalyzer $typeAnalyzer,
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
-        StringsTypePhpDocNodeDecorator $stringsTypePhpDocNodeDecorator,
-        NodeTraverser $nodeTraverser,
-        NameResolver $nameResolver,
-        UseAddingCommander $useAddingCommander,
-        BetterStandardPrinter $betterStandardPrinter,
-        StaticTypeMapper $staticTypeMapper
+        PhpDocNodeTraverser $phpDocNodeTraverser,
+        StaticTypeMapper $staticTypeMapper,
+        DocBlockClassRenamer $docBlockClassRenamer,
+        DocBlockNameImporter $docBlockNameImporter
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
-        $this->typeAnalyzer = $typeAnalyzer;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
-        $this->stringsTypePhpDocNodeDecorator = $stringsTypePhpDocNodeDecorator;
-        $this->nodeTraverser = $nodeTraverser;
-        $this->useAddingCommander = $useAddingCommander;
-        $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->nameResolver = $nameResolver;
+        $this->phpDocNodeTraverser = $phpDocNodeTraverser;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->docBlockClassRenamer = $docBlockClassRenamer;
+        $this->docBlockNameImporter = $docBlockNameImporter;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -155,7 +112,7 @@ final class DocBlockManipulator
         // advanced check, e.g. for "Namespaced\Annotations\DI"
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        return $phpDocInfo->hasTag($name);
+        return (bool) $phpDocInfo->getByType($name);
     }
 
     public function addTag(Node $node, PhpDocChildNode $phpDocChildNode): void
@@ -185,22 +142,23 @@ final class DocBlockManipulator
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo, $shouldSkipEmptyLinesAbove);
     }
 
-    public function changeType(Node $node, string $oldType, string $newType, bool $includeChildren = false): void
+    public function changeType(Node $node, Type $oldType, Type $newType): void
     {
-        if (! $this->hasNodeTypeChangeableTags($node)) {
+        if (! $this->hasNodeTypeTags($node)) {
             return;
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        $hasNodeChanged = $this->docBlockClassRenamer->renamePhpDocType(
+            $phpDocInfo->getPhpDocNode(),
+            $oldType,
+            $newType,
+            $node
+        );
 
-        $this->replacePhpDocTypeByAnother($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node, $includeChildren);
-
-        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
-    }
-
-    public function changeTypeIncludingChildren(Node $node, string $oldType, string $newType): void
-    {
-        $this->changeType($node, $oldType, $newType, true);
+        if ($hasNodeChanged) {
+            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+        }
     }
 
     public function replaceAnnotationInNode(Node $node, string $oldAnnotation, string $newAnnotation): void
@@ -215,61 +173,43 @@ final class DocBlockManipulator
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
-    public function getReturnTypeInfo(Node $node): ?ReturnTypeInfo
+    public function getReturnType(Node $node): Type
     {
         if ($node->getDocComment() === null) {
-            return null;
+            return new MixedType();
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $types = $phpDocInfo->getShortReturnTypes();
-        if ($types === []) {
-            return null;
-        }
 
-        $fqnTypes = $phpDocInfo->getReturnTypes();
-
-        return new ReturnTypeInfo($types, $this->typeAnalyzer, $fqnTypes);
+        return $phpDocInfo->getReturnType();
     }
 
     /**
      * With "name" as key
      *
      * @param Function_|ClassMethod|Closure  $functionLike
-     * @return ParamTypeInfo[]
+     * @return Type[]
      */
-    public function getParamTypeInfos(FunctionLike $functionLike): array
+    public function getParamTypesByName(FunctionLike $functionLike): array
     {
         if ($functionLike->getDocComment() === null) {
             return [];
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($functionLike);
-        $types = $phpDocInfo->getParamTagValues();
-        if ($types === []) {
-            return [];
-        }
 
-        $fqnTypes = $phpDocInfo->getParamTagValues();
+        $paramTypesByName = [];
 
-        $paramTypeInfos = [];
-        /** @var AttributeAwareParamTagValueNode $paramTagValueNode */
-        foreach ($types as $i => $paramTagValueNode) {
-            $fqnParamTagValueNode = $fqnTypes[$i];
-            $isAlias = $this->isAlias((string) $paramTagValueNode->type, $functionLike);
+        foreach ($phpDocInfo->getParamTagValues() as $paramTagValueNode) {
+            $parameterName = $paramTagValueNode->parameterName;
 
-            $paramTypeInfo = new ParamTypeInfo(
-                $paramTagValueNode->parameterName,
-                $this->typeAnalyzer,
-                $paramTagValueNode->getAttribute(Attribute::TYPE_AS_ARRAY),
-                $fqnParamTagValueNode->getAttribute(Attribute::RESOLVED_NAMES),
-                $isAlias
+            $paramTypesByName[$parameterName] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
+                $paramTagValueNode,
+                $functionLike
             );
-
-            $paramTypeInfos[$paramTypeInfo->getName()] = $paramTypeInfo;
         }
 
-        return $paramTypeInfos;
+        return $paramTypesByName;
     }
 
     /**
@@ -287,38 +227,33 @@ final class DocBlockManipulator
         return $phpDocInfo->getTagsByName($name);
     }
 
-    /**
-     * @param string|string[]|IdentifierValueObject|IdentifierValueObject[]|Type $type
-     */
-    public function changeVarTag(Node $node, $type): void
+    public function changeVarTag(Node $node, Type $newType): void
     {
-        $this->removeTagFromNode($node, 'var', true);
+        $currentVarType = $this->getVarType($node);
 
-        if ($type instanceof Type) {
-            $type = implode('|', $this->staticTypeMapper->mapPHPStanTypeToStrings($type));
+        // make sure the tags are not identical, e.g imported class vs FQN class
+        if ($this->areTypesEquals($currentVarType, $newType)) {
+            return;
         }
 
-        $this->addTypeSpecificTag($node, 'var', $type);
+        $this->removeTagFromNode($node, 'var', true);
+        $this->addTypeSpecificTag($node, 'var', $newType);
+
+        // to invoke the node override
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
     }
 
-    public function addReturnTag(Node $node, string $type): void
+    public function addReturnTag(Node $node, Type $newType): void
     {
-        // make sure the tags are not identical, e.g imported class vs FQN class
-        $returnTypeInfo = $this->getReturnTypeInfo($node);
-        if ($returnTypeInfo) {
-            // already added
-            if ([ltrim($type, '\\')] === $returnTypeInfo->getFqnTypes()) {
-                return;
-            }
-        }
+        $currentReturnType = $this->getReturnType($node);
 
-        $returnTypeInfo = new ReturnTypeInfo(explode('|', $type), $this->typeAnalyzer);
-        if ($returnTypeInfo) {
-            $type = implode('|', $returnTypeInfo->getDocTypes());
+        // make sure the tags are not identical, e.g imported class vs FQN class
+        if ($this->areTypesEquals($currentReturnType, $newType)) {
+            return;
         }
 
         $this->removeTagFromNode($node, 'return');
-        $this->addTypeSpecificTag($node, 'return', $type);
+        $this->addTypeSpecificTag($node, 'return', $newType);
     }
 
     /**
@@ -335,31 +270,30 @@ final class DocBlockManipulator
         return array_shift($foundTags);
     }
 
-    public function getVarTypeInfo(Node $node): ?VarTypeInfo
+    public function getVarType(Node $node): Type
     {
         if ($node->getDocComment() === null) {
-            return null;
+            return new MixedType();
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $types = $phpDocInfo->getShortVarTypes();
-        if ($types === []) {
-            return null;
-        }
-
-        $fqnTypes = $phpDocInfo->getVarTypes();
-
-        return new VarTypeInfo($types, $this->typeAnalyzer, $fqnTypes);
+        return $this->createPhpDocInfoFromNode($node)->getVarType();
     }
 
     public function removeTagByName(PhpDocInfo $phpDocInfo, string $tagName): void
     {
         $phpDocNode = $phpDocInfo->getPhpDocNode();
 
+        // A. remove class-based tag
+        if (class_exists($tagName)) {
+            $phpDocTagNode = $phpDocInfo->getByType($tagName);
+            if ($phpDocTagNode) {
+                $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
+            }
+        }
+
+        // B. remove string-based tags
         $tagName = AnnotationNaming::normalizeName($tagName);
-
         $phpDocTagNodes = $phpDocInfo->getTagsByName($tagName);
-
         foreach ($phpDocTagNodes as $phpDocTagNode) {
             $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
         }
@@ -406,78 +340,24 @@ final class DocBlockManipulator
         }
     }
 
-    public function replacePhpDocTypeByAnother(
-        AttributeAwarePhpDocNode $attributeAwarePhpDocNode,
-        string $oldType,
-        string $newType,
-        Node $node,
-        bool $includeChildren = false
-    ): AttributeAwarePhpDocNode {
-        foreach ($attributeAwarePhpDocNode->children as $phpDocChildNode) {
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
-                continue;
-            }
-
-            if (! $this->isTagValueNodeWithType($phpDocChildNode)) {
-                continue;
-            }
-
-            /** @var VarTagValueNode|ParamTagValueNode|ReturnTagValueNode $tagValueNode */
-            $tagValueNode = $phpDocChildNode->value;
-
-            $phpDocChildNode->value->type = $this->replaceTypeNode(
-                $tagValueNode->type,
-                $oldType,
-                $newType,
-                $includeChildren
-            );
-
-            $this->stringsTypePhpDocNodeDecorator->decorate($attributeAwarePhpDocNode, $node);
-        }
-
-        return $attributeAwarePhpDocNode;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function importNames(Node $node): array
+    public function importNames(Node $node): void
     {
         if ($node->getDocComment() === null) {
-            return [];
+            return;
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
+        $hasNodeChanged = $this->docBlockNameImporter->importNames($phpDocInfo, $node);
 
-        $this->nodeTraverser->traverseWithCallable($phpDocNode, function (
-            AttributeAwareNodeInterface $docNode
-        ) use ($node): AttributeAwareNodeInterface {
-            if (! $docNode instanceof IdentifierTypeNode) {
-                return $docNode;
-            }
-
-            // is class without namespaced name → skip
-            $name = ltrim($docNode->name, '\\');
-            if (! Strings::contains($name, '\\')) {
-                return $docNode;
-            }
-
-            $fullyQualifiedName = $this->getFullyQualifiedName($docNode);
-            $shortName = $this->getShortName($name);
-
-            return $this->processFqnNameImport($node, $docNode, $shortName, $fullyQualifiedName);
-        });
-
-        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
-
-        return $this->importedNames;
+        if ($hasNodeChanged) {
+            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+        }
     }
 
     /**
-     * @param string[]|null $excludedClasses
+     * @param string[] $excludedClasses
      */
-    public function changeUnderscoreType(Node $node, string $namespacePrefix, ?array $excludedClasses): void
+    public function changeUnderscoreType(Node $node, string $namespacePrefix, array $excludedClasses): void
     {
         if ($node->getDocComment() === null) {
             return;
@@ -485,31 +365,43 @@ final class DocBlockManipulator
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
         $phpDocNode = $phpDocInfo->getPhpDocNode();
+        $phpParserNode = $node;
 
-        $this->nodeTraverser->traverseWithCallable($phpDocNode, function (AttributeAwareNodeInterface $node) use (
+        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, function (PhpDocParserNode $node) use (
             $namespacePrefix,
-            $excludedClasses
-        ): AttributeAwareNodeInterface {
+            $excludedClasses,
+            $phpParserNode
+        ): PhpDocParserNode {
             if (! $node instanceof IdentifierTypeNode) {
                 return $node;
             }
 
-            $name = ltrim($node->name, '\\');
-            if (! Strings::startsWith($name, $namespacePrefix)) {
+            $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($node, $phpParserNode);
+            if (! $staticType instanceof ObjectType) {
+                return $node;
+            }
+
+            if (! Strings::startsWith($staticType->getClassName(), $namespacePrefix)) {
                 return $node;
             }
 
             // excluded?
-            if (is_array($excludedClasses) && in_array($name, $excludedClasses, true)) {
+            if (in_array($staticType->getClassName(), $excludedClasses, true)) {
                 return $node;
             }
 
             // change underscore to \\
-            $nameParts = explode('_', $name);
+            $nameParts = explode('_', $staticType->getClassName());
             $node->name = '\\' . implode('\\', $nameParts);
+
+            $this->hasPhpDocChanged = true;
 
             return $node;
         });
+
+        if ($this->hasPhpDocChanged === false) {
+            return;
+        }
 
         $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
@@ -517,16 +409,31 @@ final class DocBlockManipulator
     /**
      * For better performance
      */
-    public function hasNodeTypeChangeableTags(Node $node): bool
+    public function hasNodeTypeTags(Node $node): bool
     {
         $docComment = $node->getDocComment();
         if ($docComment === null) {
             return false;
         }
 
-        $text = $docComment->getText();
+        if ((bool) Strings::match($docComment->getText(), '#\@(param|throws|return|var)\b#')) {
+            return true;
+        }
 
-        return (bool) Strings::match($text, '#\@(param|throws|return|var)\b#');
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+
+        // has any type node?
+
+        foreach ($phpDocInfo->getPhpDocNode()->children as $phpDocChildNode) {
+            if ($phpDocChildNode instanceof PhpDocTagNode) {
+                // is custom class, it can contain some type info
+                if (Strings::startsWith(get_class($phpDocChildNode->value), 'Rector\\')) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public function updateNodeWithPhpDocInfo(
@@ -564,7 +471,7 @@ final class DocBlockManipulator
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        $relationTagValueNode = $phpDocInfo->getDoctrineRelationTagValueNode();
+        $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
         if ($relationTagValueNode === null) {
             return null;
         }
@@ -584,259 +491,60 @@ final class DocBlockManipulator
         return $this->phpDocInfoFactory->createFromNode($node);
     }
 
+    public function getParamTypeByName(FunctionLike $functionLike, string $paramName): Type
+    {
+        $this->ensureParamNameStartsWithDollar($paramName, __METHOD__);
+
+        $paramTypes = $this->getParamTypesByName($functionLike);
+        return $paramTypes[$paramName] ?? new MixedType();
+    }
+
     /**
      * All class-type tags are FQN by default to keep default convention through the code.
      * Some people prefer FQN, some short. FQN can be shorten with \Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector later, while short prolonged not
-     * @param string|string[]|IdentifierValueObject|IdentifierValueObject[] $type
      */
-    private function addTypeSpecificTag(Node $node, string $name, $type): void
+    private function addTypeSpecificTag(Node $node, string $name, Type $type): void
     {
-        if (! is_array($type)) {
-            $type = [$type];
+        $docStringType = $this->staticTypeMapper->mapPHPStanTypeToDocString($type);
+        if ($docStringType === '') {
+            return;
         }
-
-        foreach ($type as $key => $singleType) {
-            // prefix possible class name
-            $type[$key] = $this->preslashFullyQualifiedNames($singleType);
-        }
-
-        $type = implode('|', $type);
 
         // there might be no phpdoc at all
         if ($node->getDocComment() !== null) {
             $phpDocInfo = $this->createPhpDocInfoFromNode($node);
             $phpDocNode = $phpDocInfo->getPhpDocNode();
 
-            $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode($type), '', '');
+            $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode(
+                $docStringType
+            ), '', '');
             $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@' . $name, $varTagValueNode);
 
             $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
         } else {
             // create completely new docblock
-            $varDocComment = sprintf("/**\n * @%s %s\n */", $name, $type);
+            $varDocComment = sprintf("/**\n * @%s %s\n */", $name, $docStringType);
             $node->setDocComment(new Doc($varDocComment));
         }
     }
 
-    private function isTagValueNodeWithType(PhpDocTagNode $phpDocTagNode): bool
+    private function areTypesEquals(Type $firstType, Type $secondType): bool
     {
-        return $phpDocTagNode->value instanceof ParamTagValueNode ||
-            $phpDocTagNode->value instanceof VarTagValueNode ||
-            $phpDocTagNode->value instanceof ReturnTagValueNode ||
-            $phpDocTagNode->value instanceof ThrowsTagValueNode;
-    }
-
-    private function replaceTypeNode(
-        TypeNode $typeNode,
-        string $oldType,
-        string $newType,
-        bool $includeChildren = false
-    ): TypeNode {
-        // @todo use $this->nodeTraverser->traverseWithCallable here matching "AttributeAwareIdentifierTypeNode"
-
-        if ($typeNode instanceof AttributeAwareIdentifierTypeNode) {
-            $nodeType = $this->resolveNodeType($typeNode);
-
-            // by default do not override subtypes, can actually use parent type (race condition), which is not desired
-            // see: $includeChildren
-            if (($includeChildren && is_a($nodeType, $oldType, true)) || ltrim($nodeType, '\\') === $oldType) {
-                $newType = $this->forceFqnPrefix($newType);
-
-                return new AttributeAwareIdentifierTypeNode($newType);
-            }
-        }
-
-        if ($typeNode instanceof UnionTypeNode) {
-            foreach ($typeNode->types as $key => $subTypeNode) {
-                $typeNode->types[$key] = $this->replaceTypeNode($subTypeNode, $oldType, $newType, $includeChildren);
-            }
-        }
-
-        if ($typeNode instanceof ArrayTypeNode) {
-            $typeNode->type = $this->replaceTypeNode($typeNode->type, $oldType, $newType, $includeChildren);
-
-            return $typeNode;
-        }
-
-        return $typeNode;
-    }
-
-    /**
-     * @param AttributeAwareNodeInterface&TypeNode $typeNode
-     */
-    private function resolveNodeType(TypeNode $typeNode): string
-    {
-        $nodeType = $typeNode->getAttribute(Attribute::RESOLVED_NAME);
-
-        if ($nodeType === null) {
-            $nodeType = $typeNode->getAttribute(Attribute::TYPE_AS_STRING);
-        }
-
-        if ($nodeType === null) {
-            $nodeType = $typeNode->name;
-        }
-
-        return $nodeType;
-    }
-
-    private function forceFqnPrefix(string $newType): string
-    {
-        if (Strings::contains($newType, '\\')) {
-            $newType = '\\' . ltrim($newType, '\\');
-        }
-
-        return $newType;
-    }
-
-    private function getShortName(string $name): string
-    {
-        return Strings::after($name, '\\', -1) ?: $name;
-    }
-
-    /**
-     * @param AttributeAwareNodeInterface|AttributeAwareIdentifierTypeNode $attributeAwareNode
-     */
-    private function getFullyQualifiedName(AttributeAwareNodeInterface $attributeAwareNode): string
-    {
-        if ($attributeAwareNode->getAttribute(Attribute::RESOLVED_NAME)) {
-            $fqnName = $attributeAwareNode->getAttribute(Attribute::RESOLVED_NAME);
-        } else {
-            $fqnName = $attributeAwareNode->getAttribute(Attribute::RESOLVED_NAMES)[0] ?? $attributeAwareNode->name;
-        }
-
-        return ltrim($fqnName, '\\');
-    }
-
-    /**
-     * @param AttributeAwareIdentifierTypeNode $attributeAwareNode
-     */
-    private function processFqnNameImport(
-        Node $node,
-        AttributeAwareNodeInterface $attributeAwareNode,
-        string $shortName,
-        string $fullyQualifiedName
-    ): AttributeAwareNodeInterface {
-        // the name is already in the same namespace implicitly
-        $namespaceName = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
-
-        // the class in the same namespace as different file can se used in this code, the short names would colide → skip
-        $currentNamespaceShortName = $namespaceName . '\\' . $shortName;
-
-        if (class_exists($currentNamespaceShortName)) {
-            if ($currentNamespaceShortName !== $fullyQualifiedName) {
-                if ($this->isCurrentNamespaceSameShortClassAlreadyUsed(
-                    $node,
-                    $currentNamespaceShortName,
-                    $shortName
-                )) {
-                    return $attributeAwareNode;
-                }
-            }
-        }
-
-        if ($this->useAddingCommander->isShortImported($node, $fullyQualifiedName)) {
-            if ($this->useAddingCommander->isImportShortable($node, $fullyQualifiedName)) {
-                $attributeAwareNode->name = $shortName;
-            }
-
-            return $attributeAwareNode;
-        }
-
-        $attributeAwareNode->name = $shortName;
-        $this->useAddingCommander->addUseImport($node, $fullyQualifiedName);
-
-        return $attributeAwareNode;
-    }
-
-    /**
-     * @param string|IdentifierValueObject $type
-     */
-    private function preslashFullyQualifiedNames($type): string
-    {
-        if ($type instanceof IdentifierValueObject) {
-            if ($type->isAlias()) {
-                return $type->getName();
-            }
-
-            $type = $type->getName();
-        }
-
-        $joinChar = '|'; // default
-        if (Strings::contains($type, '|')) { // intersection
-            $joinChar = '|';
-            $types = explode($joinChar, $type);
-        } elseif (Strings::contains($type, '&')) { // union
-            $joinChar = '&';
-            $types = explode($joinChar, $type);
-        } else {
-            $types = [$type];
-        }
-
-        foreach ($types as $key => $singleType) {
-            if ($this->typeAnalyzer->isPhpReservedType($singleType)) {
-                continue;
-            }
-
-            $types[$key] = '\\' . ltrim($singleType, '\\');
-        }
-
-        return implode($joinChar, $types);
-    }
-
-    private function isCurrentNamespaceSameShortClassAlreadyUsed(
-        Node $node,
-        string $fullyQualifiedName,
-        string $shortName
-    ): bool {
-        /** @var ClassLike|null $classNode */
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
-            // cannot say, so rather yes
-            return true;
-        }
-
-        $className = $this->nameResolver->getName($classNode);
-
-        if (isset($this->usedShortNameByClasses[$className][$shortName])) {
-            return $this->usedShortNameByClasses[$className][$shortName];
-        }
-
-        $printedClass = $this->betterStandardPrinter->print($classNode->stmts);
-
-        // short with space " Type"| fqn
-        $shortNameOrFullyQualifiedNamePattern = sprintf(
-            '#(\s%s\b|\b%s\b)#',
-            preg_quote($shortName),
-            preg_quote($fullyQualifiedName)
+        return $this->staticTypeMapper->createTypeHash($firstType) === $this->staticTypeMapper->createTypeHash(
+            $secondType
         );
-
-        $isShortClassUsed = (bool) Strings::match($printedClass, $shortNameOrFullyQualifiedNamePattern);
-
-        $this->usedShortNameByClasses[$className][$shortName] = $isShortClassUsed;
-
-        return $isShortClassUsed;
     }
 
-    private function isAlias(string $paramType, Node $node): bool
+    private function ensureParamNameStartsWithDollar(string $paramName, string $location): void
     {
-        /** @var Use_[]|null $useNodes */
-        $useNodes = $node->getAttribute(AttributeKey::USE_NODES);
-        if ($useNodes === null) {
-            return false;
+        if (Strings::startsWith($paramName, '$')) {
+            return;
         }
 
-        foreach ($useNodes as $useNode) {
-            foreach ($useNode->uses as $useUse) {
-                if ($useUse->alias === null) {
-                    continue;
-                }
-
-                if ((string) $useUse->alias === $paramType) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        throw new ShouldNotHappenException(sprintf(
+            'Param name "%s" must start with "$" in "%s()" method.',
+            $paramName,
+            $location
+        ));
     }
 }

@@ -107,7 +107,7 @@ CODE_SAMPLE
     {
         // replace on @var/@param/@return/@throws
         foreach ($this->namespacePrefixesWithExcludedClasses as $namespacePrefix => $excludedClasses) {
-            $this->docBlockManipulator->changeUnderscoreType($node, $namespacePrefix, $excludedClasses);
+            $this->docBlockManipulator->changeUnderscoreType($node, $namespacePrefix, $excludedClasses ?? []);
         }
 
         if ($node instanceof Name || $node instanceof Identifier) {

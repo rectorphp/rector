@@ -4,6 +4,7 @@ namespace Rector\DoctrinePhpDocParser\PhpDocParser;
 
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\InheritanceType;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\ManyToMany;
@@ -19,6 +20,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\PhpDocParser\AbstractPhpDocParser;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\InheritanceTypeTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\TableTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\IdTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinColumnTagValueNode;
@@ -27,7 +30,6 @@ use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToManyTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToOneTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToManyTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToOneTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\TableTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineTagNodeInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -58,6 +60,10 @@ final class OrmTagParser extends AbstractPhpDocParser
         if ($currentPhpNode instanceof Class_) {
             if ($tag === EntityTagValueNode::SHORT_NAME) {
                 return $this->createEntityTagValueNode($currentPhpNode, $annotationContent);
+            }
+
+            if ($tag === InheritanceTypeTagValueNode::SHORT_NAME) {
+                return $this->createInheritanceTypeTagValueNode($currentPhpNode);
             }
 
             if ($tag === TableTagValueNode::SHORT_NAME) {
@@ -133,6 +139,14 @@ final class OrmTagParser extends AbstractPhpDocParser
         return new EntityTagValueNode($entity->repositoryClass, $entity->readOnly, $this->resolveAnnotationItemsOrder(
             $annotationContent
         ));
+    }
+
+    private function createInheritanceTypeTagValueNode(Class_ $class): InheritanceTypeTagValueNode
+    {
+        /** @var InheritanceType $inheritanceType */
+        $inheritanceType = $this->nodeAnnotationReader->readClassAnnotation($class, InheritanceType::class);
+
+        return new InheritanceTypeTagValueNode($inheritanceType->value);
     }
 
     private function createTableTagValueNode(Class_ $class, string $annotationContent): TableTagValueNode

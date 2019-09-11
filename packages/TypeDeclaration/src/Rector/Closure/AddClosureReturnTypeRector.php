@@ -6,8 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\Php\ReturnTypeInfo;
-use Rector\Php\TypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,15 +21,9 @@ final class AddClosureReturnTypeRector extends AbstractRector
      */
     private $returnTypeInferer;
 
-    /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    public function __construct(ReturnTypeInferer $returnTypeInferer, TypeAnalyzer $typeAnalyzer)
+    public function __construct(ReturnTypeInferer $returnTypeInferer)
     {
         $this->returnTypeInferer = $returnTypeInferer;
-        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -92,10 +84,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $inferedReturnTypes = $this->returnTypeInferer->inferFunctionLike($node);
+        $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
 
-        $returnTypeInfo = new ReturnTypeInfo($inferedReturnTypes, $this->typeAnalyzer, $inferedReturnTypes);
-        $returnTypeNode = $returnTypeInfo->getFqnTypeNode();
+        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedReturnType);
         if ($returnTypeNode === null) {
             return null;
         }

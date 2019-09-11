@@ -3,7 +3,13 @@
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node\FunctionLike;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 
 final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
@@ -14,39 +20,43 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
     private $returnTypeInferers = [];
 
     /**
-     * @param ReturnTypeInfererInterface[] $returnTypeInferers
+     * @var TypeFactory
      */
-    public function __construct(array $returnTypeInferers)
-    {
-        $this->returnTypeInferers = $this->sortTypeInferersByPriority($returnTypeInferers);
-    }
+    private $typeFactory;
 
     /**
-     * @return string[]
+     * @param ReturnTypeInfererInterface[] $returnTypeInferers
      */
-    public function inferFunctionLike(FunctionLike $functionLike): array
+    public function __construct(TypeFactory $typeFactory, array $returnTypeInferers)
+    {
+        $this->returnTypeInferers = $this->sortTypeInferersByPriority($returnTypeInferers);
+        $this->typeFactory = $typeFactory;
+    }
+
+    public function inferFunctionLike(FunctionLike $functionLike): Type
     {
         return $this->inferFunctionLikeWithExcludedInferers($functionLike, []);
     }
 
     /**
      * @param string[] $excludedInferers
-     * @return string[]
      */
-    public function inferFunctionLikeWithExcludedInferers(FunctionLike $functionLike, array $excludedInferers): array
+    public function inferFunctionLikeWithExcludedInferers(FunctionLike $functionLike, array $excludedInferers): Type
     {
         foreach ($this->returnTypeInferers as $returnTypeInferer) {
             if ($this->shouldSkipExcludedTypeInferer($returnTypeInferer, $excludedInferers)) {
                 continue;
             }
 
-            $types = $returnTypeInferer->inferFunctionLike($functionLike);
-            if ($types !== [] && $types !== ['mixed']) {
-                return $types;
+            $type = $returnTypeInferer->inferFunctionLike($functionLike);
+            $type = $this->normalizeArrayTypeAndArrayNever($type);
+
+            if (! $type instanceof MixedType) {
+                return $type;
             }
         }
 
-        return [];
+        return new MixedType();
     }
 
     /**
@@ -74,5 +84,30 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
         }
 
         throw new ShouldNotHappenException();
+    }
+
+    /**
+     * From "string[]|mixed[]" based on empty array to to "string[]"
+     */
+    private function normalizeArrayTypeAndArrayNever(Type $type): Type
+    {
+        if (! $type instanceof UnionType) {
+            return $type;
+        }
+
+        $nonNeverTypes = [];
+        foreach ($type->getTypes() as $unionedType) {
+            if (! $unionedType instanceof ArrayType) {
+                return $type;
+            }
+
+            if ($unionedType->getItemType() instanceof NeverType) {
+                continue;
+            }
+
+            $nonNeverTypes[] = $unionedType;
+        }
+
+        return $this->typeFactory->createMixedPassedOrUnionType($nonNeverTypes);
     }
 }

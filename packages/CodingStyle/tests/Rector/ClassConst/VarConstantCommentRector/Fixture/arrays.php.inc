@@ -29,7 +29,7 @@ class Arrays
     public const NAME = ['Papa', 'Mama'];
 
     /**
-     * @var string[]|int[]
+     * @var int[]|string[]
      */
     public const MIX = ['Papa', 5];
 
@@ -44,7 +44,7 @@ class Arrays
     public const IS_IT_TRUE = [false, true];
 
     /**
-     * @var bool[]|bool[][]
+     * @var bool[][]|bool[]
      */
     public const IS_IT_DEEP_TRUE = [false, true, [true]];
 }

@@ -2,34 +2,26 @@
 
 namespace Rector\CodingStyle\Rector\Namespace_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\CodingStyle\Imports\AliasUsesResolver;
-use Rector\CodingStyle\Imports\ShortNameResolver;
-use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\ImportFullyQualifiedNamesRectorTest;
+use Rector\CodingStyle\Imports\ImportSkipper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see ImportFullyQualifiedNamesRectorTest
+ * @see \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\ImportFullyQualifiedNamesRectorTest
  */
 final class ImportFullyQualifiedNamesRector extends AbstractRector
 {
-    /**
-     * @var string[]
-     */
-    private $shortNames = [];
-
     /**
      * @var string[]
      */
@@ -39,11 +31,6 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
      * @var DocBlockManipulator
      */
     private $docBlockManipulator;
-
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
 
     /**
      * @var bool
@@ -61,24 +48,22 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
     private $useAddingCommander;
 
     /**
-     * @var ShortNameResolver
+     * @var ImportSkipper
      */
-    private $shortNameResolver;
+    private $importSkipper;
 
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
-        ClassNaming $classNaming,
         AliasUsesResolver $aliasUsesResolver,
         UseAddingCommander $useAddingCommander,
-        ShortNameResolver $shortNameResolver,
+        ImportSkipper $importSkipper,
         bool $shouldImportDocBlocks = true
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->classNaming = $classNaming;
         $this->shouldImportDocBlocks = $shouldImportDocBlocks;
         $this->useAddingCommander = $useAddingCommander;
         $this->aliasUsesResolver = $aliasUsesResolver;
-        $this->shortNameResolver = $shortNameResolver;
+        $this->importSkipper = $importSkipper;
     }
 
     public function getDefinition(): RectorDefinition
@@ -126,133 +111,77 @@ CODE_SAMPLE
         $this->useAddingCommander->analyseFileInfoUseStatements($node);
 
         if ($node instanceof Name) {
-            if (! $this->canBeNameImported($node)) {
+            $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node);
+            if (! $staticType instanceof FullyQualifiedObjectType) {
+                return null;
+            }
+
+            if ($this->isNamespaceOrUseImportName($node)) {
                 return null;
             }
 
             $this->aliasedUses = $this->aliasUsesResolver->resolveForNode($node);
 
-            // "new X" or "X::static()"
-            $this->shortNames = $this->shortNameResolver->resolveForNode($node);
-
-            return $this->importNamesAndCollectNewUseStatements($node);
+            return $this->importNameAndCollectNewUseStatement($node, $staticType);
         }
 
-        // process every doc block node
+        // process doc blocks
         if ($this->shouldImportDocBlocks) {
-            $useImports = $this->docBlockManipulator->importNames($node);
-            foreach ($useImports as $useImport) {
-                $this->useAddingCommander->addUseImport($node, $useImport);
-            }
-
+            $this->docBlockManipulator->importNames($node);
             return $node;
         }
 
         return null;
     }
 
-    private function importNamesAndCollectNewUseStatements(Name $name): ?Name
-    {
-        $originalName = $name->getAttribute('originalName');
-
-        if (! $originalName instanceof Name) {
-            // not sure what to do
+    private function importNameAndCollectNewUseStatement(
+        Name $name,
+        FullyQualifiedObjectType $fullyQualifiedObjectType
+    ): ?Name {
+        // the same end is already imported → skip
+        if ($this->importSkipper->shouldSkipName($name, $fullyQualifiedObjectType)) {
             return null;
         }
 
-        // the short name is already used, skip it
-        // @todo this is duplicated check of - $this->useAddingCommander->isShortImported?
-        $shortName = $this->classNaming->getShortName($name->toString());
-
-        if ($this->isShortNameAlreadyUsedForDifferentFqn($name, $shortName)) {
-            return null;
-        }
-
-        $fullyQualifiedName = $this->getName($name);
-
-        // the similar end is already imported → skip
-        if ($this->shouldSkipName($name, $fullyQualifiedName)) {
-            return null;
-        }
-
-        $shortName = $this->classNaming->getShortName($fullyQualifiedName);
-
-        if ($this->useAddingCommander->isShortImported($name, $fullyQualifiedName)) {
-            if ($this->useAddingCommander->isImportShortable($name, $fullyQualifiedName)) {
-                return new Name($shortName);
+        if ($this->useAddingCommander->isShortImported($name, $fullyQualifiedObjectType)) {
+            if ($this->useAddingCommander->isImportShortable($name, $fullyQualifiedObjectType)) {
+                return $fullyQualifiedObjectType->getShortNameNode();
             }
 
             return null;
         }
 
-        if (! $this->useAddingCommander->hasImport($name, $fullyQualifiedName)) {
+        if (! $this->useAddingCommander->hasImport($name, $fullyQualifiedObjectType)) {
             $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof FuncCall) {
-                $this->useAddingCommander->addFunctionUseImport($name, $fullyQualifiedName);
+                $this->useAddingCommander->addFunctionUseImport($name, $fullyQualifiedObjectType);
             } else {
-                $this->useAddingCommander->addUseImport($name, $fullyQualifiedName);
+                $this->useAddingCommander->addUseImport($name, $fullyQualifiedObjectType);
             }
         }
 
         // possibly aliased
-        if (in_array($fullyQualifiedName, $this->aliasedUses, true)) {
-            return null;
-        }
-
-        return new Name($shortName);
-    }
-
-    // 1. name is fully qualified → import it
-    private function shouldSkipName(Name $name, string $fullyQualifiedName): bool
-    {
-        $shortName = $this->classNaming->getShortName($fullyQualifiedName);
-
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof ConstFetch) { // is true, false, null etc.
-            return true;
-        }
-
-        if ($this->isNames($name, ['self', 'parent', 'static'])) {
-            return true;
-        }
-
-        // skip native function calls
-        if ($parentNode instanceof FuncCall && ! Strings::contains($fullyQualifiedName, '\\')) {
-            return true;
-        }
-
-        // nothing to change
-        if ($shortName === $fullyQualifiedName) {
-            return false;
-        }
-
-        foreach ($this->aliasedUses as $aliasedUse) {
-            // its aliased, we cannot just rename it
-            if (Strings::endsWith($aliasedUse, '\\' . $shortName)) {
-                return true;
+        foreach ($this->aliasedUses as $aliasUse) {
+            if ($fullyQualifiedObjectType->getClassName() === $aliasUse) {
+                return null;
             }
         }
 
-        return $this->useAddingCommander->canImportBeAdded($name, $fullyQualifiedName);
+        return $fullyQualifiedObjectType->getShortNameNode();
     }
 
-    // is already used
-    private function isShortNameAlreadyUsedForDifferentFqn(Name $name, string $shortName): bool
-    {
-        if (! isset($this->shortNames[$shortName])) {
-            return false;
-        }
-
-        return $this->shortNames[$shortName] !== $this->getName($name);
-    }
-
-    private function canBeNameImported(Name $name): bool
+    /**
+     * Skip:
+     * - namespace name
+     * - use import name
+     */
+    private function isNamespaceOrUseImportName(Name $name): bool
     {
         $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Namespace_) {
-            return false;
+            return true;
         }
 
-        return ! $parentNode instanceof UseUse;
+        return $parentNode instanceof UseUse;
     }
 }

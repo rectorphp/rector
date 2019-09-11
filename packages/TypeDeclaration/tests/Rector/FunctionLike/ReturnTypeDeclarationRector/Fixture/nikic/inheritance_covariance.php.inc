@@ -29,7 +29,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationR
 
 class ACovariance {
     /** @return ACovariance */
-    public function test(): \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\Inheritance\ACovariance {
+    public function test(): self {
         return $this;
     }
 }

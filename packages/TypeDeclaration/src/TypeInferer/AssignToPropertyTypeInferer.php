@@ -14,10 +14,7 @@ use PHPStan\Type\Type;
 
 final class AssignToPropertyTypeInferer extends AbstractTypeInferer
 {
-    /**
-     * @return Type[]
-     */
-    public function inferPropertyInClassLike(string $propertyName, ClassLike $classLike): array
+    public function inferPropertyInClassLike(string $propertyName, ClassLike $classLike): Type
     {
         $assignedExprStaticTypes = [];
 
@@ -48,7 +45,7 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
             return null;
         });
 
-        return $this->filterOutDuplicatedTypes($assignedExprStaticTypes);
+        return $this->typeFactory->createMixedPassedOrUnionType($assignedExprStaticTypes);
     }
 
     /**
@@ -75,24 +72,5 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
         }
 
         return null;
-    }
-
-    /**
-     * @param Type[] $types
-     * @return Type[]
-     */
-    private function filterOutDuplicatedTypes(array $types): array
-    {
-        if (count($types) === 1) {
-            return $types;
-        }
-
-        $uniqueTypes = [];
-        foreach ($types as $type) {
-            $valueObjectHash = md5(serialize($type));
-            $uniqueTypes[$valueObjectHash] = $type;
-        }
-
-        return $uniqueTypes;
     }
 }

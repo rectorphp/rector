@@ -13,6 +13,9 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
+use PHPStan\Type\VoidType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
@@ -21,15 +24,14 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
 {
     /**
      * @param ClassMethod|Closure|Function_ $functionLike
-     * @return string[]
      */
-    public function inferFunctionLike(FunctionLike $functionLike): array
+    public function inferFunctionLike(FunctionLike $functionLike): Type
     {
         /** @var Class_|Trait_|Interface_|null $classLike */
         $classLike = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
         if ($functionLike instanceof ClassMethod) {
             if ($classLike instanceof Interface_) {
-                return [];
+                return new MixedType();
             }
         }
 
@@ -37,19 +39,23 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
         if ($localReturnNodes === []) {
             // void type
             if ($functionLike instanceof ClassMethod && ! $functionLike->isAbstract()) {
-                return ['void'];
+                return new VoidType();
             }
 
-            return [];
+            return new MixedType();
         }
 
         $types = [];
         foreach ($localReturnNodes as $localReturnNode) {
-            $types = array_merge($types, $this->nodeTypeResolver->resolveSingleTypeToStrings($localReturnNode->expr));
+            if ($localReturnNode->expr === null) {
+                continue;
+            }
+
+            $staticType = $this->nodeTypeResolver->resolveNodeToPHPStanType($localReturnNode->expr);
+            $types[] = $staticType;
         }
 
-        // @todo add priority, because this gets last :)
-        return $types;
+        return $this->typeFactory->createMixedPassedOrUnionType($types);
     }
 
     public function getPriority(): int
@@ -76,7 +82,6 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
                 return null;
             }
 
-            // skip void returns
             if ($node->expr === null) {
                 return null;
             }
