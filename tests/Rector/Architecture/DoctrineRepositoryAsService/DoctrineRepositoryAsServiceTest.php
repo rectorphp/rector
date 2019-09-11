@@ -11,9 +11,21 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
  */
 final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc', __DIR__ . '/Fixture/PostController.php']);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/PostController.php'];
     }
 
     protected function provideConfig(): string

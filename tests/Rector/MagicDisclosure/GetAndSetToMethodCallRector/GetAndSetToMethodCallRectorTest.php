@@ -9,14 +9,23 @@ use Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\SomeC
 
 final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/get.php.inc',
-            __DIR__ . '/Fixture/fixture2.php.inc',
-            __DIR__ . '/Fixture/fixture3.php.inc',
-            __DIR__ . '/Fixture/klarka.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/get.php.inc'];
+        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
+        yield [__DIR__ . '/Fixture/fixture3.php.inc'];
+        yield [__DIR__ . '/Fixture/klarka.php.inc'];
     }
 
     /**

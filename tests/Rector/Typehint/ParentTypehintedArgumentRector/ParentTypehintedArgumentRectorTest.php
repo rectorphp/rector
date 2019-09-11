@@ -9,12 +9,21 @@ use Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ParserInt
 
 final class ParentTypehintedArgumentRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/SomeClassImplementingParserInterface.php',
-            __DIR__ . '/Fixture/MyMetadataFactory.php',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/SomeClassImplementingParserInterface.php'];
+        yield [__DIR__ . '/Fixture/MyMetadataFactory.php'];
     }
 
     /**
