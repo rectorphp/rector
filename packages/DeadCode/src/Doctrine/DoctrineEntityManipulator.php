@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\InheritanceType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\InversedByNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\MappedByNodeInterface;
@@ -74,7 +75,7 @@ final class DoctrineEntityManipulator
             return false;
         }
 
-        return $this->docBlockManipulator->hasTag($class, Entity::class);
+        return $this->docBlockManipulator->hasTag($class, EntityTagValueNode::class);
     }
 
     public function removeMappedByOrInversedByFromProperty(Property $property): void

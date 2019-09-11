@@ -99,14 +99,9 @@ final class UseImportsAdder
      */
     private function createUses(array $useImportTypes, array $functionUseImportTypes, ?string $namespaceName): array
     {
-        if ($namespaceName === null) {
-            // not supported yet
-            return [];
-        }
-
         $newUses = [];
         foreach ($useImportTypes as $useImportType) {
-            if ($this->isCurrentNamespace($namespaceName, $useImportType)) {
+            if ($namespaceName !== null && $this->isCurrentNamespace($namespaceName, $useImportType)) {
                 continue;
             }
 
@@ -115,7 +110,7 @@ final class UseImportsAdder
         }
 
         foreach ($functionUseImportTypes as $functionUseImportType) {
-            if ($this->isCurrentNamespace($namespaceName, $functionUseImportType)) {
+            if ($namespaceName !== null && $this->isCurrentNamespace($namespaceName, $functionUseImportType)) {
                 continue;
             }
 

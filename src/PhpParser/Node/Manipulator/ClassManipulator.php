@@ -26,6 +26,7 @@ use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Symfony\PhpDocParser\Ast\PhpDoc\SerializerTypeTagValueNode;
 
 final class ClassManipulator
 {
@@ -510,7 +511,7 @@ final class ClassManipulator
                 return;
             }
 
-            if (! $this->docBlockManipulator->hasTag($node, Type::class)) {
+            if (! $this->docBlockManipulator->hasTag($node, SerializerTypeTagValueNode::class)) {
                 return;
             }
 

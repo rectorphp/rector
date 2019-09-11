@@ -12,6 +12,11 @@ final class DoctrineClass
     /**
      * @var string
      */
+    public const ARRAY_COLLECTION = 'Doctrine\Common\Collections\ArrayCollection';
+
+    /**
+     * @var string
+     */
     public const MANAGER_REGISTRY = 'Doctrine\Common\Persistence\ManagerRegistry';
 
     /**

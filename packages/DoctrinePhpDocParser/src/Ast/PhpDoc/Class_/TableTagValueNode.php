@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_;
+namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_;
 
 use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
