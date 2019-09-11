@@ -11,20 +11,29 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
  */
 final class Php4ConstructorRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/in_namespace.php.inc',
-            __DIR__ . '/Fixture/delegating.php.inc',
-            __DIR__ . '/Fixture/delegating_2.php.inc',
-            __DIR__ . '/Fixture/fixture5.php.inc',
-            __DIR__ . '/Fixture/non_expression.php.inc',
-        ]);
+        $this->doTestFile($file);
     }
 
     public function getRectorClass(): string
     {
         return Php4ConstructorRector::class;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/in_namespace.php.inc'];
+        yield [__DIR__ . '/Fixture/delegating.php.inc'];
+        yield [__DIR__ . '/Fixture/delegating_2.php.inc'];
+        yield [__DIR__ . '/Fixture/fixture5.php.inc'];
+        yield [__DIR__ . '/Fixture/non_expression.php.inc'];
     }
 }

@@ -7,13 +7,22 @@ use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 
 final class CovarianceTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/nikic/inheritance_covariance.php.inc',
-            __DIR__ . '/Fixture/Covariance/return_interface_to_class.php.inc',
-            __DIR__ . '/Fixture/Covariance/return_nullable_with_parent_interface.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/nikic/inheritance_covariance.php.inc'];
+        yield [__DIR__ . '/Fixture/Covariance/return_interface_to_class.php.inc'];
+        yield [__DIR__ . '/Fixture/Covariance/return_nullable_with_parent_interface.php.inc'];
     }
 
     protected function getPhpVersion(): string

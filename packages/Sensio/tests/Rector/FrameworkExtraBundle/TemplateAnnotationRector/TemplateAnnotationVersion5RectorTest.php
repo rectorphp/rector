@@ -7,15 +7,24 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class TemplateAnnotationVersion5RectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/Version5/fixture.php.inc',
-            __DIR__ . '/Fixture/Version5/fixture2.php.inc',
-            __DIR__ . '/Fixture/Version5/fixture3.php.inc',
-            __DIR__ . '/Fixture/Version5/fixture4.php.inc',
-            __DIR__ . '/Fixture/Version5/fixture5.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/Version5/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/Version5/fixture2.php.inc'];
+        yield [__DIR__ . '/Fixture/Version5/fixture3.php.inc'];
+        yield [__DIR__ . '/Fixture/Version5/fixture4.php.inc'];
+        yield [__DIR__ . '/Fixture/Version5/fixture5.php.inc'];
     }
 
     /**

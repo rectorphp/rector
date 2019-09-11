@@ -7,14 +7,23 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class NewlineBeforeNewAssignSetRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/skip_false.php.inc',
-            __DIR__ . '/Fixture/skip_already_nop.php.inc',
-            __DIR__ . '/Fixture/skip_just_one.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_false.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_already_nop.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_just_one.php.inc'];
     }
 
     protected function getRectorClass(): string

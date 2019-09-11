@@ -7,18 +7,27 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class BinarySwitchToIfElseRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/in_class.php.inc',
-            __DIR__ . '/Fixture/if_or.php.inc',
-            __DIR__ . '/Fixture/extra_break.php.inc',
-        ]);
+        $this->doTestFile($file);
     }
 
     public function getRectorClass(): string
     {
         return BinarySwitchToIfElseRector::class;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/in_class.php.inc'];
+        yield [__DIR__ . '/Fixture/if_or.php.inc'];
+        yield [__DIR__ . '/Fixture/extra_break.php.inc'];
     }
 }

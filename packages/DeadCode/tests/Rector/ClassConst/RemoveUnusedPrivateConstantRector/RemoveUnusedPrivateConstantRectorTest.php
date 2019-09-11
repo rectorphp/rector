@@ -7,13 +7,22 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveUnusedPrivateConstantRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/keep_constant.php.inc',
-            __DIR__ . '/Fixture/keep_static_constant.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_constant.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_static_constant.php.inc'];
     }
 
     protected function getRectorClass(): string

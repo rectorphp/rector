@@ -7,14 +7,22 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AddSeeTestAnnotationRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/different_namespace.php.inc',
-            __DIR__ . '/Fixture/add_to_doc_block.php.inc',
-            // skip
-            __DIR__ . '/Fixture/skip_existing.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/different_namespace.php.inc'];
+        yield [__DIR__ . '/Fixture/add_to_doc_block.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_existing.php.inc'];
     }
 
     protected function getRectorClass(): string

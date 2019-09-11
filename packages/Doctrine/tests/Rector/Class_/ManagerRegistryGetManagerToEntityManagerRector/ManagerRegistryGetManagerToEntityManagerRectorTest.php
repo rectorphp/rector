@@ -9,13 +9,22 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ManagerRegistryGetManagerToEntityManagerRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/keep_different_methods.php.inc',
-            __DIR__ . '/Fixture/do_not_remove_registry_on_non_get_repo_call.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_different_methods.php.inc'];
+        yield [__DIR__ . '/Fixture/do_not_remove_registry_on_non_get_repo_call.php.inc'];
     }
 
     /**

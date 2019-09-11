@@ -4,6 +4,7 @@ namespace Rector\PHPUnit\NodeFactory;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -40,7 +41,7 @@ final class DataProviderClassMethodFactory
             $value = $arg->value;
             if ($value instanceof Array_) {
                 foreach ($value->items as $arrayItem) {
-                    $returnStatement = new Yield_(new Array_([$arrayItem->value]));
+                    $returnStatement = new Yield_(new Array_([new ArrayItem($arrayItem->value)]));
                     $classMethod->stmts[] = new Expression($returnStatement);
                 }
             }

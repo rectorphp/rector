@@ -7,17 +7,24 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AddArrayDefaultToArrayPropertyRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/fixture_2.php.inc',
-            __DIR__ . '/Fixture/count_on_null.php.inc',
+        $this->doTestFile($file);
+    }
 
-            // new
-            __DIR__ . '/Fixture/skip_nullable_array.php.inc',
-            __DIR__ . '/Fixture/skip.php.inc',
-        ]);
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/fixture_2.php.inc'];
+        yield [__DIR__ . '/Fixture/count_on_null.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_nullable_array.php.inc'];
+        yield [__DIR__ . '/Fixture/skip.php.inc'];
     }
 
     protected function getRectorClass(): string
