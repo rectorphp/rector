@@ -47,6 +47,7 @@ script:
       if [[ $RUN_RECTOR == true ]]; then
           bin/rector process src --set symfony40 --dry-run
           composer docs
+          php bin/check_class_existance_in_yaml_configs.php
       fi
 
     # Eat your own dog food
