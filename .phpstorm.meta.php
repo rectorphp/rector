@@ -6,8 +6,12 @@ namespace PHPSTORM_META;
 // $container->get(Type::class) → instance of "Type"
 override(\Psr\Container\ContainerInterface::get(0), type(0));
 
-// $propertyPhpDocInfo->getByType(Type::class) → instance of "Type"|null - @todo how to make this nullable?
-override(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo::getByType(0), type(0));
+// $propertyPhpDocInfo->getByType(Type::class) → instance of "Type"|null
+# inspired at: https://github.com/Ocramius/phpunit/blob/2894f1e5eb2cd88708fdba608718e5b6a07391aa/.phpstorm.meta.php#L4-L9
+override(
+    \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo::getByType(0),
+    map(['@&null'])
+);
 
 // PhpStorm 2019.1 - add argument autocomplete
 // https://blog.jetbrains.com/phpstorm/2019/02/new-phpstorm-meta-php-features/
