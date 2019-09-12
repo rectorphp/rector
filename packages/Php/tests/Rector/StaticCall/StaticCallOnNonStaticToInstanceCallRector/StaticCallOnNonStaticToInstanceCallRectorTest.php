@@ -7,17 +7,26 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class StaticCallOnNonStaticToInstanceCallRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/with_constructor.php.inc',
-            __DIR__ . '/Fixture/keep.php.inc',
-            __DIR__ . '/Fixture/keep_parent_static.php.inc',
-            __DIR__ . '/Fixture/keep_annotated.php.inc',
-            __DIR__ . '/Fixture/add_static_to_method.php.inc',
-            __DIR__ . '/Fixture/with_only_static_methods.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/with_constructor.php.inc'];
+        yield [__DIR__ . '/Fixture/keep.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_parent_static.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_annotated.php.inc'];
+        yield [__DIR__ . '/Fixture/add_static_to_method.php.inc'];
+        yield [__DIR__ . '/Fixture/with_only_static_methods.php.inc'];
     }
 
     protected function getRectorClass(): string

@@ -7,13 +7,22 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ArrayArgumentInTestToDataProviderRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/various_types.php.inc',
-            __DIR__ . '/Fixture/two_arguments.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/various_types.php.inc'];
+        yield [__DIR__ . '/Fixture/two_arguments.php.inc'];
     }
 
     /**
@@ -28,6 +37,7 @@ final class ArrayArgumentInTestToDataProviderRectorTest extends AbstractRectorTe
                         'class' => 'PHPUnit\Framework\TestCase',
                         'old_method' => 'doTestMultiple',
                         'new_method' => 'doTestSingle',
+                        'variable_name' => 'variable',
                     ],
                 ],
             ],

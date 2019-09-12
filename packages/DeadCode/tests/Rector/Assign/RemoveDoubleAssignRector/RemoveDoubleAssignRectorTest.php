@@ -7,22 +7,30 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveDoubleAssignRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/calls.php.inc',
-            __DIR__ . '/Fixture/keep_dim_assign.php.inc',
-            __DIR__ . '/Fixture/property_assign.php.inc',
-            __DIR__ . '/Fixture/keep_array_reset.php.inc',
-            __DIR__ . '/Fixture/keep_property_assign_in_different_ifs.php.inc',
-            __DIR__ . '/Fixture/inside_if_else.php.inc',
-            __DIR__ . '/Fixture/inside_the_same_if.php.inc',
-            // skip
-            __DIR__ . '/Fixture/skip_double_catch.php.inc',
-            __DIR__ . '/Fixture/skip_double_case.php.inc',
-            __DIR__ . '/Fixture/skip_double_assign.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/calls.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_dim_assign.php.inc'];
+        yield [__DIR__ . '/Fixture/property_assign.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_array_reset.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_property_assign_in_different_ifs.php.inc'];
+        yield [__DIR__ . '/Fixture/inside_if_else.php.inc'];
+        yield [__DIR__ . '/Fixture/inside_the_same_if.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_double_catch.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_double_case.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_double_assign.php.inc'];
     }
 
     protected function getRectorClass(): string

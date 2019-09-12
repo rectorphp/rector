@@ -7,17 +7,26 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class CreateFunctionToAnonymousFunctionRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/concat.php.inc',
-            __DIR__ . '/Fixture/reference.php.inc',
-            __DIR__ . '/Fixture/stackoverflow.php.inc',
-            __DIR__ . '/Fixture/drupal.php.inc',
-            __DIR__ . '/Fixture/php_net.php.inc',
-            __DIR__ . '/Fixture/wordpress.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/concat.php.inc'];
+        yield [__DIR__ . '/Fixture/reference.php.inc'];
+        yield [__DIR__ . '/Fixture/stackoverflow.php.inc'];
+        yield [__DIR__ . '/Fixture/drupal.php.inc'];
+        yield [__DIR__ . '/Fixture/php_net.php.inc'];
+        yield [__DIR__ . '/Fixture/wordpress.php.inc'];
     }
 
     protected function getRectorClass(): string

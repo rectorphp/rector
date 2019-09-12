@@ -7,9 +7,21 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/json_decode.php.inc', __DIR__ . '/Fixture/json_encode.php.inc']);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/json_decode.php.inc'];
+        yield [__DIR__ . '/Fixture/json_encode.php.inc'];
     }
 
     protected function getRectorClass(): string

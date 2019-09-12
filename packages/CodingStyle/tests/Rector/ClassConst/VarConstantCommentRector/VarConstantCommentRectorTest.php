@@ -7,15 +7,24 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class VarConstantCommentRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/correct_invalid.php.inc',
-            __DIR__ . '/Fixture/arrays.php.inc',
-            __DIR__ . '/Fixture/misc_type.php.inc',
-            __DIR__ . '/Fixture/no_slash.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/correct_invalid.php.inc'];
+        yield [__DIR__ . '/Fixture/arrays.php.inc'];
+        yield [__DIR__ . '/Fixture/misc_type.php.inc'];
+        yield [__DIR__ . '/Fixture/no_slash.php.inc'];
     }
 
     protected function getRectorClass(): string

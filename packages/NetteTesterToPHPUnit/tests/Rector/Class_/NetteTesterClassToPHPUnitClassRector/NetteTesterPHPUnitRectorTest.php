@@ -10,19 +10,28 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class NetteTesterPHPUnitRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
         // prepare dummy data
         FileSystem::copy(__DIR__ . '/Copy', $this->getTempPath());
 
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/test_class.php.inc',
-            __DIR__ . '/Fixture/assert_true.php.inc',
-            __DIR__ . '/Fixture/assert_type.php.inc',
-            __DIR__ . '/Fixture/various_asserts.php.inc',
-            __DIR__ . '/Fixture/kdyby_tests_events.php.inc',
-            __DIR__ . '/Fixture/data_provider.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/test_class.php.inc'];
+        yield [__DIR__ . '/Fixture/assert_true.php.inc'];
+        yield [__DIR__ . '/Fixture/assert_type.php.inc'];
+        yield [__DIR__ . '/Fixture/various_asserts.php.inc'];
+        yield [__DIR__ . '/Fixture/kdyby_tests_events.php.inc'];
+        yield [__DIR__ . '/Fixture/data_provider.php.inc'];
     }
 
     /**

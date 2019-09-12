@@ -7,16 +7,24 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ArraySpreadInsteadOfArrayMergeRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/iterator_to_array.php.inc',
-            __DIR__ . '/Fixture/integer_keys.php.inc',
-            // see caveat: https://twitter.com/nikita_ppv/status/1126470222838366209
-            __DIR__ . '/Fixture/skip_simple_array_merge.php.inc',
-            __DIR__ . '/Fixture/skip_string_keys.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/iterator_to_array.php.inc'];
+        yield [__DIR__ . '/Fixture/integer_keys.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_simple_array_merge.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_string_keys.php.inc'];
     }
 
     protected function getRectorClass(): string

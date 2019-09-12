@@ -7,13 +7,22 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveMissingCompactVariableRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/empty_compact.php.inc',
-            __DIR__ . '/Fixture/skip_maybe_defined.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/empty_compact.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_maybe_defined.inc'];
     }
 
     protected function getRectorClass(): string

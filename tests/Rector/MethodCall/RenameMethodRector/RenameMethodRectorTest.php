@@ -10,19 +10,28 @@ use Rector\Tests\Rector\MethodCall\RenameMethodRector\Source\FormMacros;
 
 final class RenameMethodRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/fixture2.php.inc',
-            __DIR__ . '/Fixture/fixture3.php.inc',
-            __DIR__ . '/Fixture/fixture4.php.inc',
-            __DIR__ . '/Fixture/fixture5.php.inc',
-            __DIR__ . '/Fixture/fixture6.php.inc',
-            __DIR__ . '/Fixture/under_anonymous_class.php.inc',
-            __DIR__ . '/Fixture/SomeClass.php',
-            __DIR__ . '/Fixture/nette_to_symfony_presenter.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
+        yield [__DIR__ . '/Fixture/fixture3.php.inc'];
+        yield [__DIR__ . '/Fixture/fixture4.php.inc'];
+        yield [__DIR__ . '/Fixture/fixture5.php.inc'];
+        yield [__DIR__ . '/Fixture/fixture6.php.inc'];
+        yield [__DIR__ . '/Fixture/under_anonymous_class.php.inc'];
+        yield [__DIR__ . '/Fixture/SomeClass.php'];
+        yield [__DIR__ . '/Fixture/nette_to_symfony_presenter.php.inc'];
     }
 
     /**

@@ -7,14 +7,23 @@ use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
 
 final class AddClosureReturnTypeRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/return_type_object.php.inc',
-            __DIR__ . '/Fixture/callable_false_positive.php.inc',
-            __DIR__ . '/Fixture/subtype_of_object.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/return_type_object.php.inc'];
+        yield [__DIR__ . '/Fixture/callable_false_positive.php.inc'];
+        yield [__DIR__ . '/Fixture/subtype_of_object.php.inc'];
     }
 
     protected function getRectorClass(): string

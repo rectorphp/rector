@@ -9,9 +9,21 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class PreferThisOrSelfMethodCallRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/to_self.php.inc', __DIR__ . '/Fixture/to_this.php.inc']);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/to_self.php.inc'];
+        yield [__DIR__ . '/Fixture/to_this.php.inc'];
     }
 
     /**

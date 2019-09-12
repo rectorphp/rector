@@ -8,14 +8,23 @@ use Rector\Tests\Rector\MethodBody\FluentReplaceRector\Source\FluentInterfaceCla
 
 final class FluentReplaceRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/some_command.php.inc',
-            __DIR__ . '/Fixture/multiple_some_command.php.inc',
-            __DIR__ . '/Fixture/skip_date_time_modify_command.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/some_command.php.inc'];
+        yield [__DIR__ . '/Fixture/multiple_some_command.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_date_time_modify_command.php.inc'];
     }
 
     /**

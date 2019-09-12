@@ -8,13 +8,20 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class OptionNameRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            // temporary skipped due to chain call type regression in https://github.com/rectorphp/rector/pull/1953
-            // __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/fixture2.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
     }
 
     /**

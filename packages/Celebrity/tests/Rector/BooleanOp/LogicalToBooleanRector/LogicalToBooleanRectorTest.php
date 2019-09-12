@@ -7,9 +7,21 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class LogicalToBooleanRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/or.php.inc', __DIR__ . '/Fixture/and.php.inc']);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/or.php.inc'];
+        yield [__DIR__ . '/Fixture/and.php.inc'];
     }
 
     protected function getRectorClass(): string

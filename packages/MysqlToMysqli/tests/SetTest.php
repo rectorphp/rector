@@ -6,9 +6,20 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SetTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/SetFixture.php.inc']);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/SetFixture.php.inc'];
     }
 
     protected function provideConfig(): string

@@ -7,13 +7,22 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimplifyBoolIdenticalTrueRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/directly.php.inc',
-            __DIR__ . '/Fixture/negate.php.inc',
-            __DIR__ . '/Fixture/double_negate.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/directly.php.inc'];
+        yield [__DIR__ . '/Fixture/negate.php.inc'];
+        yield [__DIR__ . '/Fixture/double_negate.php.inc'];
     }
 
     protected function getRectorClass(): string

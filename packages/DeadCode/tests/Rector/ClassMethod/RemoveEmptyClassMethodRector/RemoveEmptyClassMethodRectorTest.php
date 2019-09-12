@@ -7,15 +7,24 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveEmptyClassMethodRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/simple.php.inc',
-            __DIR__ . '/Fixture/with_parent.php.inc',
-            __DIR__ . '/Fixture/with_interface.php.inc',
-            __DIR__ . '/Fixture/keep_abstract_method.php.inc',
-            __DIR__ . '/Fixture/keep_protected_child_method.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/simple.php.inc'];
+        yield [__DIR__ . '/Fixture/with_parent.php.inc'];
+        yield [__DIR__ . '/Fixture/with_interface.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_abstract_method.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_protected_child_method.php.inc'];
     }
 
     protected function getRectorClass(): string

@@ -7,13 +7,22 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class NonNamespacedTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/NonNamespaced/simple.php.inc',
-            __DIR__ . '/Fixture/NonNamespaced/already_imported.php.inc',
-            __DIR__ . '/Fixture/NonNamespaced/function_import.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/NonNamespaced/simple.php.inc'];
+        yield [__DIR__ . '/Fixture/NonNamespaced/already_imported.php.inc'];
+        yield [__DIR__ . '/Fixture/NonNamespaced/function_import.php.inc'];
     }
 
     protected function getRectorClass(): string

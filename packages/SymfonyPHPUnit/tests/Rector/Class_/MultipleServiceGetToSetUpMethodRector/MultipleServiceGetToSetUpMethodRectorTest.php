@@ -8,16 +8,25 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class MultipleServiceGetToSetUpMethodRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/existing_setup.php.inc',
-            __DIR__ . '/Fixture/string_service_name.php.inc',
-            __DIR__ . '/Fixture/extends_parent_class_with_property.php.inc',
-            __DIR__ . '/Fixture/instant_call.php.inc',
-            __DIR__ . '/Fixture/skip_sessions.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/existing_setup.php.inc'];
+        yield [__DIR__ . '/Fixture/string_service_name.php.inc'];
+        yield [__DIR__ . '/Fixture/extends_parent_class_with_property.php.inc'];
+        yield [__DIR__ . '/Fixture/instant_call.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_sessions.php.inc'];
     }
 
     /**

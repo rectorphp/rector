@@ -27,13 +27,13 @@ class VariousTypesTest extends \PHPUnit\Framework\TestCase
         $this->doTestSingle($variable);
     }
     /**
-     * @return int|string|float
+     * @return int[]|string[]|float[]
      */
     public function provideDataForTest(): iterable
     {
-        yield 1;
-        yield '2';
-        yield 3.5;
+        yield [1];
+        yield ['2'];
+        yield [3.5];
     }
 }
 

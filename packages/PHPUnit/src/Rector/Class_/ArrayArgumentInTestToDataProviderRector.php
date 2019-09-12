@@ -97,9 +97,9 @@ class SomeServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideDataForTest()
      */
-    public function test(int $value)
+    public function test(int $number)
     {
-        $this->doTestSingle($value);
+        $this->doTestSingle($number);
     }
 
     /**
@@ -107,9 +107,9 @@ class SomeServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function provideDataForTest(): iterable
     {
-        yield 1;
-        yield 2;
-        yield 3;
+        yield [1];
+        yield [2];
+        yield [3];
     }
 }
 CODE_SAMPLE
@@ -121,6 +121,7 @@ CODE_SAMPLE
                             'class' => 'PHPUnit\Framework\TestCase',
                             'old_method' => 'doTestMultiple',
                             'new_method' => 'doTestSingle',
+                            'variable_name' => 'number',
                         ],
                     ],
                 ]
@@ -141,6 +142,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $this->ensureConfigurationIsSet($this->configuration);
+
         if (! $this->isInTestClass($node)) {
             return null;
         }
@@ -179,7 +182,10 @@ CODE_SAMPLE
                 );
 
                 $node->args = [];
-                $paramAndArgs = $this->collectParamAndArgsFromArray($firstArgumentValue);
+                $paramAndArgs = $this->collectParamAndArgsFromArray(
+                    $firstArgumentValue,
+                    $singleConfiguration['variable_name']
+                );
                 foreach ($paramAndArgs as $paramAndArg) {
                     $node->args[] = new Arg($paramAndArg->getVariable());
                 }
@@ -228,7 +234,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $itemStaticTypes[] = $arrayItemStaticType;
+            $itemStaticTypes[] = new ArrayType(new MixedType(), $arrayItemStaticType);
         }
 
         return $this->typeFactory->createMixedPassedOrUnionType($itemStaticTypes);
@@ -261,7 +267,7 @@ CODE_SAMPLE
     /**
      * @return ParamAndArgValueObject[]
      */
-    private function collectParamAndArgsFromArray(Array_ $array): array
+    private function collectParamAndArgsFromArray(Array_ $array, string $variableName): array
     {
         // multiple arguments
         $i = 1;
@@ -274,7 +280,7 @@ CODE_SAMPLE
 
         if ($isNestedArray === false) {
             foreach ($array->items as $arrayItem) {
-                $variable = new Variable('variable' . ($i === 1 ? '' : $i));
+                $variable = new Variable($variableName . ($i === 1 ? '' : $i));
 
                 $paramAndArgs[] = new ParamAndArgValueObject($variable, $itemsStaticType);
                 ++$i;
@@ -288,7 +294,7 @@ CODE_SAMPLE
                 /** @var Array_ $nestedArray */
                 $nestedArray = $arrayItem->value;
                 foreach ($nestedArray->items as $nestedArrayItem) {
-                    $variable = new Variable('variable' . ($i === 1 ? '' : $i));
+                    $variable = new Variable($variableName . ($i === 1 ? '' : $i));
 
                     $itemsStaticType = $this->getStaticType($nestedArrayItem->value);
                     $paramAndArgs[] = new ParamAndArgValueObject($variable, $itemsStaticType);
@@ -400,5 +406,21 @@ CODE_SAMPLE
             $paramTagNode = $this->createParamTagNode($paramName, $staticTypeNode);
             $this->docBlockManipulator->addTag($classMethod, $paramTagNode);
         }
+    }
+
+    /**
+     * @param mixed[] $configuration
+     */
+    private function ensureConfigurationIsSet(array $configuration): void
+    {
+        if ($configuration !== []) {
+            return;
+        }
+
+        throw new ShouldNotHappenException(sprintf(
+            'Add configuration via "%s" argument for "%s"',
+            '$configuration',
+            self::class
+        ));
     }
 }
