@@ -167,7 +167,8 @@ CODE_SAMPLE
                 // resolve value types
                 $firstArgumentValue = $node->args[0]->value;
                 if (! $firstArgumentValue instanceof Array_) {
-                    throw new ShouldNotHappenException();
+                    // nothing we can do
+                    return null;
                 }
 
                 // rename method to new one handling non-array input

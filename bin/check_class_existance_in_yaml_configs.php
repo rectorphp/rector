@@ -43,4 +43,4 @@ foreach ($finder as $splFileInfo) {
     }
 }
 
-echo "All configs have existing services - good job!" . PHP_EOL;
+echo 'All configs have existing services - good job!' . PHP_EOL;
