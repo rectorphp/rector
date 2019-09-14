@@ -4,40 +4,12 @@ namespace Rector\Tests\Rector\Psr4\MultipleClassFileToPsr4ClassesRector;
 
 use Iterator;
 use Nette\Utils\FileSystem;
-use Rector\Application\FileSystem\RemovedAndAddedFilesProcessor;
-use Rector\Configuration\Configuration;
-use Rector\FileSystemRector\FileSystemFileProcessor;
-use Rector\HttpKernel\RectorKernel;
+use Rector\Rector\Psr4\MultipleClassFileToPsr4ClassesRector;
+use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-/**
- * @covers \Rector\Rector\Psr4\MultipleClassFileToPsr4ClassesRector
- */
-final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestCase
+final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemRectorTestCase
 {
-    /**
-     * @var FileSystemFileProcessor
-     */
-    private $fileSystemFileProcessor;
-
-    /**
-     * @var RemovedAndAddedFilesProcessor
-     */
-    private $removedAndAddedFilesProcessor;
-
-    protected function setUp(): void
-    {
-        $this->bootKernelWithConfigs(RectorKernel::class, [__DIR__ . '/config.yaml']);
-        $this->fileSystemFileProcessor = self::$container->get(FileSystemFileProcessor::class);
-
-        // so the files are removed and added
-        $configuration = self::$container->get(Configuration::class);
-        $configuration->setIsDryRun(false);
-
-        $this->removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
-    }
-
     protected function tearDown(): void
     {
         FileSystem::delete(__DIR__ . '/Fixture');
@@ -52,15 +24,9 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
      * @dataProvider provideExceptionsData
      * @dataProvider provideNetteExceptions
      */
-    public function test(string $file, array $expectedExceptions, bool $shouldDeleteOriginalFile): void
+    public function test(string $originaFile, array $expectedExceptions, bool $shouldDeleteOriginalFile): void
     {
-        $fileInfo = new SmartFileInfo($file);
-
-        $temporaryFilePath = $this->createTemporaryFilePath($fileInfo, $file);
-        require_once $temporaryFilePath;
-
-        $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo($temporaryFilePath));
-        $this->removedAndAddedFilesProcessor->run();
+        $temporaryFilePath = $this->doTestFile($originaFile);
 
         foreach ($expectedExceptions as $expectedExceptionLocation => $expectedFormat) {
             $this->assertFileExists($expectedExceptionLocation);
@@ -157,18 +123,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
         $this->assertStringEqualsFile(__DIR__ . '/Source/ReadyException.php', $originalFileContent);
     }
 
-    private function createTemporaryFilePath(SmartFileInfo $fileInfo, string $file): string
+    protected function getRectorClass(): string
     {
-        $temporaryFilePath = sprintf(
-            '%s%sFixture%s%s',
-            dirname($fileInfo->getPath()),
-            DIRECTORY_SEPARATOR,
-            DIRECTORY_SEPARATOR,
-            $fileInfo->getBasename()
-        );
-
-        FileSystem::copy($file, $temporaryFilePath);
-
-        return $temporaryFilePath;
+        return MultipleClassFileToPsr4ClassesRector::class;
     }
 }

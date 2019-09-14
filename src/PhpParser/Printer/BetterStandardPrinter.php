@@ -101,7 +101,6 @@ final class BetterStandardPrinter extends Standard
 
         // remove extra spaces before new Nop_ nodes, @see https://regex101.com/r/iSvroO/1
         return Strings::replace($content, '#^[ \t]+$#m');
-        return Strings::replace($content, '#^[ \t]+$#m');
     }
 
     /**

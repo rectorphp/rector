@@ -13,4 +13,4 @@ services:
 
     Rector\PhpSpecToPHPUnit\Rector\ClassMethod\MockVariableToPropertyFetchRector: ~
 
-    Rector\PhpSpecToPHPUnit\Rector\RenameSpecFileToTestFileRector: ~
+    Rector\PhpSpecToPHPUnit\Rector\FileSystem\RenameSpecFileToTestFileRector: ~

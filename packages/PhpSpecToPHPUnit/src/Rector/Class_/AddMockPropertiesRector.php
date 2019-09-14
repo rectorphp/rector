@@ -11,6 +11,9 @@ use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpSpecToPHPUnit\PhpSpecMockCollector;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 
+/**
+ * @see \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
+ */
 final class AddMockPropertiesRector extends AbstractPhpSpecToPHPUnitRector
 {
     /**

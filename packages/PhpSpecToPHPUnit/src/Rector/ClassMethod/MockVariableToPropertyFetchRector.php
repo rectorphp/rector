@@ -12,6 +12,8 @@ use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
  * $mock->call()
  * ↓
  * $this->mock->call()
+ *
+ * @see \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
  */
 final class MockVariableToPropertyFetchRector extends AbstractPhpSpecToPHPUnitRector
 {

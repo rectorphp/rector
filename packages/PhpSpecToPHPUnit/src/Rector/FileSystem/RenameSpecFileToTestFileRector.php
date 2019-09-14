@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\PhpSpecToPHPUnit\Rector;
+namespace Rector\PhpSpecToPHPUnit\Rector\FileSystem;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
@@ -10,6 +10,8 @@ use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 /**
  * @see https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
+ *
+ * @see \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
  */
 final class RenameSpecFileToTestFileRector extends AbstractFileSystemRector
 {
