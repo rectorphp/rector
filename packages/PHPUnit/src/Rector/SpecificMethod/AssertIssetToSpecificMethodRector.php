@@ -85,10 +85,11 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
 
     /**
      * @param MethodCall|StaticCall $node
+     * @param PropertyFetch $expr
      */
-    private function refactorPropertyFetchNode(Node $node, PropertyFetch $propertyFetch): void
+    private function refactorPropertyFetchNode(Node $node, Node\Expr $expr): void
     {
-        $name = $this->getName($propertyFetch);
+        $name = $this->getName($expr);
         if ($name === null) {
             return;
         }
@@ -101,7 +102,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
         $oldArgs = $node->args;
         unset($oldArgs[0]);
 
-        $node->args = array_merge($this->createArgs([new String_($name), $propertyFetch->var]), $oldArgs);
+        $node->args = array_merge($this->createArgs([new String_($name), $expr->var]), $oldArgs);
     }
 
     /**

@@ -123,6 +123,6 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
         }
 
         // PHPStan polution
-        return Strings::startsWith($node->name->toString(), 'AnonymousClass');
+        return (bool) Strings::match($node->name->toString(), '#^AnonymousClass\w+#');
     }
 }

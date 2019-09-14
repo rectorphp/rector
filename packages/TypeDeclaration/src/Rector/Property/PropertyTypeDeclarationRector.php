@@ -69,6 +69,7 @@ final class PropertyTypeDeclarationRector extends AbstractRector
         }
 
         $this->docBlockManipulator->changeVarTag($node, $type);
+
         return $node;
     }
 }

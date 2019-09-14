@@ -56,6 +56,7 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var Node|null $nextNode */
         $nextNode = $expression->getAttribute(AttributeKey::NEXT_NODE);
         if ($nextNode === null) {
             return null;

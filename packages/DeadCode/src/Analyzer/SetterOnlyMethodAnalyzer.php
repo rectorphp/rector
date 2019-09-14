@@ -3,13 +3,12 @@
 namespace Rector\DeadCode\Analyzer;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\NodeContainer\ParsedNodesByType;
+use Rector\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -52,18 +51,25 @@ final class SetterOnlyMethodAnalyzer
      */
     private $isSetterOnlyPropertiesAndMethodsByTypeAnalyzed = false;
 
+    /**
+     * @var AssignManipulator
+     */
+    private $assignManipulator;
+
     public function __construct(
         ParsedNodesByType $parsedNodesByType,
         ClassManipulator $classManipulator,
         NameResolver $nameResolver,
         CallableNodeTraverser $callableNodeTraverser,
-        DoctrineEntityManipulator $doctrineEntityManipulator
+        DoctrineEntityManipulator $doctrineEntityManipulator,
+        AssignManipulator $assignManipulator
     ) {
         $this->parsedNodesByType = $parsedNodesByType;
         $this->classManipulator = $classManipulator;
         $this->nameResolver = $nameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->doctrineEntityManipulator = $doctrineEntityManipulator;
+        $this->assignManipulator = $assignManipulator;
     }
 
     /**
@@ -158,29 +164,6 @@ final class SetterOnlyMethodAnalyzer
 
         $onlyStmt = $onlyExpression->expr;
 
-        return $this->isPropertyAssignWithPropertyNames($onlyStmt, $propertyNames);
-    }
-
-    /**
-     * Is: "$this->value = <$value>"
-     *
-     * @param string[] $propertyNames
-     */
-    private function isPropertyAssignWithPropertyNames(Node $node, array $propertyNames): bool
-    {
-        if (! $node instanceof Assign) {
-            return false;
-        }
-
-        if (! $node->var instanceof PropertyFetch) {
-            return false;
-        }
-
-        $propertyFetch = $node->var;
-        if (! $this->nameResolver->isName($propertyFetch->var, 'this')) {
-            return false;
-        }
-
-        return $this->nameResolver->isNames($propertyFetch->name, $propertyNames);
+        return $this->assignManipulator->isLocalPropertyAssignWithPropertyNames($onlyStmt, $propertyNames);
     }
 }

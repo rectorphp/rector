@@ -6,11 +6,11 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\DeadCode\Analyzer\SetterOnlyMethodAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -27,9 +27,17 @@ final class RemoveSetterOnlyPropertyAndMethodCallRector extends AbstractRector
      */
     private $setterOnlyMethodAnalyzer;
 
-    public function __construct(SetterOnlyMethodAnalyzer $setterOnlyMethodAnalyzer)
-    {
+    /**
+     * @var AssignManipulator
+     */
+    private $assignManipulator;
+
+    public function __construct(
+        SetterOnlyMethodAnalyzer $setterOnlyMethodAnalyzer,
+        AssignManipulator $assignManipulator
+    ) {
         $this->setterOnlyMethodAnalyzer = $setterOnlyMethodAnalyzer;
+        $this->assignManipulator = $assignManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -149,7 +157,7 @@ CODE_SAMPLE
         }
 
         // 2. remove class inner assigns
-        if ($this->isThisVariableAssign($node)) {
+        if ($this->assignManipulator->isLocalPropertyAssign($node)) {
             /** @var Assign $node */
             $propertyFetch = $node->var;
             /** @var PropertyFetch $propertyFetch */
@@ -164,26 +172,5 @@ CODE_SAMPLE
                 $this->removeNode($node);
             }
         }
-    }
-
-    /**
-     * Checks:
-     * $this->x = y;
-     */
-    private function isThisVariableAssign(Node $node): bool
-    {
-        if (! $node instanceof Assign) {
-            return false;
-        }
-
-        if (! $node->var instanceof PropertyFetch) {
-            return false;
-        }
-
-        if (! $node->var->var instanceof Variable) {
-            return false;
-        }
-
-        return $this->isName($node->var->var, 'this');
     }
 }
