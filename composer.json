@@ -44,6 +44,7 @@
     "autoload": {
         "psr-4": {
             "Rector\\": "src",
+            "Rector\\Autodiscovery\\": "packages/Autodiscovery/src",
             "Rector\\Architecture\\": "packages/Architecture/src",
             "Rector\\BetterPhpDocParser\\": "packages/BetterPhpDocParser/src",
             "Rector\\CakePHP\\": "packages/CakePHP/src",
@@ -90,6 +91,7 @@
     "autoload-dev": {
         "psr-4": {
             "Rector\\Tests\\": "tests",
+            "Rector\\Autodiscovery\\Tests\\": "packages/Autodiscovery/tests",
             "Rector\\Architecture\\Tests\\": "packages/Architecture/tests",
             "Rector\\BetterPhpDocParser\\Tests\\": "packages/BetterPhpDocParser/tests",
             "Rector\\CakePHP\\Tests\\": "packages/CakePHP/tests",

@@ -116,7 +116,7 @@ CODE_SAMPLE
 
     /**
      * @param Property|ClassMethod|MethodCall|Assign $node
-     * @return string[][] ][]|null
+     * @return string[][]|null
      */
     private function resolveSetterOnlyPropertiesAndMethodsForClass(Node $node): ?array
     {
