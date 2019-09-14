@@ -12,9 +12,9 @@ final class IsCountableRectorTest extends AbstractRectorTestCase
         // That method can be provided by `symfony/polyfill-php73` package,
         // or not exists as it's run on PHP < 7.3
         if (! function_exists('is_countable')) {
-            $this->doTestFiles([__DIR__ . '/Fixture/fixture71.php.inc']);
+            $this->doTestFile(__DIR__ . '/Fixture/fixture71.php.inc');
         } else {
-            $this->doTestFiles([__DIR__ . '/Fixture/fixture73.php.inc']);
+            $this->doTestFile(__DIR__ . '/Fixture/fixture73.php.inc');
         }
     }
 

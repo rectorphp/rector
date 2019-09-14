@@ -7,6 +7,8 @@ if (class_exists('Symfony\Component\Validator\Constraint')) {
 }
 
 use Exception;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
 /**
  * @property array $groups The groups that the constraint belongs to

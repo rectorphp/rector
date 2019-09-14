@@ -82,6 +82,7 @@
             "Rector\\Symfony\\": "packages/Symfony/src",
             "Rector\\Twig\\": "packages/Twig/src",
             "Rector\\TypeDeclaration\\": "packages/TypeDeclaration/src",
+            "Rector\\ZendToSymfony\\": "packages/ZendToSymfony/src",
             "Rector\\Utils\\DocumentationGenerator\\": "utils/DocumentationGenerator/src",
             "Rector\\Utils\\RectorGenerator\\": "utils/RectorGenerator/src"
         }
@@ -124,7 +125,8 @@
             "Rector\\SymfonyPHPUnit\\Tests\\": "packages/SymfonyPHPUnit/tests",
             "Rector\\Symfony\\Tests\\": "packages/Symfony/tests",
             "Rector\\Twig\\Tests\\": "packages/Twig/tests",
-            "Rector\\TypeDeclaration\\Tests\\": "packages/TypeDeclaration/tests"
+            "Rector\\TypeDeclaration\\Tests\\": "packages/TypeDeclaration/tests",
+            "Rector\\ZendToSymfony\\Tests\\": "packages/ZendToSymfony/tests"
         },
         "classmap": [
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
@@ -142,7 +144,9 @@
             "packages/Php/tests/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php",
             "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source/ChangeMeAnotherNamespace.php",
             "packages/TypeDeclaration/tests/Rector/FunctionLike/ReturnTypeDeclarationRector/Source/MyBar.php",
-            "tests/Rector/Class_/RenameClassRector/Source/Twig_Extension_Sandbox.php"
+            "tests/Rector/Class_/RenameClassRector/Source/Twig_Extension_Sandbox.php",
+            "tests/Rector/Class_/RenameClassRector/Source/TwigFilter.php",
+            "tests/Rector/Class_/RenameClassRector/Source/Manual_Twig_Filter.php"
         ]
     },
     "scripts": {

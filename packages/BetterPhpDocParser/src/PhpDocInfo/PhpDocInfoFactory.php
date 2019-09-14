@@ -10,8 +10,8 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeDecoratorInterface;
-use Rector\BetterPhpDocParser\PhpDocParser\OrmTagParser;
 use Rector\Configuration\CurrentNodeProvider;
+use Rector\DoctrinePhpDocParser\PhpDocParser\OrmTagParser;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 
 final class PhpDocInfoFactory
