@@ -114,30 +114,31 @@ CODE_SAMPLE
 
         $inferredReturnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType);
 
+        // nothing to change in PHP code - @todo add @var annotation fallback?
+        if ($inferredReturnNode === null) {
+            return null;
+        }
+
         // already overridden by previous populateChild() method run
         if ($node->returnType && $node->returnType->getAttribute(self::DO_NOT_CHANGE)) {
             return null;
         }
 
-        $shouldPopulateChildren = false;
         // should be previous overridden?
-        if ($node->returnType !== null && $inferredReturnNode !== null) {
+        if ($node->returnType !== null) {
             $isSubtype = $this->isSubtypeOf($inferredReturnNode, $node->returnType);
 
             // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
             if ($this->isAtLeastPhpVersion('7.4') && $isSubtype) {
-                $shouldPopulateChildren = true;
                 $node->returnType = $inferredReturnNode;
             } elseif ($isSubtype === false) { // type override
-                $shouldPopulateChildren = true;
                 $node->returnType = $inferredReturnNode;
             }
-        } elseif ($inferredReturnNode !== null) {
-            $shouldPopulateChildren = true;
+        } else {
             $node->returnType = $inferredReturnNode;
         }
 
-        if ($shouldPopulateChildren && $node instanceof ClassMethod) {
+        if ($node instanceof ClassMethod) {
             $this->populateChildren($node, $inferedType);
         }
 
@@ -160,6 +161,9 @@ CODE_SAMPLE
         }
 
         $childrenClassLikes = $this->parsedNodesByType->findChildrenOfClass($className);
+        if ($childrenClassLikes === []) {
+            return;
+        }
 
         // update their methods as well
         foreach ($childrenClassLikes as $childClassLike) {
@@ -181,11 +185,6 @@ CODE_SAMPLE
 
         $currentClassMethod = $classLike->getMethod($methodName);
         if ($currentClassMethod === null) {
-            return;
-        }
-
-        // already has a type
-        if ($currentClassMethod->returnType !== null) {
             return;
         }
 

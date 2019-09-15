@@ -165,17 +165,18 @@ final class ParsedNodesByType
     public function findChildrenOfClass(string $class): array
     {
         $childrenClasses = [];
-        foreach ($this->classes as $classNode) {
-            $className = $classNode->getAttribute(AttributeKey::CLASS_NAME);
-            if ($className === null) {
-                return [];
-            }
 
-            if (! is_a($className, $class, true)) {
+        foreach ($this->classes as $classNode) {
+            $currentClassName = $classNode->getAttribute(AttributeKey::CLASS_NAME);
+            if ($currentClassName === null) {
                 continue;
             }
 
-            if ($className === $class) {
+            if (! is_a($currentClassName, $class, true)) {
+                continue;
+            }
+
+            if ($currentClassName === $class) {
                 continue;
             }
 
