@@ -10,6 +10,7 @@ services:
         allow_classes:
             - 'SomeClass' # from PHPUnit
             - 'PHPUnit\Framework\TestCase' # usually part of node construction, it can be missed
+            - 'Exception'
 
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
         max_cognitive_complexity: 9
@@ -61,6 +62,7 @@ parameters:
         - '*tests/*/Expected/*'
         - '*utils/ContributorTools/templates/*'
         - 'stubs/*'
+        - '*/Expected/*'
 
     skip:
         PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff.Underscore: ~

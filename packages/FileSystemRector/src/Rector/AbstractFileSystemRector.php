@@ -7,6 +7,7 @@ use PhpParser\Lexer;
 use PhpParser\Node;
 use PhpParser\ParserFactory;
 use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
+use Rector\Autodiscovery\ValueObject\NodesWithFileDestinationValueObject;
 use Rector\Configuration\Configuration;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
@@ -152,6 +153,15 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         }
 
         $this->addFile($fileDestination, $fileContent);
+    }
+
+    protected function printNodesWithFileDestination(
+        NodesWithFileDestinationValueObject $nodesWithFileDestinationValueObject
+    ): void {
+        $this->printNewNodesToFilePath(
+            $nodesWithFileDestinationValueObject->getNodes(),
+            $nodesWithFileDestinationValueObject->getFileDestination()
+        );
     }
 
     protected function removeFile(SmartFileInfo $smartFileInfo): void

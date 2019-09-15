@@ -1,4 +1,4 @@
-# All 335 Rectors Overview
+# All 343 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -6,13 +6,13 @@
 ## Projects
 
 - [Architecture](#architecture)
+- [Autodiscovery](#autodiscovery)
 - [CakePHP](#cakephp)
 - [Celebrity](#celebrity)
 - [CodeQuality](#codequality)
 - [CodingStyle](#codingstyle)
 - [DeadCode](#deadcode)
 - [Doctrine](#doctrine)
-- [DomainDrivenDesign](#domaindrivendesign)
 - [ElasticSearchDSL](#elasticsearchdsl)
 - [Guzzle](#guzzle)
 - [Laravel](#laravel)
@@ -39,6 +39,7 @@
 - [SymfonyPHPUnit](#symfonyphpunit)
 - [Twig](#twig)
 - [TypeDeclaration](#typedeclaration)
+- [ZendToSymfony](#zendtosymfony)
 
 ## Architecture
 
@@ -84,6 +85,83 @@ Removes repository class from @Entity annotation
 + * @ORM\Entity
   */
  class Product
+ {
+ }
+```
+
+<br>
+
+## Autodiscovery
+
+### `MoveEntitiesToEntityDirectoryRector`
+
+- class: `Rector\Autodiscovery\Rector\FileSystem\MoveEntitiesToEntityDirectoryRector`
+
+Move entities to Entity namespace
+
+```diff
+-// file: app/Controller/Product.php
++// file: app/Entity/Product.php
+
+-namespace App\Controller;
++namespace App\Entity;
+
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity
+  */
+ class Product
+ {
+ }
+```
+
+<br>
+
+### `MoveInterfacesToContractNamespaceDirectoryRector`
+
+- class: `Rector\Autodiscovery\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector`
+
+Move interface to "Contract" namespace
+
+```diff
+-// file: app/Exception/Rule.php
++// file: app/Contract/Rule.php
+
+-namespace App\Exception;
++namespace App\Contract;
+
+ interface Rule
+ {
+-}
++}
+```
+
+<br>
+
+### `MoveServicesBySuffixToDirectoryRector`
+
+- class: `Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector`
+
+Move classes by their suffix to their own group/directory
+
+```yaml
+services:
+    Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector:
+        $groupNamesBySuffix:
+            - Repository
+```
+
+↓
+
+```diff
+-// file: app/Entity/ProductRepository.php
++// file: app/Repository/ProductRepository.php
+
+-namespace App/Entity;
++namespace App/Repository;
+
+ class ProductRepository
  {
  }
 ```
@@ -2015,63 +2093,6 @@ Replaces doctrine alias with class.
 
 <br>
 
-## DomainDrivenDesign
-
-### `ObjectToScalarDocBlockRector`
-
-- class: `Rector\DomainDrivenDesign\Rector\ObjectToScalar\ObjectToScalarDocBlockRector`
-
-Turns defined value object to simple types in doc blocks
-
-```yaml
-services:
-    Rector\DomainDrivenDesign\Rector\ObjectToScalar\ObjectToScalarDocBlockRector:
-        $valueObjectsToSimpleTypes:
-            ValueObject: string
-```
-
-↓
-
-```diff
- /**
-- * @var ValueObject|null
-+ * @var string|null
-  */
- private $name;
-
--/** @var ValueObject|null */
-+/** @var string|null */
- $name;
-```
-
-<br>
-
-### `ObjectToScalarRector`
-
-- class: `Rector\DomainDrivenDesign\Rector\ObjectToScalar\ObjectToScalarRector`
-
-Remove values objects and use directly the value.
-
-```yaml
-services:
-    Rector\DomainDrivenDesign\Rector\ObjectToScalar\ObjectToScalarRector:
-        $valueObjectsToSimpleTypes:
-            ValueObject: string
-```
-
-↓
-
-```diff
--$name = new ValueObject("name");
-+$name = "name";
-
--function someFunction(ValueObject $name): ?ValueObject {
-+function someFunction(string $name): ?string {
- }
-```
-
-<br>
-
 ## ElasticSearchDSL
 
 ### `MigrateFilterToQueryRector`
@@ -2794,6 +2815,7 @@ services:
                 class: PHPUnit\Framework\TestCase
                 old_method: doTestMultiple
                 new_method: doTestSingle
+                variable_name: number
 ```
 
 ↓
@@ -2805,10 +2827,10 @@ services:
 +    /**
 +     * @dataProvider provideDataForTest()
 +     */
-+    public function test(int $value)
++    public function test(int $number)
      {
 -        $this->doTestMultiple([1, 2, 3]);
-+        $this->doTestSingle($value);
++        $this->doTestSingle($number);
 +    }
 +
 +    /**
@@ -2816,9 +2838,9 @@ services:
 +     */
 +    public function provideDataForTest(): iterable
 +    {
-+        yield 1;
-+        yield 2;
-+        yield 3;
++        yield [1];
++        yield [2];
++        yield [3];
      }
  }
 ```
@@ -3610,7 +3632,7 @@ Change closure to arrow function
 
 - class: `Rector\Php\Rector\Property\CompleteVarDocTypePropertyRector`
 
-Complete property `@var` annotations for missing one, yet known.
+Complete property `@var` annotations or correct the old ones
 
 ```diff
  final class SomeClass
@@ -4798,7 +4820,7 @@ Migrate PhpSpec behavior to PHPUnit test
 
 ### `RenameSpecFileToTestFileRector`
 
-- class: `Rector\PhpSpecToPHPUnit\Rector\RenameSpecFileToTestFileRector`
+- class: `Rector\PhpSpecToPHPUnit\Rector\FileSystem\RenameSpecFileToTestFileRector`
 
 Rename "*Spec.php" file to "*Test.php" file
 
@@ -5402,7 +5424,7 @@ Changes createForm(new FormType), add(new FormType) to ones with "FormType::clas
 +        $form = $this->createForm(TeamType::class, $entity, [
              'action' => $this->generateUrl('teams_update', ['id' => $entity->getId()]),
              'method' => 'PUT',
-        ]);
+         ]);
      }
  }
 ```
@@ -5964,7 +5986,7 @@ Change @param types to type declarations if not a BC-break
 
 - class: `Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector`
 
-Add missing @var to properties that are missing it
+Add @var to properties that are missing it
 
 <br>
 
@@ -5987,6 +6009,147 @@ Change @return types and type from static analysis to type declarations if not a
      {
      }
  }
+```
+
+<br>
+
+## ZendToSymfony
+
+### `ChangeZendControllerClassToSymfonyControllerClassRector`
+
+- class: `Rector\ZendToSymfony\Rector\Class_\ChangeZendControllerClassToSymfonyControllerClassRector`
+
+Change Zend 1 controller to Symfony 4 controller
+
+```diff
+-class SomeAction extends Zend_Controller_Action
++final class SomeAction extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
+ {
+ }
+```
+
+<br>
+
+### `GetParamToClassMethodParameterAndRouteRector`
+
+- class: `Rector\ZendToSymfony\Rector\ClassMethod\GetParamToClassMethodParameterAndRouteRector`
+
+Change $this->getParam() calls to action method arguments + Sdd symfony @Route
+
+```diff
+-public function someAction()
++public function someAction($id)
+ {
+-    $id = $this->getParam('id');
+-}
++}
+```
+
+<br>
+
+### `RedirectorToRedirectToUrlRector`
+
+- class: `Rector\ZendToSymfony\Rector\Expression\RedirectorToRedirectToUrlRector`
+
+Change $redirector helper to Symfony\Controller call redirect()
+
+```diff
+ public function someAction()
+ {
+     $redirector = $this->_helper->redirector;
+-    $redirector->goToUrl('abc');
++    $this->redirect('abc');
+ }
+```
+
+<br>
+
+### `RemoveAutoloadingIncludeRector`
+
+- class: `Rector\ZendToSymfony\Rector\Include_\RemoveAutoloadingIncludeRector`
+
+Remove include/require statements, that supply autoloading (PSR-4 composer autolaod is going to be used instead)
+
+```diff
+-include 'SomeFile.php';
+-require_once 'AnotherFile.php';
+-
+ $values = require_once 'values.txt';
+```
+
+<br>
+
+### `ThisHelperToServiceMethodCallRector`
+
+- class: `Rector\ZendToSymfony\Rector\MethodCall\ThisHelperToServiceMethodCallRector`
+
+Change magic $this->_helper->calls() to constructor injection of helper services
+
+```diff
+ class SomeController
+ {
+     /**
+      * @var Zend_Controller_Action_HelperBroker
+      */
+     private $_helper;
++
++    /**
++     * @var Zend_Controller_Action_Helper_OnlinePayment
++     */
++    private $onlinePaymentHelper;
+
++    public function __construct(Zend_Controller_Action_Helper_OnlinePayment $onlinePaymentHelper)
++    {
++        $this->onlinePaymentHelper = onlinePaymentHelper;
++    }
++
+     public function someAction()
+     {
+-        $this->_helper->onlinePayment(1000);
+-
+-        $this->_helper->onlinePayment()->isPaid();
++        $this->onlinePaymentHelper->direct(1000);
++
++        $this->onlinePaymentHelper->direct()->isPaid();
+     }
+ }
+```
+
+<br>
+
+### `ThisRequestToRequestParameterRector`
+
+- class: `Rector\ZendToSymfony\Rector\ClassMethod\ThisRequestToRequestParameterRector`
+
+Change $this->_request in action method to $request parameter
+
+```diff
+-public function someAction()
++public function someAction(\Symfony\Component\HttpFoundation\Request $request)
+ {
+-    $isGet = $this->_request->isGet();
++    $isGet = $request->isGet();
+ }
+```
+
+<br>
+
+### `ThisViewToThisRenderResponseRector`
+
+- class: `Rector\ZendToSymfony\Rector\ClassMethod\ThisViewToThisRenderResponseRector`
+
+Change $this->_view->assign = 5; to $this->render("...", $templateData);
+
+```diff
+ public function someAction()
+ {
+-    $this->_view->value = 5;
+-}
++    $templateData = [];
++    $templateData['value']; = 5;
++
++    return $this->render("...", $templateData);
++}
 ```
 
 <br>
@@ -6056,8 +6219,9 @@ Changes defined return typehint of method and class.
 ```yaml
 services:
     Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
-        SomeClass:
-            getData: array
+        $typehintForMethodByClass:
+            SomeClass:
+                getData: array
 ```
 
 ↓
@@ -6077,14 +6241,6 @@ services:
 - class: `Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector`
 
 Turns non-private properties with `@annotation` to private properties and constructor injection
-
-```yaml
-services:
-    Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector:
-        $annotation: inject
-```
-
-↓
 
 ```diff
  /**
@@ -6437,6 +6593,7 @@ Changes properties with specified annotations class to constructor injection
 services:
     Rector\Rector\Property\InjectAnnotationClassRector:
         $annotationClasses:
+            - DI\Annotation\Inject
             - JMS\DiExtraBundle\Annotation\Inject
 ```
 
@@ -6702,9 +6859,10 @@ Changes defined parent class typehints.
 ```yaml
 services:
     Rector\Rector\Typehint\ParentTypehintedArgumentRector:
-        SomeInterface:
-            read:
-                $content: string
+        $typehintForArgumentByMethodAndClass:
+            SomeInterface:
+                read:
+                    $content: string
 ```
 
 ↓
