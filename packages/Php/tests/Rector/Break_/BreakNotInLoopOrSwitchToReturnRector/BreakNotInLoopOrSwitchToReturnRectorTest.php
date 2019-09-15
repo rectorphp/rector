@@ -7,14 +7,23 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class BreakNotInLoopOrSwitchToReturnRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFilesWithoutAutoload([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/foreach_not.php.inc',
-            __DIR__ . '/Fixture/return.php.inc',
-            __DIR__ . '/Fixture/Keep.php',
-        ]);
+        $this->doTestFileWithoutAutoload($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/foreach_not.php.inc'];
+        yield [__DIR__ . '/Fixture/return.php.inc'];
+        yield [__DIR__ . '/Fixture/Keep.php'];
     }
 
     protected function getRectorClass(): string

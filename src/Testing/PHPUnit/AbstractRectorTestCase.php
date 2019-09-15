@@ -106,10 +106,15 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         }
     }
 
+    protected function doTestFileWithoutAutoload(string $file): void
+    {
+        $this->doTestFilesWithoutAutoload([$file]);
+    }
+
     /**
      * @param mixed[] $files
      */
-    public function doTestFilesWithoutAutoload(array $files): void
+    protected function doTestFilesWithoutAutoload(array $files): void
     {
         $this->autoloadTestFixture = false;
         $this->doTestFiles($files);

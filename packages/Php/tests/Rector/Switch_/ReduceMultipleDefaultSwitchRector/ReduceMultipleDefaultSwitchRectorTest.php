@@ -7,13 +7,21 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ReduceMultipleDefaultSwitchRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFilesWithoutAutoload([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            // @see https://github.com/franzliedke/wp-mpdf/commit/9dc489215fbd1adcb514810653a73dea71db8e99#diff-2f1f4a51a2dd3a73ca034a48a67a2320L1373
-            __DIR__ . '/Fixture/hidden_in_middle.php.inc',
-        ]);
+        $this->doTestFileWithoutAutoload($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/hidden_in_middle.php.inc'];
     }
 
     protected function getRectorClass(): string
