@@ -9,6 +9,7 @@ use Rector\Configuration\Configuration;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\HttpKernel\RectorKernel;
+use ReflectionClass;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
@@ -38,12 +39,15 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
 
     protected function tearDown(): void
     {
-        if (FileSystem::isAbsolute(__DIR__ . '/Fixture')) {
-            FileSystem::delete(__DIR__ . '/Fixture');
+        $testReflectionClass = new ReflectionClass(static::class);
+        $testDirectory = (string) dirname((string) $testReflectionClass->getFileName());
+
+        if (file_exists($testDirectory . '/Source/Fixture')) {
+            FileSystem::delete($testDirectory . '/Source/Fixture');
         }
 
-        if (FileSystem::isAbsolute(__DIR__ . '/Source/Fixture')) {
-            FileSystem::delete(__DIR__ . '/Source/Fixture');
+        if (file_exists($testDirectory . '/Fixture')) {
+            FileSystem::delete($testDirectory . '/Fixture');
         }
     }
 
@@ -85,7 +89,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $configFileTempPath = $this->createConfigFileTempPath();
 
         $listForConfig = [];
-        foreach ($this->getCurrentTestRectorClasses() as $rectorClass => $configuration) {
+        foreach ($this->getCurrentTestRectorClassesWithConfiguration() as $rectorClass => $configuration) {
             $listForConfig[$rectorClass] = $configuration;
         }
 

@@ -25,7 +25,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
     /**
      * @return mixed[]|null[]
      */
-    protected function getCurrentTestRectorClasses(): array
+    protected function getCurrentTestRectorClassesWithConfiguration(): array
     {
         if ($this->getRectorsWithConfiguration() !== []) {
             foreach (array_keys($this->getRectorsWithConfiguration()) as $rectorClass) {

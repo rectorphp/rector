@@ -27,7 +27,7 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
         yield [
             __DIR__ . '/Source/Entity/RandomInterface.php',
             __DIR__ . '/Source/Fixture/Contract/RandomInterface.php',
-            __DIR__ . '/Fixture/ExpectedRandomInterface.php',
+            __DIR__ . '/Expected/ExpectedRandomInterface.php',
         ];
     }
 

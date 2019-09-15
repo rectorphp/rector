@@ -27,13 +27,13 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractFileSystem
         yield [
             __DIR__ . '/Source/Entity/AppleRepository.php',
             __DIR__ . '/Source/Fixture/Repository/AppleRepository.php',
-            __DIR__ . '/Fixture/ExpectedAppleRepository.php',
+            __DIR__ . '/Expected/Repository/ExpectedAppleRepository.php',
         ];
 
         yield 'prefix_same_namespace' => [
             __DIR__ . '/Source/Controller/BananaCommand.php',
             __DIR__ . '/Source/Fixture/Command/BananaCommand.php',
-            __DIR__ . '/Fixture/Command/ExpectedBananaCommand.php',
+            __DIR__ . '/Expected/Command/ExpectedBananaCommand.php',
         ];
     }
 

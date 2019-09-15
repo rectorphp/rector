@@ -62,6 +62,7 @@ parameters:
         - '*tests/*/Expected/*'
         - '*utils/ContributorTools/templates/*'
         - 'stubs/*'
+        - '*/Expected/*'
 
     skip:
         PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff.Underscore: ~

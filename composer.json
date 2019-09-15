@@ -139,7 +139,9 @@
             "tests/Rector/Psr4/MultipleClassFileToPsr4ClassesRector/Source",
             "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source",
             "stubs",
-            "tests/Issues/Issue1243/Source"
+            "tests/Issues/Issue1243/Source",
+            "packages/Autodiscovery/tests/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
+            "packages/Autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected"
         ],
         "files": [
             "packages/DeadCode/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",

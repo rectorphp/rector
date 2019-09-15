@@ -186,7 +186,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
             $listForConfig[$rectorClass] = null;
         }
 
-        foreach (array_keys($this->getCurrentTestRectorClasses()) as $rectorClass) {
+        foreach (array_keys($this->getCurrentTestRectorClassesWithConfiguration()) as $rectorClass) {
             $listForConfig[$rectorClass] = null;
         }
 
@@ -202,12 +202,8 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
     private function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
     {
-        if ($this->getRectorsWithConfiguration() !== []) {
-            foreach ($this->getRectorsWithConfiguration() as $rectorClass => $rectorConfiguration) {
-                $enabledRectorsProvider->addEnabledRector($rectorClass, $rectorConfiguration);
-            }
-        } else {
-            $enabledRectorsProvider->addEnabledRector($this->getRectorClass(), []);
+        foreach ($this->getCurrentTestRectorClassesWithConfiguration() as $rectorClass => $configuration) {
+            $enabledRectorsProvider->addEnabledRector($rectorClass, (array) $configuration);
         }
     }
 
