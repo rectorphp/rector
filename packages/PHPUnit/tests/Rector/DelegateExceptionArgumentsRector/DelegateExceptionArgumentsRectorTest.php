@@ -15,11 +15,6 @@ final class DelegateExceptionArgumentsRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return DelegateExceptionArgumentsRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -28,5 +23,10 @@ final class DelegateExceptionArgumentsRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/message.php.inc'];
         yield [__DIR__ . '/Fixture/regexp.php.inc'];
         yield [__DIR__ . '/Fixture/self_nested.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return DelegateExceptionArgumentsRector::class;
     }
 }

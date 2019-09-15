@@ -15,11 +15,6 @@ final class ArrayKeyFirstLastRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return ArrayKeyFirstLastRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -28,5 +23,10 @@ final class ArrayKeyFirstLastRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/array_key_first.php.inc'];
         yield [__DIR__ . '/Fixture/array_key_last.php.inc'];
         yield [__DIR__ . '/Fixture/both.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return ArrayKeyFirstLastRector::class;
     }
 }

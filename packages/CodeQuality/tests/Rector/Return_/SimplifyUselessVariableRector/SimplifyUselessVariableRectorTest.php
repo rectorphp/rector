@@ -20,11 +20,6 @@ final class SimplifyUselessVariableRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return SimplifyUselessVariableRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -35,5 +30,10 @@ final class SimplifyUselessVariableRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture3.php.inc'];
         yield [__DIR__ . '/Fixture/in_a_function.php.inc'];
         yield [__DIR__ . '/Fixture/keep_visual.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return SimplifyUselessVariableRector::class;
     }
 }

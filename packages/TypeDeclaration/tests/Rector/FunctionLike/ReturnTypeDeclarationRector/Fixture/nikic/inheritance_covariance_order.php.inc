@@ -2,20 +2,20 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\InheritanceOrder;
 
-class CCovariance extends ACovariance {
+class ReorderedCCovariance extends ReorderedACovariance {
     /**
      * Technically valid return type, but against PHP's variance restrictions.
-     * We use "ACovariance" instead, which is less accurate but valid.
+     * We use "ReorderedACovariance" instead, which is less accurate but valid.
      *
-     * @return CCovariance
+     * @return ReorderedCCovariance
      */
     public function test() {
         return $this;
     }
 }
 
-class ACovariance {
-    /** @return ACovariance */
+class ReorderedACovariance {
+    /** @return ReorderedACovariance */
     public function test() {
         return $this;
     }
@@ -27,20 +27,20 @@ class ACovariance {
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\InheritanceOrder;
 
-class CCovariance extends ACovariance {
+class ReorderedCCovariance extends ReorderedACovariance {
     /**
      * Technically valid return type, but against PHP's variance restrictions.
-     * We use "ACovariance" instead, which is less accurate but valid.
+     * We use "ReorderedACovariance" instead, which is less accurate but valid.
      *
-     * @return CCovariance
+     * @return ReorderedCCovariance
      */
-    public function test(): \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\InheritanceOrder\ACovariance {
+    public function test(): \Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\InheritanceOrder\ReorderedACovariance {
         return $this;
     }
 }
 
-class ACovariance {
-    /** @return ACovariance */
+class ReorderedACovariance {
+    /** @return ReorderedACovariance */
     public function test(): self {
         return $this;
     }

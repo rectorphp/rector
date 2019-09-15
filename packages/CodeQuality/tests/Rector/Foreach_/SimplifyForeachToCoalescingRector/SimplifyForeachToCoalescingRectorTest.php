@@ -15,11 +15,6 @@ final class SimplifyForeachToCoalescingRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return SimplifyForeachToCoalescingRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -29,5 +24,10 @@ final class SimplifyForeachToCoalescingRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
         yield [__DIR__ . '/Fixture/fixture3.php.inc'];
         yield [__DIR__ . '/Fixture/foreach_key_value.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return SimplifyForeachToCoalescingRector::class;
     }
 }

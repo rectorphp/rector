@@ -15,11 +15,6 @@ final class TypedPropertyRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return TypedPropertyRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -36,5 +31,10 @@ final class TypedPropertyRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/match_types.php.inc'];
         yield [__DIR__ . '/Fixture/match_types_parent.php.inc'];
         yield [__DIR__ . '/Fixture/static_analysis_based.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return TypedPropertyRector::class;
     }
 }

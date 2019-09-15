@@ -15,11 +15,6 @@ final class AssignArrayToStringRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return AssignArrayToStringRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -34,5 +29,10 @@ final class AssignArrayToStringRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture7.php.inc'];
         yield [__DIR__ . '/Fixture/fixture8.php.inc'];
         yield [__DIR__ . '/Fixture/fixture9.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return AssignArrayToStringRector::class;
     }
 }

@@ -15,11 +15,6 @@ final class SimplifyArraySearchRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return SimplifyArraySearchRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -27,5 +22,10 @@ final class SimplifyArraySearchRectorTest extends AbstractRectorTestCase
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return SimplifyArraySearchRector::class;
     }
 }

@@ -4,6 +4,8 @@ parameters:
         - "/Fixtures/"
         - "/Expected/"
         - "/Source/"
+        - "packages/Symfony/src/Bridge/DefaultAnalyzedSymfonyApplicationContainer.php"
+        - "src/Testing/PHPUnit/AbstractRectorTestCase.php"
 
         # autoload-buggy cases
         - "*.php.inc"
@@ -16,6 +18,6 @@ services:
         $configuration:
             -
                 class: 'PHPUnit\Framework\TestCase'
-                old_method: 'doTestFiles'
-                new_method: 'doTestFile'
+                old_method: 'doTestFilesWithoutAutoload'
+                new_method: 'doTestFileWithoutAutoload'
                 variable_name: 'file'

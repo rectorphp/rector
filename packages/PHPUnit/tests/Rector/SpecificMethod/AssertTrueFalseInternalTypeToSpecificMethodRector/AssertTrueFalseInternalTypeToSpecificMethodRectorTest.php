@@ -15,16 +15,16 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRectorTest extends Abstra
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return AssertTrueFalseInternalTypeToSpecificMethodRector::class;
-    }
-
     /**
      * @return string[]
      */
     public function provideDataForTest(): iterable
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return AssertTrueFalseInternalTypeToSpecificMethodRector::class;
     }
 }

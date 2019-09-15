@@ -15,11 +15,6 @@ final class IdenticalFalseToBooleanNotRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return IdenticalFalseToBooleanNotRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -27,5 +22,10 @@ final class IdenticalFalseToBooleanNotRectorTest extends AbstractRectorTestCase
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/skip_null_false.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return IdenticalFalseToBooleanNotRector::class;
     }
 }

@@ -56,7 +56,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     {
         $this->fixtureSplitter = new FixtureSplitter($this->getTempPath());
 
-        // defined in phpunit.xml
         if ($this->provideConfig() !== '') {
             $this->ensureConfigFileExists();
             $this->bootKernelWithConfigs(RectorKernel::class, [$this->provideConfig()]);
@@ -106,13 +105,10 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
         }
     }
 
-    /**
-     * @param mixed[] $files
-     */
-    public function doTestFilesWithoutAutoload(array $files): void
+    protected function doTestFileWithoutAutoload(string $file): void
     {
         $this->autoloadTestFixture = false;
-        $this->doTestFiles($files);
+        $this->doTestFile($file);
         $this->autoloadTestFixture = true;
     }
 
@@ -135,16 +131,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     {
         // can be implemented, has the highest priority
         return [];
-    }
-
-    /**
-     * @param string[] $files
-     */
-    protected function doTestFiles(array $files): void
-    {
-        foreach ($files as $file) {
-            $this->doTestFile($file);
-        }
     }
 
     protected function doTestFile(string $file): void

@@ -15,11 +15,6 @@ final class ActionSuffixRemoverRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return ActionSuffixRemoverRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -27,5 +22,10 @@ final class ActionSuffixRemoverRectorTest extends AbstractRectorTestCase
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return ActionSuffixRemoverRector::class;
     }
 }

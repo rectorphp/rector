@@ -19,11 +19,6 @@ final class Php4ConstructorRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return Php4ConstructorRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -35,5 +30,10 @@ final class Php4ConstructorRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/delegating_2.php.inc'];
         yield [__DIR__ . '/Fixture/fixture5.php.inc'];
         yield [__DIR__ . '/Fixture/non_expression.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return Php4ConstructorRector::class;
     }
 }

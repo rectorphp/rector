@@ -15,11 +15,6 @@ final class StringifyStrNeedlesRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return StringifyStrNeedlesRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -28,5 +23,10 @@ final class StringifyStrNeedlesRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/trait.php.inc'];
         yield [__DIR__ . '/Fixture/skip_twice.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return StringifyStrNeedlesRector::class;
     }
 }

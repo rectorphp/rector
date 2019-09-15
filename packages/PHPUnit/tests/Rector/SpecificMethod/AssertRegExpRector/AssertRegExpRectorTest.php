@@ -15,16 +15,16 @@ final class AssertRegExpRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return AssertRegExpRector::class;
-    }
-
     /**
      * @return string[]
      */
     public function provideDataForTest(): iterable
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return AssertRegExpRector::class;
     }
 }

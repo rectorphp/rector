@@ -15,11 +15,6 @@ final class ParseFileRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return ParseFileRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -28,5 +23,10 @@ final class ParseFileRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
         yield [__DIR__ . '/Fixture/fixture3.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return ParseFileRector::class;
     }
 }

@@ -15,11 +15,6 @@ final class BinarySwitchToIfElseRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return BinarySwitchToIfElseRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -29,5 +24,10 @@ final class BinarySwitchToIfElseRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/in_class.php.inc'];
         yield [__DIR__ . '/Fixture/if_or.php.inc'];
         yield [__DIR__ . '/Fixture/extra_break.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return BinarySwitchToIfElseRector::class;
     }
 }
