@@ -1,4 +1,6 @@
 services:
+    - { class: Rector\PHPStanExtensions\Rule\ClassMethod\PreventParentMethodVisibilityOverrideRule, tags: [phpstan.rules.rule] }
+
     - Rector\PHPStanExtensions\Utils\PHPStanValueResolver
 
     # $node->getAttribute($1) => Type|null by $1

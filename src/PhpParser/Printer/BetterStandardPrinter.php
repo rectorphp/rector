@@ -77,7 +77,7 @@ final class BetterStandardPrinter extends Standard
      * @param mixed[] $origNodes
      * @param int|null $fixup
      */
-    public function pArray(
+    protected function pArray(
         array $nodes,
         array $origNodes,
         int &$pos,
