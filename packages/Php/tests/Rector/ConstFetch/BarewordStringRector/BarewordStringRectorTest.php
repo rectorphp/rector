@@ -15,11 +15,6 @@ final class BarewordStringRectorTest extends AbstractRectorTestCase
         $this->doTestFileWithoutAutoload($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return BarewordStringRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -27,5 +22,10 @@ final class BarewordStringRectorTest extends AbstractRectorTestCase
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/define.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return BarewordStringRector::class;
     }
 }

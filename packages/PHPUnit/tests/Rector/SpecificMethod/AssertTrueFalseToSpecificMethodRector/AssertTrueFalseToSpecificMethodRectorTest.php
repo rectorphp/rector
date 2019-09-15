@@ -15,11 +15,6 @@ final class AssertTrueFalseToSpecificMethodRectorTest extends AbstractRectorTest
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return AssertTrueFalseToSpecificMethodRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -28,5 +23,10 @@ final class AssertTrueFalseToSpecificMethodRectorTest extends AbstractRectorTest
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
         yield [__DIR__ . '/Fixture/is_readable.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return AssertTrueFalseToSpecificMethodRector::class;
     }
 }

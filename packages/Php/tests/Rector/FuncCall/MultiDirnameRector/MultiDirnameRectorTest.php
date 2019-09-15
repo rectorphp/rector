@@ -19,11 +19,6 @@ final class MultiDirnameRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return MultiDirnameRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -32,5 +27,10 @@ final class MultiDirnameRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
         yield [__DIR__ . '/Fixture/fixture3.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return MultiDirnameRector::class;
     }
 }

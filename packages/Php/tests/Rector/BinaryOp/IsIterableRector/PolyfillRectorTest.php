@@ -2,40 +2,12 @@
 
 namespace Rector\Php\Tests\Rector\BinaryOp\IsIterableRector;
 
-use Rector\Configuration\Option;
 use Rector\Php\Rector\BinaryOp\IsIterableRector;
+use Rector\Php\ValueObject\PhpVersionFeature;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class PolyfillRectorTest extends AbstractRectorTestCase
 {
-    /**
-     * @var string|null
-     */
-    private $originalPhpVersionFeaturesParameter;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->parameterProvider = self::$container->get(ParameterProvider::class);
-        $this->originalPhpVersionFeaturesParameter = $this->parameterProvider->provideParameter(
-            Option::PHP_VERSION_FEATURES
-        );
-
-        $this->parameterProvider->changeParameter(Option::PHP_VERSION_FEATURES, '7.0');
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->parameterProvider->changeParameter(
-            Option::PHP_VERSION_FEATURES,
-            $this->originalPhpVersionFeaturesParameter
-        );
-    }
-
     /**
      * @dataProvider provideDataForTest()
      */
@@ -44,16 +16,21 @@ final class PolyfillRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return IsIterableRector::class;
-    }
-
     /**
      * @return string[]
      */
     public function provideDataForTest(): iterable
     {
         yield [__DIR__ . '/Fixture/polyfill_function.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return IsIterableRector::class;
+    }
+
+    protected function getPhpVersion(): string
+    {
+        return PhpVersionFeature::ITERABLE_TYPE;
     }
 }

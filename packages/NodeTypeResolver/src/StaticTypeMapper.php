@@ -47,6 +47,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\Php\PhpVersionProvider;
+use Rector\Php\ValueObject\PhpVersionFeature;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ParentStaticType;
@@ -60,21 +61,6 @@ use Traversable;
  */
 final class StaticTypeMapper
 {
-    /**
-     * @var string
-     */
-    private const PHP_VERSION_SCALAR_TYPES = '7.0';
-
-    /**
-     * @var string
-     */
-    private const PHP_VERSION_VOID_TYPE = '7.1';
-
-    /**
-     * @var string
-     */
-    private const PHP_VERSION_OBJECT_TYPE = '7.2';
-
     /**
      * @var PhpVersionProvider
      */
@@ -145,7 +131,7 @@ final class StaticTypeMapper
     public function mapPHPStanTypeToPhpParserNode(Type $phpStanType, ?string $kind = null): ?Node
     {
         if ($phpStanType instanceof VoidType) {
-            if ($this->phpVersionProvider->isAtLeast(self::PHP_VERSION_VOID_TYPE)) {
+            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::VOID_TYPE)) {
                 if (in_array($kind, ['param', 'property'], true)) {
                     // param cannot be void
                     return null;
@@ -162,7 +148,7 @@ final class StaticTypeMapper
         }
 
         if ($phpStanType instanceof IntegerType) {
-            if ($this->phpVersionProvider->isAtLeast(self::PHP_VERSION_SCALAR_TYPES)) {
+            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
                 return new Identifier('int');
             }
 
@@ -170,7 +156,7 @@ final class StaticTypeMapper
         }
 
         if ($phpStanType instanceof StringType) {
-            if ($this->phpVersionProvider->isAtLeast(self::PHP_VERSION_SCALAR_TYPES)) {
+            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
                 return new Identifier('string');
             }
 
@@ -178,7 +164,7 @@ final class StaticTypeMapper
         }
 
         if ($phpStanType instanceof BooleanType) {
-            if ($this->phpVersionProvider->isAtLeast(self::PHP_VERSION_SCALAR_TYPES)) {
+            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
                 return new Identifier('bool');
             }
 
@@ -186,7 +172,7 @@ final class StaticTypeMapper
         }
 
         if ($phpStanType instanceof FloatType) {
-            if ($this->phpVersionProvider->isAtLeast(self::PHP_VERSION_SCALAR_TYPES)) {
+            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
                 return new Identifier('float');
             }
 
@@ -281,7 +267,7 @@ final class StaticTypeMapper
         }
 
         if ($phpStanType instanceof ObjectWithoutClassType) {
-            if ($this->phpVersionProvider->isAtLeast(self::PHP_VERSION_OBJECT_TYPE)) {
+            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::OBJECT_TYPE)) {
                 return new Identifier('object');
             }
 

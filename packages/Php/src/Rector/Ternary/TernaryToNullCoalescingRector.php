@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Ternary;
+use Rector\Php\ValueObject\PhpVersionFeature;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -41,7 +42,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion('7.0')) {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::NULL_COALESCE)) {
             return null;
         }
 

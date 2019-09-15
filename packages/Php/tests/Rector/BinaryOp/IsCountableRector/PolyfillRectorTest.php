@@ -44,16 +44,16 @@ final class PolyfillRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return IsCountableRector::class;
-    }
-
     /**
      * @return string[]
      */
     public function provideDataForTest(): iterable
     {
         yield [__DIR__ . '/Fixture/polyfill_function.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return IsCountableRector::class;
     }
 }

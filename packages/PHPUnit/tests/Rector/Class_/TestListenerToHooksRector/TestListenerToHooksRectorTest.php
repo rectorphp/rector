@@ -15,11 +15,6 @@ final class TestListenerToHooksRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return TestListenerToHooksRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -27,5 +22,10 @@ final class TestListenerToHooksRectorTest extends AbstractRectorTestCase
     {
         yield [__DIR__ . '/Fixture/clear_it_all.php.inc'];
         yield [__DIR__ . '/Fixture/before_list_hook.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return TestListenerToHooksRector::class;
     }
 }

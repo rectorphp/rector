@@ -15,11 +15,6 @@ final class ListSwapArrayOrderRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return ListSwapArrayOrderRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -28,5 +23,10 @@ final class ListSwapArrayOrderRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/skip.php.inc'];
         yield [__DIR__ . '/Fixture/skip_empty.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return ListSwapArrayOrderRector::class;
     }
 }

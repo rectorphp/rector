@@ -15,11 +15,6 @@ final class SimplifyIfReturnBoolRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return SimplifyIfReturnBoolRector::class;
-    }
-
     /**
      * @return string[]
      */
@@ -35,5 +30,10 @@ final class SimplifyIfReturnBoolRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture8.php.inc'];
         yield [__DIR__ . '/Fixture/fixture9.php.inc'];
         yield [__DIR__ . '/Fixture/fixture10.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return SimplifyIfReturnBoolRector::class;
     }
 }

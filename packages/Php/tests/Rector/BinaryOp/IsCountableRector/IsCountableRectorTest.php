@@ -18,7 +18,7 @@ final class IsCountableRectorTest extends AbstractRectorTestCase
         }
     }
 
-    public function getRectorClass(): string
+    protected function getRectorClass(): string
     {
         return IsCountableRector::class;
     }

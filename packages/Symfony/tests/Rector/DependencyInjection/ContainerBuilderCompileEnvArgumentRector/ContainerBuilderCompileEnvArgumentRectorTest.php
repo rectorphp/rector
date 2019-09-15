@@ -15,16 +15,16 @@ final class ContainerBuilderCompileEnvArgumentRectorTest extends AbstractRectorT
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return ContainerBuilderCompileEnvArgumentRector::class;
-    }
-
     /**
      * @return string[]
      */
     public function provideDataForTest(): iterable
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return ContainerBuilderCompileEnvArgumentRector::class;
     }
 }

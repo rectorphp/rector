@@ -15,16 +15,16 @@ final class MysqlFuncCallToMysqliRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
-    {
-        return MysqlFuncCallToMysqliRector::class;
-    }
-
     /**
      * @return string[]
      */
     public function provideDataForTest(): iterable
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
+    }
+
+    protected function getRectorClass(): string
+    {
+        return MysqlFuncCallToMysqliRector::class;
     }
 }
