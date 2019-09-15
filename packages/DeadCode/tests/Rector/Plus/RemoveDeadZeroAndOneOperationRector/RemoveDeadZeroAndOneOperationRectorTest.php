@@ -23,6 +23,7 @@ final class RemoveDeadZeroAndOneOperationRectorTest extends AbstractRectorTestCa
         yield [__DIR__ . '/Fixture/assigns.php.inc'];
         yield [__DIR__ . '/Fixture/skip_type_change.php.inc'];
         yield [__DIR__ . '/Fixture/skip_floats.php.inc'];
+        yield [__DIR__ . '/Fixture/ignore.php.inc'];
     }
 
     protected function getRectorClass(): string
