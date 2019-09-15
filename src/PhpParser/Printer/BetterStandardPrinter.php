@@ -12,6 +12,7 @@ use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TraitUse;
@@ -223,6 +224,16 @@ final class BetterStandardPrinter extends Standard
         }
 
         return parent::pStmt_Class($class);
+    }
+
+    /**
+     * It remove all spaces extra to parent
+     */
+    protected function pStmt_Declare(Declare_ $declare): string
+    {
+        $declareString = parent::pStmt_Declare($declare);
+
+        return Strings::replace($declareString, '#\s+#');
     }
 
     /**

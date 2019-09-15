@@ -35,13 +35,19 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractFileSystem
             __DIR__ . '/Source/Fixture/Repository/AppleRepository.php',
             __DIR__ . '/Fixture/ExpectedAppleRepository.php',
         ];
+
+        yield 'prefix_same_namespace' => [
+            __DIR__ . '/Source/Controller/BananaCommand.php',
+            __DIR__ . '/Source/Fixture/Command/BananaCommand.php',
+            __DIR__ . '/Fixture/Command/ExpectedBananaCommand.php',
+        ];
     }
 
     protected function getRectorsWithConfiguration(): array
     {
         return [
             MoveServicesBySuffixToDirectoryRector::class => [
-                '$groupNamesBySuffix' => ['Repository'],
+                '$groupNamesBySuffix' => ['Repository', 'Command'],
             ],
         ];
     }

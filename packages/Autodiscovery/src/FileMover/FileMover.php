@@ -83,8 +83,6 @@ final class FileMover
             }
         }
 
-        // @todo: nodes must be sometimes FQNized
-
         // 3. return changed nodes and new file destination
         $newFileDestination = $this->fileRelocationResolver->createNewFileDestination(
             $smartFileInfo,
