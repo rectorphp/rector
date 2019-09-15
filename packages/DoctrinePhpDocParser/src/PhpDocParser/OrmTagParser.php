@@ -36,6 +36,9 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
 
 /**
  * Parses various ORM annotations
+ *
+ * @see \Rector\DoctrinePhpDocParser\Tests\PhpDocParser\OrmTagParser\Class_\OrmTagParserClassTest
+ * @see \Rector\DoctrinePhpDocParser\Tests\PhpDocParser\OrmTagParser\Property_\OrmTagParserPropertyTest
  */
 final class OrmTagParser extends AbstractPhpDocParser
 {

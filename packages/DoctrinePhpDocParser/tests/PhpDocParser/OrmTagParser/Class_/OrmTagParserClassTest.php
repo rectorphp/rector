@@ -6,7 +6,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\DoctrinePhpDocParser\Tests\PhpDocParser\OrmTagParser\AbstractOrmTagParserTest;
 
 /**
- * @covers OrmTagParser
+ * @see \Rector\DoctrinePhpDocParser\PhpDocParser\OrmTagParser
  */
 final class OrmTagParserClassTest extends AbstractOrmTagParserTest
 {
