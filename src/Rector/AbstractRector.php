@@ -3,6 +3,7 @@
 namespace Rector\Rector;
 
 use PhpParser\BuilderFactory;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
@@ -82,6 +83,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return null;
         }
 
+        // node should be ignore
+        if ($this->shouldIgnoreRectorForNode($node)) {
+            return null;
+        }
+
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? clone $node;
         $originalComment = $node->getComments();
         $originalDocComment = $node->getDocComment();
@@ -137,6 +143,21 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return $nodes;
     }
 
+    protected function shouldIgnoreRectorForNode(Node $node): bool
+    {
+        $comment = $node->getDocComment();
+        if ($comment !== null && $this->checkCommentForIgnore($comment)) {
+            return true;
+        }
+
+        // recurse up until a Stmt node is found since it might contain a noRector
+        if (! $node instanceof Stmt && $node->getAttribute(AttributeKey::PARENT_NODE)) {
+            return $this->shouldIgnoreRectorForNode($node->getAttribute(AttributeKey::PARENT_NODE));
+        }
+
+        return false;
+    }
+
     protected function removeFile(SmartFileInfo $smartFileInfo): void
     {
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
@@ -177,6 +198,18 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected function isAtLeastPhpVersion(string $version): bool
     {
         return $this->phpVersionProvider->isAtLeast($version);
+    }
+
+    protected function checkCommentForIgnore(Doc $doc): bool
+    {
+        if (preg_match_all('#@noRector\s*(?<rectorName>\S+)#i', $doc->getText(), $matches)) {
+            foreach ($matches['rectorName'] as $ignoreSpec) {
+                if (static::class === ltrim($ignoreSpec, '\\')) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private function isMatchingNodeType(string $nodeClass): bool

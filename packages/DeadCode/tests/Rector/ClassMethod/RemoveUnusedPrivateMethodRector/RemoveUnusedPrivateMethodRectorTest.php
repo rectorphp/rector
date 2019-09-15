@@ -23,6 +23,7 @@ final class RemoveUnusedPrivateMethodRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/static_method.php.inc'];
         yield [__DIR__ . '/Fixture/private_constructor.php.inc'];
+        yield [__DIR__ . '/Fixture/ignore.php.inc'];
         yield [__DIR__ . '/Fixture/keep_static_edge.php.inc'];
         yield [__DIR__ . '/Fixture/keep_anonymous.php.inc'];
         yield [__DIR__ . '/Fixture/skip_local_called.php.inc'];
