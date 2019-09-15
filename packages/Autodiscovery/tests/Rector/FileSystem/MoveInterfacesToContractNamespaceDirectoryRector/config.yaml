@@ -1,2 +1,0 @@
-services:
-    Rector\Autodiscovery\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector: ~

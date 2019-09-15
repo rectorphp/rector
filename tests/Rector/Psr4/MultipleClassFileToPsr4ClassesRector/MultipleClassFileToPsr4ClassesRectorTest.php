@@ -6,7 +6,6 @@ use Iterator;
 use Nette\Utils\FileSystem;
 use Rector\Rector\Psr4\MultipleClassFileToPsr4ClassesRector;
 use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemRectorTestCase
 {
@@ -115,12 +114,22 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
         ];
     }
 
-    public function testSkip(): void
+    /**
+     * @dataProvider provideDataForSkip()
+     */
+    public function testSkip(string $originalFile): void
     {
-        $originalFileContent = (new SmartFileInfo(__DIR__ . '/Source/ReadyException.php'))->getContents();
+        $originalFileContent = FileSystem::read($originalFile);
 
-        $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo(__DIR__ . '/Source/ReadyException.php'));
-        $this->assertStringEqualsFile(__DIR__ . '/Source/ReadyException.php', $originalFileContent);
+        $this->doTestFile($originalFile);
+
+        $this->assertFileExists($originalFile);
+        $this->assertStringEqualsFile($originalFile, $originalFileContent);
+    }
+
+    public function provideDataForSkip(): Iterator
+    {
+        yield [__DIR__ . '/Source/ReadyException.php'];
     }
 
     protected function getRectorClass(): string

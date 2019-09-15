@@ -7,7 +7,7 @@ use PHPStan\Analyser\NodeScopeResolver;
 use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
 use Rector\Configuration\Option;
-use Rector\Contract\Rector\RectorInterface;
+use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\HttpKernel\RectorKernel;
 use Rector\Testing\Application\EnabledRectorsProvider;
@@ -18,9 +18,8 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-abstract class AbstractRectorTestCase extends AbstractKernelTestCase
+abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 {
     /**
      * @var FileProcessor
@@ -99,10 +98,12 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     protected function tearDown(): void
     {
         // restore PHP version
-        if ($this->getPhpVersion()) {
-            $parameterProvider = self::$container->get(ParameterProvider::class);
-            $parameterProvider->changeParameter('php_version_features', '10.0');
+        if ($this->getPhpVersion() === '') {
+            return;
         }
+
+        $parameterProvider = self::$container->get(ParameterProvider::class);
+        $parameterProvider->changeParameter('php_version_features', '10.0');
     }
 
     protected function doTestFileWithoutAutoload(string $file): void
@@ -116,21 +117,6 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     {
         // can be implemented
         return '';
-    }
-
-    protected function getRectorClass(): string
-    {
-        // can be implemented
-        return '';
-    }
-
-    /**
-     * @return array<string, array>
-     */
-    protected function getRectorsWithConfiguration(): array
-    {
-        // can be implemented, has the highest priority
-        return [];
     }
 
     protected function doTestFile(string $file): void
@@ -154,6 +140,11 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     {
         // to be implemented
         return '';
+    }
+
+    protected function getRectorInterface(): string
+    {
+        return PhpRectorInterface::class;
     }
 
     private function doTestFileMatchesExpectedContent(
@@ -190,12 +181,12 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
     {
         $coreRectorClasses = (new RectorsFinder())->findCoreRectorClasses();
 
-        $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/all_rectors.yaml');
-
-        $allRectorClasses = array_merge($coreRectorClasses, $this->getCurrentTestRectorClasses());
-
         $listForConfig = [];
-        foreach ($allRectorClasses as $rectorClass) {
+        foreach ($coreRectorClasses as $rectorClass) {
+            $listForConfig[$rectorClass] = null;
+        }
+
+        foreach (array_keys($this->getCurrentTestRectorClasses()) as $rectorClass) {
             $listForConfig[$rectorClass] = null;
         }
 
@@ -203,55 +194,21 @@ abstract class AbstractRectorTestCase extends AbstractKernelTestCase
             'services' => $listForConfig,
         ], Yaml::DUMP_OBJECT_AS_MAP);
 
+        $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/all_rectors.yaml');
         FileSystem::write($configFileTempPath, $yamlContent);
 
-        $configFile = $configFileTempPath;
-        $this->bootKernelWithConfigs(RectorKernel::class, [$configFile]);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getCurrentTestRectorClasses(): array
-    {
-        if ($this->getRectorsWithConfiguration() !== []) {
-            return array_keys($this->getRectorsWithConfiguration());
-        }
-
-        $rectorClass = $this->getRectorClass();
-        $this->ensureRectorClassIsValid($rectorClass, 'getRectorClass');
-
-        return [$rectorClass];
+        $this->bootKernelWithConfigs(RectorKernel::class, [$configFileTempPath]);
     }
 
     private function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
     {
         if ($this->getRectorsWithConfiguration() !== []) {
             foreach ($this->getRectorsWithConfiguration() as $rectorClass => $rectorConfiguration) {
-                $this->ensureRectorClassIsValid($rectorClass, 'getRectorsWithConfiguration');
-
                 $enabledRectorsProvider->addEnabledRector($rectorClass, $rectorConfiguration);
             }
         } else {
-            $rectorClass = $this->getRectorClass();
-            $this->ensureRectorClassIsValid($rectorClass, 'getRectorClass');
-
-            $enabledRectorsProvider->addEnabledRector($rectorClass, []);
+            $enabledRectorsProvider->addEnabledRector($this->getRectorClass(), []);
         }
-    }
-
-    private function ensureRectorClassIsValid(string $rectorClass, string $methodName): void
-    {
-        if (is_a($rectorClass, RectorInterface::class, true)) {
-            return;
-        }
-
-        throw new ShouldNotHappenException(sprintf(
-            'Class "%s" in "%s()" method must be type of "%s"',
-            $rectorClass,
-            $methodName,
-            RectorInterface::class
-        ));
     }
 
     private function configurePhpVersionFeatures(): void

@@ -6,20 +6,18 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Rector\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Configuration\Configuration;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\HttpKernel\RectorKernel;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-abstract class AbstractFileSystemRectorTestCase extends AbstractKernelTestCase
+abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTestCase
 {
     /**
      * @var FileSystemFileProcessor
      */
-    protected $fileSystemFileProcessor;
+    private $fileSystemFileProcessor;
 
     /**
      * @var RemovedAndAddedFilesProcessor
@@ -30,12 +28,11 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractKernelTestCase
     {
         $this->createContainerWithProvidedRector();
 
-        $this->fileSystemFileProcessor = self::$container->get(FileSystemFileProcessor::class);
-
         // so the files are removed and added
         $configuration = self::$container->get(Configuration::class);
         $configuration->setIsDryRun(false);
 
+        $this->fileSystemFileProcessor = self::$container->get(FileSystemFileProcessor::class);
         $this->removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
     }
 
@@ -67,50 +64,33 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractKernelTestCase
         return $temporaryFilePath;
     }
 
-    protected function getRectorClass(): string
+    protected function getRectorInterface(): string
     {
-        // can be implemented
-        return '';
-    }
-
-    private function getCurrentTestRectorClass(): string
-    {
-        $rectorClass = $this->getRectorClass();
-        $this->ensureRectorClassIsValid($rectorClass, 'getRectorClass');
-
-        return $rectorClass;
-    }
-
-    private function ensureRectorClassIsValid(string $rectorClass, string $methodName): void
-    {
-        if (is_a($rectorClass, FileSystemRectorInterface::class, true)) {
-            return;
-        }
-
-        throw new ShouldNotHappenException(sprintf(
-            'Class "%s" in "%s()" method must be type of "%s"',
-            $rectorClass,
-            $methodName,
-            FileSystemRectorInterface::class
-        ));
+        return FileSystemRectorInterface::class;
     }
 
     private function createContainerWithProvidedRector(): void
     {
-        $thisClass = Strings::after(Strings::webalize(static::class), '-', -1);
+        $configFileTempPath = $this->createConfigFileTempPath();
 
-        $configFileTempPath = sprintf(
-            sys_get_temp_dir() . '/rector_temp_tests/' . $thisClass . 'file_system_rector.yaml'
-        );
+        $listForConfig = [];
+        foreach ($this->getCurrentTestRectorClasses() as $rectorClass => $configuration) {
+            $listForConfig[$rectorClass] = $configuration;
+        }
+
         $yamlContent = Yaml::dump([
-            'services' => [
-                $this->getCurrentTestRectorClass() => null,
-            ],
+            'services' => $listForConfig,
         ], Yaml::DUMP_OBJECT_AS_MAP);
 
         FileSystem::write($configFileTempPath, $yamlContent);
 
-        $configFile = $configFileTempPath;
-        $this->bootKernelWithConfigs(RectorKernel::class, [$configFile]);
+        $this->bootKernelWithConfigs(RectorKernel::class, [$configFileTempPath]);
+    }
+
+    private function createConfigFileTempPath(): string
+    {
+        $thisClass = Strings::after(Strings::webalize(static::class), '-', -1);
+
+        return sprintf(sys_get_temp_dir() . '/rector_temp_tests/' . $thisClass . 'file_system_rector.yaml');
     }
 }
