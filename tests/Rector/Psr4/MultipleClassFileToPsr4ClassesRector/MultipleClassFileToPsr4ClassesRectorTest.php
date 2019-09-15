@@ -9,19 +9,9 @@ use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 
 final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemRectorTestCase
 {
-    protected function tearDown(): void
-    {
-        FileSystem::delete(__DIR__ . '/Fixture');
-    }
-
     /**
      * @param string[] $expectedExceptions
-     * @dataProvider provideWithoutNamespace
-     * @dataProvider provideClassLike
-     * @dataProvider provideFileNameMatchingOneClass
-     *
-     * @dataProvider provideExceptionsData
-     * @dataProvider provideNetteExceptions
+     * @dataProvider provideDataForTest()
      */
     public function test(string $originaFile, array $expectedExceptions, bool $shouldDeleteOriginalFile): void
     {
@@ -37,10 +27,10 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
         }
     }
 
-    public function provideNetteExceptions(): Iterator
+    public function provideDataForTest(): Iterator
     {
         // source: https://github.com/nette/utils/blob/798f8c1626a8e0e23116d90e588532725cce7d0e/src/Utils/exceptions.php
-        yield [
+        yield 'nette_exceptions' => [
             __DIR__ . '/Source/nette-exceptions.php',
             [
                 __DIR__ . '/Fixture/ArgumentOutOfRangeException.php' => __DIR__ . '/Expected/ArgumentOutOfRangeException.php',
@@ -50,11 +40,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
             ],
             true,
         ];
-    }
 
-    public function provideExceptionsData(): Iterator
-    {
-        yield [
+        yield 'exceptions_data' => [
             __DIR__ . '/Source/exceptions.php',
             [
                 __DIR__ . '/Fixture/FirstException.php' => __DIR__ . '/Expected/FirstException.php',
@@ -62,12 +49,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
             ],
             true,
         ];
-    }
 
-    public function provideWithoutNamespace(): Iterator
-    {
-        // non namespaced PSR-4 file with one class
-        yield [
+        yield 'non_namespaced_psr4_file_with_one_class' => [
             __DIR__ . '/Source/exceptions-without-namespace.php',
             [
                 __DIR__ . '/Fixture/JustOneExceptionWithoutNamespace.php' => __DIR__ . '/Expected/JustOneExceptionWithoutNamespace.php',
@@ -75,11 +58,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
             ],
             true,
         ];
-    }
 
-    public function provideMissNamed(): Iterator
-    {
-        yield [
+        yield 'miss_named' => [
             __DIR__ . '/Source/MissNamed.php',
             [
                 __DIR__ . '/Fixture/Miss.php' => __DIR__ . '/Expected/Miss.php',
@@ -87,11 +67,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
             ],
             true,
         ];
-    }
 
-    public function provideClassLike(): Iterator
-    {
-        yield [
+        yield 'class_like' => [
             __DIR__ . '/Source/ClassLike.php',
             [
                 __DIR__ . '/Fixture/MyTrait.php' => __DIR__ . '/Expected/MyTrait.php',
@@ -100,11 +77,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
             ],
             true,
         ];
-    }
 
-    public function provideFileNameMatchingOneClass(): Iterator
-    {
-        yield [
+        yield 'provide_file_name_matching_one_class' => [
             __DIR__ . '/Source/SomeClass.php',
             [
                 __DIR__ . '/Fixture/SomeClass.php' => __DIR__ . '/Expected/SomeClass.php',
