@@ -28,6 +28,7 @@ final class CovarianceTest extends AbstractRectorTestCase
 
     protected function getPhpVersion(): string
     {
+        // the return type are covariant (flexible) since PHP 7.4 https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
         return '7.0';
     }
 
