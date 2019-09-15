@@ -3,17 +3,11 @@
 namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveEntitiesToEntityDirectoryRector;
 
 use Iterator;
-use Nette\Utils\FileSystem;
 use Rector\Autodiscovery\Rector\FileSystem\MoveEntitiesToEntityDirectoryRector;
 use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 
 final class MoveEntitiesToEntityDirectoryRectorTest extends AbstractFileSystemRectorTestCase
 {
-    protected function tearDown(): void
-    {
-        FileSystem::delete(__DIR__ . '/Source/Fixture');
-    }
-
     /**
      * @dataProvider provideDataForTest()
      */

@@ -36,6 +36,17 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $this->removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
     }
 
+    protected function tearDown(): void
+    {
+        if (FileSystem::isAbsolute(__DIR__ . '/Fixture')) {
+            FileSystem::delete(__DIR__ . '/Fixture');
+        }
+
+        if (FileSystem::isAbsolute(__DIR__ . '/Source/Fixture')) {
+            FileSystem::delete(__DIR__ . '/Source/Fixture');
+        }
+    }
+
     protected function doTestFile(string $file): string
     {
         $fileInfo = new SmartFileInfo($file);

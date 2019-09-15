@@ -3,17 +3,11 @@
 namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector;
 
 use Iterator;
-use Nette\Utils\FileSystem;
 use Rector\Autodiscovery\Rector\FileSystem\MoveInterfacesToContractNamespaceDirectoryRector;
 use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 
 final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends AbstractFileSystemRectorTestCase
 {
-    protected function tearDown(): void
-    {
-        FileSystem::delete(__DIR__ . '/Source/Fixture');
-    }
-
     /**
      * @dataProvider provideDataForTest()
      */

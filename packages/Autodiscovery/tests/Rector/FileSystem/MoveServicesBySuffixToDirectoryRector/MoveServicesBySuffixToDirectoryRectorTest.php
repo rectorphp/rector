@@ -3,17 +3,11 @@
 namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector;
 
 use Iterator;
-use Nette\Utils\FileSystem;
 use Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector;
 use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 
 final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractFileSystemRectorTestCase
 {
-    protected function tearDown(): void
-    {
-        FileSystem::delete(__DIR__ . '/Source/Fixture');
-    }
-
     /**
      * @dataProvider provideDataForTest()
      */
