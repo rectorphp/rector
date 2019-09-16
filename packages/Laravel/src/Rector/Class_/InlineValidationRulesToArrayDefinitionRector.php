@@ -59,7 +59,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isType($node, 'Illuminate\Foundation\Http\FormRequest') === false) {
+        if ($this->isObjectType($node, 'Illuminate\Foundation\Http\FormRequest') === false) {
             return null;
         }
 

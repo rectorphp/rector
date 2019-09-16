@@ -20,9 +20,7 @@ final class InlineValidationRulesToArrayDefinitionRectorTest extends AbstractRec
 
     public function test(): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc'
-        ]);
+        $this->doTestFile(__DIR__ . '/Fixture/fixture.php.inc');
     }
 
     protected function getRectorClass(): string
