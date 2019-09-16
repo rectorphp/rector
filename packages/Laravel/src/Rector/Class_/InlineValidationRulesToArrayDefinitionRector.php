@@ -132,14 +132,9 @@ CODE_SAMPLE
     private function transformRulesSetToExpressionsArray(Node\Expr $expr): array
     {
         if ($expr instanceof Node\Scalar\String_) {
-            $parts = explode('|', $expr->value);
-            if ($parts === false) {
-                throw new \InvalidArgumentException("Failed to explode string {$expr->value} with regex");
-            }
-
             return array_map(static function (string $value): Node\Scalar\String_ {
                 return new Node\Scalar\String_($value);
-            }, $parts);
+            }, explode('|', $expr->value));
         } elseif ($expr instanceof Node\Expr\BinaryOp\Concat) {
             $left = $this->transformRulesSetToExpressionsArray($expr->left);
             $expr->left = $left[count($left ) - 1];
