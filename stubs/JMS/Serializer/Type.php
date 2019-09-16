@@ -10,7 +10,7 @@ if (class_exists('JMS\Serializer\Annotation\Type')) {
  * @Annotation
  * @Target({"PROPERTY", "METHOD","ANNOTATION"})
  */
-final class Type
+class Type
 {
     /**
      * @Required

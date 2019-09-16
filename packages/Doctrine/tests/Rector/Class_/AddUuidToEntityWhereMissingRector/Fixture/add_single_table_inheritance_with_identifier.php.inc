@@ -46,7 +46,7 @@ abstract class ParentSingleTableInheritanceWithIdentifier
     }
     /**
      * @var \Ramsey\Uuid\UuidInterface
-     * @ORM\Column (type="uuid_binary", unique=true, nullable=true)
+     * @ORM\Column(type="uuid_binary", unique=true, nullable=true)
      */
     private $uuid;
     /**

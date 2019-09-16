@@ -2,7 +2,9 @@
 
 namespace Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc;
 
-interface DoctrineRelationTagValueNodeInterface
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+
+interface DoctrineRelationTagValueNodeInterface extends PhpDocTagValueNode
 {
     public function getTargetEntity(): ?string;
 

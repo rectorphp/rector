@@ -6,6 +6,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectType;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -91,16 +92,17 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($this->variablesToPropertyFetchCollection->getVariableInfos() as $variableInfo) {
-            if (! $this->isName($node, $variableInfo->getName())) {
+        foreach ($this->variablesToPropertyFetchCollection->getVariableNamesAndTypes() as $name => $type) {
+            if (! $this->isName($node, $name)) {
                 continue;
             }
 
-            if (! $this->isObjectType($node, $variableInfo->getTypeAsString())) {
+            /** @var ObjectType $type */
+            if (! $this->isObjectType($node, $type)) {
                 continue;
             }
 
-            return $this->createPropertyFetch('this', $variableInfo->getName());
+            return $this->createPropertyFetch('this', $name);
         }
 
         return null;
@@ -108,8 +110,8 @@ CODE_SAMPLE
 
     private function isInControllerActionMethod(Variable $variable): bool
     {
+        /** @var string|null $className */
         $className = $variable->getAttribute(AttributeKey::CLASS_NAME);
-
         if ($className === null) {
             return false;
         }

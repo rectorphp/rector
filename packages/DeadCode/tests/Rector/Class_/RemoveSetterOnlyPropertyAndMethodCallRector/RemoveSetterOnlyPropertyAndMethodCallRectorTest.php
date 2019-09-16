@@ -7,16 +7,25 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveSetterOnlyPropertyAndMethodCallRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/in_constructor.php.inc',
-            __DIR__ . '/Fixture/keep_many_to_one.php.inc',
-            __DIR__ . '/Fixture/keep_static_property.php.inc',
-            __DIR__ . '/Fixture/keep_public_property.php.inc',
-            __DIR__ . '/Fixture/keep_serializable_object.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/in_constructor.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_many_to_one.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_static_property.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_public_property.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_serializable_object.php.inc'];
     }
 
     protected function getRectorClass(): string

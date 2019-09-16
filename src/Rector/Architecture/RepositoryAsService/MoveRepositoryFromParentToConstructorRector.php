@@ -12,7 +12,6 @@ use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\Exception\Bridge\RectorProviderException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\PhpParser\Node\VariableInfo;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -128,13 +127,13 @@ CODE_SAMPLE
         $node->extends = null;
 
         // add $repository property
-        $propertyInfo = new VariableInfo('repository', new ObjectType($this->entityRepositoryClass));
-        $this->classManipulator->addPropertyToClass($node, $propertyInfo);
+        $this->classManipulator->addPropertyToClass($node, 'repository', new ObjectType($this->entityRepositoryClass));
 
         // add $entityManager and assign to constuctor
         $this->classManipulator->addConstructorDependencyWithCustomAssign(
             $node,
-            new VariableInfo('entityManager', new ObjectType($this->entityManagerClass)),
+            'entityManager',
+            new ObjectType($this->entityManagerClass),
             $this->createRepositoryAssign($node)
         );
 

@@ -25,7 +25,7 @@ final class ClassWithClassProperty
     /**
      * @var AnotherClass
      */
-    private AnotherClass $anotherClass;
+    private \Rector\Php\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $anotherClass;
 }
 
 ?>

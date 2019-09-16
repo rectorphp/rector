@@ -10,6 +10,7 @@ services:
         allow_classes:
             - 'SomeClass' # from PHPUnit
             - 'PHPUnit\Framework\TestCase' # usually part of node construction, it can be missed
+            - 'Exception'
 
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
         max_cognitive_complexity: 9
@@ -46,6 +47,7 @@ services:
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:
             - 'PhpParser\PrettyPrinter\Standard'
+            - '?string' # bug probably
 
     Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
         extra_parent_types_to_suffixes:
@@ -60,6 +62,7 @@ parameters:
         - '*tests/*/Expected/*'
         - '*utils/ContributorTools/templates/*'
         - 'stubs/*'
+        - '*/Expected/*'
 
     skip:
         PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff.Underscore: ~
@@ -111,6 +114,7 @@ parameters:
             - 'src/Rector/AbstractRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+            - 'packages/TypeDeclaration/src/TypeInferer/ReturnTypeInferer/ReturnedNodesReturnTypeInferer.php'
             - 'packages/NodeTypeResolver/src/NodeTypeResolver.php'
             - 'packages/NodeTypeResolver/src/PerNodeTypeResolver/VariableTypeResolver.php'
             - 'packages/Php/src/Rector/FuncCall/RemoveExtraParametersRector.php'
@@ -176,6 +180,7 @@ parameters:
             - 'src/PhpParser/Node/Value/ValueResolver.php'
 
         PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer:
+            - 'packages/BetterPhpDocParser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php'
             # intentional "assertEquals()"
             - 'tests/PhpParser/Node/NodeFactoryTest.php'
             - '*TypeResolverTest.php'

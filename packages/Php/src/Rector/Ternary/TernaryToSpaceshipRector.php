@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Expr\Ternary;
+use Rector\Php\ValueObject\PhpVersionFeature;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -50,7 +51,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion('7.0')) {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SPACESHIP)) {
             return null;
         }
 

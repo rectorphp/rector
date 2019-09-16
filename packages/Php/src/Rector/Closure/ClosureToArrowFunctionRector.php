@@ -60,10 +60,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! class_exists('PhpParser\Node\Expr\ArrowFunction')) {
-            return null;
-        }
-
         if (! $this->isAtLeastPhpVersion('7.4')) {
             return null;
         }

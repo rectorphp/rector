@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\RemoveAlwaysTrueConditionSetInConstructorRector\Fixture;
 
-final class Strings
+final class TestingStrings
 {
     private $value;
     private $smallValue;
@@ -31,7 +31,7 @@ final class Strings
 
 namespace Rector\CodeQuality\Tests\Rector\If_\RemoveAlwaysTrueConditionSetInConstructorRector\Fixture;
 
-final class Strings
+final class TestingStrings
 {
     private $value;
     private $smallValue;

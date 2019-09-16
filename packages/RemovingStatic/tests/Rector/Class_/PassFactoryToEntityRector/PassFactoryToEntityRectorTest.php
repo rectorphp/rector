@@ -11,9 +11,12 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/fixture.php.inc']);
+        $this->doTestFile($file);
 
         // test factory content
         $this->assertFileExists($this->getTempPath() . '/AnotherClassFactory.php');
@@ -23,11 +26,14 @@ final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
         );
     }
 
-    public function testMultipleArguments(): void
+    /**
+     * @dataProvider provideDataForTestMultipleArguments()
+     */
+    public function testMultipleArguments(string $file): void
     {
         $this->markTestSkipped('Conflicting with previous test() for unknown reason. Works well separately');
 
-        $this->doTestFiles([__DIR__ . '/Fixture/multiple_args.php.inc']);
+        $this->doTestFile($file);
 
         // test factory content
         $this->assertFileExists($this->getTempPath() . '/AnotherClassWithMoreArgumentsFactory.php');
@@ -35,6 +41,22 @@ final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
             __DIR__ . '/Source/ExpectedAnotherClassWithMoreArgumentsFactory.php',
             $this->getTempPath() . '/AnotherClassWithMoreArgumentsFactory.php'
         );
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTestMultipleArguments(): iterable
+    {
+        yield [__DIR__ . '/Fixture/multiple_args.php.inc'];
     }
 
     /**

@@ -21,14 +21,23 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
         $parameterProvider->changeParameter(Option::KERNEL_CLASS_PARAMETER, SomeKernelClass::class);
     }
 
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/my_command.php.inc',
-            __DIR__ . '/Fixture/first_class.php.inc',
-            __DIR__ . '/Fixture/some_controller.inc',
-            __DIR__ . '/Fixture/parent_class_with_in_construct_call.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/my_command.php.inc'];
+        yield [__DIR__ . '/Fixture/first_class.php.inc'];
+        yield [__DIR__ . '/Fixture/some_controller.inc'];
+        yield [__DIR__ . '/Fixture/parent_class_with_in_construct_call.php.inc'];
     }
 
     /**

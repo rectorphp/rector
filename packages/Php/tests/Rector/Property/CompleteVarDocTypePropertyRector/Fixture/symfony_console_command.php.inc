@@ -22,7 +22,6 @@ class Command
     private $application;
     private $name;
     private $processTitle;
-    private $aliases = array();
     private $definition;
     private $hidden = false;
     private $help;
@@ -31,8 +30,6 @@ class Command
     private $applicationDefinitionMerged = false;
     private $applicationDefinitionMergedWithArgs = false;
     private $code;
-    private $synopsis = array();
-    private $usages = array();
     private $helperSet;
     /**
      * @return string|null The default command name or null when no default name is set
@@ -586,7 +583,7 @@ class Command
      */
     protected static $defaultName;
     /**
-     * @var \Symfony\Component\Console\Application|null
+     * @var \Symfony\Component\Console\Application
      */
     private $application;
     /**
@@ -597,10 +594,6 @@ class Command
      * @var string
      */
     private $processTitle;
-    /**
-     * @var mixed[]|string[]
-     */
-    private $aliases = array();
     /**
      * @var \Symfony\Component\Console\Input\InputDefinition
      */
@@ -634,15 +627,7 @@ class Command
      */
     private $code;
     /**
-     * @var mixed[]
-     */
-    private $synopsis = array();
-    /**
-     * @var mixed[]
-     */
-    private $usages = array();
-    /**
-     * @var \Symfony\Component\Console\Helper\HelperSet|null
+     * @var \Symfony\Component\Console\Helper\HelperSet
      */
     private $helperSet;
     /**

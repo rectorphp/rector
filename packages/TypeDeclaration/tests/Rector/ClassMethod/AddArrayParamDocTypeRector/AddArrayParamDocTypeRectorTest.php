@@ -7,16 +7,24 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector;
 
 final class AddArrayParamDocTypeRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/from_property.php.inc',
-            __DIR__ . '/Fixture/from_getter.php.inc',
-            __DIR__ . '/Fixture/edge_case.php.inc',
-            // keep
-            __DIR__ . '/Fixture/keep_mixed.php.inc',
-            __DIR__ . '/Fixture/keep_filled.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/from_property.php.inc'];
+        yield [__DIR__ . '/Fixture/from_getter.php.inc'];
+        yield [__DIR__ . '/Fixture/edge_case.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_mixed.php.inc'];
+        yield [__DIR__ . '/Fixture/keep_filled.php.inc'];
     }
 
     protected function getRectorClass(): string

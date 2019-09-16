@@ -2,11 +2,13 @@
 
 namespace Rector\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
 
+use DI\Annotation\Inject;
+
 class InjectFromProtectedVar
 {
     /**
      * @Inject
-     * @var \Fully\Qualified\ClassName\To\Dependency
+     * @var \Rector\Tests\Rector\Property\InjectAnnotationClassRector\Source\ExistingDependency
      */
     protected $someDependency;
 }
@@ -17,13 +19,15 @@ class InjectFromProtectedVar
 
 namespace Rector\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
 
+use DI\Annotation\Inject;
+
 class InjectFromProtectedVar
 {
     /**
-     * @var \Fully\Qualified\ClassName\To\Dependency
+     * @var \Rector\Tests\Rector\Property\InjectAnnotationClassRector\Source\ExistingDependency
      */
     protected $someDependency;
-    public function __construct(\Fully\Qualified\ClassName\To\Dependency $someDependency)
+    public function __construct(\Rector\Tests\Rector\Property\InjectAnnotationClassRector\Source\ExistingDependency $someDependency)
     {
         $this->someDependency = $someDependency;
     }

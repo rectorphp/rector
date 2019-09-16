@@ -139,12 +139,11 @@ final class NodeFactory
         return $methodBuilder->getNode();
     }
 
-    public function createParamFromVariableInfo(VariableInfo $variableInfo): Param
+    public function createParamFromNameAndType(string $name, Type $type): Param
     {
-        $paramBuild = $this->builderFactory->param($variableInfo->getName());
+        $paramBuild = $this->builderFactory->param($name);
 
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($variableInfo->getType());
-
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
         if ($typeNode) {
             $paramBuild->setType($typeNode);
         }
@@ -152,11 +151,11 @@ final class NodeFactory
         return $paramBuild->getNode();
     }
 
-    public function createPrivatePropertyFromVariableInfo(VariableInfo $variableInfo): Property
+    public function createPrivatePropertyFromNameAndType(string $name, Type $type): Property
     {
-        $docComment = $this->createVarDoc($variableInfo->getType());
+        $docComment = $this->createVarDoc($type);
 
-        $propertyBuilder = $this->builderFactory->property($variableInfo->getName());
+        $propertyBuilder = $this->builderFactory->property($name);
         $propertyBuilder->makePrivate();
         $propertyBuilder->setDocComment($docComment);
 
@@ -175,6 +174,10 @@ final class NodeFactory
 
         if ($variable instanceof PropertyFetch) {
             $variable = new PropertyFetch($variable->var, $variable->name);
+        }
+
+        if ($variable instanceof Expr\StaticPropertyFetch) {
+            $variable = new Expr\StaticPropertyFetch($variable->class, $variable->name);
         }
 
         $methodCallNode = $this->builderFactory->methodCall($variable, $method, $arguments);

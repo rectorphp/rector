@@ -7,11 +7,15 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Nop;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+use Rector\BetterPhpDocParser\Type\PreSlashStringType;
 use Rector\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\PHPStan\TypeFactoryStaticHelper;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class PhpDocInfoTest extends AbstractKernelTestCase
@@ -46,14 +50,6 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
         $this->docBlockManipulator = self::$container->get(DocBlockManipulator::class);
     }
 
-    public function testHasTag(): void
-    {
-        $this->assertTrue($this->phpDocInfo->hasTag('param'));
-        $this->assertTrue($this->phpDocInfo->hasTag('@throw'));
-
-        $this->assertFalse($this->phpDocInfo->hasTag('random'));
-    }
-
     public function testGetTagsByName(): void
     {
         $paramTags = $this->phpDocInfo->getTagsByName('param');
@@ -65,33 +61,36 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
         $typeNode = $this->phpDocInfo->getParamTypeNode('value');
         $this->assertInstanceOf(TypeNode::class, $typeNode);
 
-        $this->assertSame(
-            ['SomeType', 'NoSlash', '\Preslashed', 'null', '\string'],
-            $this->phpDocInfo->getParamTypes('value')
-        );
+        $paramType = $this->phpDocInfo->getParamType('value');
+
+        $expectedUnionType = TypeFactoryStaticHelper::createUnionObjectType([
+            new ObjectType('SomeType'),
+            new ObjectType('NoSlash'),
+            new ObjectType('\Preslashed'),
+            new NullType(),
+            new PreSlashStringType(),
+        ]);
+
+        $this->assertEquals($expectedUnionType, $paramType);
     }
 
-    public function testGetVarTypes(): void
+    public function testGetVarType(): void
     {
-        $this->assertSame(['SomeType'], $this->phpDocInfo->getVarTypes());
+        $expectedObjectType = new ObjectType('SomeType');
+        $this->assertEquals($expectedObjectType, $this->phpDocInfo->getVarType());
     }
 
-    public function testReturn(): void
+    public function testGetReturnType(): void
     {
-        $this->assertSame(['SomeType'], $this->phpDocInfo->getReturnTypes());
+        $expectedObjectType = new ObjectType('SomeType');
+        $this->assertEquals($expectedObjectType, $this->phpDocInfo->getReturnType());
     }
 
     public function testReplaceTagByAnother(): void
     {
         $phpDocInfo = $this->createPhpDocInfoFromFile(__DIR__ . '/Source/test-tag.txt');
 
-        $this->assertFalse($phpDocInfo->hasTag('flow'));
-        $this->assertTrue($phpDocInfo->hasTag('test'));
-
         $this->docBlockManipulator->replaceTagByAnother($phpDocInfo->getPhpDocNode(), 'test', 'flow');
-
-        $this->assertFalse($phpDocInfo->hasTag('test'));
-        $this->assertTrue($phpDocInfo->hasTag('flow'));
 
         $this->assertStringEqualsFile(
             __DIR__ . '/Source/expected-replaced-tag.txt',

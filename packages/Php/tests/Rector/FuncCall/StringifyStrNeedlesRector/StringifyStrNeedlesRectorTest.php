@@ -7,16 +7,25 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class StringifyStrNeedlesRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/trait.php.inc',
-            __DIR__ . '/Fixture/skip_twice.php.inc',
-        ]);
+        $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/trait.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_twice.php.inc'];
+    }
+
+    protected function getRectorClass(): string
     {
         return StringifyStrNeedlesRector::class;
     }

@@ -9,7 +9,7 @@ use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
+use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
@@ -26,17 +26,16 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
     /**
      * @var string
      */
-    private $annotation;
+    private const INJECT_ANNOTATION = 'inject';
 
     /**
      * @var DocBlockManipulator
      */
     private $docBlockManipulator;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator, string $annotation = 'inject')
+    public function __construct(DocBlockManipulator $docBlockManipulator)
     {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->annotation = $annotation;
     }
 
     public function getDefinition(): RectorDefinition
@@ -44,7 +43,7 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
         return new RectorDefinition(
             'Turns non-private properties with `@annotation` to private properties and constructor injection',
             [
-                new ConfiguredCodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 /**
  * @var SomeService
@@ -64,10 +63,6 @@ public function __construct(SomeService $someService)
     $this->someService = $someService;
 }
 CODE_SAMPLE
-                    ,
-                    [
-                        '$annotation' => 'inject',
-                    ]
                 ),
             ]
         );
@@ -86,16 +81,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->docBlockManipulator->hasTag($node, $this->annotation)) {
+        if ($this->shouldSkipProperty($node)) {
             return null;
         }
 
-        // it needs @var tag as well, to get the type
-        if (! $this->docBlockManipulator->hasTag($node, 'var')) {
-            return null;
-        }
-
-        $this->docBlockManipulator->removeTagFromNode($node, $this->annotation);
+        $this->docBlockManipulator->removeTagFromNode($node, self::INJECT_ANNOTATION);
 
         // set to private
         $this->makePrivate($node);
@@ -123,5 +113,19 @@ CODE_SAMPLE
         $propertyName = $this->getName($property);
 
         $this->addPropertyToClass($classNode, $propertyType, $propertyName);
+    }
+
+    private function shouldSkipProperty(Node $node): bool
+    {
+        if (! $this->docBlockManipulator->hasTag($node, self::INJECT_ANNOTATION)) {
+            return true;
+        }
+
+        // it needs @var tag as well, to get the type
+        if (! $this->docBlockManipulator->hasTag($node, 'var')) {
+            return true;
+        }
+
+        return false;
     }
 }

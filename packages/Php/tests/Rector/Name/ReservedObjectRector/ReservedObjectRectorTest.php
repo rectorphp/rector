@@ -7,12 +7,21 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ReservedObjectRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/ReservedObject.php',
-            __DIR__ . '/Fixture/skip_type_declaration_object.php',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/ReservedObject.php'];
+        yield [__DIR__ . '/Fixture/skip_type_declaration_object.php'];
     }
 
     /**

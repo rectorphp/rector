@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -32,6 +33,10 @@ final class PhpDocInfoGetByTypeReturnTypeExtension implements DynamicMethodRetur
         Scope $scope
     ): Type {
         $returnType = $this->resolveArgumentValue($methodCall->args[0]->value);
+
+        if ($returnType === null) {
+            return new MixedType();
+        }
 
         return new UnionType([new ObjectType($returnType), new NullType()]);
     }

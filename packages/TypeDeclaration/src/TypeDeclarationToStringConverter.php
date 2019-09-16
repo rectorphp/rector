@@ -3,44 +3,29 @@
 namespace Rector\TypeDeclaration;
 
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\NullableType;
-use Rector\PhpParser\Node\Resolver\NameResolver;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 
 final class TypeDeclarationToStringConverter
 {
     /**
-     * @var NameResolver
+     * @var StaticTypeMapper
      */
-    private $nameResolver;
+    private $staticTypeMapper;
 
-    public function __construct(NameResolver $nameResolver)
+    public function __construct(StaticTypeMapper $staticTypeMapper)
     {
-        $this->nameResolver = $nameResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
-    /**
-     * @return string[]
-     */
-    public function resolveFunctionLikeReturnTypeToString(FunctionLike $functionLike): array
+    public function resolveFunctionLikeReturnTypeToPHPStanType(FunctionLike $functionLike): Type
     {
-        if ($functionLike->getReturnType() === null) {
-            return [];
+        $functionReturnType = $functionLike->getReturnType();
+        if ($functionReturnType === null) {
+            return new MixedType();
         }
 
-        $returnType = $functionLike->getReturnType();
-
-        $types = [];
-
-        $type = $returnType instanceof NullableType ? $returnType->type : $returnType;
-        $result = $this->nameResolver->getName($type);
-        if ($result !== null) {
-            $types[] = $result;
-        }
-
-        if ($returnType instanceof NullableType) {
-            $types[] = 'null';
-        }
-
-        return $types;
+        return $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionReturnType);
     }
 }

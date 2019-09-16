@@ -2,6 +2,10 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\NullableInheritance;
 
+class Foo
+{
+}
+
 class A {
     /** @return null|Foo */
     public function test($value) {
@@ -20,6 +24,10 @@ class B extends A {
 <?php
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture\NullableInheritance;
+
+class Foo
+{
+}
 
 class A {
     /** @return null|Foo */

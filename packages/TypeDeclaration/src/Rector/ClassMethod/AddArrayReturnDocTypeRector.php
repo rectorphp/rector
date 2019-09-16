@@ -13,6 +13,7 @@ use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationRe
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ *
  * @see \Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\AddArrayReturnDocTypeRectorTest
  */
 final class AddArrayReturnDocTypeRector extends AbstractRector
@@ -90,21 +91,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $inferedTypes = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
+        $inferedType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
             $node,
             [ReturnTypeDeclarationReturnTypeInferer::class]
         );
-        if ($inferedTypes === ['void']) {
-            return null;
-        }
 
-        if ($inferedTypes === []) {
-            return null;
-        }
-
-        $docType = implode('|', $inferedTypes);
-
-        $this->docBlockManipulator->addReturnTag($node, $docType);
+        $this->docBlockManipulator->addReturnTag($node, $inferedType);
 
         return $node;
     }
@@ -115,7 +107,7 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($classMethod->returnType) {
+        if ($classMethod->returnType !== null) {
             if (! $this->isNames($classMethod->returnType, ['array', 'iterable'])) {
                 return true;
             }

@@ -3,11 +3,9 @@
 namespace Rector\TypeDeclaration\Contract\TypeInferer;
 
 use PhpParser\Node\FunctionLike;
+use PHPStan\Type\Type;
 
 interface ReturnTypeInfererInterface extends PriorityAwareTypeInfererInterface
 {
-    /**
-     * @return string[]
-     */
-    public function inferFunctionLike(FunctionLike $functionLike): array;
+    public function inferFunctionLike(FunctionLike $functionLike): Type;
 }

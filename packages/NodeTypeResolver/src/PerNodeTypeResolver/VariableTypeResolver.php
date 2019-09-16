@@ -8,7 +8,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
@@ -82,19 +81,7 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         }
 
         // get from annotation
-        $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($variableNode);
-        if ($varTypeInfo === null) {
-            return new MixedType();
-        }
-
-        $varType = $varTypeInfo->getFqnType();
-
-        if ($varType) {
-            // @todo this can be anything :/
-            return new ObjectType($varType);
-        }
-
-        return new MixedType();
+        return $this->docBlockManipulator->getVarType($variableNode);
     }
 
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void

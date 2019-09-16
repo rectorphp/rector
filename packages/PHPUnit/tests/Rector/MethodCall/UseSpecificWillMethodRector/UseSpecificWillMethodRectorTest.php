@@ -7,9 +7,21 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class UseSpecificWillMethodRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/will.php.inc', __DIR__ . '/Fixture/with.php.inc']);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/will.php.inc'];
+        yield [__DIR__ . '/Fixture/with.php.inc'];
     }
 
     protected function getRectorClass(): string

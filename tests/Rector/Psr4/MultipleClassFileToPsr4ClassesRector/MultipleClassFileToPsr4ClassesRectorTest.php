@@ -4,63 +4,18 @@ namespace Rector\Tests\Rector\Psr4\MultipleClassFileToPsr4ClassesRector;
 
 use Iterator;
 use Nette\Utils\FileSystem;
-use Rector\Application\FileSystem\RemovedAndAddedFilesProcessor;
-use Rector\Configuration\Configuration;
-use Rector\FileSystemRector\FileSystemFileProcessor;
-use Rector\HttpKernel\RectorKernel;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
-use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Rector\Rector\Psr4\MultipleClassFileToPsr4ClassesRector;
+use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 
-/**
- * @covers \Rector\Rector\Psr4\MultipleClassFileToPsr4ClassesRector
- */
-final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestCase
+final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemRectorTestCase
 {
     /**
-     * @var FileSystemFileProcessor
-     */
-    private $fileSystemFileProcessor;
-
-    /**
-     * @var RemovedAndAddedFilesProcessor
-     */
-    private $removedAndAddedFilesProcessor;
-
-    protected function setUp(): void
-    {
-        $this->bootKernelWithConfigs(RectorKernel::class, [__DIR__ . '/config.yaml']);
-        $this->fileSystemFileProcessor = self::$container->get(FileSystemFileProcessor::class);
-
-        // so the files are removed and added
-        $configuration = self::$container->get(Configuration::class);
-        $configuration->setIsDryRun(false);
-
-        $this->removedAndAddedFilesProcessor = self::$container->get(RemovedAndAddedFilesProcessor::class);
-    }
-
-    protected function tearDown(): void
-    {
-        FileSystem::delete(__DIR__ . '/Fixture');
-    }
-
-    /**
      * @param string[] $expectedExceptions
-     * @dataProvider provideWithoutNamespace
-     * @dataProvider provideClassLike
-     * @dataProvider provideFileNameMatchingOneClass
-     *
-     * @dataProvider provideExceptionsData
-     * @dataProvider provideNetteExceptions
+     * @dataProvider provideDataForTest()
      */
-    public function test(string $file, array $expectedExceptions, bool $shouldDeleteOriginalFile): void
+    public function test(string $originaFile, array $expectedExceptions, bool $shouldDeleteOriginalFile): void
     {
-        $fileInfo = new SmartFileInfo($file);
-
-        $temporaryFilePath = $this->createTemporaryFilePath($fileInfo, $file);
-        require_once $temporaryFilePath;
-
-        $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo($temporaryFilePath));
-        $this->removedAndAddedFilesProcessor->run();
+        $temporaryFilePath = $this->doTestFile($originaFile);
 
         foreach ($expectedExceptions as $expectedExceptionLocation => $expectedFormat) {
             $this->assertFileExists($expectedExceptionLocation);
@@ -72,10 +27,10 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
         }
     }
 
-    public function provideNetteExceptions(): Iterator
+    public function provideDataForTest(): Iterator
     {
         // source: https://github.com/nette/utils/blob/798f8c1626a8e0e23116d90e588532725cce7d0e/src/Utils/exceptions.php
-        yield [
+        yield 'nette_exceptions' => [
             __DIR__ . '/Source/nette-exceptions.php',
             [
                 __DIR__ . '/Fixture/ArgumentOutOfRangeException.php' => __DIR__ . '/Expected/ArgumentOutOfRangeException.php',
@@ -85,11 +40,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
             ],
             true,
         ];
-    }
 
-    public function provideExceptionsData(): Iterator
-    {
-        yield [
+        yield 'exceptions_data' => [
             __DIR__ . '/Source/exceptions.php',
             [
                 __DIR__ . '/Fixture/FirstException.php' => __DIR__ . '/Expected/FirstException.php',
@@ -97,12 +49,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
             ],
             true,
         ];
-    }
 
-    public function provideWithoutNamespace(): Iterator
-    {
-        // non namespaced PSR-4 file with one class
-        yield [
+        yield 'non_namespaced_psr4_file_with_one_class' => [
             __DIR__ . '/Source/exceptions-without-namespace.php',
             [
                 __DIR__ . '/Fixture/JustOneExceptionWithoutNamespace.php' => __DIR__ . '/Expected/JustOneExceptionWithoutNamespace.php',
@@ -110,11 +58,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
             ],
             true,
         ];
-    }
 
-    public function provideMissNamed(): Iterator
-    {
-        yield [
+        yield 'miss_named' => [
             __DIR__ . '/Source/MissNamed.php',
             [
                 __DIR__ . '/Fixture/Miss.php' => __DIR__ . '/Expected/Miss.php',
@@ -122,11 +67,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
             ],
             true,
         ];
-    }
 
-    public function provideClassLike(): Iterator
-    {
-        yield [
+        yield 'class_like' => [
             __DIR__ . '/Source/ClassLike.php',
             [
                 __DIR__ . '/Fixture/MyTrait.php' => __DIR__ . '/Expected/MyTrait.php',
@@ -135,11 +77,8 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
             ],
             true,
         ];
-    }
 
-    public function provideFileNameMatchingOneClass(): Iterator
-    {
-        yield [
+        yield 'provide_file_name_matching_one_class' => [
             __DIR__ . '/Source/SomeClass.php',
             [
                 __DIR__ . '/Fixture/SomeClass.php' => __DIR__ . '/Expected/SomeClass.php',
@@ -149,26 +88,26 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractKernelTestC
         ];
     }
 
-    public function testSkip(): void
+    /**
+     * @dataProvider provideDataForSkip()
+     */
+    public function testSkip(string $originalFile): void
     {
-        $originalFileContent = (new SmartFileInfo(__DIR__ . '/Source/ReadyException.php'))->getContents();
+        $originalFileContent = FileSystem::read($originalFile);
 
-        $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo(__DIR__ . '/Source/ReadyException.php'));
-        $this->assertStringEqualsFile(__DIR__ . '/Source/ReadyException.php', $originalFileContent);
+        $this->doTestFile($originalFile);
+
+        $this->assertFileExists($originalFile);
+        $this->assertStringEqualsFile($originalFile, $originalFileContent);
     }
 
-    private function createTemporaryFilePath(SmartFileInfo $fileInfo, string $file): string
+    public function provideDataForSkip(): Iterator
     {
-        $temporaryFilePath = sprintf(
-            '%s%sFixture%s%s',
-            dirname($fileInfo->getPath()),
-            DIRECTORY_SEPARATOR,
-            DIRECTORY_SEPARATOR,
-            $fileInfo->getBasename()
-        );
+        yield [__DIR__ . '/Source/ReadyException.php'];
+    }
 
-        FileSystem::copy($file, $temporaryFilePath);
-
-        return $temporaryFilePath;
+    protected function getRectorClass(): string
+    {
+        return MultipleClassFileToPsr4ClassesRector::class;
     }
 }

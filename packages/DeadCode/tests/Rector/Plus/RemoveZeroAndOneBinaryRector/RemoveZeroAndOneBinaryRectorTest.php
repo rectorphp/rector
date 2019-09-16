@@ -7,15 +7,24 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveZeroAndOneBinaryRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/assigns.php.inc',
-            __DIR__ . '/Fixture/no_unintended.php.inc',
-            __DIR__ . '/Fixture/skip_type_change.php.inc',
-            __DIR__ . '/Fixture/skip_floats.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/assigns.php.inc'];
+        yield [__DIR__ . '/Fixture/no_unintended.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_type_change.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_floats.php.inc'];
     }
 
     protected function getRectorClass(): string

@@ -9,8 +9,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\Php\ParamTypeInfo;
+use Rector\Php\ValueObject\PhpVersionFeature;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -93,7 +94,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion('7.0')) {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return null;
         }
 
@@ -101,10 +102,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $paramTagInfos = $this->docBlockManipulator->getParamTypeInfos($node);
+        $paramWithTypes = $this->docBlockManipulator->getParamTypesByName($node);
 
         // no tags, nothing to complete here
-        if ($paramTagInfos === []) {
+        if ($paramWithTypes === []) {
             return null;
         }
 
@@ -123,16 +124,16 @@ CODE_SAMPLE
                 }
             }
 
-            $paramNodeName = $this->getName($paramNode->var);
+            $paramNodeName = '$' . $this->getName($paramNode->var);
 
             // no info about it
-            if (! isset($paramTagInfos[$paramNodeName])) {
+            if (! isset($paramWithTypes[$paramNodeName])) {
                 continue;
             }
 
-            $paramTypeInfo = $paramTagInfos[$paramNodeName];
-
-            if (! $paramTypeInfo->isTypehintAble()) {
+            $paramType = $paramWithTypes[$paramNodeName];
+            $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, 'param');
+            if ($paramTypeNode === null) {
                 continue;
             }
 
@@ -143,19 +144,17 @@ CODE_SAMPLE
 
             if ($hasNewType) {
                 // should override - is it subtype?
-                $possibleOverrideNewReturnType = $paramTypeInfo->getFqnTypeNode();
+                $possibleOverrideNewReturnType = $paramTypeNode;
                 if ($possibleOverrideNewReturnType !== null) {
-                    if ($paramNode->type !== null) {
-                        if ($this->isSubtypeOf($possibleOverrideNewReturnType, $paramNode->type)) {
-                            // allow override
-                            $paramNode->type = $paramTypeInfo->getFqnTypeNode();
-                        }
-                    } else {
-                        $paramNode->type = $paramTypeInfo->getTypeNode();
+                    if ($paramNode->type === null) {
+                        $paramNode->type = $paramTypeNode;
+                    } elseif ($this->isSubtypeOf($possibleOverrideNewReturnType, $paramNode->type)) {
+                        // allow override
+                        $paramNode->type = $paramTypeNode;
                     }
                 }
             } else {
-                $paramNode->type = $paramTypeInfo->getFqnTypeNode();
+                $paramNode->type = $paramTypeNode;
 
                 $paramNodeType = $paramNode->type instanceof NullableType ? $paramNode->type->type : $paramNode->type;
                 // "resource" is valid phpdoc type, but it's not implemented in PHP
@@ -166,7 +165,7 @@ CODE_SAMPLE
                 }
             }
 
-            $this->populateChildren($node, $position, $paramTypeInfo);
+            $this->populateChildren($node, $position, $paramType);
         }
 
         return $node;
@@ -176,7 +175,7 @@ CODE_SAMPLE
      * Add typehint to all children
      * @param ClassMethod|Function_ $node
      */
-    private function populateChildren(Node $node, int $position, ParamTypeInfo $paramTypeInfo): void
+    private function populateChildren(Node $node, int $position, Type $paramType): void
     {
         if (! $node instanceof ClassMethod) {
             return;
@@ -197,11 +196,11 @@ CODE_SAMPLE
                 $usedTraits = $this->parsedNodesByType->findUsedTraitsInClass($childClassLike);
 
                 foreach ($usedTraits as $trait) {
-                    $this->addParamTypeToMethod($trait, $position, $node, $paramTypeInfo);
+                    $this->addParamTypeToMethod($trait, $position, $node, $paramType);
                 }
             }
 
-            $this->addParamTypeToMethod($childClassLike, $position, $node, $paramTypeInfo);
+            $this->addParamTypeToMethod($childClassLike, $position, $node, $paramType);
         }
     }
 
@@ -209,7 +208,7 @@ CODE_SAMPLE
         ClassLike $classLike,
         int $position,
         ClassMethod $classMethod,
-        ParamTypeInfo $paramTypeInfo
+        Type $paramType
     ): void {
         $methodName = $this->getName($classMethod);
 
@@ -229,14 +228,13 @@ CODE_SAMPLE
             return;
         }
 
-        $resolvedChildType = $this->resolveChildType($paramTypeInfo, $classMethod);
+        $resolvedChildType = $this->resolveChildTypeNode($paramType);
         if ($resolvedChildType === null) {
             return;
         }
 
-        $paramNode->type = $resolvedChildType;
-
         // let the method know it was changed now
+        $paramNode->type = $resolvedChildType;
         $paramNode->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
 
         $this->notifyNodeChangeFileInfo($paramNode);

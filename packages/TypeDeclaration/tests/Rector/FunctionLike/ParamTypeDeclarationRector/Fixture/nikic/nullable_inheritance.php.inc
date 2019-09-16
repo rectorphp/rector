@@ -2,6 +2,9 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\NullableInheritance;
 
+class Foo
+{}
+
 class A {
     /** @param Foo $a */
     public function test2($a) {}
@@ -16,6 +19,9 @@ class B extends A {
 <?php
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\NullableInheritance;
+
+class Foo
+{}
 
 class A {
     /** @param Foo $a */

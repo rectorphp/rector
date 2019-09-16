@@ -7,16 +7,25 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class DelegateExceptionArgumentsRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/message.php.inc',
-            __DIR__ . '/Fixture/regexp.php.inc',
-            __DIR__ . '/Fixture/self_nested.php.inc',
-        ]);
+        $this->doTestFile($file);
     }
 
-    public function getRectorClass(): string
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/message.php.inc'];
+        yield [__DIR__ . '/Fixture/regexp.php.inc'];
+        yield [__DIR__ . '/Fixture/self_nested.php.inc'];
+    }
+
+    protected function getRectorClass(): string
     {
         return DelegateExceptionArgumentsRector::class;
     }

@@ -20,7 +20,6 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\VariableInfo;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -281,9 +280,8 @@ CODE_SAMPLE
                 continue;
             }
 
-            $variableInfo = new VariableInfo($propertyName, new ObjectType($serviceType));
-
-            $properties[] = $this->nodeFactory->createPrivatePropertyFromVariableInfo($variableInfo);
+            $serviceType = new ObjectType($serviceType);
+            $properties[] = $this->nodeFactory->createPrivatePropertyFromNameAndType($propertyName, $serviceType);
         }
 
         return $properties;

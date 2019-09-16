@@ -3,6 +3,8 @@
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node\Param;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 
 final class ParamTypeInferer
@@ -20,18 +22,15 @@ final class ParamTypeInferer
         $this->paramTypeInferers = $paramTypeInferers;
     }
 
-    /**
-     * @return string[]
-     */
-    public function inferParam(Param $param): array
+    public function inferParam(Param $param): Type
     {
         foreach ($this->paramTypeInferers as $paramTypeInferers) {
-            $types = $paramTypeInferers->inferParam($param);
-            if ($types !== []) {
-                return $types;
+            $type = $paramTypeInferers->inferParam($param);
+            if (! $type instanceof MixedType) {
+                return $type;
             }
         }
 
-        return [];
+        return new MixedType();
     }
 }

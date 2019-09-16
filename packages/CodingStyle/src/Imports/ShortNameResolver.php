@@ -33,23 +33,20 @@ final class ShortNameResolver
     {
         /** @var Namespace_|null $namespace */
         $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NODE);
-
         if ($namespace === null) {
             return [];
         }
 
+        // must be hash → unique per file
         $namespaceHash = spl_object_hash($namespace);
         if (isset($this->shortNamesByNamespaceObjectHash[$namespaceHash])) {
             return $this->shortNamesByNamespaceObjectHash[$namespaceHash];
         }
 
-        if ($namespace instanceof Namespace_) {
-            $shortNames = $this->resolveForNamespace($namespace);
-            $this->shortNamesByNamespaceObjectHash[$namespaceHash] = $shortNames;
-            return $shortNames;
-        }
+        $shortNames = $this->resolveForNamespace($namespace);
+        $this->shortNamesByNamespaceObjectHash[$namespaceHash] = $shortNames;
 
-        return [];
+        return $shortNames;
     }
 
     /**

@@ -6,7 +6,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\Doctrine\Uuid\JoinTableNameResolver;
 use Rector\Doctrine\ValueObject\DoctrineClass;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
@@ -36,16 +36,15 @@ final class PhpDocTagNodeFactory
 
     public function createVarTagUuidInterface(): PhpDocTagNode
     {
-        $varTagValueNode = new VarTagValueNode(new IdentifierTypeNode(
-            '\\' . DoctrineClass::RAMSEY_UUID_INTERFACE
-        ), '', '');
+        $identifierTypeNode = new IdentifierTypeNode('\\' . DoctrineClass::RAMSEY_UUID_INTERFACE);
+        $varTagValueNode = new VarTagValueNode($identifierTypeNode, '', '');
 
         return new PhpDocTagNode('@var', $varTagValueNode);
     }
 
     public function createIdTag(): PhpDocTagNode
     {
-        return new PhpDocTagNode(IdTagValueNode::SHORT_NAME, new IdTagValueNode());
+        return new SpacelessPhpDocTagNode(IdTagValueNode::SHORT_NAME, new IdTagValueNode());
     }
 
     public function createUuidColumnTag(bool $isNullable): PhpDocTagNode
@@ -60,17 +59,19 @@ final class PhpDocTagNodeFactory
             $isNullable ? true : null
         );
 
-        return new PhpDocTagNode($columnTagValueNode::SHORT_NAME, $columnTagValueNode);
+        return new SpacelessPhpDocTagNode($columnTagValueNode::SHORT_NAME, $columnTagValueNode);
     }
 
     public function createGeneratedValueTag(): PhpDocTagNode
     {
-        return new PhpDocTagNode(GeneratedValueTagValueNode::SHORT_NAME, new GeneratedValueTagValueNode('CUSTOM'));
+        return new SpacelessPhpDocTagNode(GeneratedValueTagValueNode::SHORT_NAME, new GeneratedValueTagValueNode(
+            'CUSTOM'
+        ));
     }
 
     public function createCustomIdGeneratorTag(): PhpDocTagNode
     {
-        return new PhpDocTagNode(
+        return new SpacelessPhpDocTagNode(
             CustomIdGeneratorTagValueNode::SHORT_NAME,
             new CustomIdGeneratorTagValueNode($this->doctrineUuidGeneratorClass)
         );
@@ -78,20 +79,22 @@ final class PhpDocTagNodeFactory
 
     public function createJoinTableTagNode(Property $property): PhpDocTagNode
     {
-        $joinTableName = $this->joinTableNameResolver->resolveManyToManyTableNameForProperty($property);
-        $uuidJoinTable = $joinTableName . '_uuid';
+        $uuidJoinTable = $this->joinTableNameResolver->resolveManyToManyUuidTableNameForProperty($property);
 
-        $joinTableTagValueNode = new JoinTableTagValueNode($uuidJoinTable, null, [
-            new JoinColumnTagValueNode(null, 'uuid'),
-        ], [new JoinColumnTagValueNode(null, 'uuid')]);
+        $joinTableTagValueNode = new JoinTableTagValueNode(
+            $uuidJoinTable,
+            null,
+            [new JoinColumnTagValueNode(null, 'uuid')],
+            [new JoinColumnTagValueNode(null, 'uuid')]
+        );
 
-        return new AttributeAwarePhpDocTagNode(JoinTableTagValueNode::SHORT_NAME, $joinTableTagValueNode);
+        return new SpacelessPhpDocTagNode(JoinTableTagValueNode::SHORT_NAME, $joinTableTagValueNode);
     }
 
     public function createJoinColumnTagNode(): PhpDocTagNode
     {
         $joinColumnTagValueNode = new JoinColumnTagValueNode(null, 'uuid', null, false);
 
-        return new AttributeAwarePhpDocTagNode(JoinColumnTagValueNode::SHORT_NAME, $joinColumnTagValueNode);
+        return new SpacelessPhpDocTagNode(JoinColumnTagValueNode::SHORT_NAME, $joinColumnTagValueNode);
     }
 }

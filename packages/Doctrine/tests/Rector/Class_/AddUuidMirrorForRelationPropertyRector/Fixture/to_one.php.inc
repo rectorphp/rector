@@ -28,6 +28,8 @@ class AnotherEntity
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    private $uuid;
 }
 
 ?>
@@ -67,6 +69,8 @@ class AnotherEntity
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    private $uuid;
 }
 
 ?>

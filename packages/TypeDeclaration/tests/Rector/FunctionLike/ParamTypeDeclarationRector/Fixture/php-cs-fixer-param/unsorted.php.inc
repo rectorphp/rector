@@ -2,6 +2,10 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\PhpCsFixerParam\Unsorted;
 
+class Baz
+{
+}
+
 /**
  * @param int $foo
  * @param string $bar
@@ -15,6 +19,10 @@ function my_foo($bar, $foo, $baz, $tab, $hey) {}
 <?php
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\PhpCsFixerParam\Unsorted;
+
+class Baz
+{
+}
 
 /**
  * @param int $foo

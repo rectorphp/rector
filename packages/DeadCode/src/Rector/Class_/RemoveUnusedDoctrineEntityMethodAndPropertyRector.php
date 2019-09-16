@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\DeadCode\UnusedNodeResolver\ClassUnusedPrivateClassMethodResolver;
+use Rector\Doctrine\ValueObject\DoctrineClass;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -24,11 +25,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const ARRAY_COLLECTION_CLASS = 'Doctrine\Common\Collections\ArrayCollection';
-
     /**
      * @var ParsedNodesByType
      */
@@ -253,7 +249,7 @@ CODE_SAMPLE
         /** @var New_ $new */
         $new = $parentNode->expr;
 
-        return $this->isName($new->class, self::ARRAY_COLLECTION_CLASS);
+        return $this->isName($new->class, DoctrineClass::ARRAY_COLLECTION);
     }
 
     /**

@@ -10,43 +10,31 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
 final class SingleMethodAssignedNodePropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
 {
-    /**
-     * @return string[]
-     */
-    public function inferProperty(Property $property): array
+    public function inferProperty(Property $property): Type
     {
         /** @var Class_ $class */
         $class = $property->getAttribute(AttributeKey::CLASS_NODE);
 
         $classMethod = $class->getMethod('__construct');
         if ($classMethod === null) {
-            return [];
+            return new MixedType();
         }
 
         $propertyName = $this->nameResolver->getName($property);
 
         $assignedNode = $this->resolveAssignedNodeToProperty($classMethod, $propertyName);
         if ($assignedNode === null) {
-            return [];
+            return new MixedType();
         }
 
-        $nodeStaticType = $this->nodeTypeResolver->getStaticType($assignedNode);
-        if ($nodeStaticType instanceof MixedType) {
-            return [];
-        }
-
-        $stringTypes = $this->staticTypeMapper->mapPHPStanTypeToStrings($nodeStaticType);
-        if ($stringTypes === []) {
-            return [];
-        }
-
-        return array_unique($stringTypes);
+        return $this->nodeTypeResolver->getStaticType($assignedNode);
     }
 
     public function getPriority(): int

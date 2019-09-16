@@ -15,14 +15,15 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\PhpParser\Node\VariableInfo;
 use Rector\PhpSpecToPHPUnit\LetManipulator;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 
+/**
+ * @see \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
+ */
 final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRector
 {
     /**
@@ -50,23 +51,16 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
      */
     private $letManipulator;
 
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
     public function __construct(
         ClassManipulator $classManipulator,
         PhpSpecRenaming $phpSpecRenaming,
         PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
-        LetManipulator $letManipulator,
-        StaticTypeMapper $staticTypeMapper
+        LetManipulator $letManipulator
     ) {
         $this->classManipulator = $classManipulator;
         $this->phpSpecRenaming = $phpSpecRenaming;
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
         $this->letManipulator = $letManipulator;
-        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     /**
@@ -95,9 +89,9 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
         $this->phpSpecRenaming->renameExtends($node);
 
         $testedClass = $this->phpSpecRenaming->resolveTestedClass($node);
-        $this->testedObjectType = new ObjectType($testedClass);
 
-        $this->classManipulator->addPropertyToClass($node, new VariableInfo($propertyName, $this->testedObjectType));
+        $this->testedObjectType = new ObjectType($testedClass);
+        $this->classManipulator->addPropertyToClass($node, $propertyName, $this->testedObjectType);
 
         // add let if missing
         if ($node->getMethod('let') === null) {

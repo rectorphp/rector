@@ -25,6 +25,9 @@ use Rector\Php\TypeAnalyzer;
 use Rector\PhpSpecToPHPUnit\PhpSpecMockCollector;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 
+/**
+ * @see \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
+ */
 final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRector
 {
     /**

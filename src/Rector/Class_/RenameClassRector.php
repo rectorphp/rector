@@ -15,10 +15,12 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
+use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpDoc\PhpDocClassRenamer;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -128,13 +130,16 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // replace on @var/@param/@return/@throws
-        if ($this->docBlockManipulator->hasNodeTypeChangeableTags($node)) {
+        if ($this->docBlockManipulator->hasNodeTypeTags($node)) {
             foreach ($this->oldToNewClasses as $oldClass => $newClass) {
-                $this->docBlockManipulator->changeType($node, $oldClass, $newClass);
-            }
-        }
+                $oldClassType = new ObjectType($oldClass);
+                $newClassType = new FullyQualifiedObjectType($newClass);
 
-        $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $this->oldToNewClasses);
+                $this->docBlockManipulator->changeType($node, $oldClassType, $newClassType);
+            }
+
+            $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $this->oldToNewClasses);
+        }
 
         if ($node instanceof Name) {
             return $this->refactorName($node);
@@ -270,6 +275,7 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var string $name */
         $this->alreadyProcessedClasses[] = $name;
 
         $newName = $this->oldToNewClasses[$name];

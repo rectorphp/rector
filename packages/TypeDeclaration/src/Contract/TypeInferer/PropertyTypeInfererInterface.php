@@ -3,12 +3,9 @@
 namespace Rector\TypeDeclaration\Contract\TypeInferer;
 
 use PhpParser\Node\Stmt\Property;
-use Rector\TypeDeclaration\ValueObject\IdentifierValueObject;
+use PHPStan\Type\Type;
 
 interface PropertyTypeInfererInterface extends PriorityAwareTypeInfererInterface
 {
-    /**
-     * @return string[]|IdentifierValueObject[]
-     */
-    public function inferProperty(Property $property): array;
+    public function inferProperty(Property $property): Type;
 }

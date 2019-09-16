@@ -25,21 +25,6 @@ final class DefaultValues
     private $size = false;
 
     /**
-     * @var array
-     */
-    private $items = null;
-
-    /**
-     * @var iterable
-     */
-    private $itemsB = null;
-
-    /**
-     * @var array|null
-     */
-    private $nullableItems = null;
-
-    /**
      * @var float
      */
     private $a = 42.42;
@@ -96,27 +81,12 @@ final class DefaultValues
     /**
      * @var bool
      */
-    private $isItRealNameNull = null;
+    private ?bool $isItRealNameNull = null;
 
     /**
      * @var string
      */
     private bool $size = false;
-
-    /**
-     * @var array
-     */
-    private $items = null;
-
-    /**
-     * @var iterable
-     */
-    private $itemsB = null;
-
-    /**
-     * @var array|null
-     */
-    private ?array $nullableItems = null;
 
     /**
      * @var float
@@ -126,7 +96,7 @@ final class DefaultValues
     /**
      * @var float
      */
-    private float $b = 42;
+    private int $b = 42;
 
     /**
      * @var float
@@ -151,7 +121,7 @@ final class DefaultValues
     /**
      * @var iterable
      */
-    private iterable $h = [1, 2, 3];
+    private array $h = [1, 2, 3];
 }
 
 ?>

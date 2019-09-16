@@ -7,14 +7,25 @@ use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 
 final class Php72RectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([__DIR__ . '/Fixture/nikic/object_php72.php.inc']);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/nikic/object_php72.php.inc'];
     }
 
     protected function getPhpVersion(): string
     {
-        return '7.0';
+        return '7.2';
     }
 
     protected function getRectorClass(): string

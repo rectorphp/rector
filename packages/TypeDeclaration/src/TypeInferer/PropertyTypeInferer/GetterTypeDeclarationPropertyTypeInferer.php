@@ -7,6 +7,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\TypeDeclarationToStringConverter;
@@ -24,10 +27,7 @@ final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer
         $this->typeDeclarationToStringConverter = $typeDeclarationToStringConverter;
     }
 
-    /**
-     * @return string[]
-     */
-    public function inferProperty(Property $property): array
+    public function inferProperty(Property $property): Type
     {
         /** @var Class_ $class */
         $class = $property->getAttribute(AttributeKey::CLASS_NODE);
@@ -40,18 +40,20 @@ final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer
                 continue;
             }
 
-            $returnTypes = $this->typeDeclarationToStringConverter->resolveFunctionLikeReturnTypeToString($classMethod);
+            $returnType = $this->typeDeclarationToStringConverter->resolveFunctionLikeReturnTypeToPHPStanType(
+                $classMethod
+            );
             // let PhpDoc solve that later for more precise type
-            if ($returnTypes === ['array']) {
-                return [];
+            if ($returnType instanceof ArrayType) {
+                return new MixedType();
             }
 
-            if ($returnTypes !== []) {
-                return $returnTypes;
+            if (! $returnType instanceof MixedType) {
+                return $returnType;
             }
         }
 
-        return [];
+        return new MixedType();
     }
 
     public function getPriority(): int

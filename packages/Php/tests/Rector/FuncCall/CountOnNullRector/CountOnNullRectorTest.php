@@ -7,26 +7,31 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class CountOnNullRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/preg_match_array.php.inc',
-            __DIR__ . '/Fixture/local_property.php.inc',
+        $this->doTestFile($file);
+    }
 
-            __DIR__ . '/Fixture/array_countable_class.php.inc',
-            __DIR__ . '/Fixture/countable_annotated_params.php.inc',
-            __DIR__ . '/Fixture/false_true_class.php.inc',
-            __DIR__ . '/Fixture/on_null.php.inc',
-            __DIR__ . '/Fixture/external_property.php.inc',
-            __DIR__ . '/Fixture/double_same_variable.php.inc',
-
-            __DIR__ . '/Fixture/property_with_doc.php.inc',
-            __DIR__ . '/Fixture/nullable_array.php.inc',
-            // skip
-            __DIR__ . '/Fixture/skip_countable_local_property.php.inc',
-
-            __DIR__ . '/Fixture/skip_array_merge.php.inc',
-        ]);
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/preg_match_array.php.inc'];
+        yield [__DIR__ . '/Fixture/local_property.php.inc'];
+        yield [__DIR__ . '/Fixture/array_countable_class.php.inc'];
+        yield [__DIR__ . '/Fixture/countable_annotated_params.php.inc'];
+        yield [__DIR__ . '/Fixture/false_true_class.php.inc'];
+        yield [__DIR__ . '/Fixture/on_null.php.inc'];
+        yield [__DIR__ . '/Fixture/external_property.php.inc'];
+        yield [__DIR__ . '/Fixture/double_same_variable.php.inc'];
+        yield [__DIR__ . '/Fixture/property_with_doc.php.inc'];
+        yield [__DIR__ . '/Fixture/nullable_array.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_countable_local_property.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_array_merge.php.inc'];
     }
 
     protected function getRectorClass(): string

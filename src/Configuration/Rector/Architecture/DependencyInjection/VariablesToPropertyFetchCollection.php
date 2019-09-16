@@ -2,25 +2,25 @@
 
 namespace Rector\Configuration\Rector\Architecture\DependencyInjection;
 
-use Rector\PhpParser\Node\VariableInfo;
+use PHPStan\Type\Type;
 
 final class VariablesToPropertyFetchCollection
 {
     /**
-     * @var VariableInfo[]
+     * @var Type[]
      */
-    private $variableInfos = [];
+    private $variableNameAndType = [];
 
-    public function addVariableInfo(VariableInfo $variableInfo): void
+    public function addVariableNameAndType(string $name, Type $type): void
     {
-        $this->variableInfos[] = $variableInfo;
+        $this->variableNameAndType[$name] = $type;
     }
 
     /**
-     * @return VariableInfo[]
+     * @return Type[]
      */
-    public function getVariableInfos(): array
+    public function getVariableNamesAndTypes(): array
     {
-        return $this->variableInfos;
+        return $this->variableNameAndType;
     }
 }

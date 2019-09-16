@@ -20,7 +20,7 @@ class AnotherMyClass
 class MyNewClassWithoutNamespace
 {
     /**
-     * @return MyNewClassWithoutNamespace
+     * @return \MyNewClassWithoutNamespace
      */
     public function createSelf(): \MyNewClassWithoutNamespace
     {

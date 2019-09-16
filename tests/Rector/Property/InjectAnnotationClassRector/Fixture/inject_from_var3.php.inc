@@ -2,10 +2,11 @@
 
 namespace Rector\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
 
-use Fully\Qualified\ClassName\SomeTotallyDifferentButFirstListed\Foo\Bar as FooBarFirst;
-use Fully\Qualified\ClassName\TheActual\Foo\Bar;
-use Fully\Qualified\ClassName\TheActual\Bar\Foo;
-use Fully\Qualified\ClassName\SomeTotallyDifferentButLastListed\Bar\Foo as BarFooLast;
+use Rector\Tests\Rector\Property\InjectAnnotationClassRector\Source\DifferntButFirstListed\Bar as FooBarFirst;
+use Rector\Tests\Rector\Property\InjectAnnotationClassRector\Source\Bar;
+use Rector\Tests\Rector\Property\InjectAnnotationClassRector\Source\Foo;
+use Rector\Tests\Rector\Property\InjectAnnotationClassRector\Source\DifferntButFirstListed\Foo as BarFooLast;
+use DI\Annotation\Inject;
 
 class InjectFromVarWithTypeOfSameName
 {
@@ -30,10 +31,11 @@ class InjectFromVarWithTypeOfSameName
 
 namespace Rector\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
 
-use Fully\Qualified\ClassName\SomeTotallyDifferentButFirstListed\Foo\Bar as FooBarFirst;
-use Fully\Qualified\ClassName\TheActual\Foo\Bar;
-use Fully\Qualified\ClassName\TheActual\Bar\Foo;
-use Fully\Qualified\ClassName\SomeTotallyDifferentButLastListed\Bar\Foo as BarFooLast;
+use Rector\Tests\Rector\Property\InjectAnnotationClassRector\Source\DifferntButFirstListed\Bar as FooBarFirst;
+use Rector\Tests\Rector\Property\InjectAnnotationClassRector\Source\Bar;
+use Rector\Tests\Rector\Property\InjectAnnotationClassRector\Source\Foo;
+use Rector\Tests\Rector\Property\InjectAnnotationClassRector\Source\DifferntButFirstListed\Foo as BarFooLast;
+use DI\Annotation\Inject;
 
 class InjectFromVarWithTypeOfSameName
 {
@@ -48,7 +50,7 @@ class InjectFromVarWithTypeOfSameName
      * @var Foo
      */
     private $someFooDependency;
-    public function __construct(\Fully\Qualified\ClassName\TheActual\Foo\Bar $someBarDependency, \Fully\Qualified\ClassName\TheActual\Bar\Foo $someFooDependency)
+    public function __construct(\Rector\Tests\Rector\Property\InjectAnnotationClassRector\Source\Bar $someBarDependency, \Rector\Tests\Rector\Property\InjectAnnotationClassRector\Source\Foo $someFooDependency)
     {
         $this->someBarDependency = $someBarDependency;
         $this->someFooDependency = $someFooDependency;

@@ -8,8 +8,6 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -83,7 +81,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->docBlockManipulator->hasTag($node, TemplateTagValueNode::CLASS_NAME)) {
+        $phpDocInfo = $this->getPhpDocInfo($node);
+        if ($phpDocInfo === null) {
+            return null;
+        }
+
+        $templateTagValueNode = $phpDocInfo->getByType(TemplateTagValueNode::class);
+        if ($templateTagValueNode === null) {
             return null;
         }
 
@@ -91,7 +95,7 @@ CODE_SAMPLE
         $returnNode = $this->betterNodeFinder->findLastInstanceOf((array) $node->stmts, Return_::class);
 
         // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
-        $renderArguments = $this->resolveRenderArguments($node, $returnNode);
+        $renderArguments = $this->resolveRenderArguments($node, $returnNode, $templateTagValueNode);
         $thisRenderMethodCall = $this->createMethodCall('this', 'render', $renderArguments);
 
         if ($returnNode === null) {
@@ -105,7 +109,7 @@ CODE_SAMPLE
         }
 
         // remove annotation
-        $this->docBlockManipulator->removeTagFromNode($node, TemplateTagValueNode::CLASS_NAME);
+        $this->docBlockManipulator->removeTagFromNode($node, TemplateTagValueNode::class);
 
         return $node;
     }
@@ -113,9 +117,13 @@ CODE_SAMPLE
     /**
      * @return Arg[]
      */
-    private function resolveRenderArguments(ClassMethod $classMethod, ?Return_ $returnNode): array
-    {
-        $arguments = [$this->resolveTemplateName($classMethod)];
+    private function resolveRenderArguments(
+        ClassMethod $classMethod,
+        ?Return_ $returnNode,
+        TemplateTagValueNode $templateTagValueNode
+    ): array {
+        $arguments = [$this->resolveTemplateName($classMethod, $templateTagValueNode)];
+
         if ($returnNode === null) {
             return $this->createArgs($arguments);
         }
@@ -129,16 +137,8 @@ CODE_SAMPLE
         return $this->createArgs($arguments);
     }
 
-    private function resolveTemplateName(ClassMethod $classMethod): string
+    private function resolveTemplateName(ClassMethod $classMethod, TemplateTagValueNode $templateTagValueNode): string
     {
-        /** @var PhpDocInfo $classMethodPhpDocInfo */
-        $classMethodPhpDocInfo = $this->getPhpDocInfo($classMethod);
-
-        $templateTagValueNode = $classMethodPhpDocInfo->getByType(TemplateTagValueNode::class);
-        if ($templateTagValueNode === null) {
-            throw new ShouldNotHappenException(__METHOD__);
-        }
-
         if ($templateTagValueNode->getTemplate() !== null) {
             return $templateTagValueNode->getTemplate();
         }

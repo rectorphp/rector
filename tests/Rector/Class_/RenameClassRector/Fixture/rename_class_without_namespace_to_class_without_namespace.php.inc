@@ -18,7 +18,7 @@ class AnotherMyOldClass
 class AnotherMyNewClass
 {
     /**
-     * @return AnotherMyNewClass
+     * @return \AnotherMyNewClass
      */
     public function createSelf(): \AnotherMyNewClass
     {

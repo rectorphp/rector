@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use PHPStan\Type\MixedType;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,15 +20,9 @@ final class VarConstantCommentRector extends AbstractRector
      */
     private $docBlockManipulator;
 
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    public function __construct(DocBlockManipulator $docBlockManipulator, StaticTypeMapper $staticTypeMapper)
+    public function __construct(DocBlockManipulator $docBlockManipulator)
     {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     public function getDefinition(): RectorDefinition
@@ -78,21 +71,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $staticTypesInStrings = $this->staticTypeMapper->mapPHPStanTypeToStrings($constStaticType);
-
-        // nothing we can do
-        if ($staticTypesInStrings === []) {
-            return null;
-        }
-
-        $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($node);
-
-        if ($varTypeInfo && $varTypeInfo->getTypes() === $staticTypesInStrings) {
-            // already set
-            return null;
-        }
-
-        $this->docBlockManipulator->changeVarTag($node, implode('|', $staticTypesInStrings));
+        $this->docBlockManipulator->changeVarTag($node, $constStaticType);
 
         return $node;
     }

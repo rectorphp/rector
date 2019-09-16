@@ -7,14 +7,22 @@ use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 
 final class CorrectionTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/Correction/constructor_property_assign_over_getter.php.inc',
-            __DIR__ . '/Fixture/Correction/prefix_fqn.php.inc',
-            // skip
-            __DIR__ . '/Fixture/Correction/skip_override_of_the_same_class.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/Correction/constructor_property_assign_over_getter.php.inc'];
+        yield [__DIR__ . '/Fixture/Correction/prefix_fqn.php.inc'];
+        yield [__DIR__ . '/Fixture/Correction/skip_override_of_the_same_class.php.inc'];
     }
 
     protected function getRectorClass(): string

@@ -2,13 +2,21 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
 
-class VoidType
+class TestVoidType
 {
     /**
      * @return false
      */
     function someFunction()
     {
+    }
+
+    /**
+     * @return void
+     */
+    function anotherFunction()
+    {
+        return;
     }
 }
 
@@ -18,13 +26,21 @@ class VoidType
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
 
-class VoidType
+class TestVoidType
 {
     /**
      * @return false
      */
     function someFunction(): void
     {
+    }
+
+    /**
+     * @return void
+     */
+    function anotherFunction(): void
+    {
+        return;
     }
 }
 

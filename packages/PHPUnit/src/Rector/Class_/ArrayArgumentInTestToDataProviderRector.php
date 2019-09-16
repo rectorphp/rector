@@ -22,7 +22,7 @@ use PHPStan\Type\UnionType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\NodeTypeResolver\StaticTypeMapper;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
 use Rector\PHPUnit\ValueObject\ParamAndArgValueObject;
@@ -32,6 +32,8 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\Class_\ArrayArgumentInTestToDataProviderRector\ArrayArgumentInTestToDataProviderRectorTest
+ *
+ * @see why → https://blog.martinhujer.cz/how-to-use-data-providers-in-phpunit/
  */
 final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRector
 {
@@ -46,11 +48,6 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
     private $docBlockManipulator;
 
     /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
      * @var DataProviderClassMethodRecipe[]
      */
     private $dataProviderClassMethodRecipes = [];
@@ -61,17 +58,22 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
     private $dataProviderClassMethodFactory;
 
     /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
      * @param mixed[] $configuration
      */
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
-        StaticTypeMapper $staticTypeMapper,
         DataProviderClassMethodFactory $dataProviderClassMethodFactory,
+        TypeFactory $typeFactory,
         array $configuration = []
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->dataProviderClassMethodFactory = $dataProviderClassMethodFactory;
+        $this->typeFactory = $typeFactory;
         $this->configuration = $configuration;
     }
 
@@ -95,9 +97,9 @@ class SomeServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider provideDataForTest()
      */
-    public function test(int $value)
+    public function test(int $number)
     {
-        $this->doTestSingle($value);
+        $this->doTestSingle($number);
     }
 
     /**
@@ -105,9 +107,9 @@ class SomeServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function provideDataForTest(): iterable
     {
-        yield 1;
-        yield 2;
-        yield 3;
+        yield [1];
+        yield [2];
+        yield [3];
     }
 }
 CODE_SAMPLE
@@ -119,6 +121,7 @@ CODE_SAMPLE
                             'class' => 'PHPUnit\Framework\TestCase',
                             'old_method' => 'doTestMultiple',
                             'new_method' => 'doTestSingle',
+                            'variable_name' => 'number',
                         ],
                     ],
                 ]
@@ -139,6 +142,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $this->ensureConfigurationIsSet($this->configuration);
+
         if (! $this->isInTestClass($node)) {
             return null;
         }
@@ -162,7 +167,8 @@ CODE_SAMPLE
                 // resolve value types
                 $firstArgumentValue = $node->args[0]->value;
                 if (! $firstArgumentValue instanceof Array_) {
-                    throw new ShouldNotHappenException();
+                    // nothing we can do
+                    return null;
                 }
 
                 // rename method to new one handling non-array input
@@ -177,7 +183,10 @@ CODE_SAMPLE
                 );
 
                 $node->args = [];
-                $paramAndArgs = $this->collectParamAndArgsFromArray($firstArgumentValue);
+                $paramAndArgs = $this->collectParamAndArgsFromArray(
+                    $firstArgumentValue,
+                    $singleConfiguration['variable_name']
+                );
                 foreach ($paramAndArgs as $paramAndArg) {
                     $node->args[] = new Arg($paramAndArg->getVariable());
                 }
@@ -217,7 +226,7 @@ CODE_SAMPLE
         return new PhpDocTagNode('@param', new ParamTagValueNode($typeNode, false, '$' . $name, ''));
     }
 
-    private function resolveUniqueArrayStaticTypes(Array_ $array): ?Type
+    private function resolveUniqueArrayStaticTypes(Array_ $array): Type
     {
         $itemStaticTypes = [];
         foreach ($array->items as $arrayItem) {
@@ -226,22 +235,10 @@ CODE_SAMPLE
                 continue;
             }
 
-            $valueObjectHash = implode('_', $this->staticTypeMapper->mapPHPStanTypeToStrings($arrayItemStaticType));
-
-            $itemStaticTypes[$valueObjectHash] = new ArrayType(new MixedType(), $arrayItemStaticType);
+            $itemStaticTypes[] = new ArrayType(new MixedType(), $arrayItemStaticType);
         }
 
-        $itemStaticTypes = array_values($itemStaticTypes);
-
-        if (count($itemStaticTypes) > 1) {
-            return new UnionType($itemStaticTypes);
-        }
-
-        if (count($itemStaticTypes) === 1) {
-            return $itemStaticTypes[0];
-        }
-
-        return null;
+        return $this->typeFactory->createMixedPassedOrUnionType($itemStaticTypes);
     }
 
     private function createDataProviderMethodName(Node $node): string
@@ -271,7 +268,7 @@ CODE_SAMPLE
     /**
      * @return ParamAndArgValueObject[]
      */
-    private function collectParamAndArgsFromArray(Array_ $array): array
+    private function collectParamAndArgsFromArray(Array_ $array, string $variableName): array
     {
         // multiple arguments
         $i = 1;
@@ -284,7 +281,7 @@ CODE_SAMPLE
 
         if ($isNestedArray === false) {
             foreach ($array->items as $arrayItem) {
-                $variable = new Variable('variable' . ($i === 1 ? '' : $i));
+                $variable = new Variable($variableName . ($i === 1 ? '' : $i));
 
                 $paramAndArgs[] = new ParamAndArgValueObject($variable, $itemsStaticType);
                 ++$i;
@@ -298,7 +295,7 @@ CODE_SAMPLE
                 /** @var Array_ $nestedArray */
                 $nestedArray = $arrayItem->value;
                 foreach ($nestedArray->items as $nestedArrayItem) {
-                    $variable = new Variable('variable' . ($i === 1 ? '' : $i));
+                    $variable = new Variable($variableName . ($i === 1 ? '' : $i));
 
                     $itemsStaticType = $this->getStaticType($nestedArrayItem->value);
                     $paramAndArgs[] = new ParamAndArgValueObject($variable, $itemsStaticType);
@@ -335,46 +332,19 @@ CODE_SAMPLE
         return $params;
     }
 
-    /**
-     * @param Type[] $itemsStaticTypes
-     * @return Type[]
-     */
-    private function filterUniqueStaticTypes(array $itemsStaticTypes): array
+    private function resolveItemStaticType(Array_ $array, bool $isNestedArray): Type
     {
-        $uniqueStaticTypes = [];
-        foreach ($itemsStaticTypes as $itemsStaticType) {
-            $uniqueHash = implode('_', $this->staticTypeMapper->mapPHPStanTypeToStrings($itemsStaticType));
-            $uniqueHash = md5($uniqueHash);
-
-            $uniqueStaticTypes[$uniqueHash] = $itemsStaticType;
-        }
-
-        return array_values($uniqueStaticTypes);
-    }
-
-    private function resolveItemStaticType(Array_ $array, bool $isNestedArray): ?Type
-    {
-        $itemsStaticTypes = [];
+        $staticTypes = [];
         if ($isNestedArray === false) {
             foreach ($array->items as $arrayItem) {
                 $arrayItemStaticType = $this->getStaticType($arrayItem->value);
                 if ($arrayItemStaticType) {
-                    $itemsStaticTypes[] = $arrayItemStaticType;
+                    $staticTypes[] = $arrayItemStaticType;
                 }
             }
         }
 
-        $itemsStaticTypes = $this->filterUniqueStaticTypes($itemsStaticTypes);
-
-        if ($itemsStaticTypes !== null && count($itemsStaticTypes) > 1) {
-            return new UnionType($itemsStaticTypes);
-        }
-
-        if (count($itemsStaticTypes) === 1) {
-            return $itemsStaticTypes[0];
-        }
-
-        return null;
+        return $this->typeFactory->createMixedPassedOrUnionType($staticTypes);
     }
 
     private function isNestedArray(Array_ $array): bool
@@ -400,7 +370,7 @@ CODE_SAMPLE
         return $this->isName($methodCall->name, $singleConfiguration['old_method']);
     }
 
-    private function resolveUniqueArrayStaticType(Array_ $array): ?Type
+    private function resolveUniqueArrayStaticType(Array_ $array): Type
     {
         $isNestedArray = $this->isNestedArray($array);
 
@@ -437,5 +407,21 @@ CODE_SAMPLE
             $paramTagNode = $this->createParamTagNode($paramName, $staticTypeNode);
             $this->docBlockManipulator->addTag($classMethod, $paramTagNode);
         }
+    }
+
+    /**
+     * @param mixed[] $configuration
+     */
+    private function ensureConfigurationIsSet(array $configuration): void
+    {
+        if ($configuration !== []) {
+            return;
+        }
+
+        throw new ShouldNotHappenException(sprintf(
+            'Add configuration via "%s" argument for "%s"',
+            '$configuration',
+            self::class
+        ));
     }
 }

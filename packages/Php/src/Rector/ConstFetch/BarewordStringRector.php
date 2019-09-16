@@ -81,6 +81,6 @@ final class BarewordStringRector extends AbstractRector
         }
 
         // wrap to explicit string
-        return new String_(sprintf('%s', $constantName));
+        return new String_($constantName);
     }
 }

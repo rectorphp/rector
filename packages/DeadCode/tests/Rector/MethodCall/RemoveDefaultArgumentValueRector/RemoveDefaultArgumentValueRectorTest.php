@@ -7,16 +7,24 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveDefaultArgumentValueRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/skip_previous_order.php.inc',
-            __DIR__ . '/Fixture/function.php.inc',
-            // reflection
-            __DIR__ . '/Fixture/user_vendor_function.php.inc',
-            __DIR__ . '/Fixture/system_function.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_previous_order.php.inc'];
+        yield [__DIR__ . '/Fixture/function.php.inc'];
+        yield [__DIR__ . '/Fixture/user_vendor_function.php.inc'];
+        yield [__DIR__ . '/Fixture/system_function.php.inc'];
     }
 
     protected function getRectorClass(): string

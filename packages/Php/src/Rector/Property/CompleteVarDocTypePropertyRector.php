@@ -4,12 +4,12 @@ namespace Rector\Php\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeTypeResolver\ComplexNodeTypeResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use PHPStan\Type\MixedType;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 /**
  * @see \Rector\Php\Tests\Rector\Property\CompleteVarDocTypePropertyRector\CompleteVarDocTypePropertyRectorTest
@@ -22,21 +22,21 @@ final class CompleteVarDocTypePropertyRector extends AbstractRector
     private $docBlockManipulator;
 
     /**
-     * @var ComplexNodeTypeResolver
+     * @var PropertyTypeInferer
      */
-    private $complexNodeTypeResolver;
+    private $propertyTypeInferer;
 
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
-        ComplexNodeTypeResolver $complexNodeTypeResolver
+        PropertyTypeInferer $propertyTypeInferer
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->complexNodeTypeResolver = $complexNodeTypeResolver;
+        $this->propertyTypeInferer = $propertyTypeInferer;
     }
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Complete property `@var` annotations for missing one, yet known.', [
+        return new RectorDefinition('Complete property `@var` annotations or correct the old ones', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass
@@ -81,25 +81,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $varTypeInfo = $this->docBlockManipulator->getVarTypeInfo($node);
-        if ($varTypeInfo !== null) {
+        $propertyType = $this->propertyTypeInferer->inferProperty($node);
+        if ($propertyType instanceof MixedType) {
             return null;
         }
 
-        $varTypeInfo = $this->complexNodeTypeResolver->resolvePropertyTypeInfo($node);
-        if ($varTypeInfo === null) {
-            return null;
-        }
-
-        if ($varTypeInfo->getDocTypes() === []) {
-            return null;
-        }
-
-        $varType = implode('|', $varTypeInfo->getDocTypes());
-
-        $this->docBlockManipulator->changeVarTag($node, $varType);
-
-        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $this->docBlockManipulator->changeVarTag($node, $propertyType);
 
         return $node;
     }

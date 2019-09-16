@@ -2,6 +2,9 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\Dunglas;
 
+class AnyClass
+{}
+
 /**
  * @param integer $integer
  * @param boolean $boolean
@@ -20,6 +23,9 @@ function aliases($integer, $boolean, $real, $double, $callback, $void, $mixed, $
 <?php
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\Dunglas;
+
+class AnyClass
+{}
 
 /**
  * @param integer $integer

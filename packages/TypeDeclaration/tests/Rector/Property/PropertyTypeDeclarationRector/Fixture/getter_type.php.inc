@@ -23,8 +23,6 @@ final class GetterType
      */
     private $language;
 
-    private $surname;
-
     public function getEmail(): string
     {
         return $this->email;
@@ -58,14 +56,6 @@ final class GetterType
     public function setPassword(string $password): void
     {
         $this->password = $password;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSurname()
-    {
-        return $this->surname;
     }
 }
 
@@ -99,11 +89,6 @@ final class GetterType
      */
     private $language;
 
-    /**
-     * @var string
-     */
-    private $surname;
-
     public function getEmail(): string
     {
         return $this->email;
@@ -137,14 +122,6 @@ final class GetterType
     public function setPassword(string $password): void
     {
         $this->password = $password;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSurname()
-    {
-        return $this->surname;
     }
 }
 

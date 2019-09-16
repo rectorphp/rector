@@ -29,7 +29,7 @@ class AnIterableClass {
 }
 class BuildOnThePreviousClass extends AnIterableClass {
     /** @return array */
-    public function getIterable($value): array {
+    public function getIterable($value): iterable {
         return $value;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\PhpCsFixerParam\Nullable;
 
+class Foo {}
+
 /** @param null|bool $foo */ function my_foo($foo) {}
 /** @param null|Foo $foo */ function my_foo2($foo) {}
 /** @param null|callable $foo */ function my_foo3($foo) {}
@@ -13,6 +15,8 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRe
 <?php
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\PhpCsFixerParam\Nullable;
+
+class Foo {}
 
 /** @param null|bool $foo */ function my_foo(?bool $foo) {}
 /** @param null|Foo $foo */ function my_foo2(?\Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRector\Fixture\PhpCsFixerParam\Nullable\Foo $foo) {}

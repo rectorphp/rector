@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    Rector\ZendToSymfony\:
+        resource: '../src'
+        exclude: '../src/{Rector/**/*Rector.php,ValueObject/*}'

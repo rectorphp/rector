@@ -2,6 +2,7 @@
 
 namespace Rector\Application;
 
+use Nette\Loaders\RobotLoader;
 use PhpParser\Lexer;
 use PhpParser\Node;
 use Rector\Exception\ShouldNotHappenException;
@@ -48,6 +49,11 @@ final class FileProcessor
      * @var CurrentFileInfoProvider
      */
     private $currentFileInfoProvider;
+
+    /**
+     * @var bool
+     */
+    private $areStubsLoaded = false;
 
     public function __construct(
         FormatPerservingPrinter $formatPerservingPrinter,
@@ -108,6 +114,8 @@ final class FileProcessor
 
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
+        $this->loadStubs();
+
         $this->makeSureFileIsParsed($smartFileInfo);
 
         [$newStmts, $oldStmts, $oldTokens] = $this->tokensByFilePath[$smartFileInfo->getRealPath()];
@@ -148,5 +156,25 @@ final class FileProcessor
             PHP_EOL,
             self::class . '::parseFileInfoToLocalCache()'
         ));
+    }
+
+    /**
+     * Load stubs after composer autoload is loaded + rector "process <src>" is loaded,
+     * so it is loaded only if the classes are really missing
+     */
+    private function loadStubs(): void
+    {
+        if ($this->areStubsLoaded) {
+            return;
+        }
+
+        $stubDirectory = __DIR__ . '/../../stubs';
+
+        $robotLoader = new RobotLoader();
+        $robotLoader->addDirectory($stubDirectory);
+        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/rector_stubs');
+        $robotLoader->register();
+
+        $this->areStubsLoaded = true;
     }
 }

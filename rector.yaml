@@ -4,7 +4,8 @@ parameters:
         - "/Fixtures/"
         - "/Expected/"
         - "/Source/"
-        - "/tests/" # for better performance of local changes
+        - "packages/Symfony/src/Bridge/DefaultAnalyzedSymfonyApplicationContainer.php"
+        - "src/Testing/PHPUnit/AbstractRectorTestCase.php"
 
         # autoload-buggy cases
         - "*.php.inc"
@@ -13,4 +14,10 @@ parameters:
     php_version_features: '7.1'
 
 services:
-    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
+    Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector:
+        $configuration:
+            -
+                class: 'PHPUnit\Framework\TestCase'
+                old_method: 'doTestFilesWithoutAutoload'
+                new_method: 'doTestFileWithoutAutoload'
+                variable_name: 'file'

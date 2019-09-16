@@ -7,15 +7,24 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ConstructorInjectionToActionInjectionRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/duplicate.php.inc',
-            __DIR__ . '/Fixture/skip_scalars.php.inc',
-            __DIR__ . '/Fixture/skip_non_action_methods.php.inc',
-            __DIR__ . '/Fixture/manage_different_naming.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/duplicate.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_scalars.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_non_action_methods.php.inc'];
+        yield [__DIR__ . '/Fixture/manage_different_naming.php.inc'];
     }
 
     protected function getRectorClass(): string

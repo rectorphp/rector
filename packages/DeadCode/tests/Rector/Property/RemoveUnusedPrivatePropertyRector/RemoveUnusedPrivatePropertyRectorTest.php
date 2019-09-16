@@ -7,18 +7,26 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveUnusedPrivatePropertyRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideDataForTest()
+     */
+    public function test(string $file): void
     {
-        $this->doTestFiles([
-            __DIR__ . '/Fixture/fixture.php.inc',
-            __DIR__ . '/Fixture/property_assign.php.inc',
-            __DIR__ . '/Fixture/with_trait.php.inc',
-            // skip
-            __DIR__ . '/Fixture/skip_doctrine_entity_property.php.inc',
-            __DIR__ . '/Fixture/skip_anonymous_class.php.inc',
-            __DIR__ . '/Fixture/skip_anonymous_function.php.inc',
-            __DIR__ . '/Fixture/skip_nested_closure.php.inc',
-        ]);
+        $this->doTestFile($file);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provideDataForTest(): iterable
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/property_assign.php.inc'];
+        yield [__DIR__ . '/Fixture/with_trait.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_doctrine_entity_property.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_anonymous_class.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_anonymous_function.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_nested_closure.php.inc'];
     }
 
     protected function getRectorClass(): string

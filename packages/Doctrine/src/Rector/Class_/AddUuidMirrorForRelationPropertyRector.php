@@ -13,6 +13,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinColumnTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToOneTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToManyTagNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToOneTagNodeInterface;
@@ -96,7 +97,7 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
      */
     private function createMirrorNullable(Property $property): Property
     {
-        $oldProperytName = $this->getName($property);
+        $oldPropertyName = $this->getName($property);
 
         $propertyWithUuid = clone $property;
 
@@ -105,11 +106,11 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
 
         // name must be changed after the doc comment update, because the reflection annotation needed for update of doc comment
         // would miss non existing *Uuid property
-        $uuidPropertyName = $oldProperytName . 'Uuid';
+        $uuidPropertyName = $oldPropertyName . 'Uuid';
         $newPropertyProperty = new PropertyProperty(new VarLikeIdentifier($uuidPropertyName));
         $propertyWithUuid->props = [$newPropertyProperty];
 
-        $this->addNewPropertyToCollector($property, $oldProperytName, $uuidPropertyName);
+        $this->addNewPropertyToCollector($property, $oldPropertyName, $uuidPropertyName);
 
         return $propertyWithUuid;
     }
@@ -176,7 +177,6 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
         }
 
         $uuidPropertyName = $this->getName($property) . 'Uuid';
-
         if ($this->hasClassPropertyName($class, $uuidPropertyName)) {
             return true;
         }
@@ -184,6 +184,24 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
         $targetEntity = $this->getTargetEntity($property);
         if ($targetEntity === null) {
             return true;
+        }
+
+        if (! property_exists($targetEntity, 'uuid')) {
+            return true;
+        }
+
+        /** @var PhpDocInfo|null $propertyPhpDocInfo */
+        $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+        if ($propertyPhpDocInfo === null) {
+            return true;
+        }
+
+        $oneToOneTagValueNode = $propertyPhpDocInfo->getByType(OneToOneTagValueNode::class);
+        if ($oneToOneTagValueNode) {
+            // skip mappedBy oneToOne, as the column doesn't really exist
+            if ($oneToOneTagValueNode->getMappedBy()) {
+                return true;
+            }
         }
 
         return false;
@@ -200,14 +218,11 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
         /** @var DoctrineRelationTagValueNodeInterface $doctrineRelationTagValueNode */
         $doctrineRelationTagValueNode = $this->getDoctrineRelationTagValueNode($property);
 
-        if ($doctrineRelationTagValueNode instanceof ToManyTagNodeInterface) {
-            $this->uuidMigrationDataCollector->addClassToManyRelationProperty(
-                $className,
-                $oldPropertyName,
-                $uuidPropertyName
-            );
-        } elseif ($doctrineRelationTagValueNode instanceof ToOneTagNodeInterface) {
-            $this->uuidMigrationDataCollector->addClassToOneRelationProperty($className, $uuidPropertyName);
-        }
+        $this->uuidMigrationDataCollector->addClassToManyRelationProperty(
+            $className,
+            $oldPropertyName,
+            $uuidPropertyName,
+            $doctrineRelationTagValueNode
+        );
     }
 }

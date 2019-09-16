@@ -15,8 +15,11 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\Php\ValueObject\PhpVersionFeature;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -295,11 +298,12 @@ CODE_SAMPLE
 
     private function decorateClassMethodWithReturnType(ClassMethod $classMethod): void
     {
-        if ($this->isAtLeastPhpVersion('7.0')) {
+        if ($this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             $classMethod->returnType = new Identifier('array');
         }
 
-        $this->docBlockManipulator->addReturnTag($classMethod, 'mixed[]');
+        $arrayMixedType = new ArrayType(new MixedType(), new MixedType(true));
+        $this->docBlockManipulator->addReturnTag($classMethod, $arrayMixedType);
     }
 
     /**

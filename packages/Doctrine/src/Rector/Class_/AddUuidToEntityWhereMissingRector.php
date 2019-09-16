@@ -86,7 +86,7 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
 
         /** @var string $class */
         $class = $this->getName($node);
-        $this->uuidMigrationDataCollector->addClassAndProperty($class, 'uuid');
+        $this->uuidMigrationDataCollector->addClassAndColumnProperty($class, 'uuid');
 
         return $node;
     }

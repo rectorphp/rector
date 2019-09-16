@@ -8,10 +8,12 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\PhpParser\Node\VariableInfo;
 use Rector\PhpSpecToPHPUnit\PhpSpecMockCollector;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 
+/**
+ * @see \Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
+ */
 final class AddMockPropertiesRector extends AbstractPhpSpecToPHPUnitRector
 {
     /**
@@ -52,7 +54,7 @@ final class AddMockPropertiesRector extends AbstractPhpSpecToPHPUnitRector
         /** @var string $class */
         $class = $node->getAttribute(AttributeKey::CLASS_NAME);
 
-        foreach ($classMocks as $variable => $methods) {
+        foreach ($classMocks as $name => $methods) {
             if (count($methods) <= 1) {
                 continue;
             }
@@ -62,17 +64,16 @@ final class AddMockPropertiesRector extends AbstractPhpSpecToPHPUnitRector
                 continue;
             }
 
-            $this->phpSpecMockCollector->addPropertyMock($class, $variable);
+            $this->phpSpecMockCollector->addPropertyMock($class, $name);
 
-            $variableType = $this->phpSpecMockCollector->getTypeForClassAndVariable($node, $variable);
+            $variableType = $this->phpSpecMockCollector->getTypeForClassAndVariable($node, $name);
 
             $unionType = new UnionType([
                 new ObjectType($variableType),
                 new ObjectType('PHPUnit\Framework\MockObject\MockObject'),
             ]);
 
-            $variableInfo = new VariableInfo($variable, $unionType);
-            $this->classManipulator->addPropertyToClass($node, $variableInfo);
+            $this->classManipulator->addPropertyToClass($node, $name, $unionType);
         }
 
         return null;
