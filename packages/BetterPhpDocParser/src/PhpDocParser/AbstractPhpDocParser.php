@@ -39,20 +39,42 @@ abstract class AbstractPhpDocParser
 
     protected function resolveAnnotationContent(TokenIterator $tokenIterator): string
     {
-        $clonedTokenIterator = clone $tokenIterator;
+        $tokenIterator->pushSavePoint();
 
-        $singleLineContent = $clonedTokenIterator->joinUntil(
+        $singleLineContent = $tokenIterator->joinUntil(
             Lexer::TOKEN_END,
             Lexer::TOKEN_PHPDOC_EOL,
             Lexer::TOKEN_CLOSE_PHPDOC
         );
+
+        $tokenIterator->rollback();
 
         if ($singleLineContent === '' || Strings::match($singleLineContent, '#^\((.*?)\)$#m')) {
             $annotationContent = $singleLineContent;
             $tokenIterator->joinUntil(Lexer::TOKEN_END, Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_CLOSE_PHPDOC);
         } else { // multiline - content
             // skip all tokens for this annotation, so next annotation can work with tokens after this one
+            $tokenIterator->pushSavePoint();
+
             $annotationContent = $tokenIterator->joinUntil(Lexer::TOKEN_END, Lexer::TOKEN_CLOSE_PHPDOC);
+
+            if (! Strings::match($annotationContent, '#\)\s+$#m')) {
+                $tokenIterator->rollback();
+
+                $annotationContent = $tokenIterator->joinUntil(
+                    Lexer::TOKEN_END,
+                    Lexer::TOKEN_CLOSE_PHPDOC,
+                    Lexer::TOKEN_CLOSE_PARENTHESES // ")"
+                );
+
+                // close it with )
+                if ($tokenIterator->currentTokenType() === Lexer::TOKEN_CLOSE_PARENTHESES) {
+                    $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_PARENTHESES);
+                    $annotationContent .= ')';
+                }
+            } else {
+                $tokenIterator->dropSavePoint();
+            }
         }
 
         return $this->cleanMultilineAnnotationContent($annotationContent);

@@ -94,9 +94,9 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
 
         $children = [];
-
         if (! $tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_PHPDOC)) {
             $children[] = $this->parseChildAndStoreItsPositions($tokenIterator);
+
             while ($tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL) && ! $tokenIterator->isCurrentTokenType(
                 Lexer::TOKEN_CLOSE_PHPDOC
             )) {
@@ -133,7 +133,7 @@ final class BetterPhpDocParser extends PhpDocParser
 
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
-        $tokenIteratorBackup = clone $tokenIterator;
+        $tokenIterator->pushSavePoint();
 
         foreach ($this->phpDocParserExtensions as $phpDocParserExtension) {
             if (! $phpDocParserExtension->matchTag($tag)) {
@@ -142,10 +142,11 @@ final class BetterPhpDocParser extends PhpDocParser
 
             $phpDocTagValueNode = $phpDocParserExtension->parse($tokenIterator, $tag);
             if ($phpDocTagValueNode !== null) {
+                $tokenIterator->dropSavePoint();
                 return $phpDocTagValueNode;
             }
-            // return back
-            $tokenIterator = $tokenIteratorBackup;
+
+            $tokenIterator->rollback();
             break;
         }
 

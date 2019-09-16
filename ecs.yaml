@@ -43,6 +43,7 @@ services:
             - 'Symplify\PackageBuilder\*'
             - 'Symfony\Component\Console\Input\*Input'
             - 'PHPStan\Analyser\NameScope'
+            - 'PHPStan\Rules\RuleErrors\RuleError*'
 
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:
