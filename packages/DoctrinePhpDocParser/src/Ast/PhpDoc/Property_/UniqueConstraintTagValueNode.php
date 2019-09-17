@@ -18,29 +18,29 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode
     private $name;
 
     /**
-     * @var mixed[]
+     * @var mixed[]|null
      */
-    private $flags = [];
+    private $flags;
 
     /**
-     * @var null|mixed[]
+     * @var mixed[]|null
      */
     private $options;
 
     /**
-     * @var mixed[]
+     * @var mixed[]|null
      */
-    private $columns = [];
+    private $columns;
 
     /**
-     * @param mixed[] $columns
-     * @param mixed[] $flags
-     * @param mixed[] $options
+     * @param mixed[]|null $columns
+     * @param mixed[]|null $flags
+     * @param mixed[]|null $options
      */
     public function __construct(
         string $name,
-        array $columns,
-        array $flags,
+        ?array $columns,
+        ?array $flags,
         ?array $options,
         ?string $originalContent = null
     ) {
@@ -62,7 +62,7 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode
             $contentItems['name'] = sprintf('name="%s"', $this->name);
         }
 
-        if ($this->flags !== []) {
+        if ($this->flags) {
             $contentItems['flags'] = $this->printArrayItem($this->flags, 'flags');
         }
 
@@ -70,7 +70,7 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode
             $contentItems['options'] = $this->printArrayItem($this->options, 'options');
         }
 
-        if ($this->columns !== []) {
+        if ($this->columns) {
             $contentItems['columns'] = $this->printArrayItem($this->columns, 'columns');
         }
 

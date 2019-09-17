@@ -355,6 +355,9 @@ final class OrmTagParser extends AbstractPhpDocParser
         UniqueConstraint $uniqueConstraint,
         string $annotationContent
     ): UniqueConstraintTagValueNode {
+
+        dump($uniqueConstraint->flags);
+
         return new UniqueConstraintTagValueNode(
             $uniqueConstraint->name,
             $uniqueConstraint->columns,
