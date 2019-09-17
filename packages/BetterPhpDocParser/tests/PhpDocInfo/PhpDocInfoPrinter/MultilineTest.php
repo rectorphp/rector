@@ -83,6 +83,13 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
             $property,
             __DIR__ . '/Source/Multiline/assert_serialize_single_line_after.txt',
         ];
+
+        $propertyBuilder = $builderFactory->property('toMany');
+        $propertyBuilder->makePublic();
+        $property = $propertyBuilder->getNode();
+        $property->setAttribute(AttributeKey::CLASS_NAME, SinglePropertyClass::class);
+
+        yield [__DIR__ . '/Source/Multiline/many_to.txt', $property, __DIR__ . '/Source/Multiline/many_to.txt'];
     }
 
     public function testDoctrine(): void

@@ -18,7 +18,7 @@ final class PHPDIInjectTagValueNode extends AbstractTagValueNode
     public const CLASS_NAME = Inject::class;
 
     /**
-     * @var ?string
+     * @var string|null
      */
     private $value;
 

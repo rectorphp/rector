@@ -1,0 +1,5 @@
+/**
+ * @var Collection
+ * @ORM\OneToMany(targetEntity="Spaceflow\Api\Reservation\Entity\Reservation", mappedBy="amenity", cascade={"persist", "merge"});
+ */
+private $manyTo;
