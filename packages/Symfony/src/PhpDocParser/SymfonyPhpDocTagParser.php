@@ -8,8 +8,10 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\PhpDocParser\AbstractPhpDocParser;
 use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AssertChoiceTagValueNode;
+use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AssertTypeTagValueNode;
 use Rector\Symfony\PhpDocParser\Ast\PhpDoc\SerializerTypeTagValueNode;
 use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints\Type as ValidatorType;
 
 final class SymfonyPhpDocTagParser extends AbstractPhpDocParser
 {
@@ -19,10 +21,13 @@ final class SymfonyPhpDocTagParser extends AbstractPhpDocParser
 
         // this is needed to append tokens to the end of annotation, even if not used
         $annotationContent = $this->resolveAnnotationContent($tokenIterator);
-
         if ($currentPhpNode instanceof Property) {
             if ($tag === AssertChoiceTagValueNode::SHORT_NAME) {
                 return $this->createAssertChoiceTagValueNode($currentPhpNode, $annotationContent);
+            }
+
+            if ($tag === AssertTypeTagValueNode::SHORT_NAME) {
+                return $this->createAssertTypeTagValueNode($currentPhpNode);
             }
 
             if ($tag === SerializerTypeTagValueNode::SHORT_NAME) {
@@ -57,5 +62,16 @@ final class SymfonyPhpDocTagParser extends AbstractPhpDocParser
         );
 
         return new SerializerTypeTagValueNode($typeAnnotation->name, $annotationContent);
+    }
+
+    private function createAssertTypeTagValueNode(Property $property): AssertTypeTagValueNode
+    {
+        /** @var ValidatorType $typeAnnotation */
+        $typeAnnotation = $this->nodeAnnotationReader->readPropertyAnnotation(
+            $property,
+            AssertTypeTagValueNode::CLASS_NAME
+        );
+
+        return new AssertTypeTagValueNode($typeAnnotation->type);
     }
 }

@@ -94,9 +94,9 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
 
         $children = [];
-
         if (! $tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_PHPDOC)) {
             $children[] = $this->parseChildAndStoreItsPositions($tokenIterator);
+
             while ($tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL) && ! $tokenIterator->isCurrentTokenType(
                 Lexer::TOKEN_CLOSE_PHPDOC
             )) {
@@ -133,7 +133,7 @@ final class BetterPhpDocParser extends PhpDocParser
 
     public function parseTagValue(TokenIterator $tokenIterator, string $tag): PhpDocTagValueNode
     {
-        $tokenIteratorBackup = clone $tokenIterator;
+        $tokenIterator->pushSavePoint();
 
         foreach ($this->phpDocParserExtensions as $phpDocParserExtension) {
             if (! $phpDocParserExtension->matchTag($tag)) {
@@ -142,33 +142,20 @@ final class BetterPhpDocParser extends PhpDocParser
 
             $phpDocTagValueNode = $phpDocParserExtension->parse($tokenIterator, $tag);
             if ($phpDocTagValueNode !== null) {
+                $tokenIterator->dropSavePoint();
                 return $phpDocTagValueNode;
             }
-            // return back
-            $tokenIterator = $tokenIteratorBackup;
+
+            $tokenIterator->rollback();
             break;
         }
 
         // needed for reference support in params, see https://github.com/rectorphp/rector/issues/1734
         if ($tag === '@param') {
-            try {
-                $tokenIterator->pushSavePoint();
-                $tagValue = $this->parseParamTagValue($tokenIterator);
-                $tokenIterator->dropSavePoint();
-            } catch (ParserException $parserException) {
-                $tokenIterator->rollback();
-                $description = $this->privatesCaller->callPrivateMethod(
-                    $this,
-                    'parseOptionalDescription',
-                    $tokenIterator
-                );
-                $tagValue = new InvalidTagValueNode($description, $parserException);
-            }
-
-            return $tagValue;
+            $tagValueNode = $this->customParseParamTagValueNode($tokenIterator);
+        } else {
+            $tagValueNode = parent::parseTagValue($tokenIterator, $tag);
         }
-
-        $tagValueNode = parent::parseTagValue($tokenIterator, $tag);
 
         return $this->attributeAwareNodeFactory->createFromNode($tagValueNode);
     }
@@ -178,6 +165,11 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokenStart = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'index');
         $node = $this->privatesCaller->callPrivateMethod($this, 'parseChild', $tokenIterator);
         $tokenEnd = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'index');
+
+        // correct spacing for: packages/BetterPhpDocParser/tests/PhpDocInfo/PhpDocInfoPrinter/Source/Multiline/assert_serialize_single_line.txt
+        if ($tokenIterator->currentTokenType() === Lexer::TOKEN_CLOSE_PHPDOC) {
+            --$tokenEnd;
+        }
 
         $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($node);
         $attributeAwareNode->setAttribute(Attribute::PHP_DOC_NODE_INFO, new StartEndInfo($tokenStart, $tokenEnd));
@@ -247,5 +239,25 @@ final class BetterPhpDocParser extends PhpDocParser
         $description = $this->privatesCaller->callPrivateMethod($this, 'parseOptionalDescription', $tokenIterator);
 
         return new AttributeAwareParamTagValueNode($type, $isVariadic, $parameterName, $description, $isReference);
+    }
+
+    private function customParseParamTagValueNode(TokenIterator $tokenIterator): PhpDocTagValueNode
+    {
+        try {
+            $tokenIterator->pushSavePoint();
+            $tagValue = $this->parseParamTagValue($tokenIterator);
+            $tokenIterator->dropSavePoint();
+
+            return $tagValue;
+        } catch (ParserException $parserException) {
+            $tokenIterator->rollback();
+            $description = $this->privatesCaller->callPrivateMethod(
+                $this,
+                'parseOptionalDescription',
+                $tokenIterator
+            );
+
+            return new InvalidTagValueNode($description, $parserException);
+        }
     }
 }

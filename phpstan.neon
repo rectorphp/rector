@@ -50,6 +50,7 @@ parameters:
         - '#Strict comparison using === between string and null will always evaluate to false#'
         # subtype
         - '#(.*?) expects ReflectionFunction\|ReflectionMethod, ReflectionFunctionAbstract given#'
+        - '#PHPDoc tag @return with type array<PhpParser\\Node\\Stmt\\Property\|string\> is incompatible with native type Iterator#'
 
         # nette container
         - '#Method Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory::create(.*?)() should return (.*?) but returns object#'

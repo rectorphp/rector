@@ -1,0 +1,9 @@
+/**
+ * @Assert\Type(
+ *     "bool"
+ * )
+ * @Assert\NotNull()
+ * @Serializer\Type("boolean")
+ * @var bool
+ */
+public $anotherProperty;

@@ -4,7 +4,7 @@ namespace Rector\Symfony\PhpDocParser\Ast\PhpDoc;
 
 use Symfony\Component\Validator\Constraints\Choice;
 
-final class AssertChoiceTagValueNode extends AbstractConstaintTagValueNode
+final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode
 {
     /**
      * @var string

@@ -9,18 +9,12 @@ use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
-use Rector\BetterPhpDocParser\Contract\PhpDocNodeDecoratorInterface;
 use Rector\Configuration\CurrentNodeProvider;
 use Rector\DoctrinePhpDocParser\PhpDocParser\OrmTagParser;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 
 final class PhpDocInfoFactory
 {
-    /**
-     * @var PhpDocNodeDecoratorInterface[]
-     */
-    private $phpDocNodeDecoratorInterfaces = [];
-
     /**
      * @var PhpDocParser
      */
@@ -41,19 +35,14 @@ final class PhpDocInfoFactory
      */
     private $staticTypeMapper;
 
-    /**
-     * @param PhpDocNodeDecoratorInterface[] $phpDocNodeDecoratorInterfacenodeDecorators
-     */
     public function __construct(
         PhpDocParser $phpDocParser,
         Lexer $lexer,
-        array $phpDocNodeDecoratorInterfacenodeDecorators,
         CurrentNodeProvider $currentNodeProvider,
         StaticTypeMapper $staticTypeMapper
     ) {
         $this->phpDocParser = $phpDocParser;
         $this->lexer = $lexer;
-        $this->phpDocNodeDecoratorInterfaces = $phpDocNodeDecoratorInterfacenodeDecorators;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->staticTypeMapper = $staticTypeMapper;
     }
@@ -68,10 +57,6 @@ final class PhpDocInfoFactory
 
         /** @var AttributeAwarePhpDocNode $phpDocNode */
         $phpDocNode = $this->phpDocParser->parse(new TokenIterator($tokens));
-
-        foreach ($this->phpDocNodeDecoratorInterfaces as $phpDocNodeDecoratorInterface) {
-            $phpDocNode = $phpDocNodeDecoratorInterface->decorate($phpDocNode, $node);
-        }
 
         $phpDocNode = $this->setPositionOfLastToken($phpDocNode);
 
