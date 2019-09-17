@@ -64,9 +64,9 @@ final class EntityUuidNodeFactory
      * Creates:
      * $this->uid = \Ramsey\Uuid\Uuid::uuid4();
      */
-    public function createUuidPropertyDefaultValueAssign(): Expression
+    public function createUuidPropertyDefaultValueAssign(string $uuidVariableName): Expression
     {
-        $thisUuidPropertyFetch = new PropertyFetch(new Variable('this'), 'uuid');
+        $thisUuidPropertyFetch = new PropertyFetch(new Variable('this'), $uuidVariableName);
         $uuid4StaticCall = new StaticCall(new FullyQualified('Ramsey\Uuid\Uuid'), 'uuid4');
 
         $assign = new Assign($thisUuidPropertyFetch, $uuid4StaticCall);
@@ -81,7 +81,7 @@ final class EntityUuidNodeFactory
      *     $this->uid = \Ramsey\Uuid\Uuid::uuid4();
      * }
      */
-    public function createConstructorWithUuidInitialization(Class_ $class): ClassMethod
+    public function createConstructorWithUuidInitialization(Class_ $class, string $uuidVariableName): ClassMethod
     {
         $classMethodBuilder = $this->builderFactory->method('__construct');
         $classMethodBuilder->makePublic();
@@ -92,7 +92,7 @@ final class EntityUuidNodeFactory
             $classMethodBuilder->addStmt($parentClassCall);
         }
 
-        $assign = $this->createUuidPropertyDefaultValueAssign();
+        $assign = $this->createUuidPropertyDefaultValueAssign($uuidVariableName);
         $classMethodBuilder->addStmt($assign);
 
         return $classMethodBuilder->getNode();
