@@ -45,6 +45,16 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
 final class OrmTagParser extends AbstractPhpDocParser
 {
     /**
+     * @var string
+     */
+    public const JOIN_COLUMN_PATTERN = '#@ORM\\\\JoinColumn\((?<singleJoinColumn>.*?)\),?#s';
+
+    /**
+     * @var string
+     */
+    public const UNIQUE_CONSTRAINT_PATTERN = '#@ORM\\\\UniqueConstraint\((?<singleUniqueConstraint>.*?)\),?#s';
+
+    /**
      * @var NameResolver
      */
     private $nameResolver;
@@ -159,11 +169,7 @@ final class OrmTagParser extends AbstractPhpDocParser
         /** @var Table $table */
         $table = $this->nodeAnnotationReader->readClassAnnotation($class, Table::class);
 
-        $uniqueConstraintContents = Strings::matchAll(
-            $annotationContent,
-            // @todo add to JoinTable
-            '#@ORM\\\\UniqueConstraint\((?<singleUniqueConstraint>.*?)\),?#s'
-        );
+        $uniqueConstraintContents = Strings::matchAll($annotationContent, self::UNIQUE_CONSTRAINT_PATTERN);
 
         $uniqueConstraintsTagValueNodes = [];
         if ($table->uniqueConstraints !== null) {
@@ -285,34 +291,12 @@ final class OrmTagParser extends AbstractPhpDocParser
         /** @var JoinTable $joinTable */
         $joinTable = $this->nodeAnnotationReader->readPropertyAnnotation($property, JoinTable::class);
 
-        $joinColumnContents = Strings::matchAll(
+        $joinColumnValuesTags = $this->createJoinColumnTagValues($annotationContent, $joinTable, 'joinColumns');
+        $inverseJoinColumnValuesTags = $this->createJoinColumnTagValues(
             $annotationContent,
-            '#joinColumns=\{(\@ORM\\\\JoinColumn\((?<singleJoinColumn>.*?)\))+\}#s'
+            $joinTable,
+            'inverseJoinColumns'
         );
-
-        $joinColumnValuesTags = [];
-        foreach ($joinTable->joinColumns as $key => $joinColumn) {
-            $currentJoinColumnContent = $joinColumnContents[$key]['singleJoinColumn'];
-
-            $joinColumnValuesTags[] = $this->createJoinColumnTagValueNodeFromJoinColumnAnnotation(
-                $joinColumn,
-                $currentJoinColumnContent
-            );
-        }
-
-        $inverseJoinColumnContents = Strings::matchAll(
-            $annotationContent,
-            '#inverseJoinColumns=\{(\@ORM\\\\JoinColumn\((?<singleJoinColumn>.*?)\))+\}#'
-        );
-
-        $inverseJoinColumnValuesTags = [];
-        foreach ($joinTable->inverseJoinColumns as $key => $inverseJoinColumn) {
-            $currentInverseJoinColumnContent = $inverseJoinColumnContents[$key]['singleJoinColumn'];
-            $inverseJoinColumnValuesTags[] = $this->createJoinColumnTagValueNodeFromJoinColumnAnnotation(
-                $inverseJoinColumn,
-                $currentInverseJoinColumnContent
-            );
-        }
 
         return new JoinTableTagValueNode(
             $joinTable->name,
@@ -396,5 +380,37 @@ final class OrmTagParser extends AbstractPhpDocParser
         $propertyName = $this->nameResolver->getName($property);
 
         return ! property_exists($className, $propertyName);
+    }
+
+    /**
+     * @return string[][]
+     */
+    private function matchJoinColumnContents(string $annotationContent, string $type): array
+    {
+        $match = Strings::match($annotationContent, '#' . $type . '=\{(?<content>.*?)\}#sm');
+        if (! isset($match['content'])) {
+            return [];
+        }
+
+        return Strings::matchAll($match['content'], self::JOIN_COLUMN_PATTERN);
+    }
+
+    /**
+     * @return JoinColumnTagValueNode[]
+     */
+    private function createJoinColumnTagValues(string $annotationContent, JoinTable $joinTable, string $type): array
+    {
+        $joinColumnContents = $this->matchJoinColumnContents($annotationContent, $type);
+        $joinColumnValuesTags = [];
+
+        foreach ($joinTable->joinColumns as $key => $joinColumn) {
+            $currentJoinColumnContent = $joinColumnContents[$key]['singleJoinColumn'];
+            $joinColumnValuesTags[] = $this->createJoinColumnTagValueNodeFromJoinColumnAnnotation(
+                $joinColumn,
+                $currentJoinColumnContent
+            );
+        }
+
+        return $joinColumnValuesTags;
     }
 }
