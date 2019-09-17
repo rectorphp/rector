@@ -2,17 +2,15 @@
 
 namespace Rector\Laravel\Rector\Class_;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -153,19 +151,18 @@ CODE_SAMPLE
                 return [];
             }
 
-            $matchesExist = preg_match('#^exists:(\w+),(\w+)$#', $fullString, $matches);
-            if ($matchesExist === false || $matchesExist === 0) {
+            $matches = Strings::match($fullString, '#^exists:(?<ruleClass>\w+),(?<ruleAttribute>\w+)$#');
+            if ($matches === null) {
                 continue;
             }
 
-            $ruleClass = $matches[1];
-            $ruleAttribute = $matches[2];
+            $ruleClass = $matches['ruleClass'];
+            $ruleAttribute = $matches['ruleAttribute'];
 
-            $newRules[$key] = new StaticCall(
-                new FullyQualified('Illuminate\Validation\Rule'),
-                'exists',
-                [new Arg(new ClassConstFetch(new Name($ruleClass), 'class')), new Arg(new String_($ruleAttribute))]
-            );
+            $arguments = [new ClassConstFetch(new Name($ruleClass), 'class'), new String_($ruleAttribute)];
+
+            $ruleExistsStaticCall = $this->createStaticCall('Illuminate\Validation\Rule', 'exists', $arguments);
+            $newRules[$key] = $ruleExistsStaticCall;
         }
 
         return $newRules;
