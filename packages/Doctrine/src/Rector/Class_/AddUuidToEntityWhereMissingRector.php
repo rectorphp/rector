@@ -77,10 +77,13 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
         // 2. add default value to uuid property
         $constructClassMethod = $node->getMethod('__construct');
         if ($constructClassMethod) {
-            $assignExpression = $this->entityUuidNodeFactory->createUuidPropertyDefaultValueAssign();
+            $assignExpression = $this->entityUuidNodeFactory->createUuidPropertyDefaultValueAssign('uuid');
             $constructClassMethod->stmts = array_merge([$assignExpression], (array) $constructClassMethod->stmts);
         } else {
-            $constructClassMethod = $this->entityUuidNodeFactory->createConstructorWithUuidInitialization($node);
+            $constructClassMethod = $this->entityUuidNodeFactory->createConstructorWithUuidInitialization(
+                $node,
+                'uuid'
+            );
             $node->stmts = array_merge([$constructClassMethod], $node->stmts);
         }
 
