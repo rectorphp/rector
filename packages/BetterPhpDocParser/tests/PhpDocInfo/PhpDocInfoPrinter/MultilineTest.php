@@ -6,10 +6,13 @@ use Iterator;
 use Nette\Utils\FileSystem;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\AnotherPropertyClass;
+use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\Class_\SomeEntityClass;
 use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\DoctrinePropertyClass;
+use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\ManyToPropertyClass;
 use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\SinglePropertyClass;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -39,13 +42,25 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         yield [__DIR__ . '/Source/Multiline/multiline5.txt', new Nop()];
     }
 
+    public function provideDataClass(): Iterator
+    {
+        // @todo this should not be mallformed, but is valid PHP/working now - fix later
+        yield [
+            __DIR__ . '/Source/Class_/some_entity_class.txt',
+            new Class_(SomeEntityClass::class),
+            __DIR__ . '/Source/Class_/expected_some_entity_class.txt',
+
+        ];
+    }
+
     /**
      * @dataProvider provideDataForChangedFormat()
+     * @dataProvider provideDataClass()
      */
-    public function testChangedFormat(string $docFilePath, Property $property, string $expectedPhpDocFile): void
+    public function testChangedFormat(string $docFilePath, Node $node, string $expectedPhpDocFile): void
     {
         $docComment = FileSystem::read($docFilePath);
-        $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, $property);
+        $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, $node);
 
         $expectedPhpDoc = FileSystem::read($expectedPhpDocFile);
 
@@ -61,34 +76,21 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
      */
     public function provideDataForChangedFormat(): Iterator
     {
-        $builderFactory = new BuilderFactory();
-
-        $propertyBuilder = $builderFactory->property('anotherProperty');
-        $propertyBuilder->makePublic();
-        $property = $propertyBuilder->getNode();
-        $property->setAttribute(AttributeKey::CLASS_NAME, AnotherPropertyClass::class);
+        $property = $this->createPublicPropertyUnderClass('anotherProperty', AnotherPropertyClass::class);
         yield [
             __DIR__ . '/Source/Multiline/assert_serialize.txt',
             $property,
             __DIR__ . '/Source/Multiline/assert_serialize_after.txt',
         ];
 
-        $propertyBuilder = $builderFactory->property('anotherSerializeSingleLine');
-        $propertyBuilder->makePublic();
-        $property = $propertyBuilder->getNode();
-        $property->setAttribute(AttributeKey::CLASS_NAME, SinglePropertyClass::class);
-
+        $property = $this->createPublicPropertyUnderClass('anotherSerializeSingleLine', SinglePropertyClass::class);
         yield [
             __DIR__ . '/Source/Multiline/assert_serialize_single_line.txt',
             $property,
             __DIR__ . '/Source/Multiline/assert_serialize_single_line_after.txt',
         ];
 
-        $propertyBuilder = $builderFactory->property('toMany');
-        $propertyBuilder->makePublic();
-        $property = $propertyBuilder->getNode();
-        $property->setAttribute(AttributeKey::CLASS_NAME, SinglePropertyClass::class);
-
+        $property = $this->createPublicPropertyUnderClass('manyTo', ManyToPropertyClass::class);
         yield [__DIR__ . '/Source/Multiline/many_to.txt', $property, __DIR__ . '/Source/Multiline/many_to.txt'];
     }
 
@@ -97,7 +99,7 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         $docFilePath = __DIR__ . '/Source/Multiline/multiline6.txt';
         $docComment = FileSystem::read($docFilePath);
 
-        $property = $this->createDoctrineProperty();
+        $property = $this->createPublicPropertyUnderClass('someProperty', DoctrinePropertyClass::class);
         $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, $property);
 
         $this->assertSame(
@@ -107,16 +109,15 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         );
     }
 
-    private function createDoctrineProperty(): Property
+    private function createPublicPropertyUnderClass(string $name, string $class): Property
     {
-        /** @var BuilderFactory $builderFactory */
-        $builderFactory = self::$container->get(BuilderFactory::class);
+        $builderFactory = new BuilderFactory();
 
-        $propertyBuilder = $builderFactory->property('someProperty');
+        $propertyBuilder = $builderFactory->property($name);
         $propertyBuilder->makePublic();
 
         $property = $propertyBuilder->getNode();
-        $property->setAttribute(AttributeKey::CLASS_NAME, DoctrinePropertyClass::class);
+        $property->setAttribute(AttributeKey::CLASS_NAME, $class);
 
         return $property;
     }

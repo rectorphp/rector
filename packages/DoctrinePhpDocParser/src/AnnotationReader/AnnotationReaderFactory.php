@@ -20,6 +20,8 @@ final class AnnotationReaderFactory
         $annotationReader::addGlobalIgnoredName('ORM\InheritanceType');
         $annotationReader::addGlobalIgnoredName('ORM\OrderBy');
 
+        // warning: nested tags must be parse-able, e.g. @ORM\Table must include @ORM\UniqueConstraint!
+
         return $annotationReader;
     }
 }

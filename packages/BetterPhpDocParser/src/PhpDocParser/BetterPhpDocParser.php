@@ -116,6 +116,7 @@ final class BetterPhpDocParser extends PhpDocParser
     public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
     {
         $tag = $tokenIterator->currentTokenValue();
+
         $tokenIterator->next();
 
         // @todo somehow decouple to tag pre-processor
@@ -197,6 +198,7 @@ final class BetterPhpDocParser extends PhpDocParser
 
     private function getOriginalContentFromTokenIterator(TokenIterator $tokenIterator): string
     {
+        // @todo iterate through tokens...
         $originalTokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
         $originalContent = '';
 

@@ -27,6 +27,6 @@ final class InheritanceTypeTagValueNode extends AbstractDoctrineTagValueNode
             return '';
         }
 
-        return '(' . $this->value . ')';
+        return '("' . $this->value . '")';
     }
 }

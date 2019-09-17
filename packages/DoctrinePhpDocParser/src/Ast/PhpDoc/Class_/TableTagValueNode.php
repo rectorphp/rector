@@ -4,6 +4,7 @@ namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_;
 
 use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\UniqueConstraintTagValueNode;
 
 final class TableTagValueNode extends AbstractDoctrineTagValueNode
 {
@@ -28,9 +29,9 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
     private $indexes;
 
     /**
-     * @var mixed[]|null
+     * @var UniqueConstraintTagValueNode[]
      */
-    private $uniqueConstaints;
+    private $uniqueConstraints = [];
 
     /**
      * @var mixed[]
@@ -39,19 +40,20 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
 
     /**
      * @param mixed[] $options
+     * @param UniqueConstraintTagValueNode[] $uniqueConstraints
      */
     public function __construct(
         ?string $name,
         ?string $schema,
         ?array $indexes,
-        ?array $uniqueConstaints,
+        array $uniqueConstraints,
         array $options,
         ?string $originalContent = null
     ) {
         $this->name = $name;
         $this->schema = $schema;
         $this->indexes = $indexes;
-        $this->uniqueConstaints = $uniqueConstaints;
+        $this->uniqueConstraints = $uniqueConstraints;
         $this->options = $options;
 
         if ($originalContent !== null) {
@@ -75,8 +77,12 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
             $contentItems['indexes'] = $this->printArrayItem($this->indexes, 'indexes');
         }
 
-        if ($this->uniqueConstaints) {
-            $contentItems['uniqueConstaints'] = $this->printArrayItem($this->uniqueConstaints, 'uniqueConstaints');
+        if ($this->uniqueConstraints !== []) {
+            $uniqueConstraintsAsString = $this->printTagValueNodesSeparatedByComma(
+                $this->uniqueConstraints,
+                UniqueConstraintTagValueNode::SHORT_NAME
+            );
+            $contentItems['uniqueConstraints'] = sprintf('uniqueConstraints={%s}', $uniqueConstraintsAsString);
         }
 
         if ($this->options !== []) {
