@@ -3,6 +3,7 @@
 namespace Rector\PHPUnit\Rector\SpecificMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
@@ -87,7 +88,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
      * @param MethodCall|StaticCall $node
      * @param PropertyFetch $expr
      */
-    private function refactorPropertyFetchNode(Node $node, Node\Expr $expr): void
+    private function refactorPropertyFetchNode(Node $node, Expr $expr): void
     {
         $name = $this->getName($expr);
         if ($name === null) {
