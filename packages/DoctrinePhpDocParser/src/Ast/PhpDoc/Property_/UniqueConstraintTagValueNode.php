@@ -23,9 +23,9 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode
     private $flags = [];
 
     /**
-     * @var mixed[]
+     * @var null|mixed[]
      */
-    private $options = [];
+    private $options;
 
     /**
      * @var mixed[]
@@ -41,7 +41,7 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode
         string $name,
         array $columns,
         array $flags,
-        array $options,
+        ?array $options,
         ?string $originalContent = null
     ) {
         $this->name = $name;
@@ -66,7 +66,7 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode
             $contentItems['flags'] = $this->printArrayItem($this->flags, 'flags');
         }
 
-        if ($this->options !== []) {
+        if ($this->options) {
             $contentItems['options'] = $this->printArrayItem($this->options, 'options');
         }
 
