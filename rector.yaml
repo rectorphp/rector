@@ -14,10 +14,4 @@ parameters:
     php_version_features: '7.1'
 
 services:
-    Rector\PHPUnit\Rector\Class_\ArrayArgumentInTestToDataProviderRector:
-        $configuration:
-            -
-                class: 'PHPUnit\Framework\TestCase'
-                old_method: 'doTestFilesWithoutAutoload'
-                new_method: 'doTestFileWithoutAutoload'
-                variable_name: 'file'
+    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~

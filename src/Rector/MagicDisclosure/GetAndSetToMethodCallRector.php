@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -97,7 +98,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Assign) {
-            if ($node->var instanceof PropertyFetch || $node->var instanceof Node\Expr\StaticPropertyFetch) {
+            if ($node->var instanceof PropertyFetch || $node->var instanceof StaticPropertyFetch) {
                 return $this->processMagicSet($node);
             }
 

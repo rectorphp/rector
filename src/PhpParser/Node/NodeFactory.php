@@ -10,10 +10,13 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -176,8 +179,8 @@ final class NodeFactory
             $variable = new PropertyFetch($variable->var, $variable->name);
         }
 
-        if ($variable instanceof Expr\StaticPropertyFetch) {
-            $variable = new Expr\StaticPropertyFetch($variable->class, $variable->name);
+        if ($variable instanceof StaticPropertyFetch) {
+            $variable = new StaticPropertyFetch($variable->class, $variable->name);
         }
 
         $methodCallNode = $this->builderFactory->methodCall($variable, $method, $arguments);
@@ -223,8 +226,8 @@ final class NodeFactory
             || $item instanceof String_
             || $item instanceof MethodCall
             || $item instanceof StaticCall
-            || $item instanceof Expr\FuncCall
-            || $item instanceof Expr\BinaryOp\Concat
+            || $item instanceof FuncCall
+            || $item instanceof Concat
         ) {
             $arrayItem = new ArrayItem($item);
         } elseif ($item instanceof Identifier) {

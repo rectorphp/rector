@@ -6,6 +6,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
@@ -81,7 +82,7 @@ final class InlineCodeParser
             return $this->stringify($content->left) . $this->stringify($content->right);
         }
 
-        if ($content instanceof Variable || $content instanceof PropertyFetch || $content instanceof Node\Expr\StaticPropertyFetch) {
+        if ($content instanceof Variable || $content instanceof PropertyFetch || $content instanceof StaticPropertyFetch) {
             return $this->betterStandardPrinter->print($content);
         }
 
