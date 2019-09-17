@@ -161,7 +161,8 @@ final class OrmTagParser extends AbstractPhpDocParser
 
         $uniqueConstraintContents = Strings::matchAll(
             $annotationContent,
-            '#uniqueConstraints=\{(\s+)?(\@ORM\\\\UniqueConstraint\((?<singleUniqueConstraint>.*?)\))+(\s+)?\}#s'
+            // @todo add to JoinTable
+            '#@ORM\\\\UniqueConstraint\((?<singleUniqueConstraint>.*?)\),?#s'
         );
 
         $uniqueConstraintsTagValueNodes = [];
