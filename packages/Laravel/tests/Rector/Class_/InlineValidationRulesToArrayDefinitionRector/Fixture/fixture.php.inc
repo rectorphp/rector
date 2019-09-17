@@ -10,6 +10,8 @@ class SomeClass extends FormRequest
     {
         return [
             'someAttribute' => 'required|string|exists:' . SomeModel::class . ',id',
+            'attribute2' => 'required',
+            'attribute3' => 'required|unsupportedRule:' . SomeRule::class,
         ];
     }
 }
@@ -28,6 +30,8 @@ class SomeClass extends FormRequest
     {
         return [
             'someAttribute' => ['required', 'string', \Illuminate\Validation\Rule::exists(SomeModel::class, 'id')],
+            'attribute2' => ['required'],
+            'attribute3' => ['required', 'unsupportedRule:' . SomeRule::class],
         ];
     }
 }
