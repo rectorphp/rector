@@ -160,6 +160,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return false;
     }
 
+    /**
+     * @return string[][]
+     */
     protected function isSimilarTo(): array
     {
         return [];
