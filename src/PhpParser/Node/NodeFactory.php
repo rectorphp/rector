@@ -224,6 +224,7 @@ final class NodeFactory
             || $item instanceof MethodCall
             || $item instanceof StaticCall
             || $item instanceof Expr\FuncCall
+            || $item instanceof Expr\BinaryOp\Concat
         ) {
             $arrayItem = new ArrayItem($item);
         } elseif ($item instanceof Identifier) {
