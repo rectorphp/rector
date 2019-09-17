@@ -87,6 +87,13 @@ CODE_SAMPLE
         return $node;
     }
 
+    protected function isSimilarTo(): array
+    {
+        return [
+            'intellij' => ['PhpUnusedPrivateMethodInspection'],
+        ];
+    }
+
     private function shouldSkip(ClassMethod $classMethod): bool
     {
         /** @var Class_|Interface_|Trait_|null $classNode */

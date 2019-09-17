@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
+use Rector\Exception\UnknownToolException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\PhpVersionProvider;
 use Rector\Rector\AbstractRector\AbstractRectorTrait;
@@ -158,6 +159,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         return false;
     }
 
+    protected function isSimilarTo(): array
+    {
+        return [];
+    }
+
     protected function removeFile(SmartFileInfo $smartFileInfo): void
     {
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
@@ -207,6 +213,29 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
                 if (static::class === ltrim($ignoreSpec, '\\')) {
                     return true;
                 }
+            }
+        }
+
+        if ($this->isIgnoredForOtherTool($doc)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function isIgnoredForOtherTool(Doc $doc): bool
+    {
+        foreach ($this->isSimilarTo() as $tool => $inspections) {
+            switch ($tool) {
+                case 'intellij':
+                    if (preg_match_all('#@noinspection\s*(?<noinspection>\S+)#i', $doc->getText(), $matches)
+                        && count(array_intersect($matches['noinspection'], $inspections))) {
+                        return true;
+                    }
+
+                    break;
+                default:
+                    throw new UnknownToolException('Unknown tool: ' . $tool);
             }
         }
         return false;
