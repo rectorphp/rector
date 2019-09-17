@@ -33,7 +33,7 @@ final class OriginalSpacingRestorer
         $nodeOutputParts = Strings::split($nodeOutput, '#\s+#');
 
         // new nodes were probably added, skip them
-        if (count($oldWhitespaces) < count($nodeOutputParts)) {
+        if (count($oldWhitespaces) < count($nodeOutputParts) || count($nodeOutputParts) === 1) {
             return $nodeOutput;
         }
 
@@ -55,7 +55,6 @@ final class OriginalSpacingRestorer
             // last space to left
             // experimental newline of the last )
             $newNodeOutput = Strings::replace($newNodeOutput, '#\)$#', "\n * )");
-            $newNodeOutput .= PHP_EOL . ' ';
         }
 
         // remove first space, added by the printer above
