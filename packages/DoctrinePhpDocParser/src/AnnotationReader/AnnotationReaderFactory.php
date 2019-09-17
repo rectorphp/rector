@@ -19,6 +19,8 @@ final class AnnotationReaderFactory
         $annotationReader::addGlobalIgnoredName('ORM\GeneratedValue');
         $annotationReader::addGlobalIgnoredName('ORM\InheritanceType');
         $annotationReader::addGlobalIgnoredName('ORM\OrderBy');
+        $annotationReader::addGlobalIgnoredName('ORM\DiscriminatorMap');
+        $annotationReader::addGlobalIgnoredName('Gedmo\SoftDeleteable');
 
         // warning: nested tags must be parse-able, e.g. @ORM\Table must include @ORM\UniqueConstraint!
 
