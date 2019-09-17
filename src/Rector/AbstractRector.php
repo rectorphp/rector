@@ -151,8 +151,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         // recurse up until a Stmt node is found since it might contain a noRector
-        if (! $node instanceof Stmt && $node->getAttribute(AttributeKey::PARENT_NODE)) {
-            return $this->shouldIgnoreRectorForNode($node->getAttribute(AttributeKey::PARENT_NODE));
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $node instanceof Stmt && $parentNode !== null) {
+            return $this->shouldIgnoreRectorForNode($parentNode);
         }
 
         return false;
