@@ -32,7 +32,7 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
     private $inverseJoinColumns;
 
     /**
-     * @param string[] $orderedVisibleItems
+     * @param string[] $name
      * @param JoinColumnTagValueNode[] $joinColumns
      * @param JoinColumnTagValueNode[] $inverseJoinColumns
      */
@@ -41,13 +41,13 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
         ?string $schema = null,
         ?array $joinColumns = null,
         ?array $inverseJoinColumns = null,
-        ?array $orderedVisibleItems = null
+        ?string $originalContent
     ) {
         $this->name = $name;
         $this->schema = $schema;
         $this->joinColumns = $joinColumns;
         $this->inverseJoinColumns = $inverseJoinColumns;
-        $this->orderedVisibleItems = $orderedVisibleItems;
+        $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     public function __toString(): string

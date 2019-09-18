@@ -19,6 +19,16 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     protected $orderedVisibleItems;
 
     /**
+     * @var bool
+     */
+    protected $hasNewlineBeforeClosing = false;
+
+    /**
+     * @var bool
+     */
+    protected $hasNewlineAfterOpening = false;
+
+    /**
      * @param mixed[] $item
      */
     protected function printArrayItem(array $item, string $key): string
@@ -46,7 +56,12 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
             return '';
         }
 
-        return '(' . implode(', ', $contentItems) . ')';
+        return sprintf(
+            '(%s%s%s)',
+            $this->hasNewlineAfterOpening ? PHP_EOL : '',
+            implode(', ', $contentItems),
+            $this->hasNewlineBeforeClosing ? PHP_EOL : ''
+        );
     }
 
     /**
@@ -66,12 +81,14 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         return implode(', ', $itemsAsStrings);
     }
 
-    protected function resolveItemsOrderFromAnnotationContent(?string $annotationContent): void
+    protected function resolveOriginalContentSpacingAndOrder(?string $originalContent): void
     {
-        if ($annotationContent === null) {
+        if ($originalContent === null) {
             return;
         }
 
-        $this->orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($annotationContent);
+        $this->orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($originalContent);
+        $this->hasNewlineAfterOpening = (bool) Strings::match($originalContent, '#^\(\s+#m');
+        $this->hasNewlineBeforeClosing = (bool) Strings::match($originalContent, '#\s+\)$#m');
     }
 }

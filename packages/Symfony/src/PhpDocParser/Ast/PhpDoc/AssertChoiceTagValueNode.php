@@ -33,7 +33,7 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode
     {
         $this->callback = $callback;
         $this->strict = $strict;
-        $this->resolveItemsOrderFromAnnotationContent($annotationContent);
+        $this->resolveOriginalContentSpacingAndOrder($annotationContent);
     }
 
     public function __toString(): string

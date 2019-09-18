@@ -69,7 +69,6 @@ final class PhpDocInfoFactory
 
         /** @var AttributeAwarePhpDocNode $phpDocNode */
         $phpDocNode = $this->phpDocParser->parse(new TokenIterator($tokens));
-
         $phpDocNode = $this->setPositionOfLastToken($phpDocNode);
 
         $phpDocInfo = new PhpDocInfo($phpDocNode, $tokens, $content, $this->staticTypeMapper, $node);
@@ -91,8 +90,8 @@ final class PhpDocInfoFactory
         $phpDocChildNodes = $attributeAwarePhpDocNode->children;
         /** @var AttributeAwareNodeInterface $lastChildNode */
         $lastChildNode = array_pop($phpDocChildNodes);
-        $phpDocNodeInfo = $lastChildNode->getAttribute(Attribute::PHP_DOC_NODE_INFO);
 
+        $phpDocNodeInfo = $lastChildNode->getAttribute(Attribute::PHP_DOC_NODE_INFO);
         if ($phpDocNodeInfo !== null) {
             $attributeAwarePhpDocNode->setAttribute(Attribute::LAST_TOKEN_POSITION, $phpDocNodeInfo->getEnd());
         }
@@ -102,13 +101,20 @@ final class PhpDocInfoFactory
 
     private function createUniqueDocNodeHash(Node $node): string
     {
-        $objectHash = spl_object_hash($node);
+        $this->ensureNodeHasDocComment($node);
 
-        if ($node->getDocComment() === null) {
-            throw new ShouldNotHappenException(sprintf('"%s" is missing a DocComment node', get_class($node)));
-        }
+        $objectHash = spl_object_hash($node);
         $docCommentHash = spl_object_hash($node->getDocComment());
 
         return $objectHash . $docCommentHash;
+    }
+
+    private function ensureNodeHasDocComment(Node $node): void
+    {
+        if ($node->getDocComment() !== null) {
+            return;
+        }
+
+        throw new ShouldNotHappenException(sprintf('"%s" is missing a DocComment node', get_class($node)));
     }
 }

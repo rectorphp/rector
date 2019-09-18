@@ -13,15 +13,13 @@ final class DoctrineTest extends AbstractPhpDocInfoPrinterTest
     /**
      * @dataProvider provideDataForTestClass()
      */
-    public function testClass(string $docFilePath, Node $node, string $expectedDocFilePath): void
+    public function testClass(string $docFilePath, Node $node): void
     {
         $docComment = FileSystem::read($docFilePath);
         $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, $node);
 
-        $expectedDoc = FileSystem::read($expectedDocFilePath);
-
         $this->assertSame(
-            $expectedDoc,
+            $docComment,
             $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo),
             'Caused in ' . $docFilePath
         );
@@ -32,10 +30,6 @@ final class DoctrineTest extends AbstractPhpDocInfoPrinterTest
      */
     public function provideDataForTestClass(): Iterator
     {
-        yield [
-            __DIR__ . '/Source/Doctrine/index_in_table.txt',
-            new Class_(IndexInTable::class),
-            __DIR__ . '/Source/Doctrine/expected_index_in_table.txt',
-        ];
+        yield [__DIR__ . '/Source/Doctrine/index_in_table.txt', new Class_(IndexInTable::class)];
     }
 }

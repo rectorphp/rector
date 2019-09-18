@@ -37,27 +37,18 @@ final class OriginalSpacingRestorer
             return $nodeOutput;
         }
 
-        $hasAsterixMultiline = false;
         foreach ($nodeOutputParts as $key => $nodeOutputPart) {
             if (isset($oldWhitespaces[$key])) {
                 $oldWhitespace = $oldWhitespaces[$key];
                 if (Strings::match($oldWhitespace, "#\n#")) {
-                    $hasAsterixMultiline = true;
                 }
             } else {
                 $oldWhitespace = '';
             }
+
             $newNodeOutput .= $oldWhitespace . $nodeOutputPart;
         }
 
-        // add probably missing last token newline
-        if ($hasAsterixMultiline && $node instanceof DoctrineTagNodeInterface) { // basically any custom tag that steals token to get name
-            // last space to left
-            // experimental newline of the last )
-            $newNodeOutput = Strings::replace($newNodeOutput, '#\)$#', "\n * )");
-        }
-
-        // remove first space, added by the printer above
         return Strings::substring($newNodeOutput, 1);
     }
 

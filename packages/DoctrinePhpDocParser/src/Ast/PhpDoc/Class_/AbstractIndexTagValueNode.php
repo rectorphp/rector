@@ -2,7 +2,6 @@
 
 namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_;
 
-use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
 
 abstract class AbstractIndexTagValueNode extends AbstractDoctrineTagValueNode
@@ -45,7 +44,7 @@ abstract class AbstractIndexTagValueNode extends AbstractDoctrineTagValueNode
         $this->columns = $columns;
 
         if ($originalContent !== null) {
-            $this->orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($originalContent);
+            $this->resolveOriginalContentSpacingAndOrder($originalContent);
         }
     }
 

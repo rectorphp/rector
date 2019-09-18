@@ -23,6 +23,9 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
         );
     }
 
+    /**
+     * @return string[]
+     */
     public function provideData(): Iterator
     {
         yield [__DIR__ . '/Source/Basic/doc.txt'];

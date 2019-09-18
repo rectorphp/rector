@@ -273,7 +273,7 @@ final class OrmTagParser extends AbstractPhpDocParser
             $joinTable->schema,
             $joinColumnValuesTags,
             $inverseJoinColumnValuesTags,
-            $this->resolveAnnotationItemsOrder($annotationContent)
+            $annotationContent
         );
     }
 

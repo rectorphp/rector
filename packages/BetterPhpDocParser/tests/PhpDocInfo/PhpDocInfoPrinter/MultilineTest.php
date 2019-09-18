@@ -20,6 +20,7 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
 {
     /**
      * @dataProvider provideData()
+     * @dataProvider provideDataClass()
      */
     public function test(string $docFilePath, Node $node): void
     {
@@ -48,14 +49,12 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         yield [
             __DIR__ . '/Source/Class_/some_entity_class.txt',
             new Class_(SomeEntityClass::class),
-            __DIR__ . '/Source/Class_/expected_some_entity_class.txt',
-
+            //            __DIR__ . '/Source/Class_/expected_some_entity_class.txt',
         ];
     }
 
     /**
      * @dataProvider provideDataForChangedFormat()
-     * @dataProvider provideDataClass()
      */
     public function testChangedFormat(string $docFilePath, Node $node, string $expectedPhpDocFile): void
     {

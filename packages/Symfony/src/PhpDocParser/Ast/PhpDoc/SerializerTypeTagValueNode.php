@@ -26,7 +26,7 @@ final class SerializerTypeTagValueNode extends AbstractTagValueNode
     public function __construct(string $name, ?string $annotationContent)
     {
         $this->name = $name;
-        $this->resolveItemsOrderFromAnnotationContent($annotationContent);
+        $this->resolveOriginalContentSpacingAndOrder($annotationContent);
     }
 
     public function __toString(): string
