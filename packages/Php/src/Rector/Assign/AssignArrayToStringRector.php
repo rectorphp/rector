@@ -40,13 +40,11 @@ final class AssignArrayToStringRector extends AbstractRector
     {
         return new RectorDefinition(
             'String cannot be turned into array by assignment anymore',
-            [new CodeSample(
-                <<<'PHP'
+            [new CodeSample(<<<'PHP'
 $string = '';
 $string[] = 1;
 PHP
-                ,
-                <<<'PHP'
+                , <<<'PHP'
 $string = [];
 $string[] = 1;
 PHP

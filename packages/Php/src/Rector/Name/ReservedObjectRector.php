@@ -35,14 +35,12 @@ final class ReservedObjectRector extends AbstractRector
     {
         return new RectorDefinition(
             'Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configured',
-            [new CodeSample(
-                <<<'PHP'
+            [new CodeSample(<<<'PHP'
 class Object
 {
 }
 PHP
-                ,
-                <<<'PHP'
+                , <<<'PHP'
 class SmartObject
 {
 }

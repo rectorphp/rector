@@ -11,6 +11,7 @@ use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
 use Rector\Configuration\CurrentNodeProvider;
 use Rector\DoctrinePhpDocParser\PhpDocParser\OrmTagParser;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 
 final class PhpDocInfoFactory
@@ -35,6 +36,11 @@ final class PhpDocInfoFactory
      */
     private $staticTypeMapper;
 
+    /**
+     * @var PhpDocInfo[]
+     */
+    private $phpDocInfoByObjectHash = [];
+
     public function __construct(
         PhpDocParser $phpDocParser,
         Lexer $lexer,
@@ -49,6 +55,12 @@ final class PhpDocInfoFactory
 
     public function createFromNode(Node $node): PhpDocInfo
     {
+        $hash = $this->createUniqueDocNodeHash($node);
+
+        if (isset($this->phpDocInfoByObjectHash[$hash])) {
+            return $this->phpDocInfoByObjectHash[$hash];
+        }
+
         /** needed for @see OrmTagParser */
         $this->currentNodeProvider->setNode($node);
 
@@ -60,7 +72,10 @@ final class PhpDocInfoFactory
 
         $phpDocNode = $this->setPositionOfLastToken($phpDocNode);
 
-        return new PhpDocInfo($phpDocNode, $tokens, $content, $this->staticTypeMapper, $node);
+        $phpDocInfo = new PhpDocInfo($phpDocNode, $tokens, $content, $this->staticTypeMapper, $node);
+        $this->phpDocInfoByObjectHash[$hash] = $phpDocInfo;
+
+        return $phpDocInfo;
     }
 
     /**
@@ -83,5 +98,17 @@ final class PhpDocInfoFactory
         }
 
         return $attributeAwarePhpDocNode;
+    }
+
+    private function createUniqueDocNodeHash(Node $node): string
+    {
+        $objectHash = spl_object_hash($node);
+
+        if ($node->getDocComment() === null) {
+            throw new ShouldNotHappenException(sprintf('"%s" is missing a DocComment node', get_class($node)));
+        }
+        $docCommentHash = spl_object_hash($node->getDocComment());
+
+        return $objectHash . $docCommentHash;
     }
 }

@@ -1,0 +1,8 @@
+/**
+ * @ORM\Table(
+ *     name="building",
+ *     indexes={
+ *          @ORM\Index(name="isDemoBuilding", columns={"is_demo_building"})
+ *     }
+ * )
+ */

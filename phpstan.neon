@@ -50,7 +50,7 @@ parameters:
         - '#Strict comparison using === between string and null will always evaluate to false#'
         # subtype
         - '#(.*?) expects ReflectionFunction\|ReflectionMethod, ReflectionFunctionAbstract given#'
-        - '#PHPDoc tag @return with type array<PhpParser\\Node\\Stmt\\Property\|string\> is incompatible with native type Iterator#'
+        - '#PHPDoc tag @return with type (.*?) is incompatible with native type Iterator#'
 
         # nette container
         - '#Method Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory::create(.*?)() should return (.*?) but returns object#'
@@ -217,3 +217,7 @@ parameters:
         - '#Call to function is_string\(\) with float will always evaluate to false#'
 
         - '#PHPDoc tag @return with type array<string\> is incompatible with native type Iterator#'
+
+        - '#Method Rector\\DoctrinePhpDocParser\\PhpDocParser\\TableTagValueNodeFactory\:\:createIndexTagValueNodes\(\) should return array<Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\> but returns array<int, Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\|Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\>#'
+
+        - '#Method Rector\\DoctrinePhpDocParser\\PhpDocParser\\TableTagValueNodeFactory\:\:createUniqueConstraintTagValueNodes\(\) should return array<Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\> but returns array<int, Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\|Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\>#'
