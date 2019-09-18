@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use ReflectionClass;
@@ -84,7 +85,7 @@ final class NodeAnnotationReader
         /** @var string $className */
         $className = $property->getAttribute(AttributeKey::CLASS_NAME);
 
-        if ($className === null || ! class_exists($className)) {
+        if ($className === null || ! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
             throw new ShouldNotHappenException(sprintf(
                 'Class "%s" for property "%s" was not found.',
                 (string) $className,
