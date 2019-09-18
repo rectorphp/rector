@@ -1,17 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_;
+namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_;
 
 use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
 
-final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode
+abstract class AbstractIndexTagValueNode extends AbstractDoctrineTagValueNode
 {
-    /**
-     * @var string
-     */
-    public const SHORT_NAME = '@ORM\UniqueConstraint';
-
     /**
      * @var string
      */
@@ -25,12 +20,12 @@ final class UniqueConstraintTagValueNode extends AbstractDoctrineTagValueNode
     /**
      * @var mixed[]|null
      */
-    private $options;
+    private $columns;
 
     /**
      * @var mixed[]|null
      */
-    private $columns;
+    private $options;
 
     /**
      * @param mixed[]|null $columns

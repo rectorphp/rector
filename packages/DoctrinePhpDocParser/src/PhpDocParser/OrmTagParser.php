@@ -11,8 +11,6 @@ use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\Table;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -31,7 +29,6 @@ use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToManyTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ManyToOneTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToManyTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\OneToOneTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\UniqueConstraintTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineTagNodeInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -47,21 +44,22 @@ final class OrmTagParser extends AbstractPhpDocParser
     /**
      * @var string
      */
-    public const JOIN_COLUMN_PATTERN = '#@ORM\\\\JoinColumn\((?<singleJoinColumn>.*?)\),?#s';
-
-    /**
-     * @var string
-     */
-    public const UNIQUE_CONSTRAINT_PATTERN = '#@ORM\\\\UniqueConstraint\((?<singleUniqueConstraint>.*?)\),?#s';
+    private const JOIN_COLUMN_PATTERN = '#@ORM\\\\JoinColumn\((?<singleJoinColumn>.*?)\),?#s';
 
     /**
      * @var NameResolver
      */
     private $nameResolver;
 
-    public function __construct(NameResolver $nameResolver)
+    /**
+     * @var TableTagValueNodeFactory
+     */
+    private $tableTagValueNodeFactory;
+
+    public function __construct(NameResolver $nameResolver, TableTagValueNodeFactory $tableTagValueNodeFactory)
     {
         $this->nameResolver = $nameResolver;
+        $this->tableTagValueNodeFactory = $tableTagValueNodeFactory;
     }
 
     public function parse(TokenIterator $tokenIterator, string $tag): ?PhpDocTagValueNode
@@ -82,7 +80,7 @@ final class OrmTagParser extends AbstractPhpDocParser
             }
 
             if ($tag === TableTagValueNode::SHORT_NAME) {
-                return $this->createTableTagValueNode($currentPhpNode, $annotationContent);
+                return $this->tableTagValueNodeFactory->create($currentPhpNode, $annotationContent);
             }
         }
 
@@ -162,34 +160,6 @@ final class OrmTagParser extends AbstractPhpDocParser
         $inheritanceType = $this->nodeAnnotationReader->readClassAnnotation($class, InheritanceType::class);
 
         return new InheritanceTypeTagValueNode($inheritanceType->value);
-    }
-
-    private function createTableTagValueNode(Class_ $class, string $annotationContent): TableTagValueNode
-    {
-        /** @var Table $table */
-        $table = $this->nodeAnnotationReader->readClassAnnotation($class, Table::class);
-
-        $uniqueConstraintContents = Strings::matchAll($annotationContent, self::UNIQUE_CONSTRAINT_PATTERN);
-
-        $uniqueConstraintsTagValueNodes = [];
-        if ($table->uniqueConstraints !== null) {
-            foreach ($table->uniqueConstraints as $key => $uniqueConstraint) {
-                $currentUniqueConstraintContent = $uniqueConstraintContents[$key]['singleUniqueConstraint'];
-                $uniqueConstraintsTagValueNodes[] = $this->createUniqueConstantTagValueNodeFromUniqueConstaint(
-                    $uniqueConstraint,
-                    $currentUniqueConstraintContent
-                );
-            }
-        }
-
-        return new TableTagValueNode(
-            $table->name,
-            $table->schema,
-            $table->indexes,
-            $uniqueConstraintsTagValueNodes,
-            $table->options,
-            $annotationContent
-        );
     }
 
     private function createColumnTagValueNode(Property $property, string $annotationContent): ColumnTagValueNode
@@ -334,22 +304,6 @@ final class OrmTagParser extends AbstractPhpDocParser
 
         // probably tested class
         return $targetEntity;
-    }
-
-    private function createUniqueConstantTagValueNodeFromUniqueConstaint(
-        UniqueConstraint $uniqueConstraint,
-        string $annotationContent
-    ): UniqueConstraintTagValueNode {
-        // doctrine orm compatibility
-        $flags = property_exists($uniqueConstraint, 'flags') ? $uniqueConstraint->flags : [];
-
-        return new UniqueConstraintTagValueNode(
-            $uniqueConstraint->name,
-            $uniqueConstraint->columns,
-            $flags,
-            $uniqueConstraint->options,
-            $annotationContent
-        );
     }
 
     private function createJoinColumnTagValueNodeFromJoinColumnAnnotation(

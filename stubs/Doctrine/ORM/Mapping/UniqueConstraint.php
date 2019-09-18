@@ -15,10 +15,10 @@ final class UniqueConstraint implements Annotation
     /** @var string */
     public $name;
 
-    /** @var array<string> */
+    /** @var string[] */
     public $columns;
 
-    /** @var array<string> */
+    /** @var string[] */
     public $flags = [];
 
     /** @var array */

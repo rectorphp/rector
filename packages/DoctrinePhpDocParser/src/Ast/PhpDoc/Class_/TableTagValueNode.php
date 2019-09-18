@@ -4,7 +4,6 @@ namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_;
 
 use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\UniqueConstraintTagValueNode;
 
 final class TableTagValueNode extends AbstractDoctrineTagValueNode
 {
@@ -24,9 +23,9 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
     private $schema;
 
     /**
-     * @var mixed[]|null
+     * @var IndexTagValueNode[]
      */
-    private $indexes;
+    private $indexes = [];
 
     /**
      * @var UniqueConstraintTagValueNode[]
@@ -40,12 +39,13 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
 
     /**
      * @param mixed[] $options
+     * @param IndexTagValueNode[] $indexes
      * @param UniqueConstraintTagValueNode[] $uniqueConstraints
      */
     public function __construct(
         ?string $name,
         ?string $schema,
-        ?array $indexes,
+        array $indexes,
         array $uniqueConstraints,
         array $options,
         ?string $originalContent = null
@@ -73,8 +73,12 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
             $contentItems['schema'] = sprintf('schema="%s"', $this->schema);
         }
 
-        if ($this->indexes) {
-            $contentItems['indexes'] = $this->printArrayItem($this->indexes, 'indexes');
+        if ($this->indexes !== []) {
+            $indexesAsString = $this->printTagValueNodesSeparatedByComma(
+                $this->indexes,
+                IndexTagValueNode::SHORT_NAME
+            );
+            $contentItems['indexes'] = sprintf('indexes={%s}', $indexesAsString);
         }
 
         if ($this->uniqueConstraints !== []) {
