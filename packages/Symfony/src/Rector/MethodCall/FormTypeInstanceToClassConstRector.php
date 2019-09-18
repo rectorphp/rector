@@ -24,6 +24,7 @@ use Rector\NodeContainer\ParsedNodesByType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Symfony\ValueObject\SymfonyClass;
 use ReflectionClass;
 
 /**
@@ -275,7 +276,7 @@ CODE_SAMPLE
         }
 
         $resolverParamBuilder = $this->builderFactory->param('resolver');
-        $resolverParamBuilder->setType(new FullyQualified('Symfony\Component\OptionsResolver\OptionsResolver'));
+        $resolverParamBuilder->setType(new FullyQualified(SymfonyClass::OPTIONS_RESOLVER));
         $resolverParam = $resolverParamBuilder->getNode();
 
         $optionsDefaults = new Array_();
