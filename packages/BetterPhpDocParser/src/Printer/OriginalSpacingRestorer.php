@@ -38,15 +38,8 @@ final class OriginalSpacingRestorer
         }
 
         foreach ($nodeOutputParts as $key => $nodeOutputPart) {
-            if (isset($oldWhitespaces[$key])) {
-                $oldWhitespace = $oldWhitespaces[$key];
-                if (Strings::match($oldWhitespace, "#\n#")) {
-                }
-            } else {
-                $oldWhitespace = '';
-            }
-
-            $newNodeOutput .= $oldWhitespace . $nodeOutputPart;
+            $newNodeOutput .= $oldWhitespaces[$key] ?? '';
+            $newNodeOutput .= $nodeOutputPart;
         }
 
         return Strings::substring($newNodeOutput, 1);

@@ -51,7 +51,7 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
 
     /**
      * @param mixed[]|null $cascade
-     * @param string[] $orderedVisibleItems
+     * @param string[] $mappedBy
      */
     public function __construct(
         string $targetEntity,
@@ -60,10 +60,9 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
         ?array $cascade,
         ?string $fetch,
         bool $orphanRemoval,
-        array $orderedVisibleItems,
+        ?string $originalContent,
         string $fqnTargetEntity
     ) {
-        $this->orderedVisibleItems = $orderedVisibleItems;
         $this->targetEntity = $targetEntity;
         $this->mappedBy = $mappedBy;
         $this->inversedBy = $inversedBy;
@@ -71,6 +70,8 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
         $this->fetch = $fetch;
         $this->orphanRemoval = $orphanRemoval;
         $this->fqnTargetEntity = $fqnTargetEntity;
+
+        $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     public function __toString(): string

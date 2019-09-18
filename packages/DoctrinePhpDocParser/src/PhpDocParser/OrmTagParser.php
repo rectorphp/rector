@@ -149,9 +149,7 @@ final class OrmTagParser extends AbstractPhpDocParser
         /** @var Entity $entity */
         $entity = $this->nodeAnnotationReader->readClassAnnotation($class, Entity::class);
 
-        return new EntityTagValueNode($entity->repositoryClass, $entity->readOnly, $this->resolveAnnotationItemsOrder(
-            $annotationContent
-        ));
+        return new EntityTagValueNode($entity->repositoryClass, $entity->readOnly, $annotationContent);
     }
 
     private function createInheritanceTypeTagValueNode(Class_ $class): InheritanceTypeTagValueNode
@@ -194,7 +192,7 @@ final class OrmTagParser extends AbstractPhpDocParser
             $manyToMany->fetch,
             $manyToMany->orphanRemoval,
             $manyToMany->indexBy,
-            $this->resolveAnnotationItemsOrder($annotationContent),
+            $annotationContent,
             $this->resolveFqnTargetEntity($manyToMany->targetEntity, $property)
         );
     }
@@ -209,7 +207,7 @@ final class OrmTagParser extends AbstractPhpDocParser
             $manyToOne->cascade,
             $manyToOne->fetch,
             $manyToOne->inversedBy,
-            $this->resolveAnnotationItemsOrder($annotationContent),
+            $annotationContent,
             $this->resolveFqnTargetEntity($manyToOne->targetEntity, $property)
         );
     }
@@ -226,7 +224,7 @@ final class OrmTagParser extends AbstractPhpDocParser
             $oneToOne->cascade,
             $oneToOne->fetch,
             $oneToOne->orphanRemoval,
-            $this->resolveAnnotationItemsOrder($annotationContent),
+            $annotationContent,
             $this->resolveFqnTargetEntity($oneToOne->targetEntity, $property)
         );
     }
@@ -243,7 +241,7 @@ final class OrmTagParser extends AbstractPhpDocParser
             $oneToMany->fetch,
             $oneToMany->orphanRemoval,
             $oneToMany->indexBy,
-            $this->resolveAnnotationItemsOrder($annotationContent),
+            $annotationContent,
             $this->resolveFqnTargetEntity($oneToMany->targetEntity, $property)
         );
     }
@@ -275,20 +273,6 @@ final class OrmTagParser extends AbstractPhpDocParser
             $inverseJoinColumnValuesTags,
             $annotationContent
         );
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolveAnnotationItemsOrder(string $content): array
-    {
-        $itemsOrder = [];
-        $matches = Strings::matchAll($content, '#(?<item>\w+)=#m');
-        foreach ($matches as $match) {
-            $itemsOrder[] = $match['item'];
-        }
-
-        return $itemsOrder;
     }
 
     private function resolveFqnTargetEntity(string $targetEntity, Node $node): string

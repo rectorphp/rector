@@ -22,13 +22,14 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode
     private $readOnly = false;
 
     /**
-     * @param string[] $orderedVisibleItems
+     * @param string[] $repositoryClass
      */
-    public function __construct(?string $repositoryClass, bool $readOnly, array $orderedVisibleItems)
+    public function __construct(?string $repositoryClass, bool $readOnly, ?string $originalContent)
     {
         $this->repositoryClass = $repositoryClass;
         $this->readOnly = $readOnly;
-        $this->orderedVisibleItems = $orderedVisibleItems;
+
+        $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     public function __toString(): string

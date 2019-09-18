@@ -41,7 +41,7 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
         ?string $schema = null,
         ?array $joinColumns = null,
         ?array $inverseJoinColumns = null,
-        ?string $originalContent
+        ?string $originalContent = null
     ) {
         $this->name = $name;
         $this->schema = $schema;
@@ -65,7 +65,8 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
                 $this->joinColumns,
                 JoinColumnTagValueNode::SHORT_NAME
             );
-            $contentItems['joinColumns'] = sprintf('joinColumns={%s}', $joinColumnsAsString);
+
+            $contentItems['joinColumns'] = sprintf('joinColumns={%s%s%s}', PHP_EOL, $joinColumnsAsString, PHP_EOL);
         }
 
         if ($this->inverseJoinColumns) {
@@ -73,7 +74,12 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
                 $this->inverseJoinColumns,
                 JoinColumnTagValueNode::SHORT_NAME
             );
-            $contentItems['inverseJoinColumns'] = sprintf('inverseJoinColumns={%s}', $inverseJoinColumnsAsString);
+            $contentItems['inverseJoinColumns'] = sprintf(
+                'inverseJoinColumns={%s%s%s}',
+                PHP_EOL,
+                $inverseJoinColumnsAsString,
+                PHP_EOL
+            );
         }
 
         return $this->printContentItems($contentItems);
