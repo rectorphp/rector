@@ -36,7 +36,7 @@ final class MinutesToSecondsInCacheRector extends AbstractRector
             'Change minutes argument to seconds in Illuminate\Contracts\Cache\Store and Illuminate\Support\Facades\Cache',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -44,9 +44,9 @@ class SomeClass
         Illuminate\Support\Facades\Cache::put('key', 'value', 60);
     }
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -54,7 +54,7 @@ class SomeClass
         Illuminate\Support\Facades\Cache::put('key', 'value', 60 * 60);
     }
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

@@ -19,7 +19,7 @@ final class ChangeSnakedFixtureNameToCamelRector extends AbstractRector
     {
         return new RectorDefinition('Changes $fixtues style from snake_case to CamelCase.', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeTest
 {
     protected $fixtures = [
@@ -27,9 +27,9 @@ class SomeTest
         'app.users',
         'some_plugin.posts/special_posts',
     ];
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeTest
 {
     protected $fixtures = [
@@ -37,7 +37,7 @@ class SomeTest
         'app.Users',
         'some_plugin.Posts/SpeectialPosts',
     ];
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

@@ -75,7 +75,7 @@ final class FacadeStaticCallToConstructorInjectionRector extends AbstractRector
     {
         return new RectorDefinition('Move Illuminate\Support\Facades\* static calls to constructor injection', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Illuminate\Support\Facades\Response;
 
 class ExampleController extends Controller
@@ -85,9 +85,9 @@ class ExampleController extends Controller
         return Response::view('example', ['new_example' => 123]);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Illuminate\Support\Facades\Response;
 
 class ExampleController extends Controller
@@ -107,7 +107,7 @@ class ExampleController extends Controller
         return $this->responseFactory->view('example', ['new_example' => 123]);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

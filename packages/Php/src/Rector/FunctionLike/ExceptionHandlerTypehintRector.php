@@ -24,15 +24,15 @@ final class ExceptionHandlerTypehintRector extends AbstractRector
             'Changes property `@var` annotations from annotation to type.',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 function handler(Exception $exception) { ... }
 set_exception_handler('handler');
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 function handler(Throwable $exception) { ... }
 set_exception_handler('handler');
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

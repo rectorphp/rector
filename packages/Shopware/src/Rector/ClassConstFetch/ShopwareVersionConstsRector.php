@@ -24,7 +24,7 @@ final class ShopwareVersionConstsRector extends AbstractRector
     {
         return new RectorDefinition('Use version from di parameter', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -32,9 +32,9 @@ class SomeClass
         echo \Shopware::VERSION;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -42,7 +42,7 @@ class SomeClass
         echo Shopware()->Container()->getParameter('shopware.release.version');
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

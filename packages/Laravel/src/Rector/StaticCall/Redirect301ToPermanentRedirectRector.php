@@ -24,7 +24,7 @@ final class Redirect301ToPermanentRedirectRector extends AbstractRector
     {
         return new RectorDefinition('Change "redirect" call with 301 to "permanentRedirect"', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -32,9 +32,9 @@ class SomeClass
         Illuminate\Routing\Route::redirect('/foo', '/bar', 301);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -42,7 +42,7 @@ class SomeClass
         Illuminate\Routing\Route::permanentRedirect('/foo', '/bar');
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

@@ -54,7 +54,7 @@ final class IfToSpaceshipRector extends AbstractRector
     {
         return new RectorDefinition('Changes if/else to spaceship <=> where useful', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -68,9 +68,9 @@ class SomeClass
         });
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -80,7 +80,7 @@ class SomeClass
         });
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

@@ -19,19 +19,19 @@ final class PublicConstantVisibilityRector extends AbstractRector
             'Add explicit public constant visibility.',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeClass
 {
     const HEY = 'you';
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeClass
 {
     public const HEY = 'you';
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

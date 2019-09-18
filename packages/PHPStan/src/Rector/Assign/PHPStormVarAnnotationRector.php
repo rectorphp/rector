@@ -23,15 +23,15 @@ final class PHPStormVarAnnotationRector extends AbstractRector
     {
         return new RectorDefinition('Change various @var annotation formats to one PHPStorm understands', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $config = 5;
 /** @var \Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfig $config */
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 /** @var \Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfig $config */
 $config = 5;
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

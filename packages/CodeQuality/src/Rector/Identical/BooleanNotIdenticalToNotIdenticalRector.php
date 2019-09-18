@@ -23,7 +23,7 @@ final class BooleanNotIdenticalToNotIdenticalRector extends AbstractRector
             'Negated identical boolean compare to not identical compare (does not apply to non-bool values)',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -36,9 +36,9 @@ class SomeClass
         var_dump($a !== $b); // true
     }
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -51,7 +51,7 @@ class SomeClass
         var_dump($a !== $b); // true
     }
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

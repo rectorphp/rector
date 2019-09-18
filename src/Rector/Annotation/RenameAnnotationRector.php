@@ -42,7 +42,7 @@ final class RenameAnnotationRector extends AbstractPHPUnitRector
             'Turns defined annotations above properties and methods to their new values.',
             [
                 new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeTest extends PHPUnit\Framework\TestCase
 {
     /**
@@ -52,9 +52,9 @@ class SomeTest extends PHPUnit\Framework\TestCase
     {
     }
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeTest extends PHPUnit\Framework\TestCase
 {
     /** 
@@ -64,7 +64,7 @@ class SomeTest extends PHPUnit\Framework\TestCase
     {
     }
 }
-CODE_SAMPLE
+PHP
                     ,
                     [
                         '$classToAnnotationMap' => [

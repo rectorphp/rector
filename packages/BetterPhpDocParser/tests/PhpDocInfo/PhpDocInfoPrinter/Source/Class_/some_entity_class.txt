@@ -2,5 +2,9 @@
  * @ORM\Table(name="amenity_building", uniqueConstraints={
  *      @ORM\UniqueConstraint(name="building_id_amenity_id", columns={"building_id", "amenity_id"})
  * })
- * @ORM\Entity
+ * @ORM\DiscriminatorMap({
+ *     "portfolio" = PortfolioBillingProfile::class,
+ *     "user" = UserBillingProfile::class
+ * })
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
  */

@@ -48,7 +48,7 @@ final class AddSeeTestAnnotationRector extends AbstractRector
             'Add @see annotation test of the class for faster jump to test. Make it FQN, so it stays in the annotation, not in the PHP source code.',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeService
 {
 }
@@ -56,9 +56,9 @@ class SomeService
 class SomeServiceTest extends \PHPUnit\Framework\TestCase
 {
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 /**
  * @see \SomeServiceTest
  */
@@ -69,7 +69,7 @@ class SomeService
 class SomeServiceTest extends \PHPUnit\Framework\TestCase
 {
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

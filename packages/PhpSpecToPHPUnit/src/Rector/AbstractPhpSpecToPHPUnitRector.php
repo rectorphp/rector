@@ -31,7 +31,7 @@ abstract class AbstractPhpSpecToPHPUnitRector extends AbstractRector
     {
         return new RectorDefinition('Migrate PhpSpec behavior to PHPUnit test', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 namespace spec\SomeNamespaceForThisTest;
 
 use PhpSpec\ObjectBehavior;
@@ -43,9 +43,9 @@ class OrderSpec extends ObjectBehavior
         $factory->createShippingMethodFor(Argument::any())->shouldBeCalled()->willReturn($shippingMethod);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 namespace spec\SomeNamespaceForThisTest;
 
 class OrderSpec extends ObjectBehavior
@@ -65,7 +65,7 @@ class OrderSpec extends ObjectBehavior
         $factory->expects($this->once())->method('createShippingMethodFor')->willReturn($shippingMethod);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

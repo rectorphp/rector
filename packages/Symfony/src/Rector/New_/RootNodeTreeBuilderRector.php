@@ -33,21 +33,21 @@ final class RootNodeTreeBuilderRector extends AbstractRector
     {
         return new RectorDefinition('Changes  Process string argument to an array', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 $treeBuilder = new TreeBuilder();
 $rootNode = $treeBuilder->root('acme_root');
 $rootNode->someCall();
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 $treeBuilder = new TreeBuilder('acme_root');
 $rootNode = $treeBuilder->getRootNode();
 $rootNode->someCall();
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

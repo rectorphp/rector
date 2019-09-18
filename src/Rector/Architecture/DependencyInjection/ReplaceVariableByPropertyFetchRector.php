@@ -31,7 +31,7 @@ final class ReplaceVariableByPropertyFetchRector extends AbstractRector
             'Turns variable in controller action to property fetch, as follow up to action injection variable to property change.',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 final class SomeController
 {
     /**
@@ -49,9 +49,9 @@ final class SomeController
         $products = $productRepository->fetchAll();
     }
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 final class SomeController
 {
     /**
@@ -69,7 +69,7 @@ final class SomeController
         $products = $this->productRepository->fetchAll();
     }
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

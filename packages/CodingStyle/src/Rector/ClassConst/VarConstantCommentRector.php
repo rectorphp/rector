@@ -29,14 +29,14 @@ final class VarConstantCommentRector extends AbstractRector
     {
         return new RectorDefinition('Constant should have a @var comment with type', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     const HI = 'hi';
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     /**
@@ -44,7 +44,7 @@ class SomeClass
      */
     const HI = 'hi';
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

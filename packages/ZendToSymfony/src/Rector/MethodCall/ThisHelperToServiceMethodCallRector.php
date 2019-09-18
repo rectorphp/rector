@@ -43,7 +43,7 @@ final class ThisHelperToServiceMethodCallRector extends AbstractRector
             'Change magic $this->_helper->calls() to constructor injection of helper services',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeController
 {
     /**
@@ -58,9 +58,9 @@ class SomeController
         $this->_helper->onlinePayment()->isPaid();
     }
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeController
 {
     /**
@@ -85,7 +85,7 @@ class SomeController
         $this->onlinePaymentHelper->direct()->isPaid();
     }
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

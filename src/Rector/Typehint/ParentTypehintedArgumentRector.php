@@ -39,7 +39,7 @@ final class ParentTypehintedArgumentRector extends AbstractRector
     {
         return new RectorDefinition('Changes defined parent class typehints.', [
             new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 interface SomeInterface
 {
     public read(string $content);
@@ -49,9 +49,9 @@ class SomeClass implements SomeInterface
 {
     public read($content);
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 interface SomeInterface
 {
     public read(string $content);
@@ -61,7 +61,7 @@ class SomeClass implements SomeInterface
 {
     public read(string $content);
 }
-CODE_SAMPLE
+PHP
                 ,
                 [
                     '$typehintForArgumentByMethodAndClass' => [
@@ -122,7 +122,6 @@ CODE_SAMPLE
                 if ($type === '') { // remove type
                     $param->type = null;
                 } else {
-//                    // @todo use mapper
                     $param->type = $this->staticTypeMapper->mapStringToPhpParserNode($type);
                 }
             }

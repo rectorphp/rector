@@ -31,17 +31,17 @@ final class ChangeZendControllerClassToSymfonyControllerClassRector extends Abst
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change Zend 1 controller to Symfony 4 controller', [new CodeSample(
-            <<<'CODE_SAMPLE'
+            <<<'PHP'
 class SomeAction extends Zend_Controller_Action
 {
 }
-CODE_SAMPLE
+PHP
             ,
-            <<<'CODE_SAMPLE'
+            <<<'PHP'
 final class SomeAction extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
 }
-CODE_SAMPLE
+PHP
         )]);
     }
 

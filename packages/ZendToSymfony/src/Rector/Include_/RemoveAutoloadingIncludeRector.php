@@ -24,16 +24,16 @@ final class RemoveAutoloadingIncludeRector extends AbstractRector
             'Remove include/require statements, that supply autoloading (PSR-4 composer autolaod is going to be used instead)',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 include 'SomeFile.php';
 require_once 'AnotherFile.php';
 
 $values = require_once 'values.txt';
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 $values = require_once 'values.txt';
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

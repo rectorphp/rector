@@ -25,13 +25,13 @@ final class MysqlFuncCallToMysqliRector extends AbstractRector
             'Converts more complex mysql functions to mysqli',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 mysql_drop_db($database);
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 mysqli_query('DROP DATABASE ' . $database);
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

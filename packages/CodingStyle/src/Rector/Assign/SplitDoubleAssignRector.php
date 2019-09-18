@@ -19,7 +19,7 @@ final class SplitDoubleAssignRector extends AbstractRector
             'Split multiple inline assigns to each own lines default value, to prevent undefined array issues',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -27,9 +27,9 @@ class SomeClass
         $one = $two = 1;
     }
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -38,7 +38,7 @@ class SomeClass
         $two = 1;
     }
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

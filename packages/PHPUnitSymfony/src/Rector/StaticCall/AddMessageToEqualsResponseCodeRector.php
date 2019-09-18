@@ -27,7 +27,7 @@ final class AddMessageToEqualsResponseCodeRector extends AbstractRector
     {
         return new RectorDefinition('Add response content to response code assert, so it is easier to debug', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -41,9 +41,9 @@ final class SomeClassTest extends TestCase
         );
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -58,7 +58,7 @@ final class SomeClassTest extends TestCase
         );
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

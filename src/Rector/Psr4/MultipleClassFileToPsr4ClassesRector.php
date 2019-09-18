@@ -35,7 +35,7 @@ final class MultipleClassFileToPsr4ClassesRector extends AbstractFileSystemRecto
             'Turns namespaced classes in one file to standalone PSR-4 classes.',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 namespace App\Exceptions;
 
 use Exception;
@@ -49,9 +49,9 @@ final class SecondException extends Exception
 {
     
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 // new file: "app/Exceptions/FirstException.php"
 namespace App\Exceptions;
 
@@ -71,7 +71,7 @@ final class SecondException extends Exception
 {
     
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

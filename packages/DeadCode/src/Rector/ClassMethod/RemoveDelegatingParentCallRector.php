@@ -37,7 +37,7 @@ final class RemoveDelegatingParentCallRector extends AbstractRector
     {
         return new RectorDefinition('', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function prettyPrint(array $stmts): string
@@ -45,13 +45,13 @@ class SomeClass
         return parent::prettyPrint($stmts);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

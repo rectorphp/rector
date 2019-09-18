@@ -54,36 +54,36 @@ final class ArgumentAdderRector extends AbstractRector
             'This Rector adds new default arguments in calls of defined methods and class types.',
             [
                 new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 $someObject = new SomeExampleClass;
 $someObject->someMethod();
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 $someObject = new SomeExampleClass;
 $someObject->someMethod(true);
-CODE_SAMPLE
+PHP
                     ,
                     $configuration
                 ),
                 new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class MyCustomClass extends SomeExampleClass
 {
     public function someMethod()
     {
     }
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class MyCustomClass extends SomeExampleClass
 {
     public function someMethod($value = true)
     {
     }
 }
-CODE_SAMPLE
+PHP
                     ,
                     $configuration
                 ),

@@ -30,13 +30,13 @@ final class IsCountableRector extends AbstractRector
             'Changes is_array + Countable check to is_countable',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 is_array($foo) || $foo instanceof Countable;
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 is_countable($foo);
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

@@ -37,58 +37,36 @@ abstract class AbstractPhpDocParser
         return $this->currentNodeProvider->getNode();
     }
 
+    /**
+     * Skip all tokens for this annotation, so next annotation can work with tokens after this one
+     * Inspired at @see \PHPStan\PhpDocParser\Parser\PhpDocParser::parseText()
+     */
     protected function resolveAnnotationContent(TokenIterator $tokenIterator): string
     {
-        $tokenIterator->pushSavePoint();
-
-        $singleLineContent = $tokenIterator->joinUntil(
-            Lexer::TOKEN_END,
-            Lexer::TOKEN_PHPDOC_EOL,
-            Lexer::TOKEN_CLOSE_PHPDOC
-        );
-
-        $tokenIterator->rollback();
-
-        if ($singleLineContent === '' || Strings::match($singleLineContent, '#^\((.*?)\)$#m')) {
-            $annotationContent = $singleLineContent;
-            $tokenIterator->joinUntil(Lexer::TOKEN_END, Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_CLOSE_PHPDOC);
-        } else { // multiline - content
-            // skip all tokens for this annotation, so next annotation can work with tokens after this one
-            $tokenIterator->pushSavePoint();
-
-            $annotationContent = $tokenIterator->joinUntil(Lexer::TOKEN_END, Lexer::TOKEN_CLOSE_PHPDOC);
-            if (! Strings::match($annotationContent, '#\)\s+$#m')) {
-                $tokenIterator->rollback();
-
-                /** inspired at @see \PHPStan\PhpDocParser\Parser\PhpDocParser::parseText() */
-                $annotationContent = '';
-                $unclosedOpenedBracketCount = 0;
-                while (true) {
-                    if ($tokenIterator->currentTokenType() === Lexer::TOKEN_OPEN_PARENTHESES) {
-                        ++$unclosedOpenedBracketCount;
-                    }
-
-                    if ($tokenIterator->currentTokenType() === Lexer::TOKEN_CLOSE_PARENTHESES) {
-                        --$unclosedOpenedBracketCount;
-                    }
-
-                    if ($unclosedOpenedBracketCount === 0 && $tokenIterator->currentTokenType() === Lexer::TOKEN_PHPDOC_EOL) {
-                        break;
-                    }
-
-                    // remove new line "*"
-                    if (Strings::contains($tokenIterator->currentTokenValue(), '*')) {
-                        $tokenValueWithoutAsterisk = Strings::replace($tokenIterator->currentTokenValue(), '#\*#');
-                        $annotationContent .= $tokenValueWithoutAsterisk;
-                    } else {
-                        $annotationContent .= $tokenIterator->currentTokenValue();
-                    }
-
-                    $tokenIterator->next();
-                }
-            } else {
-                $tokenIterator->dropSavePoint();
+        $annotationContent = '';
+        $unclosedOpenedBracketCount = 0;
+        while (true) {
+            if ($tokenIterator->currentTokenType() === Lexer::TOKEN_OPEN_PARENTHESES) {
+                ++$unclosedOpenedBracketCount;
             }
+
+            if ($tokenIterator->currentTokenType() === Lexer::TOKEN_CLOSE_PARENTHESES) {
+                --$unclosedOpenedBracketCount;
+            }
+
+            if ($unclosedOpenedBracketCount === 0 && $tokenIterator->currentTokenType() === Lexer::TOKEN_PHPDOC_EOL) {
+                break;
+            }
+
+            // remove new line "*"
+            if (Strings::contains($tokenIterator->currentTokenValue(), '*')) {
+                $tokenValueWithoutAsterisk = Strings::replace($tokenIterator->currentTokenValue(), '#\*#');
+                $annotationContent .= $tokenValueWithoutAsterisk;
+            } else {
+                $annotationContent .= $tokenIterator->currentTokenValue();
+            }
+
+            $tokenIterator->next();
         }
 
         return $this->cleanMultilineAnnotationContent($annotationContent);

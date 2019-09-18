@@ -35,18 +35,18 @@ final class RemoveUnusedPrivatePropertyRector extends AbstractRector
     {
         return new RectorDefinition('Remove unused private properties', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     private $property;
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

@@ -28,7 +28,7 @@ final class GetClassOnNullRector extends AbstractRector
     {
         return new RectorDefinition('Null is no more allowed in get_class()', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     public function getItem()
@@ -37,9 +37,9 @@ final class SomeClass
         return get_class($value);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     public function getItem()
@@ -48,7 +48,7 @@ final class SomeClass
         return $value !== null ? get_class($value) : self::class;
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

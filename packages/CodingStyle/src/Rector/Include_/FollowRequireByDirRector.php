@@ -21,7 +21,7 @@ final class FollowRequireByDirRector extends AbstractRector
     {
         return new RectorDefinition('include/require should be followed by absolute path', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -29,9 +29,9 @@ class SomeClass
         require 'autoload.php';
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -39,7 +39,7 @@ class SomeClass
         require __DIR__ . '/autoload.php';
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

@@ -20,7 +20,7 @@ final class ReservedFnFunctionRector extends AbstractRector
     {
         return new RectorDefinition('Change fn() function name, since it will be reserved keyword', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -33,9 +33,9 @@ class SomeClass
         fn(5);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -48,7 +48,7 @@ class SomeClass
         f(5);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

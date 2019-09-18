@@ -33,7 +33,7 @@ final class WrapReturnRector extends AbstractRector
     {
         return new RectorDefinition('Wrap return value of specific method', [
             new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     public function getItem()
@@ -41,9 +41,9 @@ final class SomeClass
         return 1;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     public function getItem()
@@ -51,7 +51,7 @@ final class SomeClass
         return [1];
     }
 }
-CODE_SAMPLE
+PHP
                 ,
                 [
                     'SomeClass' => [

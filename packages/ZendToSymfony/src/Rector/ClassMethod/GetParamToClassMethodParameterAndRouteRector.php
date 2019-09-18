@@ -65,18 +65,18 @@ final class GetParamToClassMethodParameterAndRouteRector extends AbstractRector
         return new RectorDefinition(
             'Change $this->getParam() calls to action method arguments + Sdd symfony @Route',
             [new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 public function someAction()
 {
     $id = $this->getParam('id');
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 public function someAction($id)
 {
 }                
-CODE_SAMPLE
+PHP
             )]
         );
     }

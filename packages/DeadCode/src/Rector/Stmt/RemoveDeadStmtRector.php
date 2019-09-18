@@ -22,14 +22,14 @@ final class RemoveDeadStmtRector extends AbstractRector
     {
         return new RectorDefinition('Removes dead code statements', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $value = 5;
 $value;
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $value = 5;
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

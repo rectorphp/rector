@@ -23,7 +23,7 @@ final class ReduceMultipleDefaultSwitchRector extends AbstractRector
     {
         return new RectorDefinition('Remove first default switch, that is ignored', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 switch ($expr) {
     default:
          echo "Hello World";
@@ -32,15 +32,15 @@ switch ($expr) {
          echo "Goodbye Moon!";
          break;
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 switch ($expr) {
     default:
          echo "Goodbye Moon!";
          break;
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

@@ -22,7 +22,7 @@ final class RemoveCodeAfterReturnRector extends AbstractRector
     {
         return new RectorDefinition('Remove dead code after return statement', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run(int $a)
@@ -31,9 +31,9 @@ class SomeClass
          $a++;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run(int $a)
@@ -41,7 +41,7 @@ class SomeClass
          return $a;
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

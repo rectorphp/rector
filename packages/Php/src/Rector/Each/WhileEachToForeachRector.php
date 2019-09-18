@@ -35,30 +35,30 @@ final class WhileEachToForeachRector extends AbstractRector
             'each() function is deprecated, use foreach() instead.',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 while (list($key, $callback) = each($callbacks)) {
     // ...
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 foreach ($callbacks as $key => $callback) {
     // ...
 }
-CODE_SAMPLE
+PHP
                 ),
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 while (list($key) = each($callbacks)) {
     // ...
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 foreach (array_keys($callbacks) as $key) {
     // ...
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

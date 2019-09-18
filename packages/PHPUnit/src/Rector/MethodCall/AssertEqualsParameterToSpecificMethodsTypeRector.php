@@ -23,7 +23,7 @@ final class AssertEqualsParameterToSpecificMethodsTypeRector extends AbstractPHP
             'Change assertEquals()/assertNotEquals() method parameters to new specific alternatives',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 final class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -38,9 +38,9 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('string', $value, 'message', 0.0, 10, false, true);
     }
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 final class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -55,7 +55,7 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
         $this->assertEqualsIgnoringCase('string', $value, 'message');
     }
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

@@ -38,7 +38,7 @@ final class CompleteVarDocTypePropertyRector extends AbstractRector
     {
         return new RectorDefinition('Complete property `@var` annotations or correct the old ones', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     private $eventDispatcher;
@@ -48,9 +48,9 @@ final class SomeClass
         $this->eventDispatcher = $eventDispatcher;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     /**
@@ -63,7 +63,7 @@ final class SomeClass
         $this->eventDispatcher = $eventDispatcher;
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

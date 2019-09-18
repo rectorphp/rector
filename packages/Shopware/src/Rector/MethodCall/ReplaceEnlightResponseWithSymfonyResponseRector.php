@@ -25,7 +25,7 @@ final class ReplaceEnlightResponseWithSymfonyResponseRector extends AbstractRect
     {
         return new RectorDefinition('Replace Enlight Response methods with Symfony Response methods', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class FrontendController extends \Enlight_Controller_Action
 {
     public function run()
@@ -33,9 +33,9 @@ class FrontendController extends \Enlight_Controller_Action
         $this->Response()->setHeader('Foo', 'Yea');
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class FrontendController extends \Enlight_Controller_Action
 {
     public function run()
@@ -43,7 +43,7 @@ class FrontendController extends \Enlight_Controller_Action
         $this->Response()->headers->set('Foo', 'Yea');
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

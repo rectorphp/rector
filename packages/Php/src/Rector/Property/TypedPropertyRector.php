@@ -33,7 +33,7 @@ final class TypedPropertyRector extends AbstractRector
             'Changes property `@var` annotations from annotation to type.',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 final class SomeClass 
 {
     /** 
@@ -41,14 +41,14 @@ final class SomeClass
      */
     private count; 
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 final class SomeClass 
 {
     private int count; 
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

@@ -32,7 +32,7 @@ final class InlineValidationRulesToArrayDefinitionRector extends AbstractRector
     {
         return new RectorDefinition('Transforms inline validation rules to array definition', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Illuminate\Foundation\Http\FormRequest;
 
 class SomeClass extends FormRequest
@@ -44,9 +44,9 @@ class SomeClass extends FormRequest
         ];
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Illuminate\Foundation\Http\FormRequest;
 
 class SomeClass extends FormRequest
@@ -58,7 +58,7 @@ class SomeClass extends FormRequest
         ];
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

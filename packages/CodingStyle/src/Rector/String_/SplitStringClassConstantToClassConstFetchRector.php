@@ -21,7 +21,7 @@ final class SplitStringClassConstantToClassConstFetchRector extends AbstractRect
     {
         return new RectorDefinition('Separate class constant in a string to class constant fetch and string', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     const HI = true;
@@ -34,9 +34,9 @@ class AnotherClass
         return 'SomeClass::HI';
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     const HI = true;
@@ -49,7 +49,7 @@ class AnotherClass
         return SomeClass::class . '::HI';
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

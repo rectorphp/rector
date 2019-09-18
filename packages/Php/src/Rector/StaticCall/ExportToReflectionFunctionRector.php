@@ -22,15 +22,15 @@ final class ExportToReflectionFunctionRector extends AbstractRector
     {
         return new RectorDefinition('Change export() to ReflectionFunction alternatives', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $reflectionFunction = ReflectionFunction::export('foo');
 $reflectionFunctionAsString = ReflectionFunction::export('foo', true);
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $reflectionFunction = new ReflectionFunction('foo');
 $reflectionFunctionAsString = (string) new ReflectionFunction('foo');
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

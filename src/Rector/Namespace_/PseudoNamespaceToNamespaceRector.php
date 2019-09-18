@@ -70,17 +70,17 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
                 ]
             ),
             new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+<<<'PHP'
 /** @var Some_Object $someService */
 $someService = new Some_Object;
 $someClassToKeep = new Some_Class_To_Keep;
-CODE_SAMPLE
+PHP
                 ,
-<<<'CODE_SAMPLE'
+<<<'PHP'
 /** @var Some\Object $someService */
 $someService = new Some\Object;
 $someClassToKeep = new Some_Class_To_Keep;
-CODE_SAMPLE
+PHP
                 ,
                 [
                     [

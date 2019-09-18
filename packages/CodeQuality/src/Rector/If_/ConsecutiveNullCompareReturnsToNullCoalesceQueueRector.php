@@ -43,7 +43,7 @@ final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends Abstr
     {
         return new RectorDefinition('Change multiple null compares to ?? queue', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -59,9 +59,9 @@ class SomeClass
         return null;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -69,7 +69,7 @@ class SomeClass
         return $this->orderItem ?? $this->orderItemUnit;
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

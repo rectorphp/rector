@@ -42,7 +42,7 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector
     {
         return new RectorDefinition('Changes $this->... to self:: or vise versa for specific types', [
             new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass extends PHPUnit\TestCase
 {
     public function run()
@@ -50,9 +50,9 @@ class SomeClass extends PHPUnit\TestCase
         $this->assertThis();
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass extends PHPUnit\TestCase
 {
     public function run()
@@ -60,7 +60,7 @@ class SomeClass extends PHPUnit\TestCase
         self::assertThis();
     }
 }
-CODE_SAMPLE
+PHP
                 ,
                 ['PHPUnit\TestCase' => self::PREFER_SELF]
             ),

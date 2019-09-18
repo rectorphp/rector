@@ -31,7 +31,7 @@ final class RenameConstantRector extends AbstractRector
     {
         return new RectorDefinition('Replace constant by new ones', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     public function run()
@@ -39,9 +39,9 @@ final class SomeClass
         return MYSQL_ASSOC;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     public function run()
@@ -49,7 +49,7 @@ final class SomeClass
         return MYSQLI_ASSOC;
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

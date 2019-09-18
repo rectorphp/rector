@@ -59,21 +59,21 @@ final class RemoveUnusedAliasRector extends AbstractRector
     {
         return new RectorDefinition('Removes unused use aliases', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Symfony\Kernel as BaseKernel;
 
 class SomeClass extends BaseKernel
 {
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Symfony\Kernel;
 
 class SomeClass extends Kernel
 {
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

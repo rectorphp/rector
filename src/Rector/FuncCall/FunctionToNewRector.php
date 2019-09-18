@@ -32,7 +32,7 @@ final class FunctionToNewRector extends AbstractRector
     {
         return new RectorDefinition('Change configured function calls to new Instance', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -40,9 +40,9 @@ class SomeClass
         $array = collection([]);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -50,7 +50,7 @@ class SomeClass
         $array = new \Collection([]);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

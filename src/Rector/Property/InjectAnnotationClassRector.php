@@ -80,7 +80,7 @@ final class InjectAnnotationClassRector extends AbstractRector
             'Changes properties with specified annotations class to constructor injection',
             [
                 new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 use JMS\DiExtraBundle\Annotation as DI;
 
 class SomeController
@@ -90,9 +90,9 @@ class SomeController
      */
     private $entityManager;
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 use JMS\DiExtraBundle\Annotation as DI;
 
 class SomeController
@@ -107,7 +107,7 @@ class SomeController
         $this->entityManager = entityManager;
     }
 }
-CODE_SAMPLE
+PHP
                     ,
                     [
                         '$annotationClasses' => [PHPDIInject::class, JMSInject::class],

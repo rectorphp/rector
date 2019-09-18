@@ -24,6 +24,7 @@ use Rector\NodeContainer\ParsedNodesByType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Symfony\ValueObject\SymfonyClass;
 use ReflectionClass;
 
 /**
@@ -73,7 +74,7 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
             'Changes createForm(new FormType), add(new FormType) to ones with "FormType::class"',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeController
 {
     public function action()
@@ -84,9 +85,9 @@ class SomeController
         ]);
     }
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeController
 {
     public function action()
@@ -97,7 +98,7 @@ class SomeController
         ]);
     }
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );
@@ -250,13 +251,16 @@ CODE_SAMPLE
         $optionsParamBuilder->setType('array');
         $optionsParam = $optionsParamBuilder->getNode();
 
-        $buildFormClassMethodNode = $this->builderFactory->method('buildForm')
-            ->makePublic()
-            ->addParam($formBuilderParam)
-            ->addParam($optionsParam)
-            // raw copy stmts from ctor @todo improve
-            ->addStmts($this->replaceParameterAssignWithOptionAssign((array) $classMethod->stmts, $optionsParam))
-            ->getNode();
+        $buildFormClassMethodBuilder = $this->builderFactory->method('buildForm');
+        $buildFormClassMethodBuilder->makePublic();
+        $buildFormClassMethodBuilder->addParam($formBuilderParam);
+        $buildFormClassMethodBuilder->addParam($optionsParam);
+        // raw copy stmts from ctor @todo improve
+        $buildFormClassMethodBuilder->addStmts(
+            $this->replaceParameterAssignWithOptionAssign((array) $classMethod->stmts, $optionsParam)
+        );
+
+        $buildFormClassMethodNode = $buildFormClassMethodBuilder->getNode();
 
         $classNode->stmts[] = $buildFormClassMethodNode;
     }
@@ -272,7 +276,7 @@ CODE_SAMPLE
         }
 
         $resolverParamBuilder = $this->builderFactory->param('resolver');
-        $resolverParamBuilder->setType(new FullyQualified('Symfony\Component\OptionsResolver\OptionsResolver'));
+        $resolverParamBuilder->setType(new FullyQualified(SymfonyClass::OPTIONS_RESOLVER));
         $resolverParam = $resolverParamBuilder->getNode();
 
         $optionsDefaults = new Array_();

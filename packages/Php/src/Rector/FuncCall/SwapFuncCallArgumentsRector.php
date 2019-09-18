@@ -30,7 +30,7 @@ final class SwapFuncCallArgumentsRector extends AbstractRector
     {
         return new RectorDefinition('Swap arguments in function calls', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     public function run($one, $two)
@@ -38,9 +38,9 @@ final class SomeClass
         return some_function($one, $two);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     public function run($one, $two)
@@ -48,7 +48,7 @@ final class SomeClass
         return some_function($two, $one);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

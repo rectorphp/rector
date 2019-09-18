@@ -23,15 +23,15 @@ final class IsObjectOnIncompleteClassRector extends AbstractRector
     {
         return new RectorDefinition('Incomplete class returns inverted bool on is_object()', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $incompleteObject = new __PHP_Incomplete_Class;
 $isObject = is_object($incompleteObject);
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $incompleteObject = new __PHP_Incomplete_Class;
 $isObject = ! is_object($incompleteObject);
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

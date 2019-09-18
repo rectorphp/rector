@@ -34,17 +34,17 @@ final class ToStringToMethodCallRector extends AbstractRector
     {
         return new RectorDefinition('Turns defined code uses of "__toString()" method  to specific method calls.', [
             new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+<<<'PHP'
 $someValue = new SomeObject;
 $result = (string) $someValue;
 $result = $someValue->__toString();
-CODE_SAMPLE
+PHP
                 ,
-<<<'CODE_SAMPLE'
+<<<'PHP'
 $someValue = new SomeObject;
 $result = $someValue->getPath();
 $result = $someValue->getPath();
-CODE_SAMPLE
+PHP
                 ,
                 [
                     'SomeObject' => 'getPath',

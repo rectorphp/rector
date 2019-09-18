@@ -21,7 +21,7 @@ final class RemoveDeadReturnRector extends AbstractRector
     {
         return new RectorDefinition('Remove last return in the functions, since does not do anything', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -35,9 +35,9 @@ class SomeClass
         return;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -49,7 +49,7 @@ class SomeClass
         }
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

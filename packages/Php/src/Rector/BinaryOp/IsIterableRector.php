@@ -30,13 +30,13 @@ final class IsIterableRector extends AbstractRector
             'Changes is_array + Traversable check to is_iterable',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 is_array($foo) || $foo instanceof Traversable;
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 is_iterable($foo);
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

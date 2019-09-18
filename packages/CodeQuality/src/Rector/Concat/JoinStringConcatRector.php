@@ -18,7 +18,7 @@ final class JoinStringConcatRector extends AbstractRector
     {
         return new RectorDefinition('Joins concat of 2 strings', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -26,9 +26,9 @@ class SomeClass
         $name = 'Hi' . ' Tom';
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -36,7 +36,7 @@ class SomeClass
         $name = 'Hi Tom';
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

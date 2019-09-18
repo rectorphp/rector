@@ -65,7 +65,7 @@ final class ConsistentPregDelimiterRector extends AbstractRector
     {
         return new RectorDefinition('Replace PREG delimiter with configured one', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -74,9 +74,9 @@ class SomeClass
         preg_match_all('~value~im', $value);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -85,7 +85,7 @@ class SomeClass
         preg_match_all('#value#im', $value);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

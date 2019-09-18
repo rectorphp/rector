@@ -21,7 +21,7 @@ final class RemoveMissingCompactVariableRector extends AbstractRector
     {
         return new RectorDefinition('Remove non-existing vars from compact()', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -31,9 +31,9 @@ class SomeClass
         compact('value', 'non_existing');
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -43,7 +43,7 @@ class SomeClass
         compact('value');
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

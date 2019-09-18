@@ -23,7 +23,7 @@ final class ShopRegistrationServiceRector extends AbstractRector
     {
         return new RectorDefinition('Replace $shop->registerResources() with ShopRegistrationService', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -32,9 +32,9 @@ class SomeClass
         $shop->registerResources();
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -43,7 +43,7 @@ class SomeClass
         Shopware()->Container()->get('shopware.components.shop_registration_service')->registerShop($shop);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

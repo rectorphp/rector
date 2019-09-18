@@ -29,23 +29,23 @@ final class NullableCompareToNullRector extends AbstractRector
             'Changes negate of empty comparison of nullable value to explicit === or !== compare',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 /** @var stdClass|null $value */
 if ($value) { 
 }
 
 if (!$value) {
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 /** @var stdClass|null $value */
 if ($value !== null) {
 }
 
 if ($value === null) {
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

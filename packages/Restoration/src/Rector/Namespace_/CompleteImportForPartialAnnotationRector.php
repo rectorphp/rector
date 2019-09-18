@@ -34,7 +34,7 @@ final class CompleteImportForPartialAnnotationRector extends AbstractRector
     {
         return new RectorDefinition('In case you have accidentally removed use imports but code still contains partial use statements, this will save you', [
             new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     /**
@@ -42,9 +42,9 @@ class SomeClass
      */
     public $id;
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Doctrine\ORM\Mapping as ORM;
 
 class SomeClass
@@ -54,7 +54,7 @@ class SomeClass
      */
     public $id;
 }
-CODE_SAMPLE
+PHP
                 ,
                 [
                     '$useImportToRestore' => [['Doctrine\ORM\Mapping', 'ORM']],

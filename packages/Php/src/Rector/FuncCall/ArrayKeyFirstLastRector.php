@@ -42,24 +42,24 @@ final class ArrayKeyFirstLastRector extends AbstractRector
             'Make use of array_key_first() and array_key_last()',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 reset($items);
 $firstKey = key($items);
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 $firstKey = array_key_first($items);
-CODE_SAMPLE
+PHP
                 ),
                 new CodeSample(
-<<<'CODE_SAMPLE'
+<<<'PHP'
 end($items);
 $lastKey = key($items);
-CODE_SAMPLE
+PHP
                     ,
-<<<'CODE_SAMPLE'
+<<<'PHP'
 $lastKey = array_key_last($items);
-CODE_SAMPLE
+PHP
                 ),
 
             ]

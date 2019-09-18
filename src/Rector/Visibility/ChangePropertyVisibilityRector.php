@@ -32,7 +32,7 @@ final class ChangePropertyVisibilityRector extends AbstractRector
         return new RectorDefinition(
             'Change visibility of property from parent class.',
             [new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+<<<'PHP'
 class FrameworkClass
 {
     protected $someProperty;
@@ -42,9 +42,9 @@ class MyClass extends FrameworkClass
 {
     public $someProperty;
 }
-CODE_SAMPLE
+PHP
                 ,
-<<<'CODE_SAMPLE'
+<<<'PHP'
 class FrameworkClass
 {
     protected $someProperty;
@@ -54,7 +54,7 @@ class MyClass extends FrameworkClass
 {
     protected $someProperty;
 }
-CODE_SAMPLE
+PHP
                 ,
                 [
                     'FrameworkClass' => [

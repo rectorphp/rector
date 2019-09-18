@@ -77,7 +77,7 @@ final class RemoveUnusedParameterRector extends AbstractRector
     {
         return new RectorDefinition('Remove unused parameter, if not required by interface or parent class', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function __construct($value, $value2)
@@ -85,9 +85,9 @@ class SomeClass
          $this->value = $value;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function __construct($value)
@@ -95,7 +95,7 @@ class SomeClass
          $this->value = $value;
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

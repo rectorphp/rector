@@ -36,7 +36,7 @@ final class ModalToGetSetRector extends AbstractRector
             'Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 $object = new InstanceConfigTrait;
 
 $config = $object->config();
@@ -44,9 +44,9 @@ $config = $object->config('key');
 
 $object->config('key', 'value');
 $object->config(['key' => 'value']);
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 $object = new InstanceConfigTrait;
 
 $config = $object->getConfig();
@@ -54,7 +54,7 @@ $config = $object->getConfig('key');
 
 $object->setConfig('key', 'value');
 $object->setConfig(['key' => 'value']);
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

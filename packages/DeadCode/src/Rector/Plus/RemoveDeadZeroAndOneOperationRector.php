@@ -24,7 +24,7 @@ final class RemoveDeadZeroAndOneOperationRector extends AbstractRector
     {
         return new RectorDefinition('', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -33,9 +33,9 @@ class SomeClass
         $value = 5 + 0;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -44,7 +44,7 @@ class SomeClass
         $value = 5;
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

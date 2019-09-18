@@ -30,17 +30,17 @@ final class RemoveInterfacesRector extends AbstractRector
     {
         return new RectorDefinition('Removes interfaces usage from class.', [
             new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass implements SomeInterface
 {
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
 }
-CODE_SAMPLE
+PHP
                 ,
                 ['SomeInterface']
             ),

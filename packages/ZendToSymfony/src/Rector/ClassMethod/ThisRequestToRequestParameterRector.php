@@ -34,19 +34,19 @@ final class ThisRequestToRequestParameterRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change $this->_request in action method to $request parameter', [new CodeSample(
-            <<<'CODE_SAMPLE'
+            <<<'PHP'
 public function someAction()
 {
     $isGet = $this->_request->isGet();
 }
-CODE_SAMPLE
+PHP
             ,
-            <<<'CODE_SAMPLE'
+            <<<'PHP'
 public function someAction(\Symfony\Component\HttpFoundation\Request $request)
 {
     $isGet = $request->isGet();
 }
-CODE_SAMPLE
+PHP
         )]);
     }
 
