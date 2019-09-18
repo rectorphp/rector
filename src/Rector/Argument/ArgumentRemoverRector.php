@@ -35,15 +35,15 @@ final class ArgumentRemoverRector extends AbstractRector
             'Removes defined arguments in defined methods and their calls.',
             [
                 new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 $someObject = new SomeClass;
 $someObject->someMethod(true);
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 $someObject = new SomeClass;
 $someObject->someMethod();'
-CODE_SAMPLE
+PHP
                     ,
                     [
                         'ExampleClass' => [

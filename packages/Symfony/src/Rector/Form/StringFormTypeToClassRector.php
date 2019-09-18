@@ -43,15 +43,15 @@ final class StringFormTypeToClassRector extends AbstractRector
             'Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony',
             [
                 new CodeSample(
-<<<'CODE_SAMPLE'
+<<<'PHP'
 $formBuilder = new Symfony\Component\Form\FormBuilder;
 $formBuilder->add('name', 'form.type.text');
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 $formBuilder = new Symfony\Component\Form\FormBuilder;
 $formBuilder->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class);
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

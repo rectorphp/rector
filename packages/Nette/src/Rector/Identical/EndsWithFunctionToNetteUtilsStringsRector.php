@@ -24,7 +24,7 @@ final class EndsWithFunctionToNetteUtilsStringsRector extends AbstractRector
     {
         return new RectorDefinition('Use Nette\Utils\Strings over bare string-functions', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function end($needle)
@@ -35,9 +35,9 @@ class SomeClass
         $no = $needle !== substr($content, -strlen($needle));
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function end($needle)
@@ -48,7 +48,7 @@ class SomeClass
         $no = !\Nette\Utils\Strings::endsWith($content, $needle);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

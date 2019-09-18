@@ -64,7 +64,7 @@ final class MultipleServiceGetToSetUpMethodRector extends AbstractRector
     {
         return new RectorDefinition('', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use ItemRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -82,9 +82,9 @@ class SomeTest extends KernelTestCase
         $itemRepository->doAnotherStuff();
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use ItemRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -111,7 +111,7 @@ class SomeTest extends KernelTestCase
         $this->itemRepository->doAnotherStuff();
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

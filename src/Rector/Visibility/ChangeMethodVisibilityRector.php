@@ -32,7 +32,7 @@ final class ChangeMethodVisibilityRector extends AbstractRector
         return new RectorDefinition(
             'Change visibility of method from parent class.',
             [new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+<<<'PHP'
 class FrameworkClass
 {
     protected someMethod()
@@ -46,9 +46,9 @@ class MyClass extends FrameworkClass
     {
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-<<<'CODE_SAMPLE'
+<<<'PHP'
 class FrameworkClass
 {
     protected someMethod()
@@ -62,7 +62,7 @@ class MyClass extends FrameworkClass
     {
     }
 }
-CODE_SAMPLE
+PHP
                 ,
                 [
                     'FrameworkClass' => [

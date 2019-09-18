@@ -19,7 +19,7 @@ final class CommonNotEqualRector extends AbstractRector
     {
         return new RectorDefinition('Use common != instead of less known <> with same meaning', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     public function run($one, $two)
@@ -27,9 +27,9 @@ final class SomeClass
         return $one <> $two;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     public function run($one, $two)
@@ -37,7 +37,7 @@ final class SomeClass
         return $one != $two;
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

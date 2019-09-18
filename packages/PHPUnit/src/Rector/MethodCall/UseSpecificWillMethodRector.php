@@ -33,7 +33,7 @@ final class UseSpecificWillMethodRector extends AbstractPHPUnitRector
     {
         return new RectorDefinition('Changes ->will($this->xxx()) to one specific method', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     public function test()
@@ -45,9 +45,9 @@ class SomeClass extends PHPUnit\Framework\TestCase
             ->will($this->returnValue('translated max {{ max }}!'));
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     public function test()
@@ -59,7 +59,7 @@ class SomeClass extends PHPUnit\Framework\TestCase
             ->willReturnValue('translated max {{ max }}!');
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

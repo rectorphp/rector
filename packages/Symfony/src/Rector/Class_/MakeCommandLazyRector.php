@@ -26,7 +26,7 @@ final class MakeCommandLazyRector extends AbstractRector
     {
         return new RectorDefinition('Make Symfony commands lazy', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Symfony\Component\Console\Command\Command
 
 class SunshineCommand extends Command
@@ -36,9 +36,9 @@ class SunshineCommand extends Command
         $this->setName('sunshine');
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Symfony\Component\Console\Command\Command
 
 class SunshineCommand extends Command
@@ -48,7 +48,7 @@ class SunshineCommand extends Command
     {
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

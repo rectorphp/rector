@@ -46,7 +46,7 @@ final class JsonDumpRectorsOutputFormatter implements DumpRectorsOutputFormatter
                 'package' => $this->rectorMetadataResolver->resolvePackageFromRectorClass(get_class($rector)),
                 'tags' => $this->createTagsFromClass(get_class($rector)),
                 'description' => $rectorConfiguration->getDescription(),
-                'code_samples' => $this->resolveCodeSamples($rectorConfiguration),
+                'PHPs' => $this->resolveCodeSamples($rectorConfiguration),
                 'is_configurable' => $this->resolveIsConfigurable($rectorConfiguration),
             ];
         }

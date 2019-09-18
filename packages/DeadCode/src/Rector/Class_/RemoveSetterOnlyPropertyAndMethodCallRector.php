@@ -44,7 +44,7 @@ final class RemoveSetterOnlyPropertyAndMethodCallRector extends AbstractRector
     {
         return new RectorDefinition('Removes method that set values that are never used', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     private $name;
@@ -63,9 +63,9 @@ class ActiveOnlySetter
         $someClass->setName('Tom');
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
 }
@@ -77,7 +77,7 @@ class ActiveOnlySetter
         $someClass = new SomeClass();
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

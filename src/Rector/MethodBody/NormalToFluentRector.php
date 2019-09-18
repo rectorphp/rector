@@ -37,17 +37,17 @@ final class NormalToFluentRector extends AbstractRector
     {
         return new RectorDefinition('Turns fluent interface calls to classic ones.', [
             new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $someObject = new SomeClass();
 $someObject->someFunction();
 $someObject->otherFunction();
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $someObject = new SomeClass();
 $someObject->someFunction()
     ->otherFunction();
-CODE_SAMPLE
+PHP
                 ,
                 [
                     'SomeClass' => ['someFunction', 'otherFunction'],

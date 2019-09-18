@@ -173,7 +173,7 @@ final class HelperFunctionToConstructorInjectionRector extends AbstractRector
     {
         return new RectorDefinition('Move help facade-like function calls to constructor injection', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeController
 {
     public function action()
@@ -182,9 +182,9 @@ class SomeController
         $viewFactory = view();
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeController
 {
     /**
@@ -203,7 +203,7 @@ class SomeController
         $viewFactory = $this->viewFactory;
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

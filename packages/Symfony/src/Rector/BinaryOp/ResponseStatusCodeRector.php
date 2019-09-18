@@ -95,7 +95,7 @@ final class ResponseStatusCodeRector extends AbstractRector
     {
         return new RectorDefinition('Turns status code numbers to constants', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeController
 {
     public function index()
@@ -106,9 +106,9 @@ class SomeController
         if ($response->getStatusCode() === 200) {}
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeController
 {
     public function index()
@@ -119,7 +119,7 @@ class SomeController
         if ($response->getStatusCode() === \Symfony\Component\HttpFoundation\Response::HTTP_OK) {}
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

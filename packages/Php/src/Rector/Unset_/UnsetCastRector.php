@@ -17,13 +17,13 @@ final class UnsetCastRector extends AbstractRector
     {
         return new RectorDefinition('Removes (unset) cast', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $value = (unset) $value;
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $value = null;
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

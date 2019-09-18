@@ -34,7 +34,7 @@ final class PregFunctionToNetteUtilsStringsRector extends AbstractRector
     {
         return new RectorDefinition('Use Nette\Utils\Strings over bare preg_* functions', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -43,9 +43,9 @@ class SomeClass
         preg_match('#Hi#', $content);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -54,7 +54,7 @@ class SomeClass
         \Nette\Utils\Strings::match($content, '#Hi#');
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

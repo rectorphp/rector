@@ -33,21 +33,21 @@ final class StringsAssertNakedRector extends AbstractRector
     {
         return new RectorDefinition('String asserts must be passed directly to assert()', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 function nakedAssert()
 {
     assert('true === true');
     assert("true === true");
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 function nakedAssert()
 {
     assert(true === true);
     assert(true === true);
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

@@ -31,7 +31,7 @@ final class ChangeSingletonToServiceRector extends AbstractRector
     {
         return new RectorDefinition('Change singleton class to normal class that can be registered as a service', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     private static $instance;
@@ -49,16 +49,16 @@ class SomeClass
         return static::$instance;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function __construct()
     {
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

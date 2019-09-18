@@ -74,7 +74,7 @@ final class FormTypeInstanceToClassConstRector extends AbstractRector
             'Changes createForm(new FormType), add(new FormType) to ones with "FormType::class"',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeController
 {
     public function action()
@@ -85,9 +85,9 @@ class SomeController
         ]);
     }
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeController
 {
     public function action()
@@ -98,7 +98,7 @@ class SomeController
         ]);
     }
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

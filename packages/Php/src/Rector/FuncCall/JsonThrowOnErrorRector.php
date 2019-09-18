@@ -25,15 +25,15 @@ final class JsonThrowOnErrorRector extends AbstractRector
             'Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonException on error',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 json_encode($content);
 json_decode($json);
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 json_encode($content, JSON_THROW_ON_ERROR);
 json_decode($json, null, null, JSON_THROW_ON_ERROR);
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

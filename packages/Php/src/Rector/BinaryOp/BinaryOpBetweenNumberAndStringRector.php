@@ -23,7 +23,7 @@ final class BinaryOpBetweenNumberAndStringRector extends AbstractRector
             'Change binary operation between some number + string to PHP 7.1 compatible version',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -35,9 +35,9 @@ class SomeClass
         $value = 5 * $name;
     }
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -49,7 +49,7 @@ class SomeClass
         $value = 5 * 0;
     }
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

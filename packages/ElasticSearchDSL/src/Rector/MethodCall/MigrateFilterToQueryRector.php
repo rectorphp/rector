@@ -22,7 +22,7 @@ final class MigrateFilterToQueryRector extends AbstractRector
     {
         return new RectorDefinition('Migrates addFilter to addQuery', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -34,9 +34,9 @@ class SomeClass
         );
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -49,7 +49,7 @@ class SomeClass
         );
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

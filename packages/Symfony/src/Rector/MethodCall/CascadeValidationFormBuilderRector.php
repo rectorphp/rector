@@ -36,7 +36,7 @@ final class CascadeValidationFormBuilderRector extends AbstractRector
     {
         return new RectorDefinition('Change "cascade_validation" option to specific node attribute', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeController
 {
     public function someMethod()
@@ -51,9 +51,9 @@ class SomeController
         return new FormBuilder();
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeController
 {
     public function someMethod()
@@ -70,7 +70,7 @@ class SomeController
         return new FormBuilder();
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

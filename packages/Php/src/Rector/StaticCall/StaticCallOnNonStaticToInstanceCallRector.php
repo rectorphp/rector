@@ -45,7 +45,7 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
     {
         return new RectorDefinition('Changes static call to instance call, where not useful', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class Something
 {
     public function doWork()
@@ -60,9 +60,9 @@ class Another
         return Something::doWork();
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class Something
 {
     public function doWork()
@@ -77,7 +77,7 @@ class Another
         return (new Something)->doWork();
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

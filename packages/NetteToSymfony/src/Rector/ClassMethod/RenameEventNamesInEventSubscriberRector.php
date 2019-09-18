@@ -53,7 +53,7 @@ final class RenameEventNamesInEventSubscriberRector extends AbstractRector
     {
         return new RectorDefinition('Changes event names from Nette ones to Symfony ones', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class SomeClass implements EventSubscriberInterface
@@ -63,9 +63,9 @@ final class SomeClass implements EventSubscriberInterface
         return ['nette.application' => 'someMethod'];
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class SomeClass implements EventSubscriberInterface
@@ -75,7 +75,7 @@ final class SomeClass implements EventSubscriberInterface
         return [\SymfonyEvents::KERNEL => 'someMethod'];
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

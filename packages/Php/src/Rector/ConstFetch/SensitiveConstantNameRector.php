@@ -84,17 +84,17 @@ final class SensitiveConstantNameRector extends AbstractRector
             'Changes case insensitive constants to sensitive ones.',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 define('FOO', 42, true);
 var_dump(FOO);
 var_dump(foo);
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 define('FOO', 42, true);
 var_dump(FOO);
 var_dump(FOO);
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

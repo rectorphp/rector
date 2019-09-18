@@ -30,15 +30,15 @@ final class MessageAsArrayRector extends AbstractRector
     {
         return new RectorDefinition('Changes getMessage(..., true) to getMessageAsArray()', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 /** @var GuzzleHttp\Message\MessageInterface */
 $value = $message->getMessage('key', true);
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 /** @var GuzzleHttp\Message\MessageInterface */
 $value = $message->getMessageAsArray('key');
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

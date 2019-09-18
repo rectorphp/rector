@@ -4,13 +4,13 @@ namespace Rector\Php\Tests\Rector\String_\SensitiveHereNowDocRector\Fixture;
 
 function sensitiveHereNowDoc()
 {
-    $value = <<<CODE_SAMPLE
-    CODE_SAMPLE_2
-CODE_SAMPLE;
+    $value = <<<PHP
+    PHP_2
+PHP;
 
-    $value = <<<CODE_SAMPLE
-    CODE_SAMPLE_WRAP_2
-CODE_SAMPLE;
+    $value = <<<PHP
+    PHP_WRAP_2
+PHP;
 
 // examples from RFC
     $value = <<<END
@@ -28,13 +28,13 @@ namespace Rector\Php\Tests\Rector\String_\SensitiveHereNowDocRector\Fixture;
 
 function sensitiveHereNowDoc()
 {
-    $value = <<<CODE_SAMPLE_WRAP
-    CODE_SAMPLE_2
-CODE_SAMPLE_WRAP;
+    $value = <<<PHP_WRAP
+    PHP_2
+PHP_WRAP;
 
-    $value = <<<CODE_SAMPLE_WRAP_1
-    CODE_SAMPLE_WRAP_2
-CODE_SAMPLE_WRAP_1;
+    $value = <<<PHP_WRAP_1
+    PHP_WRAP_2
+PHP_WRAP_1;
 
 // examples from RFC
     $value = <<<END_WRAP

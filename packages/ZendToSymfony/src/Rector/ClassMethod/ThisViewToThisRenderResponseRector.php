@@ -44,14 +44,14 @@ final class ThisViewToThisRenderResponseRector extends AbstractRector
         return new RectorDefinition(
             'Change $this->_view->assign = 5; to $this->render("...", $templateData);',
             [new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 public function someAction()
 {
     $this->_view->value = 5;
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 public function someAction()
 {
     $templateData = [];
@@ -59,7 +59,7 @@ public function someAction()
     
     return $this->render("...", $templateData);
 }                
-CODE_SAMPLE
+PHP
             )]
         );
     }

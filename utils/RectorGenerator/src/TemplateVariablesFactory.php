@@ -49,7 +49,7 @@ final class TemplateVariablesFactory
     {
         if (Strings::contains($code, PHP_EOL)) {
             // multi lines
-            return sprintf("<<<'CODE_SAMPLE'%s%s%sCODE_SAMPLE%s", PHP_EOL, $code, PHP_EOL, PHP_EOL);
+            return sprintf("<<<'PHP'%s%s%sPHP%s", PHP_EOL, $code, PHP_EOL, PHP_EOL);
         }
 
         // single line
@@ -65,11 +65,11 @@ final class TemplateVariablesFactory
             return '';
         }
 
-        $sourceDocBlock = <<<'CODE_SAMPLE'
+        $sourceDocBlock = <<<'PHP'
 /**
 %s
  */
-CODE_SAMPLE;
+PHP;
 
         $sourceAsString = '';
         foreach ($source as $singleSource) {

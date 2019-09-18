@@ -37,15 +37,15 @@ final class RenameMethodCallRector extends AbstractRector
     {
         return new RectorDefinition('Turns method call names to new ones.', [
             new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $someObject = new SomeExampleClass;
 $someObject->oldMethod();
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $someObject = new SomeExampleClass;
 $someObject->newMethod();
-CODE_SAMPLE
+PHP
                 ,
                 [
                     'SomeExampleClass' => [

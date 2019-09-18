@@ -46,7 +46,7 @@ final class GetRequestRector extends AbstractRector
             'Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeController
 {
     public function someAction()
@@ -54,9 +54,9 @@ class SomeController
         $this->getRequest()->...();
     }
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 use Symfony\Component\HttpFoundation\Request;
 
 class SomeController
@@ -66,7 +66,7 @@ class SomeController
         $request->...();
     }
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

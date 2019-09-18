@@ -18,7 +18,7 @@ final class SymplifyQuoteEscapeRector extends AbstractRector
     {
         return new RectorDefinition('Prefer quote that not inside the string', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -27,9 +27,9 @@ class SomeClass
          $name = '\' Sara';
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -38,7 +38,7 @@ class SomeClass
          $name = "' Sara";
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

@@ -31,7 +31,7 @@ final class MakeDispatchFirstArgumentEventRector extends AbstractRector
     {
         return new RectorDefinition('Make event object a first argument of dispatch() method, event name as second', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SomeClass
@@ -41,9 +41,9 @@ class SomeClass
         $eventDispatcher->dispatch('event_name', new Event());
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SomeClass
@@ -53,7 +53,7 @@ class SomeClass
         $eventDispatcher->dispatch(new Event(), 'event_name');
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

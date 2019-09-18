@@ -38,7 +38,7 @@ final class ReplaceAssertArraySubsetRector extends AbstractPHPUnitRector
     {
         return new RectorDefinition('Replace deprecated "assertArraySubset()" method with alternative methods', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -50,9 +50,9 @@ class SomeTest extends \PHPUnit\Framework\TestCase
         ], $checkedArray);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
@@ -63,7 +63,7 @@ class SomeTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('new_value', $checkedArray['cache_directory']);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

@@ -35,7 +35,7 @@ final class AddMethodParentCallRector extends AbstractRector
     {
         return new RectorDefinition('Add method parent call, in case new parent method is added', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SunshineCommand extends ParentClassWithNewConstructor
 {
     public function __construct()
@@ -43,9 +43,9 @@ class SunshineCommand extends ParentClassWithNewConstructor
         $value = 5;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SunshineCommand extends ParentClassWithNewConstructor
 {
     public function __construct()
@@ -55,7 +55,7 @@ class SunshineCommand extends ParentClassWithNewConstructor
         parent::__construct();
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

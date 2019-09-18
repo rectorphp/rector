@@ -19,7 +19,7 @@ final class IsAWithStringWithThirdArgumentRector extends AbstractRector
     {
         return new RectorDefinition('', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function __construct(string $value)
@@ -27,9 +27,9 @@ class SomeClass
         return is_a($value, 'stdClass');
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function __construct(string $value)
@@ -37,7 +37,7 @@ class SomeClass
         return is_a($value, 'stdClass', true);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

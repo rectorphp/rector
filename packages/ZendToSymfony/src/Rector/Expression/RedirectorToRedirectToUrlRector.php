@@ -41,21 +41,21 @@ final class RedirectorToRedirectToUrlRector extends AbstractRector
     {
         return new RectorDefinition('Change $redirector helper to Symfony\Controller call redirect()', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 public function someAction()
 {
     $redirector = $this->_helper->redirector;
     $redirector->goToUrl('abc');
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 public function someAction()
 {
     $redirector = $this->_helper->redirector;
     $this->redirect('abc');
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

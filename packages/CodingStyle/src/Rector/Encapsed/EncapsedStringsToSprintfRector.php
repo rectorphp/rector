@@ -23,7 +23,7 @@ final class EncapsedStringsToSprintfRector extends AbstractRector
     {
         return new RectorDefinition('Convert enscaped {$string} to more readable sprintf', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     public function run(string $format)
@@ -31,9 +31,9 @@ final class SomeClass
         return "Unsupported format {$format}";
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     public function run(string $format)
@@ -41,7 +41,7 @@ final class SomeClass
         return sprintf('Unsupported format %s', $format);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

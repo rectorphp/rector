@@ -17,7 +17,7 @@ final class RemoveAndTrueRector extends AbstractRector
     {
         return new RectorDefinition('Remove and true that has no added value', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -25,9 +25,9 @@ class SomeClass
         return true && 5 === 1;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -35,7 +35,7 @@ class SomeClass
         return 5 === 1;
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

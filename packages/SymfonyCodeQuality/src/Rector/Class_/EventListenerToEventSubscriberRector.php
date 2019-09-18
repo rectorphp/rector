@@ -98,7 +98,7 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
             'Change Symfony Event listener class to Event Subscriber based on configuration in service.yaml file',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 <?php
 
 class SomeListener
@@ -113,9 +113,9 @@ services:
     SomeListener:
         tags:
             - { name: kernel.event_listener, event: 'some_event', method: 'methodToBeCalled' }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 <?php
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -134,7 +134,7 @@ class SomeEventSubscriber implements EventSubscriberInterface
      {
      }
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

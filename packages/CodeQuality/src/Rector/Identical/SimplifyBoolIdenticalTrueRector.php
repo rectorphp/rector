@@ -21,7 +21,7 @@ final class SimplifyBoolIdenticalTrueRector extends AbstractRector
     {
         return new RectorDefinition('Symplify bool value compare to true or false', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run(bool $value, string $items)
@@ -30,9 +30,9 @@ class SomeClass
          $match = in_array($value, $items, TRUE) !== FALSE;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run(bool $value, string $items)
@@ -41,7 +41,7 @@ class SomeClass
          $match = in_array($value, $items, TRUE);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

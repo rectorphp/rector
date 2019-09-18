@@ -35,17 +35,17 @@ final class FluentReplaceRector extends AbstractRector
     {
         return new RectorDefinition('Turns fluent interface calls to classic ones.', [
             new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $someClass = new SomeClass();
 $someClass->someFunction()
             ->otherFunction();
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $someClass = new SomeClass();
 $someClass->someFunction();
 $someClass->otherFunction();
-CODE_SAMPLE
+PHP
                 ,
                 [
                     '$classesToDefluent' => ['SomeExampleClass'],

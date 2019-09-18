@@ -89,7 +89,7 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
             'Change new Route() from RouteFactory to @Route annotation above controller method',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 final class RouterFactory
 {
     public function create(): RouteList
@@ -107,9 +107,9 @@ final class SomePresenter
     {
     }
 }                
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 final class RouterFactory
 {
     public function create(): RouteList
@@ -132,7 +132,7 @@ final class SomePresenter
     {
     }
 }                
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

@@ -41,7 +41,7 @@ final class PregReplaceEModifierRector extends AbstractRector
     {
         return new RectorDefinition('The /e modifier is no longer supported, use preg_replace_callback instead ', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -49,9 +49,9 @@ class SomeClass
         $comment = preg_replace('~\b(\w)(\w+)~e', '"$1".strtolower("$2")', $comment);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -61,7 +61,7 @@ class SomeClass
         }, , $comment);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

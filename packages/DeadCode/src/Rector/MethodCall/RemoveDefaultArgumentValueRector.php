@@ -44,7 +44,7 @@ final class RemoveDefaultArgumentValueRector extends AbstractRector
     {
         return new RectorDefinition('Remove argument value, if it is the same as default value', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -63,9 +63,9 @@ class SomeClass
         return $cards;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -84,7 +84,7 @@ class SomeClass
         return $cards;
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

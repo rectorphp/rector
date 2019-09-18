@@ -52,7 +52,7 @@ final class ConstructorInjectionToActionInjectionRector extends AbstractRector
     {
         return new RectorDefinition('', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeController
 {
     /**
@@ -70,9 +70,9 @@ final class SomeController
         $products = $this->productRepository->fetchAll();
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeController
 {
     public function default(ProductRepository $productRepository)
@@ -80,7 +80,7 @@ final class SomeController
         $products = $productRepository->fetchAll();
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

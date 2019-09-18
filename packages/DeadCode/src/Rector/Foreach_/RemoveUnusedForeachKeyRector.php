@@ -17,19 +17,19 @@ final class RemoveUnusedForeachKeyRector extends AbstractRector
     {
         return new RectorDefinition('Remove unused key in foreach', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $items = [];
 foreach ($items as $key => $value) {
     $result = $value;
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $items = [];
 foreach ($items as $value) {
     $result = $value;
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

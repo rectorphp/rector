@@ -70,7 +70,7 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
     {
         return new RectorDefinition('Import fully qualified names to use statements', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function create()
@@ -78,9 +78,9 @@ class SomeClass
           return SomeAnother\AnotherClass;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use SomeAnother\AnotherClass;
 
 class SomeClass
@@ -90,7 +90,7 @@ class SomeClass
           return AnotherClass;
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

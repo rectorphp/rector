@@ -34,19 +34,19 @@ final class AddReturnTypeDeclarationRector extends AbstractRector
     {
         return new RectorDefinition('Changes defined return typehint of method and class.', [
             new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public getData();
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public getData(): array;
 }
-CODE_SAMPLE
+PHP
                 ,
                 [
                     '$typehintForMethodByClass' => [

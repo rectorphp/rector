@@ -32,7 +32,7 @@ final class RemoveUnusedPrivateMethodRector extends AbstractRector
     {
         return new RectorDefinition('Remove unused private method', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeController
 {
     public function run()
@@ -45,9 +45,9 @@ final class SomeController
         return 10;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeController
 {
     public function run()
@@ -55,7 +55,7 @@ final class SomeController
         return 5;
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

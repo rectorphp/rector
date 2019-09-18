@@ -35,11 +35,11 @@ final class SimpleArrayCallableToStringRector extends AbstractRector
     {
         return new RectorDefinition('Changes redundant anonymous bool functions to simple calls', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $paths = array_filter($paths, function ($path): bool {
     return is_dir($path);
 });
-CODE_SAMPLE
+PHP
                 ,
                 'array_filter($paths, "is_dir");'
             ),

@@ -34,21 +34,21 @@ final class SimplifyDeMorganBinaryRector extends AbstractRector
     {
         return new RectorDefinition('Simplify negated conditions with de Morgan theorem', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 <?php
 
 $a = 5;
 $b = 10;
 $result = !($a > 20 || $b <= 50);
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 <?php
 
 $a = 5;
 $b = 10;
 $result = $a <= 20 && $b > 50;
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

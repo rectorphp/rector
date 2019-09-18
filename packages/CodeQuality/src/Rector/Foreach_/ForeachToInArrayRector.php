@@ -47,7 +47,7 @@ final class ForeachToInArrayRector extends AbstractRector
             'Simplify `foreach` loops into `in_array` when possible',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 foreach ($items as $item) {
     if ($item === "something") {
         return true;
@@ -55,7 +55,7 @@ foreach ($items as $item) {
 }
 
 return false;
-CODE_SAMPLE
+PHP
                     ,
                     'in_array("something", $items, true);'
                 ),

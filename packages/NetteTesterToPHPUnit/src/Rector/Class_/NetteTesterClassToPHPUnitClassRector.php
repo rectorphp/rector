@@ -28,7 +28,7 @@ final class NetteTesterClassToPHPUnitClassRector extends AbstractRector
     {
         return new RectorDefinition('Migrate Nette Tester test case to PHPUnit', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 namespace KdybyTests\Doctrine;
 
 use Tester\TestCase;
@@ -47,9 +47,9 @@ class ExtensionTest extends TestCase
 }
 
 (new \ExtensionTest())->run();
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 namespace KdybyTests\Doctrine;
 
 use Tester\TestCase;
@@ -64,7 +64,7 @@ class ExtensionTest extends \PHPUnit\Framework\TestCase
         $this->same($container->getService('kdyby.doctrine.default.entityManager'), $default);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

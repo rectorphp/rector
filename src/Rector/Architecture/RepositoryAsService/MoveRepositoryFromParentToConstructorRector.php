@@ -54,7 +54,7 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
     {
         return new RectorDefinition('Turns parent EntityRepository class to constructor dependency', [
             new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 namespace App\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -62,9 +62,9 @@ use Doctrine\ORM\EntityRepository;
 final class PostRepository extends EntityRepository
 {
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 namespace App\Repository;
 
 use App\Entity\Post;
@@ -81,7 +81,7 @@ final class PostRepository
         $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
                 [
                     '$entityRepositoryClass' => 'Doctrine\ORM\EntityRepository',

@@ -26,7 +26,7 @@ final class ThrowWithPreviousExceptionRector extends AbstractRector
             'When throwing into a catch block, checks that the previous exception is passed to the new throw clause',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -38,9 +38,9 @@ class SomeClass
         }
     }
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -52,7 +52,7 @@ class SomeClass
         }
     }
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

@@ -19,7 +19,7 @@ final class GetCalledClassToStaticClassRector extends AbstractRector
     {
         return new RectorDefinition('Change __CLASS__ to self::class', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
    public function callOnMe()
@@ -27,9 +27,9 @@ class SomeClass
        var_dump( get_called_class());
    }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
     {
        public function callOnMe()
@@ -37,7 +37,7 @@ class SomeClass
            var_dump( static::class);
        }
     }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

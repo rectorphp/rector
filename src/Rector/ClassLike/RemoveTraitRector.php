@@ -45,18 +45,18 @@ final class RemoveTraitRector extends AbstractRector
     {
         return new RectorDefinition('Remove specific traits from code', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     use SomeTrait;
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

@@ -32,15 +32,15 @@ final class PropertyAssignToMethodCallRector extends AbstractRector
     {
         return new RectorDefinition('Turns property assign of specific type and property name to method call', [
             new ConfiguredCodeSample(
-<<<'CODE_SAMPLE'
+<<<'PHP'
 $someObject = new SomeClass; 
 $someObject->oldProperty = false;
-CODE_SAMPLE
+PHP
                 ,
-<<<'CODE_SAMPLE'
+<<<'PHP'
 $someObject = new SomeClass;
 $someObject->newMethodCall(false);
-CODE_SAMPLE
+PHP
                 ,
                 [
                     '$oldPropertiesToNewMethodCallsByType' => [

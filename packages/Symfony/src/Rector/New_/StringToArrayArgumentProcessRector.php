@@ -53,15 +53,15 @@ final class StringToArrayArgumentProcessRector extends AbstractRector
     {
         return new RectorDefinition('Changes Process string argument to an array', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Symfony\Component\Process\Process;
 $process = new Process('ls -l');
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Symfony\Component\Process\Process;
 $process = new Process(['ls', '-l']);
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

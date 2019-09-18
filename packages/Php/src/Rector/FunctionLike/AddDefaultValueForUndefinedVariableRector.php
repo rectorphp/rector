@@ -45,7 +45,7 @@ final class AddDefaultValueForUndefinedVariableRector extends AbstractRector
     {
         return new RectorDefinition('Adds default value for undefined variable', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -56,9 +56,9 @@ class SomeClass
         echo $a;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -70,7 +70,7 @@ class SomeClass
         echo $a;
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

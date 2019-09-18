@@ -48,7 +48,7 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
             'Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.',
             [
                 new CodeSample(
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 /**
  * @expectedException Exception
  * @expectedExceptionMessage Message
@@ -57,16 +57,16 @@ public function test()
 {
     // tested code
 }
-CODE_SAMPLE
+PHP
                     ,
-                    <<<'CODE_SAMPLE'
+                    <<<'PHP'
 public function test()
 {
     $this->expectException('Exception');
     $this->expectExceptionMessage('Message');
     // tested code
 }
-CODE_SAMPLE
+PHP
                 ),
             ]
         );

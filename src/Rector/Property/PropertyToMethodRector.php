@@ -33,15 +33,15 @@ final class PropertyToMethodRector extends AbstractRector
     {
         return new RectorDefinition('Replaces properties assign calls be defined methods.', [
             new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $result = $object->property;
 $object->property = $value;
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $result = $object->getProperty();
 $object->setProperty($value);
-CODE_SAMPLE
+PHP
                 ,
                 [
                     '$perClassPropertyToMethods' => [
@@ -55,13 +55,13 @@ CODE_SAMPLE
                 ]
             ),
             new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $result = $object->property;
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 $result = $object->getProperty('someArg');
-CODE_SAMPLE
+PHP
                 ,
                 [
                     '$perClassPropertyToMethods' => [

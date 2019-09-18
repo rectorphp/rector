@@ -44,7 +44,7 @@ final class ServiceGetterToConstructorInjectionRector extends AbstractRector
     {
         return new RectorDefinition('Get service call to constructor injection', [
             new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     /**
@@ -81,9 +81,9 @@ class FirstService
          return $this->anotherService;
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     /**
@@ -108,7 +108,7 @@ final class SomeClass
         $anotherService->run();
     }
 }
-CODE_SAMPLE
+PHP
 
                 ,
                 [

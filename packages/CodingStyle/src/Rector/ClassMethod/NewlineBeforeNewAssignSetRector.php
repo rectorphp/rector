@@ -34,7 +34,7 @@ final class NewlineBeforeNewAssignSetRector extends AbstractRector
     {
         return new RectorDefinition('Add extra space before new assign set', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     public function run()
@@ -45,9 +45,9 @@ final class SomeClass
         $value2->setValue(1);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 final class SomeClass
 {
     public function run()
@@ -59,7 +59,7 @@ final class SomeClass
         $value2->setValue(1);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

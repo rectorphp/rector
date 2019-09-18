@@ -31,7 +31,7 @@ final class FromRequestGetParameterToAttributesGetRector extends AbstractRector
     {
         return new RectorDefinition('Changes "getParameter()" to "attributes->get()" from Nette to Symfony', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Nette\Request;
 
 final class SomeController
@@ -41,9 +41,9 @@ final class SomeController
         $value = $request->getParameter('abz');
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 use Nette\Request;
 
 final class SomeController
@@ -53,7 +53,7 @@ final class SomeController
         $value = $request->attribute->get('abz');
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }

@@ -21,7 +21,7 @@ final class ConsistentImplodeRector extends AbstractRector
     {
         return new RectorDefinition('Changes various implode forms to consistent one', [
             new CodeSample(
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run(array $items)
@@ -32,9 +32,9 @@ class SomeClass
         $itemsAsStrings = implode('|', $items);
     }
 }
-CODE_SAMPLE
+PHP
                 ,
-                <<<'CODE_SAMPLE'
+                <<<'PHP'
 class SomeClass
 {
     public function run(array $items)
@@ -45,7 +45,7 @@ class SomeClass
         $itemsAsStrings = implode('|', $items);
     }
 }
-CODE_SAMPLE
+PHP
             ),
         ]);
     }
