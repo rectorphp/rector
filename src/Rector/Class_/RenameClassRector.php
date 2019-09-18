@@ -129,35 +129,21 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        // replace on @var/@param/@return/@throws
-        if ($this->docBlockManipulator->hasNodeTypeTags($node)) {
-            foreach ($this->oldToNewClasses as $oldClass => $newClass) {
-                $oldClassType = new ObjectType($oldClass);
-                $newClassType = new FullyQualifiedObjectType($newClass);
-
-                $this->docBlockManipulator->changeType($node, $oldClassType, $newClassType);
-            }
-
-            $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $this->oldToNewClasses);
-        }
+        $this->refactorPhpDoc($node);
 
         if ($node instanceof Name) {
             return $this->refactorName($node);
         }
 
         if ($node instanceof Namespace_) {
-            $node = $this->refactorNamespaceNode($node);
+            return $this->refactorNamespaceNode($node);
         }
 
         if ($node instanceof ClassLike) {
-            $node = $this->refactorClassLikeNode($node);
+            return $this->refactorClassLikeNode($node);
         }
 
-        if ($node === null) {
-            return null;
-        }
-
-        return $node;
+        return null;
     }
 
     /**
@@ -317,5 +303,30 @@ PHP
         }
 
         return new FullyQualified($newName);
+    }
+
+    /**
+     * Replace types in @var/@param/@return/@throws,
+     * Doctrine @ORM entity targetClass, Serialize, Assert etc.
+     */
+    private function refactorPhpDoc(Node $node): void
+    {
+        $nodePhpDocInfo = $this->getPhpDocInfo($node);
+        if ($nodePhpDocInfo === null) {
+            return;
+        }
+
+        if (! $this->docBlockManipulator->hasNodeTypeTags($node)) {
+            return;
+        }
+
+        foreach ($this->oldToNewClasses as $oldClass => $newClass) {
+            $oldClassType = new ObjectType($oldClass);
+            $newClassType = new FullyQualifiedObjectType($newClass);
+
+            $this->docBlockManipulator->changeType($node, $oldClassType, $newClassType);
+        }
+
+        $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $this->oldToNewClasses);
     }
 }
