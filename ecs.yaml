@@ -189,6 +189,3 @@ parameters:
         Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer:
             # buggy with PHP heredoc
             - 'packages/SOLID/src/Rector/ClassConst/PrivatizeLocalClassConstantRector.php'
-            - 'packages/Php/src/Rector/FuncCall/SensitiveDefineRector.php'
-            - 'packages/Php/src/Rector/Name/ReservedObjectRector.php'
-            - 'packages/Php/src/Rector/Assign/AssignArrayToStringRector.php'
