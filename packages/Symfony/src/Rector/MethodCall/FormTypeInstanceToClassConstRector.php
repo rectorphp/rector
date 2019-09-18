@@ -250,13 +250,16 @@ CODE_SAMPLE
         $optionsParamBuilder->setType('array');
         $optionsParam = $optionsParamBuilder->getNode();
 
-        $buildFormClassMethodNode = $this->builderFactory->method('buildForm')
-            ->makePublic()
-            ->addParam($formBuilderParam)
-            ->addParam($optionsParam)
-            // raw copy stmts from ctor @todo improve
-            ->addStmts($this->replaceParameterAssignWithOptionAssign((array) $classMethod->stmts, $optionsParam))
-            ->getNode();
+        $buildFormClassMethodBuilder = $this->builderFactory->method('buildForm');
+        $buildFormClassMethodBuilder->makePublic();
+        $buildFormClassMethodBuilder->addParam($formBuilderParam);
+        $buildFormClassMethodBuilder->addParam($optionsParam);
+        // raw copy stmts from ctor @todo improve
+        $buildFormClassMethodBuilder->addStmts(
+            $this->replaceParameterAssignWithOptionAssign((array) $classMethod->stmts, $optionsParam)
+        );
+
+        $buildFormClassMethodNode = $buildFormClassMethodBuilder->getNode();
 
         $classNode->stmts[] = $buildFormClassMethodNode;
     }

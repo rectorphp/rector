@@ -122,7 +122,6 @@ CODE_SAMPLE
                 if ($type === '') { // remove type
                     $param->type = null;
                 } else {
-//                    // @todo use mapper
                     $param->type = $this->staticTypeMapper->mapStringToPhpParserNode($type);
                 }
             }
