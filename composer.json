@@ -26,7 +26,7 @@
         "symfony/dependency-injection": "^3.4|^4.2",
         "symfony/finder": "^3.4|^4.2",
         "symfony/process": "^3.4|^4.2",
-        "symplify/package-builder": "^6.0.1"
+        "symplify/package-builder": "^6.1"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.14",
@@ -34,10 +34,10 @@
         "mockery/mockery": "^1.2",
         "ocramius/package-versions": "^1.4",
         "phpunit/phpunit": "^7.5|^8.0",
-        "symplify/changelog-linker": "^6.0.1",
-        "symplify/easy-coding-standard": "^6.0.1",
-        "symplify/monorepo-builder": "^6.0.1",
-        "symplify/phpstan-extensions": "^6.0.1",
+        "symplify/changelog-linker": "^6.1",
+        "symplify/easy-coding-standard": "^6.1",
+        "symplify/monorepo-builder": "^6.1",
+        "symplify/phpstan-extensions": "^6.1",
         "thecodingmachine/phpstan-strict-rules": "^0.11",
         "tracy/tracy": "^2.5"
     },
