@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -22,11 +21,6 @@ use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 final class AddArrayParamDocTypeRector extends AbstractRector
 {
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var ParamPhpDocNodeFactory
      */
     private $paramPhpDocNodeFactory;
@@ -37,11 +31,9 @@ final class AddArrayParamDocTypeRector extends AbstractRector
     private $paramTypeInferer;
 
     public function __construct(
-        DocBlockManipulator $docBlockManipulator,
         ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
         ParamTypeInferer $paramTypeInferer
     ) {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
         $this->paramTypeInferer = $paramTypeInferer;
     }

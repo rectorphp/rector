@@ -16,19 +16,19 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
 final class DoctrineEntityManipulator
 {
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var NameResolver
      */
     private $nameResolver;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator, NameResolver $nameResolver)
+    /**
+     * @var DocBlockManipulator
+     */
+    private $docBlockManipulator;
+
+    public function __construct(NameResolver $nameResolver, DocBlockManipulator $docBlockManipulator)
     {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->nameResolver = $nameResolver;
+        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function resolveOtherProperty(Property $property): ?string

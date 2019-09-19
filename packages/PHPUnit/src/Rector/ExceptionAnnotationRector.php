@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -31,16 +30,6 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
         'expectedExceptionCode' => 'expectExceptionCode',
         'expectedException' => 'expectException',
     ];
-
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    public function __construct(DocBlockManipulator $docBlockManipulator)
-    {
-        $this->docBlockManipulator = $docBlockManipulator;
-    }
 
     public function getDefinition(): RectorDefinition
     {

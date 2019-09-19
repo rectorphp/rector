@@ -25,11 +25,6 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 final class EntityUuidNodeFactory
 {
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var BuilderFactory
      */
     private $builderFactory;
@@ -39,14 +34,19 @@ final class EntityUuidNodeFactory
      */
     private $phpDocTagNodeFactory;
 
+    /**
+     * @var DocBlockManipulator
+     */
+    private $docBlockManipulator;
+
     public function __construct(
-        DocBlockManipulator $docBlockManipulator,
         BuilderFactory $builderFactory,
-        PhpDocTagNodeFactory $phpDocTagNodeFactory
+        PhpDocTagNodeFactory $phpDocTagNodeFactory,
+        DocBlockManipulator $docBlockManipulator
     ) {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->builderFactory = $builderFactory;
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
+        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function createTemporaryUuidProperty(): Property
@@ -98,7 +98,7 @@ final class EntityUuidNodeFactory
         return $classMethodBuilder->getNode();
     }
 
-    private function decoratePropertyWithUuidAnnotations(Property $property, bool $isNullable, bool $isId): void
+    public function decoratePropertyWithUuidAnnotations(Property $property, bool $isNullable, bool $isId): void
     {
         $this->clearVarAndOrmAnnotations($property);
         $this->replaceIntSerializerTypeWithString($property);

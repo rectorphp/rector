@@ -42,11 +42,6 @@ final class GetParamToClassMethodParameterAndRouteRector extends AbstractRector
     private $routeCollector;
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var ZendDetector
      */
     private $zendDetector;

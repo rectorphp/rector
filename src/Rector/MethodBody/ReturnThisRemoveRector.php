@@ -7,7 +7,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,16 +22,10 @@ final class ReturnThisRemoveRector extends AbstractRector
     private $classesToDefluent = [];
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @param string[] $classesToDefluent
      */
-    public function __construct(DocBlockManipulator $docBlockManipulator, array $classesToDefluent = [])
+    public function __construct(array $classesToDefluent = [])
     {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->classesToDefluent = $classesToDefluent;
     }
 

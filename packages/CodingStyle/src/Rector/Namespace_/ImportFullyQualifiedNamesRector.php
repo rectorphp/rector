@@ -11,7 +11,6 @@ use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\CodingStyle\Imports\AliasUsesResolver;
 use Rector\CodingStyle\Imports\ImportSkipper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -26,11 +25,6 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
      * @var string[]
      */
     private $aliasedUses = [];
-
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
 
     /**
      * @var bool
@@ -53,13 +47,11 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
     private $importSkipper;
 
     public function __construct(
-        DocBlockManipulator $docBlockManipulator,
         AliasUsesResolver $aliasUsesResolver,
         UseAddingCommander $useAddingCommander,
         ImportSkipper $importSkipper,
         bool $shouldImportDocBlocks = true
     ) {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->shouldImportDocBlocks = $shouldImportDocBlocks;
         $this->useAddingCommander = $useAddingCommander;
         $this->aliasUsesResolver = $aliasUsesResolver;

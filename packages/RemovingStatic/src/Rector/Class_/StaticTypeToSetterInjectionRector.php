@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -32,11 +31,6 @@ final class StaticTypeToSetterInjectionRector extends AbstractRector
     private $staticTypes = [];
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var PropertyNaming
      */
     private $propertyNaming;
@@ -44,12 +38,8 @@ final class StaticTypeToSetterInjectionRector extends AbstractRector
     /**
      * @param string[] $staticTypes
      */
-    public function __construct(
-        DocBlockManipulator $docBlockManipulator,
-        PropertyNaming $propertyNaming,
-        array $staticTypes = []
-    ) {
-        $this->docBlockManipulator = $docBlockManipulator;
+    public function __construct(PropertyNaming $propertyNaming, array $staticTypes = [])
+    {
         $this->propertyNaming = $propertyNaming;
         $this->staticTypes = $staticTypes;
     }

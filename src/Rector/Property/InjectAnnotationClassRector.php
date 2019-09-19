@@ -17,7 +17,6 @@ use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Exception\NotImplementedException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -31,11 +30,6 @@ use Throwable;
  */
 final class InjectAnnotationClassRector extends AbstractRector
 {
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
     /**
      * @var string[]
      */
@@ -63,12 +57,10 @@ final class InjectAnnotationClassRector extends AbstractRector
      * @param string[] $annotationClasses
      */
     public function __construct(
-        DocBlockManipulator $docBlockManipulator,
         AnalyzedApplicationContainerInterface $analyzedApplicationContainer,
         ErrorAndDiffCollector $errorAndDiffCollector,
         array $annotationClasses = []
     ) {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->annotationClasses = $annotationClasses;

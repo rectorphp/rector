@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Autodiscovery\FileMover\FileMover;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
@@ -27,15 +26,9 @@ final class MoveEntitiesToEntityDirectoryRector extends AbstractFileSystemRector
      */
     private $fileMover;
 
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    public function __construct(FileMover $fileMover, DocBlockManipulator $docBlockManipulator)
+    public function __construct(FileMover $fileMover)
     {
         $this->fileMover = $fileMover;
-        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function getDefinition(): RectorDefinition

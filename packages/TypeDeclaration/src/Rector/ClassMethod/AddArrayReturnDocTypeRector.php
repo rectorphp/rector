@@ -4,7 +4,6 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,18 +18,12 @@ use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationRe
 final class AddArrayReturnDocTypeRector extends AbstractRector
 {
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var ReturnTypeInferer
      */
     private $returnTypeInferer;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator, ReturnTypeInferer $returnTypeInferer)
+    public function __construct(ReturnTypeInferer $returnTypeInferer)
     {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->returnTypeInferer = $returnTypeInferer;
     }
 

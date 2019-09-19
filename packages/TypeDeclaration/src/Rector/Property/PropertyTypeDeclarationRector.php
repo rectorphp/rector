@@ -7,7 +7,6 @@ namespace Rector\TypeDeclaration\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
@@ -20,18 +19,12 @@ use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 final class PropertyTypeDeclarationRector extends AbstractRector
 {
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var PropertyTypeInferer
      */
     private $propertyTypeInferer;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator, PropertyTypeInferer $propertyTypeInferer)
+    public function __construct(PropertyTypeInferer $propertyTypeInferer)
     {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->propertyTypeInferer = $propertyTypeInferer;
     }
 

@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PHPUnit\Composer\ComposerAutoloadedDirectoryProvider;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -25,20 +24,12 @@ final class AddSeeTestAnnotationRector extends AbstractRector
     private $phpUnitTestCaseClasses = [];
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var ComposerAutoloadedDirectoryProvider
      */
     private $composerAutoloadedDirectoryProvider;
 
-    public function __construct(
-        DocBlockManipulator $docBlockManipulator,
-        ComposerAutoloadedDirectoryProvider $composerAutoloadedDirectoryProvider
-    ) {
-        $this->docBlockManipulator = $docBlockManipulator;
+    public function __construct(ComposerAutoloadedDirectoryProvider $composerAutoloadedDirectoryProvider)
+    {
         $this->composerAutoloadedDirectoryProvider = $composerAutoloadedDirectoryProvider;
     }
 

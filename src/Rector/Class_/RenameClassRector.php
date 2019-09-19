@@ -18,7 +18,6 @@ use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpDoc\PhpDocClassRenamer;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
@@ -34,11 +33,6 @@ final class RenameClassRector extends AbstractRector
      * @var string[]
      */
     private $oldToNewClasses = [];
-
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
 
     /**
      * @var string[]
@@ -59,12 +53,10 @@ final class RenameClassRector extends AbstractRector
      * @param string[] $oldToNewClasses
      */
     public function __construct(
-        DocBlockManipulator $docBlockManipulator,
         ClassNaming $classNaming,
         PhpDocClassRenamer $phpDocClassRenamer,
         array $oldToNewClasses = []
     ) {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->classNaming = $classNaming;
         $this->oldToNewClasses = $oldToNewClasses;
         $this->phpDocClassRenamer = $phpDocClassRenamer;

@@ -7,7 +7,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -27,16 +26,6 @@ final class AnnotatedPropertyInjectToConstructorInjectionRector extends Abstract
      * @var string
      */
     private const INJECT_ANNOTATION = 'inject';
-
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    public function __construct(DocBlockManipulator $docBlockManipulator)
-    {
-        $this->docBlockManipulator = $docBlockManipulator;
-    }
 
     public function getDefinition(): RectorDefinition
     {

@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -40,21 +39,14 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $classManipulator;
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @param string[][]|null[] $namespacePrefixesWithExcludedClasses
      */
     public function __construct(
         ClassManipulator $classManipulator,
-        DocBlockManipulator $docBlockManipulator,
         array $namespacePrefixesWithExcludedClasses = []
     ) {
         $this->classManipulator = $classManipulator;
         $this->namespacePrefixesWithExcludedClasses = $namespacePrefixesWithExcludedClasses;
-        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function getDefinition(): RectorDefinition

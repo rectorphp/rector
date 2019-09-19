@@ -17,7 +17,6 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\While_;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -28,16 +27,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class RemoveNonExistingVarAnnotationRector extends AbstractRector
 {
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    public function __construct(DocBlockManipulator $docBlockManipulator)
-    {
-        $this->docBlockManipulator = $docBlockManipulator;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Removes non-existing @var annotations above the code', [

@@ -18,7 +18,6 @@ use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNode
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToManyTagNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToOneTagNodeInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -30,11 +29,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
 {
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var PhpDocTagNodeFactory
      */
     private $phpDocTagNodeFactory;
@@ -45,11 +39,9 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
     private $uuidMigrationDataCollector;
 
     public function __construct(
-        DocBlockManipulator $docBlockManipulator,
         PhpDocTagNodeFactory $phpDocTagNodeFactory,
         UuidMigrationDataCollector $uuidMigrationDataCollector
     ) {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
         $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;
     }

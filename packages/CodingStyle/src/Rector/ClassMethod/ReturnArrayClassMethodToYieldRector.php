@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\NodeTransformer;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -34,20 +33,11 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector
     private $nodeTransformer;
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @param string[][] $methodsByType
      */
-    public function __construct(
-        NodeTransformer $nodeTransformer,
-        DocBlockManipulator $docBlockManipulator,
-        array $methodsByType = []
-    ) {
+    public function __construct(NodeTransformer $nodeTransformer, array $methodsByType = [])
+    {
         $this->nodeTransformer = $nodeTransformer;
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->methodsByType = $methodsByType;
     }
 

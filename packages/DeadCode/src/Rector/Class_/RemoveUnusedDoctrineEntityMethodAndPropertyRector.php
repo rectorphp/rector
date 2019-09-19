@@ -13,7 +13,6 @@ use Rector\DeadCode\UnusedNodeResolver\ClassUnusedPrivateClassMethodResolver;
 use Rector\Doctrine\ValueObject\DoctrineClass;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -50,23 +49,16 @@ final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRe
      */
     private $doctrineEntityManipulator;
 
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
     public function __construct(
         ParsedNodesByType $parsedNodesByType,
         ClassUnusedPrivateClassMethodResolver $classUnusedPrivateClassMethodResolver,
         ClassManipulator $classManipulator,
-        DocBlockManipulator $docBlockManipulator,
         DoctrineEntityManipulator $doctrineEntityManipulator
     ) {
         $this->parsedNodesByType = $parsedNodesByType;
         $this->classUnusedPrivateClassMethodResolver = $classUnusedPrivateClassMethodResolver;
         $this->classManipulator = $classManipulator;
         $this->doctrineEntityManipulator = $doctrineEntityManipulator;
-        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function getDefinition(): RectorDefinition
