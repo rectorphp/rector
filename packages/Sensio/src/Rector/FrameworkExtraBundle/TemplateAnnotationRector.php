@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,21 +22,12 @@ final class TemplateAnnotationRector extends AbstractRector
     private $version;
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var TemplateGuesser
      */
     private $templateGuesser;
 
-    public function __construct(
-        DocBlockManipulator $docBlockManipulator,
-        TemplateGuesser $templateGuesser,
-        int $version = 3
-    ) {
-        $this->docBlockManipulator = $docBlockManipulator;
+    public function __construct(TemplateGuesser $templateGuesser, int $version = 3)
+    {
         $this->templateGuesser = $templateGuesser;
         $this->version = $version;
     }

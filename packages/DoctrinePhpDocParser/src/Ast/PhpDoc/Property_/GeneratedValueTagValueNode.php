@@ -23,6 +23,6 @@ final class GeneratedValueTagValueNode extends AbstractDoctrineTagValueNode
 
     public function __toString(): string
     {
-        return sprintf('(stragety="%s")', $this->strategy);
+        return sprintf('(strategy="%s")', $this->strategy);
     }
 }

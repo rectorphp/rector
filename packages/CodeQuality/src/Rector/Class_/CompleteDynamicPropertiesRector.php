@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -34,18 +33,12 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
     private const LARAVEL_COLLECTION_CLASS = 'Illuminate\Support\Collection';
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var TypeFactory
      */
     private $typeFactory;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator, TypeFactory $typeFactory)
+    public function __construct(TypeFactory $typeFactory)
     {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->typeFactory = $typeFactory;
     }
 

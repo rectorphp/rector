@@ -21,7 +21,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
@@ -43,11 +42,6 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
     private $configuration = [];
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var DataProviderClassMethodRecipe[]
      */
     private $dataProviderClassMethodRecipes = [];
@@ -66,12 +60,10 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
      * @param mixed[] $configuration
      */
     public function __construct(
-        DocBlockManipulator $docBlockManipulator,
         DataProviderClassMethodFactory $dataProviderClassMethodFactory,
         TypeFactory $typeFactory,
         array $configuration = []
     ) {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->dataProviderClassMethodFactory = $dataProviderClassMethodFactory;
         $this->typeFactory = $typeFactory;
         $this->configuration = $configuration;

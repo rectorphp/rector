@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\IterableType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -31,20 +30,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AddArrayDefaultToArrayPropertyRector extends AbstractRector
 {
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var PropertyFetchManipulator
      */
     private $propertyFetchManipulator;
 
-    public function __construct(
-        DocBlockManipulator $docBlockManipulator,
-        PropertyFetchManipulator $propertyFetchManipulator
-    ) {
-        $this->docBlockManipulator = $docBlockManipulator;
+    public function __construct(PropertyFetchManipulator $propertyFetchManipulator)
+    {
         $this->propertyFetchManipulator = $propertyFetchManipulator;
     }
 

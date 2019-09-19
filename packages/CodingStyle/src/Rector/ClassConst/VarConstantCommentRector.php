@@ -5,7 +5,6 @@ namespace Rector\CodingStyle\Rector\ClassConst;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use PHPStan\Type\MixedType;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -15,16 +14,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class VarConstantCommentRector extends AbstractRector
 {
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    public function __construct(DocBlockManipulator $docBlockManipulator)
-    {
-        $this->docBlockManipulator = $docBlockManipulator;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Constant should have a @var comment with type', [

@@ -4,6 +4,7 @@ namespace Rector\DoctrinePhpDocParser\PhpDocParser;
 
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\InheritanceType;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\JoinTable;
@@ -22,6 +23,7 @@ use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\InheritanceTypeTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\TableTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\GeneratedValueTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\IdTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinTableTagValueNode;
@@ -110,6 +112,10 @@ final class OrmTagParser extends AbstractPhpDocParser
 
         if ($tag === ColumnTagValueNode::SHORT_NAME) {
             return $this->createColumnTagValueNode($property, $annotationContent);
+        }
+
+        if ($tag === GeneratedValueTagValueNode::SHORT_NAME) {
+            return $this->createGeneratedValueTagValueNode($property, $annotationContent);
         }
 
         if ($tag === JoinColumnTagValueNode::SHORT_NAME) {
@@ -252,6 +258,16 @@ final class OrmTagParser extends AbstractPhpDocParser
         $joinColumn = $this->nodeAnnotationReader->readPropertyAnnotation($property, JoinColumn::class);
 
         return $this->createJoinColumnTagValueNodeFromJoinColumnAnnotation($joinColumn, $annotationContent);
+    }
+
+    private function createGeneratedValueTagValueNode(
+        Property $property,
+        string $annotationContent
+    ): GeneratedValueTagValueNode {
+        /** @var GeneratedValue $generatedValue */
+        $generatedValue = $this->nodeAnnotationReader->readPropertyAnnotation($property, GeneratedValue::class);
+
+        return new GeneratedValueTagValueNode($generatedValue->strategy);
     }
 
     private function createJoinTableTagValeNode(Property $property, string $annotationContent): JoinTableTagValueNode

@@ -15,7 +15,6 @@ use Rector\NetteToSymfony\PhpDocParser\Ast\PhpDoc\SymfonyRoutePhpDocTagValueNode
 use Rector\NetteToSymfony\Route\RouteInfo;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NodeContainer\ParsedNodesByType;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -53,11 +52,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $parsedNodesByType;
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var RouteInfoFactory
      */
     private $routeInfoFactory;
@@ -69,7 +63,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
 
     public function __construct(
         ParsedNodesByType $parsedNodesByType,
-        DocBlockManipulator $docBlockManipulator,
         RouteInfoFactory $routeInfoFactory,
         ReturnTypeInferer $returnTypeInferer,
         string $routeListClass = 'Nette\Application\Routers\RouteList',
@@ -78,7 +71,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
         $this->routeListClass = $routeListClass;
         $this->routerClass = $routerClass;
         $this->parsedNodesByType = $parsedNodesByType;
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->routeInfoFactory = $routeInfoFactory;
         $this->returnTypeInferer = $returnTypeInferer;
     }

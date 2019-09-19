@@ -18,7 +18,6 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Php\ValueObject\PhpVersionFeature;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -79,17 +78,9 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
      */
     private $areListenerClassesLoaded = false;
 
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    public function __construct(
-        AnalyzedApplicationContainerInterface $analyzedApplicationContainer,
-        DocBlockManipulator $docBlockManipulator
-    ) {
+    public function __construct(AnalyzedApplicationContainerInterface $analyzedApplicationContainer)
+    {
         $this->analyzedApplicationContainer = $analyzedApplicationContainer;
-        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function getDefinition(): RectorDefinition

@@ -7,7 +7,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,16 +22,10 @@ final class RenameAnnotationRector extends AbstractPHPUnitRector
     private $classToAnnotationMap = [];
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @param string[][] $classToAnnotationMap
      */
-    public function __construct(DocBlockManipulator $docBlockManipulator, array $classToAnnotationMap = [])
+    public function __construct(array $classToAnnotationMap = [])
     {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->classToAnnotationMap = $classToAnnotationMap;
     }
 

@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Architecture\Tests\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector\RemoveRepositoryFromEntityAnnotationRectorTest;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -16,16 +15,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class RemoveRepositoryFromEntityAnnotationRector extends AbstractRector
 {
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    public function __construct(DocBlockManipulator $docBlockManipulator)
-    {
-        $this->docBlockManipulator = $docBlockManipulator;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Removes repository class from @Entity annotation', [
