@@ -138,9 +138,11 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
 
     private function refactorToOnePropertyPhpDocInfo(PhpDocInfo $propertyPhpDocInfo): void
     {
+        /** @var JoinColumnTagValueNode $joinColumnTagValueNode */
         $joinColumnTagValueNode = $propertyPhpDocInfo->getByType(JoinColumnTagValueNode::class);
 
         if ($joinColumnTagValueNode) {
+            $joinColumnTagValueNode->changeName('');
             $joinColumnTagValueNode->changeNullable(true);
             $joinColumnTagValueNode->changeReferencedColumnName('uuid');
         } else {
