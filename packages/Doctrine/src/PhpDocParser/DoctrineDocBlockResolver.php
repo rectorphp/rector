@@ -4,12 +4,14 @@ namespace Rector\Doctrine\PhpDocParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\IdTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 
 final class DoctrineDocBlockResolver
@@ -95,6 +97,17 @@ final class DoctrineDocBlockResolver
         }
 
         return (bool) $propertyPhpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
+    }
+
+    public function isInDoctrineEntityClass(Node $node): bool
+    {
+        /** @var ClassLike|null $classNode */
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
+            return false;
+        }
+
+        return $this->isDoctrineEntityClass($classNode);
     }
 
     private function getPhpDocInfo(Node $node): ?PhpDocInfo

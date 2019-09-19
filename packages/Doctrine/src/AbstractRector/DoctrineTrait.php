@@ -2,6 +2,7 @@
 
 namespace Rector\Doctrine\AbstractRector;
 
+use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
@@ -30,6 +31,11 @@ trait DoctrineTrait
     protected function isDoctrineEntityClass(Class_ $class): bool
     {
         return $this->doctrineDocBlockResolver->isDoctrineEntityClass($class);
+    }
+
+    protected function isInDoctrineEntityClass(Node $node): bool
+    {
+        return $this->doctrineDocBlockResolver->isInDoctrineEntityClass($node);
     }
 
     protected function getTargetEntity(Property $property): ?string
