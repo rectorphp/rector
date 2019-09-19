@@ -22,7 +22,7 @@ final class SymfonyPhpDocParserExtension implements PhpDocParserExtensionInterfa
 
     public function matchTag(string $tag): bool
     {
-        return (bool) Strings::match($tag, '#^@(Assert|Serializer)\\\\[\w]+$#');
+        return (bool) Strings::match($tag, '#^@(Route|((Assert|Serializer)\\\\[\w]+))$#');
     }
 
     public function parse(TokenIterator $tokenIterator, string $tag): ?PhpDocTagValueNode

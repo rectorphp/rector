@@ -35,6 +35,11 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     /**
      * @var string
      */
+    private const HAS_FRESH_ROUTE_ANNOTATION_ATTRIBUTE = 'has_fresh_route_annotation';
+
+    /**
+     * @var string
+     */
     private $routeListClass;
 
     /**
@@ -118,10 +123,12 @@ final class RouterFactory
     }
 }
 
+use Symfony\Component\Routing\Annotation\Route;
+
 final class SomePresenter
 {
     /**
-     * @Symfony\Component\Routing\Annotation\Route(path="some-path")
+     * @Route(path="some-path")
      */
     public function run()
     {
@@ -154,7 +161,6 @@ PHP
         $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
 
         $routeListObjectType = new ObjectType($this->routeListClass);
-
         if (! $inferedReturnType->isSuperTypeOf($routeListObjectType)->yes()) {
             return null;
         }
@@ -311,6 +317,10 @@ PHP
             return true;
         }
 
+        if ($node->getAttribute(self::HAS_FRESH_ROUTE_ANNOTATION_ATTRIBUTE)) {
+            return true;
+        }
+
         // already has Route tag
         $phpDocInfo = $this->getPhpDocInfo($node);
         if ($phpDocInfo === null) {
@@ -357,5 +367,7 @@ PHP
 
         // remove
         $this->removeShortUse('Route', $classMethod);
+
+        $classMethod->setAttribute(self::HAS_FRESH_ROUTE_ANNOTATION_ATTRIBUTE, true);
     }
 }

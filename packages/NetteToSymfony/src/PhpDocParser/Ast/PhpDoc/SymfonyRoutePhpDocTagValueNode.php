@@ -3,6 +3,7 @@
 namespace Rector\NetteToSymfony\PhpDocParser\Ast\PhpDoc;
 
 use Rector\BetterPhpDocParser\PhpDocParser\Ast\PhpDoc\AbstractTagValueNode;
+use Symfony\Component\Routing\Annotation\Route;
 
 final class SymfonyRoutePhpDocTagValueNode extends AbstractTagValueNode
 {
@@ -14,7 +15,7 @@ final class SymfonyRoutePhpDocTagValueNode extends AbstractTagValueNode
     /**
      * @var string
      */
-    public const CLASS_NAME = 'Symfony\Component\Routing\Annotation\Route';
+    public const CLASS_NAME = Route::class;
 
     /**
      * @var string|null
@@ -34,11 +35,19 @@ final class SymfonyRoutePhpDocTagValueNode extends AbstractTagValueNode
     /**
      * @param string[] $methods
      */
-    public function __construct(string $path, ?string $name = null, array $methods = [])
-    {
+    public function __construct(
+        string $path,
+        ?string $name = null,
+        array $methods = [],
+        ?string $originalContent = null
+    ) {
         $this->path = $path;
         $this->name = $name;
         $this->methods = $methods;
+
+        if ($originalContent !== null) {
+            $this->resolveOriginalContentSpacingAndOrder($originalContent);
+        }
     }
 
     public function __toString(): string

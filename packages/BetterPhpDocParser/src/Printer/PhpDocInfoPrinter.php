@@ -163,11 +163,7 @@ final class PhpDocInfoPrinter
                 return $this->printPhpDocTagNode($attributeAwareNode, $startEndInfo, $output);
             }
 
-            $content = (string) $attributeAwareNode;
-            $content = explode(PHP_EOL, $content);
-            $content = implode(PHP_EOL . ' * ', $content);
-
-            return $output . PHP_EOL . ' * ' . $content;
+            return $output . PHP_EOL . ' * ' . $this->printAttributeWithAsterisk($attributeAwareNode);
         }
 
         if (! $attributeAwareNode instanceof PhpDocTextNode && ! $attributeAwareNode instanceof GenericTagValueNode && $startEndInfo) {
@@ -179,11 +175,7 @@ final class PhpDocInfoPrinter
             );
         }
 
-        $content = (string) $attributeAwareNode;
-        $content = explode(PHP_EOL, $content);
-        $content = implode(PHP_EOL . ' * ', $content);
-
-        return $output . $content;
+        return $output . $this->printAttributeWithAsterisk($attributeAwareNode);
     }
 
     private function printEnd(string $output): string
@@ -320,5 +312,13 @@ final class PhpDocInfoPrinter
         }
 
         return Strings::contains($this->phpDocInfo->getOriginalContent(), $phpDocTagNode->name . ' ');
+    }
+
+    private function printAttributeWithAsterisk(AttributeAwareNodeInterface $attributeAwareNode): string
+    {
+        $content = (string) $attributeAwareNode;
+        $content = explode(PHP_EOL, $content);
+
+        return implode(PHP_EOL . ' * ', $content);
     }
 }

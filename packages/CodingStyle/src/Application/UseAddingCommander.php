@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Imports\UsedImportsResolver;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
@@ -42,16 +43,30 @@ final class UseAddingCommander implements CommanderInterface
     /**
      * @var string[][]
      */
-    private $removedShortTypesInFilePath = [];
+    private $removedShortUsesInFilePath = [];
+
+    /**
+     * @var UseImportsRemover
+     */
+    private $useImportsRemover;
+
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
 
     public function __construct(
         UseImportsAdder $useImportsAdder,
+        UseImportsRemover $useImportsRemover,
         UsedImportsResolver $usedImportsResolver,
-        BetterNodeFinder $betterNodeFinder
+        BetterNodeFinder $betterNodeFinder,
+        TypeFactory $typeFactory
     ) {
         $this->useImportsAdder = $useImportsAdder;
         $this->usedImportsResolver = $usedImportsResolver;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->useImportsRemover = $useImportsRemover;
+        $this->typeFactory = $typeFactory;
     }
 
     public function addUseImport(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): void
@@ -73,7 +88,7 @@ final class UseAddingCommander implements CommanderInterface
             return;
         }
 
-        $this->removedShortTypesInFilePath[$fileInfo->getRealPath()][] = $shortUse;
+        $this->removedShortUsesInFilePath[$fileInfo->getRealPath()][] = $shortUse;
     }
 
     public function addFunctionUseImport(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): void
@@ -98,11 +113,15 @@ final class UseAddingCommander implements CommanderInterface
 
         $useImportTypes = $this->useImportTypesInFilePath[$filePath] ?? [];
         $functionUseImportTypes = $this->functionUseImportTypesInFilePath[$filePath] ?? [];
+        $removedShortUses = $this->removedShortUsesInFilePath[$filePath] ?? [];
 
-        // nothing to import
-        if ($useImportTypes === [] && $functionUseImportTypes === []) {
+        // nothing to import or remove
+        if ($useImportTypes === [] && $functionUseImportTypes === [] && $removedShortUses === []) {
             return $nodes;
         }
+
+        /** @var FullyQualifiedObjectType[] $useImportTypes */
+        $useImportTypes = $this->typeFactory->uniquateTypes($useImportTypes);
 
         // clear applied imports, so isActive() doesn't return any false positives
         unset($this->useImportTypesInFilePath[$filePath], $this->functionUseImportTypesInFilePath[$filePath]);
@@ -110,11 +129,18 @@ final class UseAddingCommander implements CommanderInterface
         // A. has namespace? add under it
         $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
         if ($namespace instanceof Namespace_) {
+            // first clean
+            $this->useImportsRemover->removeImportsFromNamespace($namespace, $removedShortUses);
+            // then add, to prevent adding + removing false positive of same short use
             $this->useImportsAdder->addImportsToNamespace($namespace, $useImportTypes, $functionUseImportTypes);
+
             return $nodes;
         }
 
         // B. no namespace? add in the top
+        // first clean
+        $nodes = $this->useImportsRemover->removeImportsFromStmts($nodes, $removedShortUses);
+        // then add, to prevent adding + removing false positive of same short use
         return $this->useImportsAdder->addImportsToStmts($nodes, $useImportTypes, $functionUseImportTypes);
     }
 
