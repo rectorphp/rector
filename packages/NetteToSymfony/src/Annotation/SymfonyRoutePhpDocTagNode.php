@@ -44,19 +44,18 @@ final class SymfonyRoutePhpDocTagNode extends PhpDocTagNode implements PhpDocChi
 
     public function __toString(): string
     {
-        $string = sprintf('@\\%s(', $this->routeClass);
+        $content = sprintf('@\\%s(', $this->routeClass);
 
-        $string .= sprintf('path="%s"', $this->path);
+        $content .= sprintf('path="%s"', $this->path);
+
         if ($this->name) {
-            $string .= sprintf(', name="%s"', $this->name);
+            $content .= sprintf(', name="%s"', $this->name);
         }
 
         if ($this->methods !== []) {
-            $string .= sprintf(', methods={"%s"}', implode('", "', $this->methods));
+            $content .= sprintf(', methods={"%s"}', implode('", "', $this->methods));
         }
 
-        $string .= ')' . PHP_EOL . ' ';
-
-        return $string;
+        return $content . ')';
     }
 }

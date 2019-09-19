@@ -67,6 +67,16 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     /**
      * @param PhpDocTagValueNode[] $tagValueNodes
      */
+    protected function printNestedTag(array $tagValueNodes, string $shortName, string $label): string
+    {
+        $tagValueNodesAsString = $this->printTagValueNodesSeparatedByComma($tagValueNodes, $shortName);
+
+        return sprintf('%s={%s%s%s}', $label, PHP_EOL . '    ', $tagValueNodesAsString, PHP_EOL);
+    }
+
+    /**
+     * @param PhpDocTagValueNode[] $tagValueNodes
+     */
     protected function printTagValueNodesSeparatedByComma(array $tagValueNodes, string $prefix = ''): string
     {
         if ($tagValueNodes === []) {

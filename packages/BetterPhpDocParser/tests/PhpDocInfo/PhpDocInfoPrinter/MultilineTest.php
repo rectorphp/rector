@@ -27,11 +27,7 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         $docComment = FileSystem::read($docFilePath);
         $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, $node);
 
-        $this->assertSame(
-            $docComment,
-            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo),
-            'Caused in ' . $docFilePath
-        );
+        $this->assertSame($docComment, $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo));
     }
 
     public function provideData(): Iterator
@@ -41,16 +37,14 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         yield [__DIR__ . '/Source/Multiline/multiline3.txt', new Nop()];
         yield [__DIR__ . '/Source/Multiline/multiline4.txt', new Nop()];
         yield [__DIR__ . '/Source/Multiline/multiline5.txt', new Nop()];
+
+        $property = $this->createPublicPropertyUnderClass('manyTo', ManyToPropertyClass::class);
+        yield [__DIR__ . '/Source/Multiline/many_to.txt', $property];
     }
 
     public function provideDataClass(): Iterator
     {
-        // @todo this should not be mallformed, but is valid PHP/working now - fix later
-        yield [
-            __DIR__ . '/Source/Class_/some_entity_class.txt',
-            new Class_(SomeEntityClass::class),
-            //            __DIR__ . '/Source/Class_/expected_some_entity_class.txt',
-        ];
+        yield [__DIR__ . '/Source/Class_/some_entity_class.txt', new Class_(SomeEntityClass::class)];
     }
 
     /**
@@ -63,11 +57,7 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
 
         $expectedPhpDoc = FileSystem::read($expectedPhpDocFile);
 
-        $this->assertSame(
-            $expectedPhpDoc,
-            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo),
-            'Caused in ' . $docFilePath
-        );
+        $this->assertSame($expectedPhpDoc, $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo));
     }
 
     /**
@@ -88,9 +78,6 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
             $property,
             __DIR__ . '/Source/Multiline/assert_serialize_single_line_after.txt',
         ];
-
-        $property = $this->createPublicPropertyUnderClass('manyTo', ManyToPropertyClass::class);
-        yield [__DIR__ . '/Source/Multiline/many_to.txt', $property, __DIR__ . '/Source/Multiline/many_to.txt'];
     }
 
     public function testDoctrine(): void
@@ -101,11 +88,7 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         $property = $this->createPublicPropertyUnderClass('someProperty', DoctrinePropertyClass::class);
         $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, $property);
 
-        $this->assertSame(
-            $docComment,
-            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo),
-            'Caused in ' . $docFilePath
-        );
+        $this->assertSame($docComment, $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo));
     }
 
     private function createPublicPropertyUnderClass(string $name, string $class): Property

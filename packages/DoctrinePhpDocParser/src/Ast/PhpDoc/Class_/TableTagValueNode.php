@@ -73,23 +73,14 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
         }
 
         if ($this->indexes !== []) {
-            $indexesAsString = $this->printTagValueNodesSeparatedByComma(
-                $this->indexes,
-                IndexTagValueNode::SHORT_NAME
-            );
-            $contentItems['indexes'] = sprintf('indexes={%s%s%s}', PHP_EOL, $indexesAsString, PHP_EOL);
+            $contentItems['indexes'] = $this->printNestedTag($this->indexes, IndexTagValueNode::SHORT_NAME, 'indexes');
         }
 
         if ($this->uniqueConstraints !== []) {
-            $uniqueConstraintsAsString = $this->printTagValueNodesSeparatedByComma(
+            $contentItems['uniqueConstraints'] = $this->printNestedTag(
                 $this->uniqueConstraints,
-                UniqueConstraintTagValueNode::SHORT_NAME
-            );
-            $contentItems['uniqueConstraints'] = sprintf(
-                'uniqueConstraints={%s%s%s}',
-                PHP_EOL,
-                $uniqueConstraintsAsString,
-                PHP_EOL
+                UniqueConstraintTagValueNode::SHORT_NAME,
+                'uniqueConstraints'
             );
         }
 

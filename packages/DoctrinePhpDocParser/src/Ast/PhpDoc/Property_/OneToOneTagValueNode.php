@@ -51,7 +51,6 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
 
     /**
      * @param mixed[]|null $cascade
-     * @param string[] $mappedBy
      */
     public function __construct(
         string $targetEntity,

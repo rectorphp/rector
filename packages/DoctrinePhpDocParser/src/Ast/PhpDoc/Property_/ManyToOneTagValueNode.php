@@ -38,9 +38,6 @@ final class ManyToOneTagValueNode extends AbstractDoctrineTagValueNode implement
      */
     private $fqnTargetEntity;
 
-    /**
-     * @param string[] $targetEntity
-     */
     public function __construct(
         string $targetEntity,
         ?array $cascade,

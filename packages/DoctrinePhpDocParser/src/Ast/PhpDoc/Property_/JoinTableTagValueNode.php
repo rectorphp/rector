@@ -32,7 +32,6 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
     private $inverseJoinColumns;
 
     /**
-     * @param string[] $name
      * @param JoinColumnTagValueNode[] $joinColumns
      * @param JoinColumnTagValueNode[] $inverseJoinColumns
      */
@@ -61,24 +60,18 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
         }
 
         if ($this->joinColumns) {
-            $joinColumnsAsString = $this->printTagValueNodesSeparatedByComma(
+            $contentItems['joinColumns'] = $this->printNestedTag(
                 $this->joinColumns,
-                JoinColumnTagValueNode::SHORT_NAME
+                JoinColumnTagValueNode::SHORT_NAME,
+                'joinColumns'
             );
-
-            $contentItems['joinColumns'] = sprintf('joinColumns={%s%s%s}', PHP_EOL, $joinColumnsAsString, PHP_EOL);
         }
 
         if ($this->inverseJoinColumns) {
-            $inverseJoinColumnsAsString = $this->printTagValueNodesSeparatedByComma(
+            $contentItems['inverseJoinColumns'] = $this->printNestedTag(
                 $this->inverseJoinColumns,
-                JoinColumnTagValueNode::SHORT_NAME
-            );
-            $contentItems['inverseJoinColumns'] = sprintf(
-                'inverseJoinColumns={%s%s%s}',
-                PHP_EOL,
-                $inverseJoinColumnsAsString,
-                PHP_EOL
+                JoinColumnTagValueNode::SHORT_NAME,
+                'inverseJoinColumns'
             );
         }
 

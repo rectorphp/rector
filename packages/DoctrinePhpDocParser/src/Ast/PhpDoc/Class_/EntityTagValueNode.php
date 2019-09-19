@@ -21,9 +21,6 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode
      */
     private $readOnly = false;
 
-    /**
-     * @param string[] $repositoryClass
-     */
     public function __construct(?string $repositoryClass, bool $readOnly, ?string $originalContent)
     {
         $this->repositoryClass = $repositoryClass;

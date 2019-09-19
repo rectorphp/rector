@@ -54,9 +54,6 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
      */
     private $fqnTargetEntity;
 
-    /**
-     * @param string[] $targetEntity
-     */
     public function __construct(
         string $targetEntity,
         ?string $mappedBy,

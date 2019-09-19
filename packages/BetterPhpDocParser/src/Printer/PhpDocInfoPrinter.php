@@ -163,7 +163,11 @@ final class PhpDocInfoPrinter
                 return $this->printPhpDocTagNode($attributeAwareNode, $startEndInfo, $output);
             }
 
-            return $output . PHP_EOL . '     * ' . $attributeAwareNode;
+            $content = (string) $attributeAwareNode;
+            $content = explode(PHP_EOL, $content);
+            $content = implode(PHP_EOL . ' * ', $content);
+
+            return $output . PHP_EOL . ' * ' . $content;
         }
 
         if (! $attributeAwareNode instanceof PhpDocTextNode && ! $attributeAwareNode instanceof GenericTagValueNode && $startEndInfo) {
@@ -311,7 +315,6 @@ final class PhpDocInfoPrinter
     private function isTagSeparatedBySpace(string $nodeOutput, PhpDocTagNode $phpDocTagNode): bool
     {
         $contentWithoutSpace = $phpDocTagNode->name . Strings::substring($nodeOutput, 0, 1);
-
         if (Strings::contains($this->phpDocInfo->getOriginalContent(), $contentWithoutSpace)) {
             return false;
         }
