@@ -166,11 +166,6 @@ final class BetterPhpDocParser extends PhpDocParser
         $node = $this->privatesCaller->callPrivateMethod($this, 'parseChild', $tokenIterator);
         $tokenEnd = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'index');
 
-        // correct spacing for: packages/BetterPhpDocParser/tests/PhpDocInfo/PhpDocInfoPrinter/Source/Multiline/assert_serialize_single_line.txt
-        if ($tokenIterator->currentTokenType() === Lexer::TOKEN_CLOSE_PHPDOC) {
-            --$tokenEnd;
-        }
-
         $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($node);
         $attributeAwareNode->setAttribute(Attribute::PHP_DOC_NODE_INFO, new StartEndInfo($tokenStart, $tokenEnd));
 
