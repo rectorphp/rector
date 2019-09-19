@@ -10,11 +10,13 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
-use Rector\NetteToSymfony\Annotation\SymfonyRoutePhpDocTagNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
+use Rector\NetteToSymfony\PhpDocParser\Ast\PhpDoc\SymfonyRoutePhpDocTagValueNode;
 use Rector\NetteToSymfony\Route\RouteInfo;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -39,11 +41,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      * @var string
      */
     private $routerClass;
-
-    /**
-     * @var string
-     */
-    private $routeAnnotationClass;
 
     /**
      * @var ParsedNodesByType
@@ -71,14 +68,12 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
         RouteInfoFactory $routeInfoFactory,
         ReturnTypeInferer $returnTypeInferer,
         string $routeListClass = 'Nette\Application\Routers\RouteList',
-        string $routerClass = 'Nette\Application\IRouter',
-        string $routeAnnotationClass = 'Symfony\Component\Routing\Annotation\Route'
+        string $routerClass = 'Nette\Application\IRouter'
     ) {
         $this->routeListClass = $routeListClass;
         $this->routerClass = $routerClass;
         $this->parsedNodesByType = $parsedNodesByType;
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->routeAnnotationClass = $routeAnnotationClass;
         $this->routeInfoFactory = $routeInfoFactory;
         $this->returnTypeInferer = $returnTypeInferer;
     }
@@ -178,8 +173,9 @@ PHP
                 continue;
             }
 
-            $phpDocTagNode = $this->createSymfonyRoutePhpDocTagNode($routeInfo);
-            $this->docBlockManipulator->addTag($classMethod, $phpDocTagNode);
+            $symfonyRoutePhpDocTagValueNode = $this->createSymfonyRoutePhpDocTagValueNode($routeInfo);
+
+            $this->addSymfonyRouteShortTagNodeWithUse($symfonyRoutePhpDocTagValueNode, $classMethod);
         }
 
         // complete all other non-explicit methods, from "<presenter>/<action>"
@@ -262,9 +258,9 @@ PHP
                 }
 
                 $path = $this->resolvePathFromClassAndMethodNodes($presenterClass, $classMethod);
-                $phpDocTagNode = new SymfonyRoutePhpDocTagNode($this->routeAnnotationClass, $path);
+                $symfonyRoutePhpDocTagValueNode = new SymfonyRoutePhpDocTagValueNode($path);
 
-                $this->docBlockManipulator->addTag($classMethod, $phpDocTagNode);
+                $this->addSymfonyRouteShortTagNodeWithUse($symfonyRoutePhpDocTagValueNode, $classMethod);
             }
         }
     }
@@ -316,7 +312,12 @@ PHP
         }
 
         // already has Route tag
-        return $this->docBlockManipulator->hasTag($node, $this->routeAnnotationClass);
+        $phpDocInfo = $this->getPhpDocInfo($node);
+        if ($phpDocInfo === null) {
+            return false;
+        }
+
+        return (bool) $phpDocInfo->getByType(SymfonyRoutePhpDocTagValueNode::class);
     }
 
     private function resolvePathFromClassAndMethodNodes(Class_ $classNode, ClassMethod $classMethod): string
@@ -335,13 +336,26 @@ PHP
         return $presenterPart . '/' . $actionPart;
     }
 
-    private function createSymfonyRoutePhpDocTagNode(RouteInfo $routeInfo): SymfonyRoutePhpDocTagNode
+    private function createSymfonyRoutePhpDocTagValueNode(RouteInfo $routeInfo): SymfonyRoutePhpDocTagValueNode
     {
-        return new SymfonyRoutePhpDocTagNode(
-            $this->routeAnnotationClass,
-            $routeInfo->getPath(),
-            null,
-            $routeInfo->getHttpMethods()
+        return new SymfonyRoutePhpDocTagValueNode($routeInfo->getPath(), null, $routeInfo->getHttpMethods());
+    }
+
+    private function addSymfonyRouteShortTagNodeWithUse(
+        SymfonyRoutePhpDocTagValueNode $symfonyRoutePhpDocTagValueNode,
+        ClassMethod $classMethod
+    ): void {
+        $symfonyRoutePhpDocTagNode = new SpacelessPhpDocTagNode(
+            SymfonyRoutePhpDocTagValueNode::SHORT_NAME,
+            $symfonyRoutePhpDocTagValueNode
         );
+
+        $this->docBlockManipulator->addTag($classMethod, $symfonyRoutePhpDocTagNode);
+
+        $symfonyRouteUseObjectType = new FullyQualifiedObjectType(SymfonyRoutePhpDocTagValueNode::CLASS_NAME);
+        $this->addUseType($symfonyRouteUseObjectType, $classMethod);
+
+        // remove
+        $this->removeShortUse('Route', $classMethod);
     }
 }

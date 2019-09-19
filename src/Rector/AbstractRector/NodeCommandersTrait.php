@@ -12,6 +12,7 @@ use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\PhpParser\Node\Commander\PropertyAddingCommander;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -54,6 +55,16 @@ trait NodeCommandersTrait
         $this->nodeAddingCommander = $nodeAddingCommander;
         $this->propertyAddingCommander = $propertyAddingCommander;
         $this->useAddingCommander = $useAddingCommander;
+    }
+
+    protected function addUseType(FullyQualifiedObjectType $fullyQualifiedObjectType, Node $positionNode): void
+    {
+        $this->useAddingCommander->addUseImport($positionNode, $fullyQualifiedObjectType);
+    }
+
+    protected function removeShortUse(string $shortUse, Node $positionNode): void
+    {
+        $this->useAddingCommander->removeShortUse($positionNode, $shortUse);
     }
 
     protected function addNodeAfterNode(Node $newNode, Node $positionNode): void

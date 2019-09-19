@@ -39,6 +39,11 @@ final class UseAddingCommander implements CommanderInterface
      */
     private $betterNodeFinder;
 
+    /**
+     * @var string[][]
+     */
+    private $removedShortTypesInFilePath = [];
+
     public function __construct(
         UseImportsAdder $useImportsAdder,
         UsedImportsResolver $usedImportsResolver,
@@ -58,6 +63,17 @@ final class UseAddingCommander implements CommanderInterface
         }
 
         $this->useImportTypesInFilePath[$fileInfo->getRealPath()][] = $fullyQualifiedObjectType;
+    }
+
+    public function removeShortUse(Node $node, string $shortUse): void
+    {
+        /** @var SmartFileInfo|null $fileInfo */
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        if ($fileInfo === null) {
+            return;
+        }
+
+        $this->removedShortTypesInFilePath[$fileInfo->getRealPath()][] = $shortUse;
     }
 
     public function addFunctionUseImport(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): void

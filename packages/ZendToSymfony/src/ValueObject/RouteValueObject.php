@@ -3,8 +3,7 @@
 namespace Rector\ZendToSymfony\ValueObject;
 
 use Nette\Utils\Strings;
-use Rector\NetteToSymfony\Annotation\SymfonyRoutePhpDocTagNode;
-use Rector\Symfony\ValueObject\SymfonyClass;
+use Rector\NetteToSymfony\PhpDocParser\Ast\PhpDoc\SymfonyRoutePhpDocTagValueNode;
 use Rector\Util\RectorStrings;
 
 final class RouteValueObject
@@ -52,9 +51,9 @@ final class RouteValueObject
         return $this->params;
     }
 
-    public function getSymfonyRoutePhpDocTagNode(): SymfonyRoutePhpDocTagNode
+    public function getSymfonyRoutePhpDocTagNode(): SymfonyRoutePhpDocTagValueNode
     {
-        return new SymfonyRoutePhpDocTagNode(SymfonyClass::ROUTE_ANNOTATION, $this->getPath());
+        return new SymfonyRoutePhpDocTagValueNode($this->getPath());
     }
 
     private function getPath(): string

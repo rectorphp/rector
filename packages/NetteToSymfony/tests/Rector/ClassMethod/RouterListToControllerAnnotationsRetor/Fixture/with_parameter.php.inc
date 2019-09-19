@@ -33,8 +33,8 @@ final class WithParameterSomePresenter
 
 namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAnnotationsRetor\Fixture;
 
-use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\Route;
 use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\RouteList;
+use Symfony\Component\Routing\Annotation\Route;
 
 final class WithParameterRouterFactory
 {
@@ -50,7 +50,7 @@ final class WithParameterSomePresenter
 {
     /**
      * @todo
-     * @\Symfony\Component\Routing\Annotation\Route(path="some-path/{id}")
+     * @Route(path="some-path/{id}")
      */
     public function run()
     {

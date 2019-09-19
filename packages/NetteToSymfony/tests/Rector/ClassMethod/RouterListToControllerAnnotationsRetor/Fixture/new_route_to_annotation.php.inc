@@ -31,7 +31,7 @@ final class NewSomePresenter
 
 namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAnnotationsRetor\Fixture;
 
-use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\RouteList;
 
 final class NewRouterFactory
@@ -47,7 +47,7 @@ final class NewRouterFactory
 final class NewSomePresenter
 {
     /**
-     * @\Symfony\Component\Routing\Annotation\Route(path="some-path")
+     * @Route(path="some-path")
      */
     public function run()
     {

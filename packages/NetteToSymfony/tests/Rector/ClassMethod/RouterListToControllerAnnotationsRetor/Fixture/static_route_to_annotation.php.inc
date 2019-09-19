@@ -33,6 +33,7 @@ namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAn
 
 use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\RouteFactory;
 use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\RouteList;
+use Symfony\Component\Routing\Annotation\Route;
 
 final class StaticRouterFactory
 {
@@ -47,7 +48,7 @@ final class StaticRouterFactory
 final class StaticSomePresenter
 {
     /**
-     * @\Symfony\Component\Routing\Annotation\Route(path="some-path", methods={"GET"})
+     * @Route(path="some-path", methods={"GET"})
      */
     public function run()
     {
