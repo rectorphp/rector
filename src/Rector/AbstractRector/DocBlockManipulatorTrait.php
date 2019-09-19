@@ -21,7 +21,7 @@ trait DocBlockManipulatorTrait
     /**
      * @var DocBlockManipulator
      */
-    private $docBlockManipulator;
+    protected $docBlockManipulator;
 
     /**
      * @required
