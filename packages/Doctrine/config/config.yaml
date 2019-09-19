@@ -1,6 +1,3 @@
-parameters:
-    doctrine_uuid_generator_class: 'Ramsey\Uuid\Doctrine\UuidGenerator'
-
 services:
     _defaults:
         autowire: true

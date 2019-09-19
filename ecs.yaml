@@ -115,6 +115,7 @@ parameters:
             - 'src/Rector/AbstractRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+            - 'packages/DoctrinePhpDocParser/src/PhpDocParser/OrmTagParser.php'
             - 'packages/TypeDeclaration/src/TypeInferer/ReturnTypeInferer/ReturnedNodesReturnTypeInferer.php'
             - 'packages/NodeTypeResolver/src/NodeTypeResolver.php'
             - 'packages/NodeTypeResolver/src/PerNodeTypeResolver/VariableTypeResolver.php'

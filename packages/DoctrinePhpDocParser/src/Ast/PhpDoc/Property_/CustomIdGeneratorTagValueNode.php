@@ -16,9 +16,10 @@ final class CustomIdGeneratorTagValueNode extends AbstractDoctrineTagValueNode
      */
     private $class;
 
-    public function __construct(string $class)
+    public function __construct(string $class, ?string $originalContent = null)
     {
         $this->class = $class;
+        $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     public function __toString(): string

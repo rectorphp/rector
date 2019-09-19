@@ -115,7 +115,6 @@ final class EntityUuidNodeFactory
 
         if ($isId) {
             $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createGeneratedValueTag());
-            $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createCustomIdGeneratorTag());
         }
     }
 
