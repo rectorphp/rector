@@ -9,7 +9,6 @@ use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Utils\DocumentationGenerator\Command\DumpNodesCommand;
 use Rector\Utils\DocumentationGenerator\Command\DumpRectorsCommand;
 use Rector\Utils\RectorGenerator\Contract\ContributorCommandInterface;
-use RuntimeException;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -179,11 +178,6 @@ final class Application extends SymfonyApplication
         return getcwd() . '/rector.yaml';
     }
 
-    /**
-     * @param  InputInterface    $input
-     * @throws RuntimeException
-     * @return string
-     */
     private function getNewWorkingDir(InputInterface $input): string
     {
         $workingDir = $input->getParameterOption(['--working-dir', '-d']);

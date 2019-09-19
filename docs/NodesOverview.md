@@ -802,7 +802,7 @@ strict_types=1
 #### `PhpParser\Node\Stmt\Declare_`
 
 ```php
-declare (strict_types=1);
+declare(strict_types=1);
 ```
 <br>
 
