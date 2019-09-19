@@ -39,6 +39,11 @@ final class SerializerTypeTagValueNode extends AbstractTagValueNode
         $this->name = $newName;
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
     public function replaceName(string $oldName, string $newName): bool
     {
         $oldNamePattern = '#\b' . preg_quote($oldName, '#') . '\b#';
