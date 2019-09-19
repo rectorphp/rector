@@ -130,6 +130,16 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
         return $this->printContentItems($contentItems);
     }
 
+    public function changeType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function changeUnique(bool $unique): void
+    {
+        $this->unique = $unique;
+    }
+
     public function getType(): ?string
     {
         return $this->type;
