@@ -42,10 +42,5 @@ final class SymfonyClass
     /**
      * @var string
      */
-    public const ROUTE_ANNOTATION = 'Symfony\Component\Routing\Annotation\Route';
-
-    /**
-     * @var string
-     */
     public const OPTIONS_RESOLVER = 'Symfony\Component\OptionsResolver\OptionsResolver';
 }

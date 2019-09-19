@@ -2,7 +2,6 @@
 
 namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_;
 
-use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
 
 final class TableTagValueNode extends AbstractDoctrineTagValueNode
@@ -57,7 +56,7 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
         $this->options = $options;
 
         if ($originalContent !== null) {
-            $this->orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($originalContent);
+            $this->resolveOriginalContentSpacingAndOrder($originalContent);
         }
     }
 
@@ -74,19 +73,15 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
         }
 
         if ($this->indexes !== []) {
-            $indexesAsString = $this->printTagValueNodesSeparatedByComma(
-                $this->indexes,
-                IndexTagValueNode::SHORT_NAME
-            );
-            $contentItems['indexes'] = sprintf('indexes={%s}', $indexesAsString);
+            $contentItems['indexes'] = $this->printNestedTag($this->indexes, IndexTagValueNode::SHORT_NAME, 'indexes');
         }
 
         if ($this->uniqueConstraints !== []) {
-            $uniqueConstraintsAsString = $this->printTagValueNodesSeparatedByComma(
+            $contentItems['uniqueConstraints'] = $this->printNestedTag(
                 $this->uniqueConstraints,
-                UniqueConstraintTagValueNode::SHORT_NAME
+                UniqueConstraintTagValueNode::SHORT_NAME,
+                'uniqueConstraints'
             );
-            $contentItems['uniqueConstraints'] = sprintf('uniqueConstraints={%s}', $uniqueConstraintsAsString);
         }
 
         if ($this->options !== []) {

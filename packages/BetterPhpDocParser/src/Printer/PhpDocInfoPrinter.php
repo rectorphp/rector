@@ -163,7 +163,7 @@ final class PhpDocInfoPrinter
                 return $this->printPhpDocTagNode($attributeAwareNode, $startEndInfo, $output);
             }
 
-            return $output . PHP_EOL . '     * ' . $attributeAwareNode;
+            return $output . PHP_EOL . ' * ' . $this->printAttributeWithAsterisk($attributeAwareNode);
         }
 
         if (! $attributeAwareNode instanceof PhpDocTextNode && ! $attributeAwareNode instanceof GenericTagValueNode && $startEndInfo) {
@@ -175,11 +175,7 @@ final class PhpDocInfoPrinter
             );
         }
 
-        $content = (string) $attributeAwareNode;
-        $content = explode(PHP_EOL, $content);
-        $content = implode(PHP_EOL . ' * ', $content);
-
-        return $output . $content;
+        return $output . $this->printAttributeWithAsterisk($attributeAwareNode);
     }
 
     private function printEnd(string $output): string
@@ -230,21 +226,23 @@ final class PhpDocInfoPrinter
         string $output
     ): string {
         $output .= $phpDocTagNode->name;
-
         $nodeOutput = $this->printNode($phpDocTagNode->value, $startEndInfo);
-
         if ($nodeOutput && $this->isTagSeparatedBySpace($nodeOutput, $phpDocTagNode)) {
             $output .= ' ';
         }
 
         if ($phpDocTagNode->getAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES)) {
             if (property_exists($phpDocTagNode->value, 'description') && $phpDocTagNode->value->description) {
-                $pattern = Strings::replace(preg_quote($phpDocTagNode->value->description, '#'), '#[\s]+#', '\s+');
+                $quotedDescription = preg_quote($phpDocTagNode->value->description, '#');
+
+                $pattern = Strings::replace($quotedDescription, '#[\s]+#', '\s+');
+
                 $nodeOutput = Strings::replace(
                     $nodeOutput,
                     '#' . $pattern . '#',
                     $phpDocTagNode->value->description
                 );
+
                 if (substr_count($nodeOutput, "\n")) {
                     $nodeOutput = Strings::replace($nodeOutput, "#\n#", PHP_EOL . '  * ');
                 }
@@ -308,11 +306,19 @@ final class PhpDocInfoPrinter
      */
     private function isTagSeparatedBySpace(string $nodeOutput, PhpDocTagNode $phpDocTagNode): bool
     {
-        $contentWithoutSpace = $phpDocTagNode->name . $nodeOutput;
+        $contentWithoutSpace = $phpDocTagNode->name . Strings::substring($nodeOutput, 0, 1);
         if (Strings::contains($this->phpDocInfo->getOriginalContent(), $contentWithoutSpace)) {
             return false;
         }
 
         return Strings::contains($this->phpDocInfo->getOriginalContent(), $phpDocTagNode->name . ' ');
+    }
+
+    private function printAttributeWithAsterisk(AttributeAwareNodeInterface $attributeAwareNode): string
+    {
+        $content = (string) $attributeAwareNode;
+        $content = explode(PHP_EOL, $content);
+
+        return implode(PHP_EOL . ' * ', $content);
     }
 }

@@ -54,9 +54,6 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
      */
     private $fqnTargetEntity;
 
-    /**
-     * @param string[] $orderedVisibleItems
-     */
     public function __construct(
         string $targetEntity,
         ?string $mappedBy,
@@ -65,7 +62,7 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
         string $fetch,
         bool $orphanRemoval,
         ?string $indexBy,
-        array $orderedVisibleItems,
+        string $originalContent,
         string $fqnTargetEntity
     ) {
         $this->targetEntity = $targetEntity;
@@ -75,8 +72,9 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
         $this->fetch = $fetch;
         $this->orphanRemoval = $orphanRemoval;
         $this->indexBy = $indexBy;
-        $this->orderedVisibleItems = $orderedVisibleItems;
         $this->fqnTargetEntity = $fqnTargetEntity;
+
+        $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     public function __toString(): string

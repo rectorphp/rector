@@ -32,7 +32,6 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
     private $inverseJoinColumns;
 
     /**
-     * @param string[] $orderedVisibleItems
      * @param JoinColumnTagValueNode[] $joinColumns
      * @param JoinColumnTagValueNode[] $inverseJoinColumns
      */
@@ -41,13 +40,13 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
         ?string $schema = null,
         ?array $joinColumns = null,
         ?array $inverseJoinColumns = null,
-        ?array $orderedVisibleItems = null
+        ?string $originalContent = null
     ) {
         $this->name = $name;
         $this->schema = $schema;
         $this->joinColumns = $joinColumns;
         $this->inverseJoinColumns = $inverseJoinColumns;
-        $this->orderedVisibleItems = $orderedVisibleItems;
+        $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     public function __toString(): string
@@ -61,19 +60,19 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
         }
 
         if ($this->joinColumns) {
-            $joinColumnsAsString = $this->printTagValueNodesSeparatedByComma(
+            $contentItems['joinColumns'] = $this->printNestedTag(
                 $this->joinColumns,
-                JoinColumnTagValueNode::SHORT_NAME
+                JoinColumnTagValueNode::SHORT_NAME,
+                'joinColumns'
             );
-            $contentItems['joinColumns'] = sprintf('joinColumns={%s}', $joinColumnsAsString);
         }
 
         if ($this->inverseJoinColumns) {
-            $inverseJoinColumnsAsString = $this->printTagValueNodesSeparatedByComma(
+            $contentItems['inverseJoinColumns'] = $this->printNestedTag(
                 $this->inverseJoinColumns,
-                JoinColumnTagValueNode::SHORT_NAME
+                JoinColumnTagValueNode::SHORT_NAME,
+                'inverseJoinColumns'
             );
-            $contentItems['inverseJoinColumns'] = sprintf('inverseJoinColumns={%s}', $inverseJoinColumnsAsString);
         }
 
         return $this->printContentItems($contentItems);

@@ -2,7 +2,6 @@
 
 namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_;
 
-use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
 
 final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
@@ -84,7 +83,7 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
         $this->columnDefinition = $columnDefinition;
 
         if ($originalContent !== null) {
-            $this->orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($originalContent);
+            $this->resolveOriginalContentSpacingAndOrder($originalContent);
         }
     }
 

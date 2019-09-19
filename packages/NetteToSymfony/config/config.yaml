@@ -5,4 +5,4 @@ services:
 
     Rector\NetteToSymfony\:
         resource: '../src'
-        exclude: '../src/{Annotation,Route/RouteInfo.php,Event/EventInfo.php,Rector/*}'
+        exclude: '../src/{Route/RouteInfo.php,Event/EventInfo.php,Rector/*,PhpDocParser/Ast/PhpDoc/*}'

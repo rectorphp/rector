@@ -60,6 +60,25 @@ final class TypeFactory
      * @param Type[] $types
      * @return Type[]
      */
+    public function uniquateTypes(array $types): array
+    {
+        $uniqueTypes = [];
+        foreach ($types as $type) {
+            $type = $this->removeValueFromConstantType($type);
+
+            $typeHash = md5(serialize($type));
+
+            $uniqueTypes[$typeHash] = $type;
+        }
+
+        // re-index
+        return array_values($uniqueTypes);
+    }
+
+    /**
+     * @param Type[] $types
+     * @return Type[]
+     */
     private function unwrapUnionedTypes(array $types): array
     {
         // unwrap union types
@@ -78,25 +97,6 @@ final class TypeFactory
 
         // re-index
         return array_values($types);
-    }
-
-    /**
-     * @param Type[] $types
-     * @return Type[]
-     */
-    private function uniquateTypes(array $types): array
-    {
-        $uniqueTypes = [];
-        foreach ($types as $type) {
-            $type = $this->removeValueFromConstantType($type);
-
-            $typeHash = md5(serialize($type));
-
-            $uniqueTypes[$typeHash] = $type;
-        }
-
-        // re-index
-        return array_values($uniqueTypes);
     }
 
     private function removeValueFromConstantType(Type $type): Type

@@ -2,7 +2,6 @@
 
 namespace Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_;
 
-use Rector\DoctrinePhpDocParser\Array_\ArrayItemStaticHelper;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
 
 final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode
@@ -66,7 +65,7 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode
         $this->fieldName = $fieldName;
 
         if ($originalContent !== null) {
-            $this->orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($originalContent);
+            $this->resolveOriginalContentSpacingAndOrder($originalContent);
         }
     }
 

@@ -15,6 +15,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraint;
 
 final class NodeAnnotationReader
@@ -35,7 +36,10 @@ final class NodeAnnotationReader
         $this->nameResolver = $nameResolver;
     }
 
-    public function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName): Template
+    /**
+     * @return Template|Route|null
+     */
+    public function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName)
     {
         /** @var string $className */
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);

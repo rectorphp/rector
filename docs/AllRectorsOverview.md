@@ -1,4 +1,4 @@
-# All 343 Rectors Overview
+# All 345 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -2044,6 +2044,14 @@ Adds $uuid property to entities, that already have $id with integer type.Require
 
 <br>
 
+### `AlwaysInitializeUuidInEntityRector`
+
+- class: `Rector\Doctrine\Rector\Class_\AlwaysInitializeUuidInEntityRector`
+
+Add uuid initializion to all entities that misses it
+
+<br>
+
 ### `EntityAliasToClassConstantReferenceRector`
 
 - class: `Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector`
@@ -2194,6 +2202,29 @@ Move help facade-like function calls to constructor injection
 -        $viewFactory = view();
 +        $template = $this->viewFactory->make('template.blade');
 +        $viewFactory = $this->viewFactory;
+     }
+ }
+```
+
+<br>
+
+### `InlineValidationRulesToArrayDefinitionRector`
+
+- class: `Rector\Laravel\Rector\Class_\InlineValidationRulesToArrayDefinitionRector`
+
+Transforms inline validation rules to array definition
+
+```diff
+ use Illuminate\Foundation\Http\FormRequest;
+
+ class SomeClass extends FormRequest
+ {
+     public function rules(): array
+     {
+         return [
+-            'someAttribute' => 'required|string|exists:' . SomeModel::class . 'id',
++            'someAttribute' => ['required', 'string', \Illuminate\Validation\Rule::exists(SomeModel::class, 'id')],
+         ];
      }
  }
 ```
@@ -2686,10 +2717,12 @@ Change new Route() from RouteFactory to @Route annotation above controller metho
      }
  }
 
++use Symfony\Component\Routing\Annotation\Route;
++
  final class SomePresenter
  {
 +    /**
-+     * @Symfony\Component\Routing\Annotation\Route(path="some-path")
++     * @Route(path="some-path")
 +     */
      public function run()
      {

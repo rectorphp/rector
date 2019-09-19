@@ -38,23 +38,21 @@ final class ManyToOneTagValueNode extends AbstractDoctrineTagValueNode implement
      */
     private $fqnTargetEntity;
 
-    /**
-     * @param string[] $orderedVisibleItems
-     */
     public function __construct(
         string $targetEntity,
         ?array $cascade,
         string $fetch,
         ?string $inversedBy,
-        array $orderedVisibleItems,
+        ?string $originalContent,
         string $fqnTargetEntity
     ) {
-        $this->orderedVisibleItems = $orderedVisibleItems;
         $this->targetEntity = $targetEntity;
         $this->cascade = $cascade;
         $this->fetch = $fetch;
         $this->inversedBy = $inversedBy;
         $this->fqnTargetEntity = $fqnTargetEntity;
+
+        $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     public function __toString(): string

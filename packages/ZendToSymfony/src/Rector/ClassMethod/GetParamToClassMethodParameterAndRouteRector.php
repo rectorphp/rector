@@ -10,8 +10,11 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
+use Rector\NetteToSymfony\PhpDocParser\Ast\PhpDoc\SymfonyRoutePhpDocTagValueNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -141,7 +144,15 @@ PHP
 
     private function addRouteAnnotation(ClassMethod $classMethod, RouteValueObject $routeValueObject): void
     {
-        $this->docBlockManipulator->addTag($classMethod, $routeValueObject->getSymfonyRoutePhpDocTagNode());
+        $symfonyRoutePhpDocTagNode = $routeValueObject->getSymfonyRoutePhpDocTagNode();
+        $symfonyRoutePhpDocNode = new SpacelessPhpDocTagNode(
+            SymfonyRoutePhpDocTagValueNode::SHORT_NAME,
+            $symfonyRoutePhpDocTagNode
+        );
+
+        $this->docBlockManipulator->addTag($classMethod, $symfonyRoutePhpDocNode);
+
+        $this->addUseType(new FullyQualifiedObjectType(SymfonyRoutePhpDocTagValueNode::CLASS_NAME), $classMethod);
     }
 
     /**

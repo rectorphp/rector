@@ -221,3 +221,6 @@ parameters:
         - '#Method Rector\\DoctrinePhpDocParser\\PhpDocParser\\TableTagValueNodeFactory\:\:createIndexTagValueNodes\(\) should return array<Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\> but returns array<int, Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\|Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\>#'
 
         - '#Method Rector\\DoctrinePhpDocParser\\PhpDocParser\\TableTagValueNodeFactory\:\:createUniqueConstraintTagValueNodes\(\) should return array<Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\> but returns array<int, Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\|Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\>#'
+
+        - '#Parameter \#1 \$obj of function spl_object_hash expects object, PhpParser\\Comment\\Doc\|null given#'
+        - '#Method Rector\\DoctrinePhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:readMethodAnnotation\(\) should return Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template\|Symfony\\Component\\Routing\\Annotation\\Route\|null but returns object\|null#'
