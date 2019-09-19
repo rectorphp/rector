@@ -22,6 +22,7 @@ final class AddUuidMirrorForRelationPropertyRectorTest extends AbstractRectorTes
     {
         yield [__DIR__ . '/Fixture/to_one.php.inc'];
         yield [__DIR__ . '/Fixture/to_many.php.inc'];
+        yield [__DIR__ . '/Fixture/many_to_many_with_extra_name.php.inc'];
         // skip
         yield [__DIR__ . '/Fixture/skip_already_added.php.inc'];
         yield [__DIR__ . '/Fixture/skip_to_many_without_target_entity_uuid.php.inc'];

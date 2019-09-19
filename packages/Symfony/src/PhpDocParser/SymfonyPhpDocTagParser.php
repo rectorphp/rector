@@ -82,12 +82,16 @@ final class SymfonyPhpDocTagParser extends AbstractPhpDocParser
     private function createSerializerTypeTagValueNode(
         Property $property,
         string $annotationContent
-    ): SerializerTypeTagValueNode {
-        /** @var Type $typeAnnotation */
+    ): ?SerializerTypeTagValueNode {
+        /** @var Type|null $typeAnnotation */
         $typeAnnotation = $this->nodeAnnotationReader->readPropertyAnnotation(
             $property,
             SerializerTypeTagValueNode::CLASS_NAME
         );
+
+        if ($typeAnnotation === null) {
+            return null;
+        }
 
         return new SerializerTypeTagValueNode($typeAnnotation->name, $annotationContent);
     }

@@ -11,12 +11,14 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\Testing\PHPUnit\PHPUnitEnvironment;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraint;
+use Throwable;
 
 final class NodeAnnotationReader
 {
@@ -71,6 +73,9 @@ final class NodeAnnotationReader
     public function readPropertyAnnotation(Property $property, string $annotationClassName)
     {
         $propertyReflection = $this->createPropertyReflectionFromPropertyNode($property);
+        if ($propertyReflection === null) {
+            return null;
+        }
 
         /** @var Annotation|null $propertyAnnotation */
         $propertyAnnotation = $this->annotationReader->getPropertyAnnotation($propertyReflection, $annotationClassName);
@@ -81,7 +86,7 @@ final class NodeAnnotationReader
         return $propertyAnnotation;
     }
 
-    private function createPropertyReflectionFromPropertyNode(Property $property): ReflectionProperty
+    private function createPropertyReflectionFromPropertyNode(Property $property): ?ReflectionProperty
     {
         /** @var string $propertyName */
         $propertyName = $this->nameResolver->getName($property);
@@ -97,7 +102,15 @@ final class NodeAnnotationReader
             ));
         }
 
-        return new ReflectionProperty($className, $propertyName);
+        try {
+            return new ReflectionProperty($className, $propertyName);
+        } catch (Throwable $throwable) {
+            if (PHPUnitEnvironment::isPHPUnitRun()) {
+                return null;
+            }
+
+            throw new $throwable();
+        }
     }
 
     private function createClassReflectionFromNode(Class_ $class): ReflectionClass

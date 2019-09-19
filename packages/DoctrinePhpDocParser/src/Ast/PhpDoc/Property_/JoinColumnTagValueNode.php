@@ -77,7 +77,7 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode
             $contentItems['nullable'] = sprintf('nullable=%s', $this->nullable ? 'true' : 'false');
         }
 
-        if ($this->name !== null) {
+        if ($this->name) {
             $contentItems['name'] = sprintf('name="%s"', $this->name);
         }
 
@@ -122,5 +122,10 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode
     public function isNullable(): ?bool
     {
         return $this->nullable;
+    }
+
+    public function changeName(string $newName): void
+    {
+        $this->name = $newName;
     }
 }
