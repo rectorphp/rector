@@ -10,7 +10,6 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\Doctrine\Uuid\JoinTableNameResolver;
 use Rector\Doctrine\ValueObject\DoctrineClass;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\CustomIdGeneratorTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\GeneratedValueTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\IdTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinColumnTagValueNode;
@@ -19,18 +18,12 @@ use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinTableTagValueNode;
 final class PhpDocTagNodeFactory
 {
     /**
-     * @var string
-     */
-    private $doctrineUuidGeneratorClass;
-
-    /**
      * @var JoinTableNameResolver
      */
     private $joinTableNameResolver;
 
-    public function __construct(string $doctrineUuidGeneratorClass, JoinTableNameResolver $joinTableNameResolver)
+    public function __construct(JoinTableNameResolver $joinTableNameResolver)
     {
-        $this->doctrineUuidGeneratorClass = $doctrineUuidGeneratorClass;
         $this->joinTableNameResolver = $joinTableNameResolver;
     }
 
@@ -67,14 +60,6 @@ final class PhpDocTagNodeFactory
         return new SpacelessPhpDocTagNode(GeneratedValueTagValueNode::SHORT_NAME, new GeneratedValueTagValueNode(
             'CUSTOM'
         ));
-    }
-
-    public function createCustomIdGeneratorTag(): PhpDocTagNode
-    {
-        return new SpacelessPhpDocTagNode(
-            CustomIdGeneratorTagValueNode::SHORT_NAME,
-            new CustomIdGeneratorTagValueNode($this->doctrineUuidGeneratorClass)
-        );
     }
 
     public function createJoinTableTagNode(Property $property): PhpDocTagNode

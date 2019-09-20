@@ -105,8 +105,9 @@ final class PhpDocInfoFactory
 
         $objectHash = spl_object_hash($node);
         $docCommentHash = spl_object_hash($node->getDocComment());
+        $docCommentContentHash = sha1($node->getDocComment()->getText());
 
-        return $objectHash . $docCommentHash;
+        return $objectHash . $docCommentHash . $docCommentContentHash;
     }
 
     private function ensureNodeHasDocComment(Node $node): void

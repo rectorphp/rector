@@ -3,6 +3,7 @@
 namespace Rector\DoctrinePhpDocParser\PhpDocParser;
 
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\InheritanceType;
@@ -23,6 +24,7 @@ use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\InheritanceTypeTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\TableTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
+use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\CustomIdGeneratorTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\GeneratedValueTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\IdTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\JoinColumnTagValueNode;
@@ -136,6 +138,10 @@ final class OrmTagParser extends AbstractPhpDocParser
 
         if ($tag === OneToManyTagValueNode::SHORT_NAME) {
             return $this->createOneToManyTagValueNode($property, $annotationContent);
+        }
+
+        if ($tag === CustomIdGeneratorTagValueNode::SHORT_NAME) {
+            return $this->createCustomIdGeneratorTagValueNode($property, $annotationContent);
         }
 
         if ($tag === JoinTableTagValueNode::SHORT_NAME) {
@@ -366,5 +372,15 @@ final class OrmTagParser extends AbstractPhpDocParser
         }
 
         return $joinColumnValuesTags;
+    }
+
+    private function createCustomIdGeneratorTagValueNode(
+        Property $property,
+        string $annotationContent
+    ): CustomIdGeneratorTagValueNode {
+        /** @var CustomIdGenerator $customIdGenerator */
+        $customIdGenerator = $this->nodeAnnotationReader->readPropertyAnnotation($property, CustomIdGenerator::class);
+
+        return new CustomIdGeneratorTagValueNode($customIdGenerator->class, $annotationContent);
     }
 }
