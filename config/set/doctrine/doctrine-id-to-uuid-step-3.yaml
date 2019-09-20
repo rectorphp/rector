@@ -1,0 +1,2 @@
+services:
+    Rector\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector: ~

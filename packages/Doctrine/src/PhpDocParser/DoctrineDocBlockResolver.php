@@ -2,6 +2,7 @@
 
 namespace Rector\Doctrine\PhpDocParser;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -11,8 +12,12 @@ use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\IdTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeContainer\ParsedNodesByType;
+use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use ReflectionClass;
 
 final class DoctrineDocBlockResolver
 {
@@ -21,19 +26,48 @@ final class DoctrineDocBlockResolver
      */
     private $docBlockManipulator;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator)
+    /**
+     * @var ParsedNodesByType
+     */
+    private $parsedNodesByType;
+
+    public function __construct(DocBlockManipulator $docBlockManipulator, ParsedNodesByType $parsedNodesByType)
     {
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->parsedNodesByType = $parsedNodesByType;
     }
 
-    public function isDoctrineEntityClass(Class_ $class): bool
+    /**
+     * @param Class_|string $class
+     */
+    public function isDoctrineEntityClass($class): bool
     {
-        $classPhpDocInfo = $this->getPhpDocInfo($class);
-        if ($classPhpDocInfo === null) {
+        if ($class instanceof Class_) {
+            $classPhpDocInfo = $this->getPhpDocInfo($class);
+            if ($classPhpDocInfo === null) {
+                return false;
+            }
+
+            return (bool) $classPhpDocInfo->getByType(EntityTagValueNode::class);
+        }
+
+        if (is_string($class)) {
+            if (ClassExistenceStaticHelper::doesClassLikeExist($class)) {
+                $classNode = $this->parsedNodesByType->findClass($class);
+                if ($classNode) {
+                    return $this->isDoctrineEntityClass($classNode);
+                }
+
+                $reflectionClass = new ReflectionClass($class);
+
+                // dummy check of 3rd party code without running it
+                return Strings::contains((string) $reflectionClass->getDocComment(), '@ORM\Entity');
+            }
+
             return false;
         }
 
-        return (bool) $classPhpDocInfo->getByType(EntityTagValueNode::class);
+        throw new ShouldNotHappenException(__METHOD__);
     }
 
     public function isDoctrineEntityClassWithIdProperty(Class_ $class): bool

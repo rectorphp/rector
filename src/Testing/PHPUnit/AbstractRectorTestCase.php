@@ -4,6 +4,7 @@ namespace Rector\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
 use PHPStan\Analyser\NodeScopeResolver;
+use PHPUnit\Framework\ExpectationFailedException;
 use Psr\Container\ContainerInterface;
 use Rector\Application\FileProcessor;
 use Rector\Configuration\Option;
@@ -161,7 +162,12 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->fileProcessor->refactor($smartFileInfo);
         $changedContent = $this->fileProcessor->printToString($smartFileInfo);
 
-        $this->assertStringEqualsFile($expectedFile, $changedContent, 'Caused by ' . $fixtureFile);
+        try {
+            $this->assertStringEqualsFile($expectedFile, $changedContent, 'Caused by ' . $fixtureFile);
+        } catch (ExpectationFailedException $expectationFailedException) {
+            $expectedFileContent = FileSystem::read($expectedFile);
+            $this->assertStringMatchesFormat($expectedFileContent, $changedContent, 'Caused by ' . $fixtureFile);
+        }
     }
 
     private function ensureConfigFileExists(): void

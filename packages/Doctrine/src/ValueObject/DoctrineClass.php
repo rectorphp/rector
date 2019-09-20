@@ -28,4 +28,9 @@ final class DoctrineClass
      * @var string
      */
     public const OBJECT_MANAGER = 'Doctrine\Common\Persistence\ObjectManager';
+
+    /**
+     * @var string
+     */
+    public const RAMSEY_UUID = 'Ramsey\Uuid\Uuid';
 }
