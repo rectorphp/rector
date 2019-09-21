@@ -4,6 +4,7 @@ namespace Rector\DeadCode\Doctrine;
 
 use Doctrine\ORM\Mapping\Entity;
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
@@ -155,7 +156,7 @@ final class DoctrineEntityManipulator
 
     public function isMethodCallOnDoctrineEntity(Node $node, string $methodName): bool
     {
-        if (! $node instanceof Node\Expr\MethodCall) {
+        if (! $node instanceof MethodCall) {
             return false;
         }
 
