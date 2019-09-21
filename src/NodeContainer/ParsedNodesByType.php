@@ -22,6 +22,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Exception\NotImplementedException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -455,6 +456,23 @@ final class ParsedNodesByType
         }
 
         return $newNodesByClass;
+    }
+
+    public function findClassConstantByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
+    {
+        $class = null;
+        if ($this->nameResolver->isName($classConstFetch->class, 'self')) {
+            /** @var string|null $class */
+            $class = $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
+        }
+
+        if ($class === null) {
+            throw new NotImplementedException();
+        }
+
+        /** @var string $constantName */
+        $constantName = $this->nameResolver->getName($classConstFetch->name);
+        return $this->findClassConstant($class, $constantName);
     }
 
     private function addClass(Class_ $classNode): void

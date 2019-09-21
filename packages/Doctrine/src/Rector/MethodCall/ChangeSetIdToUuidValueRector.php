@@ -4,12 +4,15 @@ namespace Rector\Doctrine\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
 use Ramsey\Uuid\Uuid;
 use Rector\Doctrine\ValueObject\DoctrineClass;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -22,6 +25,16 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class ChangeSetIdToUuidValueRector extends AbstractRector
 {
+    /**
+     * @var ParsedNodesByType
+     */
+    private $parsedNodesByType;
+
+    public function __construct(ParsedNodesByType $parsedNodesByType)
+    {
+        $this->parsedNodesByType = $parsedNodesByType;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change set id to uuid values', [
@@ -97,16 +110,31 @@ PHP
             return $node;
         }
 
-        // already uuid static type
-        if ($this->isUuidType($node->args[0]->value)) {
-            return null;
+        // B. is the value constant reference?
+        $argumentValue = $node->args[0]->value;
+        if ($argumentValue instanceof ClassConstFetch) {
+            $classConst = $this->parsedNodesByType->findClassConstantByClassConstFetch($argumentValue);
+            if ($classConst === null) {
+                return null;
+            }
+
+            $constantValueStaticType = $this->getStaticType($classConst->consts[0]->value);
+
+            // probably already uuid
+            if ($constantValueStaticType instanceof StringType) {
+                return null;
+            }
+
+            // update constant value
+            $classConst->consts[0]->value = $this->createUuidStringNode();
+
+            $node->args[0]->value = $this->createStaticCall(Uuid::class, 'fromString', [$argumentValue]);
+
+            return $node;
         }
 
-        // B. set uuid from string with generated string
-        $uuidValue = Uuid::uuid4();
-        $uuidValueString = $uuidValue->toString();
-
-        $value = $this->createStaticCall(Uuid::class, 'fromString', [new String_($uuidValueString)]);
+        // C. set uuid from string with generated string
+        $value = $this->createStaticCall(Uuid::class, 'fromString', [$this->createUuidStringNode()]);
         $node->args[0]->value = $value;
 
         return $node;
@@ -131,6 +159,7 @@ PHP
             return true;
         }
 
+        // already uuid static type
         return $this->isUuidType($methodCall->args[0]->value);
     }
 
@@ -184,5 +213,13 @@ PHP
         }
 
         return $argumentStaticType->getClassName() === DoctrineClass::RAMSEY_UUID;
+    }
+
+    private function createUuidStringNode(): String_
+    {
+        $uuidValue = Uuid::uuid4();
+        $uuidValueString = $uuidValue->toString();
+
+        return new String_($uuidValueString);
     }
 }
