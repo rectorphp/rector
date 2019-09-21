@@ -56,7 +56,7 @@ final class ValueResolver
     /**
      * @return mixed|null
      */
-    public function resolve(Expr $expr)
+    public function getValue(Expr $expr)
     {
         try {
             $value = $this->getConstExprEvaluator()->evaluateDirectly($expr);

@@ -81,7 +81,7 @@ final class RouteInfoFactory
     private function createRouteInfoFromArgs(Node $node, array $methods = []): ?RouteInfo
     {
         $pathArgument = $node->args[0]->value;
-        $routePath = $this->valueResolver->resolve($pathArgument);
+        $routePath = $this->valueResolver->getValue($pathArgument);
 
         // route path is needed
         if ($routePath === null || ! is_string($routePath)) {

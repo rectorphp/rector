@@ -5830,9 +5830,9 @@ Change Symfony Event listener class to Event Subscriber based on configuration i
 
 ## SymfonyPHPUnit
 
-### `MultipleServiceGetToSetUpMethodRector`
+### `SelfContainerGetMethodCallFromTestToSetUpMethodRector`
 
-- class: `Rector\SymfonyPHPUnit\Rector\Class_\MultipleServiceGetToSetUpMethodRector`
+- class: `Rector\SymfonyPHPUnit\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector`
 
 ```diff
  use ItemRepository;

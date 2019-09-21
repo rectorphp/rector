@@ -189,7 +189,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 - [#1753] [DeadCode] Rector `RemoveDeadConstructorRector` should skip `private` method, Thanks to [@stloyd]
 - [#1687] [Symfony] Set few default common service names for Symfony App Analyzer, Thanks to [@stloyd]
 - [#1675] [Symfony] Make set symfony42 refactor get(...) in former container aware commands
-- [#1666] Skip session in `MultipleServiceGetToSetUpMethodRector`
+- [#1666] Skip session in `SelfContainerGetMethodCallFromTestToSetUpMethodRector`
 - [#1757] make SymfonyContainer factory configurable with "kernel_environment" parameter in rector.yaml
 - [#1707] Don't mess with lines between docblock comment and var type., Thanks to [@ravanscafi]
 - [#1699] Update composer scripts, Thanks to [@ravanscafi]
@@ -233,7 +233,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 - [#1584] [DeadCode] Add `RemoveDeadZeroAndOneOperationRector`
 - [#1586] [DeadCode] Add `RemoveDelegatingParentCallRector`
 - [#1603] [DeadCode] Add `RemoveDuplicatedInstanceOfRector`
-- [#1656] [SymfonyPHPUnit] Add `MultipleServiceGetToSetUpMethodRector`
+- [#1656] [SymfonyPHPUnit] Add `SelfContainerGetMethodCallFromTestToSetUpMethodRector`
 - [#1589] Add assign ref support to `AddDefaultValueForUndefinedVariableRector`
 - [#1609] Add `ElasticSearchDSL` package, Thanks to [@shyim]
 - [#1611] Add rector for ShopRegistration, Thanks to [@shyim]

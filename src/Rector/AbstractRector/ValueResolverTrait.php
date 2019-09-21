@@ -29,7 +29,7 @@ trait ValueResolverTrait
      */
     protected function getValue(Expr $expr)
     {
-        return $this->valueResolver->resolve($expr);
+        return $this->valueResolver->getValue($expr);
     }
 
     /**
