@@ -3,13 +3,17 @@
 namespace Rector\DeadCode\Doctrine;
 
 use Doctrine\ORM\Mapping\Entity;
+use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\ObjectType;
+use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
 use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\InheritanceTypeTagValueNode;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\InversedByNodeInterface;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\MappedByNodeInterface;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -25,10 +29,26 @@ final class DoctrineEntityManipulator
      */
     private $docBlockManipulator;
 
-    public function __construct(NameResolver $nameResolver, DocBlockManipulator $docBlockManipulator)
-    {
+    /**
+     * @var DoctrineDocBlockResolver
+     */
+    private $doctrineDocBlockResolver;
+
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    public function __construct(
+        NameResolver $nameResolver,
+        DocBlockManipulator $docBlockManipulator,
+        DoctrineDocBlockResolver $doctrineDocBlockResolver,
+        NodeTypeResolver $nodeTypeResolver
+    ) {
         $this->nameResolver = $nameResolver;
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function resolveOtherProperty(Property $property): ?string
@@ -131,5 +151,23 @@ final class DoctrineEntityManipulator
         }
 
         return $manyToOnePropertyNames;
+    }
+
+    public function isMethodCallOnDoctrineEntity(Node $node, string $methodName): bool
+    {
+        if (! $node instanceof Node\Expr\MethodCall) {
+            return false;
+        }
+
+        if (! $this->nameResolver->isName($node->name, $methodName)) {
+            return false;
+        }
+
+        $objectType = $this->nodeTypeResolver->getObjectType($node->var);
+        if (! $objectType instanceof ObjectType) {
+            return false;
+        }
+
+        return $this->doctrineDocBlockResolver->isDoctrineEntityClass($objectType->getClassName());
     }
 }

@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Ramsey\Uuid\Uuid;
+use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\Doctrine\ValueObject\DoctrineClass;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -30,9 +31,17 @@ final class ChangeSetIdToUuidValueRector extends AbstractRector
      */
     private $parsedNodesByType;
 
-    public function __construct(ParsedNodesByType $parsedNodesByType)
-    {
+    /**
+     * @var DoctrineEntityManipulator
+     */
+    private $doctrineEntityManipulator;
+
+    public function __construct(
+        ParsedNodesByType $parsedNodesByType,
+        DoctrineEntityManipulator $doctrineEntityManipulator
+    ) {
         $this->parsedNodesByType = $parsedNodesByType;
+        $this->doctrineEntityManipulator = $doctrineEntityManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -142,16 +151,7 @@ PHP
 
     private function shouldSkip(MethodCall $methodCall): bool
     {
-        if (! $this->isName($methodCall->name, 'setId')) {
-            return true;
-        }
-
-        $objectType = $this->getObjectType($methodCall);
-        if (! $objectType instanceof ObjectType) {
-            return true;
-        }
-
-        if (! $this->isDoctrineEntityClass($objectType->getClassName())) {
+        if (! $this->doctrineEntityManipulator->isMethodCallOnDoctrineEntity($methodCall, 'setId')) {
             return true;
         }
 
