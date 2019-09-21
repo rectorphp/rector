@@ -1,2 +1,2 @@
 services:
-    Rector\SymfonyPHPUnit\Rector\Class_\MultipleServiceGetToSetUpMethodRector: ~
+    Rector\SymfonyPHPUnit\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector: ~

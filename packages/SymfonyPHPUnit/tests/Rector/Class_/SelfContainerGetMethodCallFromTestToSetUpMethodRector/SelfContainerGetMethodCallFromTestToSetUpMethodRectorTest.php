@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector;
+namespace Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector;
 
-use Rector\SymfonyPHPUnit\Rector\Class_\MultipleServiceGetToSetUpMethodRector;
-use Rector\SymfonyPHPUnit\Tests\Rector\Class_\MultipleServiceGetToSetUpMethodRector\Source\DummyKernelTestCase;
+use Rector\SymfonyPHPUnit\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector;
+use Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\DummyKernelTestCase;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class MultipleServiceGetToSetUpMethodRectorTest extends AbstractRectorTestCase
+final class SelfContainerGetMethodCallFromTestToSetUpMethodRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
@@ -35,7 +35,7 @@ final class MultipleServiceGetToSetUpMethodRectorTest extends AbstractRectorTest
     protected function getRectorsWithConfiguration(): array
     {
         return [
-            MultipleServiceGetToSetUpMethodRector::class => [
+            SelfContainerGetMethodCallFromTestToSetUpMethodRector::class => [
                 '$kernelTestCaseClass' => DummyKernelTestCase::class,
             ],
         ];

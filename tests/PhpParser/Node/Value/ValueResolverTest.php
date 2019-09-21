@@ -31,7 +31,7 @@ final class ValueResolverTest extends AbstractKernelTestCase
      */
     public function test($expected, Expr $expr): void
     {
-        $this->assertSame($expected, $this->valueResolver->resolve($expr));
+        $this->assertSame($expected, $this->valueResolver->getValue($expr));
     }
 
     public function dataProvider(): Iterator

@@ -189,7 +189,7 @@ final class ClassMethodManipulator
         $arguments = [];
         foreach ($compactFuncCalls as $compactFuncCall) {
             foreach ($compactFuncCall->args as $arg) {
-                $value = $this->valueResolver->resolve($arg->value);
+                $value = $this->valueResolver->getValue($arg->value);
 
                 if ($value) {
                     $arguments[] = $value;

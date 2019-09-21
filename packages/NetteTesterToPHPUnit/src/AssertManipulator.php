@@ -228,7 +228,7 @@ final class AssertManipulator
 
     private function processTypeCall(StaticCall $staticCall): void
     {
-        $value = $this->valueResolver->resolve($staticCall->args[0]->value);
+        $value = $this->valueResolver->getValue($staticCall->args[0]->value);
 
         $typeToMethod = [
             'list' => 'assertIsArray',
