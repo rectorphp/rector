@@ -84,7 +84,7 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
             return $this->isTrue($node) ? 1 : 0;
         }
 
-        throw new ShouldNotHappenException(__METHOD__);
+        throw new ShouldNotHappenException();
     }
 
     /**

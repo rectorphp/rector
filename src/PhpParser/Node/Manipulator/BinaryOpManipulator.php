@@ -51,7 +51,7 @@ final class BinaryOpManipulator
             return;
         }
 
-        throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+        throw new ShouldNotHappenException();
     }
 
     /**

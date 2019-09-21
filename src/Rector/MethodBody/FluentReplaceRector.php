@@ -120,7 +120,7 @@ PHP
             }
         }
 
-        throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+        throw new ShouldNotHappenException();
     }
 
     private function isLastMethodCallInChainCall(MethodCall $methodCall): bool

@@ -67,7 +67,7 @@ final class DoctrineDocBlockResolver
             return false;
         }
 
-        throw new ShouldNotHappenException(__METHOD__);
+        throw new ShouldNotHappenException();
     }
 
     public function isDoctrineEntityClassWithIdProperty(Class_ $class): bool

@@ -152,12 +152,12 @@ PHP
     {
         $methodName = $this->getName($classMethod);
         if ($methodName === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
         if (! is_string($className)) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $childrenClassLikes = $this->parsedNodesByType->findChildrenOfClass($className);

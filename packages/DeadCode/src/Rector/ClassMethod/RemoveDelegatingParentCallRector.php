@@ -180,7 +180,7 @@ PHP
 
         $parentClassName = get_parent_class($className);
         if ($parentClassName === false) {
-            throw new ShouldNotHappenException(__METHOD__);
+            throw new ShouldNotHappenException();
         }
 
         /** @var string $methodName */

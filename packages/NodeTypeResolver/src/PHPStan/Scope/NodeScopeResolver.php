@@ -126,7 +126,7 @@ final class NodeScopeResolver
         }
 
         if ($classOrInterfaceNode->name === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         return $classOrInterfaceNode->name->toString();

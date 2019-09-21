@@ -153,7 +153,7 @@ PHP
                 }
 
                 if (count($node->args) !== 1) {
-                    throw new ShouldNotHappenException(__METHOD__);
+                    throw new ShouldNotHappenException();
                 }
 
                 // resolve value types

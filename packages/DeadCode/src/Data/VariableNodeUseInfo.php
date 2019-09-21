@@ -82,7 +82,7 @@ final class VariableNodeUseInfo
     {
         $parentNode = $this->variable->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         return $parentNode;

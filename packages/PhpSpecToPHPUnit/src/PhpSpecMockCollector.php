@@ -91,7 +91,7 @@ final class PhpSpecMockCollector
         $className = $this->nameResolver->getName($node);
 
         if (! isset($this->mocksWithsTypes[$className][$variable])) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         return $this->mocksWithsTypes[$className][$variable];
@@ -112,7 +112,7 @@ final class PhpSpecMockCollector
         $this->mocks[$class][$variable][] = $param->getAttribute(AttributeKey::METHOD_NAME);
 
         if ($param->type === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $paramType = (string) ($param->type->getAttribute('originalName') ?: $param->type);

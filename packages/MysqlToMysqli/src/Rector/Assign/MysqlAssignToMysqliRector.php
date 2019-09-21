@@ -155,7 +155,7 @@ PHP
 
         $previousExpression = $assign->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
         if ($previousExpression === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $this->addNodeAfterNode($forNode, $previousExpression);

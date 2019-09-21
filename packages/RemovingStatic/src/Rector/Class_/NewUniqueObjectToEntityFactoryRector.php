@@ -201,7 +201,7 @@ PHP
             if ($hasTypes) {
                 $name = $this->getName($class);
                 if ($name === null) {
-                    throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+                    throw new ShouldNotHappenException();
                 }
                 $this->classesUsingTypes[] = $name;
             }

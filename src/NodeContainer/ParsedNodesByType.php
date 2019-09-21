@@ -367,7 +367,7 @@ final class ParsedNodesByType
         if ($node instanceof Interface_ || $node instanceof Trait_ || $node instanceof Function_) {
             $name = $this->nameResolver->getName($node);
             if ($name === null) {
-                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+                throw new ShouldNotHappenException();
             }
 
             $nodeClass = get_class($node);
@@ -465,7 +465,7 @@ final class ParsedNodesByType
 
         $name = $classNode->getAttribute(AttributeKey::CLASS_NAME);
         if ($name === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $this->classes[$name] = $classNode;
@@ -475,7 +475,7 @@ final class ParsedNodesByType
     {
         $className = $classConst->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $constantName = $this->nameResolver->getName($classConst);

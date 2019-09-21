@@ -80,7 +80,7 @@ final class PhpSpecRenaming
     {
         // anonymous class?
         if ($class->name === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         // 2. change class name
@@ -94,7 +94,7 @@ final class PhpSpecRenaming
     {
         // anonymous class?
         if ($class->name === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $bareClassName = RectorStrings::removeSuffixes($class->name->toString(), ['Spec', 'Test']);
