@@ -24,19 +24,19 @@ class SomeClass
 {
    public function callOnMe()
    {
-       var_dump( get_called_class());
+       var_dump(get_called_class());
    }
 }
 PHP
                 ,
                 <<<'PHP'
 class SomeClass
-    {
-       public function callOnMe()
-       {
-           var_dump( static::class);
-       }
-    }
+{
+   public function callOnMe()
+   {
+       var_dump(static::class);
+   }
+}
 PHP
             ),
         ]);
