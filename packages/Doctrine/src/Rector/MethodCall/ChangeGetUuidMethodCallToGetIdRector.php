@@ -5,7 +5,7 @@ namespace Rector\Doctrine\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use PHPStan\Type\ObjectType;
+use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -15,6 +15,16 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class ChangeGetUuidMethodCallToGetIdRector extends AbstractRector
 {
+    /**
+     * @var DoctrineEntityManipulator
+     */
+    private $doctrineEntityManipulator;
+
+    public function __construct(DoctrineEntityManipulator $doctrineEntityManipulator)
+    {
+        $this->doctrineEntityManipulator = $doctrineEntityManipulator;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change getUuid() method call to getId()', [
@@ -91,26 +101,12 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if (! $this->doctrineEntityManipulator->isMethodCallOnDoctrineEntity($node, 'getUuid')) {
             return null;
         }
 
         $node->name = new Identifier('getId');
 
         return $node;
-    }
-
-    private function shouldSkip(Node\Expr\MethodCall $methodCall): bool
-    {
-        if (! $this->isName($methodCall->name, 'getUuid')) {
-            return true;
-        }
-
-        $methodVarObjectType = $this->getObjectType($methodCall->var);
-        if (! $methodVarObjectType instanceof ObjectType) {
-            return true;
-        }
-
-        return ! $this->isDoctrineEntityClass($methodVarObjectType->getClassName());
     }
 }

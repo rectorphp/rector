@@ -1,3 +1,5 @@
 services:
     Rector\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector: ~
     Rector\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector: ~
+    Rector\Doctrine\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector: ~
+    Rector\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector: ~
