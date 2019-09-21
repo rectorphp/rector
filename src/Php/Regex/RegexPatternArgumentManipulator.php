@@ -202,19 +202,7 @@ final class RegexPatternArgumentManipulator
      */
     private function resolveClassConstFetchValue(ClassConstFetch $classConstFetch): array
     {
-        $className = $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
-        if (! is_string($className)) {
-            return [];
-        }
-
-        $constantName = $this->nameResolver->getName($classConstFetch->name);
-
-        if ($constantName === null) {
-            return [];
-        }
-
-        $classConstNode = $this->parsedNodesByType->findClassConstant($className, $constantName);
-
+        $classConstNode = $this->parsedNodesByType->findClassConstantByClassConstFetch($classConstFetch);
         if ($classConstNode === null) {
             return [];
         }
