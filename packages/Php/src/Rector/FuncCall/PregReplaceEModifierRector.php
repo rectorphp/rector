@@ -111,7 +111,7 @@ PHP
     {
         if (! $expr instanceof String_) {
             // not supported yet
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $phpCode = '<?php ' . $expr->value . ';';

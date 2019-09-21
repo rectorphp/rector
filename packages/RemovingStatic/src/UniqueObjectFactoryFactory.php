@@ -69,7 +69,7 @@ final class UniqueObjectFactoryFactory
     {
         $className = $this->nameResolver->getName($class);
         if ($className === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $name = $className . 'Factory';

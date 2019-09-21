@@ -199,7 +199,7 @@ final class ClassManipulator
         foreach ($class->getProperties() as $property) {
             if (count($property->props) > 1) {
                 // usually full property is needed to have all the docs values
-                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+                throw new ShouldNotHappenException();
             }
 
             if ($this->nameResolver->isName($property, $name)) {

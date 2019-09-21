@@ -22,6 +22,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Exception\NotImplementedException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -367,7 +368,7 @@ final class ParsedNodesByType
         if ($node instanceof Interface_ || $node instanceof Trait_ || $node instanceof Function_) {
             $name = $this->nameResolver->getName($node);
             if ($name === null) {
-                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+                throw new ShouldNotHappenException();
             }
 
             $nodeClass = get_class($node);
@@ -457,6 +458,28 @@ final class ParsedNodesByType
         return $newNodesByClass;
     }
 
+    public function findClassConstantByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
+    {
+        $class = $this->nameResolver->getName($classConstFetch->class);
+
+        if ($class === 'self') {
+            /** @var string|null $class */
+            $class = $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
+        } elseif ($class === 'parent') {
+            /** @var string|null $class */
+            $class = $classConstFetch->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        }
+
+        if ($class === null) {
+            throw new NotImplementedException();
+        }
+
+        /** @var string $constantName */
+        $constantName = $this->nameResolver->getName($classConstFetch->name);
+
+        return $this->findClassConstant($class, $constantName);
+    }
+
     private function addClass(Class_ $classNode): void
     {
         if ($this->isClassAnonymous($classNode)) {
@@ -465,7 +488,7 @@ final class ParsedNodesByType
 
         $name = $classNode->getAttribute(AttributeKey::CLASS_NAME);
         if ($name === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $this->classes[$name] = $classNode;
@@ -475,7 +498,7 @@ final class ParsedNodesByType
     {
         $className = $classConst->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $constantName = $this->nameResolver->getName($classConst);

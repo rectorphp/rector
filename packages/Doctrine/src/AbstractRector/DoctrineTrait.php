@@ -28,7 +28,10 @@ trait DoctrineTrait
         return $this->doctrineDocBlockResolver->isDoctrineProperty($property);
     }
 
-    protected function isDoctrineEntityClass(Class_ $class): bool
+    /**
+     * @param Class_|string $class
+     */
+    protected function isDoctrineEntityClass($class): bool
     {
         return $this->doctrineDocBlockResolver->isDoctrineEntityClass($class);
     }

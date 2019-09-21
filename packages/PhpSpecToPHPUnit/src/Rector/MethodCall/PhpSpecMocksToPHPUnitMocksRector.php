@@ -113,7 +113,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
         $variableName = $this->getName($param->var);
 
         if ($variableName === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         return sprintf(
@@ -130,7 +130,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
         $assigns = [];
         foreach ((array) $classMethod->params as $param) {
             if (! $param->type instanceof Name) {
-                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+                throw new ShouldNotHappenException();
             }
 
             $createMockCall = $this->createCreateMockCall($param, $param->type);
@@ -149,12 +149,12 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
     {
         if ($this->isName($methodCall, 'shouldBeCalled')) {
             if (! $methodCall->var instanceof MethodCall) {
-                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+                throw new ShouldNotHappenException();
             }
 
             $mockMethodName = $this->getName($methodCall->var);
             if ($mockMethodName === null) {
-                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+                throw new ShouldNotHappenException();
             }
 
             $expectedArg = $methodCall->var->args[0]->value ?? null;
@@ -221,7 +221,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
     {
         $variable = $this->getName($param->var);
         if ($variable === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $propertyFetch = new PropertyFetch(new Variable('this'), $variable);

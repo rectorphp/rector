@@ -31,7 +31,7 @@ final class JoinTableNameResolver
 
         $targetEntity = $this->doctrineDocBlockResolver->getTargetEntity($property);
         if ($targetEntity === null) {
-            throw new ShouldNotHappenException(__METHOD__);
+            throw new ShouldNotHappenException();
         }
 
         $targetTableName = $this->resolveShortClassName($targetEntity);

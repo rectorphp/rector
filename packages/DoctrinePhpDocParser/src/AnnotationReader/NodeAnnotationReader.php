@@ -61,7 +61,7 @@ final class NodeAnnotationReader
         /** @var Annotation|null $classAnnotation */
         $classAnnotation = $this->annotationReader->getClassAnnotation($classReflection, $annotationClassName);
         if ($classAnnotation === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         return $classAnnotation;
@@ -80,7 +80,7 @@ final class NodeAnnotationReader
         /** @var Annotation|null $propertyAnnotation */
         $propertyAnnotation = $this->annotationReader->getPropertyAnnotation($propertyReflection, $annotationClassName);
         if ($propertyAnnotation === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         return $propertyAnnotation;

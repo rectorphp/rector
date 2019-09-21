@@ -95,7 +95,7 @@ PHP
 
         $methodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
         if ($methodNode === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $this->docBlockManipulator->removeTagFromNode($methodNode, 'return');

@@ -131,7 +131,7 @@ PHP
         // remove whole return node
         $parentNode = $arrayNode->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $this->removeNode($parentNode);

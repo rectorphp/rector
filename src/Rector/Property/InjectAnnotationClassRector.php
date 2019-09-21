@@ -163,7 +163,7 @@ PHP
 
         $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $this->addPropertyToClass($classNode, $type, $name);

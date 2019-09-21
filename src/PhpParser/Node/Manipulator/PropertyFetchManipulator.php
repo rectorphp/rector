@@ -300,7 +300,7 @@ final class PropertyFetchManipulator
     {
         $nodeScope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
         if ($nodeScope === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $propertyFetchType = $nodeScope->getType($propertyFetch->var);

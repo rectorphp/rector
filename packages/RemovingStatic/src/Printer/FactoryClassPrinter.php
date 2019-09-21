@@ -73,13 +73,13 @@ final class FactoryClassPrinter
         /** @var SmartFileInfo|null $classFileInfo */
         $classFileInfo = $oldClass->getAttribute(AttributeKey::FILE_INFO);
         if ($classFileInfo === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $directoryPath = Strings::before($classFileInfo->getRealPath(), DIRECTORY_SEPARATOR, -1);
         $resolvedOldClass = $this->nameResolver->getName($oldClass);
         if ($resolvedOldClass === null) {
-            throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+            throw new ShouldNotHappenException();
         }
 
         $bareClassName = Strings::after($resolvedOldClass, '\\', -1) . 'Factory.php';

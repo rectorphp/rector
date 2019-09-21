@@ -3,7 +3,29 @@
 namespace Rector\Exception;
 
 use Exception;
+use Throwable;
 
 final class ShouldNotHappenException extends Exception
 {
+    public function __construct($message = '', $code = 0, ?Throwable $throwable = null)
+    {
+        if ($message === '') {
+            $message = $this->createDefaultMessageWithLocation();
+        }
+
+        parent::__construct($message, $code, $throwable);
+    }
+
+    private function createDefaultMessageWithLocation(): string
+    {
+        $debugBacktrace = debug_backtrace();
+
+        $class = $debugBacktrace[1]['class'] ?? null;
+        $function = $debugBacktrace[1]['function'];
+        $line = $debugBacktrace[1]['line'];
+
+        $method = $class ? ($class . '::' . $function) : $function;
+
+        return sprintf('Look at "%s()" on line %d', $method, $line);
+    }
 }

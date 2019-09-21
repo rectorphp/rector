@@ -266,7 +266,7 @@ PHP
 
             $parentNode = $nameNode->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode === null) {
-                throw new ShouldNotHappenException(__METHOD__ . '() on line ' . __LINE__);
+                throw new ShouldNotHappenException();
             }
 
             $this->resolvedNodeNames[$originalName->toString()][] = [$nameNode, $parentNode];
