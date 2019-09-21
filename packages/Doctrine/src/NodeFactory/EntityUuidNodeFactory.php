@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use Ramsey\Uuid\Uuid;
 use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -67,7 +68,7 @@ final class EntityUuidNodeFactory
     public function createUuidPropertyDefaultValueAssign(string $uuidVariableName): Expression
     {
         $thisUuidPropertyFetch = new PropertyFetch(new Variable('this'), $uuidVariableName);
-        $uuid4StaticCall = new StaticCall(new FullyQualified('Ramsey\Uuid\Uuid'), 'uuid4');
+        $uuid4StaticCall = new StaticCall(new FullyQualified(Uuid::class), 'uuid4');
 
         $assign = new Assign($thisUuidPropertyFetch, $uuid4StaticCall);
 
