@@ -23,6 +23,7 @@ final class RegexDashEscapeRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/method_call.php.inc'];
         yield [__DIR__ . '/Fixture/const.php.inc'];
+        yield [__DIR__ . '/Fixture/external_const.php.inc'];
         yield [__DIR__ . '/Fixture/variable.php.inc'];
         yield [__DIR__ . '/Fixture/multiple_variables.php.inc'];
     }

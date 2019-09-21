@@ -460,10 +460,14 @@ final class ParsedNodesByType
 
     public function findClassConstantByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
     {
-        $class = null;
-        if ($this->nameResolver->isName($classConstFetch->class, 'self')) {
+        $class = $this->nameResolver->getName($classConstFetch->class);
+
+        if ($class === 'self') {
             /** @var string|null $class */
             $class = $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
+        } elseif ($class === 'parent') {
+            /** @var string|null $class */
+            $class = $classConstFetch->getAttribute(AttributeKey::PARENT_CLASS_NAME);
         }
 
         if ($class === null) {
@@ -472,6 +476,7 @@ final class ParsedNodesByType
 
         /** @var string $constantName */
         $constantName = $this->nameResolver->getName($classConstFetch->name);
+
         return $this->findClassConstant($class, $constantName);
     }
 

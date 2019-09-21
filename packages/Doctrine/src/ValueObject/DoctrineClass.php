@@ -7,11 +7,6 @@ final class DoctrineClass
     /**
      * @var string
      */
-    public const RAMSEY_UUID_INTERFACE = 'Ramsey\Uuid\UuidInterface';
-
-    /**
-     * @var string
-     */
     public const ARRAY_COLLECTION = 'Doctrine\Common\Collections\ArrayCollection';
 
     /**
@@ -33,4 +28,9 @@ final class DoctrineClass
      * @var string
      */
     public const RAMSEY_UUID = 'Ramsey\Uuid\Uuid';
+
+    /**
+     * @var string
+     */
+    public const RAMSEY_UUID_INTERFACE = 'Ramsey\Uuid\UuidInterface';
 }
