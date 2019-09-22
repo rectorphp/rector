@@ -1,4 +1,4 @@
-# All 345 Rectors Overview
+# All 354 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -1287,7 +1287,7 @@ Removes unused use aliases
 
 - class: `Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector`
 
-Turns yield return to array return in specific type and method
+Turns array return to yield return in specific type and method
 
 ```yaml
 services:
@@ -1303,8 +1303,8 @@ services:
  {
      public static function getSubscribedEvents()
      {
--        yield 'event' => 'callback';
-+        return ['event' => 'callback'];
+-        return ['event' => 'callback'];
++        yield 'event' => 'callback';
      }
  }
 ```
@@ -2028,6 +2028,14 @@ Removes unneeded $a = $a assigns
 
 ## Doctrine
 
+### `AddUuidAnnotationsToIdPropertyRector`
+
+- class: `Rector\Doctrine\Rector\Property\AddUuidAnnotationsToIdPropertyRector`
+
+Add uuid annotations to $id property
+
+<br>
+
 ### `AddUuidMirrorForRelationPropertyRector`
 
 - class: `Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector`
@@ -2049,6 +2057,132 @@ Adds $uuid property to entities, that already have $id with integer type.Require
 - class: `Rector\Doctrine\Rector\Class_\AlwaysInitializeUuidInEntityRector`
 
 Add uuid initializion to all entities that misses it
+
+<br>
+
+### `ChangeGetIdTypeToUuidRector`
+
+- class: `Rector\Doctrine\Rector\ClassMethod\ChangeGetIdTypeToUuidRector`
+
+Change return type of getId() to uuid interface
+
+<br>
+
+### `ChangeGetUuidMethodCallToGetIdRector`
+
+- class: `Rector\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector`
+
+Change getUuid() method call to getId()
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+ use Ramsey\Uuid\Uuid;
+ use Ramsey\Uuid\UuidInterface;
+
+ class SomeClass
+ {
+     public function run()
+     {
+         $buildingFirst = new Building();
+
+-        return $buildingFirst->getUuid()->toString();
++        return $buildingFirst->getId()->toString();
+     }
+ }
+
+ /**
+  * @ORM\Entity
+  */
+ class UuidEntity
+ {
+     private $uuid;
+     public function getUuid(): UuidInterface
+     {
+         return $this->uuid;
+     }
+ }
+```
+
+<br>
+
+### `ChangeIdenticalUuidToEqualsMethodCallRector`
+
+- class: `Rector\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector`
+
+Change $uuid === 1 to $uuid->equals(\Ramsey\Uuid\Uuid::fromString(1))
+
+```diff
+ class SomeClass
+ {
+     public function match($checkedId): int
+     {
+         $building = new Building();
+
+-        return $building->getId() === $checkedId;
++        return $building->getId()->equals(\Ramsey\Uuid\Uuid::fromString($checkedId));
+     }
+ }
+```
+
+<br>
+
+### `ChangeReturnTypeOfClassMethodWithGetIdRector`
+
+- class: `Rector\Doctrine\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector`
+
+Change getUuid() method call to getId()
+
+```diff
+ class SomeClass
+ {
+-    public function getBuildingId(): int
++    public function getBuildingId(): \Ramsey\Uuid\UuidInterface
+     {
+         $building = new Building();
+
+         return $building->getId();
+     }
+ }
+```
+
+<br>
+
+### `ChangeSetIdToUuidValueRector`
+
+- class: `Rector\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector`
+
+Change set id to uuid values
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+ use Ramsey\Uuid\Uuid;
+
+ class SomeClass
+ {
+     public function run()
+     {
+         $buildingFirst = new Building();
+-        $buildingFirst->setId(1);
+-        $buildingFirst->setUuid(Uuid::fromString('a3bfab84-e207-4ddd-b96d-488151de9e96'));
++        $buildingFirst->setId(Uuid::fromString('a3bfab84-e207-4ddd-b96d-488151de9e96'));
+     }
+ }
+
+ /**
+  * @ORM\Entity
+  */
+ class Building
+ {
+ }
+```
+
+<br>
+
+### `ChangeSetIdTypeToUuidRector`
+
+- class: `Rector\Doctrine\Rector\ClassMethod\ChangeSetIdTypeToUuidRector`
+
+Change param type of setId() to uuid interface
 
 <br>
 
@@ -2098,6 +2232,22 @@ Replaces doctrine alias with class.
      }
  }
 ```
+
+<br>
+
+### `RemoveTemporaryUuidColumnPropertyRector`
+
+- class: `Rector\Doctrine\Rector\Property\RemoveTemporaryUuidColumnPropertyRector`
+
+Remove temporary $uuid property
+
+<br>
+
+### `RemoveTemporaryUuidRelationPropertyRector`
+
+- class: `Rector\Doctrine\Rector\Property\RemoveTemporaryUuidRelationPropertyRector`
+
+Remove temporary *Uuid relation properties
 
 <br>
 
@@ -2893,12 +3043,12 @@ Turns vague php-only method in PHPUnit TestCase to more specific
 
 ```diff
 -$this->assertSame($value, {function}($anything), "message");
-+$this->assert{function}($value, $anything, "message\");
++$this->assert{function}($value, $anything, "message");
 ```
 
 ```diff
 -$this->assertEquals($value, {function}($anything), "message");
-+$this->assert{function}($value, $anything, "message\");
++$this->assert{function}($value, $anything, "message");
 ```
 
 ```diff
@@ -3004,11 +3154,11 @@ Turns isset comparisons to their method name alternatives in PHPUnit TestCase
 
 ```diff
 -$this->assertTrue(isset($anything->foo));
-+$this->assertFalse(isset($anything["foo"]), "message");
++$this->assertObjectHasAttribute("foo", $anything);
 ```
 
 ```diff
--$this->assertObjectHasAttribute("foo", $anything);
+-$this->assertFalse(isset($anything["foo"]), "message");
 +$this->assertArrayNotHasKey("foo", $anything, "message");
 ```
 
@@ -3819,18 +3969,13 @@ Change __CLASS__ to self::class
 
 ```diff
  class SomeClass
--{
--   public function callOnMe()
--   {
--       var_dump( get_called_class());
--   }
--}
-+    {
-+       public function callOnMe()
-+       {
-+           var_dump( static::class);
-+       }
-+    }
+ {
+    public function callOnMe()
+    {
+-       var_dump(get_called_class());
++       var_dump(static::class);
+    }
+ }
 ```
 
 <br>
@@ -5833,6 +5978,8 @@ Change Symfony Event listener class to Event Subscriber based on configuration i
 ### `SelfContainerGetMethodCallFromTestToSetUpMethodRector`
 
 - class: `Rector\SymfonyPHPUnit\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector`
+
+Move self::$container service fetching from test methods up to setUp method
 
 ```diff
  use ItemRepository;

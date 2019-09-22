@@ -35,10 +35,10 @@ final class AssertIssetToSpecificMethodRector extends AbstractPHPUnitRector
         return new RectorDefinition('Turns isset comparisons to their method name alternatives in PHPUnit TestCase', [
             new CodeSample(
                 '$this->assertTrue(isset($anything->foo));',
-                '$this->assertFalse(isset($anything["foo"]), "message");'
+                '$this->assertObjectHasAttribute("foo", $anything);'
             ),
             new CodeSample(
-                '$this->assertObjectHasAttribute("foo", $anything);',
+                '$this->assertFalse(isset($anything["foo"]), "message");',
                 '$this->assertArrayNotHasKey("foo", $anything, "message");'
             ),
         ]);

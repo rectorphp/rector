@@ -36,11 +36,11 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
             ),
             new CodeSample(
                 '$this->assertSame($value, {function}($anything), "message");',
-                '$this->assert{function}($value, $anything, "message\");'
+                '$this->assert{function}($value, $anything, "message");'
             ),
             new CodeSample(
                 '$this->assertEquals($value, {function}($anything), "message");',
-                '$this->assert{function}($value, $anything, "message\");'
+                '$this->assert{function}($value, $anything, "message");'
             ),
             new CodeSample(
                 '$this->assertNotSame($value, {function}($anything), "message");',
