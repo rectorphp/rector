@@ -14,4 +14,7 @@ parameters:
     php_version_features: '7.1'
 
 services:
-    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
+#    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
+    Rector\Refactoring\Rector\FileSystem\MoveAndRenameClassRector:
+        $oldClassToNewClass:
+            Rector\Php\Rector\Assign\AssignArrayToStringRector: 'Rector\Php71\Rector\Assign\AssignArrayToStringRector'

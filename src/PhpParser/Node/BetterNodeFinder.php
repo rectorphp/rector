@@ -180,6 +180,24 @@ final class BetterNodeFinder
     }
 
     /**
+     * @param Node|Node[] $nodes
+     */
+    public function findFirstClass($nodes): ?Class_
+    {
+        /** @var Class_[] $classes */
+        $classes = $this->findInstanceOf($nodes, Class_::class);
+        foreach ($classes as $class) {
+            if ($class->isAnonymous()) {
+                continue;
+            }
+
+            return $class;
+        }
+
+        return null;
+    }
+
+    /**
      * @param string[] $types
      */
     private function isTypes(Node $node, array $types): bool

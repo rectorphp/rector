@@ -207,3 +207,4 @@ parameters:
         # bugs
         - '#In method "Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:isDoctrineEntityClass", parameter \$class has no type\-hint and no @param annotation\. More info\: http\://bit\.ly/usetypehint#'
         - '#In method "Rector\\Rector\\AbstractRector\:\:isDoctrineEntityClass", parameter \$class has no type\-hint and no @param annotation\. More info\: http\://bit\.ly/usetypehint#'
+        - '#In method "Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:moveFile", parameter \$nodes type is "array"\. Please provide a @param annotation to further specify the type of the array\. For instance\: @param int\[\] \$nodes\. More info\: http\://bit\.ly/typehintarray#'

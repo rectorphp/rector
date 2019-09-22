@@ -164,6 +164,11 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         );
     }
 
+    protected function moveFile(SmartFileInfo $oldFileInfo, string $newFileLocation, string $fileContent): void
+    {
+        $this->removedAndAddedFilesCollector->addMovedFile($oldFileInfo, $newFileLocation, $fileContent);
+    }
+
     protected function removeFile(SmartFileInfo $smartFileInfo): void
     {
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);

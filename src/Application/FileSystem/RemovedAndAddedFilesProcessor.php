@@ -3,6 +3,7 @@
 namespace Rector\Application\FileSystem;
 
 use Rector\Configuration\Configuration;
+use Rector\ValueObject\MovedClassValueObject;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -47,6 +48,7 @@ final class RemovedAndAddedFilesProcessor
     {
         $this->processAddedFiles();
         $this->processDeletedFiles();
+        $this->processMovedFiles();
     }
 
     private function processAddedFiles(): void
@@ -73,5 +75,32 @@ final class RemovedAndAddedFilesProcessor
                 $this->filesystem->remove($smartFileInfo->getRealPath());
             }
         }
+    }
+
+    private function processMovedFiles(): void
+    {
+        foreach ($this->removedAndAddedFilesCollector->getMovedFiles() as $movedClassValueObject) {
+            if ($this->configuration->isDryRun()) {
+                $this->printFileMoveWarning($movedClassValueObject, 'will be');
+            } else {
+                $this->printFileMoveWarning($movedClassValueObject, 'was');
+
+                $this->filesystem->remove($movedClassValueObject->getOldPath());
+                $this->filesystem->dumpFile(
+                    $movedClassValueObject->getNewPath(),
+                    $movedClassValueObject->getFileContent()
+                );
+            }
+        }
+    }
+
+    private function printFileMoveWarning(MovedClassValueObject $movedClassValueObject, string $verb): void
+    {
+        $this->symfonyStyle->warning(sprintf(
+            'File "%s" %s moved to "%s"',
+            $movedClassValueObject->getOldPath(),
+            $verb,
+            $movedClassValueObject->getNewPath()
+        ));
     }
 }

@@ -2,15 +2,18 @@
 
 namespace Rector\PSR4;
 
+use Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
-/**
- * Will be used later
- */
 final class FileRelocationResolver
 {
+    /**
+     * @var string
+     */
+    private const NAMESPACE_SEPARATOR = '\\';
+
     /**
      * @param string[] $groupNames
      */
@@ -33,7 +36,39 @@ final class FileRelocationResolver
         $name = $namespace->name;
         $currentNamespaceParts = $name->parts;
 
-        return $this->resolveNearestRootWithCategory($currentNamespaceParts, $suffixName, '\\', $groupNames);
+        return $this->resolveNearestRootWithCategory(
+            $currentNamespaceParts,
+            $suffixName,
+            self::NAMESPACE_SEPARATOR,
+            $groupNames
+        );
+    }
+
+    public function resolveNewFileLocationFromOldClassToNewClass(
+        SmartFileInfo $oldSmartFileInfo,
+        string $oldClass,
+        string $newClass
+    ): string {
+        $beforeToAfterPart = $this->resolveBeforeToAfterPartBetweenClassNames($oldClass, $newClass);
+
+        // A. first "dir has changed" dummy detection
+        $relativeFilePathParts = Strings::split(
+            $oldSmartFileInfo->getRelativeFilePath(),
+            '#' . DIRECTORY_SEPARATOR . '#'
+        );
+
+        foreach ($relativeFilePathParts as $key => $relativeFilePathPart) {
+            if (! isset($beforeToAfterPart[$relativeFilePathPart])) {
+                continue;
+            }
+
+            $relativeFilePathParts[$key] = $beforeToAfterPart[$relativeFilePathPart];
+
+            // clear from further use
+            unset($beforeToAfterPart[$relativeFilePathPart]);
+        }
+
+        return implode(DIRECTORY_SEPARATOR, $relativeFilePathParts);
     }
 
     /**
@@ -91,5 +126,30 @@ final class FileRelocationResolver
         }
 
         return implode($separator, $rootNameParts);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveBeforeToAfterPartBetweenClassNames(string $oldClass, string $newClass): array
+    {
+        $oldClassNameParts = explode(self::NAMESPACE_SEPARATOR, $oldClass);
+        $newClassNameParts = explode(self::NAMESPACE_SEPARATOR, $newClass);
+
+        $beforeToAfterParts = [];
+        foreach ($oldClassNameParts as $key => $oldClassNamePart) {
+            if (! isset($newClassNameParts[$key])) {
+                continue;
+            }
+
+            $newClassNamePart = $newClassNameParts[$key];
+            if ($oldClassNamePart === $newClassNamePart) {
+                continue;
+            }
+
+            $beforeToAfterParts[$oldClassNamePart] = $newClassNamePart;
+        }
+
+        return $beforeToAfterParts;
     }
 }
