@@ -1,7 +1,8 @@
 services:
     Rector\Php\Rector\BinaryOp\IsIterableRector: ~
     Rector\Php\Rector\Name\ReservedObjectRector:
-        Object: 'BaseObject'
+        $reservedKeywordsToReplacements:
+            Object: 'BaseObject'
 
     Rector\Php\Rector\TryCatch\MultiExceptionCatchRector: ~
     Rector\Php\Rector\Assign\AssignArrayToStringRector: ~

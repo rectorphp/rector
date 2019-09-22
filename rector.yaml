@@ -17,4 +17,79 @@ services:
 #    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
     Rector\Refactoring\Rector\FileSystem\MoveAndRenameClassRector:
         $oldClassToNewClass:
+            Rector\Php\Rector\Property\VarToPublicPropertyRector: 'Rector\Php52\Rector\Property\VarToPublicPropertyRector'
+            Rector\Php\Rector\Switch_\ContinueToBreakInSwitchRector: 'Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector'
+
+            Rector\CodeQuality\Rector\Ternary\TernaryToElvisRector: 'Rector\Php53\Rector\Ternary\TernaryToElvisRector'
+
+            Rector\Php\Rector\FuncCall\RemoveReferenceFromCallRector: 'Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector'
+
+            Rector\Php\Rector\String_\StringClassNameToClassConstantRector: 'Rector\Php55\Rector\String_\StringClassNameToClassConstantRector'
+
+            Rector\Php\Rector\FuncCall\PowToExpRector: 'Rector\Php56\Rector\FuncCall\PowToExpRector'
+            Rector\Php\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector: 'Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector'
+
+            Rector\Php\Rector\FunctionLike\Php4ConstructorRector: 'Rector\Php70\Rector\FunctionLike\Php4ConstructorRector'
+            Rector\Php\Rector\Ternary\TernaryToNullCoalescingRector: 'Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector'
+            Rector\Php\Rector\FuncCall\RandomFunctionRector: 'Rector\Php70\Rector\FuncCall\RandomFunctionRector'
+            Rector\Php\Rector\FunctionLike\ExceptionHandlerTypehintRector: 'Rector\Php70\Rector\FunctionLike\ExceptionHandlerTypehintRector'
+            Rector\Php\Rector\FuncCall\MultiDirnameRector: 'Rector\Php70\Rector\FuncCall\MultiDirnameRector'
+            Rector\Php\Rector\List_\ListSplitStringRector: 'Rector\Php70\Rector\List_\ListSplitStringRector'
+            Rector\Php\Rector\List_\EmptyListRector: 'Rector\Php70\Rector\List_\EmptyListRector'
+
+            # be careful, run this just once, since it can keep swapping order back and forth
+            Rector\Php\Rector\List_\ListSwapArrayOrderRector: 'Rector\Php70\Rector\List_\ListSwapArrayOrderRector'
+
+            Rector\Php\Rector\FuncCall\CallUserMethodRector: 'Rector\Php70\Rector\FuncCall\CallUserMethodRector'
+            Rector\Php\Rector\FuncCall\EregToPregMatchRector: 'Rector\Php70\Rector\FuncCall\EregToPregMatchRector'
+            Rector\Php\Rector\Switch_\ReduceMultipleDefaultSwitchRector: 'Rector\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector'
+            Rector\Php\Rector\Ternary\TernaryToSpaceshipRector: 'Rector\Php70\Rector\Ternary\TernaryToSpaceshipRector'
+            Rector\Php\Rector\If_\IfToSpaceshipRector: 'Rector\Php70\Rector\If_\IfToSpaceshipRector'
+            Rector\Php\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector: 'Rector\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector'
+            Rector\Php\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector: 'Rector\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector'
+
+            Rector\Php\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector: 'Rector\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector'
+            Rector\Php\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector: 'Rector\Php70\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector'
+
+            Rector\Php\Rector\BinaryOp\IsIterableRector: 'Rector\Php71\Rector\BinaryOp\IsIterableRector'
+            Rector\Php\Rector\TryCatch\MultiExceptionCatchRector: 'Rector\Php71\Rector\TryCatch\MultiExceptionCatchRector'
+            Rector\Php\Rector\FuncCall\CountOnNullRector: 'Rector\Php71\Rector\FuncCall\CountOnNullRector'
+            Rector\Php\Rector\FuncCall\RemoveExtraParametersRector: 'Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector'
+            Rector\Php\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector: 'Rector\Php71\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector'
             Rector\Php\Rector\Assign\AssignArrayToStringRector: 'Rector\Php71\Rector\Assign\AssignArrayToStringRector'
+
+            Rector\Php\Rector\Each\WhileEachToForeachRector: 'Rector\Php72\Rector\Each\WhileEachToForeachRector'
+            Rector\Php\Rector\Each\ListEachRector: 'Rector\Php72\Rector\Each\ListEachRector'
+            Rector\Php\Rector\Unset_\UnsetCastRector: 'Rector\Php72\Rector\Unset_\UnsetCastRector'
+            Rector\Php\Rector\ConstFetch\BarewordStringRector: 'Rector\Php72\Rector\ConstFetch\BarewordStringRector'
+            Rector\Php\Rector\FuncCall\GetClassOnNullRector: 'Rector\Php72\Rector\FuncCall\GetClassOnNullRector'
+            Rector\Php\Rector\FuncCall\IsObjectOnIncompleteClassRector: 'Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector'
+            Rector\Php\Rector\FuncCall\ParseStrWithResultArgumentRector: 'Rector\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector'
+            Rector\Php\Rector\FuncCall\StringsAssertNakedRector: 'Rector\Php72\Rector\FuncCall\StringsAssertNakedRector'
+            Rector\Php\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector: 'Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector'
+            Rector\Php\Rector\FuncCall\StringifyDefineRector: 'Rector\Php72\Rector\FuncCall\StringifyDefineRector'
+
+            Rector\Php\Rector\BinaryOp\IsCountableRector: 'Rector\Php73\Rector\BinaryOp\IsCountableRector'
+            Rector\Php\Rector\FuncCall\ArrayKeyFirstLastRector: 'Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector'
+            Rector\Php\Rector\FuncCall\SensitiveDefineRector: 'Rector\Php73\Rector\FuncCall\SensitiveDefineRector'
+            Rector\Php\Rector\ConstFetch\SensitiveConstantNameRector: 'Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector'
+            Rector\Php\Rector\String_\SensitiveHereNowDocRector: 'Rector\Php73\Rector\String_\SensitiveHereNowDocRector'
+            Rector\Php\Rector\FuncCall\StringifyStrNeedlesRector: 'Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector'
+            Rector\Php\Rector\FuncCall\JsonThrowOnErrorRector: 'Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector'
+            Rector\Php\Rector\FuncCall\RegexDashEscapeRector: 'Rector\Php73\Rector\FuncCall\RegexDashEscapeRector'
+            Rector\Php\Rector\FuncCall\RemoveMissingCompactVariableRector: 'Rector\Php73\Rector\FuncCall\RemoveMissingCompactVariableRector'
+
+            Rector\Php\Rector\Property\TypedPropertyRector: 'Rector\Php74\Rector\Property\TypedPropertyRector'
+            Rector\Php\Rector\FuncCall\ArrayKeyExistsOnPropertyRector: 'Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector'
+            Rector\Php\Rector\FuncCall\FilterVarToAddSlashesRector: 'Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector'
+            Rector\Php\Rector\StaticCall\ExportToReflectionFunctionRector: 'Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector'
+            Rector\Php\Rector\MagicConstClass\ClassConstantToSelfClassRector: 'Rector\Php74\Rector\MagicConstClass\ClassConstantToSelfClassRector'
+            Rector\Php\Rector\FuncCall\GetCalledClassToStaticClassRector: 'Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector'
+            Rector\Php\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector: 'Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector'
+            Rector\Php\Rector\Double\RealToFloatTypeCastRector: 'Rector\Php74\Rector\Double\RealToFloatTypeCastRector'
+            Rector\Php\Rector\Assign\NullCoalescingOperatorRector: 'Rector\Php74\Rector\Assign\NullCoalescingOperatorRector'
+            Rector\Php\Rector\Function_\ReservedFnFunctionRector: 'Rector\Php74\Rector\Function_\ReservedFnFunctionRector'
+            Rector\Php\Rector\Closure\ClosureToArrowFunctionRector: 'Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector'
+            Rector\Php\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector: 'Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector'
+            Rector\Php\Rector\LNumber\AddLiteralSeparatorToNumberRector: 'Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector'
+
