@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\List_\ListSplitStringRector;
 
-use Rector\Php\Rector\List_\ListSplitStringRector;
+use Rector\Php70\Rector\List_\ListSplitStringRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ListSplitStringRectorTest extends AbstractRectorTestCase

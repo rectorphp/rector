@@ -1,2 +1,2 @@
 services:
-    Rector\Php\Rector\String_\StringClassNameToClassConstantRector: ~
+    Rector\Php55\Rector\String_\StringClassNameToClassConstantRector: ~

@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\List_\ListSplitStringRector\Fixture;
+
 $string = 'abcde';
 list($foo) = $string;
 
@@ -11,6 +13,8 @@ list($foo) = 'abcde';
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\List_\ListSplitStringRector\Fixture;
 
 $string = 'abcde';
 list($foo) = str_split($string);

@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\ArrayKeyFirstLastRector;
 
-use Rector\Php\Rector\FuncCall\ArrayKeyFirstLastRector;
+use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ArrayKeyFirstLastRectorTest extends AbstractRectorTestCase

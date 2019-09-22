@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\Each\Fixture;
+
 function each1()
 {
     while (list($module) = each($module_list)) {
@@ -19,6 +21,8 @@ function each1()
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\Each\Fixture;
 
 function each1()
 {

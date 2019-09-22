@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\Assign\NullCoalescingOperatorRector;
 
-use Rector\Php\Rector\Assign\NullCoalescingOperatorRector;
+use Rector\Php74\Rector\Assign\NullCoalescingOperatorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class NullCoalescingOperatorRectorTest extends AbstractRectorTestCase

@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\StringsAssertNakedRector;
 
-use Rector\Php\Rector\FuncCall\StringsAssertNakedRector;
+use Rector\Php72\Rector\FuncCall\StringsAssertNakedRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class StringsAssertNakedRectorTest extends AbstractRectorTestCase

@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\StringifyStrNeedlesRector;
 
-use Rector\Php\Rector\FuncCall\StringifyStrNeedlesRector;
+use Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class StringifyStrNeedlesRectorTest extends AbstractRectorTestCase

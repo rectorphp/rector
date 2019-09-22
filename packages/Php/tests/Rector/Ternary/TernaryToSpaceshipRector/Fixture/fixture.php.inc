@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\Ternary\TernaryToSpaceshipRector\Fixture;
+
 function order_func($a, $b) {
     return ($a < $b) ? -1 : (($a > $b) ? 1 : 0);
 
@@ -9,6 +11,8 @@ function order_func($a, $b) {
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\Ternary\TernaryToSpaceshipRector\Fixture;
 
 function order_func($a, $b) {
     return $a <=> $b;

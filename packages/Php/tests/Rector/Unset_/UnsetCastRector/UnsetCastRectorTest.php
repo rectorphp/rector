@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\Unset_\UnsetCastRector;
 
-use Rector\Php\Rector\Unset_\UnsetCastRector;
+use Rector\Php72\Rector\Unset_\UnsetCastRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class UnsetCastRectorTest extends AbstractRectorTestCase

@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector;
 
-use Rector\Php\Rector\Assign\AssignArrayToStringRector;
+use Rector\Php71\Rector\Assign\AssignArrayToStringRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AssignArrayToStringRectorTest extends AbstractRectorTestCase
@@ -28,7 +28,7 @@ final class AssignArrayToStringRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture6.php.inc'];
         yield [__DIR__ . '/Fixture/fixture7.php.inc'];
         yield [__DIR__ . '/Fixture/fixture8.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture9.php.inc'];
+        yield [__DIR__ . '/Fixture/skip.php.inc'];
     }
 
     protected function getRectorClass(): string

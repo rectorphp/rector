@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\Ternary\TernaryToSpaceshipRector;
 
-use Rector\Php\Rector\Ternary\TernaryToSpaceshipRector;
+use Rector\Php70\Rector\Ternary\TernaryToSpaceshipRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class TernaryToSpaceshipRectorTest extends AbstractRectorTestCase

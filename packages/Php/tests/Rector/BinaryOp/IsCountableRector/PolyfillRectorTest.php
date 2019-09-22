@@ -3,7 +3,7 @@
 namespace Rector\Php\Tests\Rector\BinaryOp\IsCountableRector;
 
 use Rector\Configuration\Option;
-use Rector\Php\Rector\BinaryOp\IsCountableRector;
+use Rector\Php73\Rector\BinaryOp\IsCountableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 

@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\Double\RealToFloatTypeCastRector;
 
-use Rector\Php\Rector\Double\RealToFloatTypeCastRector;
+use Rector\Php74\Rector\Double\RealToFloatTypeCastRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RealToFloatTypeCastRectorTest extends AbstractRectorTestCase

@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector;
 
-use Rector\Php\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector;
+use Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class MbStrrposEncodingArgumentPositionRectorTest extends AbstractRectorTestCase

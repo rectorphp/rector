@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
+
 use Rector\Php\Tests\Rector\FuncCall\RemoveExtraParametersRector\Source\MethodWithFuncGetArgs;
 
 function removeExtaParametersExternalScope()

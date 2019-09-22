@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector;
 
-use Rector\Php\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector;
+use Rector\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ThisCallOnStaticMethodToStaticCallRectorTest extends AbstractRectorTestCase

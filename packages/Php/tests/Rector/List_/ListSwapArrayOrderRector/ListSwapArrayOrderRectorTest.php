@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\List_\ListSwapArrayOrderRector;
 
-use Rector\Php\Rector\List_\ListSwapArrayOrderRector;
+use Rector\Php70\Rector\List_\ListSwapArrayOrderRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ListSwapArrayOrderRectorTest extends AbstractRectorTestCase

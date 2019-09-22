@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\StringifyDefineRector;
 
-use Rector\Php\Rector\FuncCall\StringifyDefineRector;
+use Rector\Php72\Rector\FuncCall\StringifyDefineRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class StringifyDefineRectorTest extends AbstractRectorTestCase

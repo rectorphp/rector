@@ -27,8 +27,11 @@ final class RemovedAndAddedFilesCollector
         $this->removedFiles[$smartFileInfo->getRealPath()] = $smartFileInfo;
     }
 
-    public function addMovedFile(SmartFileInfo $oldFileInfo, string $newFileLocation, string $content): void
+    public function addMovedFile(SmartFileInfo $oldFileInfo, string $newFileLocation, ?string $content = null): void
     {
+        // keep original content if none provided
+        $content = $content ?: $oldFileInfo->getContents();
+
         $this->movedFiles[] = new MovedClassValueObject(
             $oldFileInfo->getRelativeFilePath(),
             $newFileLocation,

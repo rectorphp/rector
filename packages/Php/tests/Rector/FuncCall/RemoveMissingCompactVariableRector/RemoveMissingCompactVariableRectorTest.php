@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\RemoveMissingCompactVariableRector;
 
-use Rector\Php\Rector\FuncCall\RemoveMissingCompactVariableRector;
+use Rector\Php73\Rector\FuncCall\RemoveMissingCompactVariableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveMissingCompactVariableRectorTest extends AbstractRectorTestCase

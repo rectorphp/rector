@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\FuncCall\StringsAssertNakedRector\Fixture;
+
 function nakedAssert()
 {
     assert('true === true');
@@ -20,6 +22,8 @@ function nakedAssert()
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\FuncCall\StringsAssertNakedRector\Fixture;
 
 function nakedAssert()
 {

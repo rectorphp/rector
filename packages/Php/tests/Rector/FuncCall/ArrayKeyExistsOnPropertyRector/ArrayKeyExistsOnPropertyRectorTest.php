@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\ArrayKeyExistsOnPropertyRector;
 
-use Rector\Php\Rector\FuncCall\ArrayKeyExistsOnPropertyRector;
+use Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ArrayKeyExistsOnPropertyRectorTest extends AbstractRectorTestCase

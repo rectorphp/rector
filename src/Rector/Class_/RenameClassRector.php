@@ -230,7 +230,9 @@ PHP
                 return false;
             }
 
-            return isset($this->oldToNewClasses[$this->getName($node)]);
+            $classLikeName = $this->getName($node);
+
+            return isset($this->oldToNewClasses[$classLikeName]);
         });
 
         return $foundClass instanceof ClassLike ? $foundClass : null;

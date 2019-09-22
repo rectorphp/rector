@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\MultiDirnameRector;
 
-use Rector\Php\Rector\FuncCall\MultiDirnameRector;
+use Rector\Php70\Rector\FuncCall\MultiDirnameRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**

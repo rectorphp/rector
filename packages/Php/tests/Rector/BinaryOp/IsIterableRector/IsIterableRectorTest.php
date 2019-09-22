@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\BinaryOp\IsIterableRector;
 
-use Rector\Php\Rector\BinaryOp\IsIterableRector;
+use Rector\Php71\Rector\BinaryOp\IsIterableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class IsIterableRectorTest extends AbstractRectorTestCase

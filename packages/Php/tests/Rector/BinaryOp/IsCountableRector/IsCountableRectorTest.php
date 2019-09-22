@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\BinaryOp\IsCountableRector;
 
-use Rector\Php\Rector\BinaryOp\IsCountableRector;
+use Rector\Php73\Rector\BinaryOp\IsCountableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class IsCountableRectorTest extends AbstractRectorTestCase

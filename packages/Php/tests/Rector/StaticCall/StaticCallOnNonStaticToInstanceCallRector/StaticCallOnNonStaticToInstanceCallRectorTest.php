@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector;
 
-use Rector\Php\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector;
+use Rector\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class StaticCallOnNonStaticToInstanceCallRectorTest extends AbstractRectorTestCase

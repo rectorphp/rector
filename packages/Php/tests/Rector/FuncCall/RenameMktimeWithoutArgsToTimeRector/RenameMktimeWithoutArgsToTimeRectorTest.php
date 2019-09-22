@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector;
 
-use Rector\Php\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector;
+use Rector\Php70\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RenameMktimeWithoutArgsToTimeRectorTest extends AbstractRectorTestCase

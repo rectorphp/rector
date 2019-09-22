@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
+
 function countables($values)
 {
     $valueCount = is_array($values) || $values instanceof Countable ? count($values) : 0;
@@ -13,6 +15,8 @@ function countables($values)
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
 
 function countables($values)
 {

@@ -19,7 +19,7 @@ final class EregToPcreTransformerTest extends TestCase
     }
 
     /**
-     * @dataProvider provideDataDroping()
+     * @dataProvider provideDataDropping()
      * @dataProvider provideDataCaseSensitive()
      */
     public function testCaseSensitive(string $ereg, string $expectedPcre): void
@@ -47,7 +47,7 @@ final class EregToPcreTransformerTest extends TestCase
         yield ['hi', '#hi#mi'];
     }
 
-    public function provideDataDroping(): Iterator
+    public function provideDataDropping(): Iterator
     {
         yield ['mearie\.org', '#mearie\.org#m'];
         yield ['mearie[.,]org', '#mearie[\.,]org#m'];

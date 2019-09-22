@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\Property\VarToPublicPropertyRector;
 
-use Rector\Php\Rector\Property\VarToPublicPropertyRector;
+use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class VarToPublicPropertyRectorTest extends AbstractRectorTestCase

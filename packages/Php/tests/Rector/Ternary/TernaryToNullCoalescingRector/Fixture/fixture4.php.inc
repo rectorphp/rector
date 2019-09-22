@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\Ternary\TernaryToNullCoalescingRector\Fixture;
+
 function ternaryToNullCoalescing4()
 {
     $d = $e !== null ? $e : 'e';
@@ -34,6 +36,8 @@ function ternaryToNullCoalescing4()
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\Ternary\TernaryToNullCoalescingRector\Fixture;
 
 function ternaryToNullCoalescing4()
 {

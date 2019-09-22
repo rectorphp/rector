@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\Each\Fixture;
+
 function each2
 ()
 {
@@ -13,6 +15,8 @@ function each2
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\Each\Fixture;
 
 function each2
 ()

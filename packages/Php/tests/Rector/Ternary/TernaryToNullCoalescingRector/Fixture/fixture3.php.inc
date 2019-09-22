@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\Ternary\TernaryToNullCoalescingRector\Fixture;
+
 function ternaryToNullCoalescing3()
 {
     $f = $g === null ? 'g' : $g;
@@ -10,6 +12,8 @@ function ternaryToNullCoalescing3()
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\Ternary\TernaryToNullCoalescingRector\Fixture;
 
 function ternaryToNullCoalescing3()
 {

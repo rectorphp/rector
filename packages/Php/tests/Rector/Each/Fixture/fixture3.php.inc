@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\Each\Fixture;
+
 function each3()
 {
     $flat = book_get_flat_menu($book_link);
@@ -13,6 +15,8 @@ function each3()
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\Each\Fixture;
 
 function each3()
 {

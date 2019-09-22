@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
+
 function someFunction() {
     $array = [1, 2, 3];
 
@@ -12,6 +14,8 @@ function someFunction() {
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
 function someFunction() {
     $array = [1, 2, 3];

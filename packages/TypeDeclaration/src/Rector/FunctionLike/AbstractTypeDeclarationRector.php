@@ -73,7 +73,6 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
         $methodName = $this->getName($classMethod);
 
         // @todo extract to some "inherited parent method" service
-
         /** @var string|null $parentClassName */
         $parentClassName = $classMethod->getAttribute(AttributeKey::PARENT_CLASS_NAME);
 

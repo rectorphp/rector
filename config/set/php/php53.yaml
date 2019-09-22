@@ -1,2 +1,2 @@
 services:
-    Rector\CodeQuality\Rector\Ternary\TernaryToElvisRector: ~
+    Rector\Php53\Rector\Ternary\TernaryToElvisRector: ~

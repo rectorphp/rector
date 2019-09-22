@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\FuncCall\MultiDirnameRector\Fixture;
+
 function multiDirname2()
 {
     dirname(dirname($path), 3);
@@ -12,6 +14,8 @@ function multiDirname2()
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\FuncCall\MultiDirnameRector\Fixture;
 
 function multiDirname2()
 {

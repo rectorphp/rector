@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Symfony\Component\Console\Command;
+namespace Rector\Php\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Fixture;
 
 class TypedArrayNested
 {
@@ -19,7 +19,7 @@ class TypedArrayNested
 -----
 <?php
 
-namespace Rector\Tests\Symfony\Component\Console\Command;
+namespace Rector\Php\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Fixture;
 
 class TypedArrayNested
 {

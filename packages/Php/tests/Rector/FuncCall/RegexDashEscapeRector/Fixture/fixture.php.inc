@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\FuncCall\RegexDashEscapeRector\Fixture;
+
 function regexDashEscapeRector()
 {
     // keep
@@ -15,6 +17,8 @@ function regexDashEscapeRector()
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\FuncCall\RegexDashEscapeRector\Fixture;
 
 function regexDashEscapeRector()
 {

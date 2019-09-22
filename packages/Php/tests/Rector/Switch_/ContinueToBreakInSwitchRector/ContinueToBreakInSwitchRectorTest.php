@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\Switch_\ContinueToBreakInSwitchRector;
 
-use Rector\Php\Rector\Switch_\ContinueToBreakInSwitchRector;
+use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ContinueToBreakInSwitchRectorTest extends AbstractRectorTestCase

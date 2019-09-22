@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\FuncCall\ArrayKeyFirstLastRector\Fixture;
+
 function process() {
     $items = [1, 2, 3];
     reset($items);
@@ -12,6 +14,8 @@ function process() {
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\FuncCall\ArrayKeyFirstLastRector\Fixture;
 
 function process() {
     $items = [1, 2, 3];

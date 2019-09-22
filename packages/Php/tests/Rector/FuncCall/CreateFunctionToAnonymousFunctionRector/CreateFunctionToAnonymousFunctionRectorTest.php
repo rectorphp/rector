@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector;
 
-use Rector\Php\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector;
+use Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class CreateFunctionToAnonymousFunctionRectorTest extends AbstractRectorTestCase

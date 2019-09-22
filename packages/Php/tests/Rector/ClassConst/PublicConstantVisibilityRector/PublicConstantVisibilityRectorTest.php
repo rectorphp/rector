@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\ClassConst\PublicConstantVisibilityRector;
 
-use Rector\Php\Rector\ClassConst\PublicConstantVisibilityRector;
+use Rector\Php71\Rector\ClassConst\PublicConstantVisibilityRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class PublicConstantVisibilityRectorTest extends AbstractRectorTestCase

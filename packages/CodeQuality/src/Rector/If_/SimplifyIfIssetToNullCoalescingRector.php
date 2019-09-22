@@ -76,7 +76,6 @@ PHP
         $valueNode = $issetNode->vars[0];
 
         // various scenarios
-
         /** @var Assign $firstAssign */
         $firstAssign = $node->stmts[0]->expr;
         /** @var Assign $secondAssign */

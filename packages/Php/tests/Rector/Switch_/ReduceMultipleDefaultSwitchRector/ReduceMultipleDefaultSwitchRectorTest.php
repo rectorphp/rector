@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\Switch_\ReduceMultipleDefaultSwitchRector;
 
-use Rector\Php\Rector\Switch_\ReduceMultipleDefaultSwitchRector;
+use Rector\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ReduceMultipleDefaultSwitchRectorTest extends AbstractRectorTestCase

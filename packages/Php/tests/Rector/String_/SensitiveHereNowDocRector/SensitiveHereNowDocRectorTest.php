@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\String_\SensitiveHereNowDocRector;
 
-use Rector\Php\Rector\String_\SensitiveHereNowDocRector;
+use Rector\Php73\Rector\String_\SensitiveHereNowDocRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SensitiveHereNowDocRectorTest extends AbstractRectorTestCase

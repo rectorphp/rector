@@ -191,7 +191,6 @@ PHP
 
             // not in different scope, than previous one - e.g. if/while/else...
             // get nesting level to $classMethodNode
-
             /** @var Assign $assignNode */
             $assignNode = $assignedVariable->getAttribute(AttributeKey::PARENT_NODE);
             $nestingHash = $this->flowOfControlLocator->resolveNestingHashFromFunctionLike($functionLike, $assignNode);
@@ -286,7 +285,6 @@ PHP
         // check previous node doesn't contain the node on the right, e.g.
         // $someNode = 1;
         // $someNode = $someNode ?: 1;
-
         /** @var Assign $assignNode */
         $assignNode = $nodeByTypeAndPosition->getParentNode();
 

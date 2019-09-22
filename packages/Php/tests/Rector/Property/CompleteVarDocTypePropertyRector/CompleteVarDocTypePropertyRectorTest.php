@@ -3,8 +3,8 @@
 namespace Rector\Php\Tests\Rector\Property\CompleteVarDocTypePropertyRector;
 
 use Iterator;
-use Rector\Php\Rector\Property\CompleteVarDocTypePropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\TypeDeclaration\Rector\Property\CompleteVarDocTypePropertyRector;
 
 final class CompleteVarDocTypePropertyRectorTest extends AbstractRectorTestCase
 {

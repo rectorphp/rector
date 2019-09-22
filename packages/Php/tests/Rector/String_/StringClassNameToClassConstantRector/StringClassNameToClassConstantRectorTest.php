@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\String_\StringClassNameToClassConstantRector;
 
-use Rector\Php\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class StringClassNameToClassConstantRectorTest extends AbstractRectorTestCase

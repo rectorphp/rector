@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\ParseStrWithResultArgumentRector;
 
-use Rector\Php\Rector\FuncCall\ParseStrWithResultArgumentRector;
+use Rector\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ParseStrWithResultArgumentRectorTest extends AbstractRectorTestCase

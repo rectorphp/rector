@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\CodeQuality\Tests\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector\Fixture;
+
 final class MyClass
 {
     public function isEmptyArray($values): bool
@@ -21,6 +23,8 @@ final class MyClass
 ?>
 -----
 <?php
+
+namespace Rector\CodeQuality\Tests\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector\Fixture;
 
 final class MyClass
 {

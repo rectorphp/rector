@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\StaticCall\ExportToReflectionFunctionRector;
 
-use Rector\Php\Rector\StaticCall\ExportToReflectionFunctionRector;
+use Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ExportToReflectionFunctionRectorTest extends AbstractRectorTestCase

@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
+
 function assignArrayToString()
 {
     $string = '';
@@ -18,6 +20,8 @@ function assignArrayToString()
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector\Fixture;
 
 function assignArrayToString()
 {

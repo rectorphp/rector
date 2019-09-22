@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\ConstFetch\SensitiveConstantNameRector\Fixture;
+
 function sensitiveConstantName()
 {
     define('FOO', 42, true);
@@ -14,6 +16,8 @@ function sensitiveConstantName()
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\ConstFetch\SensitiveConstantNameRector\Fixture;
 
 function sensitiveConstantName()
 {

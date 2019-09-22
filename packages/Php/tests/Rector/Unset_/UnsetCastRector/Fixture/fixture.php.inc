@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\Unset_\UnsetCastRector\Fixture;
+
 function unsetCast()
 {
     $value = (unset)$value;
@@ -10,6 +12,8 @@ function unsetCast()
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\Unset_\UnsetCastRector\Fixture;
 
 function unsetCast()
 {

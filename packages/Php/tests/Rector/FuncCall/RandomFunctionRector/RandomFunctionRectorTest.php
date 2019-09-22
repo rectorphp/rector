@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\RandomFunctionRector;
 
-use Rector\Php\Rector\FuncCall\RandomFunctionRector;
+use Rector\Php70\Rector\FuncCall\RandomFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**

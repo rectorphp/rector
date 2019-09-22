@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\JsonThrowOnErrorRector;
 
-use Rector\Php\Rector\FuncCall\JsonThrowOnErrorRector;
+use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class JsonThrowOnErrorRectorTest extends AbstractRectorTestCase

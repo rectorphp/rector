@@ -2,24 +2,24 @@ imports:
     - { resource: "../database-migration/mysql-to-mysqli.yaml" }
 
 services:
-    Rector\Php\Rector\FunctionLike\Php4ConstructorRector: ~
-    Rector\Php\Rector\Ternary\TernaryToNullCoalescingRector: ~
-    Rector\Php\Rector\FuncCall\RandomFunctionRector: ~
-    Rector\Php\Rector\FunctionLike\ExceptionHandlerTypehintRector: ~
-    Rector\Php\Rector\FuncCall\MultiDirnameRector: ~
-    Rector\Php\Rector\List_\ListSplitStringRector: ~
-    Rector\Php\Rector\List_\EmptyListRector: ~
+    Rector\Php70\Rector\FunctionLike\Php4ConstructorRector: ~
+    Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector: ~
+    Rector\Php70\Rector\FuncCall\RandomFunctionRector: ~
+    Rector\Php70\Rector\FunctionLike\ExceptionHandlerTypehintRector: ~
+    Rector\Php70\Rector\FuncCall\MultiDirnameRector: ~
+    Rector\Php70\Rector\List_\ListSplitStringRector: ~
+    Rector\Php70\Rector\List_\EmptyListRector: ~
 
     # be careful, run this just once, since it can keep swapping order back and forth
-    Rector\Php\Rector\List_\ListSwapArrayOrderRector: ~
+    Rector\Php70\Rector\List_\ListSwapArrayOrderRector: ~
 
-    Rector\Php\Rector\FuncCall\CallUserMethodRector : ~
-    Rector\Php\Rector\FuncCall\EregToPregMatchRector: ~
-    Rector\Php\Rector\Switch_\ReduceMultipleDefaultSwitchRector: ~
-    Rector\Php\Rector\Ternary\TernaryToSpaceshipRector: ~
-    Rector\Php\Rector\If_\IfToSpaceshipRector: ~
-    Rector\Php\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector: ~
-    Rector\Php\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector: ~
+    Rector\Php70\Rector\FuncCall\CallUserMethodRector : ~
+    Rector\Php70\Rector\FuncCall\EregToPregMatchRector: ~
+    Rector\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector: ~
+    Rector\Php70\Rector\Ternary\TernaryToSpaceshipRector: ~
+    Rector\Php70\Rector\If_\IfToSpaceshipRector: ~
+    Rector\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector: ~
+    Rector\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector: ~
 
-    Rector\Php\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector: ~
-    Rector\Php\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector: ~
+    Rector\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector: ~
+    Rector\Php70\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector: ~

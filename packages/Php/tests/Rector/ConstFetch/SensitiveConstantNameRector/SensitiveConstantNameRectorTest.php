@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\ConstFetch\SensitiveConstantNameRector;
 
-use Rector\Php\Rector\ConstFetch\SensitiveConstantNameRector;
+use Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SensitiveConstantNameRectorTest extends AbstractRectorTestCase

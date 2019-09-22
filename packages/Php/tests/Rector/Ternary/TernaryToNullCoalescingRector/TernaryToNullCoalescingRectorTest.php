@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\Ternary\TernaryToNullCoalescingRector;
 
-use Rector\Php\Rector\Ternary\TernaryToNullCoalescingRector;
+use Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**

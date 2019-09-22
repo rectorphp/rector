@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\If_\IfToSpaceshipRector;
 
-use Rector\Php\Rector\If_\IfToSpaceshipRector;
+use Rector\Php70\Rector\If_\IfToSpaceshipRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class IfToSpaceshipRectorTest extends AbstractRectorTestCase

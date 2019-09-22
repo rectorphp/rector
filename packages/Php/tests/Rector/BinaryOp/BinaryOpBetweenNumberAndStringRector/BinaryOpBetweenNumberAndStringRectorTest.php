@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector;
 
-use Rector\Php\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector;
+use Rector\Php71\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class BinaryOpBetweenNumberAndStringRectorTest extends AbstractRectorTestCase

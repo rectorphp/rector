@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\TryCatch\MultiExceptionCatchRector;
 
-use Rector\Php\Rector\TryCatch\MultiExceptionCatchRector;
+use Rector\Php71\Rector\TryCatch\MultiExceptionCatchRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class MultiExceptionCatchRectorTest extends AbstractRectorTestCase

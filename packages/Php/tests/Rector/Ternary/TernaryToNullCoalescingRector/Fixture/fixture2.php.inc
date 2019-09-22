@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\Ternary\TernaryToNullCoalescingRector\Fixture;
+
 function ternaryToNullCoalescing2()
 {
     $x = isset($a) ? $a : 1;
@@ -12,6 +14,8 @@ function ternaryToNullCoalescing2()
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\Ternary\TernaryToNullCoalescingRector\Fixture;
 
 function ternaryToNullCoalescing2()
 {

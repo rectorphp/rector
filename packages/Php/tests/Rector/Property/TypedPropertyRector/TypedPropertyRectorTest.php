@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\Property\TypedPropertyRector;
 
-use Rector\Php\Rector\Property\TypedPropertyRector;
+use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class TypedPropertyRectorTest extends AbstractRectorTestCase

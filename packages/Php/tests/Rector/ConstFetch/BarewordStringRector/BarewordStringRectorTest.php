@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\ConstFetch\BarewordStringRector;
 
-use Rector\Php\Rector\ConstFetch\BarewordStringRector;
+use Rector\Php72\Rector\ConstFetch\BarewordStringRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class BarewordStringRectorTest extends AbstractRectorTestCase

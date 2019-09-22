@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector;
 
-use Rector\Php\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector;
+use Rector\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class BreakNotInLoopOrSwitchToReturnRectorTest extends AbstractRectorTestCase

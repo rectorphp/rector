@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\CallUserMethodRector;
 
-use Rector\Php\Rector\FuncCall\CallUserMethodRector;
+use Rector\Php70\Rector\FuncCall\CallUserMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**

@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\RemoveExtraParametersRector;
 
-use Rector\Php\Rector\FuncCall\RemoveExtraParametersRector;
+use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveExtraParametersRectorTest extends AbstractRectorTestCase
@@ -25,9 +25,11 @@ final class RemoveExtraParametersRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/methods.php.inc'];
         yield [__DIR__ . '/Fixture/static_calls.php.inc'];
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/function_with_one_required_and_one_optional_parameter.php.inc'];
         yield [__DIR__ . '/Fixture/func_get_all.php.inc'];
         yield [__DIR__ . '/Fixture/external_scope.php.inc'];
         yield [__DIR__ . '/Fixture/static_call_parent.php.inc'];
+        // skip
         yield [__DIR__ . '/Fixture/skip_commented_param_func_get_args.php.inc'];
         yield [__DIR__ . '/Fixture/skip_call_user_func_array.php.inc'];
         yield [__DIR__ . '/Fixture/skip_invoke.php.inc'];

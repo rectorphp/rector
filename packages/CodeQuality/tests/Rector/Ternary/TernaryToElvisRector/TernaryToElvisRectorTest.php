@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Ternary\TernaryToElvisRector;
 
-use Rector\CodeQuality\Rector\Ternary\TernaryToElvisRector;
+use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class TernaryToElvisRectorTest extends AbstractRectorTestCase

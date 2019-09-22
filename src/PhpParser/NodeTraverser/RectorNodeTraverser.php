@@ -52,17 +52,9 @@ final class RectorNodeTraverser extends NodeTraverser
         return parent::traverse($nodes);
     }
 
-    public function getRectorCount(): int
+    public function getPhpRectorCount(): int
     {
         return count($this->visitors);
-    }
-
-    /**
-     * @return PhpRectorInterface[]
-     */
-    public function getRectors(): array
-    {
-        return $this->visitors;
     }
 
     /**

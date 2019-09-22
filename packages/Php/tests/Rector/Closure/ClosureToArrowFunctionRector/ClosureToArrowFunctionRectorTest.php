@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\Closure\ClosureToArrowFunctionRector;
 
-use Rector\Php\Rector\Closure\ClosureToArrowFunctionRector;
+use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ClosureToArrowFunctionRectorTest extends AbstractRectorTestCase

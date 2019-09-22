@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\IsObjectOnIncompleteClassRector;
 
-use Rector\Php\Rector\FuncCall\IsObjectOnIncompleteClassRector;
+use Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class IsObjectOnIncompleteClassRectorTest extends AbstractRectorTestCase

@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\FilterVarToAddSlashesRector;
 
-use Rector\Php\Rector\FuncCall\FilterVarToAddSlashesRector;
+use Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FilterVarToAddSlashesRectorTest extends AbstractRectorTestCase

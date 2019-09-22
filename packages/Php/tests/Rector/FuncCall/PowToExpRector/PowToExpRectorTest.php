@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\PowToExpRector;
 
-use Rector\Php\Rector\FuncCall\PowToExpRector;
+use Rector\Php56\Rector\FuncCall\PowToExpRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**

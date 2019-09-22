@@ -1,5 +1,10 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\FuncCall\IsObjectOnIncompleteClassRector;
+
+use __PHP_Incomplete_Class;
+use stdClass;
+
 $incompleteObject = new __PHP_Incomplete_Class;
 $isObject = is_object($incompleteObject);
 
@@ -13,6 +18,11 @@ $isObject = is_object($classicObject);
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\FuncCall\IsObjectOnIncompleteClassRector;
+
+use __PHP_Incomplete_Class;
+use stdClass;
 
 $incompleteObject = new __PHP_Incomplete_Class;
 $isObject = !is_object($incompleteObject);

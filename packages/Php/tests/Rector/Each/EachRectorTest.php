@@ -2,8 +2,8 @@
 
 namespace Rector\Php\Tests\Rector\Each;
 
-use Rector\Php\Rector\Each\ListEachRector;
-use Rector\Php\Rector\Each\WhileEachToForeachRector;
+use Rector\Php72\Rector\Each\ListEachRector;
+use Rector\Php72\Rector\Each\WhileEachToForeachRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**

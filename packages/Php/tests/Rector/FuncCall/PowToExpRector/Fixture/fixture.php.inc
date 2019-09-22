@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\FuncCall\PowToExpRector;
+
 function powToExp()
 {
     $result = pow(1, 2);
@@ -27,6 +29,8 @@ function powToExp()
 ?>
 -----
 <?php
+
+namespace Rector\Php\Tests\Rector\FuncCall\PowToExpRector;
 
 function powToExp()
 {

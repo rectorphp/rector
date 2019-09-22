@@ -20,8 +20,8 @@ final class ShouldNotHappenException extends Exception
     {
         $debugBacktrace = debug_backtrace();
 
-        $class = $debugBacktrace[1]['class'] ?? null;
-        $function = $debugBacktrace[1]['function'];
+        $class = $debugBacktrace[2]['class'] ?? null;
+        $function = $debugBacktrace[2]['function'];
         $line = $debugBacktrace[1]['line'];
 
         $method = $class ? ($class . '::' . $function) : $function;

@@ -5,6 +5,7 @@ namespace Rector\PSR4;
 use Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\ValueObject\RenamedNamespaceValueObject;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class FileRelocationResolver
@@ -44,31 +45,26 @@ final class FileRelocationResolver
         );
     }
 
+    public function resolveNewFileLocationFromRenamedNamespace(
+        SmartFileInfo $smartFileInfo,
+        RenamedNamespaceValueObject $renamedNamespaceValueObject
+    ): string {
+        $beforeToAfterPart = $this->resolveBeforeToAfterPartBetweenClassNames(
+            $renamedNamespaceValueObject->getOldNamespace(),
+            $renamedNamespaceValueObject->getNewNamespace()
+        );
+
+        return $this->replaceRalativeFilePathsWithBeforeAfter($smartFileInfo, $beforeToAfterPart);
+    }
+
     public function resolveNewFileLocationFromOldClassToNewClass(
-        SmartFileInfo $oldSmartFileInfo,
+        SmartFileInfo $smartFileInfo,
         string $oldClass,
         string $newClass
     ): string {
         $beforeToAfterPart = $this->resolveBeforeToAfterPartBetweenClassNames($oldClass, $newClass);
 
-        // A. first "dir has changed" dummy detection
-        $relativeFilePathParts = Strings::split(
-            $oldSmartFileInfo->getRelativeFilePath(),
-            '#' . DIRECTORY_SEPARATOR . '#'
-        );
-
-        foreach ($relativeFilePathParts as $key => $relativeFilePathPart) {
-            if (! isset($beforeToAfterPart[$relativeFilePathPart])) {
-                continue;
-            }
-
-            $relativeFilePathParts[$key] = $beforeToAfterPart[$relativeFilePathPart];
-
-            // clear from further use
-            unset($beforeToAfterPart[$relativeFilePathPart]);
-        }
-
-        return implode(DIRECTORY_SEPARATOR, $relativeFilePathParts);
+        return $this->replaceRalativeFilePathsWithBeforeAfter($smartFileInfo, $beforeToAfterPart);
     }
 
     /**
@@ -151,5 +147,32 @@ final class FileRelocationResolver
         }
 
         return $beforeToAfterParts;
+    }
+
+    /**
+     * @param string[] $beforeToAfterPart
+     */
+    private function replaceRalativeFilePathsWithBeforeAfter(
+        SmartFileInfo $oldSmartFileInfo,
+        array $beforeToAfterPart
+    ): string {
+        // A. first "dir has changed" dummy detection
+        $relativeFilePathParts = Strings::split(
+            $oldSmartFileInfo->getRelativeFilePath(),
+            '#' . DIRECTORY_SEPARATOR . '#'
+        );
+
+        foreach ($relativeFilePathParts as $key => $relativeFilePathPart) {
+            if (! isset($beforeToAfterPart[$relativeFilePathPart])) {
+                continue;
+            }
+
+            $relativeFilePathParts[$key] = $beforeToAfterPart[$relativeFilePathPart];
+
+            // clear from further use
+            unset($beforeToAfterPart[$relativeFilePathPart]);
+        }
+
+        return implode(DIRECTORY_SEPARATOR, $relativeFilePathParts);
     }
 }

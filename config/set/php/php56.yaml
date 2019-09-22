@@ -1,5 +1,5 @@
 services:
-    Rector\Php\Rector\FuncCall\PowToExpRector: ~
+    Rector\Php56\Rector\FuncCall\PowToExpRector: ~
 
     Rector\Rector\Function_\RenameFunctionRector:
         mcrypt_generic_end: 'mcrypt_generic_deinit'
@@ -39,4 +39,4 @@ services:
         ocistatementtype: 'oci_statement_type'
 
     # inspired by level in psalm - https://github.com/vimeo/psalm/blob/82e0bcafac723fdf5007a31a7ae74af1736c9f6f/tests/FileManipulationTest.php#L1063
-    Rector\Php\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector: ~
+    Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector: ~

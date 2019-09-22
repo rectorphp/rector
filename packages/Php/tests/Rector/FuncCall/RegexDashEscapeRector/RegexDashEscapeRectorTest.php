@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\RegexDashEscapeRector;
 
-use Rector\Php\Rector\FuncCall\RegexDashEscapeRector;
+use Rector\Php73\Rector\FuncCall\RegexDashEscapeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RegexDashEscapeRectorTest extends AbstractRectorTestCase

@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\MagicConstClass\ClassConstantToSelfClassRector;
 
-use Rector\Php\Rector\MagicConstClass\ClassConstantToSelfClassRector;
+use Rector\Php74\Rector\MagicConstClass\ClassConstantToSelfClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ClassConstantToSelfClassRectorTest extends AbstractRectorTestCase

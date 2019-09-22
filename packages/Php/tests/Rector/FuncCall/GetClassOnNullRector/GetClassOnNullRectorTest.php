@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\GetClassOnNullRector;
 
-use Rector\Php\Rector\FuncCall\GetClassOnNullRector;
+use Rector\Php72\Rector\FuncCall\GetClassOnNullRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class GetClassOnNullRectorTest extends AbstractRectorTestCase

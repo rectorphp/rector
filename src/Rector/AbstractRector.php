@@ -132,6 +132,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $nodes = $this->useAddingCommander->traverseNodes($nodes);
         }
 
+        // @todo name node importing
+        // @todo class like renaming
+
         $this->tearDown();
 
         return $nodes;

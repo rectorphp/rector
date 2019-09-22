@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Symfony\Component\Console\Command;
+namespace Rector\Php\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Fixture;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Exception\ExceptionInterface;
@@ -563,7 +563,7 @@ class Command
 -----
 <?php
 
-namespace Rector\Tests\Symfony\Component\Console\Command;
+namespace Rector\Php\Tests\Rector\Property\CompleteVarDocTypePropertyRector\Fixture;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Exception\ExceptionInterface;

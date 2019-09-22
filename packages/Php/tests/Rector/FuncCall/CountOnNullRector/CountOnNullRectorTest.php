@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\CountOnNullRector;
 
-use Rector\Php\Rector\FuncCall\CountOnNullRector;
+use Rector\Php71\Rector\FuncCall\CountOnNullRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class CountOnNullRectorTest extends AbstractRectorTestCase

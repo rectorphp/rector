@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\GetCalledClassToStaticClassRector;
 
-use Rector\Php\Rector\FuncCall\GetCalledClassToStaticClassRector;
+use Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class GetCalledClassToStaticClassRectorTest extends AbstractRectorTestCase

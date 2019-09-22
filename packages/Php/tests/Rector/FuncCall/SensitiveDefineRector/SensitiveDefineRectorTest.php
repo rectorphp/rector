@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\SensitiveDefineRector;
 
-use Rector\Php\Rector\FuncCall\SensitiveDefineRector;
+use Rector\Php73\Rector\FuncCall\SensitiveDefineRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SensitiveDefineRectorTest extends AbstractRectorTestCase

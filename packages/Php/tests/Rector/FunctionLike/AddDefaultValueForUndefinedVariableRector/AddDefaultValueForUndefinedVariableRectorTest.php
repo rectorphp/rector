@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
 
-use Rector\Php\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
+use Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AddDefaultValueForUndefinedVariableRectorTest extends AbstractRectorTestCase

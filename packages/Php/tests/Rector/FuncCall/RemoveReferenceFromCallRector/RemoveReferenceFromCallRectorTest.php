@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\RemoveReferenceFromCallRector;
 
-use Rector\Php\Rector\FuncCall\RemoveReferenceFromCallRector;
+use Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveReferenceFromCallRectorTest extends AbstractRectorTestCase

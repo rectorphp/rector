@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php\Tests\Rector\FunctionLike\ExceptionHandlerTypehintRector\Fixture;
+
 function exceptionHandlerTypehintNullable()
 {
     function handler(?Exception $exception)
@@ -10,8 +12,10 @@ function exceptionHandlerTypehintNullable()
 }
 
 ?>
----
+-----
 <?php
+
+namespace Rector\Php\Tests\Rector\FunctionLike\ExceptionHandlerTypehintRector\Fixture;
 
 function exceptionHandlerTypehintNullable()
 {

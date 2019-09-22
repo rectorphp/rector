@@ -689,7 +689,6 @@ final class StaticTypeMapper
         }
 
         // @todo the type should be compatible with all other types, check with is_a()?
-
         /** @var TypeWithClassName $firstObjectType */
         $firstObjectType = $unionType->getTypes()[0];
 

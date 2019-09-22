@@ -2,8 +2,6 @@
 
 namespace Rector\Php\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
 
-use Rector\Php\Tests\Rector\FuncCall\RemoveExtraParametersRector\Source\MethodWithFuncGetArgs;
-
 final class RemoveAnotherClassMethodCallExtraArgument
 {
     public function run()
@@ -26,8 +24,6 @@ function better_func_get_args() {
 <?php
 
 namespace Rector\Php\Tests\Rector\FuncCall\RemoveExtraParametersRector\Fixture;
-
-use Rector\Php\Tests\Rector\FuncCall\RemoveExtraParametersRector\Source\MethodWithFuncGetArgs;
 
 final class RemoveAnotherClassMethodCallExtraArgument
 {

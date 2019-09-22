@@ -1,15 +1,21 @@
 <?php
 
-namespace Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector;
+namespace Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture;
 
 class SomeClass
 {
+    /**
+     * @return SomeClass
+     */
     public function someFunction()
     {
         foo();
         return $this;
     }
 
+    /**
+     * @return SomeClass
+     */
     public function otherFunction()
     {
         bar();
@@ -21,7 +27,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector;
+namespace Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture;
 
 class SomeClass
 {

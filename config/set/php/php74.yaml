@@ -1,5 +1,5 @@
 services:
-    Rector\Php\Rector\Property\TypedPropertyRector: ~
+    Rector\Php74\Rector\Property\TypedPropertyRector: ~
 
     Rector\Rector\Function_\RenameFunctionRector:
         # https://wiki.php.net/rfc/deprecations_php_7_4#the_real_type
@@ -7,15 +7,15 @@ services:
         # https://wiki.php.net/rfc/deprecations_php_7_4#apache_request_headers_function
         apache_request_headers: 'getallheaders'
         hebrevc: ['nl2br', 'hebrev']
-    Rector\Php\Rector\FuncCall\ArrayKeyExistsOnPropertyRector: ~
-    Rector\Php\Rector\FuncCall\FilterVarToAddSlashesRector: ~
-    Rector\Php\Rector\StaticCall\ExportToReflectionFunctionRector: ~
-    Rector\Php\Rector\MagicConstClass\ClassConstantToSelfClassRector: ~
-    Rector\Php\Rector\FuncCall\GetCalledClassToStaticClassRector: ~
-    Rector\Php\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector: ~
-    Rector\Php\Rector\Double\RealToFloatTypeCastRector: ~
-    Rector\Php\Rector\Assign\NullCoalescingOperatorRector: ~
-    Rector\Php\Rector\Function_\ReservedFnFunctionRector: ~
-    Rector\Php\Rector\Closure\ClosureToArrowFunctionRector: ~
-    Rector\Php\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector: ~
-    Rector\Php\Rector\LNumber\AddLiteralSeparatorToNumberRector: ~
+    Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector: ~
+    Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector: ~
+    Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector: ~
+    Rector\Php74\Rector\MagicConstClass\ClassConstantToSelfClassRector: ~
+    Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector: ~
+    Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector: ~
+    Rector\Php74\Rector\Double\RealToFloatTypeCastRector: ~
+    Rector\Php74\Rector\Assign\NullCoalescingOperatorRector: ~
+    Rector\Php74\Rector\Function_\ReservedFnFunctionRector: ~
+    Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector: ~
+    Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector: ~
+    Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector: ~
