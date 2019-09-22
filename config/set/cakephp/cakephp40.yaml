@@ -28,6 +28,13 @@ services:
         Cake\Validation\Validator:
             containsNonAlphaNumeric: notAlphaNumeric
 
+    Rector\Rector\MethodCall\RenameStaticMethodRector:
+        $oldToNewMethodByClasses:
+            Router:
+                pushRequest: setRequest
+                setRequestInfo: setRequest
+                setRequestContext: setRequest
+
     Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         Cake\Http\BaseApplication:
             bootstrap: 'void'
