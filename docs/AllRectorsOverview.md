@@ -7372,13 +7372,13 @@ services:
 
 ### `RenameMethodRector`
 
-- class: `Rector\Rector\MethodCall\RenameMethodRector`
+- class: `Rector\Refactoring\Rector\MethodCall\RenameMethodRector`
 
 Turns method names to new ones.
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\RenameMethodRector:
+    Rector\Refactoring\Rector\MethodCall\RenameMethodRector:
         SomeExampleClass:
             oldMethod: newMethod
 ```

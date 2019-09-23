@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
+
 function methodNameReplacer()
 {
     $html = new \Nette\Utils\Html();
@@ -11,6 +13,8 @@ function methodNameReplacer()
 ?>
 -----
 <?php
+
+namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
 function methodNameReplacer()
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
-use Rector\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
-use Rector\Tests\Rector\MethodCall\RenameMethodRector\Source\Something;
+use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
+use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\Something;
 
 class MyType5 extends AbstractType
 {
@@ -20,10 +20,10 @@ class MyType5 extends AbstractType
 -----
 <?php
 
-namespace Rector\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
-use Rector\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
-use Rector\Tests\Rector\MethodCall\RenameMethodRector\Source\Something;
+use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
+use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\Something;
 
 class MyType5 extends AbstractType
 {

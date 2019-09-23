@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
 class SomePresenter
 {
@@ -13,7 +13,7 @@ class SomePresenter
 -----
 <?php
 
-namespace Rector\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
 class SomePresenter
 {

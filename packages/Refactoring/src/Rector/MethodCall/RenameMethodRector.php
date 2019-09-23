@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\MethodCall;
+namespace Rector\Refactoring\Rector\MethodCall;
 
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
@@ -14,7 +14,7 @@ use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\MethodCall\RenameMethodRector\RenameMethodRectorTest
+ * @see \Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\RenameMethodRectorTest
  */
 final class RenameMethodRector extends AbstractRector
 {

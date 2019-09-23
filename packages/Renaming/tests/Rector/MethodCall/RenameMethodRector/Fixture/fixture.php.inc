@@ -1,6 +1,8 @@
 <?php
 
-use Rector\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
+namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
+
+use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
 
 class MyCustomType extends AbstractType
 {
@@ -22,7 +24,9 @@ class AnotherClass
 -----
 <?php
 
-use Rector\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
+namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
+
+use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
 
 class MyCustomType extends AbstractType
 {

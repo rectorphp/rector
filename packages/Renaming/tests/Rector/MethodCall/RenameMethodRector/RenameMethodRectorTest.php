@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\MethodCall\RenameMethodRector;
+namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector;
 
 use Nette\Utils\Html;
-use Rector\Rector\MethodCall\RenameMethodRector;
+use Rector\Refactoring\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
+use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\FormMacros;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
-use Rector\Tests\Rector\MethodCall\RenameMethodRector\Source\FormMacros;
 
 final class RenameMethodRectorTest extends AbstractRectorTestCase
 {
