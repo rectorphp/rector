@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\ValueObject;
+namespace Rector\ValueObject;
 
 final class PhpVersionFeature
 {

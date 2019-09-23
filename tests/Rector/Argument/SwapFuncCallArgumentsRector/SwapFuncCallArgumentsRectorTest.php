@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Tests\Rector\FuncCall\SwapFuncCallArgumentsRector;
+namespace Rector\Tests\Rector\Argument\SwapFuncCallArgumentsRector;
 
-use Rector\Php\Rector\FuncCall\SwapFuncCallArgumentsRector;
+use Rector\Rector\Argument\SwapFuncCallArgumentsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SwapFuncCallArgumentsRectorTest extends AbstractRectorTestCase

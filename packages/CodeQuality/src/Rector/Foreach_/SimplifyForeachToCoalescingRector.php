@@ -12,11 +12,11 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php\ValueObject\PhpVersionFeature;
 use Rector\PhpParser\Node\Manipulator\ForeachManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\Foreach_\SimplifyForeachToCoalescingRector\SimplifyForeachToCoalescingRectorTest

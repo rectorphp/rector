@@ -4647,7 +4647,7 @@ String asserts must be passed directly to assert()
 
 ### `SwapFuncCallArgumentsRector`
 
-- class: `Rector\Php\Rector\FuncCall\SwapFuncCallArgumentsRector`
+- class: `Rector\Rector\Argument\SwapFuncCallArgumentsRector`
 
 Swap arguments in function calls
 

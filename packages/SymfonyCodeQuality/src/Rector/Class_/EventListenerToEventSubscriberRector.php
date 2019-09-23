@@ -18,10 +18,10 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
-use Rector\Php\ValueObject\PhpVersionFeature;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 use Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher;
 
 /**
