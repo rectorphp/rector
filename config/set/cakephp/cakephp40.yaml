@@ -1,7 +1,7 @@
 # source: https://book.cakephp.org/4.0/en/appendices/4-0-migration-guide.html
 
 services:
-    Rector\Rector\Class_\RenameClassRector:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
         Cake\Database\Type: 'Cake\Database\TypeFactory'
 
     Rector\Renaming\Rector\Constant\RenameClassConstantRector:

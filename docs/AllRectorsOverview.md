@@ -7294,13 +7294,13 @@ services:
 
 ### `RenameClassRector`
 
-- class: `Rector\Rector\Class_\RenameClassRector`
+- class: `Rector\Renaming\Rector\Class_\RenameClassRector`
 
 Replaces defined classes by new ones.
 
 ```yaml
 services:
-    Rector\Rector\Class_\RenameClassRector:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
             App\SomeOldClass: App\SomeNewClass
 ```

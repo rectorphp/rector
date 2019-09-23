@@ -13,7 +13,7 @@ services:
     Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector: ~
 
     # https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
-    Rector\Rector\Class_\RenameClassRector:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
         # Browser Kit
         Symfony\Component\BrowserKit\Client: 'Symfony\Component\BrowserKit\AbstractBrowser'
 

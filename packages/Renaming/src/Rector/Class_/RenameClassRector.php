@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Class_;
+namespace Rector\Renaming\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
@@ -25,7 +25,7 @@ use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\Class_\RenameClassRector\RenameClassRectorTest
+ * @see \Rector\Renaming\Tests\Rector\Class_\RenameClassRector\RenameClassRectorTest
  */
 final class RenameClassRector extends AbstractRector
 {

@@ -5,7 +5,7 @@ services:
             set: 'define'
             setShared: 'define'
 
-    Rector\Rector\Class_\RenameClassRector:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
         PhpSpec\Console\IO: 'PhpSpec\Console\ConsoleIO'
         PhpSpec\IO\IOInterface: 'PhpSpec\IO\IO'
         PhpSpec\Locator\ResourceInterface: 'PhpSpec\Locator\Resource'

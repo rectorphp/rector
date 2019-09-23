@@ -1,6 +1,6 @@
 # see: https://laravel.com/docs/5.2/upgrade
 services:
-    Rector\Rector\Class_\RenameClassRector:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
         Illuminate\Auth\Access\UnauthorizedException: 'Illuminate\Auth\Access\AuthorizationException'
         Illuminate\Http\Exception\HttpResponseException: 'Illuminate\Foundation\Validation\ValidationException'
         Illuminate\Foundation\Composer: 'Illuminate\Support\Composer'

@@ -5,7 +5,7 @@ services:
         locale.changed: ['Illuminate\Foundation\Events\LocaleUpdated', 'class']
         illuminate.log: ['Illuminate\Log\Events\MessageLogged', 'class']
 
-    Rector\Rector\Class_\RenameClassRector:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
         Illuminate\Console\AppNamespaceDetectorTrait: 'Illuminate\Console\DetectsApplicationNamespace'
         Illuminate\Http\Exception\HttpResponseException: 'Illuminate\Http\Exceptions\HttpResponseException'
         Illuminate\Http\Exception\PostTooLargeException: 'Illuminate\Http\Exceptions\PostTooLargeException'

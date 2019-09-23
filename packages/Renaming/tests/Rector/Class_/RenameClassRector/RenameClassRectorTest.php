@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Class_\RenameClassRector;
+namespace Rector\Renaming\Tests\Rector\Class_\RenameClassRector;
 
 use Iterator;
 use Manual\Twig\TwigFilter;
 use Manual_Twig_Filter;
-use Rector\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\AbstractManualExtension;
+use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
+use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClassWithoutTypo;
+use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClass;
+use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClassWithTypo;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Class_\RenameClassRector\Source\AbstractManualExtension;
-use Rector\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
-use Rector\Tests\Rector\Class_\RenameClassRector\Source\NewClassWithoutTypo;
-use Rector\Tests\Rector\Class_\RenameClassRector\Source\OldClass;
-use Rector\Tests\Rector\Class_\RenameClassRector\Source\OldClassWithTypo;
 
 final class RenameClassRectorTest extends AbstractRectorTestCase
 {

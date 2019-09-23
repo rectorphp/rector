@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Class_\RenameClassRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Fixture;
 
 use Manual\Twig\TwigFilter;
 
