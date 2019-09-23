@@ -17,12 +17,15 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDoc\PhpDocClassRenamer;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Renaming\Exception\InvalidPhpCodeException;
+use ReflectionClass;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\Class_\RenameClassRector\RenameClassRectorTest
@@ -262,6 +265,8 @@ PHP
         $newClassNamePart = $this->classNaming->getShortName($newName);
         $newNamespacePart = $this->classNaming->getNamespace($newName);
 
+        $this->ensureClassWillNotBeDuplicate($newName, $name);
+
         $classLike->name = new Identifier($newClassNamePart);
 
         // Old class did not have any namespace, we need to wrap class with Namespace_ node
@@ -322,5 +327,21 @@ PHP
         }
 
         $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $this->oldToNewClasses);
+    }
+
+    private function ensureClassWillNotBeDuplicate(string $newName, string $oldName): void
+    {
+        if (! ClassExistenceStaticHelper::doesClassLikeExist($newName)) {
+            return;
+        }
+
+        $classReflection = new ReflectionClass($newName);
+
+        throw new InvalidPhpCodeException(sprintf(
+            'Renaming class "%s" to "%s" would create a duplicated class/interface/trait (already existing in "%s") and cause PHP code to be invalid.',
+            $oldName,
+            $newName,
+            $classReflection->getFileName()
+        ));
     }
 }

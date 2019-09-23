@@ -5,7 +5,9 @@ namespace Rector\Renaming\Tests\Rector\Class_\RenameClassRector;
 use Iterator;
 use Manual\Twig\TwigFilter;
 use Manual_Twig_Filter;
+use Rector\Renaming\Exception\InvalidPhpCodeException;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Fixture\DuplicatedClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\AbstractManualExtension;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClassWithoutTypo;
@@ -52,6 +54,15 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
     }
 
     /**
+     * @see https://github.com/rectorphp/rector/issues/1438
+     */
+    public function testClassNameDuplication(): void
+    {
+        $this->expectException(InvalidPhpCodeException::class);
+        $this->doTestFile(__DIR__ . '/Fixture/skip_duplicated_class.php.inc');
+    }
+
+    /**
      * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
@@ -73,6 +84,8 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
                     'MyOldClass' => 'MyNamespace\MyNewClass',
                     'AnotherMyOldClass' => 'AnotherMyNewClass',
                     'MyNamespace\AnotherMyClass' => 'MyNewClassWithoutNamespace',
+                    // test duplicated class - @see https://github.com/rectorphp/rector/issues/1438
+                    'Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Fixture\SingularClass' => DuplicatedClass::class,
                 ],
             ],
         ];
