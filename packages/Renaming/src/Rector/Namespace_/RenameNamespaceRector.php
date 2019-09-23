@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Namespace_;
+namespace Rector\Renaming\Rector\Namespace_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -17,7 +17,7 @@ use Rector\RectorDefinition\RectorDefinition;
 use Rector\ValueObject\RenamedNamespaceValueObject;
 
 /**
- * @see \Rector\Tests\Rector\Namespace_\RenameNamespaceRector\RenameNamespaceRectorTest
+ * @see \Rector\Renaming\Tests\Rector\Namespace_\RenameNamespaceRector\RenameNamespaceRectorTest
  */
 final class RenameNamespaceRector extends AbstractRector
 {

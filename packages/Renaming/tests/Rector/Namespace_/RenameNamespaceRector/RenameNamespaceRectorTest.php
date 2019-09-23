@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Namespace_\RenameNamespaceRector;
+namespace Rector\Renaming\Tests\Rector\Namespace_\RenameNamespaceRector;
 
-use Rector\Rector\Namespace_\RenameNamespaceRector;
+use Rector\Renaming\Rector\Namespace_\RenameNamespaceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RenameNamespaceRectorTest extends AbstractRectorTestCase
