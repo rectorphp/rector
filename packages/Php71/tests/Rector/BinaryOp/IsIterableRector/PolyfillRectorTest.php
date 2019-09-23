@@ -2,9 +2,9 @@
 
 namespace Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector;
 
-use Rector\Php\ValueObject\PhpVersionFeature;
 use Rector\Php71\Rector\BinaryOp\IsIterableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\ValueObject\PhpVersionFeature;
 
 final class PolyfillRectorTest extends AbstractRectorTestCase
 {

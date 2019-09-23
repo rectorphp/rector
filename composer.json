@@ -71,7 +71,6 @@
             "Rector\\PHPUnit\\": "packages/PHPUnit/src",
             "Rector\\PSR4\\": "packages/PSR4/src",
             "Rector\\PhpSpecToPHPUnit\\": "packages/PhpSpecToPHPUnit/src",
-            "Rector\\Php\\": "packages/Php/src",
             "Rector\\Php52\\": "packages/Php52/src",
             "Rector\\Php53\\": "packages/Php53/src",
             "Rector\\Php54\\": "packages/Php54/src",
@@ -83,6 +82,7 @@
             "Rector\\Php73\\": "packages/Php73/src",
             "Rector\\Php74\\": "packages/Php74/src",
             "Rector\\RemovingStatic\\": "packages/RemovingStatic/src",
+            "Rector\\Renaming\\": "packages/Renaming/src",
             "Rector\\Restoration\\": "packages/Restoration/src",
             "Rector\\Refactoring\\": "packages/Refactoring/src",
             "Rector\\SOLID\\": "packages/SOLID/src",
@@ -128,7 +128,6 @@
             "Rector\\PHPUnit\\Tests\\": "packages/PHPUnit/tests",
             "Rector\\PSR4\\Tests\\": "packages/PSR4/tests",
             "Rector\\PhpSpecToPHPUnit\\Tests\\": "packages/PhpSpecToPHPUnit/tests",
-            "Rector\\Php\\Tests\\": "packages/Php/tests",
             "Rector\\Php52\\Tests\\": "packages/Php52/tests",
             "Rector\\Php53\\Tests\\": "packages/Php53/tests",
             "Rector\\Php54\\Tests\\": "packages/Php54/tests",
@@ -140,6 +139,7 @@
             "Rector\\Php73\\Tests\\": "packages/Php73/tests",
             "Rector\\Php74\\Tests\\": "packages/Php74/tests",
             "Rector\\RemovingStatic\\Tests\\": "packages/RemovingStatic/tests",
+            "Rector\\Renaming\\Tests\\": "packages/Renaming/tests",
             "Rector\\Restoration\\Tests\\": "packages/Restoration/tests",
             "Rector\\SOLID\\Tests\\": "packages/SOLID/tests",
             "Rector\\Sensio\\Tests\\": "packages/Sensio/tests",
@@ -171,9 +171,9 @@
             "packages/TypeDeclaration/tests/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php",
             "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source/ChangeMeAnotherNamespace.php",
             "packages/TypeDeclaration/tests/Rector/FunctionLike/ReturnTypeDeclarationRector/Source/MyBar.php",
-            "tests/Rector/Class_/RenameClassRector/Source/Twig_Extension_Sandbox.php",
-            "tests/Rector/Class_/RenameClassRector/Source/TwigFilter.php",
-            "tests/Rector/Class_/RenameClassRector/Source/Manual_Twig_Filter.php"
+            "packages/Renaming/tests/Rector/Class_/RenameClassRector/Source/Twig_Extension_Sandbox.php",
+            "packages/Renaming/tests/Rector/Class_/RenameClassRector/Source/TwigFilter.php",
+            "packages/Renaming/tests/Rector/Class_/RenameClassRector/Source/Manual_Twig_Filter.php"
         ]
     },
     "scripts": {

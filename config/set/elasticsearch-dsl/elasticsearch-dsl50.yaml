@@ -1,7 +1,7 @@
 # https://github.com/ongr-io/ElasticsearchDSL/blob/5.x/CHANGELOG.md
 services:
     Rector\ElasticSearchDSL\Rector\MethodCall\MigrateFilterToQueryRector: ~
-    Rector\Rector\Class_\RenameClassRector:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
         ONGR\ElasticsearchDSL\Query\BoolQuery: ONGR\ElasticsearchDSL\Query\Compound\BoolQuery
         ONGR\ElasticsearchDSL\Query\BoostingQuery: ONGR\ElasticsearchDSL\Query\Compound\BoostingQuery
         ONGR\ElasticsearchDSL\Query\ConstantScoreQuery: ONGR\ElasticsearchDSL\Query\Compound\ConstantScoreQuery

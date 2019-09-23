@@ -12,7 +12,7 @@ use Rector\Contract\Extension\ReportingExtensionInterface;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\PSR4\ValueObject\ClassRenameValueObject;
-use Rector\Rector\Class_\RenameClassRector;
+use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Yaml;
 

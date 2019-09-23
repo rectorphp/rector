@@ -4242,13 +4242,13 @@ Changes pow(val, val2) to ** (exp) parameter
 
 ### `PreferThisOrSelfMethodCallRector`
 
-- class: `Rector\Php\Rector\MethodCall\PreferThisOrSelfMethodCallRector`
+- class: `Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector`
 
 Changes $this->... to self:: or vise versa for specific types
 
 ```yaml
 services:
-    Rector\Php\Rector\MethodCall\PreferThisOrSelfMethodCallRector:
+    Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector:
         PHPUnit\TestCase: self
 ```
 
@@ -4269,7 +4269,7 @@ services:
 
 ### `PregReplaceEModifierRector`
 
-- class: `Rector\Php\Rector\FuncCall\PregReplaceEModifierRector`
+- class: `Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector`
 
 The /e modifier is no longer supported, use preg_replace_callback instead
 
@@ -4487,7 +4487,7 @@ Change fn() function name, since it will be reserved keyword
 
 ### `ReservedObjectRector`
 
-- class: `Rector\Php\Rector\Name\ReservedObjectRector`
+- class: `Rector\Php71\Rector\Name\ReservedObjectRector`
 
 Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configured
 
@@ -4647,7 +4647,7 @@ String asserts must be passed directly to assert()
 
 ### `SwapFuncCallArgumentsRector`
 
-- class: `Rector\Php\Rector\FuncCall\SwapFuncCallArgumentsRector`
+- class: `Rector\Rector\Argument\SwapFuncCallArgumentsRector`
 
 Swap arguments in function calls
 
@@ -7214,13 +7214,13 @@ Remove specific traits from code
 
 ### `RenameAnnotationRector`
 
-- class: `Rector\Rector\Annotation\RenameAnnotationRector`
+- class: `Rector\Renaming\Rector\Annotation\RenameAnnotationRector`
 
 Turns defined annotations above properties and methods to their new values.
 
 ```yaml
 services:
-    Rector\Rector\Annotation\RenameAnnotationRector:
+    Rector\Renaming\Rector\Annotation\RenameAnnotationRector:
         $classToAnnotationMap:
             PHPUnit\Framework\TestCase:
                 test: scenario
@@ -7246,13 +7246,13 @@ services:
 
 ### `RenameClassConstantRector`
 
-- class: `Rector\Rector\Constant\RenameClassConstantRector`
+- class: `Rector\Renaming\Rector\Constant\RenameClassConstantRector`
 
 Replaces defined class constants in their calls.
 
 ```yaml
 services:
-    Rector\Rector\Constant\RenameClassConstantRector:
+    Rector\Renaming\Rector\Constant\RenameClassConstantRector:
         SomeClass:
             OLD_CONSTANT: NEW_CONSTANT
             OTHER_OLD_CONSTANT: 'DifferentClass::NEW_CONSTANT'
@@ -7294,13 +7294,13 @@ services:
 
 ### `RenameClassRector`
 
-- class: `Rector\Rector\Class_\RenameClassRector`
+- class: `Rector\Renaming\Rector\Class_\RenameClassRector`
 
 Replaces defined classes by new ones.
 
 ```yaml
 services:
-    Rector\Rector\Class_\RenameClassRector:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
             App\SomeOldClass: App\SomeNewClass
 ```
@@ -7328,13 +7328,13 @@ services:
 
 ### `RenameFunctionRector`
 
-- class: `Rector\Rector\Function_\RenameFunctionRector`
+- class: `Rector\Renaming\Rector\Function_\RenameFunctionRector`
 
 Turns defined function call new one.
 
 ```yaml
 services:
-    Rector\Rector\Function_\RenameFunctionRector:
+    Rector\Renaming\Rector\Function_\RenameFunctionRector:
         view: Laravel\Templating\render
 ```
 
@@ -7349,13 +7349,13 @@ services:
 
 ### `RenameMethodCallRector`
 
-- class: `Rector\Rector\MethodCall\RenameMethodCallRector`
+- class: `Rector\Renaming\Rector\MethodCall\RenameMethodCallRector`
 
 Turns method call names to new ones.
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\RenameMethodCallRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
         SomeExampleClass:
             oldMethod: newMethod
 ```
@@ -7372,13 +7372,13 @@ services:
 
 ### `RenameMethodRector`
 
-- class: `Rector\Rector\MethodCall\RenameMethodRector`
+- class: `Rector\Renaming\Rector\MethodCall\RenameMethodRector`
 
 Turns method names to new ones.
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\RenameMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         SomeExampleClass:
             oldMethod: newMethod
 ```
@@ -7395,13 +7395,13 @@ services:
 
 ### `RenameNamespaceRector`
 
-- class: `Rector\Rector\Namespace_\RenameNamespaceRector`
+- class: `Rector\Renaming\Rector\Namespace_\RenameNamespaceRector`
 
 Replaces old namespace by new one.
 
 ```yaml
 services:
-    Rector\Rector\Namespace_\RenameNamespaceRector:
+    Rector\Renaming\Rector\Namespace_\RenameNamespaceRector:
         $oldToNewNamespaces:
             SomeOldNamespace: SomeNewNamespace
 ```
@@ -7440,13 +7440,13 @@ services:
 
 ### `RenameStaticMethodRector`
 
-- class: `Rector\Rector\MethodCall\RenameStaticMethodRector`
+- class: `Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector`
 
 Turns method names to new ones.
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\RenameStaticMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
         SomeClass:
             oldMethod:
                 - AnotherExampleClass
@@ -7462,7 +7462,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\RenameStaticMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
         $oldToNewMethodByClasses:
             SomeClass:
                 oldMethod: newStaticMethod

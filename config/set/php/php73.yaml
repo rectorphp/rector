@@ -6,7 +6,7 @@ services:
     Rector\Php73\Rector\String_\SensitiveHereNowDocRector: ~
 
     # https://wiki.php.net/rfc/deprecations_php_7_3
-    Rector\Rector\Function_\RenameFunctionRector:
+    Rector\Renaming\Rector\Function_\RenameFunctionRector:
         image2wbmp: 'imagewbmp'
         mbregex_encoding: 'mb_regex_encoding'
         mbereg: 'mb_ereg'

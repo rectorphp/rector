@@ -1,6 +1,6 @@
 # see: https://laravel.com/docs/5.5/upgrade
 services:
-    Rector\Rector\MethodCall\RenameMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         Illuminate\Console\Command:
             fire: 'handle'
 
@@ -10,5 +10,5 @@ services:
         Illuminate\Database\Eloquent\Relations\Pivot:
             parent: 'pivotParent'
 
-    Rector\Rector\Class_\RenameClassRector:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
         Illuminate\Translation\LoaderInterface: 'Illuminate\Contracts\Translation\Loader'

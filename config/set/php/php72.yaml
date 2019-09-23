@@ -8,7 +8,7 @@ services:
     Rector\Php72\Rector\Unset_\UnsetCastRector: ~
     Rector\Php72\Rector\ConstFetch\BarewordStringRector: ~
 
-    Rector\Rector\Function_\RenameFunctionRector:
+    Rector\Renaming\Rector\Function_\RenameFunctionRector:
         jpeg2wbmp: 'imagecreatefromjpeg' # and imagewbmp
         png2wbmp: 'imagecreatefrompng' # or imagewbmp
         # http://php.net/manual/en/migration72.deprecated.php#migration72.deprecated.gmp_random-function

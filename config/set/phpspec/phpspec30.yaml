@@ -1,11 +1,11 @@
 # @see http://www.phpspec.net/en/stable/manual/upgrading-to-phpspec-3.html
 services:
-    Rector\Rector\MethodCall\RenameMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         PhpSpec\ServiceContainer:
             set: 'define'
             setShared: 'define'
 
-    Rector\Rector\Class_\RenameClassRector:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
         PhpSpec\Console\IO: 'PhpSpec\Console\ConsoleIO'
         PhpSpec\IO\IOInterface: 'PhpSpec\IO\IO'
         PhpSpec\Locator\ResourceInterface: 'PhpSpec\Locator\Resource'

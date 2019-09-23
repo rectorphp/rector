@@ -6,11 +6,11 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php\ValueObject\PhpVersionFeature;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see \Rector\TypeDeclaration\Tests\Rector\Closure\AddClosureReturnTypeRector\AddClosureReturnTypeRectorTest

@@ -47,13 +47,13 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\Php\PhpVersionProvider;
-use Rector\Php\ValueObject\PhpVersionFeature;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ParentStaticType;
 use Rector\PHPStan\Type\SelfObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
+use Rector\ValueObject\PhpVersionFeature;
 use Traversable;
 
 /**

@@ -1,8 +1,0 @@
-services:
-    _defaults:
-        public: true
-        autowire: true
-
-    Rector\Php\:
-        resource: '../src'
-        exclude: '../src/{Rector/**/*Rector.php,ValueObject/*}'

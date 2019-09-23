@@ -32,9 +32,9 @@ final class ObjectTypeSpecifier
             return $aliasedObjectType;
         }
 
-        $shortednedObjectType = $this->matchShortenedObjectType($node, $objectType);
-        if ($shortednedObjectType) {
-            return $shortednedObjectType;
+        $shortenedObjectType = $this->matchShortenedObjectType($node, $objectType);
+        if ($shortenedObjectType) {
+            return $shortenedObjectType;
         }
 
         $sameNamespacedObjectType = $this->matchSameNamespacedObjectType($node, $objectType);

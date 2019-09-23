@@ -150,7 +150,7 @@ parameters:
             - 'packages/CodingStyle/src/Rector/Namespace_/ImportFullyQualifiedNamesRector.php'
 
             # copied 3rd party logic
-            - 'packages/Php/src/EregToPcreTransformer.php'
+            - 'packages/Php70/src/EregToPcreTransformer.php'
             # dev
             - 'packages/TypeDeclaration/src/Rector/FunctionLike/*TypeDeclarationRector.php'
             - 'packages/Php70/src/Rector/If_/IfToSpaceshipRector.php'

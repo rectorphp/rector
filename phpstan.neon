@@ -29,7 +29,7 @@ parameters:
         - '*tests/Source/*'
         - 'packages/NodeTypeResolver/tests/Source/SomeClass.php'
         # intentionally original
-        - 'packages/Php/src/EregToPcreTransformer.php'
+        - 'packages/Php70/src/EregToPcreTransformer.php'
         - '*/packages/ContributorTools/templates/*'
         # part of composer
         - 'tests/Composer/AutoloadWrongCasesEventSubscriber.php'
