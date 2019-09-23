@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Annotation\RenameAnnotationRector;
+namespace Rector\Renaming\Tests\Rector\Annotation\RenameAnnotationRector;
 
-use Rector\Rector\Annotation\RenameAnnotationRector;
+use Rector\Renaming\Rector\Annotation\RenameAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RenameAnnotationRectorTest extends AbstractRectorTestCase

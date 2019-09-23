@@ -7214,13 +7214,13 @@ Remove specific traits from code
 
 ### `RenameAnnotationRector`
 
-- class: `Rector\Rector\Annotation\RenameAnnotationRector`
+- class: `Rector\Renaming\Rector\Annotation\RenameAnnotationRector`
 
 Turns defined annotations above properties and methods to their new values.
 
 ```yaml
 services:
-    Rector\Rector\Annotation\RenameAnnotationRector:
+    Rector\Renaming\Rector\Annotation\RenameAnnotationRector:
         $classToAnnotationMap:
             PHPUnit\Framework\TestCase:
                 test: scenario
