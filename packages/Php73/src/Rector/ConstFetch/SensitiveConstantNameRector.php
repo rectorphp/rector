@@ -11,7 +11,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/case_insensitive_constant_deprecation
- * @see \Rector\Php\Tests\Rector\ConstFetch\SensitiveConstantNameRector\SensitiveConstantNameRectorTest
+ * @see \Rector\Php73\Tests\Rector\ConstFetch\SensitiveConstantNameRector\SensitiveConstantNameRectorTest
  */
 final class SensitiveConstantNameRector extends AbstractRector
 {

@@ -11,7 +11,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/multiple-catch
- * @see \Rector\Php\Tests\Rector\TryCatch\MultiExceptionCatchRector\MultiExceptionCatchRectorTest
+ * @see \Rector\Php71\Tests\Rector\TryCatch\MultiExceptionCatchRector\MultiExceptionCatchRectorTest
  */
 final class MultiExceptionCatchRector extends AbstractRector
 {

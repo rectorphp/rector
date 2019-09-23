@@ -15,7 +15,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/combined-comparison-operator
- * @see \Rector\Php\Tests\Rector\Ternary\TernaryToSpaceshipRector\TernaryToSpaceshipRectorTest
+ * @see \Rector\Php70\Tests\Rector\Ternary\TernaryToSpaceshipRector\TernaryToSpaceshipRectorTest
  */
 final class TernaryToSpaceshipRector extends AbstractRector
 {

@@ -15,7 +15,7 @@ services:
     Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
 
     # 'ClassName' → ClassName::class
-    Rector\Php\Rector\String_\StringClassNameToClassConstantRector: ~
+    Rector\Php55\Rector\String_\StringClassNameToClassConstantRector: ~
     Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector: ~
     Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector: ~
     Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector: ~

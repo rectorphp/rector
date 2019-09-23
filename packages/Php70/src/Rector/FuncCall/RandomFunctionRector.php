@@ -12,7 +12,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Php\Tests\Rector\FuncCall\RandomFunctionRector\RandomFunctionRectorTest
+ * @see \Rector\Php70\Tests\Rector\FuncCall\RandomFunctionRector\RandomFunctionRectorTest
  */
 final class RandomFunctionRector extends AbstractRector
 {

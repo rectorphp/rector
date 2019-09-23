@@ -14,7 +14,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/arrow_functions_v2
- * @see \Rector\Php\Tests\Rector\Closure\ClosureToArrowFunctionRector\ClosureToArrowFunctionRectorTest
+ * @see \Rector\Php74\Tests\Rector\Closure\ClosureToArrowFunctionRector\ClosureToArrowFunctionRectorTest
  */
 final class ClosureToArrowFunctionRector extends AbstractRector
 {

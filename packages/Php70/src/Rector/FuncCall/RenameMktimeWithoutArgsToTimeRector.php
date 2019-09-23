@@ -11,7 +11,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://3v4l.org/F5GE8
- * @see \Rector\Php\Tests\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector\RenameMktimeWithoutArgsToTimeRectorTest
+ * @see \Rector\Php70\Tests\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector\RenameMktimeWithoutArgsToTimeRectorTest
  */
 final class RenameMktimeWithoutArgsToTimeRector extends AbstractRector
 {

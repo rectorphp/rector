@@ -19,7 +19,7 @@ use ReflectionClass;
  * @see https://3v4l.org/tQ32f
  * @see https://3v4l.org/jB9jn
  * @see https://stackoverflow.com/a/19694064/1348344
- * @see \Rector\Php\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\StaticCallOnNonStaticToInstanceCallRectorTest
+ * @see \Rector\Php70\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\StaticCallOnNonStaticToInstanceCallRectorTest
  */
 final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector
 {

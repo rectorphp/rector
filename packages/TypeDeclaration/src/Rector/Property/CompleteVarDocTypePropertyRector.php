@@ -11,7 +11,7 @@ use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 /**
- * @see \Rector\Php\Tests\Rector\Property\CompleteVarDocTypePropertyRector\CompleteVarDocTypePropertyRectorTest
+ * @see \Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropertyRector\CompleteVarDocTypePropertyRectorTest
  */
 final class CompleteVarDocTypePropertyRector extends AbstractRector
 {

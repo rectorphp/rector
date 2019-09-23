@@ -11,7 +11,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_4
- * @see \Rector\Php\Tests\Rector\Double\RealToFloatTypeCastRector\RealToFloatTypeCastRectorTest
+ * @see \Rector\Php74\Tests\Rector\Double\RealToFloatTypeCastRector\RealToFloatTypeCastRectorTest
  */
 final class RealToFloatTypeCastRector extends AbstractRector
 {

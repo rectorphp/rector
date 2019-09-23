@@ -26,7 +26,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://stackoverflow.com/q/48161526/1348344
  * @see http://php.net/manual/en/migration72.deprecated.php#migration72.deprecated.create_function-function
- * @see \Rector\Php\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\CreateFunctionToAnonymousFunctionRectorTest
+ * @see \Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\CreateFunctionToAnonymousFunctionRectorTest
  */
 final class CreateFunctionToAnonymousFunctionRector extends AbstractRector
 {

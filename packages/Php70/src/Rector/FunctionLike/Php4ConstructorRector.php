@@ -19,7 +19,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/remove_php4_constructors
- * @see \Rector\Php\Tests\Rector\FunctionLike\Php4ConstructorRector\Php4ConstructorRectorTest
+ * @see \Rector\Php70\Tests\Rector\FunctionLike\Php4ConstructorRector\Php4ConstructorRectorTest
  */
 final class Php4ConstructorRector extends AbstractRector
 {

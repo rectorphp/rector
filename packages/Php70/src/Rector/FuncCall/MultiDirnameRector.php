@@ -11,7 +11,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Php\Tests\Rector\FuncCall\MultiDirnameRector\MultiDirnameRectorTest
+ * @see \Rector\Php70\Tests\Rector\FuncCall\MultiDirnameRector\MultiDirnameRectorTest
  */
 final class MultiDirnameRector extends AbstractRector
 {

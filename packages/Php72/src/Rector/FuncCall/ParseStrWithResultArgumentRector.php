@@ -15,7 +15,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see https://3v4l.org/u5pes
  * @see https://github.com/gueff/blogimus/commit/04086a10320595470efe446c7ddd90e602aa7228
  * @see https://github.com/pxgamer/youtube-dl-php/commit/83cb32b8b36844f2e39f82a862a5ab73da77b608
- * @see \Rector\Php\Tests\Rector\FuncCall\ParseStrWithResultArgumentRector\ParseStrWithResultArgumentRectorTest
+ * @see \Rector\Php72\Tests\Rector\FuncCall\ParseStrWithResultArgumentRector\ParseStrWithResultArgumentRectorTest
  */
 final class ParseStrWithResultArgumentRector extends AbstractRector
 {

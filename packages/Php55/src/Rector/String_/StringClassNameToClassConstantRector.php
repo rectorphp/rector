@@ -15,7 +15,7 @@ use ReflectionClass;
 
 /**
  * @see https://wiki.php.net/rfc/class_name_scalars
- * @see \Rector\Php\Tests\Rector\String_\StringClassNameToClassConstantRector\StringClassNameToClassConstantRectorTest
+ * @see \Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector\StringClassNameToClassConstantRectorTest
  */
 final class StringClassNameToClassConstantRector extends AbstractRector
 {

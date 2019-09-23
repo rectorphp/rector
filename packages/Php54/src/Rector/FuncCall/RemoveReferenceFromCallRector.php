@@ -9,7 +9,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Php\Tests\Rector\FuncCall\RemoveReferenceFromCallRector\RemoveReferenceFromCallRectorTest
+ * @see \Rector\Php54\Tests\Rector\FuncCall\RemoveReferenceFromCallRector\RemoveReferenceFromCallRectorTest
  */
 final class RemoveReferenceFromCallRector extends AbstractRector
 {

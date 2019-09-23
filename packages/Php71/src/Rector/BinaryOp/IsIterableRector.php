@@ -10,7 +10,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Php\Tests\Rector\BinaryOp\IsIterableRector\IsIterableRectorTest
+ * @see \Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector\IsIterableRectorTest
  */
 final class IsIterableRector extends AbstractRector
 {

@@ -9,7 +9,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Php\Tests\Rector\Unset_\UnsetCastRector\UnsetCastRectorTest
+ * @see \Rector\Php72\Tests\Rector\Unset_\UnsetCastRector\UnsetCastRectorTest
  */
 final class UnsetCastRector extends AbstractRector
 {

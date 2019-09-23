@@ -12,7 +12,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://wiki.php.net/rfc/null_coalesce_equal_operator
- * @see \Rector\Php\Tests\Rector\Assign\NullCoalescingOperatorRector\NullCoalescingOperatorRectorTest
+ * @see \Rector\Php74\Tests\Rector\Assign\NullCoalescingOperatorRector\NullCoalescingOperatorRectorTest
  */
 final class NullCoalescingOperatorRector extends AbstractRector
 {

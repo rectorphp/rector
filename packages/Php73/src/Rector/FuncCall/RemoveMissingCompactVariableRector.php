@@ -13,7 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://3v4l.org/bZ61T
- * @see \Rector\Php\Tests\Rector\FuncCall\RemoveMissingCompactVariableRector\RemoveMissingCompactVariableRectorTest
+ * @see \Rector\Php73\Tests\Rector\FuncCall\RemoveMissingCompactVariableRector\RemoveMissingCompactVariableRectorTest
  */
 final class RemoveMissingCompactVariableRector extends AbstractRector
 {

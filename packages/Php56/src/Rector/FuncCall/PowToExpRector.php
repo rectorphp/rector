@@ -10,7 +10,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Php\Tests\Rector\FuncCall\PowToExpRector\PowToExpRectorTest
+ * @see \Rector\Php56\Tests\Rector\FuncCall\PowToExpRector\PowToExpRectorTest
  */
 final class PowToExpRector extends AbstractRector
 {

@@ -24,7 +24,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see http://php.net/reference.pcre.pattern.posix
  * @see https://stackoverflow.com/a/17033826/1348344
  * @see https://docstore.mik.ua/orelly/webprog/pcook/ch13_02.htm
- * @see \Rector\Php\Tests\Rector\FuncCall\EregToPregMatchRector\EregToPregMatchRectorTest
+ * @see \Rector\Php70\Tests\Rector\FuncCall\EregToPregMatchRector\EregToPregMatchRectorTest
  */
 final class EregToPregMatchRector extends AbstractRector
 {

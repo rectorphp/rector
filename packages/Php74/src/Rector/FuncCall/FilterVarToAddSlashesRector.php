@@ -12,7 +12,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
  * @see https://3v4l.org/9rLjE
- * @see \Rector\Php\Tests\Rector\FuncCall\FilterVarToAddSlashesRector\FilterVarToAddSlashesRectorTest
+ * @see \Rector\Php74\Tests\Rector\FuncCall\FilterVarToAddSlashesRector\FilterVarToAddSlashesRectorTest
  */
 final class FilterVarToAddSlashesRector extends AbstractRector
 {

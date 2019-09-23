@@ -6,9 +6,10 @@ parameters:
         - "/Source/"
         - "packages/Symfony/src/Bridge/DefaultAnalyzedSymfonyApplicationContainer.php"
         - "src/Testing/PHPUnit/AbstractRectorTestCase.php"
+        - "packages/Php/tests/Rector/Name/ReservedObjectRector/*"
 
         # autoload-buggy cases
-#        - "*.php.inc"
+        - "*.php.inc"
 
     # so Rector code is still PHP 7.1 compatible
     php_version_features: '7.1'
@@ -18,8 +19,8 @@ parameters:
         - 'php.inc'
 
 services:
-    Rector\Refactoring\Rector\FileSystem\MoveAndRenameNamespaceRector:
-        $oldToNewNamespace:
+    Rector\Rector\Namespace_\RenameNamespaceRector:
+        $oldToNewNamespaces:
             Rector\Php\Tests\Rector\Property\VarToPublicPropertyRector: Rector\Php52\Tests\Rector\Property\VarToPublicPropertyRector
             Rector\Php\Tests\Rector\Switch_\ContinueToBreakInSwitchRector: Rector\Php52\Tests\Rector\Switch_\ContinueToBreakInSwitchRector
             Rector\Php\Tests\Rector\Ternary\TernaryToElvisRector: Rector\Php53\Tests\Rector\Ternary\TernaryToElvisRector
@@ -42,13 +43,13 @@ services:
             Rector\Php\Tests\Rector\If_\IfToSpaceshipRector: Rector\Php70\Tests\Rector\If_\IfToSpaceshipRector
             Rector\Php\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector: Rector\Php70\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector
             Rector\Php\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector: Rector\Php70\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector
-            Rector\Php\Tests\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector: Rector\Php70\Tests\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector
+            Rector\Php70\Tests\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector: Rector\Php70\Tests\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector
             Rector\Php\Tests\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector: Rector\Php70\Tests\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector
             Rector\Php\Tests\Rector\BinaryOp\IsIterableRector: Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector
             Rector\Php\Tests\Rector\TryCatch\MultiExceptionCatchRector: Rector\Php71\Tests\Rector\TryCatch\MultiExceptionCatchRector
             Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector: Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector
             Rector\Php\Tests\Rector\FuncCall\CountOnNullRector: Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector
-            Rector\Php\Tests\Rector\FuncCall\RemoveExtraParametersRector: Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector
+            Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector: Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector
             Rector\Php\Tests\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector: Rector\Php71\Tests\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector
             Rector\Php\Tests\Rector\Each\WhileEachToForeachRector: Rector\Php72\Tests\Rector\Each\WhileEachToForeachRector
             Rector\Php\Tests\Rector\Each\ListEachRector: Rector\Php72\Tests\Rector\Each\ListEachRector
@@ -82,4 +83,4 @@ services:
             Rector\Php\Tests\Rector\Closure\ClosureToArrowFunctionRector: Rector\Php74\Tests\Rector\Closure\ClosureToArrowFunctionRector
             Rector\Php\Tests\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector: Rector\Php74\Tests\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector
             Rector\Php\Tests\Rector\LNumber\AddLiteralSeparatorToNumberRector: Rector\Php74\Tests\Rector\LNumber\AddLiteralSeparatorToNumberRector
-            Rector\Php\Tests\Rector\Property\CompleteVarDocTypePropertyRector: 'Rector\TypeDeclaration\Tetss\Rector\Property\CompleteVarDocTypePropertyRector'
+            Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropertyRector: 'Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropertyRector'

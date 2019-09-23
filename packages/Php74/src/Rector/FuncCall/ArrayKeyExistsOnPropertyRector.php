@@ -13,7 +13,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
  * @see https://3v4l.org/69mpd
- * @see \Rector\Php\Tests\Rector\FuncCall\ArrayKeyExistsOnPropertyRector\ArrayKeyExistsOnPropertyRectorTest
+ * @see \Rector\Php74\Tests\Rector\FuncCall\ArrayKeyExistsOnPropertyRector\ArrayKeyExistsOnPropertyRectorTest
  */
 final class ArrayKeyExistsOnPropertyRector extends AbstractRector
 {

@@ -15,7 +15,7 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see https://wiki.php.net/rfc/switch.default.multiple
  * @see https://stackoverflow.com/a/44000794/1348344
  * @see https://github.com/franzliedke/wp-mpdf/commit/9dc489215fbd1adcb514810653a73dea71db8e99#diff-2f1f4a51a2dd3a73ca034a48a67a2320L1373
- * @see \Rector\Php\Tests\Rector\Switch_\ReduceMultipleDefaultSwitchRector\ReduceMultipleDefaultSwitchRectorTest
+ * @see \Rector\Php70\Tests\Rector\Switch_\ReduceMultipleDefaultSwitchRector\ReduceMultipleDefaultSwitchRectorTest
  */
 final class ReduceMultipleDefaultSwitchRector extends AbstractRector
 {

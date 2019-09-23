@@ -10,7 +10,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Php\Tests\Rector\FuncCall\CallUserMethodRector\CallUserMethodRectorTest
+ * @see \Rector\Php70\Tests\Rector\FuncCall\CallUserMethodRector\CallUserMethodRectorTest
  */
 final class CallUserMethodRector extends AbstractRector
 {

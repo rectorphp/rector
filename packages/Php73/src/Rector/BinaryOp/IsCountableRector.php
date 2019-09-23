@@ -10,7 +10,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Php\Tests\Rector\BinaryOp\IsCountableRector\IsCountableRectorTest
+ * @see \Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector\IsCountableRectorTest
  */
 final class IsCountableRector extends AbstractRector
 {

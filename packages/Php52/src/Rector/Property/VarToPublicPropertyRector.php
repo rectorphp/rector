@@ -9,7 +9,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Php\Tests\Rector\Property\VarToPublicPropertyRector\VarToPublicPropertyRectorTest
+ * @see \Rector\Php52\Tests\Rector\Property\VarToPublicPropertyRector\VarToPublicPropertyRectorTest
  */
 final class VarToPublicPropertyRector extends AbstractRector
 {

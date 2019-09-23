@@ -12,7 +12,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @source http://php.net/manual/en/migration70.incompatible.php#migration70.incompatible.variable-handling.list
- * @see \Rector\Php\Tests\Rector\List_\EmptyListRector\EmptyListRectorTest
+ * @see \Rector\Php70\Tests\Rector\List_\EmptyListRector\EmptyListRectorTest
  */
 final class EmptyListRector extends AbstractRector
 {

@@ -27,7 +27,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://github.com/vimeo/psalm/blob/29b70442b11e3e66113935a2ee22e165a70c74a4/docs/fixing_code.md#possiblyundefinedvariable
  * @see https://3v4l.org/MZFel
- * @see \Rector\Php\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\AddDefaultValueForUndefinedVariableRectorTest
+ * @see \Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\AddDefaultValueForUndefinedVariableRectorTest
  */
 final class AddDefaultValueForUndefinedVariableRector extends AbstractRector
 {

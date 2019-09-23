@@ -11,7 +11,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://wiki.php.net/rfc/class_const_visibility
  *
- * @see \Rector\Php\Tests\Rector\ClassConst\PublicConstantVisibilityRector\PublicConstantVisibilityRectorTest
+ * @see \Rector\Php71\Tests\Rector\ClassConst\PublicConstantVisibilityRector\PublicConstantVisibilityRectorTest
  */
 final class PublicConstantVisibilityRector extends AbstractRector
 {
