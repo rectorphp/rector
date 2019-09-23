@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\MethodCall\RenameMethodCallRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodCallRector\Fixture;
 
-use Rector\Tests\Rector\MethodCall\RenameMethodCallRector\Source\ClassMethodToBeSkipped;
+use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodCallRector\Source\ClassMethodToBeSkipped;
 
 class ChildOfClassMethodToBeSkipped extends ClassMethodToBeSkipped
 {
@@ -17,9 +17,9 @@ class ChildOfClassMethodToBeSkipped extends ClassMethodToBeSkipped
 -----
 <?php
 
-namespace Rector\Tests\Rector\MethodCall\RenameMethodCallRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodCallRector\Fixture;
 
-use Rector\Tests\Rector\MethodCall\RenameMethodCallRector\Source\ClassMethodToBeSkipped;
+use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodCallRector\Source\ClassMethodToBeSkipped;
 
 class ChildOfClassMethodToBeSkipped extends ClassMethodToBeSkipped
 {

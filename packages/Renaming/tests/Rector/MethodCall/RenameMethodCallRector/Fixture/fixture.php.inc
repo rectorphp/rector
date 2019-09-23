@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\MethodCall\RenameMethodCallRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodCallRector\Fixture;
 
 function methodNameReplacer()
 {
@@ -14,7 +14,7 @@ function methodNameReplacer()
 -----
 <?php
 
-namespace Rector\Tests\Rector\MethodCall\RenameMethodCallRector\Fixture;
+namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodCallRector\Fixture;
 
 function methodNameReplacer()
 {
