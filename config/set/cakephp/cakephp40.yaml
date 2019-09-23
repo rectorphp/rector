@@ -28,7 +28,7 @@ services:
         Cake\Validation\Validator:
             containsNonAlphaNumeric: notAlphaNumeric
 
-    Rector\Rector\MethodCall\RenameStaticMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
         $oldToNewMethodByClasses:
             Router:
                 pushRequest: setRequest

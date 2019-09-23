@@ -7440,13 +7440,13 @@ services:
 
 ### `RenameStaticMethodRector`
 
-- class: `Rector\Rector\MethodCall\RenameStaticMethodRector`
+- class: `Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector`
 
 Turns method names to new ones.
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\RenameStaticMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
         SomeClass:
             oldMethod:
                 - AnotherExampleClass
@@ -7462,7 +7462,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\RenameStaticMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
         $oldToNewMethodByClasses:
             SomeClass:
                 oldMethod: newStaticMethod
