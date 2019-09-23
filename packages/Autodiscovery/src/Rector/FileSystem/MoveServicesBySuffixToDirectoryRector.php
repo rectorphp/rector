@@ -97,7 +97,7 @@ PHP
                 continue;
             }
 
-            $this->moveFile($smartFileInfo, $nodes, $groupName);
+            $this->moveFileToGroupName($smartFileInfo, $nodes, $groupName);
             return;
         }
     }
@@ -105,7 +105,7 @@ PHP
     /**
      * @param Node[] $nodes
      */
-    private function moveFile(SmartFileInfo $smartFileInfo, array $nodes, string $desiredGroupName): void
+    private function moveFileToGroupName(SmartFileInfo $smartFileInfo, array $nodes, string $desiredGroupName): void
     {
         $nodesWithFileDestination = $this->fileMover->createMovedNodesAndFilePath(
             $smartFileInfo,

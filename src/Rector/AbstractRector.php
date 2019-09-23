@@ -132,6 +132,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $nodes = $this->useAddingCommander->traverseNodes($nodes);
         }
 
+        // @todo name node importing
+        // @todo class like renaming
+
         $this->tearDown();
 
         return $nodes;
@@ -140,11 +143,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected function removeFile(SmartFileInfo $smartFileInfo): void
     {
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
-    }
-
-    protected function addFileWithContent(string $filePath, string $content): void
-    {
-        $this->removedAndAddedFilesCollector->addFileWithContent($filePath, $content);
     }
 
     protected function getNextExpression(Node $node): ?Node

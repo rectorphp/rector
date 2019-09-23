@@ -65,7 +65,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     /**
      * @required
      */
-    public function setAbstractFileSystemRectorDependencies(
+    public function autowireAbstractFileSystemRector(
         Parser $parser,
         ParserFactory $parserFactory,
         Lexer $lexer,
@@ -98,6 +98,17 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
             $oldStmts,
             $smartFileInfo->getRealPath()
         );
+    }
+
+    /**
+     * @return Node[]
+     */
+    protected function parseFileInfoToNodesWithoutScope(SmartFileInfo $smartFileInfo): array
+    {
+        $oldStmts = $this->parser->parseFile($smartFileInfo->getRealPath());
+        $this->oldStmts = $oldStmts;
+
+        return $oldStmts;
     }
 
     /**
@@ -162,6 +173,11 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
             $nodesWithFileDestinationValueObject->getNodes(),
             $nodesWithFileDestinationValueObject->getFileDestination()
         );
+    }
+
+    protected function moveFile(SmartFileInfo $oldFileInfo, string $newFileLocation, ?string $fileContent = null): void
+    {
+        $this->removedAndAddedFilesCollector->addMovedFile($oldFileInfo, $newFileLocation, $fileContent);
     }
 
     protected function removeFile(SmartFileInfo $smartFileInfo): void

@@ -76,7 +76,6 @@ final class ParamTypeDeclarationRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/dunglas/BazTrait.php.inc'];
         yield [__DIR__ . '/Fixture/dunglas/by_reference.php.inc'];
         yield [__DIR__ . '/Fixture/dunglas/Child.php.inc'];
-        yield [__DIR__ . '/Fixture/dunglas/Foo.php.inc'];
         yield [__DIR__ . '/Fixture/dunglas/functions.php.inc'];
 
         yield [__DIR__ . '/Fixture/dunglas/functions2.php.inc'];

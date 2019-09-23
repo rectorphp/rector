@@ -1,11 +1,12 @@
 parameters:
     exclude_paths:
-        - "/Fixture/"
-        - "/Fixtures/"
+#        - "/Fixture/"
+#        - "/Fixtures/"
         - "/Expected/"
         - "/Source/"
         - "packages/Symfony/src/Bridge/DefaultAnalyzedSymfonyApplicationContainer.php"
         - "src/Testing/PHPUnit/AbstractRectorTestCase.php"
+        - "packages/Php/tests/Rector/Name/ReservedObjectRector/*"
 
         # autoload-buggy cases
         - "*.php.inc"
@@ -13,5 +14,73 @@ parameters:
     # so Rector code is still PHP 7.1 compatible
     php_version_features: '7.1'
 
+    file_extensions:
+        - 'php'
+        - 'php.inc'
+
 services:
-    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
+    Rector\Rector\Namespace_\RenameNamespaceRector:
+        $oldToNewNamespaces:
+            Rector\Php\Tests\Rector\Property\VarToPublicPropertyRector: Rector\Php52\Tests\Rector\Property\VarToPublicPropertyRector
+            Rector\Php\Tests\Rector\Switch_\ContinueToBreakInSwitchRector: Rector\Php52\Tests\Rector\Switch_\ContinueToBreakInSwitchRector
+            Rector\Php\Tests\Rector\Ternary\TernaryToElvisRector: Rector\Php53\Tests\Rector\Ternary\TernaryToElvisRector
+            Rector\Php\Tests\Rector\FuncCall\RemoveReferenceFromCallRector: Rector\Php54\Tests\Rector\FuncCall\RemoveReferenceFromCallRector
+            Rector\Php\Tests\Rector\String_\StringClassNameToClassConstantRector: Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector
+            Rector\Php\Tests\Rector\FuncCall\PowToExpRector: Rector\Php56\Tests\Rector\FuncCall\PowToExpRector
+            Rector\Php\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector: Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector
+            Rector\Php\Tests\Rector\FunctionLike\Php4ConstructorRector: Rector\Php70\Tests\Rector\FunctionLike\Php4ConstructorRector
+            Rector\Php\Tests\Rector\Ternary\TernaryToNullCoalescingRector: Rector\Php70\Tests\Rector\Ternary\TernaryToNullCoalescingRector
+            Rector\Php\Tests\Rector\FuncCall\RandomFunctionRector: Rector\Php70\Tests\Rector\FuncCall\RandomFunctionRector
+            Rector\Php\Tests\Rector\FunctionLike\ExceptionHandlerTypehintRector: Rector\Php70\Tests\Rector\FunctionLike\ExceptionHandlerTypehintRector
+            Rector\Php\Tests\Rector\FuncCall\MultiDirnameRector: Rector\Php70\Tests\Rector\FuncCall\MultiDirnameRector
+            Rector\Php\Tests\Rector\List_\ListSplitStringRector: Rector\Php70\Tests\Rector\List_\ListSplitStringRector
+            Rector\Php\Tests\Rector\List_\EmptyListRector: Rector\Php70\Tests\Rector\List_\EmptyListRector
+            Rector\Php\Tests\Rector\List_\ListSwapArrayOrderRector: Rector\Php70\Tests\Rector\List_\ListSwapArrayOrderRector
+            Rector\Php\Tests\Rector\FuncCall\CallUserMethodRector : Rector\Php70\Tests\Rector\FuncCall\CallUserMethodRector
+            Rector\Php\Tests\Rector\FuncCall\EregToPregMatchRector: Rector\Php70\Tests\Rector\FuncCall\EregToPregMatchRector
+            Rector\Php\Tests\Rector\Switch_\ReduceMultipleDefaultSwitchRector: Rector\Php70\Tests\Rector\Switch_\ReduceMultipleDefaultSwitchRector
+            Rector\Php\Tests\Rector\Ternary\TernaryToSpaceshipRector: Rector\Php70\Tests\Rector\Ternary\TernaryToSpaceshipRector
+            Rector\Php\Tests\Rector\If_\IfToSpaceshipRector: Rector\Php70\Tests\Rector\If_\IfToSpaceshipRector
+            Rector\Php\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector: Rector\Php70\Tests\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector
+            Rector\Php\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector: Rector\Php70\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector
+            Rector\Php70\Tests\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector: Rector\Php70\Tests\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector
+            Rector\Php\Tests\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector: Rector\Php70\Tests\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector
+            Rector\Php\Tests\Rector\BinaryOp\IsIterableRector: Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector
+            Rector\Php\Tests\Rector\TryCatch\MultiExceptionCatchRector: Rector\Php71\Tests\Rector\TryCatch\MultiExceptionCatchRector
+            Rector\Php\Tests\Rector\Assign\AssignArrayToStringRector: Rector\Php71\Tests\Rector\Assign\AssignArrayToStringRector
+            Rector\Php\Tests\Rector\FuncCall\CountOnNullRector: Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector
+            Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector: Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector
+            Rector\Php\Tests\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector: Rector\Php71\Tests\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector
+            Rector\Php\Tests\Rector\Each\WhileEachToForeachRector: Rector\Php72\Tests\Rector\Each\WhileEachToForeachRector
+            Rector\Php\Tests\Rector\Each\ListEachRector: Rector\Php72\Tests\Rector\Each\ListEachRector
+            Rector\Php\Tests\Rector\Unset_\UnsetCastRector: Rector\Php72\Tests\Rector\Unset_\UnsetCastRector
+            Rector\Php\Tests\Rector\ConstFetch\BarewordStringRector: Rector\Php72\Tests\Rector\ConstFetch\BarewordStringRector
+            Rector\Php\Tests\Rector\FuncCall\GetClassOnNullRector: Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector
+            Rector\Php\Tests\Rector\FuncCall\IsObjectOnIncompleteClassRector: Rector\Php72\Tests\Rector\FuncCall\IsObjectOnIncompleteClassRector
+            Rector\Php\Tests\Rector\FuncCall\ParseStrWithResultArgumentRector: Rector\Php72\Tests\Rector\FuncCall\ParseStrWithResultArgumentRector
+            Rector\Php\Tests\Rector\FuncCall\StringsAssertNakedRector: Rector\Php72\Tests\Rector\FuncCall\StringsAssertNakedRector
+            Rector\Php\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector: Rector\Php72\Tests\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector
+            Rector\Php\Tests\Rector\FuncCall\StringifyDefineRector: Rector\Php72\Tests\Rector\FuncCall\StringifyDefineRector
+            Rector\Php\Tests\Rector\BinaryOp\IsCountableRector: Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector
+            Rector\Php\Tests\Rector\FuncCall\ArrayKeyFirstLastRector: Rector\Php73\Tests\Rector\FuncCall\ArrayKeyFirstLastRector
+            Rector\Php\Tests\Rector\FuncCall\SensitiveDefineRector: Rector\Php73\Tests\Rector\FuncCall\SensitiveDefineRector
+            Rector\Php\Tests\Rector\ConstFetch\SensitiveConstantNameRector: Rector\Php73\Tests\Rector\ConstFetch\SensitiveConstantNameRector
+            Rector\Php\Tests\Rector\String_\SensitiveHereNowDocRector: Rector\Php73\Tests\Rector\String_\SensitiveHereNowDocRector
+            Rector\Php\Tests\Rector\FuncCall\StringifyStrNeedlesRector: Rector\Php73\Tests\Rector\FuncCall\StringifyStrNeedlesRector
+            Rector\Php\Tests\Rector\FuncCall\JsonThrowOnErrorRector: Rector\Php73\Tests\Rector\FuncCall\JsonThrowOnErrorRector
+            Rector\Php\Tests\Rector\FuncCall\RegexDashEscapeRector: Rector\Php73\Tests\Rector\FuncCall\RegexDashEscapeRector
+            Rector\Php\Tests\Rector\FuncCall\RemoveMissingCompactVariableRector: Rector\Php73\Tests\Rector\FuncCall\RemoveMissingCompactVariableRector
+            Rector\Php\Tests\Rector\Property\TypedPropertyRector: Rector\Php74\Tests\Rector\Property\TypedPropertyRector
+            Rector\Php\Tests\Rector\FuncCall\ArrayKeyExistsOnPropertyRector: Rector\Php74\Tests\Rector\FuncCall\ArrayKeyExistsOnPropertyRector
+            Rector\Php\Tests\Rector\FuncCall\FilterVarToAddSlashesRector: Rector\Php74\Tests\Rector\FuncCall\FilterVarToAddSlashesRector
+            Rector\Php\Tests\Rector\StaticCall\ExportToReflectionFunctionRector: Rector\Php74\Tests\Rector\StaticCall\ExportToReflectionFunctionRector
+            Rector\Php\Tests\Rector\MagicConstClass\ClassConstantToSelfClassRector: Rector\Php74\Tests\Rector\MagicConstClass\ClassConstantToSelfClassRector
+            Rector\Php\Tests\Rector\FuncCall\GetCalledClassToStaticClassRector: Rector\Php74\Tests\Rector\FuncCall\GetCalledClassToStaticClassRector
+            Rector\Php\Tests\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector: Rector\Php74\Tests\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector
+            Rector\Php\Tests\Rector\Double\RealToFloatTypeCastRector: Rector\Php74\Tests\Rector\Double\RealToFloatTypeCastRector
+            Rector\Php\Tests\Rector\Assign\NullCoalescingOperatorRector: Rector\Php74\Tests\Rector\Assign\NullCoalescingOperatorRector
+            Rector\Php\Tests\Rector\Function_\ReservedFnFunctionRector: Rector\Php74\Tests\Rector\Function_\ReservedFnFunctionRector
+            Rector\Php\Tests\Rector\Closure\ClosureToArrowFunctionRector: Rector\Php74\Tests\Rector\Closure\ClosureToArrowFunctionRector
+            Rector\Php\Tests\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector: Rector\Php74\Tests\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector
+            Rector\Php\Tests\Rector\LNumber\AddLiteralSeparatorToNumberRector: Rector\Php74\Tests\Rector\LNumber\AddLiteralSeparatorToNumberRector
+            Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropertyRector: 'Rector\TypeDeclaration\Tests\Rector\Property\CompleteVarDocTypePropertyRector'

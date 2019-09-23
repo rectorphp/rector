@@ -24,7 +24,6 @@ final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
     {
         yield [__DIR__ . '/Fixture/get.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture3.php.inc'];
         yield [__DIR__ . '/Fixture/klarka.php.inc'];
     }
 
@@ -37,10 +36,6 @@ final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
             GetAndSetToMethodCallRector::class => [
                 '$typeToMethodCalls' => [
                     SomeContainer::class => [
-                        'get' => 'getService',
-                        'set' => 'addService',
-                    ],
-                    'Enlight_View_Default' => [
                         'get' => 'getService',
                         'set' => 'addService',
                     ],

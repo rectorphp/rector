@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
+use Rector\Configuration\Configuration;
 use Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ExpressionNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
@@ -56,6 +57,11 @@ final class NodeScopeAndMetadataDecorator
      */
     private $nodeCollectorNodeVisitor;
 
+    /**
+     * @var Configuration
+     */
+    private $configuration;
+
     public function __construct(
         NodeScopeResolver $nodeScopeResolver,
         ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
@@ -64,7 +70,8 @@ final class NodeScopeAndMetadataDecorator
         NamespaceNodeVisitor $namespaceNodeVisitor,
         ExpressionNodeVisitor $expressionNodeVisitor,
         FileInfoNodeVisitor $fileInfoNodeVisitor,
-        NodeCollectorNodeVisitor $nodeCollectorNodeVisitor
+        NodeCollectorNodeVisitor $nodeCollectorNodeVisitor,
+        Configuration $configuration
     ) {
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;
@@ -74,6 +81,7 @@ final class NodeScopeAndMetadataDecorator
         $this->expressionNodeVisitor = $expressionNodeVisitor;
         $this->fileInfoNodeVisitor = $fileInfoNodeVisitor;
         $this->nodeCollectorNodeVisitor = $nodeCollectorNodeVisitor;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -89,7 +97,10 @@ final class NodeScopeAndMetadataDecorator
         ]));
         $nodes = $nodeTraverser->traverse($nodes);
 
-        $nodes = $this->nodeScopeResolver->processNodes($nodes, $filePath);
+        // node scoping is needed only for Scope
+        if ($this->configuration->areAnyPhpRectorsLoaded()) {
+            $nodes = $this->nodeScopeResolver->processNodes($nodes, $filePath);
+        }
 
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver(null, [

@@ -9,10 +9,12 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+use Rector\Naming\NamespaceMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\RenamedNamespaceValueObject;
 
 /**
  * @see \Rector\Tests\Rector\Namespace_\RenameNamespaceRector\RenameNamespaceRectorTest
@@ -25,11 +27,17 @@ final class RenameNamespaceRector extends AbstractRector
     private $oldToNewNamespaces = [];
 
     /**
+     * @var NamespaceMatcher
+     */
+    private $namespaceMatcher;
+
+    /**
      * @param string[] $oldToNewNamespaces
      */
-    public function __construct(array $oldToNewNamespaces = [])
+    public function __construct(NamespaceMatcher $namespaceMatcher, array $oldToNewNamespaces = [])
     {
         $this->oldToNewNamespaces = $oldToNewNamespaces;
+        $this->namespaceMatcher = $namespaceMatcher;
     }
 
     public function getDefinition(): RectorDefinition
@@ -65,7 +73,8 @@ final class RenameNamespaceRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isNamespaceToChange($name)) {
+        $renamedNamespaceValueObject = $this->namespaceMatcher->matchRenamedNamespace($name, $this->oldToNewNamespaces);
+        if ($renamedNamespaceValueObject === null) {
             return null;
         }
 
@@ -74,35 +83,28 @@ final class RenameNamespaceRector extends AbstractRector
         }
 
         if ($node instanceof Namespace_) {
-            $newName = $this->resolveNewNameFromNode($name);
+            $newName = $renamedNamespaceValueObject->getNameInNewNamespace();
             $node->name = new Name($newName);
 
             return $node;
         }
 
         if ($node instanceof Use_) {
-            $newName = $this->resolveNewNameFromNode($name);
+            $newName = $renamedNamespaceValueObject->getNameInNewNamespace();
             $node->uses[0]->name = new Name($newName);
 
             return $node;
         }
 
         $newName = $this->isPartialNamespace($node) ? $this->resolvePartialNewName(
-            $node
-        ) : $this->resolveNewNameFromNode($name);
-
+            $node,
+            $renamedNamespaceValueObject
+        ) : $renamedNamespaceValueObject->getNameInNewNamespace();
         if ($newName === null) {
             return null;
         }
 
-        $node->parts = explode('\\', $newName);
-
-        return $node;
-    }
-
-    private function isNamespaceToChange(string $namespace): bool
-    {
-        return (bool) $this->getNewNamespaceForOldOne($namespace);
+        return new FullyQualified($newName);
     }
 
     /**
@@ -128,13 +130,6 @@ final class RenameNamespaceRector extends AbstractRector
         return array_key_exists($newClassName, $this->oldToNewNamespaces);
     }
 
-    private function resolveNewNameFromNode(string $name): string
-    {
-        [$oldNamespace, $newNamespace] = $this->getNewNamespaceForOldOne($name);
-
-        return str_replace($oldNamespace, $newNamespace, $name);
-    }
-
     private function isPartialNamespace(Name $name): bool
     {
         $resolvedName = $name->getAttribute(AttributeKey::RESOLVED_NAME);
@@ -149,42 +144,20 @@ final class RenameNamespaceRector extends AbstractRector
         return false;
     }
 
-    private function resolvePartialNewName(Name $name): ?string
-    {
+    private function resolvePartialNewName(
+        Name $name,
+        RenamedNamespaceValueObject $renamedNamespaceValueObject
+    ): ?string {
         $nodeName = $this->getName($name);
         if ($nodeName === null) {
             return null;
         }
 
-        $completeNewName = $this->resolveNewNameFromNode($nodeName);
+        $completeNewName = $renamedNamespaceValueObject->getNameInNewNamespace();
 
         // first dummy implementation - improve
         $cutOffFromTheLeft = Strings::length($completeNewName) - Strings::length($name->toString());
 
         return Strings::substring($completeNewName, $cutOffFromTheLeft);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getNewNamespaceForOldOne(string $namespace): array
-    {
-        /** @var string $oldNamespace */
-        foreach ($this->getOldToNewNamespaces() as $oldNamespace => $newNamespace) {
-            if (Strings::startsWith($namespace, $oldNamespace)) {
-                return [$oldNamespace, $newNamespace];
-            }
-        }
-
-        return [];
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getOldToNewNamespaces(): array
-    {
-        krsort($this->oldToNewNamespaces);
-        return $this->oldToNewNamespaces;
     }
 }

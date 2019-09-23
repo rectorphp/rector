@@ -7,6 +7,7 @@ use Nette\Utils\Strings;
 use Rector\Console\Output\JsonOutputFormatter;
 use Rector\Exception\Rector\RectorNotFoundOrNotValidRectorClassException;
 use Rector\Rector\AbstractRector;
+use Rector\Testing\PHPUnit\PHPUnitEnvironment;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\PackageBuilder\Configuration\ConfigFileFinder;
 
@@ -36,6 +37,11 @@ final class Configuration
      * @var string|null
      */
     private $rule;
+
+    /**
+     * @var bool
+     */
+    private $areAnyPhpRectorsLoaded = false;
 
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
@@ -102,6 +108,20 @@ final class Configuration
     public function getRule(): ?string
     {
         return $this->rule;
+    }
+
+    public function areAnyPhpRectorsLoaded(): bool
+    {
+        if (PHPUnitEnvironment::isPHPUnitRun()) {
+            return true;
+        }
+
+        return $this->areAnyPhpRectorsLoaded;
+    }
+
+    public function setAreAnyPhpRectorsLoaded(bool $areAnyPhpRectorsLoaded): void
+    {
+        $this->areAnyPhpRectorsLoaded = $areAnyPhpRectorsLoaded;
     }
 
     private function canShowProgressBar(InputInterface $input): bool

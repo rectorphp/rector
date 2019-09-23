@@ -21,8 +21,7 @@ final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase
     public function provideDataForTest(): iterable
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture3.php.inc'];
+        yield [__DIR__ . '/Fixture/skip.php.inc'];
     }
 
     /**
@@ -33,8 +32,8 @@ final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase
         return [
             ReturnThisRemoveRector::class => [
                 '$classesToDefluent' => [
-                    'Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\SomeClass',
-                    'Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\SomeClassWithReturnAnnotations',
+                    'Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture\SomeClass',
+                    'Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture\SomeClassWithReturnAnnotations',
                 ],
             ],
         ];

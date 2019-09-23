@@ -13,6 +13,7 @@ use Rector\Console\Shell;
 use Rector\Extension\ReportingExtensionRunner;
 use Rector\FileSystem\FilesFinder;
 use Rector\Guard\RectorGuard;
+use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -67,6 +68,11 @@ final class ProcessCommand extends AbstractCommand
     private $reportingExtensionRunner;
 
     /**
+     * @var RectorNodeTraverser
+     */
+    private $rectorNodeTraverser;
+
+    /**
      * @param string[] $fileExtensions
      */
     public function __construct(
@@ -78,6 +84,7 @@ final class ProcessCommand extends AbstractCommand
         RectorApplication $rectorApplication,
         OutputFormatterCollector $outputFormatterCollector,
         ReportingExtensionRunner $reportingExtensionRunner,
+        RectorNodeTraverser $rectorNodeTraverser,
         array $fileExtensions
     ) {
         $this->filesFinder = $phpFilesFinder;
@@ -89,6 +96,7 @@ final class ProcessCommand extends AbstractCommand
         $this->fileExtensions = $fileExtensions;
         $this->outputFormatterCollector = $outputFormatterCollector;
         $this->reportingExtensionRunner = $reportingExtensionRunner;
+        $this->rectorNodeTraverser = $rectorNodeTraverser;
 
         parent::__construct();
     }
@@ -137,6 +145,7 @@ final class ProcessCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->configuration->resolveFromInput($input);
+        $this->configuration->setAreAnyPhpRectorsLoaded((bool) $this->rectorNodeTraverser->getPhpRectorCount());
 
         $this->rectorGuard->ensureSomeRectorsAreRegistered();
 

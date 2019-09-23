@@ -1,10 +1,12 @@
 services:
-    Rector\Php\Rector\BinaryOp\IsIterableRector: ~
-    Rector\Php\Rector\Name\ReservedObjectRector:
-        Object: 'BaseObject'
+    Rector\Php71\Rector\BinaryOp\IsIterableRector: ~
 
-    Rector\Php\Rector\TryCatch\MultiExceptionCatchRector: ~
-    Rector\Php\Rector\Assign\AssignArrayToStringRector: ~
-    Rector\Php\Rector\FuncCall\CountOnNullRector: ~
-    Rector\Php\Rector\FuncCall\RemoveExtraParametersRector: ~
-    Rector\Php\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector: ~
+    Rector\Php\Rector\Name\ReservedObjectRector:
+        $reservedKeywordsToReplacements:
+            Object: 'BaseObject'
+
+    Rector\Php71\Rector\TryCatch\MultiExceptionCatchRector: ~
+    Rector\Php71\Rector\Assign\AssignArrayToStringRector: ~
+    Rector\Php71\Rector\FuncCall\CountOnNullRector: ~
+    Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector: ~
+    Rector\Php71\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector: ~
