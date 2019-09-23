@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Constant\RenameClassConstantRector;
+namespace Rector\Renaming\Tests\Rector\Constant\RenameClassConstantRector;
 
-use Rector\Rector\Constant\RenameClassConstantRector;
+use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
+use Rector\Renaming\Tests\Rector\Constant\RenameClassConstantRector\Source\DifferentClass;
+use Rector\Renaming\Tests\Rector\Constant\RenameClassConstantRector\Source\LocalFormEvents;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Constant\RenameClassConstantRector\Source\DifferentClass;
-use Rector\Tests\Rector\Constant\RenameClassConstantRector\Source\LocalFormEvents;
 
 final class RenameClassConstantRectorTest extends AbstractRectorTestCase
 {

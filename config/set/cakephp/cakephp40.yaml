@@ -4,7 +4,7 @@ services:
     Rector\Rector\Class_\RenameClassRector:
         Cake\Database\Type: 'Cake\Database\TypeFactory'
 
-    Rector\Rector\Constant\RenameClassConstantRector:
+    Rector\Renaming\Rector\Constant\RenameClassConstantRector:
         Cake\View\View:
             NAME_ELEMENT: TYPE_ELEMENT
             NAME_LAYOUT: TYPE_LAYOUT

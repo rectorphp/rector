@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Rector\Constant;
+namespace Rector\Renaming\Rector\Constant;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -12,7 +12,7 @@ use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\Constant\RenameClassConstantRector\RenameClassConstantRectorTest
+ * @see \Rector\Renaming\Tests\Rector\Constant\RenameClassConstantRector\RenameClassConstantRectorTest
  */
 final class RenameClassConstantRector extends AbstractRector
 {

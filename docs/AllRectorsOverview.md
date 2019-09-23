@@ -7246,13 +7246,13 @@ services:
 
 ### `RenameClassConstantRector`
 
-- class: `Rector\Rector\Constant\RenameClassConstantRector`
+- class: `Rector\Renaming\Rector\Constant\RenameClassConstantRector`
 
 Replaces defined class constants in their calls.
 
 ```yaml
 services:
-    Rector\Rector\Constant\RenameClassConstantRector:
+    Rector\Renaming\Rector\Constant\RenameClassConstantRector:
         SomeClass:
             OLD_CONSTANT: NEW_CONSTANT
             OTHER_OLD_CONSTANT: 'DifferentClass::NEW_CONSTANT'
