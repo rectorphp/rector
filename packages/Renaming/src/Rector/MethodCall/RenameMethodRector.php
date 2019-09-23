@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Refactoring\Rector\MethodCall;
+namespace Rector\Renaming\Rector\MethodCall;
 
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;

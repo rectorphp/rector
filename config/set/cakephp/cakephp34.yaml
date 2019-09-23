@@ -186,7 +186,7 @@ services:
                 set: 'enableAutoLayout'
                 get: 'isAutoLayoutEnabled'
 
-    Rector\Rector\MethodCall\RenameMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         Cake\Network\Request:
             param: 'getParam'
             data: 'getData'

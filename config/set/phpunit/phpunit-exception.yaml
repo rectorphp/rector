@@ -5,7 +5,7 @@ services:
     # @expectedException → $this->expectException()
     Rector\PHPUnit\Rector\ExceptionAnnotationRector: ~
 
-    Rector\Rector\MethodCall\RenameMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         PHPUnit\Framework\TestClass:
             setExpectedException: 'expectedException'
             setExpectedExceptionRegExp: 'expectedException'

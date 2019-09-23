@@ -4,7 +4,7 @@ services:
     # https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
     Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector: ~
 
-    Rector\Rector\MethodCall\RenameMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         Symfony\Component\BrowserKit\Response:
             getStatus: 'getStatusCode'
         Symfony\Component\Security\Http\Firewall:

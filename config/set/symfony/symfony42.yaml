@@ -77,7 +77,7 @@ services:
                     default_value: []
                     scope: ['method_call']
 
-    Rector\Rector\MethodCall\RenameMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         Symfony\Component\Cache\CacheItem:
             getPreviousTags: 'getMetadata'
         Symfony\Component\Form\AbstractTypeExtension:

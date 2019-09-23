@@ -14,7 +14,7 @@ services:
             MESSAGE_BOTH: 'Cake\Mailer\Message::MESSAGE_BOTH'
             EMAIL_PATTERN: 'Cake\Mailer\Message::EMAIL_PATTERN'
 
-    Rector\Rector\MethodCall\RenameMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         Cake\Form\Form:
             errors: 'getErrors'
         Cake\Mailer\Email:

@@ -3,7 +3,7 @@
 namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector;
 
 use Nette\Utils\Html;
-use Rector\Refactoring\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\FormMacros;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

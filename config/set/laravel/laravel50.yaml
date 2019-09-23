@@ -5,7 +5,7 @@ services:
         # https://stackoverflow.com/a/24949656/1348344
         Illuminate\Database\Eloquent\SoftDeletingTrait: 'Illuminate\Database\Eloquent\SoftDeletes'
 
-    Rector\Rector\MethodCall\RenameMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         Illuminate\Contracts\Pagination\Paginator:
             links: 'render'
             getFrom: 'firstItem'

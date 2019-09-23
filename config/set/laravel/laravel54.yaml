@@ -12,7 +12,7 @@ services:
         Illuminate\Foundation\Http\Middleware\VerifyPostSize: 'Illuminate\Foundation\Http\Middleware\ValidatePostSize'
         Symfony\Component\HttpFoundation\Session\SessionInterface: 'Illuminate\Contracts\Session\Session'
 
-    Rector\Rector\MethodCall\RenameMethodRector:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         Illuminate\Support\Collection:
             every: 'nth'
         Illuminate\Database\Eloquent\Relations\BelongsToMany:
