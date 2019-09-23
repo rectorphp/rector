@@ -1,7 +1,7 @@
 services:
     Rector\Php74\Rector\Property\TypedPropertyRector: ~
 
-    Rector\Rector\Function_\RenameFunctionRector:
+    Rector\Renaming\Rector\Function_\RenameFunctionRector:
         # https://wiki.php.net/rfc/deprecations_php_7_4#the_real_type
         is_real: 'is_float'
         # https://wiki.php.net/rfc/deprecations_php_7_4#apache_request_headers_function

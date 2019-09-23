@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Function_\RenameFunctionRector;
+namespace Rector\Renaming\Tests\Rector\Function_\RenameFunctionRector;
 
-use Rector\Rector\Function_\RenameFunctionRector;
+use Rector\Renaming\Rector\Function_\RenameFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RenameFunctionRectorTest extends AbstractRectorTestCase

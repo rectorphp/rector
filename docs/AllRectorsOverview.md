@@ -7328,13 +7328,13 @@ services:
 
 ### `RenameFunctionRector`
 
-- class: `Rector\Rector\Function_\RenameFunctionRector`
+- class: `Rector\Renaming\Rector\Function_\RenameFunctionRector`
 
 Turns defined function call new one.
 
 ```yaml
 services:
-    Rector\Rector\Function_\RenameFunctionRector:
+    Rector\Renaming\Rector\Function_\RenameFunctionRector:
         view: Laravel\Templating\render
 ```
 
