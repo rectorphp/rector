@@ -4242,13 +4242,13 @@ Changes pow(val, val2) to ** (exp) parameter
 
 ### `PreferThisOrSelfMethodCallRector`
 
-- class: `Rector\Php\Rector\MethodCall\PreferThisOrSelfMethodCallRector`
+- class: `Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector`
 
 Changes $this->... to self:: or vise versa for specific types
 
 ```yaml
 services:
-    Rector\Php\Rector\MethodCall\PreferThisOrSelfMethodCallRector:
+    Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector:
         PHPUnit\TestCase: self
 ```
 

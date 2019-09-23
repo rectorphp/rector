@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Fixture;
 
-use Rector\Php\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\BeLocalClass;
+use Rector\CodingStyle\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\BeLocalClass;
 
 final class ToThis extends BeLocalClass
 {
@@ -19,9 +19,9 @@ final class ToThis extends BeLocalClass
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Fixture;
 
-use Rector\Php\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\BeLocalClass;
+use Rector\CodingStyle\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\BeLocalClass;
 
 final class ToThis extends BeLocalClass
 {

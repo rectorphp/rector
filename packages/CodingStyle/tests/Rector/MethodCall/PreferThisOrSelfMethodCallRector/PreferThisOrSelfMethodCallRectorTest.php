@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
+namespace Rector\CodingStyle\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 
-use Rector\Php\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
-use Rector\Php\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\AbstractTestCase;
-use Rector\Php\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\BeLocalClass;
+use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
+use Rector\CodingStyle\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\AbstractTestCase;
+use Rector\CodingStyle\Tests\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\BeLocalClass;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class PreferThisOrSelfMethodCallRectorTest extends AbstractRectorTestCase
