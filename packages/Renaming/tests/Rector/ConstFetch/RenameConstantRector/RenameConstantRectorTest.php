@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Tests\Rector\ConstFetch\RenameConstantRector;
+namespace Rector\Renaming\Tests\Rector\ConstFetch\RenameConstantRector;
 
-use Rector\Php\Rector\ConstFetch\RenameConstantRector;
+use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RenameConstantRectorTest extends AbstractRectorTestCase

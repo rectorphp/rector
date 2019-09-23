@@ -4,7 +4,7 @@ namespace Rector\Php\Tests;
 
 use Iterator;
 use PHPUnit\Framework\TestCase;
-use Rector\Php\EregToPcreTransformer;
+use Rector\Php70\EregToPcreTransformer;
 
 final class EregToPcreTransformerTest extends TestCase
 {

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Rector\ConstFetch;
+namespace Rector\Renaming\Rector\ConstFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
@@ -10,7 +10,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Php\Tests\Rector\ConstFetch\RenameConstantRector\RenameConstantRectorTest
+ * @see \Rector\Renaming\Tests\Rector\ConstFetch\RenameConstantRector\RenameConstantRectorTest
  */
 final class RenameConstantRector extends AbstractRector
 {

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php;
+namespace Rector\Php70;
 
 use Nette\Utils\Strings;
 use Rector\Php\Exception\InvalidEregException;
