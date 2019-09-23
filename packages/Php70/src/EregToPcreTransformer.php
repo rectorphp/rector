@@ -3,7 +3,7 @@
 namespace Rector\Php70;
 
 use Nette\Utils\Strings;
-use Rector\Php\Exception\InvalidEregException;
+use Rector\Php70\Exception\InvalidEregException;
 
 /**
  * @author Kang Seonghoon <public+ere2pcre@mearie.org>

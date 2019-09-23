@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Rector\FuncCall;
+namespace Rector\Php55\Rector\FuncCall;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -22,8 +22,10 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
+ * @see https://wiki.php.net/rfc/remove_preg_replace_eval_modifier
  * @see https://stackoverflow.com/q/19245205/1348344
- * @see \Rector\Php\Tests\Rector\FuncCall\PregReplaceEModifierRector\PregReplaceEModifierRectorTest
+ *
+ * @see \Rector\Php55\Tests\Rector\FuncCall\PregReplaceEModifierRector\PregReplaceEModifierRectorTest
  */
 final class PregReplaceEModifierRector extends AbstractRector
 {

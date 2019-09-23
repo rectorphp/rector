@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\FuncCall\PregReplaceEModifierRector\Fixture;
+namespace Rector\Php55\Tests\Rector\FuncCall\PregReplaceEModifierRector\Fixture;
 
 class CallFunction
 {
@@ -18,7 +18,7 @@ class CallFunction
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\FuncCall\PregReplaceEModifierRector\Fixture;
+namespace Rector\Php55\Tests\Rector\FuncCall\PregReplaceEModifierRector\Fixture;
 
 class CallFunction
 {

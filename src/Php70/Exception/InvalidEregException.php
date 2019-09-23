@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Exception;
+namespace Rector\Php70\Exception;
 
 use Exception;
 

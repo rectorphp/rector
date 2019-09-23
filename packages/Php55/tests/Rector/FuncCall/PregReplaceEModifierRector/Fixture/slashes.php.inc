@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php\Tests\Rector\FuncCall\PregReplaceEModifierRector\Fixture;
+namespace Rector\Php55\Tests\Rector\FuncCall\PregReplaceEModifierRector\Fixture;
 
 class Slashes
 {
@@ -13,7 +13,7 @@ class Slashes
 -----
 <?php
 
-namespace Rector\Php\Tests\Rector\FuncCall\PregReplaceEModifierRector\Fixture;
+namespace Rector\Php55\Tests\Rector\FuncCall\PregReplaceEModifierRector\Fixture;
 
 class Slashes
 {

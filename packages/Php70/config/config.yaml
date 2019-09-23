@@ -5,4 +5,4 @@ services:
 
     Rector\Php70\:
         resource: '../src'
-        exclude: '../src/{Rector/**/*Rector.php}'
+        exclude: '../src/{Rector/**/*Rector.php,Exception/*}'

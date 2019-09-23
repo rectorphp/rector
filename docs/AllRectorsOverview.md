@@ -4269,7 +4269,7 @@ services:
 
 ### `PregReplaceEModifierRector`
 
-- class: `Rector\Php\Rector\FuncCall\PregReplaceEModifierRector`
+- class: `Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector`
 
 The /e modifier is no longer supported, use preg_replace_callback instead
 

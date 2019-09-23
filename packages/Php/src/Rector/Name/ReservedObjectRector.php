@@ -72,9 +72,13 @@ PHP
     private function processIdentifier(Identifier $identifier): Identifier
     {
         foreach ($this->reservedKeywordsToReplacements as $reservedKeyword => $replacement) {
-            if ($this->isName($identifier, $reservedKeyword)) {
-                $identifier->name = $replacement;
+            if (! $this->isName($identifier, $reservedKeyword)) {
+                continue;
             }
+
+            $identifier->name = $replacement;
+
+            return $identifier;
         }
 
         return $identifier;
@@ -93,6 +97,8 @@ PHP
         foreach ($this->reservedKeywordsToReplacements as $reservedKeyword => $replacement) {
             if (strtolower($name->getLast()) === strtolower($reservedKeyword)) {
                 $name->parts[count($name->parts) - 1] = $replacement;
+
+                // invoke override
                 $name->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             }
         }

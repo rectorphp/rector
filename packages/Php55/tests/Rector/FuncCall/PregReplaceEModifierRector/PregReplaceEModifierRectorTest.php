@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Tests\Rector\FuncCall\PregReplaceEModifierRector;
+namespace Rector\Php55\Tests\Rector\FuncCall\PregReplaceEModifierRector;
 
-use Rector\Php\Rector\FuncCall\PregReplaceEModifierRector;
+use Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class PregReplaceEModifierRectorTest extends AbstractRectorTestCase
