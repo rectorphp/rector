@@ -4487,7 +4487,7 @@ Change fn() function name, since it will be reserved keyword
 
 ### `ReservedObjectRector`
 
-- class: `Rector\Php\Rector\Name\ReservedObjectRector`
+- class: `Rector\Php71\Rector\Name\ReservedObjectRector`
 
 Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configured
 

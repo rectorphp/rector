@@ -4,7 +4,7 @@ namespace Rector\Php73\Rector\BinaryOp;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
-use Rector\Php\IsArrayAndDualCheckToAble;
+use Rector\Php71\IsArrayAndDualCheckToAble;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;

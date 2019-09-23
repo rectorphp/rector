@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Rector\Name;
+namespace Rector\Php71\Rector\Name;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;

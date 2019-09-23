@@ -1,7 +1,7 @@
 services:
     Rector\Php71\Rector\BinaryOp\IsIterableRector: ~
 
-    Rector\Php\Rector\Name\ReservedObjectRector:
+    Rector\Php71\Rector\Name\ReservedObjectRector:
         $reservedKeywordsToReplacements:
             Object: 'BaseObject'
 

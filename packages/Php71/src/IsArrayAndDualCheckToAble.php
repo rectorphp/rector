@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php;
+namespace Rector\Php71;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;

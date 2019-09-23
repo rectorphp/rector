@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Php\Tests;
+namespace Rector\Php70\Tests;
 
 use Iterator;
 use PHPUnit\Framework\TestCase;
