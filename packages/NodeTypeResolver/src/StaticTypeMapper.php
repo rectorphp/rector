@@ -419,6 +419,11 @@ final class StaticTypeMapper
             if ($node->name === 'string') {
                 return new StringType();
             }
+
+            $type = $this->mapScalarStringToType($node->name);
+            if ($type !== null) {
+                return $type;
+            }
         }
 
         if ($node instanceof FullyQualified) {
@@ -513,61 +518,19 @@ final class StaticTypeMapper
         }
 
         throw new NotImplementedException(sprintf('%s for "%s"', __METHOD__, $type));
-
-        return null;
     }
 
     public function mapPHPStanPhpDocTypeNodeToPHPStanType(TypeNode $typeNode, Node $node): Type
     {
         if ($typeNode instanceof IdentifierTypeNode) {
+            $type = $this->mapScalarStringToType($typeNode->name);
+            if ($type !== null) {
+                return $type;
+            }
+
             $loweredName = strtolower($typeNode->name);
-
-            if ($loweredName === 'string') {
-                return new StringType();
-            }
-
-            if (in_array($loweredName, ['float', 'real', 'double'], true)) {
-                return new FloatType();
-            }
-
             if ($loweredName === '\string') {
                 return new PreSlashStringType();
-            }
-
-            if (in_array($loweredName, ['int', 'integer'], true)) {
-                return new IntegerType();
-            }
-
-            if (in_array($loweredName, ['false', 'true', 'bool', 'boolean'], true)) {
-                return new BooleanType();
-            }
-
-            if ($loweredName === 'array') {
-                return new ArrayType(new MixedType(), new MixedType());
-            }
-
-            if ($loweredName === 'null') {
-                return new NullType();
-            }
-
-            if ($loweredName === 'void') {
-                return new VoidType();
-            }
-
-            if ($loweredName === 'object') {
-                return new ObjectWithoutClassType();
-            }
-
-            if ($loweredName === 'resource') {
-                return new ResourceType();
-            }
-
-            if (in_array($loweredName, ['callback', 'callable'], true)) {
-                return new CallableType();
-            }
-
-            if ($loweredName === 'mixed') {
-                return new MixedType(true);
             }
 
             if ($loweredName === 'self') {
@@ -731,5 +694,55 @@ final class StaticTypeMapper
         }
 
         return new Identifier($type);
+    }
+
+    private function mapScalarStringToType(string $scalarName): ?Type
+    {
+        $loweredScalarName = Strings::lower($scalarName);
+        if ($loweredScalarName === 'string') {
+            return new StringType();
+        }
+
+        if (in_array($loweredScalarName, ['float', 'real', 'double'], true)) {
+            return new FloatType();
+        }
+
+        if (in_array($loweredScalarName, ['int', 'integer'], true)) {
+            return new IntegerType();
+        }
+
+        if (in_array($loweredScalarName, ['false', 'true', 'bool', 'boolean'], true)) {
+            return new BooleanType();
+        }
+
+        if ($loweredScalarName === 'array') {
+            return new ArrayType(new MixedType(), new MixedType());
+        }
+
+        if ($loweredScalarName === 'null') {
+            return new NullType();
+        }
+
+        if ($loweredScalarName === 'void') {
+            return new VoidType();
+        }
+
+        if ($loweredScalarName === 'object') {
+            return new ObjectWithoutClassType();
+        }
+
+        if ($loweredScalarName === 'resource') {
+            return new ResourceType();
+        }
+
+        if (in_array($loweredScalarName, ['callback', 'callable'], true)) {
+            return new CallableType();
+        }
+
+        if ($loweredScalarName === 'mixed') {
+            return new MixedType(true);
+        }
+
+        return null;
     }
 }

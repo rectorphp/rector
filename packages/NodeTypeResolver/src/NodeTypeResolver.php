@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver;
 use Countable;
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -277,6 +278,10 @@ final class NodeTypeResolver
     {
         if ($node instanceof String_) {
             return new ConstantStringType($node->value);
+        }
+
+        if ($node instanceof Arg) {
+            return $this->getStaticType($node->value);
         }
 
         if ($node instanceof Param) {
