@@ -6,3 +6,4 @@ services:
 
     # add Uuid type declarations
     Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedParamTypeRector: ~
+    Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector: ~
