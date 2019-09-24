@@ -4,7 +4,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeR
 
 use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Source\EntityReturningUuid;
 
-final class FullyQualifiedName
+final class ReturnUuid
 {
     /**
      * @var EntityReturningUuid[]
@@ -33,7 +33,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeR
 
 use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Source\EntityReturningUuid;
 
-final class FullyQualifiedName
+final class ReturnUuid
 {
     /**
      * @var EntityReturningUuid[]
