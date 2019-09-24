@@ -36,7 +36,7 @@ class SomeClass
         $value = 5 * 0;
 
         $name = 'Tom';
-        $value = 5 * 0;
+        $value = 5 * $name;
     }
 }
 
