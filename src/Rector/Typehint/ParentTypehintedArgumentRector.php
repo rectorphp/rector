@@ -5,7 +5,6 @@ namespace Rector\Rector\Typehint;
 use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -92,7 +91,8 @@ PHP
         foreach ($this->typehintForArgumentByMethodAndClass as $type => $methodToArgumentToTypes) {
             $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
             if ($classNode === null) {
-                throw new ShouldNotHappenException();
+                // anonymous class
+                continue;
             }
 
             if (! $this->isObjectType($classNode, $type)) {
