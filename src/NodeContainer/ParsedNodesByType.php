@@ -486,19 +486,20 @@ final class ParsedNodesByType
             return;
         }
 
-        $name = $classNode->getAttribute(AttributeKey::CLASS_NAME);
-        if ($name === null) {
+        $className = $classNode->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
             throw new ShouldNotHappenException();
         }
 
-        $this->classes[$name] = $classNode;
+        $this->classes[$className] = $classNode;
     }
 
     private function addClassConstant(ClassConst $classConst): void
     {
         $className = $classConst->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
-            throw new ShouldNotHappenException();
+            // anonymous class constant
+            return;
         }
 
         $constantName = $this->nameResolver->getName($classConst);
