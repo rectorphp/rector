@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -30,9 +31,6 @@ class SomeClass
     {
         $value = 5 + '';
         $value = 5.0 + 'hi';
-
-        $name = 'Tom';
-        $value = 5 * $name;
     }
 }
 PHP
@@ -44,9 +42,6 @@ class SomeClass
     {
         $value = 5 + 0;
         $value = 5.0 + 0
-
-        $name = 'Tom';
-        $value = 5 * 0;
     }
 }
 PHP
@@ -72,13 +67,13 @@ PHP
             return null;
         }
 
-        if ($this->isStringOrUnionStringOnlyType($node->left) && $this->isNumberType($node->right)) {
+        if ($node->left instanceof String_ && $this->isNumberType($node->right)) {
             $node->left = new LNumber(0);
 
             return $node;
         }
 
-        if ($this->isStringOrUnionStringOnlyType($node->right) && $this->isNumberType($node->left)) {
+        if ($node->right instanceof String_ && $this->isNumberType($node->left)) {
             $node->right = new LNumber(0);
 
             return $node;
