@@ -8,10 +8,12 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\PhpDocParser\AbstractPhpDocParser;
-use Rector\NetteToSymfony\PhpDocParser\Ast\PhpDoc\SymfonyRoutePhpDocTagValueNode;
+use Rector\NetteToSymfony\PhpDocParser\Ast\PhpDoc\SymfonyMethodTagValueNode;
+use Rector\NetteToSymfony\PhpDocParser\Ast\PhpDoc\SymfonyRouteTagValueNode;
 use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AssertChoiceTagValueNode;
 use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AssertTypeTagValueNode;
 use Rector\Symfony\PhpDocParser\Ast\PhpDoc\SerializerTypeTagValueNode;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Type as ValidatorType;
@@ -25,8 +27,12 @@ final class SymfonyPhpDocTagParser extends AbstractPhpDocParser
         // this is needed to append tokens to the end of annotation, even if not used
         $annotationContent = $this->resolveAnnotationContent($tokenIterator);
         if ($currentPhpNode instanceof ClassMethod) {
-            if ($tag === SymfonyRoutePhpDocTagValueNode::SHORT_NAME) {
+            if ($tag === SymfonyRouteTagValueNode::SHORT_NAME) {
                 return $this->createSymfonyRouteTagValueNode($currentPhpNode, $annotationContent);
+            }
+
+            if ($tag === SymfonyMethodTagValueNode::SHORT_NAME) {
+                return $this->createSymfonyMethodTagValueNode($currentPhpNode);
             }
         }
 
@@ -63,20 +69,31 @@ final class SymfonyPhpDocTagParser extends AbstractPhpDocParser
     private function createSymfonyRouteTagValueNode(
         ClassMethod $classMethod,
         string $annotationContent
-    ): SymfonyRoutePhpDocTagValueNode {
+    ): SymfonyRouteTagValueNode {
         /** @var Route $routeAnnotation */
         $routeAnnotation = $this->nodeAnnotationReader->readMethodAnnotation(
             $classMethod,
-            SymfonyRoutePhpDocTagValueNode::CLASS_NAME
+            SymfonyRouteTagValueNode::CLASS_NAME
         );
 
         // @todo possibly extends with all Symfony Route attributes
-        return new SymfonyRoutePhpDocTagValueNode(
+        return new SymfonyRouteTagValueNode(
             $routeAnnotation->getPath(),
             $routeAnnotation->getName(),
             $routeAnnotation->getMethods(),
             $annotationContent
         );
+    }
+
+    private function createSymfonyMethodTagValueNode(ClassMethod $classMethod): SymfonyMethodTagValueNode
+    {
+        /** @var Method $methodAnnotation */
+        $methodAnnotation = $this->nodeAnnotationReader->readMethodAnnotation(
+            $classMethod,
+            SymfonyMethodTagValueNode::CLASS_NAME
+        );
+
+        return new SymfonyMethodTagValueNode($methodAnnotation->getMethods());
     }
 
     private function createSerializerTypeTagValueNode(

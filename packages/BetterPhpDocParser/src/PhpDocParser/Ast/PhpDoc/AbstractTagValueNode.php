@@ -31,7 +31,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     /**
      * @param mixed[] $item
      */
-    protected function printArrayItem(array $item, string $key): string
+    protected function printArrayItem(array $item, ?string $key = null): string
     {
         $json = Json::encode($item);
         $json = Strings::replace($json, '#,#', ', ');
@@ -40,7 +40,11 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         // cleanup json encoded extra slashes
         $json = Strings::replace($json, '#\\\\\\\\#', '\\');
 
-        return sprintf('%s=%s', $key, $json);
+        if ($key) {
+            return sprintf('%s=%s', $key, $json);
+        }
+
+        return $json;
     }
 
     /**

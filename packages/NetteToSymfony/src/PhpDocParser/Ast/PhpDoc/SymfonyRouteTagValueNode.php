@@ -5,7 +5,7 @@ namespace Rector\NetteToSymfony\PhpDocParser\Ast\PhpDoc;
 use Rector\BetterPhpDocParser\PhpDocParser\Ast\PhpDoc\AbstractTagValueNode;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class SymfonyRoutePhpDocTagValueNode extends AbstractTagValueNode
+final class SymfonyRouteTagValueNode extends AbstractTagValueNode
 {
     /**
      * @var string
@@ -47,6 +47,11 @@ final class SymfonyRoutePhpDocTagValueNode extends AbstractTagValueNode
 
         if ($originalContent !== null) {
             $this->resolveOriginalContentSpacingAndOrder($originalContent);
+
+            // default value without key
+            if ($this->path && ! in_array('path', (array) $this->orderedVisibleItems, true)) {
+                $this->orderedVisibleItems[] = 'path';
+            }
         }
     }
 
@@ -65,5 +70,14 @@ final class SymfonyRoutePhpDocTagValueNode extends AbstractTagValueNode
         }
 
         return $this->printContentItems($contentItems);
+    }
+
+    /**
+     * @param mixed[] $methods
+     */
+    public function changeMethods(array $methods): void
+    {
+        $this->orderedVisibleItems[] = 'methods';
+        $this->methods = $methods;
     }
 }

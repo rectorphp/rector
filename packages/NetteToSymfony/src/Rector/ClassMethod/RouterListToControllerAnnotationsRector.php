@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
-use Rector\NetteToSymfony\PhpDocParser\Ast\PhpDoc\SymfonyRoutePhpDocTagValueNode;
+use Rector\NetteToSymfony\PhpDocParser\Ast\PhpDoc\SymfonyRouteTagValueNode;
 use Rector\NetteToSymfony\Route\RouteInfo;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NodeContainer\ParsedNodesByType;
@@ -256,7 +256,7 @@ PHP
                 }
 
                 $path = $this->resolvePathFromClassAndMethodNodes($presenterClass, $classMethod);
-                $symfonyRoutePhpDocTagValueNode = new SymfonyRoutePhpDocTagValueNode($path);
+                $symfonyRoutePhpDocTagValueNode = new SymfonyRouteTagValueNode($path);
 
                 $this->addSymfonyRouteShortTagNodeWithUse($symfonyRoutePhpDocTagValueNode, $classMethod);
             }
@@ -319,7 +319,7 @@ PHP
             return false;
         }
 
-        return (bool) $phpDocInfo->getByType(SymfonyRoutePhpDocTagValueNode::class);
+        return (bool) $phpDocInfo->getByType(SymfonyRouteTagValueNode::class);
     }
 
     private function resolvePathFromClassAndMethodNodes(Class_ $classNode, ClassMethod $classMethod): string
@@ -338,23 +338,23 @@ PHP
         return $presenterPart . '/' . $actionPart;
     }
 
-    private function createSymfonyRoutePhpDocTagValueNode(RouteInfo $routeInfo): SymfonyRoutePhpDocTagValueNode
+    private function createSymfonyRoutePhpDocTagValueNode(RouteInfo $routeInfo): SymfonyRouteTagValueNode
     {
-        return new SymfonyRoutePhpDocTagValueNode($routeInfo->getPath(), null, $routeInfo->getHttpMethods());
+        return new SymfonyRouteTagValueNode($routeInfo->getPath(), null, $routeInfo->getHttpMethods());
     }
 
     private function addSymfonyRouteShortTagNodeWithUse(
-        SymfonyRoutePhpDocTagValueNode $symfonyRoutePhpDocTagValueNode,
+        SymfonyRouteTagValueNode $symfonyRouteTagValueNode,
         ClassMethod $classMethod
     ): void {
         $symfonyRoutePhpDocTagNode = new SpacelessPhpDocTagNode(
-            SymfonyRoutePhpDocTagValueNode::SHORT_NAME,
-            $symfonyRoutePhpDocTagValueNode
+            SymfonyRouteTagValueNode::SHORT_NAME,
+            $symfonyRouteTagValueNode
         );
 
         $this->docBlockManipulator->addTag($classMethod, $symfonyRoutePhpDocTagNode);
 
-        $symfonyRouteUseObjectType = new FullyQualifiedObjectType(SymfonyRoutePhpDocTagValueNode::CLASS_NAME);
+        $symfonyRouteUseObjectType = new FullyQualifiedObjectType(SymfonyRouteTagValueNode::CLASS_NAME);
         $this->addUseType($symfonyRouteUseObjectType, $classMethod);
 
         // remove
