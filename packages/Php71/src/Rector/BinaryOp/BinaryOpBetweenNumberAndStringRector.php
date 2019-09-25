@@ -3,10 +3,12 @@
 namespace Rector\Php71\Rector\BinaryOp;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\Constant\ConstantStringType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -67,18 +69,34 @@ PHP
             return null;
         }
 
-        if ($node->left instanceof String_ && $this->isNumberType($node->right)) {
+        if ($this->isStringOrStaticNonNumbericString($node->left) && $this->isNumberType($node->right)) {
             $node->left = new LNumber(0);
 
             return $node;
         }
 
-        if ($node->right instanceof String_ && $this->isNumberType($node->left)) {
+        if ($this->isStringOrStaticNonNumbericString($node->right) && $this->isNumberType($node->left)) {
             $node->right = new LNumber(0);
 
             return $node;
         }
 
         return null;
+    }
+
+    private function isStringOrStaticNonNumbericString(Expr $expr): bool
+    {
+        $value = null;
+        $exprStaticType = $this->getStaticType($expr);
+
+        if ($expr instanceof String_) {
+            $value = $expr->value;
+        } elseif ($exprStaticType instanceof ConstantStringType) {
+            $value = $exprStaticType->getValue();
+        } else {
+            return false;
+        }
+
+        return ! is_numeric($value);
     }
 }
