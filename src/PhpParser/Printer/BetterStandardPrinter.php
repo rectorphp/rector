@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Declare_;
@@ -18,12 +19,19 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\Tests\PhpParser\Printer\BetterStandardPrinterTest
  */
 final class BetterStandardPrinter extends Standard
 {
+    /**
+     * Use space by default
+     * @var string
+     */
+    private $tabOrSpaceIndentCharacter = ' ';
+
     /**
      * @param mixed[] $options
      */
@@ -36,6 +44,14 @@ final class BetterStandardPrinter extends Standard
         $this->insertionMap['Stmt_ClassMethod->returnType'] = [')', false, ': ', null];
         $this->insertionMap['Stmt_Function->returnType'] = [')', false, ': ', null];
         $this->insertionMap['Expr_Closure->returnType'] = [')', false, ': ', null];
+    }
+
+    public function printFormatPreserving(array $stmts, array $origStmts, array $origTokens): string
+    {
+        // detect per print
+        $this->detectTabOrSpaceIndentCharacter($stmts);
+
+        return parent::printFormatPreserving($stmts, $origStmts, $origTokens);
     }
 
     /**
@@ -71,6 +87,50 @@ final class BetterStandardPrinter extends Standard
     public function areNodesEqual($firstNode, $secondNode): bool
     {
         return $this->print($firstNode) === $this->print($secondNode);
+    }
+
+    /**
+     * This allows to use both spaces and tabs vs. original space-only
+     */
+    protected function setIndentLevel(int $level): void
+    {
+        $this->indentLevel = $level;
+        $this->nl = "\n" . str_repeat($this->tabOrSpaceIndentCharacter, $level);
+    }
+
+    /**
+     * This allows to use both spaces and tabs vs. original space-only
+     */
+    protected function indent(): void
+    {
+        if ($this->tabOrSpaceIndentCharacter === ' ') {
+            // 4 spaces
+            $multiplier = 4;
+        } else {
+            // 1 tab
+            $multiplier = 1;
+        }
+
+        $this->indentLevel += $multiplier;
+        $this->nl .= str_repeat($this->tabOrSpaceIndentCharacter, $multiplier);
+    }
+
+    /**
+     * This allows to use both spaces and tabs vs. original space-only
+     */
+    protected function outdent(): void
+    {
+        if ($this->tabOrSpaceIndentCharacter === ' ') {
+            // - 4 spaces
+            assert($this->indentLevel >= 4);
+            $this->indentLevel -= 4;
+        } else {
+            // - 1 tab
+            assert($this->indentLevel >= 1);
+            --$this->indentLevel;
+        }
+
+        $this->nl = "\n" . str_repeat($this->tabOrSpaceIndentCharacter, $this->indentLevel);
     }
 
     /**
@@ -248,5 +308,37 @@ final class BetterStandardPrinter extends Standard
         }
 
         return false;
+    }
+
+    /**
+     * Solves https://github.com/rectorphp/rector/issues/1964
+     *
+     * Some files have spaces, some have tabs. Keep the original indent if possible.
+     *
+     * @param Stmt[] $stmts
+     */
+    private function detectTabOrSpaceIndentCharacter(array $stmts): void
+    {
+        // use space by default
+        $this->tabOrSpaceIndentCharacter = ' ';
+
+        foreach ($stmts as $stmt) {
+            if (! $stmt instanceof Node) {
+                continue;
+            }
+
+            /** @var SmartFileInfo|null $fileInfo */
+            $fileInfo = $stmt->getAttribute(AttributeKey::FILE_INFO);
+            if ($fileInfo === null) {
+                continue;
+            }
+
+            $whitespacesChars = Strings::matchAll($fileInfo->getContents(), '#^( |\t)#m');
+            foreach ($whitespacesChars as $whitespacesChar) {
+                // let the first win
+                $this->tabOrSpaceIndentCharacter = $whitespacesChar[0];
+                break;
+            }
+        }
     }
 }
