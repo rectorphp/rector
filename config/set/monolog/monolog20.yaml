@@ -1,0 +1,16 @@
+services:
+    # https://github.com/Seldaek/monolog/commit/39f8a20e6dadc0194e846b254c5f23d1c732290b#diff-dce565f403e044caa5e6a0d988339430
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
+        Monolog\Logger:
+            addDebug: 'debug'
+            addInfo: 'info'
+            addNotice: 'notice'
+            addWarning: 'warning'
+            addError: 'error'
+            addCritical: 'critical'
+            addAlert: 'alert'
+            addEmergency: 'emergency'
+            warn: 'warning'
+            err: 'error'
+            crit: 'critical'
+            emerg: 'emergency'
