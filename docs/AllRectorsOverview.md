@@ -4330,7 +4330,7 @@ Removes (unset) cast
 
 ### `WhileEachToForeachRector`
 
-- class: `Rector\Php72\Rector\Each\WhileEachToForeachRector`
+- class: `Rector\Php\Rector\Each\WhileEachToForeachRector`
 
 each() function is deprecated, use foreach() instead.
 
