@@ -2,13 +2,13 @@
 
 namespace Rector\Php72\Tests\Rector\Unset_\UnsetCastRector\Fixture;
 
-class SomeClass
+class UnsetExpr
 {
     public function run($value)
     {
-        $value = (unset) $value;
+        (unset) strlen('hi');
 
-        $different = (unset) $value;
+        $value = (unset) strlen('hi');
     }
 }
 
@@ -18,13 +18,11 @@ class SomeClass
 
 namespace Rector\Php72\Tests\Rector\Unset_\UnsetCastRector\Fixture;
 
-class SomeClass
+class UnsetExpr
 {
     public function run($value)
     {
-        unset($value);
-
-        $different = null;
+        $value = null;
     }
 }
 
