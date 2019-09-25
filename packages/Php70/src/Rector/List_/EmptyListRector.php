@@ -20,7 +20,15 @@ final class EmptyListRector extends AbstractRector
     {
         return new RectorDefinition(
             'list() cannot be empty',
-            [new CodeSample('list() = $values;', 'list($generated) = $values;')]
+            [new CodeSample(
+                <<<'CODE_SAMPLE'
+'list() = $values;' 
+CODE_SAMPLE
+                ,
+                <<<'CODE_SAMPLE'
+'list($unusedGenerated) = $values;'
+CODE_SAMPLE
+            )]
         );
     }
 
