@@ -21,6 +21,7 @@ final class UnsetCastRectorTest extends AbstractRectorTestCase
     public function provideDataForTest(): iterable
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/unset_expr.php.inc'];
     }
 
     protected function getRectorClass(): string

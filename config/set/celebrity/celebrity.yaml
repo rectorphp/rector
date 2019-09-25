@@ -5,6 +5,7 @@ services:
     Rector\Renaming\Rector\Function_\RenameFunctionRector:
         split: 'explode'
         join: 'implode'
+        sizeof: 'count'
 
     # settype($value, 'int') → (int) $value
     Rector\Celebrity\Rector\FuncCall\SetTypeToCastRector: ~
