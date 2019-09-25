@@ -27,6 +27,7 @@ final class PseudoNamespaceToNamespaceRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture5.php.inc'];
         yield [__DIR__ . '/Fixture/fixture6.php.inc'];
         yield [__DIR__ . '/Fixture/var_doc.php.inc'];
+        yield [__DIR__ . '/Fixture/use_statement.php.inc'];
     }
 
     /**
@@ -40,6 +41,7 @@ final class PseudoNamespaceToNamespaceRectorTest extends AbstractRectorTestCase
                     // namespace prefix => excluded classes
                     'PHPUnit_' => ['PHPUnit_Framework_MockObject_MockObject'],
                     'ChangeMe_' => ['KeepMe_'],
+                    'Rector_Tests_Rector_Namespace__PseudoNamespaceToNamespaceRector_Fixture_' => [],
                 ],
             ],
         ];

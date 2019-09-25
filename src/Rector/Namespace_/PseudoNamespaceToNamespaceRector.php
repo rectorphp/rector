@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Namespace_;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
@@ -11,6 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Use_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
@@ -23,6 +25,12 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class PseudoNamespaceToNamespaceRector extends AbstractRector
 {
+    /**
+     * @see https://regex101.com/r/chvLgs/1/
+     * @var string
+     */
+    private const SPLIT_BY_UNDERSCORE_PATTERN = '#([a-zA-Z])(_)?(_)([a-zA-Z])#';
+
     /**
      * @var string|null
      */
@@ -53,29 +61,20 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     {
         return new RectorDefinition('Replaces defined Pseudo_Namespaces by Namespace\Ones.', [
             new ConfiguredCodeSample(
-                '$someService = new Some_Object;',
-                '$someService = new Some\Object;',
-                [
-                    [
-                        'Some_' => [],
-                    ],
-                ]
-            ),
-            new ConfiguredCodeSample(
 <<<'PHP'
-/** @var Some_Object $someService */
-$someService = new Some_Object;
+/** @var Some_Chicken $someService */
+$someService = new Some_Chicken;
 $someClassToKeep = new Some_Class_To_Keep;
 PHP
                 ,
 <<<'PHP'
-/** @var Some\Object $someService */
-$someService = new Some\Object;
+/** @var Some\Chicken $someService */
+$someService = new Some\Chicken;
 $someClassToKeep = new Some_Class_To_Keep;
 PHP
                 ,
                 [
-                    [
+                    '$namespacePrefixesWithExcludedClasses' => [
                         'Some_' => ['Some_Class_To_Keep'],
                     ],
                 ]
@@ -121,7 +120,7 @@ PHP
 
         $namespaceNode = new Namespace_(new Name($this->newNamespace));
         foreach ($nodes as $key => $node) {
-            if ($node instanceof Class_) {
+            if ($node instanceof Use_ || $node instanceof Class_) {
                 $nodes = $this->classManipulator->insertBeforeAndFollowWithNewline($nodes, $namespaceNode, $key);
 
                 break;
@@ -156,13 +155,14 @@ PHP
             return null;
         }
 
-        $newNameParts = explode('_', $name);
-        $lastNewNamePart = $newNameParts[count($newNameParts) - 1];
+        /** @var string $namespaceName */
+        $namespaceName = Strings::before($name, '_', -1);
 
-        $namespaceParts = $newNameParts;
-        array_pop($namespaceParts);
+        /** @var string $lastNewNamePart */
+        $lastNewNamePart = Strings::after($name, '_', -1);
 
-        $newNamespace = implode('\\', $namespaceParts);
+        $newNamespace = Strings::replace($namespaceName, self::SPLIT_BY_UNDERSCORE_PATTERN, '$1$2\\\\$4');
+
         if ($this->newNamespace !== null && $this->newNamespace !== $newNamespace) {
             throw new ShouldNotHappenException('There cannot be 2 different namespaces in one file');
         }
