@@ -36,6 +36,7 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/underscore_doc.php.inc'];
         yield [__DIR__ . '/Fixture/keep_return_tag.php.inc'];
         yield [__DIR__ . '/Fixture/rename_trait.php.inc'];
+        yield [__DIR__ . '/Fixture/fqnize_namespaced.php.inc'];
     }
 
     public function provideDataForTestWithClassAnnotation(): Iterator
@@ -70,6 +71,7 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
         return [
             RenameClassRector::class => [
                 'oldToNewClasses' => [
+                    'FqnizeNamespaced' => 'Abc\FqnizeNamespaced',
                     OldClass::class => NewClass::class,
                     OldClassWithTypo::class => NewClassWithoutTypo::class,
                     'DateTime' => 'DateTimeInterface',

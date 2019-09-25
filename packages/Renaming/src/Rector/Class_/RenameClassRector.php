@@ -271,6 +271,8 @@ PHP
 
         // Old class did not have any namespace, we need to wrap class with Namespace_ node
         if ($newNamespacePart && ! $this->classNaming->getNamespace($name)) {
+            $this->changeNameToFullyQualifiedName($classLike);
+
             return new Namespace_(new Name($newNamespacePart), [$classLike]);
         }
 
@@ -343,5 +345,17 @@ PHP
             $newName,
             $classReflection->getFileName()
         ));
+    }
+
+    private function changeNameToFullyQualifiedName(ClassLike $classLike): void
+    {
+        $this->traverseNodesWithCallable($classLike, function (Node $node) {
+            if (! $node instanceof FullyQualified) {
+                return null;
+            }
+
+            // invoke override
+            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        });
     }
 }
