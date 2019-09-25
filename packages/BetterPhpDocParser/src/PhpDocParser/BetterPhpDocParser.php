@@ -20,8 +20,8 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueN
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocParserExtensionInterface;
-use Rector\BetterPhpDocParser\Data\StartEndInfo;
 use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
+use Rector\BetterPhpDocParser\ValueObject\StartEndInfo;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 

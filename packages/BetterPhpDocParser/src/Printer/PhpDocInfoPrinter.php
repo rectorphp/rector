@@ -11,8 +11,8 @@ use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
-use Rector\BetterPhpDocParser\Data\StartEndInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\ValueObject\StartEndInfo;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\PhpDocInfoPrinterTest

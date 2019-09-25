@@ -54,7 +54,7 @@ final class PhpDocClassRenamer
         $this->procesDoctrineRelationTagValueNode($oldToNewClasses, $phpDocInfo);
         $this->processSerializerTypeTagValueNode($oldToNewClasses, $phpDocInfo);
 
-        if ($this->shouldUpdate === null) {
+        if ($this->shouldUpdate === false) {
             return;
         }
 

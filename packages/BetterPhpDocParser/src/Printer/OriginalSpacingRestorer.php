@@ -6,7 +6,7 @@ use Nette\Utils\Arrays;
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Lexer\Lexer;
-use Rector\BetterPhpDocParser\Data\StartEndInfo;
+use Rector\BetterPhpDocParser\ValueObject\StartEndInfo;
 use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineTagNodeInterface;
 
 final class OriginalSpacingRestorer
