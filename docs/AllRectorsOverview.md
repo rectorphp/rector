@@ -1,4 +1,4 @@
-# All 354 Rectors Overview
+# All 357 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -25,9 +25,20 @@
 - [PHPUnit](#phpunit)
 - [PHPUnitSymfony](#phpunitsymfony)
 - [PSR4](#psr4)
-- [Php](#php)
+- [Php52](#php52)
+- [Php53](#php53)
+- [Php54](#php54)
+- [Php55](#php55)
+- [Php56](#php56)
+- [Php70](#php70)
+- [Php71](#php71)
+- [Php72](#php72)
+- [Php73](#php73)
+- [Php74](#php74)
 - [PhpSpecToPHPUnit](#phpspectophpunit)
+- [Refactoring](#refactoring)
 - [RemovingStatic](#removingstatic)
+- [Renaming](#renaming)
 - [Restoration](#restoration)
 - [SOLID](#solid)
 - [Sensio](#sensio)
@@ -937,22 +948,6 @@ Changes in_array() with single element to ===
 
 <br>
 
-### `TernaryToElvisRector`
-
-- class: `Rector\CodeQuality\Rector\Ternary\TernaryToElvisRector`
-
-Use ?: instead of ?, where useful
-
-```diff
- function elvis()
- {
--    $value = $a ? $a : false;
-+    $value = $a ?: false;
- }
-```
-
-<br>
-
 ### `ThrowWithPreviousExceptionRector`
 
 - class: `Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector`
@@ -1260,6 +1255,33 @@ Changes negate of empty comparison of nullable value to explicit === or !== comp
 
 -if (!$value) {
 +if ($value === null) {
+ }
+```
+
+<br>
+
+### `PreferThisOrSelfMethodCallRector`
+
+- class: `Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector`
+
+Changes $this->... to self:: or vise versa for specific types
+
+```yaml
+services:
+    Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector:
+        PHPUnit\TestCase: self
+```
+
+↓
+
+```diff
+ class SomeClass extends PHPUnit\TestCase
+ {
+     public function run()
+     {
+-        $this->assertThis();
++        self::assertThis();
+     }
  }
 ```
 
@@ -3572,11 +3594,137 @@ Changes namespace and class names to match PSR-4 in composer.json autoload secti
 
 <br>
 
-## Php
+## Php52
+
+### `ContinueToBreakInSwitchRector`
+
+- class: `Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector`
+
+Use break instead of continue in switch statements
+
+```diff
+ function some_run($value)
+ {
+     switch ($value) {
+         case 1:
+             echo 'Hi';
+-            continue;
++            break;
+         case 2:
+             echo 'Hello';
+             break;
+     }
+ }
+```
+
+<br>
+
+### `VarToPublicPropertyRector`
+
+- class: `Rector\Php52\Rector\Property\VarToPublicPropertyRector`
+
+Remove unused private method
+
+```diff
+ final class SomeController
+ {
+-    var $name = 'Tom';
++    public $name = 'Tom';
+ }
+```
+
+<br>
+
+## Php53
+
+### `TernaryToElvisRector`
+
+- class: `Rector\Php53\Rector\Ternary\TernaryToElvisRector`
+
+Use ?: instead of ?, where useful
+
+```diff
+ function elvis()
+ {
+-    $value = $a ? $a : false;
++    $value = $a ?: false;
+ }
+```
+
+<br>
+
+## Php54
+
+### `RemoveReferenceFromCallRector`
+
+- class: `Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector`
+
+Remove & from function and method calls
+
+```diff
+ final class SomeClass
+ {
+     public function run($one)
+     {
+-        return strlen(&$one);
++        return strlen($one);
+     }
+ }
+```
+
+<br>
+
+## Php55
+
+### `PregReplaceEModifierRector`
+
+- class: `Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector`
+
+The /e modifier is no longer supported, use preg_replace_callback instead
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $comment = preg_replace('~\b(\w)(\w+)~e', '"$1".strtolower("$2")', $comment);
++        $comment = preg_replace_callback('~\b(\w)(\w+)~', function ($matches) {
++              return($matches[1].strtolower($matches[2]));
++        }, , $comment);
+     }
+ }
+```
+
+<br>
+
+### `StringClassNameToClassConstantRector`
+
+- class: `Rector\Php55\Rector\String_\StringClassNameToClassConstantRector`
+
+Replace string class names by <class>::class constant
+
+```diff
+ class AnotherClass
+ {
+ }
+
+ class SomeClass
+ {
+     public function run()
+     {
+-        return 'AnotherClass';
++        return \AnotherClass::class;
+     }
+ }
+```
+
+<br>
+
+## Php56
 
 ### `AddDefaultValueForUndefinedVariableRector`
 
-- class: `Rector\Php\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector`
+- class: `Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector`
 
 Adds default value for undefined variable
 
@@ -3596,146 +3744,24 @@ Adds default value for undefined variable
 
 <br>
 
-### `AddLiteralSeparatorToNumberRector`
+### `PowToExpRector`
 
-- class: `Rector\Php\Rector\LNumber\AddLiteralSeparatorToNumberRector`
+- class: `Rector\Php56\Rector\FuncCall\PowToExpRector`
 
-Add "_" as thousands separator in numbers
+Changes pow(val, val2) to ** (exp) parameter
 
 ```diff
- class SomeClass
- {
-     public function run()
-     {
--        $int = 1000;
--        $float = 1000500.001;
-+        $int = 1_000;
-+        $float = 1_000_500.001;
-     }
- }
+-pow(1, 2);
++1**2;
 ```
 
 <br>
 
-### `ArrayKeyExistsOnPropertyRector`
-
-- class: `Rector\Php\Rector\FuncCall\ArrayKeyExistsOnPropertyRector`
-
-Change array_key_exists() on property to property_exists()
-
-```diff
- class SomeClass {
-      public $value;
- }
- $someClass = new SomeClass;
-
--array_key_exists('value', $someClass);
-+property_exists($someClass, 'value');
-```
-
-<br>
-
-### `ArrayKeyFirstLastRector`
-
-- class: `Rector\Php\Rector\FuncCall\ArrayKeyFirstLastRector`
-
-Make use of array_key_first() and array_key_last()
-
-```diff
--reset($items);
--$firstKey = key($items);
-+$firstKey = array_key_first($items);
-```
-
-```diff
--end($items);
--$lastKey = key($items);
-+$lastKey = array_key_last($items);
-```
-
-<br>
-
-### `ArraySpreadInsteadOfArrayMergeRector`
-
-- class: `Rector\Php\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector`
-
-Change array_merge() to spread operator, except values with possible string key values
-
-```diff
- class SomeClass
- {
-     public function run($iter1, $iter2)
-     {
--        $values = array_merge(iterator_to_array($iter1), iterator_to_array($iter2));
-+        $values = [...$iter1, ...$iter2];
-
-         // Or to generalize to all iterables
--        $anotherValues = array_merge(
--            is_array($iter1) ? $iter1 : iterator_to_array($iter1),
--            is_array($iter2) ? $iter2 : iterator_to_array($iter2)
--        );
-+        $anotherValues = [...$iter1, ...$iter2];
-     }
- }
-```
-
-<br>
-
-### `AssignArrayToStringRector`
-
-- class: `Rector\Php\Rector\Assign\AssignArrayToStringRector`
-
-String cannot be turned into array by assignment anymore
-
-```diff
--$string = '';
-+$string = [];
- $string[] = 1;
-```
-
-<br>
-
-### `BarewordStringRector`
-
-- class: `Rector\Php\Rector\ConstFetch\BarewordStringRector`
-
-Changes unquoted non-existing constants to strings
-
-```diff
--var_dump(VAR);
-+var_dump("VAR");
-```
-
-<br>
-
-### `BinaryOpBetweenNumberAndStringRector`
-
-- class: `Rector\Php\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector`
-
-Change binary operation between some number + string to PHP 7.1 compatible version
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $value = 5 + '';
--        $value = 5.0 + 'hi';
-+        $value = 5 + 0;
-+        $value = 5.0 + 0
-
-         $name = 'Tom';
--        $value = 5 * $name;
-+        $value = 5 * 0;
-     }
- }
-```
-
-<br>
+## Php70
 
 ### `BreakNotInLoopOrSwitchToReturnRector`
 
-- class: `Rector\Php\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector`
+- class: `Rector\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector`
 
 Convert break outside for/foreach/switch context to return
 
@@ -3760,7 +3786,7 @@ Convert break outside for/foreach/switch context to return
 
 ### `CallUserMethodRector`
 
-- class: `Rector\Php\Rector\FuncCall\CallUserMethodRector`
+- class: `Rector\Php70\Rector\FuncCall\CallUserMethodRector`
 
 Changes call_user_method()/call_user_method_array() to call_user_func()/call_user_func_array()
 
@@ -3771,130 +3797,9 @@ Changes call_user_method()/call_user_method_array() to call_user_func()/call_use
 
 <br>
 
-### `ClassConstantToSelfClassRector`
-
-- class: `Rector\Php\Rector\MagicConstClass\ClassConstantToSelfClassRector`
-
-Change __CLASS__ to self::class
-
-```diff
- class SomeClass
- {
-    public function callOnMe()
-    {
--       var_dump(__CLASS__);
-+       var_dump(self::class);
-    }
- }
-```
-
-<br>
-
-### `ClosureToArrowFunctionRector`
-
-- class: `Rector\Php\Rector\Closure\ClosureToArrowFunctionRector`
-
-Change closure to arrow function
-
-```diff
- class SomeClass
- {
-     public function run($meetups)
-     {
--        return array_filter($meetups, function (Meetup $meetup) {
--            return is_object($meetup);
--        });
-+        return array_filter($meetups, fn(Meetup $meetup) => is_object($meetup));
-     }
- }
-```
-
-<br>
-
-### `CompleteVarDocTypePropertyRector`
-
-- class: `Rector\Php\Rector\Property\CompleteVarDocTypePropertyRector`
-
-Complete property `@var` annotations or correct the old ones
-
-```diff
- final class SomeClass
- {
-+    /**
-+     * @var EventDispatcher
-+     */
-     private $eventDispatcher;
-
-     public function __construct(EventDispatcher $eventDispatcher)
-     {
-         $this->eventDispatcher = $eventDispatcher;
-     }
- }
-```
-
-<br>
-
-### `ContinueToBreakInSwitchRector`
-
-- class: `Rector\Php\Rector\Switch_\ContinueToBreakInSwitchRector`
-
-Use break instead of continue in switch statements
-
-```diff
- function some_run($value)
- {
-     switch ($value) {
-         case 1:
-             echo 'Hi';
--            continue;
-+            break;
-         case 2:
-             echo 'Hello';
-             break;
-     }
- }
-```
-
-<br>
-
-### `CountOnNullRector`
-
-- class: `Rector\Php\Rector\FuncCall\CountOnNullRector`
-
-Changes count() on null to safe ternary check
-
-```diff
- $values = null;
--$count = count($values);
-+$count = is_array($values) || $values instanceof Countable ? count($values) : 0;
-```
-
-<br>
-
-### `CreateFunctionToAnonymousFunctionRector`
-
-- class: `Rector\Php\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector`
-
-Use anonymous functions instead of deprecated create_function()
-
-```diff
- class ClassWithCreateFunction
- {
-     public function run()
-     {
--        $callable = create_function('$matches', "return '$delimiter' . strtolower(\$matches[1]);");
-+        $callable = function($matches) use ($delimiter) {
-+            return $delimiter . strtolower($matches[1]);
-+        };
-     }
- }
-```
-
-<br>
-
 ### `EmptyListRector`
 
-- class: `Rector\Php\Rector\List_\EmptyListRector`
+- class: `Rector\Php70\Rector\List_\EmptyListRector`
 
 list() cannot be empty
 
@@ -3907,7 +3812,7 @@ list() cannot be empty
 
 ### `EregToPregMatchRector`
 
-- class: `Rector\Php\Rector\FuncCall\EregToPregMatchRector`
+- class: `Rector\Php70\Rector\FuncCall\EregToPregMatchRector`
 
 Changes ereg*() to preg*() calls
 
@@ -3920,7 +3825,7 @@ Changes ereg*() to preg*() calls
 
 ### `ExceptionHandlerTypehintRector`
 
-- class: `Rector\Php\Rector\FunctionLike\ExceptionHandlerTypehintRector`
+- class: `Rector\Php70\Rector\FunctionLike\ExceptionHandlerTypehintRector`
 
 Changes property `@var` annotations from annotation to type.
 
@@ -3932,77 +3837,9 @@ Changes property `@var` annotations from annotation to type.
 
 <br>
 
-### `ExportToReflectionFunctionRector`
-
-- class: `Rector\Php\Rector\StaticCall\ExportToReflectionFunctionRector`
-
-Change export() to ReflectionFunction alternatives
-
-```diff
--$reflectionFunction = ReflectionFunction::export('foo');
--$reflectionFunctionAsString = ReflectionFunction::export('foo', true);
-+$reflectionFunction = new ReflectionFunction('foo');
-+$reflectionFunctionAsString = (string) new ReflectionFunction('foo');
-```
-
-<br>
-
-### `FilterVarToAddSlashesRector`
-
-- class: `Rector\Php\Rector\FuncCall\FilterVarToAddSlashesRector`
-
-Change filter_var() with slash escaping to addslashes()
-
-```diff
- $var= "Satya's here!";
--filter_var($var, FILTER_SANITIZE_MAGIC_QUOTES);
-+addslashes($var);
-```
-
-<br>
-
-### `GetCalledClassToStaticClassRector`
-
-- class: `Rector\Php\Rector\FuncCall\GetCalledClassToStaticClassRector`
-
-Change __CLASS__ to self::class
-
-```diff
- class SomeClass
- {
-    public function callOnMe()
-    {
--       var_dump(get_called_class());
-+       var_dump(static::class);
-    }
- }
-```
-
-<br>
-
-### `GetClassOnNullRector`
-
-- class: `Rector\Php\Rector\FuncCall\GetClassOnNullRector`
-
-Null is no more allowed in get_class()
-
-```diff
- final class SomeClass
- {
-     public function getItem()
-     {
-         $value = null;
--        return get_class($value);
-+        return $value !== null ? get_class($value) : self::class;
-     }
- }
-```
-
-<br>
-
 ### `IfToSpaceshipRector`
 
-- class: `Rector\Php\Rector\If_\IfToSpaceshipRector`
+- class: `Rector\Php70\Rector\If_\IfToSpaceshipRector`
 
 Changes if/else to spaceship <=> where useful
 
@@ -4025,78 +3862,9 @@ Changes if/else to spaceship <=> where useful
 
 <br>
 
-### `IsCountableRector`
-
-- class: `Rector\Php\Rector\BinaryOp\IsCountableRector`
-
-Changes is_array + Countable check to is_countable
-
-```diff
--is_array($foo) || $foo instanceof Countable;
-+is_countable($foo);
-```
-
-<br>
-
-### `IsIterableRector`
-
-- class: `Rector\Php\Rector\BinaryOp\IsIterableRector`
-
-Changes is_array + Traversable check to is_iterable
-
-```diff
--is_array($foo) || $foo instanceof Traversable;
-+is_iterable($foo);
-```
-
-<br>
-
-### `IsObjectOnIncompleteClassRector`
-
-- class: `Rector\Php\Rector\FuncCall\IsObjectOnIncompleteClassRector`
-
-Incomplete class returns inverted bool on is_object()
-
-```diff
- $incompleteObject = new __PHP_Incomplete_Class;
--$isObject = is_object($incompleteObject);
-+$isObject = ! is_object($incompleteObject);
-```
-
-<br>
-
-### `JsonThrowOnErrorRector`
-
-- class: `Rector\Php\Rector\FuncCall\JsonThrowOnErrorRector`
-
-Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonException on error
-
-```diff
--json_encode($content);
--json_decode($json);
-+json_encode($content, JSON_THROW_ON_ERROR);
-+json_decode($json, null, null, JSON_THROW_ON_ERROR);
-```
-
-<br>
-
-### `ListEachRector`
-
-- class: `Rector\Php\Rector\Each\ListEachRector`
-
-each() function is deprecated, use key() and current() instead
-
-```diff
--list($key, $callback) = each($callbacks);
-+$key = key($opt->option);
-+$val = current($opt->option);
-```
-
-<br>
-
 ### `ListSplitStringRector`
 
-- class: `Rector\Php\Rector\List_\ListSplitStringRector`
+- class: `Rector\Php70\Rector\List_\ListSplitStringRector`
 
 list() cannot split string directly anymore, use str_split()
 
@@ -4109,7 +3877,7 @@ list() cannot split string directly anymore, use str_split()
 
 ### `ListSwapArrayOrderRector`
 
-- class: `Rector\Php\Rector\List_\ListSwapArrayOrderRector`
+- class: `Rector\Php70\Rector\List_\ListSwapArrayOrderRector`
 
 list() assigns variables in reverse order - relevant in array assign
 
@@ -4120,22 +3888,9 @@ list() assigns variables in reverse order - relevant in array assign
 
 <br>
 
-### `MbStrrposEncodingArgumentPositionRector`
-
-- class: `Rector\Php\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector`
-
-Change mb_strrpos() encoding argument position
-
-```diff
--mb_strrpos($text, "abc", "UTF-8");
-+mb_strrpos($text, "abc", 0, "UTF-8");
-```
-
-<br>
-
 ### `MultiDirnameRector`
 
-- class: `Rector\Php\Rector\FuncCall\MultiDirnameRector`
+- class: `Rector\Php70\Rector\FuncCall\MultiDirnameRector`
 
 Changes multiple dirname() calls to one with nesting level
 
@@ -4146,72 +3901,9 @@ Changes multiple dirname() calls to one with nesting level
 
 <br>
 
-### `MultiExceptionCatchRector`
-
-- class: `Rector\Php\Rector\TryCatch\MultiExceptionCatchRector`
-
-Changes multi catch of same exception to single one | separated.
-
-```diff
- try {
-    // Some code...
--} catch (ExceptionType1 $exception) {
--   $sameCode;
--} catch (ExceptionType2 $exception) {
-+} catch (ExceptionType1 | ExceptionType2 $exception) {
-    $sameCode;
- }
-```
-
-<br>
-
-### `MysqlAssignToMysqliRector`
-
-- class: `Rector\Php\Rector\Assign\MysqlAssignToMysqliRector`
-
-Converts more complex mysql functions to mysqli
-
-```diff
--$data = mysql_db_name($result, $row);
-+mysqli_data_seek($result, $row);
-+$fetch = mysql_fetch_row($result);
-+$data = $fetch[0];
-```
-
-<br>
-
-### `NullCoalescingOperatorRector`
-
-- class: `Rector\Php\Rector\Assign\NullCoalescingOperatorRector`
-
-Use null coalescing operator ??=
-
-```diff
- $array = [];
--$array['user_id'] = $array['user_id'] ?? 'value';
-+$array['user_id'] ??= 'value';
-```
-
-<br>
-
-### `ParseStrWithResultArgumentRector`
-
-- class: `Rector\Php\Rector\FuncCall\ParseStrWithResultArgumentRector`
-
-Use $result argument in parse_str() function
-
-```diff
--parse_str($this->query);
--$data = get_defined_vars();
-+parse_str($this->query, $result);
-+$data = $result;
-```
-
-<br>
-
 ### `Php4ConstructorRector`
 
-- class: `Rector\Php\Rector\FunctionLike\Php4ConstructorRector`
+- class: `Rector\Php70\Rector\FunctionLike\Php4ConstructorRector`
 
 Changes PHP 4 style constructor to __construct.
 
@@ -4227,86 +3919,9 @@ Changes PHP 4 style constructor to __construct.
 
 <br>
 
-### `PowToExpRector`
-
-- class: `Rector\Php\Rector\FuncCall\PowToExpRector`
-
-Changes pow(val, val2) to ** (exp) parameter
-
-```diff
--pow(1, 2);
-+1**2;
-```
-
-<br>
-
-### `PreferThisOrSelfMethodCallRector`
-
-- class: `Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector`
-
-Changes $this->... to self:: or vise versa for specific types
-
-```yaml
-services:
-    Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector:
-        PHPUnit\TestCase: self
-```
-
-↓
-
-```diff
- class SomeClass extends PHPUnit\TestCase
- {
-     public function run()
-     {
--        $this->assertThis();
-+        self::assertThis();
-     }
- }
-```
-
-<br>
-
-### `PregReplaceEModifierRector`
-
-- class: `Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector`
-
-The /e modifier is no longer supported, use preg_replace_callback instead
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $comment = preg_replace('~\b(\w)(\w+)~e', '"$1".strtolower("$2")', $comment);
-+        $comment = preg_replace_callback('~\b(\w)(\w+)~', function ($matches) {
-+              return($matches[1].strtolower($matches[2]));
-+        }, , $comment);
-     }
- }
-```
-
-<br>
-
-### `PublicConstantVisibilityRector`
-
-- class: `Rector\Php\Rector\ClassConst\PublicConstantVisibilityRector`
-
-Add explicit public constant visibility.
-
-```diff
- class SomeClass
- {
--    const HEY = 'you';
-+    public const HEY = 'you';
- }
-```
-
-<br>
-
 ### `RandomFunctionRector`
 
-- class: `Rector\Php\Rector\FuncCall\RandomFunctionRector`
+- class: `Rector\Php70\Rector\FuncCall\RandomFunctionRector`
 
 Changes rand, srand and getrandmax by new md_* alternatives.
 
@@ -4317,30 +3932,9 @@ Changes rand, srand and getrandmax by new md_* alternatives.
 
 <br>
 
-### `RealToFloatTypeCastRector`
-
-- class: `Rector\Php\Rector\Double\RealToFloatTypeCastRector`
-
-Change deprecated (real) to (float)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $number = (real) 5;
-+        $number = (float) 5;
-         $number = (float) 5;
-         $number = (double) 5;
-     }
- }
-```
-
-<br>
-
 ### `ReduceMultipleDefaultSwitchRector`
 
-- class: `Rector\Php\Rector\Switch_\ReduceMultipleDefaultSwitchRector`
+- class: `Rector\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector`
 
 Remove first default switch, that is ignored
 
@@ -4357,94 +3951,9 @@ Remove first default switch, that is ignored
 
 <br>
 
-### `RegexDashEscapeRector`
-
-- class: `Rector\Php\Rector\FuncCall\RegexDashEscapeRector`
-
-Escape - in some cases
-
-```diff
--preg_match("#[\w-()]#", 'some text');
-+preg_match("#[\w\-()]#", 'some text');
-```
-
-<br>
-
-### `RemoveExtraParametersRector`
-
-- class: `Rector\Php\Rector\FuncCall\RemoveExtraParametersRector`
-
-Remove extra parameters
-
-```diff
--strlen("asdf", 1);
-+strlen("asdf");
-```
-
-<br>
-
-### `RemoveMissingCompactVariableRector`
-
-- class: `Rector\Php\Rector\FuncCall\RemoveMissingCompactVariableRector`
-
-Remove non-existing vars from compact()
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         $value = 'yes';
-
--        compact('value', 'non_existing');
-+        compact('value');
-     }
- }
-```
-
-<br>
-
-### `RemoveReferenceFromCallRector`
-
-- class: `Rector\Php\Rector\FuncCall\RemoveReferenceFromCallRector`
-
-Remove & from function and method calls
-
-```diff
- final class SomeClass
- {
-     public function run($one)
-     {
--        return strlen(&$one);
-+        return strlen($one);
-     }
- }
-```
-
-<br>
-
-### `RenameConstantRector`
-
-- class: `Rector\Php\Rector\ConstFetch\RenameConstantRector`
-
-Replace constant by new ones
-
-```diff
- final class SomeClass
- {
-     public function run()
-     {
--        return MYSQL_ASSOC;
-+        return MYSQLI_ASSOC;
-     }
- }
-```
-
-<br>
-
 ### `RenameMktimeWithoutArgsToTimeRector`
 
-- class: `Rector\Php\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector`
+- class: `Rector\Php70\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector`
 
 ```diff
  class SomeClass
@@ -4460,93 +3969,9 @@ Replace constant by new ones
 
 <br>
 
-### `ReservedFnFunctionRector`
-
-- class: `Rector\Php\Rector\Function_\ReservedFnFunctionRector`
-
-Change fn() function name, since it will be reserved keyword
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        function fn($value)
-+        function f($value)
-         {
-             return $value;
-         }
-
--        fn(5);
-+        f(5);
-     }
- }
-```
-
-<br>
-
-### `ReservedObjectRector`
-
-- class: `Rector\Php71\Rector\Name\ReservedObjectRector`
-
-Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configured
-
-```diff
--class Object
-+class SmartObject
- {
- }
-```
-
-<br>
-
-### `SensitiveConstantNameRector`
-
-- class: `Rector\Php\Rector\ConstFetch\SensitiveConstantNameRector`
-
-Changes case insensitive constants to sensitive ones.
-
-```diff
- define('FOO', 42, true);
- var_dump(FOO);
--var_dump(foo);
-+var_dump(FOO);
-```
-
-<br>
-
-### `SensitiveDefineRector`
-
-- class: `Rector\Php\Rector\FuncCall\SensitiveDefineRector`
-
-Changes case insensitive constants to sensitive ones.
-
-```diff
--define('FOO', 42, true);
-+define('FOO', 42);
-```
-
-<br>
-
-### `SensitiveHereNowDocRector`
-
-- class: `Rector\Php\Rector\String_\SensitiveHereNowDocRector`
-
-Changes heredoc/nowdoc that contains closing word to safe wrapper name
-
-```diff
--$value = <<<A
-+$value = <<<A_WRAP
-     A
--A
-+A_WRAP
-```
-
-<br>
-
 ### `StaticCallOnNonStaticToInstanceCallRector`
 
-- class: `Rector\Php\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector`
+- class: `Rector\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector`
 
 Changes static call to instance call, where not useful
 
@@ -4570,103 +3995,9 @@ Changes static call to instance call, where not useful
 
 <br>
 
-### `StringClassNameToClassConstantRector`
-
-- class: `Rector\Php\Rector\String_\StringClassNameToClassConstantRector`
-
-Replace string class names by <class>::class constant
-
-```diff
- class AnotherClass
- {
- }
-
- class SomeClass
- {
-     public function run()
-     {
--        return 'AnotherClass';
-+        return \AnotherClass::class;
-     }
- }
-```
-
-<br>
-
-### `StringifyDefineRector`
-
-- class: `Rector\Php\Rector\FuncCall\StringifyDefineRector`
-
-Make first argument of define() string
-
-```diff
- class SomeClass
- {
-     public function run(int $a)
-     {
--         define(CONSTANT_2, 'value');
-+         define('CONSTANT_2', 'value');
-          define('CONSTANT', 'value');
-     }
- }
-```
-
-<br>
-
-### `StringifyStrNeedlesRector`
-
-- class: `Rector\Php\Rector\FuncCall\StringifyStrNeedlesRector`
-
-Makes needles explicit strings
-
-```diff
- $needle = 5;
--$fivePosition = strpos('725', $needle);
-+$fivePosition = strpos('725', (string) $needle);
-```
-
-<br>
-
-### `StringsAssertNakedRector`
-
-- class: `Rector\Php\Rector\FuncCall\StringsAssertNakedRector`
-
-String asserts must be passed directly to assert()
-
-```diff
- function nakedAssert()
- {
--    assert('true === true');
--    assert("true === true");
-+    assert(true === true);
-+    assert(true === true);
- }
-```
-
-<br>
-
-### `SwapFuncCallArgumentsRector`
-
-- class: `Rector\Rector\Argument\SwapFuncCallArgumentsRector`
-
-Swap arguments in function calls
-
-```diff
- final class SomeClass
- {
-     public function run($one, $two)
-     {
--        return some_function($one, $two);
-+        return some_function($two, $one);
-     }
- }
-```
-
-<br>
-
 ### `TernaryToNullCoalescingRector`
 
-- class: `Rector\Php\Rector\Ternary\TernaryToNullCoalescingRector`
+- class: `Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector`
 
 Changes unneeded null check to ?? operator
 
@@ -4684,7 +4015,7 @@ Changes unneeded null check to ?? operator
 
 ### `TernaryToSpaceshipRector`
 
-- class: `Rector\Php\Rector\Ternary\TernaryToSpaceshipRector`
+- class: `Rector\Php70\Rector\Ternary\TernaryToSpaceshipRector`
 
 Use <=> spaceship instead of ternary with same effect
 
@@ -4699,7 +4030,7 @@ Use <=> spaceship instead of ternary with same effect
 
 ### `ThisCallOnStaticMethodToStaticCallRector`
 
-- class: `Rector\Php\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector`
+- class: `Rector\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector`
 
 Changes $this->call() to static method to static call
 
@@ -4720,20 +4051,265 @@ Changes $this->call() to static method to static call
 
 <br>
 
-### `TypedPropertyRector`
+## Php71
 
-- class: `Rector\Php\Rector\Property\TypedPropertyRector`
+### `AssignArrayToStringRector`
 
-Changes property `@var` annotations from annotation to type.
+- class: `Rector\Php71\Rector\Assign\AssignArrayToStringRector`
+
+String cannot be turned into array by assignment anymore
+
+```diff
+-$string = '';
++$string = [];
+ $string[] = 1;
+```
+
+<br>
+
+### `BinaryOpBetweenNumberAndStringRector`
+
+- class: `Rector\Php71\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector`
+
+Change binary operation between some number + string to PHP 7.1 compatible version
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = 5 + '';
+-        $value = 5.0 + 'hi';
++        $value = 5 + 0;
++        $value = 5.0 + 0
+     }
+ }
+```
+
+<br>
+
+### `CountOnNullRector`
+
+- class: `Rector\Php71\Rector\FuncCall\CountOnNullRector`
+
+Changes count() on null to safe ternary check
+
+```diff
+ $values = null;
+-$count = count($values);
++$count = is_array($values) || $values instanceof Countable ? count($values) : 0;
+```
+
+<br>
+
+### `IsIterableRector`
+
+- class: `Rector\Php71\Rector\BinaryOp\IsIterableRector`
+
+Changes is_array + Traversable check to is_iterable
+
+```diff
+-is_array($foo) || $foo instanceof Traversable;
++is_iterable($foo);
+```
+
+<br>
+
+### `MultiExceptionCatchRector`
+
+- class: `Rector\Php71\Rector\TryCatch\MultiExceptionCatchRector`
+
+Changes multi catch of same exception to single one | separated.
+
+```diff
+ try {
+    // Some code...
+-} catch (ExceptionType1 $exception) {
+-   $sameCode;
+-} catch (ExceptionType2 $exception) {
++} catch (ExceptionType1 | ExceptionType2 $exception) {
+    $sameCode;
+ }
+```
+
+<br>
+
+### `PublicConstantVisibilityRector`
+
+- class: `Rector\Php71\Rector\ClassConst\PublicConstantVisibilityRector`
+
+Add explicit public constant visibility.
+
+```diff
+ class SomeClass
+ {
+-    const HEY = 'you';
++    public const HEY = 'you';
+ }
+```
+
+<br>
+
+### `RemoveExtraParametersRector`
+
+- class: `Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector`
+
+Remove extra parameters
+
+```diff
+-strlen("asdf", 1);
++strlen("asdf");
+```
+
+<br>
+
+### `ReservedObjectRector`
+
+- class: `Rector\Php71\Rector\Name\ReservedObjectRector`
+
+Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configured
+
+```diff
+-class Object
++class SmartObject
+ {
+ }
+```
+
+<br>
+
+## Php72
+
+### `BarewordStringRector`
+
+- class: `Rector\Php72\Rector\ConstFetch\BarewordStringRector`
+
+Changes unquoted non-existing constants to strings
+
+```diff
+-var_dump(VAR);
++var_dump("VAR");
+```
+
+<br>
+
+### `CreateFunctionToAnonymousFunctionRector`
+
+- class: `Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector`
+
+Use anonymous functions instead of deprecated create_function()
+
+```diff
+ class ClassWithCreateFunction
+ {
+     public function run()
+     {
+-        $callable = create_function('$matches', "return '$delimiter' . strtolower(\$matches[1]);");
++        $callable = function($matches) use ($delimiter) {
++            return $delimiter . strtolower($matches[1]);
++        };
+     }
+ }
+```
+
+<br>
+
+### `GetClassOnNullRector`
+
+- class: `Rector\Php72\Rector\FuncCall\GetClassOnNullRector`
+
+Null is no more allowed in get_class()
 
 ```diff
  final class SomeClass
  {
--    /**
--     * @var int
--     */
--    private count;
-+    private int count;
+     public function getItem()
+     {
+         $value = null;
+-        return get_class($value);
++        return $value !== null ? get_class($value) : self::class;
+     }
+ }
+```
+
+<br>
+
+### `IsObjectOnIncompleteClassRector`
+
+- class: `Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector`
+
+Incomplete class returns inverted bool on is_object()
+
+```diff
+ $incompleteObject = new __PHP_Incomplete_Class;
+-$isObject = is_object($incompleteObject);
++$isObject = ! is_object($incompleteObject);
+```
+
+<br>
+
+### `ListEachRector`
+
+- class: `Rector\Php72\Rector\Each\ListEachRector`
+
+each() function is deprecated, use key() and current() instead
+
+```diff
+-list($key, $callback) = each($callbacks);
++$key = key($opt->option);
++$val = current($opt->option);
+```
+
+<br>
+
+### `ParseStrWithResultArgumentRector`
+
+- class: `Rector\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector`
+
+Use $result argument in parse_str() function
+
+```diff
+-parse_str($this->query);
+-$data = get_defined_vars();
++parse_str($this->query, $result);
++$data = $result;
+```
+
+<br>
+
+### `StringifyDefineRector`
+
+- class: `Rector\Php72\Rector\FuncCall\StringifyDefineRector`
+
+Make first argument of define() string
+
+```diff
+ class SomeClass
+ {
+     public function run(int $a)
+     {
+-         define(CONSTANT_2, 'value');
++         define('CONSTANT_2', 'value');
+          define('CONSTANT', 'value');
+     }
+ }
+```
+
+<br>
+
+### `StringsAssertNakedRector`
+
+- class: `Rector\Php72\Rector\FuncCall\StringsAssertNakedRector`
+
+String asserts must be passed directly to assert()
+
+```diff
+ function nakedAssert()
+ {
+-    assert('true === true');
+-    assert("true === true");
++    assert(true === true);
++    assert(true === true);
  }
 ```
 
@@ -4741,7 +4317,7 @@ Changes property `@var` annotations from annotation to type.
 
 ### `UnsetCastRector`
 
-- class: `Rector\Php\Rector\Unset_\UnsetCastRector`
+- class: `Rector\Php72\Rector\Unset_\UnsetCastRector`
 
 Removes (unset) cast
 
@@ -4752,25 +4328,9 @@ Removes (unset) cast
 
 <br>
 
-### `VarToPublicPropertyRector`
-
-- class: `Rector\Php\Rector\Property\VarToPublicPropertyRector`
-
-Remove unused private method
-
-```diff
- final class SomeController
- {
--    var $name = 'Tom';
-+    public $name = 'Tom';
- }
-```
-
-<br>
-
 ### `WhileEachToForeachRector`
 
-- class: `Rector\Php\Rector\Each\WhileEachToForeachRector`
+- class: `Rector\Php72\Rector\Each\WhileEachToForeachRector`
 
 each() function is deprecated, use foreach() instead.
 
@@ -4785,6 +4345,395 @@ each() function is deprecated, use foreach() instead.
 -while (list($key) = each($callbacks)) {
 +foreach (array_keys($callbacks) as $key) {
      // ...
+ }
+```
+
+<br>
+
+## Php73
+
+### `ArrayKeyFirstLastRector`
+
+- class: `Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector`
+
+Make use of array_key_first() and array_key_last()
+
+```diff
+-reset($items);
+-$firstKey = key($items);
++$firstKey = array_key_first($items);
+```
+
+```diff
+-end($items);
+-$lastKey = key($items);
++$lastKey = array_key_last($items);
+```
+
+<br>
+
+### `IsCountableRector`
+
+- class: `Rector\Php73\Rector\BinaryOp\IsCountableRector`
+
+Changes is_array + Countable check to is_countable
+
+```diff
+-is_array($foo) || $foo instanceof Countable;
++is_countable($foo);
+```
+
+<br>
+
+### `JsonThrowOnErrorRector`
+
+- class: `Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector`
+
+Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonException on error
+
+```diff
+-json_encode($content);
+-json_decode($json);
++json_encode($content, JSON_THROW_ON_ERROR);
++json_decode($json, null, null, JSON_THROW_ON_ERROR);
+```
+
+<br>
+
+### `RegexDashEscapeRector`
+
+- class: `Rector\Php73\Rector\FuncCall\RegexDashEscapeRector`
+
+Escape - in some cases
+
+```diff
+-preg_match("#[\w-()]#", 'some text');
++preg_match("#[\w\-()]#", 'some text');
+```
+
+<br>
+
+### `RemoveMissingCompactVariableRector`
+
+- class: `Rector\Php73\Rector\FuncCall\RemoveMissingCompactVariableRector`
+
+Remove non-existing vars from compact()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $value = 'yes';
+
+-        compact('value', 'non_existing');
++        compact('value');
+     }
+ }
+```
+
+<br>
+
+### `SensitiveConstantNameRector`
+
+- class: `Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector`
+
+Changes case insensitive constants to sensitive ones.
+
+```diff
+ define('FOO', 42, true);
+ var_dump(FOO);
+-var_dump(foo);
++var_dump(FOO);
+```
+
+<br>
+
+### `SensitiveDefineRector`
+
+- class: `Rector\Php73\Rector\FuncCall\SensitiveDefineRector`
+
+Changes case insensitive constants to sensitive ones.
+
+```diff
+-define('FOO', 42, true);
++define('FOO', 42);
+```
+
+<br>
+
+### `SensitiveHereNowDocRector`
+
+- class: `Rector\Php73\Rector\String_\SensitiveHereNowDocRector`
+
+Changes heredoc/nowdoc that contains closing word to safe wrapper name
+
+```diff
+-$value = <<<A
++$value = <<<A_WRAP
+     A
+-A
++A_WRAP
+```
+
+<br>
+
+### `StringifyStrNeedlesRector`
+
+- class: `Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector`
+
+Makes needles explicit strings
+
+```diff
+ $needle = 5;
+-$fivePosition = strpos('725', $needle);
++$fivePosition = strpos('725', (string) $needle);
+```
+
+<br>
+
+## Php74
+
+### `AddLiteralSeparatorToNumberRector`
+
+- class: `Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector`
+
+Add "_" as thousands separator in numbers
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $int = 1000;
+-        $float = 1000500.001;
++        $int = 1_000;
++        $float = 1_000_500.001;
+     }
+ }
+```
+
+<br>
+
+### `ArrayKeyExistsOnPropertyRector`
+
+- class: `Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector`
+
+Change array_key_exists() on property to property_exists()
+
+```diff
+ class SomeClass {
+      public $value;
+ }
+ $someClass = new SomeClass;
+
+-array_key_exists('value', $someClass);
++property_exists($someClass, 'value');
+```
+
+<br>
+
+### `ArraySpreadInsteadOfArrayMergeRector`
+
+- class: `Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector`
+
+Change array_merge() to spread operator, except values with possible string key values
+
+```diff
+ class SomeClass
+ {
+     public function run($iter1, $iter2)
+     {
+-        $values = array_merge(iterator_to_array($iter1), iterator_to_array($iter2));
++        $values = [...$iter1, ...$iter2];
+
+         // Or to generalize to all iterables
+-        $anotherValues = array_merge(
+-            is_array($iter1) ? $iter1 : iterator_to_array($iter1),
+-            is_array($iter2) ? $iter2 : iterator_to_array($iter2)
+-        );
++        $anotherValues = [...$iter1, ...$iter2];
+     }
+ }
+```
+
+<br>
+
+### `ClassConstantToSelfClassRector`
+
+- class: `Rector\Php74\Rector\MagicConstClass\ClassConstantToSelfClassRector`
+
+Change __CLASS__ to self::class
+
+```diff
+ class SomeClass
+ {
+    public function callOnMe()
+    {
+-       var_dump(__CLASS__);
++       var_dump(self::class);
+    }
+ }
+```
+
+<br>
+
+### `ClosureToArrowFunctionRector`
+
+- class: `Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector`
+
+Change closure to arrow function
+
+```diff
+ class SomeClass
+ {
+     public function run($meetups)
+     {
+-        return array_filter($meetups, function (Meetup $meetup) {
+-            return is_object($meetup);
+-        });
++        return array_filter($meetups, fn(Meetup $meetup) => is_object($meetup));
+     }
+ }
+```
+
+<br>
+
+### `ExportToReflectionFunctionRector`
+
+- class: `Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector`
+
+Change export() to ReflectionFunction alternatives
+
+```diff
+-$reflectionFunction = ReflectionFunction::export('foo');
+-$reflectionFunctionAsString = ReflectionFunction::export('foo', true);
++$reflectionFunction = new ReflectionFunction('foo');
++$reflectionFunctionAsString = (string) new ReflectionFunction('foo');
+```
+
+<br>
+
+### `FilterVarToAddSlashesRector`
+
+- class: `Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector`
+
+Change filter_var() with slash escaping to addslashes()
+
+```diff
+ $var= "Satya's here!";
+-filter_var($var, FILTER_SANITIZE_MAGIC_QUOTES);
++addslashes($var);
+```
+
+<br>
+
+### `GetCalledClassToStaticClassRector`
+
+- class: `Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector`
+
+Change __CLASS__ to self::class
+
+```diff
+ class SomeClass
+ {
+    public function callOnMe()
+    {
+-       var_dump(get_called_class());
++       var_dump(static::class);
+    }
+ }
+```
+
+<br>
+
+### `MbStrrposEncodingArgumentPositionRector`
+
+- class: `Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector`
+
+Change mb_strrpos() encoding argument position
+
+```diff
+-mb_strrpos($text, "abc", "UTF-8");
++mb_strrpos($text, "abc", 0, "UTF-8");
+```
+
+<br>
+
+### `NullCoalescingOperatorRector`
+
+- class: `Rector\Php74\Rector\Assign\NullCoalescingOperatorRector`
+
+Use null coalescing operator ??=
+
+```diff
+ $array = [];
+-$array['user_id'] = $array['user_id'] ?? 'value';
++$array['user_id'] ??= 'value';
+```
+
+<br>
+
+### `RealToFloatTypeCastRector`
+
+- class: `Rector\Php74\Rector\Double\RealToFloatTypeCastRector`
+
+Change deprecated (real) to (float)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $number = (real) 5;
++        $number = (float) 5;
+         $number = (float) 5;
+         $number = (double) 5;
+     }
+ }
+```
+
+<br>
+
+### `ReservedFnFunctionRector`
+
+- class: `Rector\Php74\Rector\Function_\ReservedFnFunctionRector`
+
+Change fn() function name, since it will be reserved keyword
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        function fn($value)
++        function f($value)
+         {
+             return $value;
+         }
+
+-        fn(5);
++        f(5);
+     }
+ }
+```
+
+<br>
+
+### `TypedPropertyRector`
+
+- class: `Rector\Php74\Rector\Property\TypedPropertyRector`
+
+Changes property `@var` annotations from annotation to type.
+
+```diff
+ final class SomeClass
+ {
+-    /**
+-     * @var int
+-     */
+-    private count;
++    private int count;
  }
 ```
 
@@ -5004,6 +4953,24 @@ Rename "*Spec.php" file to "*Test.php" file
 
 <br>
 
+## Refactoring
+
+### `MoveAndRenameClassRector`
+
+- class: `Rector\Refactoring\Rector\FileSystem\MoveAndRenameClassRector`
+
+Move class to respect new location with respect to PSR-4 + follow up with class rename
+
+<br>
+
+### `MoveAndRenameNamespaceRector`
+
+- class: `Rector\Refactoring\Rector\FileSystem\MoveAndRenameNamespaceRector`
+
+Move namespace to new location with respect to PSR-4 + follow up with files in the namespace move
+
+<br>
+
 ## RemovingStatic
 
 ### `NewUniqueObjectToEntityFactoryRector`
@@ -5189,6 +5156,246 @@ services:
      }
 -}
 +}
+```
+
+<br>
+
+## Renaming
+
+### `RenameAnnotationRector`
+
+- class: `Rector\Renaming\Rector\Annotation\RenameAnnotationRector`
+
+Turns defined annotations above properties and methods to their new values.
+
+```yaml
+services:
+    Rector\Renaming\Rector\Annotation\RenameAnnotationRector:
+        $classToAnnotationMap:
+            PHPUnit\Framework\TestCase:
+                test: scenario
+```
+
+↓
+
+```diff
+ class SomeTest extends PHPUnit\Framework\TestCase
+ {
+-    /**
+-     * @test
++    /**
++     * @scenario
+      */
+     public function someMethod()
+     {
+     }
+ }
+```
+
+<br>
+
+### `RenameClassConstantRector`
+
+- class: `Rector\Renaming\Rector\Constant\RenameClassConstantRector`
+
+Replaces defined class constants in their calls.
+
+```yaml
+services:
+    Rector\Renaming\Rector\Constant\RenameClassConstantRector:
+        SomeClass:
+            OLD_CONSTANT: NEW_CONSTANT
+            OTHER_OLD_CONSTANT: 'DifferentClass::NEW_CONSTANT'
+```
+
+↓
+
+```diff
+-$value = SomeClass::OLD_CONSTANT;
+-$value = SomeClass::OTHER_OLD_CONSTANT;
++$value = SomeClass::NEW_CONSTANT;
++$value = DifferentClass::NEW_CONSTANT;
+```
+
+<br>
+
+### `RenameClassRector`
+
+- class: `Rector\Renaming\Rector\Class_\RenameClassRector`
+
+Replaces defined classes by new ones.
+
+```yaml
+services:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
+        $oldToNewClasses:
+            App\SomeOldClass: App\SomeNewClass
+```
+
+↓
+
+```diff
+ namespace App;
+
+-use SomeOldClass;
++use SomeNewClass;
+
+-function someFunction(SomeOldClass $someOldClass): SomeOldClass
++function someFunction(SomeNewClass $someOldClass): SomeNewClass
+ {
+-    if ($someOldClass instanceof SomeOldClass) {
+-        return new SomeOldClass;
++    if ($someOldClass instanceof SomeNewClass) {
++        return new SomeNewClass;
+     }
+ }
+```
+
+<br>
+
+### `RenameConstantRector`
+
+- class: `Rector\Renaming\Rector\ConstFetch\RenameConstantRector`
+
+Replace constant by new ones
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        return MYSQL_ASSOC;
++        return MYSQLI_ASSOC;
+     }
+ }
+```
+
+<br>
+
+### `RenameFunctionRector`
+
+- class: `Rector\Renaming\Rector\Function_\RenameFunctionRector`
+
+Turns defined function call new one.
+
+```yaml
+services:
+    Rector\Renaming\Rector\Function_\RenameFunctionRector:
+        view: Laravel\Templating\render
+```
+
+↓
+
+```diff
+-view("...", []);
++Laravel\Templating\render("...", []);
+```
+
+<br>
+
+### `RenameMethodCallRector`
+
+- class: `Rector\Renaming\Rector\MethodCall\RenameMethodCallRector`
+
+Turns method call names to new ones.
+
+```yaml
+services:
+    Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
+        SomeExampleClass:
+            oldMethod: newMethod
+```
+
+↓
+
+```diff
+ $someObject = new SomeExampleClass;
+-$someObject->oldMethod();
++$someObject->newMethod();
+```
+
+<br>
+
+### `RenameMethodRector`
+
+- class: `Rector\Renaming\Rector\MethodCall\RenameMethodRector`
+
+Turns method names to new ones.
+
+```yaml
+services:
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
+        SomeExampleClass:
+            oldMethod: newMethod
+```
+
+↓
+
+```diff
+ $someObject = new SomeExampleClass;
+-$someObject->oldMethod();
++$someObject->newMethod();
+```
+
+<br>
+
+### `RenameNamespaceRector`
+
+- class: `Rector\Renaming\Rector\Namespace_\RenameNamespaceRector`
+
+Replaces old namespace by new one.
+
+```yaml
+services:
+    Rector\Renaming\Rector\Namespace_\RenameNamespaceRector:
+        $oldToNewNamespaces:
+            SomeOldNamespace: SomeNewNamespace
+```
+
+↓
+
+```diff
+-$someObject = new SomeOldNamespace\SomeClass;
++$someObject = new SomeNewNamespace\SomeClass;
+```
+
+<br>
+
+### `RenameStaticMethodRector`
+
+- class: `Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector`
+
+Turns method names to new ones.
+
+```yaml
+services:
+    Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
+        SomeClass:
+            oldMethod:
+                - AnotherExampleClass
+                - newStaticMethod
+```
+
+↓
+
+```diff
+-SomeClass::oldStaticMethod();
++AnotherExampleClass::newStaticMethod();
+```
+
+```yaml
+services:
+    Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
+        $oldToNewMethodByClasses:
+            SomeClass:
+                oldMethod: newStaticMethod
+```
+
+↓
+
+```diff
+-SomeClass::oldStaticMethod();
++SomeClass::newStaticMethod();
 ```
 
 <br>
@@ -5726,6 +5933,31 @@ Make event object a first argument of dispatch() method, event name as second
 
 <br>
 
+### `MergeMethodAnnotationToRouteAnnotationRector`
+
+- class: `Rector\Symfony\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector`
+
+Merge removed @Method annotation to @Route one
+
+```diff
+-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+ use Symfony\Component\Routing\Annotation\Route;
+
+ class DefaultController extends Controller
+ {
+     /**
+-     * @Route("/show/{id}")
+-     * @Method({"GET", "HEAD"})
++     * @Route("/show/{id}", methods={"GET","HEAD"})
+      */
+     public function show($id)
+     {
+     }
+ }
+```
+
+<br>
+
 ### `OptionNameRector`
 
 - class: `Rector\Symfony\Rector\Form\OptionNameRector`
@@ -6116,6 +6348,57 @@ Add known return type to functions
 +        return array_filter($meetups, function (Meetup $meetup): bool {
              return is_object($meetup);
          });
+     }
+ }
+```
+
+<br>
+
+### `AddMethodCallBasedParamTypeRector`
+
+- class: `Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedParamTypeRector`
+
+Change param type of passed getId() to UuidInterface type declaration
+
+```diff
+ class SomeClass
+ {
+-    public function getById($id)
++    public function getById(\Ramsey\Uuid\UuidInterface $id)
+     {
+     }
+ }
+
+ class CallerClass
+ {
+     public function run()
+     {
+         $building = new Building();
+         $someClass = new SomeClass();
+         $someClass->getById($building->getId());
+     }
+ }
+```
+
+<br>
+
+### `CompleteVarDocTypePropertyRector`
+
+- class: `Rector\TypeDeclaration\Rector\Property\CompleteVarDocTypePropertyRector`
+
+Complete property `@var` annotations or correct the old ones
+
+```diff
+ final class SomeClass
+ {
++    /**
++     * @var EventDispatcher
++     */
+     private $eventDispatcher;
+
+     public function __construct(EventDispatcher $eventDispatcher)
+     {
+         $this->eventDispatcher = $eventDispatcher;
      }
  }
 ```
@@ -7143,21 +7426,7 @@ Replaces defined Pseudo_Namespaces by Namespace\Ones.
 ```yaml
 services:
     Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
-        -
-            Some_: {  }
-```
-
-↓
-
-```diff
--$someService = new Some_Object;
-+$someService = new Some\Object;
-```
-
-```yaml
-services:
-    Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
-        -
+        $namespacePrefixesWithExcludedClasses:
             Some_:
                 - Some_Class_To_Keep
 ```
@@ -7165,10 +7434,10 @@ services:
 ↓
 
 ```diff
--/** @var Some_Object $someService */
--$someService = new Some_Object;
-+/** @var Some\Object $someService */
-+$someService = new Some\Object;
+-/** @var Some_Chicken $someService */
+-$someService = new Some_Chicken;
++/** @var Some\Chicken $someService */
++$someService = new Some\Chicken;
  $someClassToKeep = new Some_Class_To_Keep;
 ```
 
@@ -7212,63 +7481,6 @@ Remove specific traits from code
 
 <br>
 
-### `RenameAnnotationRector`
-
-- class: `Rector\Renaming\Rector\Annotation\RenameAnnotationRector`
-
-Turns defined annotations above properties and methods to their new values.
-
-```yaml
-services:
-    Rector\Renaming\Rector\Annotation\RenameAnnotationRector:
-        $classToAnnotationMap:
-            PHPUnit\Framework\TestCase:
-                test: scenario
-```
-
-↓
-
-```diff
- class SomeTest extends PHPUnit\Framework\TestCase
- {
--    /**
--     * @test
-+    /**
-+     * @scenario
-      */
-     public function someMethod()
-     {
-     }
- }
-```
-
-<br>
-
-### `RenameClassConstantRector`
-
-- class: `Rector\Renaming\Rector\Constant\RenameClassConstantRector`
-
-Replaces defined class constants in their calls.
-
-```yaml
-services:
-    Rector\Renaming\Rector\Constant\RenameClassConstantRector:
-        SomeClass:
-            OLD_CONSTANT: NEW_CONSTANT
-            OTHER_OLD_CONSTANT: 'DifferentClass::NEW_CONSTANT'
-```
-
-↓
-
-```diff
--$value = SomeClass::OLD_CONSTANT;
--$value = SomeClass::OTHER_OLD_CONSTANT;
-+$value = SomeClass::NEW_CONSTANT;
-+$value = DifferentClass::NEW_CONSTANT;
-```
-
-<br>
-
 ### `RenameClassConstantsUseToStringsRector`
 
 - class: `Rector\Rector\Constant\RenameClassConstantsUseToStringsRector`
@@ -7292,129 +7504,6 @@ services:
 
 <br>
 
-### `RenameClassRector`
-
-- class: `Rector\Renaming\Rector\Class_\RenameClassRector`
-
-Replaces defined classes by new ones.
-
-```yaml
-services:
-    Rector\Renaming\Rector\Class_\RenameClassRector:
-        $oldToNewClasses:
-            App\SomeOldClass: App\SomeNewClass
-```
-
-↓
-
-```diff
- namespace App;
-
--use SomeOldClass;
-+use SomeNewClass;
-
--function someFunction(SomeOldClass $someOldClass): SomeOldClass
-+function someFunction(SomeNewClass $someOldClass): SomeNewClass
- {
--    if ($someOldClass instanceof SomeOldClass) {
--        return new SomeOldClass;
-+    if ($someOldClass instanceof SomeNewClass) {
-+        return new SomeNewClass;
-     }
- }
-```
-
-<br>
-
-### `RenameFunctionRector`
-
-- class: `Rector\Renaming\Rector\Function_\RenameFunctionRector`
-
-Turns defined function call new one.
-
-```yaml
-services:
-    Rector\Renaming\Rector\Function_\RenameFunctionRector:
-        view: Laravel\Templating\render
-```
-
-↓
-
-```diff
--view("...", []);
-+Laravel\Templating\render("...", []);
-```
-
-<br>
-
-### `RenameMethodCallRector`
-
-- class: `Rector\Renaming\Rector\MethodCall\RenameMethodCallRector`
-
-Turns method call names to new ones.
-
-```yaml
-services:
-    Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
-        SomeExampleClass:
-            oldMethod: newMethod
-```
-
-↓
-
-```diff
- $someObject = new SomeExampleClass;
--$someObject->oldMethod();
-+$someObject->newMethod();
-```
-
-<br>
-
-### `RenameMethodRector`
-
-- class: `Rector\Renaming\Rector\MethodCall\RenameMethodRector`
-
-Turns method names to new ones.
-
-```yaml
-services:
-    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
-        SomeExampleClass:
-            oldMethod: newMethod
-```
-
-↓
-
-```diff
- $someObject = new SomeExampleClass;
--$someObject->oldMethod();
-+$someObject->newMethod();
-```
-
-<br>
-
-### `RenameNamespaceRector`
-
-- class: `Rector\Renaming\Rector\Namespace_\RenameNamespaceRector`
-
-Replaces old namespace by new one.
-
-```yaml
-services:
-    Rector\Renaming\Rector\Namespace_\RenameNamespaceRector:
-        $oldToNewNamespaces:
-            SomeOldNamespace: SomeNewNamespace
-```
-
-↓
-
-```diff
--$someObject = new SomeOldNamespace\SomeClass;
-+$someObject = new SomeNewNamespace\SomeClass;
-```
-
-<br>
-
 ### `RenamePropertyRector`
 
 - class: `Rector\Rector\Property\RenamePropertyRector`
@@ -7434,45 +7523,6 @@ services:
 ```diff
 -$someObject->someOldProperty;
 +$someObject->someNewProperty;
-```
-
-<br>
-
-### `RenameStaticMethodRector`
-
-- class: `Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector`
-
-Turns method names to new ones.
-
-```yaml
-services:
-    Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
-        SomeClass:
-            oldMethod:
-                - AnotherExampleClass
-                - newStaticMethod
-```
-
-↓
-
-```diff
--SomeClass::oldStaticMethod();
-+AnotherExampleClass::newStaticMethod();
-```
-
-```yaml
-services:
-    Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
-        $oldToNewMethodByClasses:
-            SomeClass:
-                oldMethod: newStaticMethod
-```
-
-↓
-
-```diff
--SomeClass::oldStaticMethod();
-+SomeClass::newStaticMethod();
 ```
 
 <br>
@@ -7701,6 +7751,25 @@ services:
      {
 -        return ['compiler.post_dump' => 'compile'];
 +        return [\Yet\AnotherClass::CONSTANT => 'compile'];
+     }
+ }
+```
+
+<br>
+
+### `SwapFuncCallArgumentsRector`
+
+- class: `Rector\Rector\Argument\SwapFuncCallArgumentsRector`
+
+Swap arguments in function calls
+
+```diff
+ final class SomeClass
+ {
+     public function run($one, $two)
+     {
+-        return some_function($one, $two);
++        return some_function($two, $one);
      }
  }
 ```
