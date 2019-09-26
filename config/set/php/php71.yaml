@@ -10,3 +10,4 @@ services:
     Rector\Php71\Rector\FuncCall\CountOnNullRector: ~
     Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector: ~
     Rector\Php71\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector: ~
+    Rector\Php71\Rector\List_\ListToArrayDestructRector: ~
