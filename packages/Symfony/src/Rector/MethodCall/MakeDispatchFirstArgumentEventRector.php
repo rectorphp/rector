@@ -4,6 +4,7 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
@@ -83,18 +84,32 @@ PHP
             return null;
         }
 
-        if (! $this->isStringOrUnionStringOnlyType($node->args[0]->value)) {
-            return null;
+        $firstArgumentValue = $node->args[0]->value;
+        $secondArgumentValue = $node->args[1]->value;
+
+        if ($this->isStringOrUnionStringOnlyType($firstArgumentValue)) {
+            // swap arguments
+            [$node->args[0], $node->args[1]] = [$node->args[1], $node->args[0]];
+
+            if ($this->isEventNameSameAsEventObjectClass($node)) {
+                unset($node->args[1]);
+            }
+
+            return $node;
         }
 
-        // swap arguments
-        [$node->args[0], $node->args[1]] = [$node->args[1], $node->args[0]];
+        if ($secondArgumentValue instanceof FuncCall) {
+            if ($this->isName($secondArgumentValue, 'get_class')) {
+                $getClassArgument = $secondArgumentValue->args[0]->value;
 
-        if ($this->isEventNameSameAsEventObjectClass($node)) {
-            unset($node->args[1]);
+                if ($this->areNodesEqual($firstArgumentValue, $getClassArgument)) {
+                    unset($node->args[1]);
+                    return $node;
+                }
+            }
         }
 
-        return $node;
+        return null;
     }
 
     /**
