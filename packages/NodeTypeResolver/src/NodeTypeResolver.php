@@ -128,6 +128,8 @@ final class NodeTypeResolver
      */
     public function isObjectType(Node $node, $requiredType): bool
     {
+        $this->ensureRequiredTypeIsStringOrObjectType($requiredType, 'isObjectType');
+
         if (is_string($requiredType)) {
             if (Strings::contains($requiredType, '*')) {
                 return $this->isFnMatch($node, $requiredType);
@@ -698,5 +700,28 @@ final class NodeTypeResolver
         }
 
         return $type;
+    }
+
+    /**
+     * @param mixed $requiredType
+     */
+    private function ensureRequiredTypeIsStringOrObjectType($requiredType, string $location): void
+    {
+        if (is_string($requiredType)) {
+            return;
+        }
+
+        if ($requiredType instanceof ObjectType) {
+            return;
+        }
+
+        $reportedType = is_object($requiredType) ? get_class($requiredType) : $requiredType;
+
+        throw new ShouldNotHappenException(sprintf(
+            'Value passed to "%s()" must be string or "%s". "%s" given',
+            $location,
+            ObjectType::class,
+            $reportedType
+        ));
     }
 }

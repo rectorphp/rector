@@ -21,7 +21,7 @@ foreach ($setProvider->provide() as $setName) {
     try {
         $process->mustRun();
     } catch (ProcessFailedException $processFailedException) {
-        if (! Strings::contains($processFailedException->getMessage(), '[ERROR]')) {
+        if (! Strings::match($processFailedException->getMessage(), '#(Fatal error)|(\[ERROR\])#')) {
             continue;
         }
 
