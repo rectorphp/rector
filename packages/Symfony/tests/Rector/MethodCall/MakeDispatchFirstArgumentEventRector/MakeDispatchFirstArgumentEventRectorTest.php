@@ -22,6 +22,7 @@ final class MakeDispatchFirstArgumentEventRectorTest extends AbstractRectorTestC
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/event_class_constant.php.inc'];
+        yield [__DIR__ . '/Fixture/get_class.php.inc'];
         yield [__DIR__ . '/Fixture/keep_string_event_constant.php.inc'];
     }
 

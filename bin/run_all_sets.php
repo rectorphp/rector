@@ -14,7 +14,7 @@ $setProvider = new SetProvider();
 $file = 'src/Rector/AbstractRector.php';
 $excludedSets = [
     // required Kernel class to be set in parameters
-    'symfony-code-quality'
+    'symfony-code-quality',
 ];
 
 $errors = [];
