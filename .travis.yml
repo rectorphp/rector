@@ -48,6 +48,7 @@ script:
           bin/rector process src --set symfony40 --dry-run
           composer docs
           php bin/check_services_in_yaml_configs.php
+          php bin/run_all_sets.php
       fi
 
     # Eat your own dog food
