@@ -47,7 +47,7 @@ final class TolerantRectorYamlFileLoader extends AbstractParameterMergingYamlFil
 
         $this->classExistenceValidator->ensureClassesAreValid($configuration, $file);
 
-        $configuration = $this->rectorServiceParametersShifter->process($configuration);
+        $configuration = $this->rectorServiceParametersShifter->process($configuration, $file);
 
         return $this->parameterInImportResolver->process($configuration);
     }

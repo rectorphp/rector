@@ -38,8 +38,9 @@ services:
             addConfig: load
 
     Rector\Rector\Interface_\RemoveInterfacesRector:
-        # Removes "implements IPresenter"
-        - Nette\Application\IPresenter
+        $interfacesToRemove:
+            # Removes "implements IPresenter"
+            - Nette\Application\IPresenter
 
     Rector\Renaming\Rector\Constant\RenameClassConstantRector:
         Nette\Http\*Response:

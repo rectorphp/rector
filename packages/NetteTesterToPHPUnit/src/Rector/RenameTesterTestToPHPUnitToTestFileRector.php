@@ -18,8 +18,11 @@ final class RenameTesterTestToPHPUnitToTestFileRector extends AbstractFileSystem
     public function refactor(SmartFileInfo $smartFileInfo): void
     {
         $oldRealPath = $smartFileInfo->getRealPath();
-        $newRealPath = $this->createNewRealPath($oldRealPath);
+        if (! Strings::endsWith($oldRealPath, '*.phpt')) {
+            return;
+        }
 
+        $newRealPath = $this->createNewRealPath($oldRealPath);
         if ($newRealPath === $oldRealPath) {
             return;
         }

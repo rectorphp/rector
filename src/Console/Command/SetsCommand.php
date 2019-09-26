@@ -4,11 +4,11 @@ namespace Rector\Console\Command;
 
 use Nette\Utils\Strings;
 use Rector\Console\Shell;
+use Rector\Set\SetProvider;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
 final class SetsCommand extends AbstractCommand
@@ -18,9 +18,15 @@ final class SetsCommand extends AbstractCommand
      */
     private $symfonyStyle;
 
-    public function __construct(SymfonyStyle $symfonyStyle)
+    /**
+     * @var SetProvider
+     */
+    private $setProvider;
+
+    public function __construct(SymfonyStyle $symfonyStyle, SetProvider $setProvider)
     {
         $this->symfonyStyle = $symfonyStyle;
+        $this->setProvider = $setProvider;
 
         parent::__construct();
     }
@@ -34,7 +40,7 @@ final class SetsCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $sets = $this->getAvailbleSets();
+        $sets = $this->setProvider->provide();
 
         if ($input->getArgument('name')) {
             $sets = $this->filterSetsByName($input, $sets);
@@ -44,24 +50,6 @@ final class SetsCommand extends AbstractCommand
         $this->symfonyStyle->listing($sets);
 
         return Shell::CODE_SUCCESS;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getAvailbleSets(): array
-    {
-        $finder = Finder::create()->files()
-            ->in(__DIR__ . '/../../../config/set');
-
-        $sets = [];
-        foreach ($finder->getIterator() as $fileInfo) {
-            $sets[] = $fileInfo->getBasename('.' . $fileInfo->getExtension());
-        }
-
-        sort($sets);
-
-        return array_unique($sets);
     }
 
     /**
