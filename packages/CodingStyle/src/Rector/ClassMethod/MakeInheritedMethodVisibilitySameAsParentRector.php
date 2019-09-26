@@ -72,7 +72,8 @@ PHP
         /** @var Scope|null $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if ($scope === null) {
-            throw new ShouldNotHappenException();
+            // possibly trait
+            return null;
         }
 
         $classReflection = $scope->getClassReflection();
