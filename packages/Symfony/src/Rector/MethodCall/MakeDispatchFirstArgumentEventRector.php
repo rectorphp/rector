@@ -3,7 +3,9 @@
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
@@ -71,30 +73,21 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, $this->eventDispatcherClass)) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
-        if (! $this->isName($node, 'dispatch')) {
-            return null;
+        $firstArgumentValue = $node->args[0]->value;
+        if ($this->isStringOrUnionStringOnlyType($firstArgumentValue)) {
+            return $this->refactorStringArgument($node);
         }
 
-        if (! isset($node->args[1])) {
-            return null;
+        $secondArgumentValue = $node->args[1]->value;
+        if ($secondArgumentValue instanceof FuncCall) {
+            return $this->refactorGetCallFuncCall($node, $secondArgumentValue, $firstArgumentValue);
         }
 
-        if (! $this->isStringOrUnionStringOnlyType($node->args[0]->value)) {
-            return null;
-        }
-
-        // swap arguments
-        [$node->args[0], $node->args[1]] = [$node->args[1], $node->args[0]];
-
-        if ($this->isEventNameSameAsEventObjectClass($node)) {
-            unset($node->args[1]);
-        }
-
-        return $node;
+        return null;
     }
 
     /**
@@ -115,5 +108,52 @@ PHP
         }
 
         return $classConst === $eventStaticType->getClassName();
+    }
+
+    private function shouldSkip(MethodCall $methodCall): bool
+    {
+        if (! $this->isObjectType($methodCall, $this->eventDispatcherClass)) {
+            return true;
+        }
+
+        if (! $this->isName($methodCall, 'dispatch')) {
+            return true;
+        }
+
+        if (! isset($methodCall->args[1])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function refactorStringArgument(MethodCall $methodCall): Node
+    {
+        // swap arguments
+        [$methodCall->args[0], $methodCall->args[1]] = [$methodCall->args[1], $methodCall->args[0]];
+
+        if ($this->isEventNameSameAsEventObjectClass($methodCall)) {
+            unset($methodCall->args[1]);
+        }
+
+        return $methodCall;
+    }
+
+    private function refactorGetCallFuncCall(
+        MethodCall $methodCall,
+        Expr $secondArgumentValue,
+        Expr $firstArgumentValue
+    ): ?MethodCall {
+        if ($this->isName($secondArgumentValue, 'get_class')) {
+            $getClassArgumentValue = $secondArgumentValue->args[0]->value;
+
+            if ($this->areNodesEqual($firstArgumentValue, $getClassArgumentValue)) {
+                unset($methodCall->args[1]);
+
+                return $methodCall;
+            }
+        }
+
+        return null;
     }
 }
