@@ -12,7 +12,7 @@ if (class_exists('Doctrine\ORM\Mapping\UniqueConstraint')) {
  */
 final class UniqueConstraint implements Annotation
 {
-    /** @var string */
+    /** @var string|null */
     public $name;
 
     /** @var string[] */

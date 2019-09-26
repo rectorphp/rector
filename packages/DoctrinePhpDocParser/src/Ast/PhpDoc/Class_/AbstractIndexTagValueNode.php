@@ -7,7 +7,7 @@ use Rector\DoctrinePhpDocParser\Ast\PhpDoc\AbstractDoctrineTagValueNode;
 abstract class AbstractIndexTagValueNode extends AbstractDoctrineTagValueNode
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $name;
 
@@ -32,7 +32,7 @@ abstract class AbstractIndexTagValueNode extends AbstractDoctrineTagValueNode
      * @param mixed[]|null $options
      */
     public function __construct(
-        string $name,
+        ?string $name,
         ?array $columns,
         ?array $flags,
         ?array $options,
@@ -52,7 +52,7 @@ abstract class AbstractIndexTagValueNode extends AbstractDoctrineTagValueNode
     {
         $contentItems = [];
 
-        if ($this->name !== null) {
+        if ($this->name) {
             $contentItems['name'] = sprintf('name="%s"', $this->name);
         }
 
