@@ -4,6 +4,7 @@ namespace Rector\DependencyInjection\Loader;
 
 use Nette\Utils\Strings;
 use Rector\Exception\Configuration\InvalidConfigurationException;
+use Rector\Exception\ShouldNotHappenException;
 use ReflectionClass;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Yaml\Yaml;
@@ -43,13 +44,13 @@ final class RectorServiceParametersShifter
      * @param mixed[] $configuration
      * @return mixed[]
      */
-    public function process(array $configuration): array
+    public function process(array $configuration, string $file): array
     {
         if (! isset($configuration[self::SERVICES_KEY]) || ! is_array($configuration[self::SERVICES_KEY])) {
             return $configuration;
         }
 
-        $configuration[self::SERVICES_KEY] = $this->processServices($configuration[self::SERVICES_KEY]);
+        $configuration[self::SERVICES_KEY] = $this->processServices($configuration[self::SERVICES_KEY], $file);
 
         return $configuration;
     }
@@ -58,11 +59,19 @@ final class RectorServiceParametersShifter
      * @param mixed[] $services
      * @return mixed[]
      */
-    private function processServices(array $services): array
+    private function processServices(array $services, string $file): array
     {
         foreach ($services as $serviceName => $serviceDefinition) {
             if (! $this->isRectorClass($serviceName) || empty($serviceDefinition)) {
                 continue;
+            }
+
+            if (! is_array($serviceDefinition)) {
+                throw new ShouldNotHappenException(sprintf(
+                    'Rector rule "%s" has invalid configuration in "%s". Fix it to an array',
+                    $serviceName,
+                    $file
+                ));
             }
 
             $nonReservedNonVariables = $this->resolveRectorConfiguration($serviceDefinition);

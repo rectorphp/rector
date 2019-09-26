@@ -32,8 +32,7 @@ services:
     Rector\Celebrity\Rector\FuncCall\SetTypeToCastRector: ~
 
     # class { var $value; } → class { public $value; }
-    Rector\Php52\Rector\Property\VarToPublicPropertyRector: ~pu
-
+    Rector\Php52\Rector\Property\VarToPublicPropertyRector: ~
 
     #  false or true → false || true
     #  false and true → false && true
