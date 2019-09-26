@@ -9,8 +9,8 @@ use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocParser\OrmTagParser;
 use Rector\Configuration\CurrentNodeProvider;
-use Rector\DoctrinePhpDocParser\PhpDocParser\OrmTagParser;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 

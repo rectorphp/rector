@@ -5,13 +5,13 @@ namespace Rector\Doctrine\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Doctrine\ValueObject\DoctrineClass;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\ColumnTagValueNode;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Property_\GeneratedValueTagValueNode;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Symfony\PhpDocParser\Ast\PhpDoc\SerializerTypeTagValueNode;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app

@@ -4,8 +4,6 @@ namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -16,15 +14,21 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
-use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
+use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocParserExtensionInterface;
 use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
 use Rector\BetterPhpDocParser\ValueObject\StartEndInfo;
+use Rector\Configuration\CurrentNodeProvider;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
+/**
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\Class_\BetterPhpDocParserTest
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\Property_\OrmTagParserPropertyTest
+ */
 final class BetterPhpDocParser extends PhpDocParser
 {
     /**
@@ -58,13 +62,26 @@ final class BetterPhpDocParser extends PhpDocParser
     private $phpDocParserExtensions = [];
 
     /**
+     * @var PhpDocNodeFactoryInterface[]
+     */
+    private $phpDocNodeFactories = [];
+
+    /**
+     * @var CurrentNodeProvider
+     */
+    private $currentNodeProvider;
+
+    /**
      * @param PhpDocParserExtensionInterface[] $phpDocParserExtensions
+     * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
      */
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
         MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
+        CurrentNodeProvider $currentNodeProvider,
+        array $phpDocNodeFactories = [],
         array $phpDocParserExtensions = []
     ) {
         parent::__construct($typeParser, $constExprParser);
@@ -74,6 +91,8 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
         $this->phpDocParserExtensions = $phpDocParserExtensions;
+        $this->phpDocNodeFactories = $phpDocNodeFactories;
+        $this->currentNodeProvider = $currentNodeProvider;
     }
 
     /**
@@ -104,7 +123,8 @@ final class BetterPhpDocParser extends PhpDocParser
         }
 
         if (! $this->isComment) {
-            $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_PHPDOC);
+            // might be in the middle of annotations
+            $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_CLOSE_PHPDOC);
         }
 
         $phpDocNode = new PhpDocNode(array_values($children));
@@ -118,9 +138,10 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $tokenIterator->next();
 
-        // @todo somehow decouple to tag pre-processor
-        if (Strings::match($tag, '#@(ORM|Assert|Serializer|DI|Inject)$#')) {
-            if ($tag !== '@Inject') {
+        // join tags like "@ORM\Column" etc.
+        if ($tokenIterator->currentTokenType() === Lexer::TOKEN_IDENTIFIER) {
+            // is not e.g "@var "
+            if (! Strings::match($tag, '#^@[a-z]#')) { // probably a class tag
                 $tag .= $tokenIterator->currentTokenValue();
                 $tokenIterator->next();
             }
@@ -151,9 +172,21 @@ final class BetterPhpDocParser extends PhpDocParser
         }
 
         // needed for reference support in params, see https://github.com/rectorphp/rector/issues/1734
-        if ($tag === '@param') {
-            $tagValueNode = $this->customParseParamTagValueNode($tokenIterator);
-        } else {
+        $tagValueNode = null;
+        foreach ($this->phpDocNodeFactories as $phpDocNodeFactory) {
+            // to prevent circular reference of this service
+            if ($phpDocNodeFactory instanceof PhpDocParserAwareInterface) {
+                $phpDocNodeFactory->setPhpDocParser($this);
+            }
+
+            if ($phpDocNodeFactory->getName() === $tag) {
+                $currentNode = $this->currentNodeProvider->getNode();
+                $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens($currentNode, $tokenIterator);
+            }
+        }
+
+        // fallback to orignal parser
+        if ($tagValueNode === null) {
             $tagValueNode = parent::parseTagValue($tokenIterator, $tag);
         }
 
@@ -198,16 +231,16 @@ final class BetterPhpDocParser extends PhpDocParser
 
         foreach ($originalTokens as $originalToken) {
             // skip opening
-            if (Strings::match($originalToken[0], '#/\*\*#')) {
+            if ($originalToken[1] === Lexer::TOKEN_OPEN_PHPDOC) {
                 continue;
             }
 
             // skip closing
-            if (Strings::match($originalToken[0], '#\*\/#')) {
+            if ($originalToken[1] === Lexer::TOKEN_CLOSE_PHPDOC) {
                 continue;
             }
 
-            if (Strings::match($originalToken[0], '#^\s+\*#')) {
+            if ($originalToken[1] === Lexer::TOKEN_PHPDOC_EOL) {
                 $originalToken[0] = PHP_EOL;
             }
 
@@ -215,45 +248,5 @@ final class BetterPhpDocParser extends PhpDocParser
         }
 
         return trim($originalContent);
-    }
-
-    /**
-     * Override of parent private method to allow reference: https://github.com/rectorphp/rector/pull/1735
-     */
-    private function parseParamTagValue(TokenIterator $tokenIterator): ParamTagValueNode
-    {
-        $typeParser = $this->privatesAccessor->getPrivateProperty($this, 'typeParser');
-
-        $type = $typeParser->parse($tokenIterator);
-
-        $isVariadic = $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_VARIADIC);
-
-        // extra value over parent
-        $isReference = $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_REFERENCE);
-
-        $parameterName = $this->privatesCaller->callPrivateMethod($this, 'parseRequiredVariableName', $tokenIterator);
-        $description = $this->privatesCaller->callPrivateMethod($this, 'parseOptionalDescription', $tokenIterator);
-
-        return new AttributeAwareParamTagValueNode($type, $isVariadic, $parameterName, $description, $isReference);
-    }
-
-    private function customParseParamTagValueNode(TokenIterator $tokenIterator): PhpDocTagValueNode
-    {
-        try {
-            $tokenIterator->pushSavePoint();
-            $tagValue = $this->parseParamTagValue($tokenIterator);
-            $tokenIterator->dropSavePoint();
-
-            return $tagValue;
-        } catch (ParserException $parserException) {
-            $tokenIterator->rollback();
-            $description = $this->privatesCaller->callPrivateMethod(
-                $this,
-                'parseOptionalDescription',
-                $tokenIterator
-            );
-
-            return new InvalidTagValueNode($description, $parserException);
-        }
     }
 }

@@ -4,12 +4,12 @@ namespace Rector\PhpDoc;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints\AssertChoiceTagValueNode;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
-use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AssertChoiceTagValueNode;
-use Rector\Symfony\PhpDocParser\Ast\PhpDoc\SerializerTypeTagValueNode;
 
 final class PhpDocClassRenamer
 {

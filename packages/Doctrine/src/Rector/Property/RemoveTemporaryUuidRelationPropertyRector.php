@@ -4,7 +4,7 @@ namespace Rector\Doctrine\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
-use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
+use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
 

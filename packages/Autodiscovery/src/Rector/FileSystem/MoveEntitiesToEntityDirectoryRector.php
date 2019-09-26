@@ -6,7 +6,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Autodiscovery\FileMover\FileMover;
-use Rector\DoctrinePhpDocParser\Ast\PhpDoc\Class_\EntityTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;

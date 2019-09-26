@@ -6,7 +6,9 @@ use Iterator;
 use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\Doctrine\CaseSensitive;
 use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\Doctrine\IndexInTable;
+use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\Doctrine\Short;
 
 final class DoctrineTest extends AbstractPhpDocInfoPrinterTest
 {
@@ -31,5 +33,9 @@ final class DoctrineTest extends AbstractPhpDocInfoPrinterTest
     public function provideDataForTestClass(): Iterator
     {
         yield [__DIR__ . '/Source/Doctrine/index_in_table.txt', new Class_(IndexInTable::class)];
+
+        $this->markTestSkipped('wip');
+        yield [__DIR__ . '/Source/Doctrine/case_sensitive.txt', new Class_(CaseSensitive::class)];
+        yield [__DIR__ . '/Source/Doctrine/short.txt', new Class_(Short::class)];
     }
 }
