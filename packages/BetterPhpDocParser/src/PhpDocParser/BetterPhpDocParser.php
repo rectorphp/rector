@@ -154,7 +154,7 @@ final class BetterPhpDocParser extends PhpDocParser
             }
 
             // compare regardless sensitivity
-            if (Strings::lower($phpDocNodeFactory->getName()) === Strings::lower($tag)) {
+            if ($this->isTagMatchingPhpDocNodeFactory($tag, $phpDocNodeFactory)) {
                 $currentNode = $this->currentNodeProvider->getNode();
                 $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens($currentNode, $tokenIterator);
             }
@@ -229,5 +229,26 @@ final class BetterPhpDocParser extends PhpDocParser
     private function getTokenIteratorIndex(TokenIterator $tokenIterator): int
     {
         return (int) $this->privatesAccessor->getPrivateProperty($tokenIterator, 'index');
+    }
+
+    private function isTagMatchingPhpDocNodeFactory(string $tag, PhpDocNodeFactoryInterface $phpDocNodeFactory): bool
+    {
+        if (Strings::lower($phpDocNodeFactory->getName()) === Strings::lower($tag)) {
+            return true;
+        }
+
+        if (in_array($tag, ['@param'], true)) {
+            return false;
+        }
+
+        // possible short import
+        if (Strings::contains($phpDocNodeFactory->getName(), '\\')) {
+            $lastNamePart = Strings::after($phpDocNodeFactory->getName(), '\\', -1);
+            if (Strings::lower('@' . $lastNamePart) === Strings::lower($tag)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
