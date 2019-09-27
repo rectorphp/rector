@@ -36,7 +36,7 @@ Rector **instantly upgrades and instantly refactors the PHP code of your applica
     <img src="/docs/images/space.png" width=20>
     <a href="/config/set/symfony"><img src="/docs/images/symfony.png"></a>
     <img src="/docs/images/space.png" width=20>
-    <a href="/config/set/symfony"><img src="/docs/images/easy-admin.png"></a>
+    <a href="/config/set/easy-corp"><img src="/docs/images/easy-admin.png"></a>
     <img src="/docs/images/space.png" width=20>
     <a href="/config/set/sylius"><img src="/docs/images/sylius.png"></a>
     <img src="/docs/images/space.png" width=20>
