@@ -34,6 +34,9 @@ final class AnnotationReaderFactory
         $annotationReader::addGlobalIgnoredName('Gedmo\SoftDeleteable');
         $annotationReader::addGlobalIgnoredName('SoftDeleteable');
 
+        // nette @inject dummy annotation
+        $annotationReader::addGlobalIgnoredName('inject');
+
         // warning: nested tags must be parse-able, e.g. @ORM\Table must include @ORM\UniqueConstraint!
 
         return $annotationReader;

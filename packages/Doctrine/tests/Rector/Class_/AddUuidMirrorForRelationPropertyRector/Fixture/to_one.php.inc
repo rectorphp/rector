@@ -5,7 +5,7 @@ namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRe
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @Orm\Entity
  */
 class SomeEntity
 {
@@ -17,7 +17,7 @@ class SomeEntity
 }
 
 /**
- * @ORM\Entity
+ * @Orm\Entity
  */
 class AnotherEntity
 {
@@ -41,7 +41,7 @@ namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRe
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @Orm\Entity
  */
 class SomeEntity
 {
@@ -58,7 +58,7 @@ class SomeEntity
 }
 
 /**
- * @ORM\Entity
+ * @Orm\Entity
  */
 class AnotherEntity
 {

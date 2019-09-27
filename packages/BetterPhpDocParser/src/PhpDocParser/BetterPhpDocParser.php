@@ -153,7 +153,8 @@ final class BetterPhpDocParser extends PhpDocParser
                 $phpDocNodeFactory->setPhpDocParser($this);
             }
 
-            if ($phpDocNodeFactory->getName() === $tag) {
+            // compare regardless sensitivity
+            if (Strings::lower($phpDocNodeFactory->getName()) === Strings::lower($tag)) {
                 $currentNode = $this->currentNodeProvider->getNode();
                 $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens($currentNode, $tokenIterator);
             }
