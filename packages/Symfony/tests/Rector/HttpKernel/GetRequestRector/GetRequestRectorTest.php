@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\HttpKernel\GetRequestRector;
 
+use Iterator;
 use Rector\Symfony\Rector\HttpKernel\GetRequestRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class GetRequestRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

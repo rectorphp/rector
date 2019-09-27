@@ -2,6 +2,7 @@
 
 namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\Property_;
 
+use Iterator;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\AbstractOrmTagParserTest;
 
@@ -18,7 +19,7 @@ final class OrmTagParserPropertyTest extends AbstractOrmTagParserTest
         $this->assertStringEqualsFile($expectedPrintedPhpDoc, $printedPhpDocInfo);
     }
 
-    public function provideData(): iterable
+    public function provideData(): Iterator
     {
         yield [__DIR__ . '/Fixture/SomeProperty.php', __DIR__ . '/Fixture/expected_some_property.txt'];
         yield [__DIR__ . '/Fixture/PropertyWithName.php', __DIR__ . '/Fixture/expected_property_with_name.txt'];

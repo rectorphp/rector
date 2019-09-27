@@ -2,6 +2,7 @@
 
 namespace Rector\Php70\Tests\Rector\FuncCall\RandomFunctionRector;
 
+use Iterator;
 use Rector\Php70\Rector\FuncCall\RandomFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -18,10 +19,7 @@ final class RandomFunctionRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

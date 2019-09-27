@@ -2,6 +2,7 @@
 
 namespace Rector\PHPUnit\Tests\Rector\GetMockRector;
 
+use Iterator;
 use Rector\PHPUnit\Rector\GetMockRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class GetMockRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

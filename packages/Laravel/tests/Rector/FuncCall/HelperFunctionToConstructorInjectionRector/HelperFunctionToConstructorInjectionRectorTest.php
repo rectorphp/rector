@@ -2,6 +2,7 @@
 
 namespace Rector\Laravel\Tests\Rector\FuncCall\HelperFunctionToConstructorInjectionRector;
 
+use Iterator;
 use Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class HelperFunctionToConstructorInjectionRectorTest extends AbstractRecto
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/view.php.inc'];
         yield [__DIR__ . '/Fixture/broadcast.php.inc'];

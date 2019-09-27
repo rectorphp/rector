@@ -2,6 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector;
 
+use Iterator;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParameterRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RemoveUnusedParameterRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/change_when_not_used_in_children.php.inc'];
         yield [__DIR__ . '/Fixture/dont_change_parent.php.inc'];

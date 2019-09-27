@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector;
 
+use Iterator;
 use Rector\Symfony\Rector\Process\ProcessBuilderInstanceRector;
 use Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector\Source\ProcessBuilder;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -16,10 +17,7 @@ final class ProcessBuilderInstanceRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Argument\SwapFuncCallArgumentsRector;
 
+use Iterator;
 use Rector\Rector\Argument\SwapFuncCallArgumentsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class SwapFuncCallArgumentsRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

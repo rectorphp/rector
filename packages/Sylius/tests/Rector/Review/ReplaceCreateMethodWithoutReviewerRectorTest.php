@@ -2,6 +2,7 @@
 
 namespace Rector\Sylius\Tests\Rector\Review;
 
+use Iterator;
 use Rector\Sylius\Rector\Review\ReplaceCreateMethodWithoutReviewerRector;
 use Rector\Sylius\Tests\Rector\Review\Source\ReviewFactoryInterface;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -16,10 +17,7 @@ final class ReplaceCreateMethodWithoutReviewerRectorTest extends AbstractRectorT
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

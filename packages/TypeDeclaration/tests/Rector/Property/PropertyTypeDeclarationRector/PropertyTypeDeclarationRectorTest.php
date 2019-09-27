@@ -2,6 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\Property\PropertyTypeDeclarationRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector;
 
@@ -15,10 +16,7 @@ final class PropertyTypeDeclarationRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/constructor_param.php.inc'];
         yield [__DIR__ . '/Fixture/constructor_param_with_aliased_param.php.inc'];

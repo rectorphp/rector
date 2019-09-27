@@ -2,6 +2,7 @@
 
 namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRector;
 
+use Iterator;
 use Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector;
 use Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRector\Source\SomeTranslator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -16,10 +17,7 @@ final class WrapTransParameterNameRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

@@ -59,7 +59,10 @@ final class NodeAnnotationReader
         }
     }
 
-    public function readClassAnnotation(Class_ $class, string $annotationClassName): ?Annotation
+    /**
+     * @return object|null
+     */
+    public function readClassAnnotation(Class_ $class, string $annotationClassName)
     {
         $classReflection = $this->createClassReflectionFromNode($class);
 

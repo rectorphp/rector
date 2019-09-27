@@ -2,6 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Assign\NullCoalescingOperatorRector;
 
+use Iterator;
 use Rector\Php74\Rector\Assign\NullCoalescingOperatorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class NullCoalescingOperatorRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

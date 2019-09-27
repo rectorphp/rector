@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector;
 
+use Iterator;
 use Rector\Symfony\Rector\Form\FormTypeGetParentRector;
 use Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\Source\AbstractType;
 use Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\Source\AbstractTypeExtension;
@@ -17,10 +18,7 @@ final class FormTypeGetParentRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

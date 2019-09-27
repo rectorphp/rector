@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector;
 
+use Iterator;
 use Rector\Symfony\Rector\Class_\MakeCommandLazyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class MakeCommandLazyRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/in_construct.php.inc'];

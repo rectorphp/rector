@@ -2,6 +2,7 @@
 
 namespace Rector\CakePHP\Tests\Rector\Name\ChangeSnakedFixtureNameToCamel;
 
+use Iterator;
 use Rector\CakePHP\Rector\Name\ChangeSnakedFixtureNameToCamelRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ChangeSnakedFixtureNameToCamelTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

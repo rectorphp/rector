@@ -2,6 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Assign\RemoveDoubleAssignRector;
 
+use Iterator;
 use Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RemoveDoubleAssignRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/calls.php.inc'];

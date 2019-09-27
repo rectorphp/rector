@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector;
 
+use Iterator;
 use Nette\Configurator;
 use Rector\Rector\Constant\RenameClassConstantsUseToStringsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -16,10 +17,7 @@ final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTes
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

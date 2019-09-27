@@ -26,10 +26,7 @@ class VariousTypesTest extends \PHPUnit\Framework\TestCase
     {
         $this->doTestSingle($variable);
     }
-    /**
-     * @return int[]|string[]|float[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): \Iterator
     {
         yield [1];
         yield ['2'];

@@ -2,6 +2,7 @@
 
 namespace Rector\Php54\Tests\Rector\Break_\RemoveZeroBreakContinueRector;
 
+use Iterator;
 use Rector\Php54\Rector\Break_\RemoveZeroBreakContinueRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -16,10 +17,7 @@ final class RemoveZeroBreakContinueRectorTest extends AbstractRectorTestCase
         $this->doTestFileWithoutAutoload($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

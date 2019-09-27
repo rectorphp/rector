@@ -2,6 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\ClassConst\PublicConstantVisibilityRector;
 
+use Iterator;
 use Rector\Php71\Rector\ClassConst\PublicConstantVisibilityRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class PublicConstantVisibilityRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/SomeClass.php.inc'];
     }

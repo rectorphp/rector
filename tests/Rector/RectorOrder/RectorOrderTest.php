@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\RectorOrder;
 
+use Iterator;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertComparisonToSpecificMethodRector;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector;
@@ -20,10 +21,7 @@ final class RectorOrderTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

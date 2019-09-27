@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Class_\ParentClassToTraitsRector;
 
+use Iterator;
 use Rector\Rector\Class_\ParentClassToTraitsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherParentObject;
@@ -19,10 +20,7 @@ final class ParentClassToTraitsRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

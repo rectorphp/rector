@@ -2,6 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyConditionsRector;
 
+use Iterator;
 use Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class SimplifyConditionsRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/boolean_not.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

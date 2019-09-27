@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector;
 
+use Iterator;
 use Nette\DI\Container;
 use Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -16,10 +17,7 @@ final class UnsetAndIssetToMethodCallRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

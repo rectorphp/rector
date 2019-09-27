@@ -2,6 +2,7 @@
 
 namespace Rector\Doctrine\Tests\Rector\ClassMethod\ChangeSetIdTypeToUuidRector;
 
+use Iterator;
 use Rector\Doctrine\Rector\ClassMethod\ChangeSetIdTypeToUuidRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ChangeSetIdTypeToUuidRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/set_id.inc.php'];
         yield [__DIR__ . '/Fixture/skip_setted_id.inc.php'];

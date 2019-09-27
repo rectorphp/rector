@@ -2,6 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\List_\ListToArrayDestructRector;
 
+use Iterator;
 use Rector\Php71\Rector\List_\ListToArrayDestructRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ListToArrayDestructRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

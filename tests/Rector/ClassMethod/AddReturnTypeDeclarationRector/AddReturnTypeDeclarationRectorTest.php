@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 
+use Iterator;
 use Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
@@ -16,10 +17,7 @@ final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/extended_parent.php.inc'];

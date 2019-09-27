@@ -2,6 +2,7 @@
 
 namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\Class_;
 
+use Iterator;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\AbstractOrmTagParserTest;
 
@@ -18,7 +19,7 @@ final class DoctrinePhpDocParserTest extends AbstractOrmTagParserTest
         $this->assertStringEqualsFile($expectedPrintedPhpDoc, $printedPhpDocInfo);
     }
 
-    public function provideData(): iterable
+    public function provideData(): Iterator
     {
         yield [__DIR__ . '/Fixture/SomeEntity.php', __DIR__ . '/Fixture/expected_some_entity.txt'];
     }

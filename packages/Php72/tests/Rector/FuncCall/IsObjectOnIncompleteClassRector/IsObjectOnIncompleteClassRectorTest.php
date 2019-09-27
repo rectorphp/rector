@@ -2,6 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\FuncCall\IsObjectOnIncompleteClassRector;
 
+use Iterator;
 use Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class IsObjectOnIncompleteClassRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

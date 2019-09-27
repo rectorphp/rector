@@ -2,6 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\For_\RemoveDeadIfForeachForRector;
 
+use Iterator;
 use Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RemoveDeadIfForeachForRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/side_effect_checks.php.inc'];

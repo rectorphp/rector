@@ -2,6 +2,7 @@
 
 namespace Rector\Php53\Tests\Rector\FuncCall\DirNameFileConstantToDirConstantRector;
 
+use Iterator;
 use Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class DirNameFileConstantToDirConstantRectorTest extends AbstractRectorTes
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

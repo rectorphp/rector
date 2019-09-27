@@ -2,6 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 
@@ -15,10 +16,7 @@ final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTests(): iterable
+    public function provideDataForTests(): Iterator
     {
         yield [__DIR__ . '/Fixture/PhpCsFixerReturn/various.php.inc'];
         yield [__DIR__ . '/Fixture/skip_mixed_and_string.php.inc'];

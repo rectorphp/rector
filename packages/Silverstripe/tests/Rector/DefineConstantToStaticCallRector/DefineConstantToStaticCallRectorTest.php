@@ -2,6 +2,7 @@
 
 namespace Rector\Silverstripe\Tests\Rector\DefineConstantToStaticCallRector;
 
+use Iterator;
 use Rector\Silverstripe\Rector\DefineConstantToStaticCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class DefineConstantToStaticCallRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

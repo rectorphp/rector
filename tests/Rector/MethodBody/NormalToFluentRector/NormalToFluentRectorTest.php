@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\MethodBody\NormalToFluentRector;
 
+use Iterator;
 use Rector\Rector\MethodBody\NormalToFluentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\MethodBody\NormalToFluentRector\Source\FluentInterfaceClass;
@@ -16,10 +17,7 @@ final class NormalToFluentRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Property\InjectAnnotationClassRector;
 
+use Iterator;
 use Rector\Configuration\Option;
 use Rector\Rector\Property\InjectAnnotationClassRector;
 use Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeKernelClass;
@@ -27,10 +28,7 @@ final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [
             // JMS

@@ -39,9 +39,6 @@ final class FileRelocationResolverTest extends AbstractKernelTestCase
         $this->assertSame($expectedNewFileLocation, $newFileLocation);
     }
 
-    /**
-     * @return string[]
-     */
     public function provideDataForTest(): Iterator
     {
         yield [

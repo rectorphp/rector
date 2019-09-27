@@ -2,6 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector;
 
+use Iterator;
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RemoveExtraParametersRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/better_func_get_all.php.inc'];
         yield [__DIR__ . '/Fixture/remove_another_class_method_call_extra_argument.php.inc'];

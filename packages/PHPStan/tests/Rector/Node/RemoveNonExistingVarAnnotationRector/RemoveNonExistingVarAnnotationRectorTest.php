@@ -2,6 +2,7 @@
 
 namespace Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector;
 
+use Iterator;
 use Rector\PHPStan\Rector\Node\RemoveNonExistingVarAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RemoveNonExistingVarAnnotationRectorTest extends AbstractRectorTestC
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/subcontent.php.inc'];
         yield [__DIR__ . '/Fixture/fixture.php.inc'];

@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Issues\Issue835;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Issue835Test extends AbstractRectorTestCase
@@ -14,10 +15,7 @@ final class Issue835Test extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture835.php.inc'];
     }

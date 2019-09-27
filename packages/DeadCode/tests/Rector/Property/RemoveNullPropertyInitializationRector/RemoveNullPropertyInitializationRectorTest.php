@@ -2,6 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveNullPropertyInitializationRector;
 
+use Iterator;
 use Rector\DeadCode\Rector\Property\RemoveNullPropertyInitializationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RemoveNullPropertyInitializationRectorTest extends AbstractRectorTes
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

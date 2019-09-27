@@ -2,6 +2,7 @@
 
 namespace Rector\Renaming\Tests\Rector\MethodCall\RenameStaticMethodRector;
 
+use Iterator;
 use Nette\Utils\Html;
 use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameStaticMethodRector\Source\FormMacros;
@@ -17,10 +18,7 @@ final class RenameStaticMethodRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

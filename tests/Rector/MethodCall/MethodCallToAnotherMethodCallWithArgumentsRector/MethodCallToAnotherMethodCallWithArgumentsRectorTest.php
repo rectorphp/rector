@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 
+use Iterator;
 use Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector\Source\NetteServiceDefinition;
@@ -16,10 +17,7 @@ final class MethodCallToAnotherMethodCallWithArgumentsRectorTest extends Abstrac
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

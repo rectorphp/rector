@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector;
 
+use Iterator;
 use Rector\RemovingStatic\Rector\Class_\NewUniqueObjectToEntityFactoryRector;
 use Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector;
 use Rector\RemovingStatic\Tests\Rector\Class_\PassFactoryToEntityRector\Source\TurnMeToService;
@@ -43,18 +44,12 @@ final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
         );
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTestMultipleArguments(): iterable
+    public function provideDataForTestMultipleArguments(): Iterator
     {
         yield [__DIR__ . '/Fixture/multiple_args.php.inc'];
     }

@@ -2,6 +2,7 @@
 
 namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector;
 
+use Iterator;
 use Rector\Sensio\Rector\FrameworkExtraBundle\TemplateAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class TemplateAnnotationVersion5RectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/Version5/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/Version5/fixture2.php.inc'];

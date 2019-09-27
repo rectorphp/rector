@@ -2,6 +2,7 @@
 
 namespace Rector\Nette\Tests\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector;
 
+use Iterator;
 use Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class PregFunctionToNetteUtilsStringsRectorTest extends AbstractRectorTest
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/preg_match.php.inc'];
         yield [__DIR__ . '/Fixture/preg_match_all.php.inc'];

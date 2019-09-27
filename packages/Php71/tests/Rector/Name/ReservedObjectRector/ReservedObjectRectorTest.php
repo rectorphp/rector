@@ -2,6 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\Name\ReservedObjectRector;
 
+use Iterator;
 use Rector\Php71\Rector\Name\ReservedObjectRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ReservedObjectRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/ReservedObject.php'];
         yield [__DIR__ . '/Fixture/skip_type_declaration_object.php'];

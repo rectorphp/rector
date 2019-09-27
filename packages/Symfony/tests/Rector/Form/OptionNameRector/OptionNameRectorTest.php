@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\Form\OptionNameRector;
 
+use Iterator;
 use Rector\Symfony\Rector\Form\OptionNameRector;
 use Rector\Symfony\Tests\Rector\Form\OptionNameRector\Source\FormBuilder;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -16,10 +17,7 @@ final class OptionNameRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
     }

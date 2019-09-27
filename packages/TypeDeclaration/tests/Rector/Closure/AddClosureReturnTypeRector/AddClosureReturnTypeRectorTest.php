@@ -2,6 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\Closure\AddClosureReturnTypeRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
 
@@ -15,10 +16,7 @@ final class AddClosureReturnTypeRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/return_type_object.php.inc'];

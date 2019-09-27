@@ -2,6 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\FuncCall\GetClassOnNullRector;
 
+use Iterator;
 use Rector\Php72\Rector\FuncCall\GetClassOnNullRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class GetClassOnNullRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/tricky_cases.php.inc'];

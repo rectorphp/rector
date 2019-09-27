@@ -2,14 +2,14 @@
 
 namespace Rector\PHPUnit\NodeFactory;
 
+use Iterator;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
 
 final class DataProviderClassMethodFactory
@@ -19,15 +19,9 @@ final class DataProviderClassMethodFactory
      */
     private $builderFactory;
 
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    public function __construct(BuilderFactory $builderFactory, DocBlockManipulator $docBlockManipulator)
+    public function __construct(BuilderFactory $builderFactory)
     {
         $this->builderFactory = $builderFactory;
-        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function createFromRecipe(DataProviderClassMethodRecipe $dataProviderClassMethodRecipe): ClassMethod
@@ -47,22 +41,13 @@ final class DataProviderClassMethodFactory
             }
         }
 
-        $this->decorateClassMethodWithReturnTypeAndTag($classMethod, $dataProviderClassMethodRecipe);
+        $this->decorateClassMethodWithReturnTypeAndTag($classMethod);
 
         return $classMethod;
     }
 
-    private function decorateClassMethodWithReturnTypeAndTag(
-        ClassMethod $classMethod,
-        DataProviderClassMethodRecipe $dataProviderClassMethodRecipe
-    ): void {
-        $classMethod->returnType = new Identifier('iterable');
-
-        $type = $dataProviderClassMethodRecipe->getType();
-        if ($type === null) {
-            return;
-        }
-
-        $this->docBlockManipulator->addReturnTag($classMethod, $type);
+    private function decorateClassMethodWithReturnTypeAndTag(ClassMethod $classMethod): void
+    {
+        $classMethod->returnType = new FullyQualified(Iterator::class);
     }
 }

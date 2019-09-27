@@ -3041,7 +3041,7 @@ services:
 +    /**
 +     * @return int[]
 +     */
-+    public function provideDataForTest(): iterable
++    public function provideDataForTest(): \Iterator
 +    {
 +        yield [1];
 +        yield [2];

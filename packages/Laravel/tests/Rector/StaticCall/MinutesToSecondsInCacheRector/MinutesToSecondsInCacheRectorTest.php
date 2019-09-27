@@ -2,6 +2,7 @@
 
 namespace Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector;
 
+use Iterator;
 use Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
 use Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\Source\LaravelStoreInterface;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -16,10 +17,7 @@ final class MinutesToSecondsInCacheRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/skip_call.php.inc'];

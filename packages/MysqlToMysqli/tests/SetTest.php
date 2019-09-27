@@ -2,6 +2,7 @@
 
 namespace Rector\MysqlToMysqli\Tests;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SetTest extends AbstractRectorTestCase
@@ -14,10 +15,7 @@ final class SetTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/SetFixture.php.inc'];
     }

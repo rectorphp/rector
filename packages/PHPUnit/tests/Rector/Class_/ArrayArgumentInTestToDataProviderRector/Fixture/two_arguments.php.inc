@@ -25,10 +25,7 @@ class TwoArgumentsTest extends \PHPUnit\Framework\TestCase
     {
         $this->doTestSingle($variable, $variable2);
     }
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): \Iterator
     {
         yield [['before', 'after']];
     }

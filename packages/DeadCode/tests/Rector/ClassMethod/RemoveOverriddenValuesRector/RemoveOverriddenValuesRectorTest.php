@@ -2,6 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveOverriddenValuesRector;
 
+use Iterator;
 use Rector\DeadCode\Rector\ClassMethod\RemoveOverriddenValuesRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RemoveOverriddenValuesRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/function.php.inc'];
         yield [__DIR__ . '/Fixture/fixture.php.inc'];

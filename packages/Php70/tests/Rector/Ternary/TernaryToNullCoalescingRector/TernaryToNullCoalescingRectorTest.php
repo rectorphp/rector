@@ -2,6 +2,7 @@
 
 namespace Rector\Php70\Tests\Rector\Ternary\TernaryToNullCoalescingRector;
 
+use Iterator;
 use Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -20,10 +21,7 @@ final class TernaryToNullCoalescingRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

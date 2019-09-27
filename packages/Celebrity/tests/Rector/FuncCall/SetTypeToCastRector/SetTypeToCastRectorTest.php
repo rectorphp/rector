@@ -2,6 +2,7 @@
 
 namespace Rector\Celebrity\Tests\Rector\FuncCall\SetTypeToCastRector;
 
+use Iterator;
 use Rector\Celebrity\Rector\FuncCall\SetTypeToCastRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class SetTypeToCastRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/assign.php.inc'];

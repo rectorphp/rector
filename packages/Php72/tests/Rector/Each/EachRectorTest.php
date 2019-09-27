@@ -2,6 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\Each;
 
+use Iterator;
 use Rector\Php72\Rector\Each\ListEachRector;
 use Rector\Php72\Rector\Each\WhileEachToForeachRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -21,10 +22,7 @@ final class EachRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\ClassMethod\AddMethodParentCallRector;
 
+use Iterator;
 use Rector\Rector\ClassMethod\AddMethodParentCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\ClassMethod\AddMethodParentCallRector\Source\ParentClassWithNewConstructor;
@@ -16,10 +17,7 @@ final class AddMethodParentCallRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/skip_already_has.php.inc'];

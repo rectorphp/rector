@@ -2,6 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Function_\ReservedFnFunctionRector;
 
+use Iterator;
 use PhpParser\Parser\Tokens;
 use Rector\Php74\Rector\Function_\ReservedFnFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -20,10 +21,7 @@ final class ReservedFnFunctionRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

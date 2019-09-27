@@ -2,6 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector;
 
+use Iterator;
 use Rector\Php71\Rector\BinaryOp\IsIterableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\ValueObject\PhpVersionFeature;
@@ -16,10 +17,7 @@ final class PolyfillRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/polyfill_function.php.inc'];
     }

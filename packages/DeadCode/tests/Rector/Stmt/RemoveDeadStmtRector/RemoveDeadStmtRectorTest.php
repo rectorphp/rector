@@ -2,6 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveDeadStmtRector;
 
+use Iterator;
 use Rector\DeadCode\Rector\Stmt\RemoveDeadStmtRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RemoveDeadStmtRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

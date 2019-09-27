@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\ClassLike\RemoveTraitRector;
 
+use Iterator;
 use Rector\Rector\ClassLike\RemoveTraitRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\ClassLike\RemoveTraitRector\Source\TraitToBeRemoved;
@@ -16,10 +17,7 @@ final class RemoveTraitRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

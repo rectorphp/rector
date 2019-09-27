@@ -2,6 +2,7 @@
 
 namespace Rector\Php70\Tests\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector;
 
+use Iterator;
 use Rector\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class BreakNotInLoopOrSwitchToReturnRectorTest extends AbstractRectorTestC
         $this->doTestFileWithoutAutoload($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/foreach_not.php.inc'];

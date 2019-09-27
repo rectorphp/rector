@@ -2,6 +2,7 @@
 
 namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidToEntityWhereMissingRector;
 
+use Iterator;
 use Rector\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class AddUuidToEntityWhereMissingRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/already_has_constructor.php.inc'];

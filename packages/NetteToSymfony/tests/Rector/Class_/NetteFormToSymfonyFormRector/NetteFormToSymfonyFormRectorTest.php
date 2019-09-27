@@ -2,6 +2,7 @@
 
 namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteFormToSymfonyFormRector;
 
+use Iterator;
 use Rector\NetteToSymfony\Rector\Class_\NetteFormToSymfonyFormRector;
 use Rector\NetteToSymfony\Tests\Rector\Class_\NetteFormToSymfonyFormRector\Source\NettePresenter;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -16,10 +17,7 @@ final class NetteFormToSymfonyFormRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }
