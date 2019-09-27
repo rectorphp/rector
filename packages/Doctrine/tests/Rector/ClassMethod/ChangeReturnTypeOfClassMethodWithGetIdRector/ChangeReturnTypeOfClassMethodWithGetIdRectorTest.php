@@ -2,6 +2,7 @@
 
 namespace Rector\Doctrine\Tests\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector;
 
+use Iterator;
 use Rector\Doctrine\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ChangeReturnTypeOfClassMethodWithGetIdRectorTest extends AbstractRec
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

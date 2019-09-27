@@ -2,6 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector;
 
+use Iterator;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RemoveDelegatingParentCallRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/skip_access_override.php.inc'];

@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
 
+use Iterator;
 use Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\Klarka;
@@ -17,10 +18,7 @@ final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/get.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

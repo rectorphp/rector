@@ -2,6 +2,7 @@
 
 namespace Rector\Php73\Tests\Rector\FuncCall\ArrayKeyFirstLastRector;
 
+use Iterator;
 use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ArrayKeyFirstLastRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/array_key_first.php.inc'];
         yield [__DIR__ . '/Fixture/array_key_last.php.inc'];

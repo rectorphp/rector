@@ -2,6 +2,7 @@
 
 namespace Rector\Laravel\Tests\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector;
 
+use Iterator;
 use Rector\Laravel\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class FacadeStaticCallToConstructorInjectionRectorTest extends AbstractRec
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

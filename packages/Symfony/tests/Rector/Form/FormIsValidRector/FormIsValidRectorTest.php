@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\Form\FormIsValidRector;
 
+use Iterator;
 use Rector\Symfony\Rector\Form\FormIsValidRector;
 use Rector\Symfony\Tests\Rector\Form\FormIsValidRector\Source\Form;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -16,10 +17,7 @@ final class FormIsValidRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

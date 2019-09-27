@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector;
 
+use Iterator;
 use Rector\Symfony\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ContainerBuilderCompileEnvArgumentRectorTest extends AbstractRectorT
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

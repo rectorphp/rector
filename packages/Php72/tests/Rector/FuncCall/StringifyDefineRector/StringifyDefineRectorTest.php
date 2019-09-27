@@ -2,6 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\FuncCall\StringifyDefineRector;
 
+use Iterator;
 use Rector\Php72\Rector\FuncCall\StringifyDefineRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class StringifyDefineRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

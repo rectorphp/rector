@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
-use Rector\NetteToSymfony\PhpDocParser\Ast\PhpDoc\SymfonyRouteTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\NetteToSymfony\Route\RouteInfo;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NodeContainer\ParsedNodesByType;

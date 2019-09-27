@@ -2,6 +2,7 @@
 
 namespace Rector\Php70\Tests\Rector\FunctionLike\Php4ConstructorRector;
 
+use Iterator;
 use Rector\Php70\Rector\FunctionLike\Php4ConstructorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -19,10 +20,7 @@ final class Php4ConstructorRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/in_namespace.php.inc'];

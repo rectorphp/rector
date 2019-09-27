@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\FuncCall\FunctionToNewRector;
 
+use Iterator;
 use Rector\Rector\FuncCall\FunctionToNewRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class FunctionToNewRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

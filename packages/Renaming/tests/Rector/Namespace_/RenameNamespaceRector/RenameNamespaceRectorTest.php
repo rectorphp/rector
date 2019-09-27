@@ -2,6 +2,7 @@
 
 namespace Rector\Renaming\Tests\Rector\Namespace_\RenameNamespaceRector;
 
+use Iterator;
 use Rector\Renaming\Rector\Namespace_\RenameNamespaceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RenameNamespaceRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

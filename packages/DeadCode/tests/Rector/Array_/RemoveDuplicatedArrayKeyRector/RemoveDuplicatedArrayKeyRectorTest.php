@@ -2,6 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Array_\RemoveDuplicatedArrayKeyRector;
 
+use Iterator;
 use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RemoveDuplicatedArrayKeyRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/last_man_standing.php.inc'];

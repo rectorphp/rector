@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 
+use Iterator;
 use Rector\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService;
@@ -17,10 +18,7 @@ final class ServiceGetterToConstructorInjectionRectorTest extends AbstractRector
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

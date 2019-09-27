@@ -2,6 +2,7 @@
 
 namespace Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantReferenceRector;
 
+use Iterator;
 use Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector;
 use Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantReferenceRector\Source\DoctrineEntityManager;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -16,10 +17,7 @@ final class EntityAliasToClassConstantReferenceRectorTest extends AbstractRector
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

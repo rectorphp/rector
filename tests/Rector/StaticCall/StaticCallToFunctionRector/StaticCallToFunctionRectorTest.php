@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\StaticCall\StaticCallToFunctionRector;
 
+use Iterator;
 use Rector\Rector\StaticCall\StaticCallToFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\StaticCall\StaticCallToFunctionRector\Source\SomeOldStaticClass;
@@ -16,10 +17,7 @@ final class StaticCallToFunctionRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

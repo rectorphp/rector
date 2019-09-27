@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector;
 
+use Iterator;
 use Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector;
 use Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\Process;
 use Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\ProcessHelper;
@@ -17,10 +18,7 @@ final class StringToArrayArgumentProcessRectorTest extends AbstractRectorTestCas
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

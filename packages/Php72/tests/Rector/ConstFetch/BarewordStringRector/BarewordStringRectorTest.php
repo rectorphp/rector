@@ -2,6 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\ConstFetch\BarewordStringRector;
 
+use Iterator;
 use Rector\Php72\Rector\ConstFetch\BarewordStringRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class BarewordStringRectorTest extends AbstractRectorTestCase
         $this->doTestFileWithoutAutoload($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/define.php.inc'];

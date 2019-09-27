@@ -2,6 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\Concat\RemoveConcatAutocastRector;
 
+use Iterator;
 use Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RemoveConcatAutocastRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

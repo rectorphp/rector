@@ -2,6 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 
+use Iterator;
 use Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class FinalizeClassesWithoutChildrenRectorTest extends AbstractRectorTestC
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/skip.php.inc'];

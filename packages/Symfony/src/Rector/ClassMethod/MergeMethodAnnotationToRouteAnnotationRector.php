@@ -4,8 +4,8 @@ namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NetteToSymfony\PhpDocParser\Ast\PhpDoc\SymfonyMethodTagValueNode;
-use Rector\NetteToSymfony\PhpDocParser\Ast\PhpDoc\SymfonyRouteTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioMethodTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -87,7 +87,7 @@ PHP
             return null;
         }
 
-        $symfonyMethodPhpDocTagValueNode = $phpDocInfo->getByType(SymfonyMethodTagValueNode::class);
+        $symfonyMethodPhpDocTagValueNode = $phpDocInfo->getByType(SensioMethodTagValueNode::class);
         if ($symfonyMethodPhpDocTagValueNode === null) {
             return null;
         }

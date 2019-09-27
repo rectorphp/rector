@@ -2,6 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector;
 
+use Iterator;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class TypedPropertyRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/property.php.inc'];
         yield [__DIR__ . '/Fixture/skip_invalid_property.php.inc'];

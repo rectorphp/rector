@@ -2,6 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector;
 
+use Iterator;
 use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ExplicitBoolCompareRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/count.php.inc'];
         yield [__DIR__ . '/Fixture/array.php.inc'];

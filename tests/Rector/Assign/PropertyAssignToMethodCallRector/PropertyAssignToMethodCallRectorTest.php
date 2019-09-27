@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector;
 
+use Iterator;
 use Rector\Rector\Assign\PropertyAssignToMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
@@ -17,10 +18,7 @@ final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

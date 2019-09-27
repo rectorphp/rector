@@ -2,6 +2,7 @@
 
 namespace Rector\Php72\Tests\Rector\Unset_\UnsetCastRector;
 
+use Iterator;
 use Rector\Php72\Rector\Unset_\UnsetCastRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class UnsetCastRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/unset_expr.php.inc'];

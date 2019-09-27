@@ -2,6 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 
+use Iterator;
 use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class AddLiteralSeparatorToNumberRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/skip_non_dec_simple_float_numbers.php.inc'];

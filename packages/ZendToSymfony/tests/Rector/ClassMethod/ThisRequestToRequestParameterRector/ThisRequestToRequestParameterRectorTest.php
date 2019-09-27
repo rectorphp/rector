@@ -2,6 +2,7 @@
 
 namespace Rector\ZendToSymfony\Tests\Rector\ClassMethod\ThisRequestToRequestParameterRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\ZendToSymfony\Rector\ClassMethod\ThisRequestToRequestParameterRector;
 
@@ -15,10 +16,7 @@ final class ThisRequestToRequestParameterRectorTest extends AbstractRectorTestCa
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/this_request_to_parameter.php.inc'];
     }

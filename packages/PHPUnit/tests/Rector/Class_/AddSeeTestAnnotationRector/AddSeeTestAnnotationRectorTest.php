@@ -2,6 +2,7 @@
 
 namespace Rector\PHPUnit\Tests\Rector\Class_\AddSeeTestAnnotationRector;
 
+use Iterator;
 use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class AddSeeTestAnnotationRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/different_namespace.php.inc'];
         yield [__DIR__ . '/Fixture/add_to_doc_block.php.inc'];

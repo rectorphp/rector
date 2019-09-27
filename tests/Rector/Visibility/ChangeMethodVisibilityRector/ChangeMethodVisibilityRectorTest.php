@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Visibility\ChangeMethodVisibilityRector;
 
+use Iterator;
 use Rector\Rector\Visibility\ChangeMethodVisibilityRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\Visibility\ChangeMethodVisibilityRector\Source\ParentObject;
@@ -16,10 +17,7 @@ final class ChangeMethodVisibilityRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

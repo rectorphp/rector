@@ -2,6 +2,7 @@
 
 namespace Rector\Php73\Tests\Rector\FuncCall\JsonThrowOnErrorRector;
 
+use Iterator;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class JsonThrowOnErrorRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

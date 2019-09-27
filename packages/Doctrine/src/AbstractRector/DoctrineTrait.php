@@ -5,8 +5,8 @@ namespace Rector\Doctrine\AbstractRector;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
-use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
 
 trait DoctrineTrait
 {

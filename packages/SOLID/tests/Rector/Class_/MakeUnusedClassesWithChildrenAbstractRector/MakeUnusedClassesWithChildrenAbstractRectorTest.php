@@ -2,6 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
 
+use Iterator;
 use Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class MakeUnusedClassesWithChildrenAbstractRectorTest extends AbstractRect
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/skip_new.php.inc'];

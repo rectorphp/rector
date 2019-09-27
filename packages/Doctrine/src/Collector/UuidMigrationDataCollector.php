@@ -2,8 +2,8 @@
 
 namespace Rector\Doctrine\Collector;
 
-use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\DoctrineRelationTagValueNodeInterface;
-use Rector\DoctrinePhpDocParser\Contract\Ast\PhpDoc\ToManyTagNodeInterface;
+use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
+use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
 
 final class UuidMigrationDataCollector
 {

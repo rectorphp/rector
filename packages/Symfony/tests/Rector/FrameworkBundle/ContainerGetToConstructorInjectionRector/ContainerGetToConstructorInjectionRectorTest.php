@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector;
 
+use Iterator;
 use Rector\Configuration\Option;
 use Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector;
 use Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeKernelClass;
@@ -29,10 +30,7 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/my_command.php.inc'];
         yield [__DIR__ . '/Fixture/first_class.php.inc'];

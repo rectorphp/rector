@@ -2,6 +2,7 @@
 
 namespace Rector\Php70\Tests\Rector\If_\IfToSpaceshipRector;
 
+use Iterator;
 use Rector\Php70\Rector\If_\IfToSpaceshipRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class IfToSpaceshipRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/skip.php.inc'];

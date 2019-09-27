@@ -19,9 +19,6 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractFileSystem
         $this->assertFileEquals($expectedFileContent, $expectedFileLocation);
     }
 
-    /**
-     * @return string[]
-     */
     public function provideDataForTest(): Iterator
     {
         yield [

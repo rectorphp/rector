@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\MagicDisclosure\ToStringToMethodCallRector;
 
+use Iterator;
 use Rector\Rector\MagicDisclosure\ToStringToMethodCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symfony\Component\Config\ConfigCache;
@@ -16,10 +17,7 @@ final class ToStringToMethodCallRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

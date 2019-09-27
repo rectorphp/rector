@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\CascadeValidationFormBuilderRector;
 
+use Iterator;
 use Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class CascadeValidationFormBuilderRectorTest extends AbstractRectorTestCas
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

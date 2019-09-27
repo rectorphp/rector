@@ -2,6 +2,7 @@
 
 namespace Rector\Doctrine\Tests\Rector\Property\AddUuidAnnotationsToIdPropertyRector;
 
+use Iterator;
 use Rector\Doctrine\Rector\Property\AddUuidAnnotationsToIdPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class AddUuidAnnotationsToIdPropertyRectorTest extends AbstractRectorTestC
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/column.php.inc'];

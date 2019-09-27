@@ -2,6 +2,7 @@
 
 namespace Rector\Renaming\Tests\Rector\Constant\RenameClassConstantRector;
 
+use Iterator;
 use Rector\Renaming\Rector\Constant\RenameClassConstantRector;
 use Rector\Renaming\Tests\Rector\Constant\RenameClassConstantRector\Source\DifferentClass;
 use Rector\Renaming\Tests\Rector\Constant\RenameClassConstantRector\Source\LocalFormEvents;
@@ -17,10 +18,7 @@ final class RenameClassConstantRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

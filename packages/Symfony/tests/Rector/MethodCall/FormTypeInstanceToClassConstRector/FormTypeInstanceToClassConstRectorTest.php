@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector;
 
+use Iterator;
 use Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector;
 use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\ControllerClass;
 use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\FormBuilder;
@@ -18,10 +19,7 @@ final class FormTypeInstanceToClassConstRectorTest extends AbstractRectorTestCas
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

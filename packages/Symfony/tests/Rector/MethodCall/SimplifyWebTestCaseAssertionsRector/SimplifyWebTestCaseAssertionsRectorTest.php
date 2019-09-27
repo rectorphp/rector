@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
 
+use Iterator;
 use Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
 use Rector\Symfony\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\Source\FixtureWebTestCase;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -16,10 +17,7 @@ final class SimplifyWebTestCaseAssertionsRectorTest extends AbstractRectorTestCa
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/response_code_same.php.inc'];

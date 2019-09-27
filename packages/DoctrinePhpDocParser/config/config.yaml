@@ -1,8 +1,0 @@
-services:
-    _defaults:
-        autowire: true
-        public: true
-
-    Rector\DoctrinePhpDocParser\:
-        resource: '../src'
-        exclude: '../src/{Ast/PhpDoc/*,*StaticHelper.php}'

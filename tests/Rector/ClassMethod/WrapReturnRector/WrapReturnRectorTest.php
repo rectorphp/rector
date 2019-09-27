@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\ClassMethod\WrapReturnRector;
 
+use Iterator;
 use Rector\Rector\ClassMethod\WrapReturnRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
@@ -16,10 +17,7 @@ final class WrapReturnRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/already_array.php.inc'];

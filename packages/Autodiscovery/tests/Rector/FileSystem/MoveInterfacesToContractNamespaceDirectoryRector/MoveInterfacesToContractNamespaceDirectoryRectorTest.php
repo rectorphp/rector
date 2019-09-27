@@ -19,9 +19,6 @@ final class MoveInterfacesToContractNamespaceDirectoryRectorTest extends Abstrac
         $this->assertFileEquals($expectedFileContent, $expectedFileLocation);
     }
 
-    /**
-     * @return string[]
-     */
     public function provideDataForTest(): Iterator
     {
         yield [

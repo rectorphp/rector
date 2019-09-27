@@ -2,6 +2,7 @@
 
 namespace Rector\Php54\Tests\Rector\FuncCall\RemoveReferenceFromCallRector;
 
+use Iterator;
 use Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RemoveReferenceFromCallRectorTest extends AbstractRectorTestCase
         $this->doTestFileWithoutAutoload($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

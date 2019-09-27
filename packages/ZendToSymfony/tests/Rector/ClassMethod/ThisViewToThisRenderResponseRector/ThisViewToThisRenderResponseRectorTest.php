@@ -2,6 +2,7 @@
 
 namespace Rector\ZendToSymfony\Tests\Rector\ClassMethod\ThisViewToThisRenderResponseRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\ZendToSymfony\Rector\ClassMethod\ThisViewToThisRenderResponseRector;
 
@@ -15,10 +16,7 @@ final class ThisViewToThisRenderResponseRectorTest extends AbstractRectorTestCas
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/this_view_to_this_render.php.inc'];
     }

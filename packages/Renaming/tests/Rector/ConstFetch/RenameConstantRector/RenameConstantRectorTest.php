@@ -2,6 +2,7 @@
 
 namespace Rector\Renaming\Tests\Rector\ConstFetch\RenameConstantRector;
 
+use Iterator;
 use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RenameConstantRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/spaghetti.php.inc'];

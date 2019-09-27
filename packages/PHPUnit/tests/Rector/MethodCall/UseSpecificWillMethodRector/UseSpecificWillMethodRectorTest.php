@@ -2,6 +2,7 @@
 
 namespace Rector\PHPUnit\Tests\Rector\MethodCall\UseSpecificWillMethodRector;
 
+use Iterator;
 use Rector\PHPUnit\Rector\MethodCall\UseSpecificWillMethodRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class UseSpecificWillMethodRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/will.php.inc'];
         yield [__DIR__ . '/Fixture/with.php.inc'];

@@ -2,6 +2,7 @@
 
 namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector;
 
+use Iterator;
 use Rector\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ChangeGetUuidMethodCallToGetIdRectorTest extends AbstractRectorTestC
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

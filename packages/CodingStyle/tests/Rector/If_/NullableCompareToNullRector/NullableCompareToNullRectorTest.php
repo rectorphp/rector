@@ -2,6 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\If_\NullableCompareToNullRector;
 
+use Iterator;
 use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class NullableCompareToNullRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

@@ -2,6 +2,7 @@
 
 namespace Rector\Php74\Tests\Rector\Closure\ClosureToArrowFunctionRector;
 
+use Iterator;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ClosureToArrowFunctionRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/referenced_but_not_used.php.inc'];

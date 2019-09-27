@@ -2,6 +2,7 @@
 
 namespace Rector\Php70\Tests\Rector\Ternary\TernaryToSpaceshipRector;
 
+use Iterator;
 use Rector\Php70\Rector\Ternary\TernaryToSpaceshipRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class TernaryToSpaceshipRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

@@ -2,6 +2,7 @@
 
 namespace Rector\Php70\Tests\Rector\List_\ListSplitStringRector;
 
+use Iterator;
 use Rector\Php70\Rector\List_\ListSplitStringRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ListSplitStringRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

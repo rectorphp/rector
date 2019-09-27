@@ -25,10 +25,7 @@ class SomeServiceTest extends \PHPUnit\Framework\TestCase
     {
         $this->doTestSingle($variable);
     }
-    /**
-     * @return int[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): \Iterator
     {
         yield [1];
         yield [2];

@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Argument\ArgumentDefaultValueReplacerRector;
 
+use Iterator;
 use Rector\Rector\Argument\ArgumentDefaultValueReplacerRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ArgumentDefaultValueReplacerRectorTest extends AbstractRectorTestCas
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

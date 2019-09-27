@@ -116,7 +116,6 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             - 'packages/Doctrine/src/Rector/ClassMethod/AddMethodCallBasedParamTypeRector.php'
-            - 'packages/DoctrinePhpDocParser/src/PhpDocParser/OrmTagParser.php'
             - 'packages/TypeDeclaration/src/TypeInferer/ReturnTypeInferer/ReturnedNodesReturnTypeInferer.php'
             - 'packages/NodeTypeResolver/src/NodeTypeResolver.php'
             - 'packages/NodeTypeResolver/src/PerNodeTypeResolver/VariableTypeResolver.php'
@@ -124,7 +123,7 @@ parameters:
             - 'packages/SOLID/src/Analyzer/ClassConstantFetchAnalyzer.php'
             # tough logic
             - 'packages/PHPUnit/src/Rector/Class_/ArrayArgumentInTestToDataProviderRector.php'
-            - 'packages/DoctrinePhpDocParser/src/Ast/PhpDoc/*/*TagValueNode.php'
+            - 'packages/BetterPhpDocParser/src/Ast/PhpDoc/*/*TagValueNode.php'
             - 'packages/NodeTypeResolver/src/PhpDoc/NodeAnalyzer/FqnNamePhpDocNodeDecorator.php'
             - 'packages/NodeTypeResolver/src/PHPStan/Type/StaticTypeAnalyzer.php'
             - 'src/NodeContainer/ParsedNodesByType.php'

@@ -2,6 +2,7 @@
 
 namespace Rector\PHPUnit\Tests\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector;
 
+use Iterator;
 use Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class AssertEqualsParameterToSpecificMethodsTypeRectorTest extends Abstrac
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/remove_max_depth.php.inc'];
         yield [__DIR__ . '/Fixture/refactor_canonize.php.inc'];

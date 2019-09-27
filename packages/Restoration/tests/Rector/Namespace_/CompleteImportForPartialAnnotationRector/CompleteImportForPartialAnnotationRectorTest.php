@@ -2,6 +2,7 @@
 
 namespace Rector\Restoration\Tests\Rector\Namespace_\CompleteImportForPartialAnnotationRector;
 
+use Iterator;
 use Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class CompleteImportForPartialAnnotationRectorTest extends AbstractRectorT
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/keep_non_annotations.php.inc'];

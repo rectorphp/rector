@@ -2,6 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector;
 
+use Iterator;
 use Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class VarConstantCommentRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/correct_invalid.php.inc'];

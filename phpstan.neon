@@ -174,11 +174,11 @@ parameters:
         - '#Ternary operator condition is always true#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Property\:\:\$var#'
 
-        - '#Method Rector\\DoctrinePhpDocParser\\Tests\\PhpDocParser\\OrmTagParser\\AbstractOrmTagParserTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
+        - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\OrmTagParser\\AbstractOrmTagParserTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
         - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer\:\:getService\(\) should return object but returns object\|null#'
         - '#Call to function property_exists\(\) with string and (.*?) will always evaluate to false#'
         - '#Method Rector\\Console\\Option\\SetOptionResolver\:\:separateVersionedAndUnversionedSets\(\) should return array<array<string\>\> but returns array<int, array<int\|string, array<int, string\>\|string\>\>#'
-        - '#Method Rector\\DoctrinePhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:readMethodAnnotation\(\) should return Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template but returns object\|null#'
+        - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:readMethodAnnotation\(\) should return Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template but returns object\|null#'
         - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\ClassLike\:\:\$stmts#'
 
         - '#Property Rector\\TypeDeclaration\\TypeInferer\\(.*?)\:\:\$(.*?)TypeInferers \(array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\(.*?)TypeInfererInterface\>\) does not accept array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface\>#'
@@ -196,12 +196,12 @@ parameters:
 
         - '#PHPDoc tag @return with type array<string\> is incompatible with native type Iterator#'
 
-        - '#Method Rector\\DoctrinePhpDocParser\\PhpDocParser\\TableTagValueNodeFactory\:\:createIndexTagValueNodes\(\) should return array<Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\> but returns array<int, Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\|Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\>#'
+        - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\Doctrine\\TableTagValueNodeFactory\:\:createIndexTagValueNodes\(\) should return array<Rector\\BetterPhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\> but returns array<int, Rector\\BetterPhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\|Rector\\BetterPhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\>#'
 
-        - '#Method Rector\\DoctrinePhpDocParser\\PhpDocParser\\TableTagValueNodeFactory\:\:createUniqueConstraintTagValueNodes\(\) should return array<Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\> but returns array<int, Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\|Rector\\DoctrinePhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\>#'
+        - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\Doctrine\\TableTagValueNodeFactory\:\:createUniqueConstraintTagValueNodes\(\) should return array<Rector\\BetterPhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\> but returns array<int, Rector\\BetterPhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\|Rector\\BetterPhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\>#'
 
         - '#Parameter \#1 \$obj of function spl_object_hash expects object, PhpParser\\Comment\\Doc\|null given#'
-        - '#Method Rector\\DoctrinePhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:readMethodAnnotation\(\) should return Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template\|Symfony\\Component\\Routing\\Annotation\\Route\|null but returns object\|null#'
+        - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:readMethodAnnotation\(\) should return Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template\|Symfony\\Component\\Routing\\Annotation\\Route\|null but returns object\|null#'
         - '#Method Rector\\Doctrine\\Rector\\MethodCall\\ChangeSetIdToUuidValueRector\:\:getSetUuidMethodCallOnSameVariable\(\) should return PhpParser\\Node\\Expr\\MethodCall\|null but returns PhpParser\\Node\|null#'
 
         # bugs

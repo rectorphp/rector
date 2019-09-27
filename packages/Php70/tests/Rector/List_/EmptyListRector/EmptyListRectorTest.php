@@ -2,6 +2,7 @@
 
 namespace Rector\Php70\Tests\Rector\List_\EmptyListRector;
 
+use Iterator;
 use Rector\Php70\Rector\List_\EmptyListRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class EmptyListRectorTest extends AbstractRectorTestCase
         $this->doTestFileWithoutAutoload($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

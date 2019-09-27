@@ -2,6 +2,7 @@
 
 namespace Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector;
 
+use Iterator;
 use Rector\SOLID\Rector\ClassConst\PrivatizeLocalClassConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -23,10 +24,7 @@ final class PrivatizeLocalClassConstantRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/skip_multi_overcomplex.php.inc'];
@@ -40,10 +38,7 @@ final class PrivatizeLocalClassConstantRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/override_public_constant.php.inc'];
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTestProtected(): iterable
+    public function provideDataForTestProtected(): Iterator
     {
         yield [__DIR__ . '/Fixture/protected_parent_parent.php.inc'];
         yield [__DIR__ . '/Fixture/override_protected_constant.php.inc'];

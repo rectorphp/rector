@@ -15,9 +15,6 @@ final class InlineValidationRulesToArrayDefinitionRectorTest extends AbstractRec
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
     public function provideForTest(): iterable
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];

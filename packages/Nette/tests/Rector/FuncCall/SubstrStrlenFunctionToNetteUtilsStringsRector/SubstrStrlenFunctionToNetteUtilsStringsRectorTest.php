@@ -2,6 +2,7 @@
 
 namespace Rector\Nette\Tests\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector;
 
+use Iterator;
 use Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class SubstrStrlenFunctionToNetteUtilsStringsRectorTest extends AbstractRe
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/substr.php.inc'];
         yield [__DIR__ . '/Fixture/strlen.php.inc'];

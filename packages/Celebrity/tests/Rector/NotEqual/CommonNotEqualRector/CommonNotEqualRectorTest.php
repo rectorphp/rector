@@ -2,6 +2,7 @@
 
 namespace Rector\Celebrity\Tests\Rector\NotEqual\CommonNotEqualRector;
 
+use Iterator;
 use Rector\Celebrity\Rector\NotEqual\CommonNotEqualRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class CommonNotEqualRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

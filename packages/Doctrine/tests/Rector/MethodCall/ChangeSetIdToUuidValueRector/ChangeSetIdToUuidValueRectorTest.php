@@ -2,6 +2,7 @@
 
 namespace Rector\Doctrine\Tests\Rector\MethodCall\ChangeSetIdToUuidValueRector;
 
+use Iterator;
 use Rector\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ChangeSetIdToUuidValueRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/no_set_uuid.php.inc'];

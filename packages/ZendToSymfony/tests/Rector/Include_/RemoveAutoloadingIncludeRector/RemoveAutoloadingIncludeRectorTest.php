@@ -2,6 +2,7 @@
 
 namespace Rector\ZendToSymfony\Tests\Rector\Include_\RemoveAutoloadingIncludeRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\ZendToSymfony\Rector\Include_\RemoveAutoloadingIncludeRector;
 
@@ -15,10 +16,7 @@ final class RemoveAutoloadingIncludeRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/simple_include.php.inc'];
         yield [__DIR__ . '/Fixture/keep_non_autoload_includes.php.inc'];

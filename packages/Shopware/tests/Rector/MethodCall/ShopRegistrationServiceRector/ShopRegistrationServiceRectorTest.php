@@ -2,6 +2,7 @@
 
 namespace Rector\Shopware\Tests\Rector\MethodCall\ShopRegistrationServiceRector;
 
+use Iterator;
 use Rector\Shopware\Rector\MethodCall\ShopRegistrationServiceRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ShopRegistrationServiceRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

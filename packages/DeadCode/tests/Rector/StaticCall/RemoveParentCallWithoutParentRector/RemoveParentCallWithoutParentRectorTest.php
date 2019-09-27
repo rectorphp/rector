@@ -2,6 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 
+use Iterator;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RemoveParentCallWithoutParentRectorTest extends AbstractRectorTestCa
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/parent_but_no_method.php.inc'];

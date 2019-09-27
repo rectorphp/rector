@@ -2,6 +2,7 @@
 
 namespace Rector\Php55\Tests\Rector\String_\StringClassNameToClassConstantRector;
 
+use Iterator;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class StringClassNameToClassConstantRectorTest extends AbstractRectorTestC
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/skip_error.php.inc'];

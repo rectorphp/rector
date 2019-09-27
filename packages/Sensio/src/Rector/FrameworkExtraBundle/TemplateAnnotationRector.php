@@ -8,11 +8,11 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Sensio\Helper\TemplateGuesser;
-use Rector\Sensio\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 
 final class TemplateAnnotationRector extends AbstractRector
 {
@@ -76,7 +76,7 @@ PHP
             return null;
         }
 
-        $templateTagValueNode = $phpDocInfo->getByType(TemplateTagValueNode::class);
+        $templateTagValueNode = $phpDocInfo->getByType(SensioTemplateTagValueNode::class);
         if ($templateTagValueNode === null) {
             return null;
         }
@@ -99,7 +99,7 @@ PHP
         }
 
         // remove annotation
-        $this->docBlockManipulator->removeTagFromNode($node, TemplateTagValueNode::class);
+        $this->docBlockManipulator->removeTagFromNode($node, SensioTemplateTagValueNode::class);
 
         return $node;
     }
@@ -110,9 +110,9 @@ PHP
     private function resolveRenderArguments(
         ClassMethod $classMethod,
         ?Return_ $returnNode,
-        TemplateTagValueNode $templateTagValueNode
+        SensioTemplateTagValueNode $sensioTemplateTagValueNode
     ): array {
-        $arguments = [$this->resolveTemplateName($classMethod, $templateTagValueNode)];
+        $arguments = [$this->resolveTemplateName($classMethod, $sensioTemplateTagValueNode)];
 
         if ($returnNode === null) {
             return $this->createArgs($arguments);
@@ -127,10 +127,12 @@ PHP
         return $this->createArgs($arguments);
     }
 
-    private function resolveTemplateName(ClassMethod $classMethod, TemplateTagValueNode $templateTagValueNode): string
-    {
-        if ($templateTagValueNode->getTemplate() !== null) {
-            return $templateTagValueNode->getTemplate();
+    private function resolveTemplateName(
+        ClassMethod $classMethod,
+        SensioTemplateTagValueNode $sensioTemplateTagValueNode
+    ): string {
+        if ($sensioTemplateTagValueNode->getTemplate() !== null) {
+            return $sensioTemplateTagValueNode->getTemplate();
         }
 
         return $this->templateGuesser->resolveFromClassMethodNode($classMethod, $this->version);

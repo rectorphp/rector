@@ -2,6 +2,7 @@
 
 namespace Rector\Laravel\Tests\Rector\StaticCall\Redirect301ToPermanentRedirectRector;
 
+use Iterator;
 use Rector\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class Redirect301ToPermanentRedirectRectorTest extends AbstractRectorTestC
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

@@ -2,6 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 
@@ -15,10 +16,7 @@ final class ParamTypeDeclarationRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         // @todo fix later - yield [__DIR__ . '/Fixture/aliased.php.inc'];
 

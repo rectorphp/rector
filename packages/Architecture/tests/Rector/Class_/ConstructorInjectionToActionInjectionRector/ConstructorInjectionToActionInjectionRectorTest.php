@@ -2,6 +2,7 @@
 
 namespace Rector\Architecture\Tests\Rector\Class_\ConstructorInjectionToActionInjectionRector;
 
+use Iterator;
 use Rector\Architecture\Rector\Class_\ConstructorInjectionToActionInjectionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class ConstructorInjectionToActionInjectionRectorTest extends AbstractRect
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/duplicate.php.inc'];

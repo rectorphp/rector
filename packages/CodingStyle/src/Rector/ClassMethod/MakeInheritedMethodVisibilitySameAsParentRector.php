@@ -5,7 +5,6 @@ namespace Rector\CodingStyle\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -72,7 +71,8 @@ PHP
         /** @var Scope|null $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if ($scope === null) {
-            throw new ShouldNotHappenException();
+            // possibly trait
+            return null;
         }
 
         $classReflection = $scope->getClassReflection();

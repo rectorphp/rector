@@ -2,6 +2,7 @@
 
 namespace Rector\Doctrine\Tests\Rector\Property\RemoveTemporaryUuidColumnPropertyRector;
 
+use Iterator;
 use Rector\Doctrine\Rector\Property\RemoveTemporaryUuidColumnPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class RemoveTemporaryUuidColumnPropertyRectorTest extends AbstractRectorTe
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

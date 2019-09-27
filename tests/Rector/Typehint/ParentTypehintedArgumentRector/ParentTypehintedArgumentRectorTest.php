@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector;
 
+use Iterator;
 use Rector\Rector\Typehint\ParentTypehintedArgumentRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\Typehint\ParentTypehintedArgumentRector\Source\ClassMetadataFactory;
@@ -17,10 +18,7 @@ final class ParentTypehintedArgumentRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/SomeClassImplementingParserInterface.php'];
         yield [__DIR__ . '/Fixture/MyMetadataFactory.php'];

@@ -2,6 +2,7 @@
 
 namespace Rector\Doctrine\Tests\Rector\Class_\AlwaysInitializeUuidInEntityRector;
 
+use Iterator;
 use Rector\Doctrine\Rector\Class_\AlwaysInitializeUuidInEntityRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class AlwaysInitializeUuidInEntityRectorTest extends AbstractRectorTestCas
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/add_uuid_init.php.inc'];
         yield [__DIR__ . '/Fixture/add_uuid_init_to_construct.php.inc'];

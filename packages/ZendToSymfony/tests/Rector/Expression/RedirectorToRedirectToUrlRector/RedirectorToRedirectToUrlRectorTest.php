@@ -2,6 +2,7 @@
 
 namespace Rector\ZendToSymfony\Tests\Rector\Expression\RedirectorToRedirectToUrlRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\ZendToSymfony\Rector\Expression\RedirectorToRedirectToUrlRector;
 
@@ -15,10 +16,7 @@ final class RedirectorToRedirectToUrlRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/redirector.php.inc'];
     }

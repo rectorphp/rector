@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector;
 
+use Iterator;
 use Rector\Configuration\Option;
 use Rector\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector;
 use Rector\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector;
@@ -27,10 +28,7 @@ final class ActionInjectionToConstructorInjectionRectorTest extends AbstractRect
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

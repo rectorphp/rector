@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
 
+use Iterator;
 use Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
 use Rector\Symfony\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector\Source\FormBuilder;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -16,10 +17,7 @@ final class ReadOnlyOptionToAttributeRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];

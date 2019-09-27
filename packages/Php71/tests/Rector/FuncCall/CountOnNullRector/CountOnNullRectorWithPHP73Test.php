@@ -2,6 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector;
 
+use Iterator;
 use Rector\Php71\Rector\FuncCall\CountOnNullRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,10 +16,7 @@ final class CountOnNullRectorWithPHP73Test extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/is_countable.php.inc'];
     }

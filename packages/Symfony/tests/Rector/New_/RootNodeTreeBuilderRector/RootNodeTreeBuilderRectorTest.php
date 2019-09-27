@@ -2,6 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector;
 
+use Iterator;
 use Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector;
 use Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\Source\TreeBuilder;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -16,10 +17,7 @@ final class RootNodeTreeBuilderRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @return string[]
-     */
-    public function provideDataForTest(): iterable
+    public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
