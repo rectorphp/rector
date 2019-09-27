@@ -3,21 +3,22 @@
 namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Entity;
 
 /**
- * @ORM\Entity
+ * @EntitY
  */
 class SomeEntity
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\AnotherEntity", cascade={"persist", "merge"})
+     * @Orm\ManyToOne(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\AnotherEntity", cascade={"persist", "merge"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $amenity;
 }
 
 /**
- * @ORM\Entity
+ * @Orm\Entity
  */
 class AnotherEntity
 {
@@ -39,26 +40,27 @@ class AnotherEntity
 namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Entity;
 
 /**
- * @ORM\Entity
+ * @EntitY
  */
 class SomeEntity
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\AnotherEntity", cascade={"persist", "merge"})
+     * @Orm\ManyToOne(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\AnotherEntity", cascade={"persist", "merge"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $amenity;
     /**
-     * @ORM\ManyToOne(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\AnotherEntity", cascade={"persist", "merge"})
+     * @Orm\ManyToOne(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\AnotherEntity", cascade={"persist", "merge"})
      * @ORM\JoinColumn(nullable=true, referencedColumnName="uuid")
      */
     private $amenityUuid;
 }
 
 /**
- * @ORM\Entity
+ * @Orm\Entity
  */
 class AnotherEntity
 {

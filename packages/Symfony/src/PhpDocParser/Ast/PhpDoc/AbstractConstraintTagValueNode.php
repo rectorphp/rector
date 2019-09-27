@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\PhpDocParser\Ast\PhpDoc;
 
-use Rector\BetterPhpDocParser\PhpDocParser\Ast\PhpDoc\AbstractTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 abstract class AbstractConstraintTagValueNode extends AbstractTagValueNode
 {

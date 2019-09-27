@@ -5,7 +5,7 @@ namespace Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
 final class AttributeAwarePhpDocNode extends PhpDocNode implements AttributeAwareNodeInterface
 {

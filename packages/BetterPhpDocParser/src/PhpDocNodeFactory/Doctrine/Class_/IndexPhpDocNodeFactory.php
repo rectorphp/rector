@@ -11,7 +11,7 @@ final class IndexPhpDocNodeFactory
     /**
      * @var string
      */
-    private const INDEX_PATTERN = '#@ORM\\\\Index\((?<singleIndex>.*?)\),?#si';
+    private const INDEX_PATTERN = '#(?<tag>@(ORM\\\\)?Index)\((?<content>.*?)\),?#si';
 
     /**
      * @param mixed[]|null $indexes
@@ -27,20 +27,26 @@ final class IndexPhpDocNodeFactory
 
         $indexTagValueNodes = [];
         foreach ($indexes as $key => $index) {
+            $currentContent = $indexContents[$key];
+
             $indexTagValueNodes[] = $this->createFromAnnotationAndContent(
                 $index,
-                $indexContents[$key]['singleIndex']
+                $currentContent['content'],
+                $currentContent['tag']
             );
         }
 
         return $indexTagValueNodes;
     }
 
-    private function createFromAnnotationAndContent(Index $index, string $annotationContent): IndexTagValueNode
-    {
+    private function createFromAnnotationAndContent(
+        Index $index,
+        string $annotationContent,
+        string $tag
+    ): IndexTagValueNode {
         // doctrine/orm compatibility between different versions
         $flags = property_exists($index, 'flags') ? $index->flags : [];
 
-        return new IndexTagValueNode($index->name, $index->columns, $flags, $index->options, $annotationContent);
+        return new IndexTagValueNode($index->name, $index->columns, $flags, $index->options, $annotationContent, $tag);
     }
 }

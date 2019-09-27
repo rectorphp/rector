@@ -18,7 +18,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
     /**
      * @var string
      */
-    private const JOIN_COLUMN_PATTERN = '#@ORM\\\\JoinColumn\((?<singleJoinColumn>.*?)\),?#si';
+    private const JOIN_COLUMN_PATTERN = '#(?<tag>@(ORM\\\\)?JoinColumn)\((?<content>.*?)\),?#si';
 
     /**
      * @var JoinColumnPhpDocNodeFactory
@@ -51,8 +51,8 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
-
         $joinColumnValuesTags = $this->createJoinColumnTagValues($annotationContent, $joinTable, 'joinColumns');
+
         $inverseJoinColumnValuesTags = $this->createJoinColumnTagValues(
             $annotationContent,
             $joinTable,
@@ -77,10 +77,12 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         $joinColumnValuesTags = [];
 
         foreach ($joinTable->joinColumns as $key => $joinColumn) {
-            $currentJoinColumnContent = $joinColumnContents[$key]['singleJoinColumn'];
+            $subAnnotation = $joinColumnContents[$key];
+
             $joinColumnValuesTags[] = $this->joinColumnPhpDocNodeFactory->createFromAnnotationAndAnnotationContent(
                 $joinColumn,
-                $currentJoinColumnContent
+                $subAnnotation['content'],
+                $subAnnotation['tag']
             );
         }
 

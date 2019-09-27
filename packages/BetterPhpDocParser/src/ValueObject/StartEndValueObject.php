@@ -2,7 +2,7 @@
 
 namespace Rector\BetterPhpDocParser\ValueObject;
 
-final class StartEndInfo
+final class StartEndValueObject
 {
     /**
      * @var int

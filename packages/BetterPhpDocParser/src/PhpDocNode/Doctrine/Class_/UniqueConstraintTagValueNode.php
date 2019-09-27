@@ -8,4 +8,9 @@ final class UniqueConstraintTagValueNode extends AbstractIndexTagValueNode
      * @var string
      */
     public const SHORT_NAME = '@ORM\UniqueConstraint';
+
+    public function getTag(): ?string
+    {
+        return $this->tag ?: self::SHORT_NAME;
+    }
 }

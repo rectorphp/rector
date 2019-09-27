@@ -60,9 +60,6 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         $this->assertSame($expectedPhpDoc, $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo));
     }
 
-    /**
-     * @return string[]|Property[]
-     */
     public function provideDataForChangedFormat(): Iterator
     {
         $property = $this->createPublicPropertyUnderClass('anotherProperty', AnotherPropertyClass::class);

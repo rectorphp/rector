@@ -2,11 +2,16 @@
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_;
 
-use Rector\BetterPhpDocParser\Contract\Doctrine\OriginalTagAwareInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 
-abstract class AbstractIndexTagValueNode extends AbstractDoctrineTagValueNode implements OriginalTagAwareInterface
+abstract class AbstractIndexTagValueNode extends AbstractDoctrineTagValueNode implements TagAwareNodeInterface
 {
+    /**
+     * @var string|null
+     */
+    protected $tag;
+
     /**
      * @var string|null
      */
@@ -26,11 +31,6 @@ abstract class AbstractIndexTagValueNode extends AbstractDoctrineTagValueNode im
      * @var mixed[]|null
      */
     private $options;
-
-    /**
-     * @var string|null
-     */
-    private $originalTag;
 
     /**
      * @param mixed[]|null $columns
@@ -53,7 +53,7 @@ abstract class AbstractIndexTagValueNode extends AbstractDoctrineTagValueNode im
         if ($originalContent !== null) {
             $this->resolveOriginalContentSpacingAndOrder($originalContent);
         }
-        $this->originalTag = $originalTag;
+        $this->tag = $originalTag;
     }
 
     public function __toString(): string
@@ -77,10 +77,5 @@ abstract class AbstractIndexTagValueNode extends AbstractDoctrineTagValueNode im
         }
 
         return $this->printContentItems($contentItems);
-    }
-
-    public function getOriginalTag(): ?string
-    {
-        return $this->originalTag;
     }
 }

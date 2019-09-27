@@ -40,7 +40,8 @@ final class JoinColumnPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 
     public function createFromAnnotationAndAnnotationContent(
         JoinColumn $joinColumn,
-        string $annotationContent
+        string $annotationContent,
+        ?string $tag = null
     ): JoinColumnTagValueNode {
         return new JoinColumnTagValueNode(
             $joinColumn->name,
@@ -50,7 +51,8 @@ final class JoinColumnPhpDocNodeFactory extends AbstractPhpDocNodeFactory
             $joinColumn->onDelete,
             $joinColumn->columnDefinition,
             $joinColumn->fieldName,
-            $annotationContent
+            $annotationContent,
+            $tag
         );
     }
 }

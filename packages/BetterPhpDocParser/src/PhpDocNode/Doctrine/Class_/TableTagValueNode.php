@@ -37,6 +37,16 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
     private $options = [];
 
     /**
+     * @var bool
+     */
+    private $haveIndexesFinalComma = false;
+
+    /**
+     * @var bool
+     */
+    private $haveUniqueConstraintsFinalComma = false;
+
+    /**
      * @param mixed[] $options
      * @param IndexTagValueNode[] $indexes
      * @param UniqueConstraintTagValueNode[] $uniqueConstraints
@@ -47,7 +57,9 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
         array $indexes,
         array $uniqueConstraints,
         array $options,
-        ?string $originalContent = null
+        ?string $originalContent = null,
+        bool $haveIndexesFinalComma = false,
+        bool $haveUniqueConstraintsFinalComma = false
     ) {
         $this->name = $name;
         $this->schema = $schema;
@@ -58,6 +70,9 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
         if ($originalContent !== null) {
             $this->resolveOriginalContentSpacingAndOrder($originalContent);
         }
+
+        $this->haveIndexesFinalComma = $haveIndexesFinalComma;
+        $this->haveUniqueConstraintsFinalComma = $haveUniqueConstraintsFinalComma;
     }
 
     public function __toString(): string
@@ -73,14 +88,14 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
         }
 
         if ($this->indexes !== []) {
-            $contentItems['indexes'] = $this->printNestedTag($this->indexes, IndexTagValueNode::SHORT_NAME, 'indexes');
+            $contentItems['indexes'] = $this->printNestedTag($this->indexes, 'indexes', $this->haveIndexesFinalComma);
         }
 
         if ($this->uniqueConstraints !== []) {
             $contentItems['uniqueConstraints'] = $this->printNestedTag(
                 $this->uniqueConstraints,
-                UniqueConstraintTagValueNode::SHORT_NAME,
-                'uniqueConstraints'
+                'uniqueConstraints',
+                $this->haveUniqueConstraintsFinalComma
             );
         }
 

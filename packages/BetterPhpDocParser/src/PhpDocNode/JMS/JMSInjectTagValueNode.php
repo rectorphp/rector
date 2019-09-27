@@ -3,7 +3,7 @@
 namespace Rector\BetterPhpDocParser\PhpDocNode\JMS;
 
 use JMS\DiExtraBundle\Annotation\Inject;
-use Rector\BetterPhpDocParser\PhpDocParser\Ast\PhpDoc\AbstractTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class JMSInjectTagValueNode extends AbstractTagValueNode
 {

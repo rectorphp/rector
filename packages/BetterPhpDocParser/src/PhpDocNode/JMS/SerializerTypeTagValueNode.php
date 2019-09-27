@@ -4,7 +4,7 @@ namespace Rector\BetterPhpDocParser\PhpDocNode\JMS;
 
 use JMS\Serializer\Annotation\Type;
 use Nette\Utils\Strings;
-use Rector\BetterPhpDocParser\PhpDocParser\Ast\PhpDoc\AbstractTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class SerializerTypeTagValueNode extends AbstractTagValueNode
 {

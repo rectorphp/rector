@@ -7,7 +7,7 @@ use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineTagNodeInterface;
-use Rector\BetterPhpDocParser\ValueObject\StartEndInfo;
+use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
 
 final class OriginalSpacingRestorer
 {
@@ -18,9 +18,9 @@ final class OriginalSpacingRestorer
         Node $node,
         string $nodeOutput,
         array $tokens,
-        StartEndInfo $startEndInfo
+        StartEndValueObject $startEndValueObject
     ): string {
-        $oldWhitespaces = $this->detectOldWhitespaces($node, $tokens, $startEndInfo);
+        $oldWhitespaces = $this->detectOldWhitespaces($node, $tokens, $startEndValueObject);
 
         // no original whitespaces, return
         if ($oldWhitespaces === []) {
@@ -50,18 +50,18 @@ final class OriginalSpacingRestorer
      * @param mixed[] $tokens
      * @return string[]
      */
-    private function detectOldWhitespaces(Node $node, array $tokens, StartEndInfo $startEndInfo): array
+    private function detectOldWhitespaces(Node $node, array $tokens, StartEndValueObject $startEndValueObject): array
     {
         $oldWhitespaces = [];
 
-        $start = $startEndInfo->getStart();
+        $start = $startEndValueObject->getStart();
         // this is needed, because of 1 token taken from tokens and added annotation name: "ORM" + "\X" → "ORM\X"
         // todo, this might be needed to be dynamic, based on taken tokens count (some Collector?)
         if ($node instanceof DoctrineTagNodeInterface) {
             --$start;
         }
 
-        for ($i = $start; $i < $startEndInfo->getEnd(); ++$i) {
+        for ($i = $start; $i < $startEndValueObject->getEnd(); ++$i) {
             if ($tokens[$i][1] === Lexer::TOKEN_HORIZONTAL_WS) {
                 $value = $tokens[$i][0];
 

@@ -27,14 +27,9 @@ final class DoctrineTest extends AbstractPhpDocInfoPrinterTest
         );
     }
 
-    /**
-     * @return string[]|Class_[]
-     */
     public function provideDataForTestClass(): Iterator
     {
         yield [__DIR__ . '/Source/Doctrine/index_in_table.txt', new Class_(IndexInTable::class)];
-
-        $this->markTestSkipped('wip');
         yield [__DIR__ . '/Source/Doctrine/case_sensitive.txt', new Class_(CaseSensitive::class)];
         yield [__DIR__ . '/Source/Doctrine/short.txt', new Class_(Short::class)];
     }

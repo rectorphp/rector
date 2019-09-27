@@ -2,7 +2,7 @@
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Sensio;
 
-use Rector\BetterPhpDocParser\PhpDocParser\Ast\PhpDoc\AbstractTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 final class SensioTemplateTagValueNode extends AbstractTagValueNode
