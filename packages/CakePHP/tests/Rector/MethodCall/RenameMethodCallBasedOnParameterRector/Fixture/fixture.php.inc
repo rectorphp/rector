@@ -8,11 +8,6 @@ function renameMethodCallBasedOnParameter()
 
     $config = $object->getParam('paging');
     $object->withParam('paging', 'value');
-
-    $config = $object->getParam($value);
-
-    $config = $object->getParam('other');
-    $object->withParam('other', 'value');
 }
 
 ?>
@@ -27,11 +22,6 @@ function renameMethodCallBasedOnParameter()
 
     $config = $object->getAttribute('paging');
     $object->withAttribute('paging', 'value');
-
-    $config = $object->getParam($value);
-
-    $config = $object->getParam('other');
-    $object->withParam('other', 'value');
 }
 
 ?>

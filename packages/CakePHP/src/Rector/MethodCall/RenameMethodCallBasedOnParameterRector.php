@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
@@ -36,7 +36,7 @@ final class RenameMethodCallBasedOnParameterRector extends AbstractRector
         return new RectorDefinition(
             'Changes method calls based on matching the first parameter value.',
             [
-                new CodeSample(
+                new ConfiguredCodeSample(
                     <<<'PHP'
 $object = new ServerRequest();
 
@@ -48,8 +48,19 @@ PHP
 $object = new ServerRequest();
 
 $config = $object->getAttribute('paging');
-$object = $object->withParam('paging', ['a value']);
+$object = $object->withAttribute('paging', ['a value']);
 PHP
+                    ,
+                    [
+                        'getParam' => [
+                            'match_parameter' => 'paging',
+                            'replace_with' => 'getAttribute'
+                        ],
+                        'withParam' => [
+                            'match_parameter' => 'paging',
+                            'replace_with' => 'withAttribute'
+                        ]
+                    ]
                 ),
             ]
         );
@@ -73,7 +84,7 @@ PHP
             return null;
         }
 
-        $node->name = new Identifier($config['replaceWith']);
+        $node->name = new Identifier($config['replace_with']);
 
         return $node;
     }
@@ -99,7 +110,7 @@ PHP
                 continue;
             }
             $config = $methodMapping[$currentMethodName];
-            if (empty($config['matchParameter'])) {
+            if (empty($config['match_parameter'])) {
                 continue;
             }
             if (count($methodCall->args) < 1) {
@@ -109,7 +120,7 @@ PHP
             if (! ($arg->value instanceof String_)) {
                 continue;
             }
-            if ($arg->value->value !== $config['matchParameter']) {
+            if ($arg->value->value !== $config['match_parameter']) {
                 continue;
             }
 
@@ -117,33 +128,5 @@ PHP
         }
 
         return null;
-    }
-
-    /**
-     * @param mixed[] $config
-     */
-    private function resolveNewMethodNameByCondition(MethodCall $methodCall, array $config): string
-    {
-        if (count($methodCall->args) >= $config['minimal_argument_count']) {
-            return $config['set'];
-        }
-
-        if (! isset($methodCall->args[0])) {
-            return $config['get'];
-        }
-
-        // first argument type that is considered setter
-        if (! isset($config['first_argument_type_to_set'])) {
-            return $config['get'];
-        }
-
-        $argumentType = $config['first_argument_type_to_set'];
-        $argumentValue = $methodCall->args[0]->value;
-
-        if ($argumentType === 'array' && $argumentValue instanceof Array_) {
-            return $config['set'];
-        }
-
-        return $config['get'];
     }
 }

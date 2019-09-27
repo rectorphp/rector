@@ -22,6 +22,7 @@ final class RenameMethodCallBasedOnParameterRectorTest extends AbstractRectorTes
     public function provideDataForTest(): iterable
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
     }
 
     /**
@@ -33,14 +34,15 @@ final class RenameMethodCallBasedOnParameterRectorTest extends AbstractRectorTes
             RenameMethodCallBasedOnParameterRector::class => [
                 '$methodNamesByTypes' => [
                     SomeModelType::class => [
+                        'invalidNoOptions' => [],
                         'getParam' => [
-                            'matchParameter' => 'paging',
-                            'replaceWith' => 'getAttribute',
+                            'match_parameter' => 'paging',
+                            'replace_with' => 'getAttribute',
                         ],
                         'withParam' => [
-                            'matchParameter' =>  'paging',
-                            'replaceWith' => 'withAttribute',
-                        ]
+                            'match_parameter' =>  'paging',
+                            'replace_with' => 'withAttribute',
+                        ],
                     ],
                 ],
             ],
