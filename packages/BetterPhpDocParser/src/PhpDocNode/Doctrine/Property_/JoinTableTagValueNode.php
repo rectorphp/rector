@@ -60,17 +60,12 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
         }
 
         if ($this->joinColumns) {
-            $contentItems['joinColumns'] = $this->printNestedTag(
-                $this->joinColumns,
-                JoinColumnTagValueNode::SHORT_NAME,
-                'joinColumns'
-            );
+            $contentItems['joinColumns'] = $this->printNestedTag($this->joinColumns, 'joinColumns');
         }
 
         if ($this->inverseJoinColumns) {
             $contentItems['inverseJoinColumns'] = $this->printNestedTag(
                 $this->inverseJoinColumns,
-                JoinColumnTagValueNode::SHORT_NAME,
                 'inverseJoinColumns'
             );
         }

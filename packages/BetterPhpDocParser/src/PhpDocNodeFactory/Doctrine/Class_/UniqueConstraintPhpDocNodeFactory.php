@@ -11,7 +11,7 @@ final class UniqueConstraintPhpDocNodeFactory
     /**
      * @var string
      */
-    private const UNIQUE_CONSTRAINT_PATTERN = '#@ORM\\\\UniqueConstraint\((?<singleUniqueConstraint>.*?)\),?#si';
+    private const UNIQUE_CONSTRAINT_PATTERN = '#(?<tag>@(ORM\\\\)?UniqueConstraint)\((?<content>.*?)\),?#si';
 
     /**
      * @return UniqueConstraintTagValueNode[]
@@ -26,9 +26,12 @@ final class UniqueConstraintPhpDocNodeFactory
 
         $uniqueConstraintTagValueNodes = [];
         foreach ($uniqueConstraints as $key => $uniqueConstraint) {
+            $subAnnotationContent = $uniqueConstraintContents[$key];
+
             $uniqueConstraintTagValueNodes[] = $this->createIndexOrUniqueConstantTagValueNode(
                 $uniqueConstraint,
-                $uniqueConstraintContents[$key]['singleUniqueConstraint']
+                $subAnnotationContent['content'],
+                $subAnnotationContent['tag']
             );
         }
 
@@ -37,7 +40,8 @@ final class UniqueConstraintPhpDocNodeFactory
 
     private function createIndexOrUniqueConstantTagValueNode(
         UniqueConstraint $uniqueConstraint,
-        string $annotationContent
+        string $annotationContent,
+        string $tag
     ): UniqueConstraintTagValueNode {
         // doctrine/orm compatibility between different versions
         $flags = property_exists($uniqueConstraint, 'flags') ? $uniqueConstraint->flags : [];
@@ -47,7 +51,8 @@ final class UniqueConstraintPhpDocNodeFactory
             $uniqueConstraint->columns,
             $flags,
             $uniqueConstraint->options,
-            $annotationContent
+            $annotationContent,
+            $tag
         );
     }
 }

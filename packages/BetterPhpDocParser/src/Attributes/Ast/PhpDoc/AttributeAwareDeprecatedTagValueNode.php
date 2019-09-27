@@ -4,7 +4,7 @@ namespace Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\DeprecatedTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
 final class AttributeAwareDeprecatedTagValueNode extends DeprecatedTagValueNode implements AttributeAwareNodeInterface
 {

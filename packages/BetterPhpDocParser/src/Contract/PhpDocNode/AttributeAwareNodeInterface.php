@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Attributes\Contract\Ast;
+namespace Rector\BetterPhpDocParser\Contract\PhpDocNode;
 
 use PHPStan\PhpDocParser\Ast\Node;
 

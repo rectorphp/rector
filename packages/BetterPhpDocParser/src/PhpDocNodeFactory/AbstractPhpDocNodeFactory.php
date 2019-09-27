@@ -19,7 +19,7 @@ abstract class AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
     /**
      * @var AnnotationContentResolver
      */
-    private $annotationContentResolver;
+    protected $annotationContentResolver;
 
     /**
      * @required

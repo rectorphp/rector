@@ -5,7 +5,7 @@ namespace Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
 final class AttributeAwareParamTagValueNode extends ParamTagValueNode implements AttributeAwareNodeInterface
 {

@@ -3,6 +3,7 @@
 namespace Rector\BetterPhpDocParser\PhpDocNodeFactory\Doctrine\Class_;
 
 use Doctrine\ORM\Mapping\Table;
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -50,15 +51,24 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
+        $indexesContent = $this->annotationContentResolver->resolveNestedKey($annotationContent, 'indexes');
         $indexTagValueNodes = $this->indexPhpDocNodeFactory->createIndexTagValueNodes(
             $table->indexes,
-            $annotationContent
+            $indexesContent
+        );
+
+        $haveIndexesFinalComma = (bool) Strings::match($indexesContent, '#,(\s+)?}$#m');
+        $uniqueConstraintsContent = $this->annotationContentResolver->resolveNestedKey(
+            $annotationContent,
+            'uniqueConstraints'
         );
 
         $uniqueConstraintTagValueNodes = $this->uniqueConstraintPhpDocNodeFactory->createUniqueConstraintTagValueNodes(
             $table->uniqueConstraints,
-            $annotationContent
+            $uniqueConstraintsContent
         );
+
+        $haveUniqueConstraintsFinalComma = (bool) Strings::match($uniqueConstraintsContent, '#,(\s+)?}$#m');
 
         return new TableTagValueNode(
             $table->name,
@@ -66,7 +76,9 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
             $indexTagValueNodes,
             $uniqueConstraintTagValueNodes,
             $table->options,
-            $annotationContent
+            $annotationContent,
+            $haveIndexesFinalComma,
+            $haveUniqueConstraintsFinalComma
         );
     }
 }

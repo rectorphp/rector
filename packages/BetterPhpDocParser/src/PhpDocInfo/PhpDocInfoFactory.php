@@ -8,8 +8,8 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
-use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
-use Rector\BetterPhpDocParser\PhpDocParser\OrmTagParser;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\Configuration\CurrentNodeProvider;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\StaticTypeMapper;
@@ -61,7 +61,7 @@ final class PhpDocInfoFactory
             return $this->phpDocInfoByObjectHash[$hash];
         }
 
-        /** needed for @see OrmTagParser */
+        /** needed for @see PhpDocNodeFactoryInterface */
         $this->currentNodeProvider->setNode($node);
 
         $content = $node->getDocComment()->getText();

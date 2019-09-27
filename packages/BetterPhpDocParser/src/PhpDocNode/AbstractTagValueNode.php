@@ -1,12 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\PhpDocParser\Ast\PhpDoc;
+namespace Rector\BetterPhpDocParser\PhpDocNode;
 
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
-use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
 
 abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpDocTagValueNode
@@ -71,17 +72,24 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     /**
      * @param PhpDocTagValueNode[] $tagValueNodes
      */
-    protected function printNestedTag(array $tagValueNodes, string $shortName, string $label): string
+    protected function printNestedTag(array $tagValueNodes, string $label, bool $haveFinalComma = false): string
     {
-        $tagValueNodesAsString = $this->printTagValueNodesSeparatedByComma($tagValueNodes, $shortName);
+        $tagValueNodesAsString = $this->printTagValueNodesSeparatedByComma($tagValueNodes);
 
-        return sprintf('%s={%s%s%s}', $label, PHP_EOL . '    ', $tagValueNodesAsString, PHP_EOL);
+        return sprintf(
+            '%s={%s%s%s%s}',
+            $label,
+            PHP_EOL . '    ',
+            $tagValueNodesAsString,
+            $haveFinalComma ? ',' : '',
+            PHP_EOL
+        );
     }
 
     /**
      * @param PhpDocTagValueNode[] $tagValueNodes
      */
-    protected function printTagValueNodesSeparatedByComma(array $tagValueNodes, string $prefix = ''): string
+    protected function printTagValueNodesSeparatedByComma(array $tagValueNodes): string
     {
         if ($tagValueNodes === []) {
             return '';
@@ -89,7 +97,14 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         $itemsAsStrings = [];
         foreach ($tagValueNodes as $tagValueNode) {
-            $itemsAsStrings[] = $prefix . (string) $tagValueNode;
+            $item = '';
+            if ($tagValueNode instanceof TagAwareNodeInterface) {
+                $item .= $tagValueNode->getTag();
+            }
+
+            $item .= (string) $tagValueNode;
+
+            $itemsAsStrings[] = $item;
         }
 
         return implode(', ', $itemsAsStrings);

@@ -47,7 +47,7 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareIntersect
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareNullableTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareThisTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareUnionTypeNode;
-use Rector\BetterPhpDocParser\Attributes\Contract\Ast\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\Exception\NotImplementedYetException;
 use Rector\Exception\ShouldNotHappenException;
 

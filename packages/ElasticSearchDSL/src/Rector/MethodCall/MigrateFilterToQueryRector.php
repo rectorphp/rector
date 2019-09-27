@@ -4,10 +4,8 @@ namespace Rector\ElasticSearchDSL\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,29 +21,36 @@ final class MigrateFilterToQueryRector extends AbstractRector
         return new RectorDefinition('Migrates addFilter to addQuery', [
             new CodeSample(
                 <<<'PHP'
+use ONGR\ElasticsearchDSL\Search;
+use ONGR\ElasticsearchDSL\Query\TermsQuery;
+
 class SomeClass
 {
     public function run()
     {
-        $search = new \ONGR\ElasticsearchDSL\Search();
+        $search = new Search();
 
         $search->addFilter(
-            new \ONGR\ElasticsearchDSL\Query\TermsQuery('categoryIds', [1, 2])
+            new TermsQuery('categoryIds', [1, 2])
         );
     }
 }
 PHP
                 ,
                 <<<'PHP'
+use ONGR\ElasticsearchDSL\Search;
+use ONGR\ElasticsearchDSL\Query\TermsQuery;
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+
 class SomeClass
 {
     public function run()
     {
-        $search = new \ONGR\ElasticsearchDSL\Search();
+        $search = new Search();
 
         $search->addQuery(
-            new \ONGR\ElasticsearchDSL\Query\TermsQuery('categoryIds', [1, 2]),
-            \ONGR\ElasticsearchDSL\Query\Compound\BoolQuery::FILTER
+            new TermsQuery('categoryIds', [1, 2]),
+            BoolQuery::FILTER
         );
     }
 }
@@ -77,9 +82,9 @@ PHP
 
         $node->name = new Identifier('addQuery');
 
-        $node->args[1] = new Arg(new ClassConstFetch(new FullyQualified(
-            'ONGR\ElasticsearchDSL\Query\Compound\BoolQuery'
-        ), new Identifier('FILTER')));
+        $classConstFetch = $this->createClassConstant('ONGR\ElasticsearchDSL\Query\Compound\BoolQuery', 'FILTER');
+
+        $node->args[1] = new Arg($classConstFetch);
 
         return $node;
     }

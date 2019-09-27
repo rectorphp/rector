@@ -3,7 +3,7 @@
 namespace Rector\BetterPhpDocParser\PhpDocNode\PHPDI;
 
 use DI\Annotation\Inject;
-use Rector\BetterPhpDocParser\PhpDocParser\Ast\PhpDoc\AbstractTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class PHPDIInjectTagValueNode extends AbstractTagValueNode
 {

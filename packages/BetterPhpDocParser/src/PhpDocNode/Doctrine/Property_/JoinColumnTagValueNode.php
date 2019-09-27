@@ -2,9 +2,10 @@
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\TagAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 
-final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode
+final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implements TagAwareNodeInterface
 {
     /**
      * @var string
@@ -46,6 +47,11 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode
      */
     private $fieldName;
 
+    /**
+     * @var string|null
+     */
+    private $tag;
+
     public function __construct(
         ?string $name,
         string $referencedColumnName,
@@ -54,7 +60,8 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode
         ?string $onDelete = null,
         ?string $columnDefinition = null,
         ?string $fieldName = null,
-        ?string $originalContent = null
+        ?string $originalContent = null,
+        ?string $originalTag = null
     ) {
         $this->nullable = $nullable;
         $this->name = $name;
@@ -66,6 +73,7 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode
 
         if ($originalContent !== null) {
             $this->resolveOriginalContentSpacingAndOrder($originalContent);
+            $this->tag = $originalTag;
         }
     }
 
@@ -127,5 +135,10 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode
     public function changeName(string $newName): void
     {
         $this->name = $newName;
+    }
+
+    public function getTag(): ?string
+    {
+        return $this->tag ?: self::SHORT_NAME;
     }
 }

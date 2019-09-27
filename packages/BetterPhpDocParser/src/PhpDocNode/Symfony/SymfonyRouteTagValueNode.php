@@ -2,7 +2,7 @@
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Symfony;
 
-use Rector\BetterPhpDocParser\PhpDocParser\Ast\PhpDoc\AbstractTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class SymfonyRouteTagValueNode extends AbstractTagValueNode
