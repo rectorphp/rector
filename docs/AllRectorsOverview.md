@@ -1,4 +1,4 @@
-# All 357 Rectors Overview
+# All 365 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -602,6 +602,29 @@ If conditions is always true, perform the content right away
 
 <br>
 
+### `RemoveSoleValueSprintfRector`
+
+- class: `Rector\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector`
+
+Remove sprintf() wrapper if not needed
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = sprintf('%s', 'hi');
++        $value = 'hi';
+
+         $welcome = 'hello';
+-        $value = sprintf('%s', $welcome);
++        $value = $welcome;
+     }
+ }
+```
+
+<br>
+
 ### `SimplifyArraySearchRector`
 
 - class: `Rector\CodeQuality\Rector\Identical\SimplifyArraySearchRector`
@@ -1055,6 +1078,25 @@ Changes switch with 2 options to if-else
 
 <br>
 
+### `CallUserFuncCallToVariadicRector`
+
+- class: `Rector\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector`
+
+Replace call_user_func_call with variadic
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        call_user_func_array('some_function', $items);
++        some_function(...$items);
+     }
+ }
+```
+
+<br>
+
 ### `CatchExceptionNameMatchingTypeRector`
 
 - class: `Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector`
@@ -1189,6 +1231,31 @@ Import fully qualified names to use statements
      {
 -          return SomeAnother\AnotherClass;
 +          return AnotherClass;
+     }
+ }
+```
+
+<br>
+
+### `MakeInheritedMethodVisibilitySameAsParentRector`
+
+- class: `Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector`
+
+Make method visibility same as parent one
+
+```diff
+ class ChildClass extends ParentClass
+ {
+-    public function run()
++    protected function run()
+     {
+     }
+ }
+
+ class ParentClass
+ {
+     protected function run()
+     {
      }
  }
 ```
@@ -1416,6 +1483,19 @@ Separate class constant in a string to class constant fetch and string
 +        return SomeClass::class . '::HI';
      }
  }
+```
+
+<br>
+
+### `StrictArraySearchRector`
+
+- class: `Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector`
+
+Makes array_search search for identical elements
+
+```diff
+-array_search($value, $items);
++array_search($value, $items, true);
 ```
 
 <br>
@@ -2282,17 +2362,21 @@ Remove temporary *Uuid relation properties
 Migrates addFilter to addQuery
 
 ```diff
+ use ONGR\ElasticsearchDSL\Search;
+ use ONGR\ElasticsearchDSL\Query\TermsQuery;
++use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+
  class SomeClass
  {
      public function run()
      {
-         $search = new \ONGR\ElasticsearchDSL\Search();
+         $search = new Search();
 
 -        $search->addFilter(
--            new \ONGR\ElasticsearchDSL\Query\TermsQuery('categoryIds', [1, 2])
+-            new TermsQuery('categoryIds', [1, 2])
 +        $search->addQuery(
-+            new \ONGR\ElasticsearchDSL\Query\TermsQuery('categoryIds', [1, 2]),
-+            \ONGR\ElasticsearchDSL\Query\Compound\BoolQuery::FILTER
++            new TermsQuery('categoryIds', [1, 2]),
++            BoolQuery::FILTER
          );
      }
  }
@@ -3038,9 +3122,6 @@ services:
 +        $this->doTestSingle($number);
 +    }
 +
-+    /**
-+     * @return int[]
-+     */
 +    public function provideDataForTest(): \Iterator
 +    {
 +        yield [1];
@@ -3637,6 +3718,25 @@ Remove unused private method
 
 ## Php53
 
+### `DirNameFileConstantToDirConstantRector`
+
+- class: `Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector`
+
+Convert dirname(__FILE__) to __DIR__
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        return dirname(__FILE__);
++        return __DIR__;
+     }
+ }
+```
+
+<br>
+
 ### `TernaryToElvisRector`
 
 - class: `Rector\Php53\Rector\Ternary\TernaryToElvisRector`
@@ -3674,13 +3774,41 @@ Remove & from function and method calls
 
 <br>
 
+### `RemoveZeroBreakContinueRector`
+
+- class: `Rector\Php54\Rector\Break_\RemoveZeroBreakContinueRector`
+
+Remove 0 from break and continue
+
+```diff
+ class SomeClass
+ {
+     public function run($random)
+     {
+-        continue 0;
+-        break 0;
++        continue;
++        break;
+
+         $five = 5;
+-        continue $five;
++        continue 5;
+
+-        break $random;
++        break;
+     }
+ }
+```
+
+<br>
+
 ## Php55
 
 ### `PregReplaceEModifierRector`
 
 - class: `Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector`
 
-The /e modifier is no longer supported, use preg_replace_callback instead
+The /e modifier is no longer supported, use preg_replace_callback instead 
 
 ```diff
  class SomeClass
@@ -3804,8 +3932,8 @@ Changes call_user_method()/call_user_method_array() to call_user_func()/call_use
 list() cannot be empty
 
 ```diff
--list() = $values;
-+list($generated) = $values;
+-'list() = $values;'
++'list($unusedGenerated) = $values;'
 ```
 
 <br>
@@ -4115,6 +4243,29 @@ Changes is_array + Traversable check to is_iterable
 
 <br>
 
+### `ListToArrayDestructRector`
+
+- class: `Rector\Php71\Rector\List_\ListToArrayDestructRector`
+
+Remove & from new &X
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        list($id1, $name1) = $data;
++        [$id1, $name1] = $data;
+
+-        foreach ($data as list($id, $name)) {
++        foreach ($data as [$id, $name]) {
+         }
+     }
+ }
+```
+
+<br>
+
 ### `MultiExceptionCatchRector`
 
 - class: `Rector\Php71\Rector\TryCatch\MultiExceptionCatchRector`
@@ -4322,8 +4473,11 @@ String asserts must be passed directly to assert()
 Removes (unset) cast
 
 ```diff
+-$different = (unset) $value;
++$different = null;
+
 -$value = (unset) $value;
-+$value = null;
++unset($value);
 ```
 
 <br>
@@ -5428,6 +5582,25 @@ services:
       * @ORM\Id
       */
      public $id;
+ }
+```
+
+<br>
+
+### `MissingClassConstantReferenceToStringRector`
+
+- class: `Rector\Restoration\Rector\ClassConstFetch\MissingClassConstantReferenceToStringRector`
+
+Convert missing class reference to string
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        return NonExistingClass::class;
++        return 'NonExistingClass';
+     }
  }
 ```
 
