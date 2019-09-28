@@ -19,11 +19,12 @@ final class StringToArrayArgumentProcessRectorTest extends AbstractRectorTestCas
     public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
+        yield [__DIR__ . '/Fixture/process_helper.php.inc'];
         yield [__DIR__ . '/Fixture/fixture3.php.inc'];
         yield [__DIR__ . '/Fixture/fixture4.php.inc'];
         yield [__DIR__ . '/Fixture/with_sprintf.php.inc'];
         yield [__DIR__ . '/Fixture/skip_anonymous_class.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_form_add.php.inc'];
     }
 
     protected function getRectorClass(): string

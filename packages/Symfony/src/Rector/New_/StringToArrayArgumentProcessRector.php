@@ -17,8 +17,8 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Util\RectorStrings;
+use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessHelper;
 
 /**
  * @see https://github.com/symfony/symfony/pull/27821/files
