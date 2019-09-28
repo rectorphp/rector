@@ -8,23 +8,15 @@ use Rector\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorI
 use Rector\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\SomeKernelClass;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class ActionInjectionToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $parameterProvider = self::$container->get(ParameterProvider::class);
-        $parameterProvider->changeParameter(Option::KERNEL_CLASS_PARAMETER, SomeKernelClass::class);
-    }
-
     /**
      * @dataProvider provideDataForTest()
      */
     public function test(string $file): void
     {
+        $this->setParameter(Option::KERNEL_CLASS_PARAMETER, SomeKernelClass::class);
         $this->doTestFile($file);
     }
 

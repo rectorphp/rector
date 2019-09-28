@@ -100,11 +100,10 @@ PHP
             return false;
         }
 
-        if ($class->getDocComment() === null) {
+        $phpDocInfo = $this->getPhpDocInfo($class);
+        if ($phpDocInfo === null) {
             return false;
         }
-
-        $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($class);
 
         return (bool) $phpDocInfo->getByType(EntityTagValueNode::class);
     }

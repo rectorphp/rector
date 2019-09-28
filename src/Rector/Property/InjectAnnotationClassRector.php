@@ -122,11 +122,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->getDocComment() === null) {
+        $phpDocInfo = $this->getPhpDocInfo($node);
+        if ($phpDocInfo === null) {
             return null;
         }
-
-        $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($node);
 
         foreach ($this->annotationClasses as $annotationClass) {
             $this->ensureAnnotationClassIsSupported($annotationClass);

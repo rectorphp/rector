@@ -84,7 +84,7 @@
 
 ### `RemoveRepositoryFromEntityAnnotationRector`
 
-- class: `Rector\Architecture\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector`
+- class: `Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector`
 
 Removes repository class from @Entity annotation
 

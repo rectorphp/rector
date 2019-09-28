@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\Type;
 use Rector\Application\AppliedRectorCollector;
+use Rector\CodingStyle\Application\NameImportingCommander;
 use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
@@ -22,6 +23,16 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
  */
 trait NodeCommandersTrait
 {
+    /**
+     * @var NameImportingCommander
+     */
+    protected $nameImportingCommander;
+
+    /**
+     * @var UseAddingCommander
+     */
+    protected $useAddingCommander;
+
     /**
      * @var NodeRemovingCommander
      */
@@ -38,23 +49,20 @@ trait NodeCommandersTrait
     private $propertyAddingCommander;
 
     /**
-     * @var UseAddingCommander
-     */
-    private $useAddingCommander;
-
-    /**
      * @required
      */
     public function autowireNodeCommandersTrait(
         NodeRemovingCommander $nodeRemovingCommander,
         NodeAddingCommander $nodeAddingCommander,
         PropertyAddingCommander $propertyAddingCommander,
-        UseAddingCommander $useAddingCommander
+        UseAddingCommander $useAddingCommander,
+        NameImportingCommander $nameImportingCommander
     ): void {
         $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->nodeAddingCommander = $nodeAddingCommander;
         $this->propertyAddingCommander = $propertyAddingCommander;
         $this->useAddingCommander = $useAddingCommander;
+        $this->nameImportingCommander = $nameImportingCommander;
     }
 
     protected function addUseType(FullyQualifiedObjectType $fullyQualifiedObjectType, Node $positionNode): void

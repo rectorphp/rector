@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Architecture\Tests\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
+namespace Rector\Doctrine\Tests\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
 
 use Iterator;
-use Rector\Architecture\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
+use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveRepositoryFromEntityAnnotationRectorTest extends AbstractRectorTestCase

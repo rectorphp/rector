@@ -2,6 +2,7 @@
 
 namespace Rector\Laravel\Tests\Rector\Class_\InlineValidationRulesToArrayDefinitionRector;
 
+use Iterator;
 use Rector\Laravel\Rector\Class_\InlineValidationRulesToArrayDefinitionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -15,7 +16,7 @@ final class InlineValidationRulesToArrayDefinitionRectorTest extends AbstractRec
         $this->doTestFile($file);
     }
 
-    public function provideForTest(): iterable
+    public function provideForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }

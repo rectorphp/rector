@@ -103,8 +103,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
             return;
         }
 
-        $parameterProvider = self::$container->get(ParameterProvider::class);
-        $parameterProvider->changeParameter('php_version_features', '10.0');
+        $this->setParameter(Option::PHP_VERSION_FEATURES, '10.0');
     }
 
     protected function doTestFileWithoutAutoload(string $file): void
@@ -148,12 +147,21 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         return PhpRectorInterface::class;
     }
 
+    /**
+     * @param mixed $value
+     */
+    protected function setParameter(string $name, $value): void
+    {
+        $parameterProvider = self::$container->get(ParameterProvider::class);
+        $parameterProvider->changeParameter($name, $value);
+    }
+
     private function doTestFileMatchesExpectedContent(
         string $originalFile,
         string $expectedFile,
         string $fixtureFile
     ): void {
-        $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFile]);
+        $this->setParameter(Option::SOURCE, [$originalFile]);
 
         $smartFileInfo = new SmartFileInfo($originalFile);
 
@@ -219,7 +227,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
             return;
         }
 
-        $parameterProvider = self::$container->get(ParameterProvider::class);
-        $parameterProvider->changeParameter('php_version_features', $this->getPhpVersion());
+        $this->setParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
     }
 }

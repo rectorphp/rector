@@ -10,23 +10,15 @@ use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRecto
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentCommand;
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ThisClassCallsMethodInConstructor;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $parameterProvider = self::$container->get(ParameterProvider::class);
-        $parameterProvider->changeParameter(Option::KERNEL_CLASS_PARAMETER, SomeKernelClass::class);
-    }
-
     /**
      * @dataProvider provideDataForTest()
      */
     public function test(string $file): void
     {
+        $this->setParameter(Option::KERNEL_CLASS_PARAMETER, SomeKernelClass::class);
         $this->doTestFile($file);
     }
 

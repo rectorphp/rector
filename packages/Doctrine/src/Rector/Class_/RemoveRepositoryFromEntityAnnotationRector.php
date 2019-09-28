@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Architecture\Rector\Class_;
+namespace Rector\Doctrine\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Architecture\Tests\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector\RemoveRepositoryFromEntityAnnotationRectorTest;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
+use Rector\Doctrine\Tests\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector\RemoveRepositoryFromEntityAnnotationRectorTest;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -57,11 +57,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->getDocComment() === null) {
+        $phpDocInfo = $this->getPhpDocInfo($node);
+        if ($phpDocInfo === null) {
             return null;
         }
-
-        $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($node);
 
         $doctrineEntityTag = $phpDocInfo->getByType(EntityTagValueNode::class);
         if ($doctrineEntityTag === null) {

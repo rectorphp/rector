@@ -9,11 +9,11 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
-use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\PhpVersionProvider;
 use Rector\Rector\AbstractRector\AbstractRectorTrait;
+use Rector\Rector\AbstractRector\NodeCommandersTrait;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
@@ -32,11 +32,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $symfonyStyle;
 
     /**
-     * @var RemovedAndAddedFilesCollector
-     */
-    private $removedAndAddedFilesCollector;
-
-    /**
      * @var PhpVersionProvider
      */
     private $phpVersionProvider;
@@ -53,12 +48,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     public function autowireAbstractRectorDependencies(
         SymfonyStyle $symfonyStyle,
-        RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory
     ): void {
         $this->symfonyStyle = $symfonyStyle;
-        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;
     }
@@ -83,16 +76,19 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? clone $node;
+        $originalNodeWithAttributes = clone $node;
         $originalComment = $node->getComments();
         $originalDocComment = $node->getDocComment();
         $node = $this->refactor($node);
+
+        // nothing to change → continue
         if ($node === null) {
             return null;
         }
 
         // changed!
         if ($this->hasNodeChanged($originalNode, $node)) {
-            $this->mirrorAttributes($originalNode, $node);
+            $this->mirrorAttributes($originalNodeWithAttributes, $node);
             $this->updateAttributes($node);
             $this->keepFileInfoAttribute($node, $originalNode);
             $this->notifyNodeChangeFileInfo($node);
@@ -102,7 +98,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $this->notifyNodeChangeFileInfo($node);
         }
 
-        // if stmt ("$value;") was replaced by expr ("$value"), add the ending ";" (Expression) to prevent breaking code
+        // if stmt ("$value;") was replaced by expr ("$value"), add the ending ";" (Expression) to prevent breaking the code
         if ($originalNode instanceof Stmt && $node instanceof Expr) {
             return new Expression($node);
         }
@@ -111,6 +107,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
+     * @see NodeCommandersTrait
+     *
      * @param Node[] $nodes
      * @return Node[]
      */
@@ -128,21 +126,20 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $nodes = $this->nodeRemovingCommander->traverseNodes($nodes);
         }
 
+        // this must run before use imports, since it adds them
+        if ($this->nameImportingCommander->isActive()) {
+            $nodes = $this->nameImportingCommander->traverseNodes($nodes);
+        }
+
         if ($this->useAddingCommander->isActive()) {
             $nodes = $this->useAddingCommander->traverseNodes($nodes);
         }
 
-        // @todo name node importing
         // @todo class like renaming
 
         $this->tearDown();
 
         return $nodes;
-    }
-
-    protected function removeFile(SmartFileInfo $smartFileInfo): void
-    {
-        $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
     }
 
     protected function getNextExpression(Node $node): ?Node
@@ -206,6 +203,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private function mirrorAttributes(Node $oldNode, Node $newNode): void
     {
         $attributesToMirror = [
+            AttributeKey::PARENT_NODE,
             AttributeKey::CLASS_NODE,
             AttributeKey::CLASS_NAME,
             AttributeKey::FILE_INFO,
