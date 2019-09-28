@@ -3,6 +3,7 @@
 namespace Rector\Renaming\Tests\Rector\Class_\RenameClassRector;
 
 use Iterator;
+use Rector\Configuration\Option;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClass;
@@ -15,7 +16,7 @@ final class NamePostImportTest extends AbstractRectorTestCase
      */
     public function test(string $filePath): void
     {
-        $this->setParameter('name_post_import', true);
+        $this->setParameter(Option::AUTO_IMPORT_NAMES, true);
         $this->doTestFile($filePath);
     }
 

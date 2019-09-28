@@ -227,6 +227,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
             return;
         }
 
-        $this->setParameter('php_version_features', $this->getPhpVersion());
+        $this->setParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
     }
 }

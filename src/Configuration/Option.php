@@ -48,4 +48,10 @@ final class Option
      * @var string
      */
     public const OPTION_RULE = 'rule';
+
+    /**
+     * @var string
+     */
+    public const AUTO_IMPORT_NAMES = 'auto_import_names';
+
 }
