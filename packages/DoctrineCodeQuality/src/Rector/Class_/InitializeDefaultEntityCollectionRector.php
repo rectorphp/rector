@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\Doctrine\ValueObject\DoctrineClass;
+use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -22,6 +23,16 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class InitializeDefaultEntityCollectionRector extends AbstractRector
 {
+    /**
+     * @var ClassManipulator
+     */
+    private $classManipulator;
+
+    public function __construct(ClassManipulator $classManipulator)
+    {
+        $this->classManipulator = $classManipulator;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Initialize collection property in Entity constructor', [
@@ -91,24 +102,9 @@ PHP
             return null;
         }
 
-        $constructClassMethod = $node->getMethod('__construct');
         $assigns = $this->createAssignsOfArrayCollectionsForPropertyNames($toManyPropertyNames);
 
-        if ($constructClassMethod === null) {
-            $constructClassMethod = $this->nodeFactory->createPublicMethod('__construct');
-            $constructClassMethod->stmts = $assigns;
-
-            $node->stmts = array_merge((array) $node->stmts, [$constructClassMethod]);
-        } else {
-            $assigns = $this->filterOutExistingAssigns($constructClassMethod, $assigns);
-
-            // all properties are initialized → skip
-            if ($assigns === []) {
-                return null;
-            }
-
-            $constructClassMethod->stmts = array_merge($assigns, (array) $constructClassMethod->stmts);
-        }
+        $this->classManipulator->addStmtsToClassMethodIfNotThereYet($node, '__construct', $assigns);
 
         return $node;
     }
@@ -165,26 +161,5 @@ PHP
         $assign = new Assign($propertyFetch, $newCollection);
 
         return new Expression($assign);
-    }
-
-    /**
-     * @param Expression[] $assigns
-     * @return Expression[]
-     */
-    private function filterOutExistingAssigns(Node\Stmt\ClassMethod $constructClassMethod, array $assigns): array
-    {
-        $this->traverseNodesWithCallable((array) $constructClassMethod->stmts, function (Node $node) use (&$assigns) {
-            foreach ($assigns as $key => $assign) {
-                if (! $this->areNodesEqual($node, $assign)) {
-                    continue;
-                }
-
-                unset($assigns[$key]);
-            }
-
-            return null;
-        });
-
-        return $assigns;
     }
 }
