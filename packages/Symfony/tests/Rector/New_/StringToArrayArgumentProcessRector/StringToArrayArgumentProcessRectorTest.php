@@ -4,8 +4,6 @@ namespace Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector;
 
 use Iterator;
 use Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector;
-use Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\Process;
-use Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\ProcessHelper;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class StringToArrayArgumentProcessRectorTest extends AbstractRectorTestCase
@@ -28,16 +26,8 @@ final class StringToArrayArgumentProcessRectorTest extends AbstractRectorTestCas
         yield [__DIR__ . '/Fixture/skip_anonymous_class.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            StringToArrayArgumentProcessRector::class => [
-                '$processClass' => Process::class,
-                '$processHelperClass' => ProcessHelper::class,
-            ],
-        ];
+        return StringToArrayArgumentProcessRector::class;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\Process;
+use Symfony\Component\Process\Process;
 
 class WithSprintf
 {
@@ -18,7 +18,7 @@ class WithSprintf
 
 namespace Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\Process;
+use Symfony\Component\Process\Process;
 
 class WithSprintf
 {

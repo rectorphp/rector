@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\Process;
+use Symfony\Component\Process\Process;
 
 function stringToArgumentArray()
 {
@@ -27,7 +27,7 @@ function stringToArgumentArray()
 
 namespace Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\Process;
+use Symfony\Component\Process\Process;
 
 function stringToArgumentArray()
 {
