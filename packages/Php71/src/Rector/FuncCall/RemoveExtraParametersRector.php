@@ -55,23 +55,12 @@ final class RemoveExtraParametersRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (count($node->args) === 0) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
+        /** @var ReflectionFunction $reflectionFunctionLike */
         $reflectionFunctionLike = $this->resolveReflectionFunctionLike($node);
-        if ($reflectionFunctionLike === null) {
-            return null;
-        }
-
-        // can be any number of arguments → nothing to limit here
-        if ($this->callManipulator->isVariadic($reflectionFunctionLike, $node)) {
-            return null;
-        }
-
-        if ($reflectionFunctionLike->getNumberOfParameters() >= count($node->args)) {
-            return null;
-        }
 
         $numberOfParameters = $reflectionFunctionLike->getNumberOfParameters();
         $numberOfArguments = count($node->args);
@@ -81,6 +70,38 @@ final class RemoveExtraParametersRector extends AbstractRector
         }
 
         return $node;
+    }
+
+    /**
+     * @param FuncCall|MethodCall|StaticCall $node
+     */
+    private function shouldSkip(Node $node): bool
+    {
+        if (count($node->args) === 0) {
+            return true;
+        }
+
+        if ($node instanceof StaticCall) {
+            if ($this->isName($node->class, 'parent')) {
+                return true;
+            }
+        }
+
+        $reflectionFunctionLike = $this->resolveReflectionFunctionLike($node);
+        if ($reflectionFunctionLike === null) {
+            return true;
+        }
+
+        // can be any number of arguments → nothing to limit here
+        if ($this->callManipulator->isVariadic($reflectionFunctionLike, $node)) {
+            return true;
+        }
+
+        if ($reflectionFunctionLike->getNumberOfParameters() >= count($node->args)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

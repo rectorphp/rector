@@ -31,6 +31,7 @@ final class RemoveExtraParametersRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/skip_commented_param_func_get_args.php.inc'];
         yield [__DIR__ . '/Fixture/skip_call_user_func_array.php.inc'];
         yield [__DIR__ . '/Fixture/skip_invoke.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_values_passed_from_parent.php.inc'];
     }
 
     protected function getRectorClass(): string
