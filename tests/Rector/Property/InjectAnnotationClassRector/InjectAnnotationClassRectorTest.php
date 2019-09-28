@@ -7,24 +7,15 @@ use Rector\Configuration\Option;
 use Rector\Rector\Property\InjectAnnotationClassRector;
 use Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeKernelClass;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        /** @var ParameterProvider $parameterProvider */
-        $parameterProvider = self::$container->get(ParameterProvider::class);
-        $parameterProvider->changeParameter(Option::KERNEL_CLASS_PARAMETER, SomeKernelClass::class);
-    }
-
     /**
      * @dataProvider provideDataForTest()
      */
     public function test(string $file): void
     {
+        $this->setParameter(Option::KERNEL_CLASS_PARAMETER, SomeKernelClass::class);
         $this->doTestFile($file);
     }
 
