@@ -5,6 +5,7 @@ namespace Rector\PhpParser\Node\Manipulator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
@@ -366,15 +367,21 @@ final class ClassManipulator
     /**
      * @param Stmt[] $stmts
      */
-    public function addStmtsToClassMethodIfNotThereYet(Class_ $node, string $methodName, array $stmts): void
+    public function addStmtsToClassMethodIfNotThereYet(Class_ $class, string $methodName, array $stmts): void
     {
-        $classMethod = $node->getMethod($methodName);
+        $classMethod = $class->getMethod($methodName);
 
         if ($classMethod === null) {
             $classMethod = $this->nodeFactory->createPublicMethod($methodName);
-            $classMethod->stmts = $stmts;
 
-            $node->stmts = array_merge((array) $node->stmts, [$classMethod]);
+            // keep parent constructor call
+            if ($this->hasClassParentClassMethod($class, $methodName)) {
+                $classMethod->stmts[] = $this->createParentClassMethodCall($methodName);
+            }
+
+            $classMethod->stmts = array_merge((array) $classMethod->stmts, $stmts);
+
+            $class->stmts = array_merge((array) $class->stmts, [$classMethod]);
             return;
         }
 
@@ -560,5 +567,22 @@ final class ClassManipulator
         });
 
         return $stmts;
+    }
+
+    private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
+    {
+        $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        if ($parentClassName === null) {
+            return false;
+        }
+
+        return method_exists($parentClassName, $methodName);
+    }
+
+    private function createParentClassMethodCall(string $methodName): Expression
+    {
+        $staticCall = new StaticCall(new Name('parent'), $methodName);
+
+        return new Expression($staticCall);
     }
 }

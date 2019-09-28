@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
 use Rector\Doctrine\Provider\EntityWithMissingUuidProvider;
+use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -34,7 +35,13 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
      */
     private $entityWithMissingUuidProvider;
 
+    /**
+     * @var ClassManipulator
+     */
+    private $classManipulator;
+
     public function __construct(
+        ClassManipulator $classManipulator,
         EntityUuidNodeFactory $entityUuidNodeFactory,
         UuidMigrationDataCollector $uuidMigrationDataCollector,
         EntityWithMissingUuidProvider $entityWithMissingUuidProvider
@@ -42,6 +49,7 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
         $this->entityUuidNodeFactory = $entityUuidNodeFactory;
         $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;
         $this->entityWithMissingUuidProvider = $entityWithMissingUuidProvider;
+        $this->classManipulator = $classManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -75,18 +83,11 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
         $uuidProperty = $this->entityUuidNodeFactory->createTemporaryUuidProperty();
         $node->stmts = array_merge([$uuidProperty], $node->stmts);
 
+        $assignExpression = $this->entityUuidNodeFactory->createUuidPropertyDefaultValueAssign('uuid');
+        $stmts = [$assignExpression];
+
         // 2. add default value to uuid property
-        $constructClassMethod = $node->getMethod('__construct');
-        if ($constructClassMethod) {
-            $assignExpression = $this->entityUuidNodeFactory->createUuidPropertyDefaultValueAssign('uuid');
-            $constructClassMethod->stmts = array_merge([$assignExpression], (array) $constructClassMethod->stmts);
-        } else {
-            $constructClassMethod = $this->entityUuidNodeFactory->createConstructorWithUuidInitialization(
-                $node,
-                'uuid'
-            );
-            $node->stmts = array_merge([$constructClassMethod], $node->stmts);
-        }
+        $this->classManipulator->addStmtsToClassMethodIfNotThereYet($node, '__construct', $stmts);
 
         /** @var string $class */
         $class = $this->getName($node);

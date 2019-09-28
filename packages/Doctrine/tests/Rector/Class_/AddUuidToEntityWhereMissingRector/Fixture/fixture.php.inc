@@ -31,10 +31,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SomeEntityWithIntegerId
 {
-    public function __construct()
-    {
-        $this->uuid = \Ramsey\Uuid\Uuid::uuid4();
-    }
     /**
      * @var \Ramsey\Uuid\UuidInterface
      * @ORM\Column(type="uuid_binary", unique=true, nullable=true)
@@ -47,6 +43,10 @@ class SomeEntityWithIntegerId
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    public function __construct()
+    {
+        $this->uuid = \Ramsey\Uuid\Uuid::uuid4();
+    }
 }
 
 ?>

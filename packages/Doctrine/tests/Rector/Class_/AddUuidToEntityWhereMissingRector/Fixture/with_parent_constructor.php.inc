@@ -33,11 +33,6 @@ use Rector\Doctrine\Tests\Rector\Class_\AddUuidToEntityWhereMissingRector\Source
  */
 class WithParentConstructor extends BaseEntityWithConstructor
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->uuid = \Ramsey\Uuid\Uuid::uuid4();
-    }
     /**
      * @var \Ramsey\Uuid\UuidInterface
      * @ORM\Column(type="uuid_binary", unique=true, nullable=true)
@@ -50,6 +45,11 @@ class WithParentConstructor extends BaseEntityWithConstructor
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->uuid = \Ramsey\Uuid\Uuid::uuid4();
+    }
 }
 
 ?>

@@ -40,10 +40,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 abstract class ParentSingleTableInheritance
 {
-    public function __construct()
-    {
-        $this->uuid = \Ramsey\Uuid\Uuid::uuid4();
-    }
     /**
      * @var \Ramsey\Uuid\UuidInterface
      * @ORM\Column(type="uuid_binary", unique=true, nullable=true)
@@ -56,6 +52,10 @@ abstract class ParentSingleTableInheritance
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    public function __construct()
+    {
+        $this->uuid = \Ramsey\Uuid\Uuid::uuid4();
+    }
 }
 
 /**
