@@ -59,7 +59,7 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
     /**
      * @return BundleInterface[]
      */
-    public function registerBundles(): iterable
+    public function registerBundles(): array
     {
         return [];
     }

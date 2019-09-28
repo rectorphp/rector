@@ -121,11 +121,12 @@ PHP
             $property = $node->getAttribute(AttributeKey::PARENT_NODE);
 
             // we need docblock
-            if ($property->getDocComment() === null) {
+            $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+            if ($propertyPhpDocInfo === null) {
                 return null;
             }
 
-            $varType = $this->docBlockManipulator->getVarType($property);
+            $varType = $propertyPhpDocInfo->getVarType();
             if (! $varType instanceof ArrayType && ! $varType instanceof IterableType) {
                 return null;
             }

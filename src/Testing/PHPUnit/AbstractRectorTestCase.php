@@ -148,6 +148,15 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         return PhpRectorInterface::class;
     }
 
+    /**
+     * @param mixed $value
+     */
+    protected function setParameter(string $name, $value): void
+    {
+        $parameterProvider = self::$container->get(ParameterProvider::class);
+        $parameterProvider->changeParameter($name, $value);
+    }
+
     private function doTestFileMatchesExpectedContent(
         string $originalFile,
         string $expectedFile,
@@ -219,7 +228,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
             return;
         }
 
-        $parameterProvider = self::$container->get(ParameterProvider::class);
-        $parameterProvider->changeParameter('php_version_features', $this->getPhpVersion());
+        $this->setParameter('php_version_features', $this->getPhpVersion());
     }
 }
