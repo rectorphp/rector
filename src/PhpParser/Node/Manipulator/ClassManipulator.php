@@ -5,6 +5,7 @@ namespace Rector\PhpParser\Node\Manipulator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
@@ -22,11 +23,11 @@ use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class ClassManipulator
 {
@@ -46,11 +47,6 @@ final class ClassManipulator
     private $childAndParentClassManipulator;
 
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
@@ -65,22 +61,27 @@ final class ClassManipulator
      */
     private $docBlockManipulator;
 
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
     public function __construct(
         NameResolver $nameResolver,
         NodeFactory $nodeFactory,
         ChildAndParentClassManipulator $childAndParentClassManipulator,
-        BetterNodeFinder $betterNodeFinder,
         CallableNodeTraverser $callableNodeTraverser,
         NodeRemovingCommander $nodeRemovingCommander,
-        DocBlockManipulator $docBlockManipulator
+        DocBlockManipulator $docBlockManipulator,
+        BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nameResolver = $nameResolver;
         $this->childAndParentClassManipulator = $childAndParentClassManipulator;
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     public function addConstructorDependency(Class_ $classNode, string $name, Type $type): void
@@ -359,8 +360,39 @@ final class ClassManipulator
                 return null;
             }
 
-            $this->removeNode($node);
+            $this->nodeRemovingCommander->addNode($node);
         });
+    }
+
+    /**
+     * @param Stmt[] $stmts
+     */
+    public function addStmtsToClassMethodIfNotThereYet(Class_ $class, string $methodName, array $stmts): void
+    {
+        $classMethod = $class->getMethod($methodName);
+
+        if ($classMethod === null) {
+            $classMethod = $this->nodeFactory->createPublicMethod($methodName);
+
+            // keep parent constructor call
+            if ($this->hasClassParentClassMethod($class, $methodName)) {
+                $classMethod->stmts[] = $this->createParentClassMethodCall($methodName);
+            }
+
+            $classMethod->stmts = array_merge((array) $classMethod->stmts, $stmts);
+
+            $class->stmts = array_merge((array) $class->stmts, [$classMethod]);
+            return;
+        }
+
+        $stmts = $this->filterOutExistingStmts($classMethod, $stmts);
+
+        // all stmts are already there → skip
+        if ($stmts === []) {
+            return;
+        }
+
+        $classMethod->stmts = array_merge($stmts, (array) $classMethod->stmts);
     }
 
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
@@ -440,10 +472,8 @@ final class ClassManipulator
     private function getClassMethodNames(Class_ $classNode): array
     {
         $classMethodNames = [];
-
-        $classMethodNodes = $this->betterNodeFinder->findInstanceOf($classNode->stmts, ClassMethod::class);
-        foreach ($classMethodNodes as $classMethodNode) {
-            $classMethodNames[] = $this->nameResolver->getName($classMethodNode);
+        foreach ($classNode->getMethods() as $classMethod) {
+            $classMethodNames[] = $this->nameResolver->getName($classMethod);
         }
 
         return $classMethodNames;
@@ -458,11 +488,6 @@ final class ClassManipulator
         }
 
         return false;
-    }
-
-    private function removeNode(Node $node): void
-    {
-        $this->nodeRemovingCommander->addNode($node);
     }
 
     /**
@@ -519,5 +544,45 @@ final class ClassManipulator
         });
 
         return $serializablePropertyNames;
+    }
+
+    /**
+     * @param Stmt[] $stmts
+     * @return Stmt[]
+     */
+    private function filterOutExistingStmts(ClassMethod $classMethod, array $stmts): array
+    {
+        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
+            &$stmts
+        ) {
+            foreach ($stmts as $key => $assign) {
+                if (! $this->betterStandardPrinter->areNodesEqual($node, $assign)) {
+                    continue;
+                }
+
+                unset($stmts[$key]);
+            }
+
+            return null;
+        });
+
+        return $stmts;
+    }
+
+    private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
+    {
+        $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        if ($parentClassName === null) {
+            return false;
+        }
+
+        return method_exists($parentClassName, $methodName);
+    }
+
+    private function createParentClassMethodCall(string $methodName): Expression
+    {
+        $staticCall = new StaticCall(new Name('parent'), $methodName);
+
+        return new Expression($staticCall);
     }
 }

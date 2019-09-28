@@ -10,11 +10,14 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
+use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ *
+ * @see \Rector\Doctrine\Tests\Rector\Class_\AlwaysInitializeUuidInEntityRector\AlwaysInitializeUuidInEntityRectorTest
  */
 final class AlwaysInitializeUuidInEntityRector extends AbstractRector
 {
@@ -23,9 +26,15 @@ final class AlwaysInitializeUuidInEntityRector extends AbstractRector
      */
     private $entityUuidNodeFactory;
 
-    public function __construct(EntityUuidNodeFactory $entityUuidNodeFactory)
+    /**
+     * @var ClassManipulator
+     */
+    private $classManipulator;
+
+    public function __construct(EntityUuidNodeFactory $entityUuidNodeFactory, ClassManipulator $classManipulator)
     {
         $this->entityUuidNodeFactory = $entityUuidNodeFactory;
+        $this->classManipulator = $classManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -60,17 +69,10 @@ final class AlwaysInitializeUuidInEntityRector extends AbstractRector
             return null;
         }
 
-        $constructClassMethod = $node->getMethod('__construct');
-        if ($constructClassMethod === null) {
-            $constructClassMethod = $this->entityUuidNodeFactory->createConstructorWithUuidInitialization(
-                $node,
-                $uuidPropertyName
-            );
-            $node->stmts = array_merge((array) $node->stmts, [$constructClassMethod]);
-        } else {
-            $assignExpression = $this->entityUuidNodeFactory->createUuidPropertyDefaultValueAssign($uuidPropertyName);
-            $constructClassMethod->stmts = array_merge([$assignExpression], (array) $constructClassMethod->stmts);
-        }
+        $stmts = [];
+        $stmts[] = $this->entityUuidNodeFactory->createUuidPropertyDefaultValueAssign($uuidPropertyName);
+
+        $this->classManipulator->addStmtsToClassMethodIfNotThereYet($node, '__construct', $stmts);
 
         return $node;
     }
