@@ -11,6 +11,12 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class NamePostImportTest extends AbstractRectorTestCase
 {
+    protected function tearDown(): void
+    {
+        // restore default value to prevent leaking to other tests
+        $this->setParameter(Option::AUTO_IMPORT_NAMES, false);
+    }
+
     /**
      * @dataProvider provideDataForTest()
      */
@@ -26,7 +32,7 @@ final class NamePostImportTest extends AbstractRectorTestCase
     }
 
     /**
-     * @return string[]
+     * @return mixed[]
      */
     protected function getRectorsWithConfiguration(): array
     {
