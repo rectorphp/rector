@@ -1,2 +1,3 @@
 services:
     Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector: ~
+    Rector\DoctrineCodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector: ~
