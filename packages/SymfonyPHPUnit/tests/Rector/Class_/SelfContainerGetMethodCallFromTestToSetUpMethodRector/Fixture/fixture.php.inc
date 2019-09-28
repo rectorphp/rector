@@ -3,9 +3,9 @@
 namespace Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Fixture;
 
 use Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\ItemRepository;
-use Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\DummyKernelTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class SomeTest extends DummyKernelTestCase
+class SomeTest extends KernelTestCase
 {
     public function testOne()
     {
@@ -27,9 +27,9 @@ class SomeTest extends DummyKernelTestCase
 namespace Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Fixture;
 
 use Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\ItemRepository;
-use Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\DummyKernelTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class SomeTest extends DummyKernelTestCase
+class SomeTest extends KernelTestCase
 {
     /**
      * @var \Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\ItemRepository

@@ -2,8 +2,8 @@
 
 namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAnnotationsRetor\Fixture;
 
-use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\Route;
-use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\RouteList;
+use Nette\Application\Routers\Route;
+use Nette\Application\Routers\RouteList;
 
 final class MethodNamedRoutesRouterFactory
 {
@@ -36,7 +36,7 @@ final class MethodNamedRoutesSomePresenter
 namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAnnotationsRetor\Fixture;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\RouteList;
+use Nette\Application\Routers\RouteList;
 
 final class MethodNamedRoutesRouterFactory
 {

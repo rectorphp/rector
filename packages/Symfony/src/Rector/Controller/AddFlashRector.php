@@ -10,6 +10,8 @@ use Rector\PhpParser\Node\Manipulator\ChainMethodCallManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Controller\AddFlashRector\AddFlashRectorTest
@@ -17,21 +19,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AddFlashRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private $controllerClass;
-
-    /**
      * @var ChainMethodCallManipulator
      */
     private $chainMethodCallManipulator;
 
-    public function __construct(
-        ChainMethodCallManipulator $chainMethodCallManipulator,
-        string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller'
-    ) {
+    public function __construct(ChainMethodCallManipulator $chainMethodCallManipulator)
+    {
         $this->chainMethodCallManipulator = $chainMethodCallManipulator;
-        $this->controllerClass = $controllerClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -75,13 +69,13 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName !== $this->controllerClass) {
+        if ($parentClassName !== Controller::class) {
             return null;
         }
 
         if (! $this->chainMethodCallManipulator->isTypeAndChainCalls(
             $node,
-            new ObjectType('Symfony\Component\HttpFoundation\Request'),
+            new ObjectType(Request::class),
             ['getSession', 'getFlashBag', 'add']
         )
         ) {

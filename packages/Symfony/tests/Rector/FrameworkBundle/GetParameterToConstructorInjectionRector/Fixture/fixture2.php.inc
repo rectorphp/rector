@@ -3,9 +3,9 @@
 namespace SomeNamespace;
 
 use Rector\Symfony\Tests\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector\Source\DoctrineQuery;
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class ClassWithNamedService3 extends SymfonyController
+class ClassWithNamedService3 extends Controller
 {
     public function render()
     {
@@ -23,9 +23,9 @@ class ClassWithNamedService3 extends SymfonyController
 namespace SomeNamespace;
 
 use Rector\Symfony\Tests\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector\Source\DoctrineQuery;
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class ClassWithNamedService3 extends SymfonyController
+class ClassWithNamedService3 extends Controller
 {
     /**
      * @var string

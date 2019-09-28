@@ -4,7 +4,6 @@ namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteFormToSymfonyFormRector
 
 use Iterator;
 use Rector\NetteToSymfony\Rector\Class_\NetteFormToSymfonyFormRector;
-use Rector\NetteToSymfony\Tests\Rector\Class_\NetteFormToSymfonyFormRector\Source\NettePresenter;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class NetteFormToSymfonyFormRectorTest extends AbstractRectorTestCase
@@ -22,15 +21,8 @@ final class NetteFormToSymfonyFormRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            NetteFormToSymfonyFormRector::class => [
-                '$presenterClass' => NettePresenter::class,
-            ],
-        ];
+        return NetteFormToSymfonyFormRector::class;
     }
 }

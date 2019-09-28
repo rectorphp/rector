@@ -6,8 +6,8 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Ramsey\Uuid\UuidInterface;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
-use Rector\Doctrine\ValueObject\DoctrineClass;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -80,7 +80,7 @@ PHP
             return null;
         }
 
-        $node->returnType = new FullyQualified(DoctrineClass::RAMSEY_UUID_INTERFACE);
+        $node->returnType = new FullyQualified(UuidInterface::class);
 
         return $node;
     }

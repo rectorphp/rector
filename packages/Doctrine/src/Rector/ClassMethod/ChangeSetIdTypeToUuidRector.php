@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Doctrine\ValueObject\DoctrineClass;
+use Ramsey\Uuid\UuidInterface;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -48,12 +48,12 @@ final class ChangeSetIdTypeToUuidRector extends AbstractRector
         // is already set?
         if ($node->params[0]->type) {
             $currentType = $this->getName($node->params[0]->type);
-            if ($currentType === DoctrineClass::RAMSEY_UUID_INTERFACE) {
+            if ($currentType === UuidInterface::class) {
                 return null;
             }
         }
 
-        $node->params[0]->type = new FullyQualified(DoctrineClass::RAMSEY_UUID_INTERFACE);
+        $node->params[0]->type = new FullyQualified(UuidInterface::class);
 
         return $node;
     }

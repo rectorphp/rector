@@ -190,3 +190,7 @@ parameters:
         Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer:
             # buggy with PHP heredoc
             - 'packages/SOLID/src/Rector/ClassConst/PrivatizeLocalClassConstantRector.php'
+
+        Symplify\CodingStandard\Sniffs\Commenting\AnnotationTypeExistsSniff:
+            - '*PhpDocNodeFactory.php'
+            - '*AnnotationReader.php'

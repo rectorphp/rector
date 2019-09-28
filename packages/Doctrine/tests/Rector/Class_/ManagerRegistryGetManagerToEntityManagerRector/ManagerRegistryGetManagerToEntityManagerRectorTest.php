@@ -4,8 +4,6 @@ namespace Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityM
 
 use Iterator;
 use Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector;
-use Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector\Source\DummyManagerRegistry;
-use Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector\Source\DummyObjectManager;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ManagerRegistryGetManagerToEntityManagerRectorTest extends AbstractRectorTestCase
@@ -25,16 +23,8 @@ final class ManagerRegistryGetManagerToEntityManagerRectorTest extends AbstractR
         yield [__DIR__ . '/Fixture/do_not_remove_registry_on_non_get_repo_call.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            ManagerRegistryGetManagerToEntityManagerRector::class => [
-                '$managerRegistryClass' => DummyManagerRegistry::class,
-                '$objectManagerClass' => DummyObjectManager::class,
-            ],
-        ];
+        return ManagerRegistryGetManagerToEntityManagerRector::class;
     }
 }

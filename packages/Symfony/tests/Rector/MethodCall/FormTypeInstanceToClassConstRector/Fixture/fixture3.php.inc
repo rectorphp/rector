@@ -2,10 +2,10 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\ControllerClass;
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\FormBuilder;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormBuilder;
 
-class SomeAnotherControllerWithArgs extends ControllerClass
+class SomeAnotherControllerWithArgs extends Controller
 {
     public function action(FormBuilder $builder)
     {
@@ -32,10 +32,10 @@ class SomeTypeWithCtor
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\ControllerClass;
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\FormBuilder;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormBuilder;
 
-class SomeAnotherControllerWithArgs extends ControllerClass
+class SomeAnotherControllerWithArgs extends Controller
 {
     public function action(FormBuilder $builder)
     {
@@ -49,7 +49,7 @@ class SomeTypeWithCtor
      * @var int
      */
     private $number;
-    public function buildForm(\Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\FormBuilder $builder, array $options)
+    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
         $this->number = $options['number'];
     }

@@ -4,7 +4,6 @@ namespace Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFr
 
 use Iterator;
 use Rector\SymfonyPHPUnit\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector;
-use Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\DummyKernelTestCase;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SelfContainerGetMethodCallFromTestToSetUpMethodRectorTest extends AbstractRectorTestCase
@@ -27,15 +26,8 @@ final class SelfContainerGetMethodCallFromTestToSetUpMethodRectorTest extends Ab
         yield [__DIR__ . '/Fixture/skip_sessions.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            SelfContainerGetMethodCallFromTestToSetUpMethodRector::class => [
-                '$kernelTestCaseClass' => DummyKernelTestCase::class,
-            ],
-        ];
+        return SelfContainerGetMethodCallFromTestToSetUpMethodRector::class;
     }
 }

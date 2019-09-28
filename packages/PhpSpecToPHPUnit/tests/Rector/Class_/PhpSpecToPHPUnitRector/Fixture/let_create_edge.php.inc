@@ -2,9 +2,9 @@
 
 namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
-class CurrencySpec extends DummyObjectBehavior
+class CurrencySpec extends ObjectBehavior
 {
     public function let(CurrencyData $data)
     {
@@ -28,7 +28,7 @@ class CurrencySpec extends DummyObjectBehavior
 
 namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
 class CurrencyTest extends \PHPUnit\Framework\TestCase
 {

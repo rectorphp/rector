@@ -10,6 +10,7 @@ use Rector\PhpParser\Node\Manipulator\ArrayManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector\ReadOnlyOptionToAttributeRectorTest
@@ -17,20 +18,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ReadOnlyOptionToAttributeRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private $formBuilderType;
-
-    /**
      * @var ArrayManipulator
      */
     private $arrayManipulator;
 
-    public function __construct(
-        ArrayManipulator $arrayManipulator,
-        string $formBuilderType = 'Symfony\Component\Form\FormBuilderInterface'
-    ) {
-        $this->formBuilderType = $formBuilderType;
+    public function __construct(ArrayManipulator $arrayManipulator)
+    {
         $this->arrayManipulator = $arrayManipulator;
     }
 
@@ -72,11 +65,11 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, 'add')) {
+        if (! $this->isName($node->name, 'add')) {
             return null;
         }
 
-        if (! $this->isObjectType($node, $this->formBuilderType)) {
+        if (! $this->isObjectType($node->var, FormBuilderInterface::class)) {
             return null;
         }
 

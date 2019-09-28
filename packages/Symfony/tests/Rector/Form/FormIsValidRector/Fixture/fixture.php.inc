@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\FormIsValidRector;
+namespace Rector\Symfony\Tests\Rector\Form\FormIsValidRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Form\FormIsValidRector\Source\Form;
+use Symfony\Component\Form\Form;
 
 class SomeController
 {
@@ -20,9 +20,9 @@ class SomeController
 -----
 <?php
 
-namespace Rector\Tests\FormIsValidRector;
+namespace Rector\Symfony\Tests\Rector\Form\FormIsValidRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Form\FormIsValidRector\Source\Form;
+use Symfony\Component\Form\Form;
 
 class SomeController
 {

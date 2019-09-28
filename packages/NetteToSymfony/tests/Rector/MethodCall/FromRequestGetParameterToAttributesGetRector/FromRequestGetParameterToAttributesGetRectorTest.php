@@ -4,7 +4,6 @@ namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromRequestGetParameterT
 
 use Iterator;
 use Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector;
-use Rector\NetteToSymfony\Tests\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector\Source\NetteRequest;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FromRequestGetParameterToAttributesGetRectorTest extends AbstractRectorTestCase
@@ -22,15 +21,8 @@ final class FromRequestGetParameterToAttributesGetRectorTest extends AbstractRec
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            FromRequestGetParameterToAttributesGetRector::class => [
-                '$netteRequestClass' => NetteRequest::class,
-            ],
-        ];
+        return FromRequestGetParameterToAttributesGetRector::class;
     }
 }

@@ -2,9 +2,9 @@
 
 namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
-class MockPropertiesNonLocalSpec extends DummyObjectBehavior
+class MockPropertiesNonLocalSpec extends ObjectBehavior
 {
     public function let(OrderFactory $factory)
     {
@@ -30,7 +30,7 @@ class MockPropertiesNonLocalSpec extends DummyObjectBehavior
 
 namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
 class MockPropertiesNonLocalTest extends \PHPUnit\Framework\TestCase
 {

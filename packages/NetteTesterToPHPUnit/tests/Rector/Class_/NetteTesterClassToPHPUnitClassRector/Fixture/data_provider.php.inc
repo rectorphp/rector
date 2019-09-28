@@ -2,10 +2,10 @@
 
 namespace Rector\NetteTesterToPHPUnit\Tests\Rector\StaticCall\NetteAssertToPHPUnitAssertRector\Fixture;
 
-use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\NetteTesterTestCase;
 use Tester\Assert;
+use Tester\TestCase;
 
-class DataProviderTest extends NetteTesterTestCase
+class DataProviderTest extends TestCase
 {
     /**
      * @dataProvider dataMySqlExceptions
@@ -56,8 +56,8 @@ class DataProviderTest extends NetteTesterTestCase
 
 namespace Rector\NetteTesterToPHPUnit\Tests\Rector\StaticCall\NetteAssertToPHPUnitAssertRector\Fixture;
 
-use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\NetteTesterTestCase;
 use Tester\Assert;
+use Tester\TestCase;
 
 class DataProviderTest extends \PHPUnit\Framework\TestCase
 {

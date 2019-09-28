@@ -6,7 +6,6 @@ use Iterator;
 use Nette\Utils\FileSystem;
 use Rector\NetteTesterToPHPUnit\Rector\Class_\NetteTesterClassToPHPUnitClassRector;
 use Rector\NetteTesterToPHPUnit\Rector\StaticCall\NetteAssertToPHPUnitAssertRector;
-use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\NetteTesterTestCase;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class NetteTesterPHPUnitRectorTest extends AbstractRectorTestCase
@@ -39,9 +38,7 @@ final class NetteTesterPHPUnitRectorTest extends AbstractRectorTestCase
     {
         return [
             NetteAssertToPHPUnitAssertRector::class => [],
-            NetteTesterClassToPHPUnitClassRector::class => [
-                '$netteTesterTestCaseClass' => NetteTesterTestCase::class,
-            ],
+            NetteTesterClassToPHPUnitClassRector::class => [],
         ];
     }
 }

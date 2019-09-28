@@ -9,6 +9,8 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\AbstractTypeExtension;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Form\FormTypeGetParentRector\FormTypeGetParentRectorTest
@@ -16,28 +18,13 @@ use Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider;
 final class FormTypeGetParentRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private $abstractTypeClass;
-
-    /**
-     * @var string
-     */
-    private $abstractTypeExtensionClass;
-
-    /**
      * @var FormTypeStringToTypeProvider
      */
     private $formTypeStringToTypeProvider;
 
-    public function __construct(
-        FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
-        string $abstractTypeClass = 'Symfony\Component\Form\AbstractType',
-        string $abstractTypeExtensionClass = 'Symfony\Component\Form\AbstractTypeExtension'
-    ) {
+    public function __construct(FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
+    {
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
-        $this->abstractTypeClass = $abstractTypeClass;
-        $this->abstractTypeExtensionClass = $abstractTypeExtensionClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -75,8 +62,8 @@ final class FormTypeGetParentRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isParentTypeAndMethod($node, $this->abstractTypeClass, 'getParent') &&
-            ! $this->isParentTypeAndMethod($node, $this->abstractTypeExtensionClass, 'getExtendedType')
+        if (! $this->isParentTypeAndMethod($node, AbstractType::class, 'getParent') &&
+            ! $this->isParentTypeAndMethod($node, AbstractTypeExtension::class, 'getExtendedType')
         ) {
             return null;
         }

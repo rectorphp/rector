@@ -1,9 +1,9 @@
 <?php
 
-namespace Sylius\Bundle\CoreBundle\Form\Type;
+namespace Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Source\FormBuilder;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\FormBuilder;
 
 final class ContactType
 {
@@ -24,10 +24,10 @@ final class ContactType
 -----
 <?php
 
-namespace Sylius\Bundle\CoreBundle\Form\Type;
+namespace Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Source\FormBuilder;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\FormBuilder;
 
 final class ContactType
 {

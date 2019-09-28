@@ -4,7 +4,6 @@ namespace Rector\Symfony\Tests\Rector\VarDumper\VarDumperTestTraitMethodArgsRect
 
 use Iterator;
 use Rector\Symfony\Rector\VarDumper\VarDumperTestTraitMethodArgsRector;
-use Rector\Symfony\Tests\Rector\VarDumper\VarDumperTestTraitMethodArgsRector\Source\VarDumperTrait;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class VarDumperTestTraitMethodArgsRectorTest extends AbstractRectorTestCase
@@ -22,15 +21,8 @@ final class VarDumperTestTraitMethodArgsRectorTest extends AbstractRectorTestCas
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            VarDumperTestTraitMethodArgsRector::class => [
-                '$traitName' => VarDumperTrait::class,
-            ],
-        ];
+        return VarDumperTestTraitMethodArgsRector::class;
     }
 }

@@ -4,7 +4,6 @@ namespace Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector;
 
 use Iterator;
 use Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector;
-use Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\Source\TreeBuilder;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RootNodeTreeBuilderRectorTest extends AbstractRectorTestCase
@@ -23,15 +22,8 @@ final class RootNodeTreeBuilderRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            RootNodeTreeBuilderRector::class => [
-                '$treeBuilderClass' => TreeBuilder::class,
-            ],
-        ];
+        return RootNodeTreeBuilderRector::class;
     }
 }

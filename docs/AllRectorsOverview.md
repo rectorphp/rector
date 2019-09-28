@@ -6427,7 +6427,7 @@ Move self::$container service fetching from test methods up to setUp method
 
 - class: `Rector\Twig\Rector\SimpleFunctionAndFilterRector`
 
-Changes Twig_Function_Method to Twig_SimpleFunction calls in TwigExtension.
+Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.
 
 ```diff
  class SomeExtension extends Twig_Extension

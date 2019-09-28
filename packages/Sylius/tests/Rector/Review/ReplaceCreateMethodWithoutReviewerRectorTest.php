@@ -4,7 +4,6 @@ namespace Rector\Sylius\Tests\Rector\Review;
 
 use Iterator;
 use Rector\Sylius\Rector\Review\ReplaceCreateMethodWithoutReviewerRector;
-use Rector\Sylius\Tests\Rector\Review\Source\ReviewFactoryInterface;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ReplaceCreateMethodWithoutReviewerRectorTest extends AbstractRectorTestCase
@@ -23,15 +22,8 @@ final class ReplaceCreateMethodWithoutReviewerRectorTest extends AbstractRectorT
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            ReplaceCreateMethodWithoutReviewerRector::class => [
-                '$reviewFactoryInterface' => ReviewFactoryInterface::class,
-            ],
-        ];
+        return ReplaceCreateMethodWithoutReviewerRector::class;
     }
 }

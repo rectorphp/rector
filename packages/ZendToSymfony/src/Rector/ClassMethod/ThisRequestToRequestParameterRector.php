@@ -11,8 +11,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Symfony\ValueObject\SymfonyClass;
 use Rector\ZendToSymfony\Detector\ZendDetector;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @sponsor Thanks https://previo.cz/ for sponsoring this rule
@@ -96,7 +96,7 @@ PHP
             return null;
         }
 
-        $node->params[] = $this->createParamWithNameAndClassType('request', SymfonyClass::REQUEST);
+        $node->params[] = $this->createParamWithNameAndClassType('request', Request::class);
 
         return $node;
     }

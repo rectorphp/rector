@@ -3,6 +3,7 @@
 namespace Rector\PhpSpecToPHPUnit\Rector;
 
 use PhpParser\Node;
+use PhpSpec\ObjectBehavior;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -14,19 +15,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 abstract class AbstractPhpSpecToPHPUnitRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $objectBehaviorClass;
-
-    /**
-     * @required
-     */
-    public function autowireAbstractPhpSpecToPHPUnitRector(string $objectBehaviorClass = 'PhpSpec\ObjectBehavior'): void
-    {
-        $this->objectBehaviorClass = $objectBehaviorClass;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Migrate PhpSpec behavior to PHPUnit test', [
@@ -77,6 +65,6 @@ PHP
             return false;
         }
 
-        return $this->isObjectType($classNode, $this->objectBehaviorClass);
+        return $this->isObjectType($classNode, ObjectBehavior::class);
     }
 }

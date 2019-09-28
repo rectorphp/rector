@@ -4,7 +4,6 @@ namespace Rector\Guzzle\Tests\Rector\MethodCall\MessageAsArrayRector;
 
 use Iterator;
 use Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector;
-use Rector\Guzzle\Tests\Rector\MethodCall\MessageAsArrayRector\Source\MessageType;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class MessageAsArrayRectorTest extends AbstractRectorTestCase
@@ -22,15 +21,8 @@ final class MessageAsArrayRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            MessageAsArrayRector::class => [
-                '$messageType' => MessageType::class,
-            ],
-        ];
+        return MessageAsArrayRector::class;
     }
 }

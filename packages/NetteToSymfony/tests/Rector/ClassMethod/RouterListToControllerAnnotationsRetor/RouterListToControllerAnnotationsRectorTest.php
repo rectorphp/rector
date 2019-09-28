@@ -4,8 +4,6 @@ namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerA
 
 use Iterator;
 use Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector;
-use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\Route;
-use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\RouteList;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RouterListToControllerAnnotationsRectorTest extends AbstractRectorTestCase
@@ -28,16 +26,8 @@ final class RouterListToControllerAnnotationsRectorTest extends AbstractRectorTe
         yield [__DIR__ . '/Fixture/with_parameter.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            RouterListToControllerAnnotationsRector::class => [
-                '$routeListClass' => RouteList::class,
-                '$routerClass' => Route::class,
-            ],
-        ];
+        return RouterListToControllerAnnotationsRector::class;
     }
 }

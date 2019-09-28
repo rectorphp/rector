@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
 
-use Rector\Symfony\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector\Source\FormBuilder;
+use Symfony\Component\Form\FormBuilder;
 
 class ReadOnlyOptionToAttribute
 {
@@ -18,7 +18,7 @@ class ReadOnlyOptionToAttribute
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
 
-use Rector\Symfony\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector\Source\FormBuilder;
+use Symfony\Component\Form\FormBuilder;
 
 class ReadOnlyOptionToAttribute
 {

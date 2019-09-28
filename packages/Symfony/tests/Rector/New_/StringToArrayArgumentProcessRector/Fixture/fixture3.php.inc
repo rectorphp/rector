@@ -1,6 +1,8 @@
 <?php
 
-use Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\Process;
+namespace Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
+
+use Symfony\Component\Process\Process;
 
 function stringToArgumentArray3()
 {
@@ -20,7 +22,9 @@ function stringToArgumentArray3()
 -----
 <?php
 
-use Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Source\Process;
+namespace Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\Fixture;
+
+use Symfony\Component\Process\Process;
 
 function stringToArgumentArray3()
 {

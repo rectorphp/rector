@@ -17,6 +17,8 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Util\RectorStrings;
+use Symfony\Component\Console\Helper\ProcessHelper;
+use Symfony\Component\Process\Process;
 
 /**
  * @see https://github.com/symfony/symfony/pull/27821/files
@@ -25,28 +27,13 @@ use Rector\Util\RectorStrings;
 final class StringToArrayArgumentProcessRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private $processClass;
-
-    /**
-     * @var string
-     */
-    private $processHelperClass;
-
-    /**
      * @var NodeTransformer
      */
     private $nodeTransformer;
 
-    public function __construct(
-        NodeTransformer $nodeTransformer,
-        string $processClass = 'Symfony\Component\Process\Process',
-        string $processHelperClass = 'Symfony\Component\Console\Helper\ProcessHelper'
-    ) {
+    public function __construct(NodeTransformer $nodeTransformer)
+    {
         $this->nodeTransformer = $nodeTransformer;
-        $this->processClass = $processClass;
-        $this->processHelperClass = $processHelperClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -79,11 +66,11 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isObjectType($node, $this->processClass)) {
+        if ($this->isObjectType($node, Process::class)) {
             return $this->processArgumentPosition($node, 0);
         }
 
-        if ($this->isObjectType($node, $this->processHelperClass)) {
+        if ($this->isObjectType($node, ProcessHelper::class)) {
             return $this->processArgumentPosition($node, 1);
         }
 

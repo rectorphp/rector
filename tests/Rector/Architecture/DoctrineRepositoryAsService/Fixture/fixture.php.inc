@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Post;
-use Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityRepositoryClass;
+use Doctrine\ORM\EntityRepository;
 
-final class FirstPostRepository extends EntityRepositoryClass
+final class FirstPostRepository extends EntityRepository
 {
     /**
      * Our custom method
@@ -33,15 +33,15 @@ final class FirstPostRepository extends EntityRepositoryClass
 namespace App\Repository;
 
 use App\Entity\Post;
-use Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityRepositoryClass;
+use Doctrine\ORM\EntityRepository;
 
 final class FirstPostRepository
 {
     /**
-     * @var \Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityRepositoryClass
+     * @var \Doctrine\ORM\EntityRepository
      */
     private $repository;
-    public function __construct(\Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService\Source\EntityManagerClass $entityManager)
+    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
     {
         $this->repository = $entityManager->getRepository(\App\Entity\FirstPost::class);
     }

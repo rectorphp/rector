@@ -4,7 +4,6 @@ namespace Rector\Symfony\Tests\Rector\Form\FormIsValidRector;
 
 use Iterator;
 use Rector\Symfony\Rector\Form\FormIsValidRector;
-use Rector\Symfony\Tests\Rector\Form\FormIsValidRector\Source\Form;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FormIsValidRectorTest extends AbstractRectorTestCase
@@ -22,15 +21,8 @@ final class FormIsValidRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            FormIsValidRector::class => [
-                '$formClass' => Form::class,
-            ],
-        ];
+        return FormIsValidRector::class;
     }
 }

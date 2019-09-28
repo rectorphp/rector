@@ -4,7 +4,6 @@ namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControl
 
 use Iterator;
 use Rector\NetteToSymfony\Rector\Class_\NetteControlToSymfonyControllerRector;
-use Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControllerRector\Source\NetteControl;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class NetteControlToSymfonyControllerRectorTest extends AbstractRectorTestCase
@@ -22,15 +21,8 @@ final class NetteControlToSymfonyControllerRectorTest extends AbstractRectorTest
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            NetteControlToSymfonyControllerRector::class => [
-                '$netteControlClass' => NetteControl::class,
-            ],
-        ];
+        return NetteControlToSymfonyControllerRector::class;
     }
 }

@@ -2,9 +2,9 @@
 
 namespace SomeNamespace;
 
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-final class ClassWithNamedService1 extends SymfonyController
+final class ClassWithNamedService1 extends Controller
 {
     public function render()
     {
@@ -23,9 +23,9 @@ final class ClassWithNamedService1 extends SymfonyController
 
 namespace SomeNamespace;
 
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-final class ClassWithNamedService1 extends SymfonyController
+final class ClassWithNamedService1 extends Controller
 {
     /**
      * @var string

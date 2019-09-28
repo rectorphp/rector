@@ -8,22 +8,13 @@ use PhpParser\Node\Expr\StaticCall;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector\ProcessBuilderInstanceRectorTest
  */
 final class ProcessBuilderInstanceRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $processBuilderClass;
-
-    public function __construct(string $processBuilderClass = 'Symfony\Component\Process\ProcessBuilder')
-    {
-        $this->processBuilderClass = $processBuilderClass;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -50,11 +41,11 @@ final class ProcessBuilderInstanceRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, $this->processBuilderClass)) {
+        if (! $this->isName($node->class, ProcessBuilder::class)) {
             return null;
         }
 
-        if (! $this->isName($node, 'create')) {
+        if (! $this->isName($node->name, 'create')) {
             return null;
         }
 

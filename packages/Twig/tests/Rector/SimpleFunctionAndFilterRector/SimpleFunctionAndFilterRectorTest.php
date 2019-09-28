@@ -5,11 +5,6 @@ namespace Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector;
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Twig\Rector\SimpleFunctionAndFilterRector;
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigExtension;
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFilterMethod;
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFunctionMethod;
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigSimpleFilter;
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigSimpleFunction;
 
 final class SimpleFunctionAndFilterRectorTest extends AbstractRectorTestCase
 {
@@ -28,19 +23,8 @@ final class SimpleFunctionAndFilterRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture3.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            SimpleFunctionAndFilterRector::class => [
-                '$twigExtensionClass' => TwigExtension::class,
-                '$oldToNewClasses' => [
-                    TwigFunctionMethod::class => TwigSimpleFunction::class,
-                    TwigFilterMethod::class => TwigSimpleFilter::class,
-                ],
-            ],
-        ];
+        return SimpleFunctionAndFilterRector::class;
     }
 }

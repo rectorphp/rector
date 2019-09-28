@@ -12,22 +12,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Symfony\ValueObject\SymfonyClass;
 use Rector\SymfonyPHPUnit\Naming\ServiceNaming;
 use Rector\SymfonyPHPUnit\Node\KernelTestCaseNodeAnalyzer;
 use Rector\SymfonyPHPUnit\Node\KernelTestCaseNodeFactory;
 use Rector\SymfonyPHPUnit\SelfContainerMethodCallCollector;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * @see \Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\SelfContainerGetMethodCallFromTestToSetUpMethodRectorTest
  */
 final class SelfContainerGetMethodCallFromTestToSetUpMethodRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $kernelTestCaseClass;
-
     /**
      * @var KernelTestCaseNodeAnalyzer
      */
@@ -52,10 +47,8 @@ final class SelfContainerGetMethodCallFromTestToSetUpMethodRector extends Abstra
         KernelTestCaseNodeAnalyzer $kernelTestCaseNodeAnalyzer,
         KernelTestCaseNodeFactory $kernelTestCaseNodeFactory,
         ServiceNaming $serviceNaming,
-        SelfContainerMethodCallCollector $selfContainerMethodCallCollector,
-        string $kernelTestCaseClass = SymfonyClass::KERNEL_TEST_CASE
+        SelfContainerMethodCallCollector $selfContainerMethodCallCollector
     ) {
-        $this->kernelTestCaseClass = $kernelTestCaseClass;
         $this->kernelTestCaseNodeAnalyzer = $kernelTestCaseNodeAnalyzer;
         $this->kernelTestCaseNodeFactory = $kernelTestCaseNodeFactory;
         $this->selfContainerMethodCallCollector = $selfContainerMethodCallCollector;
@@ -135,7 +128,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node, $this->kernelTestCaseClass)) {
+        if (! $this->isObjectType($node, KernelTestCase::class)) {
             return null;
         }
 

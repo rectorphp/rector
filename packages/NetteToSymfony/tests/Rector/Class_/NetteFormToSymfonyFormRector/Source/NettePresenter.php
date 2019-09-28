@@ -2,7 +2,9 @@
 
 namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteFormToSymfonyFormRector\Source;
 
-abstract class NettePresenter
+use Nette\Application\IPresenter;
+
+abstract class NettePresenter implements IPresenter
 {
 
 }

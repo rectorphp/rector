@@ -11,6 +11,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 /**
  * @see https://github.com/symfony/symfony/pull/27476
@@ -18,17 +19,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class RootNodeTreeBuilderRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $treeBuilderClass;
-
-    public function __construct(
-        string $treeBuilderClass = 'Symfony\Component\Config\Definition\Builder\TreeBuilder'
-    ) {
-        $this->treeBuilderClass = $treeBuilderClass;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes  Process string argument to an array', [
@@ -65,7 +55,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->class, $this->treeBuilderClass)) {
+        if (! $this->isObjectType($node->class, TreeBuilder::class)) {
             return null;
         }
 
@@ -109,7 +99,7 @@ PHP
                 return false;
             }
 
-            if (! $this->isObjectType($node, $this->treeBuilderClass)) {
+            if (! $this->isObjectType($node, TreeBuilder::class)) {
                 return false;
             }
 

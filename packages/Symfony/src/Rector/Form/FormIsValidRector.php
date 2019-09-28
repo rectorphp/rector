@@ -9,26 +9,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Component\Form\Form;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Form\FormIsValidRector\FormIsValidRectorTest
  */
 final class FormIsValidRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $formClass;
-
-    public function __construct(string $formClass = 'Symfony\Component\Form\Form')
-    {
-        $this->formClass = $formClass;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Adds `$form->isSubmitted()` validatoin to all `$form->isValid()` calls in Form in Symfony',
+            'Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form in Symfony',
             [
                 new CodeSample(
                     <<<'PHP'
@@ -63,7 +54,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node, $this->formClass)) {
+        if (! $this->isObjectType($node, Form::class)) {
             return null;
         }
 

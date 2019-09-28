@@ -2,7 +2,7 @@
 
 namespace Rector\Sylius\Tests\Rector\Review\Fixture;
 
-use Rector\Sylius\Tests\Rector\Review\Source\ReviewFactoryInterface;
+use Sylius\Component\Review\Factory\ReviewFactoryInterface;
 
 class SomeClass2
 {
@@ -23,7 +23,7 @@ class SomeClass2
 
 namespace Rector\Sylius\Tests\Rector\Review\Fixture;
 
-use Rector\Sylius\Tests\Rector\Review\Source\ReviewFactoryInterface;
+use Sylius\Component\Review\Factory\ReviewFactoryInterface;
 
 class SomeClass2
 {

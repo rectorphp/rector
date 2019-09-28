@@ -14,6 +14,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @see https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
@@ -23,19 +24,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class SimplifyWebTestCaseAssertionsRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private $webTestCaseClass;
-
-    /**
      * @var MethodCall
      */
     private $getStatusCodeMethodCall;
 
-    public function __construct(string $webTestCaseClass = 'Symfony\Bundle\FrameworkBundle\Test\WebTestCase')
+    public function __construct()
     {
-        $this->webTestCaseClass = $webTestCaseClass;
-
         $clientGetResponse = new MethodCall(new Variable('client'), 'getResponse');
         $this->getStatusCodeMethodCall = new MethodCall($clientGetResponse, 'getStatusCode');
     }
@@ -141,7 +135,7 @@ PHP
             return false;
         }
 
-        return $this->isObjectType($class, $this->webTestCaseClass);
+        return $this->isObjectType($class, WebTestCase::class);
     }
 
     /**

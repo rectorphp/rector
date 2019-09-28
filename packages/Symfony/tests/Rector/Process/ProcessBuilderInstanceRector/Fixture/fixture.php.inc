@@ -1,8 +1,8 @@
 <?php
 
-namespace SomeNamespace;
+namespace Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector\Source\ProcessBuilder;
+use Symfony\Component\Process\ProcessBuilder;
 
 function processBuilderInstance()
 {
@@ -13,9 +13,9 @@ function processBuilderInstance()
 -----
 <?php
 
-namespace SomeNamespace;
+namespace Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector\Source\ProcessBuilder;
+use Symfony\Component\Process\ProcessBuilder;
 
 function processBuilderInstance()
 {

@@ -12,7 +12,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Ramsey\Uuid\Uuid;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
-use Rector\Doctrine\ValueObject\DoctrineClass;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -212,7 +211,7 @@ PHP
             return false;
         }
 
-        return $argumentStaticType->getClassName() === DoctrineClass::RAMSEY_UUID;
+        return $argumentStaticType->getClassName() === Uuid::class;
     }
 
     private function createUuidStringNode(): String_

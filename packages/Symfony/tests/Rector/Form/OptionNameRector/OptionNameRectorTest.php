@@ -4,7 +4,6 @@ namespace Rector\Symfony\Tests\Rector\Form\OptionNameRector;
 
 use Iterator;
 use Rector\Symfony\Rector\Form\OptionNameRector;
-use Rector\Symfony\Tests\Rector\Form\OptionNameRector\Source\FormBuilder;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class OptionNameRectorTest extends AbstractRectorTestCase
@@ -22,15 +21,8 @@ final class OptionNameRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            OptionNameRector::class => [
-                '$formBuilderType' => FormBuilder::class,
-            ],
-        ];
+        return OptionNameRector::class;
     }
 }

@@ -18,11 +18,11 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Symfony\ValueObject\SymfonyClass;
 use Rector\ZendToSymfony\Collector\RouteCollector;
 use Rector\ZendToSymfony\Detector\ZendDetector;
 use Rector\ZendToSymfony\Resolver\ControllerMethodParamResolver;
 use Rector\ZendToSymfony\ValueObject\RouteValueObject;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @sponsor Thanks https://previo.cz/ for sponsoring this rule
@@ -100,7 +100,7 @@ PHP
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         // every symfony action must return response
-        $node->returnType = new FullyQualified(SymfonyClass::RESPONSE);
+        $node->returnType = new FullyQualified(Response::class);
 
         // add params to arguments
         $paramNamesToParentNodes = $this->controllerMethodParamResolver->resolve($node);

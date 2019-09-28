@@ -1,6 +1,2 @@
 imports:
     - { resource: '../../../../../../config/set/framework-migration/phpspec-to-phpunit.yaml' }
-
-parameters:
-    # for tests only
-    object_behavior_class: 'Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior'

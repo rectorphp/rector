@@ -2,16 +2,16 @@
 
 namespace Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector\Fixture;
 
-use Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector\Source\DummyManagerRegistry;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 class KeepDifferntMethods
 {
     /**
-     * @var DummyManagerRegistry
+     * @var ManagerRegistry
      */
     private $managerRegistry;
 
-    public function __construct(DummyManagerRegistry $managerRegistry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
         $this->managerRegistry = $managerRegistry;
     }

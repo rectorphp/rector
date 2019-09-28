@@ -4,7 +4,6 @@ namespace Rector\Symfony\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector
 
 use Iterator;
 use Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
-use Rector\Symfony\Tests\Rector\MethodCall\ReadOnlyOptionToAttributeRector\Source\FormBuilder;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ReadOnlyOptionToAttributeRectorTest extends AbstractRectorTestCase
@@ -23,15 +22,8 @@ final class ReadOnlyOptionToAttributeRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            ReadOnlyOptionToAttributeRector::class => [
-                '$formBuilderType' => FormBuilder::class,
-            ],
-        ];
+        return ReadOnlyOptionToAttributeRector::class;
     }
 }

@@ -6,7 +6,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Symfony\ValueObject\SymfonyClass;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\GetToConstructorInjectionRectorTest
@@ -21,9 +22,8 @@ final class GetToConstructorInjectionRector extends AbstractToConstructorInjecti
     /**
      * @param string[] $getMethodAwareTypes
      */
-    public function __construct(
-        array $getMethodAwareTypes = [SymfonyClass::CONTROLLER, SymfonyClass::CONTROLLER_TRAIT]
-    ) {
+    public function __construct(array $getMethodAwareTypes = [Controller::class, ControllerTrait::class])
+    {
         $this->getMethodAwareTypes = $getMethodAwareTypes;
     }
 

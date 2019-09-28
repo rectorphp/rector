@@ -2,12 +2,13 @@
 
 namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Fixture;
 
+use Nette\Http\Request;
 use Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Source\IrrelevantRequest;
 
 final class SomeMissingArgumentController
 {
     /**
-     * @var \Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Source\NetteHttpRequest
+     * @var Request
      */
     private $httpRequest;
 
@@ -28,12 +29,13 @@ final class SomeMissingArgumentController
 
 namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Fixture;
 
+use Nette\Http\Request;
 use Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Source\IrrelevantRequest;
 
 final class SomeMissingArgumentController
 {
     /**
-     * @var \Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Source\NetteHttpRequest
+     * @var Request
      */
     private $httpRequest;
 

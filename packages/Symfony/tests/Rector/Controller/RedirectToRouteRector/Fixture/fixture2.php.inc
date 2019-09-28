@@ -1,8 +1,10 @@
 <?php
 
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+namespace Rector\Symfony\Tests\Rector\Controller\RedirectToRouteRector\Fixture;
 
-class AppController2 extends SymfonyController
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+class AppController2 extends Controller
 {
     public function someAction()
     {
@@ -14,9 +16,11 @@ class AppController2 extends SymfonyController
 -----
 <?php
 
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
+namespace Rector\Symfony\Tests\Rector\Controller\RedirectToRouteRector\Fixture;
 
-class AppController2 extends SymfonyController
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+class AppController2 extends Controller
 {
     public function someAction()
     {

@@ -2,18 +2,19 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\ControllerClass;
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\FormBuilder;
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\FormType;
+use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\AnotherFormTypeClass;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilder;
 
-class SomeAnotherController extends ControllerClass
+class SomeAnotherController extends Controller
 {
     public function action(FormBuilder $builder)
     {
         $builder->add('someText', new SomeClass);
 
-        $form = new FormType();
-        $form->add('text', new AnotherFormTypeClass);
+        $form = new TextType();
+        $form->add('text', new AnotherFormTypeClass());
     }
 }
 
@@ -23,17 +24,18 @@ class SomeAnotherController extends ControllerClass
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\ControllerClass;
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\FormBuilder;
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\FormType;
+use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\AnotherFormTypeClass;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilder;
 
-class SomeAnotherController extends ControllerClass
+class SomeAnotherController extends Controller
 {
     public function action(FormBuilder $builder)
     {
         $builder->add('someText', SomeClass::class);
 
-        $form = new FormType();
+        $form = new TextType();
         $form->add('text', AnotherFormTypeClass::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Rector\DeadCode\Rector\Class_;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
@@ -10,7 +11,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
 use Rector\DeadCode\UnusedNodeResolver\ClassUnusedPrivateClassMethodResolver;
-use Rector\Doctrine\ValueObject\DoctrineClass;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
@@ -241,7 +241,7 @@ PHP
         /** @var New_ $new */
         $new = $parentNode->expr;
 
-        return $this->isName($new->class, DoctrineClass::ARRAY_COLLECTION);
+        return $this->isName($new->class, ArrayCollection::class);
     }
 
     /**

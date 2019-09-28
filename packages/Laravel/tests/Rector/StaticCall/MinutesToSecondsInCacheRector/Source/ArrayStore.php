@@ -2,7 +2,9 @@
 
 namespace Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\Source;
 
-final class ArrayStore implements LaravelStoreInterface
+use Illuminate\Contracts\Cache\Store;
+
+final class ArrayStore implements Store
 {
     public function get($key)
     {

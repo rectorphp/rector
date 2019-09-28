@@ -2,6 +2,7 @@
 
 namespace Rector\Doctrine\Rector\MethodCall;
 
+use Doctrine\ORM\EntityManagerInterface;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
@@ -20,19 +21,11 @@ final class EntityAliasToClassConstantReferenceRector extends AbstractRector
     private $aliasesToNamespaces = [];
 
     /**
-     * @var string
-     */
-    private $entityManagerClass;
-
-    /**
      * @param string[] $aliasesToNamespaces
      */
-    public function __construct(
-        array $aliasesToNamespaces = [],
-        string $entityManagerClass = 'Doctrine\ORM\EntityManagerInterface'
-    ) {
+    public function __construct(array $aliasesToNamespaces = [])
+    {
         $this->aliasesToNamespaces = $aliasesToNamespaces;
-        $this->entityManagerClass = $entityManagerClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -65,7 +58,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, $this->entityManagerClass)) {
+        if (! $this->isObjectType($node, EntityManagerInterface::class)) {
             return null;
         }
 

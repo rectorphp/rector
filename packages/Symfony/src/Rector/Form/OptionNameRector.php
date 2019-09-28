@@ -9,6 +9,7 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Form\OptionNameRector\OptionNameRectorTest
@@ -16,22 +17,12 @@ use Rector\RectorDefinition\RectorDefinition;
 final class OptionNameRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private $formBuilderType;
-
-    /**
      * @var string[]
      */
     private $oldToNewOption = [
         'precision' => 'scale',
         'virtual' => 'inherit_data',
     ];
-
-    public function __construct(string $formBuilderType = 'Symfony\Component\Form\FormBuilderInterface')
-    {
-        $this->formBuilderType = $formBuilderType;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -67,7 +58,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node->var, $this->formBuilderType)) {
+        if (! $this->isObjectType($node->var, FormBuilderInterface::class)) {
             return null;
         }
 

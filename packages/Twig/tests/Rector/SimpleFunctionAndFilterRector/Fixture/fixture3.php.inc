@@ -2,15 +2,15 @@
 
 namespace  Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Fixture;
 
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigExtension;
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFilterMethod;
+use Twig_Extension;
+use Twig_Filter_Method;
 
-final class SomeExtension3 extends TwigExtension
+final class SomeExtension3 extends Twig_Extension
 {
     public function getFilters()
     {
         return [
-            'sphinx_highlight' => new TwigFilterMethod([$this, 'sphinx_highlight'], ['is_safe' => ['html']]),
+            'sphinx_highlight' => new Twig_Filter_Method([$this, 'sphinx_highlight'], ['is_safe' => ['html']]),
         ];
     }
 }
@@ -21,15 +21,15 @@ final class SomeExtension3 extends TwigExtension
 
 namespace  Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Fixture;
 
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigExtension;
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFilterMethod;
+use Twig_Extension;
+use Twig_Filter_Method;
 
-final class SomeExtension3 extends TwigExtension
+final class SomeExtension3 extends Twig_Extension
 {
     public function getFilters()
     {
         return [
-            new \Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigSimpleFilter('sphinx_highlight', [$this, 'sphinx_highlight'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('sphinx_highlight', [$this, 'sphinx_highlight'], ['is_safe' => ['html']]),
         ];
     }
 }

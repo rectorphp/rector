@@ -2,7 +2,11 @@
 
 namespace Rector\Guzzle\Tests\Rector\MethodCall\MessageAsArrayRector\Source;
 
-class MessageType
-{
+use GuzzleHttp\Message\MessageInterface;
 
+class MessageType implements MessageInterface
+{
+    public function getMessage()
+    {
+    }
 }

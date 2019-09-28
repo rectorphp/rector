@@ -1,6 +1,8 @@
 <?php
 
-use Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Source\FormBuilder;
+namespace Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Fixture;
+
+use Symfony\Component\Form\FormBuilder;
 
 function stringFromType()
 {
@@ -14,7 +16,9 @@ function stringFromType()
 -----
 <?php
 
-use Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Source\FormBuilder;
+namespace Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Fixture;
+
+use Symfony\Component\Form\FormBuilder;
 
 function stringFromType()
 {

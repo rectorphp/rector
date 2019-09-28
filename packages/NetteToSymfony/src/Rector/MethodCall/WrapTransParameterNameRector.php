@@ -10,6 +10,7 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * @see https://symfony.com/doc/current/components/translation/usage.html#message-placeholders
@@ -19,16 +20,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class WrapTransParameterNameRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $translatorClass;
-
-    public function __construct(string $translatorClass = 'Symfony\Component\Translation\TranslatorInterface')
-    {
-        $this->translatorClass = $translatorClass;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Adds %% to placeholder name of trans() method if missing', [
@@ -81,11 +72,11 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, $this->translatorClass)) {
+        if (! $this->isObjectType($node->var, TranslatorInterface::class)) {
             return null;
         }
 
-        if (! $this->isName($node, 'trans')) {
+        if (! $this->isName($node->name, 'trans')) {
             return null;
         }
 

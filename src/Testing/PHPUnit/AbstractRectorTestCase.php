@@ -11,6 +11,7 @@ use Rector\Configuration\Option;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\HttpKernel\RectorKernel;
+use Rector\Stubs\StubLoader;
 use Rector\Testing\Application\EnabledRectorsProvider;
 use Rector\Testing\Finder\RectorsFinder;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -92,6 +93,10 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
         // needed for PHPStan, because the analyzed file is just create in /temp
         $this->nodeScopeResolver = static::$container->get(NodeScopeResolver::class);
+
+        // load stubs
+        $stubLoader = static::$container->get(StubLoader::class);
+        $stubLoader->loadStubs();
 
         $this->configurePhpVersionFeatures();
     }

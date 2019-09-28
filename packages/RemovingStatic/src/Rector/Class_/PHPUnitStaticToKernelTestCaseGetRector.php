@@ -29,7 +29,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\RemovingStatic\ValueObject\PHPUnitClass;
-use Rector\Symfony\ValueObject\SymfonyClass;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * @see \Rector\RemovingStatic\Tests\Rector\Class_\PHPUnitStaticToKernelTestCaseGetRector\PHPUnitStaticToKernelTestCaseGetRectorTest
@@ -52,11 +52,6 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector
     private $newProperties = [];
 
     /**
-     * @var string
-     */
-    private $kernelTestCaseClass;
-
-    /**
      * @var ClassManipulator
      */
     private $classManipulator;
@@ -73,12 +68,10 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector
         PropertyNaming $propertyNaming,
         ClassManipulator $classManipulator,
         PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
-        array $staticClassTypes = [],
-        string $kernelTestCaseClass = SymfonyClass::KERNEL_TEST_CASE
+        array $staticClassTypes = []
     ) {
         $this->staticClassTypes = $staticClassTypes;
         $this->propertyNaming = $propertyNaming;
-        $this->kernelTestCaseClass = $kernelTestCaseClass;
         $this->classManipulator = $classManipulator;
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
     }
@@ -347,8 +340,8 @@ PHP
         }
 
         // update parent clsas if not already
-        if (! $this->isObjectType($class, $this->kernelTestCaseClass)) {
-            $class->extends = new FullyQualified($this->kernelTestCaseClass);
+        if (! $this->isObjectType($class, KernelTestCase::class)) {
+            $class->extends = new FullyQualified(KernelTestCase::class);
         }
 
         return $class;

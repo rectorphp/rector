@@ -2,9 +2,9 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\Source\FixtureWebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class ResponseCodeSame extends FixtureWebTestCase
+final class ResponseCodeSame extends WebTestCase
 {
     public function test()
     {
@@ -18,9 +18,9 @@ final class ResponseCodeSame extends FixtureWebTestCase
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\Source\FixtureWebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class ResponseCodeSame extends FixtureWebTestCase
+final class ResponseCodeSame extends WebTestCase
 {
     public function test()
     {
