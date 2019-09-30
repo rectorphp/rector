@@ -4,7 +4,6 @@ namespace Rector\Symfony\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRe
 
 use Iterator;
 use Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
-use Rector\Symfony\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector\Source\FixtureWebTestCase;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimplifyWebTestCaseAssertionsRectorTest extends AbstractRectorTestCase
@@ -23,15 +22,8 @@ final class SimplifyWebTestCaseAssertionsRectorTest extends AbstractRectorTestCa
         yield [__DIR__ . '/Fixture/response_code_same.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            SimplifyWebTestCaseAssertionsRector::class => [
-                '$webTestCaseClass' => FixtureWebTestCase::class,
-            ],
-        ];
+        return SimplifyWebTestCaseAssertionsRector::class;
     }
 }

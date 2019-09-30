@@ -2,6 +2,7 @@
 
 namespace Rector\NetteToSymfony\Rector\MethodCall;
 
+use Nette\Http\Request;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -11,6 +12,7 @@ use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**
  * @see https://doc.nette.org/en/2.4/http-request-response
@@ -20,26 +22,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class FromHttpRequestGetHeaderToHeadersGetRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private $netteHttpRequestClass;
-
-    /**
      * @var ClassMethodManipulator
      */
     private $classMethodManipulator;
 
-    /**
-     * @var string
-     */
-    private $symfonyRequestClass = 'Symfony\Component\HttpFoundation\Request';
-
-    public function __construct(
-        ClassMethodManipulator $classMethodManipulator,
-        string $netteHttpRequestClass = 'Nette\Http\Request'
-    ) {
+    public function __construct(ClassMethodManipulator $classMethodManipulator)
+    {
         $this->classMethodManipulator = $classMethodManipulator;
-        $this->netteHttpRequestClass = $netteHttpRequestClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -86,7 +75,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, $this->netteHttpRequestClass)) {
+        if (! $this->isObjectType($node, Request::class)) {
             return null;
         }
 
@@ -96,7 +85,7 @@ PHP
 
         $requestName = $this->classMethodManipulator->addMethodParameterIfMissing(
             $node,
-            $this->symfonyRequestClass,
+            SymfonyRequest::class,
             ['request', 'symfonyRequest']
         );
 

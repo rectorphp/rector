@@ -2,9 +2,9 @@
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\ControllerClass;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class SomeController extends ControllerClass
+class SomeController extends Controller
 {
     public function action()
     {
@@ -36,9 +36,9 @@ final class AnotherFormType
 
 namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\ControllerClass;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class SomeController extends ControllerClass
+class SomeController extends Controller
 {
     public function action()
     {
@@ -57,7 +57,7 @@ final class AnotherFormType
      * @var array
      */
     private $items;
-    public function buildForm(\Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\FormBuilder $builder, array $options)
+    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
         $this->items = $options['items'];
     }

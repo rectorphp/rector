@@ -2,12 +2,12 @@
 
 namespace Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Fixture;
 
-use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\NetteTesterTestCase;
 use Tester\Assert;
+use Tester\TestCase;
 
 require_once __DIR__ . '/bootstrap.php';
 
-class ExtensionTest extends NetteTesterTestCase
+class ExtensionTest extends TestCase
 {
     public function setUp()
     {
@@ -36,8 +36,8 @@ class ExtensionTest extends NetteTesterTestCase
 
 namespace Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Fixture;
 
-use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\NetteTesterTestCase;
 use Tester\Assert;
+use Tester\TestCase;
 
 class ExtensionTest extends \PHPUnit\Framework\TestCase
 {

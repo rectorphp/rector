@@ -2,6 +2,7 @@
 
 namespace Rector\Laravel\Rector\StaticCall;
 
+use Illuminate\Contracts\Cache\Store;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -20,16 +21,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class MinutesToSecondsInCacheRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $storeClass;
-
-    public function __construct(string $storeClass = 'Illuminate\Contracts\Cache\Store')
-    {
-        $this->storeClass = $storeClass;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -124,7 +115,7 @@ PHP
                 'put' => 2, // time argument position
                 'add' => 2,
             ],
-            $this->storeClass => [
+            Store::class => [
                 'put' => 2,
                 'putMany' => 1,
             ],

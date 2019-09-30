@@ -8,22 +8,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\Controller\RedirectToRouteRector\RedirectToRouteRectorTest
  */
 final class RedirectToRouteRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $controllerClass;
-
-    public function __construct(string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller')
-    {
-        $this->controllerClass = $controllerClass;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns redirect to route to short helper method in Controller in Symfony', [
@@ -48,7 +39,7 @@ final class RedirectToRouteRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName !== $this->controllerClass) {
+        if ($parentClassName !== Controller::class) {
             return null;
         }
         if (! $this->isName($node, 'redirect')) {

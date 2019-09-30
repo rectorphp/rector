@@ -8,8 +8,8 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Symfony\ValueObject\SymfonyClass;
 use Rector\ZendToSymfony\Detector\ZendDetector;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @sponsor Thanks https://previo.cz/ for sponsoring this rule
@@ -62,7 +62,7 @@ PHP
             return null;
         }
 
-        $node->extends = new FullyQualified(SymfonyClass::ABSTRACT_CONTROLLER);
+        $node->extends = new FullyQualified(AbstractController::class);
 
         $this->makeFinal($node);
 

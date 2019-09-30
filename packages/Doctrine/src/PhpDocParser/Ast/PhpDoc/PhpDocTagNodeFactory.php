@@ -6,6 +6,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Ramsey\Uuid\UuidInterface;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
@@ -13,7 +14,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinTableTagValueNode;
 use Rector\Doctrine\Uuid\JoinTableNameResolver;
-use Rector\Doctrine\ValueObject\DoctrineClass;
 
 final class PhpDocTagNodeFactory
 {
@@ -29,7 +29,7 @@ final class PhpDocTagNodeFactory
 
     public function createVarTagUuidInterface(): PhpDocTagNode
     {
-        $identifierTypeNode = new IdentifierTypeNode('\\' . DoctrineClass::RAMSEY_UUID_INTERFACE);
+        $identifierTypeNode = new IdentifierTypeNode('\\' . UuidInterface::class);
         $varTagValueNode = new VarTagValueNode($identifierTypeNode, '', '');
 
         return new PhpDocTagNode('@var', $varTagValueNode);

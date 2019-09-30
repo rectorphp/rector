@@ -4,7 +4,6 @@ namespace Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantRefe
 
 use Iterator;
 use Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector;
-use Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantReferenceRector\Source\DoctrineEntityManager;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class EntityAliasToClassConstantReferenceRectorTest extends AbstractRectorTestCase
@@ -32,7 +31,6 @@ final class EntityAliasToClassConstantReferenceRectorTest extends AbstractRector
                 '$aliasesToNamespaces' => [
                     'App' => 'App\Entity',
                 ],
-                '$entityManagerClass' => DoctrineEntityManager::class,
             ],
         ];
     }

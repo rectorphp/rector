@@ -4,7 +4,6 @@ namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRe
 
 use Iterator;
 use Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector;
-use Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRector\Source\SomeTranslator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class WrapTransParameterNameRectorTest extends AbstractRectorTestCase
@@ -22,15 +21,8 @@ final class WrapTransParameterNameRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            WrapTransParameterNameRector::class => [
-                '$translatorClass' => SomeTranslator::class,
-            ],
-        ];
+        return WrapTransParameterNameRector::class;
     }
 }

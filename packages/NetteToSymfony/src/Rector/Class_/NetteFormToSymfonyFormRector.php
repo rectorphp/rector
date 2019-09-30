@@ -2,6 +2,8 @@
 
 namespace Rector\NetteToSymfony\Rector\Class_;
 
+use Nette\Application\IPresenter;
+use Nette\Application\UI\Form;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -28,11 +30,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class NetteFormToSymfonyFormRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private $presenterClass;
-
-    /**
      * @var string[]
      */
     private $addMethodToFormType = [
@@ -58,11 +55,6 @@ final class NetteFormToSymfonyFormRector extends AbstractRector
         'addSubmit' => 'Symfony\Component\Form\Extension\Core\Type\SubmitType',
         'addButton' => 'Symfony\Component\Form\Extension\Core\Type\ButtonType',
     ];
-
-    public function __construct(string $presenterClass = 'Nette\Application\IPresenter')
-    {
-        $this->presenterClass = $presenterClass;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -125,7 +117,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($classNode, $this->presenterClass)) {
+        if (! $this->isObjectType($classNode, IPresenter::class)) {
             return null;
         }
 
@@ -134,7 +126,7 @@ PHP
         }
 
         /** @var MethodCall $node */
-        if (! $this->isObjectType($node->var, 'Nette\Application\UI\Form')) {
+        if (! $this->isObjectType($node->var, Form::class)) {
             return null;
         }
 
@@ -151,7 +143,7 @@ PHP
 
     private function processNew(New_ $new): ?MethodCall
     {
-        if (! $this->isName($new->class, 'Nette\Application\UI\Form')) {
+        if (! $this->isName($new->class, Form::class)) {
             return null;
         }
 

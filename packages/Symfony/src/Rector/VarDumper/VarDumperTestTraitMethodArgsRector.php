@@ -9,22 +9,13 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Component\VarDumper\Test\VarDumperTestTrait;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\VarDumper\VarDumperTestTraitMethodArgsRector\VarDumperTestTraitMethodArgsRectorTest
  */
 final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $traitName;
-
-    public function __construct(string $traitName = 'Symfony\Component\VarDumper\Test\VarDumperTestTrait')
-    {
-        $this->traitName = $traitName;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -55,7 +46,7 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node->var, $this->traitName)) {
+        if (! $this->isObjectType($node->var, VarDumperTestTrait::class)) {
             return null;
         }
 

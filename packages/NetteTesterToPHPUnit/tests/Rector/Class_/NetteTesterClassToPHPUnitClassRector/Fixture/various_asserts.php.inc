@@ -2,10 +2,10 @@
 
 namespace Rector\NetteTesterToPHPUnit\Tests\Rector\StaticCall\NetteAssertToPHPUnitAssertRector\Fixture;
 
-use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\NetteTesterTestCase;
 use Tester\Assert;
+use Tester\TestCase;
 
-class VariousAssertsTest extends NetteTesterTestCase
+class VariousAssertsTest extends TestCase
 {
     public function testFunctionality()
     {
@@ -52,8 +52,8 @@ class VariousAssertsTest extends NetteTesterTestCase
 
 namespace Rector\NetteTesterToPHPUnit\Tests\Rector\StaticCall\NetteAssertToPHPUnitAssertRector\Fixture;
 
-use Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source\NetteTesterTestCase;
 use Tester\Assert;
+use Tester\TestCase;
 
 class VariousAssertsTest extends \PHPUnit\Framework\TestCase
 {

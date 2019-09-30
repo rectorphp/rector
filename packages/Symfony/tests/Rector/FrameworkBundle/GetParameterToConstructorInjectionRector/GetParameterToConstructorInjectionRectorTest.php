@@ -4,7 +4,6 @@ namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetParameterToConstructorI
 
 use Iterator;
 use Rector\Symfony\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector;
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class GetParameterToConstructorInjectionRectorTest extends AbstractRectorTestCase
@@ -23,15 +22,8 @@ final class GetParameterToConstructorInjectionRectorTest extends AbstractRectorT
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            GetParameterToConstructorInjectionRector::class => [
-                '$controllerClass' => SymfonyController::class,
-            ],
-        ];
+        return GetParameterToConstructorInjectionRector::class;
     }
 }

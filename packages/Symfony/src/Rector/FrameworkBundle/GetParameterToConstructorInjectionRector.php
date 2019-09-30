@@ -12,6 +12,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector\GetParameterToConstructorInjectionRectorTest
@@ -19,21 +20,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class GetParameterToConstructorInjectionRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private $controllerClass;
-
-    /**
      * @var PropertyNaming
      */
     private $propertyNaming;
 
-    public function __construct(
-        PropertyNaming $propertyNaming,
-        string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller'
-    ) {
+    public function __construct(PropertyNaming $propertyNaming)
+    {
         $this->propertyNaming = $propertyNaming;
-        $this->controllerClass = $controllerClass;
     }
 
     public function getDefinition(): RectorDefinition
@@ -86,11 +79,11 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, $this->controllerClass)) {
+        if (! $this->isObjectType($node->var, Controller::class)) {
             return null;
         }
 
-        if (! $this->isName($node, 'getParameter')) {
+        if (! $this->isName($node->name, 'getParameter')) {
             return null;
         }
 

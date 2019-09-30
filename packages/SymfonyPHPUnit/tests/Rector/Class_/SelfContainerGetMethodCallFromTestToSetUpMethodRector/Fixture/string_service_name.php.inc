@@ -2,9 +2,9 @@
 
 namespace Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Fixture;
 
-use Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\DummyKernelTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class StringServiceName extends DummyKernelTestCase
+class StringServiceName extends KernelTestCase
 {
     public function testOne()
     {
@@ -19,9 +19,9 @@ class StringServiceName extends DummyKernelTestCase
 
 namespace Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Fixture;
 
-use Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\DummyKernelTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class StringServiceName extends DummyKernelTestCase
+class StringServiceName extends KernelTestCase
 {
     /**
      * @var some_value

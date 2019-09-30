@@ -2,15 +2,15 @@
 
 namespace  Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Fixture;
 
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigExtension;
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFilterMethod;
+use Twig_Extension;
+use Twig_Filter_Method;
 
-final class SomeExtension2 extends TwigExtension
+final class SomeExtension2 extends Twig_Extension
 {
     public function getFilters()
     {
         return [
-            'is_mobile' => new TwigFilterMethod($this, 'isMobile'),
+            'is_mobile' => new Twig_Filter_Method($this, 'isMobile'),
         ];
     }
 }
@@ -21,15 +21,15 @@ final class SomeExtension2 extends TwigExtension
 
 namespace  Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Fixture;
 
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigExtension;
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFilterMethod;
+use Twig_Extension;
+use Twig_Filter_Method;
 
-final class SomeExtension2 extends TwigExtension
+final class SomeExtension2 extends Twig_Extension
 {
     public function getFilters()
     {
         return [
-            new \Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigSimpleFilter('is_mobile', [$this, 'isMobile']),
+            new \Twig_SimpleFilter('is_mobile', [$this, 'isMobile']),
         ];
     }
 }

@@ -2,9 +2,9 @@
 
 namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
-class KeepMethodSpec extends DummyObjectBehavior
+class KeepMethodSpec extends ObjectBehavior
 {
     public function let()
     {
@@ -25,7 +25,7 @@ class KeepMethodSpec extends DummyObjectBehavior
 
 namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
 class KeepMethodTest extends \PHPUnit\Framework\TestCase
 {

@@ -4,7 +4,6 @@ namespace Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector;
 
 use Iterator;
 use Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector;
-use Rector\Laravel\Tests\Rector\StaticCall\MinutesToSecondsInCacheRector\Source\LaravelStoreInterface;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class MinutesToSecondsInCacheRectorTest extends AbstractRectorTestCase
@@ -23,15 +22,8 @@ final class MinutesToSecondsInCacheRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/skip_call.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            MinutesToSecondsInCacheRector::class => [
-                '$storeClass' => LaravelStoreInterface::class, // just for test case
-            ],
-        ];
+        return MinutesToSecondsInCacheRector::class;
     }
 }

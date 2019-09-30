@@ -11,19 +11,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Tester\TestCase;
 
 final class NetteTesterClassToPHPUnitClassRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $netteTesterTestCaseClass;
-
-    public function __construct(string $netteTesterTestCaseClass = 'Tester\TestCase')
-    {
-        $this->netteTesterTestCaseClass = $netteTesterTestCaseClass;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Migrate Nette Tester test case to PHPUnit', [
@@ -87,7 +78,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node, $this->netteTesterTestCaseClass)) {
+        if (! $this->isObjectType($node, TestCase::class)) {
             return null;
         }
 

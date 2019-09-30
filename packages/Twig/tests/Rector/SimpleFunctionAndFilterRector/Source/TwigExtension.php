@@ -2,7 +2,7 @@
 
 namespace Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source;
 
-abstract class TwigExtension
+abstract class Twig_Extension
 {
 
 }

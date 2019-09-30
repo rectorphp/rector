@@ -7,6 +7,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPUnit\Framework\TestListener;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -37,16 +38,6 @@ final class TestListenerToHooksRector extends AbstractRector
         'startTestSuite' => ['PHPUnit\Runner\BeforeFirstTestHook', 'executeBeforeFirstTest'],
         'endTestSuite' => ['PHPUnit\Runner\AfterLastTestHook', 'executeAfterLastTest'],
     ];
-
-    /**
-     * @var string
-     */
-    private $testListenerClass;
-
-    public function __construct(string $testListenerClass = 'PHPUnit\Framework\TestListener')
-    {
-        $this->testListenerClass = $testListenerClass;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -138,12 +129,12 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, $this->testListenerClass)) {
+        if (! $this->isObjectType($node, TestListener::class)) {
             return null;
         }
 
         foreach ($node->implements as $implement) {
-            if ($this->isName($implement, $this->testListenerClass)) {
+            if ($this->isName($implement, TestListener::class)) {
                 $this->removeNode($implement);
             }
         }

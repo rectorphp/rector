@@ -30,7 +30,7 @@ final class RenameClassConstantRectorTest extends AbstractRectorTestCase
     {
         return [
             RenameClassConstantRector::class => [
-                'oldToNewConstantsByClass' => [
+                '$oldToNewConstantsByClass' => [
                     LocalFormEvents::class => [
                         'PRE_BIND' => 'PRE_SUBMIT',
                         'BIND' => 'SUBMIT',

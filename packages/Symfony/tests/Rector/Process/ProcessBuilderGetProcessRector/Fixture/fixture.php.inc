@@ -1,8 +1,8 @@
 <?php
 
-namespace SomeNamespace;
+namespace Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector\Source\ProcessBuilder;
+use Symfony\Component\Process\ProcessBuilder;
 
 function processBuilderGetProcess()
 {
@@ -16,9 +16,9 @@ function processBuilderGetProcess()
 -----
 <?php
 
-namespace SomeNamespace;
+namespace Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\Process\ProcessBuilderGetProcessRector\Source\ProcessBuilder;
+use Symfony\Component\Process\ProcessBuilder;
 
 function processBuilderGetProcess()
 {

@@ -2,9 +2,9 @@
 
 namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControllerRector\Fixture;
 
-use Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControllerRector\Source\NetteControl;
+use Nette\Application\UI\Control;
 
-class SomeControl extends NetteControl
+class SomeControl extends Control
 {
     public function render()
     {
@@ -19,7 +19,7 @@ class SomeControl extends NetteControl
 
 namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControllerRector\Fixture;
 
-use Rector\NetteToSymfony\Tests\Rector\Class_\NetteControlToSymfonyControllerRector\Source\NetteControl;
+use Nette\Application\UI\Control;
 
 class SomeController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {

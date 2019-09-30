@@ -2,6 +2,7 @@
 
 namespace Rector\DoctrineCodeQuality\Rector\Class_;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
@@ -10,7 +11,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
-use Rector\Doctrine\ValueObject\DoctrineClass;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -156,7 +156,7 @@ PHP
     private function createPropertyArrayCollectionAssign(string $toManyPropertyName): Expression
     {
         $propertyFetch = $this->createPropertyFetch('this', $toManyPropertyName);
-        $newCollection = new New_(new FullyQualified(DoctrineClass::ARRAY_COLLECTION));
+        $newCollection = new New_(new FullyQualified(ArrayCollection::class));
 
         $assign = new Assign($propertyFetch, $newCollection);
 

@@ -13,7 +13,7 @@ use PHPStan\Type\StringType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Symfony\ValueObject\SymfonyClass;
+use Symfony\Component\Console\Command\Command;
 
 /**
  * @see https://symfony.com/doc/current/console/commands_as_services.html
@@ -66,7 +66,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, SymfonyClass::COMMAND)) {
+        if (! $this->isObjectType($node, Command::class)) {
             return null;
         }
 
@@ -98,7 +98,7 @@ PHP
 
         $this->traverseNodesWithCallable((array) $class->stmts, function (Node $node) use (&$commandName) {
             if ($node instanceof MethodCall) {
-                if (! $this->isObjectType($node->var, SymfonyClass::COMMAND)) {
+                if (! $this->isObjectType($node->var, Command::class)) {
                     return null;
                 }
 
@@ -116,7 +116,7 @@ PHP
             }
 
             if ($node instanceof StaticCall) {
-                if (! $this->isObjectType($node->class, SymfonyClass::COMMAND)) {
+                if (! $this->isObjectType($node->class, Command::class)) {
                     return null;
                 }
 

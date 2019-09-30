@@ -6,8 +6,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PHPStan\Type\ObjectType;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Rector\DeadCode\Doctrine\DoctrineEntityManipulator;
-use Rector\Doctrine\ValueObject\DoctrineClass;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -78,7 +79,7 @@ PHP
 
         [$entityMethodCall, $comparedVariable] = $match;
 
-        $fromStringValue = $this->createStaticCall(DoctrineClass::RAMSEY_UUID, 'fromString', [$comparedVariable]);
+        $fromStringValue = $this->createStaticCall(Uuid::class, 'fromString', [$comparedVariable]);
 
         return $this->createMethodCall($entityMethodCall, 'equals', [$fromStringValue]);
     }
@@ -90,7 +91,7 @@ PHP
             return false;
         }
 
-        return $comparedValueObjectType->getClassName() === DoctrineClass::RAMSEY_UUID_INTERFACE;
+        return $comparedValueObjectType->getClassName() === UuidInterface::class;
     }
 
     /**

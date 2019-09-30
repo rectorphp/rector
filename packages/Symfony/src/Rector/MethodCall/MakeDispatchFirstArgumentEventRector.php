@@ -11,6 +11,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @see https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
@@ -18,17 +19,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class MakeDispatchFirstArgumentEventRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $eventDispatcherClass;
-
-    public function __construct(
-        string $eventDispatcherClass = 'Symfony\Component\EventDispatcher\EventDispatcherInterface'
-    ) {
-        $this->eventDispatcherClass = $eventDispatcherClass;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Make event object a first argument of dispatch() method, event name as second', [
@@ -112,11 +102,11 @@ PHP
 
     private function shouldSkip(MethodCall $methodCall): bool
     {
-        if (! $this->isObjectType($methodCall, $this->eventDispatcherClass)) {
+        if (! $this->isObjectType($methodCall->var, EventDispatcherInterface::class)) {
             return true;
         }
 
-        if (! $this->isName($methodCall, 'dispatch')) {
+        if (! $this->isName($methodCall->name, 'dispatch')) {
             return true;
         }
 

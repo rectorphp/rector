@@ -2,6 +2,8 @@
 
 namespace Rector\Rector\Architecture\RepositoryAsService;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -13,21 +15,11 @@ use Rector\Exception\Bridge\RectorProviderException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
+use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $entityManagerClass;
-
-    /**
-     * @var string
-     */
-    private $entityRepositoryClass;
-
     /**
      * @var DoctrineEntityAndRepositoryMapperInterface
      */
@@ -40,20 +32,16 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
 
     public function __construct(
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
-        ClassManipulator $classManipulator,
-        string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository',
-        string $entityManagerClass = 'Doctrine\ORM\EntityManager'
+        ClassManipulator $classManipulator
     ) {
         $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
-        $this->entityRepositoryClass = $entityRepositoryClass;
-        $this->entityManagerClass = $entityManagerClass;
         $this->classManipulator = $classManipulator;
     }
 
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Turns parent EntityRepository class to constructor dependency', [
-            new ConfiguredCodeSample(
+            new CodeSample(
                 <<<'PHP'
 namespace App\Repository;
 
@@ -82,11 +70,6 @@ final class PostRepository
     }
 }
 PHP
-                ,
-                [
-                    '$entityRepositoryClass' => 'Doctrine\ORM\EntityRepository',
-                    '$entityManagerClass' => 'Doctrine\ORM\EntityManager',
-                ]
             ),
         ]);
     }
@@ -109,7 +92,7 @@ PHP
         }
 
         $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName !== $this->entityRepositoryClass) {
+        if ($parentClassName !== EntityRepository::class) {
             return null;
         }
 
@@ -127,13 +110,13 @@ PHP
         $node->extends = null;
 
         // add $repository property
-        $this->classManipulator->addPropertyToClass($node, 'repository', new ObjectType($this->entityRepositoryClass));
+        $this->classManipulator->addPropertyToClass($node, 'repository', new ObjectType(EntityRepository::class));
 
         // add $entityManager and assign to constuctor
         $this->classManipulator->addConstructorDependencyWithCustomAssign(
             $node,
             'entityManager',
-            new ObjectType($this->entityManagerClass),
+            new ObjectType(EntityManager::class),
             $this->createRepositoryAssign($node)
         );
 

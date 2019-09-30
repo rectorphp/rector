@@ -4,7 +4,6 @@ namespace Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector;
 
 use Iterator;
 use Rector\Symfony\Rector\Process\ProcessBuilderInstanceRector;
-use Rector\Symfony\Tests\Rector\Process\ProcessBuilderInstanceRector\Source\ProcessBuilder;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ProcessBuilderInstanceRectorTest extends AbstractRectorTestCase
@@ -22,15 +21,8 @@ final class ProcessBuilderInstanceRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            ProcessBuilderInstanceRector::class => [
-                '$processBuilderClass' => ProcessBuilder::class,
-            ],
-        ];
+        return ProcessBuilderInstanceRector::class;
     }
 }

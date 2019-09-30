@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 final class SomeController
 {
     /**
-     * @var \Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Source\NetteHttpRequest
+     * @var \Nette\Http\Request
      */
     private $httpRequest;
 
@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 final class SomeController
 {
     /**
-     * @var \Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Source\NetteHttpRequest
+     * @var \Nette\Http\Request
      */
     private $httpRequest;
 

@@ -1,16 +1,13 @@
 <?php
 
-namespace  Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Fixture;
+namespace Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Fixture;
 
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigExtension;
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFunctionMethod;
-
-final class SomeExtension extends TwigExtension
+final class SomeExtension extends \Twig_Extension
 {
     public function getFunctions()
     {
         return [
-            'is_mobile' => new TwigFunctionMethod($this, 'isMobile'),
+            'is_mobile' => new \Twig_Function_Method($this, 'isMobile'),
         ];
     }
 }
@@ -19,17 +16,14 @@ final class SomeExtension extends TwigExtension
 -----
 <?php
 
-namespace  Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Fixture;
+namespace Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Fixture;
 
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigExtension;
-use Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigFunctionMethod;
-
-final class SomeExtension extends TwigExtension
+final class SomeExtension extends \Twig_Extension
 {
     public function getFunctions()
     {
         return [
-            new \Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\Source\TwigSimpleFunction('is_mobile', [$this, 'isMobile']),
+            new \Twig_SimpleFunction('is_mobile', [$this, 'isMobile']),
         ];
     }
 }

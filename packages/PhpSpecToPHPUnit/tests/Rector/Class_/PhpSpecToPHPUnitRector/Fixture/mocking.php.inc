@@ -2,9 +2,9 @@
 
 namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
-class OrderSpec extends DummyObjectBehavior
+class OrderSpec extends ObjectBehavior
 {
     public function let(OrderFactory $factory, ShippingMethod $shippingMethod)
     {
@@ -19,7 +19,7 @@ class OrderSpec extends DummyObjectBehavior
 
 namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
 class OrderTest extends \PHPUnit\Framework\TestCase
 {

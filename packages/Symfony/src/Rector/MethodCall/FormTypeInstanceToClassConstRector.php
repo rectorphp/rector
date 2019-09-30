@@ -24,48 +24,30 @@ use Rector\NodeContainer\ParsedNodesByType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Symfony\ValueObject\SymfonyClass;
 use ReflectionClass;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @see https://github.com/symfony/symfony/commit/adf20c86fb0d8dc2859aa0d2821fe339d3551347
  * @see http://www.keganv.com/passing-arguments-controller-file-type-symfony-3/
  * @see https://stackoverflow.com/questions/34027711/passing-data-to-buildform-in-symfony-2-8-3-0
  * @see https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
+ *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\FormTypeInstanceToClassConstRectorTest
  */
 final class FormTypeInstanceToClassConstRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private $controllerClass;
-
-    /**
-     * @var string
-     */
-    private $formBuilderType;
-
-    /**
-     * @var string
-     */
-    private $formType;
-
-    /**
      * @var ParsedNodesByType
      */
     private $parsedNodesByType;
 
-    public function __construct(
-        ParsedNodesByType $parsedNodesByType,
-        string $controllerClass = 'Symfony\Bundle\FrameworkBundle\Controller\Controller',
-        string $formBuilderType = 'Symfony\Component\Form\FormBuilderInterface',
-        string $formType = 'Symfony\Component\Form\FormInterface'
-    ) {
+    public function __construct(ParsedNodesByType $parsedNodesByType)
+    {
         $this->parsedNodesByType = $parsedNodesByType;
-        $this->controllerClass = $controllerClass;
-        $this->formBuilderType = $formBuilderType;
-        $this->formType = $formType;
     }
 
     public function getDefinition(): RectorDefinition
@@ -117,15 +99,19 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isObjectType($node, $this->controllerClass) && $this->isName($node, 'createForm')) {
+        if ($this->isObjectType($node->var, Controller::class) && $this->isName($node->name, 'createForm')) {
             return $this->processNewInstance($node, 0, 2);
         }
 
-        if ($this->isObjectTypes($node, [$this->formBuilderType, $this->formType]) && $this->isName($node, 'add')) {
-            return $this->processNewInstance($node, 1, 2);
+        if (! $this->isObjectTypes($node->var, [FormBuilderInterface::class, FormInterface::class])) {
+            return null;
         }
 
-        return null;
+        if (! $this->isName($node->name, 'add')) {
+            return null;
+        }
+
+        return $this->processNewInstance($node, 1, 2);
     }
 
     private function processNewInstance(MethodCall $methodCall, int $position, int $optionsPosition): ?Node
@@ -154,6 +140,7 @@ PHP
                 $newNode->class->toString(),
                 $newNode->args
             );
+
             if ($methodCall === null) {
                 return null;
             }
@@ -244,7 +231,7 @@ PHP
         }
 
         $formBuilderParamBuilder = $this->builderFactory->param('builder');
-        $formBuilderParamBuilder->setType(new FullyQualified($this->formBuilderType));
+        $formBuilderParamBuilder->setType(new FullyQualified(FormBuilderInterface::class));
         $formBuilderParam = $formBuilderParamBuilder->getNode();
 
         $optionsParamBuilder = $this->builderFactory->param('options');
@@ -276,7 +263,7 @@ PHP
         }
 
         $resolverParamBuilder = $this->builderFactory->param('resolver');
-        $resolverParamBuilder->setType(new FullyQualified(SymfonyClass::OPTIONS_RESOLVER));
+        $resolverParamBuilder->setType(new FullyQualified(OptionsResolver::class));
         $resolverParam = $resolverParamBuilder->getNode();
 
         $optionsDefaults = new Array_();

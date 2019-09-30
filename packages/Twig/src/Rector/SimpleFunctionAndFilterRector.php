@@ -16,18 +16,19 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Twig_Extension;
+use Twig_Filter_Method;
+use Twig_Function_Method;
+use Twig_SimpleFilter;
+use Twig_SimpleFunction;
 
 /**
  * Covers https://twig.symfony.com/doc/1.x/deprecated.html#function
+ *
  * @see \Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector\SimpleFunctionAndFilterRectorTest
  */
 final class SimpleFunctionAndFilterRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $twigExtensionClass;
-
     /**
      * @var string[]
      */
@@ -36,21 +37,18 @@ final class SimpleFunctionAndFilterRector extends AbstractRector
     /**
      * @param string[] $oldToNewClasses
      */
-    public function __construct(
-        string $twigExtensionClass = 'Twig_Extension',
-        array $oldToNewClasses = [
-            'Twig_Function_Method' => 'Twig_SimpleFunction',
-            'Twig_Filter_Method' => 'Twig_SimpleFilter',
-        ]
-    ) {
-        $this->twigExtensionClass = $twigExtensionClass;
+    public function __construct(array $oldToNewClasses = [
+        Twig_Function_Method::class => Twig_SimpleFunction::class,
+        Twig_Filter_Method::class => Twig_SimpleFilter::class,
+    ])
+    {
         $this->oldToNewClasses = $oldToNewClasses;
     }
 
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Changes Twig_Function_Method to Twig_SimpleFunction calls in TwigExtension.',
+            'Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.',
             [
                 new CodeSample(
                     <<<'PHP'
@@ -117,7 +115,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectTypes($classNode, [$this->twigExtensionClass])) {
+        if (! $this->isObjectType($classNode, Twig_Extension::class)) {
             return null;
         }
 

@@ -4,7 +4,6 @@ namespace Rector\Symfony\Tests\Rector\Controller\RedirectToRouteRector;
 
 use Iterator;
 use Rector\Symfony\Rector\Controller\RedirectToRouteRector;
-use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RedirectToRouteRectorTest extends AbstractRectorTestCase
@@ -24,15 +23,8 @@ final class RedirectToRouteRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture3.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            RedirectToRouteRector::class => [
-                '$controllerClass' => SymfonyController::class,
-            ],
-        ];
+        return RedirectToRouteRector::class;
     }
 }

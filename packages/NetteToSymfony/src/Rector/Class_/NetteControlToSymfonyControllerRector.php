@@ -2,6 +2,7 @@
 
 namespace Rector\NetteToSymfony\Rector\Class_;
 
+use Nette\Application\UI\Control;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -30,11 +31,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class NetteControlToSymfonyControllerRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private $netteControlClass;
-
-    /**
      * @var Expr|null
      */
     private $templateFileExpr;
@@ -43,11 +39,6 @@ final class NetteControlToSymfonyControllerRector extends AbstractRector
      * @var Expr[]
      */
     private $templateVariables = [];
-
-    public function __construct(string $netteControlClass = 'Nette\Application\UI\Control')
-    {
-        $this->netteControlClass = $netteControlClass;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -99,7 +90,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node, $this->netteControlClass)) {
+        if (! $this->isObjectType($node, Control::class)) {
             return null;
         }
 

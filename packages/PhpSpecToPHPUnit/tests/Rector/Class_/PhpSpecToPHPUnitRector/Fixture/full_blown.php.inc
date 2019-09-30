@@ -11,9 +11,9 @@ use Ecommerce\Pricing\Price\CalculatedPrice;
 use Ecommerce\Pricing\Price\Price;
 use Ecommerce\Taxing\PriceType;
 use Ramsey\Uuid\Uuid;
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
-class CartSpec extends DummyObjectBehavior
+class CartSpec extends ObjectBehavior
 {
     public function let()
     {
@@ -186,7 +186,7 @@ use Ecommerce\Pricing\Price\CalculatedPrice;
 use Ecommerce\Pricing\Price\Price;
 use Ecommerce\Taxing\PriceType;
 use Ramsey\Uuid\Uuid;
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
 class CartTest extends \PHPUnit\Framework\TestCase
 {

@@ -4,7 +4,6 @@ namespace Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector;
 
 use Iterator;
 use Rector\Symfony\Rector\Form\StringFormTypeToClassRector;
-use Rector\Symfony\Tests\Rector\Form\StringFormTypeToClassRector\Source\FormBuilder;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class StringFormTypeToClassRectorTest extends AbstractRectorTestCase
@@ -23,15 +22,8 @@ final class StringFormTypeToClassRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture2.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            StringFormTypeToClassRector::class => [
-                '$formBuilderClass' => FormBuilder::class,
-            ],
-        ];
+        return StringFormTypeToClassRector::class;
     }
 }

@@ -4,11 +4,11 @@ namespace Rector\Doctrine\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
+use Ramsey\Uuid\UuidInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
-use Rector\Doctrine\ValueObject\DoctrineClass;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
@@ -61,7 +61,7 @@ final class AddUuidAnnotationsToIdPropertyRector extends AbstractRector
 
     private function changeVarToUuidInterface(Property $property): void
     {
-        $uuidObjectType = new FullyQualifiedObjectType(DoctrineClass::RAMSEY_UUID_INTERFACE);
+        $uuidObjectType = new FullyQualifiedObjectType(UuidInterface::class);
         $this->docBlockManipulator->changeVarTag($property, $uuidObjectType);
     }
 

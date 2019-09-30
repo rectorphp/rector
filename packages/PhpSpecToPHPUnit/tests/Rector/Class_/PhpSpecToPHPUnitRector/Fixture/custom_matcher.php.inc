@@ -2,9 +2,9 @@
 
 namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
-class RatesSpec extends DummyObjectBehavior
+class RatesSpec extends ObjectBehavior
 {
     public function let(Provider $provider)
     {
@@ -59,7 +59,7 @@ class RatesSpec extends DummyObjectBehavior
 
 namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
 class RatesTest extends \PHPUnit\Framework\TestCase
 {

@@ -2,10 +2,10 @@
 
 namespace Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Fixture;
 
-use Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\DummyKernelTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\ItemRepository;
 
-class InstantCall extends DummyKernelTestCase
+class InstantCall extends KernelTestCase
 {
     public function testOne()
     {
@@ -24,10 +24,10 @@ class InstantCall extends DummyKernelTestCase
 
 namespace Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Fixture;
 
-use Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\DummyKernelTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\ItemRepository;
 
-class InstantCall extends DummyKernelTestCase
+class InstantCall extends KernelTestCase
 {
     /**
      * @var \Rector\SymfonyPHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToSetUpMethodRector\Source\ItemRepository

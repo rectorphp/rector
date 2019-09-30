@@ -2,6 +2,9 @@
 
 namespace Rector\Doctrine\Rector\Class_;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
@@ -15,7 +18,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
-use Rector\Doctrine\ValueObject\DoctrineClass;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -26,24 +28,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class ManagerRegistryGetManagerToEntityManagerRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $managerRegistryClass;
-
-    /**
-     * @var string
-     */
-    private $objectManagerClass;
-
-    public function __construct(
-        string $managerRegistryClass = DoctrineClass::MANAGER_REGISTRY,
-        string $objectManagerClass = DoctrineClass::OBJECT_MANAGER
-    ) {
-        $this->managerRegistryClass = $managerRegistryClass;
-        $this->objectManagerClass = $objectManagerClass;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('', [
@@ -140,7 +124,7 @@ PHP
             $node,
             $constructMethodNode,
             'entityManager',
-            new FullyQualifiedObjectType(DoctrineClass::ENTITY_MANAGER)
+            new FullyQualifiedObjectType(EntityManagerInterface::class)
         );
 
         return $node;
@@ -152,7 +136,7 @@ PHP
             return false;
         }
 
-        if (! $this->isObjectType($assign->expr->var, $this->managerRegistryClass)) {
+        if (! $this->isObjectType($assign->expr->var, ManagerRegistry::class)) {
             return false;
         }
 
@@ -183,7 +167,7 @@ PHP
 
     private function createEntityManagerParam(): Param
     {
-        return new Param(new Variable('entityManager'), null, new FullyQualified(DoctrineClass::ENTITY_MANAGER));
+        return new Param(new Variable('entityManager'), null, new FullyQualified(EntityManagerInterface::class));
     }
 
     /**
@@ -197,7 +181,7 @@ PHP
                 return null;
             }
 
-            if (! $this->isObjectType($node->var, $this->managerRegistryClass)) {
+            if (! $this->isObjectType($node->var, ManagerRegistry::class)) {
                 return null;
             }
 
@@ -223,7 +207,7 @@ PHP
                 continue;
             }
 
-            if (! $this->isName($param->type, $this->managerRegistryClass)) {
+            if (! $this->isName($param->type, ManagerRegistry::class)) {
                 continue;
             }
 
@@ -252,7 +236,7 @@ PHP
                 continue;
             }
 
-            if (! $this->isName($param->type, $this->managerRegistryClass)) {
+            if (! $this->isName($param->type, ManagerRegistry::class)) {
                 continue;
             }
 
@@ -331,7 +315,7 @@ PHP
                 return null;
             }
 
-            if (! $this->isObjectType($node, $this->objectManagerClass)) {
+            if (! $this->isObjectType($node, ObjectManager::class)) {
                 return null;
             }
 

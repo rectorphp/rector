@@ -2,6 +2,7 @@
 
 namespace Rector\NetteToSymfony\Rector\MethodCall;
 
+use Nette\Application\Request;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -17,16 +18,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class FromRequestGetParameterToAttributesGetRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $netteRequestClass;
-
-    public function __construct(string $netteRequestClass = 'Nette\Application\Request')
-    {
-        $this->netteRequestClass = $netteRequestClass;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes "getParameter()" to "attributes->get()" from Nette to Symfony', [
@@ -71,7 +62,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, $this->netteRequestClass)) {
+        if (! $this->isObjectType($node, Request::class)) {
             return null;
         }
 

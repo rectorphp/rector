@@ -2,6 +2,7 @@
 
 namespace Rector\Guzzle\Rector\MethodCall;
 
+use GuzzleHttp\Message\MessageInterface;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -16,16 +17,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class MessageAsArrayRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $messageType;
-
-    public function __construct(string $messageType = 'GuzzleHttp\Message\MessageInterface')
-    {
-        $this->messageType = $messageType;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes getMessage(..., true) to getMessageAsArray()', [
@@ -56,11 +47,11 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, $this->messageType)) {
+        if (! $this->isObjectType($node->var, MessageInterface::class)) {
             return null;
         }
 
-        if (! $this->isName($node, 'getMessage')) {
+        if (! $this->isName($node->name, 'getMessage')) {
             return null;
         }
 

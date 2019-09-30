@@ -4,7 +4,6 @@ namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeader
 
 use Iterator;
 use Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector;
-use Rector\NetteToSymfony\Tests\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector\Source\NetteHttpRequest;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FromHttpRequestGetHeaderToHeadersGetRectorTest extends AbstractRectorTestCase
@@ -23,15 +22,8 @@ final class FromHttpRequestGetHeaderToHeadersGetRectorTest extends AbstractRecto
         yield [__DIR__ . '/Fixture/missing_argument.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            FromHttpRequestGetHeaderToHeadersGetRector::class => [
-                '$netteHttpRequestClass' => NetteHttpRequest::class,
-            ],
-        ];
+        return FromHttpRequestGetHeaderToHeadersGetRector::class;
     }
 }

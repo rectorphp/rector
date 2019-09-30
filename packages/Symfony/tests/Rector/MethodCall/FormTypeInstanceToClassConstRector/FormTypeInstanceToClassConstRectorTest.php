@@ -4,9 +4,6 @@ namespace Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRec
 
 use Iterator;
 use Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector;
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\ControllerClass;
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\FormBuilder;
-use Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\Source\FormType;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FormTypeInstanceToClassConstRectorTest extends AbstractRectorTestCase
@@ -26,17 +23,8 @@ final class FormTypeInstanceToClassConstRectorTest extends AbstractRectorTestCas
         yield [__DIR__ . '/Fixture/fixture3.php.inc'];
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            FormTypeInstanceToClassConstRector::class => [
-                '$controllerClass' => ControllerClass::class,
-                '$formBuilderType' => FormBuilder::class,
-                '$formType' => FormType::class,
-            ],
-        ];
+        return FormTypeInstanceToClassConstRector::class;
     }
 }

@@ -2,9 +2,9 @@
 
 namespace spec\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
-class ResultSpec extends DummyObjectBehavior
+class ResultSpec extends ObjectBehavior
 {
     public function it_is_initializable()
     {
@@ -25,7 +25,7 @@ class ResultSpec extends DummyObjectBehavior
 
 namespace Tests\Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Fixture;
 
-use Rector\PhpSpecToPHPUnit\Tests\Rector\Class_\PhpSpecToPHPUnitRector\Source\DummyObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
 class ResultTest extends \PHPUnit\Framework\TestCase
 {

@@ -2,6 +2,8 @@
 
 namespace Rector\NetteToSymfony\Rector\ClassMethod;
 
+use Nette\Application\IRouter;
+use Nette\Application\Routers\RouteList;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -37,16 +39,6 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private const HAS_FRESH_ROUTE_ANNOTATION_ATTRIBUTE = 'has_fresh_route_annotation';
 
     /**
-     * @var string
-     */
-    private $routeListClass;
-
-    /**
-     * @var string
-     */
-    private $routerClass;
-
-    /**
      * @var ParsedNodesByType
      */
     private $parsedNodesByType;
@@ -64,12 +56,8 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     public function __construct(
         ParsedNodesByType $parsedNodesByType,
         RouteInfoFactory $routeInfoFactory,
-        ReturnTypeInferer $returnTypeInferer,
-        string $routeListClass = 'Nette\Application\Routers\RouteList',
-        string $routerClass = 'Nette\Application\IRouter'
+        ReturnTypeInferer $returnTypeInferer
     ) {
-        $this->routeListClass = $routeListClass;
-        $this->routerClass = $routerClass;
         $this->parsedNodesByType = $parsedNodesByType;
         $this->routeInfoFactory = $routeInfoFactory;
         $this->returnTypeInferer = $returnTypeInferer;
@@ -152,7 +140,7 @@ PHP
 
         $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
 
-        $routeListObjectType = new ObjectType($this->routeListClass);
+        $routeListObjectType = new ObjectType(RouteList::class);
         if (! $inferedReturnType->isSuperTypeOf($routeListObjectType)->yes()) {
             return null;
         }
@@ -201,7 +189,7 @@ PHP
                 return false;
             }
 
-            if ($this->isObjectType($classMethod->expr, $this->routerClass)) {
+            if ($this->isObjectType($classMethod->expr, IRouter::class)) {
                 return true;
             }
 
@@ -286,7 +274,7 @@ PHP
         $methodReflection = new ReflectionMethod($className, $methodName);
         if ($methodReflection->getReturnType() !== null) {
             $staticCallReturnType = (string) $methodReflection->getReturnType();
-            if (is_a($staticCallReturnType, $this->routerClass, true)) {
+            if (is_a($staticCallReturnType, IRouter::class, true)) {
                 return true;
             }
         }

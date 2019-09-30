@@ -2,6 +2,8 @@
 
 namespace Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\Source;
 
-abstract class ORMTestCase extends NetteTesterTestCase
+use Tester\TestCase;
+
+abstract class ORMTestCase extends TestCase
 {
 }

@@ -7,23 +7,13 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @see \Rector\Symfony\Tests\Rector\DependencyInjection\ContainerBuilderCompileEnvArgumentRector\ContainerBuilderCompileEnvArgumentRectorTest
  */
 final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $containerBuilderClass;
-
-    public function __construct(
-        string $containerBuilderClass = 'Symfony\Component\DependencyInjection\ContainerBuilder'
-    ) {
-        $this->containerBuilderClass = $containerBuilderClass;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -50,7 +40,7 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, $this->containerBuilderClass)) {
+        if (! $this->isObjectType($node, ContainerBuilder::class)) {
             return null;
         }
 

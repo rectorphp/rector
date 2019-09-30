@@ -2,7 +2,7 @@
 
 namespace Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\Source\TreeBuilder;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 class SomeConfiguration2
 {
@@ -19,7 +19,7 @@ class SomeConfiguration2
 
 namespace Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\Fixture;
 
-use Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\Source\TreeBuilder;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 class SomeConfiguration2
 {

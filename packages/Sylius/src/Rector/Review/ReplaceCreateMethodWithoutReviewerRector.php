@@ -9,23 +9,13 @@ use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Sylius\Component\Review\Factory\ReviewFactoryInterface;
 
 /**
  * @see \Rector\Sylius\Tests\Rector\Review\ReplaceCreateMethodWithoutReviewerRectorTest
  */
 final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $reviewFactoryInterface;
-
-    public function __construct(
-        string $reviewFactoryInterface = 'Sylius\Component\Review\Factory\ReviewFactoryInterface'
-    ) {
-        $this->reviewFactoryInterface = $reviewFactoryInterface;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -52,11 +42,11 @@ final class ReplaceCreateMethodWithoutReviewerRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, $this->reviewFactoryInterface)) {
+        if (! $this->isObjectType($node->var, ReviewFactoryInterface::class)) {
             return null;
         }
 
-        if (! $this->isName($node, 'createForSubjectWithReviewer')) {
+        if (! $this->isName($node->name, 'createForSubjectWithReviewer')) {
             return null;
         }
 

@@ -2,6 +2,7 @@
 
 namespace Rector\Rector\Architecture\RepositoryAsService;
 
+use Doctrine\ORM\EntityRepository;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -11,11 +12,6 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    private $entityRepositoryClass;
-
     /**
      * @var string[]
      */
@@ -31,11 +27,6 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
         'getClassName',
         'matching',
     ];
-
-    public function __construct(string $entityRepositoryClass = 'Doctrine\ORM\EntityRepository')
-    {
-        $this->entityRepositoryClass = $entityRepositoryClass;
-    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -92,7 +83,7 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node->var, $this->entityRepositoryClass)) {
+        if (! $this->isObjectType($node->var, EntityRepository::class)) {
             return null;
         }
 

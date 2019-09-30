@@ -2,16 +2,16 @@
 
 namespace Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector\Fixture;
 
-use Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector\Source\DummyManagerRegistry;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 class DoNotRemoveRegistryOnNonGetRepoCall
 {
     /**
-     * @var DummyManagerRegistry
+     * @var ManagerRegistry
      */
     private $managerRegistry;
 
-    public function __construct(DummyManagerRegistry $managerRegistry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
         $this->managerRegistry = $managerRegistry;
     }
@@ -31,12 +31,12 @@ class DoNotRemoveRegistryOnNonGetRepoCall
 
 namespace Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector\Fixture;
 
-use Rector\Doctrine\Tests\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector\Source\DummyManagerRegistry;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 class DoNotRemoveRegistryOnNonGetRepoCall
 {
     /**
-     * @var DummyManagerRegistry
+     * @var ManagerRegistry
      */
     private $managerRegistry;
     /**
@@ -44,7 +44,7 @@ class DoNotRemoveRegistryOnNonGetRepoCall
      */
     private $entityManager;
 
-    public function __construct(DummyManagerRegistry $managerRegistry, \Doctrine\ORM\EntityManagerInterface $entityManager)
+    public function __construct(ManagerRegistry $managerRegistry, \Doctrine\ORM\EntityManagerInterface $entityManager)
     {
         $this->managerRegistry = $managerRegistry;
         $this->entityManager = $entityManager;

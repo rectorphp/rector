@@ -9,6 +9,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Covers https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#frameworkbundle
@@ -17,20 +18,12 @@ use Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider;
 final class StringFormTypeToClassRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private $formBuilderClass;
-
-    /**
      * @var FormTypeStringToTypeProvider
      */
     private $formTypeStringToTypeProvider;
 
-    public function __construct(
-        FormTypeStringToTypeProvider $formTypeStringToTypeProvider,
-        string $formBuilderClass = 'Symfony\Component\Form\FormBuilderInterface'
-    ) {
-        $this->formBuilderClass = $formBuilderClass;
+    public function __construct(FormTypeStringToTypeProvider $formTypeStringToTypeProvider)
+    {
         $this->formTypeStringToTypeProvider = $formTypeStringToTypeProvider;
     }
 
@@ -70,11 +63,11 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, $this->formBuilderClass)) {
+        if (! $this->isObjectType($node->var, FormBuilderInterface::class)) {
             return null;
         }
 
-        if (! $this->isName($node, 'add')) {
+        if (! $this->isName($node->name, 'add')) {
             return null;
         }
 

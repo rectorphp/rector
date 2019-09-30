@@ -2,8 +2,9 @@
 
 namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAnnotationsRetor\Fixture;
 
-use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\Route;
-use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\RouteList;
+use Nette\Application\IPresenter;
+use Nette\Application\Routers\Route;
+use Nette\Application\Routers\RouteList;
 
 final class WithParameterRouterFactory
 {
@@ -17,7 +18,7 @@ final class WithParameterRouterFactory
     }
 }
 
-final class WithParameterSomePresenter
+final class WithParameterSomePresenter implements IPresenter
 {
     /**
      * @todo
@@ -34,7 +35,8 @@ final class WithParameterSomePresenter
 namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAnnotationsRetor\Fixture;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Rector\NetteToSymfony\Tests\Rector\ClassMethod\RouterListToControllerAnnotationsRetor\Source\RouteList;
+use Nette\Application\IPresenter;
+use Nette\Application\Routers\RouteList;
 
 final class WithParameterRouterFactory
 {
@@ -46,7 +48,7 @@ final class WithParameterRouterFactory
     }
 }
 
-final class WithParameterSomePresenter
+final class WithParameterSomePresenter implements IPresenter
 {
     /**
      * @todo
