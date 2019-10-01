@@ -52,3 +52,12 @@ services:
             validationDefault: 'Cake\Validation\Validator'
         Cake\View\Helper:
             initialize: 'void'
+
+    Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector:
+        $methodNamesByTypes:
+            getParam:
+              match_parameter: 'paging'
+              replace_with: 'getAttribute'
+            withParam:
+              match_parameter: 'paging'
+              replace_with: 'withAttribute'
