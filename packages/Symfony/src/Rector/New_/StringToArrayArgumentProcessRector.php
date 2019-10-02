@@ -113,7 +113,8 @@ PHP
             return;
         }
 
-        if ($firstArgument instanceof FuncCall && $this->isName($firstArgument, 'sprintf')) {
+        if ($this->isFunctionNamed($firstArgument, 'sprintf')) {
+            /** @var FuncCall $firstArgument */
             $arrayNode = $this->nodeTransformer->transformSprintfToArray($firstArgument);
             if ($arrayNode !== null) {
                 $node->args[$argumentPosition]->value = $arrayNode;
@@ -131,11 +132,10 @@ PHP
         /** @var Assign|null $createdNode */
         $createdNode = $this->findPreviousNodeAssign($node, $firstArgument);
 
-        if ($createdNode instanceof Assign && $createdNode->expr instanceof FuncCall && $this->isName(
-            $createdNode->expr,
-            'sprintf'
-        )) {
-            $arrayNode = $this->nodeTransformer->transformSprintfToArray($createdNode->expr);
+        if ($createdNode instanceof Assign && $this->isFunctionNamed($createdNode->expr, 'sprintf')) {
+            /** @var FuncCall $funcCall */
+            $funcCall = $createdNode->expr;
+            $arrayNode = $this->nodeTransformer->transformSprintfToArray($funcCall);
             if ($arrayNode !== null) {
                 $createdNode->expr = $arrayNode;
             }
@@ -159,5 +159,14 @@ PHP
 
             return $checkedNode;
         });
+    }
+
+    private function isFunctionNamed(Node $node, string $name): bool
+    {
+        if (! $node instanceof FuncCall) {
+            return false;
+        }
+
+        return $this->isName($node, $name);
     }
 }
