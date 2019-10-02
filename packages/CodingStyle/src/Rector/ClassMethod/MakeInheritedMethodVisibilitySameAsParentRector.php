@@ -177,7 +177,7 @@ PHP
                 continue;
             }
 
-            $isStaticSelfFactory = $this->isStaticSelfFactory($iteratedClassMethod);
+            $isStaticSelfFactory = $this->isStaticNamedConstructor($iteratedClassMethod);
 
             if ($isStaticSelfFactory === false) {
                 continue;
@@ -193,7 +193,7 @@ PHP
      * Looks for:
      * public static someMethod() { return new self(); }
      */
-    private function isStaticSelfFactory(ClassMethod $classMethod): bool
+    private function isStaticNamedConstructor(ClassMethod $classMethod): bool
     {
         if (! $classMethod->isPublic()) {
             return false;
@@ -212,7 +212,7 @@ PHP
                 return false;
             }
 
-            return $this->isName($node->expr->class, 'self');
+            return $this->isName($node->expr->class, 'self') || $this->isName($node->expr->class, 'static');
         });
     }
 }
