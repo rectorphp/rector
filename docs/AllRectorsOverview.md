@@ -1,4 +1,4 @@
-# All 365 Rectors Overview
+# All 367 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -13,6 +13,7 @@
 - [CodingStyle](#codingstyle)
 - [DeadCode](#deadcode)
 - [Doctrine](#doctrine)
+- [DoctrineCodeQuality](#doctrinecodequality)
 - [ElasticSearchDSL](#elasticsearchdsl)
 - [Guzzle](#guzzle)
 - [Laravel](#laravel)
@@ -77,26 +78,6 @@
 -        $products = $this->productRepository->fetchAll();
 +        $products = $productRepository->fetchAll();
      }
- }
-```
-
-<br>
-
-### `RemoveRepositoryFromEntityAnnotationRector`
-
-- class: `Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector`
-
-Removes repository class from @Entity annotation
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-- * @ORM\Entity(repositoryClass="ProductRepository")
-+ * @ORM\Entity
-  */
- class Product
- {
  }
 ```
 
@@ -220,6 +201,36 @@ Changes combined set/get `value()` to specific `getValue()` or `setValue(x)`.
 -$object->config(['key' => 'value']);
 +$object->setConfig('key', 'value');
 +$object->setConfig(['key' => 'value']);
+```
+
+<br>
+
+### `RenameMethodCallBasedOnParameterRector`
+
+- class: `Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector`
+
+Changes method calls based on matching the first parameter value.
+
+```yaml
+services:
+    Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector:
+        getParam:
+            match_parameter: paging
+            replace_with: getAttribute
+        withParam:
+            match_parameter: paging
+            replace_with: withAttribute
+```
+
+↓
+
+```diff
+ $object = new ServerRequest();
+
+-$config = $object->getParam('paging');
+-$object = $object->withParam('paging', ['a value']);
++$config = $object->getAttribute('paging');
++$object = $object->withAttribute('paging', ['a value']);
 ```
 
 <br>
@@ -2337,6 +2348,26 @@ Replaces doctrine alias with class.
 
 <br>
 
+### `RemoveRepositoryFromEntityAnnotationRector`
+
+- class: `Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector`
+
+Removes repository class from @Entity annotation
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+- * @ORM\Entity(repositoryClass="ProductRepository")
++ * @ORM\Entity
+  */
+ class Product
+ {
+ }
+```
+
+<br>
+
 ### `RemoveTemporaryUuidColumnPropertyRector`
 
 - class: `Rector\Doctrine\Rector\Property\RemoveTemporaryUuidColumnPropertyRector`
@@ -2350,6 +2381,36 @@ Remove temporary $uuid property
 - class: `Rector\Doctrine\Rector\Property\RemoveTemporaryUuidRelationPropertyRector`
 
 Remove temporary *Uuid relation properties
+
+<br>
+
+## DoctrineCodeQuality
+
+### `InitializeDefaultEntityCollectionRector`
+
+- class: `Rector\DoctrineCodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector`
+
+Initialize collection property in Entity constructor
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ /**
+  * @ORM\Entity
+  */
+ class SomeClass
+ {
+     /**
+      * @ORM\OneToMany(targetEntity="MarketingEvent")
+      */
+     private $marketingEvents = [];
++
++    public function __construct()
++    {
++        $this->marketingEvents = new ArrayCollection();
++    }
+ }
+```
 
 <br>
 
@@ -3808,7 +3869,7 @@ Remove 0 from break and continue
 
 - class: `Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector`
 
-The /e modifier is no longer supported, use preg_replace_callback instead
+The /e modifier is no longer supported, use preg_replace_callback instead 
 
 ```diff
  class SomeClass
@@ -5939,7 +6000,7 @@ Turns fetching of dependencies via `$container->get()` in ContainerAware to cons
 
 - class: `Rector\Symfony\Rector\Form\FormIsValidRector`
 
-Adds `$form->isSubmitted()` validatoin to all `$form->isValid()` calls in Form in Symfony
+Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form in Symfony
 
 ```diff
 -if ($form->isValid()) {
@@ -7310,15 +7371,6 @@ services:
 - class: `Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector`
 
 Turns parent EntityRepository class to constructor dependency
-
-```yaml
-services:
-    Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector:
-        $entityRepositoryClass: Doctrine\ORM\EntityRepository
-        $entityManagerClass: Doctrine\ORM\EntityManager
-```
-
-↓
 
 ```diff
  namespace App\Repository;
