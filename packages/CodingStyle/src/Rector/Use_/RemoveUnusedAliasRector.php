@@ -329,7 +329,7 @@ PHP
     }
 
     /**
-     * @return string[]
+     * @return string[][]
      */
     private function collectUseNamesAliasToName(Use_ $use): array
     {
