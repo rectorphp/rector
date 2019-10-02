@@ -100,7 +100,6 @@ final class AnnotationContentResolver
             return implode('', $tokenContents);
         } catch (ParserException $parserException) {
             throw $parserException;
-            return '';
         }
     }
 

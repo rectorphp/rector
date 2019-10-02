@@ -82,17 +82,14 @@ PHP
             return null;
         }
 
-        if ($node instanceof For_) {
-            if ($node->stmts !== []) {
-                return null;
-            }
-
-            $this->removeNode($node);
-
+        // For
+        if ($node->stmts !== []) {
             return null;
         }
 
-        return $node;
+        $this->removeNode($node);
+
+        return null;
     }
 
     private function processIf(If_ $if): void

@@ -106,7 +106,7 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        if ($varNodeType->isSuperTypeOf($type)) {
+        if ($varNodeType->isSuperTypeOf($type)->yes()) {
             return false;
         }
 
