@@ -50,8 +50,8 @@ final class PhpDocClassRenamer
         $this->shouldUpdate = false;
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        $this->procesAssertChoiceTagValueNode($oldToNewClasses, $phpDocInfo);
-        $this->procesDoctrineRelationTagValueNode($oldToNewClasses, $phpDocInfo);
+        $this->processAssertChoiceTagValueNode($oldToNewClasses, $phpDocInfo);
+        $this->processDoctrineRelationTagValueNode($oldToNewClasses, $phpDocInfo);
         $this->processSerializerTypeTagValueNode($oldToNewClasses, $phpDocInfo);
 
         if ($this->shouldUpdate === false) {
@@ -65,7 +65,7 @@ final class PhpDocClassRenamer
     /**
      * @param string[] $oldToNewClasses
      */
-    private function procesAssertChoiceTagValueNode(array $oldToNewClasses, PhpDocInfo $phpDocInfo): void
+    private function processAssertChoiceTagValueNode(array $oldToNewClasses, PhpDocInfo $phpDocInfo): void
     {
         $choiceTagValueNode = $phpDocInfo->getByType(AssertChoiceTagValueNode::class);
         if (! $choiceTagValueNode instanceof AssertChoiceTagValueNode) {
@@ -86,7 +86,7 @@ final class PhpDocClassRenamer
     /**
      * @param string[] $oldToNewClasses
      */
-    private function procesDoctrineRelationTagValueNode(array $oldToNewClasses, PhpDocInfo $phpDocInfo): void
+    private function processDoctrineRelationTagValueNode(array $oldToNewClasses, PhpDocInfo $phpDocInfo): void
     {
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
         if (! $relationTagValueNode instanceof DoctrineRelationTagValueNodeInterface) {
