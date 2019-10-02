@@ -40,7 +40,7 @@ final class RenameMethodCallBasedOnParameterRectorTest extends AbstractRectorTes
                             'replace_with' => 'getAttribute',
                         ],
                         'withParam' => [
-                            'match_parameter' =>  'paging',
+                            'match_parameter' => 'paging',
                             'replace_with' => 'withAttribute',
                         ],
                     ],

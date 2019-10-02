@@ -3,7 +3,6 @@
 namespace Rector\CakePHP\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
@@ -54,12 +53,12 @@ PHP
                     [
                         'getParam' => [
                             'match_parameter' => 'paging',
-                            'replace_with' => 'getAttribute'
+                            'replace_with' => 'getAttribute',
                         ],
                         'withParam' => [
                             'match_parameter' => 'paging',
-                            'replace_with' => 'withAttribute'
-                        ]
+                            'replace_with' => 'withAttribute',
+                        ],
                     ]
                 ),
             ]
