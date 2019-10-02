@@ -199,14 +199,14 @@ PHP
         return ! (in_array($node, $classNode->implements, true) && class_exists($newName));
     }
 
-    private function refactorNamespaceNode(Namespace_ $node): ?Node
+    private function refactorNamespaceNode(Namespace_ $namespace): ?Node
     {
-        $name = $this->getName($node);
+        $name = $this->getName($namespace);
         if ($name === null) {
             return null;
         }
 
-        $classNode = $this->getClassOfNamespaceToRefactor($node);
+        $classNode = $this->getClassOfNamespaceToRefactor($namespace);
         if ($classNode === null) {
             return null;
         }
@@ -221,9 +221,9 @@ PHP
             return $classNode;
         }
 
-        $node->name = new Name($newNamespace);
+        $namespace->name = new Name($newNamespace);
 
-        return $node;
+        return $namespace;
     }
 
     private function getClassOfNamespaceToRefactor(Namespace_ $namespace): ?ClassLike
@@ -279,23 +279,23 @@ PHP
         return $classLike;
     }
 
-    private function refactorName(Node $node): ?Name
+    private function refactorName(Name $name): ?Name
     {
-        $name = $this->getName($node);
-        if ($name === null) {
+        $stringName = $this->getName($name);
+        if ($stringName === null) {
             return null;
         }
 
-        $newName = $this->oldToNewClasses[$name] ?? null;
+        $newName = $this->oldToNewClasses[$stringName] ?? null;
         if (! $newName) {
             return null;
         }
 
-        if (! $this->isClassToInterfaceValidChange($node, $newName)) {
+        if (! $this->isClassToInterfaceValidChange($name, $newName)) {
             return null;
         }
 
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         // no need to preslash "use \SomeNamespace" of imported namespace
         if ($parentNode instanceof UseUse) {
             if ($parentNode->type === Use_::TYPE_NORMAL || $parentNode->type === Use_::TYPE_UNKNOWN) {

@@ -57,25 +57,28 @@ final class RemoveUnusedAliasRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Removes unused use aliases', [
-            new CodeSample(
-                <<<'PHP'
+        return new RectorDefinition(
+            'Removes unused use aliases. Keep annotation aliases like "Doctrine\ORM\Mapping as ORM" to keep convention format',
+            [
+                new CodeSample(
+                    <<<'PHP'
 use Symfony\Kernel as BaseKernel;
 
 class SomeClass extends BaseKernel
 {
 }
 PHP
-                ,
-                <<<'PHP'
+                    ,
+                    <<<'PHP'
 use Symfony\Kernel;
 
 class SomeClass extends Kernel
 {
 }
 PHP
-            ),
-        ]);
+                ),
+            ]
+        );
     }
 
     /**
@@ -94,14 +97,7 @@ PHP
         $this->resolvedNodeNames = [];
         $this->resolveUsedNameNodes($node);
 
-        // collect differentiated aliases
-        $useNamesAliasToName = [];
-
-        $shortNames = $this->shortNameResolver->resolveForNode($node);
-        foreach ($shortNames as $alias => $useImport) {
-            $shortName = $this->classNaming->getShortName($useImport);
-            $useNamesAliasToName[$shortName][] = $alias;
-        }
+        $useNamesAliasToName = $this->collectUseNamesAliasToName($node);
 
         foreach ($node->uses as $use) {
             if ($use->alias === null) {
@@ -109,15 +105,11 @@ PHP
             }
 
             $lastName = $use->name->getLast();
+
+            /** @var string $aliasName */
             $aliasName = $this->getName($use->alias);
 
-            // both are used → nothing to remove
-            if (isset($this->resolvedNodeNames[$lastName], $this->resolvedNodeNames[$aliasName])) {
-                continue;
-            }
-
-            // part of some @Doc annotation
-            if (in_array($aliasName, $this->resolvedDocPossibleAliases, true)) {
+            if ($this->shouldSkip($lastName, $aliasName)) {
                 continue;
             }
 
@@ -129,7 +121,7 @@ PHP
 
             // only alias name is used → use last name directly
             if (isset($this->resolvedNodeNames[$aliasName])) {
-                // keep to differentiate 2 alaises classes
+                // keep to differentiate 2 aliases classes
                 if (isset($useNamesAliasToName[$lastName]) && count($useNamesAliasToName[$lastName]) > 1) {
                     continue;
                 }
@@ -152,7 +144,8 @@ PHP
         $this->resolveUsedNames($searchNode);
         $this->resolveUsedClassNames($searchNode);
         $this->resolveTraitUseNames($searchNode);
-        $this->resolveDocPossibleAliases($searchNode);
+
+        $this->resolvedDocPossibleAliases = $this->resolveDocPossibleAliases($searchNode);
     }
 
     /**
@@ -299,17 +292,55 @@ PHP
         }
     }
 
-    private function resolveDocPossibleAliases(Node $searchNode): void
+    /**
+     * @return string[]
+     */
+    private function resolveDocPossibleAliases(Node $searchNode): array
     {
-        $this->traverseNodesWithCallable($searchNode, function (Node $node): void {
+        $possibleDocAliases = [];
+
+        $this->traverseNodesWithCallable($searchNode, function (Node $node) use (&$possibleDocAliases): void {
             if ($node->getDocComment() === null) {
                 return;
             }
 
-            $matches = Strings::matchAll($node->getDocComment()->getText(), '#\@(?<possible_alias>.*?)\\\\#s');
+            $matches = Strings::matchAll($node->getDocComment()->getText(), '#\@(?<possible_alias>\w+)(\\\\)?#s');
             foreach ($matches as $match) {
-                $this->resolvedDocPossibleAliases[] = $match['possible_alias'];
+                $possibleDocAliases[] = $match['possible_alias'];
             }
         });
+
+        return array_unique($possibleDocAliases);
+    }
+
+    private function shouldSkip(string $lastName, string $aliasName): bool
+    {
+        // both are used → nothing to remove
+        if (isset($this->resolvedNodeNames[$lastName], $this->resolvedNodeNames[$aliasName])) {
+            return true;
+        }
+
+        // part of some @Doc annotation
+        if (in_array($aliasName, $this->resolvedDocPossibleAliases, true)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function collectUseNamesAliasToName(Use_ $use): array
+    {
+        $useNamesAliasToName = [];
+
+        $shortNames = $this->shortNameResolver->resolveForNode($use);
+        foreach ($shortNames as $alias => $useImport) {
+            $shortName = $this->classNaming->getShortName($useImport);
+            $useNamesAliasToName[$shortName][] = $alias;
+        }
+
+        return $useNamesAliasToName;
     }
 }

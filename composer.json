@@ -35,7 +35,6 @@
         "mockery/mockery": "^1.2",
         "ocramius/package-versions": "^1.4",
         "phpunit/phpunit": "^7.5|^8.0",
-        "psr/event-dispatcher": "^1.0",
         "symplify/changelog-linker": "^6.1",
         "symplify/easy-coding-standard": "^6.1",
         "symplify/monorepo-builder": "^6.1",
