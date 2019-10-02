@@ -21,6 +21,7 @@ final class MakeInheritedMethodVisibilitySameAsParentRectorTest extends Abstract
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/private.php.inc'];
         yield [__DIR__ . '/Fixture/skip_existing.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_something.php.inc'];
     }
 
     protected function getRectorClass(): string
