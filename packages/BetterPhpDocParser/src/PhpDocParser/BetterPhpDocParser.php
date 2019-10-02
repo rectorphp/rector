@@ -25,7 +25,7 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 /**
- * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\Class_\BetterPhpDocParserTest
+ * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\Class_\DoctrinePhpDocParserTest
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\Property_\OrmTagParserPropertyTest
  */
 final class BetterPhpDocParser extends PhpDocParser
@@ -133,8 +133,23 @@ final class BetterPhpDocParser extends PhpDocParser
         if ($tokenIterator->currentTokenType() === Lexer::TOKEN_IDENTIFIER) {
             // is not e.g "@var "
             if (! Strings::match($tag, '#^@[a-z]#')) { // probably a class tag
+                $oldTag = $tag;
+
                 $tag .= $tokenIterator->currentTokenValue();
-                $tokenIterator->next();
+
+                $isTagMatchedByFactories = false;
+                foreach ($this->phpDocNodeFactories as $phpDocNodeFactory) {
+                    if ($this->isTagMatchingPhpDocNodeFactory($tag, $phpDocNodeFactory)) {
+                        $isTagMatchedByFactories = true;
+                        break;
+                    }
+                }
+
+                if ($isTagMatchedByFactories) {
+                    $tokenIterator->next();
+                } else {
+                    $tag = $oldTag;
+                }
             }
         }
 

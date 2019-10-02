@@ -19,6 +19,7 @@ final class AddSeeTestAnnotationRectorTest extends AbstractRectorTestCase
     public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/different_namespace.php.inc'];
+        yield [__DIR__ . '/Fixture/surrounded_doc.php.inc'];
         yield [__DIR__ . '/Fixture/add_to_doc_block.php.inc'];
         yield [__DIR__ . '/Fixture/skip_existing.php.inc'];
     }
