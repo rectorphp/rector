@@ -21,6 +21,7 @@ final class StringifyStrNeedlesRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/trait.php.inc'];
         yield [__DIR__ . '/Fixture/skip_twice.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_already_string.php.inc'];
     }
 
     protected function getRectorClass(): string
