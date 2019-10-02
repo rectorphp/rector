@@ -19,6 +19,8 @@ final class FormIsValidRectorTest extends AbstractRectorTestCase
     public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_nested_if.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_negative_if.php.inc'];
     }
 
     protected function getRectorClass(): string
