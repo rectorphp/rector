@@ -24,6 +24,7 @@ final class StringToArrayArgumentProcessRectorTest extends AbstractRectorTestCas
         yield [__DIR__ . '/Fixture/fixture4.php.inc'];
         yield [__DIR__ . '/Fixture/with_sprintf.php.inc'];
         yield [__DIR__ . '/Fixture/skip_anonymous_class.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_class_extending_traversable.php.inc'];
     }
 
     protected function getRectorClass(): string
