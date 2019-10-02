@@ -8,4 +8,7 @@ if (class_exists('PHPUnit\Framework\TestCase')) {
 
 abstract class TestCase
 {
+    protected function tearDown()
+    {
+    }
 }
