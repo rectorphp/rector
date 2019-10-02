@@ -163,7 +163,15 @@ final class NodeTypeResolver
             return true;
         }
 
-        return $resolvedType->isSuperTypeOf($requiredType)->yes();
+        if ($resolvedType instanceof UnionType) {
+            foreach ($resolvedType->getTypes() as $unionedType) {
+                if ($unionedType->equals($requiredType)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public function getObjectType(Node $node): Type
