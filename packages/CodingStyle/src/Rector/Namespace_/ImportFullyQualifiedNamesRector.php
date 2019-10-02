@@ -2,7 +2,6 @@
 
 namespace Rector\CodingStyle\Rector\Namespace_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use Rector\CodingStyle\Node\NameImporter;
@@ -83,9 +82,9 @@ PHP
     public function refactor(Node $node): ?Node
     {
         // Importing root namespace classes (like \DateTime) is optional
-        if (! $this->shouldImportRootNamespaceClasses) {
+        if (! $this->shouldImportRootNamespaceClasses && $node instanceof Name) {
             $name = $this->getName($node);
-            if (Strings::startsWith($name, '\\') && substr_count($name, '\\') === 1) {
+            if ($name !== null && substr_count($name, '\\') === 0) {
                 return null;
             }
         }
