@@ -8,6 +8,9 @@ final class SkipAlreadyString
     {
         return 'needle';
     }
-}
 
-strpos('needle', (new SkipAlreadyString)->getNeedle());
+    public function __invoke()
+    {
+        return strpos('needle', (new SkipAlreadyString)->getNeedle());
+    }
+}
