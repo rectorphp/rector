@@ -192,6 +192,8 @@ PHP
     /**
      * Looks for:
      * public static someMethod() { return new self(); }
+     * or
+     * public static someMethod() { return new static(); }
      */
     private function isStaticNamedConstructor(ClassMethod $classMethod): bool
     {
