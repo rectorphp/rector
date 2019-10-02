@@ -125,33 +125,7 @@ final class BetterPhpDocParser extends PhpDocParser
 
     public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
     {
-        $tag = $tokenIterator->currentTokenValue();
-
-        $tokenIterator->next();
-
-        // join tags like "@ORM\Column" etc.
-        if ($tokenIterator->currentTokenType() === Lexer::TOKEN_IDENTIFIER) {
-            // is not e.g "@var "
-            if (! Strings::match($tag, '#^@[a-z]#')) { // probably a class tag
-                $oldTag = $tag;
-
-                $tag .= $tokenIterator->currentTokenValue();
-
-                $isTagMatchedByFactories = false;
-                foreach ($this->phpDocNodeFactories as $phpDocNodeFactory) {
-                    if ($this->isTagMatchingPhpDocNodeFactory($tag, $phpDocNodeFactory)) {
-                        $isTagMatchedByFactories = true;
-                        break;
-                    }
-                }
-
-                if ($isTagMatchedByFactories) {
-                    $tokenIterator->next();
-                } else {
-                    $tag = $oldTag;
-                }
-            }
-        }
+        $tag = $this->resolveTag($tokenIterator);
 
         $phpDocTagValueNode = $this->parseTagValue($tokenIterator, $tag);
 
@@ -260,6 +234,42 @@ final class BetterPhpDocParser extends PhpDocParser
         if (Strings::contains($phpDocNodeFactory->getName(), '\\')) {
             $lastNamePart = Strings::after($phpDocNodeFactory->getName(), '\\', -1);
             if (Strings::lower('@' . $lastNamePart) === Strings::lower($tag)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function resolveTag(TokenIterator $tokenIterator): string
+    {
+        $tag = $tokenIterator->currentTokenValue();
+
+        $tokenIterator->next();
+
+        // is not e.g "@var "
+        // join tags like "@ORM\Column" etc.
+        if ($tokenIterator->currentTokenType() !== Lexer::TOKEN_IDENTIFIER) {
+            return $tag;
+        }
+        $oldTag = $tag;
+
+        $tag .= $tokenIterator->currentTokenValue();
+
+        $isTagMatchedByFactories = $this->isTagMatchedByFactories($tag);
+        if (! $isTagMatchedByFactories) {
+            return $oldTag;
+        }
+
+        $tokenIterator->next();
+
+        return $tag;
+    }
+
+    private function isTagMatchedByFactories(string $tag): bool
+    {
+        foreach ($this->phpDocNodeFactories as $phpDocNodeFactory) {
+            if ($this->isTagMatchingPhpDocNodeFactory($tag, $phpDocNodeFactory)) {
                 return true;
             }
         }
