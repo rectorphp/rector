@@ -163,7 +163,7 @@ PHP
 
     private function isFunctionNamed(Node $node, string $name): bool
     {
-        if ($node instanceof FuncCall) {
+        if (! $node instanceof FuncCall) {
             return false;
         }
 
