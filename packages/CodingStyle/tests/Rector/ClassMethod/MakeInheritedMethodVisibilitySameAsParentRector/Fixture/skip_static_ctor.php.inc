@@ -2,19 +2,6 @@
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector\Fixture;
 
-final class SkipSelfCtor extends ParentWithPublicConstructor
-{
-    private function __construct()
-    {
-        // do something
-    }
-
-    public static function create()
-    {
-        return new self();
-    }
-}
-
 abstract class SkipStaticCtor extends ParentWithPublicConstructor
 {
     protected function __construct()
@@ -32,13 +19,8 @@ class InheritedSkipCtor extends SkipStaticCtor
 {
     protected function __construct()
     {
-        // do something more
-    }
-}
+        parent::__construct();
 
-class ParentWithPublicConstructor
-{
-    public function __construct()
-    {
+        // do something more
     }
 }
