@@ -28,6 +28,7 @@ final class RemoveUnusedAliasRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/interace_extending.php.inc'];
         yield [__DIR__ . '/Fixture/doc_block.php.inc'];
         yield [__DIR__ . '/Fixture/skip_different_namespaces_same_name.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_vich_annotation.php.inc'];
     }
 
     protected function getRectorClass(): string
