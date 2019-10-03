@@ -166,6 +166,10 @@ PHP
                 return null;
             }
 
+            if (! $this->isName($node->var, 'this')) {
+                return null;
+            }
+
             foreach ($this->propertyFetchToParams as $propertyFetchName => $param) {
                 if ($this->isName($node, $propertyFetchName)) {
                     $currentlyAddedLocalVariables[] = $param;
