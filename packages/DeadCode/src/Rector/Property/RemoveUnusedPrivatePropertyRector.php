@@ -3,6 +3,7 @@
 namespace Rector\DeadCode\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -145,7 +146,7 @@ PHP
                 return false;
             }
 
-            return $node->name instanceof Node\Expr;
+            return $node->name instanceof Expr;
         });
 
         if ($hasMagicPropertyFetch) {

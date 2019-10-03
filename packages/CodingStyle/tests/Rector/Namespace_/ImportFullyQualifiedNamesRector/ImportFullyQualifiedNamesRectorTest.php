@@ -28,6 +28,8 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
     public function provideNamespacedClasses(): Iterator
     {
         // keep
+        yield [__DIR__ . '/Fixture/bootstrap_names.php.inc'];
+
         yield [__DIR__ . '/Fixture/keep.php.inc'];
         yield [__DIR__ . '/Fixture/keep_aliased.php.inc'];
         yield [__DIR__ . '/Fixture/keep_same_end.php.inc'];

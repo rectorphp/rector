@@ -33,7 +33,8 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_EXPRESSION,
     \Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES,
     \Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION,
-    \Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE
+    \Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE,
+    \Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE,
 );
 
 expectedArguments(
@@ -53,5 +54,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_EXPRESSION,
     \Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_EXPRESSION,
     \Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES,
-    \Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION
+    \Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION,
+    \Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE,
+    \Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE,
 );

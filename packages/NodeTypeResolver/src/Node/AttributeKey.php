@@ -106,4 +106,9 @@ final class AttributeKey
      * Use often in php-parser
      */
     public const KIND = 'kind';
+
+    /**
+     * @var string
+     */
+    public const IS_UNREACHABLE = 'is_unreachable';
 }
