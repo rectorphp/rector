@@ -214,7 +214,15 @@ PHP
                 return false;
             }
 
-            return $this->isName($node->expr->class, 'self') || $this->isName($node->expr->class, 'static');
+            if ($this->isName($node->expr->class, 'self')) {
+                return true;
+            }
+
+            if ($this->isName($node->expr->class, 'static')) {
+                return true;
+            }
+
+            return false;
         });
     }
 }
