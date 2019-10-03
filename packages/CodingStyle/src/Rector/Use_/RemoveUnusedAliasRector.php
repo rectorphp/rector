@@ -321,11 +321,7 @@ PHP
         }
 
         // part of some @Doc annotation
-        if (in_array($aliasName, $this->resolvedDocPossibleAliases, true)) {
-            return true;
-        }
-
-        return false;
+        return in_array($aliasName, $this->resolvedDocPossibleAliases, true);
     }
 
     /**
