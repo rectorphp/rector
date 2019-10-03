@@ -30,13 +30,7 @@ final class ExcludeByDocBlock implements ExclusionCheckInterface
 
     private function checkCommentForIgnore(PhpRectorInterface $phpRector, Doc $doc): bool
     {
-        if (preg_match_all('#@noRector\s*(?<rectorName>\S+)#i', $doc->getText(), $matches)) {
-            foreach ($matches['rectorName'] as $ignoreSpec) {
-                if (get_class($phpRector) === ltrim($ignoreSpec, '\\')) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        $regex = '#@noRector\s*\\\\?' . preg_quote(get_class($phpRector), '/') . '#i';
+        return preg_match($regex, $doc->getText(), $matches) === 1;
     }
 }
