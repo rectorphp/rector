@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Exclusion\Check\Fixture3;
+namespace Rector\Tests\Rector\Exclusion\Check\OtherDocBlocks;
 
 
 final class SomeController
@@ -22,7 +22,7 @@ final class SomeController
 -----
 <?php
 
-namespace Rector\Tests\Rector\Exclusion\Check\Fixture3;
+namespace Rector\Tests\Rector\Exclusion\Check\OtherDocBlocks;
 
 
 final class SomeController

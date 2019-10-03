@@ -8,5 +8,5 @@ use Rector\Contract\Rector\PhpRectorInterface;
 
 interface ExclusionCheckInterface
 {
-    public function shouldExcludeRector(PhpRectorInterface $phpRector, Node $onNode): bool;
+    public function isNodeSkippedByRector(PhpRectorInterface $phpRector, Node $onNode): bool;
 }

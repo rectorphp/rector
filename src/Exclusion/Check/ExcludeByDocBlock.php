@@ -12,7 +12,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ExcludeByDocBlock implements ExclusionCheckInterface
 {
-    public function shouldExcludeRector(PhpRectorInterface $phpRector, Node $node): bool
+    public function isNodeSkippedByRector(PhpRectorInterface $phpRector, Node $node): bool
     {
         $comment = $node->getDocComment();
         if ($comment !== null && $this->checkCommentForIgnore($phpRector, $comment)) {
@@ -22,7 +22,7 @@ final class ExcludeByDocBlock implements ExclusionCheckInterface
         // recurse up until a Stmt node is found since it might contain a noRector
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (! $node instanceof Stmt && $parentNode !== null) {
-            return $this->shouldExcludeRector($phpRector, $parentNode);
+            return $this->isNodeSkippedByRector($phpRector, $parentNode);
         }
 
         return false;

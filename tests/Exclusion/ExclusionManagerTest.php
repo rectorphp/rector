@@ -28,7 +28,7 @@ final class ExclusionManagerTest extends TestCase
         $this->sampleNode = Mockery::mock(Node::class);
     }
 
-    public function testShouldExcludeRector(): void
+    public function testisNodeSkippedByRector(): void
     {
         //poor mans dataprovider because mockery's times() assertions don't work properly with dataproviders
 
@@ -50,7 +50,7 @@ final class ExclusionManagerTest extends TestCase
     public function doTest(bool $expected, array $exclusionChecks): void
     {
         $manager = new ExclusionManager($exclusionChecks);
-        $shouldExclude = $manager->shouldExcludeRector($this->sampleRector, $this->sampleNode);
+        $shouldExclude = $manager->isNodeSkippedByRector($this->sampleRector, $this->sampleNode);
 
         self::assertSame($expected, $shouldExclude);
         Mockery::close();
@@ -62,7 +62,7 @@ final class ExclusionManagerTest extends TestCase
     private function getCheckMock(bool $return, bool $shouldBeCalled): ExclusionCheckInterface
     {
         $exclusionCheck = Mockery::mock(ExclusionCheckInterface::class);
-        $exclusionCheck->shouldReceive('shouldExcludeRector')
+        $exclusionCheck->shouldReceive('isNodeSkippedByRector')
             ->times($shouldBeCalled ? 1 : 0)
             ->andReturn($return);
         return $exclusionCheck;

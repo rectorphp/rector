@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Exclusion\Check\Fixture1;
+namespace Rector\Tests\Rector\Exclusion\Check\DocBlockOnSelfBaseLine;
 
 
 final class SomeController
@@ -19,7 +19,7 @@ final class SomeController
 -----
 <?php
 
-namespace Rector\Tests\Rector\Exclusion\Check\Fixture1;
+namespace Rector\Tests\Rector\Exclusion\Check\DocBlockOnSelfBaseLine;
 
 
 final class SomeController

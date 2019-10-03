@@ -20,11 +20,11 @@ final class ExcludeByDocBlockTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture-norector.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture2-norector.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture3.php.inc'];
+        yield [__DIR__ . '/Fixture/docblock-on-self-baseline.php.inc'];
+        yield [__DIR__ . '/Fixture/docblock-on-self-no-rector.php.inc'];
+        yield [__DIR__ . '/Fixture/docblock-on-parent-baseline.php.inc'];
+        yield [__DIR__ . '/Fixture/docblock-on-parent-norector.php.inc'];
+        yield [__DIR__ . '/Fixture/other-docblocks.php.inc'];
     }
 
     protected function provideConfig(): string

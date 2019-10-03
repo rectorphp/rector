@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Exclusion\Check\Fixture2NoRector;
+namespace Rector\Tests\Rector\Exclusion\Check\DocBlockOnSelfNoRector;
 
 
 final class SomeController

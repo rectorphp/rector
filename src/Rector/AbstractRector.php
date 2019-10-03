@@ -83,7 +83,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return null;
         }
 
-        if ($this->exclusionManager->shouldExcludeRector($this, $node)) {
+        if ($this->exclusionManager->isNodeSkippedByRector($this, $node)) {
             return null;
         }
 
