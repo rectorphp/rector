@@ -23,6 +23,7 @@ final class ConstructorInjectionToActionInjectionRectorTest extends AbstractRect
         yield [__DIR__ . '/Fixture/skip_scalars.php.inc'];
         yield [__DIR__ . '/Fixture/skip_non_action_methods.php.inc'];
         yield [__DIR__ . '/Fixture/manage_different_naming.php.inc'];
+        yield [__DIR__ . '/Fixture/extra_calls_in_constructor.inc.php'];
     }
 
     protected function getRectorClass(): string
