@@ -2,6 +2,8 @@
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector\Fixture;
 
+use Rector\CodingStyle\Tests\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector\Source\ParentWithPublicConstructor;
+
 abstract class SkipStaticCtor extends ParentWithPublicConstructor
 {
     protected function __construct()
