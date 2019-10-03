@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\Rector\PhpRectorInterface;
+use Rector\Exclusion\ExclusionManager;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\PhpVersionProvider;
 use Rector\Rector\AbstractRector\AbstractRectorTrait;
@@ -37,6 +38,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $phpVersionProvider;
 
     /**
+     * @var ExclusionManager
+     */
+    private $exclusionManager;
+
+    /**
      * Run once in the every end of one processed file
      */
     protected function tearDown(): void
@@ -49,11 +55,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     public function autowireAbstractRectorDependencies(
         SymfonyStyle $symfonyStyle,
         PhpVersionProvider $phpVersionProvider,
-        BuilderFactory $builderFactory
+        BuilderFactory $builderFactory,
+        ExclusionManager $exclusionManager
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;
+        $this->exclusionManager = $exclusionManager;
     }
 
     /**
@@ -72,6 +80,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // already removed
         if ($this->isNodeRemoved($node)) {
+            return null;
+        }
+
+        if ($this->exclusionManager->shouldExcludeRector($this, $node)) {
             return null;
         }
 
