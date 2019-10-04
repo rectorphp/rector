@@ -71,7 +71,12 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$else = $node->else) {
+        return $this->shortenElseIf($node);
+    }
+
+    private function shortenElseIf(If_ $node): ?Node
+    {
+        if (! $else = $node->else) {
             return null;
         }
 
@@ -84,7 +89,8 @@ PHP
             return null;
         }
 
-        $refactored = $this->refactor($if);
+        // Try to shorten the nested if before transforming it to elseif
+        $refactored = $this->shortenElseIf($if);
 
         if ($refactored) {
             $if = $refactored;
