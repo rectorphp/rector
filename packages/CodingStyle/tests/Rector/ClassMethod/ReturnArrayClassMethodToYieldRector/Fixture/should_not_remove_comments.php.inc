@@ -4,13 +4,18 @@ namespace Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYi
 
 use Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\Source\ParentTestCase;
 
-final class ShouldNotRemoveComment extends ParentTestCase
+final class ShouldNotRemoveComments extends ParentTestCase
 {
     public function provideData(): array
     {
-        // Let's pretend that this comment is extremely important and meaningful. It should not be removed by Rector.
+        // Let's pretend that this comment is extremely important and meaningful.
+        // It should not be removed by Rector.
         return [
-            ['item']
+            // This is yet another comment.
+            ['item1'],
+
+            // And a final one.
+            ['item2'],
         ];
     }
 }
@@ -23,12 +28,17 @@ namespace Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYi
 
 use Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\Source\ParentTestCase;
 
-final class ShouldNotRemoveComment extends ParentTestCase
+final class ShouldNotRemoveComments extends ParentTestCase
 {
     public function provideData(): \Iterator
     {
-        // Let's pretend that this comment is extremely important and meaningful. It should not be removed by Rector.
-        yield ['item'];
+        // Let's pretend that this comment is extremely important and meaningful.
+        // It should not be removed by Rector.
+
+        // This is yet another comment.
+        yield ['item1'];
+        // And a final one.
+        yield ['item2'];
     }
 }
 
