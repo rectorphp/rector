@@ -97,6 +97,7 @@ final class DocBlockNameImporter
                 return $docNode;
             }
 
+            // Importing root namespace classes (like \DateTime) is optional
             if (! $shouldImportRootNamespaceClasses && substr_count($staticType->getClassName(), '\\') === 0) {
                 return $docNode;
             }
