@@ -1235,6 +1235,7 @@ Import fully qualified names to use statements
 
 ```diff
 +use SomeAnother\AnotherClass;
++use DateTime;
 +
  class SomeClass
  {
@@ -1242,6 +1243,12 @@ Import fully qualified names to use statements
      {
 -          return SomeAnother\AnotherClass;
 +          return AnotherClass;
+     }
+
+     public function createDate()
+     {
+-        return new \DateTime();
++        return new DateTime();
      }
  }
 ```

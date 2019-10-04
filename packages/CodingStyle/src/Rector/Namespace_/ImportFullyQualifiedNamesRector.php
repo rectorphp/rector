@@ -51,17 +51,28 @@ class SomeClass
     {
           return SomeAnother\AnotherClass;
     }
+
+    public function createDate()
+    {
+        return new \DateTime();
+    }
 }
 PHP
                 ,
                 <<<'PHP'
 use SomeAnother\AnotherClass;
+use DateTime;
 
 class SomeClass
 {
     public function create()
     {
           return AnotherClass;
+    }
+
+    public function createDate()
+    {
+        return new DateTime();
     }
 }
 PHP
