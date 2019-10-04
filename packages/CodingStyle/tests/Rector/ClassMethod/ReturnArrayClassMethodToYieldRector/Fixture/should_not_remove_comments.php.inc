@@ -21,7 +21,7 @@ final class ShouldNotRemoveComments extends ParentTestCase
 }
 
 ?>
-    -----
+-----
 <?php
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\Fixture;
