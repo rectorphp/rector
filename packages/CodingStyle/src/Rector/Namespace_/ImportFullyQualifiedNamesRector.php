@@ -7,6 +7,7 @@ use PhpParser\Node\Name;
 use Rector\CodingStyle\Node\NameImporter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
@@ -64,6 +65,43 @@ class SomeClass
     }
 }
 PHP
+            ),
+            new ConfiguredCodeSample(
+                <<<'PHP'
+class SomeClass
+{
+    public function create()
+    {
+        return SomeAnother\AnotherClass;
+    }
+
+    public function createDate()
+    {
+        return new \DateTime(); // this remains untouched
+    }
+}
+PHP
+                ,
+                <<<'PHP'
+use SomeAnother\AnotherClass;
+
+class SomeClass
+{
+    public function create()
+    {
+        return AnotherClass;
+    }
+
+    public function createDate()
+    {
+        return new \DateTime(); // this remains untouched
+    }
+}
+PHP
+                ,
+                [
+                    '$shouldImportRootNamespaceClasses' => false,
+                ]
             ),
         ]);
     }

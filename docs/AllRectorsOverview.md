@@ -1,4 +1,4 @@
-# All 367 Rectors Overview
+# All 369 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -1246,6 +1246,32 @@ Import fully qualified names to use statements
  }
 ```
 
+```yaml
+services:
+    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector:
+        $shouldImportRootNamespaceClasses: false
+```
+
+↓
+
+```diff
++use SomeAnother\AnotherClass;
++
+ class SomeClass
+ {
+     public function create()
+     {
+-        return SomeAnother\AnotherClass;
++        return AnotherClass;
+     }
+
+     public function createDate()
+     {
+         return new \DateTime(); // this remains untouched
+     }
+ }
+```
+
 <br>
 
 ### `MakeInheritedMethodVisibilitySameAsParentRector`
@@ -1369,7 +1395,7 @@ services:
 
 - class: `Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector`
 
-Removes unused use aliases
+Removes unused use aliases. Keep annotation aliases like "Doctrine\ORM\Mapping as ORM" to keep convention format
 
 ```diff
 -use Symfony\Kernel as BaseKernel;
@@ -1526,6 +1552,25 @@ Prefer quote that not inside the string
 -         $name = '\' Sara';
 +         $name = '" Tom';
 +         $name = "' Sara";
+     }
+ }
+```
+
+<br>
+
+### `UseIncrementAssignRector`
+
+- class: `Rector\CodingStyle\Rector\Assign\UseIncrementAssignRector`
+
+Use ++ increment instead of $var += 1.
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $style += 1;
++        ++$style
      }
  }
 ```
@@ -1977,6 +2022,26 @@ Removes method that set values that are never used
      {
          $someClass = new SomeClass();
 -        $someClass->setName('Tom');
+     }
+ }
+```
+
+<br>
+
+### `RemoveUnreachableStatementRector`
+
+- class: `Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector`
+
+Remove unreachable statements
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         return 5;
+-
+-        $removeMe = 10;
      }
  }
 ```
@@ -3869,7 +3934,7 @@ Remove 0 from break and continue
 
 - class: `Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector`
 
-The /e modifier is no longer supported, use preg_replace_callback instead
+The /e modifier is no longer supported, use preg_replace_callback instead 
 
 ```diff
  class SomeClass
