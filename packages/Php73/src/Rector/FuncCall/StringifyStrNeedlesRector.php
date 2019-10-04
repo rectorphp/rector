@@ -5,7 +5,7 @@ namespace Rector\Php73\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
-use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\StringType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -70,7 +70,7 @@ PHP
         $needleArgNode = $node->args[1]->value;
 
         $nodeStaticType = $this->getStaticType($needleArgNode);
-        if ($nodeStaticType instanceof ConstantStringType) {
+        if ($nodeStaticType instanceof StringType) {
             return null;
         }
 
