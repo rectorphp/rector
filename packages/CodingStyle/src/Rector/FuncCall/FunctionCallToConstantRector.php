@@ -18,7 +18,7 @@ final class FunctionCallToConstantRector extends AbstractRector
     /**
      * @var string[]string
      */
-    private $functionsToConstants;
+    private $functionsToConstants = [];
 
     /**
      * @param string[] $functionsToConstants

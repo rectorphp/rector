@@ -85,7 +85,7 @@ EOS
      */
     public function refactor(Node $node): ?Node
     {
-        if (!$this->isName($node, 'version_compare')) {
+        if (! $this->isName($node, 'version_compare')) {
             return null;
         }
 
@@ -93,7 +93,9 @@ EOS
             return null;
         }
 
-        if (!$this->isPhpVersionConstant($node->args[0]->value) && !$this->isPhpVersionConstant($node->args[1]->value)) {
+        if (! $this->isPhpVersionConstant($node->args[0]->value) && ! $this->isPhpVersionConstant(
+            $node->args[1]->value
+        )) {
             return null;
         }
 
@@ -107,35 +109,35 @@ EOS
         return new $comparison($left, $right);
     }
 
-    private function isPhpVersionConstant(Expr $value): bool
+    private function isPhpVersionConstant(Expr $expr): bool
     {
-        if ($value instanceof ConstFetch && $value->name->toString() === 'PHP_VERSION') {
+        if ($expr instanceof ConstFetch && $expr->name->toString() === 'PHP_VERSION') {
             return true;
         }
 
         return false;
     }
 
-    private function getNewNodeForArg(Expr $value): Node
+    private function getNewNodeForArg(Expr $expr): Node
     {
-        if ($this->isPhpVersionConstant($value)) {
+        if ($this->isPhpVersionConstant($expr)) {
             return new ConstFetch(new Name('PHP_VERSION_ID'));
         }
 
-        return $this->getVersionNumberFormVersionString($value);
+        return $this->getVersionNumberFormVersionString($expr);
     }
 
-    private function getVersionNumberFormVersionString(Expr $value): LNumber
+    private function getVersionNumberFormVersionString(Expr $expr): LNumber
     {
-        if (! $value instanceof String_) {
+        if (! $expr instanceof String_) {
             throw new ShouldNotHappenException();
         }
 
-        if (! preg_match('/^\d+\.\d+\.\d+$/', $value->value)) {
+        if (! preg_match('#^\d+\.\d+\.\d+$#', $expr->value)) {
             throw new ShouldNotHappenException();
         }
 
-        $versionParts = explode('.', $value->value);
+        $versionParts = explode('.', $expr->value);
 
         return new LNumber((int) $versionParts[0] * 10000 + (int) $versionParts[1] * 100 + (int) $versionParts[2]);
     }
