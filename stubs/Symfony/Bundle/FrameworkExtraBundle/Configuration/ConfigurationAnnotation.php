@@ -2,6 +2,10 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 
+if (class_exists('Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationAnnotation')) {
+    return;
+}
+
 abstract class ConfigurationAnnotation
 {
     public function __construct(array $values)

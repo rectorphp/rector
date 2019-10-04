@@ -4,9 +4,9 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\Property_;
 
 use Iterator;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\AbstractOrmTagParserTest;
+use Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\AbstractPhpDocInfoTest;
 
-final class OrmTagParserPropertyTest extends AbstractOrmTagParserTest
+final class OrmTagParserPropertyTest extends AbstractPhpDocInfoTest
 {
     /**
      * @dataProvider provideData()

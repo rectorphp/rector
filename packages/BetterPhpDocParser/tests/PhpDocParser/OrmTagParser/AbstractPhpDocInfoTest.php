@@ -11,7 +11,7 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
-abstract class AbstractOrmTagParserTest extends AbstractKernelTestCase
+abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
 {
     /**
      * @var PhpDocInfoFactory

@@ -2,7 +2,9 @@
 
 namespace Rector\Tests\Rector\Property\InjectAnnotationClassRector;
 
+use DI\Annotation\Inject as PHPDIInject;
 use Iterator;
+use JMS\DiExtraBundle\Annotation\Inject;
 use Rector\Configuration\Option;
 use Rector\Rector\Property\InjectAnnotationClassRector;
 use Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeKernelClass;
@@ -44,7 +46,7 @@ final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
     {
         return [
             InjectAnnotationClassRector::class => [
-                '$annotationClasses' => ['JMS\DiExtraBundle\Annotation\Inject', 'DI\Annotation\Inject'],
+                '$annotationClasses' => [Inject::class, PHPDIInject::class],
             ],
         ];
     }

@@ -4,16 +4,17 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\Class_;
 
 use Iterator;
 use PhpParser\Node\Stmt\Class_;
-use Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\AbstractOrmTagParserTest;
+use PhpParser\Node\Stmt\ClassMethod;
+use Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\AbstractPhpDocInfoTest;
 
-final class DoctrinePhpDocParserTest extends AbstractOrmTagParserTest
+final class DoctrinePhpDocParserTest extends AbstractPhpDocInfoTest
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $filePath, string $expectedPrintedPhpDoc): void
+    public function test(string $filePath, string $expectedPrintedPhpDoc, string $type): void
     {
-        $class = $this->parseFileAndGetFirstNodeOfType($filePath, Class_::class);
+        $class = $this->parseFileAndGetFirstNodeOfType($filePath, $type);
         $printedPhpDocInfo = $this->createPhpDocInfoFromNodeAndPrintBackToString($class);
 
         $this->assertStringEqualsFile($expectedPrintedPhpDoc, $printedPhpDocInfo);
@@ -21,6 +22,11 @@ final class DoctrinePhpDocParserTest extends AbstractOrmTagParserTest
 
     public function provideData(): Iterator
     {
-        yield [__DIR__ . '/Fixture/SomeEntity.php', __DIR__ . '/Fixture/expected_some_entity.txt'];
+        yield [__DIR__ . '/Fixture/SomeEntity.php', __DIR__ . '/Fixture/expected_some_entity.txt', Class_::class];
+        yield [
+            __DIR__ . '/Fixture/SkipNonDoctrineEntity.php',
+            __DIR__ . '/Fixture/expected_skip_non_doctrine_entity.txt',
+            ClassMethod::class,
+        ];
     }
 }

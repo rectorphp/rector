@@ -13,9 +13,9 @@ use Rector\Exception\ShouldNotHappenException;
 
 final class SerializerTypePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getName(): string
+    public function getClass(): string
     {
-        return SerializerTypeTagValueNode::SHORT_NAME;
+        return Type::class;
     }
 
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
@@ -25,7 +25,7 @@ final class SerializerTypePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var Type|null $type */
-        $type = $this->nodeAnnotationReader->readPropertyAnnotation($node, SerializerTypeTagValueNode::CLASS_NAME);
+        $type = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
         if ($type === null) {
             return null;
         }

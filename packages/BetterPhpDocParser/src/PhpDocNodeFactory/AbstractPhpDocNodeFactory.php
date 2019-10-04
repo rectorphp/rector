@@ -5,11 +5,11 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFactory;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\AnnotationReader\NodeAnnotationReader;
-use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
+use Rector\BetterPhpDocParser\Contract\ClassAwarePhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\PhpDocParser\AnnotationContentResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-abstract class AbstractPhpDocNodeFactory implements PhpDocNodeFactoryInterface
+abstract class AbstractPhpDocNodeFactory implements ClassAwarePhpDocNodeFactoryInterface
 {
     /**
      * @var NodeAnnotationReader

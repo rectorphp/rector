@@ -12,9 +12,9 @@ use Symfony\Component\Validator\Constraints\Type;
 
 final class AssertTypePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getName(): string
+    public function getClass(): string
     {
-        return AssertTypeTagValueNode::SHORT_NAME;
+        return Type::class;
     }
 
     /**
@@ -27,7 +27,7 @@ final class AssertTypePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var Type|null $type */
-        $type = $this->nodeAnnotationReader->readPropertyAnnotation($node, AssertTypeTagValueNode::CLASS_NAME);
+        $type = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
         if ($type === null) {
             return null;
         }

@@ -12,9 +12,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 final class SensioMethodPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getName(): string
+    public function getClass(): string
     {
-        return SensioMethodTagValueNode::SHORT_NAME;
+        return Method::class;
     }
 
     /**
@@ -27,7 +27,7 @@ final class SensioMethodPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var Method|null $method */
-        $method = $this->nodeAnnotationReader->readMethodAnnotation($node, SensioMethodTagValueNode::CLASS_NAME);
+        $method = $this->nodeAnnotationReader->readMethodAnnotation($node, $this->getClass());
         if ($method === null) {
             return null;
         }

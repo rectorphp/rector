@@ -13,9 +13,9 @@ use Rector\Exception\ShouldNotHappenException;
 
 final class EntityPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getName(): string
+    public function getClass(): string
     {
-        return EntityTagValueNode::SHORT_NAME;
+        return Entity::class;
     }
 
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
@@ -25,7 +25,7 @@ final class EntityPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var Entity|null $entity */
-        $entity = $this->nodeAnnotationReader->readClassAnnotation($node, Entity::class);
+        $entity = $this->nodeAnnotationReader->readClassAnnotation($node, $this->getClass());
         if ($entity === null) {
             return null;
         }

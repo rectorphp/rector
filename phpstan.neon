@@ -210,3 +210,4 @@ parameters:
         - '#In method "Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:moveFile", parameter \$nodes type is "array"\. Please provide a @param annotation to further specify the type of the array\. For instance\: @param int\[\] \$nodes\. More info\: http\://bit\.ly/typehintarray#'
         - '#Parameter \#1 \$items of class PhpParser\\Node\\Expr\\Array_ constructor expects array<PhpParser\\Node\\Expr\\ArrayItem\>, array<PhpParser\\Node\\Expr\\ArrayItem\|null\> given#'
         - '#Parameter \#1 \$sprintfFuncCall of method Rector\\PhpParser\\NodeTransformer\:\:transformSprintfToArray\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node given#'
+        - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\OrmTagParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
