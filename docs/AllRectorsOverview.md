@@ -3941,7 +3941,7 @@ Remove 0 from break and continue
 
 - class: `Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector`
 
-The /e modifier is no longer supported, use preg_replace_callback instead 
+The /e modifier is no longer supported, use preg_replace_callback instead
 
 ```diff
  class SomeClass

@@ -20,7 +20,7 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
 {
     /**
      * @dataProvider provideData()
-     * @dataProvider provideDataForTestSerialize()
+     * @dataProvider provideDataForProperty()
      * @dataProvider provideDataClass()
      */
     public function test(string $docFilePath, Node $node): void
@@ -38,9 +38,6 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         yield [__DIR__ . '/Source/Multiline/multiline3.txt', new Nop()];
         yield [__DIR__ . '/Source/Multiline/multiline4.txt', new Nop()];
         yield [__DIR__ . '/Source/Multiline/multiline5.txt', new Nop()];
-
-        $property = $this->createPublicPropertyUnderClass('manyTo', ManyToPropertyClass::class);
-        yield [__DIR__ . '/Source/Multiline/many_to.txt', $property];
     }
 
     public function provideDataClass(): Iterator
@@ -48,24 +45,19 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         yield [__DIR__ . '/Source/Class_/some_entity_class.txt', new Class_(SomeEntityClass::class)];
     }
 
-    public function provideDataForTestSerialize(): Iterator
+    public function provideDataForProperty(): Iterator
     {
+        $property = $this->createPublicPropertyUnderClass('manyTo', ManyToPropertyClass::class);
+        yield [__DIR__ . '/Source/Multiline/many_to.txt', $property];
+
         $property = $this->createPublicPropertyUnderClass('anotherProperty', AnotherPropertyClass::class);
         yield [__DIR__ . '/Source/Multiline/assert_serialize.txt', $property];
 
         $property = $this->createPublicPropertyUnderClass('anotherSerializeSingleLine', SinglePropertyClass::class);
         yield [__DIR__ . '/Source/Multiline/assert_serialize_single_line.txt', $property];
-    }
-
-    public function testDoctrine(): void
-    {
-        $docFilePath = __DIR__ . '/Source/Multiline/multiline6.txt';
-        $docComment = FileSystem::read($docFilePath);
 
         $property = $this->createPublicPropertyUnderClass('someProperty', DoctrinePropertyClass::class);
-        $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, $property);
-
-        $this->assertSame($docComment, $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo));
+        yield [__DIR__ . '/Source/Multiline/multiline6.txt', $property];
     }
 
     private function createPublicPropertyUnderClass(string $name, string $class): Property
