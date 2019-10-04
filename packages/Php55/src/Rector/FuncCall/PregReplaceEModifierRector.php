@@ -41,7 +41,7 @@ final class PregReplaceEModifierRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('The /e modifier is no longer supported, use preg_replace_callback instead ', [
+        return new RectorDefinition('The /e modifier is no longer supported, use preg_replace_callback instead', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass
