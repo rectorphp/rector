@@ -26,7 +26,7 @@ use Rector\RectorDefinition\RectorDefinition;
 final class FunctionCallToConstantRector extends AbstractRector
 {
     /**
-     * @var string[][]
+     * @var string[]string
      */
     private $operatorToComparison = [
         '=' => Identical::class,
@@ -49,7 +49,7 @@ final class FunctionCallToConstantRector extends AbstractRector
     {
         return new RectorDefinition('Changes use of function calls to use constants', [
             new CodeSample(
-                <<<EOS
+                <<<'EOS'
 class SomeClass
 {
     public function run()
@@ -59,7 +59,7 @@ class SomeClass
 }
 EOS
                 ,
-                <<<EOS
+                <<<'EOS'
 class SomeClass
 {
     public function run()
@@ -70,7 +70,7 @@ class SomeClass
 EOS
             ),
             new CodeSample(
-                <<<EOS
+                <<<'EOS'
 class SomeClass
 {
     public function run()
@@ -80,7 +80,7 @@ class SomeClass
 }
 EOS
                 ,
-                <<<EOS
+                <<<'EOS'
 class SomeClass
 {
     public function run()
@@ -91,7 +91,7 @@ class SomeClass
 EOS
             ),
             new CodeSample(
-                <<<EOS
+                <<<'EOS'
 class SomeClass
 {
     public function run()
@@ -101,7 +101,7 @@ class SomeClass
 }
 EOS
                 ,
-                <<<EOS
+                <<<'EOS'
 class SomeClass
 {
     public function run()
@@ -180,12 +180,16 @@ EOS
 
     private function getVersionNumberFormVersionString(Expr $value): LNumber
     {
-        if (! $value instanceof String_ && ! preg_match('/^\d+\.\d+\.\d+$/', $value->value)) {
+        if (! $value instanceof String_) {
+            throw new ShouldNotHappenException();
+        }
+
+        if (! preg_match('/^\d+\.\d+\.\d+$/', $value->value)) {
             throw new ShouldNotHappenException();
         }
 
         $versionParts = explode('.', $value->value);
 
-        return new LNumber($versionParts[0] * 10000 + $versionParts[1] * 100 + $versionParts[2]);
+        return new LNumber((int) $versionParts[0] * 10000 + (int) $versionParts[1] * 100 + (int) $versionParts[2]);
     }
 }
