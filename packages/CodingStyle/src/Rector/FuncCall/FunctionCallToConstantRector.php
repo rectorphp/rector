@@ -20,6 +20,9 @@ final class FunctionCallToConstantRector extends AbstractRector
      */
     private $functionsToConstants;
 
+    /**
+     * @param string[] $functionsToConstants
+     */
     public function __construct(array $functionsToConstants = [])
     {
         $this->functionsToConstants = $functionsToConstants;
@@ -87,7 +90,7 @@ EOS
     public function refactor(Node $node): ?Node
     {
         $functionName = $this->getName($node);
-        if (! array_key_exists($functionName, $this->functionsToConstants)) {
+        if (! $functionName || ! array_key_exists($functionName, $this->functionsToConstants)) {
             return null;
         }
 

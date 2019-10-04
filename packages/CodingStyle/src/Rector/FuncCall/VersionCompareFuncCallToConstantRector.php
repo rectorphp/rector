@@ -100,7 +100,9 @@ EOS
         $left = $this->getNewNodeForArg($node->args[0]->value);
         $right = $this->getNewNodeForArg($node->args[1]->value);
 
-        $comparison = $this->operatorToComparison[$node->args[2]->value->value];
+        /** @var String_ $operator */
+        $operator = $node->args[2]->value;
+        $comparison = $this->operatorToComparison[$operator->value];
 
         return new $comparison($left, $right);
     }
