@@ -81,23 +81,23 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        // Importing root namespace classes (like \DateTime) is optional
-        if (! $this->shouldImportRootNamespaceClasses && $node instanceof Name) {
-            $name = $this->getName($node);
-            if ($name !== null && substr_count($name, '\\') === 0) {
-                return null;
-            }
-        }
-
         $this->useAddingCommander->analyseFileInfoUseStatements($node);
 
         if ($node instanceof Name) {
+            // Importing root namespace classes (like \DateTime) is optional
+            if (! $this->shouldImportRootNamespaceClasses) {
+                $name = $this->getName($node);
+                if ($name !== null && substr_count($name, '\\') === 0) {
+                    return null;
+                }
+            }
+
             return $this->nameImporter->importName($node);
         }
 
         // process doc blocks
         if ($this->shouldImportDocBlocks) {
-            $this->docBlockManipulator->importNames($node);
+            $this->docBlockManipulator->importNames($node, $this->shouldImportRootNamespaceClasses);
             return $node;
         }
 
