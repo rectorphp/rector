@@ -3,8 +3,10 @@
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\FunctionCallToConstantRector;
 
 use Iterator;
+use Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector;
 use Rector\CodingStyle\Rector\FuncCall\FunctionCallToConstantRector;
+use Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FunctionCallToConstantRectorTest extends AbstractRectorTestCase
@@ -19,15 +21,19 @@ final class FunctionCallToConstantRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/version-compare.php.inc'];
-        yield [__DIR__ . '/Fixture/sapi-name.php.inc'];
-        yield [__DIR__ . '/Fixture/pi.php.inc'];
-        yield [__DIR__ . '/Fixture/skip-version-compare.php.inc'];
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
 
     }
 
-    protected function getRectorClass(): string
+    protected function getRectorsWithConfiguration(): array
     {
-        return FunctionCallToConstantRector::class;
+        return [
+            FunctionCallToConstantRector::class => [
+                '$functionsToConstants' => [
+                    'php_sapi_name' => 'PHP_SAPI',
+                    'pi' => 'M_PI'
+                ],
+            ],
+        ];
     }
 }
