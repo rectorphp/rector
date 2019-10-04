@@ -30,11 +30,10 @@ use Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRec
 
 final class ShouldNotRemoveComments extends ParentTestCase
 {
+    // Let's pretend that this comment is extremely important and meaningful.
+    // It should not be removed by Rector.
     public function provideData(): \Iterator
     {
-        // Let's pretend that this comment is extremely important and meaningful.
-        // It should not be removed by Rector.
-
         // This is yet another comment.
         yield ['item1'];
         // And a final one.
