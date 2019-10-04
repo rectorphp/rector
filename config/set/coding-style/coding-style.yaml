@@ -29,3 +29,8 @@ services:
     Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector: ~
     Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector: ~
     Rector\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector: ~
+    Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector: ~
+    Rector\CodingStyle\Rector\FuncCall\FunctionCallToConstantRector:
+        $functionsToConstants:
+            php_sapi_name: PHP_SAPI
+            pi: M_PI
