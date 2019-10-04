@@ -20,14 +20,23 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
     private $shouldImportDocBlocks = true;
 
     /**
+     * @var bool
+     */
+    private $shouldImportRootNamespaceClasses = true;
+
+    /**
      * @var NameImporter
      */
     private $nameImporter;
 
-    public function __construct(NameImporter $nameImporter, bool $shouldImportDocBlocks = true)
-    {
+    public function __construct(
+        NameImporter $nameImporter,
+        bool $shouldImportDocBlocks = true,
+        bool $shouldImportRootNamespaceClasses = true
+    ) {
         $this->nameImporter = $nameImporter;
         $this->shouldImportDocBlocks = $shouldImportDocBlocks;
+        $this->shouldImportRootNamespaceClasses = $shouldImportRootNamespaceClasses;
     }
 
     public function getDefinition(): RectorDefinition
@@ -75,12 +84,20 @@ PHP
         $this->useAddingCommander->analyseFileInfoUseStatements($node);
 
         if ($node instanceof Name) {
+            // Importing root namespace classes (like \DateTime) is optional
+            if (! $this->shouldImportRootNamespaceClasses) {
+                $name = $this->getName($node);
+                if ($name !== null && substr_count($name, '\\') === 0) {
+                    return null;
+                }
+            }
+
             return $this->nameImporter->importName($node);
         }
 
         // process doc blocks
         if ($this->shouldImportDocBlocks) {
-            $this->docBlockManipulator->importNames($node);
+            $this->docBlockManipulator->importNames($node, $this->shouldImportRootNamespaceClasses);
             return $node;
         }
 

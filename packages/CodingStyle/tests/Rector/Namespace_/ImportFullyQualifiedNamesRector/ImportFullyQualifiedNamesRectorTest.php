@@ -60,6 +60,8 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/keep_static_method.php.inc'];
         yield [__DIR__ . '/Fixture/keep_various_request.php.inc'];
         yield [__DIR__ . '/Fixture/instance_of.php.inc'];
+
+        yield [__DIR__ . '/Fixture/import_root_namespace_classes_enabled.php.inc'];
     }
 
     public function provideFunctions(): Iterator
