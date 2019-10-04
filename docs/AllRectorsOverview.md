@@ -6386,16 +6386,16 @@ Changes Process string argument to an array
 
 - class: `Rector\Symfony\Rector\VarDumper\VarDumperTestTraitMethodArgsRector`
 
-Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Validator in Symfony.
+Adds a new `$filter` argument in `VarDumperTestTrait->assertDumpEquals()` and `VarDumperTestTrait->assertDumpMatchesFormat()` in Validator in Symfony.
 
 ```diff
--$varDumperTestTrait->assertDumpEquals($dump, $data, $mesage = "");
-+$varDumperTestTrait->assertDumpEquals($dump, $data, $context = null, $mesage = "");
+-$varDumperTestTrait->assertDumpEquals($dump, $data, $message = "");
++$varDumperTestTrait->assertDumpEquals($dump, $data, $filter = 0, $message = "");
 ```
 
 ```diff
--$varDumperTestTrait->assertDumpMatchesFormat($dump, $format, $mesage = "");
-+$varDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");
+-$varDumperTestTrait->assertDumpMatchesFormat($dump, $data, $message = "");
++$varDumperTestTrait->assertDumpMatchesFormat($dump, $data, $filter = 0, $message = "");
 ```
 
 <br>
