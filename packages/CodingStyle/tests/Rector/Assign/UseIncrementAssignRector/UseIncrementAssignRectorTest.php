@@ -18,10 +18,7 @@ final class UseIncrementAssignRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [
-            __DIR__ . '/Fixture/increment-fixture.php.inc',
-            __DIR__ . '/Fixture/decrement-fixture.php.inc'
-        ];
+        yield [__DIR__ . '/Fixture/fixture.php.inc'];
     }
 
     protected function getRectorClass(): string

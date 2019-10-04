@@ -60,11 +60,15 @@ PHP
     }
 
     /**
-     * @param AssignOp $node
+     * @param Plus|Minus $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ((! $node->expr instanceof LNumber) || $node->expr->value !== 1) {
+        if (! $node->expr instanceof LNumber) {
+            return null;
+        }
+
+        if ($node->expr->value !== 1) {
             return null;
         }
 

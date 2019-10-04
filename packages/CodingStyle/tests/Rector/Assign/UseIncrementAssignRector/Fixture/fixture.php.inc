@@ -8,6 +8,8 @@ class SomeClass
     {
         $style = 0;
 
+        $style += 1;
+
         $style -= 1;
     }
 }
@@ -23,6 +25,8 @@ class SomeClass
     public function run()
     {
         $style = 0;
+
+        ++$style;
 
         --$style;
     }
