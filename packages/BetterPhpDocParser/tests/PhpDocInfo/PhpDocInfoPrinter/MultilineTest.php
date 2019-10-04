@@ -20,6 +20,7 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
 {
     /**
      * @dataProvider provideData()
+     * @dataProvider provideDataForTestSerialize()
      * @dataProvider provideDataClass()
      */
     public function test(string $docFilePath, Node $node): void
@@ -47,34 +48,13 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         yield [__DIR__ . '/Source/Class_/some_entity_class.txt', new Class_(SomeEntityClass::class)];
     }
 
-    /**
-     * @dataProvider provideDataForChangedFormat()
-     */
-    public function testChangedFormat(string $docFilePath, Node $node, string $expectedPhpDocFile): void
-    {
-        $docComment = FileSystem::read($docFilePath);
-        $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, $node);
-
-        $expectedPhpDoc = FileSystem::read($expectedPhpDocFile);
-
-        $this->assertSame($expectedPhpDoc, $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo));
-    }
-
-    public function provideDataForChangedFormat(): Iterator
+    public function provideDataForTestSerialize(): Iterator
     {
         $property = $this->createPublicPropertyUnderClass('anotherProperty', AnotherPropertyClass::class);
-        yield [
-            __DIR__ . '/Source/Multiline/assert_serialize.txt',
-            $property,
-            __DIR__ . '/Source/Multiline/assert_serialize_after.txt',
-        ];
+        yield [__DIR__ . '/Source/Multiline/assert_serialize.txt', $property];
 
         $property = $this->createPublicPropertyUnderClass('anotherSerializeSingleLine', SinglePropertyClass::class);
-        yield [
-            __DIR__ . '/Source/Multiline/assert_serialize_single_line.txt',
-            $property,
-            __DIR__ . '/Source/Multiline/assert_serialize_single_line_after.txt',
-        ];
+        yield [__DIR__ . '/Source/Multiline/assert_serialize_single_line.txt', $property];
     }
 
     public function testDoctrine(): void

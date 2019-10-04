@@ -30,9 +30,9 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         $this->joinColumnPhpDocNodeFactory = $joinColumnPhpDocNodeFactory;
     }
 
-    public function getName(): string
+    public function getClass(): string
     {
-        return JoinTableTagValueNode::SHORT_NAME;
+        return JoinTable::class;
     }
 
     /**
@@ -45,7 +45,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var JoinTable|null $joinTable */
-        $joinTable = $this->nodeAnnotationReader->readPropertyAnnotation($node, JoinTable::class);
+        $joinTable = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
         if ($joinTable === null) {
             return null;
         }

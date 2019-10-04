@@ -1,0 +1,3 @@
+/**
+     * @Entity("user", expr="repository.findOneBy({'legalInformation.payment.uboDeclarationId': uboDeclarationId})")
+     */

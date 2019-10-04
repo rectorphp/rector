@@ -32,9 +32,9 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         $this->uniqueConstraintPhpDocNodeFactory = $uniqueConstraintPhpDocNodeFactory;
     }
 
-    public function getName(): string
+    public function getClass(): string
     {
-        return TableTagValueNode::SHORT_NAME;
+        return Table::class;
     }
 
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
@@ -44,7 +44,7 @@ final class TablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var Table|null $table */
-        $table = $this->nodeAnnotationReader->readClassAnnotation($node, Table::class);
+        $table = $this->nodeAnnotationReader->readClassAnnotation($node, $this->getClass());
         if ($table === null) {
             return null;
         }
