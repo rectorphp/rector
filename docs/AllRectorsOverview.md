@@ -5716,7 +5716,7 @@ Classes that have no children nor are used, should have abstract
 
 - class: `Rector\SOLID\Rector\ClassConst\PrivatizeLocalClassConstantRector`
 
-Finalize every class constant that is used only locally
+Privatize every class constant that is used only locally
 
 ```diff
  class ClassWithConstantUsedOnlyHere
@@ -5727,6 +5727,29 @@ Finalize every class constant that is used only locally
      public function isLocalOnly()
      {
          return self::LOCAL_ONLY;
+     }
+ }
+```
+
+Use `$keepDeclaredVisibility` to keep explicitly declared constant visibility, to that only
+constants missing the visibility declaration will be changed.
+
+```yaml
+services:
+    Rector\SOLID\Rector\ClassConst\PrivatizeLocalClassConstantRector:
+        $keepDeclaredVisibility: true
+```
+
+```diff
+ class ClassWithConstantUsedOnlyHere
+ {
+     public LOCAL_ONLY_BUT_DECLARED_PUBLIC = true;
+-    const LOCAL_ONLY = true;
++    private const LOCAL_ONLY = true;
+
+     public function isLocalOnly()
+     {
+         return self::LOCAL_ONLY && self::LOCAL_ONLY_BUT_DECLARED_PUBLIC;
      }
  }
 ```

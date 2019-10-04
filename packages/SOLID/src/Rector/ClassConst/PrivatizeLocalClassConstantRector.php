@@ -3,6 +3,7 @@
 namespace Rector\SOLID\Rector\ClassConst;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -31,12 +32,19 @@ final class PrivatizeLocalClassConstantRector extends AbstractRector
      */
     private $classConstantFetchAnalyzer;
 
+    /**
+     * @var bool
+     */
+    private $keepDeclaredVisibility;
+
     public function __construct(
         ParsedNodesByType $parsedNodesByType,
-        ClassConstantFetchAnalyzer $classConstantFetchAnalyzer
+        ClassConstantFetchAnalyzer $classConstantFetchAnalyzer,
+        bool $keepDeclaredVisibility = false
     ) {
         $this->parsedNodesByType = $parsedNodesByType;
         $this->classConstantFetchAnalyzer = $classConstantFetchAnalyzer;
+        $this->keepDeclaredVisibility = $keepDeclaredVisibility;
     }
 
     public function getDefinition(): RectorDefinition
@@ -214,6 +222,10 @@ PHP
         }
 
         if (! $this->isAtLeastPhpVersion('7.1')) {
+            return true;
+        }
+
+        if ($this->keepDeclaredVisibility && ($classConst->flags & Class_::VISIBILITY_MODIFIER_MASK) !== 0) {
             return true;
         }
 
