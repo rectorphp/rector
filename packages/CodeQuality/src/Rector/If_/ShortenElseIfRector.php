@@ -84,7 +84,11 @@ PHP
             return null;
         }
 
-        $if = $this->refactor($if) ?? $if;
+        $refactored = $this->refactor($if);
+
+        if ($refactored) {
+            $if = $refactored;
+        }
 
         $node->elseifs[] = new ElseIf_(
             $if->cond,
