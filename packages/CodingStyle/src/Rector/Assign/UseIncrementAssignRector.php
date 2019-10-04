@@ -3,7 +3,6 @@
 namespace Rector\CodingStyle\Rector\Assign;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\AssignOp\Minus;
 use PhpParser\Node\Expr\AssignOp\Plus;
 use PhpParser\Node\Expr\PreDec;
@@ -53,10 +52,7 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [
-            Plus::class,
-            Minus::class
-        ];
+        return [Plus::class, Minus::class];
     }
 
     /**
