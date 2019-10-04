@@ -14,7 +14,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\CodingStyle\Tests\Rector\Assign\SplitDoubleAssignRector\UseIncrementAssignRectorTest
+ * @see \Rector\CodingStyle\Tests\Rector\Assign\UseIncrementAssignRector\UseIncrementAssignRectorTest
  */
 final class UseIncrementAssignRector extends AbstractRector
 {

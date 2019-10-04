@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Assign\SplitDoubleAssignRector;
+namespace Rector\CodingStyle\Tests\Rector\Assign\UseIncrementAssignRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Assign\UseIncrementAssignRector;
