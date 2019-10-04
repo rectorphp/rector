@@ -28,7 +28,8 @@ final class SimplifyIfReturnBoolRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture8.php.inc'];
         yield [__DIR__ . '/Fixture/fixture9.php.inc'];
         yield [__DIR__ . '/Fixture/fixture10.php.inc'];
-        yield [__DIR__ . '/Fixture/should_not_remove_comments.php.inc'];
+        yield [__DIR__ . '/Fixture/should_keep_comments.php.inc'];
+        yield [__DIR__ . '/Fixture/should_keep_doc_blocks.php.inc'];
     }
 
     protected function getRectorClass(): string
