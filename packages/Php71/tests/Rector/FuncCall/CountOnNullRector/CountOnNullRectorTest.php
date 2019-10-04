@@ -30,6 +30,7 @@ final class CountOnNullRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/nullable_array.php.inc'];
         yield [__DIR__ . '/Fixture/skip_countable_local_property.php.inc'];
         yield [__DIR__ . '/Fixture/skip_array_merge.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_simple_xml_element.php.inc'];
     }
 
     protected function getRectorClass(): string

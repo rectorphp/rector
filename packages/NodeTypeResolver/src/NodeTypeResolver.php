@@ -249,7 +249,20 @@ final class NodeTypeResolver
 
         $nodeType = $this->correctPregMatchType($node, $nodeType);
         if ($nodeType instanceof ObjectType) {
-            return is_a($nodeType->getClassName(), Countable::class, true);
+            if (is_a($nodeType->getClassName(), Countable::class, true)) {
+                return true;
+            }
+
+            // @see https://github.com/rectorphp/rector/issues/2028
+            if (is_a($nodeType->getClassName(), 'SimpleXMLElement', true)) {
+                return true;
+            }
+
+            if (is_a($nodeType->getClassName(), 'ResourceBundle', true)) {
+                return true;
+            }
+
+            return false;
         }
 
         return $this->isArrayType($node);
