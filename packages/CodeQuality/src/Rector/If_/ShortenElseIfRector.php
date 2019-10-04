@@ -2,15 +2,8 @@
 
 namespace Rector\CodeQuality\Rector\If_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -76,10 +69,11 @@ PHP
 
     private function shortenElseIf(If_ $node): ?Node
     {
-        if (! $else = $node->else) {
+        if ($node->else === null) {
             return null;
         }
 
+        $else = $node->else;
         if (count($else->stmts) > 1) {
             return null;
         }
@@ -96,10 +90,7 @@ PHP
             $if = $refactored;
         }
 
-        $node->elseifs[] = new ElseIf_(
-            $if->cond,
-            $if->stmts
-        );
+        $node->elseifs[] = new ElseIf_($if->cond, $if->stmts);
 
         $node->else = $if->else;
 

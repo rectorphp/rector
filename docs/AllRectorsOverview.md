@@ -1,4 +1,4 @@
-# All 369 Rectors Overview
+# All 370 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -630,6 +630,33 @@ Remove sprintf() wrapper if not needed
          $welcome = 'hello';
 -        $value = sprintf('%s', $welcome);
 +        $value = $welcome;
+     }
+ }
+```
+
+<br>
+
+### `ShortenElseIfRector`
+
+- class: `Rector\CodeQuality\Rector\If_\ShortenElseIfRector`
+
+Shortens else/if to elseif
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         if ($cond1) {
+             return $action1;
+-        } else {
+-            if ($cond2) {
+-                return $action2;
+-            }
+-        }
++        } elseif ($cond2) {
++            return $action2;
++        }
      }
  }
 ```
@@ -3941,7 +3968,7 @@ Remove 0 from break and continue
 
 - class: `Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector`
 
-The /e modifier is no longer supported, use preg_replace_callback instead 
+The /e modifier is no longer supported, use preg_replace_callback instead
 
 ```diff
  class SomeClass

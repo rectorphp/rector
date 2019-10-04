@@ -402,7 +402,7 @@ final class DumpNodesCommand extends AbstractCommand
 
                 $this->nodeInfoResult->addNodeInfo($category, new NodeInfo(
                     $nodeClass,
-                    $this->betterStandardPrinter->print($node),
+                    trim($this->betterStandardPrinter->print($node)),
                     true
                 ));
 
