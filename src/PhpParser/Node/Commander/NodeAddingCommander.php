@@ -88,6 +88,12 @@ final class NodeAddingCommander implements CommanderInterface
             return spl_object_hash($node);
         }
 
+        // special case for "If_"
+        $parentNode = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
+        if ($parentNode === null) {
+            return spl_object_hash($node);
+        }
+
         /** @var Expression|null $foundNode */
         $foundNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($node, Expression::class);
         if ($foundNode === null) {
