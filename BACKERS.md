@@ -18,8 +18,9 @@ Check out all the tiers - higher ones include additional goodies like placing th
 - Kerrial Newham
 - Jan Mikeš
 - Jan Kuchař
-- Martin Čermák
 - Jakob Oberhummer
-- Tomáš Pilař
-- Stefan Melbinger
 - Attila Fulop
+
+## $1+
+
+- Arnaud TIERANT
