@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\AbstractPhpDocInfoTest;
 
-final class DoctrinePhpDocParserTest extends AbstractPhpDocInfoTest
+final class ParserClassTest extends AbstractPhpDocInfoTest
 {
     /**
      * @dataProvider provideData()
@@ -27,6 +27,12 @@ final class DoctrinePhpDocParserTest extends AbstractPhpDocInfoTest
             __DIR__ . '/Fixture/SkipNonDoctrineEntity.php',
             __DIR__ . '/Fixture/expected_skip_non_doctrine_entity.txt',
             ClassMethod::class,
+        ];
+
+        yield [
+            __DIR__ . '/Fixture/TableWithIndexes.php',
+            __DIR__ . '/Fixture/expected_table_with_indexes.txt',
+            Class_::class,
         ];
     }
 }

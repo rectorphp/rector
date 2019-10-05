@@ -18,6 +18,16 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
     /**
      * @var string
      */
+    public const INVERSE_JOIN_COLUMNS = 'inverseJoinColumns';
+
+    /**
+     * @var string
+     */
+    private const JOIN_COLUMNS = 'joinColumns';
+
+    /**
+     * @var string
+     */
     private const JOIN_COLUMN_PATTERN = '#(?<tag>@(ORM\\\\)?JoinColumn)\((?<content>.*?)\),?#si';
 
     /**
@@ -51,12 +61,35 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
-        $joinColumnValuesTags = $this->createJoinColumnTagValues($annotationContent, $joinTable, 'joinColumns');
 
+        $joinColumnsAnnotationContent = $this->annotationContentResolver->resolveNestedKey(
+            $annotationContent,
+            self::JOIN_COLUMNS
+        );
+
+        $joinColumnValuesTags = $this->createJoinColumnTagValues(
+            $joinColumnsAnnotationContent,
+            $joinTable,
+            self::JOIN_COLUMNS
+        );
+
+        [$joinColumnsOpeningSpace, $joinColumnsClosingSpace] = $this->matchCurlyBracketOpeningAndClosingSpace(
+            $joinColumnsAnnotationContent
+        );
+
+        // inversed join columns
+        $inverseJoinColumnsAnnotationContent = $this->annotationContentResolver->resolveNestedKey(
+            $annotationContent,
+            self::INVERSE_JOIN_COLUMNS
+        );
         $inverseJoinColumnValuesTags = $this->createJoinColumnTagValues(
             $annotationContent,
             $joinTable,
-            'inverseJoinColumns'
+            self::INVERSE_JOIN_COLUMNS
+        );
+
+        [$inverseJoinColumnsOpeningSpace, $inverseJoinColumnsClosingSpace] = $this->matchCurlyBracketOpeningAndClosingSpace(
+            $inverseJoinColumnsAnnotationContent
         );
 
         return new JoinTableTagValueNode(
@@ -64,7 +97,11 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
             $joinTable->schema,
             $joinColumnValuesTags,
             $inverseJoinColumnValuesTags,
-            $annotationContent
+            $annotationContent,
+            $joinColumnsOpeningSpace,
+            $joinColumnsClosingSpace,
+            $inverseJoinColumnsOpeningSpace,
+            $inverseJoinColumnsClosingSpace
         );
     }
 
@@ -73,10 +110,16 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
      */
     private function createJoinColumnTagValues(string $annotationContent, JoinTable $joinTable, string $type): array
     {
-        $joinColumnContents = $this->matchJoinColumnContents($annotationContent, $type);
+        $joinColumnContents = $this->matchJoinColumnContents($annotationContent);
+
         $joinColumnValuesTags = [];
 
-        foreach ($joinTable->joinColumns as $key => $joinColumn) {
+        if (! in_array($type, [self::JOIN_COLUMNS, self::INVERSE_JOIN_COLUMNS], true)) {
+            throw new ShouldNotHappenException();
+        }
+
+        $joinColumns = $joinTable->{$type};
+        foreach ($joinColumns as $key => $joinColumn) {
             $subAnnotation = $joinColumnContents[$key];
 
             $joinColumnValuesTags[] = $this->joinColumnPhpDocNodeFactory->createFromAnnotationAndAnnotationContent(
@@ -92,13 +135,8 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
     /**
      * @return string[][]
      */
-    private function matchJoinColumnContents(string $annotationContent, string $type): array
+    private function matchJoinColumnContents(string $annotationContent): array
     {
-        $match = Strings::match($annotationContent, '#' . $type . '=\{(?<content>.*?)\}#sm');
-        if (! isset($match['content'])) {
-            return [];
-        }
-
-        return Strings::matchAll($match['content'], self::JOIN_COLUMN_PATTERN);
+        return Strings::matchAll($annotationContent, self::JOIN_COLUMN_PATTERN);
     }
 }

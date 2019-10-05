@@ -1,0 +1,5 @@
+/**
+ * @ORM\Table(name="amenity_building", uniqueConstraints={@ORM\UniqueConstraint(name="building_id_amenity_id",
+ *      columns={"building_id", "amenity_id"})}
+ * )
+ */

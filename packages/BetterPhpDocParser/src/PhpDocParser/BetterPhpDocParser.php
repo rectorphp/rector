@@ -240,7 +240,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokenIterator->next();
 
         // basic annotation
-        if (Strings::match($tag, '#@(var|param|return|throws)#')) {
+        if (Strings::match($tag, '#@(var|param|return|throws|property|deprecated)#')) {
             return $tag;
         }
 
