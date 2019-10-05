@@ -116,7 +116,7 @@ PHP
         $previousMethodCallNames = [];
 
         do {
-            $previousMethodCallNames[] = $this->collectMethodCallsOnVariableName($parentNode, $variableName);;
+            $previousMethodCallNames[] = $this->collectMethodCallsOnVariableName($parentNode, $variableName);
 
             $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
         } while ($parentNode instanceof Node && ! $parentNode instanceof FunctionLike);
