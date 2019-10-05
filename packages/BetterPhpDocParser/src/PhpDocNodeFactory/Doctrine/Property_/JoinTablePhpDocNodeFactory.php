@@ -139,19 +139,4 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
     {
         return Strings::matchAll($annotationContent, self::JOIN_COLUMN_PATTERN);
     }
-
-    /**
-     * Covers spaces like https://github.com/rectorphp/rector/issues/2110
-     * @return string[]
-     */
-    private function matchCurlyBracketOpeningAndClosingSpace(string $annotationContent): array
-    {
-        $match = Strings::match($annotationContent, '#^\{(?<openingSpace>\s+)#');
-        $openingSpace = $match['openingSpace'] ?? '';
-
-        $match = Strings::match($annotationContent, '#^(?<closingSpace>\s+)\}$#');
-        $closingSpace = $match['closingSpace'] ?? '';
-
-        return [$openingSpace, $closingSpace];
-    }
 }

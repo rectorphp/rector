@@ -6,7 +6,7 @@ use Iterator;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser\AbstractPhpDocInfoTest;
 
-final class OrmTagParserPropertyTest extends AbstractPhpDocInfoTest
+final class ParserPropertyTest extends AbstractPhpDocInfoTest
 {
     /**
      * @dataProvider provideData()
@@ -22,8 +22,11 @@ final class OrmTagParserPropertyTest extends AbstractPhpDocInfoTest
     public function provideData(): Iterator
     {
         yield [__DIR__ . '/Fixture/SomeProperty.php', __DIR__ . '/Fixture/expected_some_property.txt'];
+
         yield [__DIR__ . '/Fixture/PropertyWithName.php', __DIR__ . '/Fixture/expected_property_with_name.txt'];
+
         yield [__DIR__ . '/Fixture/FromOfficialDocs.php', __DIR__ . '/Fixture/expected_from_official_docs.txt'];
+
         yield [__DIR__ . '/Fixture/JoinTable.php', __DIR__ . '/Fixture/expected_join_table.txt'];
     }
 }
