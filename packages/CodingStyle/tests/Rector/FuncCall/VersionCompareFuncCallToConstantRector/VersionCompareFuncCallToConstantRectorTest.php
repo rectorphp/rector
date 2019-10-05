@@ -3,8 +3,6 @@
 namespace Rector\CodingStyle\Tests\Rector\FuncCall\VersionCompareFuncCallToConstantRector;
 
 use Iterator;
-use Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector;
-use Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector;
 use Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -22,7 +20,6 @@ final class VersionCompareFuncCallToConstantRectorTest extends AbstractRectorTes
     {
         yield [__DIR__ . '/Fixture/version-compare.php.inc'];
         yield [__DIR__ . '/Fixture/skip-version-compare.php.inc'];
-
     }
 
     protected function getRectorClass(): string
