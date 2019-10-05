@@ -1,4 +1,0 @@
-services:
-    Rector\Exclusion\Check\ExcludeByDocBlock: ~
-    Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector: ~
-    Rector\DeadCode\Rector\Plus\RemoveZeroAndOneBinaryRector: ~

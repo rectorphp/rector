@@ -10,7 +10,7 @@ use Rector\Contract\Exclusion\ExclusionCheckInterface;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-final class ExcludeByDocBlock implements ExclusionCheckInterface
+final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface
 {
     public function isNodeSkippedByRector(PhpRectorInterface $phpRector, Node $node): bool
     {

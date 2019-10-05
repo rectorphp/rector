@@ -8,7 +8,7 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
 use Rector\DeadCode\Rector\Plus\RemoveZeroAndOneBinaryRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class ExcludeByDocBlockTest extends AbstractRectorTestCase
+final class ExcludeByDocBlockExclusionCheckTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
@@ -25,11 +25,6 @@ final class ExcludeByDocBlockTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/docblock-on-parent-baseline.php.inc'];
         yield [__DIR__ . '/Fixture/docblock-on-parent-norector.php.inc'];
         yield [__DIR__ . '/Fixture/other-docblocks.php.inc'];
-    }
-
-    protected function provideConfig(): string
-    {
-        return dirname(__DIR__) . '/config.yaml';
     }
 
     /**
