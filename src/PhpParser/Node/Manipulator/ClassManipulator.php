@@ -504,16 +504,13 @@ final class ClassManipulator
             return ! $this->isNodeLeftPartOfAssign($node);
         }
 
-        if ($node instanceof StaticPropertyFetch) {
-            if (! $this->nameResolver->isName($node->class, 'self')) {
-                return false;
-            }
-
-            // is "self::$property = x;" assign
-            return ! $this->isNodeLeftPartOfAssign($node);
+        // is StaticPropertyFetch
+        if (! $this->nameResolver->isName($node->class, 'self')) {
+            return false;
         }
 
-        return false;
+        // is "self::$property = x;" assign
+        return ! $this->isNodeLeftPartOfAssign($node);
     }
 
     private function isNodeLeftPartOfAssign(Node $node): bool

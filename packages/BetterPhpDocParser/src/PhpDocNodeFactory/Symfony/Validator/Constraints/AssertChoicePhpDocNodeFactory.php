@@ -12,9 +12,9 @@ use Symfony\Component\Validator\Constraints\Choice;
 
 final class AssertChoicePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getName(): string
+    public function getClass(): string
     {
-        return AssertChoiceTagValueNode::SHORT_NAME;
+        return Choice::class;
     }
 
     /**
@@ -27,7 +27,7 @@ final class AssertChoicePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var Choice|null $choice */
-        $choice = $this->nodeAnnotationReader->readPropertyAnnotation($node, AssertChoiceTagValueNode::CLASS_NAME);
+        $choice = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
         if ($choice === null) {
             return null;
         }

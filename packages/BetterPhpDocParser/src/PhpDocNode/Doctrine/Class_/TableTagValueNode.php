@@ -47,6 +47,26 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
     private $haveUniqueConstraintsFinalComma = false;
 
     /**
+     * @var string|null
+     */
+    private $indexesOpeningSpace;
+
+    /**
+     * @var string|null
+     */
+    private $indexesClosingSpace;
+
+    /**
+     * @var string|null
+     */
+    private $uniqueConstraintsOpeningSpace;
+
+    /**
+     * @var string|null
+     */
+    private $uniqueConstraintsClosingSpace;
+
+    /**
      * @param mixed[] $options
      * @param IndexTagValueNode[] $indexes
      * @param UniqueConstraintTagValueNode[] $uniqueConstraints
@@ -59,7 +79,11 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
         array $options,
         ?string $originalContent = null,
         bool $haveIndexesFinalComma = false,
-        bool $haveUniqueConstraintsFinalComma = false
+        bool $haveUniqueConstraintsFinalComma = false,
+        ?string $indexesOpeningSpace = null,
+        ?string $indexesClosingSpace = null,
+        ?string $uniqueConstraintsOpeningSpace = null,
+        ?string $uniqueConstraintsClosingSpace = null
     ) {
         $this->name = $name;
         $this->schema = $schema;
@@ -73,6 +97,10 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
 
         $this->haveIndexesFinalComma = $haveIndexesFinalComma;
         $this->haveUniqueConstraintsFinalComma = $haveUniqueConstraintsFinalComma;
+        $this->indexesOpeningSpace = $indexesOpeningSpace;
+        $this->indexesClosingSpace = $indexesClosingSpace;
+        $this->uniqueConstraintsOpeningSpace = $uniqueConstraintsOpeningSpace;
+        $this->uniqueConstraintsClosingSpace = $uniqueConstraintsClosingSpace;
     }
 
     public function __toString(): string
@@ -88,14 +116,22 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
         }
 
         if ($this->indexes !== []) {
-            $contentItems['indexes'] = $this->printNestedTag($this->indexes, 'indexes', $this->haveIndexesFinalComma);
+            $contentItems['indexes'] = $this->printNestedTag(
+                $this->indexes,
+                'indexes',
+                $this->haveIndexesFinalComma,
+                $this->indexesOpeningSpace,
+                $this->indexesClosingSpace
+            );
         }
 
         if ($this->uniqueConstraints !== []) {
             $contentItems['uniqueConstraints'] = $this->printNestedTag(
                 $this->uniqueConstraints,
                 'uniqueConstraints',
-                $this->haveUniqueConstraintsFinalComma
+                $this->haveUniqueConstraintsFinalComma,
+                $this->uniqueConstraintsOpeningSpace,
+                $this->uniqueConstraintsClosingSpace
             );
         }
 

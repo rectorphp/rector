@@ -78,6 +78,6 @@ PHP
             return $this->createStaticCall($staticCall[0], $staticCall[1], $node->args);
         }
 
-        return $node;
+        return null;
     }
 }

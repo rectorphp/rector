@@ -2,11 +2,13 @@
 
 namespace Rector\DeadCode\Rector\ClassMethod;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
@@ -70,11 +72,7 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
-            return null;
-        }
-
-        if ($classNode->extends === null) {
+        if ($this->shouldSkipClass($classNode)) {
             return null;
         }
 
@@ -82,21 +80,19 @@ PHP
             return null;
         }
 
-        if ($node->stmts[0] instanceof Expression) {
-            $onlyStmt = $node->stmts[0]->expr;
-        } else {
-            $onlyStmt = $node->stmts[0];
-        }
+        $onlyStmt = $this->unwrapExpression($node->stmts[0]);
 
         // are both return?
-        if ($node->returnType && ! $this->isName($node->returnType, 'void') && ! $onlyStmt instanceof Return_) {
+        if ($this->isMethodReturnType($node, 'void') && ! $onlyStmt instanceof Return_) {
             return null;
         }
 
-        /** @var Node $onlyStmt */
         $staticCall = $this->matchStaticCall($onlyStmt);
-
         if (! $this->isParentCallMatching($node, $staticCall)) {
+            return null;
+        }
+
+        if ($this->hasRequiredAnnotation($node)) {
             return null;
         }
 
@@ -201,5 +197,50 @@ PHP
         }
 
         return false;
+    }
+
+    /**
+     * @param Node|Expression $node
+     */
+    private function unwrapExpression(Node $node): Node
+    {
+        if ($node instanceof Expression) {
+            return $node->expr;
+        }
+
+        return $node;
+    }
+
+    private function shouldSkipClass(?ClassLike $classLike): bool
+    {
+        if (! $classLike instanceof Class_) {
+            return true;
+        }
+
+        if ($classLike->extends === null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function isMethodReturnType(ClassMethod $classMethod, string $type): bool
+    {
+        if ($classMethod->returnType === null) {
+            return false;
+        }
+
+        return $this->isName($classMethod->returnType, $type);
+    }
+
+    private function hasRequiredAnnotation(Node $node): bool
+    {
+        if ($node->getDocComment() === null) {
+            return false;
+        }
+
+        $docCommentText = $node->getDocComment()->getText();
+
+        return (bool) Strings::match($docCommentText, '#\s\@required\s#si');
     }
 }

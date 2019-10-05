@@ -19,15 +19,15 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Validator in Symfony.',
+            'Adds a new `$filter` argument in `VarDumperTestTrait->assertDumpEquals()` and `VarDumperTestTrait->assertDumpMatchesFormat()` in Validator in Symfony.',
             [
                 new CodeSample(
-                    '$varDumperTestTrait->assertDumpEquals($dump, $data, $mesage = "");',
-                    '$varDumperTestTrait->assertDumpEquals($dump, $data, $context = null, $mesage = "");'
+                    '$varDumperTestTrait->assertDumpEquals($dump, $data, $message = "");',
+                    '$varDumperTestTrait->assertDumpEquals($dump, $data, $filter = 0, $message = "");'
                 ),
                 new CodeSample(
-                    '$varDumperTestTrait->assertDumpMatchesFormat($dump, $format, $mesage = "");',
-                    '$varDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");'
+                    '$varDumperTestTrait->assertDumpMatchesFormat($dump, $data, $message = "");',
+                    '$varDumperTestTrait->assertDumpMatchesFormat($dump, $data, $filter = 0, $message = "");'
                 ),
             ]
         );
@@ -60,7 +60,7 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
 
         if ($node->args[2]->value instanceof String_) {
             $node->args[3] = $node->args[2];
-            $node->args[2] = $this->createArg($this->createNull());
+            $node->args[2] = $this->createArg(0);
 
             return $node;
         }

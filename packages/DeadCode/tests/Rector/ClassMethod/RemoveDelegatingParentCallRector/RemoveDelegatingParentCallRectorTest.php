@@ -25,6 +25,7 @@ final class RemoveDelegatingParentCallRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/skip_in_trait.php.inc'];
         yield [__DIR__ . '/Fixture/skip_different_method_name.php.inc'];
         yield [__DIR__ . '/Fixture/skip_changed_arguments.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_required.php.inc'];
     }
 
     protected function getRectorClass(): string

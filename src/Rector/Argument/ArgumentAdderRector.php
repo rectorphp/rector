@@ -209,11 +209,8 @@ PHP
             return in_array('method_call', $scope, true);
         }
 
-        if ($node instanceof MethodCall) {
-            return in_array('method_call', $scope, true);
-        }
-
-        return false;
+        // MethodCall
+        return in_array('method_call', $scope, true);
     }
 
     /**
@@ -229,13 +226,10 @@ PHP
             return $this->isObjectType($node->class, $type);
         }
 
-        if ($node instanceof ClassMethod) {
-            /** @var Class_ $class */
-            $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        // ClassMethod
+        /** @var Class_ $class */
+        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
 
-            return $this->isObjectType($class, $type);
-        }
-
-        return false;
+        return $this->isObjectType($class, $type);
     }
 }

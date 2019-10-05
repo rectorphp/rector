@@ -23,9 +23,9 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         $this->nameResolver = $nameResolver;
     }
 
-    public function getName(): string
+    public function getClass(): string
     {
-        return JMSInjectTagValueNode::SHORT_NAME;
+        return Inject::class;
     }
 
     /**
@@ -38,7 +38,7 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var Inject|null $inject */
-        $inject = $this->nodeAnnotationReader->readPropertyAnnotation($node, JMSInjectTagValueNode::CLASS_NAME);
+        $inject = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
         if ($inject === null) {
             return null;
         }

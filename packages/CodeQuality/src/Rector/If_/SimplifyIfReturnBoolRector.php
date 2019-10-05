@@ -77,7 +77,7 @@ PHP
             return null;
         }
 
-        $this->keepComments($node, $newReturnNode);
+        $this->keepComments($node, $nextNode, $newReturnNode);
         $this->removeNode($nextNode);
 
         return $newReturnNode;
@@ -153,13 +153,16 @@ PHP
         return new Return_($this->boolCastOrNullCompareIfNeeded(new BooleanNot($ifNode->cond)));
     }
 
-    private function keepComments(Node $oldNode, Node $newNode): void
+    private function keepComments(Node $oldNode, Node $nextNode, Node $newNode): void
     {
-        if ($oldNode->getDocComment() !== null) {
-            $newNode->setDocComment($oldNode->getDocComment());
+        /** @var Node $node */
+        foreach ([$oldNode, $nextNode] as $node) {
+            $newNode->setAttribute('comments', array_merge($newNode->getComments(), $node->getComments()));
         }
 
-        $newNode->setAttribute('comments', $oldNode->getComments());
+        if ($nextNode->getDocComment() !== null) {
+            $newNode->setDocComment($nextNode->getDocComment());
+        }
     }
 
     private function boolCastOrNullCompareIfNeeded(Expr $expr): Expr

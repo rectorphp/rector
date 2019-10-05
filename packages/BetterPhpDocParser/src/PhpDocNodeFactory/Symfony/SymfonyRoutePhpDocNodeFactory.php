@@ -12,9 +12,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class SymfonyRoutePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getName(): string
+    public function getClass(): string
     {
-        return SymfonyRouteTagValueNode::SHORT_NAME;
+        return Route::class;
     }
 
     /**
@@ -27,7 +27,7 @@ final class SymfonyRoutePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var Route|null $route */
-        $route = $this->nodeAnnotationReader->readMethodAnnotation($node, SymfonyRouteTagValueNode::CLASS_NAME);
+        $route = $this->nodeAnnotationReader->readMethodAnnotation($node, $this->getClass());
         if ($route === null) {
             return null;
         }

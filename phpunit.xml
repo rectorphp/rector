@@ -12,7 +12,6 @@
         <testsuite name="main">
             <directory>packages/*/tests</directory>
             <directory>tests</directory>
-            <exclude>packages/ContributorTools/templates/*</exclude>
         </testsuite>
     </testsuites>
 
@@ -21,7 +20,7 @@
             <directory suffix="*.php">packages/*/src</directory>
             <directory>src</directory>
             <exclude>
-                <directory>../tests/**/*Source/**</directory>
+                <directory>tests/**/*Source/**</directory>
             </exclude>
         </whitelist>
     </filter>

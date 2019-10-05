@@ -28,3 +28,4 @@ services:
     Rector\DeadCode\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector: ~
 
     Rector\DeadCode\Rector\Property\RemoveNullPropertyInitializationRector: ~
+    Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector: ~

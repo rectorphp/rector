@@ -1,4 +1,4 @@
-# All 367 Rectors Overview
+# All 370 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -636,6 +636,33 @@ Remove sprintf() wrapper if not needed
 
 <br>
 
+### `ShortenElseIfRector`
+
+- class: `Rector\CodeQuality\Rector\If_\ShortenElseIfRector`
+
+Shortens else/if to elseif
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         if ($cond1) {
+             return $action1;
+-        } else {
+-            if ($cond2) {
+-                return $action2;
+-            }
+-        }
++        } elseif ($cond2) {
++            return $action2;
++        }
+     }
+ }
+```
+
+<br>
+
 ### `SimplifyArraySearchRector`
 
 - class: `Rector\CodeQuality\Rector\Identical\SimplifyArraySearchRector`
@@ -1235,6 +1262,7 @@ Import fully qualified names to use statements
 
 ```diff
 +use SomeAnother\AnotherClass;
++use DateTime;
 +
  class SomeClass
  {
@@ -1242,6 +1270,38 @@ Import fully qualified names to use statements
      {
 -          return SomeAnother\AnotherClass;
 +          return AnotherClass;
+     }
+
+     public function createDate()
+     {
+-        return new \DateTime();
++        return new DateTime();
+     }
+ }
+```
+
+```yaml
+services:
+    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector:
+        $shouldImportRootNamespaceClasses: false
+```
+
+↓
+
+```diff
++use SomeAnother\AnotherClass;
++
+ class SomeClass
+ {
+     public function create()
+     {
+-        return SomeAnother\AnotherClass;
++        return AnotherClass;
+     }
+
+     public function createDate()
+     {
+         return new \DateTime(); // this remains untouched
      }
  }
 ```
@@ -1369,7 +1429,7 @@ services:
 
 - class: `Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector`
 
-Removes unused use aliases
+Removes unused use aliases. Keep annotation aliases like "Doctrine\ORM\Mapping as ORM" to keep convention format
 
 ```diff
 -use Symfony\Kernel as BaseKernel;
@@ -1526,6 +1586,25 @@ Prefer quote that not inside the string
 -         $name = '\' Sara';
 +         $name = '" Tom';
 +         $name = "' Sara";
+     }
+ }
+```
+
+<br>
+
+### `UseIncrementAssignRector`
+
+- class: `Rector\CodingStyle\Rector\Assign\UseIncrementAssignRector`
+
+Use ++ increment instead of $var += 1.
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $style += 1;
++        ++$style
      }
  }
 ```
@@ -1977,6 +2056,26 @@ Removes method that set values that are never used
      {
          $someClass = new SomeClass();
 -        $someClass->setName('Tom');
+     }
+ }
+```
+
+<br>
+
+### `RemoveUnreachableStatementRector`
+
+- class: `Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector`
+
+Remove unreachable statements
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         return 5;
+-
+-        $removeMe = 10;
      }
  }
 ```
@@ -6386,16 +6485,16 @@ Changes Process string argument to an array
 
 - class: `Rector\Symfony\Rector\VarDumper\VarDumperTestTraitMethodArgsRector`
 
-Adds new `$format` argument in `VarDumperTestTrait->assertDumpEquals()` in Validator in Symfony.
+Adds a new `$filter` argument in `VarDumperTestTrait->assertDumpEquals()` and `VarDumperTestTrait->assertDumpMatchesFormat()` in Validator in Symfony.
 
 ```diff
--$varDumperTestTrait->assertDumpEquals($dump, $data, $mesage = "");
-+$varDumperTestTrait->assertDumpEquals($dump, $data, $context = null, $mesage = "");
+-$varDumperTestTrait->assertDumpEquals($dump, $data, $message = "");
++$varDumperTestTrait->assertDumpEquals($dump, $data, $filter = 0, $message = "");
 ```
 
 ```diff
--$varDumperTestTrait->assertDumpMatchesFormat($dump, $format, $mesage = "");
-+$varDumperTestTrait->assertDumpMatchesFormat($dump, $format, $context = null,  $mesage = "");
+-$varDumperTestTrait->assertDumpMatchesFormat($dump, $data, $message = "");
++$varDumperTestTrait->assertDumpMatchesFormat($dump, $data, $filter = 0, $message = "");
 ```
 
 <br>

@@ -13,9 +13,9 @@ use Rector\Exception\ShouldNotHappenException;
 
 final class JoinColumnPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getName(): string
+    public function getClass(): string
     {
-        return JoinColumnTagValueNode::SHORT_NAME;
+        return JoinColumn::class;
     }
 
     /**
@@ -28,7 +28,7 @@ final class JoinColumnPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var JoinColumn|null $joinColumn */
-        $joinColumn = $this->nodeAnnotationReader->readPropertyAnnotation($node, JoinColumn::class);
+        $joinColumn = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
         if ($joinColumn === null) {
             return null;
         }

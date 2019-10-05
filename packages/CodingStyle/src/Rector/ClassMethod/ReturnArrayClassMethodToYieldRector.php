@@ -3,6 +3,8 @@
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use Iterator;
+use PhpParser\Comment;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Name\FullyQualified;
@@ -31,6 +33,16 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector
      * @var NodeTransformer
      */
     private $nodeTransformer;
+
+    /**
+     * @var Doc|null
+     */
+    private $returnDocComment;
+
+    /**
+     * @var Comment[]
+     */
+    private $returnComments = [];
 
     /**
      * @param string[][] $methodsByType
@@ -90,8 +102,8 @@ PHP
                 continue;
             }
 
-            foreach ($methods as $method) {
-                if (! $this->isName($node, $method)) {
+            foreach ($methods as $methodName) {
+                if (! $this->isName($node, $methodName)) {
                     continue;
                 }
 
@@ -101,6 +113,8 @@ PHP
                 }
 
                 $this->transformArrayToYieldsOnMethodNode($node, $arrayNode);
+
+                $this->completeComments($node);
             }
         }
 
@@ -115,9 +129,13 @@ PHP
 
         foreach ($classMethod->stmts as $statement) {
             if ($statement instanceof Return_) {
-                if ($statement->expr instanceof Array_) {
-                    return $statement->expr;
+                if (! $statement->expr instanceof Array_) {
+                    continue;
                 }
+
+                $this->collectComments($statement);
+
+                return $statement->expr;
             }
         }
 
@@ -143,5 +161,20 @@ PHP
         $classMethod->returnType = new FullyQualified(Iterator::class);
 
         $classMethod->stmts = array_merge((array) $classMethod->stmts, $yieldNodes);
+    }
+
+    private function completeComments(Node $node): void
+    {
+        if ($this->returnDocComment) {
+            $node->setDocComment($this->returnDocComment);
+        } elseif ($this->returnComments) {
+            $node->setAttribute('comments', $this->returnComments);
+        }
+    }
+
+    private function collectComments(Node $node): void
+    {
+        $this->returnDocComment = $node->getDocComment();
+        $this->returnComments = $node->getComments();
     }
 }

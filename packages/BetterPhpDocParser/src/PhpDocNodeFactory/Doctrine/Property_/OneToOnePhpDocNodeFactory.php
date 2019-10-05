@@ -13,9 +13,9 @@ use Rector\Exception\ShouldNotHappenException;
 
 final class OneToOnePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getName(): string
+    public function getClass(): string
     {
-        return OneToOneTagValueNode::SHORT_NAME;
+        return OneToOne::class;
     }
 
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
@@ -25,7 +25,7 @@ final class OneToOnePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var OneToOne|null $oneToOne */
-        $oneToOne = $this->nodeAnnotationReader->readPropertyAnnotation($node, OneToOne::class);
+        $oneToOne = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
         if ($oneToOne === null) {
             return null;
         }

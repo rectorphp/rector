@@ -4,6 +4,7 @@ namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
@@ -24,8 +25,12 @@ final class AllAssignNodePropertyTypeInferer extends AbstractTypeInferer impleme
 
     public function inferProperty(Property $property): Type
     {
-        /** @var ClassLike $class */
+        /** @var ClassLike|null $class */
         $class = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($class === null) {
+            // anonymous class
+            return new MixedType();
+        }
 
         $propertyName = $this->nameResolver->getName($property);
 

@@ -35,6 +35,7 @@ final class PropertyTypeDeclarationRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/doctrine_relation_target_entity_same_namespace.php.inc'];
         yield [__DIR__ . '/Fixture/setter_type.php.inc'];
         yield [__DIR__ . '/Fixture/skip_multi_vars.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_anonymous_class.php.inc'];
     }
 
     protected function getRectorClass(): string

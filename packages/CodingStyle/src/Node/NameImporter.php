@@ -2,6 +2,7 @@
 
 namespace Rector\CodingStyle\Node;
 
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
@@ -60,6 +61,10 @@ final class NameImporter
         }
 
         if ($this->isNamespaceOrUseImportName($name)) {
+            return null;
+        }
+
+        if ($this->isFunctionOrConstantImportWithSingleName($name)) {
             return null;
         }
 
@@ -124,5 +129,15 @@ final class NameImporter
         } else {
             $this->useAddingCommander->addUseImport($name, $fullyQualifiedObjectType);
         }
+    }
+
+    private function isFunctionOrConstantImportWithSingleName(Name $name): bool
+    {
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof ConstFetch && ! $parentNode instanceof FuncCall) {
+            return false;
+        }
+
+        return count($name->parts) === 1;
     }
 }

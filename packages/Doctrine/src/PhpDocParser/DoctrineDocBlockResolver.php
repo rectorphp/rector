@@ -38,7 +38,7 @@ final class DoctrineDocBlockResolver
     }
 
     /**
-     * @param Class_|string $class
+     * @param Class_|string|mixed $class
      */
     public function isDoctrineEntityClass($class): bool
     {

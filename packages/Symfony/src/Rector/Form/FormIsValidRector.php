@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -119,7 +120,7 @@ PHP
             $previousMethodCallNames = array_merge($previousMethodCallNames, $methodCallNames);
 
             $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        } while ($parentNode instanceof Node && ! $parentNode instanceof Node\FunctionLike);
+        } while ($parentNode instanceof Node && ! $parentNode instanceof FunctionLike);
 
         return array_unique($previousMethodCallNames);
     }
