@@ -200,3 +200,6 @@ parameters:
         - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\JMS\\SerializerTypePhpDocNodeFactory\:\:resolveTypeAnnotation\(\) should return JMS\\Serializer\\Annotation\\Type\|null but returns Doctrine\\ORM\\Mapping\\Annotation\|Symfony\\Component\\Validator\\Constraint\|null#'
 
         - '#Parameter \#1 \$phpDocTagValueNode of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:removeTagValueNodeFromNode\(\) expects PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode, PHPStan\\PhpDocParser\\Ast\\PhpDoc\\VarTagValueNode\|null given#'
+
+        # known value
+        - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDelegatingParentCallRector\:\:unwrapExpression\(\) expects PhpParser\\Node, PhpParser\\Node\\Stmt\|null given#'
