@@ -89,6 +89,10 @@ vendor/bin/rector process ../project --autoload-file ../project/vendor/autoload.
 
 Or make use of `rector.yaml` config:
 
+```bash
+vendor/bin/rector process ../project --config ../project/rector.yaml
+```
+
 ```yaml
 # rector.yaml
 parameters:
