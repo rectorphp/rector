@@ -19,6 +19,7 @@ final class ConstructorInjectionToActionInjectionRectorTest extends AbstractRect
     public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/multiple.php.inc'];
         yield [__DIR__ . '/Fixture/duplicate.php.inc'];
         yield [__DIR__ . '/Fixture/skip_scalars.php.inc'];
         yield [__DIR__ . '/Fixture/skip_non_action_methods.php.inc'];

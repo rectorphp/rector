@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\TypeAnalyzer;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -42,10 +43,19 @@ final class ConstructorInjectionToActionInjectionRector extends AbstractRector
      */
     private $propertyFetchToParamsToRemoveFromConstructor = [];
 
-    public function __construct(ClassManipulator $classManipulator, TypeAnalyzer $typeAnalyzer)
-    {
+    /**
+     * @var ClassMethodManipulator
+     */
+    private $classMethodManipulator;
+
+    public function __construct(
+        ClassManipulator $classManipulator,
+        TypeAnalyzer $typeAnalyzer,
+        ClassMethodManipulator $classMethodManipulator
+    ) {
         $this->classManipulator = $classManipulator;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->classMethodManipulator = $classMethodManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -128,7 +138,9 @@ PHP
                 continue;
             }
 
-            $this->replacePropertyFetchByInjectedVariables($classMethod);
+            foreach ($this->propertyFetchToParams as $propertyFetchName => $param) {
+                $this->changePropertyUsageToParameter($classMethod, $propertyFetchName, $param);
+            }
         }
 
         // collect all property fetches that are relevant to original constructor properties
@@ -155,25 +167,25 @@ PHP
         return $node;
     }
 
-    private function replacePropertyFetchByInjectedVariables(ClassMethod $classMethod): void
+    private function changePropertyUsageToParameter(ClassMethod $classMethod, string $propertyName, Param $param): void
     {
         $currentlyAddedLocalVariables = [];
 
         $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
+            $propertyName,
+            $param,
             &$currentlyAddedLocalVariables
         ): ?Variable {
             if (! $node instanceof PropertyFetch) {
                 return null;
             }
 
-            foreach ($this->propertyFetchToParams as $propertyFetchName => $param) {
-                if ($this->isName($node, $propertyFetchName)) {
-                    $currentlyAddedLocalVariables[] = $param;
+            if ($this->isName($node, $propertyName)) {
+                $currentlyAddedLocalVariables[] = $param;
 
-                    /** @var string $paramName */
-                    $paramName = $this->getName($param);
-                    return new Variable($paramName);
-                }
+                /** @var string $paramName */
+                $paramName = $this->getName($param);
+                return new Variable($paramName);
             }
 
             return null;
@@ -270,41 +282,30 @@ PHP
 
     private function removeUnusedPropertiesAndConstructorParams(Class_ $class, ClassMethod $classMethod): void
     {
-        if ($this->propertyFetchToParamsToRemoveFromConstructor === []) {
-            return;
+        $this->removeAssignsFromConstructor($classMethod);
+        foreach ($this->propertyFetchToParamsToRemoveFromConstructor as $propertyFetchName => $param) {
+            $this->changePropertyUsageToParameter($classMethod, $propertyFetchName, $param);
         }
-
-        $this->removeAssignsAndParamsFromConstructor($classMethod);
+        $this->classMethodManipulator->removeUnusedParameters($classMethod);
         $this->removeUnusedProperties($class);
-        $this->removeEmptyConstruct($class, $classMethod);
+        $this->removeConstructIfEmpty($class, $classMethod);
     }
 
-    private function removeAssignsAndParamsFromConstructor(ClassMethod $classMethod): void
+    private function removeAssignsFromConstructor(ClassMethod $classMethod): void
     {
-        foreach ($this->propertyFetchToParamsToRemoveFromConstructor as $propertyFetchToRemove => $paramToRemove) {
-            // remove unused params in constructor
-            foreach ($classMethod->params as $key => $constructorParam) {
-                if (! $this->areNamesEqual($constructorParam, $paramToRemove)) {
-                    continue;
-                }
-
-                unset($classMethod->params[$key]);
+        foreach ((array) $classMethod->stmts as $key => $constructorStmt) {
+            $propertyFetchToVariable = $this->resolveAssignPropertyToVariableOrNull($constructorStmt);
+            if ($propertyFetchToVariable === null) {
+                continue;
             }
 
-            foreach ((array) $classMethod->stmts as $key => $constructorStmt) {
-                $propertyFetchToVariable = $this->resolveAssignPropertyToVariableOrNull($constructorStmt);
-                if ($propertyFetchToVariable === null) {
-                    continue;
-                }
-
-                [$propertyFetchName, ] = $propertyFetchToVariable;
-                if ($propertyFetchName !== $propertyFetchToRemove) {
-                    continue;
-                }
-
-                // remove the assign
-                unset($classMethod->stmts[$key]);
+            [$propertyFetchName, ] = $propertyFetchToVariable;
+            if (! isset($this->propertyFetchToParamsToRemoveFromConstructor[$propertyFetchName])) {
+                continue;
             }
+
+            // remove the assign
+            unset($classMethod->stmts[$key]);
         }
     }
 
@@ -316,7 +317,7 @@ PHP
         }
     }
 
-    private function removeEmptyConstruct(Class_ $class, ClassMethod $constructClassMethod): void
+    private function removeConstructIfEmpty(Class_ $class, ClassMethod $constructClassMethod): void
     {
         if ($constructClassMethod->stmts !== []) {
             return;
