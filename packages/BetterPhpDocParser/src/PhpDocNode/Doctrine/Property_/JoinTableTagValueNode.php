@@ -32,6 +32,26 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
     private $inverseJoinColumns;
 
     /**
+     * @var string|null
+     */
+    private $joinColumnsOpeningSpace;
+
+    /**
+     * @var string|null
+     */
+    private $inverseJoinColumnsOpeningSpace;
+
+    /**
+     * @var string|null
+     */
+    private $joinColumnsClosingSpace;
+
+    /**
+     * @var string|null
+     */
+    private $inverseJoinColumnsClosingSpace;
+
+    /**
      * @param JoinColumnTagValueNode[] $joinColumns
      * @param JoinColumnTagValueNode[] $inverseJoinColumns
      */
@@ -40,13 +60,21 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
         ?string $schema = null,
         ?array $joinColumns = null,
         ?array $inverseJoinColumns = null,
-        ?string $originalContent = null
+        ?string $originalContent = null,
+        ?string $joinColumnsOpeningSpace = null,
+        ?string $joinColumnsClosingSpace = null,
+        ?string $inverseJoinColumnsOpeningSpace = null,
+        ?string $inverseJoinColumnsClosingSpace = null
     ) {
         $this->name = $name;
         $this->schema = $schema;
         $this->joinColumns = $joinColumns;
         $this->inverseJoinColumns = $inverseJoinColumns;
         $this->resolveOriginalContentSpacingAndOrder($originalContent);
+        $this->joinColumnsOpeningSpace = $joinColumnsOpeningSpace;
+        $this->joinColumnsClosingSpace = $joinColumnsClosingSpace;
+        $this->inverseJoinColumnsOpeningSpace = $inverseJoinColumnsOpeningSpace;
+        $this->inverseJoinColumnsClosingSpace = $inverseJoinColumnsClosingSpace;
     }
 
     public function __toString(): string
@@ -60,13 +88,22 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
         }
 
         if ($this->joinColumns) {
-            $contentItems['joinColumns'] = $this->printNestedTag($this->joinColumns, 'joinColumns');
+            $contentItems['joinColumns'] = $this->printNestedTag(
+                $this->joinColumns,
+                'joinColumns',
+                false,
+                $this->joinColumnsOpeningSpace,
+                $this->joinColumnsClosingSpace
+            );
         }
 
         if ($this->inverseJoinColumns) {
             $contentItems['inverseJoinColumns'] = $this->printNestedTag(
                 $this->inverseJoinColumns,
-                'inverseJoinColumns'
+                'inverseJoinColumns',
+                false,
+                $this->inverseJoinColumnsOpeningSpace,
+                $this->inverseJoinColumnsClosingSpace
             );
         }
 
