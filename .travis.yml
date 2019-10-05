@@ -17,6 +17,7 @@ matrix:
           env: DOG_FOOD=true
         - php: '7.4snapshot'
     allow_failures:
+        # remove coding standard burden from contributors and fix once upon a time
         - php: '7.1'
           env: CODING_STANDARD=true
         - php: '7.2'
@@ -37,15 +38,14 @@ before_script:
     - set -e
 
 script:
-    - vendor/bin/phpunit
+    - vendor/bin/phpunit --testsuite main
 
     - if [[ $STATIC_ANALYSIS == true ]]; then composer phpstan; fi
     - if [[ $CODING_STANDARD == true ]]; then composer check-cs; fi
 
     # Rector demo run
     - |
-      if [[ $RUN_RECTOR == true ]]; then
-          bin/rector process src --set symfony40 --dry-run
+      if [[ $STATIC_ANALYSIS == true ]]; then
           composer docs
           php bin/check_services_in_yaml_configs.php
           php bin/run_all_sets.php
@@ -54,8 +54,7 @@ script:
     # Eat your own dog food
     - |
       if [[ $DOG_FOOD == true ]]; then
-          bin/rector process src packages --set dead-code --dry-run
-          bin/rector process src packages --set code-quality --dry-run
+          bin/rector process src --set dead-code --dry-run
       fi
 
     # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
