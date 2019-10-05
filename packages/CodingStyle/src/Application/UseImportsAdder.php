@@ -4,6 +4,7 @@ namespace Rector\CodingStyle\Application;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\CodingStyle\Imports\UsedImportsResolver;
@@ -40,6 +41,16 @@ final class UseImportsAdder
 
         $newUses = $this->createUses($useImportTypes, $functionUseImportTypes, null);
 
+        // place after declare strict_types
+        foreach ($stmts as $key => $stmt) {
+            if ($stmt instanceof Declare_) {
+                array_splice($stmts, $key + 1, 0, $newUses);
+
+                return $stmts;
+            }
+        }
+
+        // make use stmts first
         return array_merge($newUses, $stmts);
     }
 

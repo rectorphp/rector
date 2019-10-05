@@ -4,6 +4,8 @@ namespace Rector\Php53\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\MagicConst\Dir;
+use PhpParser\Node\Scalar\MagicConst\File;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -62,10 +64,10 @@ PHP
         }
 
         $firstArgValue = $node->args[0]->value;
-        if (! $firstArgValue instanceof Node\Scalar\MagicConst\File) {
+        if (! $firstArgValue instanceof File) {
             return null;
         }
 
-        return new Node\Scalar\MagicConst\Dir();
+        return new Dir();
     }
 }

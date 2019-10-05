@@ -13,9 +13,9 @@ use Rector\Exception\ShouldNotHappenException;
 
 final class GeneratedValuePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getName(): string
+    public function getClass(): string
     {
-        return GeneratedValueTagValueNode::SHORT_NAME;
+        return GeneratedValue::class;
     }
 
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
@@ -25,7 +25,7 @@ final class GeneratedValuePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var GeneratedValue|null $generatedValue */
-        $generatedValue = $this->nodeAnnotationReader->readPropertyAnnotation($node, GeneratedValue::class);
+        $generatedValue = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
         if ($generatedValue === null) {
             return null;
         }

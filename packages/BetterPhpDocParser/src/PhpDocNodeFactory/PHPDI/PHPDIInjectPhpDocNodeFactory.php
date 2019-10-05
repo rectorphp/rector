@@ -12,9 +12,9 @@ use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
 
 final class PHPDIInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getName(): string
+    public function getClass(): string
     {
-        return PHPDIInjectTagValueNode::SHORT_NAME;
+        return Inject::class;
     }
 
     /**
@@ -27,7 +27,7 @@ final class PHPDIInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var Inject|null $inject */
-        $inject = $this->nodeAnnotationReader->readPropertyAnnotation($node, PHPDIInjectTagValueNode::CLASS_NAME);
+        $inject = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
         if ($inject === null) {
             return null;
         }

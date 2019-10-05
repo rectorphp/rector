@@ -180,6 +180,10 @@ PHP
                 return null;
             }
 
+            if (! $this->isName($node->var, 'this')) {
+                return null;
+            }
+
             if ($this->isName($node, $propertyName)) {
                 $currentlyAddedLocalVariables[] = $param;
 

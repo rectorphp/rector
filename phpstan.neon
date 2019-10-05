@@ -50,7 +50,6 @@ parameters:
         - '#Strict comparison using === between string and null will always evaluate to false#'
         # subtype
         - '#(.*?) expects ReflectionFunction\|ReflectionMethod, ReflectionFunctionAbstract given#'
-        - '#PHPDoc tag @return with type (.*?) is incompatible with native type Iterator#'
 
         # nette container
         - '#Method Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory::create(.*?)() should return (.*?) but returns object#'
@@ -83,11 +82,7 @@ parameters:
         # intentionally incorrect - part of the test
         - '#Parameter \#2 \$codeSamples of class Rector\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\Contract\\RectorDefinition\\CodeSampleInterface>, array<int, stdClass> given#'
 
-        # invalid interface type resolution
-        - '#Method Rector\\PhpParser\\NodeTraverser\\RectorNodeTraverser::getRectors\(\) should return array<Rector\\Contract\\Rector\\PhpRectorInterface> but returns array<PhpParser\\NodeVisitor>#'
-
         # known values
-
         - '#Cannot access property \$value on PhpParser\\Node\\Expr\\ArrayItem\|null#'
         - '#Method Rector\\Symfony\\Rector\\New_\\StringToArrayArgumentProcessRector::findPreviousNodeAssign\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
 
@@ -174,11 +169,9 @@ parameters:
         - '#Ternary operator condition is always true#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Property\:\:\$var#'
 
-        - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\OrmTagParser\\AbstractOrmTagParserTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
         - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer\:\:getService\(\) should return object but returns object\|null#'
         - '#Call to function property_exists\(\) with string and (.*?) will always evaluate to false#'
         - '#Method Rector\\Console\\Option\\SetOptionResolver\:\:separateVersionedAndUnversionedSets\(\) should return array<array<string\>\> but returns array<int, array<int\|string, array<int, string\>\|string\>\>#'
-        - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:readMethodAnnotation\(\) should return Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template but returns object\|null#'
         - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\ClassLike\:\:\$stmts#'
 
         - '#Property Rector\\TypeDeclaration\\TypeInferer\\(.*?)\:\:\$(.*?)TypeInferers \(array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\(.*?)TypeInfererInterface\>\) does not accept array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface\>#'
@@ -194,19 +187,19 @@ parameters:
         - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\) does not accept string#'
         - '#Call to function is_string\(\) with float will always evaluate to false#'
 
-        - '#PHPDoc tag @return with type array<string\> is incompatible with native type Iterator#'
-
-        - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\Doctrine\\TableTagValueNodeFactory\:\:createIndexTagValueNodes\(\) should return array<Rector\\BetterPhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\> but returns array<int, Rector\\BetterPhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\|Rector\\BetterPhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\>#'
-
-        - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\Doctrine\\TableTagValueNodeFactory\:\:createUniqueConstraintTagValueNodes\(\) should return array<Rector\\BetterPhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\> but returns array<int, Rector\\BetterPhpDocParser\\Ast\\PhpDoc\\Class_\\IndexTagValueNode\|Rector\\BetterPhpDocParser\\Ast\\PhpDoc\\Class_\\UniqueConstraintTagValueNode\>#'
-
         - '#Parameter \#1 \$obj of function spl_object_hash expects object, PhpParser\\Comment\\Doc\|null given#'
-        - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:readMethodAnnotation\(\) should return Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template\|Symfony\\Component\\Routing\\Annotation\\Route\|null but returns object\|null#'
+
         - '#Method Rector\\Doctrine\\Rector\\MethodCall\\ChangeSetIdToUuidValueRector\:\:getSetUuidMethodCallOnSameVariable\(\) should return PhpParser\\Node\\Expr\\MethodCall\|null but returns PhpParser\\Node\|null#'
 
         # bugs
-        - '#In method "Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:isDoctrineEntityClass", parameter \$class has no type\-hint and no @param annotation\. More info\: http\://bit\.ly/usetypehint#'
-        - '#In method "Rector\\Rector\\AbstractRector\:\:isDoctrineEntityClass", parameter \$class has no type\-hint and no @param annotation\. More info\: http\://bit\.ly/usetypehint#'
-        - '#In method "Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:moveFile", parameter \$nodes type is "array"\. Please provide a @param annotation to further specify the type of the array\. For instance\: @param int\[\] \$nodes\. More info\: http\://bit\.ly/typehintarray#'
         - '#Parameter \#1 \$items of class PhpParser\\Node\\Expr\\Array_ constructor expects array<PhpParser\\Node\\Expr\\ArrayItem\>, array<PhpParser\\Node\\Expr\\ArrayItem\|null\> given#'
         - '#Parameter \#1 \$sprintfFuncCall of method Rector\\PhpParser\\NodeTransformer\:\:transformSprintfToArray\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node given#'
+        - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\OrmTagParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
+
+        - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\JMS\\SerializerTypePhpDocNodeFactory\:\:resolveTypeAnnotation\(\) should return JMS\\Serializer\\Annotation\\Type\|null but returns object\|null#'
+        - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\JMS\\SerializerTypePhpDocNodeFactory\:\:resolveTypeAnnotation\(\) should return JMS\\Serializer\\Annotation\\Type\|null but returns Doctrine\\ORM\\Mapping\\Annotation\|Symfony\\Component\\Validator\\Constraint\|null#'
+
+        - '#Parameter \#1 \$phpDocTagValueNode of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:removeTagValueNodeFromNode\(\) expects PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode, PHPStan\\PhpDocParser\\Ast\\PhpDoc\\VarTagValueNode\|null given#'
+
+        # known value
+        - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDelegatingParentCallRector\:\:unwrapExpression\(\) expects PhpParser\\Node, PhpParser\\Node\\Stmt\|null given#'

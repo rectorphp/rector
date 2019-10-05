@@ -13,9 +13,9 @@ use Rector\Exception\ShouldNotHappenException;
 
 final class ColumnPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getName(): string
+    public function getClass(): string
     {
-        return ColumnTagValueNode::SHORT_NAME;
+        return Column::class;
     }
 
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
@@ -25,7 +25,7 @@ final class ColumnPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var Column|null $column */
-        $column = $this->nodeAnnotationReader->readPropertyAnnotation($node, Column::class);
+        $column = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
         if ($column === null) {
             return null;
         }

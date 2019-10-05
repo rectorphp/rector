@@ -11,6 +11,7 @@ use PhpParser\NodeTraverser;
 use PHPStan\Analyser\NodeScopeResolver as PHPStanNodeScopeResolver;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
+use PHPStan\Node\UnreachableStatementNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
@@ -87,7 +88,14 @@ final class NodeScopeResolver
                 return;
             }
 
-            $node->setAttribute(AttributeKey::SCOPE, $scope);
+            // special case for unreachable nodes
+            if ($node instanceof UnreachableStatementNode) {
+                $originalNode = $node->getOriginalStatement();
+                $originalNode->setAttribute(AttributeKey::IS_UNREACHABLE, true);
+                $originalNode->setAttribute(AttributeKey::SCOPE, $scope);
+            } else {
+                $node->setAttribute(AttributeKey::SCOPE, $scope);
+            }
         };
 
         $this->phpStanNodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);

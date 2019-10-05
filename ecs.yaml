@@ -11,6 +11,8 @@ services:
             - 'SomeClass' # from PHPUnit
             - 'PHPUnit\Framework\TestCase' # usually part of node construction, it can be missed
             - 'Exception'
+            - 'ResourceBundle'
+            - 'SimpleXMLElement'
 
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
         max_cognitive_complexity: 9

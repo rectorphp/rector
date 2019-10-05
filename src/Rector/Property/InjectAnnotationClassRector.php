@@ -133,7 +133,6 @@ PHP
             $tagClass = $this->annotationToTagClass[$annotationClass];
 
             $injectTagValueNode = $phpDocInfo->getByType($tagClass);
-
             if ($injectTagValueNode === null) {
                 continue;
             }

@@ -11,12 +11,12 @@ use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
-use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
+use Rector\BetterPhpDocParser\Contract\NameAwarePhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
-final class ParamPhpDocNodeFactory implements PhpDocNodeFactoryInterface, PhpDocParserAwareInterface
+final class ParamPhpDocNodeFactory implements NameAwarePhpDocNodeFactoryInterface, PhpDocParserAwareInterface
 {
     /**
      * @var PrivatesAccessor
@@ -41,7 +41,7 @@ final class ParamPhpDocNodeFactory implements PhpDocNodeFactoryInterface, PhpDoc
 
     public function getName(): string
     {
-        return '@param';
+        return 'param';
     }
 
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode

@@ -12,9 +12,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 final class SensioTemplatePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getName(): string
+    public function getClass(): string
     {
-        return SensioTemplateTagValueNode::SHORT_NAME;
+        return Template::class;
     }
 
     /**
@@ -27,7 +27,7 @@ final class SensioTemplatePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var Template|null $template */
-        $template = $this->nodeAnnotationReader->readMethodAnnotation($node, SensioTemplateTagValueNode::CLASS_NAME);
+        $template = $this->nodeAnnotationReader->readMethodAnnotation($node, $this->getClass());
         if ($template === null) {
             return null;
         }

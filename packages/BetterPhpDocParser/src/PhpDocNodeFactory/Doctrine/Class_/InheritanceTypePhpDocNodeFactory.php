@@ -13,9 +13,9 @@ use Rector\Exception\ShouldNotHappenException;
 
 final class InheritanceTypePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getName(): string
+    public function getClass(): string
     {
-        return InheritanceTypeTagValueNode::SHORT_NAME;
+        return InheritanceType::class;
     }
 
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
@@ -25,7 +25,7 @@ final class InheritanceTypePhpDocNodeFactory extends AbstractPhpDocNodeFactory
         }
 
         /** @var InheritanceType|null $inheritanceType */
-        $inheritanceType = $this->nodeAnnotationReader->readClassAnnotation($node, InheritanceType::class);
+        $inheritanceType = $this->nodeAnnotationReader->readClassAnnotation($node, $this->getClass());
         if ($inheritanceType === null) {
             return null;
         }

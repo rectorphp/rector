@@ -15,8 +15,6 @@ use Rector\Testing\PHPUnit\PHPUnitEnvironment;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraint;
 use Throwable;
 
@@ -39,7 +37,7 @@ final class NodeAnnotationReader
     }
 
     /**
-     * @return Template|Route|null
+     * @return object|null
      */
     public function readMethodAnnotation(ClassMethod $classMethod, string $annotationClassName)
     {

@@ -13,9 +13,9 @@ use Rector\Exception\ShouldNotHappenException;
 
 final class CustomIdGeneratorPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
-    public function getName(): string
+    public function getClass(): string
     {
-        return CustomIdGeneratorTagValueNode::SHORT_NAME;
+        return CustomIdGenerator::class;
     }
 
     public function createFromNodeAndTokens(Node $node, TokenIterator $tokenIterator): ?PhpDocTagValueNode
@@ -27,7 +27,7 @@ final class CustomIdGeneratorPhpDocNodeFactory extends AbstractPhpDocNodeFactory
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
         /** @var CustomIdGenerator|null $customIdGenerator */
-        $customIdGenerator = $this->nodeAnnotationReader->readPropertyAnnotation($node, CustomIdGenerator::class);
+        $customIdGenerator = $this->nodeAnnotationReader->readPropertyAnnotation($node, $this->getClass());
         if ($customIdGenerator === null) {
             return null;
         }

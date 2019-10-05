@@ -4,6 +4,7 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\StringType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -69,7 +70,7 @@ PHP
         }
 
         $maskArgument = $node->args[0]->value;
-        if (! $maskArgument instanceof Node\Scalar\String_) {
+        if (! $maskArgument instanceof String_) {
             return null;
         }
 

@@ -8,6 +8,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertFalse($expected === $anything);
         $this->assertTrue(count($something) > 2);
+        $this->assertTrue($something[0]['foo'] > $something[1]['foo']);
         $this->assertTrue(__DIR__ <> $something, 'message');
         $this->assertTrue(1.0 === $something);
         $this->assertFalse(true === in_array('foo', ['bar', 'baz'], true));
@@ -28,6 +29,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNotSame($expected, $anything);
         $this->assertGreaterThan(2, count($something));
+        $this->assertGreaterThan($something[1]['foo'], $something[0]['foo']);
         $this->assertNotEquals(__DIR__, $something, 'message');
         $this->assertSame(1.0, $something);
         $this->assertNotSame(true, in_array('foo', ['bar', 'baz'], true));

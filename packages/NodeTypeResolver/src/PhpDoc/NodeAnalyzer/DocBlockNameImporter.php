@@ -77,12 +77,18 @@ final class DocBlockNameImporter
         $this->importSkipper = $importSkipper;
     }
 
-    public function importNames(PhpDocInfo $phpDocInfo, Node $phpParserNode): bool
-    {
+    public function importNames(
+        PhpDocInfo $phpDocInfo,
+        Node $phpParserNode,
+        bool $shouldImportRootNamespaceClasses = true
+    ): bool {
         $phpDocNode = $phpDocInfo->getPhpDocNode();
 
+        $this->hasPhpDocChanged = false;
+
         $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, function (PhpDocParserNode $docNode) use (
-            $phpParserNode
+            $phpParserNode,
+            $shouldImportRootNamespaceClasses
         ): PhpDocParserNode {
             if (! $docNode instanceof IdentifierTypeNode) {
                 return $docNode;
@@ -90,6 +96,11 @@ final class DocBlockNameImporter
 
             $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($docNode, $phpParserNode);
             if (! $staticType instanceof FullyQualifiedObjectType) {
+                return $docNode;
+            }
+
+            // Importing root namespace classes (like \DateTime) is optional
+            if (! $shouldImportRootNamespaceClasses && substr_count($staticType->getClassName(), '\\') === 0) {
                 return $docNode;
             }
 

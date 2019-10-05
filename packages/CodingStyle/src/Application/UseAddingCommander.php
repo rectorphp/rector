@@ -105,7 +105,7 @@ final class UseAddingCommander implements CommanderInterface
     public function traverseNodes(array $nodes): array
     {
         // no nodes → just return
-        if (! isset($nodes[0])) {
+        if (count($nodes) === 0) {
             return $nodes;
         }
 

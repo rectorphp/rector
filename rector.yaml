@@ -3,8 +3,8 @@ parameters:
     auto_import_names: true
 
     exclude_paths:
-#        - "/Fixture/"
-#        - "/Fixtures/"
+        - "/Fixture/"
+        - "/Fixtures/"
         - "/Expected/"
         - "/Source/"
         - "packages/Symfony/src/Bridge/DefaultAnalyzedSymfonyApplicationContainer.php"
@@ -16,3 +16,6 @@ parameters:
 
     # so Rector code is still PHP 7.1 compatible
     php_version_features: '7.1'
+
+services:
+    Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector: ~
