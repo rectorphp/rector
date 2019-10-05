@@ -45,8 +45,12 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
 
     public function inferProperty(Property $property): Type
     {
-        /** @var Class_ $class */
+        /** @var Class_|null $class */
         $class = $property->getAttribute(AttributeKey::CLASS_NODE);
+        if ($class === null) {
+            // anonymous class
+            return new MixedType();
+        }
 
         /** @var string $propertyName */
         $propertyName = $this->nameResolver->getName($property);
