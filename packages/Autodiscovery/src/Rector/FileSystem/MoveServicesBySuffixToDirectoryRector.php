@@ -92,7 +92,7 @@ PHP
             }
 
             // is suffix in the same category, e.g. "Exception/SomeException.php"
-            $expectedLocationFilePattern = sprintf('#\/%s\/.+%s#', preg_quote($groupName), preg_quote($suffixPattern));
+            $expectedLocationFilePattern = sprintf('#\/%s\/.+%s#', preg_quote($groupName, '#'), preg_quote($suffixPattern, '#'));
             if (Strings::match($smartFileInfo->getRealPath(), $expectedLocationFilePattern)) {
                 continue;
             }

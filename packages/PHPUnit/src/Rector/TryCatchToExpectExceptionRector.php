@@ -246,7 +246,7 @@ PHP
         if ($methodCall->args[0]->value instanceof String_) {
             /** @var String_ $oldString */
             $oldString = $methodCall->args[0]->value;
-            $methodCall->args[0]->value = new String_('#' . preg_quote($oldString->value) . '#');
+            $methodCall->args[0]->value = new String_('#' . preg_quote($oldString->value, '#') . '#');
         }
 
         $this->newExpressions[] = $expression;

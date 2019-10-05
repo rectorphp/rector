@@ -195,8 +195,8 @@ final class DocBlockNameImporter
         // short with space " Type"| fqn
         $shortNameOrFullyQualifiedNamePattern = sprintf(
             '#(\s%s\b|\b%s\b)#',
-            preg_quote($shortenedObjectType->getShortName()),
-            preg_quote($fullyQualifiedName)
+            preg_quote($shortenedObjectType->getShortName(), '#'),
+            preg_quote($fullyQualifiedName, '#')
         );
 
         $isShortClassUsed = (bool) Strings::match($printedClass, $shortNameOrFullyQualifiedNamePattern);

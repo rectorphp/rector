@@ -200,7 +200,7 @@ PHP
 
         $dataProviderClassMethods = $this->createDataProviderClassMethodsFromRecipes();
 
-        $node->stmts = array_Merge($node->stmts, $dataProviderClassMethods);
+        $node->stmts = array_merge($node->stmts, $dataProviderClassMethods);
 
         return $node;
     }

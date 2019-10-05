@@ -74,7 +74,7 @@ PHP
             }
         }
 
-        $arguments = array_merge([new Arg(new String_($string))], $arguments);
+        array_unshift($arguments, new Arg(new String_($string)));
 
         return new FuncCall(new Name('sprintf'), $arguments);
     }
