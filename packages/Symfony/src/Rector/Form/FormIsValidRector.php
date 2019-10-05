@@ -116,13 +116,16 @@ PHP
         $previousMethodCallNames = [];
 
         do {
-            $methodCallNames = $this->collectMethodCallsOnVariableName($parentNode, $variableName);
-            $previousMethodCallNames = array_merge($previousMethodCallNames, $methodCallNames);
+            $previousMethodCallNames[] = $this->collectMethodCallsOnVariableName($parentNode, $variableName);;
 
             $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
         } while ($parentNode instanceof Node && ! $parentNode instanceof FunctionLike);
 
-        return array_unique($previousMethodCallNames);
+        if ($previousMethodCallNames !== []) {
+            $previousMethodCallNames = array_unique(array_merge([], ...$previousMethodCallNames));
+        }
+
+        return $previousMethodCallNames;
     }
 
     /**

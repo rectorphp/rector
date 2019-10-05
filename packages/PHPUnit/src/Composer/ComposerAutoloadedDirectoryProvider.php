@@ -41,7 +41,11 @@ final class ComposerAutoloadedDirectoryProvider
             }
 
             $sectionDirectories = $this->collectDirectoriesFromAutoload($composerJson[$autoloadSection]);
-            $autoloadDirectories = array_merge($autoloadDirectories, $sectionDirectories);
+            $autoloadDirectories[] = $sectionDirectories;
+        }
+
+        if ($autoloadDirectories !== []) {
+            $autoloadDirectories = array_merge([], ...$autoloadDirectories);
         }
 
         return $autoloadDirectories;

@@ -104,7 +104,11 @@ PHP
         $collectedTypes = [];
 
         foreach ($keys as $key) {
-            $collectedTypes = array_merge($collectedTypes, $tryCatch->catches[$key]->types);
+            $collectedTypes = $tryCatch->catches[$key]->types;
+        }
+
+        if ($collectedTypes !== []) {
+            $collectedTypes = array_merge([], ...$collectedTypes);
         }
 
         return $collectedTypes;

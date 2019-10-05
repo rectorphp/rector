@@ -77,16 +77,20 @@ final class OriginalSpacingRestorer
                     }
                 }
 
-                $oldWhitespaces[] = $value;
+                $oldWhitespaces[] = [$value];
             }
 
             // quoted string with spaces?
             if ($this->isQuotedStringWithSpaces($tokens, $i)) {
                 $matches = Strings::matchAll($tokens[$i][0], '#\s+#m');
                 if ($matches !== []) {
-                    $oldWhitespaces = array_merge($oldWhitespaces, Arrays::flatten($matches));
+                    $oldWhitespaces[] = Arrays::flatten($matches);
                 }
             }
+        }
+
+        if ($oldWhitespaces !== []) {
+            $oldWhitespaces = array_merge([], ...$oldWhitespaces);
         }
 
         return $oldWhitespaces;

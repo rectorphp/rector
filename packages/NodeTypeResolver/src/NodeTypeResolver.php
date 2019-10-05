@@ -710,11 +710,12 @@ final class NodeTypeResolver
 
                     $classReflection = $this->broker->getClass($unionedType->getClassName());
 
-                    $allTypes = array_merge(
-                        $allTypes,
-                        $this->classReflectionTypesResolver->resolve($classReflection)
-                    );
+                    $allTypes[] = $this->classReflectionTypesResolver->resolve($classReflection);
                 }
+            }
+
+            if ($allTypes !== []) {
+                $allTypes = array_merge([], ...$allTypes);
             }
 
             return $this->typeFactory->createObjectTypeOrUnionType($allTypes);

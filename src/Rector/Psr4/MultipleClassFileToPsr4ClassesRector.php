@@ -214,7 +214,7 @@ PHP
             $fileDestination = $this->createClassLikeFileDestination($node, $smartFileInfo);
 
             if ($declareNode) {
-                $nodes = array_merge([$declareNode], [$node]);
+                $nodes = [$declareNode, $node];
             } else {
                 $nodes = [$node];
             }
