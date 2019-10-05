@@ -18,7 +18,10 @@ final class FilesystemTweaker
         $absoluteDirectories = [];
         foreach ($directories as $directory) {
             if (Strings::contains($directory, '*')) { // is fnmatch for directories
-                $absoluteDirectories[] = glob($directory, GLOB_ONLYDIR);
+                $globDirectory = glob($directory, GLOB_ONLYDIR);
+                if ($globDirectory !== false) {
+                    $absoluteDirectories[] = $globDirectory;
+                }
             } else { // is classic directory
                 $this->ensureDirectoryExists($directory);
                 $absoluteDirectories[] = [$directory];
