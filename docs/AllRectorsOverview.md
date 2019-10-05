@@ -1,4 +1,4 @@
-# All 370 Rectors Overview
+# All 373 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -45,6 +45,7 @@
 - [Sensio](#sensio)
 - [Shopware](#shopware)
 - [Silverstripe](#silverstripe)
+- [StrictCodeQuality](#strictcodequality)
 - [Sylius](#sylius)
 - [Symfony](#symfony)
 - [SymfonyCodeQuality](#symfonycodequality)
@@ -1241,6 +1242,36 @@ include/require should be followed by absolute path
 
 <br>
 
+### `FunctionCallToConstantRector`
+
+- class: `Rector\CodingStyle\Rector\FuncCall\FunctionCallToConstantRector`
+
+Changes use of function calls to use constants
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = php_sapi_name();
++        $value = PHP_SAPI;
+     }
+ }
+```
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = pi();
++        $value = M_PI;
+     }
+ }
+```
+
+<br>
+
 ### `IdenticalFalseToBooleanNotRector`
 
 - class: `Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector`
@@ -1624,6 +1655,25 @@ Constant should have a @var comment with type
 +     * @var string
 +     */
      const HI = 'hi';
+ }
+```
+
+<br>
+
+### `VersionCompareFuncCallToConstantRector`
+
+- class: `Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector`
+
+Changes use of call to version compare function to use of PHP version constant
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        version_compare(PHP_VERSION, '5.3.0', '<');
++        PHP_VERSION_ID < 50300;
+     }
  }
 ```
 
@@ -5936,6 +5986,28 @@ Turns defined function call to static method call.
 ```diff
 -defined("SS_DATABASE_NAME");
 +Environment::getEnv("SS_DATABASE_NAME");
+```
+
+<br>
+
+## StrictCodeQuality
+
+### `VarInlineAnnotationToAssertRector`
+
+- class: `Rector\StrictCodeQuality\Rector\Stmt\VarInlineAnnotationToAssertRector`
+
+Turn @var inline checks above code to assert() of hte type
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         /** @var SpecificClass $value */
++        assert($value instanceof SpecificClass);
+         $value->call();
+     }
+ }
 ```
 
 <br>
