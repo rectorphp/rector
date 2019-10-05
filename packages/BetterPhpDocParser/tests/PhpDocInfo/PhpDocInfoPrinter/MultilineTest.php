@@ -7,13 +7,16 @@ use Nette\Utils\FileSystem;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\AnotherPropertyClass;
 use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\Class_\SomeEntityClass;
 use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\DoctrinePropertyClass;
 use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\ManyToPropertyClass;
+use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\RoutePropertyClass;
 use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\SinglePropertyClass;
+use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\TableClass;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class MultilineTest extends AbstractPhpDocInfoPrinterTest
@@ -43,6 +46,8 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
     public function provideDataClass(): Iterator
     {
         yield [__DIR__ . '/Source/Class_/some_entity_class.txt', new Class_(SomeEntityClass::class)];
+
+        yield [__DIR__ . '/Source/Multiline/table.txt', new Class_(TableClass::class)];
     }
 
     public function provideDataForProperty(): Iterator
@@ -58,6 +63,9 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
 
         $property = $this->createPublicPropertyUnderClass('someProperty', DoctrinePropertyClass::class);
         yield [__DIR__ . '/Source/Multiline/multiline6.txt', $property];
+
+        $property = $this->createMethodUnderClass('someMethod', RoutePropertyClass::class);
+        yield [__DIR__ . '/Source/Multiline/route_property.txt', $property];
     }
 
     private function createPublicPropertyUnderClass(string $name, string $class): Property
@@ -71,5 +79,18 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
         $property->setAttribute(AttributeKey::CLASS_NAME, $class);
 
         return $property;
+    }
+
+    private function createMethodUnderClass(string $name, string $class): ClassMethod
+    {
+        $builderFactory = new BuilderFactory();
+
+        $methodBuilder = $builderFactory->method($name);
+        $methodBuilder->makePublic();
+
+        $method = $methodBuilder->getNode();
+        $method->setAttribute(AttributeKey::CLASS_NAME, $class);
+
+        return $method;
     }
 }

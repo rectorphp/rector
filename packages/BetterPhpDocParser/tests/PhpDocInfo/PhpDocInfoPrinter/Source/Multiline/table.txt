@@ -1,0 +1,5 @@
+/**
+ * @ORM\Table("Table_Name")
+ * @ORM\Entity()
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ */
