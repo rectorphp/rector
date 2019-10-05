@@ -104,7 +104,7 @@ PHP
         $collectedTypes = [];
 
         foreach ($keys as $key) {
-            $collectedTypes = $tryCatch->catches[$key]->types;
+            $collectedTypes[] = $tryCatch->catches[$key]->types;
         }
 
         if ($collectedTypes !== []) {
