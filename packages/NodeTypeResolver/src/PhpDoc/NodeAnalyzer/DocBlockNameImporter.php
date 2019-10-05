@@ -84,6 +84,8 @@ final class DocBlockNameImporter
     ): bool {
         $phpDocNode = $phpDocInfo->getPhpDocNode();
 
+        $this->hasPhpDocChanged = false;
+
         $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, function (PhpDocParserNode $docNode) use (
             $phpParserNode,
             $shouldImportRootNamespaceClasses
