@@ -89,16 +89,16 @@ vendor/bin/rector process ../project --autoload-file ../project/vendor/autoload.
 
 Or make use of `rector.yaml` config:
 
-```bash
-vendor/bin/rector process ../project --config ../project/rector.yaml
-```
-
 ```yaml
 # rector.yaml
 parameters:
     autoload_paths:
         - 'vendor/squizlabs/php_codesniffer/autoload.php'
         - 'vendor/project-without-composer'
+```
+
+```bash
+vendor/bin/rector process ../project --config ../project/rector.yaml
 ```
 
 ## Exclude Paths and Rectors
