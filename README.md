@@ -36,6 +36,8 @@ Rector can grow faster with your help, the more you help, the more work it saves
 
 So please support the project on [Patreon](https://www.patreon.com/rectorphp) or say thanks with a one-time donation through [PayPal](https://www.paypal.me/rectorphp).
 
+<br>
+
 #### Sponsors
 
 A big thank you to our sponsors: ❤
@@ -87,12 +89,16 @@ Please take look at the overview of all available [Rectors](/docs/AllRectorsOver
 - [Turn Laravel static to Dependency Injection](https://www.tomasvotruba.cz/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
 - ...
 
+<br>
+
 #### Rector !== Coding Standards
 
 Don't use Rector for your coding standards.
 
 The AST libraries that Rector uses, don't work well with coding standards, so it's better to let coding standard tools do that.
 Your project doesn't have one? Consider adding [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard), [PHP CS Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) or [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer).
+
+<br>
 
 ## Install
 
@@ -102,6 +108,8 @@ composer require rector/rector --dev
 
 INFO: If you have conflicts on `composer require` or other dependencies problems, 
 then you can use this [Docker](#run-rector-in-docker) image.
+
+<br>
 
 ## Configuration
 
@@ -162,6 +170,8 @@ parameters:
     php_version_features: '7.2'
 ```
 
+<br>
+
 ## Usage
 
 #### A. Prepared Sets
@@ -201,6 +211,8 @@ vendor/bin/rector process src --set symfony40
     # apply
     vendor/bin/rector process src
     ```
+
+<br>
 
 ## Create your own Rector (in 3 steps)
 
@@ -294,11 +306,15 @@ vendor/bin/rector process src
 
 That's it!
 
+<br>
+
 ## Documentation
 
 - [All Rectors Overview](/docs/AllRectorsOverview.md)
 - [How Rector Works?](/docs/HowItWorks.md)
 - [Nodes Overview](/docs/NodesOverview.md)
+
+<br>
 
 ## Contribute
 
@@ -322,6 +338,8 @@ composer fix-cs
 
 May the **rec**onstruc**tor** be with you and we would be happy to discuss and merge your ideas.
 
+<br>
+
 ## Docker
 
 With this command, you can process your project with Rector from docker:
@@ -337,6 +355,8 @@ Using `rector.yaml`:
 ```bash
 docker run -v $(pwd):/project rector/rector:latest process /project/app --config /project/rector.yaml --autoload-file /project/vendor/autoload.php --dry-run
 ```
+
+<br>
 
 ## Community
 
