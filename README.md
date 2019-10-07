@@ -1,31 +1,55 @@
-# Rector - Upgrade your Legacy App to Modern Codebase
-
-Rector is a **rec**onstruc**tor** tool - it does **instant upgrades** and **instant refactoring** of your code.
-Why doing it manually if 80% Rector can handle for you?
-
 [![Build Status](https://img.shields.io/travis/rectorphp/rector/master.svg?style=flat-square)](https://travis-ci.org/rectorphp/rector)
 [![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
 
+# Rector
+
+<a href="https://getrector.org/">
+<img height="100" style="max-width:100%;" src="https://getrector.org/assets/images/logo/rector-no_frame_vector.svg">
+</a>
+
+<br>
+
+Rector is a **rec**onstruc**tor** tool - it does **instant upgrades** and **instant refactoring** of your code
+and helps you to upgrade from a legacy to modern codebase.
+
+Why doing it manually if 80% Rector can handle for you?
+
+#### Index
+
+* [Showcase](#showcase)
+* [Crowdfunding](#crowdfunding)
+* [Sponsors](#sponsors)
+* [Overview](#overview)
+* [Usage](#usage)
+
+
+#### Showcase
 
 ![Rector-showcase](docs/images/rector-showcase.gif)
 
 <br>
 
-## Sponsors
+#### Crowdfunding
 
-Rector grows faster with your help, the more you help the more work it saves you.
-Check out [Rector's Patreon](https://www.patreon.com/rectorphp). One-time donation is welcomed [through PayPal](https://www.paypal.me/rectorphp).
+Rector can grow faster with your help, the more you help, the more work it saves for us all.
 
-Thank you:
+So please support the project on [Patreon](https://www.patreon.com/rectorphp) or say thanks with a one-time donation through [PayPal](https://www.paypal.me/rectorphp).
+
+#### Sponsors
+
+A big thank you to our sponsors: ❤
 
 <a href="https://spaceflow.io/en"><img src="/docs/images/spaceflow.png"></a>
 
 <br>
 
-## Open-Source First
+#### Overview
 
-Rector **instantly upgrades and instantly refactors the PHP code of your application**. It covers many open-source projects and PHP changes itself:
+Rector already includes support for many PHP open source projects and for PHP itself. 
+
+We call this upgrades and refactoring classes **Rectors** or *Rector* (e.g. AnnotatedPropertyInjectToConstructorInjectionRector) for a single class. 
+A full set of this classes we call **Set** (e.g. symfony40).
 
 <br>
 
@@ -49,9 +73,11 @@ Rector **instantly upgrades and instantly refactors the PHP code of your applica
     <a href="/config/set/silverstripe"><img src="/docs/images/silverstripe.jpg"></a>
 </p>
 
+Please take look at the overview of all available [Rectors](/docs/AllRectorsOverview.md) with before/after diffs and configuration examples.
+
 <br>
 
-## What can Rector do for You?
+#### Features
 
 - Rename classes, methods, properties, namespaces or constants
 - Complete [parameter, var or return type declarations](https://www.tomasvotruba.cz/blog/2019/01/03/how-to-complete-type-declarations-without-docblocks-with-rector/) based on static analysis of your code
@@ -59,14 +85,13 @@ Rector **instantly upgrades and instantly refactors the PHP code of your applica
 - [Migrate your project from Nette to Symfony](https://www.tomasvotruba.cz/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
 - [Complete PHP 7.4 property type declarations](https://www.tomasvotruba.cz/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
 - [Turn Laravel static to Dependency Injection](https://www.tomasvotruba.cz/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
-- And much more...
+- ...
 
-...**look at the overview of [all available Rectors](/docs/AllRectorsOverview.md)** with before/after diffs and configuration examples. You can use them to build your own sets.
+#### Rector !== Coding Standards
 
-## How to Apply Coding Standards?
+Don't use Rector for your coding standards.
 
 The AST libraries that Rector uses, don't work well with coding standards, so it's better to let coding standard tools do that.
-
 Your project doesn't have one? Consider adding [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard), [PHP CS Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) or [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer).
 
 ## Install
@@ -75,19 +100,22 @@ Your project doesn't have one? Consider adding [EasyCodingStandard](https://gith
 composer require rector/rector --dev
 ```
 
-**Do you have conflicts on `composer require` or on run?**
+INFO: If you have conflicts on `composer require` or other dependencies problems, 
+then you can use this [Docker](#run-rector-in-docker) image.
 
-- Use [Docker image](#run-rector-in-docker)!
+## Configuration
 
-### Extra Autoloading
+#### Config Loading
 
-Rector relies on project and autoloading of its classes. To specify your own autoload file, use `--autoload-file` option:
+The config file `rector.yaml` is passed to the rector executable with the `--config` option:
 
 ```bash
-vendor/bin/rector process ../project --autoload-file ../project/vendor/autoload.php
+vendor/bin/rector process ../project --config ../project/rector.yaml
 ```
 
-Or make use of `rector.yaml` config:
+#### Extra Autoloading
+
+Rector relies on project and autoloading of its classes. To specify your own autoload file(s), use the `autoload_paths` option in the config:
 
 ```yaml
 # rector.yaml
@@ -97,13 +125,15 @@ parameters:
         - 'vendor/project-without-composer'
 ```
 
+Or make use of `--autoload-file` option:
+
 ```bash
-vendor/bin/rector process ../project --config ../project/rector.yaml
+vendor/bin/rector process ../project --config ../project/rector.yaml --autoload-file ../project/vendor/autoload.php
 ```
 
-## Exclude Paths and Rectors
+#### Exclude files / directories
 
-You can also **exclude files or directories** (with regex or [fnmatch](http://php.net/manual/en/function.fnmatch.php)):
+You can also exclude files or directories (with regex or [fnmatch](http://php.net/manual/en/function.fnmatch.php)):
 
 ```yaml
 # rector.yaml
@@ -111,6 +141,8 @@ parameters:
     exclude_paths:
         - '*/src/*/Tests/*'
 ```
+
+#### Exclude Rectors
 
 Do you want to use a whole set, except that one rule? Exclude it:
 
@@ -121,38 +153,40 @@ parameters:
         - 'Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector'
 ```
 
-By default Rector uses language features of your PHP version. If you you want to use different PHP version than your system, put it in config:
+#### Define the PHP version
+
+By default Rector uses language features of your current PHP version. If you you want to use a different PHP version, please use this option:
 
 ```yaml
 parameters:
-    php_version_features: '7.2' # your version 7.3
+    php_version_features: '7.2'
 ```
 
-## Running Rector
+## Usage
 
-### A. Prepared Sets
+#### A. Prepared Sets
 
-Featured open-source projects have **prepared sets**. You'll find them in [`/config/set`](/config/set) or by calling:
+You can see all included sets for different PHP open source projects and for PHP itself in [`/config/set`](/config/set) or by calling:
 
 ```bash
 vendor/bin/rector sets
 ```
 
-Let's say you pick the `symfony40` set and you want to upgrade your `/src` directory:
+Let's say you pick the `symfony40` set and you want to upgrade your `./src` directory:
 
 ```bash
-# show known changes in Symfony 4.0
+# show known changes from Symfony 4.0
 vendor/bin/rector process src --set symfony40 --dry-run
 ```
 
 ```bash
-# apply
+# apply known changes from Symfony 4.0
 vendor/bin/rector process src --set symfony40
 ```
 
-### B. Custom Sets
+#### B. Custom Sets
 
-1. Create `rector.yaml` with desired Rectors:
+1. Create `./rector.yaml` with desired Rectors:
 
     ```yaml
     services:
@@ -160,7 +194,7 @@ vendor/bin/rector process src --set symfony40
             $annotation: "inject"
     ```
 
-2. Run on your `/src` directory:
+2. Run on your `./src` directory:
 
     ```bash
     vendor/bin/rector process src --dry-run
@@ -168,9 +202,9 @@ vendor/bin/rector process src --set symfony40
     vendor/bin/rector process src
     ```
 
-## 3 Steps to Create Own Rector
+## Create your own Rector (in 3 steps)
 
-First, make sure it's not covered by [any existing Rectors yet](/docs/AllRectorsOverview.md).
+First, make sure it's not covered by any existing [Rectors](/docs/AllRectorsOverview.md) yet.
 
 Let's say we want to **change method calls from `set*` to `change*`**.
 
@@ -180,7 +214,7 @@ Let's say we want to **change method calls from `set*` to `change*`**.
 +$user->changePassword('123456');
 ```
 
-### 1. Create New Rector and Implement Methods
+#### 1. Create New Rector and Implement Methods
 
 Create a class that extends [`Rector\Rector\AbstractRector`](/src/Rector/AbstractRector.php). It has useful methods like checking node type and name. Just run `$this->` and let PHPStorm show you all possible methods.
 
@@ -201,8 +235,7 @@ final class MyFirstRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        // what does this do?
-        // minimalistic before/after sample - to explain in code
+        // description + minimalistic before/after sample - to explain in code
         return new RectorDefinition('Change method calls from set* to change*.', [
             new CodeSample('$user->setPassword("123456");', '$user->changePassword("123456");')
         ]);
@@ -213,8 +246,9 @@ final class MyFirstRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        // what node types we look for?
-        // pick any node from https://github.com/rectorphp/rector/blob/master/docs/NodesOverview.md
+        // node types we look for
+        //
+        // INFO: pick any node from: https://github.com/rectorphp/rector/blob/master/docs/NodesOverview.md
         return [MethodCall::class];
     }
 
@@ -234,13 +268,13 @@ final class MyFirstRector extends AbstractRector
 
         $node->name = new Identifier($newMethodCallName);
 
-        // return $node if you modified it
+        // return modified $node
         return $node;
     }
 }
 ```
 
-### 2. Register it
+#### 2. Register it
 
 ```yaml
 # rector.yaml
@@ -248,7 +282,7 @@ services:
     App\Rector\MyFirstRector: ~
 ```
 
-### 3. Let Rector Refactor Your Code
+#### 3. Let Rector Refactor Your Code
 
 ```bash
 # see the diff first
@@ -260,33 +294,35 @@ vendor/bin/rector process src
 
 That's it!
 
-## More Detailed Documentation
+## Documentation
 
-- **[All Rectors Overview](/docs/AllRectorsOverview.md)**
+- [All Rectors Overview](/docs/AllRectorsOverview.md)
 - [How Rector Works?](/docs/HowItWorks.md)
 - [Nodes Overview](/docs/NodesOverview.md)
 
-## How to Contribute
+## Contribute
 
 Just follow 3 rules:
 
-- **1 feature per pull-request**
-- **New features need tests**
+- 1 feature === 1 pull-request
+- New features === New tests
 - Tests, coding standards and PHPStan **checks must pass**:
 
-    ```bash
-    composer complete-check
-    ```
+#### Run checks
 
-    Do you need to fix coding standards? Run:
+```bash
+composer complete-check
+```
 
-    ```bash
-    composer fix-cs
-    ```
+#### Auto fix coding standards
 
-We would be happy to merge your feature then.
+```bash
+composer fix-cs
+```
 
-## Run Rector in Docker
+May the **rec**onstruc**tor** be with you and we would be happy to discuss and merge your ideas.
+
+## Docker
 
 With this command, you can process your project with Rector from docker:
 
@@ -302,8 +338,8 @@ Using `rector.yaml`:
 docker run -v $(pwd):/project rector/rector:latest process /project/app --config /project/rector.yaml --autoload-file /project/vendor/autoload.php --dry-run
 ```
 
-### Community Packages
+## Community
 
-Do you use Rector to upgrade your code? Share it here:
+If you are using Rector to upgrade your code, please share your experience and maybe your code:
 
 - [drupal8-rector/drupal8-rector](https://github.com/drupal8-rector/drupal8-rector) by @mxr576
