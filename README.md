@@ -21,8 +21,28 @@ Why doing it manually if 80% Rector can handle for you?
 * [Crowdfunding](#crowdfunding)
 * [Sponsors](#sponsors)
 * [Overview](#overview)
-* [Usage](#usage)
-
+* [Features](#features)
+* [Rector !== Coding Standards](rector--coding-standards)
+* [Install](install)
+* [Configuration](configuration)
+    * [Config Loading]()
+    * [Extra Autoloading]()
+    * [Exclude files / directories]()
+    * [Exclude Rectors]()
+    * [Define the PHP version]()
+* [Usage]()
+    * [A. Prepared Sets]()
+    * [B. Custom Sets]()
+* [Create your own Rector (in 3 steps)]()
+    * [1. Create]()
+    * [2. Register]()
+    * [3. Use]()
+* [Documentation]()
+* [Contribute]()
+    * [Run checks]()
+    * [Auto fix coding standards]()
+* [Docker]()
+* [Community]()
 
 #### Showcase
 
@@ -107,7 +127,7 @@ composer require rector/rector --dev
 ```
 
 INFO: If you have conflicts on `composer require` or other dependencies problems, 
-then you can use this [Docker](#run-rector-in-docker) image.
+then you can use this [Docker](#docker) image.
 
 <br>
 
@@ -185,12 +205,10 @@ vendor/bin/rector sets
 Let's say you pick the `symfony40` set and you want to upgrade your `./src` directory:
 
 ```bash
-# show known changes from Symfony 4.0
+# see the diff first
 vendor/bin/rector process src --set symfony40 --dry-run
-```
 
-```bash
-# apply known changes from Symfony 4.0
+# if it's ok, apply the changes
 vendor/bin/rector process src --set symfony40
 ```
 
@@ -206,11 +224,13 @@ vendor/bin/rector process src --set symfony40
 
 2. Run on your `./src` directory:
 
-    ```bash
-    vendor/bin/rector process src --dry-run
-    # apply
-    vendor/bin/rector process src
-    ```
+```bash
+## see the diff first
+vendor/bin/rector process src --dry-run
+
+# if it's ok, apply the changes
+vendor/bin/rector process src
+```
 
 <br>
 
@@ -226,9 +246,10 @@ Let's say we want to **change method calls from `set*` to `change*`**.
 +$user->changePassword('123456');
 ```
 
-#### 1. Create New Rector and Implement Methods
+#### 1. Create
 
-Create a class that extends [`Rector\Rector\AbstractRector`](/src/Rector/AbstractRector.php). It has useful methods like checking node type and name. Just run `$this->` and let PHPStorm show you all possible methods.
+Let's create a new class (*./src/App/Rector/MyFirstRector.php*) that extends [`Rector\Rector\AbstractRector`](/src/Rector/AbstractRector.php).
+It has useful methods like checking node type and name. Just run `$this->` and let PHPStorm show you all possible methods.
 
 ```php
 <?php declare(strict_types=1);
@@ -286,7 +307,7 @@ final class MyFirstRector extends AbstractRector
 }
 ```
 
-#### 2. Register it
+#### 2. Register
 
 ```yaml
 # rector.yaml
@@ -294,13 +315,15 @@ services:
     App\Rector\MyFirstRector: ~
 ```
 
-#### 3. Let Rector Refactor Your Code
+#### 3. Use
+
+Let the new Rector refactor your code base.
 
 ```bash
 # see the diff first
 vendor/bin/rector process src --dry-run
 
-# if it's ok, apply
+# if it's ok, apply the changes
 vendor/bin/rector process src
 ```
 
