@@ -203,3 +203,4 @@ parameters:
 
         # known value
         - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDelegatingParentCallRector\:\:unwrapExpression\(\) expects PhpParser\\Node, PhpParser\\Node\\Stmt\|null given#'
+        - '#Method Rector\\StrictCodeQuality\\Rector\\Stmt\\VarInlineAnnotationToAssertRector\:\:findVariableByName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns PhpParser\\Node\|null#'

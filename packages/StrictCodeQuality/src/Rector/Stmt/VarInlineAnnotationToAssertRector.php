@@ -3,15 +3,22 @@
 namespace Rector\StrictCodeQuality\Rector\Stmt;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -69,46 +76,145 @@ PHP
             return null;
         }
 
-        $variable = $this->betterNodeFinder->findFirstInstanceOf($node, Variable::class);
+        // skip properties
+        if ($node instanceof Property) {
+            return null;
+        }
+
+        $docVariableName = $this->getVarDocVariableName($phpDocInfo);
+        if ($docVariableName === null) {
+            return null;
+        }
+
+        $variable = $this->findVariableByName($node, $docVariableName);
         if (! $variable instanceof Variable) {
             return null;
         }
 
-        $variable->setAttribute('comments', []);
-        $type = $phpDocInfo->getVarType();
+        $isVariableJustCreated = $this->isVariableJustCreated($node, $docVariableName);
+        if ($isVariableJustCreated === false) {
+            return $this->refactorFreshlyCreatedNode($node, $phpDocInfo, $variable);
+        }
 
-        $assertFuncCall = null;
+        return $this->refactorAlreadyCreatedNode($node, $phpDocInfo, $variable);
+    }
+
+    private function createFuncCallBasedOnType(Type $type, Variable $variable): ?FuncCall
+    {
         if ($type instanceof ObjectType) {
             $instanceOf = new Instanceof_($variable, new FullyQualified($type->getClassName()));
-            $assertFuncCall = $this->createFunction('assert', [$instanceOf]);
+            return $this->createFunction('assert', [$instanceOf]);
         }
 
         if ($type instanceof IntegerType) {
             $isInt = $this->createFunction('is_int', [$variable]);
-            $assertFuncCall = $this->createFunction('assert', [$isInt]);
+            return $this->createFunction('assert', [$isInt]);
+        }
+
+        if ($type instanceof FloatType) {
+            $isFloat = $this->createFunction('is_float', [$variable]);
+            return $this->createFunction('assert', [$isFloat]);
         }
 
         if ($type instanceof StringType) {
-            $isInt = $this->createFunction('is_string', [$variable]);
-            $assertFuncCall = $this->createFunction('assert', [$isInt]);
+            $isString = $this->createFunction('is_string', [$variable]);
+            return $this->createFunction('assert', [$isString]);
         }
 
         if ($type instanceof BooleanType) {
             $isInt = $this->createFunction('is_bool', [$variable]);
-            $assertFuncCall = $this->createFunction('assert', [$isInt]);
+            return $this->createFunction('assert', [$isInt]);
         }
 
-        if ($assertFuncCall === null) {
+        return null;
+    }
+
+    private function isVariableJustCreated(Node $node, string $docVariableName): bool
+    {
+        if (! $node instanceof Expression) {
+            return false;
+        }
+        if (! $node->expr instanceof Assign) {
+            return false;
+        }
+
+        $assign = $node->expr;
+
+        // the variable is on the left side = just created
+        if (! $assign->var instanceof Variable) {
+            return false;
+        }
+
+        return $this->isName($assign->var, $docVariableName);
+    }
+
+    private function getVarDocVariableName(PhpDocInfo $phpDocInfo): ?string
+    {
+        $varTagValueNode = $phpDocInfo->getVarTagValue();
+        if ($varTagValueNode === null) {
             return null;
         }
 
-        $this->addNodeBeforeNode($assertFuncCall, $node);
+        $variableName = $varTagValueNode->variableName;
+        // no variable
+        if (empty($variableName)) {
+            return null;
+        }
 
-        // cleanup @var annotation
+        return ltrim($variableName, '$');
+    }
+
+    private function removeVarAnnotation(Node $node, PhpDocInfo $phpDocInfo): void
+    {
         $varTagValueNode = $phpDocInfo->getByType(VarTagValueNode::class);
         $phpDocInfo->removeTagValueNodeFromNode($varTagValueNode);
 
         $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+    }
+
+    private function findVariableByName(Stmt $stmt, string $docVariableName): ?Variable
+    {
+        return $this->betterNodeFinder->findFirst($stmt, function (Node $stmt) use ($docVariableName): bool {
+            if (! $stmt instanceof Variable) {
+                return false;
+            }
+
+            return $this->isName($stmt, $docVariableName);
+        });
+    }
+
+    private function refactorFreshlyCreatedNode(Node $node, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
+    {
+        $node->setAttribute('comments', []);
+        $type = $phpDocInfo->getVarType();
+
+        $assertFuncCall = $this->createFuncCallBasedOnType($type, $variable);
+        if ($assertFuncCall === null) {
+            return null;
+        }
+
+        $this->removeVarAnnotation($variable, $phpDocInfo);
+        $this->addNodeBeforeNode($assertFuncCall, $node);
+
+        return $node;
+    }
+
+    private function refactorAlreadyCreatedNode(Node $node, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
+    {
+        $varTagValue = $phpDocInfo->getVarTagValue();
+
+        $phpStanType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
+            $varTagValue->type,
+            $variable
+        );
+
+        $assertFuncCall = $this->createFuncCallBasedOnType($phpStanType, $variable);
+        if ($assertFuncCall === null) {
+            return null;
+        }
+
+        $this->removeVarAnnotation($variable, $phpDocInfo);
+        $this->addNodeAfterNode($assertFuncCall, $node);
 
         return $node;
     }
