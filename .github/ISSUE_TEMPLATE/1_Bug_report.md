@@ -20,4 +20,10 @@ about: Report errors and problems
 <!-- if possible, always run Rector on specfic file, that causes the error -->
 <!-- e.g. vendor/bin/rector process /src/SpecificFile.php --set dead-code --debug -->  
 
+```php
+<?php 
+
+// put file content here
+```
+
 ## Expected Behaviour
