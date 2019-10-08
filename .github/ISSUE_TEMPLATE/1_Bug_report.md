@@ -7,6 +7,7 @@ about: Report errors and problems
 
 | Subject        | Details                                                      |
 | :------------- | :----------------------------------------------------------- |
+| Rector version | e.g. v0.5.15 (invoke `vendor/bin/rector --version`)          |
 | PHP version    | e.g. PHP 7.3 (invoke `php -v`)                               |
 | Full Command   | e.g. vendor/bin/rector process /src --set dead-code --debug  | 
 
