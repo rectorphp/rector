@@ -9,6 +9,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\PhpVersionProvider;
@@ -37,6 +38,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $phpVersionProvider;
 
     /**
+     * @var CommanderInterface[]
+     */
+    private $commanders = [];
+
+    /**
      * Run once in the every end of one processed file
      */
     protected function tearDown(): void
@@ -45,15 +51,18 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     /**
      * @required
+     * @param CommanderInterface[] $symfonyStyle
      */
     public function autowireAbstractRectorDependencies(
         SymfonyStyle $symfonyStyle,
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory
+        // array $commanders = []
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;
+        // $this->commanders = $commanders;
     }
 
     /**
@@ -114,6 +123,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     public function afterTraverse(array $nodes): array
     {
+//        foreach ($this->commanders as $commander) {
+//            if (! $commander->isActive()) {
+//                continue;
+//            }
+//
+//            $nodes = $commander->traverseNodes($nodes);
+//        }
         if ($this->nodeAddingCommander->isActive()) {
             $nodes = $this->nodeAddingCommander->traverseNodes($nodes);
         }
@@ -134,8 +150,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         if ($this->useAddingCommander->isActive()) {
             $nodes = $this->useAddingCommander->traverseNodes($nodes);
         }
-
-        // @todo class like renaming
 
         $this->tearDown();
 

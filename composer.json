@@ -174,7 +174,8 @@
             "packages/TypeDeclaration/tests/Rector/FunctionLike/ReturnTypeDeclarationRector/Source/MyBar.php",
             "packages/Renaming/tests/Rector/Class_/RenameClassRector/Source/Twig_Extension_Sandbox.php",
             "packages/Renaming/tests/Rector/Class_/RenameClassRector/Source/TwigFilter.php",
-            "packages/Renaming/tests/Rector/Class_/RenameClassRector/Source/Manual_Twig_Filter.php"
+            "packages/Renaming/tests/Rector/Class_/RenameClassRector/Source/Manual_Twig_Filter.php",
+            "packages/SOLID/tests/Rector/ClassMethod/UseInterfaceOverImplementationInConstructorRector/Source/Apple.php"
         ]
     },
     "scripts": {

@@ -66,6 +66,8 @@ parameters:
         - '*utils/ContributorTools/templates/*'
         - 'stubs/*'
         - '*/Expected/*'
+        # exclude
+        - 'src/Rector/AbstractRector.php'
 
     skip:
         PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff.Underscore: ~
