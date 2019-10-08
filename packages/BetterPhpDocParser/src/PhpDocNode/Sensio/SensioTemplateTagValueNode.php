@@ -23,20 +23,20 @@ final class SensioTemplateTagValueNode extends AbstractTagValueNode
     private $template;
 
     /**
-     * @var mixed[]
+     * @var mixed[]|null
      */
-    private $owner = [];
+    private $owner;
 
     /**
-     * @var mixed[]
+     * @var mixed[]|null
      */
-    private $vars = [];
+    private $vars;
 
     /**
-     * @param mixed[] $owner
-     * @param mixed[] $vars
+     * @param mixed[]|null $owner
+     * @param mixed[]|null $vars
      */
-    public function __construct(?string $template, array $owner, array $vars)
+    public function __construct(?string $template, ?array $owner = null, ?array $vars = null)
     {
         $this->template = $template;
         $this->owner = $owner;
