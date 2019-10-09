@@ -1,5 +1,3 @@
 services:
-    # first, run these rule → then look at step-1
+    # add uuid id property
     Rector\Doctrine\Rector\Class_\AddUuidToEntityWhereMissingRector: ~
-    Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector: ~
-    Rector\Doctrine\Rector\Class_\AlwaysInitializeUuidInEntityRector: ~
