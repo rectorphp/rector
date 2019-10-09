@@ -6,6 +6,11 @@ use PhpParser\Node;
 
 interface CommanderInterface
 {
+    /**
+     * Higher values are executed first
+     */
+    public function getPriority(): int;
+
     public function isActive(): bool;
 
     /**

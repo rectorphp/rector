@@ -9,6 +9,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Commander\CommanderCollector;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -38,9 +39,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $phpVersionProvider;
 
     /**
-     * @var CommanderInterface[]
+     * @var CommanderCollector
      */
-    private $commanders = [];
+    private $commanderCollector;
 
     /**
      * Run once in the every end of one processed file
@@ -51,18 +52,17 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     /**
      * @required
-     * @param CommanderInterface[] $symfonyStyle
      */
     public function autowireAbstractRectorDependencies(
         SymfonyStyle $symfonyStyle,
         PhpVersionProvider $phpVersionProvider,
-        BuilderFactory $builderFactory
-        // array $commanders = []
+        BuilderFactory $builderFactory,
+        CommanderCollector $commanderCollector
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;
-        // $this->commanders = $commanders;
+        $this->commanderCollector = $commanderCollector;
     }
 
     /**
@@ -123,32 +123,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     public function afterTraverse(array $nodes): array
     {
-//        foreach ($this->commanders as $commander) {
-//            if (! $commander->isActive()) {
-//                continue;
-//            }
-//
-//            $nodes = $commander->traverseNodes($nodes);
-//        }
-        if ($this->nodeAddingCommander->isActive()) {
-            $nodes = $this->nodeAddingCommander->traverseNodes($nodes);
-        }
+        foreach ($this->commanderCollector->provide() as $commander) {
+            if (! $commander->isActive()) {
+                continue;
+            }
 
-        if ($this->propertyAddingCommander->isActive()) {
-            $nodes = $this->propertyAddingCommander->traverseNodes($nodes);
-        }
-
-        if ($this->nodeRemovingCommander->isActive()) {
-            $nodes = $this->nodeRemovingCommander->traverseNodes($nodes);
-        }
-
-        // this must run before use imports, since it adds them
-        if ($this->nameImportingCommander->isActive()) {
-            $nodes = $this->nameImportingCommander->traverseNodes($nodes);
-        }
-
-        if ($this->useAddingCommander->isActive()) {
-            $nodes = $this->useAddingCommander->traverseNodes($nodes);
+            $nodes = $commander->traverseNodes($nodes);
         }
 
         $this->tearDown();

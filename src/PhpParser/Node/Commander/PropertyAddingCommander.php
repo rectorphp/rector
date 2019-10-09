@@ -56,6 +56,11 @@ final class PropertyAddingCommander implements CommanderInterface
         return count($this->propertiesByClass) > 0;
     }
 
+    public function getPriority(): int
+    {
+        return 900;
+    }
+
     private function createNodeVisitor(): NodeVisitor
     {
         return new class($this->classManipulator, $this->propertiesByClass) extends NodeVisitorAbstract {

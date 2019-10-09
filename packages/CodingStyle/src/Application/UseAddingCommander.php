@@ -240,6 +240,11 @@ final class UseAddingCommander implements CommanderInterface
         return true;
     }
 
+    public function getPriority(): int
+    {
+        return 500;
+    }
+
     /**
      * @return FullyQualifiedObjectType[]
      */

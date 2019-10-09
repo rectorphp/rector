@@ -58,4 +58,9 @@ final class NameImportingCommander implements CommanderInterface
 
         return $nodes;
     }
+
+    public function getPriority(): int
+    {
+        return 600;
+    }
 }
