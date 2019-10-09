@@ -81,6 +81,11 @@ final class NodeRemovingCommander implements CommanderInterface
         return $this->nodesToRemove;
     }
 
+    public function getPriority(): int
+    {
+        return 800;
+    }
+
     private function ensureIsNotPartOfChainMethodCall(Node $node): void
     {
         if (! $node instanceof MethodCall) {

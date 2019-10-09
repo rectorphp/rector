@@ -82,6 +82,11 @@ final class NodeAddingCommander implements CommanderInterface
         return count($this->nodesToAdd) > 0 || count($this->nodesToAddBefore) > 0;
     }
 
+    public function getPriority(): int
+    {
+        return 1000;
+    }
+
     private function resolveNearestExpressionPosition(Node $node): string
     {
         if ($node instanceof Expression) {
