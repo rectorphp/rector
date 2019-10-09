@@ -204,3 +204,6 @@ parameters:
         # known value
         - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDelegatingParentCallRector\:\:unwrapExpression\(\) expects PhpParser\\Node, PhpParser\\Node\\Stmt\|null given#'
         - '#Method Rector\\StrictCodeQuality\\Rector\\Stmt\\VarInlineAnnotationToAssertRector\:\:findVariableByName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns PhpParser\\Node\|null#'
+        - '#PHPDoc tag @param references unknown parameter\: \$commanders#'
+        - '#In method "Rector\\Rector\\AbstractRector\:\:autowireAbstractRectorDependencies", parameter \$symfonyStyle type is type\-hinted to "Symfony\\Component\\Console\\Style\\SymfonyStyle" but the @param annotation says it is a "array<Rector\\Contract\\PhpParser\\Node\\CommanderInterface\>"\. Please fix the @param annotation#'
+        - '#PHPDoc tag @param for parameter \$symfonyStyle with type array<Rector\\Contract\\PhpParser\\Node\\CommanderInterface\> is incompatible with native type Symfony\\Component\\Console\\Style\\SymfonyStyle#'
