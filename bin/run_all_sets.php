@@ -27,10 +27,10 @@ foreach ($setProvider->provide() as $setName) {
 
 
     $process = new Process($command, __DIR__ . '/..');
-    echo sprintf('Set "%s" is OK' . PHP_EOL, $setName);
 
     try {
         $process->mustRun();
+        echo sprintf('Set "%s" is OK' . PHP_EOL, $setName);
     } catch (ProcessFailedException $processFailedException) {
         if (! Strings::match($processFailedException->getMessage(), '#(Fatal error)|(\[ERROR\])#')) {
             continue;
