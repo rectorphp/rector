@@ -7,6 +7,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Psr\Container\ContainerInterface;
@@ -31,10 +32,19 @@ final class StaticContainerGetDynamicMethodReturnTypeExtension implements Dynami
     ): Type {
         $valueType = $scope->getType($methodCall->args[0]->value);
 
+        // we don't know what it is
+        if ($valueType instanceof MixedType) {
+            return $valueType;
+        }
+
         if ($valueType instanceof ConstantStringType) {
             return new ObjectType($valueType->getValue());
         }
 
-        throw new ShouldNotHappenException();
+        throw new ShouldNotHappenException(sprintf(
+            '%s type given, only "%s" is supported',
+            get_class($valueType),
+            ConstantStringType::class
+        ));
     }
 }
