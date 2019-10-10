@@ -4,8 +4,8 @@ namespace Rector\CodingStyle\Rector\Encapsed;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\EncapsedStringPart;
@@ -68,7 +68,7 @@ PHP
                 continue;
             }
 
-            if ($part instanceof Variable) {
+            if ($part instanceof Expr) {
                 $string .= '%s';
                 $arguments[] = new Arg($part);
             }
