@@ -119,6 +119,8 @@ parameters:
             - 'src/Rector/AbstractRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+            # solve later
+            - 'src/Console/Command/ScreenFileCommand.php'
             - 'packages/Doctrine/src/Rector/ClassMethod/AddMethodCallBasedParamTypeRector.php'
             - 'packages/TypeDeclaration/src/TypeInferer/ReturnTypeInferer/ReturnedNodesReturnTypeInferer.php'
             - 'packages/NodeTypeResolver/src/NodeTypeResolver.php'
