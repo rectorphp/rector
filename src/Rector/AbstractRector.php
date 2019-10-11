@@ -78,7 +78,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // show current Rector class on --debug
         if ($this->symfonyStyle->isDebug()) {
-            $this->symfonyStyle->writeln('[applying] ' . static::class);
+            // indented on purpose to improve log nesting under [refactoring]
+            $this->symfonyStyle->writeln('    [applying] ' . static::class);
         }
 
         // already removed

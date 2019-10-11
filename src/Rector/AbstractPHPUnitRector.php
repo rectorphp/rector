@@ -4,13 +4,33 @@ declare(strict_types=1);
 
 namespace Rector\Rector;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 abstract class AbstractPHPUnitRector extends AbstractRector
 {
+    protected function isTestClassMethod(ClassMethod $classMethod): bool
+    {
+        if (! $classMethod->isPublic()) {
+            return false;
+        }
+
+        if ($this->isName($classMethod, 'test*')) {
+            return true;
+        }
+
+        $docComment = $classMethod->getDocComment();
+        if ($docComment) {
+            return (bool) Strings::match($docComment->getText(), '#@test\b#');
+        }
+
+        return false;
+    }
+
     protected function isPHPUnitMethodName(Node $node, string $name): bool
     {
         if (! $this->isPHPUnitTestCaseCall($node)) {

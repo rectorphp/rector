@@ -7,6 +7,7 @@ namespace Rector\PHPUnit\Rector\Class_;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -142,7 +143,7 @@ PHP
                     continue;
                 }
 
-                $classMethod->name = new Node\Identifier($newName);
+                $classMethod->name = new Identifier($newName);
             }
         }
     }

@@ -7,8 +7,10 @@ namespace Rector\Console\Command;
 use Nette\Utils\FileSystem;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
@@ -156,7 +158,7 @@ final class ScreenFileCommand extends AbstractCommand
     {
         $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node): Node {
             // not useful
-            if ($node instanceof Node\Stmt\Expression) {
+            if ($node instanceof Expression) {
                 $infoNode = $node->expr;
             } else {
                 $infoNode = $node;
@@ -171,7 +173,7 @@ final class ScreenFileCommand extends AbstractCommand
                 $data['variable_name - $this->isName($node, "X")'] = $this->nameResolver->getName($infoNode);
             }
 
-            if ($infoNode instanceof Node\Expr\MethodCall) {
+            if ($infoNode instanceof MethodCall) {
                 $data['method_variable_name - $this->isName($node->var, "X")'] = $this->nameResolver->getName(
                     $infoNode->var
                 );

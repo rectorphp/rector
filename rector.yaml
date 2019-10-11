@@ -18,4 +18,4 @@ parameters:
     php_version_features: '7.1'
 
 services:
-    Rector\SOLID\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector: ~
+    Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector: ~
