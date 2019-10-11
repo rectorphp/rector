@@ -24,6 +24,9 @@ final class ConsoleExecuteReturnIntRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/multiple-returns.php.inc'];
         yield [__DIR__ . '/Fixture/add-return-type.php.inc'];
         yield [__DIR__ . '/Fixture/return-function-call.php.inc'];
+        yield [__DIR__ . '/Fixture/return-external-function-call.php.inc'];
+        yield [__DIR__ . '/Fixture/return-static-function-call.php.inc'];
+        yield [__DIR__ . '/Fixture/return-external-static-function-call.php.inc'];
     }
 
     protected function getRectorClass(): string
