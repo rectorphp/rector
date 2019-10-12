@@ -244,8 +244,10 @@ PHP
         }
 
         // skip native functions, hard to analyze without stubs (stubs would make working with IDE non-practical)
-        /** @var string $functionName */
         $functionName = $this->getName($node);
+        if (! is_string($functionName)) {
+            return false;
+        }
 
         return $this->functionReflectionResolver->isPhpNativeFunction($functionName);
     }
