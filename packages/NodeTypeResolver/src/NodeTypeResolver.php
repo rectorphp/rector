@@ -22,9 +22,12 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\PropertyProperty;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
@@ -560,8 +563,11 @@ final class NodeTypeResolver
             return false;
         }
 
-        /** @var Class_ $classNode */
+        /** @var Class_|Trait_|Interface_|null $classNode */
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classNode instanceof Interface_ || $classNode === null) {
+            return false;
+        }
 
         $propertyName = $this->nameResolver->getName($node->name);
         if ($propertyName === null) {
@@ -576,9 +582,12 @@ final class NodeTypeResolver
         return $propertyPropertyNode->default instanceof Array_;
     }
 
-    private function getClassNodeProperty(Class_ $class, string $name): ?PropertyProperty
+    /**
+     * @param Trait_|Class_ $classLike
+     */
+    private function getClassNodeProperty(ClassLike $classLike, string $name): ?PropertyProperty
     {
-        foreach ($class->getProperties() as $property) {
+        foreach ($classLike->getProperties() as $property) {
             foreach ($property->props as $propertyProperty) {
                 if ($this->nameResolver->isName($propertyProperty, $name)) {
                     return $propertyProperty;
