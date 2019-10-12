@@ -102,7 +102,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->args === []) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -227,13 +227,26 @@ PHP
             return $defaultValues;
         }
 
-        $coreFunctionReflection = $this->functionReflectionResolver->resolveCoreStubFunctionNode($nodeName);
+        return [];
+    }
 
-        // unable to found
-        if ($coreFunctionReflection === null) {
-            return [];
+    /**
+     * @param MethodCall|StaticCall|FuncCall $node
+     */
+    private function shouldSkip(Node $node): bool
+    {
+        if ($node->args === []) {
+            return true;
         }
 
-        return $this->resolveDefaultParamValuesFromFunctionLike($coreFunctionReflection);
+        if (! $node instanceof FuncCall) {
+            return false;
+        }
+
+        // skip native functions, hard to analyze without stubs (stubs would make working with IDE non-practical)
+        /** @var string $functionName */
+        $functionName = $this->getName($node);
+
+        return $this->functionReflectionResolver->isPhpNativeFunction($functionName);
     }
 }
