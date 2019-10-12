@@ -134,6 +134,15 @@ PHP
         if ($node->returnType !== null) {
             $isSubtype = $this->isSubtypeOf($inferredReturnNode, $node->returnType);
 
+            $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
+
+            // is current class implementation/subtype
+            if ($currentType instanceof ObjectType && $inferedType instanceof ObjectType) {
+                if (is_a($currentType->getClassName(), $inferedType->getClassName(), true)) {
+                    return null;
+                }
+            }
+
             // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
             if ($this->isAtLeastPhpVersion('7.4') && $isSubtype) {
                 $node->returnType = $inferredReturnNode;
