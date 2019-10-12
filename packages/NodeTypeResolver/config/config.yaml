@@ -25,3 +25,6 @@ services:
 
     PHPStan\Analyser\ScopeFactory:
         factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createScopeFactory']
+
+    PHPStan\Reflection\SignatureMap\SignatureMapProvider:
+        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createSignatureMapProvider']
