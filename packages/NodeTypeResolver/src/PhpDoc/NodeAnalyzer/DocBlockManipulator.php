@@ -15,6 +15,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -33,6 +34,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
+use Rector\PHPStan\Type\ShortenedObjectType;
 
 /**
  * @see \Rector\NodeTypeResolver\Tests\PhpDoc\NodeAnalyzer\DocBlockManipulatorTest
@@ -537,11 +539,23 @@ final class DocBlockManipulator
         }
     }
 
+    /**
+     * @todo Extract this logic to own service
+     */
     private function areTypesEquals(Type $firstType, Type $secondType): bool
     {
-        return $this->staticTypeMapper->createTypeHash($firstType) === $this->staticTypeMapper->createTypeHash(
-            $secondType
-        );
+        $firstTypeHash = $this->staticTypeMapper->createTypeHash($firstType);
+        $secondTypeHash = $this->staticTypeMapper->createTypeHash($secondType);
+
+        if ($firstTypeHash === $secondTypeHash) {
+            return true;
+        }
+
+        if ($this->areArrayTypeWithSingleObjectChildToParent($firstType, $secondType)) {
+            return true;
+        }
+
+        return false;
     }
 
     private function ensureParamNameStartsWithDollar(string $paramName, string $location): void
@@ -555,5 +569,42 @@ final class DocBlockManipulator
             $paramName,
             $location
         ));
+    }
+
+    private function getFqnClassName(ObjectType $objectType): string
+    {
+        if ($objectType instanceof ShortenedObjectType) {
+            return $objectType->getFullyQualifiedName();
+        }
+
+        return $objectType->getClassName();
+    }
+
+    /**
+     * E.g.  class A extends B, class B → A[] is subtype of B[] → keep A[]
+     */
+    private function areArrayTypeWithSingleObjectChildToParent(Type $firstType, Type $secondType): bool
+    {
+        if (! $firstType instanceof ArrayType || ! $secondType instanceof ArrayType) {
+            return false;
+        }
+
+        $firstArrayItemType = $firstType->getItemType();
+        $secondArrayItemType = $secondType->getItemType();
+
+        if ($firstArrayItemType instanceof ObjectType && $secondArrayItemType instanceof ObjectType) {
+            $firstFqnClassName = $this->getFqnClassName($firstArrayItemType);
+            $secondFqnClassName = $this->getFqnClassName($secondArrayItemType);
+
+            if (is_a($firstFqnClassName, $secondFqnClassName, true)) {
+                return true;
+            }
+
+            if (is_a($secondFqnClassName, $firstFqnClassName, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
