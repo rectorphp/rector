@@ -60,6 +60,8 @@ final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/dunglas/nullable_types.php.inc'];
         // anonymous class
         yield [__DIR__ . '/Fixture/a_new_class.php.inc'];
+
+        yield [__DIR__ . '/Fixture/skip_iterable_array_iterator_co_type.php.inc'];
     }
 
     protected function getRectorClass(): string
