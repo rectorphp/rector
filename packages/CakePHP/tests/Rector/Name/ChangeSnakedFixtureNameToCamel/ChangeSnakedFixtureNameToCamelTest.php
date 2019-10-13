@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\CakePHP\Tests\Rector\Name\ChangeSnakedFixtureNameToCamel;
 

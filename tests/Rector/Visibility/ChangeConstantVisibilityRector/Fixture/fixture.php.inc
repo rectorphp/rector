@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source;
 
@@ -13,7 +15,9 @@ class ClassWithInvalidConstants extends ParentObject
 
 ?>
 -----
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source;
 

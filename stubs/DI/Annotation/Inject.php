@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 // source: https://github.com/PHP-DI/PHP-DI/blob/master/src/Annotation/Inject.php
 

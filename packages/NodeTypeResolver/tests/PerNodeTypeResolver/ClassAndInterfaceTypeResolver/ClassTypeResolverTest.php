@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResolver;
 
@@ -63,7 +65,7 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
             0,
             TypeFactoryStaticHelper::createUnionObjectType(
                 [
-                    'AnonymousClass06034401da58dec7c1cba7dbc513a1b7',
+                    'AnonymousClass691b1ff75a776cc58f309db3866e022c',
                     ParentClass::class,
                     SomeInterface::class,
                     AnotherTrait::class,

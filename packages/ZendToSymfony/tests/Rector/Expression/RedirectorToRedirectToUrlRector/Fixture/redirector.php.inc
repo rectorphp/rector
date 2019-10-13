@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\ZendToSymfony\Tests\Rector\Expression\RedirectorToRedirectToUrlRector\Fixture;
 
@@ -13,7 +15,9 @@ class ThisViewToThisRender extends \Zend_Controller_Action
 
 ?>
 -----
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\ZendToSymfony\Tests\Rector\Expression\RedirectorToRedirectToUrlRector\Fixture;
 

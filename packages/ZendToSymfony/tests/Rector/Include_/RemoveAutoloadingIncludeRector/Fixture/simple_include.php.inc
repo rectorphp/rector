@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\ZendToSymfony\Tests\Rector\Include_\RemoveAutoloadingIncludeRector\Fixture;
 
@@ -15,7 +17,9 @@ final class SimpleInclude
 
 ?>
 -----
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\ZendToSymfony\Tests\Rector\Include_\RemoveAutoloadingIncludeRector\Fixture;
 

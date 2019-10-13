@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use Nette\Utils\Strings;
 use Rector\Exception\ShouldNotHappenException;

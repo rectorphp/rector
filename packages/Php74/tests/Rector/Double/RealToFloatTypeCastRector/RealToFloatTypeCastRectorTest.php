@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Php74\Tests\Rector\Double\RealToFloatTypeCastRector;
 

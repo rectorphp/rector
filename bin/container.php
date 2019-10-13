@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use Rector\Console\Option\SetOptionResolver;
 use Rector\Exception\Configuration\SetNotFoundException;
