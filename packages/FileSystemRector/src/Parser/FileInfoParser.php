@@ -36,4 +36,14 @@ final class FileInfoParser
 
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo->getRealPath());
     }
+
+    /**
+     * @return Node[]
+     */
+    public function parseFileInfoToNodesAndDecorateWithScope(SmartFileInfo $fileInfo): array
+    {
+        $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
+
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo->getRealPath(), true);
+    }
 }

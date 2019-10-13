@@ -6,12 +6,10 @@ namespace App;
 
 final class ScreenSample
 {
-    public function run()
+    public function run($value)
     {
-        $this->mute();
-    }
+        $value = is_string($value) ? 5 : $value;
 
-    public function mute()
-    {
+        return $value;
     }
 }

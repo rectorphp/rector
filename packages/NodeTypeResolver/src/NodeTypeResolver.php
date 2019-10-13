@@ -46,6 +46,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Exception\ShouldNotHappenException;
@@ -474,19 +475,9 @@ final class NodeTypeResolver
             return $classType;
         }
 
-        $classTypes = [];
-        if ($classType instanceof ObjectType) {
-            $classTypes[] = $classType;
-        } elseif ($classType instanceof UnionType) {
-            foreach ($classType->getTypes() as $unionedType) {
-                if ($unionedType instanceof ObjectType) {
-                    $classTypes[] = $unionedType;
-                }
-            }
-        }
-
-        foreach ($classTypes as $classType) {
-            if (! method_exists($classType->getClassName(), $methodName)) {
+        $classNames = TypeUtils::getDirectClassNames($classType);
+        foreach ($classNames as $className) {
+            if (! method_exists($className, $methodName)) {
                 continue;
             }
 

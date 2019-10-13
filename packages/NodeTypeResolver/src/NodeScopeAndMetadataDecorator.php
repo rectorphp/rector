@@ -90,7 +90,7 @@ final class NodeScopeAndMetadataDecorator
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function decorateNodesFromFile(array $nodes, string $filePath): array
+    public function decorateNodesFromFile(array $nodes, string $filePath, bool $needsScope = false): array
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver(null, [
@@ -100,7 +100,7 @@ final class NodeScopeAndMetadataDecorator
         $nodes = $nodeTraverser->traverse($nodes);
 
         // node scoping is needed only for Scope
-        if ($this->configuration->areAnyPhpRectorsLoaded()) {
+        if ($needsScope || $this->configuration->areAnyPhpRectorsLoaded()) {
             $nodes = $this->nodeScopeResolver->processNodes($nodes, $filePath);
         }
 
