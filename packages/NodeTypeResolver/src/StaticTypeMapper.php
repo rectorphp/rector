@@ -2,6 +2,7 @@
 
 namespace Rector\NodeTypeResolver;
 
+use Closure;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -316,6 +317,10 @@ final class StaticTypeMapper
             }
 
             return $phpStanType->getClassName();
+        }
+
+        if ($phpStanType instanceof ClosureType) {
+            return '\\' . Closure::class;
         }
 
         if ($phpStanType instanceof StringType) {
