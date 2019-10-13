@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 // see https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Advanced+Metadata
 namespace PHPSTORM_META;

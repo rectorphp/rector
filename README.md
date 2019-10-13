@@ -192,7 +192,9 @@ Let's say we want to **change method calls from `set*` to `change*`**.
 Create a class that extends [`Rector\Rector\AbstractRector`](/src/Rector/AbstractRector.php). It has useful methods like checking node type and name. Just run `$this->` and let PHPStorm show you all possible methods.
 
 ```php
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Rector;
 
