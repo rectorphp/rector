@@ -33,12 +33,12 @@ final class ReturnStaticFunctionCallCommand extends Command
 {
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        return static::doSomething();
+        return (int) static::doSomething();
     }
 
     private static function doSomething()
     {
-        return 0;
+        return null;
     }
 }
 

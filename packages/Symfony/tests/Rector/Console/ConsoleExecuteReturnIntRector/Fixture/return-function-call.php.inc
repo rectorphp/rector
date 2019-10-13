@@ -33,12 +33,12 @@ final class ReturnFunctionCallCommand extends Command
 {
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        return $this->doSomething();
+        return (int) $this->doSomething();
     }
 
     private function doSomething()
     {
-        return 0;
+        return null;
     }
 }
 
