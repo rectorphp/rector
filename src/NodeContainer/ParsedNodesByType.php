@@ -308,6 +308,49 @@ final class ParsedNodesByType
         return $this->simpleParsedNodesByType[Function_::class][$name] ?? null;
     }
 
+    public function findClassMethodByMethodCall(MethodCall $methodCall): ?ClassMethod
+    {
+        /** @var string|null $className */
+        $className = $methodCall->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            return null;
+        }
+
+        $methodName = $this->nameResolver->getName($methodCall->name);
+        if ($methodName === null) {
+            return null;
+        }
+
+        return $this->findMethod($methodName, $className);
+    }
+
+    public function findClassMethodByStaticCall(StaticCall $staticCall): ?ClassMethod
+    {
+        $methodName = $this->nameResolver->getName($staticCall->name);
+        if ($methodName === null) {
+            return null;
+        }
+
+        $objectType = $this->nodeTypeResolver->getObjectType($staticCall->class);
+        if ($objectType instanceof ObjectType) {
+            return $this->findMethod($methodName, $objectType->getClassName());
+        }
+
+        if ($objectType instanceof UnionType) {
+            foreach ($objectType->getTypes() as $unionedType) {
+                if (! $unionedType instanceof ObjectType) {
+                    continue;
+                }
+                $foundMethod = $this->findMethod($methodName, $unionedType->getClassName());
+                if ($foundMethod) {
+                    return $foundMethod;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public function findMethod(string $methodName, string $className): ?ClassMethod
     {
         if (isset($this->methodsByType[$className][$methodName])) {

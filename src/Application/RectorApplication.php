@@ -211,7 +211,8 @@ final class RectorApplication
     private function advance(SmartFileInfo $smartFileInfo, string $phase): void
     {
         if ($this->symfonyStyle->isVerbose()) {
-            $this->symfonyStyle->writeln(sprintf('[%s] %s', $phase, $smartFileInfo->getRealPath()));
+            $relativeFilePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
+            $this->symfonyStyle->writeln(sprintf('[%s] %s', $phase, $relativeFilePath));
         } elseif ($this->configuration->showProgressBar()) {
             $this->symfonyStyle->progressAdvance();
         }

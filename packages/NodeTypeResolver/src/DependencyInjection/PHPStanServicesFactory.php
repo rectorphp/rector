@@ -10,7 +10,6 @@ use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Broker\Broker;
 use PHPStan\DependencyInjection\ContainerFactory;
-use PHPStan\Reflection\SignatureMap\SignatureMapProvider;
 
 final class PHPStanServicesFactory
 {
@@ -48,11 +47,6 @@ final class PHPStanServicesFactory
     public function createTypeSpecifier(): TypeSpecifier
     {
         return $this->container->getByType(TypeSpecifier::class);
-    }
-
-    public function createSignatureMapProvider(): SignatureMapProvider
-    {
-        return $this->container->getByType(SignatureMapProvider::class);
     }
 
     public function createScopeFactory(): ScopeFactory

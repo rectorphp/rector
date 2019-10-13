@@ -16,7 +16,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Reflection\FunctionReflectionResolver;
 use ReflectionFunction;
 
 /**
@@ -29,17 +28,9 @@ final class RemoveDefaultArgumentValueRector extends AbstractRector
      */
     private $parsedNodesByType;
 
-    /**
-     * @var FunctionReflectionResolver
-     */
-    private $functionReflectionResolver;
-
-    public function __construct(
-        ParsedNodesByType $parsedNodesByType,
-        FunctionReflectionResolver $functionReflectionResolver
-    ) {
+    public function __construct(ParsedNodesByType $parsedNodesByType)
+    {
         $this->parsedNodesByType = $parsedNodesByType;
-        $this->functionReflectionResolver = $functionReflectionResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -245,12 +236,18 @@ PHP
             return false;
         }
 
-        // skip native functions, hard to analyze without stubs (stubs would make working with IDE non-practical)
-        $functionName = $this->getName($node);
-        if (! is_string($functionName)) {
+        $functionName = $this->getName($node->name);
+        if ($functionName === null) {
             return false;
         }
 
-        return $this->functionReflectionResolver->isPhpNativeFunction($functionName);
+        if (! function_exists($functionName)) {
+            return false;
+        }
+
+        $reflectionFunction = new ReflectionFunction($functionName);
+
+        // skip native functions, hard to analyze without stubs (stubs would make working with IDE non-practical)
+        return $reflectionFunction->isInternal();
     }
 }
