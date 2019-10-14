@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Symfony\Rector\Console;
 
@@ -83,18 +85,18 @@ PHP
         return $this->addReturn0ToMethod($node);
     }
 
-    private function addReturn0ToMethod(ClassMethod $functionLike): ClassMethod
+    private function addReturn0ToMethod(ClassMethod $classMethod): ClassMethod
     {
         $hasReturn = false;
-        $this->traverseNodesWithCallable($functionLike->getStmts() ?? [], function (Node $stmt) use (
-            $functionLike,
+        $this->traverseNodesWithCallable($classMethod->getStmts() ?? [], function (Node $stmt) use (
+            $classMethod,
             &$hasReturn
         ): void {
             if (! $stmt instanceof Return_) {
                 return;
             }
 
-            if ($this->areNodesEqual($stmt->getAttribute(AttributeKey::PARENT_NODE), $functionLike)) {
+            if ($this->areNodesEqual($stmt->getAttribute(AttributeKey::PARENT_NODE), $classMethod)) {
                 $hasReturn = true;
             }
 
@@ -102,12 +104,12 @@ PHP
         });
 
         if ($hasReturn) {
-            return $functionLike;
+            return $classMethod;
         }
 
-        $functionLike->stmts[] = new Return_(new LNumber(0));
+        $classMethod->stmts[] = new Return_(new LNumber(0));
 
-        return $functionLike;
+        return $classMethod;
     }
 
     private function setReturnTo0InsteadOfNull(Return_ $return): void
