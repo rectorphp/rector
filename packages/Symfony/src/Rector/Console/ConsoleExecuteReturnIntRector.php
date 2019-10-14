@@ -6,7 +6,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Class_;
@@ -84,10 +83,10 @@ PHP
         return $this->addReturn0ToMethod($node);
     }
 
-    private function addReturn0ToMethod(FunctionLike $functionLike): FunctionLike
+    private function addReturn0ToMethod(ClassMethod $functionLike): ClassMethod
     {
         $hasReturn = false;
-        $this->traverseNodesWithCallable($functionLike->getStmts(), function (Node $stmt) use (
+        $this->traverseNodesWithCallable($functionLike->getStmts() ?? [], function (Node $stmt) use (
             $functionLike,
             &$hasReturn
         ): void {
