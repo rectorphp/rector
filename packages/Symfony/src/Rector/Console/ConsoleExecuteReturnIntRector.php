@@ -75,7 +75,7 @@ PHP
             return null;
         }
 
-        if (! $class->extends || $class->extends->toCodeString() !== '\\' . Command::class) {
+        if (! $class->extends || $this->isName($class->extends, '\\' . Command::class)) {
             return null;
         }
 
