@@ -130,11 +130,11 @@ final class NodeTypeResolver
     }
 
     /**
-     * @param ObjectType|string $requiredType
+     * @param ObjectType|string|mixed $requiredType
      */
     public function isObjectType(Node $node, $requiredType): bool
     {
-        $this->ensureRequiredTypeIsStringOrObjectType($requiredType, 'isObjectType');
+        $this->ensureRequiredTypeIsStringOrObjectType($requiredType, __METHOD__);
 
         if (is_string($requiredType)) {
             if (Strings::contains($requiredType, '*')) {
@@ -143,7 +143,6 @@ final class NodeTypeResolver
         }
 
         $resolvedType = $this->getObjectType($node);
-
         if ($resolvedType instanceof MixedType) {
             return false;
         }
@@ -159,7 +158,7 @@ final class NodeTypeResolver
             return true;
         }
 
-        if ($resolvedType instanceof ObjectType) {
+        if ($resolvedType instanceof TypeWithClassName) {
             if (is_a($resolvedType->getClassName(), $requiredType->getClassName(), true)) {
                 return true;
             }
@@ -660,30 +659,21 @@ final class NodeTypeResolver
 
     private function isFnMatch(Node $node, string $requiredType): bool
     {
-        $resolvedType = $this->getObjectType($node);
+        $objectType = $this->getObjectType($node);
 
-        if ($resolvedType instanceof TypeWithClassName) {
-            return $this->isObjectTypeFnMatch($resolvedType, $requiredType);
-        }
-
-        if ($resolvedType instanceof UnionType) {
-            foreach ($resolvedType->getTypes() as $unionedType) {
-                if (! $unionedType instanceof TypeWithClassName) {
-                    continue;
-                }
-
-                if ($this->isObjectTypeFnMatch($unionedType, $requiredType)) {
-                    return true;
-                }
+        $classNames = TypeUtils::getDirectClassNames($objectType);
+        foreach ($classNames as $className) {
+            if ($this->isObjectTypeFnMatch($className, $requiredType)) {
+                return true;
             }
         }
 
         return false;
     }
 
-    private function isObjectTypeFnMatch(TypeWithClassName $typeWithClassName, string $requiredType): bool
+    private function isObjectTypeFnMatch(string $className, string $requiredType): bool
     {
-        return fnmatch($requiredType, $typeWithClassName->getClassName(), FNM_NOESCAPE);
+        return fnmatch($requiredType, $className, FNM_NOESCAPE);
     }
 
     private function unionWithParentClassesInterfacesAndUsedTraits(Type $type): Type
@@ -693,36 +683,22 @@ final class NodeTypeResolver
                 return $type;
             }
 
-            $classReflection = $this->broker->getClass($type->getClassName());
-
-            $allTypes = $this->classReflectionTypesResolver->resolve($classReflection);
-            $allTypes = array_unique($allTypes);
-
+            $allTypes = $this->getClassLikeTypesByClassName($type->getClassName());
             return $this->typeFactory->createObjectTypeOrUnionType($allTypes);
         }
 
-        if ($type instanceof UnionType) {
-            $allTypes = [];
+        $classNames = TypeUtils::getDirectClassNames($type);
 
-            foreach ($type->getTypes() as $unionedType) {
-                if ($unionedType instanceof TypeWithClassName) {
-                    if (! ClassExistenceStaticHelper::doesClassLikeExist($unionedType->getClassName())) {
-                        continue;
-                    }
-
-                    $classReflection = $this->broker->getClass($unionedType->getClassName());
-
-                    $allTypes = array_merge(
-                        $allTypes,
-                        $this->classReflectionTypesResolver->resolve($classReflection)
-                    );
-                }
+        $allTypes = [];
+        foreach ($classNames as $className) {
+            if (! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
+                continue;
             }
 
-            return $this->typeFactory->createObjectTypeOrUnionType($allTypes);
+            $allTypes = array_merge($allTypes, $this->getClassLikeTypesByClassName($className));
         }
 
-        return $type;
+        return $this->typeFactory->createObjectTypeOrUnionType($allTypes);
     }
 
     /**
@@ -746,5 +722,17 @@ final class NodeTypeResolver
             ObjectType::class,
             $reportedType
         ));
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getClassLikeTypesByClassName(string $className): array
+    {
+        $classReflection = $this->broker->getClass($className);
+
+        $classLikeTypes = $this->classReflectionTypesResolver->resolve($classReflection);
+
+        return array_unique($classLikeTypes);
     }
 }

@@ -23,6 +23,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeUtils;
 use PHPStan\Type\UnionType;
 use Rector\Exception\NotImplementedException;
 use Rector\Exception\ShouldNotHappenException;
@@ -332,19 +333,12 @@ final class ParsedNodesByType
         }
 
         $objectType = $this->nodeTypeResolver->getObjectType($staticCall->class);
-        if ($objectType instanceof ObjectType) {
-            return $this->findMethod($methodName, $objectType->getClassName());
-        }
 
-        if ($objectType instanceof UnionType) {
-            foreach ($objectType->getTypes() as $unionedType) {
-                if (! $unionedType instanceof ObjectType) {
-                    continue;
-                }
-                $foundMethod = $this->findMethod($methodName, $unionedType->getClassName());
-                if ($foundMethod) {
-                    return $foundMethod;
-                }
+        $classNames = TypeUtils::getDirectClassNames($objectType);
+        foreach ($classNames as $className) {
+            $foundMethod = $this->findMethod($methodName, $className);
+            if ($foundMethod) {
+                return $foundMethod;
             }
         }
 
