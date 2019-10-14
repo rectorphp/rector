@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeUtils;
 use PHPStan\Type\UnionType;
 use Rector\PhpParser\Node\Manipulator\CallManipulator;
 use Rector\Rector\AbstractRector;
@@ -143,39 +144,28 @@ final class RemoveExtraParametersRector extends AbstractRector
             return null;
         }
 
-        $priorityType = $this->resolvePriorityType($objectType);
-        if ($priorityType === null) {
+        $class = $this->resolveClassOverIntefaceFromType($objectType);
+        if ($class === null) {
             return null;
         }
 
-        if (! method_exists($priorityType->getClassName(), $methodName)) {
+        if (! method_exists($class, $methodName)) {
             return null;
         }
 
-        return new ReflectionMethod($priorityType->getClassName(), $methodName);
+        return new ReflectionMethod($class, $methodName);
     }
 
     /**
      * Give class priority over interface, because it can change the interface signature
      * @see https://github.com/rectorphp/rector/issues/1593#issuecomment-502404580
      */
-    private function resolvePriorityType(Type $type): ?ObjectType
+    private function resolveClassOverIntefaceFromType(Type $type): ?string
     {
-        if ($type instanceof ObjectType) {
-            if (class_exists($type->getClassName())) {
-                return $type;
-            }
-
-            return null;
-        }
-
-        if ($type instanceof UnionType) {
-            foreach ($type->getTypes() as $unionedType) {
-                if ($unionedType instanceof ObjectType) {
-                    if (class_exists($unionedType->getClassName())) {
-                        return $unionedType;
-                    }
-                }
+        $classNames = TypeUtils::getDirectClassNames($type);
+        foreach ($classNames as $className) {
+            if (class_exists($className)) {
+                return $className;
             }
         }
 

@@ -5,19 +5,24 @@ declare(strict_types=1);
 namespace Rector\Console\Command;
 
 use Nette\Utils\FileSystem;
+use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Nop;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\UnionType;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\TypeUtils;
 use Rector\Console\Shell;
 use Rector\FileSystemRector\Parser\FileInfoParser;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\Node\Commander\NodeAddingCommander;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
@@ -47,11 +52,6 @@ final class ScreenFileCommand extends AbstractCommand
     private $symfonyStyle;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var FileInfoParser
      */
     private $fileInfoParser;
@@ -67,31 +67,36 @@ final class ScreenFileCommand extends AbstractCommand
     private $nameResolver;
 
     /**
-     * @var NodeAddingCommander
-     */
-    private $nodeAddingCommander;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
-        BetterStandardPrinter $betterStandardPrinter,
         FileInfoParser $fileInfoParser,
         CallableNodeTraverser $callableNodeTraverser,
         NameResolver $nameResolver,
-        NodeAddingCommander $nodeAddingCommander,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        BetterStandardPrinter $betterStandardPrinter,
+        StaticTypeMapper $staticTypeMapper
     ) {
         $this->symfonyStyle = $symfonyStyle;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->fileInfoParser = $fileInfoParser;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nameResolver = $nameResolver;
-        $this->nodeAddingCommander = $nodeAddingCommander;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->staticTypeMapper = $staticTypeMapper;
 
         parent::__construct();
     }
@@ -99,31 +104,26 @@ final class ScreenFileCommand extends AbstractCommand
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('Load file and print with meta data about nodes - super helpful to learn to build rules');
+        $this->setDescription('Load file and print nodes meta data - super helpful to learn to build rules');
 
-        $this->addArgument(self::FILE_ARGUMENT, InputArgument::OPTIONAL, 'Path to file to be screened');
+        $this->addArgument(self::FILE_ARGUMENT, InputArgument::REQUIRED, 'Path to file to be screened');
         $this->addOption(self::OUTPUT_OPTION, 'o', InputOption::VALUE_REQUIRED, 'Path to print decorated file into');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // 1. load file
         $filePath = $input->getArgument(self::FILE_ARGUMENT);
         $smartFileInfo = new SmartFileInfo($filePath);
 
-        include_once $filePath;
+        // 2. parse file to nodes
+        $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorateWithScope($smartFileInfo);
 
-        $nodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($smartFileInfo);
-
+        // 3. decorate nodes
         $this->decorateNodes($nodes);
 
-        $decoratedFileContent = '<?php' . PHP_EOL . $this->printNodesToString($nodes);
-
-        $outputOption = (string) $input->getOption(self::OUTPUT_OPTION);
-        if ($outputOption) {
-            FileSystem::write($outputOption, $decoratedFileContent);
-        } else {
-            $this->symfonyStyle->writeln($decoratedFileContent);
-        }
+        // 4. print decorated nodes to output/file
+        $this->outputDecoratedFileContent($input, $nodes);
 
         return Shell::CODE_SUCCESS;
     }
@@ -131,24 +131,29 @@ final class ScreenFileCommand extends AbstractCommand
     /**
      * @param mixed[] $data
      */
-    private function createDocBlockFromArrayData(array $data): string
+    private function createDocBlockFromArrayData(array $data, string $indent = ''): string
     {
         $comments = '';
         $comments .= PHP_EOL;
 
         foreach ($data as $name => $value) {
-            $comments .= sprintf('// %s: "%s"', $name, $value) . PHP_EOL;
+            $wrapInQuotes = true;
+            if (is_array($value)) {
+                $wrapInQuotes = false;
+                $value = $this->createDocBlockFromArrayData($value, '  * ');
+            }
+
+            $comments .= sprintf(
+                '// %s%s: %s%s%s',
+                $indent,
+                $name,
+                $wrapInQuotes ? '"' : '',
+                $value,
+                $wrapInQuotes ? '"' : ''
+            ) . PHP_EOL;
         }
 
         return $comments;
-    }
-
-    /**
-     * @param Node[] $nodes
-     */
-    private function printNodesToString(array $nodes): string
-    {
-        return $this->betterStandardPrinter->prettyPrint($nodes);
     }
 
     /**
@@ -164,42 +169,7 @@ final class ScreenFileCommand extends AbstractCommand
                 $infoNode = $node;
             }
 
-            $data = [];
-            if ($infoNode instanceof ClassLike) {
-                $data['class_name'] = $this->nameResolver->getName($infoNode);
-            }
-
-            if ($infoNode instanceof Variable) {
-                $data['variable_name - $this->isName($node, "X")'] = $this->nameResolver->getName($infoNode);
-            }
-
-            if ($infoNode instanceof MethodCall) {
-                $data['method_variable_name - $this->isName($node->var, "X")'] = $this->nameResolver->getName(
-                    $infoNode->var
-                );
-                $data['method_call_method_name - $this->isName($node->name, "X")'] = $this->nameResolver->getName(
-                    $infoNode->name
-                );
-
-                $objectType = $this->nodeTypeResolver->getStaticType($infoNode->var);
-                if ($objectType instanceof ObjectType) {
-                    $data['method_variable_type - $this->isObjectType($node, "X")'] = $objectType->getClassName();
-                } elseif ($objectType instanceof UnionType) {
-                    $objectTypes = [];
-
-                    // @todo solve that later
-                    foreach ($objectType->getTypes() as $unionedObjectType) {
-                        if ($unionedObjectType instanceof ObjectType) {
-                            $objectTypes[] = $unionedObjectType;
-                        }
-                    }
-
-                    $objectTypesAsString = implode(', ', $objectTypes);
-                    $data['method_variable_types - $this->isObjectType($node, "X")'] = $objectTypesAsString;
-                }
-            }
-
-            $data['node_type'] = get_class($infoNode);
+            $data = $this->decorateNodeData($infoNode);
 
             $docBlock = $this->createDocBlockFromArrayData($data);
             if ($node->getDocComment() === null) {
@@ -211,11 +181,161 @@ final class ScreenFileCommand extends AbstractCommand
                 $node->setDocComment(new Doc($newDocBlock));
             }
 
-            // make extra space between each node for readability
-            $nopNode = new Nop();
-            $this->nodeAddingCommander->addNodeBeforeNode($nopNode, $node);
-
             return $node;
         });
+    }
+
+    /**
+     * @param mixed[] $data
+     * @return mixed[]
+     */
+    private function decorateClassLike(ClassLike $classLike, array $data): array
+    {
+        $data['name'] = $this->nameResolver->getName($classLike);
+
+        $parentClassName = $classLike->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        if ($parentClassName) {
+            $data['parent_class_name'] = $parentClassName;
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param mixed[] $data
+     * @return mixed[]
+     */
+    private function decorateMethodCall(MethodCall $methodCall, array $data): array
+    {
+        $data['method_call_variable'] = $this->decorateNodeData($methodCall->var);
+        $data['method_call_name'] = $this->nameResolver->getName($methodCall->name);
+
+        return $data;
+    }
+
+    /**
+     * @param mixed[] $data
+     * @return mixed[]
+     */
+    private function decorateWithNodeType(Node $node, array $data): array
+    {
+        $data['node_type'] = $this->getObjectShortClass($node);
+
+        return $data;
+    }
+
+    /**
+     * @param mixed[] $data
+     * @return mixed[]
+     */
+    private function decorateReturn(Return_ $return, array $data): array
+    {
+        if ($return->expr === null) {
+            return $data;
+        }
+
+        $data['returned_node'] = $this->decorateNodeData($return->expr);
+
+        return $data;
+    }
+
+    /**
+     * @param object $object
+     */
+    private function getObjectShortClass($object): string
+    {
+        $classNode = get_class($object);
+
+        return (string) Strings::after($classNode, '\\', -1);
+    }
+
+    /**
+     * @param mixed[] $data
+     * @return mixed[]
+     */
+    private function decorateNodeData(Node $node, array $data = []): array
+    {
+        $data = $this->decorateWithNodeType($node, $data);
+
+        if ($node instanceof ClassLike) {
+            $data = $this->decorateClassLike($node, $data);
+        }
+
+        if ($node instanceof Variable) {
+            $data['name'] = $this->nameResolver->getName($node);
+        }
+
+        if ($node instanceof Assign) {
+            $data = $this->decorateAssign($node, $data);
+        }
+
+        if ($node instanceof Namespace_) {
+            if ($node->name !== null) {
+                $data['name'] = $this->nameResolver->getName($node->name);
+            }
+        }
+
+        if ($node instanceof FuncCall) {
+            if ($node->name !== null) {
+                $data['name'] = $this->nameResolver->getName($node->name);
+            }
+        }
+
+        if ($node instanceof Variable) {
+            $staticType = $this->nodeTypeResolver->getStaticType($node);
+
+            $classNames = TypeUtils::getDirectClassNames($staticType);
+            if ($classNames !== []) {
+                $objectTypesAsString = implode(', ', $classNames);
+                $data['variable_types'] = $objectTypesAsString;
+            } else {
+                $typeString = $this->staticTypeMapper->mapPHPStanTypeToDocString($staticType);
+                $data['variable_types'] = $typeString;
+            }
+        }
+
+        if ($node instanceof Return_) {
+            $data = $this->decorateReturn($node, $data);
+        }
+
+        if ($node instanceof ArrayItem) {
+            $arrayItemValueStaticType = $this->nodeTypeResolver->getStaticType($node->value);
+
+            $shortStaticType = $this->getObjectShortClass($arrayItemValueStaticType);
+            $data['value_static_type'] = $shortStaticType;
+        }
+
+        if ($node instanceof MethodCall) {
+            $data = $this->decorateMethodCall($node, $data);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param mixed[] $data
+     * @return mixed[]
+     */
+    private function decorateAssign(Assign $assign, array $data): array
+    {
+        $data['assign_var (the left one)'] = $this->decorateNodeData($assign->var);
+        $data['assign_expr (the right one)'] = $this->decorateNodeData($assign->expr);
+
+        return $data;
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    private function outputDecoratedFileContent(InputInterface $input, array $nodes): void
+    {
+        $decoratedFileContent = '<?php' . PHP_EOL . $this->betterStandardPrinter->prettyPrint($nodes);
+
+        $outputOption = (string) $input->getOption(self::OUTPUT_OPTION);
+        if ($outputOption) {
+            FileSystem::write($outputOption, $decoratedFileContent);
+        } else {
+            $this->symfonyStyle->writeln($decoratedFileContent);
+        }
     }
 }
