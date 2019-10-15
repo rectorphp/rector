@@ -65,7 +65,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         SymfonyStyle $symfonyStyle,
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory,
-        ExclusionManager $exclusionManager
+        ExclusionManager $exclusionManager,
         CommanderCollector $commanderCollector
     ): void {
         $this->symfonyStyle = $symfonyStyle;
