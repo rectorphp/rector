@@ -1,4 +1,4 @@
-# All 370 Rectors Overview
+# All 380 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -45,6 +45,7 @@
 - [Sensio](#sensio)
 - [Shopware](#shopware)
 - [Silverstripe](#silverstripe)
+- [StrictCodeQuality](#strictcodequality)
 - [Sylius](#sylius)
 - [Symfony](#symfony)
 - [SymfonyCodeQuality](#symfonycodequality)
@@ -1241,6 +1242,36 @@ include/require should be followed by absolute path
 
 <br>
 
+### `FunctionCallToConstantRector`
+
+- class: `Rector\CodingStyle\Rector\FuncCall\FunctionCallToConstantRector`
+
+Changes use of function calls to use constants
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = php_sapi_name();
++        $value = PHP_SAPI;
+     }
+ }
+```
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = pi();
++        $value = M_PI;
+     }
+ }
+```
+
+<br>
+
 ### `IdenticalFalseToBooleanNotRector`
 
 - class: `Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector`
@@ -1624,6 +1655,25 @@ Constant should have a @var comment with type
 +     * @var string
 +     */
      const HI = 'hi';
+ }
+```
+
+<br>
+
+### `VersionCompareFuncCallToConstantRector`
+
+- class: `Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector`
+
+Changes use of call to version compare function to use of PHP version constant
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        version_compare(PHP_VERSION, '5.3.0', '<');
++        PHP_VERSION_ID < 50300;
+     }
  }
 ```
 
@@ -2220,6 +2270,29 @@ Remove unused private properties
 -        $value = 5 + 0;
 +        $value = 5;
 +        $value = 5;
+     }
+ }
+```
+
+<br>
+
+### `SimplifyIfElseWithSameContentRector`
+
+- class: `Rector\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector`
+
+Remove if/else if they have same content
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        if (true) {
+-            return 1;
+-        } else {
+-            return 1;
+-        }
++        return 1;
      }
  }
 ```
@@ -3229,6 +3302,27 @@ Removes non-existing @var annotations above the code
 
 ## PHPUnit
 
+### `AddDoesNotPerformAssertionToNonAssertingTestRector`
+
+- class: `Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector`
+
+Tests without assertion will have @doesNotPerformAssertion 
+
+```diff
+ class SomeClass extends PHPUnit\Framework\TestCase
+ {
++    /**
++     * @doesNotPerformAssertion
++     */
+     public function test()
+     {
+         $nothing = 5;
+     }
+ }
+```
+
+<br>
+
 ### `AddSeeTestAnnotationRector`
 
 - class: `Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector`
@@ -3545,6 +3639,28 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 
 <br>
 
+### `EnsureDataProviderInDocBlockRector`
+
+- class: `Rector\PHPUnit\Rector\ClassMethod\EnsureDataProviderInDocBlockRector`
+
+Data provider annotation must be in doc block
+
+```diff
+ class SomeClass extends PHPUnit\Framework\TestCase
+ {
+-    /*
++    /**
+      * @dataProvider testProvideData()
+      */
+     public function test()
+     {
+         $nothing = 5;
+     }
+ }
+```
+
+<br>
+
 ### `ExceptionAnnotationRector`
 
 - class: `Rector\PHPUnit\Rector\ExceptionAnnotationRector`
@@ -3566,6 +3682,28 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 
 <br>
 
+### `FixDataProviderAnnotationTypoRector`
+
+- class: `Rector\PHPUnit\Rector\ClassMethod\FixDataProviderAnnotationTypoRector`
+
+Fix data provider annotation typos
+
+```diff
+ class SomeClass extends \PHPUnit\Framework\TestCase
+ {
+     /**
+-     * @dataProvidor testProvideData()
++     * @dataProvider testProvideData()
+      */
+     public function test()
+     {
+         $nothing = 5;
+     }
+ }
+```
+
+<br>
+
 ### `GetMockRector`
 
 - class: `Rector\PHPUnit\Rector\GetMockRector`
@@ -3580,6 +3718,34 @@ Turns getMock*() methods to createMock()
 ```diff
 -$this->getMockWithoutInvokingTheOriginalConstructor("Class");
 +$this->createMock("Class");
+```
+
+<br>
+
+### `RemoveDataProviderTestPrefixRector`
+
+- class: `Rector\PHPUnit\Rector\Class_\RemoveDataProviderTestPrefixRector`
+
+Data provider methods cannot start with "test" prefix
+
+```diff
+ class SomeClass extends PHPUnit\Framework\TestCase
+ {
+     /**
+-     * @dataProvider testProvideData()
++     * @dataProvider provideData()
+      */
+     public function test()
+     {
+         $nothing = 5;
+     }
+
+-    public function testProvideData()
++    public function provideData()
+     {
+         return ['123'];
+     }
+ }
 ```
 
 <br>
@@ -5832,6 +5998,32 @@ Finalize every class constant that is used only locally
 
 <br>
 
+### `UseInterfaceOverImplementationInConstructorRector`
+
+- class: `Rector\SOLID\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector`
+
+Use interface instead of specific class
+
+```diff
+ class SomeClass
+ {
+-    public function __construct(SomeImplementation $someImplementation)
++    public function __construct(SomeInterface $someImplementation)
+     {
+     }
+ }
+
+ class SomeImplementation implements SomeInterface
+ {
+ }
+
+ interface SomeInterface
+ {
+ }
+```
+
+<br>
+
 ## Sensio
 
 ### `TemplateAnnotationRector`
@@ -5940,6 +6132,28 @@ Turns defined function call to static method call.
 
 <br>
 
+## StrictCodeQuality
+
+### `VarInlineAnnotationToAssertRector`
+
+- class: `Rector\StrictCodeQuality\Rector\Stmt\VarInlineAnnotationToAssertRector`
+
+Turn @var inline checks above code to assert() of hte type
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         /** @var SpecificClass $value */
++        assert($value instanceof SpecificClass);
+         $value->call();
+     }
+ }
+```
+
+<br>
+
 ## Sylius
 
 ### `ReplaceCreateMethodWithoutReviewerRector`
@@ -6037,6 +6251,26 @@ Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
 ```diff
 -Symfony\Component\Console\ConsoleEvents::EXCEPTION
 +Symfony\Component\Console\ConsoleEvents::ERROR
+```
+
+<br>
+
+### `ConsoleExecuteReturnIntRector`
+
+- class: `Rector\Symfony\Rector\Console\ConsoleExecuteReturnIntRector`
+
+Returns int from Command::execute command
+
+```diff
+ class SomeCommand extends Command
+ {
+-    public function execute(InputInterface $input, OutputInterface $output)
++    public function index(InputInterface $input, OutputInterface $output): int
+     {
+-        return null;
++        return 0;
+     }
+ }
 ```
 
 <br>
