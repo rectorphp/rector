@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\CodingStyle\Application;
 
@@ -238,6 +240,11 @@ final class UseAddingCommander implements CommanderInterface
         }
 
         return true;
+    }
+
+    public function getPriority(): int
+    {
+        return 500;
     }
 
     /**

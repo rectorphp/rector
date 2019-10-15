@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\MysqlToMysqli\Tests\Fixture;
 
@@ -14,7 +16,9 @@ final class SetFixture
 
 ?>
 -----
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\MysqlToMysqli\Tests\Fixture;
 

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveUnreachableStatementRector;
 
@@ -24,6 +26,7 @@ final class RemoveUnreachableStatementRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/skip_condition_before.php.inc'];
         yield [__DIR__ . '/Fixture/skip_marked_skipped_test_file.php.inc'];
         yield [__DIR__ . '/Fixture/keep_comment.php.inc'];
+        yield [__DIR__ . '/Fixture/if_else.php.inc'];
     }
 
     protected function getRectorClass(): string

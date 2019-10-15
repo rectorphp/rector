@@ -21,7 +21,6 @@
         "phpstan/phpdoc-parser": "^0.3.5",
         "phpstan/phpstan": "^0.11.13",
         "phpstan/phpstan-phpunit": "^0.11.2",
-        "ramsey/uuid": "^3.8",
         "sebastian/diff": "^3.0",
         "symfony/console": "^3.4|^4.2",
         "symfony/dependency-injection": "^3.4|^4.2",
@@ -174,7 +173,8 @@
             "packages/TypeDeclaration/tests/Rector/FunctionLike/ReturnTypeDeclarationRector/Source/MyBar.php",
             "packages/Renaming/tests/Rector/Class_/RenameClassRector/Source/Twig_Extension_Sandbox.php",
             "packages/Renaming/tests/Rector/Class_/RenameClassRector/Source/TwigFilter.php",
-            "packages/Renaming/tests/Rector/Class_/RenameClassRector/Source/Manual_Twig_Filter.php"
+            "packages/Renaming/tests/Rector/Class_/RenameClassRector/Source/Manual_Twig_Filter.php",
+            "packages/SOLID/tests/Rector/ClassMethod/UseInterfaceOverImplementationInConstructorRector/Source/Apple.php"
         ]
     },
     "scripts": {

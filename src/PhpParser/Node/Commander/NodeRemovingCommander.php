@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\PhpParser\Node\Commander;
 
@@ -79,6 +81,11 @@ final class NodeRemovingCommander implements CommanderInterface
     public function getNodesToRemove(): array
     {
         return $this->nodesToRemove;
+    }
+
+    public function getPriority(): int
+    {
+        return 800;
     }
 
     private function ensureIsNotPartOfChainMethodCall(Node $node): void

@@ -1,17 +1,17 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\PhpParser\Node\Commander;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
 
@@ -82,21 +82,27 @@ final class NodeAddingCommander implements CommanderInterface
         return count($this->nodesToAdd) > 0 || count($this->nodesToAddBefore) > 0;
     }
 
+    public function getPriority(): int
+    {
+        return 1000;
+    }
+
     private function resolveNearestExpressionPosition(Node $node): string
     {
         if ($node instanceof Expression) {
             return spl_object_hash($node);
         }
 
+        // special case for "If_"
+        $parentNode = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
+        if ($parentNode === null) {
+            return spl_object_hash($node);
+        }
+
         /** @var Expression|null $foundNode */
         $foundNode = $this->betterNodeFinder->findFirstAncestorInstanceOf($node, Expression::class);
         if ($foundNode === null) {
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof ClassLike) {
-                $foundNode = $node;
-            } else {
-                throw new ShouldNotHappenException();
-            }
+            $foundNode = $node;
         }
 
         return spl_object_hash($foundNode);

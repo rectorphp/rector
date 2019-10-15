@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 // see https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Advanced+Metadata
 namespace PHPSTORM_META;
@@ -27,6 +29,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACE_NAME,
     \Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACE_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE,
+    \Rector\NodeTypeResolver\Node\AttributeKey::PARENT_CLASS_NAME,
     \Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_EXPRESSION,
@@ -49,6 +52,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACE_NAME,
     \Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACE_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE,
+    \Rector\NodeTypeResolver\Node\AttributeKey::PARENT_CLASS_NAME,
     \Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_EXPRESSION,

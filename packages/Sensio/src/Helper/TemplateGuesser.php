@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Sensio\Helper;
 
@@ -8,6 +10,10 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
+/**
+ * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\TemplateAnnotationVersion3RectorTest
+ * @see \Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\TemplateAnnotationVersion5RectorTest
+ */
 final class TemplateGuesser
 {
     /**

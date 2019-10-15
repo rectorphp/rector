@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\PhpParser\Node\Manipulator;
 
@@ -149,6 +151,26 @@ final class ClassMethodManipulator
         $classMethodNode->params[] = new Param(new Variable($paramName), null, new FullyQualified($type));
 
         return $paramName;
+    }
+
+    public function removeParameter(Param $param, ClassMethod $classMethod): void
+    {
+        foreach ($classMethod->params as $key => $constructorParam) {
+            if (! $this->nameResolver->areNamesEqual($constructorParam, $param)) {
+                continue;
+            }
+
+            unset($classMethod->params[$key]);
+        }
+    }
+
+    public function removeUnusedParameters(ClassMethod $classMethod): void
+    {
+        foreach ($classMethod->getParams() as $param) {
+            if (! $this->isParameterUsedMethod($param, $classMethod)) {
+                $this->removeParameter($param, $classMethod);
+            }
+        }
     }
 
     private function isMethodInParent(string $class, string $method): bool

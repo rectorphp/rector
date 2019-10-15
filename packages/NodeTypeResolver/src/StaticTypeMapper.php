@@ -1,7 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver;
 
+use Closure;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -26,6 +29,7 @@ use PHPStan\Type\CallableType;
 use PHPStan\Type\ClosureType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
@@ -279,7 +283,7 @@ final class StaticTypeMapper
 
     public function mapPHPStanTypeToDocString(Type $phpStanType, ?Type $parentType = null): string
     {
-        if ($phpStanType instanceof UnionType) {
+        if ($phpStanType instanceof UnionType || $phpStanType instanceof IntersectionType) {
             $stringTypes = [];
 
             foreach ($phpStanType->getTypes() as $unionedType) {
@@ -290,7 +294,9 @@ final class StaticTypeMapper
             $stringTypes = array_unique($stringTypes);
             $stringTypes = array_filter($stringTypes);
 
-            return implode('|', $stringTypes);
+            $joinCharacter = $phpStanType instanceof IntersectionType ? '&' : '|';
+
+            return implode($joinCharacter, $stringTypes);
         }
 
         if ($phpStanType instanceof AliasedObjectType) {
@@ -313,6 +319,10 @@ final class StaticTypeMapper
             }
 
             return $phpStanType->getClassName();
+        }
+
+        if ($phpStanType instanceof ClosureType) {
+            return '\\' . Closure::class;
         }
 
         if ($phpStanType instanceof StringType) {

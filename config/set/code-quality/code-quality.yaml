@@ -42,3 +42,4 @@ services:
     Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector: ~
     Rector\CodeQuality\Rector\FuncCall\RemoveSoleValueSprintfRector: ~
     Rector\CodeQuality\Rector\If_\ShortenElseIfRector: ~
+    Rector\SOLID\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector: ~

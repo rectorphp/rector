@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Testing\PHPUnit;
 
@@ -76,7 +78,9 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
                     self::$container = self::$allRectorContainer;
                 }
             } else {
-                $this->bootKernelWithConfigs(RectorKernel::class, [$this->provideConfig()]);
+                // 3rd party
+                $configFileTempPath = $this->getConfigFor3rdPartyTest();
+                $this->bootKernelWithConfigs(RectorKernel::class, [$configFileTempPath]);
             }
 
             $enabledRectorsProvider = self::$container->get(EnabledRectorsProvider::class);
@@ -233,5 +237,22 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         }
 
         $this->setParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
+    }
+
+    private function getConfigFor3rdPartyTest(): string
+    {
+        if ($this->provideConfig() !== '') {
+            return $this->provideConfig();
+        }
+
+        $rectorClassWithConfiguration = $this->getCurrentTestRectorClassesWithConfiguration();
+        $yamlContent = Yaml::dump([
+            'services' => $rectorClassWithConfiguration,
+        ], Yaml::DUMP_OBJECT_AS_MAP);
+
+        $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/current_test.yaml');
+        FileSystem::write($configFileTempPath, $yamlContent);
+
+        return $configFileTempPath;
     }
 }

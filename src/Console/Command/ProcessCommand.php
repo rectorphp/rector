@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Console\Command;
 
@@ -14,6 +16,7 @@ use Rector\Extension\ReportingExtensionRunner;
 use Rector\FileSystem\FilesFinder;
 use Rector\Guard\RectorGuard;
 use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
+use Rector\Stubs\StubLoader;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -73,6 +76,11 @@ final class ProcessCommand extends AbstractCommand
     private $rectorNodeTraverser;
 
     /**
+     * @var StubLoader
+     */
+    private $stubLoader;
+
+    /**
      * @param string[] $fileExtensions
      */
     public function __construct(
@@ -85,6 +93,7 @@ final class ProcessCommand extends AbstractCommand
         OutputFormatterCollector $outputFormatterCollector,
         ReportingExtensionRunner $reportingExtensionRunner,
         RectorNodeTraverser $rectorNodeTraverser,
+        StubLoader $stubLoader,
         array $fileExtensions
     ) {
         $this->filesFinder = $phpFilesFinder;
@@ -97,6 +106,7 @@ final class ProcessCommand extends AbstractCommand
         $this->outputFormatterCollector = $outputFormatterCollector;
         $this->reportingExtensionRunner = $reportingExtensionRunner;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
+        $this->stubLoader = $stubLoader;
 
         parent::__construct();
     }
@@ -148,6 +158,7 @@ final class ProcessCommand extends AbstractCommand
         $this->configuration->setAreAnyPhpRectorsLoaded((bool) $this->rectorNodeTraverser->getPhpRectorCount());
 
         $this->rectorGuard->ensureSomeRectorsAreRegistered();
+        $this->stubLoader->loadStubs();
 
         $source = (array) $input->getArgument(Option::SOURCE);
 

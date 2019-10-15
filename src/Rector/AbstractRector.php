@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Rector;
 
@@ -9,6 +11,8 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Commander\CommanderCollector;
+use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\Exclusion\ExclusionManager;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -41,6 +45,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var ExclusionManager
      */
     private $exclusionManager;
+    
+    /**
+     * @var CommanderCollector
+     */
+    private $commanderCollector;
 
     /**
      * Run once in the every end of one processed file
@@ -57,11 +66,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory,
         ExclusionManager $exclusionManager
+        CommanderCollector $commanderCollector
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;
         $this->exclusionManager = $exclusionManager;
+        $this->commanderCollector = $commanderCollector;
     }
 
     /**
@@ -75,7 +86,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // show current Rector class on --debug
         if ($this->symfonyStyle->isDebug()) {
-            $this->symfonyStyle->writeln('[applying] ' . static::class);
+            // indented on purpose to improve log nesting under [refactoring]
+            $this->symfonyStyle->writeln('    [applying] ' . static::class);
         }
 
         // already removed
@@ -126,28 +138,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     public function afterTraverse(array $nodes): array
     {
-        if ($this->nodeAddingCommander->isActive()) {
-            $nodes = $this->nodeAddingCommander->traverseNodes($nodes);
-        }
+        foreach ($this->commanderCollector->provide() as $commander) {
+            if (! $commander->isActive()) {
+                continue;
+            }
 
-        if ($this->propertyAddingCommander->isActive()) {
-            $nodes = $this->propertyAddingCommander->traverseNodes($nodes);
+            $nodes = $commander->traverseNodes($nodes);
         }
-
-        if ($this->nodeRemovingCommander->isActive()) {
-            $nodes = $this->nodeRemovingCommander->traverseNodes($nodes);
-        }
-
-        // this must run before use imports, since it adds them
-        if ($this->nameImportingCommander->isActive()) {
-            $nodes = $this->nameImportingCommander->traverseNodes($nodes);
-        }
-
-        if ($this->useAddingCommander->isActive()) {
-            $nodes = $this->useAddingCommander->traverseNodes($nodes);
-        }
-
-        // @todo class like renaming
 
         $this->tearDown();
 

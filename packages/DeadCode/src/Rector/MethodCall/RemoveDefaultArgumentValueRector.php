@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\DeadCode\Rector\MethodCall;
 
@@ -14,7 +16,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\Reflection\FunctionReflectionResolver;
 use ReflectionFunction;
 
 /**
@@ -27,17 +28,9 @@ final class RemoveDefaultArgumentValueRector extends AbstractRector
      */
     private $parsedNodesByType;
 
-    /**
-     * @var FunctionReflectionResolver
-     */
-    private $functionReflectionResolver;
-
-    public function __construct(
-        ParsedNodesByType $parsedNodesByType,
-        FunctionReflectionResolver $functionReflectionResolver
-    ) {
+    public function __construct(ParsedNodesByType $parsedNodesByType)
+    {
         $this->parsedNodesByType = $parsedNodesByType;
-        $this->functionReflectionResolver = $functionReflectionResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -102,7 +95,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->args === []) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -227,13 +220,34 @@ PHP
             return $defaultValues;
         }
 
-        $coreFunctionReflection = $this->functionReflectionResolver->resolveCoreStubFunctionNode($nodeName);
+        return [];
+    }
 
-        // unable to found
-        if ($coreFunctionReflection === null) {
-            return [];
+    /**
+     * @param MethodCall|StaticCall|FuncCall $node
+     */
+    private function shouldSkip(Node $node): bool
+    {
+        if ($node->args === []) {
+            return true;
         }
 
-        return $this->resolveDefaultParamValuesFromFunctionLike($coreFunctionReflection);
+        if (! $node instanceof FuncCall) {
+            return false;
+        }
+
+        $functionName = $this->getName($node->name);
+        if ($functionName === null) {
+            return false;
+        }
+
+        if (! function_exists($functionName)) {
+            return false;
+        }
+
+        $reflectionFunction = new ReflectionFunction($functionName);
+
+        // skip native functions, hard to analyze without stubs (stubs would make working with IDE non-practical)
+        return $reflectionFunction->isInternal();
     }
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\DeadCode\Rector\Stmt;
 
@@ -7,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Nop;
@@ -139,6 +142,10 @@ PHP
         }
 
         if ($node instanceof Namespace_) {
+            return true;
+        }
+
+        if ($node instanceof Else_) {
             return true;
         }
 

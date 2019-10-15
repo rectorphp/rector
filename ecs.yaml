@@ -1,5 +1,5 @@
 imports:
-    - { resource: 'vendor/symplify/easy-coding-standard/config/set/psr2.yaml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/set/psr12.yaml' }
     - { resource: 'vendor/symplify/easy-coding-standard/config/set/php71.yaml' }
     - { resource: 'vendor/symplify/easy-coding-standard/config/set/symplify.yaml' }
     - { resource: 'vendor/symplify/easy-coding-standard/config/set/common.yaml' }
@@ -66,6 +66,8 @@ parameters:
         - '*utils/ContributorTools/templates/*'
         - 'stubs/*'
         - '*/Expected/*'
+        # exclude
+        - 'src/Rector/AbstractRector.php'
 
     skip:
         PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff.Underscore: ~
@@ -117,6 +119,8 @@ parameters:
             - 'src/Rector/AbstractRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+            # solve later
+            - 'src/Console/Command/ScreenFileCommand.php'
             - 'packages/Doctrine/src/Rector/ClassMethod/AddMethodCallBasedParamTypeRector.php'
             - 'packages/TypeDeclaration/src/TypeInferer/ReturnTypeInferer/ReturnedNodesReturnTypeInferer.php'
             - 'packages/NodeTypeResolver/src/NodeTypeResolver.php'
@@ -196,3 +200,6 @@ parameters:
         Symplify\CodingStandard\Sniffs\Commenting\AnnotationTypeExistsSniff:
             - '*PhpDocNodeFactory.php'
             - '*AnnotationReader.php'
+
+        # conflicts with "PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer"
+        PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer: ~

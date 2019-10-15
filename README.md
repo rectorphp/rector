@@ -120,9 +120,20 @@ parameters:
 By default Rector uses language features of your PHP version. If you you want to use different PHP version than your system, put it in config:
 
 ```yaml
+# rector.yaml
 parameters:
     php_version_features: '7.2' # your version 7.3
 ```
+
+Do you prefer importing FQN class names by default?
+
+```yaml
+# rector.yaml
+parameters:
+    auto_import_names: true
+```
+
+This will import classes on every change Rector does, so you don't have to do it manually/with coding standard after each run.
 
 ## Running Rector
 
@@ -181,7 +192,9 @@ Let's say we want to **change method calls from `set*` to `change*`**.
 Create a class that extends [`Rector\Rector\AbstractRector`](/src/Rector/AbstractRector.php). It has useful methods like checking node type and name. Just run `$this->` and let PHPStorm show you all possible methods.
 
 ```php
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Rector;
 

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\CodingStyle\Application;
 
@@ -57,5 +59,10 @@ final class NameImportingCommander implements CommanderInterface
         });
 
         return $nodes;
+    }
+
+    public function getPriority(): int
+    {
+        return 600;
     }
 }

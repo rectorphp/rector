@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Contract\PhpParser\Node;
 
@@ -6,6 +8,11 @@ use PhpParser\Node;
 
 interface CommanderInterface
 {
+    /**
+     * Higher values are executed first
+     */
+    public function getPriority(): int;
+
     public function isActive(): bool;
 
     /**

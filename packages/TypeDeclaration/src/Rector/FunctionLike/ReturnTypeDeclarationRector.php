@@ -1,13 +1,21 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
+use Iterator;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\IntersectionType;
+use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\RectorDefinition\CodeSample;
@@ -128,6 +136,15 @@ PHP
         if ($node->returnType !== null) {
             $isSubtype = $this->isSubtypeOf($inferredReturnNode, $node->returnType);
 
+            $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
+
+            // is current class implementation/subtype
+            if ($currentType instanceof ObjectType && $inferedType instanceof ObjectType) {
+                if (is_a($currentType->getClassName(), $inferedType->getClassName(), true)) {
+                    return null;
+                }
+            }
+
             // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
             if ($this->isAtLeastPhpVersion('7.4') && $isSubtype) {
                 $node->returnType = $inferredReturnNode;
@@ -230,7 +247,12 @@ PHP
             return false;
         }
 
-        if ($this->print($node->returnType) === $this->print($returnNode)) {
+        if ($this->areNodesEqual($node->returnType, $returnNode)) {
+            return true;
+        }
+
+        // is array <=> iterable <=> Iterator co-type? → skip
+        if ($this->isArrayIterableIteratorCoType($node, $returnType)) {
             return true;
         }
 
@@ -243,5 +265,43 @@ PHP
         }
 
         return false;
+    }
+
+    private function isStaticTypeIterable(Type $type): bool
+    {
+        if ($type instanceof ArrayType) {
+            return true;
+        }
+
+        if ($type instanceof IterableType) {
+            return true;
+        }
+
+        if ($type instanceof ObjectType) {
+            if ($type->getClassName() === Iterator::class) {
+                return true;
+            }
+        }
+
+        if ($type instanceof UnionType || $type instanceof IntersectionType) {
+            foreach ($type->getTypes() as $joinedType) {
+                if (! $this->isStaticTypeIterable($joinedType)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function isArrayIterableIteratorCoType(Node $node, Type $returnType): bool
+    {
+        if (! $this->isNames($node->returnType, ['iterable', 'Iterator', 'array'])) {
+            return false;
+        }
+
+        return $this->isStaticTypeIterable($returnType);
     }
 }

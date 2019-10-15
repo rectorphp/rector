@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\PhpParser\Node\Commander;
 
@@ -54,6 +56,11 @@ final class PropertyAddingCommander implements CommanderInterface
     public function isActive(): bool
     {
         return count($this->propertiesByClass) > 0;
+    }
+
+    public function getPriority(): int
+    {
+        return 900;
     }
 
     private function createNodeVisitor(): NodeVisitor

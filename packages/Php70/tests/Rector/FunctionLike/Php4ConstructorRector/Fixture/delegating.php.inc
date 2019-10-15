@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 final class DelegatingPhp4ConstructorClass
 {
@@ -27,7 +29,9 @@ final class DelegatingPhp4ConstructorClass
 
 ?>
 -----
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 final class DelegatingPhp4ConstructorClass
 {

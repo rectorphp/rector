@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Application\FileSystem;
 
@@ -68,10 +70,12 @@ final class RemovedAndAddedFilesProcessor
     private function processDeletedFiles(): void
     {
         foreach ($this->removedAndAddedFilesCollector->getRemovedFiles() as $smartFileInfo) {
+            $relativePath = $smartFileInfo->getRelativeFilePathFromDirectory(getcwd());
+
             if ($this->configuration->isDryRun()) {
-                $this->symfonyStyle->warning(sprintf('File "%s" will be removed', $smartFileInfo->getRealPath()));
+                $this->symfonyStyle->warning(sprintf('File "%s" will be removed', $relativePath));
             } else {
-                $this->symfonyStyle->warning(sprintf('File "%s" was removed', $smartFileInfo->getRealPath()));
+                $this->symfonyStyle->warning(sprintf('File "%s" was removed', $relativePath));
                 $this->filesystem->remove($smartFileInfo->getRealPath());
             }
         }

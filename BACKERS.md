@@ -24,3 +24,10 @@ Check out all the tiers - higher ones include additional goodies like placing th
 ## $1+
 
 - Arnaud TIERANT
+
+<br>
+
+## PayPal Backers
+
+- Musement S.p.a.
+- Sebastian Schreiber

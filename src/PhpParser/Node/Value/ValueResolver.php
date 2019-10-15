@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\PhpParser\Node\Value;
 
@@ -182,10 +184,13 @@ final class ValueResolver
         foreach ($constantArrayType->getValueTypes() as $i => $valueType) {
             if ($valueType instanceof ConstantArrayType) {
                 $value = $this->extractConstantArrayTypeValue($valueType);
-            } else {
-                /** @var ConstantScalarType $valueType */
+            } elseif ($valueType instanceof ConstantScalarType) {
                 $value = $valueType->getValue();
+            } else {
+                // not sure about value
+                continue;
             }
+
             $values[$keys[$i]] = $value;
         }
 

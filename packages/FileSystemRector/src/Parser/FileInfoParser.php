@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\FileSystemRector\Parser;
 
@@ -33,5 +35,15 @@ final class FileInfoParser
         $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
 
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo->getRealPath());
+    }
+
+    /**
+     * @return Node[]
+     */
+    public function parseFileInfoToNodesAndDecorateWithScope(SmartFileInfo $fileInfo): array
+    {
+        $oldStmts = $this->parser->parseFile($fileInfo->getRealPath());
+
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($oldStmts, $fileInfo->getRealPath(), true);
     }
 }

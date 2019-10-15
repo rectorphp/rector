@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\NodeContainer;
 
@@ -21,6 +23,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeUtils;
 use PHPStan\Type\UnionType;
 use Rector\Exception\NotImplementedException;
 use Rector\Exception\ShouldNotHappenException;
@@ -304,6 +307,42 @@ final class ParsedNodesByType
     public function findFunction(string $name): ?Function_
     {
         return $this->simpleParsedNodesByType[Function_::class][$name] ?? null;
+    }
+
+    public function findClassMethodByMethodCall(MethodCall $methodCall): ?ClassMethod
+    {
+        /** @var string|null $className */
+        $className = $methodCall->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
+            return null;
+        }
+
+        $methodName = $this->nameResolver->getName($methodCall->name);
+        if ($methodName === null) {
+            return null;
+        }
+
+        return $this->findMethod($methodName, $className);
+    }
+
+    public function findClassMethodByStaticCall(StaticCall $staticCall): ?ClassMethod
+    {
+        $methodName = $this->nameResolver->getName($staticCall->name);
+        if ($methodName === null) {
+            return null;
+        }
+
+        $objectType = $this->nodeTypeResolver->getObjectType($staticCall->class);
+
+        $classNames = TypeUtils::getDirectClassNames($objectType);
+        foreach ($classNames as $className) {
+            $foundMethod = $this->findMethod($methodName, $className);
+            if ($foundMethod) {
+                return $foundMethod;
+            }
+        }
+
+        return null;
     }
 
     public function findMethod(string $methodName, string $className): ?ClassMethod

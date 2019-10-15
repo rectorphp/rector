@@ -2,3 +2,7 @@ services:
     -
         class: Rector\NodeTypeResolver\Type\TypeExtension\StaticContainerGetDynamicMethodReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+
+    -
+        class: Rector\NodeTypeResolver\Type\TypeExtension\KernelGetContainerAfterBootReturnTypeExtension
+        tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
