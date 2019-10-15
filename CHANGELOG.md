@@ -9,7 +9,51 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
-## v0.5.14 - 2019-10-09
+## [v0.5.17] - 2019-10-15
+
+### Added
+
+- [#2156] [PHPUnit] [Doc] Add FixDataProviderAnnotationTypoRector
+- [#2155] [PHPUnit] [Doc] Add EnsureDataProviderInDocBlockRector
+- [#2144] [PHPUnit] Add RemoveDataProviderTestPrefixRector
+- [#2132] [Symfony] Add ConsoleExecuteReturnIntRector, Thanks to [@keulinho]
+- [#2166] add paypal backers
+- [#2150] phpstan - add getContainer() after boot()
+- [#2141] add inter support
+- [#2142] [PHPUnit 6] Add AddDoesNotPerformAssertionToNonAssertingTestRector
+- [#2087] Added way to exclude rectors, Thanks to [@jeroensmit]
+
+### Fixed
+
+- [#2146] fix ValueResolver static array for non static keys
+- [#2152] fix get property by class
+- [#2114] Fix for issue [#2090], Thanks to [@jeroensmit]
+- [#2140] fix 3rd party testing without config
+- [#2147] fix string-named func
+- [#2164] [code-quality] fixes processing of trait - RemoveAlwaysTrueConditionSetInConstructorRector  [#2162], Thanks to [@lapetr]
+- [#2165] Bugfix for RemoveUnreachableStatementRector, Thanks to [@jeroensmit]
+
+### Changed
+
+- [#2145] [DeadCode] Make RemoveDefaultArgumentValueRector skip native functions
+- [#2148] [TypeDeclaration] Prevent array-iterable-Iterator override in ReturnTypeDeclarationRector
+- [#2159] Screen file command improvements
+- [#2149] prevent doc type of child array override
+- [#2151] make `ReturnTypeDeclarationRector` keep implementation
+
+## [v0.5.16] - 2019-10-10
+
+- [#2139] Add `screen-file` command for learning & trainings
+
+## [v0.5.15] - 2019-10-10
+
+### Fixed
+
+- [#2135] Fix EncapsedStringsToSprintfRector for non-var exprs
+- [#2130] fix stub loading location
+- [#2128] Fix `EncapsedStringsToSprintfRector` when using class properties, Thanks to [@gnutix]
+
+## [v0.5.14] - 2019-10-09
 
 ### Added
 
@@ -1164,10 +1208,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#2115]: https://github.com/rectorphp/rector/pull/2115
 [#2112]: https://github.com/rectorphp/rector/pull/2112
 [#2109]: https://github.com/rectorphp/rector/pull/2109
-[#2108]: https://github.com/rectorphp/rector/pull/2108
 [#2107]: https://github.com/rectorphp/rector/pull/2107
-[#2106]: https://github.com/rectorphp/rector/pull/2106
-[#2105]: https://github.com/rectorphp/rector/pull/2105
 [#2103]: https://github.com/rectorphp/rector/pull/2103
 [#2102]: https://github.com/rectorphp/rector/pull/2102
 [#2101]: https://github.com/rectorphp/rector/pull/2101
@@ -1204,6 +1245,38 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#2047]: https://github.com/rectorphp/rector/pull/2047
 [#2009]: https://github.com/rectorphp/rector/pull/2009
 [@jeroenherczeg]: https://github.com/jeroenherczeg
-[@Template]: https://github.com/Template
 [@TODO]: https://github.com/TODO
 [v0.5.13]: https://github.com/rectorphp/rector/compare/v0.5.12...v0.5.13
+[#2166]: https://github.com/rectorphp/rector/pull/2166
+[#2165]: https://github.com/rectorphp/rector/pull/2165
+[#2164]: https://github.com/rectorphp/rector/pull/2164
+[#2162]: https://github.com/rectorphp/rector/pull/2162
+[#2159]: https://github.com/rectorphp/rector/pull/2159
+[#2156]: https://github.com/rectorphp/rector/pull/2156
+[#2155]: https://github.com/rectorphp/rector/pull/2155
+[#2154]: https://github.com/rectorphp/rector/pull/2154
+[#2152]: https://github.com/rectorphp/rector/pull/2152
+[#2151]: https://github.com/rectorphp/rector/pull/2151
+[#2150]: https://github.com/rectorphp/rector/pull/2150
+[#2149]: https://github.com/rectorphp/rector/pull/2149
+[#2148]: https://github.com/rectorphp/rector/pull/2148
+[#2147]: https://github.com/rectorphp/rector/pull/2147
+[#2146]: https://github.com/rectorphp/rector/pull/2146
+[#2145]: https://github.com/rectorphp/rector/pull/2145
+[#2144]: https://github.com/rectorphp/rector/pull/2144
+[#2142]: https://github.com/rectorphp/rector/pull/2142
+[#2141]: https://github.com/rectorphp/rector/pull/2141
+[#2140]: https://github.com/rectorphp/rector/pull/2140
+[#2139]: https://github.com/rectorphp/rector/pull/2139
+[#2135]: https://github.com/rectorphp/rector/pull/2135
+[#2132]: https://github.com/rectorphp/rector/pull/2132
+[#2130]: https://github.com/rectorphp/rector/pull/2130
+[#2129]: https://github.com/rectorphp/rector/pull/2129
+[#2128]: https://github.com/rectorphp/rector/pull/2128
+[#2114]: https://github.com/rectorphp/rector/pull/2114
+[#2090]: https://github.com/rectorphp/rector/pull/2090
+[#2087]: https://github.com/rectorphp/rector/pull/2087
+[v0.5.16]: https://github.com/rectorphp/rector/compare/v0.5.15...v0.5.16
+[@lapetr]: https://github.com/lapetr
+[v0.5.15]: https://github.com/rectorphp/rector/compare/v0.5.14...v0.5.15
+[v0.5.14]: https://github.com/rectorphp/rector/compare/v0.5.13...v0.5.14
