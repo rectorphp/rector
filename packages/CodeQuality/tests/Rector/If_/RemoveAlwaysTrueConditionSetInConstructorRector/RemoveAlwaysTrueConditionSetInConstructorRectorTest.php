@@ -31,6 +31,7 @@ final class RemoveAlwaysTrueConditionSetInConstructorRectorTest extends Abstract
         yield [__DIR__ . '/Fixture/skip_scalars.php.inc'];
         yield [__DIR__ . '/Fixture/skip_unknown.php.inc'];
         yield [__DIR__ . '/Fixture/skip_optional_argument_value.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_trait.php.inc'];
     }
 
     protected function getRectorClass(): string
