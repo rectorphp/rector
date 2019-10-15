@@ -84,6 +84,7 @@ parameters:
             - 'packages/Php71/src/Rector/FuncCall/RemoveExtraParametersRector.php'
             - 'packages/SOLID/src/Analyzer/ClassConstantFetchAnalyzer.php'
             # tough logic
+            - 'packages/Autodiscovery/src/Analyzer/ClassAnalyzer.php'
             - 'packages/CodingStyle/src/Imports/ImportSkipper.php'
             - 'packages/PHPUnit/src/Rector/Class_/ArrayArgumentInTestToDataProviderRector.php'
             - 'packages/BetterPhpDocParser/src/Ast/PhpDoc/*/*TagValueNode.php'
