@@ -191,6 +191,12 @@ parameters:
 
         - '#Method Rector\\Doctrine\\Rector\\MethodCall\\ChangeSetIdToUuidValueRector\:\:getSetUuidMethodCallOnSameVariable\(\) should return PhpParser\\Node\\Expr\\MethodCall\|null but returns PhpParser\\Node\|null#'
 
+        # Does not understand Mockery
+        - '#Property .* does not accept Mockery\\#'
+        - '#Method .+ should return .+ but returns Mockery\\.+#'
+        - '#.*should return Mockery Mockery\\#'
+        - '#Call to an undefined method Mockery\\ExpectationInterface\|Mockery\\HigherOrderMessage\:\:times\(\)#'
+
         # bugs
         - '#Parameter \#1 \$items of class PhpParser\\Node\\Expr\\Array_ constructor expects array<PhpParser\\Node\\Expr\\ArrayItem\>, array<PhpParser\\Node\\Expr\\ArrayItem\|null\> given#'
         - '#Parameter \#1 \$sprintfFuncCall of method Rector\\PhpParser\\NodeTransformer\:\:transformSprintfToArray\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node given#'

@@ -14,6 +14,7 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Commander\CommanderCollector;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Contract\Rector\PhpRectorInterface;
+use Rector\Exclusion\ExclusionManager;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\PhpVersionProvider;
 use Rector\Rector\AbstractRector\AbstractRectorTrait;
@@ -41,6 +42,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $phpVersionProvider;
 
     /**
+     * @var ExclusionManager
+     */
+    private $exclusionManager;
+    
+    /**
      * @var CommanderCollector
      */
     private $commanderCollector;
@@ -59,11 +65,13 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         SymfonyStyle $symfonyStyle,
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory,
+        ExclusionManager $exclusionManager,
         CommanderCollector $commanderCollector
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;
+        $this->exclusionManager = $exclusionManager;
         $this->commanderCollector = $commanderCollector;
     }
 
@@ -84,6 +92,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // already removed
         if ($this->isNodeRemoved($node)) {
+            return null;
+        }
+
+        if ($this->exclusionManager->isNodeSkippedByRector($this, $node)) {
             return null;
         }
 
