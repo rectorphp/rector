@@ -197,9 +197,9 @@ final class ClassManipulator
         return $usedTraits;
     }
 
-    public function getProperty(Class_ $class, string $name): ?Property
+    public function getProperty(ClassLike $classLike, string $name): ?Property
     {
-        foreach ($class->getProperties() as $property) {
+        foreach ($classLike->getProperties() as $property) {
             if (count($property->props) > 1) {
                 // usually full property is needed to have all the docs values
                 throw new ShouldNotHappenException();
