@@ -36,6 +36,8 @@ services:
     Symfony\Component\EventDispatcher\EventDispatcherInterface: '@Rector\EventDispatcher\AutowiredEventDispatcher'
     Rector\Bridge\Contract\AnalyzedApplicationContainerInterface: '@Rector\Symfony\Bridge\DefaultAnalyzedSymfonyApplicationContainer'
 
+    OndraM\CiDetector\CiDetector: ~
+
     # see https://github.com/symplify/packagebuilder#prevent-parameter-typos
     Symplify\PackageBuilder\EventSubscriber\ParameterTypoProofreaderEventSubscriber: ~
     Symplify\PackageBuilder\Parameter\ParameterTypoProofreader:
