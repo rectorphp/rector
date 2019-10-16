@@ -108,7 +108,7 @@ final class NodeAnnotationReader
                 return null;
             }
 
-            throw new $throwable();
+            throw $throwable;
         }
     }
 
