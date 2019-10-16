@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Application;
 
+use OndraM\CiDetector\CiDetector;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
@@ -12,8 +13,10 @@ use Rector\Configuration\Configuration;
 use Rector\Extension\FinishingExtensionRunner;
 use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\Testing\Application\EnabledRectorsProvider;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Throwable;
 
 /**
@@ -82,6 +85,11 @@ final class RectorApplication
      */
     private $finishingExtensionRunner;
 
+    /**
+     * @var CiDetector
+     */
+    private $ciDetector;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         FileSystemFileProcessor $fileSystemFileProcessor,
@@ -92,7 +100,8 @@ final class RectorApplication
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         NodeScopeResolver $nodeScopeResolver,
-        FinishingExtensionRunner $finishingExtensionRunner
+        FinishingExtensionRunner $finishingExtensionRunner,
+        CiDetector $ciDetector
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->fileSystemFileProcessor = $fileSystemFileProcessor;
@@ -104,6 +113,7 @@ final class RectorApplication
         $this->enabledRectorsProvider = $enabledRectorsProvider;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->finishingExtensionRunner = $finishingExtensionRunner;
+        $this->ciDetector = $ciDetector;
     }
 
     /**
@@ -119,6 +129,8 @@ final class RectorApplication
         if (! $this->symfonyStyle->isVerbose() && $this->configuration->showProgressBar()) {
             // why 3? one for each cycle, so user sees some activity all the time
             $this->symfonyStyle->progressStart($fileCount * 3);
+
+            $this->configureStepCount($this->symfonyStyle);
         }
 
         // PHPStan has to know about all files!
@@ -229,5 +241,26 @@ final class RectorApplication
         }
 
         $this->nodeScopeResolver->setAnalysedFiles($filePaths);
+    }
+
+    /**
+     * This prevent CI report flood with 1 file = 1 line in progress bar
+     */
+    private function configureStepCount(SymfonyStyle $symfonyStyle): void
+    {
+        if ($this->ciDetector->isCiDetected() === false) {
+            return;
+        }
+
+        $privatesAccessor = new PrivatesAccessor();
+
+        /** @var ProgressBar $progressBar */
+        $progressBar = $privatesAccessor->getPrivateProperty($symfonyStyle, 'progressBar');
+        if ($progressBar->getMaxSteps() < 10) {
+            return;
+        }
+
+        $redrawFrequency = (int) ($progressBar->getMaxSteps() / 20);
+        $progressBar->setRedrawFrequency($redrawFrequency);
     }
 }
