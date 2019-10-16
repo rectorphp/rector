@@ -207,3 +207,5 @@ parameters:
         - '#PHPDoc tag @param references unknown parameter\: \$commanders#'
         - '#In method "Rector\\Rector\\AbstractRector\:\:autowireAbstractRectorDependencies", parameter \$symfonyStyle type is type\-hinted to "Symfony\\Component\\Console\\Style\\SymfonyStyle" but the @param annotation says it is a "array<Rector\\Contract\\PhpParser\\Node\\CommanderInterface\>"\. Please fix the @param annotation#'
         - '#PHPDoc tag @param for parameter \$symfonyStyle with type array<Rector\\Contract\\PhpParser\\Node\\CommanderInterface\> is incompatible with native type Symfony\\Component\\Console\\Style\\SymfonyStyle#'
+
+        - '#In method "Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createPropertyReflectionFromPropertyNode", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
