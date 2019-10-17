@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -65,7 +67,7 @@ PHP
             return null;
         }
 
-        $node->args[1] = new Node\Arg(new Node\Scalar\String_('#'));
+        $node->args[1] = new Arg(new String_('#'));
 
         return $node;
     }
