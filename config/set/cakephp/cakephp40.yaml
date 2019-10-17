@@ -61,3 +61,13 @@ services:
             withParam:
               match_parameter: 'paging'
               replace_with: 'withAttribute'
+
+    Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
+        Cake\Console\ConsoleIo:
+            styles:
+                set: 'setStyle'
+                get: 'getStyle'
+        Cake\Console\ConsoleOutput:
+            styles:
+                set: 'setStyle'
+                get: 'getStyle'
