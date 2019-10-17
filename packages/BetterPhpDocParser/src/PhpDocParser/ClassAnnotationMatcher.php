@@ -36,7 +36,7 @@ final class ClassAnnotationMatcher
     private function isUseMatchingName(string $tag, UseUse $useUse): bool
     {
         $shortName = $useUse->alias ? $useUse->alias->name : $useUse->name->getLast();
-        $shortNamePattern = preg_quote($shortName);
+        $shortNamePattern = preg_quote($shortName, '#');
 
         return (bool) Strings::match($tag, '#' . $shortNamePattern . '(\\\\[\w]+)?#i');
     }
