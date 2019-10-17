@@ -44,3 +44,4 @@ services:
     Rector\CodeQuality\Rector\If_\ShortenElseIfRector: ~
     Rector\SOLID\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector: ~
     Rector\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector: ~
+    Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector: ~
