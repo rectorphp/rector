@@ -157,6 +157,22 @@ vendor/bin/rector process src --set symfony40 --dry-run
 vendor/bin/rector process src --set symfony40
 ```
 
+Some sets, such as [`code-quality`](/config/set/code-quality) can be
+used on a regular basis. You can include them in your `rector.yaml` to
+run them by default:
+
+```yaml
+# rector.yaml
+imports:
+    - { resource: 'vendor/rector/rector/config/set/code-quality/*.yaml' }
+    - { resource: 'vendor/rector/rector/config/set/php/php71.yaml' }
+    - { resource: 'vendor/rector/rector/config/set/php/php72.yaml' }
+    - { resource: 'vendor/rector/rector/config/set/php/php73.yaml' }
+```
+
+>  If you use Rector in Docker, you can use absolute path, e.g.
+>  `/rector/config/set/php/php71.yaml`
+
 ### B. Custom Sets
 
 1. Create `rector.yaml` with desired Rectors:
