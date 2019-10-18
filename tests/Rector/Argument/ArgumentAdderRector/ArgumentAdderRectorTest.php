@@ -27,6 +27,7 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/fixture3.php.inc'];
         yield [__DIR__ . '/Fixture/scoped.php.inc'];
         yield [__DIR__ . '/Fixture/already_added.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_anonymous.php.inc'];
     }
 
     /**
