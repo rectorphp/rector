@@ -229,8 +229,13 @@ PHP
         }
 
         // ClassMethod
-        /** @var Class_ $class */
+        /** @var Class_|null $class */
         $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+
+        // anonymous class
+        if ($class === null) {
+            return false;
+        }
 
         return $this->isObjectType($class, $type);
     }
