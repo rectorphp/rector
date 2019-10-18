@@ -21,6 +21,8 @@ final class ArrayMergeOfNonArraysToSimpleArrayRectorTest extends AbstractRectorT
     public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        // https://3v4l.org/2r26K
+        yield [__DIR__ . '/Fixture/nested_arrays.php.inc'];
         // skip multiple items https://3v4l.org/anks3
         yield [__DIR__ . '/Fixture/skip_non_arrays.php.inc'];
     }

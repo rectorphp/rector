@@ -6,9 +6,8 @@ namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\Constant\ConstantArrayType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -32,7 +31,7 @@ class SomeClass
         $value = 5;
         $value2 = 10;
 
-        return array_merge([$value, $value2]);
+        return array_merge([$value], [$value2]);
     }
 }
 PHP
@@ -71,10 +70,6 @@ PHP
             return null;
         }
 
-        if ($this->shouldSkip($node)) {
-            return null;
-        }
-
         $array = new Array_();
         foreach ($node->args as $arg) {
             /** @var Array_ $nestedArrayItem */
@@ -86,30 +81,10 @@ PHP
             }
 
             foreach ($nestedArrayItem->items as $nestedArrayItemItem) {
-                $array->items[] = $nestedArrayItemItem->value;
+                $array->items[] = new ArrayItem($nestedArrayItemItem->value);
             }
         }
 
         return $array;
-    }
-
-    private function shouldSkip(Node $node): bool
-    {
-        foreach ($node->args as $arg) {
-            $argumentValueStaticType = $this->getStaticType($arg->value);
-
-            if (! $argumentValueStaticType instanceof ConstantArrayType) {
-                return true;
-            }
-
-            foreach ($argumentValueStaticType->getValueTypes() as $valueType) {
-                // nested array → skip
-                if ($valueType instanceof ArrayType) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 }
