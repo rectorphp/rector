@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Symfony;
 
+use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -35,6 +36,11 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode
     private $methods = [];
 
     /**
+     * @var bool
+     */
+    private $isPathExplicit = true;
+
+    /**
      * @param string[] $methods
      */
     public function __construct(
@@ -48,11 +54,14 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode
         $this->methods = $methods;
 
         if ($originalContent !== null) {
+            $this->isPathExplicit = (bool) Strings::contains($originalContent, 'path=');
+
             $this->resolveOriginalContentSpacingAndOrder($originalContent);
 
             // default value without key
             if ($this->path && ! in_array('path', (array) $this->orderedVisibleItems, true)) {
-                $this->orderedVisibleItems[] = 'path';
+                // add path as first item
+                $this->orderedVisibleItems = array_merge(['path'], (array) $this->orderedVisibleItems);
             }
         }
     }
@@ -60,7 +69,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode
     public function __toString(): string
     {
         $contentItems = [
-            'path' => sprintf('path="%s"', $this->path),
+            'path' => $this->createPath(),
         ];
 
         if ($this->name) {
@@ -81,5 +90,14 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode
     {
         $this->orderedVisibleItems[] = 'methods';
         $this->methods = $methods;
+    }
+
+    private function createPath(): string
+    {
+        if ($this->isPathExplicit) {
+            return sprintf('path="%s"', $this->path);
+        }
+
+        return sprintf('"%s"', $this->path);
     }
 }
