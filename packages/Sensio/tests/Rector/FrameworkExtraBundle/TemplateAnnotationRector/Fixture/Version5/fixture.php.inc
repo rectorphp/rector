@@ -2,10 +2,9 @@
 
 namespace AppBundle\Controller;
 
-use Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\Source\SymfonyController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-class ClassWithNamedService15Controller extends SymfonyController
+class ClassWithNamedService15Controller
 {
     /**
      * @Template
@@ -38,10 +37,9 @@ class ClassWithNamedService15Controller extends SymfonyController
 
 namespace AppBundle\Controller;
 
-use Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\Source\SymfonyController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-class ClassWithNamedService15Controller extends SymfonyController
+class ClassWithNamedService15Controller
 {
     public function indexAction()
     {
