@@ -157,6 +157,19 @@ final class PhpDocInfo
         return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($paramTagValue, $this->node);
     }
 
+    /**
+     * @return Type[]
+     */
+    public function getParamTypes(): array
+    {
+        $paramTypes = [];
+        foreach ($this->getParamTagValues() as $paramTagValue) {
+            $paramTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($paramTagValue, $this->node);
+        }
+
+        return $paramTypes;
+    }
+
     public function getVarType(): Type
     {
         $varTagValue = $this->getVarTagValue();
