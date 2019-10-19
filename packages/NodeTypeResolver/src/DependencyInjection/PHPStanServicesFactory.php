@@ -31,7 +31,7 @@ final class PHPStanServicesFactory
             $additionalConfigFiles[] = $phpstanPhpunitExtensionConfig;
         }
 
-        $currentProjectConfigFile = $currentWorkingDirectory . 'phpstan.neon';
+        $currentProjectConfigFile = $currentWorkingDirectory . '/phpstan.neon';
         if (file_exists($currentProjectConfigFile)) {
             $additionalConfigFiles[] = $currentProjectConfigFile;
         }
