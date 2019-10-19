@@ -8,7 +8,7 @@ Why doing it manually if 80% Rector can handle for you?
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
 
 
-![Rector-showcase](docs/images/rector-showcase.gif)
+![Rector-showcase](docs/images/rector-showcase-var.gif)
 
 <br>
 
