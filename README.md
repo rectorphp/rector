@@ -32,15 +32,15 @@ Rector **instantly upgrades and instantly refactors the PHP code of your applica
 <p align="center">
     <a href="/config/set/php"><img src="/docs/images/php.png"></a>
     <img src="/docs/images/space.png" width=40>
-    <a href="/config/set/cakephp"><img src="/docs/images/cakephp.png"></a>
-    <img src="/docs/images/space.png" width=40>
     <a href="/config/set/symfony"><img src="/docs/images/symfony.png"></a>
+    <img src="/docs/images/space.png" width=40>
+    <a href="/config/set/laravel"><img src="/docs/images/laravel.png"></a>
+    <br>
+    <a href="/config/set/cakephp"><img src="/docs/images/cakephp.png"></a>
     <img src="/docs/images/space.png" width=40>
     <a href="/config/set/phpunit"><img src="/docs/images/phpunit.jpg"></a>
     <img src="/docs/images/space.png" width=40>
     <a href="/config/set/twig"><img src="/docs/images/twig.png"></a>
-    <img src="/docs/images/space.png" width=40>
-    <a href="/config/set/laravel"><img src="/docs/images/laravel.png"></a>
 </p>
 
 <br>
