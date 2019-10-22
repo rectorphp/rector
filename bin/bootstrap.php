@@ -8,17 +8,14 @@ function includeProjectsAutoload(string $composerJsonPath, string $cwd): void
 
     $composerSettings = json_decode($contents, true);
     if (! is_array($composerSettings)) {
-        fwrite(STDERR, "Failed to load '${composerJsonPath}'\n");
-        exit(1);
+        die(sprintf('Failed to load "%s"', $composerJsonPath));
     }
 
     $vendorPath = $composerSettings['config']['vendor-dir'] ?? $cwd . '/vendor';
     if (! is_dir($vendorPath)) {
-        fwrite(STDERR, "Please check if 'composer.phar install' was run already (expected to find '${vendorPath}')\n");
-        exit(1);
+        die(sprintf('Please check if "composer install" was run already (expected to find "%s")', $vendorPath));
     }
 
-    /** @noinspection PhpIncludeInspection */
     require $vendorPath . '/autoload.php';
 }
 
@@ -29,6 +26,7 @@ if (is_file($projectAutoload)) {
     require $projectAutoload;
 }
 
+// is autolaod successful?
 if (class_exists('Rector\HttpKernel\RectorKernel')) {
     return;
 }
@@ -53,11 +51,9 @@ if (file_exists($composerJsonPath)) {
     return;
 }
 
-fwrite(
-    STDERR,
+die(
     sprintf(
         'Composer autoload.php was not found in paths "%s". Have you ran "composer update"?',
         implode('", "', $possibleAutoloadPaths)
     )
 );
-exit(1);

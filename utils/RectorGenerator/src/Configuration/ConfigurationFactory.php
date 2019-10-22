@@ -7,6 +7,7 @@ namespace Rector\Utils\RectorGenerator\Configuration;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\Exception\FileSystem\FileNotFoundException;
+use Rector\Set\Set;
 use Rector\Utils\RectorGenerator\Exception\ConfigurationException;
 use Rector\Utils\RectorGenerator\Node\NodeClassProvider;
 use Rector\Utils\RectorGenerator\ValueObject\Configuration;
@@ -17,18 +18,12 @@ use Symfony\Component\Yaml\Yaml;
 final class ConfigurationFactory
 {
     /**
-     * @var string
-     */
-    private $setsDirectory;
-
-    /**
      * @var NodeClassProvider
      */
     private $nodeClassProvider;
 
     public function __construct(NodeClassProvider $nodeClassProvider)
     {
-        $this->setsDirectory = __DIR__ . '/../../../../config/set';
         $this->nodeClassProvider = $nodeClassProvider;
     }
 
@@ -140,7 +135,7 @@ final class ConfigurationFactory
 
         $fileSet = sprintf('#^%s(\.yaml)?$#', $set);
         $finder = Finder::create()->files()
-            ->in($this->setsDirectory)
+            ->in(Set::SET_DIRECTORY)
             ->name($fileSet);
 
         /** @var SplFileInfo[] $fileInfos */
@@ -149,7 +144,7 @@ final class ConfigurationFactory
             // assume new one is created
             $match = Strings::match($set, '#\/(?<name>[a-zA-Z_-]+])#');
             if (isset($match['name'])) {
-                return $this->setsDirectory . '/' . $match['name'] . '/' . $set;
+                return Set::SET_DIRECTORY . '/' . $match['name'] . '/' . $set;
             }
 
             return null;

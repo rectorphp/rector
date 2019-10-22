@@ -40,6 +40,11 @@ final class SetOptionResolver
             return null;
         }
 
+        return $this->detectFromNameAndDirectory($setName, $configDirectory);
+    }
+
+    public function detectFromNameAndDirectory(string $setName, string $configDirectory): ?string
+    {
         $nearestMatches = $this->findNearestMatchingFiles($configDirectory, $setName);
         if (count($nearestMatches) === 0) {
             $this->reportSetNotFound($configDirectory, $setName);
@@ -57,18 +62,16 @@ final class SetOptionResolver
 
         $suggestedSet = ObjectHelpers::getSuggestion($allSets, $setName);
 
-        $hasSetVersion = (bool) Strings::match($setName, '#[\d]#');
-
         [$versionedSets, $unversionedSets] = $this->separateVersionedAndUnversionedSets($allSets);
 
-        $setsListInString = $this->createSetListInString($hasSetVersion, $unversionedSets, $versionedSets);
+        $setsListInString = $this->createSetListInString($unversionedSets, $versionedSets);
 
         $setNotFoundMessage = sprintf(
             '%s "%s" was not found.%s%s',
             ucfirst($this->keyName),
             $setName,
             PHP_EOL,
-            $suggestedSet ? sprintf('Did you mean "%s"?', $suggestedSet) . PHP_EOL : 'Pick one of above.'
+            $suggestedSet ? sprintf('Did you mean "%s"?', $suggestedSet) . PHP_EOL : ''
         );
 
         $pickOneOfMessage = sprintf('Pick "--%s" of:%s%s', $this->keyName, PHP_EOL . PHP_EOL, $setsListInString);
@@ -152,24 +155,18 @@ final class SetOptionResolver
      * @param string[] $unversionedSets
      * @param string[] $versionedSets
      */
-    private function createSetListInString(
-        bool $hasSetVersion,
-        array $unversionedSets,
-        array $versionedSets
-    ): string {
+    private function createSetListInString(array $unversionedSets, array $versionedSets): string
+    {
         $setsListInString = '';
 
-        if ($hasSetVersion === false) {
-            foreach ($unversionedSets as $unversionedSet) {
-                $setsListInString .= ' * ' . $unversionedSet . PHP_EOL;
-            }
+        foreach ($unversionedSets as $unversionedSet) {
+            $setsListInString .= ' * ' . $unversionedSet . PHP_EOL;
         }
 
-        if ($hasSetVersion) {
-            foreach ($versionedSets as $groupName => $configName) {
-                $setsListInString .= ' * ' . $groupName . ': ' . implode(', ', $configName) . PHP_EOL;
-            }
+        foreach ($versionedSets as $groupName => $configName) {
+            $setsListInString .= ' * ' . $groupName . ': ' . implode(', ', $configName) . PHP_EOL;
         }
+
         return $setsListInString;
     }
 
@@ -183,12 +180,16 @@ final class SetOptionResolver
         $unversionedSets = [];
 
         foreach ($allSets as $set) {
-            $match = Strings::match($set, '#^[A-Za-z\-]+#');
-            if ($match === null) {
+            $hasVersion = (bool) Strings::match($set, '#\d#');
+
+            if ($hasVersion === false) {
                 $unversionedSets[] = $set;
+                continue;
             }
 
-            $setWithoutVersion = rtrim($match[0], '-');
+            $match = Strings::match($set, '#^(?<set>[A-Za-z\-]+)#');
+            $setWithoutVersion = $match['set'];
+
             if ($setWithoutVersion !== $set) {
                 $versionedSets[$setWithoutVersion][] = $set;
             }
