@@ -10,6 +10,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\HttpKernel\RectorKernel;
 use Rector\Set\Set;
 use Symplify\PackageBuilder\Configuration\ConfigFileFinder;
+use Symplify\PackageBuilder\Console\Input\InputDetector;
 
 final class RectorContainerFactory
 {
@@ -31,6 +32,25 @@ final class RectorContainerFactory
     }
 
     /**
+     * @param string[] $configFiles
+     */
+    public function createFromConfigs(array $configFiles): ContainerInterface
+    {
+        // to override the configs without clearing cache
+        $environment = 'prod' . random_int(1, 10000000);
+        $isDebug = InputDetector::isDebug();
+
+        $rectorKernel = new RectorKernel($environment, $isDebug);
+        if ($configFiles) {
+            $rectorKernel->setConfigs($configFiles);
+        }
+
+        $rectorKernel->boot();
+
+        return $rectorKernel->getContainer();
+    }
+
+    /**
      * @return string[]
      */
     private function resolveConfigs(string $set): array
@@ -48,24 +68,5 @@ final class RectorContainerFactory
 
         // remove empty values
         return array_filter($configFiles);
-    }
-
-    /**
-     * @param string[] $configFiles
-     */
-    private function createFromConfigs(array $configFiles): ContainerInterface
-    {
-        // to override the configs without clearing cache
-        $environment = 'prod' . random_int(1, 10000000);
-        $isDebug = true;
-
-        $rectorKernel = new RectorKernel($environment, $isDebug);
-        if ($configFiles) {
-            $rectorKernel->setConfigs($configFiles);
-        }
-
-        $rectorKernel->boot();
-
-        return $rectorKernel->getContainer();
     }
 }
