@@ -11,6 +11,7 @@
     "bin": ["bin/rector"],
     "require": {
         "php": "^7.1",
+        "ext-json": "*",
         "composer/xdebug-handler": "^1.3",
         "doctrine/annotations": "^1.6",
         "doctrine/inflector": "^1.3",
