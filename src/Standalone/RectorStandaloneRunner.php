@@ -21,7 +21,9 @@ use Rector\Guard\RectorGuard;
 use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Stubs\StubLoader;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 /**
  * This class is needed over process/cli run to get console output in sane way;
@@ -39,6 +41,11 @@ final class RectorStandaloneRunner
      */
     private $nativeSymfonyStyle;
 
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
     public function __construct(RectorContainerFactory $rectorContainerFactory, SymfonyStyle $symfonyStyle)
     {
         $this->rectorContainerFactory = $rectorContainerFactory;
@@ -48,63 +55,72 @@ final class RectorStandaloneRunner
     /**
      * @param string[] $source
      */
-    public function processSourceWithSet(array $source, string $set, bool $isDryRun): void
-    {
+    public function processSourceWithSet(
+        array $source,
+        string $set,
+        bool $isDryRun,
+        bool $isQuietMode = false
+    ): ErrorAndDiffCollector {
         $source = $this->absolutizeSource($source);
 
-        $container = $this->rectorContainerFactory->createFromSet($set);
-        $this->prepare($container, $source, $isDryRun);
+        $this->container = $this->rectorContainerFactory->createFromSet($set);
 
-        /** @var FilesFinder $filesFinder */
-        $filesFinder = $container->get(FilesFinder::class);
-        $phpFileInfos = $filesFinder->findInDirectoriesAndFiles($source, ['php']);
+        // silent Symfony style
+        if ($isQuietMode) {
+            $this->nativeSymfonyStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+        }
 
-        /** @var RectorApplication $rectorApplication */
-        $rectorApplication = $container->get(RectorApplication::class);
-        $rectorApplication->runOnFileInfos($phpFileInfos);
+        $this->prepare($source, $isDryRun);
 
-        $this->reportErrors($container);
+        $phpFileInfos = $this->findFilesInSource($source);
+        $this->runRectorOnFileInfos($phpFileInfos);
 
-        $this->finish($container);
+        if ($isQuietMode === false) {
+            $this->reportErrors();
+        }
+
+        $this->finish();
+
+        return $this->container->get(ErrorAndDiffCollector::class);
     }
 
     /**
      * Mostly copied from: https://github.com/rectorphp/rector/blob/master/src/Console/Command/ProcessCommand.php.
      * @param string[] $source
      */
-    private function prepare(ContainerInterface $container, array $source, bool $isDryRun): void
+    private function prepare(array $source, bool $isDryRun): void
     {
         ini_set('memory_limit', '4096M');
 
         /** @var RectorNodeTraverser $rectorNodeTraverser */
-        $rectorNodeTraverser = $container->get(RectorNodeTraverser::class);
-        $this->prepareConfiguration($container, $rectorNodeTraverser, $isDryRun);
+        $rectorNodeTraverser = $this->container->get(RectorNodeTraverser::class);
+        $this->prepareConfiguration($rectorNodeTraverser, $isDryRun);
 
         /** @var RectorGuard $rectorGuard */
-        $rectorGuard = $container->get(RectorGuard::class);
+        $rectorGuard = $this->container->get(RectorGuard::class);
         $rectorGuard->ensureSomeRectorsAreRegistered();
 
         // setup verbosity from the current run
         /** @var SymfonyStyle $symfonyStyle */
-        $symfonyStyle = $container->get(SymfonyStyle::class);
+        $symfonyStyle = $this->container->get(SymfonyStyle::class);
         $symfonyStyle->setVerbosity($this->nativeSymfonyStyle->getVerbosity());
 
         /** @var AdditionalAutoloader $additionalAutoloader */
-        $additionalAutoloader = $container->get(AdditionalAutoloader::class);
+        $additionalAutoloader = $this->container->get(AdditionalAutoloader::class);
         $additionalAutoloader->autoloadWithInputAndSource(new ArrayInput([]), $source);
 
         /** @var StubLoader $stubLoader */
-        $stubLoader = $container->get(StubLoader::class);
+        $stubLoader = $this->container->get(StubLoader::class);
         $stubLoader->loadStubs();
     }
 
-    private function reportErrors(ContainerInterface $container): void
+    private function reportErrors(): void
     {
         /** @var ErrorAndDiffCollector $errorAndDiffCollector */
-        $errorAndDiffCollector = $container->get(ErrorAndDiffCollector::class);
+        $errorAndDiffCollector = $this->container->get(ErrorAndDiffCollector::class);
 
         /** @var ConsoleOutputFormatter $consoleOutputFormatter */
-        $consoleOutputFormatter = $container->get(ConsoleOutputFormatter::class);
+        $consoleOutputFormatter = $this->container->get(ConsoleOutputFormatter::class);
         $consoleOutputFormatter->report($errorAndDiffCollector);
     }
 
@@ -128,30 +144,27 @@ final class RectorStandaloneRunner
         return $source;
     }
 
-    private function finish(ContainerInterface $container): void
+    private function finish(): void
     {
         /** @var FinishingExtensionRunner $finishingExtensionRunner */
-        $finishingExtensionRunner = $container->get(FinishingExtensionRunner::class);
+        $finishingExtensionRunner = $this->container->get(FinishingExtensionRunner::class);
         $finishingExtensionRunner->run();
 
         /** @var ReportingExtensionRunner $reportingExtensionRunner */
-        $reportingExtensionRunner = $container->get(ReportingExtensionRunner::class);
+        $reportingExtensionRunner = $this->container->get(ReportingExtensionRunner::class);
         $reportingExtensionRunner->run();
     }
 
-    private function prepareConfiguration(
-        ContainerInterface $container,
-        RectorNodeTraverser $rectorNodeTraverser,
-        bool $isDryRun
-    ): void {
+    private function prepareConfiguration(RectorNodeTraverser $rectorNodeTraverser, bool $isDryRun): void
+    {
         /** @var Configuration $configuration */
-        $configuration = $container->get(Configuration::class);
+        $configuration = $this->container->get(Configuration::class);
 
         $configuration->setAreAnyPhpRectorsLoaded((bool) $rectorNodeTraverser->getPhpRectorCount());
 
         // definition mimics @see ProcessCommand definition
         /** @var ProcessCommand $processCommand */
-        $processCommand = $container->get(ProcessCommand::class);
+        $processCommand = $this->container->get(ProcessCommand::class);
         $definition = clone $processCommand->getDefinition();
 
         // reset arguments to prevent "source is missing"
@@ -161,5 +174,27 @@ final class RectorStandaloneRunner
             '--' . Option::OPTION_DRY_RUN => $isDryRun,
             '--' . Option::OPTION_OUTPUT_FORMAT => 'console',
         ], $definition));
+    }
+
+    /**
+     * @param string[] $source
+     * @return SmartFileInfo[]
+     */
+    private function findFilesInSource(array $source): array
+    {
+        /** @var FilesFinder $filesFinder */
+        $filesFinder = $this->container->get(FilesFinder::class);
+
+        return $filesFinder->findInDirectoriesAndFiles($source, ['php']);
+    }
+
+    /**
+     * @param SmartFileInfo[] $phpFileInfos
+     */
+    private function runRectorOnFileInfos(array $phpFileInfos): void
+    {
+        /** @var RectorApplication $rectorApplication */
+        $rectorApplication = $this->container->get(RectorApplication::class);
+        $rectorApplication->runOnFileInfos($phpFileInfos);
     }
 }

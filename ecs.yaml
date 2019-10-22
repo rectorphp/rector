@@ -109,7 +109,7 @@ parameters:
             - 'packages/BetterPhpDocParser/src/Annotation/AnnotationNaming.php'
             - 'src/Testing/PHPUnit/PHPUnitEnvironment.php'
             # honesty first
-            - 'src/*StaticHelper.php'
+            - 'src/*Static*.php'
 
         Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
             - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'
