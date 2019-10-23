@@ -27,6 +27,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\CallableType;
 use PHPStan\Type\ClosureType;
+use PHPStan\Type\ConstantType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
@@ -480,17 +481,15 @@ final class StaticTypeMapper
             return $type->getClassName();
         }
 
-        return $this->mapPHPStanTypeToDocString($type);
-    }
+        if ($type instanceof ConstantType) {
+            if (method_exists($type, 'getValue')) {
+                return get_class($type) . $type->getValue();
+            }
 
-    public function mapStringToPHPStanType(string $newSimpleType): Type
-    {
-        $phpParserNode = $this->mapStringToPhpParserNode($newSimpleType);
-        if ($phpParserNode === null) {
-            return new MixedType();
+            throw new ShouldNotHappenException();
         }
 
-        return $this->mapPhpParserNodePHPStanType($phpParserNode);
+        return $this->mapPHPStanTypeToDocString($type);
     }
 
     /**
