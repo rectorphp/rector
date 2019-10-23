@@ -6,6 +6,10 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,6 +23,11 @@ use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationRe
  */
 final class AddArrayReturnDocTypeRector extends AbstractRector
 {
+    /**
+     * @var int
+     */
+    private const MAX_NUMBER_OF_TYPES = 3;
+
     /**
      * @var ReturnTypeInferer
      */
@@ -91,6 +100,10 @@ PHP
             [ReturnTypeDeclarationReturnTypeInferer::class]
         );
 
+        if ($this->shouldSkipType($inferedType, $node)) {
+            return null;
+        }
+
         $this->docBlockManipulator->addReturnTag($node, $inferedType);
 
         return $node;
@@ -109,5 +122,49 @@ PHP
         }
 
         return false;
+    }
+
+    private function shouldSkipType(Type $newType, ClassMethod $classMethod): bool
+    {
+        if (! $newType instanceof ArrayType && ! $newType instanceof UnionType) {
+            return true;
+        }
+
+        if ($newType instanceof ArrayType) {
+            if ($this->isNewAndCurrentTypeBothCallable($newType, $classMethod)) {
+                return true;
+            }
+        }
+
+        if ($newType instanceof ConstantArrayType) {
+            if (count($newType->getValueTypes()) > self::MAX_NUMBER_OF_TYPES) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isNewAndCurrentTypeBothCallable(ArrayType $newArrayType, ClassMethod $classMethod): bool
+    {
+        $currentPhpDocInfo = $this->getPhpDocInfo($classMethod);
+        if ($currentPhpDocInfo === null) {
+            return false;
+        }
+
+        $currentReturnType = $currentPhpDocInfo->getReturnType();
+        if (! $currentReturnType instanceof ArrayType) {
+            return false;
+        }
+
+        if (! $newArrayType->getItemType()->isCallable()->yes()) {
+            return false;
+        }
+
+        if (! $currentReturnType->getItemType()->isCallable()->yes()) {
+            return false;
+        }
+
+        return true;
     }
 }
