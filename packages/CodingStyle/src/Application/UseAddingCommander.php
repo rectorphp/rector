@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Imports\UsedImportsResolver;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -86,6 +87,9 @@ final class UseAddingCommander implements CommanderInterface
         if ($fileInfo === null) {
             // fallback for freshly created Name nodes
             $fileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
+            if ($fileInfo === null) {
+                throw new ShouldNotHappenException();
+            }
         }
 
         $this->useImportTypesInFilePath[$fileInfo->getRealPath()][] = $fullyQualifiedObjectType;

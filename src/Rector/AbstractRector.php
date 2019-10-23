@@ -15,6 +15,7 @@ use Rector\Commander\CommanderCollector;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\Exclusion\ExclusionManager;
+use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\PhpVersionProvider;
 use Rector\Rector\AbstractRector\AbstractRectorTrait;
@@ -45,11 +46,16 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var ExclusionManager
      */
     private $exclusionManager;
-    
+
     /**
      * @var CommanderCollector
      */
     private $commanderCollector;
+
+    /**
+     * @var CurrentFileInfoProvider
+     */
+    private $currentFileInfoProvider;
 
     /**
      * Run once in the every end of one processed file
@@ -66,13 +72,15 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         PhpVersionProvider $phpVersionProvider,
         BuilderFactory $builderFactory,
         ExclusionManager $exclusionManager,
-        CommanderCollector $commanderCollector
+        CommanderCollector $commanderCollector,
+        CurrentFileInfoProvider $currentFileInfoProvider
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->builderFactory = $builderFactory;
         $this->exclusionManager = $exclusionManager;
         $this->commanderCollector = $commanderCollector;
+        $this->currentFileInfoProvider = $currentFileInfoProvider;
     }
 
     /**
@@ -117,7 +125,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $this->keepFileInfoAttribute($node, $originalNode);
             $this->notifyNodeChangeFileInfo($node);
 
-        // doc block has changed
+            // doc block has changed
         } elseif ($node->getComments() !== $originalComment || $node->getDocComment() !== $originalDocComment) {
             $this->notifyNodeChangeFileInfo($node);
         }
@@ -138,6 +146,15 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     public function afterTraverse(array $nodes): array
     {
+        // setup for commanders
+        foreach ($nodes as $node) {
+            $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+            if ($fileInfo instanceof SmartFileInfo) {
+                $this->currentFileInfoProvider->setCurrentFileInfo($fileInfo);
+                break;
+            }
+        }
+
         foreach ($this->commanderCollector->provide() as $commander) {
             if (! $commander->isActive()) {
                 continue;
