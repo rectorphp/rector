@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Rector\AbstractRector;
@@ -134,6 +135,10 @@ PHP
             if ($this->isNewAndCurrentTypeBothCallable($newType, $classMethod)) {
                 return true;
             }
+
+            if ($this->isMixedOfSpecificOverride($newType, $classMethod)) {
+                return true;
+            }
         }
 
         if ($newType instanceof ConstantArrayType) {
@@ -162,6 +167,25 @@ PHP
         }
 
         if (! $currentReturnType->getItemType()->isCallable()->yes()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function isMixedOfSpecificOverride(ArrayType $arrayType, ClassMethod $classMethod): bool
+    {
+        if (! $arrayType->getItemType() instanceof MixedType) {
+            return false;
+        }
+
+        $currentPhpDocInfo = $this->getPhpDocInfo($classMethod);
+        if ($currentPhpDocInfo === null) {
+            return false;
+        }
+
+        $currentReturnType = $currentPhpDocInfo->getReturnType();
+        if (! $currentReturnType instanceof ArrayType) {
             return false;
         }
 
