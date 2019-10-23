@@ -6,6 +6,8 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Type;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,6 +21,11 @@ use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationRe
  */
 final class AddArrayReturnDocTypeRector extends AbstractRector
 {
+    /**
+     * @var int
+     */
+    private const MAX_NUMBER_OF_TYPES = 3;
+
     /**
      * @var ReturnTypeInferer
      */
@@ -91,6 +98,10 @@ PHP
             [ReturnTypeDeclarationReturnTypeInferer::class]
         );
 
+        if ($this->shouldSkipType($inferedType)) {
+            return null;
+        }
+
         $this->docBlockManipulator->addReturnTag($node, $inferedType);
 
         return $node;
@@ -106,6 +117,19 @@ PHP
             if (! $this->isNames($classMethod->returnType, ['array', 'iterable'])) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    private function shouldSkipType(Type $type): bool
+    {
+        if (! $type instanceof ConstantArrayType) {
+            return false;
+        }
+
+        if (count($type->getValueTypes()) > self::MAX_NUMBER_OF_TYPES) {
+            return true;
         }
 
         return false;
