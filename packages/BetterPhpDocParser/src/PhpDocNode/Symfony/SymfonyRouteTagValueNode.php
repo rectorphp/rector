@@ -41,17 +41,41 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode
     private $isPathExplicit = true;
 
     /**
+     * @var mixed[]
+     */
+    private $options = [];
+
+    /**
+     * @var mixed[]
+     */
+    private $defaults = [];
+
+    /**
+     * @var mixed[]
+     */
+    private $requirements = [];
+
+    /**
      * @param string[] $methods
+     * @param string[] $options
+     * @param string[] $defaults
+     * @param string[] $requirements
      */
     public function __construct(
         string $path,
         ?string $name = null,
         array $methods = [],
+        array $options = [],
+        array $defaults = [],
+        array $requirements = [],
         ?string $originalContent = null
     ) {
         $this->path = $path;
         $this->name = $name;
         $this->methods = $methods;
+        $this->options = $options;
+        $this->defaults = $defaults;
+        $this->requirements = $requirements;
 
         if ($originalContent !== null) {
             $this->isPathExplicit = (bool) Strings::contains($originalContent, 'path=');
@@ -78,6 +102,18 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode
 
         if ($this->methods) {
             $contentItems['methods'] = $this->printArrayItem($this->methods, 'methods');
+        }
+
+        if ($this->options) {
+            $contentItems['options'] = $this->printArrayItem($this->options, 'options');
+        }
+
+        if ($this->defaults) {
+            $contentItems['defaults'] = $this->printArrayItem($this->defaults, 'defaults');
+        }
+
+        if ($this->requirements) {
+            $contentItems['requirements'] = $this->printArrayItem($this->requirements, 'requirements');
         }
 
         return $this->printContentItems($contentItems);

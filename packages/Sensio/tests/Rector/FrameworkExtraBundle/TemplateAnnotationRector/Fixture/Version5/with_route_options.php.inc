@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class WithRouteOptions
 {
     /**
-     * @Route("/{category}", name="report_overview", defaults={"category" = null}, requirements={"category" = "\d+"})
+     * @Route("/{category}", name="report_overview", defaults={"category":null}, requirements={"category":"\d+"})
      * @Template("PAPPReportBundle:Report:report_list.html.twig")
      */
     public function index($category = null)
@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class WithRouteOptions
 {
     /**
-     * @Route("/{category}", name="report_overview", defaults={"category" = null}, requirements={"category" = "\d+"})
+     * @Route("/{category}", name="report_overview", defaults={"category":null}, requirements={"category":"\d+"})
      */
     public function index($category = null)
     {
