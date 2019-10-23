@@ -127,16 +127,14 @@ PHP
 
     private function shouldSkipType(Type $newType, ClassMethod $classMethod): bool
     {
-        if (! $newType instanceof ArrayType && ! $newType instanceof UnionType) {
-            return true;
-        }
-
         if ($newType instanceof ArrayType) {
-            if ($this->isNewAndCurrentTypeBothCallable($newType, $classMethod)) {
+            if ($this->shouldSkipArrayType($newType, $classMethod)) {
                 return true;
             }
+        }
 
-            if ($this->isMixedOfSpecificOverride($newType, $classMethod)) {
+        if ($newType instanceof UnionType) {
+            if (count($newType->getTypes()) > self::MAX_NUMBER_OF_TYPES) {
                 return true;
             }
         }
@@ -190,5 +188,18 @@ PHP
         }
 
         return true;
+    }
+
+    private function shouldSkipArrayType(ArrayType $arrayType, ClassMethod $classMethod): bool
+    {
+        if ($this->isNewAndCurrentTypeBothCallable($arrayType, $classMethod)) {
+            return true;
+        }
+
+        if ($this->isMixedOfSpecificOverride($arrayType, $classMethod)) {
+            return true;
+        }
+
+        return false;
     }
 }
