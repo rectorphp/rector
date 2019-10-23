@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Imports\UsedImportsResolver;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
+use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -57,26 +58,34 @@ final class UseAddingCommander implements CommanderInterface
      */
     private $typeFactory;
 
+    /**
+     * @var CurrentFileInfoProvider
+     */
+    private $currentFileInfoProvider;
+
     public function __construct(
         UseImportsAdder $useImportsAdder,
         UseImportsRemover $useImportsRemover,
         UsedImportsResolver $usedImportsResolver,
         BetterNodeFinder $betterNodeFinder,
-        TypeFactory $typeFactory
+        TypeFactory $typeFactory,
+        CurrentFileInfoProvider $currentFileInfoProvider
     ) {
         $this->useImportsAdder = $useImportsAdder;
         $this->usedImportsResolver = $usedImportsResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->useImportsRemover = $useImportsRemover;
         $this->typeFactory = $typeFactory;
+        $this->currentFileInfoProvider = $currentFileInfoProvider;
     }
 
-    public function addUseImport(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): void
+    public function addUseImport(Node $positionNode, FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
         /** @var SmartFileInfo|null $fileInfo */
-        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        $fileInfo = $positionNode->getAttribute(AttributeKey::FILE_INFO);
         if ($fileInfo === null) {
-            return;
+            // fallback for freshly created Name nodes
+            $fileInfo = $this->currentFileInfoProvider->getSmartFileInfo();
         }
 
         $this->useImportTypesInFilePath[$fileInfo->getRealPath()][] = $fullyQualifiedObjectType;
