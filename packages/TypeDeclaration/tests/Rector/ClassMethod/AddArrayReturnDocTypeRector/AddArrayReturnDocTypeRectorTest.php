@@ -32,6 +32,7 @@ final class AddArrayReturnDocTypeRectorTest extends AbstractRectorTestCase
 
         // skip
         yield [__DIR__ . '/Fixture/skip_too_many.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_mixed_of_specific_override.php.inc'];
         yield [__DIR__ . '/Fixture/skip_closure_callable_override.php.inc'];
         yield [__DIR__ . '/Fixture/skip_shorten_class_name.php.inc'];
         yield [__DIR__ . '/Fixture/skip_constructor.php.inc'];
