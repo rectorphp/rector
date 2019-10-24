@@ -1,0 +1,63 @@
+# see https://laravel.com/docs/6.x/upgrade
+services:
+    # https://github.com/laravel/docs/pull/5531/files
+    Rector\Rector\MethodCall\MethodCallToReturnRector:
+        Illuminate\Auth\Access\HandlesAuthorization:
+            - 'deny'
+
+    # https://github.com/laravel/framework/commit/67a38ba0fa2acfbd1f4af4bf7d462bb4419cc091
+    # covered by
+    Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector: ~
+
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
+        # https://github.com/laravel/framework/commit/69de466ddc25966a0f6551f48acab1afa7bb9424
+        Illuminate\Auth\Access\Gate:
+            'access': 'inspect'
+
+        # https://github.com/laravel/framework/commit/efbe23c4116f86846ad6edc0d95cd56f4175a446
+        Illuminate\Support\Facades\Lang:
+            trans: 'get'
+            transChoice: 'choice'
+
+        # https://github.com/laravel/framework/commit/697b898a1c89881c91af83ecc4493fa681e2aa38
+        Illuminate\Translation\Translator:
+            getFromJson: 'get'
+
+    Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
+        # https://github.com/laravel/framework/commit/55785d3514a8149d4858acef40c56a31b6b2ccd1
+        Illuminate\Support\Facades\Input:
+            get: ['Illuminate\Support\Facades\Request', 'input']
+
+    Rector\Renaming\Rector\Class_\RenameClassRector:
+        Illuminate\Support\Facades\Input: 'Illuminate\Support\Facades\Request'
+
+    Rector\Rector\Visibility\ChangeMethodVisibilityRector:
+        # https://github.com/laravel/framework/commit/e47e91417ab22e6af001db1dcbe75b87db218c1d
+        Illuminate\Foundation\Http\FormRequest:
+            validationData: 'public'
+
+    Rector\Rector\Argument\ArgumentAdderRector:
+        # https://github.com/laravel/framework/commit/6c1e014943a508afb2c10869c3175f7783a004e1
+        Illuminate\Database\Capsule\Manager:
+            table:
+                1:
+                    name: 'as'
+                    default_value: 'null'
+
+        Illuminate\Database\Connection:
+            table:
+                1:
+                    name: 'as'
+                    default_value: 'null'
+
+        Illuminate\Database\ConnectionInterface:
+            table:
+                1:
+                    name: 'as'
+                    default_value: 'null'
+
+        Illuminate\Database\Query\Builder:
+            from:
+                1:
+                    name: 'as'
+                    default_value: 'null'

@@ -82,7 +82,7 @@ PHP
             return null;
         }
 
-        if (! $this->isName($node, 'get')) {
+        if (! $this->isName($node->name, 'get')) {
             return null;
         }
 

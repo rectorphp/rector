@@ -139,32 +139,32 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             return null;
         }
 
-        if ($this->isName($node, 'getWrappedObject')) {
+        if ($this->isName($node->name, 'getWrappedObject')) {
             return $node->var;
         }
 
-        if ($this->isName($node, 'during')) {
+        if ($this->isName($node->name, 'during')) {
             return $this->processDuring($node);
         }
 
-        if ($this->isName($node, 'duringInstantiation')) {
+        if ($this->isName($node->name, 'duringInstantiation')) {
             return $this->processDuringInstantiation($node);
         }
 
-        if ($this->isName($node, 'getMatchers')) {
+        if ($this->isName($node->name, 'getMatchers')) {
             return null;
         }
 
         $this->prepare($node);
 
-        if ($this->isName($node, 'beConstructed*')) {
+        if ($this->isName($node->name, 'beConstructed*')) {
             return $this->processBeConstructed($node);
         }
 
         $this->processMatchersKeys($node);
 
         foreach ($this->newMethodToOldMethods as $newMethod => $oldMethods) {
-            if ($this->isNames($node, $oldMethods)) {
+            if ($this->isNames($node->name, $oldMethods)) {
                 return $this->createAssertMethod($newMethod, $node->var, $node->args[0]->value ?? null);
             }
         }
@@ -178,12 +178,12 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         }
 
         // skip "createMock" method
-        if ($this->isName($node, 'createMock')) {
+        if ($this->isName($node->name, 'createMock')) {
             return null;
         }
 
         // $this->clone() → clone $this->testedObject
-        if ($this->isName($node, 'clone')) {
+        if ($this->isName($node->name, 'clone')) {
             return new Clone_($this->testedObjectPropertyFetch);
         }
 
@@ -258,14 +258,14 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
 
     private function processBeConstructed(MethodCall $methodCall): ?Node
     {
-        if ($this->isName($methodCall, 'beConstructedWith')) {
+        if ($this->isName($methodCall->name, 'beConstructedWith')) {
             $new = new New_(new FullyQualified($this->testedClass));
             $new->args = $methodCall->args;
 
             return new Assign($this->testedObjectPropertyFetch, $new);
         }
 
-        if ($this->isName($methodCall, 'beConstructedThrough')) {
+        if ($this->isName($methodCall->name, 'beConstructedThrough')) {
             // static method
             $methodName = $this->getValue($methodCall->args[0]->value);
             $staticCall = $this->createStaticCall($this->testedClass, $methodName);
@@ -301,7 +301,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     private function processMatchersKeys(MethodCall $methodCall): void
     {
         foreach ($this->matchersKeys as $matcherKey) {
-            if (! $this->isName($methodCall, 'should' . ucfirst($matcherKey))) {
+            if (! $this->isName($methodCall->name, 'should' . ucfirst($matcherKey))) {
                 continue;
             }
 

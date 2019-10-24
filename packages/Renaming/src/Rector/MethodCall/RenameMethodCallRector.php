@@ -77,7 +77,7 @@ PHP
             }
 
             foreach ($oldToNewMethods as $oldMethod => $newMethod) {
-                if (! $this->isName($node, $oldMethod)) {
+                if (! $this->isName($node->name, $oldMethod)) {
                     continue;
                 }
 

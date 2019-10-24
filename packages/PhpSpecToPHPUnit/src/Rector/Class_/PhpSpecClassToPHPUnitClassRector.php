@@ -144,7 +144,7 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
                 continue;
             }
 
-            if (! $this->isName($innerClassMethodStmt, 'shouldHaveType')) {
+            if (! $this->isName($innerClassMethodStmt->name, 'shouldHaveType')) {
                 continue;
             }
 

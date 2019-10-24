@@ -33,7 +33,6 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.14",
         "jetbrains/phpstorm-stubs": "^2019.1",
-        "mockery/mockery": "^1.2",
         "ocramius/package-versions": "^1.4",
         "phpunit/phpunit": "^7.5|^8.0",
         "symplify/changelog-linker": "^6.1",

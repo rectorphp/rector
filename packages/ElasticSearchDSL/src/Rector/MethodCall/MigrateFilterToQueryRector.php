@@ -78,7 +78,7 @@ PHP
             return null;
         }
 
-        if (! $this->isName($node, 'addFilter')) {
+        if (! $this->isName($node->name, 'addFilter')) {
             return null;
         }
 

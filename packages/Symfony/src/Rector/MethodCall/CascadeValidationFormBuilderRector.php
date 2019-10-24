@@ -108,7 +108,7 @@ PHP
 
     private function shouldSkip(MethodCall $methodCall): bool
     {
-        if (! $this->isName($methodCall, 'createFormBuilder')) {
+        if (! $this->isName($methodCall->name, 'createFormBuilder')) {
             return true;
         }
 
@@ -153,7 +153,7 @@ PHP
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         while ($parentNode instanceof MethodCall) {
-            if ($this->isName($parentNode, 'add')) {
+            if ($this->isName($parentNode->name, 'add')) {
                 /** @var Array_ $addOptionsArrayNode */
                 $addOptionsArrayNode = isset($parentNode->args[2]) ? $parentNode->args[2]->value : new Array_();
                 $addOptionsArrayNode->items[] = $constraintsArrayItem;

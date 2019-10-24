@@ -141,7 +141,7 @@ PHP
         $this->templateVariables = [];
 
         $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): void {
-            if ($node instanceof MethodCall && $this->isName($node, 'render')) {
+            if ($node instanceof MethodCall && $this->isName($node->name, 'render')) {
                 $this->templateFileExpr = $node->args[0]->value;
                 $this->removeNode($node);
             }
