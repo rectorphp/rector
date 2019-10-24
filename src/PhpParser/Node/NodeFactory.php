@@ -185,6 +185,10 @@ final class NodeFactory
             $variable = new StaticPropertyFetch($variable->class, $variable->name);
         }
 
+        if ($variable instanceof MethodCall) {
+            $variable = new MethodCall($variable->var, $variable->name, $variable->args);
+        }
+
         $methodCallNode = $this->builderFactory->methodCall($variable, $method, $arguments);
 
         $variable->setAttribute(AttributeKey::PARENT_NODE, $methodCallNode);

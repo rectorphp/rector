@@ -19,3 +19,4 @@ services:
     Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector: ~
     Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector: ~
     Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector: ~
+    Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector: ~

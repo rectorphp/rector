@@ -9,7 +9,7 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * See https://github.com/nikic/PHP-Parser/blob/master/doc/5_FAQ.markdown#how-can-the-nextprevious-sibling-of-a-node-be-obtained.
+ * @see https://github.com/nikic/PHP-Parser/blob/master/doc/component/FAQ.markdown#how-can-the-nextprevious-sibling-of-a-node-be-obtained
  */
 final class ParentAndNextNodeVisitor extends NodeVisitorAbstract
 {
