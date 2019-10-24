@@ -102,7 +102,6 @@ parameters:
         - '#Method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolveAssignRouteNodes\(\) should return array<PhpParser\\Node\\Expr\\Assign\> but returns array<PhpParser\\Node\>#'
         - '#Access to an undefined property PhpParser\\Node\\Stmt\:\:\$expr#'
         - '#Cannot access property \$stmts on PhpParser\\Node\\Stmt\\Else_\|null#'
-        - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDelegatingParentCallRector\:\:matchStaticCall\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt\|null given#'
 
         # node finder
         - '#Method Rector\\(.*?) should return array<PhpParser\\Node\\(.*?)> but returns array<PhpParser\\Node\>#'
@@ -118,7 +117,6 @@ parameters:
         - '#Parameter \#1 \$children of class PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocNode constructor expects array<PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode\>, array<int, PHPStan\\PhpDocParser\\Ast\\Node\> given#'
         # false positive
         - '#If condition is always false#'
-        - '#Call to an undefined method PHPStan\\Type\\Type\:\:getValue\(\)#'
         - '#Method Rector\\PHPUnit\\Rector\\MethodCall\\ReplaceAssertArraySubsetRector\:\:matchArray\(\) should return PhpParser\\Node\\Expr\\Array_\|null but returns PhpParser\\Node\\Expr#'
 
         - '#(.*?)PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable given#'
@@ -204,10 +202,5 @@ parameters:
         # known value
         - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDelegatingParentCallRector\:\:unwrapExpression\(\) expects PhpParser\\Node, PhpParser\\Node\\Stmt\|null given#'
         - '#Method Rector\\StrictCodeQuality\\Rector\\Stmt\\VarInlineAnnotationToAssertRector\:\:findVariableByName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns PhpParser\\Node\|null#'
-        - '#PHPDoc tag @param references unknown parameter\: \$commanders#'
-        - '#In method "Rector\\Rector\\AbstractRector\:\:autowireAbstractRectorDependencies", parameter \$symfonyStyle type is type\-hinted to "Symfony\\Component\\Console\\Style\\SymfonyStyle" but the @param annotation says it is a "array<Rector\\Contract\\PhpParser\\Node\\CommanderInterface\>"\. Please fix the @param annotation#'
-        - '#PHPDoc tag @param for parameter \$symfonyStyle with type array<Rector\\Contract\\PhpParser\\Node\\CommanderInterface\> is incompatible with native type Symfony\\Component\\Console\\Style\\SymfonyStyle#'
 
         - '#In method "Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createPropertyReflectionFromPropertyNode", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
-        - '#Method Rector\\TypeDeclaration\\TypeNormalizer\:\:createUnionedTypesFromArrayTypes\(\) should return array<PHPStan\\Type\\ArrayType\> but returns array<int, PHPStan\\Type\\Type\>#'
-        - '#Class Rector\\MethodCall\\Tests\\Rector\\MethodCall\\MethodCallToReturnRector\\Fixture\\SomeClass not found#'
