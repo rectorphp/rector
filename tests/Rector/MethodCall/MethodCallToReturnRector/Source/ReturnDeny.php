@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\MethodCall\Tests\Rector\MethodCall\MethodCallToReturnRector\Source;
+namespace Rector\Tests\Rector\MethodCall\MethodCallToReturnRector\Source;
 
 final class ReturnDeny
 {

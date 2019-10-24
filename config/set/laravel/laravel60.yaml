@@ -1,7 +1,7 @@
 # see https://laravel.com/docs/6.x/upgrade
 services:
     # https://github.com/laravel/docs/pull/5531/files
-    Rector\MethodCall\Rector\MethodCall\MethodCallToReturnRector:
+    Rector\Rector\MethodCall\MethodCallToReturnRector:
         Illuminate\Auth\Access\HandlesAuthorization:
             - 'deny'
 

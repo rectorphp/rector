@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\MethodCall\Rector\MethodCall;
+namespace Rector\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -13,7 +13,7 @@ use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\MethodCall\Tests\Rector\MethodCall\MethodCallToReturnRector\MethodCallToReturnRectorTest
+ * @see \Rector\Tests\Rector\MethodCall\MethodCallToReturnRector\MethodCallToReturnRectorTest
  */
 final class MethodCallToReturnRector extends AbstractRector
 {
