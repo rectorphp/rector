@@ -112,7 +112,7 @@ PHP
             }
 
             foreach ($positionWithDefaultValueByMethodNames as $method => $positionWithDefaultValues) {
-                if (! $this->isName($node, $method)) {
+                if (! $this->isName($node->name, $method)) {
                     continue;
                 }
 

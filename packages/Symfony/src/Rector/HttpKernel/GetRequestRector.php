@@ -134,12 +134,16 @@ PHP
             return false;
         }
 
+        if (! $node->var instanceof Variable) {
+            return false;
+        }
+
         // must be $this->getRequest() in controller
         if (! $this->isName($node->var, 'this')) {
             return false;
         }
 
-        if (! $this->isName($node, 'getRequest') && ! $this->isGetMethodCallWithRequestParameters($node)) {
+        if (! $this->isName($node->name, 'getRequest') && ! $this->isGetMethodCallWithRequestParameters($node)) {
             return false;
         }
 
@@ -168,11 +172,15 @@ PHP
                 return false;
             }
 
+            if (! $node->var instanceof Variable) {
+                return false;
+            }
+
             if (! $this->isName($node->var, 'this')) {
                 return false;
             }
 
-            return $this->isName($node, 'get');
+            return $this->isName($node->name, 'get');
         });
 
         foreach ($getMethodCalls as $getMethodCall) {
@@ -186,7 +194,7 @@ PHP
 
     private function isGetMethodCallWithRequestParameters(MethodCall $methodCall): bool
     {
-        if (! $this->isName($methodCall, 'get')) {
+        if (! $this->isName($methodCall->name, 'get')) {
             return false;
         }
 
@@ -212,11 +220,15 @@ PHP
                 return false;
             }
 
+            if (! $node->var instanceof Variable) {
+                return false;
+            }
+
             if (! $this->isName($node->var, 'this')) {
                 return false;
             }
 
-            return $this->isName($node, 'getRequest');
+            return $this->isName($node->name, 'getRequest');
         });
     }
 }

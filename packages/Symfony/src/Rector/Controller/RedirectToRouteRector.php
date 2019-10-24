@@ -44,7 +44,7 @@ final class RedirectToRouteRector extends AbstractRector
         if ($parentClassName !== Controller::class) {
             return null;
         }
-        if (! $this->isName($node, 'redirect')) {
+        if (! $this->isName($node->name, 'redirect')) {
             return null;
         }
 
@@ -52,7 +52,12 @@ final class RedirectToRouteRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isName($node->args[0]->value, 'generateUrl')) {
+        $argumentValue = $node->args[0]->value;
+        if (! $argumentValue instanceof MethodCall) {
+            return null;
+        }
+
+        if (! $this->isName($argumentValue->name, 'generateUrl')) {
             return null;
         }
 

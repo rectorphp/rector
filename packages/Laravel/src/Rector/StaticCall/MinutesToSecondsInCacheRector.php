@@ -72,7 +72,7 @@ PHP
             }
 
             foreach ($methodsToArguments as $method => $argumentPosition) {
-                if (! $this->isName($node, $method)) {
+                if (! $this->isName($node->name, $method)) {
                     continue;
                 }
 

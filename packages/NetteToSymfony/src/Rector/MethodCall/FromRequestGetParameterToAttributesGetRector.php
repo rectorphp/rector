@@ -68,7 +68,7 @@ PHP
             return null;
         }
 
-        if (! $this->isName($node, 'getParameter')) {
+        if (! $this->isName($node->name, 'getParameter')) {
             return null;
         }
 

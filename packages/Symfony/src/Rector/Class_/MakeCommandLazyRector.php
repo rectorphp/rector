@@ -104,7 +104,7 @@ PHP
                     return null;
                 }
 
-                if (! $this->isName($node, 'setName')) {
+                if (! $this->isName($node->name, 'setName')) {
                     return null;
                 }
 

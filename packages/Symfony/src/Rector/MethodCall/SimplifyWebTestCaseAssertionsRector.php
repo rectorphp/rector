@@ -145,7 +145,7 @@ PHP
      */
     private function matchAssertContainsCrawlerArg(MethodCall $methodCall): ?array
     {
-        if (! $this->isName($methodCall, 'assertContains')) {
+        if (! $this->isName($methodCall->name, 'assertContains')) {
             return null;
         }
 
@@ -166,7 +166,7 @@ PHP
             return null;
         }
 
-        if (! $this->isName($comparedNode, 'text')) {
+        if (! $this->isName($comparedNode->name, 'text')) {
             return null;
         }
 
@@ -226,7 +226,7 @@ PHP
             return null;
         }
 
-        if (! $this->isName($node, 'assertSame')) {
+        if (! $this->isName($node->name, 'assertSame')) {
             return null;
         }
 

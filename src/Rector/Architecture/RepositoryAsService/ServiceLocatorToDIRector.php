@@ -96,7 +96,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, 'getRepository')) {
+        if (! $this->isName($node->name, 'getRepository')) {
             return null;
         }
 

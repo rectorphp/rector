@@ -37,7 +37,8 @@ abstract class AbstractPHPUnitRector extends AbstractRector
             return false;
         }
 
-        return $this->isName($node, $name);
+        /** @var StaticCall|MethodCall $node */
+        return $this->isName($node->name, $name);
     }
 
     /**
@@ -49,7 +50,8 @@ abstract class AbstractPHPUnitRector extends AbstractRector
             return false;
         }
 
-        return $this->isNames($node, $names);
+        /** @var MethodCall|StaticCall $node */
+        return $this->isNames($node->name, $names);
     }
 
     protected function isInTestClass(Node $node): bool

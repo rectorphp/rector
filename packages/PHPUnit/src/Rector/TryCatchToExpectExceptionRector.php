@@ -141,7 +141,7 @@ PHP
             return;
         }
 
-        if (! $this->isName($methodCall, 'assertInstanceOf')) {
+        if (! $this->isName($methodCall->name, 'assertInstanceOf')) {
             return;
         }
 
@@ -167,7 +167,7 @@ PHP
             return;
         }
 
-        if (! $this->isNames($methodCall, ['assertSame', 'assertEquals'])) {
+        if (! $this->isNames($methodCall->name, ['assertSame', 'assertEquals'])) {
             return;
         }
 
@@ -180,7 +180,7 @@ PHP
             return;
         }
 
-        if (! $this->isName($secondArgument, 'getMessage')) {
+        if (! $this->isName($secondArgument->name, 'getMessage')) {
             return;
         }
 
@@ -196,7 +196,7 @@ PHP
             return;
         }
 
-        if (! $this->isNames($methodCall, ['assertSame', 'assertEquals'])) {
+        if (! $this->isNames($methodCall->name, ['assertSame', 'assertEquals'])) {
             return;
         }
 
@@ -210,7 +210,7 @@ PHP
             return;
         }
 
-        if (! $this->isName($secondArgument, 'getCode')) {
+        if (! $this->isName($secondArgument->name, 'getCode')) {
             return;
         }
 
@@ -223,7 +223,7 @@ PHP
             return;
         }
 
-        if (! $this->isName($methodCall, 'assertContains')) {
+        if (! $this->isName($methodCall->name, 'assertContains')) {
             return;
         }
 
@@ -237,7 +237,7 @@ PHP
             return;
         }
 
-        if (! $this->isName($secondArgument, 'getMessage')) {
+        if (! $this->isName($secondArgument->name, 'getMessage')) {
             return;
         }
 

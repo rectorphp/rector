@@ -66,7 +66,7 @@ PHP
                     return null;
                 }
 
-                if (! $this->isName($node, 'assertInstanceOf')) {
+                if (! $this->isName($node->name, 'assertInstanceOf')) {
                     return null;
                 }
 

@@ -85,7 +85,7 @@ PHP
             }
 
             foreach ($replacesByMethods as $method => $replaces) {
-                if (! $this->isName($node, $method)) {
+                if (! $this->isName($node->name, $method)) {
                     continue;
                 }
 

@@ -196,7 +196,7 @@ PHP
                 return false;
             }
 
-            if (! $this->isName($node, 'setUuid')) {
+            if (! $this->isName($node->name, 'setUuid')) {
                 return false;
             }
 

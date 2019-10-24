@@ -32,10 +32,6 @@ final class NameResolver
      */
     public function isNames(Node $node, array $names): bool
     {
-        if ($node instanceof MethodCall) {
-            throw new ShouldNotHappenException(sprintf('Cannot get name on "%s" node', MethodCall::class));
-        }
-
         foreach ($names as $name) {
             if ($this->isName($node, $name)) {
                 return true;
@@ -47,6 +43,12 @@ final class NameResolver
 
     public function isName(Node $node, string $name): bool
     {
+        if ($node instanceof MethodCall) {
+            throw new ShouldNotHappenException(sprintf(
+                'Cannot get name on "%s" node. Use $node->name instead', MethodCall::class
+            ));
+        }
+
         $resolvedName = $this->getName($node);
         if ($resolvedName === null) {
             return false;

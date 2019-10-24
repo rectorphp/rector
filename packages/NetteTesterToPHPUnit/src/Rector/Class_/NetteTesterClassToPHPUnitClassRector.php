@@ -109,7 +109,7 @@ PHP
 
     private function processUnderTestRun(MethodCall $methodCall): void
     {
-        if ($this->isName($methodCall, 'run')) {
+        if ($this->isName($methodCall->name, 'run')) {
             $this->removeNode($methodCall);
         }
     }

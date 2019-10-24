@@ -32,11 +32,11 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
     {
         $value = 'value';
         $this->assertEquals('string', $value, 'message', 5.0);
-        
+
         $this->assertEquals('string', $value, 'message', 0.0, 20);
-        
+
         $this->assertEquals('string', $value, 'message', 0.0, 10, true);
-        
+
         $this->assertEquals('string', $value, 'message', 0.0, 10, false, true);
     }
 }
@@ -49,11 +49,11 @@ final class SomeTest extends \PHPUnit\Framework\TestCase
     {
         $value = 'value';
         $this->assertEqualsWithDelta('string', $value, 5.0, 'message');
-        
+
         $this->assertEquals('string', $value, 'message', 0.0);
-        
+
         $this->assertEqualsCanonicalizing('string', $value, 'message');
-        
+
         $this->assertEqualsIgnoringCase('string', $value, 'message');
     }
 }
