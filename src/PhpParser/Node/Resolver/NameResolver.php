@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Empty_;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
@@ -21,6 +22,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\Use_;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class NameResolver
@@ -30,6 +32,10 @@ final class NameResolver
      */
     public function isNames(Node $node, array $names): bool
     {
+        if ($node instanceof MethodCall) {
+            throw new ShouldNotHappenException(sprintf('Cannot get name on "%s" node', MethodCall::class));
+        }
+
         foreach ($names as $name) {
             if ($this->isName($node, $name)) {
                 return true;
