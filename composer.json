@@ -28,7 +28,9 @@
         "symfony/dependency-injection": "^3.4|^4.2",
         "symfony/finder": "^3.4|^4.2",
         "symfony/process": "^3.4|^4.2",
-        "symplify/package-builder": "^6.1"
+        "symplify/package-builder": "^6.1",
+        "symplify/phpstan-extensions": "^6.1",
+        "thecodingmachine/phpstan-strict-rules": "^0.11"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.14",
@@ -38,8 +40,6 @@
         "symplify/changelog-linker": "^6.1",
         "symplify/easy-coding-standard": "^6.1",
         "symplify/monorepo-builder": "^6.1",
-        "symplify/phpstan-extensions": "^6.1",
-        "thecodingmachine/phpstan-strict-rules": "^0.11",
         "tracy/tracy": "^2.5"
     },
     "autoload": {
@@ -71,6 +71,7 @@
             "Rector\\PHPUnit\\": "packages/PHPUnit/src",
             "Rector\\PSR4\\": "packages/PSR4/src",
             "Rector\\PhpSpecToPHPUnit\\": "packages/PhpSpecToPHPUnit/src",
+            "Rector\\PHPStanExtensions\\": "utils/PHPStanExtensions/src",
             "Rector\\Php52\\": "packages/Php52/src",
             "Rector\\Php53\\": "packages/Php53/src",
             "Rector\\Php54\\": "packages/Php54/src",
@@ -123,7 +124,6 @@
             "Rector\\NetteToSymfony\\Tests\\": "packages/NetteToSymfony/tests",
             "Rector\\Nette\\Tests\\": "packages/Nette/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/NodeTypeResolver/tests",
-            "Rector\\PHPStanExtensions\\": "utils/PHPStanExtensions/src",
             "Rector\\PHPStan\\Tests\\": "packages/PHPStan/tests",
             "Rector\\PHPUnitSymfony\\Tests\\": "packages/PHPUnitSymfony/tests",
             "Rector\\PHPUnit\\Tests\\": "packages/PHPUnit/tests",
