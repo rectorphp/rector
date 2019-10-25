@@ -21,6 +21,7 @@ final class ConsoleExecuteReturnIntRectorTest extends AbstractRectorTestCase
     public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/non-console-command.php.inc'];
+        yield [__DIR__ . '/Fixture/extends-command-not-directly.php.inc'];
         yield [__DIR__ . '/Fixture/explicit-return-null.php.inc'];
         yield [__DIR__ . '/Fixture/no-return.php.inc'];
         yield [__DIR__ . '/Fixture/empty-return.php.inc'];
