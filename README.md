@@ -321,4 +321,4 @@ docker run -v $(pwd):/project rector/rector:latest process /project/app --config
 Do you use Rector to upgrade your code? Add it here:
 
 - [drupal8-rector/drupal8-rector](https://github.com/drupal8-rector/drupal8-rector) by [@mxr576](https://github.com/mxr576) for [Drupal](https://www.drupal.org/)
-- [sabbelasichon/typo3-rector](https://github.com/sabbelasichon/typo3-rector] for [TYPO3](https://typo3.org/)
+- [sabbelasichon/typo3-rector](https://github.com/sabbelasichon/typo3-rector) for [TYPO3](https://typo3.org/)
