@@ -1,7 +1,7 @@
 # Rector - Upgrade Your Legacy App to a Modern Codebase
 
 Rector is a **rec**onstruc**tor** tool - it does **instant upgrades** and **instant refactoring** of your code.
-Why refactor manually if Rector can handle it for you?
+Why refactor manually if Rector can handle 80% for you?
 
 [![Build Status](https://img.shields.io/travis/rectorphp/rector/master.svg?style=flat-square)](https://travis-ci.org/rectorphp/rector)
 [![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
@@ -25,7 +25,7 @@ Thank you:
 
 ## Open-Source First
 
-Rector **instantly upgrades and instantly refactors the PHP code of your application**. It keeps up to date with the latest PHP changes, and supports many open-source projects:
+Rector **instantly upgrades and instantly refactors the PHP code of your application**. It supports all modern versions of PHP and many open-source projects:
 
 <br>
 
@@ -69,7 +69,7 @@ Don't have a coding standard tool for your project? Consider adding [EasyCodingS
 composer require rector/rector --dev
 ```
 
-**If you had conflicts during `composer require` or on run, use the [Docker image](#run-rector-in-docker).**
+**Did you have conflicts during `composer require` or on run? Use the [Docker image](#run-rector-in-docker).**
 
 ### Extra Autoloading
 
