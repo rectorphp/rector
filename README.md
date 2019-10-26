@@ -69,7 +69,8 @@ Don't have a coding standard tool for your project? Consider adding [EasyCodingS
 composer require rector/rector --dev
 ```
 
-**Did you have conflicts during `composer require` or on run? Use the [Docker image](#run-rector-in-docker).**
+**Did you have conflicts during `composer require` or on run?**
+- Use the [Docker image](#run-rector-in-docker)
 
 ### Extra Autoloading
 
@@ -185,7 +186,7 @@ imports:
 
 First, make sure it's not covered by [any existing Rectors](/docs/AllRectorsOverview.md).
 
-Let's say we want to **change method prefixes from `set*` to `change*`**.
+Let's say we want to **change method calls from `set*` to `change*`**.
 
 ```diff
  $user = new User();
@@ -279,7 +280,7 @@ That's it!
 
 - **[All Rectors: Overview](/docs/AllRectorsOverview.md)**
 - [How Does Rector Work?](/docs/HowItWorks.md)
-- [Nodes: Overview](/docs/NodesOverview.md)
+- [Nodes Overview](/docs/NodesOverview.md)
 
 ## How to Contribute
 
@@ -307,7 +308,7 @@ You can run Rector on your project using Docker:
 ```bash
 docker run -v $(pwd):/project rector/rector:latest process /project/src --set symfony40 --dry-run
 
-# Note that a volume is mounted from the current directory into `/project` which can be accessed later.
+# Note that a volume is mounted from `pwd` (the current directory) into `/project` which can be accessed later.
 ```
 
 Using `rector.yaml`:
