@@ -7,6 +7,7 @@ namespace Rector\Symfony\Rector\Console;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Cast\Int_;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Class_;
@@ -78,7 +79,7 @@ PHP
             return null;
         }
 
-        $this->refactorReturnType($node);
+        $this->refactorReturnTypeDeclaration($node);
         $this->addReturn0ToMethod($node);
 
         return $node;
@@ -87,19 +88,21 @@ PHP
     private function addReturn0ToMethod(ClassMethod $classMethod): void
     {
         $hasReturn = false;
-        $this->traverseNodesWithCallable($classMethod->getStmts() ?? [], function (Node $stmt) use (
+
+        $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use (
             $classMethod,
             &$hasReturn
         ): void {
-            if (! $stmt instanceof Return_) {
+            if (! $node instanceof Return_) {
                 return;
             }
 
-            if ($this->areNodesEqual($stmt->getAttribute(AttributeKey::PARENT_NODE), $classMethod)) {
+            // is there return without nesting?
+            if ($this->areNodesEqual($node->getAttribute(AttributeKey::PARENT_NODE), $classMethod)) {
                 $hasReturn = true;
             }
 
-            $this->setReturnTo0InsteadOfNull($stmt);
+            $this->setReturnTo0InsteadOfNull($node);
         });
 
         if ($hasReturn) {
@@ -126,13 +129,21 @@ PHP
             return;
         }
 
-        if (! $this->getStaticType($return->expr) instanceof IntegerType) {
+        if ($return->expr instanceof Ternary) {
+            $hasChanged = $this->refactorTernaryReturn($return->expr);
+            if ($hasChanged) {
+                return;
+            }
+        }
+
+        $staticType = $this->getStaticType($return->expr);
+        if (! $staticType instanceof IntegerType) {
             $return->expr = new Int_($return->expr);
             return;
         }
     }
 
-    private function refactorReturnType(ClassMethod $classMethod): void
+    private function refactorReturnTypeDeclaration(ClassMethod $classMethod): void
     {
         if ($classMethod->returnType) {
             // already set
@@ -142,5 +153,21 @@ PHP
         }
 
         $classMethod->returnType = new Identifier('int');
+    }
+
+    private function refactorTernaryReturn(Ternary $ternary): bool
+    {
+        $hasChanged = false;
+        if ($ternary->if && $this->isNull($ternary->if)) {
+            $ternary->if = new LNumber(0);
+            $hasChanged = true;
+        }
+
+        if ($this->isNull($ternary->else)) {
+            $ternary->else = new LNumber(0);
+            $hasChanged = true;
+        }
+
+        return $hasChanged;
     }
 }

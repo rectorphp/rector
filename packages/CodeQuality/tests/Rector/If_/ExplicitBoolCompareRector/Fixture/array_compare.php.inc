@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
-final class Array_
+final class ArrayCompare
 {
     public function run(array $items)
     {
@@ -22,7 +22,7 @@ final class Array_
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
-final class Array_
+final class ArrayCompare
 {
     public function run(array $items)
     {
