@@ -7,7 +7,6 @@ namespace Rector\Symfony\Rector\Console;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Cast\Int_;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Class_;
@@ -21,8 +20,7 @@ use Rector\RectorDefinition\RectorDefinition;
 use Symfony\Component\Console\Command\Command;
 
 /**
- * Covers:
- * - https://github.com/symfony/symfony/pull/33775/files
+ * @see https://github.com/symfony/symfony/pull/33775/files
  * @see \Rector\Symfony\Tests\Rector\Console\ConsoleExecuteReturnIntRector\ConsoleExecuteReturnIntRectorTest
  */
 final class ConsoleExecuteReturnIntRector extends AbstractRector
@@ -67,26 +65,26 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->getName($node) !== 'execute') {
+        if (! $this->isName($node, 'execute')) {
             return null;
         }
 
         $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class || ! $class instanceof Class_) {
+        if (! $class instanceof Class_) {
             return null;
         }
 
-        $reflection = new \ReflectionClass($this->getName($class));
-        if (! $reflection->isSubclassOf(Command::class)) {
+        if (! $this->isObjectType($class, Command::class)) {
             return null;
         }
 
-        $node->returnType = new Identifier('int');
+        $this->refactorReturnType($node);
+        $this->addReturn0ToMethod($node);
 
-        return $this->addReturn0ToMethod($node);
+        return $node;
     }
 
-    private function addReturn0ToMethod(ClassMethod $classMethod): ClassMethod
+    private function addReturn0ToMethod(ClassMethod $classMethod): void
     {
         $hasReturn = false;
         $this->traverseNodesWithCallable($classMethod->getStmts() ?? [], function (Node $stmt) use (
@@ -105,12 +103,10 @@ PHP
         });
 
         if ($hasReturn) {
-            return $classMethod;
+            return;
         }
 
         $classMethod->stmts[] = new Return_(new LNumber(0));
-
-        return $classMethod;
     }
 
     private function setReturnTo0InsteadOfNull(Return_ $return): void
@@ -120,14 +116,12 @@ PHP
             return;
         }
 
-        if ($return->expr instanceof ConstFetch && $this->getName($return->expr) === 'null') {
+        if ($this->isNull($return->expr)) {
             $return->expr = new LNumber(0);
             return;
         }
 
-        if ($return->expr instanceof Coalesce && $return->expr->right instanceof ConstFetch && $this->getName(
-            $return->expr->right
-        ) === 'null') {
+        if ($return->expr instanceof Coalesce && $this->isNull($return->expr->right)) {
             $return->expr->right = new LNumber(0);
             return;
         }
@@ -136,5 +130,17 @@ PHP
             $return->expr = new Int_($return->expr);
             return;
         }
+    }
+
+    private function refactorReturnType(ClassMethod $classMethod): void
+    {
+        if ($classMethod->returnType) {
+            // already set
+            if ($this->isName($classMethod->returnType, 'int')) {
+                return;
+            }
+        }
+
+        $classMethod->returnType = new Identifier('int');
     }
 }
