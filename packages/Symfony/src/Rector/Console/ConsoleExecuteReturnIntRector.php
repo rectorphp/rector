@@ -76,7 +76,8 @@ PHP
             return null;
         }
 
-        if (! ($class->extends && $this->isName($class->extends, Command::class))) {
+        $reflection = new \ReflectionClass($this->getName($class));
+        if (! $reflection->isSubclassOf(Command::class)) {
             return null;
         }
 
