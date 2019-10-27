@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use Rector\DeadCode\Analyzer\SetterOnlyMethodAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -152,7 +154,7 @@ PHP
 
     /**
      * @param Property|Assign|ClassMethod $node
-     * @param string[][] $setterOnlyPropertiesAndMethods
+     * @param string[][]                  $setterOnlyPropertiesAndMethods
      */
     private function processClassStmts(Node $node, array $setterOnlyPropertiesAndMethods): void
     {
@@ -194,7 +196,12 @@ PHP
 
         /** @var PropertyFetch $propertyFetch */
         if ($this->isNames($propertyFetch->name, $propertyNames)) {
-            $this->removeNode($node);
+            $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parent instanceof Expression) {
+                $this->removeNode($node);
+            } else {
+                $this->replaceNode($node, $node->expr);
+            }
         }
     }
 }
