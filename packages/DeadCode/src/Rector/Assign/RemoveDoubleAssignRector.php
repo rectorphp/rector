@@ -76,16 +76,16 @@ PHP
             return null;
         }
 
-        $previousExpression = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        if (! $previousExpression instanceof Expression) {
+        $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
+        if (! $previousStatement instanceof Expression) {
             return null;
         }
 
-        if (! $previousExpression->expr instanceof Assign) {
+        if (! $previousStatement->expr instanceof Assign) {
             return null;
         }
 
-        if (! $this->areNodesEqual($previousExpression->expr, $node)) {
+        if (! $this->areNodesEqual($previousStatement->expr, $node)) {
             return null;
         }
 
@@ -93,7 +93,7 @@ PHP
             return null;
         }
 
-        if ($this->shouldSkipForDifferentScope($node, $previousExpression)) {
+        if ($this->shouldSkipForDifferentScope($node, $previousStatement)) {
             return null;
         }
 

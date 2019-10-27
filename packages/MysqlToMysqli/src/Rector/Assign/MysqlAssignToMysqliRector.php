@@ -155,12 +155,12 @@ PHP
             'stmts' => [new Expression($funcCall)],
         ]);
 
-        $previousExpression = $assign->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        if ($previousExpression === null) {
+        $previousStatement = $assign->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
+        if ($previousStatement === null) {
             throw new ShouldNotHappenException();
         }
 
-        $this->addNodeAfterNode($forNode, $previousExpression);
+        $this->addNodeAfterNode($forNode, $previousStatement);
 
         return $assign;
     }

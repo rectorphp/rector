@@ -173,12 +173,12 @@ final class BetterNodeFinder
         }
 
         // move to next expression
-        $previousExpression = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        if ($previousExpression === null) {
+        $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
+        if ($previousStatement === null) {
             return null;
         }
 
-        return $this->findFirstPrevious($previousExpression, $filter);
+        return $this->findFirstPrevious($previousStatement, $filter);
     }
 
     /**
