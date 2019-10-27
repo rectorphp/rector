@@ -77,7 +77,7 @@ PHP
         }
 
         $previousExpression = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        if (!$previousExpression instanceof Expression) {
+        if (! $previousExpression instanceof Expression) {
             return null;
         }
 

@@ -9,12 +9,12 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use Rector\Configuration\Configuration;
-use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
 
 final class NodeScopeAndMetadataDecorator
@@ -37,7 +37,7 @@ final class NodeScopeAndMetadataDecorator
     /**
      * @var FunctionMethodAndClassNodeVisitor
      */
-    private $classAndMethodNodeVisitor;
+    private $functionMethodAndClassNodeVisitor;
 
     /**
      * @var NamespaceNodeVisitor
@@ -47,7 +47,7 @@ final class NodeScopeAndMetadataDecorator
     /**
      * @var StatementNodeVisitor
      */
-    private $expressionNodeVisitor;
+    private $statementNodeVisitor;
 
     /**
      * @var FileInfoNodeVisitor
@@ -68,9 +68,9 @@ final class NodeScopeAndMetadataDecorator
         NodeScopeResolver $nodeScopeResolver,
         ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
         CloningVisitor $cloningVisitor,
-        FunctionMethodAndClassNodeVisitor $classAndMethodNodeVisitor,
+        FunctionMethodAndClassNodeVisitor $functionMethodAndClassNodeVisitor,
         NamespaceNodeVisitor $namespaceNodeVisitor,
-        StatementNodeVisitor $expressionNodeVisitor,
+        StatementNodeVisitor $statementNodeVisitor,
         FileInfoNodeVisitor $fileInfoNodeVisitor,
         NodeCollectorNodeVisitor $nodeCollectorNodeVisitor,
         Configuration $configuration
@@ -78,9 +78,9 @@ final class NodeScopeAndMetadataDecorator
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->parentAndNextNodeVisitor = $parentAndNextNodeVisitor;
         $this->cloningVisitor = $cloningVisitor;
-        $this->classAndMethodNodeVisitor = $classAndMethodNodeVisitor;
+        $this->functionMethodAndClassNodeVisitor = $functionMethodAndClassNodeVisitor;
         $this->namespaceNodeVisitor = $namespaceNodeVisitor;
-        $this->expressionNodeVisitor = $expressionNodeVisitor;
+        $this->statementNodeVisitor = $statementNodeVisitor;
         $this->fileInfoNodeVisitor = $fileInfoNodeVisitor;
         $this->nodeCollectorNodeVisitor = $nodeCollectorNodeVisitor;
         $this->configuration = $configuration;
@@ -115,14 +115,14 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->cloningVisitor); // needed also for format preserving printing
         $nodeTraverser->addVisitor($this->parentAndNextNodeVisitor);
-        $nodeTraverser->addVisitor($this->classAndMethodNodeVisitor);
+        $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
 
         $nodes = $nodeTraverser->traverse($nodes);
 
         // this split is needed, so nodes have names, classes and namespaces
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->expressionNodeVisitor);
+        $nodeTraverser->addVisitor($this->statementNodeVisitor);
         $nodeTraverser->addVisitor($this->fileInfoNodeVisitor);
         $nodeTraverser->addVisitor($this->nodeCollectorNodeVisitor);
 
@@ -137,8 +137,8 @@ final class NodeScopeAndMetadataDecorator
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->parentAndNextNodeVisitor);
-        $nodeTraverser->addVisitor($this->classAndMethodNodeVisitor);
-        $nodeTraverser->addVisitor($this->expressionNodeVisitor);
+        $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
+        $nodeTraverser->addVisitor($this->statementNodeVisitor);
 
         return $nodeTraverser->traverse($nodes);
     }

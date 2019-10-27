@@ -26,7 +26,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Stmt\Trait_;
@@ -102,6 +101,7 @@ final class NodeTypeResolver
      * @var ObjectTypeSpecifier
      */
     private $objectTypeSpecifier;
+
     /**
      * @var BetterNodeFinder
      */
@@ -505,7 +505,7 @@ final class NodeTypeResolver
      */
     private function correctPregMatchType(Node $node, Type $originalType): Type
     {
-        if (!$node instanceof Variable) {
+        if (! $node instanceof Variable) {
             return $originalType;
         }
 
@@ -514,14 +514,13 @@ final class NodeTypeResolver
         }
 
         foreach ($this->getVariableUsages($node) as $usage) {
-            /** @var Expression|null $previousExpression */
             $possiblyArg = $usage->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$possiblyArg instanceof Arg) {
+            if (! $possiblyArg instanceof Arg) {
                 continue;
             }
 
             $funcCallNode = $possiblyArg->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$funcCallNode instanceof FuncCall) {
+            if (! $funcCallNode instanceof FuncCall) {
                 continue;
             }
 
@@ -542,23 +541,21 @@ final class NodeTypeResolver
         return $originalType;
     }
 
-    private function getScopeNode(Node $node) : Node
+    private function getScopeNode(Node $node): Node
     {
         return $node->getAttribute(AttributeKey::METHOD_NODE)
             ?? $node->getAttribute(AttributeKey::FUNCTION_NODE)
-            ?? $node->getAttribute( AttributeKey::NAMESPACE_NODE);
+            ?? $node->getAttribute(AttributeKey::NAMESPACE_NODE);
     }
 
     /**
      * @return Node[]
      */
-    private function getVariableUsages(Variable $variable) : array
+    private function getVariableUsages(Variable $variable): array
     {
         $scope = $this->getScopeNode($variable);
 
-        return $this->betterNodeFinder->find((array) $scope->stmts, function (Node $node) use (
-            $variable
-        ): bool {
+        return $this->betterNodeFinder->find((array) $scope->stmts, function (Node $node) use ($variable): bool {
             return $node instanceof Variable && $node->name === $variable->name;
             return $this->betterStandardPrinter->areNodesEqual($node, $variable);
         });

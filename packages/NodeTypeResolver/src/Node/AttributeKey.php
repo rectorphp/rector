@@ -114,7 +114,13 @@ final class AttributeKey
      */
     public const IS_UNREACHABLE = 'is_unreachable';
 
+    /**
+     * @var string
+     */
     public const FUNCTION_NAME = 'function_name';
 
+    /**
+     * @var string
+     */
     public const FUNCTION_NODE = 'function_node';
 }
