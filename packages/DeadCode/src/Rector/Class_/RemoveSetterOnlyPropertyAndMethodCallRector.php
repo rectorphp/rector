@@ -162,6 +162,9 @@ PHP
         if ($this->assignManipulator->isLocalPropertyAssign($node)) {
             /** @var Assign $node */
             $propertyFetch = $node->var;
+            if ($propertyFetch instanceof Node\Expr\ArrayDimFetch) {
+                $propertyFetch = $propertyFetch->var;
+            }
             /** @var PropertyFetch $propertyFetch */
             if ($this->isNames($propertyFetch->name, $propertyNames)) {
                 $this->removeNode($node);

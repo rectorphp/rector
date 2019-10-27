@@ -26,6 +26,8 @@ final class RemoveSetterOnlyPropertyAndMethodCallRectorTest extends AbstractRect
         yield [__DIR__ . '/Fixture/keep_static_property.php.inc'];
         yield [__DIR__ . '/Fixture/keep_public_property.php.inc'];
         yield [__DIR__ . '/Fixture/keep_serializable_object.php.inc'];
+        yield [__DIR__ . '/Fixture/deal_with_property_fetches.php.inc'];
+        yield [__DIR__ . '/Fixture/node_removal_on_non_expression.php.inc'];
     }
 
     protected function getRectorClass(): string

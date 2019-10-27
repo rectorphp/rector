@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\NodeDumper;
 use PhpParser\NodeTraverser;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Exception\ShouldNotHappenException;
@@ -37,8 +38,8 @@ final class NodeRemovingCommander implements CommanderInterface
         $this->ensureIsNotPartOfChainMethodCall($node);
 
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $node instanceof Expression && $parentNode instanceof Expression) {
-            // only expressions can be removed
+        if (! $node instanceof Stmt && $parentNode instanceof Expression) {
+            // only stmts can be removed
             $node = $parentNode;
         }
 
