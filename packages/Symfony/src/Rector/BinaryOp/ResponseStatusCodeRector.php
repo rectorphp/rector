@@ -104,7 +104,7 @@ class SomeController
     {
         $response = new \Symfony\Component\HttpFoundation\Response();
         $response->setStatusCode(200);
-        
+
         if ($response->getStatusCode() === 200) {}
     }
 }
@@ -117,7 +117,7 @@ class SomeController
     {
         $response = new \Symfony\Component\HttpFoundation\Response();
         $response->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_OK);
-        
+
         if ($response->getStatusCode() === \Symfony\Component\HttpFoundation\Response::HTTP_OK) {}
     }
 }
@@ -152,7 +152,7 @@ PHP
             return null;
         }
 
-        if (! $this->isName($methodCall, 'setStatusCode')) {
+        if (! $this->isName($methodCall->name, 'setStatusCode')) {
             return null;
         }
 
@@ -203,7 +203,7 @@ PHP
             return false;
         }
 
-        return $this->isName($node, 'getStatusCode');
+        return $this->isName($node->name, 'getStatusCode');
     }
 
     /**

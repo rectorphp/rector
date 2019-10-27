@@ -63,7 +63,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, 'registerResources')) {
+        if (! $this->isName($node->name, 'registerResources')) {
             return null;
         }
 

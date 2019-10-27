@@ -149,7 +149,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
     private function processMethodCall(MethodCall $methodCall): ?MethodCall
     {
-        if ($this->isName($methodCall, 'shouldBeCalled')) {
+        if ($this->isName($methodCall->name, 'shouldBeCalled')) {
             if (! $methodCall->var instanceof MethodCall) {
                 throw new ShouldNotHappenException();
             }

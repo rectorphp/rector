@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
-final class Ternary
+final class WithTernary
 {
     public function run(int $item)
     {
@@ -18,7 +18,7 @@ final class Ternary
 
 namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector\Fixture;
 
-final class Ternary
+final class WithTernary
 {
     public function run(int $item)
     {

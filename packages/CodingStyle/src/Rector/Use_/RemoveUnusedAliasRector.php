@@ -18,10 +18,12 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeVisitor\NameResolver;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodingStyle\Imports\ShortNameResolver;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -306,6 +308,27 @@ PHP
                 return;
             }
 
+            /** @var PhpDocInfo $phpDocInfo */
+            $phpDocInfo = $this->getPhpDocInfo($node);
+            if ($phpDocInfo->getVarType()) {
+                $varType = $phpDocInfo->getVarType();
+                if ($varType instanceof AliasedObjectType) {
+                    $possibleDocAliases[] = $varType->getClassName();
+                }
+
+                $returnType = $phpDocInfo->getReturnType();
+                if ($returnType instanceof AliasedObjectType) {
+                    $possibleDocAliases[] = $returnType->getClassName();
+                }
+
+                foreach ($phpDocInfo->getParamTypes() as $paramType) {
+                    if ($paramType instanceof AliasedObjectType) {
+                        $possibleDocAliases[] = $paramType->getClassName();
+                    }
+                }
+            }
+
+            // e.g. "use Dotrine\ORM\Mapping as ORM" etc.
             $matches = Strings::matchAll($node->getDocComment()->getText(), '#\@(?<possible_alias>\w+)(\\\\)?#s');
             foreach ($matches as $match) {
                 $possibleDocAliases[] = $match['possible_alias'];
@@ -336,6 +359,10 @@ PHP
         $shortNames = $this->shortNameResolver->resolveForNode($use);
         foreach ($shortNames as $alias => $useImport) {
             $shortName = $this->classNaming->getShortName($useImport);
+            if ($shortName === $alias) {
+                continue;
+            }
+
             $useNamesAliasToName[$shortName][] = $alias;
         }
 

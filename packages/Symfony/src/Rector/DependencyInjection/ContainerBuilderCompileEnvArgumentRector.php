@@ -46,7 +46,7 @@ final class ContainerBuilderCompileEnvArgumentRector extends AbstractRector
             return null;
         }
 
-        if (! $this->isName($node, 'compile')) {
+        if (! $this->isName($node->name, 'compile')) {
             return null;
         }
 

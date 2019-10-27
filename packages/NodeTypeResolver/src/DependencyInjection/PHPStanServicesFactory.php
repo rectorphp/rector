@@ -20,13 +20,20 @@ final class PHPStanServicesFactory
 
     public function __construct()
     {
-        $containerFactory = new ContainerFactory(getcwd());
+        $currentWorkingDirectory = getcwd();
+
+        $containerFactory = new ContainerFactory($currentWorkingDirectory);
         $additionalConfigFiles = [];
 
         // possible path collision for Docker
-        $phpstanPhpunitExtensionConfig = getcwd() . '/vendor/phpstan/phpstan-phpunit/extension.neon';
+        $phpstanPhpunitExtensionConfig = $currentWorkingDirectory . '/vendor/phpstan/phpstan-phpunit/extension.neon';
         if (file_exists($phpstanPhpunitExtensionConfig) && class_exists('PHPUnit\\Framework\\TestCase')) {
             $additionalConfigFiles[] = $phpstanPhpunitExtensionConfig;
+        }
+
+        $currentProjectConfigFile = $currentWorkingDirectory . '/phpstan.neon';
+        if (file_exists($currentProjectConfigFile)) {
+            $additionalConfigFiles[] = $currentProjectConfigFile;
         }
 
         $additionalConfigFiles[] = __DIR__ . '/../../config/phpstan/type-extensions.neon';

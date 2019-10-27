@@ -316,7 +316,7 @@ final class NodeTypeResolver
         }
 
         if ($node instanceof Arg) {
-            return $this->getStaticType($node->value);
+            throw new ShouldNotHappenException('Arg does not have a type, use $arg->value instead');
         }
 
         if ($node instanceof Param) {
@@ -636,15 +636,15 @@ final class NodeTypeResolver
         return $className === null || Strings::contains($className, 'AnonymousClass');
     }
 
-    private function resolveParamStaticType(Node $node): Type
+    private function resolveParamStaticType(Param $param): Type
     {
-        $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+        $classMethod = $param->getAttribute(AttributeKey::METHOD_NODE);
         if ($classMethod === null) {
             return new MixedType();
         }
 
         /** @var string $paramName */
-        $paramName = $this->nameResolver->getName($node);
+        $paramName = $this->nameResolver->getName($param);
         $paramStaticType = new MixedType();
 
         // special case for param inside method/function
@@ -660,7 +660,6 @@ final class NodeTypeResolver
                 }
 
                 $paramStaticType = $this->getStaticType($node);
-
                 return NodeTraverser::STOP_TRAVERSAL;
             }
         );

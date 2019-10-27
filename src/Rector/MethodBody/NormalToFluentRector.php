@@ -186,7 +186,7 @@ PHP
                 continue;
             }
 
-            if ($this->isNames($methodCall, $methodNames)) {
+            if ($this->isNames($methodCall->name, $methodNames)) {
                 return $type;
             }
         }

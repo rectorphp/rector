@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\Testing\PHPUnit\PHPUnitEnvironment;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
@@ -104,11 +103,8 @@ final class NodeAnnotationReader
         try {
             return new ReflectionProperty($className, $propertyName);
         } catch (Throwable $throwable) {
-            if (PHPUnitEnvironment::isPHPUnitRun()) {
-                return null;
-            }
-
-            throw new $throwable();
+            // in case of PHPUnit property or just-added property
+            return null;
         }
     }
 

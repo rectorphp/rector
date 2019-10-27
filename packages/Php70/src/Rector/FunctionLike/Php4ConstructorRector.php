@@ -166,7 +166,7 @@ PHP
             return false;
         }
 
-        return $this->isName($node, '__construct');
+        return $this->isName($node->name, '__construct');
     }
 
     private function processParentPhp4ConstructCall(Node $node): void

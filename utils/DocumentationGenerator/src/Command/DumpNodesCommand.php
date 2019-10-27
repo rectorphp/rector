@@ -49,6 +49,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\DNumber;
@@ -298,7 +299,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === Alias::class) {
                     $node = new Alias(new Name('SomeTrait'), 'method', Class_::MODIFIER_PUBLIC, 'aliasedMethod');
                 } elseif ($nodeClass === Throw_::class) {
-                    $node = new Throw_(new New_(new Variable('someException')));
+                    $node = new Throw_(new New_(new FullyQualified('SomeException')));
                 } elseif ($nodeClass === TryCatch::class) {
                     $node = new TryCatch([new Function_('someFunction')], [new Function_('logException')]);
                 } elseif ($nodeClass === Interface_::class) {

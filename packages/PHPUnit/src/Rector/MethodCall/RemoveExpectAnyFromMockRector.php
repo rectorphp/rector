@@ -69,7 +69,7 @@ PHP
             return null;
         }
 
-        if (! $this->isName($node, 'expects')) {
+        if (! $this->isName($node->name, 'expects')) {
             return null;
         }
 
@@ -88,7 +88,7 @@ PHP
             return null;
         }
 
-        if (! $this->isName($onlyArgument, 'any')) {
+        if (! $this->isName($onlyArgument->name, 'any')) {
             return null;
         }
 

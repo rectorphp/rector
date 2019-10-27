@@ -112,7 +112,8 @@ PHP
 
         array_shift($node->args);
 
-        $methodName = $this->typeToMethod[$type][$this->isName($node, 'assertInternalType') ? 0 : 1];
+        $position = $this->isName($node->name, 'assertInternalType') ? 0 : 1;
+        $methodName = $this->typeToMethod[$type][$position];
 
         $node->name = new Identifier($methodName);
 

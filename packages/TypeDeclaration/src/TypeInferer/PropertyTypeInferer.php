@@ -70,7 +70,7 @@ final class PropertyTypeInferer extends AbstractPriorityAwareTypeInferer
             return $defaultValueType;
         }
 
-        $types = array_merge([$type], [$defaultValueType]);
+        $types = [$type, $defaultValueType];
         return $this->typeFactory->createMixedPassedOrUnionType($types);
     }
 }

@@ -95,7 +95,7 @@ PHP
                 continue;
             }
 
-            if (! $this->isName($methodCall, '__toString')) {
+            if (! $this->isName($methodCall->name, '__toString')) {
                 continue;
             }
 

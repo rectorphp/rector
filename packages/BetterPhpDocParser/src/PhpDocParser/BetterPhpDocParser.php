@@ -177,6 +177,9 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokenStart = $this->getTokenIteratorIndex($tokenIterator);
         $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', $tokenIterator);
         $tokenEnd = $this->getTokenIteratorIndex($tokenIterator);
+
+        $tokenEnd = $this->adjustTokenEndToFitClassAnnotation($tokenIterator, $tokenEnd);
+
         $startEndValueObject = new StartEndValueObject($tokenStart, $tokenEnd);
 
         $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode);
@@ -302,5 +305,31 @@ final class BetterPhpDocParser extends PhpDocParser
         }
 
         return false;
+    }
+
+    /**
+     * @see https://github.com/rectorphp/rector/issues/2158
+     *
+     * Need to find end of this bracket first, because the parseChild() skips class annotatinos
+     */
+    private function adjustTokenEndToFitClassAnnotation(TokenIterator $tokenIterator, int $tokenEnd): int
+    {
+        $tokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
+        if ($tokens[$tokenEnd][0] !== '(') {
+            return $tokenEnd;
+        }
+
+        while ($tokens[$tokenEnd][0] !== ')') {
+            ++$tokenEnd;
+
+            // to prevent missing index error
+            if (! isset($tokens[$tokenEnd])) {
+                return --$tokenEnd;
+            }
+        }
+
+        ++$tokenEnd;
+
+        return $tokenEnd;
     }
 }

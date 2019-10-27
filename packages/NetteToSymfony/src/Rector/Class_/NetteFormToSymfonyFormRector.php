@@ -133,7 +133,7 @@ PHP
         }
 
         foreach ($this->addMethodToFormType as $method => $classType) {
-            if (! $this->isName($node, $method)) {
+            if (! $this->isName($node->name, $method)) {
                 continue;
             }
 

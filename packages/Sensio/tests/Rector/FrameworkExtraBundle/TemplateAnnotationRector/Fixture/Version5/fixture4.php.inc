@@ -2,10 +2,9 @@
 
 namespace App\Controller;
 
-use Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\Source\SymfonyController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-class ClassWithNamedService45Controller extends SymfonyController
+class ClassWithNamedService45Controller
 {
     /**
      * @Template("AdminBundle:Payment:create.html.twig")
@@ -24,10 +23,9 @@ class ClassWithNamedService45Controller extends SymfonyController
 
 namespace App\Controller;
 
-use Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\Source\SymfonyController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-class ClassWithNamedService45Controller extends SymfonyController
+class ClassWithNamedService45Controller
 {
     public function indexAction()
     {

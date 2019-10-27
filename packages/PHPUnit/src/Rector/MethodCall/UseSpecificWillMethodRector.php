@@ -87,11 +87,11 @@ PHP
             return null;
         }
 
-        if ($this->isName($node, 'with')) {
+        if ($this->isName($node->name, 'with')) {
             return $this->processWithCall($node);
         }
 
-        if ($this->isName($node, 'will')) {
+        if ($this->isName($node->name, 'will')) {
             return $this->processWillCall($node);
         }
 
@@ -105,8 +105,11 @@ PHP
     private function processWithCall(Node $node): Node
     {
         foreach ($node->args as $i => $argNode) {
-            if ($argNode->value instanceof MethodCall && $this->isName($argNode->value, 'equalTo')) {
-                $node->args[$i] = $argNode->value->args[0];
+            if ($argNode->value instanceof MethodCall) {
+                $methodCall = $argNode->value;
+                if ($this->isName($methodCall->name, 'equalTo')) {
+                    $node->args[$i] = $methodCall->args[0];
+                }
             }
         }
 
@@ -126,14 +129,16 @@ PHP
         $nestedMethodCall = $node->args[0]->value;
 
         foreach ($this->nestedMethodToRenameMap as $oldMethodName => $newParentMethodName) {
-            if ($this->isName($nestedMethodCall, $oldMethodName)) {
-                $node->name = new Identifier($newParentMethodName);
-
-                // move args up
-                $node->args = $nestedMethodCall->args;
-
-                return $node;
+            if (! $this->isName($nestedMethodCall->name, $oldMethodName)) {
+                continue;
             }
+
+            $node->name = new Identifier($newParentMethodName);
+
+            // move args up
+            $node->args = $nestedMethodCall->args;
+
+            return $node;
         }
 
         return null;

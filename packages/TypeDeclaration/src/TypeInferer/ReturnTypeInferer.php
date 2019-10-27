@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node\FunctionLike;
-use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
+use Rector\TypeDeclaration\TypeNormalizer;
 
 final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
 {
@@ -22,17 +19,17 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
     private $returnTypeInferers = [];
 
     /**
-     * @var TypeFactory
+     * @var TypeNormalizer
      */
-    private $typeFactory;
+    private $typeNormalizer;
 
     /**
      * @param ReturnTypeInfererInterface[] $returnTypeInferers
      */
-    public function __construct(TypeFactory $typeFactory, array $returnTypeInferers)
+    public function __construct(array $returnTypeInferers, TypeNormalizer $typeNormalizer)
     {
         $this->returnTypeInferers = $this->sortTypeInferersByPriority($returnTypeInferers);
-        $this->typeFactory = $typeFactory;
+        $this->typeNormalizer = $typeNormalizer;
     }
 
     public function inferFunctionLike(FunctionLike $functionLike): Type
@@ -51,7 +48,10 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
             }
 
             $type = $returnTypeInferer->inferFunctionLike($functionLike);
-            $type = $this->normalizeArrayTypeAndArrayNever($type);
+
+            $type = $this->typeNormalizer->normalizeArrayTypeAndArrayNever($type);
+            $type = $this->typeNormalizer->uniqueateConstantArrayType($type);
+            $type = $this->typeNormalizer->normalizeArrayOfUnionToUnionArray($type);
 
             if (! $type instanceof MixedType) {
                 return $type;
@@ -86,30 +86,5 @@ final class ReturnTypeInferer extends AbstractPriorityAwareTypeInferer
         }
 
         throw new ShouldNotHappenException();
-    }
-
-    /**
-     * From "string[]|mixed[]" based on empty array to to "string[]"
-     */
-    private function normalizeArrayTypeAndArrayNever(Type $type): Type
-    {
-        if (! $type instanceof UnionType) {
-            return $type;
-        }
-
-        $nonNeverTypes = [];
-        foreach ($type->getTypes() as $unionedType) {
-            if (! $unionedType instanceof ArrayType) {
-                return $type;
-            }
-
-            if ($unionedType->getItemType() instanceof NeverType) {
-                continue;
-            }
-
-            $nonNeverTypes[] = $unionedType;
-        }
-
-        return $this->typeFactory->createMixedPassedOrUnionType($nonNeverTypes);
     }
 }

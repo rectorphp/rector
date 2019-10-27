@@ -9,10 +9,46 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+## [v0.5.19] - 2019-10-24
+
+### Added
+
+- [#2195] [Laravel] Add Laravel 6 instant upgrade set
+- [#2192] Add test case for route annotation with optional parameters, Thanks to [@stedekay]
+- [#2182] [PHP 74] Add ChangeReflectionTypeToStringToGetNameRector
+
+### Fixed
+
+- [#2193] fix union too many types
+- [#2190] Various Return types fixes
+- [#2194] fix for Template and Route annotation
+- [#2191] prevent mixed of specific override
+
+## [v0.5.18] - 2019-10-22
+
+### Added
+
+- [#2177] [CodeQuality] Add ArrayMergeOfNonArraysToSimpleArrayRector
+- [#2176] [CodeQuality] Add AddPregQuoteDelimiterRector
+- [#2184] [FEATURE] Possibility to add custom phpstan.neon configuration, Thanks to [@sabbelasichon]
+- [#2172] Add rules for ConsoleIo::styles(), Thanks to [@markstory]
+- [#2175] Added rector sets composition hint, Thanks to [@SilverFire]
+- [#2181] add test case for [#2158]
+- [#2188] add Standalone Runner
+
+### Fixed
+
+- [#2180] fix ArgumentAdderRector for anonymous class [closes [#2157]]
+- [#2183] fix RemoveUnusedAliasRector for doc vs class concurency
+- [#2174] Fix for Issue2173, Thanks to [@dpesch]
+- [#2169] Fixes
+- [#2168] Prevent CI floods with progress bar
+
 ## [v0.5.17] - 2019-10-15
 
 ### Added
 
+- [#2087] Added way to exclude rectors, Thanks to [@jeroensmit]
 - [#2156] [PHPUnit] [Doc] Add FixDataProviderAnnotationTypoRector
 - [#2155] [PHPUnit] [Doc] Add EnsureDataProviderInDocBlockRector
 - [#2144] [PHPUnit] Add RemoveDataProviderTestPrefixRector
@@ -1254,7 +1290,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#2159]: https://github.com/rectorphp/rector/pull/2159
 [#2156]: https://github.com/rectorphp/rector/pull/2156
 [#2155]: https://github.com/rectorphp/rector/pull/2155
-[#2154]: https://github.com/rectorphp/rector/pull/2154
 [#2152]: https://github.com/rectorphp/rector/pull/2152
 [#2151]: https://github.com/rectorphp/rector/pull/2151
 [#2150]: https://github.com/rectorphp/rector/pull/2150
@@ -1271,7 +1306,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#2135]: https://github.com/rectorphp/rector/pull/2135
 [#2132]: https://github.com/rectorphp/rector/pull/2132
 [#2130]: https://github.com/rectorphp/rector/pull/2130
-[#2129]: https://github.com/rectorphp/rector/pull/2129
 [#2128]: https://github.com/rectorphp/rector/pull/2128
 [#2114]: https://github.com/rectorphp/rector/pull/2114
 [#2090]: https://github.com/rectorphp/rector/pull/2090
@@ -1280,3 +1314,32 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@lapetr]: https://github.com/lapetr
 [v0.5.15]: https://github.com/rectorphp/rector/compare/v0.5.14...v0.5.15
 [v0.5.14]: https://github.com/rectorphp/rector/compare/v0.5.13...v0.5.14
+[#2195]: https://github.com/rectorphp/rector/pull/2195
+[#2194]: https://github.com/rectorphp/rector/pull/2194
+[#2193]: https://github.com/rectorphp/rector/pull/2193
+[#2192]: https://github.com/rectorphp/rector/pull/2192
+[#2191]: https://github.com/rectorphp/rector/pull/2191
+[#2190]: https://github.com/rectorphp/rector/pull/2190
+[#2188]: https://github.com/rectorphp/rector/pull/2188
+[#2184]: https://github.com/rectorphp/rector/pull/2184
+[#2183]: https://github.com/rectorphp/rector/pull/2183
+[#2182]: https://github.com/rectorphp/rector/pull/2182
+[#2181]: https://github.com/rectorphp/rector/pull/2181
+[#2180]: https://github.com/rectorphp/rector/pull/2180
+[#2177]: https://github.com/rectorphp/rector/pull/2177
+[#2176]: https://github.com/rectorphp/rector/pull/2176
+[#2175]: https://github.com/rectorphp/rector/pull/2175
+[#2174]: https://github.com/rectorphp/rector/pull/2174
+[#2172]: https://github.com/rectorphp/rector/pull/2172
+[#2169]: https://github.com/rectorphp/rector/pull/2169
+[#2168]: https://github.com/rectorphp/rector/pull/2168
+[#2167]: https://github.com/rectorphp/rector/pull/2167
+[#2158]: https://github.com/rectorphp/rector/pull/2158
+[#2157]: https://github.com/rectorphp/rector/pull/2157
+[v0.5.19]: https://github.com/rectorphp/rector/compare/v0.5.18...v0.5.19
+[v0.5.18]: https://github.com/rectorphp/rector/compare/v0.5.17...v0.5.18
+[@stedekay]: https://github.com/stedekay
+[@sabbelasichon]: https://github.com/sabbelasichon
+[@dpesch]: https://github.com/dpesch
+[@SilverFire]: https://github.com/SilverFire
+[v0.5.17]: https://github.com/rectorphp/rector/compare/v0.5.16...v0.5.17

@@ -18,4 +18,5 @@ parameters:
     php_version_features: '7.1'
 
 services:
-    Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector: ~
+    Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector: ~
+#    Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector: ~

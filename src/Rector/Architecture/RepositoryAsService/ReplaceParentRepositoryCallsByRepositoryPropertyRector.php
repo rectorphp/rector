@@ -89,7 +89,7 @@ PHP
             return null;
         }
 
-        if (! $this->isNames($node, $this->entityRepositoryPublicMethods)) {
+        if (! $this->isNames($node->name, $this->entityRepositoryPublicMethods)) {
             return null;
         }
 

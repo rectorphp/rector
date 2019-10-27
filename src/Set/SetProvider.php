@@ -14,7 +14,7 @@ final class SetProvider
     public function provide(): array
     {
         $finder = Finder::create()->files()
-            ->in(__DIR__ . '/../../config/set');
+            ->in(Set::SET_DIRECTORY);
 
         $sets = [];
         foreach ($finder->getIterator() as $fileInfo) {

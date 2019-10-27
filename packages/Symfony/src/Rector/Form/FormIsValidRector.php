@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\Manipulator\MethodCallManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,6 +20,16 @@ use Symfony\Component\Form\Form;
  */
 final class FormIsValidRector extends AbstractRector
 {
+    /**
+     * @var MethodCallManipulator
+     */
+    private $methodCallManipulator;
+
+    public function __construct(MethodCallManipulator $methodCallManipulator)
+    {
+        $this->methodCallManipulator = $methodCallManipulator;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -27,7 +37,7 @@ final class FormIsValidRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'PHP'
-if ($form->isValid()) { 
+if ($form->isValid()) {
 }
 PHP
                     ,
@@ -99,65 +109,9 @@ PHP
         return false;
     }
 
-    /**
-     * @return string[]
-     */
-    private function findMethodCallNamesOnVariable(Variable $variable): array
-    {
-        /** @var Node|null $parentNode */
-        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode === null) {
-            return [];
-        }
-
-        $variableName = $this->getName($variable);
-        if ($variableName === null) {
-            return [];
-        }
-
-        $previousMethodCallNames = [];
-
-        do {
-            $methodCallNames = $this->collectMethodCallsOnVariableName($parentNode, $variableName);
-            $previousMethodCallNames = array_merge($previousMethodCallNames, $methodCallNames);
-
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        } while ($parentNode instanceof Node && ! $parentNode instanceof FunctionLike);
-
-        return array_unique($previousMethodCallNames);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function collectMethodCallsOnVariableName(Node $node, string $variableName): array
-    {
-        $methodCallNames = [];
-        $this->traverseNodesWithCallable($node, function (Node $node) use ($variableName, &$methodCallNames) {
-            if (! $node instanceof MethodCall) {
-                return null;
-            }
-
-            if (! $this->isName($node->var, $variableName)) {
-                return null;
-            }
-
-            $methodName = $this->getName($node->name);
-            if ($methodName === null) {
-                return null;
-            }
-
-            $methodCallNames[] = $methodName;
-
-            return null;
-        });
-
-        return $methodCallNames;
-    }
-
     private function isIsSubmittedByAlreadyCalledOnVariable(Variable $variable): bool
     {
-        $previousMethodCallNamesOnVariable = $this->findMethodCallNamesOnVariable($variable);
+        $previousMethodCallNamesOnVariable = $this->methodCallManipulator->findMethodCallNamesOnVariable($variable);
 
         // already checked by isSubmitted()
         return in_array('isSubmitted', $previousMethodCallNamesOnVariable, true);

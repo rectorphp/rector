@@ -81,7 +81,7 @@ PHP
             return null;
         }
 
-        if (! $this->isName($node, 'getHeader')) {
+        if (! $this->isName($node->name, 'getHeader')) {
             return null;
         }
 

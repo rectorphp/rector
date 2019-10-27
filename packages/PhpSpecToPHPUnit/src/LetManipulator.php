@@ -43,7 +43,7 @@ final class LetManipulator
                         return null;
                     }
 
-                    return $this->nameResolver->isName($node, 'beConstructedThrough');
+                    return $this->nameResolver->isName($node->name, 'beConstructedThrough');
                 }
             );
 

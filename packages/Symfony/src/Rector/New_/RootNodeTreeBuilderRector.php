@@ -105,7 +105,7 @@ PHP
                 return false;
             }
 
-            if (! $this->isName($node, 'root')) {
+            if (! $this->isName($node->name, 'root')) {
                 return false;
             }
             return isset($node->args[0]);

@@ -28,7 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController
 {
     /**
-     * @Route(path="/show/{id}", methods={"GET", "HEAD"})
+     * @Route("/show/{id}", methods={"GET", "HEAD"})
      */
     public function show($id)
     {

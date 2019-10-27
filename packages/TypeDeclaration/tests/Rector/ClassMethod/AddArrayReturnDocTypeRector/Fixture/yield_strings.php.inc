@@ -2,8 +2,6 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
-use stdClass;
-
 class YieldsStrings
 {
     public function getValues(): iterable
@@ -18,8 +16,6 @@ class YieldsStrings
 <?php
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
-
-use stdClass;
 
 class YieldsStrings
 {
