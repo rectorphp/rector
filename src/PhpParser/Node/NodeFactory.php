@@ -24,6 +24,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -229,11 +230,11 @@ final class NodeFactory
         $arrayItem = null;
 
         if ($item instanceof Variable
-            || $item instanceof String_
             || $item instanceof MethodCall
             || $item instanceof StaticCall
             || $item instanceof FuncCall
             || $item instanceof Concat
+            || $item instanceof Scalar
         ) {
             $arrayItem = new ArrayItem($item);
         } elseif ($item instanceof Identifier) {
