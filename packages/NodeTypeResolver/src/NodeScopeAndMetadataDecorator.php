@@ -9,8 +9,8 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use Rector\Configuration\Configuration;
-use Rector\NodeTypeResolver\NodeVisitor\ClassAndMethodNodeVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\ExpressionNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NodeCollectorNodeVisitor;
@@ -35,7 +35,7 @@ final class NodeScopeAndMetadataDecorator
     private $parentAndNextNodeVisitor;
 
     /**
-     * @var ClassAndMethodNodeVisitor
+     * @var FunctionMethodAndClassNodeVisitor
      */
     private $classAndMethodNodeVisitor;
 
@@ -45,7 +45,7 @@ final class NodeScopeAndMetadataDecorator
     private $namespaceNodeVisitor;
 
     /**
-     * @var ExpressionNodeVisitor
+     * @var StatementNodeVisitor
      */
     private $expressionNodeVisitor;
 
@@ -68,9 +68,9 @@ final class NodeScopeAndMetadataDecorator
         NodeScopeResolver $nodeScopeResolver,
         ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
         CloningVisitor $cloningVisitor,
-        ClassAndMethodNodeVisitor $classAndMethodNodeVisitor,
+        FunctionMethodAndClassNodeVisitor $classAndMethodNodeVisitor,
         NamespaceNodeVisitor $namespaceNodeVisitor,
-        ExpressionNodeVisitor $expressionNodeVisitor,
+        StatementNodeVisitor $expressionNodeVisitor,
         FileInfoNodeVisitor $fileInfoNodeVisitor,
         NodeCollectorNodeVisitor $nodeCollectorNodeVisitor,
         Configuration $configuration

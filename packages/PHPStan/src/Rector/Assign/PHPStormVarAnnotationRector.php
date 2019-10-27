@@ -51,7 +51,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $expression = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
+        $expression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
 
         // unable to analyze
         if ($expression === null) {

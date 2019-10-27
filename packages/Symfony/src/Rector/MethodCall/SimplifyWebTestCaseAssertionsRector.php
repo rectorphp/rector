@@ -180,7 +180,7 @@ PHP
     private function processAssertResponseRedirects(MethodCall $methodCall): ?Node
     {
         /** @var Expression|null $previousExpression */
-        $previousExpression = $methodCall->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
+        $previousExpression = $methodCall->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
         if (! $previousExpression instanceof Expression) {
             return null;
         }

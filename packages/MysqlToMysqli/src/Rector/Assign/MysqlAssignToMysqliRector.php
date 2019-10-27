@@ -155,7 +155,7 @@ PHP
             'stmts' => [new Expression($funcCall)],
         ]);
 
-        $previousExpression = $assign->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
+        $previousExpression = $assign->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
         if ($previousExpression === null) {
             throw new ShouldNotHappenException();
         }

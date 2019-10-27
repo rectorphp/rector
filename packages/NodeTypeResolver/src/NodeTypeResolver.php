@@ -55,6 +55,7 @@ use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInte
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
+use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
@@ -101,6 +102,10 @@ final class NodeTypeResolver
      * @var ObjectTypeSpecifier
      */
     private $objectTypeSpecifier;
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
 
     /**
      * @param PerNodeTypeResolverInterface[] $perNodeTypeResolvers
@@ -113,6 +118,7 @@ final class NodeTypeResolver
         Broker $broker,
         TypeFactory $typeFactory,
         ObjectTypeSpecifier $objectTypeSpecifier,
+        BetterNodeFinder $betterNodeFinder,
         array $perNodeTypeResolvers
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -127,6 +133,7 @@ final class NodeTypeResolver
         $this->broker = $broker;
         $this->typeFactory = $typeFactory;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**
@@ -498,27 +505,7 @@ final class NodeTypeResolver
      */
     private function correctPregMatchType(Node $node, Type $originalType): Type
     {
-        /** @var Expression|null $previousExpression */
-        $previousExpression = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
-        if ($previousExpression === null) {
-            return $originalType;
-        }
-
-        if (! $previousExpression->expr instanceof FuncCall) {
-            return $originalType;
-        }
-
-        $funcCallNode = $previousExpression->expr;
-        if (! $this->nameResolver->isNames($funcCallNode, ['preg_match', 'preg_match_all'])) {
-            return $originalType;
-        }
-
-        if (! isset($funcCallNode->args[2])) {
-            return $originalType;
-        }
-
-        // are the same variables
-        if (! $this->betterStandardPrinter->areNodesEqual($funcCallNode->args[2]->value, $node)) {
+        if (!$node instanceof Variable) {
             return $originalType;
         }
 
@@ -526,7 +513,55 @@ final class NodeTypeResolver
             return $originalType;
         }
 
-        return new ArrayType(new MixedType(), new MixedType());
+        foreach ($this->getVariableUsages($node) as $usage) {
+            /** @var Expression|null $previousExpression */
+            $possiblyArg = $usage->getAttribute(AttributeKey::PARENT_NODE);
+            if (!$possiblyArg instanceof Arg) {
+                continue;
+            }
+
+            $funcCallNode = $possiblyArg->getAttribute(AttributeKey::PARENT_NODE);
+            if (!$funcCallNode instanceof FuncCall) {
+                continue;
+            }
+
+            if (! $this->nameResolver->isNames($funcCallNode, ['preg_match', 'preg_match_all'])) {
+                continue;
+            }
+
+            if (! isset($funcCallNode->args[2])) {
+                continue;
+            }
+
+            // are the same variables
+            if (! $this->betterStandardPrinter->areNodesEqual($funcCallNode->args[2]->value, $node)) {
+                continue;
+            }
+            return new ArrayType(new MixedType(), new MixedType());
+        }
+        return $originalType;
+    }
+
+    private function getScopeNode(Node $node) : Node
+    {
+        return $node->getAttribute(AttributeKey::METHOD_NODE)
+            ?? $node->getAttribute(AttributeKey::FUNCTION_NODE)
+            ?? $node->getAttribute( AttributeKey::NAMESPACE_NODE);
+    }
+
+    /**
+     * @return Node[]
+     */
+    private function getVariableUsages(Variable $variable) : array
+    {
+        $scope = $this->getScopeNode($variable);
+
+        return $this->betterNodeFinder->find((array) $scope->stmts, function (Node $node) use (
+            $variable
+        ): bool {
+            return $node instanceof Variable && $node->name === $variable->name;
+            return $this->betterStandardPrinter->areNodesEqual($node, $variable);
+        });
     }
 
     private function isIntersectionArrayType(Type $nodeType): bool

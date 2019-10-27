@@ -62,7 +62,7 @@ PHP
         $resultVariable = new Variable('result');
         $node->args[1] = new Arg($resultVariable);
 
-        $expression = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
+        $expression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
         if ($expression === null) {
             return null;
         }

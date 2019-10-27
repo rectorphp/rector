@@ -86,12 +86,12 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const PREVIOUS_EXPRESSION = 'previousExpression';
+    public const PREVIOUS_STATEMENT = 'previousExpression';
 
     /**
      * @var string
      */
-    public const CURRENT_EXPRESSION = 'currentExpression';
+    public const CURRENT_STATEMENT = 'currentExpression';
 
     /**
      * @var string
@@ -113,4 +113,8 @@ final class AttributeKey
      * @var string
      */
     public const IS_UNREACHABLE = 'is_unreachable';
+
+    public const FUNCTION_NAME = 'function_name';
+
+    public const FUNCTION_NODE = 'function_node';
 }

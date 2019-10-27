@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\NodeDumper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -71,14 +72,13 @@ PHP
             return null;
         }
 
-        if (! $this->isUnreachable($node)) {
-            return null;
+        // might be PHPStan false positive, better skip
+        $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
+        if ($previousStatement instanceof If_) {
+            $node->setAttribute(AttributeKey::IS_UNREACHABLE, $previousStatement->getAttribute(AttributeKey::IS_UNREACHABLE));
         }
 
-        // might be PHPStan false positive, better skip
-        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($previousNode instanceof If_) {
-            $node->setAttribute(AttributeKey::IS_UNREACHABLE, false);
+        if (! $this->isUnreachable($node)) {
             return null;
         }
 
@@ -100,15 +100,15 @@ PHP
         }
 
         // traverse up for unreachable node in the same scope
-        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
 
-        while ($previousNode instanceof Node && ! $this->isBreakingScopeNode($node)) {
+        while ($previousNode instanceof Node && ! $this->isBreakingScopeNode($previousNode)) {
             $isUnreachable = $previousNode->getAttribute(AttributeKey::IS_UNREACHABLE);
             if ($isUnreachable === true) {
                 return true;
             }
 
-            $previousNode = $previousNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+            $previousNode = $previousNode->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
         }
 
         return false;

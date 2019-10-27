@@ -45,7 +45,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var ExclusionManager
      */
     private $exclusionManager;
-    
+
     /**
      * @var CommanderCollector
      */
@@ -153,7 +153,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     protected function getNextExpression(Node $node): ?Node
     {
-        $currentExpression = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
+        $currentExpression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
         if (! $currentExpression instanceof Expression) {
             return null;
         }

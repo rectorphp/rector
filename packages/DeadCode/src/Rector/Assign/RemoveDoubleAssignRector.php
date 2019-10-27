@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\While_;
@@ -75,8 +76,8 @@ PHP
             return null;
         }
 
-        $previousExpression = $node->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
-        if ($previousExpression === null) {
+        $previousExpression = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
+        if (!$previousExpression instanceof Expression) {
             return null;
         }
 

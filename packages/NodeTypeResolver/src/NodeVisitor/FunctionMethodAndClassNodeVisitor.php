@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
+final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var string|null
@@ -26,6 +26,11 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
     private $className;
 
     /**
+     * @var string|null
+     */
+    private $functionName;
+
+    /**
      * @var ClassLike|null
      */
     private $classNode;
@@ -34,6 +39,11 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
      * @var ClassMethod|null
      */
     private $methodNode;
+
+    /**
+     * @var Node\Stmt\Function_|null
+     */
+    private $functionNode;
 
     /**
      * @param Node[] $nodes
@@ -45,6 +55,8 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
         $this->className = null;
         $this->methodName = null;
         $this->methodNode = null;
+        $this->functionName = null;
+        $this->functionNode = null;
 
         return null;
     }
@@ -66,6 +78,7 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
 
         $this->processClass($node);
         $this->processMethod($node);
+        $this->processFunction($node);
 
         return $node;
     }
@@ -94,6 +107,17 @@ final class ClassAndMethodNodeVisitor extends NodeVisitorAbstract
 
         $node->setAttribute(AttributeKey::METHOD_NAME, $this->methodName);
         $node->setAttribute(AttributeKey::METHOD_NODE, $this->methodNode);
+    }
+
+    private function processFunction(Node $node): void
+    {
+        if ($node instanceof Node\Stmt\Function_) {
+            $this->functionNode = $node;
+            $this->functionName = (string) $node->name;
+        }
+
+        $node->setAttribute(AttributeKey::FUNCTION_NODE, $this->functionNode);
+        $node->setAttribute(AttributeKey::FUNCTION_NAME, $this->functionName);
     }
 
     private function setParentClassName(Class_ $classNode, Node $node): void

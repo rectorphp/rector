@@ -86,7 +86,7 @@ PHP
 
     private function getRootMethodCallNode(Node $node): ?Node
     {
-        $expression = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
+        $expression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
         if ($expression === null) {
             return null;
         }
