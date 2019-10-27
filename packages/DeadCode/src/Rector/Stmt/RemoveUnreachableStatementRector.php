@@ -78,6 +78,10 @@ PHP
             $node->setAttribute(AttributeKey::IS_UNREACHABLE, $previousStatement->getAttribute(AttributeKey::IS_UNREACHABLE));
         }
 
+        if ($previousStatement instanceof Stmt\While_) {
+            $node->setAttribute(AttributeKey::IS_UNREACHABLE, $previousStatement->getAttribute(AttributeKey::IS_UNREACHABLE));
+        }
+
         if (! $this->isUnreachable($node)) {
             return null;
         }

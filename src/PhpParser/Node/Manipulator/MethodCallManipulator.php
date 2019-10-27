@@ -212,7 +212,7 @@ final class MethodCallManipulator
 
         if (! $parentNode instanceof FunctionLike) {
             // is about to leave → try previous expression
-            $previousExpression = $previousParentNode->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
+            $previousExpression = $previousParentNode->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
             if ($previousExpression instanceof Expression) {
                 return $previousExpression->expr;
             }

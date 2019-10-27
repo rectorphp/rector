@@ -9,9 +9,9 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Use_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
@@ -38,8 +38,8 @@ final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeEx
         AttributeKey::class . '::RESOLVED_NAME' => Name::class,
         AttributeKey::class . '::CLASS_NODE' => ClassLike::class,
         AttributeKey::class . '::METHOD_NODE' => ClassMethod::class,
-        AttributeKey::class . '::CURRENT_EXPRESSION' => Expression::class,
-        AttributeKey::class . '::PREVIOUS_EXPRESSION' => Expression::class,
+        AttributeKey::class . '::CURRENT_EXPRESSION' => Stmt::class,
+        AttributeKey::class . '::PREVIOUS_STATEMENT' => Stmt::class,
         AttributeKey::class . '::SCOPE' => Scope::class,
         # Node
         AttributeKey::class . '::ORIGINAL_NODE' => Node::class,
