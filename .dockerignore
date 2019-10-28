@@ -7,7 +7,15 @@
 .editorconfig
 .phpstorm.meta.php
 
+.coveralls.yml
+
+phpstan.neon
 rector.yaml
+create-rector.yaml.dist
+phpunit.xml
+ecs.yaml
+ecs-after-rector.yaml
+changelog-linker.yaml
 
 LICENSE
 
@@ -24,3 +32,5 @@ docker-compose.dist.yml
 
 /vendor
 /docs
+/sample
+/var
