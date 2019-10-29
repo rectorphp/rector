@@ -283,6 +283,11 @@ PHP
                 return true;
             }
 
+            // setExpectException (deprecated method)
+            if ($this->isName($node->name, 'setExpectedException*')) {
+                return true;
+            }
+
             return false;
         });
     }
