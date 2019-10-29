@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Console\Command;
 
+use Composer\XdebugHandler\XdebugHandler;
 use Nette\Utils\Strings;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Descriptor\TextDescriptor;
@@ -59,6 +60,13 @@ abstract class AbstractCommand extends Command
             }
 
             $this->getApplication()->setCatchExceptions(false);
+        }
+
+        // @fixes https://github.com/rectorphp/rector/issues/2205
+        if ($input->getOption('xdebug')) {
+            $xdebug = new XdebugHandler('rector', '--ansi');
+            $xdebug->check();
+            unset($xdebug);
         }
     }
 }

@@ -168,6 +168,13 @@ final class Application extends SymfonyApplication
         ));
 
         $inputDefinition->addOption(new InputOption(
+            'xdebug',
+            null,
+            InputOption::VALUE_NONE,
+            'Allow running xdebug'
+        ));
+
+        $inputDefinition->addOption(new InputOption(
             '--working-dir',
             '-d',
             InputOption::VALUE_REQUIRED,

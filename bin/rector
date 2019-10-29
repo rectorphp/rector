@@ -3,7 +3,6 @@
 
 declare(strict_types=1);
 
-use Composer\XdebugHandler\XdebugHandler;
 use Psr\Container\ContainerInterface;
 use Rector\Console\Application;
 
@@ -14,10 +13,6 @@ gc_disable();
 
 // Require Composer autoload.php
 require_once __DIR__ . '/bootstrap.php';
-
-$xdebug = new XdebugHandler('rector', '--ansi');
-$xdebug->check();
-unset($xdebug);
 
 /** @var ContainerInterface $container */
 $container = require_once __DIR__ . '/container.php';
