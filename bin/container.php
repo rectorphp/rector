@@ -25,7 +25,16 @@ try {
 }
 
 // And from --config or default one
-ConfigFileFinder::detectFromInput('rector', new ArgvInput());
+$argInput = new ArgvInput();
+
+// https://github.com/rectorphp/rector/issues/2205
+$configOptionValue = ConfigFileFinder::getOptionValue($argInput, ['-c', '--config']);
+if ($configOptionValue === '--ansi') {
+    // empty --config with xdebug handler
+    die('Option "-c" or "--config" cannot be empty. Provide path to config file' . PHP_EOL);
+}
+
+ConfigFileFinder::detectFromInput('rector', $argInput);
 $configs[] = ConfigFileFinder::provide('rector', ['rector.yml', 'rector.yaml']);
 
 // remove empty values
