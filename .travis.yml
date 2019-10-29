@@ -51,9 +51,16 @@ script:
           php bin/run_all_sets.php
       fi
 
+    # try #2205 w/ xdebug
+    - |
+      if [[ $COVERAGE == true ]]; then
+        git describe --tags --always --dirty && bin/rector -c
+      fi
+
     # Eat your own dog food
     - |
       if [[ $DOG_FOOD == true ]]; then
+          git describe --tags --always --dirty && bin/rector -c
           bin/rector process src --set dead-code --dry-run
       fi
 
