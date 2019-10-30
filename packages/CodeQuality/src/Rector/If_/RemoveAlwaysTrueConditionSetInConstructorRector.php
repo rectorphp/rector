@@ -22,6 +22,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://phpstan.org/r/e909844a-084e-427e-92ac-fed3c2aeabab
+ *
  * @see \Rector\CodeQuality\Tests\Rector\If_\RemoveAlwaysTrueConditionSetInConstructorRector\RemoveAlwaysTrueConditionSetInConstructorRectorTest
  */
 final class RemoveAlwaysTrueConditionSetInConstructorRector extends AbstractRector
