@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
@@ -197,11 +198,11 @@ PHP
     /**
      * @return Type[]
      */
-    private function resolveAssignTypes(Class_ $class, string $propertyName): array
+    private function resolveAssignTypes(ClassLike $classLike, string $propertyName): array
     {
         $resolvedTypes = [];
 
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (
+        $this->traverseNodesWithCallable($classLike->stmts, function (Node $node) use (
             $propertyName,
             &$resolvedTypes
         ) {

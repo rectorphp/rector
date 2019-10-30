@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Renaming\Tests\Rector\Class_\RenameClassRector;
 
 use Iterator;
+use Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector;
 use Rector\Configuration\Option;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
@@ -30,7 +31,8 @@ final class NamePostImportTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/class_to_new_with_post_import.php.inc'];
+        yield [__DIR__ . '/Fixture/PostImport/class_to_new_with_post_import.php.inc'];
+        yield [__DIR__ . '/Fixture/PostImport/partial_expression.php.inc'];
     }
 
     /**
@@ -39,6 +41,8 @@ final class NamePostImportTest extends AbstractRectorTestCase
     protected function getRectorsWithConfiguration(): array
     {
         return [
+            # this class causes to "partial_expression.php.inc" to fail
+            SimplifyEmptyArrayCheckRector::class => [],
             RenameClassRector::class => [
                 '$oldToNewClasses' => [
                     OldClass::class => NewClass::class,

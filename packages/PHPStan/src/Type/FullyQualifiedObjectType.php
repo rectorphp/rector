@@ -9,6 +9,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class FullyQualifiedObjectType extends ObjectType
 {
@@ -38,14 +39,20 @@ final class FullyQualifiedObjectType extends ObjectType
 
     public function getUseNode(): Use_
     {
-        $useUse = new UseUse(new Name($this->getClassName()));
+        $name = new Name($this->getClassName());
+        $useUse = new UseUse($name);
+
+        $name->setAttribute(AttributeKey::PARENT_NODE, $useUse);
 
         return new Use_([$useUse]);
     }
 
     public function getFunctionUseNode(): Use_
     {
-        $useUse = new UseUse(new Name($this->getClassName()), null, Use_::TYPE_FUNCTION);
+        $name = new Name($this->getClassName());
+        $useUse = new UseUse($name, null, Use_::TYPE_FUNCTION);
+
+        $name->setAttribute(AttributeKey::PARENT_NODE, $useUse);
 
         return new Use_([$useUse]);
     }
