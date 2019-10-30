@@ -188,7 +188,7 @@
         "check-cs": "vendor/bin/ecs check bin packages src tests utils --ansi",
         "fix-cs": [
             "vendor/bin/ecs check bin packages src tests utils --fix --ansi",
-            "bin/clean_trailing_spaces.sh"
+            "ci/clean_trailing_spaces.sh"
         ],
         "phpstan": "vendor/bin/phpstan analyse packages src tests --error-format symplify --ansi",
         "changelog": [

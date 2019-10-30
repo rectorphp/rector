@@ -47,8 +47,8 @@ script:
     - |
       if [[ $STATIC_ANALYSIS == true ]]; then
           composer docs
-          php bin/check_services_in_yaml_configs.php
-          php bin/run_all_sets.php
+          php ci/check_services_in_yaml_configs.php
+          php ci/run_all_sets.php
       fi
 
     # Eat your own dog food
