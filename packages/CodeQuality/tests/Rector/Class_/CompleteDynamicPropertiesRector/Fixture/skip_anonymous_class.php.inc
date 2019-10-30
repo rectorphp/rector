@@ -1,15 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Rector\PhpParser\NodeTraverser;
+namespace Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector\Fixture;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 
-final class CallableNodeTraverser
+class SkipAnonymousClass
 {
     /**
      * @param Node|Node[] $nodes

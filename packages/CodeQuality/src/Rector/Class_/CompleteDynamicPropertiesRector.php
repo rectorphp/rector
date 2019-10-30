@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -134,7 +135,12 @@ PHP
 
         $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             &$fetchedLocalPropertyNameToTypes
-        ) {
+        ): ?int {
+            // skip anonymous class scope
+            if ($this->isAnonymousClass($node)) {
+                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+            }
+
             if (! $node instanceof PropertyFetch) {
                 return null;
             }
@@ -164,6 +170,8 @@ PHP
             $propertyFetchType = $this->resolvePropertyFetchType($node);
 
             $fetchedLocalPropertyNameToTypes[$propertyName][] = $propertyFetchType;
+
+            return null;
         });
 
         // normalize types to union

@@ -22,6 +22,7 @@ final class CompleteDynamicPropertiesRectorTest extends AbstractRectorTestCase
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/multiple_types.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_anonymous_class.php.inc'];
         yield [__DIR__ . '/Fixture/skip_defined.php.inc'];
         yield [__DIR__ . '/Fixture/skip_parent_property.php.inc'];
         yield [__DIR__ . '/Fixture/skip_trait_used.php.inc'];
