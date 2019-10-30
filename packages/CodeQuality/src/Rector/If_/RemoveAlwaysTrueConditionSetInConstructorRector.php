@@ -182,6 +182,25 @@ PHP
 
         $resolvedTypes = [];
 
+        // add dfeault vlaue @todo
+        $defaultValue = $property->props[0]->default;
+        if ($defaultValue) {
+            $defaultValueStaticType = $this->getStaticType($defaultValue);
+            $resolvedTypes[] = $defaultValueStaticType;
+        }
+
+        $assignTypes = $this->resolveAssignTypes($class, $propertyName);
+
+        return array_merge($resolvedTypes, $assignTypes);
+    }
+
+    /**
+     * @return Type[]
+     */
+    private function resolveAssignTypes(Class_ $class, string $propertyName): array
+    {
+        $resolvedTypes = [];
+
         $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             $propertyName,
             &$resolvedTypes

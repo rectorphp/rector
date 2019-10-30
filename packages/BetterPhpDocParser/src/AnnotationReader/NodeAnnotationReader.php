@@ -6,7 +6,6 @@ namespace Rector\BetterPhpDocParser\AnnotationReader;
 
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\ORM\Mapping\Annotation;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -16,7 +15,6 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
-use Symfony\Component\Validator\Constraint;
 use Throwable;
 
 final class NodeAnnotationReader
@@ -69,7 +67,7 @@ final class NodeAnnotationReader
     }
 
     /**
-     * @return Annotation|Constraint|null
+     * @return object|null
      */
     public function readPropertyAnnotation(Property $property, string $annotationClassName)
     {
@@ -78,7 +76,6 @@ final class NodeAnnotationReader
             return null;
         }
 
-        /** @var Annotation|null $propertyAnnotation */
         return $this->reader->getPropertyAnnotation($propertyReflection, $annotationClassName);
     }
 
