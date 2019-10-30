@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
@@ -15,6 +17,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Sensio\Helper\TemplateGuesser;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class TemplateAnnotationRector extends AbstractRector
 {
@@ -65,7 +68,7 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [ClassMethod::class, Class_::class];
     }
 
     /**
@@ -73,6 +76,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node instanceof Class_) {
+            return $this->addBaseClassIfMissing($node);
+        }
+
         $phpDocInfo = $this->getPhpDocInfo($node);
         if ($phpDocInfo === null) {
             return null;
@@ -102,6 +109,17 @@ PHP
 
         // remove annotation
         $this->docBlockManipulator->removeTagFromNode($node, SensioTemplateTagValueNode::class);
+
+        return $node;
+    }
+
+    private function addBaseClassIfMissing(Node $node): ?Node
+    {
+        if ($node->extends !== null) {
+            return null;
+        }
+
+        $node->extends = new FullyQualified(AbstractController::class);
 
         return $node;
     }
@@ -142,6 +160,7 @@ PHP
 
     /**
      * Already existing method call
+     *
      * @return Array_[]
      */
     private function resolveArrayArgumentsFromMethodCall(Return_ $returnNode): array
