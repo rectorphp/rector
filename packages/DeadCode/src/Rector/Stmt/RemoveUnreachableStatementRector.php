@@ -144,6 +144,7 @@ PHP
         if ($node instanceof Namespace_) {
             return true;
         }
+
         return $node instanceof Else_;
     }
 }
