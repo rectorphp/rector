@@ -136,11 +136,7 @@ PHP
                     continue;
                 }
 
-                if ($type === '') { // remove type
-                    $param->type = null;
-                } else {
-                    $param->type = $this->staticTypeMapper->mapStringToPhpParserNode($type);
-                }
+                $param->type = $type === '' ? null : $this->staticTypeMapper->mapStringToPhpParserNode($type);
             }
         }
     }

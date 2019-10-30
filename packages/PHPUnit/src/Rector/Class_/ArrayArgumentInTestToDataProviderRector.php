@@ -271,7 +271,7 @@ PHP
 
         $itemsStaticType = $this->resolveItemStaticType($array, $isNestedArray);
 
-        if ($isNestedArray === false) {
+        if (! $isNestedArray) {
             foreach ($array->items as $arrayItem) {
                 $variable = new Variable($variableName . ($i === 1 ? '' : $i));
 
@@ -374,7 +374,7 @@ PHP
     private function resolveItemStaticType(Array_ $array, bool $isNestedArray): Type
     {
         $staticTypes = [];
-        if ($isNestedArray === false) {
+        if (! $isNestedArray) {
             foreach ($array->items as $arrayItem) {
                 $arrayItemStaticType = $this->getStaticType($arrayItem->value);
                 if ($arrayItemStaticType) {

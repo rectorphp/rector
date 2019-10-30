@@ -128,12 +128,7 @@ final class AlwaysInitializeUuidInEntityRector extends AbstractRector
             if (! $this->isName($staticCall->name, 'uuid4')) {
                 return false;
             }
-
-            if (! $this->isName($node->var, $uuidPropertyName)) {
-                return false;
-            }
-
-            return true;
+            return $this->isName($node->var, $uuidPropertyName);
         });
     }
 }

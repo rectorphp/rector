@@ -114,7 +114,7 @@ PHP
 
         // A. try find "setUuid()" call on the same object later
         $setUuidCallOnSameVariable = $this->getSetUuidMethodCallOnSameVariable($node);
-        if ($setUuidCallOnSameVariable) {
+        if ($setUuidCallOnSameVariable !== null) {
             $node->args = $setUuidCallOnSameVariable->args;
             $this->removeNode($setUuidCallOnSameVariable);
             return $node;
@@ -195,12 +195,7 @@ PHP
             if (! $this->isObjectType($node->var, $variableType)) {
                 return false;
             }
-
-            if (! $this->isName($node->name, 'setUuid')) {
-                return false;
-            }
-
-            return true;
+            return $this->isName($node->name, 'setUuid');
         });
     }
 

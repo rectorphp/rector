@@ -262,12 +262,7 @@ final class NodeTypeResolver
             if (is_a($nodeType->getClassName(), 'SimpleXMLElement', true)) {
                 return true;
             }
-
-            if (is_a($nodeType->getClassName(), 'ResourceBundle', true)) {
-                return true;
-            }
-
-            return false;
+            return is_a($nodeType->getClassName(), 'ResourceBundle', true);
         }
 
         return $this->isArrayType($node);
@@ -284,7 +279,7 @@ final class NodeTypeResolver
 
         if ($node instanceof PropertyFetch || $node instanceof StaticPropertyFetch) {
             // PHPStan false positive, when variable has type[] docblock, but default array is missing
-            if ($this->isPropertyFetchWithArrayDefault($node) === false) {
+            if (! $this->isPropertyFetchWithArrayDefault($node)) {
                 return false;
             }
         }

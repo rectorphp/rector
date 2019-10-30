@@ -76,7 +76,7 @@ PHP
             return null;
         }
 
-        if ($conditionStaticType->getValue() !== true) {
+        if (! $conditionStaticType->getValue()) {
             return null;
         }
 

@@ -77,7 +77,7 @@ final class EntityWithMissingUuidProvider
             }
 
             // already has $uuid property
-            if ($this->classManipulator->getProperty($class, 'uuid')) {
+            if ($this->classManipulator->getProperty($class, 'uuid') !== null) {
                 continue;
             }
 

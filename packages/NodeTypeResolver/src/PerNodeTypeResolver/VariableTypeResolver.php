@@ -110,7 +110,7 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
     {
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($nodeScope) {
+        if ($nodeScope !== null) {
             return $nodeScope;
         }
 
@@ -120,7 +120,7 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
             /** @var string $traitName */
             $traitName = $node->getAttribute(AttributeKey::CLASS_NAME);
             $traitNodeScope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $node);
-            if ($traitNodeScope) {
+            if ($traitNodeScope !== null) {
                 return $traitNodeScope;
             }
         }
@@ -128,7 +128,7 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Node) {
             $parentNodeScope = $parentNode->getAttribute(AttributeKey::SCOPE);
-            if ($parentNodeScope) {
+            if ($parentNodeScope !== null) {
                 return $parentNodeScope;
             }
         }
@@ -137,7 +137,7 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         $method = $node->getAttribute(AttributeKey::METHOD_NODE);
         if ($method instanceof Node) {
             $methodNodeScope = $method->getAttribute(AttributeKey::SCOPE);
-            if ($methodNodeScope) {
+            if ($methodNodeScope !== null) {
                 return $methodNodeScope;
             }
         }

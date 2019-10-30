@@ -47,7 +47,7 @@ final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements R
         $yieldNodes = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Yield_::class);
 
         $types = [];
-        if (count($yieldNodes)) {
+        if (count($yieldNodes) > 0) {
             foreach ($yieldNodes as $yieldNode) {
                 if ($yieldNode->value === null) {
                     continue;

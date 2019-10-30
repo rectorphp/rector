@@ -118,19 +118,13 @@ PHP
 
         /** @var Node\Stmt\ClassLike $class */
         $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        $hasMagicPropertyFetch = (bool) $this->betterNodeFinder->findFirst($class->stmts, function (Node $node): bool {
+        return (bool) $this->betterNodeFinder->findFirst($class->stmts, function (Node $node): bool {
             if (! $node instanceof PropertyFetch) {
                 return false;
             }
 
             return $node->name instanceof Expr;
         });
-
-        if ($hasMagicPropertyFetch) {
-            return true;
-        }
-
-        return false;
     }
 
     /**

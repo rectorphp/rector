@@ -34,7 +34,7 @@ final class KernelGetContainerAfterBootReturnTypeExtension implements DynamicMet
     ): Type {
         $returnType = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
 
-        if ($this->isCalledAfterBoot($scope, $methodCall) === false) {
+        if (! $this->isCalledAfterBoot($scope, $methodCall)) {
             return $returnType;
         }
 

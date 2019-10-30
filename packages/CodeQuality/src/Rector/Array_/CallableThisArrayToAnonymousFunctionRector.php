@@ -186,7 +186,7 @@ PHP
         }
 
         // does method return something?
-        if ($hasClassMethodReturn) {
+        if ($hasClassMethodReturn !== []) {
             $anonymousFunction->stmts[] = new Return_($innerMethodCall);
         } else {
             $anonymousFunction->stmts[] = new Expression($innerMethodCall);

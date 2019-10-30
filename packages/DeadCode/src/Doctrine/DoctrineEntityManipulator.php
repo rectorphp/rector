@@ -126,7 +126,7 @@ final class DoctrineEntityManipulator
             }
         }
 
-        if ($shouldUpdate === false) {
+        if (! $shouldUpdate) {
             return;
         }
 

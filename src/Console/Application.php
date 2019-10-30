@@ -61,7 +61,7 @@ final class Application extends SymfonyApplication
 
         // switch working dir
         $newWorkDir = $this->getNewWorkingDir($input);
-        if ($newWorkDir) {
+        if ($newWorkDir !== '') {
             $oldWorkingDir = getcwd();
             chdir($newWorkDir);
             $output->isDebug() && $output->writeln('Changed CWD form ' . $oldWorkingDir . ' to ' . getcwd());

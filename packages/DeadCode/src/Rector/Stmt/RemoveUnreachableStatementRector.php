@@ -144,11 +144,6 @@ PHP
         if ($node instanceof Namespace_) {
             return true;
         }
-
-        if ($node instanceof Else_) {
-            return true;
-        }
-
-        return false;
+        return $node instanceof Else_;
     }
 }

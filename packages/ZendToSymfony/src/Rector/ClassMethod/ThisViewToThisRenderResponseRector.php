@@ -109,7 +109,7 @@ PHP
             return $node;
         });
 
-        if ($hasRender === false) {
+        if (! $hasRender) {
             return null;
         }
 
@@ -127,13 +127,8 @@ PHP
         if ($this->isObjectType($propertyFetch, ZendClass::ZEND_VIEW)) {
             return true;
         }
-
         // fallback if checked property is missing @var doc
-        if ($this->isNames($propertyFetch->name, ['_view', 'view'])) {
-            return true;
-        }
-
-        return false;
+        return $this->isNames($propertyFetch->name, ['_view', 'view']);
     }
 
     /**

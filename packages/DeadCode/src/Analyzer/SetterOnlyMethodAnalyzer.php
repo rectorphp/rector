@@ -94,13 +94,13 @@ final class SetterOnlyMethodAnalyzer
             $relationPropertyNames = $this->doctrineEntityManipulator->resolveRelationPropertyNames($class);
             $assignOnlyPrivatePropertyNames = array_diff($assignOnlyPrivatePropertyNames, $relationPropertyNames);
 
-            if ($assignOnlyPrivatePropertyNames) {
+            if ($assignOnlyPrivatePropertyNames !== []) {
                 $this->propertiesAndMethodsToRemoveByType[$type]['properties'] = $assignOnlyPrivatePropertyNames;
             }
 
             // 2. setter only methods by class
             $setterOnlyMethodNames = $this->resolveSetterOnlyMethodNames($class, $assignOnlyPrivatePropertyNames);
-            if ($setterOnlyMethodNames) {
+            if ($setterOnlyMethodNames !== []) {
                 $this->propertiesAndMethodsToRemoveByType[$type]['methods'] = $setterOnlyMethodNames;
             }
         }

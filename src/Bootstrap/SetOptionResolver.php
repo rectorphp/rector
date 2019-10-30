@@ -163,7 +163,7 @@ final class SetOptionResolver
         foreach ($allSets as $set) {
             $hasVersion = (bool) Strings::match($set, '#\d#');
 
-            if ($hasVersion === false) {
+            if (! $hasVersion) {
                 $unversionedSets[] = $set;
                 continue;
             }

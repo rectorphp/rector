@@ -337,7 +337,7 @@ final class ParsedNodesByType
         $classNames = TypeUtils::getDirectClassNames($objectType);
         foreach ($classNames as $className) {
             $foundMethod = $this->findMethod($methodName, $className);
-            if ($foundMethod) {
+            if ($foundMethod !== null) {
                 return $foundMethod;
             }
         }

@@ -139,13 +139,8 @@ PHP
         if (! $this->isNewVariableThanBefore($currentStmtVariableName)) {
             return false;
         }
-
         // this is already empty line before
-        if ($this->isPreceededByEmptyLine($node, $key)) {
-            return false;
-        }
-
-        return true;
+        return ! $this->isPreceededByEmptyLine($node, $key);
     }
 
     private function isNewVariableThanBefore(?string $currentStmtVariableName): bool

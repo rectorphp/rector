@@ -4,7 +4,6 @@ parameters:
 
     exclude_paths:
         - "/Fixture/"
-        - "/Fixtures/"
         - "/Expected/"
         - "/Source/"
         - "packages/Symfony/src/Bridge/DefaultAnalyzedSymfonyApplicationContainer.php"

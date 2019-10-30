@@ -78,7 +78,7 @@ PHP
         }
 
         $hasEntityGetIdMethodCall = $this->hasEntityGetIdMethodCall($node);
-        if ($hasEntityGetIdMethodCall === false) {
+        if (! $hasEntityGetIdMethodCall) {
             return null;
         }
 

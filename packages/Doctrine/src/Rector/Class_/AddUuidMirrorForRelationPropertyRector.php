@@ -111,7 +111,7 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
         }
 
         $oneToOneTagValueNode = $propertyPhpDocInfo->getByType(OneToOneTagValueNode::class);
-        if ($oneToOneTagValueNode) {
+        if ($oneToOneTagValueNode !== null) {
             // skip mappedBy oneToOne, as the column doesn't really exist
             if ($oneToOneTagValueNode->getMappedBy()) {
                 return true;
@@ -197,7 +197,7 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
     private function refactorToManyPropertyPhpDocInfo(PhpDocInfo $propertyPhpDocInfo, Property $property): void
     {
         $doctrineJoinColumnTagValueNode = $propertyPhpDocInfo->getByType(JoinColumnTagValueNode::class);
-        if ($doctrineJoinColumnTagValueNode) {
+        if ($doctrineJoinColumnTagValueNode !== null) {
             // replace @ORM\JoinColumn with @ORM\JoinTable
             $propertyPhpDocInfo->removeTagValueNodeFromNode($doctrineJoinColumnTagValueNode);
         }

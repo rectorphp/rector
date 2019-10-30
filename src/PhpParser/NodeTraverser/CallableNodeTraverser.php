@@ -12,6 +12,11 @@ use PhpParser\NodeVisitorAbstract;
 final class CallableNodeTraverser
 {
     /**
+     * @var callable
+     */
+    public $callable;
+
+    /**
      * @param Node|Node[] $nodes
      */
     public function traverseNodesWithCallable($nodes, callable $callable): void

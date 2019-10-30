@@ -102,11 +102,7 @@ PHP
         }
 
         $variableName = $this->getName($methodCall->var);
-        if ($variableName === null) {
-            return true;
-        }
-
-        return false;
+        return $variableName === null;
     }
 
     private function isIsSubmittedByAlreadyCalledOnVariable(Variable $variable): bool

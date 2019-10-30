@@ -126,7 +126,7 @@ PHP
 
     private function setReturnTo0InsteadOfNull(Return_ $return): void
     {
-        if (! $return->expr) {
+        if ($return->expr === null) {
             $return->expr = new LNumber(0);
             return;
         }

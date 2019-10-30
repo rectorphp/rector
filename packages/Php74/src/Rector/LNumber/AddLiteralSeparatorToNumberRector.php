@@ -112,13 +112,8 @@ PHP
         if (Strings::match($numericValueAsString, '#e#i')) {
             return true;
         }
-
         // too short
-        if (Strings::length($numericValueAsString) <= self::GROUP_SIZE) {
-            return true;
-        }
-
-        return false;
+        return Strings::length($numericValueAsString) <= self::GROUP_SIZE;
     }
 
     /**

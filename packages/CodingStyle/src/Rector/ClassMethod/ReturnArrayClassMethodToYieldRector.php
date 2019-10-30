@@ -167,9 +167,9 @@ PHP
 
     private function completeComments(Node $node): void
     {
-        if ($this->returnDocComment) {
+        if ($this->returnDocComment !== null) {
             $node->setDocComment($this->returnDocComment);
-        } elseif ($this->returnComments) {
+        } elseif ($this->returnComments !== []) {
             $node->setAttribute('comments', $this->returnComments);
         }
     }

@@ -182,7 +182,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
             return true;
         }
 
-        if ($param->default) {
+        if ($param->default !== null) {
             $defaultValueStaticType = $this->nodeTypeResolver->getStaticType($param->default);
             if ($defaultValueStaticType instanceof NullType) {
                 return true;

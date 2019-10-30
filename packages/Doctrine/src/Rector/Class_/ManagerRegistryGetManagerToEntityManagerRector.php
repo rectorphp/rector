@@ -286,12 +286,7 @@ PHP
         if (! $this->isObjectType($assign->expr->var, ManagerRegistry::class)) {
             return false;
         }
-
-        if (! $this->isName($assign->expr->name, 'getManager')) {
-            return false;
-        }
-
-        return true;
+        return $this->isName($assign->expr->name, 'getManager');
     }
 
     /**

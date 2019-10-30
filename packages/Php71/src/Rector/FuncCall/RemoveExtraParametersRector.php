@@ -99,12 +99,7 @@ final class RemoveExtraParametersRector extends AbstractRector
         if ($this->callManipulator->isVariadic($reflectionFunctionLike, $node)) {
             return true;
         }
-
-        if ($reflectionFunctionLike->getNumberOfParameters() >= count($node->args)) {
-            return true;
-        }
-
-        return false;
+        return $reflectionFunctionLike->getNumberOfParameters() >= count($node->args);
     }
 
     /**

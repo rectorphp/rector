@@ -122,12 +122,7 @@ PHP
         if ($reflectionMethod->isProtected() && $classMethod->isProtected()) {
             return true;
         }
-
-        if ($reflectionMethod->isPrivate() && $classMethod->isPrivate()) {
-            return true;
-        }
-
-        return false;
+        return $reflectionMethod->isPrivate() && $classMethod->isPrivate();
     }
 
     /**
@@ -161,7 +156,7 @@ PHP
 
             $isStaticSelfFactory = $this->isStaticNamedConstructor($iteratedClassMethod);
 
-            if ($isStaticSelfFactory === false) {
+            if (! $isStaticSelfFactory) {
                 continue;
             }
 
@@ -219,12 +214,7 @@ PHP
             if ($this->isName($node->expr->class, 'self')) {
                 return true;
             }
-
-            if ($this->isName($node->expr->class, 'static')) {
-                return true;
-            }
-
-            return false;
+            return $this->isName($node->expr->class, 'static');
         });
     }
 }

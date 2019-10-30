@@ -1,9 +1,10 @@
 parameters:
-    exclude_paths:
-        - "/Fixture/"
-        - "/Fixtures/"
-        - "/Source/"
-        - "/Expected/"
-
     sets:
         - "code-quality"
+
+    auto_import_names: true
+
+    exclude_paths:
+        - "/Fixture/"
+        - "/Source/"
+        - "/Expected/"

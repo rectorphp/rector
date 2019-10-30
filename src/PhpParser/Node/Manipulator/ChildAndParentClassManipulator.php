@@ -52,13 +52,13 @@ final class ChildAndParentClassManipulator
 
         // not in analyzed scope, nothing we can do
         $parentClassNode = $this->parsedNodesByType->findClass($parentClassName);
-        if ($parentClassNode) {
+        if ($parentClassNode !== null) {
             $this->completeParentConstructorBasedOnParentNode($parentClassNode, $classMethod);
             return;
         }
 
         // complete parent call for __construct()
-        if ($parentClassName) {
+        if ($parentClassName !== '') {
             if (method_exists($parentClassName, '__construct')) {
                 $parentConstructCallNode = $this->nodeFactory->createParentConstructWithParams([]);
                 $classMethod->stmts[] = new Expression($parentConstructCallNode);

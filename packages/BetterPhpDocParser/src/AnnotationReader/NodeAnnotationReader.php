@@ -79,12 +79,7 @@ final class NodeAnnotationReader
         }
 
         /** @var Annotation|null $propertyAnnotation */
-        $propertyAnnotation = $this->reader->getPropertyAnnotation($propertyReflection, $annotationClassName);
-        if ($propertyAnnotation === null) {
-            return null;
-        }
-
-        return $propertyAnnotation;
+        return $this->reader->getPropertyAnnotation($propertyReflection, $annotationClassName);
     }
 
     private function createClassReflectionFromNode(Class_ $class): ReflectionClass

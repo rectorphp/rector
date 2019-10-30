@@ -148,7 +148,7 @@ PHP
             // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
             if ($this->isAtLeastPhpVersion('7.4') && $isSubtype) {
                 $node->returnType = $inferredReturnNode;
-            } elseif ($isSubtype === false) { // type override
+            } elseif (! $isSubtype) { // type override
                 $node->returnType = $inferredReturnNode;
             }
         } else {
@@ -167,7 +167,7 @@ PHP
      */
     private function shouldSkip(Node $node): bool
     {
-        if ($this->overrideExistingReturnTypes === false) {
+        if (! $this->overrideExistingReturnTypes) {
             if ($node->returnType) {
                 return true;
             }

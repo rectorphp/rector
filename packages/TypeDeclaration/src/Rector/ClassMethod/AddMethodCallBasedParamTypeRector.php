@@ -158,12 +158,7 @@ PHP
         }
 
         $parameterStaticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($parameter->type);
-
         // already completed → skip
-        if ($parameterStaticType->equals($argumentStaticType)) {
-            return true;
-        }
-
-        return false;
+        return $parameterStaticType->equals($argumentStaticType);
     }
 }

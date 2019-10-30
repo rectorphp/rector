@@ -115,7 +115,7 @@ PHP
         }
 
         // is the @see annotation already added
-        if ($class->getDocComment()) {
+        if ($class->getDocComment() !== null) {
             /** @var string $docCommentText */
             $docCommentText = $class->getDocComment()->getText();
 
@@ -160,7 +160,7 @@ PHP
      */
     private function getPhpUnitTestCaseClasses(): array
     {
-        if ($this->phpUnitTestCaseClasses) {
+        if ($this->phpUnitTestCaseClasses !== []) {
             return $this->phpUnitTestCaseClasses;
         }
 
