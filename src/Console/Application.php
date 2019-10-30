@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Console;
 
+use Composer\XdebugHandler\XdebugHandler;
 use Jean85\PrettyVersions;
 use Rector\Configuration\Configuration;
 use Rector\Console\Output\JsonOutputFormatter;
@@ -55,6 +56,14 @@ final class Application extends SymfonyApplication
 
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
+        // @fixes https://github.com/rectorphp/rector/issues/2205
+        $isXdebugAllowed = $input->hasParameterOption('--xdebug');
+        if (!$isXdebugAllowed) {
+            $xdebug = new XdebugHandler('rector', '--ansi');
+            $xdebug->check();
+            unset($xdebug);
+        }
+
         $this->configuration->setConfigFilePathFromInput($input);
 
         $shouldFollowByNewline = false;
