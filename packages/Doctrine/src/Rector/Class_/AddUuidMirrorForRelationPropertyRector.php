@@ -83,86 +83,6 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
         return $node;
     }
 
-    /**
-     * Creates duplicated property, that has "*uuidSuffix"
-     * and nullable join column, so we cna complete them manually
-     */
-    private function createMirrorNullable(Property $property): Property
-    {
-        $oldPropertyName = $this->getName($property);
-
-        $propertyWithUuid = clone $property;
-
-        // this is needed to keep old property name
-        $this->updateDocComment($propertyWithUuid);
-
-        // name must be changed after the doc comment update, because the reflection annotation needed for update of doc comment
-        // would miss non existing *Uuid property
-        $uuidPropertyName = $oldPropertyName . 'Uuid';
-        $newPropertyProperty = new PropertyProperty(new VarLikeIdentifier($uuidPropertyName));
-        $propertyWithUuid->props = [$newPropertyProperty];
-
-        $this->addNewPropertyToCollector($property, $oldPropertyName, $uuidPropertyName);
-
-        return $propertyWithUuid;
-    }
-
-    private function updateDocComment(Property $property): void
-    {
-        /** @var PhpDocInfo $propertyPhpDocInfo */
-        $propertyPhpDocInfo = $this->getPhpDocInfo($property);
-
-        /** @var DoctrineRelationTagValueNodeInterface $doctrineRelationTagValueNode */
-        $doctrineRelationTagValueNode = $this->getDoctrineRelationTagValueNode($property);
-
-        if ($doctrineRelationTagValueNode instanceof ToManyTagNodeInterface) {
-            $this->refactorToManyPropertyPhpDocInfo($propertyPhpDocInfo, $property);
-        } elseif ($doctrineRelationTagValueNode instanceof ToOneTagNodeInterface) {
-            $this->refactorToOnePropertyPhpDocInfo($propertyPhpDocInfo);
-        }
-
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($property, $propertyPhpDocInfo);
-    }
-
-    private function refactorToManyPropertyPhpDocInfo(PhpDocInfo $propertyPhpDocInfo, Property $property): void
-    {
-        $doctrineJoinColumnTagValueNode = $propertyPhpDocInfo->getByType(JoinColumnTagValueNode::class);
-        if ($doctrineJoinColumnTagValueNode) {
-            // replace @ORM\JoinColumn with @ORM\JoinTable
-            $propertyPhpDocInfo->removeTagValueNodeFromNode($doctrineJoinColumnTagValueNode);
-        }
-
-        $joinTableTagNode = $this->phpDocTagNodeFactory->createJoinTableTagNode($property);
-        $propertyPhpDocInfo->getPhpDocNode()->children[] = $joinTableTagNode;
-    }
-
-    private function refactorToOnePropertyPhpDocInfo(PhpDocInfo $propertyPhpDocInfo): void
-    {
-        /** @var JoinColumnTagValueNode $joinColumnTagValueNode */
-        $joinColumnTagValueNode = $propertyPhpDocInfo->getByType(JoinColumnTagValueNode::class);
-
-        if ($joinColumnTagValueNode) {
-            $joinColumnTagValueNode->changeName('');
-            $joinColumnTagValueNode->changeNullable(true);
-            $joinColumnTagValueNode->changeReferencedColumnName('uuid');
-        } else {
-            $propertyPhpDocInfo->getPhpDocNode()->children[] = $this->phpDocTagNodeFactory->createJoinColumnTagNode();
-        }
-    }
-
-    private function hasClassPropertyName(Class_ $node, string $uuidPropertyName): bool
-    {
-        foreach ($node->getProperties() as $property) {
-            if (! $this->isName($property, $uuidPropertyName)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
     private function shouldSkipProperty(Class_ $class, Property $property): bool
     {
         // this relation already is or has uuid property
@@ -201,6 +121,60 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
         return false;
     }
 
+    /**
+     * Creates duplicated property, that has "*uuidSuffix"
+     * and nullable join column, so we cna complete them manually
+     */
+    private function createMirrorNullable(Property $property): Property
+    {
+        $oldPropertyName = $this->getName($property);
+
+        $propertyWithUuid = clone $property;
+
+        // this is needed to keep old property name
+        $this->updateDocComment($propertyWithUuid);
+
+        // name must be changed after the doc comment update, because the reflection annotation needed for update of doc comment
+        // would miss non existing *Uuid property
+        $uuidPropertyName = $oldPropertyName . 'Uuid';
+        $newPropertyProperty = new PropertyProperty(new VarLikeIdentifier($uuidPropertyName));
+        $propertyWithUuid->props = [$newPropertyProperty];
+
+        $this->addNewPropertyToCollector($property, $oldPropertyName, $uuidPropertyName);
+
+        return $propertyWithUuid;
+    }
+
+    private function hasClassPropertyName(Class_ $node, string $uuidPropertyName): bool
+    {
+        foreach ($node->getProperties() as $property) {
+            if (! $this->isName($property, $uuidPropertyName)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function updateDocComment(Property $property): void
+    {
+        /** @var PhpDocInfo $propertyPhpDocInfo */
+        $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+
+        /** @var DoctrineRelationTagValueNodeInterface $doctrineRelationTagValueNode */
+        $doctrineRelationTagValueNode = $this->getDoctrineRelationTagValueNode($property);
+
+        if ($doctrineRelationTagValueNode instanceof ToManyTagNodeInterface) {
+            $this->refactorToManyPropertyPhpDocInfo($propertyPhpDocInfo, $property);
+        } elseif ($doctrineRelationTagValueNode instanceof ToOneTagNodeInterface) {
+            $this->refactorToOnePropertyPhpDocInfo($propertyPhpDocInfo);
+        }
+
+        $this->docBlockManipulator->updateNodeWithPhpDocInfo($property, $propertyPhpDocInfo);
+    }
+
     private function addNewPropertyToCollector(
         Property $property,
         string $oldPropertyName,
@@ -218,5 +192,31 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
             $uuidPropertyName,
             $doctrineRelationTagValueNode
         );
+    }
+
+    private function refactorToManyPropertyPhpDocInfo(PhpDocInfo $propertyPhpDocInfo, Property $property): void
+    {
+        $doctrineJoinColumnTagValueNode = $propertyPhpDocInfo->getByType(JoinColumnTagValueNode::class);
+        if ($doctrineJoinColumnTagValueNode) {
+            // replace @ORM\JoinColumn with @ORM\JoinTable
+            $propertyPhpDocInfo->removeTagValueNodeFromNode($doctrineJoinColumnTagValueNode);
+        }
+
+        $joinTableTagNode = $this->phpDocTagNodeFactory->createJoinTableTagNode($property);
+        $propertyPhpDocInfo->getPhpDocNode()->children[] = $joinTableTagNode;
+    }
+
+    private function refactorToOnePropertyPhpDocInfo(PhpDocInfo $propertyPhpDocInfo): void
+    {
+        /** @var JoinColumnTagValueNode $joinColumnTagValueNode */
+        $joinColumnTagValueNode = $propertyPhpDocInfo->getByType(JoinColumnTagValueNode::class);
+
+        if ($joinColumnTagValueNode) {
+            $joinColumnTagValueNode->changeName('');
+            $joinColumnTagValueNode->changeNullable(true);
+            $joinColumnTagValueNode->changeReferencedColumnName('uuid');
+        } else {
+            $propertyPhpDocInfo->getPhpDocNode()->children[] = $this->phpDocTagNodeFactory->createJoinColumnTagNode();
+        }
     }
 }

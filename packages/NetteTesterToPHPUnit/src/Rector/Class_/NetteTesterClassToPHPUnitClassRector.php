@@ -95,11 +95,6 @@ PHP
         return $node;
     }
 
-    private function processExtends(Class_ $class): void
-    {
-        $class->extends = new FullyQualified('PHPUnit\Framework\TestCase');
-    }
-
     private function processAboveTestInclude(Include_ $include): void
     {
         if ($include->getAttribute(AttributeKey::CLASS_NODE) === null) {
@@ -112,6 +107,11 @@ PHP
         if ($this->isName($methodCall->name, 'run')) {
             $this->removeNode($methodCall);
         }
+    }
+
+    private function processExtends(Class_ $class): void
+    {
+        $class->extends = new FullyQualified('PHPUnit\Framework\TestCase');
     }
 
     private function processMethods(Class_ $class): void

@@ -95,36 +95,6 @@ PHP
         return $currentOne;
     }
 
-    private function isMatchingMethodCall(MethodCall $methodCall): bool
-    {
-        foreach ($this->classesToDefluent as $classToDefluent) {
-            if ($this->isObjectType($methodCall, $classToDefluent)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param MethodCall[] $methodCalls
-     * @return Variable|PropertyFetch
-     */
-    private function extractRootVariable(array $methodCalls): Expr
-    {
-        foreach ($methodCalls as $methodCall) {
-            if ($methodCall->var instanceof Variable) {
-                return $methodCall->var;
-            }
-
-            if ($methodCall->var instanceof PropertyFetch) {
-                return $methodCall->var;
-            }
-        }
-
-        throw new ShouldNotHappenException();
-    }
-
     private function isLastMethodCallInChainCall(MethodCall $methodCall): bool
     {
         // is chain method call
@@ -184,5 +154,35 @@ PHP
         }
 
         return $decoupledMethodCalls;
+    }
+
+    private function isMatchingMethodCall(MethodCall $methodCall): bool
+    {
+        foreach ($this->classesToDefluent as $classToDefluent) {
+            if ($this->isObjectType($methodCall, $classToDefluent)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param MethodCall[] $methodCalls
+     * @return Variable|PropertyFetch
+     */
+    private function extractRootVariable(array $methodCalls): Expr
+    {
+        foreach ($methodCalls as $methodCall) {
+            if ($methodCall->var instanceof Variable) {
+                return $methodCall->var;
+            }
+
+            if ($methodCall->var instanceof PropertyFetch) {
+                return $methodCall->var;
+            }
+        }
+
+        throw new ShouldNotHappenException();
     }
 }

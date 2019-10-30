@@ -131,6 +131,23 @@ PHP
     }
 
     /**
+     * @param Node[] $nodes
+     * @return string[]
+     */
+    private function getNodeNames(array $nodes): array
+    {
+        $nodeNames = [];
+        foreach ($nodes as $node) {
+            $nodeName = $this->getName($node);
+            if ($nodeName) {
+                $nodeNames[] = $nodeName;
+            }
+        }
+
+        return array_unique($nodeNames);
+    }
+
+    /**
      * @param Variable[] $assignedVariables
      * @return Variable[]
      */
@@ -156,23 +173,6 @@ PHP
 
             return $this->isNodeEqual($node, $assignedVariables);
         });
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @return string[]
-     */
-    private function getNodeNames(array $nodes): array
-    {
-        $nodeNames = [];
-        foreach ($nodes as $node) {
-            $nodeName = $this->getName($node);
-            if ($nodeName) {
-                $nodeNames[] = $nodeName;
-            }
-        }
-
-        return array_unique($nodeNames);
     }
 
     /**
@@ -265,6 +265,22 @@ PHP
         return $nodesToRemove;
     }
 
+    private function isAssignNodeUsed(
+        ?VariableNodeUseInfo $previousNode,
+        VariableNodeUseInfo $nodeByTypeAndPosition
+    ): bool {
+        // this node was just used, skip to next one
+        if ($previousNode !== null) {
+            if ($previousNode->isType(VariableNodeUseInfo::TYPE_ASSIGN) && $nodeByTypeAndPosition->isType(
+                VariableNodeUseInfo::TYPE_USE
+            )) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function shouldRemoveAssignNode(
         ?VariableNodeUseInfo $previousNode,
         VariableNodeUseInfo $nodeByTypeAndPosition
@@ -297,21 +313,5 @@ PHP
         });
 
         return ! $isVariableAssigned;
-    }
-
-    private function isAssignNodeUsed(
-        ?VariableNodeUseInfo $previousNode,
-        VariableNodeUseInfo $nodeByTypeAndPosition
-    ): bool {
-        // this node was just used, skip to next one
-        if ($previousNode !== null) {
-            if ($previousNode->isType(VariableNodeUseInfo::TYPE_ASSIGN) && $nodeByTypeAndPosition->isType(
-                VariableNodeUseInfo::TYPE_USE
-            )) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

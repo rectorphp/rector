@@ -152,6 +152,31 @@ PHP
         return $this->createMethodCall('this', 'createFormBuilder');
     }
 
+    private function processAddMethod(MethodCall $methodCall, string $method, string $classType): void
+    {
+        $methodCall->name = new Identifier('add');
+
+        // remove unused params
+        if ($method === 'addText') {
+            unset($methodCall->args[3], $methodCall->args[4]);
+        }
+
+        // has label
+        $optionsArray = new Array_();
+        if (isset($methodCall->args[1])) {
+            $optionsArray->items[] = new ArrayItem($methodCall->args[1]->value, new String_('label'));
+        }
+
+        $this->addChoiceTypeOptions($method, $optionsArray);
+        $this->addMultiFileTypeOptions($method, $optionsArray);
+
+        $methodCall->args[1] = new Arg($this->createClassConstantReference($classType));
+
+        if (count($optionsArray->items) > 0) {
+            $methodCall->args[2] = new Arg($optionsArray);
+        }
+    }
+
     private function addChoiceTypeOptions(string $method, Array_ $optionsArray): void
     {
         if ($method === 'addSelect') {
@@ -179,31 +204,6 @@ PHP
             $multiple ? $this->createTrue() : $this->createFalse(),
             new String_('multiple')
         );
-    }
-
-    private function processAddMethod(MethodCall $methodCall, string $method, string $classType): void
-    {
-        $methodCall->name = new Identifier('add');
-
-        // remove unused params
-        if ($method === 'addText') {
-            unset($methodCall->args[3], $methodCall->args[4]);
-        }
-
-        // has label
-        $optionsArray = new Array_();
-        if (isset($methodCall->args[1])) {
-            $optionsArray->items[] = new ArrayItem($methodCall->args[1]->value, new String_('label'));
-        }
-
-        $this->addChoiceTypeOptions($method, $optionsArray);
-        $this->addMultiFileTypeOptions($method, $optionsArray);
-
-        $methodCall->args[1] = new Arg($this->createClassConstantReference($classType));
-
-        if (count($optionsArray->items) > 0) {
-            $methodCall->args[2] = new Arg($optionsArray);
-        }
     }
 
     private function addMultiFileTypeOptions(string $method, Array_ $optionsArray): void

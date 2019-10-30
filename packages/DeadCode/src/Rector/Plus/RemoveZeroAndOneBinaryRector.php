@@ -83,6 +83,46 @@ PHP
         }
     }
 
+    private function processAssignOp(Node $node): ?Expr
+    {
+        // +=, -=
+        if ($node instanceof Node\Expr\AssignOp\Plus || $node instanceof Node\Expr\AssignOp\Minus) {
+            if (! $this->isValue($node->expr, 0)) {
+                return null;
+            }
+
+            if ($this->isNumberType($node->var)) {
+                return $node->var;
+            }
+        }
+
+        // *, /
+        if ($node instanceof Node\Expr\AssignOp\Mul || $node instanceof Node\Expr\AssignOp\Div) {
+            if (! $this->isValue($node->expr, 1)) {
+                return null;
+            }
+            if ($this->isNumberType($node->var)) {
+                return $node->var;
+            }
+        }
+
+        return null;
+    }
+
+    private function processBinaryOp(Node $node): ?Expr
+    {
+        if ($node instanceof Plus || $node instanceof Minus) {
+            return $this->processBinaryPlusAndMinus($node);
+        }
+
+        // *, /
+        if ($node instanceof Mul || $node instanceof Div) {
+            return $this->processBinaryMulAndDiv($node);
+        }
+
+        return null;
+    }
+
     /**
      * @param Plus|Minus $binaryOp
      */
@@ -120,46 +160,6 @@ PHP
             if ($this->isNumberType($binaryOp->left)) {
                 return $binaryOp->left;
             }
-        }
-
-        return null;
-    }
-
-    private function processAssignOp(Node $node): ?Expr
-    {
-        // +=, -=
-        if ($node instanceof Node\Expr\AssignOp\Plus || $node instanceof Node\Expr\AssignOp\Minus) {
-            if (! $this->isValue($node->expr, 0)) {
-                return null;
-            }
-
-            if ($this->isNumberType($node->var)) {
-                return $node->var;
-            }
-        }
-
-        // *, /
-        if ($node instanceof Node\Expr\AssignOp\Mul || $node instanceof Node\Expr\AssignOp\Div) {
-            if (! $this->isValue($node->expr, 1)) {
-                return null;
-            }
-            if ($this->isNumberType($node->var)) {
-                return $node->var;
-            }
-        }
-
-        return null;
-    }
-
-    private function processBinaryOp(Node $node): ?Expr
-    {
-        if ($node instanceof Plus || $node instanceof Minus) {
-            return $this->processBinaryPlusAndMinus($node);
-        }
-
-        // *, /
-        if ($node instanceof Mul || $node instanceof Div) {
-            return $this->processBinaryMulAndDiv($node);
         }
 
         return null;

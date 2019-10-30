@@ -34,12 +34,6 @@ final class PSR4AutoloadPathsProvider
         return $this->cachedComposerJsonPSR4AutoloadPaths;
     }
 
-    private function getComposerJsonPath(): string
-    {
-        // assume the project has "composer.json" in root directory
-        return getcwd() . '/composer.json';
-    }
-
     /**
      * @return mixed[]
      */
@@ -48,6 +42,12 @@ final class PSR4AutoloadPathsProvider
         $composerJsonContent = FileSystem::read($composerJson);
 
         return Json::decode($composerJsonContent, Json::FORCE_ARRAY);
+    }
+
+    private function getComposerJsonPath(): string
+    {
+        // assume the project has "composer.json" in root directory
+        return getcwd() . '/composer.json';
     }
 
     /**

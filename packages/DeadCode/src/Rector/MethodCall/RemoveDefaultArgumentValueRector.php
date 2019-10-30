@@ -110,6 +110,64 @@ PHP
     }
 
     /**
+     * @param MethodCall|StaticCall|FuncCall $node
+     */
+    private function shouldSkip(Node $node): bool
+    {
+        if ($node->args === []) {
+            return true;
+        }
+
+        if (! $node instanceof FuncCall) {
+            return false;
+        }
+
+        $functionName = $this->getName($node->name);
+        if ($functionName === null) {
+            return false;
+        }
+
+        if (! function_exists($functionName)) {
+            return false;
+        }
+
+        $reflectionFunction = new ReflectionFunction($functionName);
+
+        // skip native functions, hard to analyze without stubs (stubs would make working with IDE non-practical)
+        return $reflectionFunction->isInternal();
+    }
+
+    /**
+     * @param StaticCall|FuncCall|MethodCall $node
+     * @return Expr[]
+     */
+    private function resolveDefaultValuesFromCall(Node $node): array
+    {
+        /** @var string|null $nodeName */
+        $nodeName = $this->getName($node);
+        if ($nodeName === null) {
+            return [];
+        }
+
+        if ($node instanceof FuncCall) {
+            return $this->resolveFuncCallDefaultParamValues($nodeName);
+        }
+
+        /** @var string|null $className */
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) { // anonymous class
+            return [];
+        }
+
+        $classMethodNode = $this->parsedNodesByType->findMethod($nodeName, $className);
+        if ($classMethodNode !== null) {
+            return $this->resolveDefaultParamValuesFromFunctionLike($classMethodNode);
+        }
+
+        return [];
+    }
+
+    /**
      * @param StaticCall|MethodCall|FuncCall $node
      * @param Expr[]|mixed[] $defaultValues
      * @return int[]
@@ -147,53 +205,6 @@ PHP
     }
 
     /**
-     * @param StaticCall|FuncCall|MethodCall $node
-     * @return Expr[]
-     */
-    private function resolveDefaultValuesFromCall(Node $node): array
-    {
-        /** @var string|null $nodeName */
-        $nodeName = $this->getName($node);
-        if ($nodeName === null) {
-            return [];
-        }
-
-        if ($node instanceof FuncCall) {
-            return $this->resolveFuncCallDefaultParamValues($nodeName);
-        }
-
-        /** @var string|null $className */
-        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) { // anonymous class
-            return [];
-        }
-
-        $classMethodNode = $this->parsedNodesByType->findMethod($nodeName, $className);
-        if ($classMethodNode !== null) {
-            return $this->resolveDefaultParamValuesFromFunctionLike($classMethodNode);
-        }
-
-        return [];
-    }
-
-    /**
-     * @return Node[]
-     */
-    private function resolveDefaultParamValuesFromFunctionLike(FunctionLike $functionLike): array
-    {
-        $defaultValues = [];
-        foreach ($functionLike->getParams() as $key => $param) {
-            if ($param->default === null) {
-                continue;
-            }
-
-            $defaultValues[$key] = $param->default;
-        }
-
-        return $defaultValues;
-    }
-
-    /**
      * @return Expr[]
      */
     private function resolveFuncCallDefaultParamValues(string $nodeName): array
@@ -224,30 +235,19 @@ PHP
     }
 
     /**
-     * @param MethodCall|StaticCall|FuncCall $node
+     * @return Node[]
      */
-    private function shouldSkip(Node $node): bool
+    private function resolveDefaultParamValuesFromFunctionLike(FunctionLike $functionLike): array
     {
-        if ($node->args === []) {
-            return true;
+        $defaultValues = [];
+        foreach ($functionLike->getParams() as $key => $param) {
+            if ($param->default === null) {
+                continue;
+            }
+
+            $defaultValues[$key] = $param->default;
         }
 
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        $functionName = $this->getName($node->name);
-        if ($functionName === null) {
-            return false;
-        }
-
-        if (! function_exists($functionName)) {
-            return false;
-        }
-
-        $reflectionFunction = new ReflectionFunction($functionName);
-
-        // skip native functions, hard to analyze without stubs (stubs would make working with IDE non-practical)
-        return $reflectionFunction->isInternal();
+        return $defaultValues;
     }
 }

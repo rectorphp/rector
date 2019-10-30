@@ -56,48 +56,6 @@ final class SetOptionResolver
         return $nearestMatch->getRealPath();
     }
 
-    private function reportSetNotFound(string $configDirectory, string $setName): void
-    {
-        $allSets = $this->findAllSetsInDirectory($configDirectory);
-
-        $suggestedSet = ObjectHelpers::getSuggestion($allSets, $setName);
-
-        [$versionedSets, $unversionedSets] = $this->separateVersionedAndUnversionedSets($allSets);
-
-        $setsListInString = $this->createSetListInString($unversionedSets, $versionedSets);
-
-        $setNotFoundMessage = sprintf(
-            '%s "%s" was not found.%s%s',
-            ucfirst($this->keyName),
-            $setName,
-            PHP_EOL,
-            $suggestedSet ? sprintf('Did you mean "%s"?', $suggestedSet) . PHP_EOL : ''
-        );
-
-        $pickOneOfMessage = sprintf('Pick "--%s" of:%s%s', $this->keyName, PHP_EOL . PHP_EOL, $setsListInString);
-
-        throw new SetNotFoundException($setNotFoundMessage . PHP_EOL . $pickOneOfMessage);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function findAllSetsInDirectory(string $configDirectory): array
-    {
-        $finder = Finder::create()
-            ->files()
-            ->in($configDirectory);
-
-        $sets = [];
-        foreach ($finder->getIterator() as $fileInfo) {
-            $sets[] = $fileInfo->getBasename('.' . $fileInfo->getExtension());
-        }
-
-        sort($sets);
-
-        return array_unique($sets);
-    }
-
     /**
      * @return SplFileInfo[]
      */
@@ -140,6 +98,29 @@ final class SetOptionResolver
         return $nearestMatches;
     }
 
+    private function reportSetNotFound(string $configDirectory, string $setName): void
+    {
+        $allSets = $this->findAllSetsInDirectory($configDirectory);
+
+        $suggestedSet = ObjectHelpers::getSuggestion($allSets, $setName);
+
+        [$versionedSets, $unversionedSets] = $this->separateVersionedAndUnversionedSets($allSets);
+
+        $setsListInString = $this->createSetListInString($unversionedSets, $versionedSets);
+
+        $setNotFoundMessage = sprintf(
+            '%s "%s" was not found.%s%s',
+            ucfirst($this->keyName),
+            $setName,
+            PHP_EOL,
+            $suggestedSet ? sprintf('Did you mean "%s"?', $suggestedSet) . PHP_EOL : ''
+        );
+
+        $pickOneOfMessage = sprintf('Pick "--%s" of:%s%s', $this->keyName, PHP_EOL . PHP_EOL, $setsListInString);
+
+        throw new SetNotFoundException($setNotFoundMessage . PHP_EOL . $pickOneOfMessage);
+    }
+
     private function matchVersionInTheEnd(string $setName): ?string
     {
         $match = Strings::match($setName, '#(?<version>[\d\.]+$)#');
@@ -152,22 +133,22 @@ final class SetOptionResolver
     }
 
     /**
-     * @param string[] $unversionedSets
-     * @param string[] $versionedSets
+     * @return string[]
      */
-    private function createSetListInString(array $unversionedSets, array $versionedSets): string
+    private function findAllSetsInDirectory(string $configDirectory): array
     {
-        $setsListInString = '';
+        $finder = Finder::create()
+            ->files()
+            ->in($configDirectory);
 
-        foreach ($unversionedSets as $unversionedSet) {
-            $setsListInString .= ' * ' . $unversionedSet . PHP_EOL;
+        $sets = [];
+        foreach ($finder->getIterator() as $fileInfo) {
+            $sets[] = $fileInfo->getBasename('.' . $fileInfo->getExtension());
         }
 
-        foreach ($versionedSets as $groupName => $configName) {
-            $setsListInString .= ' * ' . $groupName . ': ' . implode(', ', $configName) . PHP_EOL;
-        }
+        sort($sets);
 
-        return $setsListInString;
+        return array_unique($sets);
     }
 
     /**
@@ -196,5 +177,24 @@ final class SetOptionResolver
         }
 
         return [$versionedSets, $unversionedSets];
+    }
+
+    /**
+     * @param string[] $unversionedSets
+     * @param string[] $versionedSets
+     */
+    private function createSetListInString(array $unversionedSets, array $versionedSets): string
+    {
+        $setsListInString = '';
+
+        foreach ($unversionedSets as $unversionedSet) {
+            $setsListInString .= ' * ' . $unversionedSet . PHP_EOL;
+        }
+
+        foreach ($versionedSets as $groupName => $configName) {
+            $setsListInString .= ' * ' . $groupName . ': ' . implode(', ', $configName) . PHP_EOL;
+        }
+
+        return $setsListInString;
     }
 }

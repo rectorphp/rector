@@ -121,13 +121,16 @@ final class Application extends SymfonyApplication
         return array_values($filteredCommands);
     }
 
-    private function removeUnusedOptions(InputDefinition $inputDefinition): void
+    private function getNewWorkingDir(InputInterface $input): string
     {
-        $options = $inputDefinition->getOptions();
+        $workingDir = $input->getParameterOption(['--working-dir', '-d']);
+        if ($workingDir !== false && ! is_dir($workingDir)) {
+            throw new InvalidConfigurationException(
+                'Invalid working directory specified, ' . $workingDir . ' does not exist.'
+            );
+        }
 
-        unset($options['quiet'], $options['no-interaction']);
-
-        $inputDefinition->setOptions($options);
+        return (string) $workingDir;
     }
 
     private function shouldPrintMetaInformation(InputInterface $input): bool
@@ -141,6 +144,15 @@ final class Application extends SymfonyApplication
         );
 
         return ! ($hasVersionOption || $hasNoArguments || $hasJsonOutput);
+    }
+
+    private function removeUnusedOptions(InputDefinition $inputDefinition): void
+    {
+        $options = $inputDefinition->getOptions();
+
+        unset($options['quiet'], $options['no-interaction']);
+
+        $inputDefinition->setOptions($options);
     }
 
     private function addCustomOptions(InputDefinition $inputDefinition): void
@@ -185,17 +197,5 @@ final class Application extends SymfonyApplication
     private function getDefaultConfigPath(): string
     {
         return getcwd() . '/rector.yaml';
-    }
-
-    private function getNewWorkingDir(InputInterface $input): string
-    {
-        $workingDir = $input->getParameterOption(['--working-dir', '-d']);
-        if ($workingDir !== false && ! is_dir($workingDir)) {
-            throw new InvalidConfigurationException(
-                'Invalid working directory specified, ' . $workingDir . ' does not exist.'
-            );
-        }
-
-        return (string) $workingDir;
     }
 }

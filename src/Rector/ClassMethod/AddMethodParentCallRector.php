@@ -107,6 +107,22 @@ PHP
         return null;
     }
 
+    private function shouldSkipMethod(ClassMethod $classMethod, string $method): bool
+    {
+        if (! $this->isName($classMethod, $method)) {
+            return true;
+        }
+
+        return $this->hasParentCallOfMethod($classMethod, $method);
+    }
+
+    private function createParentStaticCall(string $method): Expression
+    {
+        $parentStaticCall = new StaticCall(new Name('parent'), new Identifier($method));
+
+        return new Expression($parentStaticCall);
+    }
+
     /**
      * Looks for "parent::<methodName>
      */
@@ -125,21 +141,5 @@ PHP
 
             return $this->isName($node, $method);
         });
-    }
-
-    private function createParentStaticCall(string $method): Expression
-    {
-        $parentStaticCall = new StaticCall(new Name('parent'), new Identifier($method));
-
-        return new Expression($parentStaticCall);
-    }
-
-    private function shouldSkipMethod(ClassMethod $classMethod, string $method): bool
-    {
-        if (! $this->isName($classMethod, $method)) {
-            return true;
-        }
-
-        return $this->hasParentCallOfMethod($classMethod, $method);
     }
 }

@@ -121,6 +121,19 @@ PHP
         return $this->changeConstantVisibility($node, $useClasses, $parentConstIsProtected, $class);
     }
 
+    private function shouldSkip(ClassConst $classConst): bool
+    {
+        if ($classConst->getAttribute(self::HAS_NEW_ACCESS_LEVEL)) {
+            return true;
+        }
+
+        if (! $this->isAtLeastPhpVersion('7.1')) {
+            return true;
+        }
+
+        return count($classConst->consts) !== 1;
+    }
+
     private function findParentClassConstant(string $class, string $constant): ?ClassConst
     {
         $classNode = $this->parsedNodesByType->findClass($class);
@@ -141,34 +154,6 @@ PHP
         }
 
         return null;
-    }
-
-    private function makePrivateOrWeaker(ClassConst $classConst, bool $protectedRequired): void
-    {
-        if ($protectedRequired) {
-            $this->makeProtected($classConst);
-        } else {
-            $this->makePrivate($classConst);
-        }
-    }
-
-    /**
-     * @param string[] $useClasses
-     */
-    private function isUsedByChildrenOnly(array $useClasses, string $class): bool
-    {
-        $isChild = false;
-
-        foreach ($useClasses as $useClass) {
-            if (is_a($useClass, $class, true)) {
-                $isChild = true;
-            } else {
-                // not a child, must be public
-                return false;
-            }
-        }
-
-        return $isChild;
     }
 
     private function findClassConstantFetches(string $className, string $constantName): ?array
@@ -209,16 +194,31 @@ PHP
         return $classConst;
     }
 
-    private function shouldSkip(ClassConst $classConst): bool
+    private function makePrivateOrWeaker(ClassConst $classConst, bool $protectedRequired): void
     {
-        if ($classConst->getAttribute(self::HAS_NEW_ACCESS_LEVEL)) {
-            return true;
+        if ($protectedRequired) {
+            $this->makeProtected($classConst);
+        } else {
+            $this->makePrivate($classConst);
+        }
+    }
+
+    /**
+     * @param string[] $useClasses
+     */
+    private function isUsedByChildrenOnly(array $useClasses, string $class): bool
+    {
+        $isChild = false;
+
+        foreach ($useClasses as $useClass) {
+            if (is_a($useClass, $class, true)) {
+                $isChild = true;
+            } else {
+                // not a child, must be public
+                return false;
+            }
         }
 
-        if (! $this->isAtLeastPhpVersion('7.1')) {
-            return true;
-        }
-
-        return count($classConst->consts) !== 1;
+        return $isChild;
     }
 }

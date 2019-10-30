@@ -108,22 +108,6 @@ PHP
         return new Assign($valueNode, $funcCallNode);
     }
 
-    /**
-     * @param If_|Else_ $node
-     */
-    private function hasOnlyStatementAssign(Node $node): bool
-    {
-        if (count($node->stmts) !== 1) {
-            return false;
-        }
-
-        if (! $node->stmts[0] instanceof Expression) {
-            return false;
-        }
-
-        return $node->stmts[0]->expr instanceof Assign;
-    }
-
     private function shouldSkip(If_ $ifNode): bool
     {
         if ($ifNode->else === null) {
@@ -150,5 +134,21 @@ PHP
             return true;
         }
         return ! $this->areNodesEqual($ifNode->cond->vars[0], $ifNode->else->stmts[0]->expr->var);
+    }
+
+    /**
+     * @param If_|Else_ $node
+     */
+    private function hasOnlyStatementAssign(Node $node): bool
+    {
+        if (count($node->stmts) !== 1) {
+            return false;
+        }
+
+        if (! $node->stmts[0] instanceof Expression) {
+            return false;
+        }
+
+        return $node->stmts[0]->expr instanceof Assign;
     }
 }

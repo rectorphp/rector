@@ -124,6 +124,37 @@ PHP
         $this->expectedValuesByKeys = [];
     }
 
+    private function matchArray(Expr $expr): ?Array_
+    {
+        if ($expr instanceof Array_) {
+            return $expr;
+        }
+
+        $value = $this->getValue($expr);
+
+        // nothing we can do
+        if ($value === null || ! is_array($value)) {
+            return null;
+        }
+
+        // use specific array instead
+        return BuilderHelpers::normalizeValue($value);
+    }
+
+    private function collectExpectedKeysAndValues(Array_ $expectedArray): void
+    {
+        foreach ($expectedArray->items as $arrayItem) {
+            if ($arrayItem->key === null) {
+                continue;
+            }
+
+            $this->expectedKeys[] = $arrayItem->key;
+
+            $key = $this->getValue($arrayItem->key);
+            $this->expectedValuesByKeys[$key] = $arrayItem->value;
+        }
+    }
+
     /**
      * @param MethodCall|StaticCall $node
      */
@@ -152,36 +183,5 @@ PHP
 
             $this->addNodeAfterNode($assertSame, $node);
         }
-    }
-
-    private function collectExpectedKeysAndValues(Array_ $expectedArray): void
-    {
-        foreach ($expectedArray->items as $arrayItem) {
-            if ($arrayItem->key === null) {
-                continue;
-            }
-
-            $this->expectedKeys[] = $arrayItem->key;
-
-            $key = $this->getValue($arrayItem->key);
-            $this->expectedValuesByKeys[$key] = $arrayItem->value;
-        }
-    }
-
-    private function matchArray(Expr $expr): ?Array_
-    {
-        if ($expr instanceof Array_) {
-            return $expr;
-        }
-
-        $value = $this->getValue($expr);
-
-        // nothing we can do
-        if ($value === null || ! is_array($value)) {
-            return null;
-        }
-
-        // use specific array instead
-        return BuilderHelpers::normalizeValue($value);
     }
 }

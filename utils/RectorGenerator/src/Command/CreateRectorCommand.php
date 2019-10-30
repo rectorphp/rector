@@ -122,6 +122,39 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     }
 
     /**
+     * @param mixed[] $templateVariables
+     */
+    private function processComposerAutoload(array $templateVariables): void
+    {
+        $composerJsonFilePath = getcwd() . '/composer.json';
+        $composerJson = $this->loadFileToJson($composerJsonFilePath);
+
+        $package = $templateVariables['_Package_'];
+
+        // skip core, already autoloaded
+        if ($package === 'Rector') {
+            return;
+        }
+
+        $namespace = 'Rector\\' . $package . '\\';
+        $namespaceTest = 'Rector\\' . $package . '\\Tests\\';
+
+        // already autoloaded?
+        if (isset($composerJson['autoload']['psr-4'][$namespace])) {
+            return;
+        }
+
+        $composerJson['autoload']['psr-4'][$namespace] = 'packages/' . $package . '/src';
+        $composerJson['autoload-dev']['psr-4'][$namespaceTest] = 'packages/' . $package . '/tests';
+
+        $this->saveJsonToFile($composerJsonFilePath, $composerJson);
+
+        // rebuild new namespace
+        $composerDumpProcess = new Process(['composer', 'dump']);
+        $composerDumpProcess->run();
+    }
+
+    /**
      * @return SmartFileInfo[]
      */
     private function findTemplateFileInfos(): array
@@ -209,44 +242,31 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     }
 
     /**
+     * @return mixed[]
+     */
+    private function loadFileToJson(string $filePath): array
+    {
+        $fileContent = FileSystem::read($filePath);
+        return Json::decode($fileContent, Json::FORCE_ARRAY);
+    }
+
+    /**
+     * @param mixed[] $json
+     */
+    private function saveJsonToFile(string $filePath, array $json): void
+    {
+        $content = Json::encode($json, Json::PRETTY);
+        $content = $this->inlineSections($content, ['keywords', 'bin']);
+        $content = $this->inlineAuthors($content);
+        FileSystem::write($filePath, $content);
+    }
+
+    /**
      * @param mixed[] $variables
      */
     private function applyVariables(string $content, array $variables): string
     {
         return str_replace(array_keys($variables), array_values($variables), $content);
-    }
-
-    /**
-     * @param mixed[] $templateVariables
-     */
-    private function processComposerAutoload(array $templateVariables): void
-    {
-        $composerJsonFilePath = getcwd() . '/composer.json';
-        $composerJson = $this->loadFileToJson($composerJsonFilePath);
-
-        $package = $templateVariables['_Package_'];
-
-        // skip core, already autoloaded
-        if ($package === 'Rector') {
-            return;
-        }
-
-        $namespace = 'Rector\\' . $package . '\\';
-        $namespaceTest = 'Rector\\' . $package . '\\Tests\\';
-
-        // already autoloaded?
-        if (isset($composerJson['autoload']['psr-4'][$namespace])) {
-            return;
-        }
-
-        $composerJson['autoload']['psr-4'][$namespace] = 'packages/' . $package . '/src';
-        $composerJson['autoload-dev']['psr-4'][$namespaceTest] = 'packages/' . $package . '/tests';
-
-        $this->saveJsonToFile($composerJsonFilePath, $composerJson);
-
-        // rebuild new namespace
-        $composerDumpProcess = new Process(['composer', 'dump']);
-        $composerDumpProcess->run();
     }
 
     /**
@@ -265,26 +285,6 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         }
 
         return $jsonContent;
-    }
-
-    /**
-     * @return mixed[]
-     */
-    private function loadFileToJson(string $filePath): array
-    {
-        $fileContent = FileSystem::read($filePath);
-        return Json::decode($fileContent, Json::FORCE_ARRAY);
-    }
-
-    /**
-     * @param mixed[] $json
-     */
-    private function saveJsonToFile(string $filePath, array $json): void
-    {
-        $content = Json::encode($json, Json::PRETTY);
-        $content = $this->inlineSections($content, ['keywords', 'bin']);
-        $content = $this->inlineAuthors($content);
-        FileSystem::write($filePath, $content);
     }
 
     private function inlineAuthors(string $jsonContent): string

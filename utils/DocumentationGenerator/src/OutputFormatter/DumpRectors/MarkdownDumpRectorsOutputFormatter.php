@@ -92,6 +92,39 @@ final class MarkdownDumpRectorsOutputFormatter implements DumpRectorsOutputForma
         }
     }
 
+    /**
+     * @param RectorInterface[] $rectors
+     * @return RectorInterface[][]
+     */
+    private function groupRectorsByPackage(array $rectors): array
+    {
+        $rectorsByPackage = [];
+        foreach ($rectors as $rector) {
+            $package = $this->rectorMetadataResolver->resolvePackageFromRectorClass(get_class($rector));
+            $rectorsByPackage[$package][] = $rector;
+        }
+
+        // sort groups by name to make them more readable
+        ksort($rectorsByPackage);
+
+        return $rectorsByPackage;
+    }
+
+    /**
+     * @param RectorInterface[][] $rectorsByGroup
+     */
+    private function printGroupsMenu(array $rectorsByGroup): void
+    {
+        foreach (array_keys($rectorsByGroup) as $group) {
+            $escapedGroup = str_replace('\\', '', $group);
+            $escapedGroup = Strings::webalize($escapedGroup, '_');
+
+            $this->symfonyStyle->writeln(sprintf('- [%s](#%s)', $group, $escapedGroup));
+        }
+
+        $this->symfonyStyle->newLine();
+    }
+
     private function printRector(RectorInterface $rector): void
     {
         $headline = $this->getRectorClassWithoutNamespace($rector);
@@ -126,44 +159,6 @@ final class MarkdownDumpRectorsOutputFormatter implements DumpRectorsOutputForma
         return $rectorClassParts[count($rectorClassParts) - 1];
     }
 
-    private function printCodeWrapped(string $content, string $format): void
-    {
-        $this->symfonyStyle->writeln(sprintf('```%s%s%s%s```', $format, PHP_EOL, rtrim($content), PHP_EOL));
-    }
-
-    /**
-     * @param RectorInterface[][] $rectorsByGroup
-     */
-    private function printGroupsMenu(array $rectorsByGroup): void
-    {
-        foreach (array_keys($rectorsByGroup) as $group) {
-            $escapedGroup = str_replace('\\', '', $group);
-            $escapedGroup = Strings::webalize($escapedGroup, '_');
-
-            $this->symfonyStyle->writeln(sprintf('- [%s](#%s)', $group, $escapedGroup));
-        }
-
-        $this->symfonyStyle->newLine();
-    }
-
-    /**
-     * @param RectorInterface[] $rectors
-     * @return RectorInterface[][]
-     */
-    private function groupRectorsByPackage(array $rectors): array
-    {
-        $rectorsByPackage = [];
-        foreach ($rectors as $rector) {
-            $package = $this->rectorMetadataResolver->resolvePackageFromRectorClass(get_class($rector));
-            $rectorsByPackage[$package][] = $rector;
-        }
-
-        // sort groups by name to make them more readable
-        ksort($rectorsByPackage);
-
-        return $rectorsByPackage;
-    }
-
     private function printConfiguration(RectorInterface $rector, CodeSampleInterface $codeSample): void
     {
         if (! $codeSample instanceof ConfiguredCodeSample) {
@@ -192,5 +187,10 @@ final class MarkdownDumpRectorsOutputFormatter implements DumpRectorsOutputForma
         );
 
         $this->printCodeWrapped($diff, 'diff');
+    }
+
+    private function printCodeWrapped(string $content, string $format): void
+    {
+        $this->symfonyStyle->writeln(sprintf('```%s%s%s%s```', $format, PHP_EOL, rtrim($content), PHP_EOL));
     }
 }

@@ -120,38 +120,6 @@ PHP
         return $node;
     }
 
-    private function removeGetParamAssignIfNotUseful(?Node $getParamParentNode): void
-    {
-        // e.g. $value = (int) $this->getParam('value');
-        if ($getParamParentNode instanceof Cast) {
-            $getParamParentNode = $getParamParentNode->getAttribute(AttributeKey::PARENT_NODE);
-        }
-
-        if (! $getParamParentNode instanceof Assign) {
-            return;
-        }
-
-        if (! $getParamParentNode->var instanceof Variable) {
-            return;
-        }
-
-        // matches: "$x = $this->getParam('x');"
-        $this->removeNode($getParamParentNode);
-    }
-
-    private function addRouteAnnotation(ClassMethod $classMethod, RouteValueObject $routeValueObject): void
-    {
-        $symfonyRoutePhpDocTagNode = $routeValueObject->getSymfonyRoutePhpDocTagNode();
-        $symfonyRoutePhpDocNode = new SpacelessPhpDocTagNode(
-            SymfonyRouteTagValueNode::SHORT_NAME,
-            $symfonyRoutePhpDocTagNode
-        );
-
-        $this->docBlockManipulator->addTag($classMethod, $symfonyRoutePhpDocNode);
-
-        $this->addUseType(new FullyQualifiedObjectType(SymfonyRouteTagValueNode::CLASS_NAME), $classMethod);
-    }
-
     /**
      * @param Param[] $paramNamesToParentNodes
      * @return string[]
@@ -172,6 +140,38 @@ PHP
             $addedParamNames[] = $paramName;
         }
         return $addedParamNames;
+    }
+
+    private function addRouteAnnotation(ClassMethod $classMethod, RouteValueObject $routeValueObject): void
+    {
+        $symfonyRoutePhpDocTagNode = $routeValueObject->getSymfonyRoutePhpDocTagNode();
+        $symfonyRoutePhpDocNode = new SpacelessPhpDocTagNode(
+            SymfonyRouteTagValueNode::SHORT_NAME,
+            $symfonyRoutePhpDocTagNode
+        );
+
+        $this->docBlockManipulator->addTag($classMethod, $symfonyRoutePhpDocNode);
+
+        $this->addUseType(new FullyQualifiedObjectType(SymfonyRouteTagValueNode::CLASS_NAME), $classMethod);
+    }
+
+    private function removeGetParamAssignIfNotUseful(?Node $getParamParentNode): void
+    {
+        // e.g. $value = (int) $this->getParam('value');
+        if ($getParamParentNode instanceof Cast) {
+            $getParamParentNode = $getParamParentNode->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        if (! $getParamParentNode instanceof Assign) {
+            return;
+        }
+
+        if (! $getParamParentNode->var instanceof Variable) {
+            return;
+        }
+
+        // matches: "$x = $this->getParam('x');"
+        $this->removeNode($getParamParentNode);
     }
 
     private function correctParamNameBasedOnAssign(Node $parentNode, string $currentParamName): string

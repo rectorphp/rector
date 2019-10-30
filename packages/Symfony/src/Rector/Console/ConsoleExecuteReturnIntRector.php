@@ -85,6 +85,18 @@ PHP
         return $node;
     }
 
+    private function refactorReturnTypeDeclaration(ClassMethod $classMethod): void
+    {
+        if ($classMethod->returnType) {
+            // already set
+            if ($this->isName($classMethod->returnType, 'int')) {
+                return;
+            }
+        }
+
+        $classMethod->returnType = new Identifier('int');
+    }
+
     private function addReturn0ToMethod(ClassMethod $classMethod): void
     {
         $hasReturn = false;
@@ -141,18 +153,6 @@ PHP
             $return->expr = new Int_($return->expr);
             return;
         }
-    }
-
-    private function refactorReturnTypeDeclaration(ClassMethod $classMethod): void
-    {
-        if ($classMethod->returnType) {
-            // already set
-            if ($this->isName($classMethod->returnType, 'int')) {
-                return;
-            }
-        }
-
-        $classMethod->returnType = new Identifier('int');
     }
 
     private function refactorTernaryReturn(Ternary $ternary): bool

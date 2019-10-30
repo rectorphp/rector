@@ -102,6 +102,27 @@ PHP
         return $node;
     }
 
+    private function shouldSkipForDifferentScope(Assign $assign, Node $anotherNode): bool
+    {
+        if (! $this->areInSameClassMethod($assign, $anotherNode)) {
+            return true;
+        }
+
+        if ($this->shouldSkipDueToForeachOverride($assign, $anotherNode)) {
+            return true;
+        }
+
+        return $this->shouldSkipForDifferenceParent($assign, $anotherNode);
+    }
+
+    private function areInSameClassMethod(Node $node, Node $previousExpression): bool
+    {
+        return $this->areNodesEqual(
+            $node->getAttribute(AttributeKey::METHOD_NODE),
+            $previousExpression->getAttribute(AttributeKey::METHOD_NODE)
+        );
+    }
+
     private function shouldSkipDueToForeachOverride(Assign $assign, Node $node): bool
     {
         // is nested in a foreach and the previous expression is not?
@@ -126,29 +147,8 @@ PHP
         return ! $this->areNodesEqual($firstNodeParent, $secondNodeParent);
     }
 
-    private function shouldSkipForDifferentScope(Assign $assign, Node $anotherNode): bool
-    {
-        if (! $this->areInSameClassMethod($assign, $anotherNode)) {
-            return true;
-        }
-
-        if ($this->shouldSkipDueToForeachOverride($assign, $anotherNode)) {
-            return true;
-        }
-
-        return $this->shouldSkipForDifferenceParent($assign, $anotherNode);
-    }
-
     private function findParentControlStructure(Node $node): ?Node
     {
         return $this->betterNodeFinder->findFirstParentInstanceOf($node, self::CONTROL_STRUCTURE_NODES);
-    }
-
-    private function areInSameClassMethod(Node $node, Node $previousExpression): bool
-    {
-        return $this->areNodesEqual(
-            $node->getAttribute(AttributeKey::METHOD_NODE),
-            $previousExpression->getAttribute(AttributeKey::METHOD_NODE)
-        );
     }
 }

@@ -67,6 +67,17 @@ final class SymfonyContainerFactory
         return $container;
     }
 
+    private function resolveEnvironment(): string
+    {
+        /** @var string|null $kernelEnvironment */
+        $kernelEnvironment = $this->parameterProvider->provideParameter(Option::KERNEL_ENVIRONMENT_PARAMETER);
+        if ($kernelEnvironment) {
+            return $kernelEnvironment;
+        }
+
+        return $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? self::FALLBACK_ENVIRONMENT;
+    }
+
     /**
      * Mimics https://github.com/symfony/symfony/blob/f834c9262b411aa5793fcea23694e3ad3b5acbb4/src/Symfony/Bundle/FrameworkBundle/Command/ContainerDebugCommand.php#L200-L203
      */
@@ -112,16 +123,5 @@ final class SymfonyContainerFactory
         }
 
         return $containerBuilder;
-    }
-
-    private function resolveEnvironment(): string
-    {
-        /** @var string|null $kernelEnvironment */
-        $kernelEnvironment = $this->parameterProvider->provideParameter(Option::KERNEL_ENVIRONMENT_PARAMETER);
-        if ($kernelEnvironment) {
-            return $kernelEnvironment;
-        }
-
-        return $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? self::FALLBACK_ENVIRONMENT;
     }
 }

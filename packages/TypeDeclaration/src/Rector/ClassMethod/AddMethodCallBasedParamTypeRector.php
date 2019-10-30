@@ -116,31 +116,6 @@ PHP
         return $node;
     }
 
-    private function skipArgumentStaticType(Node $node, Type $argumentStaticType, int $position): bool
-    {
-        if ($argumentStaticType instanceof MixedType) {
-            return true;
-        }
-
-        if (! isset($node->params[$position])) {
-            return true;
-        }
-
-        $parameter = $node->params[$position];
-        if ($parameter->type === null) {
-            return false;
-        }
-
-        $parameterStaticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($parameter->type);
-
-        // already completed → skip
-        if ($parameterStaticType->equals($argumentStaticType)) {
-            return true;
-        }
-
-        return false;
-    }
-
     /**
      * @param MethodCall[]|StaticCall[]|Array_[] $classMethodCalls
      * @return Type[]
@@ -165,5 +140,30 @@ PHP
         }
 
         return $staticTypeByArgumentPosition;
+    }
+
+    private function skipArgumentStaticType(Node $node, Type $argumentStaticType, int $position): bool
+    {
+        if ($argumentStaticType instanceof MixedType) {
+            return true;
+        }
+
+        if (! isset($node->params[$position])) {
+            return true;
+        }
+
+        $parameter = $node->params[$position];
+        if ($parameter->type === null) {
+            return false;
+        }
+
+        $parameterStaticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($parameter->type);
+
+        // already completed → skip
+        if ($parameterStaticType->equals($argumentStaticType)) {
+            return true;
+        }
+
+        return false;
     }
 }

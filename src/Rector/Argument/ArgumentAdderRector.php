@@ -124,6 +124,31 @@ PHP
     }
 
     /**
+     * @param MethodCall|StaticCall|ClassMethod $node
+     */
+    private function isObjectTypeMatch(Node $node, string $type): bool
+    {
+        if ($node instanceof MethodCall) {
+            return $this->isObjectType($node->var, $type);
+        }
+
+        if ($node instanceof StaticCall) {
+            return $this->isObjectType($node->class, $type);
+        }
+
+        // ClassMethod
+        /** @var Class_|null $class */
+        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+
+        // anonymous class
+        if ($class === null) {
+            return false;
+        }
+
+        return $this->isObjectType($class, $type);
+    }
+
+    /**
      * @param ClassMethod|MethodCall|StaticCall $node
      * @param mixed[] $positionWithDefaultValues
      */
@@ -152,24 +177,6 @@ PHP
                 $node->args[$position] = $arg;
             }
         }
-    }
-
-    /**
-     * @param mixed $defaultValue
-     */
-    private function addClassMethodParam(
-        ClassMethod $classMethod,
-        string $name,
-        $defaultValue,
-        ?string $type,
-        int $position
-    ): void {
-        $param = new Param(new Variable($name), BuilderHelpers::normalizeValue($defaultValue));
-        if ($type) {
-            $param->type = ctype_upper($type[0]) ? new FullyQualified($type) : new Identifier($type);
-        }
-
-        $classMethod->params[$position] = $param;
     }
 
     /**
@@ -216,27 +223,20 @@ PHP
     }
 
     /**
-     * @param MethodCall|StaticCall|ClassMethod $node
+     * @param mixed $defaultValue
      */
-    private function isObjectTypeMatch(Node $node, string $type): bool
-    {
-        if ($node instanceof MethodCall) {
-            return $this->isObjectType($node->var, $type);
+    private function addClassMethodParam(
+        ClassMethod $classMethod,
+        string $name,
+        $defaultValue,
+        ?string $type,
+        int $position
+    ): void {
+        $param = new Param(new Variable($name), BuilderHelpers::normalizeValue($defaultValue));
+        if ($type) {
+            $param->type = ctype_upper($type[0]) ? new FullyQualified($type) : new Identifier($type);
         }
 
-        if ($node instanceof StaticCall) {
-            return $this->isObjectType($node->class, $type);
-        }
-
-        // ClassMethod
-        /** @var Class_|null $class */
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-
-        // anonymous class
-        if ($class === null) {
-            return false;
-        }
-
-        return $this->isObjectType($class, $type);
+        $classMethod->params[$position] = $param;
     }
 }

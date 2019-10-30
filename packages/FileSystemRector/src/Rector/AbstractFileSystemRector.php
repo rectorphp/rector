@@ -199,6 +199,22 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         return $this->clearString($firstString) === $this->clearString($secondString);
     }
 
+    /**
+     * Add empty line in the end, if it is in the original tokens
+     */
+    private function resolveLastEmptyLine(string $prettyPrintContent): string
+    {
+        $tokens = $this->lexer->getTokens();
+        $lastToken = array_pop($tokens);
+        if ($lastToken) {
+            if (Strings::contains($lastToken[1], "\n")) {
+                $prettyPrintContent = trim($prettyPrintContent) . PHP_EOL;
+            }
+        }
+
+        return $prettyPrintContent;
+    }
+
     private function clearString(string $string): string
     {
         $string = $this->removeComments($string);
@@ -221,21 +237,5 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $string = Strings::replace($string, '#/\*.*?\*/#s', '');
 
         return Strings::replace($string, '#\n\s*\n#', "\n");
-    }
-
-    /**
-     * Add empty line in the end, if it is in the original tokens
-     */
-    private function resolveLastEmptyLine(string $prettyPrintContent): string
-    {
-        $tokens = $this->lexer->getTokens();
-        $lastToken = array_pop($tokens);
-        if ($lastToken) {
-            if (Strings::contains($lastToken[1], "\n")) {
-                $prettyPrintContent = trim($prettyPrintContent) . PHP_EOL;
-            }
-        }
-
-        return $prettyPrintContent;
     }
 }

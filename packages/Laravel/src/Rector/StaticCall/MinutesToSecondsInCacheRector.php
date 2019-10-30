@@ -88,26 +88,6 @@ PHP
     }
 
     /**
-     * @param StaticCall|MethodCall $expr
-     * @return StaticCall|MethodCall
-     */
-    private function processArgumentPosition(Expr $expr, int $argumentPosition): Expr
-    {
-        $oldValue = $expr->args[$argumentPosition]->value;
-        if (! $oldValue instanceof LNumber) {
-            if (! $this->getStaticType($oldValue) instanceof ConstantIntegerType) {
-                return $expr;
-            }
-        }
-
-        $newArgumentValue = new Mul($oldValue, new LNumber(60));
-
-        $expr->args[$argumentPosition] = new Arg($newArgumentValue);
-
-        return $expr;
-    }
-
-    /**
      * @return int[][]
      */
     private function getTypesToMethods(): array
@@ -125,5 +105,25 @@ PHP
                 'add' => 2,
             ],
         ];
+    }
+
+    /**
+     * @param StaticCall|MethodCall $expr
+     * @return StaticCall|MethodCall
+     */
+    private function processArgumentPosition(Expr $expr, int $argumentPosition): Expr
+    {
+        $oldValue = $expr->args[$argumentPosition]->value;
+        if (! $oldValue instanceof LNumber) {
+            if (! $this->getStaticType($oldValue) instanceof ConstantIntegerType) {
+                return $expr;
+            }
+        }
+
+        $newArgumentValue = new Mul($oldValue, new LNumber(60));
+
+        $expr->args[$argumentPosition] = new Arg($newArgumentValue);
+
+        return $expr;
     }
 }

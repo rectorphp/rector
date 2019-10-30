@@ -82,26 +82,6 @@ PHP
         return null;
     }
 
-    /**
-     * Is the event name just `::class`?
-     * We can remove it
-     */
-    private function isEventNameSameAsEventObjectClass(MethodCall $methodCall): bool
-    {
-        if (! $methodCall->args[1]->value instanceof ClassConstFetch) {
-            return false;
-        }
-
-        $classConst = $this->getValue($methodCall->args[1]->value);
-        $eventStaticType = $this->getStaticType($methodCall->args[0]->value);
-
-        if (! $eventStaticType instanceof ObjectType) {
-            return false;
-        }
-
-        return $classConst === $eventStaticType->getClassName();
-    }
-
     private function shouldSkip(MethodCall $methodCall): bool
     {
         if (! $this->isObjectType($methodCall->var, EventDispatcherInterface::class)) {
@@ -147,5 +127,25 @@ PHP
         }
 
         return null;
+    }
+
+    /**
+     * Is the event name just `::class`?
+     * We can remove it
+     */
+    private function isEventNameSameAsEventObjectClass(MethodCall $methodCall): bool
+    {
+        if (! $methodCall->args[1]->value instanceof ClassConstFetch) {
+            return false;
+        }
+
+        $classConst = $this->getValue($methodCall->args[1]->value);
+        $eventStaticType = $this->getStaticType($methodCall->args[0]->value);
+
+        if (! $eventStaticType instanceof ObjectType) {
+            return false;
+        }
+
+        return $classConst === $eventStaticType->getClassName();
     }
 }

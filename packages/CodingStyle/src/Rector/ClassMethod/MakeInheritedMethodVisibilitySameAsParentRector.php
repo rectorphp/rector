@@ -130,26 +130,6 @@ PHP
         return false;
     }
 
-    private function changeClassMethodVisibilityBasedOnReflectionMethod(
-        ClassMethod $classMethod,
-        ReflectionMethod $reflectionMethod
-    ): void {
-        if ($reflectionMethod->isPublic()) {
-            $this->makePublic($classMethod);
-            return;
-        }
-
-        if ($reflectionMethod->isProtected()) {
-            $this->makeProtected($classMethod);
-            return;
-        }
-
-        if ($reflectionMethod->isPrivate()) {
-            $this->makePrivate($classMethod);
-            return;
-        }
-    }
-
     /**
      * Parent constructor visibility override is allowed only since PHP 7.2+
      * @see https://3v4l.org/RFYmn
@@ -189,6 +169,26 @@ PHP
         }
 
         return false;
+    }
+
+    private function changeClassMethodVisibilityBasedOnReflectionMethod(
+        ClassMethod $classMethod,
+        ReflectionMethod $reflectionMethod
+    ): void {
+        if ($reflectionMethod->isPublic()) {
+            $this->makePublic($classMethod);
+            return;
+        }
+
+        if ($reflectionMethod->isProtected()) {
+            $this->makeProtected($classMethod);
+            return;
+        }
+
+        if ($reflectionMethod->isPrivate()) {
+            $this->makePrivate($classMethod);
+            return;
+        }
     }
 
     /**

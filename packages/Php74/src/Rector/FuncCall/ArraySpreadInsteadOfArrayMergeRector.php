@@ -87,9 +87,51 @@ PHP
         return null;
     }
 
-    private function isIteratorToArrayFuncCall(Expr $expr): bool
+    private function refactorArray(FuncCall $funcCall): ?Array_
     {
-        return $expr instanceof FuncCall && $this->isName($expr, 'iterator_to_array');
+        $array = new Array_();
+
+        foreach ($funcCall->args as $arg) {
+            $value = $arg->value;
+
+            if ($this->shouldSkipArrayForInvalidTypeOrKeys($value)) {
+                return null;
+            }
+
+            $value = $this->resolveValue($value);
+
+            $array->items[] = $this->createUnpackedArrayItem($value);
+        }
+
+        return $array;
+    }
+
+    private function refactorIteratorToArray(FuncCall $funcCall): Array_
+    {
+        $array = new Array_();
+        $array->items[] = $this->createUnpackedArrayItem($funcCall->args[0]->value);
+
+        return $array;
+    }
+
+    private function shouldSkipArrayForInvalidTypeOrKeys(Expr $expr): bool
+    {
+        // we have no idea what it is → cannot change it
+        if (! $this->isArrayType($expr)) {
+            return true;
+        }
+
+        $arrayStaticType = $this->getStaticType($expr);
+        if ($arrayStaticType instanceof ConstantArrayType) {
+            foreach ($arrayStaticType->getKeyTypes() as $keyType) {
+                // key cannot be string
+                if ($keyType instanceof ConstantStringType) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private function resolveValue(Expr $expr): Expr
@@ -120,55 +162,13 @@ PHP
         return $expr;
     }
 
-    private function refactorArray(FuncCall $funcCall): ?Array_
-    {
-        $array = new Array_();
-
-        foreach ($funcCall->args as $arg) {
-            $value = $arg->value;
-
-            if ($this->shouldSkipArrayForInvalidTypeOrKeys($value)) {
-                return null;
-            }
-
-            $value = $this->resolveValue($value);
-
-            $array->items[] = $this->createUnpackedArrayItem($value);
-        }
-
-        return $array;
-    }
-
-    private function refactorIteratorToArray(FuncCall $funcCall): Array_
-    {
-        $array = new Array_();
-        $array->items[] = $this->createUnpackedArrayItem($funcCall->args[0]->value);
-
-        return $array;
-    }
-
     private function createUnpackedArrayItem(Expr $expr): ArrayItem
     {
         return new ArrayItem($expr, null, false, [], true);
     }
 
-    private function shouldSkipArrayForInvalidTypeOrKeys(Expr $expr): bool
+    private function isIteratorToArrayFuncCall(Expr $expr): bool
     {
-        // we have no idea what it is → cannot change it
-        if (! $this->isArrayType($expr)) {
-            return true;
-        }
-
-        $arrayStaticType = $this->getStaticType($expr);
-        if ($arrayStaticType instanceof ConstantArrayType) {
-            foreach ($arrayStaticType->getKeyTypes() as $keyType) {
-                // key cannot be string
-                if ($keyType instanceof ConstantStringType) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return $expr instanceof FuncCall && $this->isName($expr, 'iterator_to_array');
     }
 }

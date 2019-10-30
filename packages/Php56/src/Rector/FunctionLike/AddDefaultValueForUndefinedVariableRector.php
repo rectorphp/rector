@@ -144,17 +144,26 @@ PHP
         return $node;
     }
 
-    private function isStaticVariable(Node $parentNode): bool
+    private function collectDefinedVariablesFromForeach(Node $node): void
     {
-        // definition of static variable
-        if ($parentNode instanceof StaticVar) {
-            $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentParentNode instanceof Static_) {
-                return true;
-            }
+        if (! $node instanceof Foreach_) {
+            return;
         }
 
-        return false;
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node): void {
+            if ($node instanceof Assign || $node instanceof AssignRef) {
+                if (! $node->var instanceof Variable) {
+                    return;
+                }
+
+                $variableName = $this->getName($node->var);
+                if ($variableName === null) {
+                    return;
+                }
+
+                $this->definedVariables[] = $variableName;
+            }
+        });
     }
 
     private function shouldSkipVariable(Variable $variable): bool
@@ -195,25 +204,16 @@ PHP
         return false;
     }
 
-    private function collectDefinedVariablesFromForeach(Node $node): void
+    private function isStaticVariable(Node $parentNode): bool
     {
-        if (! $node instanceof Foreach_) {
-            return;
+        // definition of static variable
+        if ($parentNode instanceof StaticVar) {
+            $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentParentNode instanceof Static_) {
+                return true;
+            }
         }
 
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node): void {
-            if ($node instanceof Assign || $node instanceof AssignRef) {
-                if (! $node->var instanceof Variable) {
-                    return;
-                }
-
-                $variableName = $this->getName($node->var);
-                if ($variableName === null) {
-                    return;
-                }
-
-                $this->definedVariables[] = $variableName;
-            }
-        });
+        return false;
     }
 }

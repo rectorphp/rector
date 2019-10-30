@@ -126,6 +126,19 @@ PHP
         return $node;
     }
 
+    private function refactorFuncCall(FuncCall $funcCall): FuncCall
+    {
+        foreach (self::FUNCTIONS_WITH_REGEX_PATTERN as $function => $position) {
+            if (! $this->isName($funcCall, $function)) {
+                continue;
+            }
+
+            $this->refactorArgument($funcCall->args[$position]);
+        }
+
+        return $funcCall;
+    }
+
     private function refactorArgument(Arg $arg): void
     {
         if (! $arg->value instanceof String_) {
@@ -146,18 +159,5 @@ PHP
 
             return $innerPattern . $match['close'];
         });
-    }
-
-    private function refactorFuncCall(FuncCall $funcCall): FuncCall
-    {
-        foreach (self::FUNCTIONS_WITH_REGEX_PATTERN as $function => $position) {
-            if (! $this->isName($funcCall, $function)) {
-                continue;
-            }
-
-            $this->refactorArgument($funcCall->args[$position]);
-        }
-
-        return $funcCall;
     }
 }

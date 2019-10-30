@@ -134,6 +134,36 @@ PHP
         return $nodes;
     }
 
+    /**
+     * @param Name|Identifier $node
+     * @return Name|Identifier
+     */
+    private function processNameOrIdentifier(Node $node): ?Node
+    {
+        // no name → skip
+        if ($node->toString() === '') {
+            return null;
+        }
+
+        foreach ($this->namespacePrefixesWithExcludedClasses as $namespacePrefix => $excludedClasses) {
+            if (! $this->isName($node, $namespacePrefix . '*')) {
+                continue;
+            }
+
+            if (is_array($excludedClasses) && $this->isNames($node, $excludedClasses)) {
+                return null;
+            }
+
+            if ($node instanceof Name) {
+                return $this->processName($node);
+            }
+
+            return $this->processIdentifier($node);
+        }
+
+        return null;
+    }
+
     private function processName(Name $name): Name
     {
         $nodeName = $this->getName($name);
@@ -174,35 +204,5 @@ PHP
         $identifier->name = $lastNewNamePart;
 
         return $identifier;
-    }
-
-    /**
-     * @param Name|Identifier $node
-     * @return Name|Identifier
-     */
-    private function processNameOrIdentifier(Node $node): ?Node
-    {
-        // no name → skip
-        if ($node->toString() === '') {
-            return null;
-        }
-
-        foreach ($this->namespacePrefixesWithExcludedClasses as $namespacePrefix => $excludedClasses) {
-            if (! $this->isName($node, $namespacePrefix . '*')) {
-                continue;
-            }
-
-            if (is_array($excludedClasses) && $this->isNames($node, $excludedClasses)) {
-                return null;
-            }
-
-            if ($node instanceof Name) {
-                return $this->processName($node);
-            }
-
-            return $this->processIdentifier($node);
-        }
-
-        return null;
     }
 }

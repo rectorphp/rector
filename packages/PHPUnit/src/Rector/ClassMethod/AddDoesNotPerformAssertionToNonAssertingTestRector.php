@@ -119,27 +119,6 @@ PHP
         return $node;
     }
 
-    private function addDoesNotPerformAssertion(ClassMethod $classMethod): void
-    {
-        // A. create new doc
-        $doc = $classMethod->getDocComment();
-        if ($doc === null) {
-            $text = sprintf('/**%s * @doesNotPerformAssertion%s */', PHP_EOL, PHP_EOL);
-            $classMethod->setDocComment(new Doc($text));
-            return;
-        }
-
-        // B. extend current doc
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $this->getPhpDocInfo($classMethod);
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
-        $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@doesNotPerformAssertion', new GenericTagValueNode(
-            ''
-        ));
-
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($classMethod, $phpDocInfo);
-    }
-
     private function shouldSkipClassMethod(ClassMethod $classMethod): bool
     {
         if (! $this->isInTestClass($classMethod)) {
@@ -164,6 +143,27 @@ PHP
         return false;
     }
 
+    private function addDoesNotPerformAssertion(ClassMethod $classMethod): void
+    {
+        // A. create new doc
+        $doc = $classMethod->getDocComment();
+        if ($doc === null) {
+            $text = sprintf('/**%s * @doesNotPerformAssertion%s */', PHP_EOL, PHP_EOL);
+            $classMethod->setDocComment(new Doc($text));
+            return;
+        }
+
+        // B. extend current doc
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $this->getPhpDocInfo($classMethod);
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
+        $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@doesNotPerformAssertion', new GenericTagValueNode(
+            ''
+        ));
+
+        $this->docBlockManipulator->updateNodeWithPhpDocInfo($classMethod, $phpDocInfo);
+    }
+
     private function containsAssertCall(ClassMethod $classMethod): bool
     {
         $cacheHash = md5($this->print($classMethod));
@@ -185,31 +185,56 @@ PHP
         return $hasNestedAssertCall;
     }
 
-    private function findClassMethodInFile(string $fileName, string $methodName): ?ClassMethod
+    private function hasDirectAssertCall(ClassMethod $classMethod): bool
     {
-        // skip already anayzed method to prevent cycling
-        if (isset($this->analyzedMethodsInFileName[$fileName][$methodName])) {
-            return $this->analyzedMethodsInFileName[$fileName][$methodName];
-        }
-
-        $smartFileInfo = new SmartFileInfo($fileName);
-        $examinedMethodNodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($smartFileInfo);
-
-        /** @var ClassMethod|null $examinedClassMethod */
-        $examinedClassMethod = $this->betterNodeFinder->findFirst(
-            $examinedMethodNodes,
-            function (Node $node) use ($methodName): bool {
-                if (! $node instanceof ClassMethod) {
-                    return false;
-                }
-
-                return $this->isName($node, $methodName);
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node): bool {
+            if (! $node instanceof MethodCall && ! $node instanceof StaticCall) {
+                return false;
             }
-        );
 
-        $this->analyzedMethodsInFileName[$fileName][$methodName] = $examinedClassMethod;
+            if ($this->isName($node->name, 'assert*')) {
+                return true;
+            }
 
-        return $examinedClassMethod;
+            // expectException(...)
+            if ($this->isName($node->name, 'expectException*')) {
+                return true;
+            }
+
+            // setExpectException (deprecated method)
+            if ($this->isName($node->name, 'setExpectedException*')) {
+                return true;
+            }
+
+            return false;
+        });
+    }
+
+    private function hasNestedAssertCall(ClassMethod $classMethod): bool
+    {
+        $currentClassMethod = $classMethod;
+
+        // over and over the same method :/
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use (
+            $currentClassMethod
+        ): bool {
+            if (! $node instanceof MethodCall && ! $node instanceof StaticCall) {
+                return false;
+            }
+
+            $classMethod = $this->findClassMethod($node);
+
+            // skip circular self calls
+            if ($currentClassMethod === $classMethod) {
+                return false;
+            }
+
+            if ($classMethod) {
+                return $this->containsAssertCall($classMethod);
+            }
+
+            return false;
+        });
     }
 
     /**
@@ -267,55 +292,30 @@ PHP
         return $this->findClassMethodInFile($fileName, $methodName);
     }
 
-    private function hasDirectAssertCall(ClassMethod $classMethod): bool
+    private function findClassMethodInFile(string $fileName, string $methodName): ?ClassMethod
     {
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node): bool {
-            if (! $node instanceof MethodCall && ! $node instanceof StaticCall) {
-                return false;
+        // skip already anayzed method to prevent cycling
+        if (isset($this->analyzedMethodsInFileName[$fileName][$methodName])) {
+            return $this->analyzedMethodsInFileName[$fileName][$methodName];
+        }
+
+        $smartFileInfo = new SmartFileInfo($fileName);
+        $examinedMethodNodes = $this->fileInfoParser->parseFileInfoToNodesAndDecorate($smartFileInfo);
+
+        /** @var ClassMethod|null $examinedClassMethod */
+        $examinedClassMethod = $this->betterNodeFinder->findFirst(
+            $examinedMethodNodes,
+            function (Node $node) use ($methodName): bool {
+                if (! $node instanceof ClassMethod) {
+                    return false;
+                }
+
+                return $this->isName($node, $methodName);
             }
+        );
 
-            if ($this->isName($node->name, 'assert*')) {
-                return true;
-            }
+        $this->analyzedMethodsInFileName[$fileName][$methodName] = $examinedClassMethod;
 
-            // expectException(...)
-            if ($this->isName($node->name, 'expectException*')) {
-                return true;
-            }
-
-            // setExpectException (deprecated method)
-            if ($this->isName($node->name, 'setExpectedException*')) {
-                return true;
-            }
-
-            return false;
-        });
-    }
-
-    private function hasNestedAssertCall(ClassMethod $classMethod): bool
-    {
-        $currentClassMethod = $classMethod;
-
-        // over and over the same method :/
-        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use (
-            $currentClassMethod
-        ): bool {
-            if (! $node instanceof MethodCall && ! $node instanceof StaticCall) {
-                return false;
-            }
-
-            $classMethod = $this->findClassMethod($node);
-
-            // skip circular self calls
-            if ($currentClassMethod === $classMethod) {
-                return false;
-            }
-
-            if ($classMethod) {
-                return $this->containsAssertCall($classMethod);
-            }
-
-            return false;
-        });
+        return $examinedClassMethod;
     }
 }

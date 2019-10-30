@@ -87,6 +87,14 @@ final class NodeAnnotationReader
         return $propertyAnnotation;
     }
 
+    private function createClassReflectionFromNode(Class_ $class): ReflectionClass
+    {
+        /** @var string $className */
+        $className = $this->nameResolver->getName($class);
+
+        return new ReflectionClass($className);
+    }
+
     private function createPropertyReflectionFromPropertyNode(Property $property): ?ReflectionProperty
     {
         /** @var string $propertyName */
@@ -106,13 +114,5 @@ final class NodeAnnotationReader
             // in case of PHPUnit property or just-added property
             return null;
         }
-    }
-
-    private function createClassReflectionFromNode(Class_ $class): ReflectionClass
-    {
-        /** @var string $className */
-        $className = $this->nameResolver->getName($class);
-
-        return new ReflectionClass($className);
     }
 }

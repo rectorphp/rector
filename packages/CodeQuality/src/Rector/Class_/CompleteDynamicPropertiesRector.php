@@ -126,41 +126,6 @@ PHP
     }
 
     /**
-     * @param Type[] $fetchedLocalPropertyNameToTypes
-     * @param string[] $propertiesToComplete
-     * @return Property[]
-     */
-    private function createNewProperties(array $fetchedLocalPropertyNameToTypes, array $propertiesToComplete): array
-    {
-        $newProperties = [];
-        foreach ($fetchedLocalPropertyNameToTypes as $propertyName => $propertyType) {
-            if (! in_array($propertyName, $propertiesToComplete, true)) {
-                continue;
-            }
-
-            $propertyBuilder = $this->builderFactory->property($propertyName);
-            $propertyBuilder->makePublic();
-            $property = $propertyBuilder->getNode();
-
-            if ($this->isAtLeastPhpVersion('7.4')) {
-                $phpStanNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
-                if ($phpStanNode) {
-                    $property->type = $phpStanNode;
-                } else {
-                    // fallback to doc type in PHP 7.4
-                    $this->docBlockManipulator->changeVarTag($property, $propertyType);
-                }
-            } else {
-                $this->docBlockManipulator->changeVarTag($property, $propertyType);
-            }
-
-            $newProperties[] = $property;
-        }
-
-        return $newProperties;
-    }
-
-    /**
      * @return Type[]
      */
     private function resolveFetchedLocalPropertyNameToType(Class_ $class): array
@@ -220,16 +185,39 @@ PHP
         return $propertyNames;
     }
 
-    private function resolvePropertyFetchType(Node $node): Type
+    /**
+     * @param Type[] $fetchedLocalPropertyNameToTypes
+     * @param string[] $propertiesToComplete
+     * @return Property[]
+     */
+    private function createNewProperties(array $fetchedLocalPropertyNameToTypes, array $propertiesToComplete): array
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $newProperties = [];
+        foreach ($fetchedLocalPropertyNameToTypes as $propertyName => $propertyType) {
+            if (! in_array($propertyName, $propertiesToComplete, true)) {
+                continue;
+            }
 
-        // possible get type
-        if ($parentNode instanceof Assign) {
-            return $this->getStaticType($parentNode->expr);
+            $propertyBuilder = $this->builderFactory->property($propertyName);
+            $propertyBuilder->makePublic();
+            $property = $propertyBuilder->getNode();
+
+            if ($this->isAtLeastPhpVersion('7.4')) {
+                $phpStanNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
+                if ($phpStanNode) {
+                    $property->type = $phpStanNode;
+                } else {
+                    // fallback to doc type in PHP 7.4
+                    $this->docBlockManipulator->changeVarTag($property, $propertyType);
+                }
+            } else {
+                $this->docBlockManipulator->changeVarTag($property, $propertyType);
+            }
+
+            $newProperties[] = $property;
         }
 
-        return new MixedType();
+        return $newProperties;
     }
 
     private function shouldSkipForLaravelCollection(Node $node): bool
@@ -244,5 +232,17 @@ PHP
         }
 
         return $this->isName($staticCallOrClassMethod->class, self::LARAVEL_COLLECTION_CLASS);
+    }
+
+    private function resolvePropertyFetchType(Node $node): Type
+    {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        // possible get type
+        if ($parentNode instanceof Assign) {
+            return $this->getStaticType($parentNode->expr);
+        }
+
+        return new MixedType();
     }
 }

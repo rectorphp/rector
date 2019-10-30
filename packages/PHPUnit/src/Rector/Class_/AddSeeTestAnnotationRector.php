@@ -98,30 +98,6 @@ PHP
         return $node;
     }
 
-    private function resolveTestCaseClassName(string $className): ?string
-    {
-        if (class_exists($className . 'Test')) {
-            return $className . 'Test';
-        }
-
-        $shortClassName = Strings::after($className, '\\', -1);
-        $testShortClassName = $shortClassName . 'Test';
-
-        $phpUnitTestCaseClasses = $this->getPhpUnitTestCaseClasses();
-        foreach ($phpUnitTestCaseClasses as $declaredClass) {
-            if (Strings::endsWith($declaredClass, '\\' . $testShortClassName)) {
-                return $declaredClass;
-            }
-        }
-
-        return null;
-    }
-
-    private function createSeePhpDocTagNode(string $className): PhpDocTagNode
-    {
-        return new PhpDocTagNode('@see', new AttributeAwareGenericTagValueNode('\\' . $className));
-    }
-
     private function shouldSkipClass(Class_ $class): bool
     {
         if ($class->isAnonymous()) {
@@ -153,6 +129,30 @@ PHP
         }
 
         return false;
+    }
+
+    private function resolveTestCaseClassName(string $className): ?string
+    {
+        if (class_exists($className . 'Test')) {
+            return $className . 'Test';
+        }
+
+        $shortClassName = Strings::after($className, '\\', -1);
+        $testShortClassName = $shortClassName . 'Test';
+
+        $phpUnitTestCaseClasses = $this->getPhpUnitTestCaseClasses();
+        foreach ($phpUnitTestCaseClasses as $declaredClass) {
+            if (Strings::endsWith($declaredClass, '\\' . $testShortClassName)) {
+                return $declaredClass;
+            }
+        }
+
+        return null;
+    }
+
+    private function createSeePhpDocTagNode(string $className): PhpDocTagNode
+    {
+        return new PhpDocTagNode('@see', new AttributeAwareGenericTagValueNode('\\' . $className));
     }
 
     /**

@@ -513,6 +513,25 @@ final class DocBlockManipulator
     }
 
     /**
+     * @todo Extract this logic to own service
+     */
+    private function areTypesEquals(Type $firstType, Type $secondType): bool
+    {
+        $firstTypeHash = $this->staticTypeMapper->createTypeHash($firstType);
+        $secondTypeHash = $this->staticTypeMapper->createTypeHash($secondType);
+
+        if ($firstTypeHash === $secondTypeHash) {
+            return true;
+        }
+
+        if ($this->areArrayTypeWithSingleObjectChildToParent($firstType, $secondType)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * All class-type tags are FQN by default to keep default convention through the code.
      * Some people prefer FQN, some short. FQN can be shorten with \Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector later, while short prolonged not
      */
@@ -541,25 +560,6 @@ final class DocBlockManipulator
         }
     }
 
-    /**
-     * @todo Extract this logic to own service
-     */
-    private function areTypesEquals(Type $firstType, Type $secondType): bool
-    {
-        $firstTypeHash = $this->staticTypeMapper->createTypeHash($firstType);
-        $secondTypeHash = $this->staticTypeMapper->createTypeHash($secondType);
-
-        if ($firstTypeHash === $secondTypeHash) {
-            return true;
-        }
-
-        if ($this->areArrayTypeWithSingleObjectChildToParent($firstType, $secondType)) {
-            return true;
-        }
-
-        return false;
-    }
-
     private function ensureParamNameStartsWithDollar(string $paramName, string $location): void
     {
         if (Strings::startsWith($paramName, '$')) {
@@ -571,15 +571,6 @@ final class DocBlockManipulator
             $paramName,
             $location
         ));
-    }
-
-    private function getFqnClassName(ObjectType $objectType): string
-    {
-        if ($objectType instanceof ShortenedObjectType) {
-            return $objectType->getFullyQualifiedName();
-        }
-
-        return $objectType->getClassName();
     }
 
     /**
@@ -608,5 +599,14 @@ final class DocBlockManipulator
         }
 
         return false;
+    }
+
+    private function getFqnClassName(ObjectType $objectType): string
+    {
+        if ($objectType instanceof ShortenedObjectType) {
+            return $objectType->getFullyQualifiedName();
+        }
+
+        return $objectType->getClassName();
     }
 }

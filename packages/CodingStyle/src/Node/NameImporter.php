@@ -90,6 +90,16 @@ final class NameImporter
         return $parentNode instanceof UseUse;
     }
 
+    private function isFunctionOrConstantImportWithSingleName(Name $name): bool
+    {
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof ConstFetch && ! $parentNode instanceof FuncCall) {
+            return false;
+        }
+
+        return count($name->parts) === 1;
+    }
+
     private function importNameAndCollectNewUseStatement(
         Name $name,
         FullyQualifiedObjectType $fullyQualifiedObjectType
@@ -131,15 +141,5 @@ final class NameImporter
         } else {
             $this->useAddingCommander->addUseImport($name, $fullyQualifiedObjectType);
         }
-    }
-
-    private function isFunctionOrConstantImportWithSingleName(Name $name): bool
-    {
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof ConstFetch && ! $parentNode instanceof FuncCall) {
-            return false;
-        }
-
-        return count($name->parts) === 1;
     }
 }

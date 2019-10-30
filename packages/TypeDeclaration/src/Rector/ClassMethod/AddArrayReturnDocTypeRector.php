@@ -148,6 +148,19 @@ PHP
         return false;
     }
 
+    private function shouldSkipArrayType(ArrayType $arrayType, ClassMethod $classMethod): bool
+    {
+        if ($this->isNewAndCurrentTypeBothCallable($arrayType, $classMethod)) {
+            return true;
+        }
+
+        if ($this->isMixedOfSpecificOverride($arrayType, $classMethod)) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function isNewAndCurrentTypeBothCallable(ArrayType $newArrayType, ClassMethod $classMethod): bool
     {
         $currentPhpDocInfo = $this->getPhpDocInfo($classMethod);
@@ -188,18 +201,5 @@ PHP
         }
 
         return true;
-    }
-
-    private function shouldSkipArrayType(ArrayType $arrayType, ClassMethod $classMethod): bool
-    {
-        if ($this->isNewAndCurrentTypeBothCallable($arrayType, $classMethod)) {
-            return true;
-        }
-
-        if ($this->isMixedOfSpecificOverride($arrayType, $classMethod)) {
-            return true;
-        }
-
-        return false;
     }
 }

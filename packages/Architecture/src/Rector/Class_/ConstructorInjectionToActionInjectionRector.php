@@ -169,6 +169,48 @@ PHP
         return $node;
     }
 
+    private function reset(): void
+    {
+        $this->propertyFetchToParams = [];
+        $this->propertyFetchToParamsToRemoveFromConstructor = [];
+    }
+
+    private function collectPropertyFetchToParams(ClassMethod $classMethod): void
+    {
+        foreach ((array) $classMethod->stmts as $constructorStmt) {
+            $propertyToVariable = $this->resolveAssignPropertyToVariableOrNull($constructorStmt);
+            if ($propertyToVariable === null) {
+                continue;
+            }
+
+            [$propertyFetchName, $variableName] = $propertyToVariable;
+
+            $param = $this->classManipulator->findMethodParamByName($classMethod, $variableName);
+            if ($param === null) {
+                continue;
+            }
+
+            // random type, we cannot autowire in action
+            if ($param->type === null) {
+                continue;
+            }
+
+            $paramType = $this->getName($param->type);
+            if ($paramType === null) {
+                continue;
+            }
+
+            if ($this->typeAnalyzer->isPhpReservedType($paramType)) {
+                continue;
+            }
+
+            // it's a match
+            $this->propertyFetchToParams[$propertyFetchName] = $param;
+        }
+
+        $this->propertyFetchToParamsToRemoveFromConstructor = $this->propertyFetchToParams;
+    }
+
     private function changePropertyUsageToParameter(ClassMethod $classMethod, string $propertyName, Param $param): void
     {
         $currentlyAddedLocalVariables = [];
@@ -209,46 +251,15 @@ PHP
         }
     }
 
-    private function collectPropertyFetchToParams(ClassMethod $classMethod): void
+    private function removeUnusedPropertiesAndConstructorParams(Class_ $class, ClassMethod $classMethod): void
     {
-        foreach ((array) $classMethod->stmts as $constructorStmt) {
-            $propertyToVariable = $this->resolveAssignPropertyToVariableOrNull($constructorStmt);
-            if ($propertyToVariable === null) {
-                continue;
-            }
-
-            [$propertyFetchName, $variableName] = $propertyToVariable;
-
-            $param = $this->classManipulator->findMethodParamByName($classMethod, $variableName);
-            if ($param === null) {
-                continue;
-            }
-
-            // random type, we cannot autowire in action
-            if ($param->type === null) {
-                continue;
-            }
-
-            $paramType = $this->getName($param->type);
-            if ($paramType === null) {
-                continue;
-            }
-
-            if ($this->typeAnalyzer->isPhpReservedType($paramType)) {
-                continue;
-            }
-
-            // it's a match
-            $this->propertyFetchToParams[$propertyFetchName] = $param;
+        $this->removeAssignsFromConstructor($classMethod);
+        foreach ($this->propertyFetchToParamsToRemoveFromConstructor as $propertyFetchName => $param) {
+            $this->changePropertyUsageToParameter($classMethod, $propertyFetchName, $param);
         }
-
-        $this->propertyFetchToParamsToRemoveFromConstructor = $this->propertyFetchToParams;
-    }
-
-    private function reset(): void
-    {
-        $this->propertyFetchToParams = [];
-        $this->propertyFetchToParamsToRemoveFromConstructor = [];
+        $this->classMethodManipulator->removeUnusedParameters($classMethod);
+        $this->removeUnusedProperties($class);
+        $this->removeConstructIfEmpty($class, $classMethod);
     }
 
     /**
@@ -284,17 +295,6 @@ PHP
         }
 
         return [$propertyFetchName, $variableName];
-    }
-
-    private function removeUnusedPropertiesAndConstructorParams(Class_ $class, ClassMethod $classMethod): void
-    {
-        $this->removeAssignsFromConstructor($classMethod);
-        foreach ($this->propertyFetchToParamsToRemoveFromConstructor as $propertyFetchName => $param) {
-            $this->changePropertyUsageToParameter($classMethod, $propertyFetchName, $param);
-        }
-        $this->classMethodManipulator->removeUnusedParameters($classMethod);
-        $this->removeUnusedProperties($class);
-        $this->removeConstructIfEmpty($class, $classMethod);
     }
 
     private function removeAssignsFromConstructor(ClassMethod $classMethod): void

@@ -119,6 +119,19 @@ PHP
     }
 
     /**
+     * @param Assign|MethodCall $node
+     */
+    private function shouldSkipLeftVariable(Node $node): bool
+    {
+        if (! $node->var instanceof Variable) {
+            return true;
+        }
+
+        // local method call
+        return $this->isName($node->var, 'this');
+    }
+
+    /**
      * @param ClassMethod|Function_|Closure $node
      */
     private function shouldAddEmptyLine(?string $currentStmtVariableName, Node $node, int $key): bool
@@ -169,18 +182,5 @@ PHP
         $currentNode = $node->stmts[$key];
 
         return abs($currentNode->getLine() - $previousNode->getLine()) >= 2;
-    }
-
-    /**
-     * @param Assign|MethodCall $node
-     */
-    private function shouldSkipLeftVariable(Node $node): bool
-    {
-        if (! $node->var instanceof Variable) {
-            return true;
-        }
-
-        // local method call
-        return $this->isName($node->var, 'this');
     }
 }

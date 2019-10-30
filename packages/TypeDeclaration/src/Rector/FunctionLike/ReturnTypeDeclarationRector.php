@@ -163,62 +163,6 @@ PHP
     }
 
     /**
-     * Add typehint to all children class methods
-     */
-    private function populateChildren(ClassMethod $classMethod, Type $returnType): void
-    {
-        $methodName = $this->getName($classMethod);
-        if ($methodName === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        if (! is_string($className)) {
-            throw new ShouldNotHappenException();
-        }
-
-        $childrenClassLikes = $this->parsedNodesByType->findChildrenOfClass($className);
-        if ($childrenClassLikes === []) {
-            return;
-        }
-
-        // update their methods as well
-        foreach ($childrenClassLikes as $childClassLike) {
-            $usedTraits = $this->parsedNodesByType->findUsedTraitsInClass($childClassLike);
-            foreach ($usedTraits as $trait) {
-                $this->addReturnTypeToChildMethod($trait, $classMethod, $returnType);
-            }
-
-            $this->addReturnTypeToChildMethod($childClassLike, $classMethod, $returnType);
-        }
-    }
-
-    private function addReturnTypeToChildMethod(
-        ClassLike $classLike,
-        ClassMethod $classMethod,
-        Type $returnType
-    ): void {
-        $methodName = $this->getName($classMethod);
-
-        $currentClassMethod = $classLike->getMethod($methodName);
-        if ($currentClassMethod === null) {
-            return;
-        }
-
-        $resolvedChildTypeNode = $this->resolveChildTypeNode($returnType);
-        if ($resolvedChildTypeNode === null) {
-            return;
-        }
-
-        $currentClassMethod->returnType = $resolvedChildTypeNode;
-
-        // make sure the type is not overridden
-        $currentClassMethod->returnType->setAttribute(self::DO_NOT_CHANGE, true);
-
-        $this->notifyNodeChangeFileInfo($currentClassMethod);
-    }
-
-    /**
      * @param ClassMethod|Function_ $node
      */
     private function shouldSkip(Node $node): bool
@@ -267,6 +211,71 @@ PHP
         return false;
     }
 
+    /**
+     * Add typehint to all children class methods
+     */
+    private function populateChildren(ClassMethod $classMethod, Type $returnType): void
+    {
+        $methodName = $this->getName($classMethod);
+        if ($methodName === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        if (! is_string($className)) {
+            throw new ShouldNotHappenException();
+        }
+
+        $childrenClassLikes = $this->parsedNodesByType->findChildrenOfClass($className);
+        if ($childrenClassLikes === []) {
+            return;
+        }
+
+        // update their methods as well
+        foreach ($childrenClassLikes as $childClassLike) {
+            $usedTraits = $this->parsedNodesByType->findUsedTraitsInClass($childClassLike);
+            foreach ($usedTraits as $trait) {
+                $this->addReturnTypeToChildMethod($trait, $classMethod, $returnType);
+            }
+
+            $this->addReturnTypeToChildMethod($childClassLike, $classMethod, $returnType);
+        }
+    }
+
+    private function isArrayIterableIteratorCoType(Node $node, Type $returnType): bool
+    {
+        if (! $this->isNames($node->returnType, ['iterable', 'Iterator', 'array'])) {
+            return false;
+        }
+
+        return $this->isStaticTypeIterable($returnType);
+    }
+
+    private function addReturnTypeToChildMethod(
+        ClassLike $classLike,
+        ClassMethod $classMethod,
+        Type $returnType
+    ): void {
+        $methodName = $this->getName($classMethod);
+
+        $currentClassMethod = $classLike->getMethod($methodName);
+        if ($currentClassMethod === null) {
+            return;
+        }
+
+        $resolvedChildTypeNode = $this->resolveChildTypeNode($returnType);
+        if ($resolvedChildTypeNode === null) {
+            return;
+        }
+
+        $currentClassMethod->returnType = $resolvedChildTypeNode;
+
+        // make sure the type is not overridden
+        $currentClassMethod->returnType->setAttribute(self::DO_NOT_CHANGE, true);
+
+        $this->notifyNodeChangeFileInfo($currentClassMethod);
+    }
+
     private function isStaticTypeIterable(Type $type): bool
     {
         if ($type instanceof ArrayType) {
@@ -294,14 +303,5 @@ PHP
         }
 
         return false;
-    }
-
-    private function isArrayIterableIteratorCoType(Node $node, Type $returnType): bool
-    {
-        if (! $this->isNames($node->returnType, ['iterable', 'Iterator', 'array'])) {
-            return false;
-        }
-
-        return $this->isStaticTypeIterable($returnType);
     }
 }

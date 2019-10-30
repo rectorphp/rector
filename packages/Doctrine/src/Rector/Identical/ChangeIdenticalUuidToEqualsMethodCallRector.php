@@ -86,16 +86,6 @@ PHP
         return $this->createMethodCall($entityMethodCall, 'equals', [$fromStringValue]);
     }
 
-    private function isAlreadyUuidType(Expr $expr): bool
-    {
-        $comparedValueObjectType = $this->getStaticType($expr);
-        if (! $comparedValueObjectType instanceof ObjectType) {
-            return false;
-        }
-
-        return $comparedValueObjectType->getClassName() === UuidInterface::class;
-    }
-
     /**
      * @return Expr[]|null
      */
@@ -118,5 +108,15 @@ PHP
         }
 
         return null;
+    }
+
+    private function isAlreadyUuidType(Expr $expr): bool
+    {
+        $comparedValueObjectType = $this->getStaticType($expr);
+        if (! $comparedValueObjectType instanceof ObjectType) {
+            return false;
+        }
+
+        return $comparedValueObjectType->getClassName() === UuidInterface::class;
     }
 }

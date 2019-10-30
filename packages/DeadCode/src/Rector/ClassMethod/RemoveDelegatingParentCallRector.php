@@ -104,6 +104,40 @@ PHP
         return null;
     }
 
+    private function shouldSkipClass(?ClassLike $classLike): bool
+    {
+        if (! $classLike instanceof Class_) {
+            return true;
+        }
+
+        if ($classLike->extends === null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Node|Expression $node
+     */
+    private function unwrapExpression(Node $node): Node
+    {
+        if ($node instanceof Expression) {
+            return $node->expr;
+        }
+
+        return $node;
+    }
+
+    private function isMethodReturnType(ClassMethod $classMethod, string $type): bool
+    {
+        if ($classMethod->returnType === null) {
+            return false;
+        }
+
+        return $this->isName($classMethod->returnType, $type);
+    }
+
     private function matchStaticCall(Node $node): ?StaticCall
     {
         // must be static call
@@ -145,6 +179,17 @@ PHP
         }
 
         return true;
+    }
+
+    private function hasRequiredAnnotation(Node $node): bool
+    {
+        if ($node->getDocComment() === null) {
+            return false;
+        }
+
+        $docCommentText = $node->getDocComment()->getText();
+
+        return (bool) Strings::match($docCommentText, '#\s\@required\s#si');
     }
 
     /**
@@ -199,50 +244,5 @@ PHP
         }
 
         return false;
-    }
-
-    /**
-     * @param Node|Expression $node
-     */
-    private function unwrapExpression(Node $node): Node
-    {
-        if ($node instanceof Expression) {
-            return $node->expr;
-        }
-
-        return $node;
-    }
-
-    private function shouldSkipClass(?ClassLike $classLike): bool
-    {
-        if (! $classLike instanceof Class_) {
-            return true;
-        }
-
-        if ($classLike->extends === null) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function isMethodReturnType(ClassMethod $classMethod, string $type): bool
-    {
-        if ($classMethod->returnType === null) {
-            return false;
-        }
-
-        return $this->isName($classMethod->returnType, $type);
-    }
-
-    private function hasRequiredAnnotation(Node $node): bool
-    {
-        if ($node->getDocComment() === null) {
-            return false;
-        }
-
-        $docCommentText = $node->getDocComment()->getText();
-
-        return (bool) Strings::match($docCommentText, '#\s\@required\s#si');
     }
 }
