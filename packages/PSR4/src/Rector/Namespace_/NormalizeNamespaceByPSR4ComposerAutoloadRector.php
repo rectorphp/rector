@@ -94,7 +94,7 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
 
         $newUseImports = array_unique($newUseImports);
 
-        if ($newUseImports) {
+        if ($newUseImports !== []) {
             $useImports = $this->createUses($newUseImports);
             $node->stmts = array_merge($useImports, $node->stmts);
         }

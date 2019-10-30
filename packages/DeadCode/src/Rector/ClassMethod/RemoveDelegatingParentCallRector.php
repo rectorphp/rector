@@ -109,12 +109,7 @@ PHP
         if (! $classLike instanceof Class_) {
             return true;
         }
-
-        if ($classLike->extends === null) {
-            return true;
-        }
-
-        return false;
+        return $classLike->extends === null;
     }
 
     /**
@@ -173,12 +168,7 @@ PHP
         if (! $this->areArgsAndParamsEqual($staticCall->args, $classMethod->params)) {
             return false;
         }
-
-        if ($this->isParentClassMethodVisibilityOverride($classMethod, $staticCall)) {
-            return false;
-        }
-
-        return true;
+        return ! $this->isParentClassMethodVisibilityOverride($classMethod, $staticCall);
     }
 
     private function hasRequiredAnnotation(Node $node): bool

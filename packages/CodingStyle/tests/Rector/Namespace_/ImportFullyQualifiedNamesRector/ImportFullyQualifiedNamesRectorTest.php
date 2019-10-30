@@ -13,6 +13,7 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
     /**
      * @dataProvider provideNamespacedClasses()
      * @dataProvider provideFunctions()
+     * @dataProvider providerPartials()
      */
     public function test(string $file): void
     {
@@ -21,7 +22,12 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
 
     public function providerPartials(): Iterator
     {
-        // @todo fix later, details
+        yield [__DIR__ . '/Fixture/prevent_duplication.php.inc'];
+    }
+
+    public function skippedProviderPartials(): Iterator
+    {
+//         @todo fix later
         yield [__DIR__ . '/Fixture/doc_combined.php.inc'];
         yield [__DIR__ . '/Fixture/conflicting_endings.php.inc'];
         yield [__DIR__ . '/Fixture/import_return_doc.php.inc'];

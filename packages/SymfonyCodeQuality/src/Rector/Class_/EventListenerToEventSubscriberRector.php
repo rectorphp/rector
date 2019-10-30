@@ -120,7 +120,7 @@ class SomeEventSubscriber implements EventSubscriberInterface
       */
      public static function getSubscribedEvents(): array
      {
-         return ['some_event' => 'methodToBeCalled'];  
+         return ['some_event' => 'methodToBeCalled'];
      }
 
      public function methodToBeCalled()

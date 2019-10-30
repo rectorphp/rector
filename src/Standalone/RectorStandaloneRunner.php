@@ -75,7 +75,7 @@ final class RectorStandaloneRunner
         $phpFileInfos = $this->findFilesInSource($source);
         $this->runRectorOnFileInfos($phpFileInfos);
 
-        if ($isQuietMode === false) {
+        if (! $isQuietMode) {
             $this->reportErrors();
         }
 

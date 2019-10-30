@@ -179,12 +179,7 @@ PHP
         if ($parentNode instanceof Ternary) {
             return true;
         }
-
-        if ($parentNode instanceof Return_) {
-            return true;
-        }
-
-        return false;
+        return $parentNode instanceof Return_;
     }
 
     private function isReflectionParameterGetTypeMethodCall(MethodCall $methodCall): bool
@@ -219,7 +214,7 @@ PHP
     private function refactorReflectionFunctionGetReturnType(MethodCall $methodCall): Node
     {
         $refactoredMethodCall = $this->refactorIfHasReturnTypeWasCalled($methodCall);
-        if ($refactoredMethodCall) {
+        if ($refactoredMethodCall !== null) {
             return $refactoredMethodCall;
         }
 

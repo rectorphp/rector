@@ -57,7 +57,12 @@ final class NameImporter
 
     public function importName(Name $name): ?Name
     {
+        if ($name->getAttribute('virtual_node')) {
+            return null;
+        }
+
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($name);
+
         if (! $staticType instanceof FullyQualifiedObjectType) {
             return null;
         }

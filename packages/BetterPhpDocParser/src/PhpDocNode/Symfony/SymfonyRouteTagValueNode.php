@@ -100,19 +100,19 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode
             $contentItems['name'] = sprintf('name="%s"', $this->name);
         }
 
-        if ($this->methods) {
+        if ($this->methods !== []) {
             $contentItems['methods'] = $this->printArrayItem($this->methods, 'methods');
         }
 
-        if ($this->options) {
+        if ($this->options !== []) {
             $contentItems['options'] = $this->printArrayItem($this->options, 'options');
         }
 
-        if ($this->defaults) {
+        if ($this->defaults !== []) {
             $contentItems['defaults'] = $this->printArrayItem($this->defaults, 'defaults');
         }
 
-        if ($this->requirements) {
+        if ($this->requirements !== []) {
             $contentItems['requirements'] = $this->printArrayItem($this->requirements, 'requirements');
         }
 

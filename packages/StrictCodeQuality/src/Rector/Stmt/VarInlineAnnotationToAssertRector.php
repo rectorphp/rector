@@ -94,7 +94,7 @@ PHP
         }
 
         $isVariableJustCreated = $this->isVariableJustCreated($node, $docVariableName);
-        if ($isVariableJustCreated === false) {
+        if (! $isVariableJustCreated) {
             return $this->refactorFreshlyCreatedNode($node, $phpDocInfo, $variable);
         }
 

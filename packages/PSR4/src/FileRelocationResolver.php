@@ -111,14 +111,14 @@ final class FileRelocationResolver
             $removedParts[] = $reversedNamePart;
         }
 
-        if ($hasStopped === false) {
+        if (! $hasStopped) {
             $rootNameParts = $nameParts;
             $rootNameParts[] = $suffixName;
         } else {
             $rootNameParts = array_reverse($reversedNameParts);
             $rootNameParts[] = $suffixName;
 
-            if ($removedParts) {
+            if ($removedParts !== []) {
                 $rootNameParts = array_merge($rootNameParts, $removedParts);
             }
         }

@@ -92,13 +92,8 @@ PHP
         if (! $this->docBlockManipulator->hasTag($node, self::INJECT_ANNOTATION)) {
             return true;
         }
-
         // it needs @var tag as well, to get the type
-        if (! $this->docBlockManipulator->hasTag($node, 'var')) {
-            return true;
-        }
-
-        return false;
+        return ! $this->docBlockManipulator->hasTag($node, 'var');
     }
 
     private function addPropertyToCollector(Property $property): void

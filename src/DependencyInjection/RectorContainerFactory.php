@@ -41,7 +41,7 @@ final class RectorContainerFactory
         $isDebug = InputDetector::isDebug();
 
         $rectorKernel = new RectorKernel($environment, $isDebug);
-        if ($configFiles) {
+        if ($configFiles !== []) {
             $rectorKernel->setConfigs($configFiles);
         }
 

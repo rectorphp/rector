@@ -168,13 +168,8 @@ final class PropertyFetchManipulator
         if (! $node->var instanceof PropertyFetch) {
             return false;
         }
-
         // must be local property
-        if (! $this->nameResolver->isName($node->var->var, 'this')) {
-            return false;
-        }
-
-        return true;
+        return $this->nameResolver->isName($node->var->var, 'this');
     }
 
     /**

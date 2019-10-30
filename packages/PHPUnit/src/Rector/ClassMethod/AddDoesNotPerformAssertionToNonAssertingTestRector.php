@@ -129,18 +129,13 @@ PHP
             return true;
         }
 
-        if ($classMethod->getDocComment()) {
+        if ($classMethod->getDocComment() !== null) {
             $text = $classMethod->getDocComment();
             if (Strings::match($text->getText(), '#@expectedException\b#')) {
                 return true;
             }
         }
-
-        if ($this->containsAssertCall($classMethod)) {
-            return true;
-        }
-
-        return false;
+        return $this->containsAssertCall($classMethod);
     }
 
     private function addDoesNotPerformAssertion(ClassMethod $classMethod): void
@@ -192,21 +187,7 @@ PHP
                 return false;
             }
 
-            if ($this->isName($node->name, 'assert*')) {
-                return true;
-            }
-
-            // expectException(...)
-            if ($this->isName($node->name, 'expectException*')) {
-                return true;
-            }
-
-            // setExpectException (deprecated method)
-            if ($this->isName($node->name, 'setExpectedException*')) {
-                return true;
-            }
-
-            return false;
+            return $this->isNames($node->name, ['assert*', 'expectException*', 'setExpectedException*']);
         });
     }
 
@@ -229,7 +210,7 @@ PHP
                 return false;
             }
 
-            if ($classMethod) {
+            if ($classMethod !== null) {
                 return $this->containsAssertCall($classMethod);
             }
 
@@ -244,12 +225,12 @@ PHP
     {
         if ($node instanceof MethodCall) {
             $classMethod = $this->parsedNodesByType->findClassMethodByMethodCall($node);
-            if ($classMethod) {
+            if ($classMethod !== null) {
                 return $classMethod;
             }
         } elseif ($node instanceof StaticCall) {
             $classMethod = $this->parsedNodesByType->findClassMethodByStaticCall($node);
-            if ($classMethod) {
+            if ($classMethod !== null) {
                 return $classMethod;
             }
         }

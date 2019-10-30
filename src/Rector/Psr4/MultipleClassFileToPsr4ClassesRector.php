@@ -87,7 +87,7 @@ PHP
         /** @var Namespace_[] $namespaceNodes */
         $namespaceNodes = $this->betterNodeFinder->findInstanceOf($nodes, Namespace_::class);
 
-        if (count($namespaceNodes)) {
+        if (count($namespaceNodes) > 0) {
             $this->processNamespaceNodes($smartFileInfo, $namespaceNodes, $nodes, $shouldDelete);
         } else {
             $this->processNodesWithoutNamespace($nodes, $smartFileInfo, $shouldDelete);
@@ -184,11 +184,7 @@ PHP
 
             $fileDestination = $this->createClassLikeFileDestination($node, $smartFileInfo);
 
-            if ($declareNode) {
-                $nodes = [$declareNode, $node];
-            } else {
-                $nodes = [$node];
-            }
+            $nodes = $declareNode !== null ? [$declareNode, $node] : [$node];
 
             // has file changed?
             if ($shouldDelete) {

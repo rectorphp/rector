@@ -72,17 +72,17 @@ PHP
         }
 
         // 1. is in static call?
-        if ($this->parsedNodesByType->findMethodCallsOnClass($className)) {
+        if ($this->parsedNodesByType->findMethodCallsOnClass($className) !== []) {
             return null;
         }
 
         // 2. is in new?
-        if ($this->parsedNodesByType->findNewNodesByClass($className)) {
+        if ($this->parsedNodesByType->findNewNodesByClass($className) !== []) {
             return null;
         }
 
         // 3. does it have any children
-        if (! $this->parsedNodesByType->findChildrenOfClass($className)) {
+        if ($this->parsedNodesByType->findChildrenOfClass($className) === []) {
             return null;
         }
 

@@ -134,12 +134,7 @@ final class ScreenFileCommand extends AbstractCommand
     private function decorateNodes(array $nodes): void
     {
         $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node): Node {
-            // not useful
-            if ($node instanceof Expression) {
-                $infoNode = $node->expr;
-            } else {
-                $infoNode = $node;
-            }
+            $infoNode = $node instanceof Expression ? $node->expr : $node;
 
             $data = $this->decorateNodeData($infoNode);
 

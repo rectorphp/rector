@@ -412,7 +412,7 @@ final class DocBlockManipulator
             return $node;
         });
 
-        if ($this->hasPhpDocChanged === false) {
+        if (! $this->hasPhpDocChanged) {
             return;
         }
 
@@ -523,12 +523,7 @@ final class DocBlockManipulator
         if ($firstTypeHash === $secondTypeHash) {
             return true;
         }
-
-        if ($this->areArrayTypeWithSingleObjectChildToParent($firstType, $secondType)) {
-            return true;
-        }
-
-        return false;
+        return $this->areArrayTypeWithSingleObjectChildToParent($firstType, $secondType);
     }
 
     /**

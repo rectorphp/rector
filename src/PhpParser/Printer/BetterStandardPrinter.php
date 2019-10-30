@@ -105,13 +105,7 @@ final class BetterStandardPrinter extends Standard
      */
     protected function indent(): void
     {
-        if ($this->tabOrSpaceIndentCharacter === ' ') {
-            // 4 spaces
-            $multiplier = 4;
-        } else {
-            // 1 tab
-            $multiplier = 1;
-        }
+        $multiplier = $this->tabOrSpaceIndentCharacter === ' ' ? 4 : 1;
 
         $this->indentLevel += $multiplier;
         $this->nl .= str_repeat($this->tabOrSpaceIndentCharacter, $multiplier);

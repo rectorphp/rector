@@ -104,12 +104,7 @@ PHP
         if (! $this->isName($methodNode, 'rules')) {
             return true;
         }
-
-        if (! $arrayItem->value instanceof String_ && ! $arrayItem->value instanceof Concat) {
-            return true;
-        }
-
-        return false;
+        return ! $arrayItem->value instanceof String_ && ! $arrayItem->value instanceof Concat;
     }
 
     /**

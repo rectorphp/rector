@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Rector\Concat;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\String_;
+use Rector\CodeQuality\Exception\TooLongException;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -16,6 +18,11 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class JoinStringConcatRector extends AbstractRector
 {
+    /**
+     * @var int
+     */
+    private const LINE_BREAK_POINT = 80;
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Joins concat of 2 strings', [
@@ -56,7 +63,11 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        return $this->joinConcatIfStrings($node);
+        try {
+            return $this->joinConcatIfStrings($node);
+        } catch (TooLongException $tooLongException) {
+            return null;
+        }
     }
 
     /**
@@ -78,6 +89,11 @@ PHP
 
         if (! $concat->right instanceof String_) {
             return $concat;
+        }
+
+        $value = $concat->left->value . $concat->right->value;
+        if (Strings::length($value) >= self::LINE_BREAK_POINT) {
+            throw new TooLongException();
         }
 
         return new String_($concat->left->value . $concat->right->value);

@@ -115,7 +115,7 @@ PHP
                 return null;
             }
 
-            if ($node->default) {
+            if ($node->default !== null) {
                 return null;
             }
 
@@ -199,7 +199,7 @@ PHP
                 return $this->isNames($countedArgument, $propertyNames);
             });
 
-            if ($isNextNodeCountingProperty === false) {
+            if (! $isNextNodeCountingProperty) {
                 return null;
             }
 
@@ -250,13 +250,8 @@ PHP
         )) {
             return true;
         }
-
-        if ($this->propertyFetchManipulator->isLocalPropertyOfNames($expr->right, $propertyNames) && $this->isNull(
+        return $this->propertyFetchManipulator->isLocalPropertyOfNames($expr->right, $propertyNames) && $this->isNull(
             $expr->left
-        )) {
-            return true;
-        }
-
-        return false;
+        );
     }
 }

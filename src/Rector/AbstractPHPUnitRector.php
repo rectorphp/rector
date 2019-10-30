@@ -24,7 +24,7 @@ abstract class AbstractPHPUnitRector extends AbstractRector
         }
 
         $docComment = $classMethod->getDocComment();
-        if ($docComment) {
+        if ($docComment !== null) {
             return (bool) Strings::match($docComment->getText(), '#@test\b#');
         }
 

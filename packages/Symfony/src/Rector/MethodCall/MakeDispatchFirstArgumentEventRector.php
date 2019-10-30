@@ -91,12 +91,7 @@ PHP
         if (! $this->isName($methodCall->name, 'dispatch')) {
             return true;
         }
-
-        if (! isset($methodCall->args[1])) {
-            return true;
-        }
-
-        return false;
+        return ! isset($methodCall->args[1]);
     }
 
     private function refactorStringArgument(MethodCall $methodCall): Node

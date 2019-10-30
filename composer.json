@@ -200,7 +200,7 @@
             "bin/rector dump-rectors -o markdown > docs/AllRectorsOverview.md",
             "bin/rector dump-nodes -o markdown > docs/NodesOverview.md"
         ],
-        "rector": "bin/rector process packages src --config rector-ci.yaml --dry-run"
+        "rector": "bin/rector process packages src tests --config rector-ci.yaml --dry-run"
     },
     "scripts-descriptions": {
         "docs": "Regenerate descriptions of all Rectors to docs/AllRectorsOverview.md file"

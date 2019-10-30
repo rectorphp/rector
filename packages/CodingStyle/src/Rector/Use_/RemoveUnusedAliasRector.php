@@ -267,17 +267,11 @@ PHP
     private function resolveSearchNode(Use_ $node): ?Node
     {
         $searchNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($searchNode) {
+        if ($searchNode !== null) {
             return $searchNode;
         }
 
-        $searchNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if ($searchNode) {
-            return $searchNode;
-        }
-
-        // skip
-        return null;
+        return $node->getAttribute(AttributeKey::NEXT_NODE);
     }
 
     private function resolveUsedNames(Node $searchNode): void

@@ -4,7 +4,6 @@ parameters:
 
     exclude_paths:
         - "/Fixture/"
-        - "/Fixtures/"
         - "/Expected/"
         - "/Source/"
         - "packages/Symfony/src/Bridge/DefaultAnalyzedSymfonyApplicationContainer.php"
@@ -18,5 +17,3 @@ parameters:
     php_version_features: '7.1'
 
 services:
-    Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector: ~
-#    Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector: ~

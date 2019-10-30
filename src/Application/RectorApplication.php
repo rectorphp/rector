@@ -179,7 +179,7 @@ final class RectorApplication
      */
     private function configureStepCount(SymfonyStyle $symfonyStyle): void
     {
-        if ($this->ciDetector->isCiDetected() === false) {
+        if (! $this->ciDetector->isCiDetected()) {
             return;
         }
 

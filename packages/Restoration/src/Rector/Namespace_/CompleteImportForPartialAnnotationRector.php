@@ -126,7 +126,7 @@ PHP
     private function addImportToNamespace(Namespace_ $namespace, string $name, string $alias): Namespace_
     {
         $useBuilder = $this->builderFactory->use($name);
-        if ($alias) {
+        if ($alias !== '') {
             $useBuilder->as($alias);
         }
 

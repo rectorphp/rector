@@ -197,11 +197,7 @@ PHP
         }
 
         $variableName = $this->getName($variable);
-        if ($variableName === null) {
-            return true;
-        }
-
-        return false;
+        return $variableName === null;
     }
 
     private function isStaticVariable(Node $parentNode): bool

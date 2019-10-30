@@ -56,7 +56,7 @@ final class DoctrineDocBlockResolver
         if (is_string($class)) {
             if (ClassExistenceStaticHelper::doesClassLikeExist($class)) {
                 $classNode = $this->parsedNodesByType->findClass($class);
-                if ($classNode) {
+                if ($classNode !== null) {
                     return $this->isDoctrineEntityClass($classNode);
                 }
 
@@ -128,7 +128,7 @@ final class DoctrineDocBlockResolver
             return false;
         }
 
-        if ($propertyPhpDocInfo->getByType(ColumnTagValueNode::class)) {
+        if ($propertyPhpDocInfo->getByType(ColumnTagValueNode::class) !== null) {
             return true;
         }
 

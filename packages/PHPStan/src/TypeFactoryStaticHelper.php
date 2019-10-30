@@ -19,11 +19,7 @@ final class TypeFactoryStaticHelper
     {
         $objectTypes = [];
         foreach ($types as $type) {
-            if ($type instanceof Type) {
-                $objectTypes[] = $type;
-            } else {
-                $objectTypes[] = new ObjectType($type);
-            }
+            $objectTypes[] = $type instanceof Type ? $type : new ObjectType($type);
         }
 
         // this is needed to prevent missing broker static fatal error, for tests with missing class

@@ -245,11 +245,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $tag = ltrim($tag, '@');
 
         if ($phpDocNodeFactory instanceof NameAwarePhpDocNodeFactoryInterface) {
-            if (Strings::lower($phpDocNodeFactory->getName()) === Strings::lower($tag)) {
-                return true;
-            }
-
-            return false;
+            return Strings::lower($phpDocNodeFactory->getName()) === Strings::lower($tag);
         }
 
         if ($phpDocNodeFactory instanceof ClassAwarePhpDocNodeFactoryInterface) {

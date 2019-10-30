@@ -140,9 +140,9 @@ PHP
         if ($classNode !== null && $classNode->hasAttribute(AttributeKey::PARENT_CLASS_NAME)) {
             /** @var string $parentClassName */
             $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-            if ($parentClassName) {
+            if ($parentClassName !== '') {
                 $parentClassConstant = $this->parsedNodesByType->findClassConstant($parentClassName, $constant);
-                if ($parentClassConstant) {
+                if ($parentClassConstant !== null) {
                     // Make sure the parent's constant has been refactored
                     $this->refactor($parentClassConstant);
 

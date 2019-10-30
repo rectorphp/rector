@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
@@ -22,6 +23,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://phpstan.org/r/e909844a-084e-427e-92ac-fed3c2aeabab
+ *
  * @see \Rector\CodeQuality\Tests\Rector\If_\RemoveAlwaysTrueConditionSetInConstructorRector\RemoveAlwaysTrueConditionSetInConstructorRectorTest
  */
 final class RemoveAlwaysTrueConditionSetInConstructorRector extends AbstractRector
@@ -181,7 +183,26 @@ PHP
 
         $resolvedTypes = [];
 
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (
+        // add dfeault vlaue @todo
+        $defaultValue = $property->props[0]->default;
+        if ($defaultValue !== null) {
+            $defaultValueStaticType = $this->getStaticType($defaultValue);
+            $resolvedTypes[] = $defaultValueStaticType;
+        }
+
+        $assignTypes = $this->resolveAssignTypes($class, $propertyName);
+
+        return array_merge($resolvedTypes, $assignTypes);
+    }
+
+    /**
+     * @return Type[]
+     */
+    private function resolveAssignTypes(ClassLike $classLike, string $propertyName): array
+    {
+        $resolvedTypes = [];
+
+        $this->traverseNodesWithCallable($classLike->stmts, function (Node $node) use (
             $propertyName,
             &$resolvedTypes
         ) {

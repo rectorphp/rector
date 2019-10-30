@@ -74,7 +74,7 @@ final class AnnotationContentResolver
                 }
 
                 $start = $this->tryStartWithKey($name, $start, $tokenIterator);
-                if ($start === false) {
+                if (! $start) {
                     $tokenIterator->next();
                     continue;
                 }
@@ -112,7 +112,7 @@ final class AnnotationContentResolver
 
     private function tryStartWithKey(string $name, bool $start, TokenIterator $localTokenIterator): bool
     {
-        if ($start === true) {
+        if ($start) {
             return true;
         }
 

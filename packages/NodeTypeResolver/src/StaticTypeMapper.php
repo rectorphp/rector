@@ -244,7 +244,7 @@ final class StaticTypeMapper
         if ($phpStanType instanceof UnionType) {
             // match array types
             $arrayNode = $this->matchArrayTypes($phpStanType);
-            if ($arrayNode) {
+            if ($arrayNode !== null) {
                 return $arrayNode;
             }
 
@@ -443,6 +443,7 @@ final class StaticTypeMapper
 
         if ($node instanceof Name) {
             $name = $node->toString();
+
             if (ClassExistenceStaticHelper::doesClassLikeExist($name)) {
                 return new FullyQualifiedObjectType($node->toString());
             }

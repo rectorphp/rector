@@ -148,7 +148,7 @@ final class PhpDocInfoPrinter
         $startEndValueObject = $attributeAwareNode->getAttribute(Attribute::PHP_DOC_NODE_INFO) ?: $startEndValueObject;
         $attributeAwareNode = $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($attributeAwareNode);
 
-        if ($startEndValueObject) {
+        if ($startEndValueObject !== null) {
             $isLastToken = ($nodeCount === $i);
 
             $output = $this->addTokensFromTo(
@@ -162,7 +162,7 @@ final class PhpDocInfoPrinter
         }
 
         if ($attributeAwareNode instanceof PhpDocTagNode) {
-            if ($startEndValueObject) {
+            if ($startEndValueObject !== null) {
                 return $this->printPhpDocTagNode($attributeAwareNode, $startEndValueObject, $output);
             }
 
@@ -246,7 +246,7 @@ final class PhpDocInfoPrinter
                     $phpDocTagNode->value->description
                 );
 
-                if (substr_count($nodeOutput, "\n")) {
+                if (substr_count($nodeOutput, "\n") !== 0) {
                     $nodeOutput = Strings::replace($nodeOutput, "#\n#", PHP_EOL . '  * ');
                 }
             }

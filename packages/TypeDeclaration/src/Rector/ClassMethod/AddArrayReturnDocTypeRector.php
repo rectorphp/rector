@@ -153,12 +153,7 @@ PHP
         if ($this->isNewAndCurrentTypeBothCallable($arrayType, $classMethod)) {
             return true;
         }
-
-        if ($this->isMixedOfSpecificOverride($arrayType, $classMethod)) {
-            return true;
-        }
-
-        return false;
+        return $this->isMixedOfSpecificOverride($arrayType, $classMethod);
     }
 
     private function isNewAndCurrentTypeBothCallable(ArrayType $newArrayType, ClassMethod $classMethod): bool
@@ -176,12 +171,7 @@ PHP
         if (! $newArrayType->getItemType()->isCallable()->yes()) {
             return false;
         }
-
-        if (! $currentReturnType->getItemType()->isCallable()->yes()) {
-            return false;
-        }
-
-        return true;
+        return $currentReturnType->getItemType()->isCallable()->yes();
     }
 
     private function isMixedOfSpecificOverride(ArrayType $arrayType, ClassMethod $classMethod): bool
@@ -196,10 +186,6 @@ PHP
         }
 
         $currentReturnType = $currentPhpDocInfo->getReturnType();
-        if (! $currentReturnType instanceof ArrayType) {
-            return false;
-        }
-
-        return true;
+        return $currentReturnType instanceof ArrayType;
     }
 }

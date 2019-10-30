@@ -19,6 +19,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class Application extends SymfonyApplication
 {
@@ -60,7 +61,7 @@ final class Application extends SymfonyApplication
 
         // switch working dir
         $newWorkDir = $this->getNewWorkingDir($input);
-        if ($newWorkDir) {
+        if ($newWorkDir !== '') {
             $oldWorkingDir = getcwd();
             chdir($newWorkDir);
             $output->isDebug() && $output->writeln('Changed CWD form ' . $oldWorkingDir . ' to ' . getcwd());
@@ -81,7 +82,10 @@ final class Application extends SymfonyApplication
 
             $configPath = $this->configuration->getConfigFilePath();
             if ($configPath) {
-                $output->writeln('Config file: ' . realpath($configPath));
+                $configFileInfo = new SmartFileInfo($configPath);
+                $relativeConfigPath = $configFileInfo->getRelativeFilePathFromDirectory(getcwd());
+
+                $output->writeln('Config file: ' . $relativeConfigPath);
                 $shouldFollowByNewline = true;
             }
         }
