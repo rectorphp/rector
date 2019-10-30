@@ -185,7 +185,7 @@ PHP
 
         // add dfeault vlaue @todo
         $defaultValue = $property->props[0]->default;
-        if ($defaultValue) {
+        if ($defaultValue !== null) {
             $defaultValueStaticType = $this->getStaticType($defaultValue);
             $resolvedTypes[] = $defaultValueStaticType;
         }

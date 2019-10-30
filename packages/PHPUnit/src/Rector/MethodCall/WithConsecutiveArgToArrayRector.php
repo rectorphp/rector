@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
@@ -140,7 +141,7 @@ PHP
         // split into chunks of X parameters
         $valueChunks = array_chunk($values, $numberOfParameters);
         foreach ($valueChunks as $valueChunk) {
-            $node->args[] = new Node\Arg($this->createArray($valueChunk));
+            $node->args[] = new Arg($this->createArray($valueChunk));
         }
 
         return $node;

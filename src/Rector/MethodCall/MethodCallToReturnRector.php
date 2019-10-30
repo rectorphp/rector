@@ -6,6 +6,7 @@ namespace Rector\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -77,7 +78,7 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [Node\Stmt\Expression::class];
+        return [Expression::class];
     }
 
     /**

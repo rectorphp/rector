@@ -271,13 +271,7 @@ PHP
             return $searchNode;
         }
 
-        $searchNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if ($searchNode !== null) {
-            return $searchNode;
-        }
-
-        // skip
-        return null;
+        return $node->getAttribute(AttributeKey::NEXT_NODE);
     }
 
     private function resolveUsedNames(Node $searchNode): void
