@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\AnnotationReader;
 
 use Doctrine\Common\Annotations\AnnotationException;
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\Annotation;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -22,18 +22,18 @@ use Throwable;
 final class NodeAnnotationReader
 {
     /**
-     * @var AnnotationReader
+     * @var Reader
      */
-    private $annotationReader;
+    private $reader;
 
     /**
      * @var NameResolver
      */
     private $nameResolver;
 
-    public function __construct(AnnotationReader $annotationReader, NameResolver $nameResolver)
+    public function __construct(Reader $reader, NameResolver $nameResolver)
     {
-        $this->annotationReader = $annotationReader;
+        $this->reader = $reader;
         $this->nameResolver = $nameResolver;
     }
 
@@ -51,7 +51,7 @@ final class NodeAnnotationReader
         $reflectionMethod = new ReflectionMethod($className, $methodName);
 
         try {
-            return $this->annotationReader->getMethodAnnotation($reflectionMethod, $annotationClassName);
+            return $this->reader->getMethodAnnotation($reflectionMethod, $annotationClassName);
         } catch (AnnotationException $annotationException) {
             // unable to laod
             return null;
@@ -65,7 +65,7 @@ final class NodeAnnotationReader
     {
         $classReflection = $this->createClassReflectionFromNode($class);
 
-        return $this->annotationReader->getClassAnnotation($classReflection, $annotationClassName);
+        return $this->reader->getClassAnnotation($classReflection, $annotationClassName);
     }
 
     /**
@@ -79,7 +79,7 @@ final class NodeAnnotationReader
         }
 
         /** @var Annotation|null $propertyAnnotation */
-        $propertyAnnotation = $this->annotationReader->getPropertyAnnotation($propertyReflection, $annotationClassName);
+        $propertyAnnotation = $this->reader->getPropertyAnnotation($propertyReflection, $annotationClassName);
         if ($propertyAnnotation === null) {
             return null;
         }
