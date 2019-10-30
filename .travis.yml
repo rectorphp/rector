@@ -54,7 +54,7 @@ script:
     # Eat your own dog food
     - |
       if [[ $DOG_FOOD == true ]]; then
-          bin/rector process src --set dead-code --dry-run
+          composer rector
       fi
 
     # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
