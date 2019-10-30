@@ -443,6 +443,7 @@ final class StaticTypeMapper
 
         if ($node instanceof Name) {
             $name = $node->toString();
+
             if (ClassExistenceStaticHelper::doesClassLikeExist($name)) {
                 return new FullyQualifiedObjectType($node->toString());
             }

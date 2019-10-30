@@ -187,16 +187,7 @@ PHP
                 return false;
             }
 
-            if ($this->isName($node->name, 'assert*')) {
-                return true;
-            }
-
-            // expectException(...)
-            if ($this->isName($node->name, 'expectException*')) {
-                return true;
-            }
-            // setExpectException (deprecated method)
-            return $this->isName($node->name, 'setExpectedException*');
+            return $this->isNames($node->name, ['assert*', 'expectException*', 'setExpectedException*']);
         });
     }
 

@@ -12,7 +12,7 @@ use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClass;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class NamePostImportTest extends AbstractRectorTestCase
+final class AutoImportNamesParameterTest extends AbstractRectorTestCase
 {
     protected function tearDown(): void
     {
@@ -31,8 +31,9 @@ final class NamePostImportTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/PostImport/class_to_new_with_post_import.php.inc'];
-        yield [__DIR__ . '/Fixture/PostImport/partial_expression.php.inc'];
+        yield [__DIR__ . '/Fixture/AutoImportNamesParameter/class_to_new_with_post_import.php.inc'];
+        yield [__DIR__ . '/Fixture/AutoImportNamesParameter/partial_expression.php.inc'];
+        yield [__DIR__ . '/Fixture/AutoImportNamesParameter/skip_closure_me.php.inc'];
     }
 
     /**
