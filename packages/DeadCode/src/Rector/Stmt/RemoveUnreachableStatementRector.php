@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\While_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -78,6 +79,11 @@ PHP
         // might be PHPStan false positive, better skip
         $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
         if ($previousNode instanceof If_) {
+            $node->setAttribute(AttributeKey::IS_UNREACHABLE, false);
+            return null;
+        }
+
+        if ($previousNode instanceof While_) {
             $node->setAttribute(AttributeKey::IS_UNREACHABLE, false);
             return null;
         }
