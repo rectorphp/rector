@@ -169,7 +169,7 @@ parameters:
 
         - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer\:\:getService\(\) should return object but returns object\|null#'
         - '#Call to function property_exists\(\) with string and (.*?) will always evaluate to false#'
-        - '#Method Rector\\Console\\Option\\SetOptionResolver\:\:separateVersionedAndUnversionedSets\(\) should return array<array<string\>\> but returns array<int, array<int\|string, array<int, string\>\|string\>\>#'
+        - '#Method Rector\\Bootstrap\\SetOptionResolver\:\:separateVersionedAndUnversionedSets\(\) should return array<array<string\>\> but returns array<int, array<int\|string, array<int, string\>\|string\>\>#'
         - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\ClassLike\:\:\$stmts#'
 
         - '#Property Rector\\TypeDeclaration\\TypeInferer\\(.*?)\:\:\$(.*?)TypeInferers \(array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\(.*?)TypeInfererInterface\>\) does not accept array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface\>#'

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\DependencyInjection;
 
 use Psr\Container\ContainerInterface;
-use Rector\Console\Option\SetOptionResolver;
+use Rector\Bootstrap\SetOptionResolver;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\HttpKernel\RectorKernel;
 use Rector\Set\Set;

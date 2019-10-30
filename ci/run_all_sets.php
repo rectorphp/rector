@@ -47,8 +47,7 @@ if ($errors === []) {
 }
 
 foreach ($errors as $error) {
-    echo $error;
-    echo PHP_EOL;
+    echo $error . PHP_EOL;
 }
 
 exit(ShellCode::ERROR);

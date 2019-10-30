@@ -24,7 +24,6 @@ matrix:
           env: STANDALONE=true
         - php: '7.3'
           env: DOG_FOOD=true
-        - php: '7.4snapshot'
 
 install:
     - composer update $COMPOSER_FLAGS
@@ -47,14 +46,14 @@ script:
     - |
       if [[ $STATIC_ANALYSIS == true ]]; then
           composer docs
-          php bin/check_services_in_yaml_configs.php
-          php bin/run_all_sets.php
+          php ci/check_services_in_yaml_configs.php
+          php ci/run_all_sets.php
       fi
 
     # Eat your own dog food
     - |
       if [[ $DOG_FOOD == true ]]; then
-          bin/rector process src --set dead-code --dry-run
+          composer rector
       fi
 
     # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732

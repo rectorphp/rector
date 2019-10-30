@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Console\Option;
+namespace Rector\Bootstrap;
 
 use Nette\Utils\ObjectHelpers;
 use Nette\Utils\Strings;
@@ -43,7 +43,7 @@ final class SetOptionResolver
         return $this->detectFromNameAndDirectory($setName, $configDirectory);
     }
 
-    public function detectFromNameAndDirectory(string $setName, string $configDirectory): ?string
+    public function detectFromNameAndDirectory(string $setName, string $configDirectory): string
     {
         $nearestMatches = $this->findNearestMatchingFiles($configDirectory, $setName);
         if (count($nearestMatches) === 0) {
