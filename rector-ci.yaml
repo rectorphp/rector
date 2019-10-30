@@ -1,2 +1,9 @@
-sets:
-    - 'clean-code'
+parameters:
+    exclude_paths:
+        - "/Fixture/"
+        - "/Fixtures/"
+        - "/Source/"
+        - "/Expected/"
+
+    sets:
+        - "code-quality"

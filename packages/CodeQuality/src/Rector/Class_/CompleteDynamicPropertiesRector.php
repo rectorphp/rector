@@ -139,6 +139,10 @@ PHP
                 return null;
             }
 
+            if (! $node->var instanceof Variable) {
+                return null;
+            }
+
             if (! $this->isName($node->var, 'this')) {
                 return null;
             }

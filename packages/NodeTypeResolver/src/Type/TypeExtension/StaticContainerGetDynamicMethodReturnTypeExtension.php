@@ -13,7 +13,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Psr\Container\ContainerInterface;
-use Rector\Exception\ShouldNotHappenException;
 
 final class StaticContainerGetDynamicMethodReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
@@ -32,7 +31,8 @@ final class StaticContainerGetDynamicMethodReturnTypeExtension implements Dynami
         MethodCall $methodCall,
         Scope $scope
     ): Type {
-        $valueType = $scope->getType($methodCall->args[0]->value);
+        $value = $methodCall->args[0]->value;
+        $valueType = $scope->getType($value);
 
         // we don't know what it is
         if ($valueType instanceof MixedType) {
@@ -43,10 +43,7 @@ final class StaticContainerGetDynamicMethodReturnTypeExtension implements Dynami
             return new ObjectType($valueType->getValue());
         }
 
-        throw new ShouldNotHappenException(sprintf(
-            '%s type given, only "%s" is supported',
-            get_class($valueType),
-            ConstantStringType::class
-        ));
+        // unknown, probably variable
+        return new MixedType();
     }
 }
