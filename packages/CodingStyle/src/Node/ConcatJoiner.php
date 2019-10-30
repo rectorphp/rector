@@ -40,6 +40,12 @@ final class ConcatJoiner
         return [$this->content, $this->placeholderNodes];
     }
 
+    private function reset(): void
+    {
+        $this->content = '';
+        $this->placeholderNodes = [];
+    }
+
     private function processConcatSide(Expr $expr): void
     {
         if ($expr instanceof String_) {
@@ -52,11 +58,5 @@ final class ConcatJoiner
 
             $this->content .= $objectHash;
         }
-    }
-
-    private function reset(): void
-    {
-        $this->content = '';
-        $this->placeholderNodes = [];
     }
 }

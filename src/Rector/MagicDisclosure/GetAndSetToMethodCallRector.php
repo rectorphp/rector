@@ -131,41 +131,6 @@ PHP
         return null;
     }
 
-    private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch, ObjectType $objectType): bool
-    {
-        if (! $this->isObjectType($propertyFetch->var, $objectType)) {
-            return true;
-        }
-
-        if (! $this->propertyFetchManipulator->isMagicOnType($propertyFetch, $objectType)) {
-            return true;
-        }
-
-        // $this->value = $value
-        return $this->propertyFetchManipulator->isPropertyToSelf($propertyFetch);
-    }
-
-    private function createMethodCallNodeFromPropertyFetchNode(
-        PropertyFetch $propertyFetch,
-        string $method
-    ): MethodCall {
-        /** @var Variable $variableNode */
-        $variableNode = $propertyFetch->var;
-
-        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetch)]);
-    }
-
-    private function createMethodCallNodeFromAssignNode(
-        PropertyFetch $propertyFetch,
-        Node $node,
-        string $method
-    ): MethodCall {
-        /** @var Variable $variableNode */
-        $variableNode = $propertyFetch->var;
-
-        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetch), $node]);
-    }
-
     private function processPropertyFetch(PropertyFetch $propertyFetch): ?MethodCall
     {
         foreach ($this->typeToMethodCalls as $type => $transformation) {
@@ -187,5 +152,40 @@ PHP
         }
 
         return null;
+    }
+
+    private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch, ObjectType $objectType): bool
+    {
+        if (! $this->isObjectType($propertyFetch->var, $objectType)) {
+            return true;
+        }
+
+        if (! $this->propertyFetchManipulator->isMagicOnType($propertyFetch, $objectType)) {
+            return true;
+        }
+
+        // $this->value = $value
+        return $this->propertyFetchManipulator->isPropertyToSelf($propertyFetch);
+    }
+
+    private function createMethodCallNodeFromAssignNode(
+        PropertyFetch $propertyFetch,
+        Node $node,
+        string $method
+    ): MethodCall {
+        /** @var Variable $variableNode */
+        $variableNode = $propertyFetch->var;
+
+        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetch), $node]);
+    }
+
+    private function createMethodCallNodeFromPropertyFetchNode(
+        PropertyFetch $propertyFetch,
+        string $method
+    ): MethodCall {
+        /** @var Variable $variableNode */
+        $variableNode = $propertyFetch->var;
+
+        return $this->createMethodCall($variableNode, $method, [$this->getName($propertyFetch)]);
     }
 }

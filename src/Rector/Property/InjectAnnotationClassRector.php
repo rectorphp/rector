@@ -147,6 +147,32 @@ PHP
         return null;
     }
 
+    private function ensureAnnotationClassIsSupported(string $annotationClass): void
+    {
+        if (isset($this->annotationToTagClass[$annotationClass])) {
+            return;
+        }
+
+        throw new NotImplementedException(sprintf(
+            'Annotation class "%s" is not implemented yet. Use one of "%s" or add custom tag for it to Rector.',
+            $annotationClass,
+            implode('", "', array_keys($this->annotationToTagClass))
+        ));
+    }
+
+    private function resolveType(Node $node, PhpDocTagValueNode $phpDocTagValueNode): Type
+    {
+        if ($phpDocTagValueNode instanceof JMSInjectTagValueNode) {
+            return $this->resolveJMSDIInjectType($node, $phpDocTagValueNode);
+        }
+
+        if ($phpDocTagValueNode instanceof PHPDIInjectTagValueNode) {
+            return $this->docBlockManipulator->getVarType($node);
+        }
+
+        throw new ShouldNotHappenException();
+    }
+
     private function refactorPropertyWithAnnotation(Property $property, Type $type, string $tagClass): ?Property
     {
         if ($type instanceof MixedType) {
@@ -202,31 +228,5 @@ PHP
         }
 
         return new MixedType();
-    }
-
-    private function ensureAnnotationClassIsSupported(string $annotationClass): void
-    {
-        if (isset($this->annotationToTagClass[$annotationClass])) {
-            return;
-        }
-
-        throw new NotImplementedException(sprintf(
-            'Annotation class "%s" is not implemented yet. Use one of "%s" or add custom tag for it to Rector.',
-            $annotationClass,
-            implode('", "', array_keys($this->annotationToTagClass))
-        ));
-    }
-
-    private function resolveType(Node $node, PhpDocTagValueNode $phpDocTagValueNode): Type
-    {
-        if ($phpDocTagValueNode instanceof JMSInjectTagValueNode) {
-            return $this->resolveJMSDIInjectType($node, $phpDocTagValueNode);
-        }
-
-        if ($phpDocTagValueNode instanceof PHPDIInjectTagValueNode) {
-            return $this->docBlockManipulator->getVarType($node);
-        }
-
-        throw new ShouldNotHappenException();
     }
 }

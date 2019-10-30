@@ -124,6 +124,32 @@ PHP
         return $node;
     }
 
+    private function isAlwaysTruableNode(Node $node): bool
+    {
+        if (! $node instanceof If_) {
+            return false;
+        }
+
+        // just one if
+        if (count($node->elseifs) !== 0) {
+            return false;
+        }
+
+        // there is some else
+        if ($node->else !== null) {
+            return false;
+        }
+
+        // only property fetch, because of constructor set
+        if (! $node->cond instanceof PropertyFetch) {
+            return false;
+        }
+
+        $propertyFetchTypes = $this->resolvePropertyFetchTypes($node->cond);
+
+        return $this->staticTypeAnalyzer->areTypesAlwaysTruable($propertyFetchTypes);
+    }
+
     /**
      * @return Type[]
      */
@@ -180,31 +206,5 @@ PHP
         });
 
         return $resolvedTypes;
-    }
-
-    private function isAlwaysTruableNode(Node $node): bool
-    {
-        if (! $node instanceof If_) {
-            return false;
-        }
-
-        // just one if
-        if (count($node->elseifs) !== 0) {
-            return false;
-        }
-
-        // there is some else
-        if ($node->else !== null) {
-            return false;
-        }
-
-        // only property fetch, because of constructor set
-        if (! $node->cond instanceof PropertyFetch) {
-            return false;
-        }
-
-        $propertyFetchTypes = $this->resolvePropertyFetchTypes($node->cond);
-
-        return $this->staticTypeAnalyzer->areTypesAlwaysTruable($propertyFetchTypes);
     }
 }

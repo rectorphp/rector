@@ -133,6 +133,20 @@ final class AssertManipulator
         return $staticCall;
     }
 
+    private function processContainsCall(StaticCall $staticCall): void
+    {
+        if ($this->nodeTypeResolver->isStringOrUnionStringOnlyType($staticCall->args[1]->value)) {
+            $name = $this->nameResolver->isName(
+                $staticCall,
+                'contains'
+            ) ? 'assertStringContainsString' : 'assertStringNotContainsString';
+        } else {
+            $name = $this->nameResolver->isName($staticCall, 'contains') ? 'assertContains' : 'assertNotContains';
+        }
+
+        $staticCall->name = new Identifier($name);
+    }
+
     private function processExceptionCall(StaticCall $staticCall): void
     {
         $method = 'expectException';
@@ -184,6 +198,37 @@ final class AssertManipulator
         $this->nodeRemovingCommander->addNode($staticCall);
     }
 
+    private function processTypeCall(StaticCall $staticCall): void
+    {
+        $value = $this->valueResolver->getValue($staticCall->args[0]->value);
+
+        $typeToMethod = [
+            'list' => 'assertIsArray',
+            'array' => 'assertIsArray',
+            'bool' => 'assertIsBool',
+            'callable' => 'assertIsCallable',
+            'float' => 'assertIsFloat',
+            'int' => 'assertIsInt',
+            'integer' => 'assertIsInt',
+            'object' => 'assertIsObject',
+            'resource' => 'assertIsResource',
+            'string' => 'assertIsString',
+            'scalar' => 'assertIsScalar',
+        ];
+
+        if (isset($typeToMethod[$value])) {
+            $staticCall->name = new Identifier($typeToMethod[$value]);
+            unset($staticCall->args[0]);
+            array_values($staticCall->args);
+        } elseif ($value === 'null') {
+            $staticCall->name = new Identifier('assertNull');
+            unset($staticCall->args[0]);
+            array_values($staticCall->args);
+        } else {
+            $staticCall->name = new Identifier('assertInstanceOf');
+        }
+    }
+
     private function processNoErrorCall(StaticCall $staticCall): void
     {
         /** @var Closure $closure */
@@ -226,51 +271,6 @@ final class AssertManipulator
         }
 
         return $call;
-    }
-
-    private function processTypeCall(StaticCall $staticCall): void
-    {
-        $value = $this->valueResolver->getValue($staticCall->args[0]->value);
-
-        $typeToMethod = [
-            'list' => 'assertIsArray',
-            'array' => 'assertIsArray',
-            'bool' => 'assertIsBool',
-            'callable' => 'assertIsCallable',
-            'float' => 'assertIsFloat',
-            'int' => 'assertIsInt',
-            'integer' => 'assertIsInt',
-            'object' => 'assertIsObject',
-            'resource' => 'assertIsResource',
-            'string' => 'assertIsString',
-            'scalar' => 'assertIsScalar',
-        ];
-
-        if (isset($typeToMethod[$value])) {
-            $staticCall->name = new Identifier($typeToMethod[$value]);
-            unset($staticCall->args[0]);
-            array_values($staticCall->args);
-        } elseif ($value === 'null') {
-            $staticCall->name = new Identifier('assertNull');
-            unset($staticCall->args[0]);
-            array_values($staticCall->args);
-        } else {
-            $staticCall->name = new Identifier('assertInstanceOf');
-        }
-    }
-
-    private function processContainsCall(StaticCall $staticCall): void
-    {
-        if ($this->nodeTypeResolver->isStringOrUnionStringOnlyType($staticCall->args[1]->value)) {
-            $name = $this->nameResolver->isName(
-                $staticCall,
-                'contains'
-            ) ? 'assertStringContainsString' : 'assertStringNotContainsString';
-        } else {
-            $name = $this->nameResolver->isName($staticCall, 'contains') ? 'assertContains' : 'assertNotContains';
-        }
-
-        $staticCall->name = new Identifier($name);
     }
 
     private function sholdBeStaticCall(StaticCall $staticCall): bool

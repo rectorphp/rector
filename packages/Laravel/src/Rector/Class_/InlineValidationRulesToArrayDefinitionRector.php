@@ -85,6 +85,67 @@ PHP
         return $node;
     }
 
+    private function shouldSkipArrayItem(ArrayItem $arrayItem): bool
+    {
+        $classNode = $arrayItem->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classNode === null) {
+            return true;
+        }
+
+        if (! $this->isObjectType($classNode, self::FORM_REQUEST_CLASS)) {
+            return true;
+        }
+
+        $methodNode = $arrayItem->getAttribute(AttributeKey::METHOD_NODE);
+        if ($methodNode === null) {
+            return true;
+        }
+
+        if (! $this->isName($methodNode, 'rules')) {
+            return true;
+        }
+
+        if (! $arrayItem->value instanceof String_ && ! $arrayItem->value instanceof Concat) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return Expr[]
+     */
+    private function createNewRules(ArrayItem $arrayItem): array
+    {
+        $newRules = $this->transformRulesSetToExpressionsArray($arrayItem->value);
+
+        foreach ($newRules as $key => $newRule) {
+            if (! $newRule instanceof Concat) {
+                continue;
+            }
+
+            $fullString = $this->transformConcatExpressionToSingleString($newRule);
+            if ($fullString === null) {
+                return [];
+            }
+
+            $matches = Strings::match($fullString, '#^exists:(?<ruleClass>\w+),(?<ruleAttribute>\w+)$#');
+            if ($matches === null) {
+                continue;
+            }
+
+            $ruleClass = $matches['ruleClass'];
+            $ruleAttribute = $matches['ruleAttribute'];
+
+            $arguments = [new ClassConstFetch(new Name($ruleClass), 'class'), new String_($ruleAttribute)];
+
+            $ruleExistsStaticCall = $this->createStaticCall('Illuminate\Validation\Rule', 'exists', $arguments);
+            $newRules[$key] = $ruleExistsStaticCall;
+        }
+
+        return $newRules;
+    }
+
     /**
      * @return Expr[]
      */
@@ -134,66 +195,5 @@ PHP
         }
 
         return $output;
-    }
-
-    /**
-     * @return Expr[]
-     */
-    private function createNewRules(ArrayItem $arrayItem): array
-    {
-        $newRules = $this->transformRulesSetToExpressionsArray($arrayItem->value);
-
-        foreach ($newRules as $key => $newRule) {
-            if (! $newRule instanceof Concat) {
-                continue;
-            }
-
-            $fullString = $this->transformConcatExpressionToSingleString($newRule);
-            if ($fullString === null) {
-                return [];
-            }
-
-            $matches = Strings::match($fullString, '#^exists:(?<ruleClass>\w+),(?<ruleAttribute>\w+)$#');
-            if ($matches === null) {
-                continue;
-            }
-
-            $ruleClass = $matches['ruleClass'];
-            $ruleAttribute = $matches['ruleAttribute'];
-
-            $arguments = [new ClassConstFetch(new Name($ruleClass), 'class'), new String_($ruleAttribute)];
-
-            $ruleExistsStaticCall = $this->createStaticCall('Illuminate\Validation\Rule', 'exists', $arguments);
-            $newRules[$key] = $ruleExistsStaticCall;
-        }
-
-        return $newRules;
-    }
-
-    private function shouldSkipArrayItem(ArrayItem $arrayItem): bool
-    {
-        $classNode = $arrayItem->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
-            return true;
-        }
-
-        if (! $this->isObjectType($classNode, self::FORM_REQUEST_CLASS)) {
-            return true;
-        }
-
-        $methodNode = $arrayItem->getAttribute(AttributeKey::METHOD_NODE);
-        if ($methodNode === null) {
-            return true;
-        }
-
-        if (! $this->isName($methodNode, 'rules')) {
-            return true;
-        }
-
-        if (! $arrayItem->value instanceof String_ && ! $arrayItem->value instanceof Concat) {
-            return true;
-        }
-
-        return false;
     }
 }

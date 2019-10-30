@@ -204,56 +204,56 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         return $node;
     }
 
-    private function thisToTestedObjectPropertyFetch(Expr $expr): Expr
+    private function processDuring(MethodCall $methodCall): MethodCall
     {
-        if (! $expr instanceof Variable) {
-            return $expr;
+        if (! isset($methodCall->args[0])) {
+            throw new ShouldNotHappenException();
         }
 
-        if (! $this->isName($expr, 'this')) {
-            return $expr;
+        $name = $this->getValue($methodCall->args[0]->value);
+        $thisObjectPropertyMethodCall = new MethodCall($this->testedObjectPropertyFetch, $name);
+
+        if (isset($methodCall->args[1]) && $methodCall->args[1]->value instanceof Array_) {
+            /** @var Array_ $array */
+            $array = $methodCall->args[1]->value;
+            if (isset($array->items[0])) {
+                $thisObjectPropertyMethodCall->args[] = new Arg($array->items[0]->value);
+            }
         }
 
-        return $this->testedObjectPropertyFetch;
+        /** @var MethodCall $parentMethodCall */
+        $parentMethodCall = $methodCall->var;
+        $parentMethodCall->name = new Identifier('expectException');
+
+        // add $this->object->someCall($withArgs)
+        $this->addNodeAfterNode($thisObjectPropertyMethodCall, $methodCall);
+
+        return $parentMethodCall;
     }
 
-    private function createAssertMethod(string $name, Expr $value, ?Expr $expected): MethodCall
+    private function processDuringInstantiation(MethodCall $methodCall): MethodCall
     {
-        $this->isBoolAssert = false;
+        /** @var MethodCall $parentMethodCall */
+        $parentMethodCall = $methodCall->var;
+        $parentMethodCall->name = new Identifier('expectException');
 
-        // special case with bool!
-        if ($expected !== null) {
-            $name = $this->resolveBoolMethodName($name, $expected);
-        }
-
-        $assetMethodCall = $this->createMethodCall('this', $name);
-
-        if (! $this->isBoolAssert && $expected) {
-            $assetMethodCall->args[] = new Arg($this->thisToTestedObjectPropertyFetch($expected));
-        }
-
-        $assetMethodCall->args[] = new Arg($this->thisToTestedObjectPropertyFetch($value));
-
-        return $assetMethodCall;
+        return $parentMethodCall;
     }
 
-    private function resolveBoolMethodName(string $name, Expr $expr): string
+    private function prepare(Node $node): void
     {
-        if (! $this->isBool($expr)) {
-            return $name;
+        if ($this->isPrepared) {
+            return;
         }
 
-        if ($name === 'assertSame') {
-            $this->isBoolAssert = true;
-            return $this->isFalse($expr) ? 'assertFalse' : 'assertTrue';
-        }
+        /** @var Class_ $classNode */
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
 
-        if ($name === 'assertNotSame') {
-            $this->isBoolAssert = true;
-            return $this->isFalse($expr) ? 'assertNotFalse' : 'assertNotTrue';
-        }
+        $this->matchersKeys = $this->matchersManipulator->resolveMatcherNamesFromClass($classNode);
+        $this->testedClass = $this->phpSpecRenaming->resolveTestedClass($node);
+        $this->testedObjectPropertyFetch = $this->createTestedObjectPropertyFetch($classNode);
 
-        return $name;
+        $this->isPrepared = true;
     }
 
     private function processBeConstructed(MethodCall $methodCall): ?Node
@@ -276,23 +276,6 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         }
 
         return null;
-    }
-
-    private function moveConstructorArguments(MethodCall $methodCall, StaticCall $staticCall): void
-    {
-        if (! isset($methodCall->args[1])) {
-            return;
-        }
-
-        if (! $methodCall->args[1]->value instanceof Array_) {
-            return;
-        }
-
-        /** @var Array_ $array */
-        $array = $methodCall->args[1]->value;
-        foreach ($array->items as $arrayItem) {
-            $staticCall->args[] = new Arg($arrayItem->value);
-        }
     }
 
     /**
@@ -333,6 +316,26 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         }
     }
 
+    private function createAssertMethod(string $name, Expr $value, ?Expr $expected): MethodCall
+    {
+        $this->isBoolAssert = false;
+
+        // special case with bool!
+        if ($expected !== null) {
+            $name = $this->resolveBoolMethodName($name, $expected);
+        }
+
+        $assetMethodCall = $this->createMethodCall('this', $name);
+
+        if (! $this->isBoolAssert && $expected) {
+            $assetMethodCall->args[] = new Arg($this->thisToTestedObjectPropertyFetch($expected));
+        }
+
+        $assetMethodCall->args[] = new Arg($this->thisToTestedObjectPropertyFetch($value));
+
+        return $assetMethodCall;
+    }
+
     private function createTestedObjectPropertyFetch(Class_ $class): PropertyFetch
     {
         $propertyName = $this->phpSpecRenaming->resolveObjectPropertyName($class);
@@ -340,55 +343,52 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         return new PropertyFetch(new Variable('this'), $propertyName);
     }
 
-    private function prepare(Node $node): void
+    private function moveConstructorArguments(MethodCall $methodCall, StaticCall $staticCall): void
     {
-        if ($this->isPrepared) {
+        if (! isset($methodCall->args[1])) {
             return;
         }
 
-        /** @var Class_ $classNode */
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-
-        $this->matchersKeys = $this->matchersManipulator->resolveMatcherNamesFromClass($classNode);
-        $this->testedClass = $this->phpSpecRenaming->resolveTestedClass($node);
-        $this->testedObjectPropertyFetch = $this->createTestedObjectPropertyFetch($classNode);
-
-        $this->isPrepared = true;
-    }
-
-    private function processDuring(MethodCall $methodCall): MethodCall
-    {
-        if (! isset($methodCall->args[0])) {
-            throw new ShouldNotHappenException();
+        if (! $methodCall->args[1]->value instanceof Array_) {
+            return;
         }
 
-        $name = $this->getValue($methodCall->args[0]->value);
-        $thisObjectPropertyMethodCall = new MethodCall($this->testedObjectPropertyFetch, $name);
-
-        if (isset($methodCall->args[1]) && $methodCall->args[1]->value instanceof Array_) {
-            /** @var Array_ $array */
-            $array = $methodCall->args[1]->value;
-            if (isset($array->items[0])) {
-                $thisObjectPropertyMethodCall->args[] = new Arg($array->items[0]->value);
-            }
+        /** @var Array_ $array */
+        $array = $methodCall->args[1]->value;
+        foreach ($array->items as $arrayItem) {
+            $staticCall->args[] = new Arg($arrayItem->value);
         }
-
-        /** @var MethodCall $parentMethodCall */
-        $parentMethodCall = $methodCall->var;
-        $parentMethodCall->name = new Identifier('expectException');
-
-        // add $this->object->someCall($withArgs)
-        $this->addNodeAfterNode($thisObjectPropertyMethodCall, $methodCall);
-
-        return $parentMethodCall;
     }
 
-    private function processDuringInstantiation(MethodCall $methodCall): MethodCall
+    private function resolveBoolMethodName(string $name, Expr $expr): string
     {
-        /** @var MethodCall $parentMethodCall */
-        $parentMethodCall = $methodCall->var;
-        $parentMethodCall->name = new Identifier('expectException');
+        if (! $this->isBool($expr)) {
+            return $name;
+        }
 
-        return $parentMethodCall;
+        if ($name === 'assertSame') {
+            $this->isBoolAssert = true;
+            return $this->isFalse($expr) ? 'assertFalse' : 'assertTrue';
+        }
+
+        if ($name === 'assertNotSame') {
+            $this->isBoolAssert = true;
+            return $this->isFalse($expr) ? 'assertNotFalse' : 'assertNotTrue';
+        }
+
+        return $name;
+    }
+
+    private function thisToTestedObjectPropertyFetch(Expr $expr): Expr
+    {
+        if (! $expr instanceof Variable) {
+            return $expr;
+        }
+
+        if (! $this->isName($expr, 'this')) {
+            return $expr;
+        }
+
+        return $this->testedObjectPropertyFetch;
     }
 }

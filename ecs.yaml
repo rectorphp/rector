@@ -24,30 +24,6 @@ services:
                 - 'getNodeTypes'
                 - 'refactor'
 
-    Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
-        extra_allowed_classes:
-            - 'PHPStan\Type\*'
-            - '*Type'
-            - 'PHPStan\Analyser\Scope'
-            - 'PhpParser\NodeVisitor\NameResolver'
-            - 'PhpParser\Node\*'
-            - '*Data'
-            - '*Recipe'
-            - '*ValueObject'
-            - 'PhpParser\Comment'
-            - 'PhpParser\Lexer'
-            - 'PhpParser\Comment\Doc'
-            - 'PhpParser\NodeTraverser'
-            - 'Rector\Reporting\FileDiff'
-            - 'Rector\RectorDefinition\*'
-            - 'Rector\Application\Error'
-            - 'Rector\DependencyInjection\Loader\*'
-            - 'Symplify\PackageBuilder\*'
-            - 'Symfony\Component\Console\Input\*Input'
-            - 'PHPStan\Analyser\NameScope'
-            - 'PHPStan\Rules\RuleErrors\RuleError*'
-            - '*\XdebugHandler'
-
     Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
         extra_skipped_classes:
             - 'PhpParser\PrettyPrinter\Standard'
@@ -71,6 +47,9 @@ parameters:
         - 'src/Rector/AbstractRector.php'
 
     skip:
+        # rather useless
+        Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff: ~
+
         PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff.Underscore: ~
         Symplify\CodingStandard\Sniffs\Architecture\DuplicatedClassShortNameSniff: ~
         # skip temporary due to missing "import" feature in PhpStorm
@@ -184,19 +163,11 @@ parameters:
             - 'packages/DeadCode/src/Rector/ClassMethod/RemoveOverriddenValuesRector.php'
             - 'packages/PhpSpecToPHPUnit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php'
 
-        Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff:
-            # 3rd party api
-            - 'src/PhpParser/Node/Value/ValueResolver.php'
-
         PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer:
             - 'packages/BetterPhpDocParser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php'
             # intentional "assertEquals()"
             - 'tests/PhpParser/Node/NodeFactoryTest.php'
             - '*TypeResolverTest.php'
-
-        Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer:
-            # buggy with PHP heredoc
-            - 'packages/SOLID/src/Rector/ClassConst/PrivatizeLocalClassConstantRector.php'
 
         Symplify\CodingStandard\Sniffs\Commenting\AnnotationTypeExistsSniff:
             - '*PhpDocNodeFactory.php'

@@ -255,6 +255,14 @@ final class PhpDocInfoPrinter
         return $output . $nodeOutput;
     }
 
+    private function printAttributeWithAsterisk(AttributeAwareNodeInterface $attributeAwareNode): string
+    {
+        $content = (string) $attributeAwareNode;
+        $content = explode(PHP_EOL, $content);
+
+        return implode(PHP_EOL . ' * ', $content);
+    }
+
     /**
      * @return StartEndValueObject[]
      */
@@ -318,13 +326,5 @@ final class PhpDocInfoPrinter
         }
 
         return Strings::contains($this->phpDocInfo->getOriginalContent(), $phpDocTagNode->name . ' ');
-    }
-
-    private function printAttributeWithAsterisk(AttributeAwareNodeInterface $attributeAwareNode): string
-    {
-        $content = (string) $attributeAwareNode;
-        $content = explode(PHP_EOL, $content);
-
-        return implode(PHP_EOL . ' * ', $content);
     }
 }

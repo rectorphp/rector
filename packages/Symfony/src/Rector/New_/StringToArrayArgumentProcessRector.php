@@ -129,6 +129,15 @@ PHP
         $this->processPreviousAssign($node, $firstArgument);
     }
 
+    private function isFunctionNamed(Node $node, string $name): bool
+    {
+        if (! $node instanceof FuncCall) {
+            return false;
+        }
+
+        return $this->isName($node, $name);
+    }
+
     private function processPreviousAssign(Node $node, Node $firstArgument): void
     {
         /** @var Assign|null $createdNode */
@@ -161,14 +170,5 @@ PHP
 
             return $checkedNode;
         });
-    }
-
-    private function isFunctionNamed(Node $node, string $name): bool
-    {
-        if (! $node instanceof FuncCall) {
-            return false;
-        }
-
-        return $this->isName($node, $name);
     }
 }

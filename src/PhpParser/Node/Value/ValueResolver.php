@@ -115,6 +115,34 @@ final class ValueResolver
         return $this->constExprEvaluator;
     }
 
+    /**
+     * @return mixed[]
+     */
+    private function extractConstantArrayTypeValue(ConstantArrayType $constantArrayType): array
+    {
+        $keys = [];
+        foreach ($constantArrayType->getKeyTypes() as $i => $keyType) {
+            /** @var ConstantScalarType $keyType */
+            $keys[$i] = $keyType->getValue();
+        }
+
+        $values = [];
+        foreach ($constantArrayType->getValueTypes() as $i => $valueType) {
+            if ($valueType instanceof ConstantArrayType) {
+                $value = $this->extractConstantArrayTypeValue($valueType);
+            } elseif ($valueType instanceof ConstantScalarType) {
+                $value = $valueType->getValue();
+            } else {
+                // not sure about value
+                continue;
+            }
+
+            $values[$keys[$i]] = $value;
+        }
+
+        return $values;
+    }
+
     private function resolveDirConstant(Dir $dir): string
     {
         $fileInfo = $dir->getAttribute(AttributeKey::FILE_INFO);
@@ -167,33 +195,5 @@ final class ValueResolver
         }
 
         return $this->constExprEvaluator->evaluateDirectly($classConstNode->consts[0]->value);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    private function extractConstantArrayTypeValue(ConstantArrayType $constantArrayType): array
-    {
-        $keys = [];
-        foreach ($constantArrayType->getKeyTypes() as $i => $keyType) {
-            /** @var ConstantScalarType $keyType */
-            $keys[$i] = $keyType->getValue();
-        }
-
-        $values = [];
-        foreach ($constantArrayType->getValueTypes() as $i => $valueType) {
-            if ($valueType instanceof ConstantArrayType) {
-                $value = $this->extractConstantArrayTypeValue($valueType);
-            } elseif ($valueType instanceof ConstantScalarType) {
-                $value = $valueType->getValue();
-            } else {
-                // not sure about value
-                continue;
-            }
-
-            $values[$keys[$i]] = $value;
-        }
-
-        return $values;
     }
 }

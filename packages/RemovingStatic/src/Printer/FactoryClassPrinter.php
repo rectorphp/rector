@@ -60,14 +60,6 @@ final class FactoryClassPrinter
         $this->filesystem->dumpFile($factoryClassFilePath, $factoryClassContent);
     }
 
-    /**
-     * @param Node|Node[] $node
-     */
-    private function rawPrintNode($node): string
-    {
-        return sprintf('<?php%s%s%s', PHP_EOL . PHP_EOL, $this->betterStandardPrinter->print($node), PHP_EOL);
-    }
-
     private function createFactoryClassFilePath(Class_ $oldClass): string
     {
         /** @var SmartFileInfo|null $classFileInfo */
@@ -85,5 +77,13 @@ final class FactoryClassPrinter
         $bareClassName = Strings::after($resolvedOldClass, '\\', -1) . 'Factory.php';
 
         return $directoryPath . DIRECTORY_SEPARATOR . $bareClassName;
+    }
+
+    /**
+     * @param Node|Node[] $node
+     */
+    private function rawPrintNode($node): string
+    {
+        return sprintf('<?php%s%s%s', PHP_EOL . PHP_EOL, $this->betterStandardPrinter->print($node), PHP_EOL);
     }
 }

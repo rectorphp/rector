@@ -153,6 +153,37 @@ PHP
     }
 
     /**
+     * @return string[][]
+     */
+    private function collectUseNamesAliasToName(Use_ $use): array
+    {
+        $useNamesAliasToName = [];
+
+        $shortNames = $this->shortNameResolver->resolveForNode($use);
+        foreach ($shortNames as $alias => $useImport) {
+            $shortName = $this->classNaming->getShortName($useImport);
+            if ($shortName === $alias) {
+                continue;
+            }
+
+            $useNamesAliasToName[$shortName][] = $alias;
+        }
+
+        return $useNamesAliasToName;
+    }
+
+    private function shouldSkip(string $lastName, string $aliasName): bool
+    {
+        // both are used → nothing to remove
+        if (isset($this->resolvedNodeNames[$lastName], $this->resolvedNodeNames[$aliasName])) {
+            return true;
+        }
+
+        // part of some @Doc annotation
+        return in_array($aliasName, $this->resolvedDocPossibleAliases, true);
+    }
+
+    /**
      * @param Node[][] $usedNameNodes
      */
     private function renameNameNode(array $usedNameNodes, string $lastName): void
@@ -336,36 +367,5 @@ PHP
         });
 
         return array_unique($possibleDocAliases);
-    }
-
-    private function shouldSkip(string $lastName, string $aliasName): bool
-    {
-        // both are used → nothing to remove
-        if (isset($this->resolvedNodeNames[$lastName], $this->resolvedNodeNames[$aliasName])) {
-            return true;
-        }
-
-        // part of some @Doc annotation
-        return in_array($aliasName, $this->resolvedDocPossibleAliases, true);
-    }
-
-    /**
-     * @return string[][]
-     */
-    private function collectUseNamesAliasToName(Use_ $use): array
-    {
-        $useNamesAliasToName = [];
-
-        $shortNames = $this->shortNameResolver->resolveForNode($use);
-        foreach ($shortNames as $alias => $useImport) {
-            $shortName = $this->classNaming->getShortName($useImport);
-            if ($shortName === $alias) {
-                continue;
-            }
-
-            $useNamesAliasToName[$shortName][] = $alias;
-        }
-
-        return $useNamesAliasToName;
     }
 }

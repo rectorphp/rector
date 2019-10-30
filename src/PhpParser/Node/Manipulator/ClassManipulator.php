@@ -481,17 +481,6 @@ final class ClassManipulator
         return $classMethodNames;
     }
 
-    private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
-    {
-        foreach ($classMethod->params as $constructorParameter) {
-            if ($this->nameResolver->isName($constructorParameter->var, $name)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * @param PropertyFetch|StaticPropertyFetch $node
      */
@@ -513,13 +502,6 @@ final class ClassManipulator
 
         // is "self::$property = x;" assign
         return ! $this->isNodeLeftPartOfAssign($node);
-    }
-
-    private function isNodeLeftPartOfAssign(Node $node): bool
-    {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-        return $parentNode instanceof Assign && $parentNode->var === $node;
     }
 
     /**
@@ -545,6 +527,23 @@ final class ClassManipulator
         return $serializablePropertyNames;
     }
 
+    private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
+    {
+        $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        if ($parentClassName === null) {
+            return false;
+        }
+
+        return method_exists($parentClassName, $methodName);
+    }
+
+    private function createParentClassMethodCall(string $methodName): Expression
+    {
+        $staticCall = new StaticCall(new Name('parent'), $methodName);
+
+        return new Expression($staticCall);
+    }
+
     /**
      * @param Stmt[] $stmts
      * @return Stmt[]
@@ -568,20 +567,21 @@ final class ClassManipulator
         return $stmts;
     }
 
-    private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
+    private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
     {
-        $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName === null) {
-            return false;
+        foreach ($classMethod->params as $constructorParameter) {
+            if ($this->nameResolver->isName($constructorParameter->var, $name)) {
+                return true;
+            }
         }
 
-        return method_exists($parentClassName, $methodName);
+        return false;
     }
 
-    private function createParentClassMethodCall(string $methodName): Expression
+    private function isNodeLeftPartOfAssign(Node $node): bool
     {
-        $staticCall = new StaticCall(new Name('parent'), $methodName);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
-        return new Expression($staticCall);
+        return $parentNode instanceof Assign && $parentNode->var === $node;
     }
 }

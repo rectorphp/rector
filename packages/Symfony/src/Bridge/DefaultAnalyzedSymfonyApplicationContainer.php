@@ -139,6 +139,16 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
         return $container;
     }
 
+    private function resolveKernelClass(): ?string
+    {
+        $kernelClassParameter = $this->parameterProvider->provideParameter(Option::KERNEL_CLASS_PARAMETER);
+        if ($kernelClassParameter) {
+            return $kernelClassParameter;
+        }
+
+        return $this->getDefaultKernelClass();
+    }
+
     private function getDefaultKernelClass(): ?string
     {
         $possibleKernelClasses = ['App\Kernel', 'Kernel', 'AppKernel'];
@@ -150,15 +160,5 @@ final class DefaultAnalyzedSymfonyApplicationContainer implements AnalyzedApplic
         }
 
         return null;
-    }
-
-    private function resolveKernelClass(): ?string
-    {
-        $kernelClassParameter = $this->parameterProvider->provideParameter(Option::KERNEL_CLASS_PARAMETER);
-        if ($kernelClassParameter) {
-            return $kernelClassParameter;
-        }
-
-        return $this->getDefaultKernelClass();
     }
 }

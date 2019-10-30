@@ -122,15 +122,6 @@ PHP
         return null;
     }
 
-    private function isEntityFactoryStaticCall(Node $node, ObjectType $objectType): bool
-    {
-        if (! $node instanceof StaticCall) {
-            return false;
-        }
-
-        return $this->isObjectType($node->class, $objectType);
-    }
-
     private function processClass(Class_ $class): Class_
     {
         foreach ($this->staticTypes as $implements => $staticType) {
@@ -174,6 +165,15 @@ PHP
         }
 
         return $class;
+    }
+
+    private function isEntityFactoryStaticCall(Node $node, ObjectType $objectType): bool
+    {
+        if (! $node instanceof StaticCall) {
+            return false;
+        }
+
+        return $this->isObjectType($node->class, $objectType);
     }
 
     private function createSetEntityFactoryClassMethod(

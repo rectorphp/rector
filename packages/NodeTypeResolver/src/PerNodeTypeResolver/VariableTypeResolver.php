@@ -91,6 +91,21 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
+    private function resolveTypesFromScope(Variable $variable, string $variableName): Type
+    {
+        $nodeScope = $this->resolveNodeScope($variable);
+        if ($nodeScope === null) {
+            return new MixedType();
+        }
+
+        if (! $nodeScope->hasVariableType($variableName)->yes()) {
+            return new MixedType();
+        }
+
+        // this → object type is easier to work with and consistent with the rest of the code
+        return $nodeScope->getVariableType($variableName);
+    }
+
     private function resolveNodeScope(Node $node): ?Scope
     {
         /** @var Scope|null $nodeScope */
@@ -128,20 +143,5 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         }
 
         return null;
-    }
-
-    private function resolveTypesFromScope(Variable $variable, string $variableName): Type
-    {
-        $nodeScope = $this->resolveNodeScope($variable);
-        if ($nodeScope === null) {
-            return new MixedType();
-        }
-
-        if (! $nodeScope->hasVariableType($variableName)->yes()) {
-            return new MixedType();
-        }
-
-        // this → object type is easier to work with and consistent with the rest of the code
-        return $nodeScope->getVariableType($variableName);
     }
 }

@@ -235,6 +235,31 @@ PHP
         return $classNode->getMethod($routeInfo->getMethod());
     }
 
+    private function createSymfonyRoutePhpDocTagValueNode(RouteInfo $routeInfo): SymfonyRouteTagValueNode
+    {
+        return new SymfonyRouteTagValueNode($routeInfo->getPath(), null, $routeInfo->getHttpMethods());
+    }
+
+    private function addSymfonyRouteShortTagNodeWithUse(
+        SymfonyRouteTagValueNode $symfonyRouteTagValueNode,
+        ClassMethod $classMethod
+    ): void {
+        $symfonyRoutePhpDocTagNode = new SpacelessPhpDocTagNode(
+            SymfonyRouteTagValueNode::SHORT_NAME,
+            $symfonyRouteTagValueNode
+        );
+
+        $this->docBlockManipulator->addTag($classMethod, $symfonyRoutePhpDocTagNode);
+
+        $symfonyRouteUseObjectType = new FullyQualifiedObjectType(SymfonyRouteTagValueNode::CLASS_NAME);
+        $this->addUseType($symfonyRouteUseObjectType, $classMethod);
+
+        // remove
+        $this->removeShortUse('Route', $classMethod);
+
+        $classMethod->setAttribute(self::HAS_FRESH_ROUTE_ANNOTATION_ATTRIBUTE, true);
+    }
+
     private function completeImplicitRoutes(): void
     {
         $presenterClasses = $this->parsedNodesByType->findClassesBySuffix('Presenter');
@@ -326,30 +351,5 @@ PHP
         $actionPart = lcfirst($match['short_action_name']);
 
         return $presenterPart . '/' . $actionPart;
-    }
-
-    private function createSymfonyRoutePhpDocTagValueNode(RouteInfo $routeInfo): SymfonyRouteTagValueNode
-    {
-        return new SymfonyRouteTagValueNode($routeInfo->getPath(), null, $routeInfo->getHttpMethods());
-    }
-
-    private function addSymfonyRouteShortTagNodeWithUse(
-        SymfonyRouteTagValueNode $symfonyRouteTagValueNode,
-        ClassMethod $classMethod
-    ): void {
-        $symfonyRoutePhpDocTagNode = new SpacelessPhpDocTagNode(
-            SymfonyRouteTagValueNode::SHORT_NAME,
-            $symfonyRouteTagValueNode
-        );
-
-        $this->docBlockManipulator->addTag($classMethod, $symfonyRoutePhpDocTagNode);
-
-        $symfonyRouteUseObjectType = new FullyQualifiedObjectType(SymfonyRouteTagValueNode::CLASS_NAME);
-        $this->addUseType($symfonyRouteUseObjectType, $classMethod);
-
-        // remove
-        $this->removeShortUse('Route', $classMethod);
-
-        $classMethod->setAttribute(self::HAS_FRESH_ROUTE_ANNOTATION_ATTRIBUTE, true);
     }
 }

@@ -164,35 +164,6 @@ PHP
     /**
      * @param string[] $propertyNames
      */
-    private function replaceNullComparisonOfArrayPropertiesWithArrayComparison(
-        Class_ $class,
-        array $propertyNames
-    ): void {
-        // replace comparison to "null" with "[]"
-        $this->traverseNodesWithCallable($class, function (Node $node) use ($propertyNames): ?BinaryOp {
-            if (! $node instanceof BinaryOp) {
-                return null;
-            }
-
-            if ($this->propertyFetchManipulator->isLocalPropertyOfNames($node->left, $propertyNames) && $this->isNull(
-                $node->right
-            )) {
-                $node->right = new Array_();
-            }
-
-            if ($this->propertyFetchManipulator->isLocalPropertyOfNames($node->right, $propertyNames) && $this->isNull(
-                $node->left
-            )) {
-                $node->left = new Array_();
-            }
-
-            return $node;
-        });
-    }
-
-    /**
-     * @param string[] $propertyNames
-     */
     private function clearNotNullBeforeCount(Class_ $class, array $propertyNames): void
     {
         $this->traverseNodesWithCallable($class, function (Node $node) use ($propertyNames): ?Expr {
@@ -233,6 +204,35 @@ PHP
             }
 
             return $node->right;
+        });
+    }
+
+    /**
+     * @param string[] $propertyNames
+     */
+    private function replaceNullComparisonOfArrayPropertiesWithArrayComparison(
+        Class_ $class,
+        array $propertyNames
+    ): void {
+        // replace comparison to "null" with "[]"
+        $this->traverseNodesWithCallable($class, function (Node $node) use ($propertyNames): ?BinaryOp {
+            if (! $node instanceof BinaryOp) {
+                return null;
+            }
+
+            if ($this->propertyFetchManipulator->isLocalPropertyOfNames($node->left, $propertyNames) && $this->isNull(
+                $node->right
+            )) {
+                $node->right = new Array_();
+            }
+
+            if ($this->propertyFetchManipulator->isLocalPropertyOfNames($node->right, $propertyNames) && $this->isNull(
+                $node->left
+            )) {
+                $node->left = new Array_();
+            }
+
+            return $node;
         });
     }
 

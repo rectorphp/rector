@@ -204,6 +204,14 @@ PHP
         });
     }
 
+    private function createUuidStringNode(): String_
+    {
+        $uuidValue = Uuid::uuid4();
+        $uuidValueString = $uuidValue->toString();
+
+        return new String_($uuidValueString);
+    }
+
     private function isUuidType(Expr $expr): bool
     {
         $argumentStaticType = $this->getStaticType($expr);
@@ -214,13 +222,5 @@ PHP
         }
 
         return $argumentStaticType->getClassName() === Uuid::class;
-    }
-
-    private function createUuidStringNode(): String_
-    {
-        $uuidValue = Uuid::uuid4();
-        $uuidValueString = $uuidValue->toString();
-
-        return new String_($uuidValueString);
     }
 }

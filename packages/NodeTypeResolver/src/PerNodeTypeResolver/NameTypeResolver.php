@@ -46,28 +46,6 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
         return new ObjectType($fullyQualifiedName);
     }
 
-    private function resolveFullyQualifiedName(Node $nameNode, string $name): string
-    {
-        if (in_array($name, ['self', 'static', 'this'], true)) {
-            /** @var string|null $class */
-            $class = $nameNode->getAttribute(AttributeKey::CLASS_NAME);
-            if ($class === null) {
-                // anonymous class probably
-                return 'Anonymous';
-            }
-
-            return $class;
-        }
-
-        /** @var Name|null $resolvedNameNode */
-        $resolvedNameNode = $nameNode->getAttribute(AttributeKey::RESOLVED_NAME);
-        if ($resolvedNameNode instanceof Name) {
-            return $resolvedNameNode->toString();
-        }
-
-        return $name;
-    }
-
     /**
      * @return ObjectType|UnionType|MixedType
      */
@@ -90,5 +68,27 @@ final class NameTypeResolver implements PerNodeTypeResolverInterface
         }
 
         return $type;
+    }
+
+    private function resolveFullyQualifiedName(Node $nameNode, string $name): string
+    {
+        if (in_array($name, ['self', 'static', 'this'], true)) {
+            /** @var string|null $class */
+            $class = $nameNode->getAttribute(AttributeKey::CLASS_NAME);
+            if ($class === null) {
+                // anonymous class probably
+                return 'Anonymous';
+            }
+
+            return $class;
+        }
+
+        /** @var Name|null $resolvedNameNode */
+        $resolvedNameNode = $nameNode->getAttribute(AttributeKey::RESOLVED_NAME);
+        if ($resolvedNameNode instanceof Name) {
+            return $resolvedNameNode->toString();
+        }
+
+        return $name;
     }
 }

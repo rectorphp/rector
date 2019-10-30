@@ -80,29 +80,22 @@ final class UseImportsAdder
         $namespace->stmts = array_merge($newUses, $namespace->stmts);
     }
 
-    private function getNamespaceName(Namespace_ $namespace): ?string
+    /**
+     * @param FullyQualifiedObjectType[] $mainTypes
+     * @param FullyQualifiedObjectType[] $typesToRemove
+     * @return FullyQualifiedObjectType[]
+     */
+    private function diffFullyQualifiedObjectTypes(array $mainTypes, array $typesToRemove): array
     {
-        if ($namespace->name === null) {
-            return null;
+        foreach ($mainTypes as $key => $mainType) {
+            foreach ($typesToRemove as $typeToRemove) {
+                if ($mainType->equals($typeToRemove)) {
+                    unset($mainTypes[$key]);
+                }
+            }
         }
 
-        return $namespace->name->toString();
-    }
-
-    private function isCurrentNamespace(
-        string $namespaceName,
-        FullyQualifiedObjectType $fullyQualifiedObjectType
-    ): bool {
-        if ($namespaceName === null) {
-            return false;
-        }
-
-        $afterCurrentNamespace = Strings::after($fullyQualifiedObjectType->getClassName(), $namespaceName . '\\');
-        if (! $afterCurrentNamespace) {
-            return false;
-        }
-
-        return ! Strings::contains($afterCurrentNamespace, '\\');
+        return array_values($mainTypes);
     }
 
     /**
@@ -134,21 +127,28 @@ final class UseImportsAdder
         return $newUses;
     }
 
-    /**
-     * @param FullyQualifiedObjectType[] $mainTypes
-     * @param FullyQualifiedObjectType[] $typesToRemove
-     * @return FullyQualifiedObjectType[]
-     */
-    private function diffFullyQualifiedObjectTypes(array $mainTypes, array $typesToRemove): array
+    private function getNamespaceName(Namespace_ $namespace): ?string
     {
-        foreach ($mainTypes as $key => $mainType) {
-            foreach ($typesToRemove as $typeToRemove) {
-                if ($mainType->equals($typeToRemove)) {
-                    unset($mainTypes[$key]);
-                }
-            }
+        if ($namespace->name === null) {
+            return null;
         }
 
-        return array_values($mainTypes);
+        return $namespace->name->toString();
+    }
+
+    private function isCurrentNamespace(
+        string $namespaceName,
+        FullyQualifiedObjectType $fullyQualifiedObjectType
+    ): bool {
+        if ($namespaceName === null) {
+            return false;
+        }
+
+        $afterCurrentNamespace = Strings::after($fullyQualifiedObjectType->getClassName(), $namespaceName . '\\');
+        if (! $afterCurrentNamespace) {
+            return false;
+        }
+
+        return ! Strings::contains($afterCurrentNamespace, '\\');
     }
 }

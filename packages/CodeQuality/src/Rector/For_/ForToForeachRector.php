@@ -138,6 +138,13 @@ PHP
         return $foreach;
     }
 
+    private function reset(): void
+    {
+        $this->keyValueName = null;
+        $this->countValueName = null;
+        $this->iteratedExpr = null;
+    }
+
     /**
      * @param Expr[] $initExprs
      */
@@ -209,39 +216,6 @@ PHP
         return false;
     }
 
-    private function reset(): void
-    {
-        $this->keyValueName = null;
-        $this->countValueName = null;
-        $this->iteratedExpr = null;
-    }
-
-    /**
-     * @param Expr[] $condExprs
-     */
-    private function isSmallerOrGreater(array $condExprs, string $keyValueName, string $countValueName): bool
-    {
-        // $i < $count
-        if ($condExprs[0] instanceof Smaller) {
-            if (! $this->isName($condExprs[0]->left, $keyValueName)) {
-                return false;
-            }
-
-            return $this->isName($condExprs[0]->right, $countValueName);
-        }
-
-        // $i > $count
-        if ($condExprs[0] instanceof Greater) {
-            if (! $this->isName($condExprs[0]->left, $countValueName)) {
-                return false;
-            }
-
-            return $this->isName($condExprs[0]->right, $keyValueName);
-        }
-
-        return false;
-    }
-
     /**
      * @param Stmt[] $stmts
      */
@@ -276,6 +250,32 @@ PHP
 
             return $expr;
         });
+    }
+
+    /**
+     * @param Expr[] $condExprs
+     */
+    private function isSmallerOrGreater(array $condExprs, string $keyValueName, string $countValueName): bool
+    {
+        // $i < $count
+        if ($condExprs[0] instanceof Smaller) {
+            if (! $this->isName($condExprs[0]->left, $keyValueName)) {
+                return false;
+            }
+
+            return $this->isName($condExprs[0]->right, $countValueName);
+        }
+
+        // $i > $count
+        if ($condExprs[0] instanceof Greater) {
+            if (! $this->isName($condExprs[0]->left, $countValueName)) {
+                return false;
+            }
+
+            return $this->isName($condExprs[0]->right, $keyValueName);
+        }
+
+        return false;
     }
 
     private function isPartOfAssign(?Node $node): bool

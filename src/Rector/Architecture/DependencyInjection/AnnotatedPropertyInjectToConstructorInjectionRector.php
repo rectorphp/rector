@@ -87,6 +87,20 @@ PHP
         return $node;
     }
 
+    private function shouldSkipProperty(Node $node): bool
+    {
+        if (! $this->docBlockManipulator->hasTag($node, self::INJECT_ANNOTATION)) {
+            return true;
+        }
+
+        // it needs @var tag as well, to get the type
+        if (! $this->docBlockManipulator->hasTag($node, 'var')) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function addPropertyToCollector(Property $property): void
     {
         $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
@@ -104,19 +118,5 @@ PHP
         $propertyName = $this->getName($property);
 
         $this->addPropertyToClass($classNode, $propertyType, $propertyName);
-    }
-
-    private function shouldSkipProperty(Node $node): bool
-    {
-        if (! $this->docBlockManipulator->hasTag($node, self::INJECT_ANNOTATION)) {
-            return true;
-        }
-
-        // it needs @var tag as well, to get the type
-        if (! $this->docBlockManipulator->hasTag($node, 'var')) {
-            return true;
-        }
-
-        return false;
     }
 }

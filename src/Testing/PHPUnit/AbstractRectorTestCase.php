@@ -165,28 +165,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $parameterProvider->changeParameter($name, $value);
     }
 
-    private function doTestFileMatchesExpectedContent(
-        string $originalFile,
-        string $expectedFile,
-        string $fixtureFile
-    ): void {
-        $this->setParameter(Option::SOURCE, [$originalFile]);
-
-        $smartFileInfo = new SmartFileInfo($originalFile);
-
-        // life-cycle trio :)
-        $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
-        $this->fileProcessor->refactor($smartFileInfo);
-        $changedContent = $this->fileProcessor->printToString($smartFileInfo);
-
-        try {
-            $this->assertStringEqualsFile($expectedFile, $changedContent, 'Caused by ' . $fixtureFile);
-        } catch (ExpectationFailedException $expectationFailedException) {
-            $expectedFileContent = FileSystem::read($expectedFile);
-            $this->assertStringMatchesFormat($expectedFileContent, $changedContent, 'Caused by ' . $fixtureFile);
-        }
-    }
-
     private function ensureConfigFileExists(): void
     {
         if (file_exists($this->provideConfig())) {
@@ -223,6 +201,23 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->bootKernelWithConfigs(RectorKernel::class, [$configFileTempPath]);
     }
 
+    private function getConfigFor3rdPartyTest(): string
+    {
+        if ($this->provideConfig() !== '') {
+            return $this->provideConfig();
+        }
+
+        $rectorClassWithConfiguration = $this->getCurrentTestRectorClassesWithConfiguration();
+        $yamlContent = Yaml::dump([
+            'services' => $rectorClassWithConfiguration,
+        ], Yaml::DUMP_OBJECT_AS_MAP);
+
+        $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/current_test.yaml');
+        FileSystem::write($configFileTempPath, $yamlContent);
+
+        return $configFileTempPath;
+    }
+
     private function configureEnabledRectors(EnabledRectorsProvider $enabledRectorsProvider): void
     {
         foreach ($this->getCurrentTestRectorClassesWithConfiguration() as $rectorClass => $configuration) {
@@ -239,20 +234,25 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->setParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
     }
 
-    private function getConfigFor3rdPartyTest(): string
-    {
-        if ($this->provideConfig() !== '') {
-            return $this->provideConfig();
+    private function doTestFileMatchesExpectedContent(
+        string $originalFile,
+        string $expectedFile,
+        string $fixtureFile
+    ): void {
+        $this->setParameter(Option::SOURCE, [$originalFile]);
+
+        $smartFileInfo = new SmartFileInfo($originalFile);
+
+        // life-cycle trio :)
+        $this->fileProcessor->parseFileInfoToLocalCache($smartFileInfo);
+        $this->fileProcessor->refactor($smartFileInfo);
+        $changedContent = $this->fileProcessor->printToString($smartFileInfo);
+
+        try {
+            $this->assertStringEqualsFile($expectedFile, $changedContent, 'Caused by ' . $fixtureFile);
+        } catch (ExpectationFailedException $expectationFailedException) {
+            $expectedFileContent = FileSystem::read($expectedFile);
+            $this->assertStringMatchesFormat($expectedFileContent, $changedContent, 'Caused by ' . $fixtureFile);
         }
-
-        $rectorClassWithConfiguration = $this->getCurrentTestRectorClassesWithConfiguration();
-        $yamlContent = Yaml::dump([
-            'services' => $rectorClassWithConfiguration,
-        ], Yaml::DUMP_OBJECT_AS_MAP);
-
-        $configFileTempPath = sprintf(sys_get_temp_dir() . '/rector_temp_tests/current_test.yaml');
-        FileSystem::write($configFileTempPath, $yamlContent);
-
-        return $configFileTempPath;
     }
 }

@@ -101,26 +101,6 @@ final class ChildAndParentClassManipulator
         }
     }
 
-    private function findFirstParentConstructor(Class_ $classNode): ?ClassMethod
-    {
-        while ($classNode !== null) {
-            $constructMethodNode = $classNode->getMethod('__construct');
-            if ($constructMethodNode !== null) {
-                return $constructMethodNode;
-            }
-
-            /** @var string|null $parentClassName */
-            $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-            if ($parentClassName === null) {
-                return null;
-            }
-
-            $classNode = $this->parsedNodesByType->findClass($parentClassName);
-        }
-
-        return null;
-    }
-
     private function completeParentConstructorBasedOnParentNode(Class_ $parentClassNode, ClassMethod $classMethod): void
     {
         // iterate up?
@@ -140,5 +120,25 @@ final class ChildAndParentClassManipulator
             $firstParentConstructMethodNode->params
         );
         $classMethod->stmts[] = new Expression($parentConstructCallNode);
+    }
+
+    private function findFirstParentConstructor(Class_ $classNode): ?ClassMethod
+    {
+        while ($classNode !== null) {
+            $constructMethodNode = $classNode->getMethod('__construct');
+            if ($constructMethodNode !== null) {
+                return $constructMethodNode;
+            }
+
+            /** @var string|null $parentClassName */
+            $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+            if ($parentClassName === null) {
+                return null;
+            }
+
+            $classNode = $this->parsedNodesByType->findClass($parentClassName);
+        }
+
+        return null;
     }
 }

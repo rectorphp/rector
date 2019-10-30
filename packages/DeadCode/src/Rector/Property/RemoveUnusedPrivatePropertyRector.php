@@ -89,31 +89,6 @@ PHP
         return $node;
     }
 
-    /**
-     * Matches all-only: "$this->property = x"
-     * If these is ANY OTHER use of property, e.g. process($this->property), it returns []
-     *
-     * @param PropertyFetch[]|StaticPropertyFetch[] $propertyFetches
-     * @return Assign[]
-     */
-    private function resolveUselessAssignNode(array $propertyFetches): array
-    {
-        $uselessAssigns = [];
-
-        foreach ($propertyFetches as $propertyFetch) {
-            $propertyFetchParentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
-
-            if ($propertyFetchParentNode instanceof Assign && $propertyFetchParentNode->var === $propertyFetch) {
-                $uselessAssigns[] = $propertyFetchParentNode;
-            } else {
-                // it is used another way as well → nothing to remove
-                return [];
-            }
-        }
-
-        return $uselessAssigns;
-    }
-
     private function shouldSkipProperty(Property $property): bool
     {
         if (! $property->isPrivate()) {
@@ -156,5 +131,30 @@ PHP
         }
 
         return false;
+    }
+
+    /**
+     * Matches all-only: "$this->property = x"
+     * If these is ANY OTHER use of property, e.g. process($this->property), it returns []
+     *
+     * @param PropertyFetch[]|StaticPropertyFetch[] $propertyFetches
+     * @return Assign[]
+     */
+    private function resolveUselessAssignNode(array $propertyFetches): array
+    {
+        $uselessAssigns = [];
+
+        foreach ($propertyFetches as $propertyFetch) {
+            $propertyFetchParentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
+
+            if ($propertyFetchParentNode instanceof Assign && $propertyFetchParentNode->var === $propertyFetch) {
+                $uselessAssigns[] = $propertyFetchParentNode;
+            } else {
+                // it is used another way as well → nothing to remove
+                return [];
+            }
+        }
+
+        return $uselessAssigns;
     }
 }

@@ -132,6 +132,19 @@ PHP
         return new MethodCall($propertyFetch, 'direct', $node->args);
     }
 
+    private function resolveHelperName(MethodCall $methodCall): string
+    {
+        /** @var string $methodName */
+        $methodName = $this->getName($methodCall->name);
+
+        // special case handled by another path
+        if ($methodName === 'getHelper') {
+            return $this->getValue($methodCall->args[0]->value);
+        }
+
+        return $methodName;
+    }
+
     private function resolveHelperClassType(string $helperName): Type
     {
         // @todo make configurable/adaptable for custom helper override in own namespace
@@ -147,18 +160,5 @@ PHP
             'Class for "%s" filter was not found. Try finding the class location and add it to composer > autoload-dev > classmap',
             $helperName
         ));
-    }
-
-    private function resolveHelperName(MethodCall $methodCall): string
-    {
-        /** @var string $methodName */
-        $methodName = $this->getName($methodCall->name);
-
-        // special case handled by another path
-        if ($methodName === 'getHelper') {
-            return $this->getValue($methodCall->args[0]->value);
-        }
-
-        return $methodName;
     }
 }

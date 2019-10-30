@@ -143,13 +143,6 @@ PHP
         return null;
     }
 
-    private function processJsonString(Assign $assign, string $stringValue): Node
-    {
-        $arrayNode = $this->createArrayNodeFromJsonString($stringValue);
-
-        return $this->createAndReturnJsonEncodeFromArray($assign, $arrayNode);
-    }
-
     private function isJsonString(string $stringValue): bool
     {
         if (! (bool) Strings::match($stringValue, '#{(.*?\:.*?)}#s')) {
@@ -161,6 +154,85 @@ PHP
         } catch (JsonException $jsonException) {
             return false;
         }
+    }
+
+    private function processJsonString(Assign $assign, string $stringValue): Node
+    {
+        $arrayNode = $this->createArrayNodeFromJsonString($stringValue);
+
+        return $this->createAndReturnJsonEncodeFromArray($assign, $arrayNode);
+    }
+
+    private function collectContentAndPlaceholderNodesFromNextExpressions(Assign $assign): ConcatExpressionJoinData
+    {
+        $concatExpressionJoinData = new ConcatExpressionJoinData();
+
+        $currentNode = $assign;
+
+        while ([$nodeToRemove, $valueNode] = $this->matchNextExpressionAssignConcatToSameVariable(
+            $assign->var,
+            $currentNode
+        )) {
+            if ($valueNode instanceof String_) {
+                $concatExpressionJoinData->addString($valueNode->value);
+            } elseif ($valueNode instanceof Concat) {
+                /** @var Expr[] $newPlaceholderNodes */
+                [$content, $newPlaceholderNodes] = $this->concatJoiner->joinToStringAndPlaceholderNodes($valueNode);
+                /** @var string $content */
+                $concatExpressionJoinData->addString($content);
+
+                foreach ($newPlaceholderNodes as $placeholder => $expr) {
+                    /** @var string $placeholder */
+                    $concatExpressionJoinData->addPlaceholderToNode($placeholder, $expr);
+                }
+            } elseif ($valueNode instanceof Expr) {
+                $objectHash = '____' . spl_object_hash($valueNode) . '____';
+
+                $concatExpressionJoinData->addString($objectHash);
+                $concatExpressionJoinData->addPlaceholderToNode($objectHash, $valueNode);
+            }
+
+            $concatExpressionJoinData->addNodeToRemove($nodeToRemove);
+
+            // jump to next one
+            $currentNode = $this->getNextExpression($currentNode);
+            if ($currentNode === null) {
+                return $concatExpressionJoinData;
+            }
+        }
+
+        return $concatExpressionJoinData;
+    }
+
+    /**
+     * @param Node[] $nodesToRemove
+     * @param Expr[] $placeholderNodes
+     */
+    private function removeNodesAndCreateJsonEncodeFromStringValue(
+        array $nodesToRemove,
+        string $stringValue,
+        array $placeholderNodes,
+        Assign $assign
+    ): ?Assign {
+        // quote object hashes if needed - https://regex101.com/r/85PZHm/1
+        $stringValue = Strings::replace($stringValue, '#(?<start>[^\"])(?<hash>____\w+____)#', '$1"$2"');
+        if (! $this->isJsonString($stringValue)) {
+            return null;
+        }
+
+        $this->removeNodes($nodesToRemove);
+
+        $jsonArray = $this->createArrayNodeFromJsonString($stringValue);
+        $this->replaceNodeObjectHashPlaceholdersWithNodes($jsonArray, $placeholderNodes);
+
+        return $this->createAndReturnJsonEncodeFromArray($assign, $jsonArray);
+    }
+
+    private function createArrayNodeFromJsonString(string $stringValue): Array_
+    {
+        $array = Json::decode($stringValue, Json::FORCE_ARRAY);
+
+        return $this->createArray($array);
     }
 
     /**
@@ -179,26 +251,6 @@ PHP
         $assign->expr = $this->createStaticCall('Nette\Utils\Json', 'encode', [$jsonDataVariable]);
 
         return $assign;
-    }
-
-    /**
-     * @param Expr[] $placeholderNodes
-     */
-    private function replaceNodeObjectHashPlaceholdersWithNodes(Array_ $array, array $placeholderNodes): void
-    {
-        // traverse and replace placeholder by original nodes
-        $this->traverseNodesWithCallable($array, function (Node $node) use ($placeholderNodes): ?Expr {
-            if ($node instanceof Array_ && count($node->items) === 1) {
-                $placeholderNode = $this->matchPlaceholderNode($node->items[0]->value, $placeholderNodes);
-
-                if ($placeholderNode && $this->isImplodeToJson($placeholderNode)) {
-                    /** @var FuncCall $placeholderNode */
-                    return $placeholderNode->args[1]->value;
-                }
-            }
-
-            return $this->matchPlaceholderNode($node, $placeholderNodes);
-        });
     }
 
     /**
@@ -251,52 +303,36 @@ PHP
         return null;
     }
 
-    private function createArrayNodeFromJsonString(string $stringValue): Array_
+    /**
+     * @param Expr[] $placeholderNodes
+     */
+    private function replaceNodeObjectHashPlaceholdersWithNodes(Array_ $array, array $placeholderNodes): void
     {
-        $array = Json::decode($stringValue, Json::FORCE_ARRAY);
+        // traverse and replace placeholder by original nodes
+        $this->traverseNodesWithCallable($array, function (Node $node) use ($placeholderNodes): ?Expr {
+            if ($node instanceof Array_ && count($node->items) === 1) {
+                $placeholderNode = $this->matchPlaceholderNode($node->items[0]->value, $placeholderNodes);
 
-        return $this->createArray($array);
+                if ($placeholderNode && $this->isImplodeToJson($placeholderNode)) {
+                    /** @var FuncCall $placeholderNode */
+                    return $placeholderNode->args[1]->value;
+                }
+            }
+
+            return $this->matchPlaceholderNode($node, $placeholderNodes);
+        });
     }
 
-    private function collectContentAndPlaceholderNodesFromNextExpressions(Assign $assign): ConcatExpressionJoinData
+    /**
+     * @param Expr[] $placeholderNodes
+     */
+    private function matchPlaceholderNode(Node $node, array $placeholderNodes): ?Expr
     {
-        $concatExpressionJoinData = new ConcatExpressionJoinData();
-
-        $currentNode = $assign;
-
-        while ([$nodeToRemove, $valueNode] = $this->matchNextExpressionAssignConcatToSameVariable(
-            $assign->var,
-            $currentNode
-        )) {
-            if ($valueNode instanceof String_) {
-                $concatExpressionJoinData->addString($valueNode->value);
-            } elseif ($valueNode instanceof Concat) {
-                /** @var Expr[] $newPlaceholderNodes */
-                [$content, $newPlaceholderNodes] = $this->concatJoiner->joinToStringAndPlaceholderNodes($valueNode);
-                /** @var string $content */
-                $concatExpressionJoinData->addString($content);
-
-                foreach ($newPlaceholderNodes as $placeholder => $expr) {
-                    /** @var string $placeholder */
-                    $concatExpressionJoinData->addPlaceholderToNode($placeholder, $expr);
-                }
-            } elseif ($valueNode instanceof Expr) {
-                $objectHash = '____' . spl_object_hash($valueNode) . '____';
-
-                $concatExpressionJoinData->addString($objectHash);
-                $concatExpressionJoinData->addPlaceholderToNode($objectHash, $valueNode);
-            }
-
-            $concatExpressionJoinData->addNodeToRemove($nodeToRemove);
-
-            // jump to next one
-            $currentNode = $this->getNextExpression($currentNode);
-            if ($currentNode === null) {
-                return $concatExpressionJoinData;
-            }
+        if (! $node instanceof String_) {
+            return null;
         }
 
-        return $concatExpressionJoinData;
+        return $placeholderNodes[$node->value] ?? null;
     }
 
     /**
@@ -324,41 +360,5 @@ PHP
         }
 
         return true;
-    }
-
-    /**
-     * @param Expr[] $placeholderNodes
-     */
-    private function matchPlaceholderNode(Node $node, array $placeholderNodes): ?Expr
-    {
-        if (! $node instanceof String_) {
-            return null;
-        }
-
-        return $placeholderNodes[$node->value] ?? null;
-    }
-
-    /**
-     * @param Node[] $nodesToRemove
-     * @param Expr[] $placeholderNodes
-     */
-    private function removeNodesAndCreateJsonEncodeFromStringValue(
-        array $nodesToRemove,
-        string $stringValue,
-        array $placeholderNodes,
-        Assign $assign
-    ): ?Assign {
-        // quote object hashes if needed - https://regex101.com/r/85PZHm/1
-        $stringValue = Strings::replace($stringValue, '#(?<start>[^\"])(?<hash>____\w+____)#', '$1"$2"');
-        if (! $this->isJsonString($stringValue)) {
-            return null;
-        }
-
-        $this->removeNodes($nodesToRemove);
-
-        $jsonArray = $this->createArrayNodeFromJsonString($stringValue);
-        $this->replaceNodeObjectHashPlaceholdersWithNodes($jsonArray, $placeholderNodes);
-
-        return $this->createAndReturnJsonEncodeFromArray($assign, $jsonArray);
     }
 }

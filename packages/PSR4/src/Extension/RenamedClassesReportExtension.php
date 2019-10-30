@@ -65,24 +65,6 @@ final class RenamedClassesReportExtension implements ReportingExtensionInterface
         );
     }
 
-    /**
-     * @param ClassRenameValueObject[] $classRenames
-     * @return Expression[]
-     */
-    private function createClassAliasNodes(array $classRenames): array
-    {
-        $nodes = [];
-        foreach ($classRenames as $classRename) {
-            $classAlias = new FuncCall(new Name('class_alias'));
-            $classAlias->args[] = new Arg(new String_($classRename->getNewClass()));
-            $classAlias->args[] = new Arg(new String_($classRename->getOldClass()));
-
-            $nodes[] = new Expression($classAlias);
-        }
-
-        return $nodes;
-    }
-
     private function createRectorYamlContent(): string
     {
         $oldToNewClasses = $this->renamedClassesCollector->getOldToNewClassesSortedByHighestParentsAsString();
@@ -106,5 +88,23 @@ final class RenamedClassesReportExtension implements ReportingExtensionInterface
         $classAliasContent = $this->betterStandardPrinter->print($this->createClassAliasNodes($classRenames));
 
         return '<?php' . PHP_EOL . PHP_EOL . $classAliasContent;
+    }
+
+    /**
+     * @param ClassRenameValueObject[] $classRenames
+     * @return Expression[]
+     */
+    private function createClassAliasNodes(array $classRenames): array
+    {
+        $nodes = [];
+        foreach ($classRenames as $classRename) {
+            $classAlias = new FuncCall(new Name('class_alias'));
+            $classAlias->args[] = new Arg(new String_($classRename->getNewClass()));
+            $classAlias->args[] = new Arg(new String_($classRename->getOldClass()));
+
+            $nodes[] = new Expression($classAlias);
+        }
+
+        return $nodes;
     }
 }

@@ -190,62 +190,6 @@ PHP
         return $class;
     }
 
-    private function getOtherRelationProperty(Property $property): ?Property
-    {
-        $targetEntity = $this->docBlockManipulator->getDoctrineFqnTargetEntity($property);
-        if ($targetEntity === null) {
-            return null;
-        }
-
-        $otherProperty = $this->doctrineEntityManipulator->resolveOtherProperty($property);
-        if ($otherProperty === null) {
-            return null;
-        }
-
-        // get the class property and remove "mappedBy/inversedBy" from annotation
-        $relatedEntityClass = $this->parsedNodesByType->findClass($targetEntity);
-        if (! $relatedEntityClass instanceof Class_) {
-            return null;
-        }
-
-        foreach ($relatedEntityClass->getProperties() as $relatedEntityClassStmt) {
-            if (! $this->isName($relatedEntityClassStmt, $otherProperty)) {
-                continue;
-            }
-
-            return $relatedEntityClassStmt;
-        }
-
-        return null;
-    }
-
-    private function removeInversedByOrMappedByOnRelatedProperty(Property $property): void
-    {
-        $otherRelationProperty = $this->getOtherRelationProperty($property);
-        if ($otherRelationProperty === null) {
-            return;
-        }
-
-        $this->doctrineEntityManipulator->removeMappedByOrInversedByFromProperty($otherRelationProperty);
-    }
-
-    private function isPropertyFetchAssignOfArrayCollection(PropertyFetch $propertyFetch): bool
-    {
-        $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Assign) {
-            return false;
-        }
-
-        if (! $parentNode->expr instanceof New_) {
-            return false;
-        }
-
-        /** @var New_ $new */
-        $new = $parentNode->expr;
-
-        return $this->isName($new->class, ArrayCollection::class);
-    }
-
     /**
      * @return string[]
      */
@@ -279,5 +223,61 @@ PHP
         });
 
         return $usedPropertyNames;
+    }
+
+    private function removeInversedByOrMappedByOnRelatedProperty(Property $property): void
+    {
+        $otherRelationProperty = $this->getOtherRelationProperty($property);
+        if ($otherRelationProperty === null) {
+            return;
+        }
+
+        $this->doctrineEntityManipulator->removeMappedByOrInversedByFromProperty($otherRelationProperty);
+    }
+
+    private function isPropertyFetchAssignOfArrayCollection(PropertyFetch $propertyFetch): bool
+    {
+        $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Assign) {
+            return false;
+        }
+
+        if (! $parentNode->expr instanceof New_) {
+            return false;
+        }
+
+        /** @var New_ $new */
+        $new = $parentNode->expr;
+
+        return $this->isName($new->class, ArrayCollection::class);
+    }
+
+    private function getOtherRelationProperty(Property $property): ?Property
+    {
+        $targetEntity = $this->docBlockManipulator->getDoctrineFqnTargetEntity($property);
+        if ($targetEntity === null) {
+            return null;
+        }
+
+        $otherProperty = $this->doctrineEntityManipulator->resolveOtherProperty($property);
+        if ($otherProperty === null) {
+            return null;
+        }
+
+        // get the class property and remove "mappedBy/inversedBy" from annotation
+        $relatedEntityClass = $this->parsedNodesByType->findClass($targetEntity);
+        if (! $relatedEntityClass instanceof Class_) {
+            return null;
+        }
+
+        foreach ($relatedEntityClass->getProperties() as $relatedEntityClassStmt) {
+            if (! $this->isName($relatedEntityClassStmt, $otherProperty)) {
+                continue;
+            }
+
+            return $relatedEntityClassStmt;
+        }
+
+        return null;
     }
 }

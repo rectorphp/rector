@@ -145,11 +145,6 @@ PHP
         return $onlyStmt->expr;
     }
 
-    private function unwrapExpression(Node $node): Node
-    {
-        return $node instanceof Expression ? $node->expr : $node;
-    }
-
     /**
      * @param Node[] $nodes
      */
@@ -167,5 +162,10 @@ PHP
     private function isNodeTooLong(Assign $assign): bool
     {
         return Strings::length($this->print($assign)) > self::LINE_LENGHT_LIMIT;
+    }
+
+    private function unwrapExpression(Node $node): Node
+    {
+        return $node instanceof Expression ? $node->expr : $node;
     }
 }

@@ -140,6 +140,30 @@ PHP
         return $this->isObjectType($class, WebTestCase::class);
     }
 
+    private function processAssertResponseStatusCodeSame(Node $node): ?MethodCall
+    {
+        if (! $node instanceof MethodCall) {
+            return null;
+        }
+
+        if (! $this->isName($node->name, 'assertSame')) {
+            return null;
+        }
+
+        if (! $this->areNodesEqual($node->args[1]->value, $this->getStatusCodeMethodCall)) {
+            return null;
+        }
+
+        $statusCode = $this->getValue($node->args[0]->value);
+
+        // handled by another methods
+        if (in_array($statusCode, [200, 301], true)) {
+            return null;
+        }
+
+        return new MethodCall(new Variable('this'), 'assertResponseStatusCodeSame', [$node->args[0]]);
+    }
+
     /**
      * @return Arg[]|null
      */
@@ -218,29 +242,5 @@ PHP
         }
 
         return null;
-    }
-
-    private function processAssertResponseStatusCodeSame(Node $node): ?MethodCall
-    {
-        if (! $node instanceof MethodCall) {
-            return null;
-        }
-
-        if (! $this->isName($node->name, 'assertSame')) {
-            return null;
-        }
-
-        if (! $this->areNodesEqual($node->args[1]->value, $this->getStatusCodeMethodCall)) {
-            return null;
-        }
-
-        $statusCode = $this->getValue($node->args[0]->value);
-
-        // handled by another methods
-        if (in_array($statusCode, [200, 301], true)) {
-            return null;
-        }
-
-        return new MethodCall(new Variable('this'), 'assertResponseStatusCodeSame', [$node->args[0]]);
     }
 }

@@ -93,22 +93,33 @@ final class UniqueObjectFactoryFactory
         return $factoryClassBuilder->getNode();
     }
 
-    /**
-     * @param Param[] $params
-     *
-     * @return Assign[]
-     */
-    private function createAssignsFromParams(array $params): array
+    private function resolveClassShortName(string $name): string
     {
-        $assigns = [];
-
-        /** @var Param $param */
-        foreach ($params as $param) {
-            $propertyFetch = new PropertyFetch(new Variable('this'), $param->var->name);
-            $assigns[] = new Assign($propertyFetch, new Variable($param->var->name));
+        if (Strings::contains($name, '\\')) {
+            return (string) Strings::after($name, '\\', -1);
         }
 
-        return $assigns;
+        return $name;
+    }
+
+    /**
+     * @return Property[]
+     */
+    private function createPropertiesFromTypes(ObjectType $objectType): array
+    {
+        $properties = [];
+
+        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
+        $propertyBuilder = $this->builderFactory->property($propertyName);
+        $propertyBuilder->makePrivate();
+
+        $property = $propertyBuilder->getNode();
+
+        $this->docBlockManipulator->changeVarTag($property, $objectType);
+
+        $properties[] = $property;
+
+        return $properties;
     }
 
     private function createConstructMethod(ObjectType $objectType): ClassMethod
@@ -166,31 +177,20 @@ final class UniqueObjectFactoryFactory
     }
 
     /**
-     * @return Property[]
+     * @param Param[] $params
+     *
+     * @return Assign[]
      */
-    private function createPropertiesFromTypes(ObjectType $objectType): array
+    private function createAssignsFromParams(array $params): array
     {
-        $properties = [];
+        $assigns = [];
 
-        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-        $propertyBuilder = $this->builderFactory->property($propertyName);
-        $propertyBuilder->makePrivate();
-
-        $property = $propertyBuilder->getNode();
-
-        $this->docBlockManipulator->changeVarTag($property, $objectType);
-
-        $properties[] = $property;
-
-        return $properties;
-    }
-
-    private function resolveClassShortName(string $name): string
-    {
-        if (Strings::contains($name, '\\')) {
-            return (string) Strings::after($name, '\\', -1);
+        /** @var Param $param */
+        foreach ($params as $param) {
+            $propertyFetch = new PropertyFetch(new Variable('this'), $param->var->name);
+            $assigns[] = new Assign($propertyFetch, new Variable($param->var->name));
         }
 
-        return $name;
+        return $assigns;
     }
 }

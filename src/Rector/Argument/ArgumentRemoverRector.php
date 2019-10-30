@@ -125,16 +125,6 @@ PHP
     }
 
     /**
-     * @param mixed[] $values
-     */
-    private function isArgumentValueMatch(Arg $arg, array $values): bool
-    {
-        $nodeValue = $this->getValue($arg->value);
-
-        return in_array($nodeValue, $values, true);
-    }
-
-    /**
      * @param ClassMethod|StaticCall|MethodCall $node
      */
     private function removeByName(Node $node, int $position, string $name): void
@@ -154,5 +144,15 @@ PHP
 
             return;
         }
+    }
+
+    /**
+     * @param mixed[] $values
+     */
+    private function isArgumentValueMatch(Arg $arg, array $values): bool
+    {
+        $nodeValue = $this->getValue($arg->value);
+
+        return in_array($nodeValue, $values, true);
     }
 }

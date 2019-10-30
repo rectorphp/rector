@@ -207,29 +207,32 @@ PHP
         return $node;
     }
 
-    private function createDataProviderTagNode(string $dataProviderMethodName): PhpDocTagNode
+    /**
+     * @param mixed[] $configuration
+     */
+    private function ensureConfigurationIsSet(array $configuration): void
     {
-        return new PhpDocTagNode('@dataProvider', new GenericTagValueNode($dataProviderMethodName . '()'));
-    }
-
-    private function createParamTagNode(string $name, TypeNode $typeNode): PhpDocTagNode
-    {
-        return new PhpDocTagNode('@param', new ParamTagValueNode($typeNode, false, '$' . $name, ''));
-    }
-
-    private function resolveUniqueArrayStaticTypes(Array_ $array): Type
-    {
-        $itemStaticTypes = [];
-        foreach ($array->items as $arrayItem) {
-            $arrayItemStaticType = $this->getStaticType($arrayItem->value);
-            if ($arrayItemStaticType instanceof MixedType) {
-                continue;
-            }
-
-            $itemStaticTypes[] = new ArrayType(new MixedType(), $arrayItemStaticType);
+        if ($configuration !== []) {
+            return;
         }
 
-        return $this->typeFactory->createMixedPassedOrUnionType($itemStaticTypes);
+        throw new ShouldNotHappenException(sprintf(
+            'Add configuration via "%s" argument for "%s"',
+            '$configuration',
+            self::class
+        ));
+    }
+
+    /**
+     * @param string[] $singleConfiguration
+     */
+    private function isMethodCallMatch(MethodCall $methodCall, array $singleConfiguration): bool
+    {
+        if (! $this->isObjectType($methodCall->var, $singleConfiguration['class'])) {
+            return false;
+        }
+
+        return $this->isName($methodCall->name, $singleConfiguration['old_method']);
     }
 
     private function createDataProviderMethodName(Node $node): string
@@ -240,20 +243,18 @@ PHP
         return 'provideDataFor' . ucfirst($methodName);
     }
 
-    /**
-     * @return ClassMethod[]
-     */
-    private function createDataProviderClassMethodsFromRecipes(): array
+    private function resolveUniqueArrayStaticType(Array_ $array): Type
     {
-        $dataProviderClassMethods = [];
+        $isNestedArray = $this->isNestedArray($array);
 
-        foreach ($this->dataProviderClassMethodRecipes as $dataProviderClassMethodRecipe) {
-            $dataProviderClassMethods[] = $this->dataProviderClassMethodFactory->createFromRecipe(
-                $dataProviderClassMethodRecipe
-            );
+        $uniqueArrayStaticType = $this->resolveUniqueArrayStaticTypes($array);
+
+        if ($isNestedArray && $uniqueArrayStaticType instanceof ArrayType) {
+            // unwrap one level up
+            return $uniqueArrayStaticType->getItemType();
         }
 
-        return $dataProviderClassMethods;
+        return $uniqueArrayStaticType;
     }
 
     /**
@@ -300,83 +301,6 @@ PHP
 
     /**
      * @param ParamAndArgValueObject[] $paramAndArgs
-     * @return Param[]
-     */
-    private function createParams(array $paramAndArgs): array
-    {
-        $params = [];
-        foreach ($paramAndArgs as $paramAndArg) {
-            $param = new Param($paramAndArg->getVariable());
-
-            $staticType = $paramAndArg->getType();
-
-            if ($staticType !== null && ! $staticType instanceof UnionType) {
-                $phpNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType);
-                if ($phpNodeType !== null) {
-                    $param->type = $phpNodeType;
-                }
-            }
-
-            $params[] = $param;
-        }
-
-        return $params;
-    }
-
-    private function resolveItemStaticType(Array_ $array, bool $isNestedArray): Type
-    {
-        $staticTypes = [];
-        if ($isNestedArray === false) {
-            foreach ($array->items as $arrayItem) {
-                $arrayItemStaticType = $this->getStaticType($arrayItem->value);
-                if ($arrayItemStaticType) {
-                    $staticTypes[] = $arrayItemStaticType;
-                }
-            }
-        }
-
-        return $this->typeFactory->createMixedPassedOrUnionType($staticTypes);
-    }
-
-    private function isNestedArray(Array_ $array): bool
-    {
-        foreach ($array->items as $arrayItem) {
-            if ($arrayItem->value instanceof Array_) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param string[] $singleConfiguration
-     */
-    private function isMethodCallMatch(MethodCall $methodCall, array $singleConfiguration): bool
-    {
-        if (! $this->isObjectType($methodCall->var, $singleConfiguration['class'])) {
-            return false;
-        }
-
-        return $this->isName($methodCall->name, $singleConfiguration['old_method']);
-    }
-
-    private function resolveUniqueArrayStaticType(Array_ $array): Type
-    {
-        $isNestedArray = $this->isNestedArray($array);
-
-        $uniqueArrayStaticType = $this->resolveUniqueArrayStaticTypes($array);
-
-        if ($isNestedArray && $uniqueArrayStaticType instanceof ArrayType) {
-            // unwrap one level up
-            return $uniqueArrayStaticType->getItemType();
-        }
-
-        return $uniqueArrayStaticType;
-    }
-
-    /**
-     * @param ParamAndArgValueObject[] $paramAndArgs
      */
     private function refactorTestClassMethodParams(ClassMethod $classMethod, array $paramAndArgs): void
     {
@@ -400,19 +324,95 @@ PHP
         }
     }
 
-    /**
-     * @param mixed[] $configuration
-     */
-    private function ensureConfigurationIsSet(array $configuration): void
+    private function createDataProviderTagNode(string $dataProviderMethodName): PhpDocTagNode
     {
-        if ($configuration !== []) {
-            return;
+        return new PhpDocTagNode('@dataProvider', new GenericTagValueNode($dataProviderMethodName . '()'));
+    }
+
+    /**
+     * @return ClassMethod[]
+     */
+    private function createDataProviderClassMethodsFromRecipes(): array
+    {
+        $dataProviderClassMethods = [];
+
+        foreach ($this->dataProviderClassMethodRecipes as $dataProviderClassMethodRecipe) {
+            $dataProviderClassMethods[] = $this->dataProviderClassMethodFactory->createFromRecipe(
+                $dataProviderClassMethodRecipe
+            );
         }
 
-        throw new ShouldNotHappenException(sprintf(
-            'Add configuration via "%s" argument for "%s"',
-            '$configuration',
-            self::class
-        ));
+        return $dataProviderClassMethods;
+    }
+
+    private function isNestedArray(Array_ $array): bool
+    {
+        foreach ($array->items as $arrayItem) {
+            if ($arrayItem->value instanceof Array_) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function resolveUniqueArrayStaticTypes(Array_ $array): Type
+    {
+        $itemStaticTypes = [];
+        foreach ($array->items as $arrayItem) {
+            $arrayItemStaticType = $this->getStaticType($arrayItem->value);
+            if ($arrayItemStaticType instanceof MixedType) {
+                continue;
+            }
+
+            $itemStaticTypes[] = new ArrayType(new MixedType(), $arrayItemStaticType);
+        }
+
+        return $this->typeFactory->createMixedPassedOrUnionType($itemStaticTypes);
+    }
+
+    private function resolveItemStaticType(Array_ $array, bool $isNestedArray): Type
+    {
+        $staticTypes = [];
+        if ($isNestedArray === false) {
+            foreach ($array->items as $arrayItem) {
+                $arrayItemStaticType = $this->getStaticType($arrayItem->value);
+                if ($arrayItemStaticType) {
+                    $staticTypes[] = $arrayItemStaticType;
+                }
+            }
+        }
+
+        return $this->typeFactory->createMixedPassedOrUnionType($staticTypes);
+    }
+
+    /**
+     * @param ParamAndArgValueObject[] $paramAndArgs
+     * @return Param[]
+     */
+    private function createParams(array $paramAndArgs): array
+    {
+        $params = [];
+        foreach ($paramAndArgs as $paramAndArg) {
+            $param = new Param($paramAndArg->getVariable());
+
+            $staticType = $paramAndArg->getType();
+
+            if ($staticType !== null && ! $staticType instanceof UnionType) {
+                $phpNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType);
+                if ($phpNodeType !== null) {
+                    $param->type = $phpNodeType;
+                }
+            }
+
+            $params[] = $param;
+        }
+
+        return $params;
+    }
+
+    private function createParamTagNode(string $name, TypeNode $typeNode): PhpDocTagNode
+    {
+        return new PhpDocTagNode('@param', new ParamTagValueNode($typeNode, false, '$' . $name, ''));
     }
 }

@@ -144,61 +144,55 @@ PHP
     }
 
     /**
-     * Checks validity:
-     *
-     * - extends SomeClass
-     * - extends SomeInterface
-     *
-     * - new SomeClass
-     * - new SomeInterface
-     *
-     * - implements SomeInterface
-     * - implements SomeClass
+     * Replace types in @var/@param/@return/@throws,
+     * Doctrine @ORM entity targetClass, Serialize, Assert etc.
      */
-    private function isClassToInterfaceValidChange(Node $node, string $newName): bool
+    private function refactorPhpDoc(Node $node): void
     {
-        // ensure new is not with interface
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof New_ && interface_exists($newName)) {
-            return false;
+        $nodePhpDocInfo = $this->getPhpDocInfo($node);
+        if ($nodePhpDocInfo === null) {
+            return;
         }
 
-        if ($parentNode instanceof Class_) {
-            return $this->isValidClassNameChange($node, $newName, $parentNode);
+        if (! $this->docBlockManipulator->hasNodeTypeTags($node)) {
+            return;
         }
 
-        // prevent to change to import, that already exists
-        if ($parentNode instanceof UseUse) {
-            return $this->isValidUseImportChange($newName, $parentNode);
+        foreach ($this->oldToNewClasses as $oldClass => $newClass) {
+            $oldClassType = new ObjectType($oldClass);
+            $newClassType = new FullyQualifiedObjectType($newClass);
+
+            $this->docBlockManipulator->changeType($node, $oldClassType, $newClassType);
         }
 
-        return true;
+        $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $this->oldToNewClasses);
     }
 
-    private function isValidUseImportChange(string $newName, UseUse $useUse): bool
+    private function refactorName(Name $name): ?Name
     {
-        /** @var Use_[]|null $useNodes */
-        $useNodes = $useUse->getAttribute(AttributeKey::USE_NODES);
-        if ($useNodes === null) {
-            return true;
+        $stringName = $this->getName($name);
+        if ($stringName === null) {
+            return null;
         }
 
-        foreach ($useNodes as $useNode) {
-            if ($this->isName($useNode, $newName)) {
-                // name already exists
-                return false;
+        $newName = $this->oldToNewClasses[$stringName] ?? null;
+        if (! $newName) {
+            return null;
+        }
+
+        if (! $this->isClassToInterfaceValidChange($name, $newName)) {
+            return null;
+        }
+
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        // no need to preslash "use \SomeNamespace" of imported namespace
+        if ($parentNode instanceof UseUse) {
+            if ($parentNode->type === Use_::TYPE_NORMAL || $parentNode->type === Use_::TYPE_UNKNOWN) {
+                return new Name($newName);
             }
         }
 
-        return true;
-    }
-
-    private function isValidClassNameChange(Node $node, string $newName, Class_ $classNode): bool
-    {
-        if ($classNode->extends === $node && interface_exists($newName)) {
-            return false;
-        }
-        return ! (in_array($node, $classNode->implements, true) && class_exists($newName));
+        return new FullyQualified($newName);
     }
 
     private function refactorNamespaceNode(Namespace_ $namespace): ?Node
@@ -226,21 +220,6 @@ PHP
         $namespace->name = new Name($newNamespace);
 
         return $namespace;
-    }
-
-    private function getClassOfNamespaceToRefactor(Namespace_ $namespace): ?ClassLike
-    {
-        $foundClass = $this->betterNodeFinder->findFirst($namespace, function (Node $node): bool {
-            if (! $node instanceof ClassLike) {
-                return false;
-            }
-
-            $classLikeName = $this->getName($node);
-
-            return isset($this->oldToNewClasses[$classLikeName]);
-        });
-
-        return $foundClass instanceof ClassLike ? $foundClass : null;
     }
 
     private function refactorClassLikeNode(ClassLike $classLike): ?Node
@@ -281,56 +260,51 @@ PHP
         return $classLike;
     }
 
-    private function refactorName(Name $name): ?Name
+    /**
+     * Checks validity:
+     *
+     * - extends SomeClass
+     * - extends SomeInterface
+     *
+     * - new SomeClass
+     * - new SomeInterface
+     *
+     * - implements SomeInterface
+     * - implements SomeClass
+     */
+    private function isClassToInterfaceValidChange(Node $node, string $newName): bool
     {
-        $stringName = $this->getName($name);
-        if ($stringName === null) {
-            return null;
+        // ensure new is not with interface
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof New_ && interface_exists($newName)) {
+            return false;
         }
 
-        $newName = $this->oldToNewClasses[$stringName] ?? null;
-        if (! $newName) {
-            return null;
+        if ($parentNode instanceof Class_) {
+            return $this->isValidClassNameChange($node, $newName, $parentNode);
         }
 
-        if (! $this->isClassToInterfaceValidChange($name, $newName)) {
-            return null;
-        }
-
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        // no need to preslash "use \SomeNamespace" of imported namespace
+        // prevent to change to import, that already exists
         if ($parentNode instanceof UseUse) {
-            if ($parentNode->type === Use_::TYPE_NORMAL || $parentNode->type === Use_::TYPE_UNKNOWN) {
-                return new Name($newName);
-            }
+            return $this->isValidUseImportChange($newName, $parentNode);
         }
 
-        return new FullyQualified($newName);
+        return true;
     }
 
-    /**
-     * Replace types in @var/@param/@return/@throws,
-     * Doctrine @ORM entity targetClass, Serialize, Assert etc.
-     */
-    private function refactorPhpDoc(Node $node): void
+    private function getClassOfNamespaceToRefactor(Namespace_ $namespace): ?ClassLike
     {
-        $nodePhpDocInfo = $this->getPhpDocInfo($node);
-        if ($nodePhpDocInfo === null) {
-            return;
-        }
+        $foundClass = $this->betterNodeFinder->findFirst($namespace, function (Node $node): bool {
+            if (! $node instanceof ClassLike) {
+                return false;
+            }
 
-        if (! $this->docBlockManipulator->hasNodeTypeTags($node)) {
-            return;
-        }
+            $classLikeName = $this->getName($node);
 
-        foreach ($this->oldToNewClasses as $oldClass => $newClass) {
-            $oldClassType = new ObjectType($oldClass);
-            $newClassType = new FullyQualifiedObjectType($newClass);
+            return isset($this->oldToNewClasses[$classLikeName]);
+        });
 
-            $this->docBlockManipulator->changeType($node, $oldClassType, $newClassType);
-        }
-
-        $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $this->oldToNewClasses);
+        return $foundClass instanceof ClassLike ? $foundClass : null;
     }
 
     private function ensureClassWillNotBeDuplicate(string $newName, string $oldName): void
@@ -359,5 +333,31 @@ PHP
             // invoke override
             $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         });
+    }
+
+    private function isValidClassNameChange(Node $node, string $newName, Class_ $classNode): bool
+    {
+        if ($classNode->extends === $node && interface_exists($newName)) {
+            return false;
+        }
+        return ! (in_array($node, $classNode->implements, true) && class_exists($newName));
+    }
+
+    private function isValidUseImportChange(string $newName, UseUse $useUse): bool
+    {
+        /** @var Use_[]|null $useNodes */
+        $useNodes = $useUse->getAttribute(AttributeKey::USE_NODES);
+        if ($useNodes === null) {
+            return true;
+        }
+
+        foreach ($useNodes as $useNode) {
+            if ($this->isName($useNode, $newName)) {
+                // name already exists
+                return false;
+            }
+        }
+
+        return true;
     }
 }
