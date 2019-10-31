@@ -1,8 +1,9 @@
 <?php declare (strict_types=1);
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ClassWithNamedService43
+class ClassWithNamedService43 extends AbstractController
 {
     /**
      * @Template("AdminBundle:Payment:create.html.twig")
@@ -20,8 +21,9 @@ class ClassWithNamedService43
 <?php declare (strict_types=1);
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ClassWithNamedService43
+class ClassWithNamedService43 extends AbstractController
 {
     public function indexAction()
     {

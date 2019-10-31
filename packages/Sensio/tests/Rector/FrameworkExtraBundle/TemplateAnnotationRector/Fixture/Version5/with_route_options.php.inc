@@ -3,9 +3,10 @@
 namespace App\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class WithRouteOptions
+class WithRouteOptions extends AbstractController
 {
     /**
      * @Route("/{category}", name="report_overview", defaults={"category":null}, requirements={"category":"\d+"})
@@ -26,9 +27,10 @@ class WithRouteOptions
 namespace App\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class WithRouteOptions
+class WithRouteOptions extends AbstractController
 {
     /**
      * @Route("/{category}", name="report_overview", defaults={"category":null}, requirements={"category":"\d+"})

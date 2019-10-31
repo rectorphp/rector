@@ -3,8 +3,9 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ClassWithNamedService23Controller
+class ClassWithNamedService23Controller extends AbstractController
 {
     /**
      * @Template()
@@ -32,8 +33,9 @@ class ClassWithNamedService23Controller
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ClassWithNamedService23Controller
+class ClassWithNamedService23Controller extends AbstractController
 {
     public function indexAction()
     {

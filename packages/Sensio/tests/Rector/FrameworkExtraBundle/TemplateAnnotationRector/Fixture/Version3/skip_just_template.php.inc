@@ -2,7 +2,9 @@
 
 namespace Rector\Sensio\Tests\Rector\FrameworkExtraBundle\TemplateAnnotationRector\Fixture;
 
-class SkipJustTemplateController
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+class SkipJustTemplateController extends AbstractController
 {
     /**
      * @Template

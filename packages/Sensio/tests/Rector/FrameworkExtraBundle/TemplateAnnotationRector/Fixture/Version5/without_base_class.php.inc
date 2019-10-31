@@ -3,14 +3,13 @@
 namespace App\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class WithRouteToo extends AbstractController
+class WithoutBaseClass
 {
     /**
      * @Route("/change", name="facility_change")
-     * @Template("PAPPUserBundle:Facility:facility.html.twig")
+     * @Template("AppBundle:ClassWithNamedService25:index.html.twig")
      */
     public function index()
     {
@@ -25,17 +24,16 @@ class WithRouteToo extends AbstractController
 namespace App\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class WithRouteToo extends AbstractController
+class WithoutBaseClass extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
     /**
      * @Route("/change", name="facility_change")
      */
     public function index()
     {
-        return $this->render('PAPPUserBundle:Facility:facility.html.twig');
+        return $this->render('AppBundle:ClassWithNamedService25:index.html.twig');
     }
 }
 
