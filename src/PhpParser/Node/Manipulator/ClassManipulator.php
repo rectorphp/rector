@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
@@ -487,6 +488,10 @@ final class ClassManipulator
     private function isNonAssignPropertyFetch(Node $node): bool
     {
         if ($node instanceof PropertyFetch) {
+            if (! $node->var instanceof Variable) {
+                return false;
+            }
+
             if (! $this->nameResolver->isName($node->var, 'this')) {
                 return false;
             }

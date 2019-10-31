@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\While_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -82,6 +83,11 @@ PHP
             return null;
         }
 
+        if ($previousNode instanceof While_) {
+            $node->setAttribute(AttributeKey::IS_UNREACHABLE, false);
+            return null;
+        }
+
         if ($this->isAfterMarkTestSkippedMethodCall($node)) {
             $node->setAttribute(AttributeKey::IS_UNREACHABLE, false);
             return null;
@@ -144,6 +150,7 @@ PHP
         if ($node instanceof Namespace_) {
             return true;
         }
+
         return $node instanceof Else_;
     }
 }

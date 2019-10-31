@@ -24,6 +24,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class NameResolver
 {
@@ -44,8 +45,16 @@ final class NameResolver
     public function isName(Node $node, string $name): bool
     {
         if ($node instanceof MethodCall) {
+            $debugBacktrace = debug_backtrace();
+
+            $previousCaller = $debugBacktrace[0];
+            $fileInfo = new SmartFileInfo($previousCaller['file']);
+            $location = $fileInfo->getRelativeFilePathFromDirectory(getcwd()) . ':' . $previousCaller['line'];
+
             throw new ShouldNotHappenException(sprintf(
-                'Cannot get name on "%s" node. Use $node->name instead', MethodCall::class
+                'Cannot get name on "%s" node. Use $node->name instead. Called in: %s',
+                MethodCall::class,
+                $location
             ));
         }
 
