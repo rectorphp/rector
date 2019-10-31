@@ -58,7 +58,7 @@ final class Application extends SymfonyApplication
     {
         // @fixes https://github.com/rectorphp/rector/issues/2205
         $isXdebugAllowed = $input->hasParameterOption('--xdebug');
-        if (!$isXdebugAllowed) {
+        if (! $isXdebugAllowed) {
             $xdebug = new XdebugHandler('rector', '--ansi');
             $xdebug->check();
             unset($xdebug);
