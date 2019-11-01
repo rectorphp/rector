@@ -72,19 +72,23 @@ PHP
             return null;
         }
 
-        if (! $this->isUnreachable($node)) {
-            return null;
-        }
-
         // might be PHPStan false positive, better skip
-        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($previousNode instanceof If_) {
-            $node->setAttribute(AttributeKey::IS_UNREACHABLE, false);
-            return null;
+        $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
+        if ($previousStatement instanceof If_) {
+            $node->setAttribute(
+                AttributeKey::IS_UNREACHABLE,
+                $previousStatement->getAttribute(AttributeKey::IS_UNREACHABLE)
+            );
         }
 
-        if ($previousNode instanceof While_) {
-            $node->setAttribute(AttributeKey::IS_UNREACHABLE, false);
+        if ($previousStatement instanceof While_) {
+            $node->setAttribute(
+                AttributeKey::IS_UNREACHABLE,
+                $previousStatement->getAttribute(AttributeKey::IS_UNREACHABLE)
+            );
+        }
+
+        if (! $this->isUnreachable($node)) {
             return null;
         }
 
@@ -106,15 +110,15 @@ PHP
         }
 
         // traverse up for unreachable node in the same scope
-        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
 
-        while ($previousNode instanceof Node && ! $this->isBreakingScopeNode($node)) {
+        while ($previousNode instanceof Node && ! $this->isBreakingScopeNode($previousNode)) {
             $isUnreachable = $previousNode->getAttribute(AttributeKey::IS_UNREACHABLE);
             if ($isUnreachable === true) {
                 return true;
             }
 
-            $previousNode = $previousNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+            $previousNode = $previousNode->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
         }
 
         return false;

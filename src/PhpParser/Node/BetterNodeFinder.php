@@ -156,7 +156,7 @@ final class BetterNodeFinder
 
     public function findFirstPrevious(Node $node, callable $filter): ?Node
     {
-        $node = $node instanceof Expression ? $node : $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
+        $node = $node instanceof Expression ? $node : $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
         if ($node === null) {
             return null;
         }
@@ -168,12 +168,12 @@ final class BetterNodeFinder
         }
 
         // move to next expression
-        $previousExpression = $node->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
-        if ($previousExpression === null) {
+        $previousStatement = $node->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
+        if ($previousStatement === null) {
             return null;
         }
 
-        return $this->findFirstPrevious($previousExpression, $filter);
+        return $this->findFirstPrevious($previousStatement, $filter);
     }
 
     /**

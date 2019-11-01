@@ -203,13 +203,13 @@ PHP
 
     private function processAssertResponseRedirects(MethodCall $methodCall): ?Node
     {
-        /** @var Expression|null $previousExpression */
-        $previousExpression = $methodCall->getAttribute(AttributeKey::PREVIOUS_EXPRESSION);
-        if (! $previousExpression instanceof Expression) {
+        /** @var Expression|null $previousStatement */
+        $previousStatement = $methodCall->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
+        if (! $previousStatement instanceof Expression) {
             return null;
         }
 
-        $previousNode = $previousExpression->expr;
+        $previousNode = $previousStatement->expr;
         if (! $previousNode instanceof MethodCall) {
             return null;
         }

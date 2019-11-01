@@ -94,7 +94,8 @@ final class NodeAddingCommander implements CommanderInterface
         }
 
         // special case for "If_"
-        $parentNode = $node->getAttribute(AttributeKey::CURRENT_EXPRESSION);
+        $parentNode = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+
         if ($parentNode === null) {
             return spl_object_hash($node);
         }
