@@ -92,11 +92,6 @@ PHP
             return null;
         }
 
-        if ($previousNode instanceof While_) {
-            $node->setAttribute(AttributeKey::IS_UNREACHABLE, false);
-            return null;
-        }
-
         if ($this->isAfterMarkTestSkippedMethodCall($node)) {
             $node->setAttribute(AttributeKey::IS_UNREACHABLE, false);
             return null;
