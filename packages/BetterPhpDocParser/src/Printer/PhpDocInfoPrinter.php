@@ -148,7 +148,7 @@ final class PhpDocInfoPrinter
         $startEndValueObject = $attributeAwareNode->getAttribute(Attribute::PHP_DOC_NODE_INFO) ?: $startEndValueObject;
         $attributeAwareNode = $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($attributeAwareNode);
 
-        if ($startEndValueObject) {
+        if ($startEndValueObject !== null) {
             $isLastToken = ($nodeCount === $i);
 
             $output = $this->addTokensFromTo(
@@ -162,7 +162,7 @@ final class PhpDocInfoPrinter
         }
 
         if ($attributeAwareNode instanceof PhpDocTagNode) {
-            if ($startEndValueObject) {
+            if ($startEndValueObject !== null) {
                 return $this->printPhpDocTagNode($attributeAwareNode, $startEndValueObject, $output);
             }
 
@@ -246,13 +246,21 @@ final class PhpDocInfoPrinter
                     $phpDocTagNode->value->description
                 );
 
-                if (substr_count($nodeOutput, "\n")) {
+                if (substr_count($nodeOutput, "\n") !== 0) {
                     $nodeOutput = Strings::replace($nodeOutput, "#\n#", PHP_EOL . '  * ');
                 }
             }
         }
 
         return $output . $nodeOutput;
+    }
+
+    private function printAttributeWithAsterisk(AttributeAwareNodeInterface $attributeAwareNode): string
+    {
+        $content = (string) $attributeAwareNode;
+        $content = explode(PHP_EOL, $content);
+
+        return implode(PHP_EOL . ' * ', $content);
     }
 
     /**
@@ -318,13 +326,5 @@ final class PhpDocInfoPrinter
         }
 
         return Strings::contains($this->phpDocInfo->getOriginalContent(), $phpDocTagNode->name . ' ');
-    }
-
-    private function printAttributeWithAsterisk(AttributeAwareNodeInterface $attributeAwareNode): string
-    {
-        $content = (string) $attributeAwareNode;
-        $content = explode(PHP_EOL, $content);
-
-        return implode(PHP_EOL . ' * ', $content);
     }
 }

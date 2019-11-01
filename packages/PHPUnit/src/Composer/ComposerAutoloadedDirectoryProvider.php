@@ -50,6 +50,20 @@ final class ComposerAutoloadedDirectoryProvider
     }
 
     /**
+     * @return mixed[]
+     */
+    private function loadComposerJsonArray(): array
+    {
+        if (! file_exists($this->composerFilePath)) {
+            return [];
+        }
+
+        $composerFileContent = FileSystem::read($this->composerFilePath);
+
+        return Json::decode($composerFileContent, Json::FORCE_ARRAY);
+    }
+
+    /**
      * @param string[] $composerJsonAutoload
      * @return string[]
      */
@@ -80,19 +94,5 @@ final class ComposerAutoloadedDirectoryProvider
         }
 
         return array_values($autoloadDirectories);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    private function loadComposerJsonArray(): array
-    {
-        if (! file_exists($this->composerFilePath)) {
-            return [];
-        }
-
-        $composerFileContent = FileSystem::read($this->composerFilePath);
-
-        return Json::decode($composerFileContent, Json::FORCE_ARRAY);
     }
 }

@@ -75,13 +75,33 @@ final class RectorStandaloneRunner
         $phpFileInfos = $this->findFilesInSource($source);
         $this->runRectorOnFileInfos($phpFileInfos);
 
-        if ($isQuietMode === false) {
+        if (! $isQuietMode) {
             $this->reportErrors();
         }
 
         $this->finish();
 
         return $this->container->get(ErrorAndDiffCollector::class);
+    }
+
+    /**
+     * @param string[] $source
+     * @return string[]
+     */
+    private function absolutizeSource(array $source): array
+    {
+        foreach ($source as $key => $singleSource) {
+            /** @var string $singleSource */
+            if (! file_exists($singleSource)) {
+                throw new FileNotFoundException($singleSource);
+            }
+
+            /** @var string $realpath */
+            $realpath = realpath($singleSource);
+            $source[$key] = $realpath;
+        }
+
+        return $source;
     }
 
     /**
@@ -114,6 +134,28 @@ final class RectorStandaloneRunner
         $stubLoader->loadStubs();
     }
 
+    /**
+     * @param string[] $source
+     * @return SmartFileInfo[]
+     */
+    private function findFilesInSource(array $source): array
+    {
+        /** @var FilesFinder $filesFinder */
+        $filesFinder = $this->container->get(FilesFinder::class);
+
+        return $filesFinder->findInDirectoriesAndFiles($source, ['php']);
+    }
+
+    /**
+     * @param SmartFileInfo[] $phpFileInfos
+     */
+    private function runRectorOnFileInfos(array $phpFileInfos): void
+    {
+        /** @var RectorApplication $rectorApplication */
+        $rectorApplication = $this->container->get(RectorApplication::class);
+        $rectorApplication->runOnFileInfos($phpFileInfos);
+    }
+
     private function reportErrors(): void
     {
         /** @var ErrorAndDiffCollector $errorAndDiffCollector */
@@ -122,26 +164,6 @@ final class RectorStandaloneRunner
         /** @var ConsoleOutputFormatter $consoleOutputFormatter */
         $consoleOutputFormatter = $this->container->get(ConsoleOutputFormatter::class);
         $consoleOutputFormatter->report($errorAndDiffCollector);
-    }
-
-    /**
-     * @param string[] $source
-     * @return string[]
-     */
-    private function absolutizeSource(array $source): array
-    {
-        foreach ($source as $key => $singleSource) {
-            /** @var string $singleSource */
-            if (! file_exists($singleSource)) {
-                throw new FileNotFoundException($singleSource);
-            }
-
-            /** @var string $realpath */
-            $realpath = realpath($singleSource);
-            $source[$key] = $realpath;
-        }
-
-        return $source;
     }
 
     private function finish(): void
@@ -174,27 +196,5 @@ final class RectorStandaloneRunner
             '--' . Option::OPTION_DRY_RUN => $isDryRun,
             '--' . Option::OPTION_OUTPUT_FORMAT => 'console',
         ], $definition));
-    }
-
-    /**
-     * @param string[] $source
-     * @return SmartFileInfo[]
-     */
-    private function findFilesInSource(array $source): array
-    {
-        /** @var FilesFinder $filesFinder */
-        $filesFinder = $this->container->get(FilesFinder::class);
-
-        return $filesFinder->findInDirectoriesAndFiles($source, ['php']);
-    }
-
-    /**
-     * @param SmartFileInfo[] $phpFileInfos
-     */
-    private function runRectorOnFileInfos(array $phpFileInfos): void
-    {
-        /** @var RectorApplication $rectorApplication */
-        $rectorApplication = $this->container->get(RectorApplication::class);
-        $rectorApplication->runOnFileInfos($phpFileInfos);
     }
 }

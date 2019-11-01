@@ -108,6 +108,80 @@ PHP
         return null;
     }
 
+    private function refactorMethodCall(MethodCall $methodCall): ?Node
+    {
+        $this->collectCallByVariable($methodCall);
+
+        if ($this->shouldSkipMethodCall($methodCall)) {
+            return null;
+        }
+
+        if ($this->isReflectionParameterGetTypeMethodCall($methodCall)) {
+            return $this->refactorReflectionParameterGetName($methodCall);
+        }
+
+        if ($this->isReflectionFunctionAbstractGetReturnTypeMethodCall($methodCall)) {
+            return $this->refactorReflectionFunctionGetReturnType($methodCall);
+        }
+
+        return null;
+    }
+
+    private function refactorIfHasReturnTypeWasCalled(MethodCall $methodCall): ?Node
+    {
+        if (! $methodCall->var instanceof Variable) {
+            return null;
+        }
+
+        $variableName = $this->getName($methodCall->var);
+
+        $callsByVariable = $this->callsByVariable[$variableName] ?? [];
+
+        // we already know it has return type
+        if (in_array('hasReturnType', $callsByVariable, true)) {
+            return $this->createMethodCall($methodCall, 'getName');
+        }
+
+        return null;
+    }
+
+    private function collectCallByVariable(Node $node): void
+    {
+        // bit workaround for now
+        if ($node->var instanceof Variable) {
+            $variableName = $this->getName($node->var);
+            $methodName = $this->getName($node->name);
+
+            if ($variableName && $methodName) {
+                $this->callsByVariable[$variableName][] = $methodName;
+            }
+        }
+    }
+
+    private function shouldSkipMethodCall(MethodCall $methodCall): bool
+    {
+        // just added node → skip it
+        if ($methodCall->getAttribute(AttributeKey::SCOPE) === null) {
+            return true;
+        }
+
+        // is to string retype?
+        $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof String_) {
+            return false;
+        }
+
+        if ($parentNode instanceof Concat) {
+            return false;
+        }
+
+        // probably already converted
+        if ($parentNode instanceof Ternary) {
+            return true;
+        }
+        return $parentNode instanceof Return_;
+    }
+
     private function isReflectionParameterGetTypeMethodCall(MethodCall $methodCall): bool
     {
         if (! $this->isObjectType($methodCall->var, ReflectionParameter::class)) {
@@ -140,7 +214,7 @@ PHP
     private function refactorReflectionFunctionGetReturnType(MethodCall $methodCall): Node
     {
         $refactoredMethodCall = $this->refactorIfHasReturnTypeWasCalled($methodCall);
-        if ($refactoredMethodCall) {
+        if ($refactoredMethodCall !== null) {
             return $refactoredMethodCall;
         }
 
@@ -151,84 +225,5 @@ PHP
         $methodCall->setAttribute(AttributeKey::PARENT_NODE, $ternary);
 
         return $ternary;
-    }
-
-    private function shouldSkipMethodCall(MethodCall $methodCall): bool
-    {
-        // just added node → skip it
-        if ($methodCall->getAttribute(AttributeKey::SCOPE) === null) {
-            return true;
-        }
-
-        // is to string retype?
-        $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof String_) {
-            return false;
-        }
-
-        if ($parentNode instanceof Concat) {
-            return false;
-        }
-
-        // probably already converted
-        if ($parentNode instanceof Ternary) {
-            return true;
-        }
-
-        if ($parentNode instanceof Return_) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function collectCallByVariable(Node $node): void
-    {
-        // bit workaround for now
-        if ($node->var instanceof Variable) {
-            $variableName = $this->getName($node->var);
-            $methodName = $this->getName($node->name);
-
-            if ($variableName && $methodName) {
-                $this->callsByVariable[$variableName][] = $methodName;
-            }
-        }
-    }
-
-    private function refactorIfHasReturnTypeWasCalled(MethodCall $methodCall): ?Node
-    {
-        if (! $methodCall->var instanceof Variable) {
-            return null;
-        }
-
-        $variableName = $this->getName($methodCall->var);
-
-        $callsByVariable = $this->callsByVariable[$variableName] ?? [];
-
-        // we already know it has return type
-        if (in_array('hasReturnType', $callsByVariable, true)) {
-            return $this->createMethodCall($methodCall, 'getName');
-        }
-
-        return null;
-    }
-
-    private function refactorMethodCall(MethodCall $methodCall): ?Node
-    {
-        $this->collectCallByVariable($methodCall);
-
-        if ($this->shouldSkipMethodCall($methodCall)) {
-            return null;
-        }
-
-        if ($this->isReflectionParameterGetTypeMethodCall($methodCall)) {
-            return $this->refactorReflectionParameterGetName($methodCall);
-        }
-
-        if ($this->isReflectionFunctionAbstractGetReturnTypeMethodCall($methodCall)) {
-            return $this->refactorReflectionFunctionGetReturnType($methodCall);
-        }
-
-        return null;
     }
 }

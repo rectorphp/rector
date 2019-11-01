@@ -137,6 +137,18 @@ final class TypeNormalizer
         return $this->typeFactory->createMixedPassedOrUnionType($nonNeverTypes);
     }
 
+    private function collectNestedArrayTypeFromUnionType(UnionType $unionType, int $arrayNesting): void
+    {
+        foreach ($unionType->getTypes() as $unionedType) {
+            if ($unionedType instanceof ArrayType) {
+                ++$arrayNesting;
+                $this->normalizeArrayOfUnionToUnionArray($unionedType, $arrayNesting);
+            } else {
+                $this->collectedNestedArrayTypes[] = new NestedArrayTypeValueObject($unionedType, $arrayNesting);
+            }
+        }
+    }
+
     /**
      * @param NestedArrayTypeValueObject[] $collectedNestedArrayTypes
      */
@@ -158,17 +170,5 @@ final class TypeNormalizer
         }
 
         return $unionedTypes[0];
-    }
-
-    private function collectNestedArrayTypeFromUnionType(UnionType $unionType, int $arrayNesting): void
-    {
-        foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof ArrayType) {
-                ++$arrayNesting;
-                $this->normalizeArrayOfUnionToUnionArray($unionedType, $arrayNesting);
-            } else {
-                $this->collectedNestedArrayTypes[] = new NestedArrayTypeValueObject($unionedType, $arrayNesting);
-            }
-        }
     }
 }

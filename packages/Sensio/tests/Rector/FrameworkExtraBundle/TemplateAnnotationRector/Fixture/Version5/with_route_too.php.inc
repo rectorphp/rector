@@ -3,9 +3,10 @@
 namespace App\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class WithRouteToo
+class WithRouteToo extends AbstractController
 {
     /**
      * @Route("/change", name="facility_change")
@@ -24,9 +25,10 @@ class WithRouteToo
 namespace App\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class WithRouteToo
+class WithRouteToo extends AbstractController
 {
     /**
      * @Route("/change", name="facility_change")

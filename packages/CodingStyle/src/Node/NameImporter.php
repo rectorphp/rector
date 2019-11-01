@@ -57,7 +57,12 @@ final class NameImporter
 
     public function importName(Name $name): ?Name
     {
+        if ($name->getAttribute('virtual_node')) {
+            return null;
+        }
+
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($name);
+
         if (! $staticType instanceof FullyQualifiedObjectType) {
             return null;
         }
@@ -88,6 +93,16 @@ final class NameImporter
         }
 
         return $parentNode instanceof UseUse;
+    }
+
+    private function isFunctionOrConstantImportWithSingleName(Name $name): bool
+    {
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof ConstFetch && ! $parentNode instanceof FuncCall) {
+            return false;
+        }
+
+        return count($name->parts) === 1;
     }
 
     private function importNameAndCollectNewUseStatement(
@@ -131,15 +146,5 @@ final class NameImporter
         } else {
             $this->useAddingCommander->addUseImport($name, $fullyQualifiedObjectType);
         }
-    }
-
-    private function isFunctionOrConstantImportWithSingleName(Name $name): bool
-    {
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof ConstFetch && ! $parentNode instanceof FuncCall) {
-            return false;
-        }
-
-        return count($name->parts) === 1;
     }
 }

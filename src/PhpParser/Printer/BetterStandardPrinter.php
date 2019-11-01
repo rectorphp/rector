@@ -105,13 +105,7 @@ final class BetterStandardPrinter extends Standard
      */
     protected function indent(): void
     {
-        if ($this->tabOrSpaceIndentCharacter === ' ') {
-            // 4 spaces
-            $multiplier = 4;
-        } else {
-            // 1 tab
-            $multiplier = 1;
-        }
+        $multiplier = $this->tabOrSpaceIndentCharacter === ' ' ? 4 : 1;
 
         $this->indentLevel += $multiplier;
         $this->nl .= str_repeat($this->tabOrSpaceIndentCharacter, $multiplier);
@@ -299,20 +293,6 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
-     * @param Node[] $nodes
-     */
-    private function containsNop(array $nodes): bool
-    {
-        foreach ($nodes as $node) {
-            if ($node instanceof Nop) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Solves https://github.com/rectorphp/rector/issues/1964
      *
      * Some files have spaces, some have tabs. Keep the original indent if possible.
@@ -342,5 +322,19 @@ final class BetterStandardPrinter extends Standard
                 break;
             }
         }
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    private function containsNop(array $nodes): bool
+    {
+        foreach ($nodes as $node) {
+            if ($node instanceof Nop) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

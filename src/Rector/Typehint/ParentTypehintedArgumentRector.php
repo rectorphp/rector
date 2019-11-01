@@ -108,6 +108,21 @@ PHP
     }
 
     /**
+     * @param string[][] $methodToArgumentToTypes
+     */
+    private function processArgumentToTypes(ClassMethod $classMethod, array $methodToArgumentToTypes): void
+    {
+        foreach ($methodToArgumentToTypes as $method => $argumentToTypes) {
+            if (! $this->isName($classMethod, $method)) {
+                continue;
+            }
+
+            $this->processClassMethodNodeWithTypehints($classMethod, $argumentToTypes);
+            return;
+        }
+    }
+
+    /**
      * @param string[] $parametersToTypes
      */
     private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, array $parametersToTypes): void
@@ -121,27 +136,8 @@ PHP
                     continue;
                 }
 
-                if ($type === '') { // remove type
-                    $param->type = null;
-                } else {
-                    $param->type = $this->staticTypeMapper->mapStringToPhpParserNode($type);
-                }
+                $param->type = $type === '' ? null : $this->staticTypeMapper->mapStringToPhpParserNode($type);
             }
-        }
-    }
-
-    /**
-     * @param string[][] $methodToArgumentToTypes
-     */
-    private function processArgumentToTypes(ClassMethod $classMethod, array $methodToArgumentToTypes): void
-    {
-        foreach ($methodToArgumentToTypes as $method => $argumentToTypes) {
-            if (! $this->isName($classMethod, $method)) {
-                continue;
-            }
-
-            $this->processClassMethodNodeWithTypehints($classMethod, $argumentToTypes);
-            return;
         }
     }
 }

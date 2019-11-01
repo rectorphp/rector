@@ -84,16 +84,6 @@ PHP
         return $node;
     }
 
-    private function createDefaultNameProperty(Node $commandNameNode): Property
-    {
-        $propertyBuilder = $this->builderFactory->property('defaultName');
-        $propertyBuilder->makeProtected();
-        $propertyBuilder->makeStatic();
-        $propertyBuilder->setDefault($commandNameNode);
-
-        return $propertyBuilder->getNode();
-    }
-
     private function resolveCommandNameAndRemove(Class_ $class): ?Node
     {
         $commandName = null;
@@ -134,6 +124,16 @@ PHP
         $this->removeConstructorIfHasOnlySetNameMethodCall($class);
 
         return $commandName;
+    }
+
+    private function createDefaultNameProperty(Node $commandNameNode): Property
+    {
+        $propertyBuilder = $this->builderFactory->property('defaultName');
+        $propertyBuilder->makeProtected();
+        $propertyBuilder->makeStatic();
+        $propertyBuilder->setDefault($commandNameNode);
+
+        return $propertyBuilder->getNode();
     }
 
     private function matchCommandNameNodeInConstruct(Expr $expr): ?Node

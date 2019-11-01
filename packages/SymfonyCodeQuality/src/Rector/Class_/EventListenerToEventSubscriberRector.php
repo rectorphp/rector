@@ -120,7 +120,7 @@ class SomeEventSubscriber implements EventSubscriberInterface
       */
      public static function getSubscribedEvents(): array
      {
-         return ['some_event' => 'methodToBeCalled'];  
+         return ['some_event' => 'methodToBeCalled'];
      }
 
      public function methodToBeCalled()
@@ -244,25 +244,6 @@ PHP
     }
 
     /**
-     * @return String_|ClassConstFetch
-     */
-    private function createEventName(string $eventName): Node
-    {
-        if (class_exists($eventName)) {
-            return $this->createClassConstantReference($eventName);
-        }
-
-        // is string a that could be caught in constant, e.g. KernelEvents?
-        if (isset($this->eventNamesToClassConstants[$eventName])) {
-            [$class, $constant] = $this->eventNamesToClassConstants[$eventName];
-
-            return $this->createClassConstant($class, $constant);
-        }
-
-        return new String_($eventName);
-    }
-
-    /**
      * @param mixed[][] $eventsToMethods
      */
     private function createGetSubscribedEventsClassMethod(array $eventsToMethods): ClassMethod
@@ -289,14 +270,23 @@ PHP
         return $getSubscribedEventsMethod;
     }
 
-    private function decorateClassMethodWithReturnType(ClassMethod $classMethod): void
+    /**
+     * @return String_|ClassConstFetch
+     */
+    private function createEventName(string $eventName): Node
     {
-        if ($this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
-            $classMethod->returnType = new Identifier('array');
+        if (class_exists($eventName)) {
+            return $this->createClassConstantReference($eventName);
         }
 
-        $arrayMixedType = new ArrayType(new MixedType(), new MixedType(true));
-        $this->docBlockManipulator->addReturnTag($classMethod, $arrayMixedType);
+        // is string a that could be caught in constant, e.g. KernelEvents?
+        if (isset($this->eventNamesToClassConstants[$eventName])) {
+            [$class, $constant] = $this->eventNamesToClassConstants[$eventName];
+
+            return $this->createClassConstant($class, $constant);
+        }
+
+        return new String_($eventName);
     }
 
     /**
@@ -347,5 +337,15 @@ PHP
         }
 
         $eventsToMethodsArray->items[] = new ArrayItem($multipleMethodsArray, $expr);
+    }
+
+    private function decorateClassMethodWithReturnType(ClassMethod $classMethod): void
+    {
+        if ($this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
+            $classMethod->returnType = new Identifier('array');
+        }
+
+        $arrayMixedType = new ArrayType(new MixedType(), new MixedType(true));
+        $this->docBlockManipulator->addReturnTag($classMethod, $arrayMixedType);
     }
 }

@@ -141,13 +141,8 @@ final class BetterNodeFinder
             if (! $node instanceof ClassLike) {
                 return false;
             }
-
             // skip anonymous classes
-            if ($node instanceof Class_ && $node->isAnonymous()) {
-                return false;
-            }
-
-            return true;
+            return ! ($node instanceof Class_ && $node->isAnonymous());
         });
     }
 

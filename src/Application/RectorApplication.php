@@ -174,6 +174,40 @@ final class RectorApplication
         $this->finishingExtensionRunner->run();
     }
 
+    /**
+     * This prevent CI report flood with 1 file = 1 line in progress bar
+     */
+    private function configureStepCount(SymfonyStyle $symfonyStyle): void
+    {
+        if (! $this->ciDetector->isCiDetected()) {
+            return;
+        }
+
+        $privatesAccessor = new PrivatesAccessor();
+
+        /** @var ProgressBar $progressBar */
+        $progressBar = $privatesAccessor->getPrivateProperty($symfonyStyle, 'progressBar');
+        if ($progressBar->getMaxSteps() < 10) {
+            return;
+        }
+
+        $redrawFrequency = (int) ($progressBar->getMaxSteps() / 20);
+        $progressBar->setRedrawFrequency($redrawFrequency);
+    }
+
+    /**
+     * @param SmartFileInfo[] $fileInfos
+     */
+    private function configurePHPStanNodeScopeResolver(array $fileInfos): void
+    {
+        $filePaths = [];
+        foreach ($fileInfos as $fileInfo) {
+            $filePaths[] = $fileInfo->getRealPath();
+        }
+
+        $this->nodeScopeResolver->setAnalysedFiles($filePaths);
+    }
+
     private function tryCatchWrapper(SmartFileInfo $smartFileInfo, callable $callback, string $phase): void
     {
         $this->advance($smartFileInfo, $phase);
@@ -228,39 +262,5 @@ final class RectorApplication
         } elseif ($this->configuration->showProgressBar()) {
             $this->symfonyStyle->progressAdvance();
         }
-    }
-
-    /**
-     * @param SmartFileInfo[] $fileInfos
-     */
-    private function configurePHPStanNodeScopeResolver(array $fileInfos): void
-    {
-        $filePaths = [];
-        foreach ($fileInfos as $fileInfo) {
-            $filePaths[] = $fileInfo->getRealPath();
-        }
-
-        $this->nodeScopeResolver->setAnalysedFiles($filePaths);
-    }
-
-    /**
-     * This prevent CI report flood with 1 file = 1 line in progress bar
-     */
-    private function configureStepCount(SymfonyStyle $symfonyStyle): void
-    {
-        if ($this->ciDetector->isCiDetected() === false) {
-            return;
-        }
-
-        $privatesAccessor = new PrivatesAccessor();
-
-        /** @var ProgressBar $progressBar */
-        $progressBar = $privatesAccessor->getPrivateProperty($symfonyStyle, 'progressBar');
-        if ($progressBar->getMaxSteps() < 10) {
-            return;
-        }
-
-        $redrawFrequency = (int) ($progressBar->getMaxSteps() / 20);
-        $progressBar->setRedrawFrequency($redrawFrequency);
     }
 }

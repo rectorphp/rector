@@ -140,37 +140,6 @@ final class MethodCallManipulator
     }
 
     /**
-     * @return MethodCall[]
-     */
-    private function collectMethodCallsOnVariableName(Node $node, string $variableName): array
-    {
-        $methodCalls = [];
-
-        $this->callableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
-            $variableName,
-            &$methodCalls
-        ) {
-            if (! $node instanceof MethodCall) {
-                return null;
-            }
-
-            if (! $node->var instanceof Variable) {
-                return null;
-            }
-
-            if (! $this->nameResolver->isName($node->var, $variableName)) {
-                return null;
-            }
-
-            $methodCalls[] = $node;
-
-            return null;
-        });
-
-        return $methodCalls;
-    }
-
-    /**
      * @see https://stackoverflow.com/a/4507991/1348344
      * @param object[] $objects
      * @return object[]
@@ -219,5 +188,36 @@ final class MethodCallManipulator
         }
 
         return $parentNode;
+    }
+
+    /**
+     * @return MethodCall[]
+     */
+    private function collectMethodCallsOnVariableName(Node $node, string $variableName): array
+    {
+        $methodCalls = [];
+
+        $this->callableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
+            $variableName,
+            &$methodCalls
+        ) {
+            if (! $node instanceof MethodCall) {
+                return null;
+            }
+
+            if (! $node->var instanceof Variable) {
+                return null;
+            }
+
+            if (! $this->nameResolver->isName($node->var, $variableName)) {
+                return null;
+            }
+
+            $methodCalls[] = $node;
+
+            return null;
+        });
+
+        return $methodCalls;
     }
 }

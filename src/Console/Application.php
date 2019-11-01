@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Console;
 
+use Composer\XdebugHandler\XdebugHandler;
 use Jean85\PrettyVersions;
 use Rector\Configuration\Configuration;
 use Rector\Console\Output\JsonOutputFormatter;
@@ -19,6 +20,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class Application extends SymfonyApplication
 {
@@ -54,13 +56,21 @@ final class Application extends SymfonyApplication
 
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
+        // @fixes https://github.com/rectorphp/rector/issues/2205
+        $isXdebugAllowed = $input->hasParameterOption('--xdebug');
+        if (! $isXdebugAllowed) {
+            $xdebug = new XdebugHandler('rector', '--ansi');
+            $xdebug->check();
+            unset($xdebug);
+        }
+
         $this->configuration->setConfigFilePathFromInput($input);
 
         $shouldFollowByNewline = false;
 
         // switch working dir
         $newWorkDir = $this->getNewWorkingDir($input);
-        if ($newWorkDir) {
+        if ($newWorkDir !== '') {
             $oldWorkingDir = getcwd();
             chdir($newWorkDir);
             $output->isDebug() && $output->writeln('Changed CWD form ' . $oldWorkingDir . ' to ' . getcwd());
@@ -81,7 +91,10 @@ final class Application extends SymfonyApplication
 
             $configPath = $this->configuration->getConfigFilePath();
             if ($configPath) {
-                $output->writeln('Config file: ' . realpath($configPath));
+                $configFileInfo = new SmartFileInfo($configPath);
+                $relativeConfigPath = $configFileInfo->getRelativeFilePathFromDirectory(getcwd());
+
+                $output->writeln('Config file: ' . $relativeConfigPath);
                 $shouldFollowByNewline = true;
             }
         }
@@ -121,13 +134,16 @@ final class Application extends SymfonyApplication
         return array_values($filteredCommands);
     }
 
-    private function removeUnusedOptions(InputDefinition $inputDefinition): void
+    private function getNewWorkingDir(InputInterface $input): string
     {
-        $options = $inputDefinition->getOptions();
+        $workingDir = $input->getParameterOption(['--working-dir', '-d']);
+        if ($workingDir !== false && ! is_dir($workingDir)) {
+            throw new InvalidConfigurationException(
+                'Invalid working directory specified, ' . $workingDir . ' does not exist.'
+            );
+        }
 
-        unset($options['quiet'], $options['no-interaction']);
-
-        $inputDefinition->setOptions($options);
+        return (string) $workingDir;
     }
 
     private function shouldPrintMetaInformation(InputInterface $input): bool
@@ -141,6 +157,15 @@ final class Application extends SymfonyApplication
         );
 
         return ! ($hasVersionOption || $hasNoArguments || $hasJsonOutput);
+    }
+
+    private function removeUnusedOptions(InputDefinition $inputDefinition): void
+    {
+        $options = $inputDefinition->getOptions();
+
+        unset($options['quiet'], $options['no-interaction']);
+
+        $inputDefinition->setOptions($options);
     }
 
     private function addCustomOptions(InputDefinition $inputDefinition): void
@@ -168,6 +193,13 @@ final class Application extends SymfonyApplication
         ));
 
         $inputDefinition->addOption(new InputOption(
+            'xdebug',
+            null,
+            InputOption::VALUE_NONE,
+            'Allow running xdebug'
+        ));
+
+        $inputDefinition->addOption(new InputOption(
             '--working-dir',
             '-d',
             InputOption::VALUE_REQUIRED,
@@ -178,17 +210,5 @@ final class Application extends SymfonyApplication
     private function getDefaultConfigPath(): string
     {
         return getcwd() . '/rector.yaml';
-    }
-
-    private function getNewWorkingDir(InputInterface $input): string
-    {
-        $workingDir = $input->getParameterOption(['--working-dir', '-d']);
-        if ($workingDir !== false && ! is_dir($workingDir)) {
-            throw new InvalidConfigurationException(
-                'Invalid working directory specified, ' . $workingDir . ' does not exist.'
-            );
-        }
-
-        return (string) $workingDir;
     }
 }

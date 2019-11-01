@@ -113,11 +113,7 @@ EOS
 
     private function isPhpVersionConstant(Expr $expr): bool
     {
-        if ($expr instanceof ConstFetch && $expr->name->toString() === 'PHP_VERSION') {
-            return true;
-        }
-
-        return false;
+        return $expr instanceof ConstFetch && $expr->name->toString() === 'PHP_VERSION';
     }
 
     private function getNewNodeForArg(Expr $expr): Node

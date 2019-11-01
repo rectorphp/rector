@@ -173,6 +173,26 @@ final class ClassMethodManipulator
         }
     }
 
+    /**
+     * @param FuncCall[] $compactFuncCalls
+     * @return string[]
+     */
+    private function extractArgumentsFromCompactFuncCalls(array $compactFuncCalls): array
+    {
+        $arguments = [];
+        foreach ($compactFuncCalls as $compactFuncCall) {
+            foreach ($compactFuncCall->args as $arg) {
+                $value = $this->valueResolver->getValue($arg->value);
+
+                if ($value) {
+                    $arguments[] = $value;
+                }
+            }
+        }
+
+        return $arguments;
+    }
+
     private function isMethodInParent(string $class, string $method): bool
     {
         foreach (class_parents($class) as $parentClass) {
@@ -200,25 +220,5 @@ final class ClassMethodManipulator
         }
 
         throw new ShouldNotHappenException();
-    }
-
-    /**
-     * @param FuncCall[] $compactFuncCalls
-     * @return string[]
-     */
-    private function extractArgumentsFromCompactFuncCalls(array $compactFuncCalls): array
-    {
-        $arguments = [];
-        foreach ($compactFuncCalls as $compactFuncCall) {
-            foreach ($compactFuncCall->args as $arg) {
-                $value = $this->valueResolver->getValue($arg->value);
-
-                if ($value) {
-                    $arguments[] = $value;
-                }
-            }
-        }
-
-        return $arguments;
     }
 }

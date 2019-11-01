@@ -94,7 +94,7 @@ PHP
         });
 
         // add request argument
-        if ($hasRequest === false) {
+        if (! $hasRequest) {
             return null;
         }
 

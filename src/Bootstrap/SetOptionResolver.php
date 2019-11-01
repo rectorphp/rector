@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Console\Option;
+namespace Rector\Bootstrap;
 
 use Nette\Utils\ObjectHelpers;
 use Nette\Utils\Strings;
@@ -43,7 +43,7 @@ final class SetOptionResolver
         return $this->detectFromNameAndDirectory($setName, $configDirectory);
     }
 
-    public function detectFromNameAndDirectory(string $setName, string $configDirectory): ?string
+    public function detectFromNameAndDirectory(string $setName, string $configDirectory): string
     {
         $nearestMatches = $this->findNearestMatchingFiles($configDirectory, $setName);
         if (count($nearestMatches) === 0) {
@@ -54,48 +54,6 @@ final class SetOptionResolver
         $nearestMatch = array_shift($nearestMatches);
 
         return $nearestMatch->getRealPath();
-    }
-
-    private function reportSetNotFound(string $configDirectory, string $setName): void
-    {
-        $allSets = $this->findAllSetsInDirectory($configDirectory);
-
-        $suggestedSet = ObjectHelpers::getSuggestion($allSets, $setName);
-
-        [$versionedSets, $unversionedSets] = $this->separateVersionedAndUnversionedSets($allSets);
-
-        $setsListInString = $this->createSetListInString($unversionedSets, $versionedSets);
-
-        $setNotFoundMessage = sprintf(
-            '%s "%s" was not found.%s%s',
-            ucfirst($this->keyName),
-            $setName,
-            PHP_EOL,
-            $suggestedSet ? sprintf('Did you mean "%s"?', $suggestedSet) . PHP_EOL : ''
-        );
-
-        $pickOneOfMessage = sprintf('Pick "--%s" of:%s%s', $this->keyName, PHP_EOL . PHP_EOL, $setsListInString);
-
-        throw new SetNotFoundException($setNotFoundMessage . PHP_EOL . $pickOneOfMessage);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function findAllSetsInDirectory(string $configDirectory): array
-    {
-        $finder = Finder::create()
-            ->files()
-            ->in($configDirectory);
-
-        $sets = [];
-        foreach ($finder->getIterator() as $fileInfo) {
-            $sets[] = $fileInfo->getBasename('.' . $fileInfo->getExtension());
-        }
-
-        sort($sets);
-
-        return array_unique($sets);
     }
 
     /**
@@ -140,6 +98,29 @@ final class SetOptionResolver
         return $nearestMatches;
     }
 
+    private function reportSetNotFound(string $configDirectory, string $setName): void
+    {
+        $allSets = $this->findAllSetsInDirectory($configDirectory);
+
+        $suggestedSet = ObjectHelpers::getSuggestion($allSets, $setName);
+
+        [$versionedSets, $unversionedSets] = $this->separateVersionedAndUnversionedSets($allSets);
+
+        $setsListInString = $this->createSetListInString($unversionedSets, $versionedSets);
+
+        $setNotFoundMessage = sprintf(
+            '%s "%s" was not found.%s%s',
+            ucfirst($this->keyName),
+            $setName,
+            PHP_EOL,
+            $suggestedSet ? sprintf('Did you mean "%s"?', $suggestedSet) . PHP_EOL : ''
+        );
+
+        $pickOneOfMessage = sprintf('Pick "--%s" of:%s%s', $this->keyName, PHP_EOL . PHP_EOL, $setsListInString);
+
+        throw new SetNotFoundException($setNotFoundMessage . PHP_EOL . $pickOneOfMessage);
+    }
+
     private function matchVersionInTheEnd(string $setName): ?string
     {
         $match = Strings::match($setName, '#(?<version>[\d\.]+$)#');
@@ -149,6 +130,53 @@ final class SetOptionResolver
 
         $version = $match['version'];
         return Strings::replace($version, '#\.#');
+    }
+
+    /**
+     * @return string[]
+     */
+    private function findAllSetsInDirectory(string $configDirectory): array
+    {
+        $finder = Finder::create()
+            ->files()
+            ->in($configDirectory);
+
+        $sets = [];
+        foreach ($finder->getIterator() as $fileInfo) {
+            $sets[] = $fileInfo->getBasename('.' . $fileInfo->getExtension());
+        }
+
+        sort($sets);
+
+        return array_unique($sets);
+    }
+
+    /**
+     * @param string[] $allSets
+     * @return string[][]
+     */
+    private function separateVersionedAndUnversionedSets(array $allSets): array
+    {
+        $versionedSets = [];
+        $unversionedSets = [];
+
+        foreach ($allSets as $set) {
+            $hasVersion = (bool) Strings::match($set, '#\d#');
+
+            if (! $hasVersion) {
+                $unversionedSets[] = $set;
+                continue;
+            }
+
+            $match = Strings::match($set, '#^(?<set>[A-Za-z\-]+)#');
+            $setWithoutVersion = $match['set'];
+
+            if ($setWithoutVersion !== $set) {
+                $versionedSets[$setWithoutVersion][] = $set;
+            }
+        }
+
+        return [$versionedSets, $unversionedSets];
     }
 
     /**
@@ -168,33 +196,5 @@ final class SetOptionResolver
         }
 
         return $setsListInString;
-    }
-
-    /**
-     * @param string[] $allSets
-     * @return string[][]
-     */
-    private function separateVersionedAndUnversionedSets(array $allSets): array
-    {
-        $versionedSets = [];
-        $unversionedSets = [];
-
-        foreach ($allSets as $set) {
-            $hasVersion = (bool) Strings::match($set, '#\d#');
-
-            if ($hasVersion === false) {
-                $unversionedSets[] = $set;
-                continue;
-            }
-
-            $match = Strings::match($set, '#^(?<set>[A-Za-z\-]+)#');
-            $setWithoutVersion = $match['set'];
-
-            if ($setWithoutVersion !== $set) {
-                $versionedSets[$setWithoutVersion][] = $set;
-            }
-        }
-
-        return [$versionedSets, $unversionedSets];
     }
 }

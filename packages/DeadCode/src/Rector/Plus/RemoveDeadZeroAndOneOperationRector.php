@@ -102,46 +102,6 @@ PHP
         return $changedNode;
     }
 
-    /**
-     * @param Plus|Minus $binaryOp
-     */
-    private function processBinaryPlusAndMinus(BinaryOp $binaryOp): ?Expr
-    {
-        if ($this->isValue($binaryOp->left, 0)) {
-            if ($this->isNumberType($binaryOp->right)) {
-                return $binaryOp->right;
-            }
-        }
-
-        if ($this->isValue($binaryOp->right, 0)) {
-            if ($this->isNumberType($binaryOp->left)) {
-                return $binaryOp->left;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param Mul|Div $binaryOp
-     */
-    private function processBinaryMulAndDiv(BinaryOp $binaryOp): ?Expr
-    {
-        if ($this->isValue($binaryOp->left, 1)) {
-            if ($this->isNumberType($binaryOp->right)) {
-                return $binaryOp->right;
-            }
-        }
-
-        if ($this->isValue($binaryOp->right, 1)) {
-            if ($this->isNumberType($binaryOp->left)) {
-                return $binaryOp->left;
-            }
-        }
-
-        return null;
-    }
-
     private function processAssignOp(Node $node): ?Expr
     {
         // +=, -=
@@ -177,6 +137,46 @@ PHP
         // *, /
         if ($node instanceof Mul || $node instanceof Div) {
             return $this->processBinaryMulAndDiv($node);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Plus|Minus $binaryOp
+     */
+    private function processBinaryPlusAndMinus(BinaryOp $binaryOp): ?Expr
+    {
+        if ($this->isValue($binaryOp->left, 0)) {
+            if ($this->isNumberType($binaryOp->right)) {
+                return $binaryOp->right;
+            }
+        }
+
+        if ($this->isValue($binaryOp->right, 0)) {
+            if ($this->isNumberType($binaryOp->left)) {
+                return $binaryOp->left;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Mul|Div $binaryOp
+     */
+    private function processBinaryMulAndDiv(BinaryOp $binaryOp): ?Expr
+    {
+        if ($this->isValue($binaryOp->left, 1)) {
+            if ($this->isNumberType($binaryOp->right)) {
+                return $binaryOp->right;
+            }
+        }
+
+        if ($this->isValue($binaryOp->right, 1)) {
+            if ($this->isNumberType($binaryOp->left)) {
+                return $binaryOp->left;
+            }
         }
 
         return null;

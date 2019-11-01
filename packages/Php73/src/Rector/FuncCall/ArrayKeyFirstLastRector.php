@@ -128,11 +128,6 @@ PHP
         if (function_exists(self::ARRAY_KEY_FIRST) && function_exists(self::ARRAY_KEY_LAST)) {
             return false;
         }
-
-        if ($this->isNames($funcCall, ['reset', 'end'])) {
-            return true;
-        }
-
-        return false;
+        return $this->isNames($funcCall, ['reset', 'end']);
     }
 }

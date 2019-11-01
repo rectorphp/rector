@@ -79,53 +79,6 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
         return $this->processMethodCall($node);
     }
 
-    /**
-     * Variable or property fetch, based on number of present params in whole class
-     */
-    private function createCreateMockCall(Param $param, Name $name): ?Expression
-    {
-        /** @var Class_ $classNode */
-        $classNode = $param->getAttribute(AttributeKey::CLASS_NODE);
-
-        $classMocks = $this->phpSpecMockCollector->resolveClassMocksFromParam($classNode);
-
-        $variable = $this->getName($param->var);
-        $method = $param->getAttribute(AttributeKey::METHOD_NAME);
-
-        $methodsWithWThisMock = $classMocks[$variable];
-
-        // single use: "$mock = $this->createMock()"
-        if (! $this->phpSpecMockCollector->isVariableMockInProperty($param->var)) {
-            return $this->createNewMockVariableAssign($param, $name);
-        }
-
-        $reversedMethodsWithThisMock = array_flip($methodsWithWThisMock);
-
-        // first use of many: "$this->mock = $this->createMock()"
-        if ($reversedMethodsWithThisMock[$method] === 0) {
-            return $this->createPropertyFetchMockVariableAssign($param, $name);
-        }
-
-        return null;
-    }
-
-    private function createMockVarDoc(Param $param, Name $name): string
-    {
-        $paramType = (string) ($name->getAttribute('originalName') ?: $name);
-        $variableName = $this->getName($param->var);
-
-        if ($variableName === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        return sprintf(
-            '/** @var %s|\%s $%s */',
-            $paramType,
-            'PHPUnit\Framework\MockObject\MockObject',
-            $variableName
-        );
-    }
-
     private function processMethodParamsToMocks(ClassMethod $classMethod): void
     {
         // remove params and turn them to instances
@@ -173,6 +126,36 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
             }
 
             return $methodCall;
+        }
+
+        return null;
+    }
+
+    /**
+     * Variable or property fetch, based on number of present params in whole class
+     */
+    private function createCreateMockCall(Param $param, Name $name): ?Expression
+    {
+        /** @var Class_ $classNode */
+        $classNode = $param->getAttribute(AttributeKey::CLASS_NODE);
+
+        $classMocks = $this->phpSpecMockCollector->resolveClassMocksFromParam($classNode);
+
+        $variable = $this->getName($param->var);
+        $method = $param->getAttribute(AttributeKey::METHOD_NAME);
+
+        $methodsWithWThisMock = $classMocks[$variable];
+
+        // single use: "$mock = $this->createMock()"
+        if (! $this->phpSpecMockCollector->isVariableMockInProperty($param->var)) {
+            return $this->createNewMockVariableAssign($param, $name);
+        }
+
+        $reversedMethodsWithThisMock = array_flip($methodsWithWThisMock);
+
+        // first use of many: "$this->mock = $this->createMock()"
+        if ($reversedMethodsWithThisMock[$method] === 0) {
+            return $this->createPropertyFetchMockVariableAssign($param, $name);
         }
 
         return null;
@@ -243,5 +226,22 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
         $name = $this->typeAnalyzer->isPhpReservedType($type) ? 'isType' : 'isInstanceOf';
 
         return $this->createMethodCall('this', $name, $staticCall->args);
+    }
+
+    private function createMockVarDoc(Param $param, Name $name): string
+    {
+        $paramType = (string) ($name->getAttribute('originalName') ?: $name);
+        $variableName = $this->getName($param->var);
+
+        if ($variableName === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        return sprintf(
+            '/** @var %s|\%s $%s */',
+            $paramType,
+            'PHPUnit\Framework\MockObject\MockObject',
+            $variableName
+        );
     }
 }

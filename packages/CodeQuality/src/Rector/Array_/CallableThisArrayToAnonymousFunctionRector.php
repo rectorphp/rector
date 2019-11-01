@@ -123,18 +123,15 @@ PHP
         return $this->createAnonymousFunction($classMethod, $objectVariable);
     }
 
-    /**
-     * @param Param[] $params
-     * @return Arg[]
-     */
-    private function convertParamsToArgs(array $params): array
+    private function shouldSkipArray(Array_ $array): bool
     {
-        $args = [];
-        foreach ($params as $key => $param) {
-            $args[$key] = new Arg($param->var);
+        // callback is exactly "[$two, 'items']"
+        if (count($array->items) !== 2) {
+            return true;
         }
 
-        return $args;
+        // can be totally empty in case of "[, $value]"
+        return $array->items[0] === null;
     }
 
     /**
@@ -171,17 +168,6 @@ PHP
         return null;
     }
 
-    private function shouldSkipArray(Array_ $array): bool
-    {
-        // callback is exactly "[$two, 'items']"
-        if (count($array->items) !== 2) {
-            return true;
-        }
-
-        // can be totally empty in case of "[, $value]"
-        return $array->items[0] === null;
-    }
-
     /**
      * @param Variable|PropertyFetch $node
      */
@@ -200,7 +186,7 @@ PHP
         }
 
         // does method return something?
-        if ($hasClassMethodReturn) {
+        if ($hasClassMethodReturn !== []) {
             $anonymousFunction->stmts[] = new Return_($innerMethodCall);
         } else {
             $anonymousFunction->stmts[] = new Expression($innerMethodCall);
@@ -213,5 +199,19 @@ PHP
         }
 
         return $anonymousFunction;
+    }
+
+    /**
+     * @param Param[] $params
+     * @return Arg[]
+     */
+    private function convertParamsToArgs(array $params): array
+    {
+        $args = [];
+        foreach ($params as $key => $param) {
+            $args[$key] = new Arg($param->var);
+        }
+
+        return $args;
     }
 }

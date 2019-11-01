@@ -98,6 +98,39 @@ PHP
         return $node;
     }
 
+    private function shouldSkipClass(Class_ $class): bool
+    {
+        if ($class->isAnonymous()) {
+            return true;
+        }
+
+        $className = $this->getName($class);
+        if ($className === null) {
+            return true;
+        }
+
+        // is a test case
+        if (Strings::endsWith($className, 'Test')) {
+            return true;
+        }
+
+        // is the @see annotation already added
+        if ($class->getDocComment() !== null) {
+            /** @var string $docCommentText */
+            $docCommentText = $class->getDocComment()->getText();
+
+            /** @var string $shortClassName */
+            $shortClassName = Strings::after($className, '\\', -1);
+            $seeClassPattern = '#@see (.*?)' . preg_quote($shortClassName, '#') . 'Test#m';
+
+            if (Strings::match($docCommentText, $seeClassPattern)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function resolveTestCaseClassName(string $className): ?string
     {
         if (class_exists($className . 'Test')) {
@@ -122,45 +155,12 @@ PHP
         return new PhpDocTagNode('@see', new AttributeAwareGenericTagValueNode('\\' . $className));
     }
 
-    private function shouldSkipClass(Class_ $class): bool
-    {
-        if ($class->isAnonymous()) {
-            return true;
-        }
-
-        $className = $this->getName($class);
-        if ($className === null) {
-            return true;
-        }
-
-        // is a test case
-        if (Strings::endsWith($className, 'Test')) {
-            return true;
-        }
-
-        // is the @see annotation already added
-        if ($class->getDocComment()) {
-            /** @var string $docCommentText */
-            $docCommentText = $class->getDocComment()->getText();
-
-            /** @var string $shortClassName */
-            $shortClassName = Strings::after($className, '\\', -1);
-            $seeClassPattern = '#@see (.*?)' . preg_quote($shortClassName, '#') . 'Test#m';
-
-            if (Strings::match($docCommentText, $seeClassPattern)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * @return string[]
      */
     private function getPhpUnitTestCaseClasses(): array
     {
-        if ($this->phpUnitTestCaseClasses) {
+        if ($this->phpUnitTestCaseClasses !== []) {
             return $this->phpUnitTestCaseClasses;
         }
 

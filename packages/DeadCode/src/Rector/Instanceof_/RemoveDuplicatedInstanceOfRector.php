@@ -99,24 +99,6 @@ PHP
         $this->duplicatedInstanceOfs = array_keys($instanceOfsByClass);
     }
 
-    private function createUniqueKeyForInstanceOf(Instanceof_ $instanceof): ?string
-    {
-        if (! $instanceof->expr instanceof Variable) {
-            return null;
-        }
-        $variableName = $this->getName($instanceof->expr);
-        if ($variableName === null) {
-            return null;
-        }
-
-        $className = $this->getName($instanceof->class);
-        if ($className === null) {
-            return null;
-        }
-
-        return $variableName . '_' . $className;
-    }
-
     private function traverseBinaryOpAndRemoveDuplicatedInstanceOfs(BinaryOp $binaryOp): Node
     {
         $this->traverseNodesWithCallable([&$binaryOp], function (Node &$node): ?Node {
@@ -138,10 +120,22 @@ PHP
         return $binaryOp;
     }
 
-    private function removeClassFromDuplicatedInstanceOfs(string $variableClassKey): void
+    private function createUniqueKeyForInstanceOf(Instanceof_ $instanceof): ?string
     {
-        // remove just once
-        unset($this->duplicatedInstanceOfs[array_search($variableClassKey, $this->duplicatedInstanceOfs, true)]);
+        if (! $instanceof->expr instanceof Variable) {
+            return null;
+        }
+        $variableName = $this->getName($instanceof->expr);
+        if ($variableName === null) {
+            return null;
+        }
+
+        $className = $this->getName($instanceof->class);
+        if ($className === null) {
+            return null;
+        }
+
+        return $variableName . '_' . $className;
     }
 
     private function processBinaryWithFirstInstaneOf(Instanceof_ $instanceof, Expr $otherExpr): ?Expr
@@ -157,5 +151,11 @@ PHP
 
         // remove left instanceof
         return $otherExpr;
+    }
+
+    private function removeClassFromDuplicatedInstanceOfs(string $variableClassKey): void
+    {
+        // remove just once
+        unset($this->duplicatedInstanceOfs[array_search($variableClassKey, $this->duplicatedInstanceOfs, true)]);
     }
 }

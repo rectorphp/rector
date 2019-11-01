@@ -115,7 +115,7 @@ PHP
                 return null;
             }
 
-            if ($node->default) {
+            if ($node->default !== null) {
                 return null;
             }
 
@@ -164,35 +164,6 @@ PHP
     /**
      * @param string[] $propertyNames
      */
-    private function replaceNullComparisonOfArrayPropertiesWithArrayComparison(
-        Class_ $class,
-        array $propertyNames
-    ): void {
-        // replace comparison to "null" with "[]"
-        $this->traverseNodesWithCallable($class, function (Node $node) use ($propertyNames): ?BinaryOp {
-            if (! $node instanceof BinaryOp) {
-                return null;
-            }
-
-            if ($this->propertyFetchManipulator->isLocalPropertyOfNames($node->left, $propertyNames) && $this->isNull(
-                $node->right
-            )) {
-                $node->right = new Array_();
-            }
-
-            if ($this->propertyFetchManipulator->isLocalPropertyOfNames($node->right, $propertyNames) && $this->isNull(
-                $node->left
-            )) {
-                $node->left = new Array_();
-            }
-
-            return $node;
-        });
-    }
-
-    /**
-     * @param string[] $propertyNames
-     */
     private function clearNotNullBeforeCount(Class_ $class, array $propertyNames): void
     {
         $this->traverseNodesWithCallable($class, function (Node $node) use ($propertyNames): ?Expr {
@@ -228,11 +199,40 @@ PHP
                 return $this->isNames($countedArgument, $propertyNames);
             });
 
-            if ($isNextNodeCountingProperty === false) {
+            if (! $isNextNodeCountingProperty) {
                 return null;
             }
 
             return $node->right;
+        });
+    }
+
+    /**
+     * @param string[] $propertyNames
+     */
+    private function replaceNullComparisonOfArrayPropertiesWithArrayComparison(
+        Class_ $class,
+        array $propertyNames
+    ): void {
+        // replace comparison to "null" with "[]"
+        $this->traverseNodesWithCallable($class, function (Node $node) use ($propertyNames): ?BinaryOp {
+            if (! $node instanceof BinaryOp) {
+                return null;
+            }
+
+            if ($this->propertyFetchManipulator->isLocalPropertyOfNames($node->left, $propertyNames) && $this->isNull(
+                $node->right
+            )) {
+                $node->right = new Array_();
+            }
+
+            if ($this->propertyFetchManipulator->isLocalPropertyOfNames($node->right, $propertyNames) && $this->isNull(
+                $node->left
+            )) {
+                $node->left = new Array_();
+            }
+
+            return $node;
         });
     }
 
@@ -250,13 +250,8 @@ PHP
         )) {
             return true;
         }
-
-        if ($this->propertyFetchManipulator->isLocalPropertyOfNames($expr->right, $propertyNames) && $this->isNull(
+        return $this->propertyFetchManipulator->isLocalPropertyOfNames($expr->right, $propertyNames) && $this->isNull(
             $expr->left
-        )) {
-            return true;
-        }
-
-        return false;
+        );
     }
 }

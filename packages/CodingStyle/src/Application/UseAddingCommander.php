@@ -260,16 +260,6 @@ final class UseAddingCommander implements CommanderInterface
         return 500;
     }
 
-    /**
-     * @return FullyQualifiedObjectType[]
-     */
-    private function getUseImportTypesByNode(Node $node): array
-    {
-        $filePath = $this->getRealPathFromNode($node);
-
-        return $this->useImportTypesInFilePath[$filePath] ?? [];
-    }
-
     private function getRealPathFromNode(Node $node): ?string
     {
         /** @var SmartFileInfo|null $fileInfo */
@@ -279,5 +269,15 @@ final class UseAddingCommander implements CommanderInterface
         }
 
         return $fileInfo->getRealPath();
+    }
+
+    /**
+     * @return FullyQualifiedObjectType[]
+     */
+    private function getUseImportTypesByNode(Node $node): array
+    {
+        $filePath = $this->getRealPathFromNode($node);
+
+        return $this->useImportTypesInFilePath[$filePath] ?? [];
     }
 }

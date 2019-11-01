@@ -46,10 +46,8 @@ final class EregToPcreTransformer
             if (isset($icache[$s])) {
                 return $icache[$s];
             }
-        } else {
-            if (isset($cache[$s])) {
-                return $cache[$s];
-            }
+        } elseif (isset($cache[$s])) {
+            return $cache[$s];
         }
         [$r, $i] = $this->_ere2pcre($s, 0);
         if ($i !== strlen($s)) {

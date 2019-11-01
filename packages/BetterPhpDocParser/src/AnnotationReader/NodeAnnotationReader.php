@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\AnnotationReader;
 
 use Doctrine\Common\Annotations\AnnotationException;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\ORM\Mapping\Annotation;
+use Doctrine\Common\Annotations\Reader;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -16,24 +15,23 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
-use Symfony\Component\Validator\Constraint;
 use Throwable;
 
 final class NodeAnnotationReader
 {
     /**
-     * @var AnnotationReader
+     * @var Reader
      */
-    private $annotationReader;
+    private $reader;
 
     /**
      * @var NameResolver
      */
     private $nameResolver;
 
-    public function __construct(AnnotationReader $annotationReader, NameResolver $nameResolver)
+    public function __construct(Reader $reader, NameResolver $nameResolver)
     {
-        $this->annotationReader = $annotationReader;
+        $this->reader = $reader;
         $this->nameResolver = $nameResolver;
     }
 
@@ -51,7 +49,7 @@ final class NodeAnnotationReader
         $reflectionMethod = new ReflectionMethod($className, $methodName);
 
         try {
-            return $this->annotationReader->getMethodAnnotation($reflectionMethod, $annotationClassName);
+            return $this->reader->getMethodAnnotation($reflectionMethod, $annotationClassName);
         } catch (AnnotationException $annotationException) {
             // unable to laod
             return null;
@@ -65,11 +63,11 @@ final class NodeAnnotationReader
     {
         $classReflection = $this->createClassReflectionFromNode($class);
 
-        return $this->annotationReader->getClassAnnotation($classReflection, $annotationClassName);
+        return $this->reader->getClassAnnotation($classReflection, $annotationClassName);
     }
 
     /**
-     * @return Annotation|Constraint|null
+     * @return object|null
      */
     public function readPropertyAnnotation(Property $property, string $annotationClassName)
     {
@@ -78,13 +76,15 @@ final class NodeAnnotationReader
             return null;
         }
 
-        /** @var Annotation|null $propertyAnnotation */
-        $propertyAnnotation = $this->annotationReader->getPropertyAnnotation($propertyReflection, $annotationClassName);
-        if ($propertyAnnotation === null) {
-            return null;
-        }
+        return $this->reader->getPropertyAnnotation($propertyReflection, $annotationClassName);
+    }
 
-        return $propertyAnnotation;
+    private function createClassReflectionFromNode(Class_ $class): ReflectionClass
+    {
+        /** @var string $className */
+        $className = $this->nameResolver->getName($class);
+
+        return new ReflectionClass($className);
     }
 
     private function createPropertyReflectionFromPropertyNode(Property $property): ?ReflectionProperty
@@ -106,13 +106,5 @@ final class NodeAnnotationReader
             // in case of PHPUnit property or just-added property
             return null;
         }
-    }
-
-    private function createClassReflectionFromNode(Class_ $class): ReflectionClass
-    {
-        /** @var string $className */
-        $className = $this->nameResolver->getName($class);
-
-        return new ReflectionClass($className);
     }
 }

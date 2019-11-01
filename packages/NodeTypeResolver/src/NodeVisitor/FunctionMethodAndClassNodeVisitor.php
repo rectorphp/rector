@@ -83,6 +83,24 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         return $node;
     }
 
+    private function isClassAnonymous(Node $node): bool
+    {
+        if (! $node instanceof Class_) {
+            return false;
+        }
+
+        if ($node->isAnonymous()) {
+            return true;
+        }
+
+        if ($node->name === null) {
+            return true;
+        }
+
+        // PHPStan polution
+        return (bool) Strings::match($node->name->toString(), '#^AnonymousClass\w+#');
+    }
+
     private function processClass(Node $node): void
     {
         if ($node instanceof ClassLike) {
@@ -132,23 +150,5 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         }
 
         $node->setAttribute(AttributeKey::PARENT_CLASS_NAME, $parentClassResolvedName);
-    }
-
-    private function isClassAnonymous(Node $node): bool
-    {
-        if (! $node instanceof Class_) {
-            return false;
-        }
-
-        if ($node->isAnonymous()) {
-            return true;
-        }
-
-        if ($node->name === null) {
-            return true;
-        }
-
-        // PHPStan polution
-        return (bool) Strings::match($node->name->toString(), '#^AnonymousClass\w+#');
     }
 }

@@ -28,7 +28,6 @@ use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
@@ -40,11 +39,6 @@ final class ScreenFileCommand extends AbstractCommand
      * @var string
      */
     private const FILE_ARGUMENT = 'file';
-
-    /**
-     * @var string
-     */
-    private const OUTPUT_OPTION = 'output';
 
     /**
      * @var SymfonyStyle
@@ -107,7 +101,6 @@ final class ScreenFileCommand extends AbstractCommand
         $this->setDescription('Load file and print nodes meta data - super helpful to learn to build rules');
 
         $this->addArgument(self::FILE_ARGUMENT, InputArgument::REQUIRED, 'Path to file to be screened');
-        $this->addOption(self::OUTPUT_OPTION, 'o', InputOption::VALUE_REQUIRED, 'Path to print decorated file into');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -123,37 +116,9 @@ final class ScreenFileCommand extends AbstractCommand
         $this->decorateNodes($nodes);
 
         // 4. print decorated nodes to output/file
-        $this->outputDecoratedFileContent($input, $nodes);
+        $this->outputDecoratedFileContent($nodes, $smartFileInfo);
 
         return Shell::CODE_SUCCESS;
-    }
-
-    /**
-     * @param mixed[] $data
-     */
-    private function createDocBlockFromArrayData(array $data, string $indent = ''): string
-    {
-        $comments = '';
-        $comments .= PHP_EOL;
-
-        foreach ($data as $name => $value) {
-            $wrapInQuotes = true;
-            if (is_array($value)) {
-                $wrapInQuotes = false;
-                $value = $this->createDocBlockFromArrayData($value, '  * ');
-            }
-
-            $comments .= sprintf(
-                '// %s%s: %s%s%s',
-                $indent,
-                $name,
-                $wrapInQuotes ? '"' : '',
-                $value,
-                $wrapInQuotes ? '"' : ''
-            ) . PHP_EOL;
-        }
-
-        return $comments;
     }
 
     /**
@@ -162,12 +127,7 @@ final class ScreenFileCommand extends AbstractCommand
     private function decorateNodes(array $nodes): void
     {
         $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node): Node {
-            // not useful
-            if ($node instanceof Expression) {
-                $infoNode = $node->expr;
-            } else {
-                $infoNode = $node;
-            }
+            $infoNode = $node instanceof Expression ? $node->expr : $node;
 
             $data = $this->decorateNodeData($infoNode);
 
@@ -186,67 +146,16 @@ final class ScreenFileCommand extends AbstractCommand
     }
 
     /**
-     * @param mixed[] $data
-     * @return mixed[]
+     * @param Node[] $nodes
      */
-    private function decorateClassLike(ClassLike $classLike, array $data): array
+    private function outputDecoratedFileContent(array $nodes, SmartFileInfo $fileInfo): void
     {
-        $data['name'] = $this->nameResolver->getName($classLike);
+        $decoratedFileContent = '<?php' . PHP_EOL . $this->betterStandardPrinter->prettyPrint($nodes);
 
-        $parentClassName = $classLike->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName) {
-            $data['parent_class_name'] = $parentClassName;
-        }
+        $outputFileName = 'rector_vision_' . $fileInfo->getFilename();
+        FileSystem::write($outputFileName, $decoratedFileContent);
 
-        return $data;
-    }
-
-    /**
-     * @param mixed[] $data
-     * @return mixed[]
-     */
-    private function decorateMethodCall(MethodCall $methodCall, array $data): array
-    {
-        $data['method_call_variable'] = $this->decorateNodeData($methodCall->var);
-        $data['method_call_name'] = $this->nameResolver->getName($methodCall->name);
-
-        return $data;
-    }
-
-    /**
-     * @param mixed[] $data
-     * @return mixed[]
-     */
-    private function decorateWithNodeType(Node $node, array $data): array
-    {
-        $data['node_type'] = $this->getObjectShortClass($node);
-
-        return $data;
-    }
-
-    /**
-     * @param mixed[] $data
-     * @return mixed[]
-     */
-    private function decorateReturn(Return_ $return, array $data): array
-    {
-        if ($return->expr === null) {
-            return $data;
-        }
-
-        $data['returned_node'] = $this->decorateNodeData($return->expr);
-
-        return $data;
-    }
-
-    /**
-     * @param object $object
-     */
-    private function getObjectShortClass($object): string
-    {
-        $classNode = get_class($object);
-
-        return (string) Strings::after($classNode, '\\', -1);
+        $this->symfonyStyle->writeln(sprintf('See: %s', $outputFileName));
     }
 
     /**
@@ -314,6 +223,61 @@ final class ScreenFileCommand extends AbstractCommand
 
     /**
      * @param mixed[] $data
+     */
+    private function createDocBlockFromArrayData(array $data, string $indent = ''): string
+    {
+        $comments = '';
+        $comments .= PHP_EOL;
+
+        foreach ($data as $name => $value) {
+            $wrapInQuotes = true;
+            if (is_array($value)) {
+                $wrapInQuotes = false;
+                $value = $this->createDocBlockFromArrayData($value, '  * ');
+            }
+
+            $comments .= sprintf(
+                '// %s%s: %s%s%s',
+                $indent,
+                $name,
+                $wrapInQuotes ? '"' : '',
+                $value,
+                $wrapInQuotes ? '"' : ''
+            ) . PHP_EOL;
+        }
+
+        return $comments;
+    }
+
+    /**
+     * @param mixed[] $data
+     * @return mixed[]
+     */
+    private function decorateWithNodeType(Node $node, array $data): array
+    {
+        $data['node_type'] = $this->getObjectShortClass($node);
+
+        return $data;
+    }
+
+    /**
+     * @param mixed[] $data
+     * @return mixed[]
+     */
+    private function decorateClassLike(ClassLike $classLike, array $data): array
+    {
+        $data['name'] = $this->nameResolver->getName($classLike);
+
+        $parentClassName = $classLike->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+        if ($parentClassName) {
+            $data['parent_class_name'] = $parentClassName;
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param mixed[] $data
      * @return mixed[]
      */
     private function decorateAssign(Assign $assign, array $data): array
@@ -325,17 +289,39 @@ final class ScreenFileCommand extends AbstractCommand
     }
 
     /**
-     * @param Node[] $nodes
+     * @param mixed[] $data
+     * @return mixed[]
      */
-    private function outputDecoratedFileContent(InputInterface $input, array $nodes): void
+    private function decorateReturn(Return_ $return, array $data): array
     {
-        $decoratedFileContent = '<?php' . PHP_EOL . $this->betterStandardPrinter->prettyPrint($nodes);
-
-        $outputOption = (string) $input->getOption(self::OUTPUT_OPTION);
-        if ($outputOption) {
-            FileSystem::write($outputOption, $decoratedFileContent);
-        } else {
-            $this->symfonyStyle->writeln($decoratedFileContent);
+        if ($return->expr === null) {
+            return $data;
         }
+
+        $data['returned_node'] = $this->decorateNodeData($return->expr);
+
+        return $data;
+    }
+
+    /**
+     * @param object $object
+     */
+    private function getObjectShortClass($object): string
+    {
+        $classNode = get_class($object);
+
+        return (string) Strings::after($classNode, '\\', -1);
+    }
+
+    /**
+     * @param mixed[] $data
+     * @return mixed[]
+     */
+    private function decorateMethodCall(MethodCall $methodCall, array $data): array
+    {
+        $data['method_call_variable'] = $this->decorateNodeData($methodCall->var);
+        $data['method_call_name'] = $this->nameResolver->getName($methodCall->name);
+
+        return $data;
     }
 }

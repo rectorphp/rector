@@ -94,41 +94,38 @@ PHP
         }
 
         $isVariableJustCreated = $this->isVariableJustCreated($node, $docVariableName);
-        if ($isVariableJustCreated === false) {
+        if (! $isVariableJustCreated) {
             return $this->refactorFreshlyCreatedNode($node, $phpDocInfo, $variable);
         }
 
         return $this->refactorAlreadyCreatedNode($node, $phpDocInfo, $variable);
     }
 
-    private function createFuncCallBasedOnType(Type $type, Variable $variable): ?FuncCall
+    private function getVarDocVariableName(PhpDocInfo $phpDocInfo): ?string
     {
-        if ($type instanceof ObjectType) {
-            $instanceOf = new Instanceof_($variable, new FullyQualified($type->getClassName()));
-            return $this->createFunction('assert', [$instanceOf]);
+        $varTagValueNode = $phpDocInfo->getVarTagValue();
+        if ($varTagValueNode === null) {
+            return null;
         }
 
-        if ($type instanceof IntegerType) {
-            $isInt = $this->createFunction('is_int', [$variable]);
-            return $this->createFunction('assert', [$isInt]);
+        $variableName = $varTagValueNode->variableName;
+        // no variable
+        if (empty($variableName)) {
+            return null;
         }
 
-        if ($type instanceof FloatType) {
-            $isFloat = $this->createFunction('is_float', [$variable]);
-            return $this->createFunction('assert', [$isFloat]);
-        }
+        return ltrim($variableName, '$');
+    }
 
-        if ($type instanceof StringType) {
-            $isString = $this->createFunction('is_string', [$variable]);
-            return $this->createFunction('assert', [$isString]);
-        }
+    private function findVariableByName(Stmt $stmt, string $docVariableName): ?Variable
+    {
+        return $this->betterNodeFinder->findFirst($stmt, function (Node $stmt) use ($docVariableName): bool {
+            if (! $stmt instanceof Variable) {
+                return false;
+            }
 
-        if ($type instanceof BooleanType) {
-            $isInt = $this->createFunction('is_bool', [$variable]);
-            return $this->createFunction('assert', [$isInt]);
-        }
-
-        return null;
+            return $this->isName($stmt, $docVariableName);
+        });
     }
 
     private function isVariableJustCreated(Node $node, string $docVariableName): bool
@@ -148,41 +145,6 @@ PHP
         }
 
         return $this->isName($assign->var, $docVariableName);
-    }
-
-    private function getVarDocVariableName(PhpDocInfo $phpDocInfo): ?string
-    {
-        $varTagValueNode = $phpDocInfo->getVarTagValue();
-        if ($varTagValueNode === null) {
-            return null;
-        }
-
-        $variableName = $varTagValueNode->variableName;
-        // no variable
-        if (empty($variableName)) {
-            return null;
-        }
-
-        return ltrim($variableName, '$');
-    }
-
-    private function removeVarAnnotation(Node $node, PhpDocInfo $phpDocInfo): void
-    {
-        $varTagValueNode = $phpDocInfo->getByType(VarTagValueNode::class);
-        $phpDocInfo->removeTagValueNodeFromNode($varTagValueNode);
-
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $phpDocInfo);
-    }
-
-    private function findVariableByName(Stmt $stmt, string $docVariableName): ?Variable
-    {
-        return $this->betterNodeFinder->findFirst($stmt, function (Node $stmt) use ($docVariableName): bool {
-            if (! $stmt instanceof Variable) {
-                return false;
-            }
-
-            return $this->isName($stmt, $docVariableName);
-        });
     }
 
     private function refactorFreshlyCreatedNode(Node $node, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
@@ -219,5 +181,43 @@ PHP
         $this->addNodeAfterNode($assertFuncCall, $node);
 
         return $node;
+    }
+
+    private function createFuncCallBasedOnType(Type $type, Variable $variable): ?FuncCall
+    {
+        if ($type instanceof ObjectType) {
+            $instanceOf = new Instanceof_($variable, new FullyQualified($type->getClassName()));
+            return $this->createFunction('assert', [$instanceOf]);
+        }
+
+        if ($type instanceof IntegerType) {
+            $isInt = $this->createFunction('is_int', [$variable]);
+            return $this->createFunction('assert', [$isInt]);
+        }
+
+        if ($type instanceof FloatType) {
+            $isFloat = $this->createFunction('is_float', [$variable]);
+            return $this->createFunction('assert', [$isFloat]);
+        }
+
+        if ($type instanceof StringType) {
+            $isString = $this->createFunction('is_string', [$variable]);
+            return $this->createFunction('assert', [$isString]);
+        }
+
+        if ($type instanceof BooleanType) {
+            $isInt = $this->createFunction('is_bool', [$variable]);
+            return $this->createFunction('assert', [$isInt]);
+        }
+
+        return null;
+    }
+
+    private function removeVarAnnotation(Node $node, PhpDocInfo $phpDocInfo): void
+    {
+        $varTagValueNode = $phpDocInfo->getByType(VarTagValueNode::class);
+        $phpDocInfo->removeTagValueNodeFromNode($varTagValueNode);
+
+        $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 }

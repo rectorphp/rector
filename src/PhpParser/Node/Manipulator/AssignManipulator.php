@@ -37,11 +37,7 @@ final class AssignManipulator
             return false;
         }
 
-        if ($node->var instanceof ArrayDimFetch) {
-            $potentialPropertyFetch = $node->var->var;
-        } else {
-            $potentialPropertyFetch = $node->var;
-        }
+        $potentialPropertyFetch = $node->var instanceof ArrayDimFetch ? $node->var->var : $node->var;
 
         return $potentialPropertyFetch instanceof PropertyFetch || $potentialPropertyFetch instanceof StaticPropertyFetch;
     }
@@ -57,14 +53,7 @@ final class AssignManipulator
             return false;
         }
 
-        /** @var Assign $node */
-        if ($node->var instanceof ArrayDimFetch) {
-            /** @var PropertyFetch|StaticPropertyFetch $propertyFetch */
-            $propertyFetch = $node->var->var;
-        } else {
-            /** @var PropertyFetch|StaticPropertyFetch $propertyFetch */
-            $propertyFetch = $node->var;
-        }
+        $propertyFetch = $node->var instanceof ArrayDimFetch ? $node->var->var : $node->var;
 
         return $this->nameResolver->isNames($propertyFetch, $propertyNames);
     }

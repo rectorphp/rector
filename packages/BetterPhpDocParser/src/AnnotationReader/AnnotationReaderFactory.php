@@ -6,10 +6,11 @@ namespace Rector\BetterPhpDocParser\AnnotationReader;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\Reader;
 
 final class AnnotationReaderFactory
 {
-    public function create(): AnnotationReader
+    public function create(): Reader
     {
         AnnotationRegistry::registerLoader('class_exists');
 

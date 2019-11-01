@@ -94,7 +94,7 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
 
         $newUseImports = array_unique($newUseImports);
 
-        if ($newUseImports) {
+        if ($newUseImports !== []) {
             $useImports = $this->createUses($newUseImports);
             $node->stmts = array_merge($useImports, $node->stmts);
         }
@@ -129,17 +129,6 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
     }
 
     /**
-     * Get the extra path that is not included in root PSR-4 namespace
-     */
-    private function resolveExtraNamespace(SmartFileInfo $smartFileInfo, string $path): string
-    {
-        $extraNamespace = Strings::substring($smartFileInfo->getRelativeDirectoryPath(), Strings::length($path) + 1);
-        $extraNamespace = Strings::replace($extraNamespace, '#/#', '\\');
-
-        return trim($extraNamespace);
-    }
-
-    /**
      * @param string[] $newUseImports
      * @return Use_[]
      */
@@ -153,5 +142,16 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
         }
 
         return $uses;
+    }
+
+    /**
+     * Get the extra path that is not included in root PSR-4 namespace
+     */
+    private function resolveExtraNamespace(SmartFileInfo $smartFileInfo, string $path): string
+    {
+        $extraNamespace = Strings::substring($smartFileInfo->getRelativeDirectoryPath(), Strings::length($path) + 1);
+        $extraNamespace = Strings::replace($extraNamespace, '#/#', '\\');
+
+        return trim($extraNamespace);
     }
 }

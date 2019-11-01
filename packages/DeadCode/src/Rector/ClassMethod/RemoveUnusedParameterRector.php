@@ -154,45 +154,6 @@ PHP
     }
 
     /**
-     * @return Param[]
-     */
-    private function resolveUnusedParameters(ClassMethod $classMethod): array
-    {
-        $unusedParameters = [];
-
-        foreach ((array) $classMethod->params as $i => $param) {
-            if ($this->classMethodManipulator->isParameterUsedMethod($param, $classMethod)) {
-                // reset to keep order of removed arguments, if not construtctor - probably autowired
-                if (! $this->isName($classMethod, '__construct')) {
-                    $unusedParameters = [];
-                }
-
-                continue;
-            }
-
-            $unusedParameters[$i] = $param;
-        }
-
-        return $unusedParameters;
-    }
-
-    /**
-     * @param Param[] $parameters1
-     * @param Param[] $parameters2
-     * @return Param[]
-     */
-    private function getParameterOverlap(array $parameters1, array $parameters2): array
-    {
-        return array_uintersect(
-            $parameters1,
-            $parameters2,
-            function (Param $a, Param $b): int {
-                return $this->betterStandardPrinter->areNodesEqual($a, $b) ? 0 : 1;
-            }
-        );
-    }
-
-    /**
      * @param ClassMethod $classMethod
      * @param string      $methodName
      * @param Class_[]    $childrenOfClass
@@ -214,6 +175,45 @@ PHP
                 );
             }
         }
+        return $unusedParameters;
+    }
+
+    /**
+     * @param Param[] $parameters1
+     * @param Param[] $parameters2
+     * @return Param[]
+     */
+    private function getParameterOverlap(array $parameters1, array $parameters2): array
+    {
+        return array_uintersect(
+            $parameters1,
+            $parameters2,
+            function (Param $a, Param $b): int {
+                return $this->betterStandardPrinter->areNodesEqual($a, $b) ? 0 : 1;
+            }
+        );
+    }
+
+    /**
+     * @return Param[]
+     */
+    private function resolveUnusedParameters(ClassMethod $classMethod): array
+    {
+        $unusedParameters = [];
+
+        foreach ((array) $classMethod->params as $i => $param) {
+            if ($this->classMethodManipulator->isParameterUsedMethod($param, $classMethod)) {
+                // reset to keep order of removed arguments, if not construtctor - probably autowired
+                if (! $this->isName($classMethod, '__construct')) {
+                    $unusedParameters = [];
+                }
+
+                continue;
+            }
+
+            $unusedParameters[$i] = $param;
+        }
+
         return $unusedParameters;
     }
 }

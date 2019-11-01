@@ -192,126 +192,6 @@ PHP
         return null;
     }
 
-    /**
-     * @return ObjectType[]
-     */
-    private function collectNewProperties(Class_ $class): array
-    {
-        $this->newProperties = [];
-
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node): void {
-            if (! $node instanceof StaticCall) {
-                return;
-            }
-
-            foreach ($this->staticClassTypes as $type) {
-                $objectType = new ObjectType($type);
-                if (! $this->isObjectType($node->class, $objectType)) {
-                    continue;
-                }
-
-                $this->newProperties[] = $objectType;
-            }
-        });
-
-        $this->newProperties = array_unique($this->newProperties);
-
-        return $this->newProperties;
-    }
-
-    private function createPropertyFromType(ObjectType $objectType): Property
-    {
-        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-
-        return $this->nodeFactory->createPrivatePropertyFromNameAndType($propertyName, $objectType);
-    }
-
-    private function convertStaticCallToPropertyMethodCall(StaticCall $staticCall, ObjectType $objectType): MethodCall
-    {
-        // create "$this->someService" instead
-        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-        $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
-
-        // turn static call to method on property call
-        $methodCall = new MethodCall($propertyFetch, $staticCall->name);
-        $methodCall->args = $staticCall->args;
-
-        return $methodCall;
-    }
-
-    private function createContainerGetTypeMethodCall(ObjectType $objectType): MethodCall
-    {
-        $containerProperty = new StaticPropertyFetch(new Name('self'), 'container');
-        $getMethodCall = new MethodCall($containerProperty, 'get');
-
-        $className = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType);
-        if (! $className instanceof Name) {
-            throw new ShouldNotHappenException();
-        }
-
-        $getMethodCall->args[] = new Arg(new ClassConstFetch($className, 'class'));
-
-        return $getMethodCall;
-    }
-
-    /**
-     * @param ObjectType[] $newProperties
-     */
-    private function addNewPropertiesToClass(Class_ $class, array $newProperties): Class_
-    {
-        $properties = [];
-        foreach ($newProperties as $objectType) {
-            $properties[] = $this->createPropertyFromType($objectType);
-        }
-
-        // add property to the start of the class
-        $class->stmts = array_merge($properties, $class->stmts);
-
-        return $class;
-    }
-
-    private function createContainerGetTypeToPropertyAssign(ObjectType $objectType): Expression
-    {
-        $getMethodCall = $this->createContainerGetTypeMethodCall($objectType);
-
-        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-        $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
-
-        $assign = new Assign($propertyFetch, $getMethodCall);
-
-        return new Expression($assign);
-    }
-
-    private function getParentSetUpStaticCallPosition(ClassMethod $setupClassMethod): ?int
-    {
-        foreach ((array) $setupClassMethod->stmts as $position => $methodStmt) {
-            if ($methodStmt instanceof Expression) {
-                $methodStmt = $methodStmt->expr;
-            }
-
-            if (! $methodStmt instanceof StaticCall) {
-                continue;
-            }
-
-            if (! $this->isName($methodStmt->class, 'parent')) {
-                continue;
-            }
-
-            if (! $this->isName($methodStmt->name, 'setUp')) {
-                continue;
-            }
-
-            return $position;
-        }
-
-        return null;
-    }
-
-    private function createParentSetUpStaticCall(): Expression
-    {
-        return new Expression(new StaticCall(new Name('parent'), 'setUp'));
-    }
-
     private function processPHPUnitClass(Class_ $class): ?Class_
     {
         // add property with the object
@@ -347,17 +227,77 @@ PHP
         return $class;
     }
 
-    private function createSetUpMethod(Expression $parentSetupStaticCall, Expression $assign): ClassMethod
+    /**
+     * @return ObjectType[]
+     */
+    private function collectNewProperties(Class_ $class): array
     {
-        $classMethodBuilder = $this->builderFactory->method('setUp');
-        $classMethodBuilder->makeProtected();
-        $classMethodBuilder->addStmt($parentSetupStaticCall);
-        $classMethodBuilder->addStmt($assign);
+        $this->newProperties = [];
 
-        $classMethod = $classMethodBuilder->getNode();
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node): void {
+            if (! $node instanceof StaticCall) {
+                return;
+            }
 
-        $this->phpUnitTypeDeclarationDecorator->decorate($classMethod);
-        return $classMethod;
+            foreach ($this->staticClassTypes as $type) {
+                $objectType = new ObjectType($type);
+                if (! $this->isObjectType($node->class, $objectType)) {
+                    continue;
+                }
+
+                $this->newProperties[] = $objectType;
+            }
+        });
+
+        $this->newProperties = array_unique($this->newProperties);
+
+        return $this->newProperties;
+    }
+
+    private function convertStaticCallToPropertyMethodCall(StaticCall $staticCall, ObjectType $objectType): MethodCall
+    {
+        // create "$this->someService" instead
+        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
+        $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
+
+        // turn static call to method on property call
+        $methodCall = new MethodCall($propertyFetch, $staticCall->name);
+        $methodCall->args = $staticCall->args;
+
+        return $methodCall;
+    }
+
+    /**
+     * @param ObjectType[] $newProperties
+     */
+    private function addNewPropertiesToClass(Class_ $class, array $newProperties): Class_
+    {
+        $properties = [];
+        foreach ($newProperties as $objectType) {
+            $properties[] = $this->createPropertyFromType($objectType);
+        }
+
+        // add property to the start of the class
+        $class->stmts = array_merge($properties, $class->stmts);
+
+        return $class;
+    }
+
+    private function createParentSetUpStaticCall(): Expression
+    {
+        return new Expression(new StaticCall(new Name('parent'), 'setUp'));
+    }
+
+    private function createContainerGetTypeToPropertyAssign(ObjectType $objectType): Expression
+    {
+        $getMethodCall = $this->createContainerGetTypeMethodCall($objectType);
+
+        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
+        $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
+
+        $assign = new Assign($propertyFetch, $getMethodCall);
+
+        return new Expression($assign);
     }
 
     private function updateSetUpMethod(
@@ -372,5 +312,65 @@ PHP
             assert($setupClassMethod->stmts !== null);
             array_splice($setupClassMethod->stmts, $parentSetUpStaticCallPosition + 1, 0, [$assign]);
         }
+    }
+
+    private function createSetUpMethod(Expression $parentSetupStaticCall, Expression $assign): ClassMethod
+    {
+        $classMethodBuilder = $this->builderFactory->method('setUp');
+        $classMethodBuilder->makeProtected();
+        $classMethodBuilder->addStmt($parentSetupStaticCall);
+        $classMethodBuilder->addStmt($assign);
+
+        $classMethod = $classMethodBuilder->getNode();
+
+        $this->phpUnitTypeDeclarationDecorator->decorate($classMethod);
+        return $classMethod;
+    }
+
+    private function createPropertyFromType(ObjectType $objectType): Property
+    {
+        $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
+
+        return $this->nodeFactory->createPrivatePropertyFromNameAndType($propertyName, $objectType);
+    }
+
+    private function createContainerGetTypeMethodCall(ObjectType $objectType): MethodCall
+    {
+        $containerProperty = new StaticPropertyFetch(new Name('self'), 'container');
+        $getMethodCall = new MethodCall($containerProperty, 'get');
+
+        $className = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType);
+        if (! $className instanceof Name) {
+            throw new ShouldNotHappenException();
+        }
+
+        $getMethodCall->args[] = new Arg(new ClassConstFetch($className, 'class'));
+
+        return $getMethodCall;
+    }
+
+    private function getParentSetUpStaticCallPosition(ClassMethod $setupClassMethod): ?int
+    {
+        foreach ((array) $setupClassMethod->stmts as $position => $methodStmt) {
+            if ($methodStmt instanceof Expression) {
+                $methodStmt = $methodStmt->expr;
+            }
+
+            if (! $methodStmt instanceof StaticCall) {
+                continue;
+            }
+
+            if (! $this->isName($methodStmt->class, 'parent')) {
+                continue;
+            }
+
+            if (! $this->isName($methodStmt->name, 'setUp')) {
+                continue;
+            }
+
+            return $position;
+        }
+
+        return null;
     }
 }

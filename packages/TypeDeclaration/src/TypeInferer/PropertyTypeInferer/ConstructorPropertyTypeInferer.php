@@ -80,30 +80,6 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         return 800;
     }
 
-    private function getResolveParamStaticTypeAsPHPStanType(ClassMethod $classMethod, string $propertyName): Type
-    {
-        $paramStaticType = new ArrayType(new MixedType(), new MixedType());
-
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $propertyName,
-            &$paramStaticType
-        ): ?int {
-            if (! $node instanceof Variable) {
-                return null;
-            }
-
-            if (! $this->nameResolver->isName($node, $propertyName)) {
-                return null;
-            }
-
-            $paramStaticType = $this->nodeTypeResolver->getStaticType($node);
-
-            return NodeTraverser::STOP_TRAVERSAL;
-        });
-
-        return $paramStaticType;
-    }
-
     /**
      * In case the property name is different to param name:
      *
@@ -151,22 +127,6 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         return null;
     }
 
-    private function isParamNullable(Param $param): bool
-    {
-        if ($param->type instanceof NullableType) {
-            return true;
-        }
-
-        if ($param->default) {
-            $defaultValueStaticType = $this->nodeTypeResolver->getStaticType($param->default);
-            if ($defaultValueStaticType instanceof NullType) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     private function resolveParamTypeToPHPStanType(Param $param): Type
     {
         if ($param->type === null) {
@@ -190,6 +150,46 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         }
 
         return $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+    }
+
+    private function getResolveParamStaticTypeAsPHPStanType(ClassMethod $classMethod, string $propertyName): Type
+    {
+        $paramStaticType = new ArrayType(new MixedType(), new MixedType());
+
+        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
+            $propertyName,
+            &$paramStaticType
+        ): ?int {
+            if (! $node instanceof Variable) {
+                return null;
+            }
+
+            if (! $this->nameResolver->isName($node, $propertyName)) {
+                return null;
+            }
+
+            $paramStaticType = $this->nodeTypeResolver->getStaticType($node);
+
+            return NodeTraverser::STOP_TRAVERSAL;
+        });
+
+        return $paramStaticType;
+    }
+
+    private function isParamNullable(Param $param): bool
+    {
+        if ($param->type instanceof NullableType) {
+            return true;
+        }
+
+        if ($param->default !== null) {
+            $defaultValueStaticType = $this->nodeTypeResolver->getStaticType($param->default);
+            if ($defaultValueStaticType instanceof NullType) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function resolveFullyQualifiedOrAlaisedObjectType(Param $param): ?Type

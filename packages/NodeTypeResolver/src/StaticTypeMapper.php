@@ -244,7 +244,7 @@ final class StaticTypeMapper
         if ($phpStanType instanceof UnionType) {
             // match array types
             $arrayNode = $this->matchArrayTypes($phpStanType);
-            if ($arrayNode) {
+            if ($arrayNode !== null) {
                 return $arrayNode;
             }
 
@@ -443,6 +443,7 @@ final class StaticTypeMapper
 
         if ($node instanceof Name) {
             $name = $node->toString();
+
             if (ClassExistenceStaticHelper::doesClassLikeExist($name)) {
                 return new FullyQualifiedObjectType($node->toString());
             }
@@ -628,6 +629,44 @@ final class StaticTypeMapper
         throw new NotImplementedException(__METHOD__ . ' for ' . get_class($typeNode));
     }
 
+    private function matchArrayTypes(UnionType $unionType): ?Identifier
+    {
+        $isNullableType = false;
+        $hasIterable = false;
+
+        foreach ($unionType->getTypes() as $unionedType) {
+            if ($unionedType instanceof IterableType) {
+                $hasIterable = true;
+                continue;
+            }
+
+            if ($unionedType instanceof ArrayType) {
+                continue;
+            }
+
+            if ($unionedType instanceof NullType) {
+                $isNullableType = true;
+                continue;
+            }
+
+            if ($unionedType instanceof ObjectType) {
+                if ($unionedType->getClassName() === Traversable::class) {
+                    $hasIterable = true;
+                    continue;
+                }
+            }
+
+            return null;
+        }
+
+        $type = $hasIterable ? 'iterable' : 'array';
+        if ($isNullableType) {
+            return new Identifier('?' . $type);
+        }
+
+        return new Identifier($type);
+    }
+
     private function matchTypeForNullableUnionType(UnionType $unionType): ?Type
     {
         if (count($unionType->getTypes()) !== 2) {
@@ -665,44 +704,6 @@ final class StaticTypeMapper
         $firstObjectType = $unionType->getTypes()[0];
 
         return new FullyQualified($firstObjectType->getClassName());
-    }
-
-    private function matchArrayTypes(UnionType $unionType): ?Identifier
-    {
-        $isNullableType = false;
-        $hasIterable = false;
-
-        foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof IterableType) {
-                $hasIterable = true;
-                continue;
-            }
-
-            if ($unionedType instanceof ArrayType) {
-                continue;
-            }
-
-            if ($unionedType instanceof NullType) {
-                $isNullableType = true;
-                continue;
-            }
-
-            if ($unionedType instanceof ObjectType) {
-                if ($unionedType->getClassName() === Traversable::class) {
-                    $hasIterable = true;
-                    continue;
-                }
-            }
-
-            return null;
-        }
-
-        $type = $hasIterable ? 'iterable' : 'array';
-        if ($isNullableType) {
-            return new Identifier('?' . $type);
-        }
-
-        return new Identifier($type);
     }
 
     private function mapScalarStringToType(string $scalarName): ?Type

@@ -91,45 +91,6 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
-    private function resolveNodeScope(Node $node): ?Scope
-    {
-        /** @var Scope|null $nodeScope */
-        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($nodeScope) {
-            return $nodeScope;
-        }
-
-        // is node in trait
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode instanceof Trait_) {
-            /** @var string $traitName */
-            $traitName = $node->getAttribute(AttributeKey::CLASS_NAME);
-            $traitNodeScope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $node);
-            if ($traitNodeScope) {
-                return $traitNodeScope;
-            }
-        }
-
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Node) {
-            $parentNodeScope = $parentNode->getAttribute(AttributeKey::SCOPE);
-            if ($parentNodeScope) {
-                return $parentNodeScope;
-            }
-        }
-
-        // get nearest variable scope
-        $method = $node->getAttribute(AttributeKey::METHOD_NODE);
-        if ($method instanceof Node) {
-            $methodNodeScope = $method->getAttribute(AttributeKey::SCOPE);
-            if ($methodNodeScope) {
-                return $methodNodeScope;
-            }
-        }
-
-        return null;
-    }
-
     private function resolveTypesFromScope(Variable $variable, string $variableName): Type
     {
         $nodeScope = $this->resolveNodeScope($variable);
@@ -143,5 +104,44 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
 
         // this → object type is easier to work with and consistent with the rest of the code
         return $nodeScope->getVariableType($variableName);
+    }
+
+    private function resolveNodeScope(Node $node): ?Scope
+    {
+        /** @var Scope|null $nodeScope */
+        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
+        if ($nodeScope !== null) {
+            return $nodeScope;
+        }
+
+        // is node in trait
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classNode instanceof Trait_) {
+            /** @var string $traitName */
+            $traitName = $node->getAttribute(AttributeKey::CLASS_NAME);
+            $traitNodeScope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $node);
+            if ($traitNodeScope !== null) {
+                return $traitNodeScope;
+            }
+        }
+
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Node) {
+            $parentNodeScope = $parentNode->getAttribute(AttributeKey::SCOPE);
+            if ($parentNodeScope !== null) {
+                return $parentNodeScope;
+            }
+        }
+
+        // get nearest variable scope
+        $method = $node->getAttribute(AttributeKey::METHOD_NODE);
+        if ($method instanceof Node) {
+            $methodNodeScope = $method->getAttribute(AttributeKey::SCOPE);
+            if ($methodNodeScope !== null) {
+                return $methodNodeScope;
+            }
+        }
+
+        return null;
     }
 }

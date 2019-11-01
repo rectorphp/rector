@@ -36,11 +36,10 @@ final class ReportRoutesExtension implements ReportingExtensionInterface
         $tableLines = [];
 
         foreach ($this->routeCollector->getRouteValueObjects() as $routeValueObject) {
-            if ($routeValueObject->getParams()) {
-                $paramsAsString = '$' . implode(', $', $routeValueObject->getParams());
-            } else {
-                $paramsAsString = '';
-            }
+            $paramsAsString = $routeValueObject->getParams() !== [] ? '$' . implode(
+                ', $',
+                $routeValueObject->getParams()
+            ) : '';
 
             $tableLines[] = [
                 $routeValueObject->getControllerClass(),

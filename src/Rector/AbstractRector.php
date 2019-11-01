@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Rector;
 
+use Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Commander\CommanderCollector;
@@ -219,7 +221,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         if ($originalNode->getAttribute(AttributeKey::FILE_INFO) !== null) {
             $node->setAttribute(AttributeKey::FILE_INFO, $originalNode->getAttribute(AttributeKey::FILE_INFO));
-        } elseif ($originalNode->getAttribute(AttributeKey::PARENT_NODE)) {
+        } elseif ($originalNode->getAttribute(AttributeKey::PARENT_NODE) !== null) {
             /** @var Node $parentOriginalNode */
             $parentOriginalNode = $originalNode->getAttribute(AttributeKey::PARENT_NODE);
             $node->setAttribute(AttributeKey::FILE_INFO, $parentOriginalNode->getAttribute(AttributeKey::FILE_INFO));
@@ -249,6 +251,17 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
             $newNode->setAttribute($attributeName, $oldNodeAttributeValue);
         }
+    }
+
+    protected function isAnonymousClass(Node $node): bool
+    {
+        if (! $node instanceof Class_) {
+            return false;
+        }
+
+        $className = $this->nameResolver->getName($node);
+
+        return $className === null || Strings::contains($className, 'AnonymousClass');
     }
 
     private function updateAttributes(Node $node): void

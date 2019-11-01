@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-use Rector\Console\Option\SetOptionResolver;
+use Rector\Bootstrap\ConfigResolver;
+use Rector\Bootstrap\SetOptionResolver;
 use Rector\DependencyInjection\RectorContainerFactory;
 use Rector\Exception\Configuration\SetNotFoundException;
 use Rector\Set\Set;
@@ -30,6 +31,11 @@ $configs[] = ConfigFileFinder::provide('rector', ['rector.yml', 'rector.yaml']);
 
 // remove empty values
 $configs = array_filter($configs);
+
+// resolve: parameters > sets
+$configResolver = new ConfigResolver();
+$parameterSetsConfigs = $configResolver->resolveFromParameterSetsFromConfigFiles($configs);
+$configs = array_merge($configs, $parameterSetsConfigs);
 
 // Build DI container
 $rectorContainerFactory = new RectorContainerFactory();

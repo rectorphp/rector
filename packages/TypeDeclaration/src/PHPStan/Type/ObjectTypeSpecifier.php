@@ -30,17 +30,17 @@ final class ObjectTypeSpecifier
         }
 
         $aliasedObjectType = $this->matchAliasedObjectType($node, $objectType);
-        if ($aliasedObjectType) {
+        if ($aliasedObjectType !== null) {
             return $aliasedObjectType;
         }
 
         $shortenedObjectType = $this->matchShortenedObjectType($node, $objectType);
-        if ($shortenedObjectType) {
+        if ($shortenedObjectType !== null) {
             return $shortenedObjectType;
         }
 
         $sameNamespacedObjectType = $this->matchSameNamespacedObjectType($node, $objectType);
-        if ($sameNamespacedObjectType) {
+        if ($sameNamespacedObjectType !== null) {
             return $sameNamespacedObjectType;
         }
 
@@ -89,17 +89,17 @@ final class ObjectTypeSpecifier
 
         foreach ($uses as $use) {
             foreach ($use->uses as $useUse) {
-                if ($useUse->alias) {
+                if ($useUse->alias !== null) {
                     continue;
                 }
 
                 $partialNamespaceObjectType = $this->matchPartialNamespaceObjectType($objectType, $useUse);
-                if ($partialNamespaceObjectType) {
+                if ($partialNamespaceObjectType !== null) {
                     return $partialNamespaceObjectType;
                 }
 
                 $partialNamespaceObjectType = $this->matchClassWithLastUseImportPart($objectType, $useUse);
-                if ($partialNamespaceObjectType) {
+                if ($partialNamespaceObjectType !== null) {
                     return $partialNamespaceObjectType;
                 }
             }

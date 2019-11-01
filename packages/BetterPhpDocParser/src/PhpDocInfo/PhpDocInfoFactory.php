@@ -79,6 +79,17 @@ final class PhpDocInfoFactory
         return $phpDocInfo;
     }
 
+    private function createUniqueDocNodeHash(Node $node): string
+    {
+        $this->ensureNodeHasDocComment($node);
+
+        $objectHash = spl_object_hash($node);
+        $docCommentHash = spl_object_hash($node->getDocComment());
+        $docCommentContentHash = sha1($node->getDocComment()->getText());
+
+        return $objectHash . $docCommentHash . $docCommentContentHash;
+    }
+
     /**
      * Needed for printing
      */
@@ -99,17 +110,6 @@ final class PhpDocInfoFactory
         }
 
         return $attributeAwarePhpDocNode;
-    }
-
-    private function createUniqueDocNodeHash(Node $node): string
-    {
-        $this->ensureNodeHasDocComment($node);
-
-        $objectHash = spl_object_hash($node);
-        $docCommentHash = spl_object_hash($node->getDocComment());
-        $docCommentContentHash = sha1($node->getDocComment()->getText());
-
-        return $objectHash . $docCommentHash . $docCommentContentHash;
     }
 
     private function ensureNodeHasDocComment(Node $node): void

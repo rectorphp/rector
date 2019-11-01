@@ -94,24 +94,6 @@ PHP
     }
 
     /**
-     * @return string[]
-     */
-    private function strSplitNegative(string $string, int $length): array
-    {
-        $inversed = strrev($string);
-
-        /** @var string[] $chunks */
-        $chunks = str_split($inversed, $length);
-
-        $chunks = array_reverse($chunks);
-        foreach ($chunks as $key => $chunk) {
-            $chunks[$key] = strrev($chunk);
-        }
-
-        return $chunks;
-    }
-
-    /**
      * @param LNumber|DNumber $node
      */
     private function shouldSkip(Node $node, string $numericValueAsString): bool
@@ -130,12 +112,25 @@ PHP
         if (Strings::match($numericValueAsString, '#e#i')) {
             return true;
         }
-
         // too short
-        if (Strings::length($numericValueAsString) <= self::GROUP_SIZE) {
-            return true;
+        return Strings::length($numericValueAsString) <= self::GROUP_SIZE;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function strSplitNegative(string $string, int $length): array
+    {
+        $inversed = strrev($string);
+
+        /** @var string[] $chunks */
+        $chunks = str_split($inversed, $length);
+
+        $chunks = array_reverse($chunks);
+        foreach ($chunks as $key => $chunk) {
+            $chunks[$key] = strrev($chunk);
         }
 
-        return false;
+        return $chunks;
     }
 }

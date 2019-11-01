@@ -87,7 +87,7 @@ PHP
         /** @var Namespace_[] $namespaceNodes */
         $namespaceNodes = $this->betterNodeFinder->findInstanceOf($nodes, Namespace_::class);
 
-        if (count($namespaceNodes)) {
+        if (count($namespaceNodes) > 0) {
             $this->processNamespaceNodes($smartFileInfo, $namespaceNodes, $nodes, $shouldDelete);
         } else {
             $this->processNodesWithoutNamespace($nodes, $smartFileInfo, $shouldDelete);
@@ -99,34 +99,24 @@ PHP
     }
 
     /**
-     * @param Node[] $nodes
-     * @return Node[]
+     * @param Stmt[] $nodes
      */
-    private function removeAllOtherNamespaces(array $nodes, Namespace_ $namespaceNode): array
+    private function shouldDeleteFileInfo(SmartFileInfo $smartFileInfo, array $nodes): bool
     {
-        foreach ($nodes as $key => $stmt) {
-            if ($stmt instanceof Namespace_ && $stmt !== $namespaceNode) {
-                unset($nodes[$key]);
+        $classLikes = $this->betterNodeFinder->findClassLikes($nodes);
+        foreach ($classLikes as $classLike) {
+            $className = $this->getName($classLike);
+            if ($className === null) {
+                continue;
+            }
+
+            $classShortName = $this->classNaming->getShortName($className);
+            if ($smartFileInfo->getBasenameWithoutSuffix() === $classShortName) {
+                return false;
             }
         }
 
-        return $nodes;
-    }
-
-    private function removeAllClassLikesFromNamespaceNode(Namespace_ $namespaceNode): void
-    {
-        foreach ($namespaceNode->stmts as $key => $namespaceStatement) {
-            if ($namespaceStatement instanceof ClassLike) {
-                unset($namespaceNode->stmts[$key]);
-            }
-        }
-    }
-
-    private function createClassLikeFileDestination(ClassLike $classLike, SmartFileInfo $smartFileInfo): string
-    {
-        $currentDirectory = dirname($smartFileInfo->getRealPath());
-
-        return $currentDirectory . DIRECTORY_SEPARATOR . $classLike->name . '.php';
+        return true;
     }
 
     /**
@@ -173,27 +163,6 @@ PHP
     /**
      * @param Stmt[] $nodes
      */
-    private function shouldDeleteFileInfo(SmartFileInfo $smartFileInfo, array $nodes): bool
-    {
-        $classLikes = $this->betterNodeFinder->findClassLikes($nodes);
-        foreach ($classLikes as $classLike) {
-            $className = $this->getName($classLike);
-            if ($className === null) {
-                continue;
-            }
-
-            $classShortName = $this->classNaming->getShortName($className);
-            if ($smartFileInfo->getBasenameWithoutSuffix() === $classShortName) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @param Stmt[] $nodes
-     */
     private function processNodesWithoutNamespace(array $nodes, SmartFileInfo $smartFileInfo, bool $shouldDelete): void
     {
         // process only files with 2 classes and more
@@ -215,11 +184,7 @@ PHP
 
             $fileDestination = $this->createClassLikeFileDestination($node, $smartFileInfo);
 
-            if ($declareNode) {
-                $nodes = [$declareNode, $node];
-            } else {
-                $nodes = [$node];
-            }
+            $nodes = $declareNode !== null ? [$declareNode, $node] : [$node];
 
             // has file changed?
             if ($shouldDelete) {
@@ -228,5 +193,36 @@ PHP
                 $this->printNodesToFilePath($nodes, $fileDestination);
             }
         }
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return Node[]
+     */
+    private function removeAllOtherNamespaces(array $nodes, Namespace_ $namespaceNode): array
+    {
+        foreach ($nodes as $key => $stmt) {
+            if ($stmt instanceof Namespace_ && $stmt !== $namespaceNode) {
+                unset($nodes[$key]);
+            }
+        }
+
+        return $nodes;
+    }
+
+    private function removeAllClassLikesFromNamespaceNode(Namespace_ $namespaceNode): void
+    {
+        foreach ($namespaceNode->stmts as $key => $namespaceStatement) {
+            if ($namespaceStatement instanceof ClassLike) {
+                unset($namespaceNode->stmts[$key]);
+            }
+        }
+    }
+
+    private function createClassLikeFileDestination(ClassLike $classLike, SmartFileInfo $smartFileInfo): string
+    {
+        $currentDirectory = dirname($smartFileInfo->getRealPath());
+
+        return $currentDirectory . DIRECTORY_SEPARATOR . $classLike->name . '.php';
     }
 }

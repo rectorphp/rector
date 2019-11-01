@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -126,6 +127,77 @@ PHP
     }
 
     /**
+     * @return Type[]
+     */
+    private function resolveFetchedLocalPropertyNameToType(Class_ $class): array
+    {
+        $fetchedLocalPropertyNameToTypes = [];
+
+        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (
+            &$fetchedLocalPropertyNameToTypes
+        ): ?int {
+            // skip anonymous class scope
+            if ($this->isAnonymousClass($node)) {
+                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+            }
+
+            if (! $node instanceof PropertyFetch) {
+                return null;
+            }
+
+            if (! $node->var instanceof Variable) {
+                return null;
+            }
+
+            if (! $this->isName($node->var, 'this')) {
+                return null;
+            }
+
+            // special Laravel collection scope
+            if ($this->shouldSkipForLaravelCollection($node)) {
+                return null;
+            }
+
+            if ($node->name instanceof Variable) {
+                return null;
+            }
+
+            $propertyName = $this->getName($node->name);
+            if ($propertyName === null) {
+                return null;
+            }
+
+            $propertyFetchType = $this->resolvePropertyFetchType($node);
+
+            $fetchedLocalPropertyNameToTypes[$propertyName][] = $propertyFetchType;
+
+            return null;
+        });
+
+        // normalize types to union
+        $fetchedLocalPropertyNameToType = [];
+        foreach ($fetchedLocalPropertyNameToTypes as $name => $types) {
+            $fetchedLocalPropertyNameToType[$name] = $this->typeFactory->createMixedPassedOrUnionType($types);
+        }
+
+        return $fetchedLocalPropertyNameToType;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getClassPropertyNames(Class_ $class): array
+    {
+        $propertyNames = [];
+
+        foreach ($class->getProperties() as $property) {
+            $propertyNames[] = $this->getName($property);
+        }
+
+        return $propertyNames;
+    }
+
+    /**
      * @param Type[] $fetchedLocalPropertyNameToTypes
      * @param string[] $propertiesToComplete
      * @return Property[]
@@ -160,78 +232,6 @@ PHP
         return $newProperties;
     }
 
-    /**
-     * @return Type[]
-     */
-    private function resolveFetchedLocalPropertyNameToType(Class_ $class): array
-    {
-        $fetchedLocalPropertyNameToTypes = [];
-
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use (
-            &$fetchedLocalPropertyNameToTypes
-        ) {
-            if (! $node instanceof PropertyFetch) {
-                return null;
-            }
-
-            if (! $this->isName($node->var, 'this')) {
-                return null;
-            }
-
-            // special Laravel collection scope
-            if ($this->shouldSkipForLaravelCollection($node)) {
-                return null;
-            }
-
-            if ($node->name instanceof Variable) {
-                return null;
-            }
-
-            $propertyName = $this->getName($node->name);
-            if ($propertyName === null) {
-                return null;
-            }
-
-            $propertyFetchType = $this->resolvePropertyFetchType($node);
-
-            $fetchedLocalPropertyNameToTypes[$propertyName][] = $propertyFetchType;
-        });
-
-        // normalize types to union
-        $fetchedLocalPropertyNameToType = [];
-        foreach ($fetchedLocalPropertyNameToTypes as $name => $types) {
-            $fetchedLocalPropertyNameToType[$name] = $this->typeFactory->createMixedPassedOrUnionType($types);
-        }
-
-        return $fetchedLocalPropertyNameToType;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getClassPropertyNames(Class_ $class): array
-    {
-        $propertyNames = [];
-
-        foreach ($class->getProperties() as $property) {
-            $propertyNames[] = $this->getName($property);
-        }
-
-        return $propertyNames;
-    }
-
-    private function resolvePropertyFetchType(Node $node): Type
-    {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-        // possible get type
-        if ($parentNode instanceof Assign) {
-            return $this->getStaticType($parentNode->expr);
-        }
-
-        return new MixedType();
-    }
-
     private function shouldSkipForLaravelCollection(Node $node): bool
     {
         $staticCallOrClassMethod = $this->betterNodeFinder->findFirstAncestorInstancesOf(
@@ -244,5 +244,17 @@ PHP
         }
 
         return $this->isName($staticCallOrClassMethod->class, self::LARAVEL_COLLECTION_CLASS);
+    }
+
+    private function resolvePropertyFetchType(Node $node): Type
+    {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        // possible get type
+        if ($parentNode instanceof Assign) {
+            return $this->getStaticType($parentNode->expr);
+        }
+
+        return new MixedType();
     }
 }

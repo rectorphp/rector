@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
@@ -140,29 +141,24 @@ PHP
         // split into chunks of X parameters
         $valueChunks = array_chunk($values, $numberOfParameters);
         foreach ($valueChunks as $valueChunk) {
-            $node->args[] = new Node\Arg($this->createArray($valueChunk));
+            $node->args[] = new Arg($this->createArray($valueChunk));
         }
 
         return $node;
     }
 
-    private function inferMockedMethodName(MethodCall $methodCall): string
+    private function areAllArgArrayTypes(MethodCall $methodCall): bool
     {
-        $previousMethodCalls = $this->methodCallManipulator->findMethodCallsIncludingChain($methodCall);
-        foreach ($previousMethodCalls as $previousMethodCall) {
-            if (! $this->isName($previousMethodCall->name, 'method')) {
+        foreach ($methodCall->args as $arg) {
+            $argumentStaticType = $this->getStaticType($arg->value);
+            if ($argumentStaticType instanceof ArrayType) {
                 continue;
             }
 
-            $firstArgumentValue = $previousMethodCall->args[0]->value;
-            if (! $firstArgumentValue instanceof String_) {
-                continue;
-            }
-
-            return $firstArgumentValue->value;
+            return false;
         }
 
-        throw new ShouldNotHappenException();
+        return true;
     }
 
     private function inferMockedClassName(MethodCall $methodCall): ?string
@@ -193,6 +189,25 @@ PHP
         return null;
     }
 
+    private function inferMockedMethodName(MethodCall $methodCall): string
+    {
+        $previousMethodCalls = $this->methodCallManipulator->findMethodCallsIncludingChain($methodCall);
+        foreach ($previousMethodCalls as $previousMethodCall) {
+            if (! $this->isName($previousMethodCall->name, 'method')) {
+                continue;
+            }
+
+            $firstArgumentValue = $previousMethodCall->args[0]->value;
+            if (! $firstArgumentValue instanceof String_) {
+                continue;
+            }
+
+            return $firstArgumentValue->value;
+        }
+
+        throw new ShouldNotHappenException();
+    }
+
     private function findRootVariableOfChainCall(MethodCall $methodCall): ?Variable
     {
         $currentMethodCallee = $methodCall->var;
@@ -201,19 +216,5 @@ PHP
         }
 
         return $currentMethodCallee;
-    }
-
-    private function areAllArgArrayTypes(MethodCall $methodCall): bool
-    {
-        foreach ($methodCall->args as $arg) {
-            $argumentStaticType = $this->getStaticType($arg->value);
-            if ($argumentStaticType instanceof ArrayType) {
-                continue;
-            }
-
-            return false;
-        }
-
-        return true;
     }
 }

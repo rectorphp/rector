@@ -206,38 +206,6 @@ final class BetterPhpDocParser extends PhpDocParser
         return $attributeAwareNode;
     }
 
-    private function getOriginalContentFromTokenIterator(TokenIterator $tokenIterator): string
-    {
-        // @todo iterate through tokens...
-        $originalTokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
-        $originalContent = '';
-
-        foreach ($originalTokens as $originalToken) {
-            // skip opening
-            if ($originalToken[1] === Lexer::TOKEN_OPEN_PHPDOC) {
-                continue;
-            }
-
-            // skip closing
-            if ($originalToken[1] === Lexer::TOKEN_CLOSE_PHPDOC) {
-                continue;
-            }
-
-            if ($originalToken[1] === Lexer::TOKEN_PHPDOC_EOL) {
-                $originalToken[0] = PHP_EOL;
-            }
-
-            $originalContent .= $originalToken[0];
-        }
-
-        return trim($originalContent);
-    }
-
-    private function getTokenIteratorIndex(TokenIterator $tokenIterator): int
-    {
-        return (int) $this->privatesAccessor->getPrivateProperty($tokenIterator, 'index');
-    }
-
     private function resolveTag(TokenIterator $tokenIterator): string
     {
         $tag = $tokenIterator->currentTokenValue();
@@ -268,18 +236,6 @@ final class BetterPhpDocParser extends PhpDocParser
         return $tag;
     }
 
-    private function isTagMatchedByFactories(string $tag): bool
-    {
-        $currentPhpNode = $this->currentNodeProvider->getNode();
-        foreach ($this->phpDocNodeFactories as $phpDocNodeFactory) {
-            if ($this->isTagMatchingPhpDocNodeFactory($tag, $phpDocNodeFactory, $currentPhpNode)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     private function isTagMatchingPhpDocNodeFactory(
         string $tag,
         PhpDocNodeFactoryInterface $phpDocNodeFactory,
@@ -289,11 +245,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $tag = ltrim($tag, '@');
 
         if ($phpDocNodeFactory instanceof NameAwarePhpDocNodeFactoryInterface) {
-            if (Strings::lower($phpDocNodeFactory->getName()) === Strings::lower($tag)) {
-                return true;
-            }
-
-            return false;
+            return Strings::lower($phpDocNodeFactory->getName()) === Strings::lower($tag);
         }
 
         if ($phpDocNodeFactory instanceof ClassAwarePhpDocNodeFactoryInterface) {
@@ -305,6 +257,11 @@ final class BetterPhpDocParser extends PhpDocParser
         }
 
         return false;
+    }
+
+    private function getTokenIteratorIndex(TokenIterator $tokenIterator): int
+    {
+        return (int) $this->privatesAccessor->getPrivateProperty($tokenIterator, 'index');
     }
 
     /**
@@ -331,5 +288,44 @@ final class BetterPhpDocParser extends PhpDocParser
         ++$tokenEnd;
 
         return $tokenEnd;
+    }
+
+    private function getOriginalContentFromTokenIterator(TokenIterator $tokenIterator): string
+    {
+        // @todo iterate through tokens...
+        $originalTokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
+        $originalContent = '';
+
+        foreach ($originalTokens as $originalToken) {
+            // skip opening
+            if ($originalToken[1] === Lexer::TOKEN_OPEN_PHPDOC) {
+                continue;
+            }
+
+            // skip closing
+            if ($originalToken[1] === Lexer::TOKEN_CLOSE_PHPDOC) {
+                continue;
+            }
+
+            if ($originalToken[1] === Lexer::TOKEN_PHPDOC_EOL) {
+                $originalToken[0] = PHP_EOL;
+            }
+
+            $originalContent .= $originalToken[0];
+        }
+
+        return trim($originalContent);
+    }
+
+    private function isTagMatchedByFactories(string $tag): bool
+    {
+        $currentPhpNode = $this->currentNodeProvider->getNode();
+        foreach ($this->phpDocNodeFactories as $phpDocNodeFactory) {
+            if ($this->isTagMatchingPhpDocNodeFactory($tag, $phpDocNodeFactory, $currentPhpNode)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

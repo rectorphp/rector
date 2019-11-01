@@ -182,6 +182,20 @@ PHP
         return null;
     }
 
+    private function processMethodArgument(string $class, string $method, EventInfo $eventInfo): void
+    {
+        $classMethodNode = $this->parsedNodesByType->findMethod($method, $class);
+        if ($classMethodNode === null) {
+            return;
+        }
+
+        if (count((array) $classMethodNode->params) !== 1) {
+            return;
+        }
+
+        $classMethodNode->params[0]->type = new FullyQualified($eventInfo->getEventClass());
+    }
+
     private function resolveClassConstAliasMatch(ArrayItem $arrayItem, EventInfo $eventInfo): bool
     {
         foreach ($eventInfo->getOldClassConstAlaises() as $netteClassConst) {
@@ -196,19 +210,5 @@ PHP
         }
 
         return false;
-    }
-
-    private function processMethodArgument(string $class, string $method, EventInfo $eventInfo): void
-    {
-        $classMethodNode = $this->parsedNodesByType->findMethod($method, $class);
-        if ($classMethodNode === null) {
-            return;
-        }
-
-        if (count((array) $classMethodNode->params) !== 1) {
-            return;
-        }
-
-        $classMethodNode->params[0]->type = new FullyQualified($eventInfo->getEventClass());
     }
 }

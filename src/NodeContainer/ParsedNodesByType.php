@@ -337,7 +337,7 @@ final class ParsedNodesByType
         $classNames = TypeUtils::getDirectClassNames($objectType);
         foreach ($classNames as $className) {
             $foundMethod = $this->findMethod($methodName, $className);
-            if ($foundMethod) {
+            if ($foundMethod !== null) {
                 return $foundMethod;
             }
         }
@@ -562,14 +562,44 @@ final class ParsedNodesByType
         $this->methodsByType[$className][$methodName] = $classMethod;
     }
 
-    private function isClassAnonymous(Class_ $classNode): bool
+    /**
+     * Matches array like: "[$this, 'methodName']" → ['ClassName', 'methodName']
+     * @return string[]|null
+     */
+    private function matchArrayCallableClassAndMethod(Array_ $array): ?array
     {
-        if ($classNode->isAnonymous() || $classNode->name === null) {
-            return true;
+        if (count($array->items) !== 2) {
+            return null;
         }
 
-        // PHPStan polution
-        return Strings::startsWith($classNode->name->toString(), 'AnonymousClass');
+        if ($array->items[0] === null) {
+            return null;
+        }
+
+        // $this, self, static, FQN
+        if (! $this->isThisVariable($array->items[0]->value)) {
+            return null;
+        }
+
+        if ($array->items[1] === null) {
+            return null;
+        }
+
+        if (! $array->items[1]->value instanceof String_) {
+            return null;
+        }
+
+        /** @var String_ $string */
+        $string = $array->items[1]->value;
+
+        $methodName = $string->value;
+        $className = $array->getAttribute(AttributeKey::CLASS_NAME);
+
+        if ($className === null) {
+            return null;
+        }
+
+        return [$className, $methodName];
     }
 
     /**
@@ -612,44 +642,14 @@ final class ParsedNodesByType
         }
     }
 
-    /**
-     * Matches array like: "[$this, 'methodName']" → ['ClassName', 'methodName']
-     * @return string[]|null
-     */
-    private function matchArrayCallableClassAndMethod(Array_ $array): ?array
+    private function isClassAnonymous(Class_ $classNode): bool
     {
-        if (count($array->items) !== 2) {
-            return null;
+        if ($classNode->isAnonymous() || $classNode->name === null) {
+            return true;
         }
 
-        if ($array->items[0] === null) {
-            return null;
-        }
-
-        // $this, self, static, FQN
-        if (! $this->isThisVariable($array->items[0]->value)) {
-            return null;
-        }
-
-        if ($array->items[1] === null) {
-            return null;
-        }
-
-        if (! $array->items[1]->value instanceof String_) {
-            return null;
-        }
-
-        /** @var String_ $string */
-        $string = $array->items[1]->value;
-
-        $methodName = $string->value;
-        $className = $array->getAttribute(AttributeKey::CLASS_NAME);
-
-        if ($className === null) {
-            return null;
-        }
-
-        return [$className, $methodName];
+        // PHPStan polution
+        return Strings::startsWith($classNode->name->toString(), 'AnonymousClass');
     }
 
     private function isThisVariable(Node $node): bool

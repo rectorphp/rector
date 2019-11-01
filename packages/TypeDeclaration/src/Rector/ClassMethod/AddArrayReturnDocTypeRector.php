@@ -148,6 +148,14 @@ PHP
         return false;
     }
 
+    private function shouldSkipArrayType(ArrayType $arrayType, ClassMethod $classMethod): bool
+    {
+        if ($this->isNewAndCurrentTypeBothCallable($arrayType, $classMethod)) {
+            return true;
+        }
+        return $this->isMixedOfSpecificOverride($arrayType, $classMethod);
+    }
+
     private function isNewAndCurrentTypeBothCallable(ArrayType $newArrayType, ClassMethod $classMethod): bool
     {
         $currentPhpDocInfo = $this->getPhpDocInfo($classMethod);
@@ -163,12 +171,7 @@ PHP
         if (! $newArrayType->getItemType()->isCallable()->yes()) {
             return false;
         }
-
-        if (! $currentReturnType->getItemType()->isCallable()->yes()) {
-            return false;
-        }
-
-        return true;
+        return $currentReturnType->getItemType()->isCallable()->yes();
     }
 
     private function isMixedOfSpecificOverride(ArrayType $arrayType, ClassMethod $classMethod): bool
@@ -183,23 +186,6 @@ PHP
         }
 
         $currentReturnType = $currentPhpDocInfo->getReturnType();
-        if (! $currentReturnType instanceof ArrayType) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private function shouldSkipArrayType(ArrayType $arrayType, ClassMethod $classMethod): bool
-    {
-        if ($this->isNewAndCurrentTypeBothCallable($arrayType, $classMethod)) {
-            return true;
-        }
-
-        if ($this->isMixedOfSpecificOverride($arrayType, $classMethod)) {
-            return true;
-        }
-
-        return false;
+        return $currentReturnType instanceof ArrayType;
     }
 }

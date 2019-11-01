@@ -122,32 +122,7 @@ PHP
         if ($reflectionMethod->isProtected() && $classMethod->isProtected()) {
             return true;
         }
-
-        if ($reflectionMethod->isPrivate() && $classMethod->isPrivate()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function changeClassMethodVisibilityBasedOnReflectionMethod(
-        ClassMethod $classMethod,
-        ReflectionMethod $reflectionMethod
-    ): void {
-        if ($reflectionMethod->isPublic()) {
-            $this->makePublic($classMethod);
-            return;
-        }
-
-        if ($reflectionMethod->isProtected()) {
-            $this->makeProtected($classMethod);
-            return;
-        }
-
-        if ($reflectionMethod->isPrivate()) {
-            $this->makePrivate($classMethod);
-            return;
-        }
+        return $reflectionMethod->isPrivate() && $classMethod->isPrivate();
     }
 
     /**
@@ -181,7 +156,7 @@ PHP
 
             $isStaticSelfFactory = $this->isStaticNamedConstructor($iteratedClassMethod);
 
-            if ($isStaticSelfFactory === false) {
+            if (! $isStaticSelfFactory) {
                 continue;
             }
 
@@ -189,6 +164,26 @@ PHP
         }
 
         return false;
+    }
+
+    private function changeClassMethodVisibilityBasedOnReflectionMethod(
+        ClassMethod $classMethod,
+        ReflectionMethod $reflectionMethod
+    ): void {
+        if ($reflectionMethod->isPublic()) {
+            $this->makePublic($classMethod);
+            return;
+        }
+
+        if ($reflectionMethod->isProtected()) {
+            $this->makeProtected($classMethod);
+            return;
+        }
+
+        if ($reflectionMethod->isPrivate()) {
+            $this->makePrivate($classMethod);
+            return;
+        }
     }
 
     /**
@@ -219,12 +214,7 @@ PHP
             if ($this->isName($node->expr->class, 'self')) {
                 return true;
             }
-
-            if ($this->isName($node->expr->class, 'static')) {
-                return true;
-            }
-
-            return false;
+            return $this->isName($node->expr->class, 'static');
         });
     }
 }
