@@ -42,10 +42,9 @@ final class StatementNodeVisitor extends NodeVisitorAbstract
             $node->setAttribute(AttributeKey::PREVIOUS_STATEMENT, $this->previousStatement);
             $node->setAttribute(AttributeKey::CURRENT_STATEMENT, $node);
             $this->previousStatement = $node;
-            return;
         }
 
-        if (property_exists($node, 'stmts')) {
+        if (isset($node->stmts)) {
             $previous = null;
             $previous = $node;
             foreach ((array) $node->stmts as $stmt) {
@@ -54,7 +53,7 @@ final class StatementNodeVisitor extends NodeVisitorAbstract
                 $previous = $stmt;
             }
         }
-        if (! $node->getAttribute(AttributeKey::CURRENT_STATEMENT)) {
+        if ($parent && ! $node->getAttribute(AttributeKey::CURRENT_STATEMENT)) {
             $node->setAttribute(
                 AttributeKey::PREVIOUS_STATEMENT,
                 $parent->getAttribute(AttributeKey::PREVIOUS_STATEMENT)
