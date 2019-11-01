@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
@@ -332,6 +333,16 @@ final class ClassManipulator
         $this->callableNodeTraverser->traverseNodesWithCallable([$node], function (Node $node) use (
             &$propertyNonAssignNames
         ): void {
+            // unwrap array dim fetch
+            if ($node instanceof ArrayDimFetch) {
+                $currentNode = $node;
+                while ($currentNode instanceof ArrayDimFetch) {
+                    $currentNode = $currentNode->var;
+                }
+
+                $node = $currentNode;
+            }
+
             if (! $node instanceof PropertyFetch && ! $node instanceof StaticPropertyFetch) {
                 return;
             }
@@ -586,7 +597,28 @@ final class ClassManipulator
     private function isNodeLeftPartOfAssign(Node $node): bool
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Assign) {
+            return $parentNode->var === $node;
+        }
 
-        return $parentNode instanceof Assign && $parentNode->var === $node;
+        if (! $parentNode instanceof ArrayDimFetch) {
+            return false;
+        }
+
+        // traver array dim fetch up
+        $firstParentNode = null;
+        while ($parentNode instanceof ArrayDimFetch) {
+            if ($firstParentNode === null) {
+                $firstParentNode = $parentNode;
+            }
+
+            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        }
+
+        if (! $parentNode instanceof Assign) {
+            return false;
+        }
+
+        return $firstParentNode->var === $node;
     }
 }

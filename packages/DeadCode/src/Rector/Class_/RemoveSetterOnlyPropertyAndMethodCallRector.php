@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -159,20 +160,36 @@ PHP
         }
 
         // 2. remove class inner assigns
-        if ($this->assignManipulator->isLocalPropertyAssign($node)) {
-            /** @var Assign $node */
-            $propertyFetch = $node->var;
-            /** @var PropertyFetch $propertyFetch */
-            if ($this->isNames($propertyFetch->name, $propertyNames)) {
-                $this->removeNode($node);
-            }
-        }
+        $this->removeClassInnerAssigns($node, $propertyNames);
 
         // 3. remove class methods
         if ($node instanceof ClassMethod) {
             if ($this->isNames($node, $methodNames)) {
                 $this->removeNode($node);
             }
+        }
+    }
+
+    /**
+     * @param Property|Assign|ClassMethod $node
+     * @param string[] $propertyNames
+     */
+    private function removeClassInnerAssigns(Node $node, array $propertyNames): void
+    {
+        if (! $this->assignManipulator->isLocalPropertyAssign($node)) {
+            return;
+        }
+
+        /** @var Assign $node */
+        $propertyFetch = $node->var;
+
+        while ($propertyFetch instanceof ArrayDimFetch) {
+            $propertyFetch = $propertyFetch->var;
+        }
+
+        /** @var PropertyFetch $propertyFetch */
+        if ($this->isNames($propertyFetch->name, $propertyNames)) {
+            $this->removeNode($node);
         }
     }
 }

@@ -37,7 +37,11 @@ final class AssignManipulator
             return false;
         }
 
-        $potentialPropertyFetch = $node->var instanceof ArrayDimFetch ? $node->var->var : $node->var;
+        while ($node->var instanceof ArrayDimFetch) {
+            $node = $node->var;
+        }
+
+        $potentialPropertyFetch = $node->var;
 
         return $potentialPropertyFetch instanceof PropertyFetch || $potentialPropertyFetch instanceof StaticPropertyFetch;
     }
