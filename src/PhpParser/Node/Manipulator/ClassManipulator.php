@@ -70,6 +70,11 @@ final class ClassManipulator
      */
     private $betterStandardPrinter;
 
+    /**
+     * @var PropertyFetchManipulator
+     */
+    private $propertyFetchManipulator;
+
     public function __construct(
         NameResolver $nameResolver,
         NodeFactory $nodeFactory,
@@ -77,7 +82,8 @@ final class ClassManipulator
         CallableNodeTraverser $callableNodeTraverser,
         NodeRemovingCommander $nodeRemovingCommander,
         DocBlockManipulator $docBlockManipulator,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        PropertyFetchManipulator $propertyFetchManipulator
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nameResolver = $nameResolver;
@@ -86,6 +92,7 @@ final class ClassManipulator
         $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->propertyFetchManipulator = $propertyFetchManipulator;
     }
 
     public function addConstructorDependency(Class_ $classNode, string $name, Type $type): void
@@ -332,26 +339,19 @@ final class ClassManipulator
 
         $this->callableNodeTraverser->traverseNodesWithCallable([$node], function (Node $node) use (
             &$propertyNonAssignNames
-        ): void {
-            // unwrap array dim fetch
-            if ($node instanceof ArrayDimFetch) {
-                $currentNode = $node;
-                while ($currentNode instanceof ArrayDimFetch) {
-                    $currentNode = $currentNode->var;
-                }
-
-                $node = $currentNode;
-            }
-
-            if (! $node instanceof PropertyFetch && ! $node instanceof StaticPropertyFetch) {
-                return;
+        ): ?Node {
+            $propertyFetch = $this->propertyFetchManipulator->matchPropertyFetch($node);
+            if ($propertyFetch === null) {
+                return null;
             }
 
             if (! $this->isNonAssignPropertyFetch($node)) {
-                return;
+                return null;
             }
 
             $propertyNonAssignNames[] = $this->nameResolver->getName($node);
+
+            return null;
         });
 
         // skip serializable properties, because they are probably used in serialization even though assign only
@@ -499,11 +499,7 @@ final class ClassManipulator
     private function isNonAssignPropertyFetch(Node $node): bool
     {
         if ($node instanceof PropertyFetch) {
-            if (! $node->var instanceof Variable) {
-                return false;
-            }
-
-            if (! $this->nameResolver->isName($node->var, 'this')) {
+            if (! $this->isThisPropertyFetch($node)) {
                 return false;
             }
 
@@ -594,31 +590,47 @@ final class ClassManipulator
         return false;
     }
 
+    /**
+     * @param PropertyFetch|StaticPropertyFetch $node
+     */
     private function isNodeLeftPartOfAssign(Node $node): bool
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Assign) {
-            return $parentNode->var === $node;
-        }
-
-        if (! $parentNode instanceof ArrayDimFetch) {
-            return false;
-        }
-
-        // traver array dim fetch up
-        $firstParentNode = null;
-        while ($parentNode instanceof ArrayDimFetch) {
-            if ($firstParentNode === null) {
-                $firstParentNode = $parentNode;
-            }
-
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        }
 
         if (! $parentNode instanceof Assign) {
             return false;
         }
 
-        return $firstParentNode->var === $node;
+        // traver array dim fetch up
+//        $firstParentNode = null;
+//        while ($parentNode instanceof ArrayDimFetch) {
+//            dump($parentNode);
+//            die;
+        ////            if ($firstParentNode === null) {
+        ////                $firstParentNode = $parentNode;
+        ////            }
+//
+//            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+//        }
+
+//        if (! $parentNode instanceof Assign) {
+//            return false;
+//        }
+
+        // @todo extra ArrayDimFetch analyzer to decouple this logic
+        return $parentNode->var === $node;
+    }
+
+    private function isThisPropertyFetch(PropertyFetch $propertyFetch): bool
+    {
+        if (! $propertyFetch->var instanceof Variable) {
+            return false;
+        }
+
+        if (! $this->nameResolver->isName($propertyFetch->var, 'this')) {
+            return false;
+        }
+
+        return true;
     }
 }

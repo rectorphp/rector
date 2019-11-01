@@ -6,11 +6,14 @@ namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
@@ -47,11 +50,6 @@ final class PropertyFetchManipulator
     private $nameResolver;
 
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
@@ -65,14 +63,12 @@ final class PropertyFetchManipulator
         NodeTypeResolver $nodeTypeResolver,
         Broker $broker,
         NameResolver $nameResolver,
-        ClassManipulator $classManipulator,
         CallableNodeTraverser $callableNodeTraverser,
         AssignManipulator $assignManipulator
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->broker = $broker;
         $this->nameResolver = $nameResolver;
-        $this->classManipulator = $classManipulator;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->assignManipulator = $assignManipulator;
     }
@@ -89,7 +85,7 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        return $this->classManipulator->hasPropertyFetchAsProperty($class, $propertyFetch);
+        return $this->hasClassPropertyFetchAsProperty($class, $propertyFetch);
     }
 
     public function isMagicOnType(Node $node, Type $type): bool
@@ -293,6 +289,32 @@ final class PropertyFetchManipulator
         return null;
     }
 
+    /**
+     * @return PropertyFetch|StaticPropertyFetch|null
+     */
+    public function matchPropertyFetch(Node $node): ?Node
+    {
+        if ($node instanceof PropertyFetch) {
+            return $node;
+        }
+
+        if ($node instanceof StaticPropertyFetch) {
+            return $node;
+        }
+
+        // unwrap array dim fetch
+        if ($node instanceof ArrayDimFetch) {
+            $currentNode = $node;
+            while ($currentNode instanceof ArrayDimFetch) {
+                $currentNode = $currentNode->var;
+            }
+
+            return $this->matchPropertyFetch($node);
+        }
+
+        return null;
+    }
+
     private function hasPublicProperty(PropertyFetch $propertyFetch, string $propertyName): bool
     {
         $nodeScope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
@@ -321,5 +343,23 @@ final class PropertyFetchManipulator
         $propertyReflection = $classReflection->getProperty($propertyName, $nodeScope);
 
         return $propertyReflection->isPublic();
+    }
+
+    /**
+     * @param PropertyFetch|StaticPropertyFetch|ArrayDimFetch $classLike
+     */
+    private function hasClassPropertyFetchAsProperty(ClassLike $classLike, Node $node): bool
+    {
+        if (! $this->nameResolver->isName($node->var, 'this')) {
+            return false;
+        }
+
+        foreach ($classLike->getProperties() as $property) {
+            if ($this->nameResolver->areNamesEqual($property->props[0], $node)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
