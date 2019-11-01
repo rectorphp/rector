@@ -158,10 +158,10 @@ PHP
         return $this->betterNodeFinder->findFirstParentInstanceOf($node, self::CONTROL_STRUCTURE_NODES);
     }
 
-    private function isSelfReferencing(Assign $node) : bool
+    private function isSelfReferencing(Assign $assign): bool
     {
-        return (bool)$this->betterNodeFinder->findFirst($node->expr, function ($subNode) use ($node){
-            return $this->areNodesEqual($node->var, $subNode);
+        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function ($subNode) use ($assign) {
+            return $this->areNodesEqual($assign->var, $subNode);
         });
     }
 }
