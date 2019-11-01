@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
+use PhpParser\Node\Stmt\Function_;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
@@ -129,7 +130,7 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
 
     private function processFunction(Node $node): void
     {
-        if ($node instanceof Node\Stmt\Function_) {
+        if ($node instanceof Function_) {
             $this->functionNode = $node;
             $this->functionName = (string) $node->name;
         }

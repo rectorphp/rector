@@ -81,7 +81,7 @@ PHP
             );
         }
 
-        if ($previousStatement instanceof Stmt\While_) {
+        if ($previousStatement instanceof While_) {
             $node->setAttribute(
                 AttributeKey::IS_UNREACHABLE,
                 $previousStatement->getAttribute(AttributeKey::IS_UNREACHABLE)

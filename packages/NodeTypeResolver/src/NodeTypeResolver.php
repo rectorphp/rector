@@ -638,7 +638,6 @@ final class NodeTypeResolver
 
         return $this->betterNodeFinder->find((array) $scope->stmts, function (Node $node) use ($variable): bool {
             return $node instanceof Variable && $node->name === $variable->name;
-            return $this->betterStandardPrinter->areNodesEqual($node, $variable);
         });
     }
 

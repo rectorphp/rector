@@ -34,7 +34,7 @@ final class StatementNodeVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent) {
+        if ($parent === null) {
             if (! $node instanceof Stmt) {
                 throw new ShouldNotHappenException('Only statement can appear at top level');
             }
@@ -45,7 +45,6 @@ final class StatementNodeVisitor extends NodeVisitorAbstract
         }
 
         if (isset($node->stmts)) {
-            $previous = null;
             $previous = $node;
             foreach ((array) $node->stmts as $stmt) {
                 $stmt->setAttribute(AttributeKey::PREVIOUS_STATEMENT, $previous);
