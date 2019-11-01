@@ -28,7 +28,6 @@ use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
@@ -40,11 +39,6 @@ final class ScreenFileCommand extends AbstractCommand
      * @var string
      */
     private const FILE_ARGUMENT = 'file';
-
-    /**
-     * @var string
-     */
-    private const OUTPUT_OPTION = 'output';
 
     /**
      * @var SymfonyStyle
@@ -107,7 +101,6 @@ final class ScreenFileCommand extends AbstractCommand
         $this->setDescription('Load file and print nodes meta data - super helpful to learn to build rules');
 
         $this->addArgument(self::FILE_ARGUMENT, InputArgument::REQUIRED, 'Path to file to be screened');
-        $this->addOption(self::OUTPUT_OPTION, 'o', InputOption::VALUE_REQUIRED, 'Path to print decorated file into');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -123,7 +116,7 @@ final class ScreenFileCommand extends AbstractCommand
         $this->decorateNodes($nodes);
 
         // 4. print decorated nodes to output/file
-        $this->outputDecoratedFileContent($input, $nodes);
+        $this->outputDecoratedFileContent($nodes, $smartFileInfo);
 
         return Shell::CODE_SUCCESS;
     }
@@ -155,16 +148,14 @@ final class ScreenFileCommand extends AbstractCommand
     /**
      * @param Node[] $nodes
      */
-    private function outputDecoratedFileContent(InputInterface $input, array $nodes): void
+    private function outputDecoratedFileContent(array $nodes, SmartFileInfo $fileInfo): void
     {
         $decoratedFileContent = '<?php' . PHP_EOL . $this->betterStandardPrinter->prettyPrint($nodes);
 
-        $outputOption = (string) $input->getOption(self::OUTPUT_OPTION);
-        if ($outputOption) {
-            FileSystem::write($outputOption, $decoratedFileContent);
-        } else {
-            $this->symfonyStyle->writeln($decoratedFileContent);
-        }
+        $outputFileName = 'rector_vision_' . $fileInfo->getFilename();
+        FileSystem::write($outputFileName, $decoratedFileContent);
+
+        $this->symfonyStyle->writeln(sprintf('See: %s', $outputFileName));
     }
 
     /**
