@@ -31,6 +31,7 @@ final class RemoveDoubleAssignRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/skip_double_catch.php.inc'];
         yield [__DIR__ . '/Fixture/skip_double_case.php.inc'];
         yield [__DIR__ . '/Fixture/skip_double_assign.php.inc'];
+        yield [__DIR__ . '/Fixture/different_value.php.inc'];
     }
 
     protected function getRectorClass(): string

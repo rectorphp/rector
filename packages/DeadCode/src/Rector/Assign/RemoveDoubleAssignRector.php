@@ -85,7 +85,7 @@ PHP
             return null;
         }
 
-        if (! $this->areNodesEqual($previousStatement->expr, $node)) {
+        if (! $this->areNodesEqual($previousStatement->expr->var, $node->var)) {
             return null;
         }
 
@@ -98,7 +98,7 @@ PHP
         }
 
         // no calls on right, could hide e.g. array_pop()|array_shift()
-        $this->removeNode($node);
+        $this->removeNode($previousExpression);
 
         return $node;
     }
