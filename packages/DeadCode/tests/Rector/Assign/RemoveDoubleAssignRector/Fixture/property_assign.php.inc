@@ -28,6 +28,7 @@ class PropertyAssign
     public function create()
     {
         $value = 5;
+
         $this->numbers = $value;
     }
 }

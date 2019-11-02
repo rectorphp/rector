@@ -85,7 +85,7 @@ PHP
             return null;
         }
 
-        if (! $this->areNodesEqual($previousStatement->expr, $node)) {
+        if (! $this->areNodesEqual($previousStatement->expr->var, $node->var)) {
             return null;
         }
 
@@ -97,8 +97,13 @@ PHP
             return null;
         }
 
+
+        if ($this->isSelfReferencing($node)) {
+            return null;
+        }
+
         // no calls on right, could hide e.g. array_pop()|array_shift()
-        $this->removeNode($node);
+        $this->removeNode($previousStatement);
 
         return $node;
     }
@@ -151,5 +156,12 @@ PHP
     private function findParentControlStructure(Node $node): ?Node
     {
         return $this->betterNodeFinder->findFirstParentInstanceOf($node, self::CONTROL_STRUCTURE_NODES);
+    }
+
+    private function isSelfReferencing(Assign $assign): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function ($subNode) use ($assign) : bool {
+            return $this->areNodesEqual($assign->var, $subNode);
+        });
     }
 }
