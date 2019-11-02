@@ -90,9 +90,10 @@ final class SetterOnlyMethodAnalyzer
             // 1. setter only properties by class
             $assignOnlyPrivatePropertyNames = $this->classManipulator->getAssignOnlyPrivatePropertyNames($class);
 
-            // filter out ManyToOne/OneToMany entities
-            $relationPropertyNames = $this->doctrineEntityManipulator->resolveRelationPropertyNames($class);
-            $assignOnlyPrivatePropertyNames = array_diff($assignOnlyPrivatePropertyNames, $relationPropertyNames);
+            $assignOnlyPrivatePropertyNames = $this->filterOutDoctrineRelationProperties(
+                $class,
+                $assignOnlyPrivatePropertyNames
+            );
 
             if ($assignOnlyPrivatePropertyNames !== []) {
                 $this->propertiesAndMethodsToRemoveByType[$type]['properties'] = $assignOnlyPrivatePropertyNames;
@@ -167,5 +168,18 @@ final class SetterOnlyMethodAnalyzer
         $onlyStmt = $onlyExpression->expr;
 
         return $this->assignManipulator->isLocalPropertyAssignWithPropertyNames($onlyStmt, $propertyNames);
+    }
+
+    /**
+     * Filter out ManyToOne/OneToMany entities
+     *
+     * @param string[] $propertesNames
+     * @return string[]
+     */
+    private function filterOutDoctrineRelationProperties(Class_ $class, array $propertesNames): array
+    {
+        $relationPropertyNames = $this->doctrineEntityManipulator->resolveRelationPropertyNames($class);
+
+        return array_diff($propertesNames, $relationPropertyNames);
     }
 }

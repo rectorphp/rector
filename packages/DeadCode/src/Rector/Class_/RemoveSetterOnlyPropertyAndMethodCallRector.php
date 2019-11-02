@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\DeadCode\Analyzer\SetterOnlyMethodAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\AssignManipulator;
+use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -34,12 +35,19 @@ final class RemoveSetterOnlyPropertyAndMethodCallRector extends AbstractRector
      */
     private $assignManipulator;
 
+    /**
+     * @var PropertyFetchManipulator
+     */
+    private $propertyFetchManipulator;
+
     public function __construct(
         SetterOnlyMethodAnalyzer $setterOnlyMethodAnalyzer,
-        AssignManipulator $assignManipulator
+        AssignManipulator $assignManipulator,
+        PropertyFetchManipulator $propertyFetchManipulator
     ) {
         $this->setterOnlyMethodAnalyzer = $setterOnlyMethodAnalyzer;
         $this->assignManipulator = $assignManipulator;
+        $this->propertyFetchManipulator = $propertyFetchManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -159,20 +167,34 @@ PHP
         }
 
         // 2. remove class inner assigns
-        if ($this->assignManipulator->isLocalPropertyAssign($node)) {
-            /** @var Assign $node */
-            $propertyFetch = $node->var;
-            /** @var PropertyFetch $propertyFetch */
-            if ($this->isNames($propertyFetch->name, $propertyNames)) {
-                $this->removeNode($node);
-            }
-        }
+        $this->removeClassInnerAssigns($node, $propertyNames);
 
         // 3. remove class methods
         if ($node instanceof ClassMethod) {
             if ($this->isNames($node, $methodNames)) {
                 $this->removeNode($node);
             }
+        }
+    }
+
+    /**
+     * @param string[] $propertyNames
+     */
+    private function removeClassInnerAssigns(Node $node, array $propertyNames): void
+    {
+        if (! $this->assignManipulator->isLocalPropertyAssign($node)) {
+            return;
+        }
+
+        /** @var Assign $node */
+        $propertyFetch = $this->propertyFetchManipulator->matchPropertyFetch($node->var);
+        if ($propertyFetch === null) {
+            return;
+        }
+
+        /** @var PropertyFetch $propertyFetch */
+        if ($this->isNames($propertyFetch->name, $propertyNames)) {
+            $this->removeNode($node);
         }
     }
 }
