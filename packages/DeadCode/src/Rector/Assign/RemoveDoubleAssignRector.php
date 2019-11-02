@@ -97,7 +97,6 @@ PHP
             return null;
         }
 
-
         if ($this->isSelfReferencing($node)) {
             return null;
         }
@@ -160,7 +159,7 @@ PHP
 
     private function isSelfReferencing(Assign $assign): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function ($subNode) use ($assign) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function ($subNode) use ($assign): bool {
             return $this->areNodesEqual($assign->var, $subNode);
         });
     }

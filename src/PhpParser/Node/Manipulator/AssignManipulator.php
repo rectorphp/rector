@@ -6,12 +6,9 @@ namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class AssignManipulator
@@ -21,9 +18,15 @@ final class AssignManipulator
      */
     private $nameResolver;
 
-    public function __construct(NameResolver $nameResolver)
+    /**
+     * @var PropertyFetchManipulator
+     */
+    private $propertyFetchManipulator;
+
+    public function __construct(NameResolver $nameResolver, PropertyFetchManipulator $propertyFetchManipulator)
     {
         $this->nameResolver = $nameResolver;
+        $this->propertyFetchManipulator = $propertyFetchManipulator;
     }
 
     /**
@@ -37,9 +40,7 @@ final class AssignManipulator
             return false;
         }
 
-        $potentialPropertyFetch = $node->var instanceof ArrayDimFetch ? $node->var->var : $node->var;
-
-        return $potentialPropertyFetch instanceof PropertyFetch || $potentialPropertyFetch instanceof StaticPropertyFetch;
+        return (bool) $this->propertyFetchManipulator->matchPropertyFetch($node->var);
     }
 
     /**
@@ -53,7 +54,11 @@ final class AssignManipulator
             return false;
         }
 
-        $propertyFetch = $node->var instanceof ArrayDimFetch ? $node->var->var : $node->var;
+        /** @var Assign $node */
+        $propertyFetch = $this->propertyFetchManipulator->matchPropertyFetch($node->var);
+        if ($propertyFetch === null) {
+            return false;
+        }
 
         return $this->nameResolver->isNames($propertyFetch, $propertyNames);
     }
