@@ -47,11 +47,6 @@ final class PropertyFetchManipulator
     private $nameResolver;
 
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
@@ -65,14 +60,12 @@ final class PropertyFetchManipulator
         NodeTypeResolver $nodeTypeResolver,
         Broker $broker,
         NameResolver $nameResolver,
-        ClassManipulator $classManipulator,
         CallableNodeTraverser $callableNodeTraverser,
         AssignManipulator $assignManipulator
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->broker = $broker;
         $this->nameResolver = $nameResolver;
-        $this->classManipulator = $classManipulator;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->assignManipulator = $assignManipulator;
     }
@@ -89,7 +82,17 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        return $this->classManipulator->hasPropertyFetchAsProperty($class, $propertyFetch);
+        if (! $this->nameResolver->isName($propertyFetch->var, 'this')) {
+            return false;
+        }
+
+        foreach ($class->getProperties() as $property) {
+            if ($this->nameResolver->areNamesEqual($property->props[0], $propertyFetch)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function isMagicOnType(Node $node, Type $type): bool

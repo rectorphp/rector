@@ -244,21 +244,6 @@ final class ClassManipulator
         return in_array($methodName, $methodNames, true);
     }
 
-    public function hasPropertyFetchAsProperty(Class_ $class, PropertyFetch $propertyFetch): bool
-    {
-        if (! $this->nameResolver->isName($propertyFetch->var, 'this')) {
-            return false;
-        }
-
-        foreach ($class->getProperties() as $property) {
-            if ($this->nameResolver->areNamesEqual($property->props[0], $propertyFetch)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public function removeProperty(Class_ $class, string $propertyName): void
     {
         $this->removeProperties($class, [$propertyName]);
