@@ -6,7 +6,9 @@ namespace Rector\CodingStyle\Imports;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -61,6 +63,14 @@ final class ShortNameResolver
         $this->callableNodeTraverser->traverseNodesWithCallable($node->stmts, function (Node $node) use (
             &$shortNames
         ): void {
+            // class name is used!
+            if ($node instanceof ClassLike) {
+                if ($node->name instanceof Identifier) {
+                    $shortNames[$node->name->toString()] = $node->name->toString();
+                    return;
+                }
+            }
+
             if (! $node instanceof Name) {
                 return;
             }
