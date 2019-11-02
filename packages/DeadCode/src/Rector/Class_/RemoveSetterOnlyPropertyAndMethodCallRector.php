@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Rector\Class_;
 
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
@@ -162,7 +163,7 @@ PHP
         if ($this->assignManipulator->isLocalPropertyAssign($node)) {
             /** @var Assign $node */
             $propertyFetch = $node->var;
-            if ($propertyFetch instanceof Node\Expr\ArrayDimFetch) {
+            if ($propertyFetch instanceof ArrayDimFetch) {
                 $propertyFetch = $propertyFetch->var;
             }
             /** @var PropertyFetch $propertyFetch */
