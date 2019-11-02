@@ -27,6 +27,7 @@ final class CompleteVarDocTypePropertyRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/typed_array.php.inc'];
         yield [__DIR__ . '/Fixture/typed_array_nested.php.inc'];
         yield [__DIR__ . '/Fixture/symfony_console_command.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_more_specific.php.inc'];
     }
 
     protected function getRectorClass(): string
