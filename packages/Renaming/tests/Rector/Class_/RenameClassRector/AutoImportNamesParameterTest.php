@@ -34,6 +34,7 @@ final class AutoImportNamesParameterTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/AutoImportNamesParameter/class_to_new_with_post_import.php.inc'];
         yield [__DIR__ . '/Fixture/AutoImportNamesParameter/partial_expression.php.inc'];
         yield [__DIR__ . '/Fixture/AutoImportNamesParameter/skip_closure_me.php.inc'];
+        yield [__DIR__ . '/Fixture/AutoImportNamesParameter/skip_parent_class_same_name.php.inc'];
     }
 
     /**
