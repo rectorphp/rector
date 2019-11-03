@@ -16,6 +16,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -256,8 +257,22 @@ final class DocBlockManipulator
             }
         }
 
-        $this->removeTagFromNode($node, 'var', true);
-        $this->addTypeSpecificTag($node, 'var', $newType);
+        if ($this->hasTag($node, '@var')) {
+            // just change the type
+            $varTag = $this->getTagByName($node, '@var');
+
+            /** @var VarTagValueNode $varTagValueNode */
+            $varTagValueNode = $varTag->value;
+
+            $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
+            $varTagValueNode->type = $phpDocType;
+
+            // update doc :)
+            $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+        } else {
+            $this->addTypeSpecificTag($node, 'var', $newType);
+        }
 
         // to invoke the node override
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);

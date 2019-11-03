@@ -10,7 +10,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 
 final class DocBlockClassRenamer
@@ -54,14 +53,9 @@ final class DocBlockClassRenamer
                     return $node;
                 }
 
-                $newIdentifierType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
-                if ($newIdentifierType === null) {
-                    throw new ShouldNotHappenException();
-                }
-
                 $this->hasNodeChanged = true;
 
-                return $newIdentifierType;
+                return $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
             }
         );
 
