@@ -20,6 +20,7 @@ final class CompleteVarDocTypePropertyRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
+        yield [__DIR__ . '/Fixture/keep_comment.php.inc'];
         yield [__DIR__ . '/Fixture/property_assign.php.inc'];
         yield [__DIR__ . '/Fixture/default_value.php.inc'];
         yield [__DIR__ . '/Fixture/assign_conflict.php.inc'];

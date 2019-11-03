@@ -91,7 +91,7 @@ final class StaticTypeMapper
         $this->objectTypeSpecifier = $objectTypeSpecifier;
     }
 
-    public function mapPHPStanTypeToPHPStanPhpDocTypeNode(Type $phpStanType): ?TypeNode
+    public function mapPHPStanTypeToPHPStanPhpDocTypeNode(Type $phpStanType): TypeNode
     {
         if ($phpStanType instanceof UnionType) {
             $unionTypesNodes = [];
@@ -104,10 +104,6 @@ final class StaticTypeMapper
 
         if ($phpStanType instanceof ArrayType) {
             $itemTypeNode = $this->mapPHPStanTypeToPHPStanPhpDocTypeNode($phpStanType->getItemType());
-            if ($itemTypeNode === null) {
-                throw new ShouldNotHappenException();
-            }
-
             return new ArrayTypeNode($itemTypeNode);
         }
 

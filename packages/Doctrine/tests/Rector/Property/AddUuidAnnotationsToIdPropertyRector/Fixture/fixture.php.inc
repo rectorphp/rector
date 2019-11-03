@@ -37,10 +37,10 @@ use JMS\Serializer\Annotation as Serializer;
 class SomeFixture
 {
     /**
+     * @var \Ramsey\Uuid\UuidInterface
      * @ORM\Id
      * @ORM\Column(type="uuid_binary")
      * @Serializer\Type("string")
-     * @var \Ramsey\Uuid\UuidInterface
      */
     private $id;
 }
