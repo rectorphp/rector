@@ -18,7 +18,9 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
@@ -243,6 +245,15 @@ final class DocBlockManipulator
         // make sure the tags are not identical, e.g imported class vs FQN class
         if ($this->areTypesEquals($currentVarType, $newType)) {
             return;
+        }
+
+        // prevent existing type override by mixed
+        if (! $currentVarType instanceof MixedType) {
+            if ($newType instanceof ConstantArrayType) {
+                if ($newType->getItemType() instanceof NeverType) {
+                    return;
+                }
+            }
         }
 
         $this->removeTagFromNode($node, 'var', true);
