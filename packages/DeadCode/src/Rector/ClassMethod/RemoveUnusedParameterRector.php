@@ -116,7 +116,7 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_ || $classNode->isAnonymous()) {
+        if (! $classNode instanceof Class_ || $this->isAnonymousClass($classNode)) {
             return null;
         }
 

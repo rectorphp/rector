@@ -67,23 +67,25 @@ final class PropertyManipulator
         $nodesToSearch[] = $classNode;
 
         /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->betterNodeFinder->find($nodesToSearch, function (Node $node) use ($property) {
+        $propertyFetches = $this->betterNodeFinder->find($nodesToSearch, function (Node $node) use (
+            $property,
+            $nodesToSearch
+        ): bool {
             // property + static fetch
             if (! $node instanceof PropertyFetch && ! $node instanceof StaticPropertyFetch) {
-                return null;
+                return false;
             }
 
             // itself
             if ($this->betterStandardPrinter->areNodesEqual($node, $property)) {
-                return null;
+                return false;
             }
 
             // is it the name match?
             if (! $this->nameResolver->areNamesEqual($node, $property)) {
-                return null;
+                return false;
             }
-
-            return $node;
+            return in_array($node->getAttribute(AttributeKey::CLASS_NODE), $nodesToSearch, true);
         });
 
         return $propertyFetches;

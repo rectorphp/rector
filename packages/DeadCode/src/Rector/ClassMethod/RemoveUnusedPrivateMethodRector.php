@@ -102,7 +102,7 @@ PHP
             return true;
         }
 
-        if ($classNode->isAnonymous()) {
+        if ($this->isAnonymousClass($classNode)) {
             return true;
         }
 
