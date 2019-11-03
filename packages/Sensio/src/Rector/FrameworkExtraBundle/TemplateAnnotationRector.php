@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -31,9 +32,18 @@ final class TemplateAnnotationRector extends AbstractRector
      */
     private $templateGuesser;
 
-    public function __construct(TemplateGuesser $templateGuesser, int $version = 3)
-    {
+    /**
+     * @var ParsedNodesByType
+     */
+    private $parsedNodesByType;
+
+    public function __construct(
+        TemplateGuesser $templateGuesser,
+        ParsedNodesByType $parsedNodesByType,
+        int $version = 3
+    ) {
         $this->templateGuesser = $templateGuesser;
+        $this->parsedNodesByType = $parsedNodesByType;
         $this->version = $version;
     }
 
@@ -74,7 +84,7 @@ PHP
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof Class_) {
-            return $this->addBaseClassIfMissing($node);
+            return $this->addAbstractControllerParentClassIfMissing($node);
         }
 
         if ($node instanceof ClassMethod) {
@@ -84,7 +94,7 @@ PHP
         return null;
     }
 
-    private function addBaseClassIfMissing(Class_ $node): ?Node
+    private function addAbstractControllerParentClassIfMissing(Class_ $node): ?Class_
     {
         if ($node->extends !== null) {
             return null;
@@ -101,14 +111,13 @@ PHP
 
     private function classHasTemplateAnnotations(Class_ $node): bool
     {
-        foreach ($node->stmts as $stmtNode) {
-            $phpDocInfo = $this->getPhpDocInfo($stmtNode);
+        foreach ($node->getMethods() as $classMethod) {
+            $phpDocInfo = $this->getPhpDocInfo($classMethod);
             if ($phpDocInfo === null) {
                 continue;
             }
 
-            $templateTagValueNode = $phpDocInfo->getByType(SensioTemplateTagValueNode::class);
-            if ($templateTagValueNode !== null) {
+            if ((bool) $phpDocInfo->getByType(SensioTemplateTagValueNode::class)) {
                 return true;
             }
         }
@@ -118,32 +127,13 @@ PHP
 
     private function replaceTemplateAnnotation(ClassMethod $classMethod): ?Node
     {
-        $phpDocInfo = $this->getPhpDocInfo($classMethod);
-        if ($phpDocInfo === null) {
+        /** @var SensioTemplateTagValueNode|null $sensioTemplateTagValueNode */
+        $sensioTemplateTagValueNode = $this->getSensioTemplateTagValueNode($classMethod);
+        if ($sensioTemplateTagValueNode === null) {
             return null;
         }
 
-        $templateTagValueNode = $phpDocInfo->getByType(SensioTemplateTagValueNode::class);
-        if ($templateTagValueNode === null) {
-            return null;
-        }
-
-        /** @var Return_|null $returnNode */
-        $returnNode = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
-
-        // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
-        $renderArguments = $this->resolveRenderArguments($classMethod, $returnNode, $templateTagValueNode);
-        $thisRenderMethodCall = $this->createMethodCall('this', 'render', $renderArguments);
-
-        if ($returnNode === null) {
-            // or add as last statement in the method
-            $classMethod->stmts[] = new Return_($thisRenderMethodCall);
-        }
-
-        // replace Return_ node value if exists and is not already in correct format
-        if ($returnNode && ! $returnNode->expr instanceof MethodCall) {
-            $returnNode->expr = $thisRenderMethodCall;
-        }
+        $this->refactorClassMethod($classMethod, $sensioTemplateTagValueNode);
 
         // remove annotation
         $this->docBlockManipulator->removeTagFromNode($classMethod, SensioTemplateTagValueNode::class);
@@ -156,20 +146,20 @@ PHP
      */
     private function resolveRenderArguments(
         ClassMethod $classMethod,
-        ?Return_ $returnNode,
+        ?Return_ $return,
         SensioTemplateTagValueNode $sensioTemplateTagValueNode
     ): array {
         $arguments = [$this->resolveTemplateName($classMethod, $sensioTemplateTagValueNode)];
 
-        if ($returnNode === null) {
+        if ($return === null) {
             return $this->createArgs($arguments);
         }
 
-        if ($returnNode->expr instanceof Array_ && count($returnNode->expr->items)) {
-            $arguments[] = $returnNode->expr;
+        if ($return->expr instanceof Array_ && count($return->expr->items)) {
+            $arguments[] = $return->expr;
         }
 
-        $arguments = array_merge($arguments, $this->resolveArrayArgumentsFromMethodCall($returnNode));
+        $arguments = array_merge($arguments, $this->resolveArrayArgumentsFromMethodCall($return));
 
         return $this->createArgs($arguments);
     }
@@ -206,5 +196,57 @@ PHP
         }
 
         return $arguments;
+    }
+
+    private function createThisRender(
+        ClassMethod $classMethod,
+        ?Return_ $return,
+        SensioTemplateTagValueNode $sensioTemplateTagValueNode
+    ): MethodCall {
+        $renderArguments = $this->resolveRenderArguments($classMethod, $return, $sensioTemplateTagValueNode);
+
+        return $this->createMethodCall('this', 'render', $renderArguments);
+    }
+
+    private function refactorClassMethod(
+        ClassMethod $classMethod,
+        SensioTemplateTagValueNode $sensioTemplateTagValueNode
+    ): void {
+        /** @var Return_|null $returnNode */
+        $returnNode = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
+
+        if ($returnNode !== null) {
+            if ($returnNode->expr instanceof MethodCall) {
+                // go inside called method
+                $innerClassMethod = $this->parsedNodesByType->findClassMethodByMethodCall($returnNode->expr);
+                if ($innerClassMethod !== null) {
+                    $this->refactorClassMethod($innerClassMethod, $sensioTemplateTagValueNode);
+                    return;
+                }
+            }
+        }
+
+        // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
+        $thisRenderMethodCall = $this->createThisRender($classMethod, $returnNode, $sensioTemplateTagValueNode);
+
+        if ($returnNode === null) {
+            // or add as last statement in the method
+            $classMethod->stmts[] = new Return_($thisRenderMethodCall);
+        }
+
+        // replace Return_ node value if exists and is not already in correct format
+        if ($returnNode && ! $returnNode->expr instanceof MethodCall) {
+            $returnNode->expr = $thisRenderMethodCall;
+        }
+    }
+
+    private function getSensioTemplateTagValueNode(ClassMethod $classMethod): ?SensioTemplateTagValueNode
+    {
+        $phpDocInfo = $this->getPhpDocInfo($classMethod);
+        if ($phpDocInfo === null) {
+            return null;
+        }
+
+        return $phpDocInfo->getByType(SensioTemplateTagValueNode::class);
     }
 }
