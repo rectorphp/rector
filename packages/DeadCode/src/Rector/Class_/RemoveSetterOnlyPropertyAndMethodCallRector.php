@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
