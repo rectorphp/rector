@@ -116,6 +116,15 @@ PHP
 
         /** @var If_ $ifNode */
         $ifNode = $foreachNode->stmts[0];
+
+        if ($ifNode->else) {
+            return true;
+        }
+
+        if ($ifNode->elseifs) {
+            return true;
+        }
+
         return ! $ifNode->cond instanceof FuncCall;
     }
 
