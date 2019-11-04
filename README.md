@@ -118,12 +118,12 @@ parameters:
     php_version_features: '7.2' # your version is 7.3
 ```
 
-You can import FQN class names automatically every time Rector performs a change, so you don't have to do it manually/after each run:
+FQN classes are imported by default every time Rector performs a change,  so you don't have to do it manually/after each run. You can disable it by:
 
 ```yaml
 # rector.yaml
 parameters:
-    auto_import_names: true
+    auto_import_names: false
 ```
 
 ## Running Rector

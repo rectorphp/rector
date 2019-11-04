@@ -106,23 +106,28 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $stubLoader->loadStubs();
 
         $this->configurePhpVersionFeatures();
+        $this->configureAutoImportParameter();
     }
 
     protected function tearDown(): void
     {
-        // restore PHP version
-        if ($this->getPhpVersion() === '') {
-            return;
+        // restore PHP version if changed
+        if ($this->getPhpVersion() !== '') {
+            $this->setParameter(Option::PHP_VERSION_FEATURES, '10.0');
         }
 
-        $this->setParameter(Option::PHP_VERSION_FEATURES, '10.0');
+        // restore disabled auto_import_names if changed
+        if ($this->getAutoImportNames() !== null) {
+            $this->setParameter(Option::AUTO_IMPORT_NAMES, false);
+        }
     }
 
-    protected function provideEachFileInDir(string $dir): Iterator
+    protected function provideEachFileInDir(string $directory): Iterator
     {
-        /** @var SplFileInfo $file */
-        foreach (Finder::create()->in($dir)->files() as $file) {
-            yield [$file->getPathName()];
+        $fileInfos = $this->findFilesInDirectory($directory);
+
+        foreach ($fileInfos as $fileInfo) {
+            yield [$fileInfo->getPathName()];
         }
     }
 
@@ -174,6 +179,12 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     {
         $parameterProvider = self::$container->get(ParameterProvider::class);
         $parameterProvider->changeParameter($name, $value);
+    }
+
+    protected function getAutoImportNames(): ?bool
+    {
+        // to be implemented
+        return null;
     }
 
     private function ensureConfigFileExists(): void
@@ -265,5 +276,26 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
             $expectedFileContent = FileSystem::read($expectedFile);
             $this->assertStringMatchesFormat($expectedFileContent, $changedContent, 'Caused by ' . $fixtureFile);
         }
+    }
+
+    private function configureAutoImportParameter(): void
+    {
+        // for faster tests
+        $autoImportNames = false;
+        if ($this->getAutoImportNames() !== null) {
+            $autoImportNames = $this->getAutoImportNames();
+        }
+
+        $this->parameterProvider->changeParameter(Option::AUTO_IMPORT_NAMES, $autoImportNames);
+    }
+
+    /**
+     * @return SplFileInfo[]
+     */
+    private function findFilesInDirectory(string $directory): array
+    {
+        $finder = Finder::create()->in($directory)->files();
+
+        return iterator_to_array($finder);
     }
 }
