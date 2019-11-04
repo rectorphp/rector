@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
@@ -196,7 +197,7 @@ PHP
         }
 
         $resolveAssignedType = $this->resolveAssignedTypeInStmtsByPropertyName($class->stmts, $propertyName);
-        if ($resolveAssignedType) {
+        if ($resolveAssignedType !== null) {
             $resolvedTypes[] = $resolveAssignedType;
         }
 
@@ -249,7 +250,7 @@ PHP
         return $this->isName($node->var, $propertyName);
     }
 
-    private function resolvePropertyTypeAfterConstructor(Node\Stmt\ClassLike $classLike, string $propertyName): Type
+    private function resolvePropertyTypeAfterConstructor(ClassLike $classLike, string $propertyName): Type
     {
         $propertyTypeFromConstructor = null;
 

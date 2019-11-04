@@ -69,7 +69,7 @@ final class TypeFactory
     {
         $uniqueTypes = [];
         foreach ($types as $type) {
-            if ($keepConstant === false) {
+            if (! $keepConstant) {
                 $type = $this->removeValueFromConstantType($type);
             }
 

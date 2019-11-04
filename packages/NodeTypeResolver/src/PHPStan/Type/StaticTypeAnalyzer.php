@@ -43,11 +43,7 @@ final class StaticTypeAnalyzer
         }
 
         if ($type instanceof ConstantScalarType && ! $type instanceof NullType) {
-            if (! $type->getValue()) {
-                return false;
-            }
-
-            return true;
+            return (bool) $type->getValue();
         }
 
         if ($this->isScalarType($type)) {
@@ -56,7 +52,7 @@ final class StaticTypeAnalyzer
 
         if ($type instanceof UnionType) {
             foreach ($type->getTypes() as $unionedType) {
-                if ($this->isAlwaysTruableType($unionedType) === false) {
+                if (! $this->isAlwaysTruableType($unionedType)) {
                     return false;
                 }
             }

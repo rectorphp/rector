@@ -207,3 +207,5 @@ parameters:
         - '#Method Rector\\PhpParser\\Node\\Manipulator\\MethodCallManipulator\:\:findAssignToVariableName\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
         - '#Method Rector\\PhpParser\\Node\\Manipulator\\MethodCallManipulator\:\:findMethodCallsIncludingChain\(\) should return array<PhpParser\\Node\\Expr\\MethodCall\> but returns array<object\>#'
         - '#Method Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory\:\:createUnionOrSingleType\(\) should return PHPStan\\Type\\MixedType\|PHPStan\\Type\\UnionType but returns PHPStan\\Type\\Type#'
+
+        - '#Parameter \#1 \$node of method Rector\\Rector\\AbstractRector\:\:(isBool|isFalse)\(\) expects PhpParser\\Node, PhpParser\\Node\\Expr\|null given#'
