@@ -54,6 +54,9 @@ final class NodeReplacingCommander implements CommanderInterface
              */
             private $nodesToReplace = [];
 
+            /**
+             * @param Node[][] $nodesToReplace
+             */
             public function __construct(array $nodesToReplace)
             {
                 $this->nodesToReplace = $nodesToReplace;
