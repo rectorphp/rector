@@ -22,6 +22,7 @@ final class SimplifyForeachToArrayFilterRectorTest extends AbstractRectorTestCas
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
         yield [__DIR__ . '/Fixture/skip.php.inc'];
+        yield [__DIR__ . '/Fixture/skip_if_else.php.inc'];
     }
 
     protected function getRectorClass(): string
