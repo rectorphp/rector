@@ -17,13 +17,6 @@ function simplifyIfReturnBool()
     }
 
     return false;
-
-
-    if (strpos($docToken->getContent(), "\n") !== false) {
-        return true;
-    }
-
-    return 5;
 }
 
 ?>
@@ -37,13 +30,6 @@ function simplifyIfReturnBool()
     $docToken = new Token([]);
     return strpos($docToken->getContent(), "\n") === false;
     return strpos($docToken->getContent(), "\n") !== false;
-
-
-    if (strpos($docToken->getContent(), "\n") !== false) {
-        return true;
-    }
-
-    return 5;
 }
 
 ?>

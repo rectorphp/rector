@@ -38,7 +38,7 @@ Rector **instantly upgrades and instantly refactors the PHP code of your applica
     <br>
     <a href="/config/set/cakephp"><img src="/docs/images/cakephp.png"></a>
     <img src="/docs/images/space.png" width=40>
-    <a href="/config/set/phpunit"><img src="/docs/images/phpunit.jpg"></a>
+    <a href="/config/set/phpunit"><img src="/docs/images/phpunit.png"></a>
     <img src="/docs/images/space.png" width=40>
     <a href="/config/set/twig"><img src="/docs/images/twig.png"></a>
 </p>

@@ -13,9 +13,13 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\NodeTraverser;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -38,10 +42,19 @@ final class RemoveAlwaysTrueConditionSetInConstructorRector extends AbstractRect
      */
     private $staticTypeAnalyzer;
 
-    public function __construct(ClassManipulator $classManipulator, StaticTypeAnalyzer $staticTypeAnalyzer)
-    {
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    public function __construct(
+        ClassManipulator $classManipulator,
+        StaticTypeAnalyzer $staticTypeAnalyzer,
+        TypeFactory $typeFactory
+    ) {
         $this->classManipulator = $classManipulator;
         $this->staticTypeAnalyzer = $staticTypeAnalyzer;
+        $this->typeFactory = $typeFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -100,11 +113,11 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->stmts === null) {
+        if ($node->stmts === null || $node->stmts === []) {
             return null;
         }
 
-        foreach ($node->stmts as $key => $stmt) {
+        foreach ((array) $node->stmts as $key => $stmt) {
             if ($stmt instanceof Expression) {
                 $stmt = $stmt->expr;
             }
@@ -147,85 +160,113 @@ PHP
             return false;
         }
 
-        $propertyFetchTypes = $this->resolvePropertyFetchTypes($node->cond);
+        $propertyFetchType = $this->resolvePropertyFetchType($node->cond);
 
-        return $this->staticTypeAnalyzer->areTypesAlwaysTruable($propertyFetchTypes);
+        return $this->staticTypeAnalyzer->isAlwaysTruableType($propertyFetchType);
     }
 
-    /**
-     * @return Type[]
-     */
-    private function resolvePropertyFetchTypes(PropertyFetch $propertyFetch): array
+    private function resolvePropertyFetchType(PropertyFetch $propertyFetch): Type
     {
         /** @var Class_ $class */
         $class = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
 
         $propertyName = $this->getName($propertyFetch);
         if ($propertyName === null) {
-            return [];
+            return new MixedType();
         }
 
         $property = $this->classManipulator->getProperty($class, $propertyName);
         if ($property === null) {
-            return [];
+            return new MixedType();
         }
 
         // anything but private can be changed from outer scope
         if (! $property->isPrivate()) {
-            return [];
+            return new MixedType();
         }
 
         // set in constructor + changed in class
-        $constructClassMethod = $class->getMethod('__construct');
-        if ($constructClassMethod === null) {
-            return [];
-        }
+        $propertyTypeFromConstructor = $this->resolvePropertyTypeAfterConstructor($class, $propertyName);
 
         $resolvedTypes = [];
+        $resolvedTypes[] = $propertyTypeFromConstructor;
 
-        // add dfeault vlaue @todo
         $defaultValue = $property->props[0]->default;
         if ($defaultValue !== null) {
-            $defaultValueStaticType = $this->getStaticType($defaultValue);
-            $resolvedTypes[] = $defaultValueStaticType;
+            $resolvedTypes[] = $this->getStaticType($defaultValue);
         }
 
-        $assignTypes = $this->resolveAssignTypes($class, $propertyName);
+        $resolveAssignedType = $this->resolveAssignedTypeInStmtsByPropertyName($class->stmts, $propertyName);
+        if ($resolveAssignedType !== null) {
+            $resolvedTypes[] = $resolveAssignedType;
+        }
 
-        return array_merge($resolvedTypes, $assignTypes);
+        return $this->typeFactory->createMixedPassedOrUnionTypeAndKeepConstant($resolvedTypes);
     }
 
     /**
-     * @return Type[]
+     * @param Node\Stmt[] $stmts
      */
-    private function resolveAssignTypes(ClassLike $classLike, string $propertyName): array
+    private function resolveAssignedTypeInStmtsByPropertyName(array $stmts, string $propertyName): ?Type
     {
         $resolvedTypes = [];
 
-        $this->traverseNodesWithCallable($classLike->stmts, function (Node $node) use (
-            $propertyName,
-            &$resolvedTypes
-        ) {
-            if (! $node instanceof Assign) {
+        $this->traverseNodesWithCallable($stmts, function (Node $node) use ($propertyName, &$resolvedTypes): ?int {
+            // skip constructor
+            if ($node instanceof ClassMethod) {
+                if ($this->isName($node, '__construct')) {
+                    return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+                }
+            }
+
+            if (! $this->isPropertyFetchAssignOfPropertyName($node, $propertyName)) {
                 return null;
             }
 
-            if (! $node->var instanceof PropertyFetch) {
-                return null;
-            }
-
-            if (! $this->isName($node->var, $propertyName)) {
-                return null;
-            }
-
-            $staticType = $this->getStaticType($node->expr);
-            if ($staticType !== null) {
-                $resolvedTypes[] = $staticType;
-            }
-
+            $resolvedTypes[] = $this->getStaticType($node->expr);
             return null;
         });
 
-        return $resolvedTypes;
+        if ($resolvedTypes === []) {
+            return null;
+        }
+
+        return $this->typeFactory->createMixedPassedOrUnionTypeAndKeepConstant($resolvedTypes);
+    }
+
+    /**
+     * E.g. $this->{value} = x
+     */
+    private function isPropertyFetchAssignOfPropertyName(Node $node, string $propertyName): bool
+    {
+        if (! $node instanceof Assign) {
+            return false;
+        }
+
+        if (! $node->var instanceof PropertyFetch) {
+            return false;
+        }
+
+        return $this->isName($node->var, $propertyName);
+    }
+
+    private function resolvePropertyTypeAfterConstructor(ClassLike $classLike, string $propertyName): Type
+    {
+        $propertyTypeFromConstructor = null;
+
+        $constructClassMethod = $classLike->getMethod('__construct');
+        if ($constructClassMethod !== null) {
+            $propertyTypeFromConstructor = $this->resolveAssignedTypeInStmtsByPropertyName(
+                (array) $constructClassMethod->stmts,
+                $propertyName
+            );
+        }
+
+        if ($propertyTypeFromConstructor !== null) {
+            return $propertyTypeFromConstructor;
+        }
+
+        // undefined property is null by default
+        return new NullType();
     }
 }

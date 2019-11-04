@@ -24,20 +24,23 @@ final class TypeFactory
     /**
      * @param Type[] $types
      */
+    public function createMixedPassedOrUnionTypeAndKeepConstant(array $types): Type
+    {
+        $types = $this->unwrapUnionedTypes($types);
+        $types = $this->uniquateTypes($types, true);
+
+        return $this->createUnionOrSingleType($types);
+    }
+
+    /**
+     * @param Type[] $types
+     */
     public function createMixedPassedOrUnionType(array $types): Type
     {
         $types = $this->unwrapUnionedTypes($types);
         $types = $this->uniquateTypes($types);
 
-        if (count($types) === 0) {
-            return new MixedType();
-        }
-
-        if (count($types) === 1) {
-            return $types[0];
-        }
-
-        return TypeFactoryStaticHelper::createUnionObjectType($types);
+        return $this->createUnionOrSingleType($types);
     }
 
     /**
@@ -62,11 +65,13 @@ final class TypeFactory
      * @param Type[] $types
      * @return Type[]
      */
-    public function uniquateTypes(array $types): array
+    public function uniquateTypes(array $types, bool $keepConstant = false): array
     {
         $uniqueTypes = [];
         foreach ($types as $type) {
-            $type = $this->removeValueFromConstantType($type);
+            if (! $keepConstant) {
+                $type = $this->removeValueFromConstantType($type);
+            }
 
             $typeHash = md5(serialize($type));
 
@@ -121,5 +126,22 @@ final class TypeFactory
         }
 
         return $type;
+    }
+
+    /**
+     * @param Type[] $types
+     * @return MixedType|UnionType
+     */
+    private function createUnionOrSingleType(array $types): Type
+    {
+        if (count($types) === 0) {
+            return new MixedType();
+        }
+
+        if (count($types) === 1) {
+            return $types[0];
+        }
+
+        return TypeFactoryStaticHelper::createUnionObjectType($types);
     }
 }
