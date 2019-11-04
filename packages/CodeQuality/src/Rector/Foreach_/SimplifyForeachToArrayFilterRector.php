@@ -117,7 +117,7 @@ PHP
         /** @var If_ $ifNode */
         $ifNode = $foreachNode->stmts[0];
 
-        if ($ifNode->else) {
+        if ($ifNode->else !== null) {
             return true;
         }
 
