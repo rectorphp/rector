@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Testing\PHPUnit;
 
+use Iterator;
 use Nette\Utils\FileSystem;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -19,6 +20,8 @@ use Rector\Testing\Finder\RectorsFinder;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -113,6 +116,14 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         }
 
         $this->setParameter(Option::PHP_VERSION_FEATURES, '10.0');
+    }
+
+    protected function provideEachFileInDir(string $dir): Iterator
+    {
+        /** @var SplFileInfo $file */
+        foreach (Finder::create()->in($dir)->files() as $file) {
+            yield [$file->getPathName()];
+        }
     }
 
     protected function doTestFileWithoutAutoload(string $file): void
