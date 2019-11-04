@@ -45,6 +45,7 @@ parameters:
         - '*/Expected/*'
         # exclude
         - 'src/Rector/AbstractRector.php'
+        - 'src/PhpParser/BetterNodeDumper.php'
 
     skip:
         # rather useless

@@ -106,10 +106,6 @@ PHP
             return true;
         }
 
-        if ($classNode->isAnonymous()) {
-            return true;
-        }
-
         if (count($property->props) !== 1) {
             return true;
         }

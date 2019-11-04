@@ -87,6 +87,11 @@ PHP
             return null;
         }
 
+        if ($this->isAnonymousClass($class)) {
+            //currently the classMethodManipulator isn't able to find usages of anonymous classes
+            return null;
+        }
+
         $calledMethodName = $this->getName($node->name);
         if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($methodNode, $calledMethodName)) {
             return null;

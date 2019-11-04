@@ -27,6 +27,8 @@ final class RemoveUnusedPrivatePropertyRectorTest extends AbstractRectorTestCase
         yield [__DIR__ . '/Fixture/skip_magically_accessed_fetch.php.inc'];
         yield [__DIR__ . '/Fixture/skip_doctrine_entity_property.php.inc'];
         yield [__DIR__ . '/Fixture/skip_anonymous_class.php.inc'];
+        yield [__DIR__ . '/Fixture/no_usage_in_anonymous_class.php.inc'];
+        yield [__DIR__ . '/Fixture/no_usage_outside_anonymous_class.php.inc'];
         yield [__DIR__ . '/Fixture/skip_anonymous_function.php.inc'];
         yield [__DIR__ . '/Fixture/skip_nested_closure.php.inc'];
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\NodeVisitor;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
@@ -47,6 +46,16 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     private $functionNode;
 
     /**
+     * @var ClassLike[]|null[]
+     */
+    private $classStack = [];
+
+    /**
+     * @var ClassMethod[]|null[]
+     */
+    private $methodStack = [];
+
+    /**
      * @param Node[] $nodes
      * @return Node[]|null
      */
@@ -67,16 +76,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if ($this->isClassAnonymous($node)) {
-            return null;
-        }
-
-        // skip anonymous classes
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Class_ && $this->isClassAnonymous($parentNode)) {
-            return null;
-        }
-
         $this->processClass($node);
         $this->processMethod($node);
         $this->processFunction($node);
@@ -84,29 +83,23 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         return $node;
     }
 
-    private function isClassAnonymous(Node $node): bool
+    public function leaveNode(Node $node)
     {
-        if (! $node instanceof Class_) {
-            return false;
+        if ($node instanceof ClassLike) {
+            $this->setClassNodeAndName(array_pop($this->classStack));
         }
-
-        if ($node->isAnonymous()) {
-            return true;
+        if ($node instanceof ClassMethod) {
+            $this->methodNode = array_pop($this->methodStack);
+            $this->methodName = (string) $this->methodName;
         }
-
-        if ($node->name === null) {
-            return true;
-        }
-
-        // PHPStan polution
-        return (bool) Strings::match($node->name->toString(), '#^AnonymousClass\w+#');
+        return null;
     }
 
     private function processClass(Node $node): void
     {
         if ($node instanceof ClassLike) {
-            $this->classNode = $node;
-            $this->className = $node->namespacedName->toString();
+            $this->classStack[] = $this->classNode;
+            $this->setClassNodeAndName($node);
         }
 
         $node->setAttribute(AttributeKey::CLASS_NODE, $this->classNode);
@@ -120,6 +113,8 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     private function processMethod(Node $node): void
     {
         if ($node instanceof ClassMethod) {
+            $this->methodStack[] = $this->methodNode;
+
             $this->methodNode = $node;
             $this->methodName = (string) $node->name;
         }
@@ -151,5 +146,17 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         }
 
         $node->setAttribute(AttributeKey::PARENT_CLASS_NAME, $parentClassResolvedName);
+    }
+
+    private function setClassNodeAndName(?ClassLike $classLike): void
+    {
+        $this->classNode = $classLike;
+        if ($classLike === null || $classLike->name === null) {
+            $this->className = null;
+        } elseif (isset($classLike->namespacedName)) {
+            $this->className = $classLike->namespacedName->toString();
+        } else {
+            $this->className = (string) $classLike->name;
+        }
     }
 }
