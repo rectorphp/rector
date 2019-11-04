@@ -19,48 +19,49 @@ use PHPStan\Type\UnionType;
 
 final class StaticTypeAnalyzer
 {
-    /**
-     * @param Type[] $types
-     */
-    public function areTypesAlwaysTruable(array $types): bool
+    public function isAlwaysTruableType(Type $type): bool
     {
-        if ($types === []) {
+        if ($type instanceof MixedType) {
             return false;
         }
 
-        foreach ($types as $type) {
-            if ($type instanceof ConstantArrayType) {
-                continue;
-            }
+        if ($type instanceof ConstantArrayType) {
+            return true;
+        }
 
-            if ($type instanceof ArrayType) {
+        if ($type instanceof ArrayType) {
+            return false;
+        }
+
+        if ($this->isNullable($type)) {
+            return false;
+        }
+
+        // always trueish
+        if ($type instanceof ObjectType) {
+            return true;
+        }
+
+        if ($type instanceof ConstantScalarType && ! $type instanceof NullType) {
+            if (! $type->getValue()) {
                 return false;
             }
 
-            if ($this->isNullable($type)) {
-                return false;
-            }
+            return true;
+        }
 
-            if ($type instanceof MixedType) {
-                return false;
-            }
+        if ($this->isScalarType($type)) {
+            return false;
+        }
 
-            // always trueish
-            if ($type instanceof ObjectType) {
-                continue;
-            }
-
-            if ($type instanceof ConstantScalarType && ! $type instanceof NullType) {
-                if (! $type->getValue()) {
+        if ($type instanceof UnionType) {
+            foreach ($type->getTypes() as $unionedType) {
+                if ($this->isAlwaysTruableType($unionedType) === false) {
                     return false;
                 }
-
-                continue;
             }
 
-            if ($this->isScalarType($type)) {
-                return false;
-            }
+            return true;
         }
 
         return true;

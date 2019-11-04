@@ -206,3 +206,4 @@ parameters:
         - '#In method "Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createPropertyReflectionFromPropertyNode", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
         - '#Method Rector\\PhpParser\\Node\\Manipulator\\MethodCallManipulator\:\:findAssignToVariableName\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
         - '#Method Rector\\PhpParser\\Node\\Manipulator\\MethodCallManipulator\:\:findMethodCallsIncludingChain\(\) should return array<PhpParser\\Node\\Expr\\MethodCall\> but returns array<object\>#'
+        - '#Method Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory\:\:createUnionOrSingleType\(\) should return PHPStan\\Type\\MixedType\|PHPStan\\Type\\UnionType but returns PHPStan\\Type\\Type#'

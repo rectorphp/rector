@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\If_\RemoveAlwaysTrueConditionSetInConstructorRector\Fixture;
 
-final class SkipOptoinalArgumentValue
+final class SkipOptionalArgumentValue
 {
     /**
      * @var bool
