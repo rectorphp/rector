@@ -2,8 +2,6 @@ imports:
     - { resource: 'phpunit-exception.yaml' }
 
 services:
-    Rector\PHPUnit\Rector\GetMockRector: ~
-
     # ref. https://github.com/sebastianbergmann/phpunit/compare/5.7.9...6.0.0
     Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
         PHPUnit_:
