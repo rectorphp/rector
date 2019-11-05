@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Tests\PhpParser\Node\BetterNodeFinder;
 
+use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Variable;
@@ -63,7 +64,7 @@ final class BetterNodeFinderTest extends AbstractKernelTestCase
     private function createNodesFromFile(string $filePath): array
     {
         $phpParser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-        $nodes = $phpParser->parse(file_get_contents($filePath));
+        $nodes = $phpParser->parse(FileSystem::read($filePath));
         if ($nodes === null) {
             return [];
         }

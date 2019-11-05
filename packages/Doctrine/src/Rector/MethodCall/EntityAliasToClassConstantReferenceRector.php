@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Doctrine\Rector\MethodCall;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
@@ -103,7 +104,7 @@ PHP
 
     private function isAlias(string $name): bool
     {
-        return strpos($name, ':') !== false;
+        return Strings::contains($name, ':');
     }
 
     private function hasAlias(string $name): bool

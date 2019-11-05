@@ -21,7 +21,6 @@ final class SubstrStrlenFunctionToNetteUtilsStringsRectorTest extends AbstractRe
     public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/substr.php.inc'];
-        yield [__DIR__ . '/Fixture/strlen.php.inc'];
     }
 
     protected function getRectorClass(): string

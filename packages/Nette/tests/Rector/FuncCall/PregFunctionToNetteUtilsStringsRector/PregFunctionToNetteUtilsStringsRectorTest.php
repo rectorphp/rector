@@ -25,6 +25,8 @@ final class PregFunctionToNetteUtilsStringsRectorTest extends AbstractRectorTest
         yield [__DIR__ . '/Fixture/preg_split.php.inc'];
         yield [__DIR__ . '/Fixture/preg_replace.php.inc'];
         yield [__DIR__ . '/Fixture/preg_replace_callback.php.inc'];
+        yield [__DIR__ . '/Fixture/preg_match_identical_one.php.inc'];
+        yield [__DIR__ . '/Fixture/preg_match_identical_one_with_matches.php.inc'];
     }
 
     protected function getRectorClass(): string

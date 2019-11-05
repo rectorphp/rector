@@ -10,8 +10,6 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -74,7 +72,7 @@ PHP
             return null;
         }
 
-        $containsStaticCall = new StaticCall(new FullyQualified('Nette\Utils\Strings'), 'contains');
+        $containsStaticCall = $this->createStaticCall('Nette\Utils\Strings', 'contains');
         $containsStaticCall->args[0] = $strpos->args[0];
         $containsStaticCall->args[1] = $strpos->args[1];
 

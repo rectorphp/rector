@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Testing\PHPUnit;
 
+use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\NodeDumper;
 use Rector\HttpKernel\RectorKernel;
@@ -79,7 +80,7 @@ abstract class AbstractNodeVisitorTestCase extends AbstractKernelTestCase
         $dumpedNodes = $this->nodeDumper->dump($nodes);
 
         if (getenv('UPDATE_FIXTURE')) {
-            file_put_contents($file, file_get_contents($originalFile) . "-----\n" . $dumpedNodes);
+            FileSystem::write($file, FileSystem::read($originalFile) . "-----\n" . $dumpedNodes);
         } else {
             $this->assertSame(trim($smartFileInfo2->getContents()), $dumpedNodes, 'Caused by ' . $file);
         }
