@@ -95,6 +95,6 @@ PHP
         );
         $table = implode('/', $table);
 
-        return new String_("{$prefix}.{$table}", $name->getAttributes());
+        return new String_(sprintf('%s.%s', $prefix, $table), $name->getAttributes());
     }
 }

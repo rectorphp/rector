@@ -192,7 +192,7 @@ final class SetOptionResolver
         }
 
         foreach ($versionedSets as $groupName => $configName) {
-            $setsListInString .= ' * ' . $groupName . ': ' . implode(', ', $configName) . PHP_EOL;
+            $setsListInString .= ' * ' . $groupName . ': ' . implode($configName, ', ') . PHP_EOL;
         }
 
         return $setsListInString;

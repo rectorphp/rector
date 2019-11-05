@@ -266,7 +266,7 @@ PHP
         }
 
         $fileName = $reflectionMethod->getFileName();
-        if ($fileName === false || ! file_exists($fileName)) {
+        if (! $fileName || ! file_exists($fileName)) {
             return null;
         }
 

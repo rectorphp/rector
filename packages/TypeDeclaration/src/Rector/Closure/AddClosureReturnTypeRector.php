@@ -77,7 +77,7 @@ PHP
             return null;
         }
 
-        if ($node->returnType) {
+        if ($node->returnType !== null) {
             return null;
         }
 

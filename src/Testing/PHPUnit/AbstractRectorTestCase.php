@@ -122,7 +122,7 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         }
     }
 
-    protected function provideEachFileInDir(string $directory): Iterator
+    protected function yieldFilesFromDirectory(string $directory): Iterator
     {
         $fileInfos = $this->findFilesInDirectory($directory);
 

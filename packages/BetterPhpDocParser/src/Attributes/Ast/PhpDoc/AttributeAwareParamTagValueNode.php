@@ -38,6 +38,8 @@ final class AttributeAwareParamTagValueNode extends ParamTagValueNode implements
         $variadic = $this->isVariadic ? '...' : '';
         $reference = $this->isReference ? '&' : '';
 
-        return trim("{$this->type} {$variadic}{$reference}{$this->parameterName} {$this->description}");
+        return trim(
+            sprintf('%s %s%s%s %s', $this->type, $variadic, $reference, $this->parameterName, $this->description)
+        );
     }
 }

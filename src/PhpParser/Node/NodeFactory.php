@@ -150,7 +150,7 @@ final class NodeFactory
         $paramBuild = $this->builderFactory->param($name);
 
         $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
-        if ($typeNode) {
+        if ($typeNode !== null) {
             $paramBuild->setType($typeNode);
         }
 

@@ -168,7 +168,7 @@ PHP
     private function shouldSkip(Node $node): bool
     {
         if (! $this->overrideExistingReturnTypes) {
-            if ($node->returnType) {
+            if ($node->returnType !== null) {
                 return true;
             }
         }
