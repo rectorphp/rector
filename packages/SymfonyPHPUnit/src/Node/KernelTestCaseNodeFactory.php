@@ -76,6 +76,7 @@ final class KernelTestCaseNodeFactory
         $classMethodBuilder = $this->builderFactory->method('setUp');
         $classMethodBuilder->makeProtected();
         $classMethodBuilder->addStmts($stmts);
+
         $classMethod = $classMethodBuilder->getNode();
 
         $this->phpUnitTypeDeclarationDecorator->decorate($classMethod);

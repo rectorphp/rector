@@ -212,7 +212,7 @@ PHP
         $className = $staticCall->getAttribute(AttributeKey::CLASS_NAME);
 
         $parentClassName = get_parent_class($className);
-        if ($parentClassName === false) {
+        if (! $parentClassName) {
             throw new ShouldNotHappenException();
         }
 

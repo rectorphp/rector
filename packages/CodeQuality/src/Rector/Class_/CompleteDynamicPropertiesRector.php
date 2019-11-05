@@ -216,7 +216,7 @@ PHP
 
             if ($this->isAtLeastPhpVersion('7.4')) {
                 $phpStanNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
-                if ($phpStanNode) {
+                if ($phpStanNode !== null) {
                     $property->type = $phpStanNode;
                 } else {
                     // fallback to doc type in PHP 7.4
