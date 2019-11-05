@@ -10,7 +10,7 @@ use Symfony\Component\Finder\SplFileInfo;
 
 final class StaticFixtureProvider
 {
-    public static function yieldFilesFromDirectory(string $directory, string $suffix = '*.php'): Iterator
+    public static function yieldFilesFromDirectory(string $directory, string $suffix): Iterator
     {
         $fileInfos = self::findFilesInDirectory($directory, $suffix);
 
