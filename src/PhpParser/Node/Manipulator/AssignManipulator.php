@@ -6,9 +6,11 @@ namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class AssignManipulator
@@ -94,5 +96,28 @@ final class AssignManipulator
         }
 
         return $this->nameResolver->isName($assign->expr, 'each');
+    }
+
+    public function isNodeLeftPartOfAssign(Node $node): bool
+    {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Assign && $parentNode->var === $node) {
+            return true;
+        }
+
+        // traverse up to array dim fetches
+        if ($parentNode instanceof ArrayDimFetch) {
+            $previousParentNode = $parentNode;
+            while ($parentNode instanceof ArrayDimFetch) {
+                $previousParentNode = $parentNode;
+                $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+            }
+
+            if ($parentNode instanceof Assign) {
+                return $parentNode->var === $previousParentNode;
+            }
+        }
+
+        return false;
     }
 }

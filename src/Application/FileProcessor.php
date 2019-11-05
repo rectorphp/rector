@@ -12,6 +12,7 @@ use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\PhpParser\Parser\Parser;
 use Rector\PhpParser\Printer\FormatPerservingPrinter;
+use Rector\Rector\AffectedFilesCollector;
 use Rector\Stubs\StubLoader;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
@@ -57,6 +58,11 @@ final class FileProcessor
      */
     private $stubLoader;
 
+    /**
+     * @var AffectedFilesCollector
+     */
+    private $affectedFilesCollector;
+
     public function __construct(
         FormatPerservingPrinter $formatPerservingPrinter,
         Parser $parser,
@@ -64,7 +70,8 @@ final class FileProcessor
         RectorNodeTraverser $rectorNodeTraverser,
         NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
         CurrentFileInfoProvider $currentFileInfoProvider,
-        StubLoader $stubLoader
+        StubLoader $stubLoader,
+        AffectedFilesCollector $affectedFilesCollector
     ) {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->parser = $parser;
@@ -73,6 +80,7 @@ final class FileProcessor
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->stubLoader = $stubLoader;
+        $this->affectedFilesCollector = $affectedFilesCollector;
     }
 
     public function parseFileInfoToLocalCache(SmartFileInfo $smartFileInfo): void
@@ -127,6 +135,11 @@ final class FileProcessor
 
         // this is needed for new tokens added in "afterTraverse()"
         $this->tokensByFilePath[$smartFileInfo->getRealPath()] = [$newStmts, $oldStmts, $oldTokens];
+
+        $this->affectedFilesCollector->removeFromList($smartFileInfo);
+        while ($otherTouchedFile = $this->affectedFilesCollector->getNext()) {
+            $this->refactor($otherTouchedFile);
+        }
     }
 
     /**

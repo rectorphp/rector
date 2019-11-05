@@ -13,6 +13,8 @@ use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\NodeVisitorFactory\NodeRemovingNodeVisitorFactory;
+use Rector\Rector\AffectedFilesCollector;
+use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class NodeRemovingCommander implements CommanderInterface
 {
@@ -26,9 +28,17 @@ final class NodeRemovingCommander implements CommanderInterface
      */
     private $nodeRemovingNodeVisitorFactory;
 
-    public function __construct(NodeRemovingNodeVisitorFactory $nodeRemovingNodeVisitorFactory)
-    {
+    /**
+     * @var AffectedFilesCollector
+     */
+    private $affectedFilesCollector;
+
+    public function __construct(
+        NodeRemovingNodeVisitorFactory $nodeRemovingNodeVisitorFactory,
+        AffectedFilesCollector $affectedFilesCollector
+    ) {
         $this->nodeRemovingNodeVisitorFactory = $nodeRemovingNodeVisitorFactory;
+        $this->affectedFilesCollector = $affectedFilesCollector;
     }
 
     public function addNode(Node $node): void
@@ -41,6 +51,10 @@ final class NodeRemovingCommander implements CommanderInterface
             // only expressions can be removed
             $node = $parentNode;
         }
+
+        /** @var SmartFileInfo $fileInfo */
+        $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
+        $this->affectedFilesCollector->addFile($fileInfo);
 
         /** @var Stmt $node */
         $this->nodesToRemove[] = $node;

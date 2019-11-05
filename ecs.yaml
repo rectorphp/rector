@@ -133,7 +133,7 @@ parameters:
             - 'packages/PhpSpecToPHPUnit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php'
             - 'packages/NetteTesterToPHPUnit/src/AssertManipulator.php'
             - 'packages/Legacy/src/NodeAnalyzer/SingletonClassMethodAnalyzer.php'
-            - 'packages/DeadCode/src/Rector/Stmt/RemoveDeadStmtRector.php'
+            - 'src/Rector/AbstractRector/ComplexRemovalTrait.php'
             # aliases
             - 'packages/CodingStyle/src/Rector/Namespace_/ImportFullyQualifiedNamesRector.php'
 
