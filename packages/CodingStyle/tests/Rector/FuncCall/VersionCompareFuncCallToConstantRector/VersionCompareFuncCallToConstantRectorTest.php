@@ -20,8 +20,7 @@ final class VersionCompareFuncCallToConstantRectorTest extends AbstractRectorTes
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/version-compare.php.inc'];
-        yield [__DIR__ . '/Fixture/skip-version-compare.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

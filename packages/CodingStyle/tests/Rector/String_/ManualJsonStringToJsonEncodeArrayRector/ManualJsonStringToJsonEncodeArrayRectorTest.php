@@ -20,15 +20,7 @@ final class ManualJsonStringToJsonEncodeArrayRectorTest extends AbstractRectorTe
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/concat_json.php.inc'];
-        yield [__DIR__ . '/Fixture/multiline_concat_json.php.inc'];
-        yield [__DIR__ . '/Fixture/tripleline_multiline_concat_json.php.inc'];
-        yield [__DIR__ . '/Fixture/assign_with_concat.php.inc'];
-        yield [__DIR__ . '/Fixture/with_implode.php.inc'];
-        yield [__DIR__ . '/Fixture/without_assign.php.inc'];
-        yield [__DIR__ . '/Fixture/array_concat.php.inc'];
-        yield [__DIR__ . '/Fixture/simple_row_with_spaces.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

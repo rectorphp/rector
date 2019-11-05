@@ -20,9 +20,7 @@ final class ForToForeachRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/for_with_count.php.inc'];
-        yield [__DIR__ . '/Fixture/for_with_switched_compare.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

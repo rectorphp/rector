@@ -26,10 +26,7 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/my_command.php.inc'];
-        yield [__DIR__ . '/Fixture/first_class.php.inc'];
-        yield [__DIR__ . '/Fixture/some_controller.inc'];
-        yield [__DIR__ . '/Fixture/parent_class_with_in_construct_call.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     /**

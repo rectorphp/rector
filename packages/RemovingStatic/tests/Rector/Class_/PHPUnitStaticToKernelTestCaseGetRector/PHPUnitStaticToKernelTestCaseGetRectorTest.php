@@ -21,9 +21,7 @@ final class PHPUnitStaticToKernelTestCaseGetRectorTest extends AbstractRectorTes
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/setup_already_exists.php.inc'];
-        yield [__DIR__ . '/Fixture/setup_already_exists_with_parent_setup.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     /**

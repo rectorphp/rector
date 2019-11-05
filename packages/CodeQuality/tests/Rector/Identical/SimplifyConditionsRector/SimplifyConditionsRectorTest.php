@@ -20,10 +20,7 @@ final class SimplifyConditionsRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/boolean_not.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture3.php.inc'];
-        yield [__DIR__ . '/Fixture/dual_null.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

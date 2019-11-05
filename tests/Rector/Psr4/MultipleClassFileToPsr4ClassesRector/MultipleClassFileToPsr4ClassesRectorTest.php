@@ -105,7 +105,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
 
     public function provideDataForSkip(): Iterator
     {
-        yield [__DIR__ . '/Source/ReadyException.php'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureSkip');
     }
 
     protected function getRectorClass(): string

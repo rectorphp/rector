@@ -20,9 +20,7 @@ final class MakeUnusedClassesWithChildrenAbstractRectorTest extends AbstractRect
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_new.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_static_call.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

@@ -20,11 +20,7 @@ final class ArraySpreadInsteadOfArrayMergeRectorTest extends AbstractRectorTestC
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/iterator_to_array.php.inc'];
-        yield [__DIR__ . '/Fixture/integer_keys.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_simple_array_merge.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_string_keys.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

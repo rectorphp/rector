@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Testing\PHPUnit;
 
+use Iterator;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\Testing\StaticFixtureProvider;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
@@ -47,6 +49,11 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
      * Return interface type that extends @see \Rector\Contract\Rector\RectorInterface;
      */
     abstract protected function getRectorInterface(): string;
+
+    protected function yieldFilesFromDirectory(string $directory): Iterator
+    {
+        return StaticFixtureProvider::yieldFilesFromDirectory($directory, '*.php.inc');
+    }
 
     private function ensureRectorClassIsValid(string $rectorClass, string $methodName): void
     {

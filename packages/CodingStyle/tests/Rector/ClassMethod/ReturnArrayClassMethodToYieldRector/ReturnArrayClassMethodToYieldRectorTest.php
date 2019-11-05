@@ -22,13 +22,7 @@ final class ReturnArrayClassMethodToYieldRectorTest extends AbstractRectorTestCa
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture3.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture4.php.inc'];
-        yield [__DIR__ . '/Fixture/data_provider.php.inc'];
-        yield [__DIR__ . '/Fixture/should_not_remove_comments.php.inc'];
-        yield [__DIR__ . '/Fixture/should_not_remove_doc_blocks.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     /**

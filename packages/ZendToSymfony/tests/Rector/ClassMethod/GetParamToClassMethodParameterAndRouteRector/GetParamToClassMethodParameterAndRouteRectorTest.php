@@ -20,7 +20,7 @@ final class GetParamToClassMethodParameterAndRouteRectorTest extends AbstractRec
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/get_param_to_request.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

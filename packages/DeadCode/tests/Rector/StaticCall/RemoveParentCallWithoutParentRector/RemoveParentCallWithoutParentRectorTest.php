@@ -20,12 +20,7 @@ final class RemoveParentCallWithoutParentRectorTest extends AbstractRectorTestCa
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/parent_but_no_method.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_trait.php.inc'];
-        yield [__DIR__ . '/Fixture/edge_case.php.inc'];
-        yield [__DIR__ . '/Fixture/anonymous_class_without_parent.php.inc'];
-        yield [__DIR__ . '/Fixture/anonymous_class_with_parent.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

@@ -20,13 +20,7 @@ final class RegexDashEscapeRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/method_call.php.inc'];
-        yield [__DIR__ . '/Fixture/const.php.inc'];
-        yield [__DIR__ . '/Fixture/external_const.php.inc'];
-        yield [__DIR__ . '/Fixture/variable.php.inc'];
-        yield [__DIR__ . '/Fixture/multiple_variables.php.inc'];
-        yield [__DIR__ . '/Fixture/false_positive.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

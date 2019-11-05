@@ -20,8 +20,7 @@ final class JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRectorTest extends Abstr
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/json_decode.php.inc'];
-        yield [__DIR__ . '/Fixture/json_encode.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

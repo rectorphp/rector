@@ -25,20 +25,7 @@ final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [
-            // JMS
-            __DIR__ . '/Fixture/fixture.php.inc',
-        ];
-        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture3.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture4.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture5.php.inc'];
-        yield [
-            // PHP DI
-            __DIR__ . '/Fixture/inject_from_var.php.inc',
-        ];
-        yield [__DIR__ . '/Fixture/inject_from_var2.php.inc'];
-        yield [__DIR__ . '/Fixture/inject_from_var3.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     /**

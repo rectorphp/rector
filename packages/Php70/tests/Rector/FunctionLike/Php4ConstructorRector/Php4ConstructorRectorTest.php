@@ -24,12 +24,7 @@ final class Php4ConstructorRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/in_namespace.php.inc'];
-        yield [__DIR__ . '/Fixture/delegating.php.inc'];
-        yield [__DIR__ . '/Fixture/delegating_2.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture5.php.inc'];
-        yield [__DIR__ . '/Fixture/non_expression.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

@@ -14,18 +14,17 @@ use Rector\Testing\PHPUnit\AbstractNodeVisitorTestCase;
 
 final class FunctionMethodAndClassNodeVisitorTest extends AbstractNodeVisitorTestCase
 {
-    public function provideDataForTest(): Iterator
-    {
-        yield [__DIR__ . '/Fixture/simple.php.inc'];
-        yield [__DIR__ . '/Fixture/anonymousClass.php.inc'];
-    }
-
     /**
      * @dataProvider provideDataForTest();
      */
     public function testVisitor(string $file): void
     {
         $this->doTestFile($file);
+    }
+
+    public function provideDataForTest(): Iterator
+    {
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture', '*.php.inc');
     }
 
     /**

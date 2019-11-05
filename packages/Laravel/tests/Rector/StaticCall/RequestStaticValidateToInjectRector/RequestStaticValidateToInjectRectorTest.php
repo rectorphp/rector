@@ -20,10 +20,7 @@ final class RequestStaticValidateToInjectRectorTest extends AbstractRectorTestCa
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture-alias.php.inc'];
-        yield [__DIR__ . '/Fixture/function.php.inc'];
-        yield [__DIR__ . '/Fixture/function2.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

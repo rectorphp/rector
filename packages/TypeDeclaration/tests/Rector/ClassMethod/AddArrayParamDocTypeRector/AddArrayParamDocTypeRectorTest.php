@@ -20,11 +20,7 @@ final class AddArrayParamDocTypeRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/from_property.php.inc'];
-        yield [__DIR__ . '/Fixture/from_getter.php.inc'];
-        yield [__DIR__ . '/Fixture/edge_case.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_mixed.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_filled.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

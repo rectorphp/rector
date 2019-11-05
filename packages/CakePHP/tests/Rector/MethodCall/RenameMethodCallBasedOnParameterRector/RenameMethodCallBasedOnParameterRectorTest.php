@@ -23,8 +23,7 @@ final class RenameMethodCallBasedOnParameterRectorTest extends AbstractRectorTes
      */
     public function provideDataForTest(): iterable
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     /**

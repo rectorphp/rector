@@ -20,9 +20,7 @@ final class RemoveMissingCompactVariableRectorTest extends AbstractRectorTestCas
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/empty_compact.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_maybe_defined.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

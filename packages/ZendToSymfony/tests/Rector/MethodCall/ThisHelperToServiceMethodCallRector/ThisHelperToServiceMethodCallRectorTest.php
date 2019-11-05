@@ -20,7 +20,7 @@ final class ThisHelperToServiceMethodCallRectorTest extends AbstractRectorTestCa
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/this_helper_to_service.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

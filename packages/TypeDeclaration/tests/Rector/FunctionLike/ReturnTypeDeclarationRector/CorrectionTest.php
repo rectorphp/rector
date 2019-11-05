@@ -20,9 +20,7 @@ final class CorrectionTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/Correction/constructor_property_assign_over_getter.php.inc'];
-        yield [__DIR__ . '/Fixture/Correction/prefix_fqn.php.inc'];
-        yield [__DIR__ . '/Fixture/Correction/skip_override_of_the_same_class.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

@@ -20,9 +20,7 @@ final class DelegateExceptionArgumentsRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/message.php.inc'];
-        yield [__DIR__ . '/Fixture/regexp.php.inc'];
-        yield [__DIR__ . '/Fixture/self_nested.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

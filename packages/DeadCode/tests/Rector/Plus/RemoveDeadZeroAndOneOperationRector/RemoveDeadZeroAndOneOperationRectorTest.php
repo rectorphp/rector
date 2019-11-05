@@ -20,11 +20,7 @@ final class RemoveDeadZeroAndOneOperationRectorTest extends AbstractRectorTestCa
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/multiple.php.inc'];
-        yield [__DIR__ . '/Fixture/assigns.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_type_change.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_floats.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

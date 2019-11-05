@@ -20,12 +20,7 @@ final class ShortenElseIfRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/simple.php.inc'];
-        yield [__DIR__ . '/Fixture/nested-else.php.inc'];
-        yield [__DIR__ . '/Fixture/nested-elseif.php.inc'];
-        yield [__DIR__ . '/Fixture/recursive.php.inc'];
-        yield [__DIR__ . '/Fixture/skip-no-else-if.php.inc'];
-        yield [__DIR__ . '/Fixture/skip-multiple-stmts.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

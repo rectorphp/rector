@@ -20,13 +20,7 @@ final class MakeCommandLazyRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/in_construct.php.inc'];
-        yield [__DIR__ . '/Fixture/in_construct_with_param.php.inc'];
-        yield [__DIR__ . '/Fixture/constant_defined_name.php.inc'];
-        yield [__DIR__ . '/Fixture/set_name_fluent.php.inc'];
-        yield [__DIR__ . '/Fixture/static_in_execute.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_non_string_param_construct.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

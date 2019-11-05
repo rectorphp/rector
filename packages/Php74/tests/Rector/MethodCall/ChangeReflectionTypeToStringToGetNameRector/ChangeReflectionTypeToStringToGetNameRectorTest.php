@@ -20,10 +20,7 @@ final class ChangeReflectionTypeToStringToGetNameRectorTest extends AbstractRect
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_returned_value.php.inc'];
-        yield [__DIR__ . '/Fixture/parameter_type.php.inc'];
-        yield [__DIR__ . '/Fixture/known_has_type.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

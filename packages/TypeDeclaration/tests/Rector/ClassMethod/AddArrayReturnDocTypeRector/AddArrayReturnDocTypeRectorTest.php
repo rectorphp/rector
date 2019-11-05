@@ -20,25 +20,7 @@ final class AddArrayReturnDocTypeRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/setter_based.php.inc'];
-        yield [__DIR__ . '/Fixture/simple_array.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/fully_qualified_name.php.inc'];
-        yield [__DIR__ . '/Fixture/fully_qualified_name_nested_array.php.inc'];
-        yield [__DIR__ . '/Fixture/yield_strings.php.inc'];
-        yield [__DIR__ . '/Fixture/add_without_return_type_declaration.php.inc'];
-        yield [__DIR__ . '/Fixture/fix_incorrect_array.php.inc'];
-        yield [__DIR__ . '/Fixture/return_uuid.php.inc'];
-
-        // skip
-        yield [__DIR__ . '/Fixture/skip_too_many.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_too_many_2.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_mixed_of_specific_override.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_closure_callable_override.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_shorten_class_name.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_constructor.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_inner_function_return.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_array_after_array_type.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

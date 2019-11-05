@@ -20,7 +20,7 @@ final class PolyfillRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/polyfill_function.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureWithPolyfill');
     }
 
     protected function getPhpVersion(): string

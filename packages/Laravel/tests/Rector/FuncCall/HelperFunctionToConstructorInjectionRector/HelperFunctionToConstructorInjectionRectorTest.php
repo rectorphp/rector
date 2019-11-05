@@ -20,12 +20,7 @@ final class HelperFunctionToConstructorInjectionRectorTest extends AbstractRecto
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/view.php.inc'];
-        yield [__DIR__ . '/Fixture/broadcast.php.inc'];
-        yield [__DIR__ . '/Fixture/session.php.inc'];
-        yield [__DIR__ . '/Fixture/route.php.inc'];
-        yield [__DIR__ . '/Fixture/config.php.inc'];
-        yield [__DIR__ . '/Fixture/back.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

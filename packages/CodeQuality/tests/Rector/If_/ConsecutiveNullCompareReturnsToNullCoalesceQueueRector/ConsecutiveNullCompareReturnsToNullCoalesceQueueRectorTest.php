@@ -20,8 +20,7 @@ final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRectorTest extends A
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/triplets.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

@@ -20,13 +20,7 @@ final class CreateFunctionToAnonymousFunctionRectorTest extends AbstractRectorTe
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/concat.php.inc'];
-        yield [__DIR__ . '/Fixture/reference.php.inc'];
-        yield [__DIR__ . '/Fixture/stackoverflow.php.inc'];
-        yield [__DIR__ . '/Fixture/drupal.php.inc'];
-        yield [__DIR__ . '/Fixture/php_net.php.inc'];
-        yield [__DIR__ . '/Fixture/wordpress.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

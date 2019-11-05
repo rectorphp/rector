@@ -20,12 +20,7 @@ final class TemplateAnnotationVersion3RectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/Version3/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/Version3/fixture2.php.inc'];
-        yield [__DIR__ . '/Fixture/Version3/fixture3.php.inc'];
-        yield [__DIR__ . '/Fixture/Version3/fixture4.php.inc'];
-        yield [__DIR__ . '/Fixture/Version3/skip_just_template.php.inc'];
-        yield [__DIR__ . '/Fixture/Version3/resolve_another_method_call.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureVersion3');
     }
 
     /**

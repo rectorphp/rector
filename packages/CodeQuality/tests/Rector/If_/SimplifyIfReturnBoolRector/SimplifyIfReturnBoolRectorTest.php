@@ -20,21 +20,7 @@ final class SimplifyIfReturnBoolRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture3.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture4.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture5.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture6.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture7.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture8.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture9.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture10.php.inc'];
-
-        // skip
-        yield [__DIR__ . '/Fixture/skip_constant_scalar_type.php.inc'];
-        yield [__DIR__ . '/Fixture/should_keep_comments.php.inc'];
-        yield [__DIR__ . '/Fixture/should_keep_doc_blocks.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

@@ -20,10 +20,7 @@ final class CovarianceTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/nikic/inheritance_covariance.php.inc'];
-        yield [__DIR__ . '/Fixture/nikic/inheritance_covariance_order.php.inc'];
-        yield [__DIR__ . '/Fixture/Covariance/return_interface_to_class.php.inc'];
-        yield [__DIR__ . '/Fixture/Covariance/return_nullable_with_parent_interface.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getPhpVersion(): string
