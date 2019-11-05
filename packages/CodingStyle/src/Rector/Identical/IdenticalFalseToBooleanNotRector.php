@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BooleanNot;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
@@ -70,7 +71,14 @@ final class IdenticalFalseToBooleanNotRector extends AbstractRector
         /** @var Expr $comparedNode */
         [$comparedNode, ] = $matchedNodes;
 
-        if ($this->hasNullOrIntegerType($this->getStaticType($comparedNode))) {
+        $staticType = $this->getStaticType($comparedNode);
+
+        // nothing we can do
+        if ($staticType instanceof MixedType) {
+            return null;
+        }
+
+        if ($this->hasNullOrIntegerType($staticType)) {
             return null;
         }
 
@@ -85,15 +93,16 @@ final class IdenticalFalseToBooleanNotRector extends AbstractRector
      * E.g strpos() can return 0 and false, so this would be false positive:
      * ! 0 → true
      * ! false → true
+     * ! mixed → true/false
      */
     private function hasNullOrIntegerType(?Type $staticType): bool
     {
-        if ($staticType instanceof UnionType) {
-            return $staticType->isSuperTypeOf(new IntegerType())->yes() && $staticType->isSuperTypeOf(
-                new ConstantBooleanType(false)
-            )->yes();
+        if (! $staticType instanceof UnionType) {
+            return false;
         }
 
-        return false;
+        return $staticType->isSuperTypeOf(new IntegerType())->yes() && $staticType->isSuperTypeOf(
+            new ConstantBooleanType(false)
+        )->yes();
     }
 }

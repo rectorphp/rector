@@ -238,8 +238,8 @@ PHP
         $formBuilderParam = $formBuilderParamBuilder->getNode();
 
         $optionsParamBuilder = $this->builderFactory->param('options');
-
         $optionsParamBuilder->setType('array');
+
         $optionsParam = $optionsParamBuilder->getNode();
 
         $buildFormClassMethodBuilder = $this->builderFactory->method('buildForm');
