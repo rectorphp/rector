@@ -245,7 +245,6 @@ PHP
         $buildFormClassMethodBuilder = $this->builderFactory->method('buildForm');
         $buildFormClassMethodBuilder->makePublic();
         $buildFormClassMethodBuilder->addParam($formBuilderParam);
-
         $buildFormClassMethodBuilder->addParam($optionsParam);
         // raw copy stmts from ctor @todo improve
         $buildFormClassMethodBuilder->addStmts(
@@ -285,8 +284,8 @@ PHP
         $configureOptionsClassMethodBuilder = $this->builderFactory->method('configureOptions');
         $configureOptionsClassMethodBuilder->makePublic();
         $configureOptionsClassMethodBuilder->addParam($resolverParam);
-
         $configureOptionsClassMethodBuilder->addStmt($setDefaultsMethodCall);
+
         $configureOptionsClassMethod = $configureOptionsClassMethodBuilder->getNode();
 
         $classNode->stmts[] = $configureOptionsClassMethod;

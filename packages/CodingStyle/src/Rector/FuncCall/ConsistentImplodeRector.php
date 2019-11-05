@@ -77,6 +77,11 @@ PHP
             return $node;
         }
 
+        $firstArgumentValue = $node->args[0]->value;
+        if ($firstArgumentValue instanceof String_) {
+            return null;
+        }
+
         if (count($node->args) === 2) {
             if ($this->isStringOrUnionStringOnlyType($node->args[1]->value)) {
                 $node->args = array_reverse($node->args);

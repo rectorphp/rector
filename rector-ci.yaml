@@ -1,9 +1,9 @@
 parameters:
     sets:
         - 'coding-style'
-        - 'code-quality'
-        - 'dead-code'
-        - 'nette-utils-code-quality'
+#        - 'code-quality'
+#        - 'dead-code'
+#        - 'nette-utils-code-quality'
 
     exclude_paths:
         - '/Fixture/'
