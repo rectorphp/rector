@@ -20,10 +20,7 @@ final class AddClosureReturnTypeRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/return_type_object.php.inc'];
-        yield [__DIR__ . '/Fixture/callable_false_positive.php.inc'];
-        yield [__DIR__ . '/Fixture/subtype_of_object.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

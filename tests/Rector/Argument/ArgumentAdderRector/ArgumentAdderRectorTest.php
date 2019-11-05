@@ -22,12 +22,7 @@ final class ArgumentAdderRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture3.php.inc'];
-        yield [__DIR__ . '/Fixture/scoped.php.inc'];
-        yield [__DIR__ . '/Fixture/already_added.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_anonymous.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     /**

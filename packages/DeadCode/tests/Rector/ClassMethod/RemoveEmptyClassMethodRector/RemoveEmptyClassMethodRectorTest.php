@@ -20,11 +20,7 @@ final class RemoveEmptyClassMethodRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/simple.php.inc'];
-        yield [__DIR__ . '/Fixture/with_parent.php.inc'];
-        yield [__DIR__ . '/Fixture/with_interface.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_abstract_method.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_protected_child_method.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

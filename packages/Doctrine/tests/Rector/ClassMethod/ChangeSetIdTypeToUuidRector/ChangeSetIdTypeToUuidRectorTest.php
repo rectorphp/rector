@@ -20,8 +20,7 @@ final class ChangeSetIdTypeToUuidRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/set_id.inc.php'];
-        yield [__DIR__ . '/Fixture/skip_setted_id.inc.php'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

@@ -20,15 +20,7 @@ final class RemoveUnusedParameterRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/change_when_not_used_in_children.php.inc'];
-        yield [__DIR__ . '/Fixture/dont_change_parent.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/order.php.inc'];
-        yield [__DIR__ . '/Fixture/parent_required.php.inc'];
-        yield [__DIR__ . '/Fixture/in_between_parameter.php.inc'];
-        yield [__DIR__ . '/Fixture/compact.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_magic_methods_param.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_anonymous_classes.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

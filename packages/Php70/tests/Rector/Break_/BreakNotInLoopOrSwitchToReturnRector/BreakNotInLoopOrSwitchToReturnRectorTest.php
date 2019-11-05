@@ -20,10 +20,7 @@ final class BreakNotInLoopOrSwitchToReturnRectorTest extends AbstractRectorTestC
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/foreach_not.php.inc'];
-        yield [__DIR__ . '/Fixture/return.php.inc'];
-        yield [__DIR__ . '/Fixture/Keep.php'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

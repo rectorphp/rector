@@ -20,9 +20,7 @@ final class SimplifyDeMorganBinaryRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/binary_and.php.inc'];
-        yield [__DIR__ . '/Fixture/multi_binary.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

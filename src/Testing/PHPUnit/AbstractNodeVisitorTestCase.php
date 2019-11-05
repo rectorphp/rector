@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\Testing\PHPUnit;
 
+use Iterator;
 use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\NodeDumper;
 use Rector\HttpKernel\RectorKernel;
 use Rector\PhpParser\BetterNodeDumper;
 use Rector\PhpParser\Parser\Parser;
+use Rector\Testing\StaticFixtureProvider;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
@@ -84,5 +86,10 @@ abstract class AbstractNodeVisitorTestCase extends AbstractKernelTestCase
         } else {
             $this->assertSame(trim($smartFileInfo2->getContents()), $dumpedNodes, 'Caused by ' . $file);
         }
+    }
+
+    protected function yieldFilesFromDirectory(string $directory, string $suffix): Iterator
+    {
+        return StaticFixtureProvider::yieldFilesFromDirectory($directory, $suffix);
     }
 }

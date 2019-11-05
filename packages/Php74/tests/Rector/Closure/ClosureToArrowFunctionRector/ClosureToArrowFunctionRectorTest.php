@@ -20,10 +20,7 @@ final class ClosureToArrowFunctionRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/referenced_but_not_used.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_no_return.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_referenced_value.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

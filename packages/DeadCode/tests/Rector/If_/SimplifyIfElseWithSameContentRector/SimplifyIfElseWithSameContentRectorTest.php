@@ -20,12 +20,7 @@ final class SimplifyIfElseWithSameContentRectorTest extends AbstractRectorTestCa
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/with_else_ifs.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_different_content.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_missing_else.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_else_with_no_return.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_more_than_return.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

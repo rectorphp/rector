@@ -20,11 +20,7 @@ final class AssertEqualsParameterToSpecificMethodsTypeRectorTest extends Abstrac
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/remove_max_depth.php.inc'];
-        yield [__DIR__ . '/Fixture/refactor_canonize.php.inc'];
-        yield [__DIR__ . '/Fixture/refactor_delta.php.inc'];
-        yield [__DIR__ . '/Fixture/refactor_ignore_case.php.inc'];
-        yield [__DIR__ . '/Fixture/combination.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

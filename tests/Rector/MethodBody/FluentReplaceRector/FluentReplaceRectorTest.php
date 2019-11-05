@@ -21,10 +21,7 @@ final class FluentReplaceRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/some_command.php.inc'];
-        yield [__DIR__ . '/Fixture/multiple_some_command.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_date_time_modify_command.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     /**

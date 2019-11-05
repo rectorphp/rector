@@ -20,11 +20,7 @@ final class InheritanceTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/nikic/inheritance.php.inc'];
-        yield [__DIR__ . '/Fixture/nikic/nullable_inheritance.php.inc'];
-        yield [__DIR__ . '/Fixture/PhpCsFixerReturn/self_static.php.inc'];
-        yield [__DIR__ . '/Fixture/nikic/self_parent_static.php.inc'];
-        yield [__DIR__ . '/Fixture/nikic/self_inheritance.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureInheritance');
     }
 
     protected function getPhpVersion(): string

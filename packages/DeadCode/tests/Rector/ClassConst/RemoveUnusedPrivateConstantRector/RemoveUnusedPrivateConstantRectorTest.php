@@ -20,9 +20,7 @@ final class RemoveUnusedPrivateConstantRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_constant.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_static_constant.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

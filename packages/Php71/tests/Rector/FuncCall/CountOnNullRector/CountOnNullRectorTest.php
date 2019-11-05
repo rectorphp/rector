@@ -20,19 +20,7 @@ final class CountOnNullRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/preg_match_array.php.inc'];
-        yield [__DIR__ . '/Fixture/local_property.php.inc'];
-        yield [__DIR__ . '/Fixture/array_countable_class.php.inc'];
-        yield [__DIR__ . '/Fixture/countable_annotated_params.php.inc'];
-        yield [__DIR__ . '/Fixture/false_true_class.php.inc'];
-        yield [__DIR__ . '/Fixture/on_null.php.inc'];
-        yield [__DIR__ . '/Fixture/external_property.php.inc'];
-        yield [__DIR__ . '/Fixture/double_same_variable.php.inc'];
-        yield [__DIR__ . '/Fixture/property_with_doc.php.inc'];
-        yield [__DIR__ . '/Fixture/nullable_array.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_countable_local_property.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_array_merge.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_simple_xml_element.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

@@ -20,7 +20,7 @@ final class Php72RectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/nikic/object_php72.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureForPhp72');
     }
 
     protected function getPhpVersion(): string

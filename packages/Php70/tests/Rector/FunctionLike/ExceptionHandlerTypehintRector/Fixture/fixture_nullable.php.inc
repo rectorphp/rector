@@ -4,7 +4,7 @@ namespace Rector\Php70\Tests\Rector\FunctionLike\ExceptionHandlerTypehintRector\
 
 function exceptionHandlerTypehintNullable()
 {
-    function handler(?Exception $exception)
+    function handler(?\Exception $exception)
     {
     }
 

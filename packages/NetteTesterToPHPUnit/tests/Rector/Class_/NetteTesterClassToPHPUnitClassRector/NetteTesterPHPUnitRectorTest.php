@@ -25,12 +25,7 @@ final class NetteTesterPHPUnitRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/test_class.php.inc'];
-        yield [__DIR__ . '/Fixture/assert_true.php.inc'];
-        yield [__DIR__ . '/Fixture/assert_type.php.inc'];
-        yield [__DIR__ . '/Fixture/various_asserts.php.inc'];
-        yield [__DIR__ . '/Fixture/kdyby_tests_events.php.inc'];
-        yield [__DIR__ . '/Fixture/data_provider.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     /**

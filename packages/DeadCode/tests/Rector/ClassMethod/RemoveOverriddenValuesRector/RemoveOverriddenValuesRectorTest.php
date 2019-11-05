@@ -20,19 +20,7 @@ final class RemoveOverriddenValuesRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/function.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/multiple_assigns.php.inc'];
-        yield [__DIR__ . '/Fixture/reference_use.php.inc'];
-        yield [__DIR__ . '/Fixture/method_call.php.inc'];
-        yield [__DIR__ . '/Fixture/keep.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_pre_assign.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_conditional_override.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_re_use.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_re_use_2.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_same_level_but_different_condition_scope.php.inc'];
-        yield [__DIR__ . '/Fixture/issue_1093.php.inc'];
-        yield [__DIR__ . '/Fixture/issue_1286.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

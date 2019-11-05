@@ -20,7 +20,7 @@ final class CountOnNullRectorWithPHP73Test extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/is_countable.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureForPhp73');
     }
 
     protected function getRectorClass(): string

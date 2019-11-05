@@ -20,9 +20,7 @@ final class AlwaysInitializeUuidInEntityRectorTest extends AbstractRectorTestCas
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/add_uuid_init.php.inc'];
-        yield [__DIR__ . '/Fixture/add_uuid_init_to_construct.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_already_added.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

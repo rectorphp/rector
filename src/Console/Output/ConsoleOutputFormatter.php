@@ -84,7 +84,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             $this->symfonyStyle->newLine();
 
             if ($fileDiff->getAppliedRectorClasses() !== []) {
-                $this->symfonyStyle->writeln('Applied rectors:');
+                $this->symfonyStyle->writeln('Applied rules:');
                 $this->symfonyStyle->newLine();
                 $this->symfonyStyle->listing($fileDiff->getAppliedRectorClasses());
                 $this->symfonyStyle->newLine();

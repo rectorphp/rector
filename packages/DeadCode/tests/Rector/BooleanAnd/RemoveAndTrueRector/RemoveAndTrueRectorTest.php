@@ -20,9 +20,7 @@ final class RemoveAndTrueRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_something.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_property_changed_in_another_method.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

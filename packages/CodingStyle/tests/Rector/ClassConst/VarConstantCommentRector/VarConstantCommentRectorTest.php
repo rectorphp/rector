@@ -20,11 +20,7 @@ final class VarConstantCommentRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/correct_invalid.php.inc'];
-        yield [__DIR__ . '/Fixture/arrays.php.inc'];
-        yield [__DIR__ . '/Fixture/misc_type.php.inc'];
-        yield [__DIR__ . '/Fixture/no_slash.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

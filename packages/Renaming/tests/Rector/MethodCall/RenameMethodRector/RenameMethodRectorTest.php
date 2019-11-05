@@ -23,15 +23,7 @@ final class RenameMethodRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture3.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture4.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture5.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture6.php.inc'];
-        yield [__DIR__ . '/Fixture/under_anonymous_class.php.inc'];
-        yield [__DIR__ . '/Fixture/SomeClass.php'];
-        yield [__DIR__ . '/Fixture/nette_to_symfony_presenter.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     /**

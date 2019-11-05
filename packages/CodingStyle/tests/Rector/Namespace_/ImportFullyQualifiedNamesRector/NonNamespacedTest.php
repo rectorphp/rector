@@ -20,9 +20,7 @@ final class NonNamespacedTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/NonNamespaced/simple.php.inc'];
-        yield [__DIR__ . '/Fixture/NonNamespaced/already_imported.php.inc'];
-        yield [__DIR__ . '/Fixture/NonNamespaced/function_import.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureNonNamespaced');
     }
 
     protected function getRectorClass(): string

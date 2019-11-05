@@ -20,9 +20,7 @@ final class RenameEventNamesInEventSubscriberRectorTest extends AbstractRectorTe
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/presenter_startup.php.inc'];
-        yield [__DIR__ . '/Fixture/event_class.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

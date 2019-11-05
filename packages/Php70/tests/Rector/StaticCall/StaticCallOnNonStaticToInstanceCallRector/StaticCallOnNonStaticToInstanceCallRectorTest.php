@@ -20,13 +20,7 @@ final class StaticCallOnNonStaticToInstanceCallRectorTest extends AbstractRector
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/with_constructor.php.inc'];
-        yield [__DIR__ . '/Fixture/keep.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_parent_static.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_annotated.php.inc'];
-        yield [__DIR__ . '/Fixture/add_static_to_method.php.inc'];
-        yield [__DIR__ . '/Fixture/with_only_static_methods.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

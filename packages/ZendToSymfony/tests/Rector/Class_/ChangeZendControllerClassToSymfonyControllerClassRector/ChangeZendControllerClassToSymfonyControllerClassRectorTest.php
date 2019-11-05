@@ -20,7 +20,7 @@ final class ChangeZendControllerClassToSymfonyControllerClassRectorTest extends 
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/zend_controller.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

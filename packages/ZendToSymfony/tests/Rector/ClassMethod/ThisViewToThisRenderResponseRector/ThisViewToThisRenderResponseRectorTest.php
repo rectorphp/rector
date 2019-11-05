@@ -20,7 +20,7 @@ final class ThisViewToThisRenderResponseRectorTest extends AbstractRectorTestCas
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/this_view_to_this_render.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string
