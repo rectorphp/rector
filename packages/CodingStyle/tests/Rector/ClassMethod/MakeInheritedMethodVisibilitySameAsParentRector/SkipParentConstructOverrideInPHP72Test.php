@@ -23,7 +23,7 @@ final class SkipParentConstructOverrideInPHP72Test extends AbstractRectorTestCas
 
     public function provideDataForTest(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureForPhp72');
     }
 
     protected function getRectorClass(): string

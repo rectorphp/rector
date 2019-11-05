@@ -4,7 +4,7 @@ namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\Fixtur
 
 class SomeClass
 {
-    public function foreachWithElseNullable()
+    public function foreachWithElseNullable($items)
     {
         foreach ($items as $item) {
             // some comment
@@ -25,7 +25,7 @@ namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector\Fixtur
 
 class SomeClass
 {
-    public function foreachWithElseNullable()
+    public function foreachWithElseNullable($items)
     {
         // some comment
         return in_array('something', $items);

@@ -82,6 +82,8 @@ PHP
             return null;
         }
 
+        $this->comments = [];
+
         /** @var If_ $firstNodeInsideForeach */
         $firstNodeInsideForeach = $node->stmts[0];
         if ($this->shouldSkipIf($firstNodeInsideForeach)) {
