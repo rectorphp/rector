@@ -16,8 +16,8 @@ final class FunctionMethodAndClassNodeVisitorTest extends AbstractNodeVisitorTes
 {
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/fixtures/simple.php.inc'];
-        yield [__DIR__ . '/fixtures/anonymousClass.php.inc'];
+        yield [__DIR__ . '/Fixture/simple.php.inc'];
+        yield [__DIR__ . '/Fixture/anonymousClass.php.inc'];
     }
 
     /**
