@@ -20,6 +20,3 @@ class UnderAnonymousClass
         $class->triggerError();
     }
 }
-
-?>
-

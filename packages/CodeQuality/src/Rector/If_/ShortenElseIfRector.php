@@ -45,7 +45,7 @@ class SomeClass
             return $action1;
         } elseif ($cond2) {
             return $action2;
-        }    
+        }
     }
 }
 PHP
