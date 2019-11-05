@@ -117,10 +117,5 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const FUNCTION_NAME = 'function_name';
-
-    /**
-     * @var string
-     */
     public const FUNCTION_NODE = 'function_node';
 }
