@@ -6,10 +6,14 @@ namespace Rector\Nette\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -17,6 +21,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://www.tomasvotruba.cz/blog/2019/02/07/what-i-learned-by-using-thecodingmachine-safe/#is-there-a-better-way
+ *
  * @see \Rector\Nette\Tests\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector\PregFunctionToNetteUtilsStringsRectorTest
  */
 final class PregFunctionToNetteUtilsStringsRector extends AbstractRector
@@ -42,7 +47,7 @@ class SomeClass
     public function run()
     {
         $content = 'Hi my name is Tom';
-        preg_match('#Hi#', $content);
+        preg_match('#Hi#', $content, $matches);
     }
 }
 PHP
@@ -53,7 +58,7 @@ class SomeClass
     public function run()
     {
         $content = 'Hi my name is Tom';
-        \Nette\Utils\Strings::match($content, '#Hi#');
+        $matches = \Nette\Utils\Strings::match($content, '#Hi#');
     }
 }
 PHP
@@ -66,46 +71,19 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [FuncCall::class];
+        return [FuncCall::class, Identical::class];
     }
 
     /**
-     * @param FuncCall $node
+     * @param FuncCall|Identical $node
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isNames($node, array_keys($this->functionNameToMethodName))) {
-            return null;
+        if ($node instanceof Identical) {
+            return $this->refactorIdentical($node);
         }
 
-        $methodName = $this->functionNameToMethodName[$this->getName($node)];
-        $matchStaticCall = $this->createMatchStaticCall($node, $methodName);
-
-        // skip assigns, might be used with different return value
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Assign) {
-            if ($methodName === 'matchAll') {
-                // use count
-                return new FuncCall(new Name('count'), [new Arg($matchStaticCall)]);
-            }
-
-            if ($methodName === 'split') {
-                return $this->processSplit($node, $matchStaticCall);
-            }
-
-            if ($methodName === 'replace') {
-                return $matchStaticCall;
-            }
-
-            return null;
-        }
-
-        // assign
-        if (isset($node->args[2])) {
-            return new Assign($node->args[2]->value, $matchStaticCall);
-        }
-
-        return $matchStaticCall;
+        return $this->refactorFuncCall($node);
     }
 
     private function createMatchStaticCall(FuncCall $funcCall, string $methodName): StaticCall
@@ -124,7 +102,10 @@ PHP
         return $this->createStaticCall('Nette\Utils\Strings', $methodName, $args);
     }
 
-    private function processSplit(FuncCall $funcCall, StaticCall $matchStaticCall): Node
+    /**
+     * @return FuncCall|StaticCall
+     */
+    private function processSplit(FuncCall $funcCall, StaticCall $matchStaticCall): Expr
     {
         if (isset($funcCall->args[2])) {
             if ($this->isValue($funcCall->args[2]->value, -1)) {
@@ -139,5 +120,77 @@ PHP
         }
 
         return $matchStaticCall;
+    }
+
+    /**
+     * @return FuncCall|StaticCall|Assign|null
+     */
+    private function refactorFuncCall(FuncCall $funcCall): ?Expr
+    {
+        if (! $this->isNames($funcCall, array_keys($this->functionNameToMethodName))) {
+            return null;
+        }
+
+        $methodName = $this->functionNameToMethodName[$this->getName($funcCall)];
+        $matchStaticCall = $this->createMatchStaticCall($funcCall, $methodName);
+
+        // skip assigns, might be used with different return value
+        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Assign) {
+            if ($methodName === 'matchAll') {
+                // use count
+                return new FuncCall(new Name('count'), [new Arg($matchStaticCall)]);
+            }
+
+            if ($methodName === 'split') {
+                return $this->processSplit($funcCall, $matchStaticCall);
+            }
+
+            if ($methodName === 'replace') {
+                return $matchStaticCall;
+            }
+
+            return null;
+        }
+
+        // assign
+        if (isset($funcCall->args[2])) {
+            return new Assign($funcCall->args[2]->value, $matchStaticCall);
+        }
+
+        return $matchStaticCall;
+    }
+
+    private function refactorIdentical(Identical $identical): ?Bool_
+    {
+        $parentNode = $identical->getAttribute(AttributeKey::PARENT_NODE);
+
+        if ($identical->left instanceof FuncCall) {
+            $refactoredFuncCall = $this->refactorFuncCall($identical->left);
+            if ($refactoredFuncCall !== null && $this->isValue($identical->right, 1)) {
+                return $this->createBoolCast($parentNode, $refactoredFuncCall);
+            }
+        }
+
+        if ($identical->right instanceof FuncCall) {
+            $refactoredFuncCall = $this->refactorFuncCall($identical->right);
+            if ($refactoredFuncCall !== null && $this->isValue($identical->left, 1)) {
+                return new Bool_($refactoredFuncCall);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param FuncCall|StaticCall|Assign $refactoredFuncCall
+     */
+    private function createBoolCast(?Node $parentNode, Node $refactoredFuncCall): Bool_
+    {
+        if ($parentNode instanceof Return_ && $refactoredFuncCall instanceof Assign) {
+            $refactoredFuncCall = $refactoredFuncCall->expr;
+        }
+
+        return new Bool_($refactoredFuncCall);
     }
 }

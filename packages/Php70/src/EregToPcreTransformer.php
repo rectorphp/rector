@@ -200,16 +200,16 @@ final class EregToPcreTransformer
                     throw new InvalidEregException('"{" does not have a matching "}"');
                 }
                 $bound = Strings::substring($s, $i + 1, $ii - ($i + 1));
-                if (! preg_match(
-                    '/^(\d|[1-9]\d|1\d\d|
+
+                $m = Strings::match($bound, '/^(\d|[1-9]\d|1\d\d|
                                 2[0-4]\d|25[0-5])
                                (,(\d|[1-9]\d|1\d\d|
-                                  2[0-4]\d|25[0-5])?)?$/x',
-                    $bound,
-                    $m
-                )) {
+                                  2[0-4]\d|25[0-5])?)?$/x');
+
+                if (! $m) {
                     throw new InvalidEregException('an invalid bound');
                 }
+
                 if (isset($m[3])) {
                     if ($m[1] > $m[3]) {
                         throw new InvalidEregException('an invalid bound');

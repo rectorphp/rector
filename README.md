@@ -155,7 +155,7 @@ run them by default:
 ```yaml
 # rector.yaml
 imports:
-    - { resource: 'vendor/rector/rector/config/set/code-quality/*.yaml' }
+    - { resource: 'vendor/rector/rector/config/set/code-quality/code-quality.yaml' }
     - { resource: 'vendor/rector/rector/config/set/php/php71.yaml' }
     - { resource: 'vendor/rector/rector/config/set/php/php72.yaml' }
     - { resource: 'vendor/rector/rector/config/set/php/php73.yaml' }
