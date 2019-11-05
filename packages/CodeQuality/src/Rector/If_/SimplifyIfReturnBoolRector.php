@@ -14,7 +14,11 @@ use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
+use Rector\PHPStan\TypeFactoryStaticHelper;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -24,6 +28,16 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class SimplifyIfReturnBoolRector extends AbstractRector
 {
+    /**
+     * @var StaticTypeAnalyzer
+     */
+    private $staticTypeAnalyzer;
+
+    public function __construct(StaticTypeAnalyzer $staticTypeAnalyzer)
+    {
+        $this->staticTypeAnalyzer = $staticTypeAnalyzer;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Shortens if return false/true to direct return', [
@@ -87,23 +101,12 @@ PHP
 
     private function shouldSkip(If_ $ifNode): bool
     {
-        if (count($ifNode->stmts) !== 1) {
+        if (! $this->isIfWithSingleReturnExpr($ifNode)) {
             return true;
         }
 
-        if (count($ifNode->elseifs) > 0) {
-            return true;
-        }
-
+        /** @var Return_ $ifInnerNode */
         $ifInnerNode = $ifNode->stmts[0];
-        if (! $ifInnerNode instanceof Return_) {
-            return true;
-        }
-
-        if ($ifInnerNode->expr === null) {
-            return true;
-        }
-
         if (! $this->isBool($ifInnerNode->expr)) {
             return true;
         }
@@ -170,7 +173,16 @@ PHP
     private function boolCastOrNullCompareIfNeeded(Expr $expr): Expr
     {
         if ($this->isNullableType($expr)) {
-            return new NotIdentical($expr, $this->createNull());
+            $exprStaticType = $this->getStaticType($expr);
+            // if we remove null type, still has to be trueable
+            if ($exprStaticType instanceof UnionType) {
+                $unionTypeWithoutNullType = $this->removeNullTypeFromUnionType($exprStaticType);
+                if ($this->staticTypeAnalyzer->isAlwaysTruableType($unionTypeWithoutNullType)) {
+                    return new NotIdentical($expr, $this->createNull());
+                }
+            } elseif ($this->staticTypeAnalyzer->isAlwaysTruableType($exprStaticType)) {
+                return new NotIdentical($expr, $this->createNull());
+            }
         }
 
         if ($expr instanceof BooleanNot) {
@@ -182,5 +194,41 @@ PHP
         }
 
         return new Bool_($expr);
+    }
+
+    private function isIfWithSingleReturnExpr(If_ $if): bool
+    {
+        if (count($if->stmts) !== 1) {
+            return false;
+        }
+
+        if (count($if->elseifs) > 0) {
+            return false;
+        }
+
+        $ifInnerNode = $if->stmts[0];
+        if (! $ifInnerNode instanceof Return_) {
+            return false;
+        }
+
+        // return must have value
+        return $ifInnerNode->expr !== null;
+    }
+
+    /**
+     * @return Type|UnionType
+     */
+    private function removeNullTypeFromUnionType(UnionType $unionType): Type
+    {
+        $unionedTypesWithoutNullType = [];
+        foreach ($unionType->getTypes() as $type) {
+            if ($type instanceof UnionType) {
+                continue;
+            }
+
+            $unionedTypesWithoutNullType[] = $type;
+        }
+
+        return TypeFactoryStaticHelper::createUnionObjectType($unionedTypesWithoutNullType);
     }
 }

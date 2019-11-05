@@ -21,7 +21,6 @@ final class SubstrStrlenFunctionToNetteUtilsStringsRector extends AbstractRector
      */
     private $functionToStaticMethod = [
         'substr' => 'substring',
-        'strlen' => 'length',
     ];
 
     public function getDefinition(): RectorDefinition
@@ -65,9 +64,11 @@ PHP
     public function refactor(Node $node): ?Node
     {
         foreach ($this->functionToStaticMethod as $function => $staticMethod) {
-            if ($this->isName($node, $function)) {
-                return $this->createStaticCall('Nette\Utils\Strings', $staticMethod, $node->args);
+            if (! $this->isName($node, $function)) {
+                continue;
             }
+
+            return $this->createStaticCall('Nette\Utils\Strings', $staticMethod, $node->args);
         }
 
         return null;

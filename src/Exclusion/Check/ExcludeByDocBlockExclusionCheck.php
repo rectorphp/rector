@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Exclusion\Check;
 
+use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -32,6 +33,6 @@ final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface
     private function checkCommentForIgnore(PhpRectorInterface $phpRector, Doc $doc): bool
     {
         $regex = '#@noRector\s*\\\\?' . preg_quote(get_class($phpRector), '/') . '#i';
-        return preg_match($regex, $doc->getText(), $matches) === 1;
+        return (bool) Strings::match($doc->getText(), $regex);
     }
 }

@@ -14,6 +14,7 @@ use Rector\CodingStyle\Application\NameImportingCommander;
 use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
+use Rector\PhpParser\Node\Commander\NodeReplacingCommander;
 use Rector\PhpParser\Node\Commander\PropertyAddingCommander;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
@@ -51,6 +52,11 @@ trait NodeCommandersTrait
     private $propertyAddingCommander;
 
     /**
+     * @var NodeReplacingCommander
+     */
+    private $nodeReplacingCommander;
+
+    /**
      * @required
      */
     public function autowireNodeCommandersTrait(
@@ -58,13 +64,15 @@ trait NodeCommandersTrait
         NodeAddingCommander $nodeAddingCommander,
         PropertyAddingCommander $propertyAddingCommander,
         UseAddingCommander $useAddingCommander,
-        NameImportingCommander $nameImportingCommander
+        NameImportingCommander $nameImportingCommander,
+        NodeReplacingCommander $nodeReplacingCommander
     ): void {
         $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->nodeAddingCommander = $nodeAddingCommander;
         $this->propertyAddingCommander = $propertyAddingCommander;
         $this->useAddingCommander = $useAddingCommander;
         $this->nameImportingCommander = $nameImportingCommander;
+        $this->nodeReplacingCommander = $nodeReplacingCommander;
     }
 
     protected function addUseType(FullyQualifiedObjectType $fullyQualifiedObjectType, Node $positionNode): void
@@ -103,6 +111,13 @@ trait NodeCommandersTrait
         $this->nodeRemovingCommander->addNode($node);
 
         $this->notifyNodeChangeFileInfo($node);
+    }
+
+    protected function replaceNode(Node $node, Node $replaceWith): void
+    {
+        $this->nodeReplacingCommander->replaceNode($node, $replaceWith);
+
+        $this->notifyNodeChangeFileInfo($replaceWith);
     }
 
     /**

@@ -15,11 +15,14 @@ final class SkipChangedValue
 
     public function go()
     {
-        $this->value = null;
-
         if ($this->value) {
             $maybe = 'yes';
             return 'she says ' . $maybe;
         }
+    }
+
+    public function another()
+    {
+        $this->value = null;
     }
 }

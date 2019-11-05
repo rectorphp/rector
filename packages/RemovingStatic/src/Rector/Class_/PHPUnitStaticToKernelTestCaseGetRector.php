@@ -103,7 +103,7 @@ final class SomeTestCase extends KernelTestCase
      * @var EntityFactory
      */
     private $entityFactory;
-    
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -285,7 +285,8 @@ PHP
 
     private function createParentSetUpStaticCall(): Expression
     {
-        return new Expression(new StaticCall(new Name('parent'), 'setUp'));
+        $parentSetupStaticCall = $this->createStaticCall('parent', 'setUp');
+        return new Expression($parentSetupStaticCall);
     }
 
     private function createContainerGetTypeToPropertyAssign(ObjectType $objectType): Expression

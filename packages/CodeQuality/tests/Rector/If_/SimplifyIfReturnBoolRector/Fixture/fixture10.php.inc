@@ -28,7 +28,7 @@ class AnyClass
 {
     public function reset()
     {
-        return $this->getValue() !== null;
+        return (bool) $this->getValue();
     }
 
     public function getValue(): ?int

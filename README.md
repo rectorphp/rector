@@ -38,7 +38,7 @@ Rector **instantly upgrades and instantly refactors the PHP code of your applica
     <br>
     <a href="/config/set/cakephp"><img src="/docs/images/cakephp.png"></a>
     <img src="/docs/images/space.png" width=40>
-    <a href="/config/set/phpunit"><img src="/docs/images/phpunit.jpg"></a>
+    <a href="/config/set/phpunit"><img src="/docs/images/phpunit.png"></a>
     <img src="/docs/images/space.png" width=40>
     <a href="/config/set/twig"><img src="/docs/images/twig.png"></a>
 </p>
@@ -118,12 +118,12 @@ parameters:
     php_version_features: '7.2' # your version is 7.3
 ```
 
-You can import FQN class names automatically every time Rector performs a change, so you don't have to do it manually/after each run:
+FQN classes are imported by default every time Rector performs a change,  so you don't have to do it manually/after each run. You can disable it by:
 
 ```yaml
 # rector.yaml
 parameters:
-    auto_import_names: true
+    auto_import_names: false
 ```
 
 ## Running Rector
@@ -155,7 +155,7 @@ run them by default:
 ```yaml
 # rector.yaml
 imports:
-    - { resource: 'vendor/rector/rector/config/set/code-quality/*.yaml' }
+    - { resource: 'vendor/rector/rector/config/set/code-quality/code-quality.yaml' }
     - { resource: 'vendor/rector/rector/config/set/php/php71.yaml' }
     - { resource: 'vendor/rector/rector/config/set/php/php72.yaml' }
     - { resource: 'vendor/rector/rector/config/set/php/php73.yaml' }

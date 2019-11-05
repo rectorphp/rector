@@ -64,16 +64,16 @@ script:
           mkdir rector-dir
           composer require rector/rector -d rector-dir
 
-          mkdir laravel-dir
-          composer create-project laravel/framework laravel-dir
-          # missing in laravel for some reason
-          composer require doctrine/dbal -d laravel-dir
-          composer dump-autoload --no-dev -d laravel-dir
+          mkdir symfony-demo-dir
+          composer create-project symfony/symfony-demo symfony-demo-dir --dev
+          # missing for some reason
+          composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir
+          composer dump-autoload --no-dev -d symfony-demo-dir
 
           # 2. run an nother project
           rector-dir/vendor/bin/rector
 
-          cd laravel-dir
+          cd symfony-demo-dir
           ../rector-dir/vendor/bin/rector
 
           # --hide-autoload-errors due to skipped dev deps and mixes tests in /src

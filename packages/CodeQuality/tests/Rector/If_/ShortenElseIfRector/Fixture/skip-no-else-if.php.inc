@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class NoElseIfClass
+class SkipNoElseIfClass
 {
     /**
      * @var bool
@@ -28,6 +28,3 @@ class NoElseIfClass
 
     }
 }
-
-?>
-
