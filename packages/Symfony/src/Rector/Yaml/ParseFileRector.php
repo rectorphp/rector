@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
-use PHPStan\Analyser\Scope;
 use PHPStan\Type\Constant\ConstantStringType;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
