@@ -415,11 +415,11 @@ final class StaticTypeMapper
         }
 
         if ($node instanceof NullableType) {
-            if ($node->type instanceof FullyQualified) {
-                $types = [new FullyQualifiedObjectType($node->type->toString()), new NullType()];
+            $types = [];
+            $types[] = $this->mapPhpParserNodePHPStanType($node->type);
+            $types[] = new NullType();
 
-                return $this->typeFactory->createMixedPassedOrUnionType($types);
-            }
+            return $this->typeFactory->createMixedPassedOrUnionType($types);
         }
 
         if ($node instanceof Identifier) {
