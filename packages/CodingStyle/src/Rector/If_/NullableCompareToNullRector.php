@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
@@ -33,7 +34,7 @@ final class NullableCompareToNullRector extends AbstractRector
                 new CodeSample(
                     <<<'PHP'
 /** @var stdClass|null $value */
-if ($value) { 
+if ($value) {
 }
 
 if (!$value) {
@@ -113,6 +114,12 @@ PHP
         if ($staticType->isSuperTypeOf(new IntegerType())->yes()) {
             return false;
         }
+
+        // is bool?
+        if ($staticType->isSuperTypeOf(new BooleanType())->yes()) {
+            return false;
+        }
+
         return ! $staticType->isSuperTypeOf(new FloatType())->yes();
     }
 }
