@@ -26,11 +26,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     private $className;
 
     /**
-     * @var string|null
-     */
-    private $functionName;
-
-    /**
      * @var ClassLike|null
      */
     private $classNode;
@@ -65,7 +60,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         $this->className = null;
         $this->methodName = null;
         $this->methodNode = null;
-        $this->functionName = null;
         $this->functionNode = null;
 
         return null;
@@ -127,11 +121,9 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     {
         if ($node instanceof Function_) {
             $this->functionNode = $node;
-            $this->functionName = (string) $node->name;
         }
 
         $node->setAttribute(AttributeKey::FUNCTION_NODE, $this->functionNode);
-        $node->setAttribute(AttributeKey::FUNCTION_NAME, $this->functionName);
     }
 
     private function setParentClassName(Class_ $classNode, Node $node): void

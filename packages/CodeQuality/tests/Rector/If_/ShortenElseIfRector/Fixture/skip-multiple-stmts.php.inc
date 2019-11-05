@@ -31,6 +31,3 @@ class MultipleStmtsClass
 
     }
 }
-
-?>
-
