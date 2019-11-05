@@ -99,12 +99,12 @@ final class EregToPcreTransformer
                 $start = true;
                 do {
                     if ($s[$i] === '[' &&
-                        $i + 1 < $l && strpos('.=:', $s[$i + 1]) !== false) {
+                        $i + 1 < $l && Strings::contains('.=:', $s[$i + 1])) {
                         $ii = strpos($s, ']', $i);
                         if ($ii === false) {
                             throw new InvalidEregException('"[" does not have a matching "]"');
                         }
-                        $ccls = substr($s, $i + 1, $ii - ($i + 1));
+                        $ccls = Strings::substring($s, $i + 1, $ii - ($i + 1));
                         $cclsmap = [
                             ':alnum:' => '[:alnum:]',
                             ':alpha:' => '[:alpha:]',
@@ -158,7 +158,7 @@ final class EregToPcreTransformer
             } elseif ($c === '*' || $c === '+' || $c === '?') {
                 throw new InvalidEregException('unescaped metacharacter "' . $c . '"');
             } elseif ($c === '{') {
-                if ($i + 1 < $l && strpos('0123456789', $s[$i + 1]) !== false) {
+                if ($i + 1 < $l && Strings::contains('0123456789', $s[$i + 1])) {
                     $r[$rr] .= '\{';
                 } else {
                     throw new InvalidEregException('unescaped metacharacter "' . $c . '"');
@@ -199,7 +199,7 @@ final class EregToPcreTransformer
                 if ($ii === false) {
                     throw new InvalidEregException('"{" does not have a matching "}"');
                 }
-                $bound = substr($s, $i + 1, $ii - ($i + 1));
+                $bound = Strings::substring($s, $i + 1, $ii - ($i + 1));
                 if (! preg_match(
                     '/^(\d|[1-9]\d|1\d\d|
                                 2[0-4]\d|25[0-5])
@@ -234,7 +234,7 @@ final class EregToPcreTransformer
     {
         if ($c === "\0") {
             throw new InvalidEregException('a literal null byte in the regex');
-        } elseif (strpos('\^$.[]|()?*+{}-/', $c) !== false) {
+        } elseif (Strings::contains('\^$.[]|()?*+{}-/', $c)) {
             return '\\' . $c;
         }
 
