@@ -3,8 +3,6 @@ parameters:
         - "code-quality"
         - "dead-code"
 
-    auto_import_names: true
-
     exclude_paths:
         - "/Fixture/"
         - "/Source/"

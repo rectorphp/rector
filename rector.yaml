@@ -1,7 +1,4 @@
 parameters:
-    # see https://github.com/rectorphp/rector/pull/2052
-    auto_import_names: true
-
     exclude_paths:
         - "/Fixture/"
         - "/Expected/"
@@ -15,5 +12,3 @@ parameters:
 
     # so Rector code is still PHP 7.1 compatible
     php_version_features: '7.1'
-
-services:
