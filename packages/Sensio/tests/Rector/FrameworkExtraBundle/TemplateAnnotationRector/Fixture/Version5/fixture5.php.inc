@@ -27,7 +27,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ClassWithNamedService55Controller extends AbstractController
 {
-    public function index()
+    public function index(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('class_with_named_service55/index.html.twig');
     }

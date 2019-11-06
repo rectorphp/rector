@@ -33,7 +33,7 @@ class WithRouteToo extends AbstractController
     /**
      * @Route("/change", name="facility_change")
      */
-    public function index()
+    public function index(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('PAPPUserBundle:Facility:facility.html.twig');
     }

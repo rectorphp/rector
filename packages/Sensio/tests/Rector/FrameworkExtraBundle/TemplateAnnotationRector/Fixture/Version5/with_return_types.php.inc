@@ -66,7 +66,7 @@ class ClassWithReturnTypes extends AbstractController
     /**
      * @return Response
      */
-    public function index2Action()
+    public function index2Action(): \Symfony\Component\HttpFoundation\Response
     {
         if (true) {
             return $this->redirectToRoute('index');

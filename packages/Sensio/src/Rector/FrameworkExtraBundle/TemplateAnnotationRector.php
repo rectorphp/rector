@@ -13,19 +13,15 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Sensio\Helper\TemplateGuesser;
-use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
-use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer;
 use Rector\ValueObject\PhpVersionFeature;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 
 final class TemplateAnnotationRector extends AbstractRector
 {
@@ -44,21 +40,14 @@ final class TemplateAnnotationRector extends AbstractRector
      */
     private $parsedNodesByType;
 
-    /**
-     * @var ReturnTypeInferer
-     */
-    private $returnTypeInferer;
-
     public function __construct(
         TemplateGuesser $templateGuesser,
         ParsedNodesByType $parsedNodesByType,
-        ReturnTypeInferer $returnTypeInferer,
         int $version = 3
     ) {
         $this->templateGuesser = $templateGuesser;
         $this->parsedNodesByType = $parsedNodesByType;
         $this->version = $version;
-        $this->returnTypeInferer = $returnTypeInferer;
     }
 
     public function getDefinition(): RectorDefinition
@@ -141,14 +130,13 @@ PHP
 
     private function replaceTemplateAnnotation(ClassMethod $classMethod): ?Node
     {
-        $this->updateReturnType($classMethod);
-
         /** @var SensioTemplateTagValueNode|null $sensioTemplateTagValueNode */
         $sensioTemplateTagValueNode = $this->getSensioTemplateTagValueNode($classMethod);
         if ($sensioTemplateTagValueNode === null) {
             return null;
         }
 
+        $this->updateReturnType($classMethod);
         $this->refactorClassMethod($classMethod, $sensioTemplateTagValueNode);
 
         // remove annotation
@@ -163,13 +151,14 @@ PHP
             return;
         }
 
-        if ($classMethod->returnType === null) {
+        if ($classMethod->returnType !== null && strpos(
+                Response::class,
+                $classMethod->returnType->toString()
+            ) !== false) {
             return;
         }
 
-        if (strpos('array', $classMethod->returnType->toString()) !== false) {
-            $classMethod->returnType = new Identifier('\Symfony\Component\HttpFoundation\Response');
-        }
+        $classMethod->returnType = new Identifier('\Symfony\Component\HttpFoundation\Response');
     }
 
     /**
@@ -252,6 +241,7 @@ PHP
                 $innerClassMethod = $this->parsedNodesByType->findClassMethodByMethodCall($returnNode->expr);
                 if ($innerClassMethod !== null) {
                     $this->refactorClassMethod($innerClassMethod, $sensioTemplateTagValueNode);
+
                     return;
                 }
             }
@@ -269,6 +259,8 @@ PHP
         if ($returnNode && ! $returnNode->expr instanceof MethodCall) {
             $returnNode->expr = $thisRenderMethodCall;
         }
+
+        $this->updateReturnType($classMethod);
     }
 
     private function getSensioTemplateTagValueNode(ClassMethod $classMethod): ?SensioTemplateTagValueNode
