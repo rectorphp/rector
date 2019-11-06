@@ -1,93 +1,116 @@
+os: linux
 language: php
+
+php:
+    - '7.1'
+    - '7.2'
+    - '7.3'
+    - '7.4snapshot'
+
+before_install:
+    # turn off XDebug
+    - phpenv config-rm xdebug.ini || return 0
+
+install:
+    - echo "memory_limit=4096M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+    - composer install --no-progress
+
+jobs:
+    include:
+        # Stage 1
+        -
+            stage: test
+            php: 7.1
+            name: Lowest dependencies
+            script:
+                # install lowest dependencies
+                - composer update --prefer-lowest
+                - vendor/bin/phpunit --testsuite main
+
+        -
+            stage: test
+            name: Simple checks
+            php: 7.1
+            script:
+                - composer docs
+                - php ci/check_services_in_yaml_configs.php
+                - php ci/run_all_sets.php
+
+        -
+            stage: test
+            name: PHPStan
+            php: 7.1
+            script:
+                - composer phpstan
+
+        -
+            stage: test
+            php: 7.1
+            name: ECS
+            script:
+                - composer check-cs
+
+        -
+            stage: test
+            name: Unit tests
+            scripts:
+                - vendor/bin/phpunit --testsuite main
+
+        -
+            stage: test
+            php: 7.3
+            name: Dog Food
+            scripts:
+                - composer rector
+
+        # Stage 3
+        -
+            # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
+            stage: standalone
+            php: 7.3
+            name: Standalone Run
+            script:
+                # 1. install locally
+                - mkdir test-paths
+                - cd test-paths
+
+                - mkdir rector-dir
+                - composer require rector/rector -d rector-dir
+
+                - mkdir symfony-demo-dir
+                - composer create-project symfony/symfony-demo symfony-demo-dir --dev
+                # missing for some reason
+                - composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir
+                - composer dump-autoload --no-dev -d symfony-demo-dir
+
+                # 2. run an another project
+                - rector-dir/vendor/bin/rector
+
+                - cd symfony-demo-dir
+                - ../rector-dir/vendor/bin/rector
+
+                # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
+                - ../rector-dir/vendor/bin/rector process src --set code-quality --hide-autoload-errors --dry-run
+
+        # Stage 4
+        -
+            stage: coverage
+            php: 7.3
+            name: Test Coverage
+            if: branch = master AND type = push
+            before_install:
+                - echo "keep xdebug"
+            script:
+                - vendor/bin/phpunit --coverage-clover coverage.xml
+                - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
+                - php php-coveralls.phar --verbose
+
+    allow_failures:
+        - name: ECS
+        - name: Standalone Run
 
 matrix:
     fast_finish: true
-    include:
-        - php: '7.1'
-          env: STATIC_ANALYSIS=true RUN_RECTOR=true
-        - php: '7.1'
-          env: COMPOSER_FLAGS="--prefer-lowest"
-        - php: '7.1'
-          env: CODING_STANDARD=true
-        - php: '7.2'
-          env: STANDALONE=true
-        - php: '7.3'
-          env: COVERAGE=true
-        - php: '7.3'
-          env: DOG_FOOD=true
-        - php: '7.4snapshot'
-    allow_failures:
-        # remove coding standard burden from contributors and fix once upon a time
-        - php: '7.1'
-          env: CODING_STANDARD=true
-        - php: '7.2'
-          env: STANDALONE=true
-
-install:
-    - composer update $COMPOSER_FLAGS
-
-before_script:
-    # disable xdebug
-    - if [[ $COVERAGE == "" ]]; then phpenv config-rm xdebug.ini || echo "xdebug not available"; fi
-    # increase memory for tests
-    - echo "memory_limit=2048M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-    # report inline scripts fails
-    - set -e
-
-script:
-    - vendor/bin/phpunit --testsuite main
-
-    - if [[ $STATIC_ANALYSIS == true ]]; then composer phpstan; fi
-    - if [[ $CODING_STANDARD == true ]]; then composer check-cs; fi
-
-    # Rector demo run
-    - |
-      if [[ $STATIC_ANALYSIS == true ]]; then
-          composer docs
-          php ci/check_services_in_yaml_configs.php
-          php ci/run_all_sets.php
-      fi
-
-    # Eat your own dog food
-    - |
-      if [[ $DOG_FOOD == true ]]; then
-          composer rector
-      fi
-
-    # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
-    - |
-      if [[ $STANDALONE == true ]]; then
-          # 1. install locally
-          mkdir test-paths
-          cd test-paths
-
-          mkdir rector-dir
-          composer require rector/rector -d rector-dir
-
-          mkdir symfony-demo-dir
-          composer create-project symfony/symfony-demo symfony-demo-dir --dev
-          # missing for some reason
-          composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir
-          composer dump-autoload --no-dev -d symfony-demo-dir
-
-          # 2. run an nother project
-          rector-dir/vendor/bin/rector
-
-          cd symfony-demo-dir
-          ../rector-dir/vendor/bin/rector
-
-          # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
-          ../rector-dir/vendor/bin/rector process src --set code-quality --hide-autoload-errors --dry-run
-      fi
-
-after_script:
-    # Coverage
-    - |
-      if [[ $COVERAGE == true && $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" ]]; then
-          vendor/bin/phpunit --coverage-clover coverage.xml
-          wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
-          php php-coveralls.phar --verbose
-      fi
 
 cache:
     directories:
