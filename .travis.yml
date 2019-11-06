@@ -29,7 +29,6 @@ jobs:
                 - composer update --prefer-lowest --no-progress
 
         -
-            stage: test
             name: Simple checks
             php: 7.1
             script:
@@ -38,29 +37,25 @@ jobs:
                 - php ci/run_all_sets.php
 
         -
-            stage: test
             name: PHPStan
             php: 7.1
             script:
                 - composer phpstan
 
         -
-            stage: test
             php: 7.1
             name: ECS
             script:
                 - composer check-cs
 
         -
-            stage: test
-            name: Unit tests
+            name: 'Unit tests'
             script:
                 - vendor/bin/phpunit --testsuite main
 
         -
-            stage: test
             php: 7.3
-            name: Dog Food
+            name: Rector
             script:
                 - composer rector
 

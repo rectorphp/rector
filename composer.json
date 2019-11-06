@@ -98,7 +98,8 @@
             "Rector\\ZendToSymfony\\": "packages/ZendToSymfony/src",
             "Rector\\Utils\\DocumentationGenerator\\": "utils/DocumentationGenerator/src",
             "Rector\\Utils\\RectorGenerator\\": "utils/RectorGenerator/src",
-            "Rector\\StrictCodeQuality\\": "packages/StrictCodeQuality/src"
+            "Rector\\StrictCodeQuality\\": "packages/StrictCodeQuality/src",
+            "Rector\\DynamicTypeAnalysis\\": "packages/DynamicTypeAnalysis/src"
         }
     },
     "autoload-dev": {
@@ -153,7 +154,8 @@
             "Rector\\Twig\\Tests\\": "packages/Twig/tests",
             "Rector\\TypeDeclaration\\Tests\\": "packages/TypeDeclaration/tests",
             "Rector\\ZendToSymfony\\Tests\\": "packages/ZendToSymfony/tests",
-            "Rector\\StrictCodeQuality\\Tests\\": "packages/StrictCodeQuality/tests"
+            "Rector\\StrictCodeQuality\\Tests\\": "packages/StrictCodeQuality/tests",
+            "Rector\\DynamicTypeAnalysis\\Tests\\": "packages/DynamicTypeAnalysis/tests"
         },
         "classmap": [
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
