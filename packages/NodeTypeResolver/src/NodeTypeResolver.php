@@ -35,6 +35,7 @@ use PHPStan\Broker\Broker;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -59,6 +60,7 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
+use Symfony\Component\Finder\SplFileInfo;
 
 final class NodeTypeResolver
 {
@@ -335,6 +337,17 @@ final class NodeTypeResolver
 
         // make object type specific to alias or FQN
         $staticType = $nodeScope->getType($node);
+
+        // false type correction of inherited method
+        if ($node instanceof MethodCall) {
+            if ($this->isObjectType($node, SplFileInfo::class)) {
+                $methodName = $this->nameResolver->getName($node->name);
+                if ($methodName === 'getRealPath') {
+                    return new UnionType([new StringType(), new ConstantBooleanType(false)]);
+                }
+            }
+        }
+
         if (! $staticType instanceof ObjectType) {
             return $staticType;
         }
