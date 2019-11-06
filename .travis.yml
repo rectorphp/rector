@@ -12,8 +12,10 @@ before_install:
     - phpenv config-rm xdebug.ini || return 0
 
 install:
-    - echo "memory_limit=4096M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
     - composer install --no-progress
+
+script:
+    - vendor/bin/phpunit --testsuite main
 
 jobs:
     include:
@@ -22,10 +24,9 @@ jobs:
             stage: test
             php: 7.1
             name: Lowest dependencies
-            script:
+            install:
                 # install lowest dependencies
-                - composer update --prefer-lowest
-                - vendor/bin/phpunit --testsuite main
+                - composer update --prefer-lowest --no-progress
 
         -
             stage: test
@@ -53,17 +54,17 @@ jobs:
         -
             stage: test
             name: Unit tests
-            scripts:
+            script:
                 - vendor/bin/phpunit --testsuite main
 
         -
             stage: test
             php: 7.3
             name: Dog Food
-            scripts:
+            script:
                 - composer rector
 
-        # Stage 3
+        # Stage 2
         -
             # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
             stage: standalone
@@ -92,7 +93,7 @@ jobs:
                 # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
                 - ../rector-dir/vendor/bin/rector process src --set code-quality --hide-autoload-errors --dry-run
 
-        # Stage 4
+        # Stage 3
         -
             stage: coverage
             php: 7.3
@@ -105,9 +106,47 @@ jobs:
                 - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
                 - php php-coveralls.phar --verbose
 
+        # Windows
+        -
+            stage: test
+            name: Windows PHP 7.1
+            os: windows
+            dist: '1803-containers'
+            language: sh # No PHP currently
+            env: PHP_VERSION=7.1.32
+            install:
+                - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
+                - choco install composer --ia "/DEV=C:\tools\php"
+                - export PATH=/c/tools/php:$PATH
+
+        -
+            stage: test
+            name: Windows PHP 7.2
+            os: windows
+            dist: '1803-containers'
+            language: sh # No PHP currently
+            env: PHP_VERSION=7.2.23
+            install:
+                - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
+                - choco install composer --ia "/DEV=C:\tools\php"
+                - export PATH=/c/tools/php:$PATH
+
+        -
+            stage: test
+            name: Windows PHP 7.3
+            os: windows
+            dist: '1803-containers'
+            language: sh # No PHP currently
+            env: PHP_VERSION=7.3.10
+            install:
+                - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
+                - choco install composer --ia "/DEV=C:\tools\php"
+                - export PATH=/c/tools/php:$PATH
+
     allow_failures:
         - name: ECS
         - name: Standalone Run
+        - os: windows
 
 matrix:
     fast_finish: true
@@ -115,6 +154,7 @@ matrix:
 cache:
     directories:
         - $HOME/.composer/cache
+        - tmp
 
 notifications:
     email: false
