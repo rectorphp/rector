@@ -3,7 +3,7 @@
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
 
 /**
- * @var string $string[optional]
+ * @param string $string[optional]
  */
 function test($string = null){
 
@@ -16,7 +16,7 @@ function test($string = null){
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
 
 /**
- * @var string $string[optional]
+ * @param string $string[optional]
  */
 function test(string $string = null){
 
