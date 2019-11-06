@@ -1,4 +1,4 @@
-# All 380 Rectors Overview
+# All 385 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -297,6 +297,25 @@ Changes settype() to (type) where possible
 
 ## CodeQuality
 
+### `AddPregQuoteDelimiterRector`
+
+- class: `Rector\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector`
+
+Add preg_quote delimiter when missing
+
+```diff
+ class SomeClass
+ {
+     public function test()
+     {
+-        return preg_quote('name');
++        return preg_quote('name', '#');
+     }
+ }
+```
+
+<br>
+
 ### `AndAssignsToSeparateLinesRector`
 
 - class: `Rector\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector`
@@ -312,6 +331,28 @@ Split 2 assigns ands to separate line
 -        $token = 4 and $tokens[] = $token;
 +        $token = 4;
 +        $tokens[] = $token;
+     }
+ }
+```
+
+<br>
+
+### `ArrayMergeOfNonArraysToSimpleArrayRector`
+
+- class: `Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector`
+
+Change array_merge of non arrays to array directly
+
+```diff
+ class SomeClass
+ {
+     public function go()
+     {
+         $value = 5;
+         $value2 = 10;
+
+-        return array_merge([$value], [$value2]);
++        return [$value, $value2];
      }
  }
 ```
@@ -654,10 +695,9 @@ Shortens else/if to elseif
 -            if ($cond2) {
 -                return $action2;
 -            }
--        }
 +        } elseif ($cond2) {
 +            return $action2;
-+        }
+         }
      }
  }
 ```
@@ -2930,8 +2970,8 @@ Use Nette\Utils\Strings over bare preg_* functions
      public function run()
      {
          $content = 'Hi my name is Tom';
--        preg_match('#Hi#', $content);
-+        \Nette\Utils\Strings::match($content, '#Hi#');
+-        preg_match('#Hi#', $content, $matches);
++        $matches = \Nette\Utils\Strings::match($content, '#Hi#');
      }
  }
 ```
@@ -3958,6 +3998,36 @@ Changes ->will($this->xxx()) to one specific method
 -            ->will($this->returnValue('translated max {{ max }}!'));
 +            ->with('old max {{ max }}!')
 +            ->willReturnValue('translated max {{ max }}!');
+     }
+ }
+```
+
+<br>
+
+### `WithConsecutiveArgToArrayRector`
+
+- class: `Rector\PHPUnit\Rector\MethodCall\WithConsecutiveArgToArrayRector`
+
+Split withConsecutive() arg to array
+
+```diff
+ class SomeClass
+ {
+     public function run($one, $two)
+     {
+     }
+ }
+
+ class SomeTestCase extends \PHPUnit\Framework\TestCase
+ {
+     public function test()
+     {
+         $someClassMock = $this->createMock(SomeClass::class);
+         $someClassMock
+             ->expects($this->exactly(2))
+             ->method('run')
+-            ->withConsecutive(1, 2, 3, 5);
++            ->withConsecutive([1, 2], [3, 5]);
      }
  }
 ```
@@ -5039,6 +5109,33 @@ Change array_merge() to spread operator, except values with possible string key 
 
 <br>
 
+### `ChangeReflectionTypeToStringToGetNameRector`
+
+- class: `Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector`
+
+Change string calls on ReflectionType
+
+```diff
+ class SomeClass
+ {
+     public function go(ReflectionFunction $reflectionFunction)
+     {
+         $parameterReflection = $reflectionFunction->getParameters()[0];
+
+-        $paramType = (string) $parameterReflection->getType();
++        $paramType = (string) ($parameterReflection->getType() ? $parameterReflection->getType()->getName() : null);
+
+-        $stringValue = 'hey' . $reflectionFunction->getReturnType();
++        $stringValue = 'hey' . ($reflectionFunction->getReturnType() ? $reflectionFunction->getReturnType()->getName() : null);
+
+         // keep
+         return $reflectionFunction->getReturnType();
+     }
+ }
+```
+
+<br>
+
 ### `ClassConstantToSelfClassRector`
 
 - class: `Rector\Php74\Rector\MagicConstClass\ClassConstantToSelfClassRector`
@@ -5513,15 +5610,15 @@ services:
 +     * @var EntityFactory
 +     */
 +    private $entityFactory;
-+
+
+-final class SomeTestCase extends TestCase
+-{
 +    protected function setUp(): void
 +    {
 +        parent::setUp();
 +        $this->entityFactory = self::$container->get(EntityFactory::class);
 +    }
-
--final class SomeTestCase extends TestCase
--{
++
      public function test()
      {
 -        $product = EntityFactory::create('product');
@@ -7695,6 +7792,40 @@ services:
  $serviceDefinition = new Nette\DI\ServiceDefinition;
 -$serviceDefinition->setInject();
 +$serviceDefinition->addTag('inject');
+```
+
+<br>
+
+### `MethodCallToReturnRector`
+
+- class: `Rector\Rector\MethodCall\MethodCallToReturnRector`
+
+Wrap method call to return
+
+```yaml
+services:
+    Rector\Rector\MethodCall\MethodCallToReturnRector:
+        $methodNamesByType:
+            SomeClass:
+                - deny
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $this->deny();
++        return $this->deny();
+     }
+
+     public function deny()
+     {
+         return 1;
+     }
+ }
 ```
 
 <br>

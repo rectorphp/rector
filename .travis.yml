@@ -118,6 +118,8 @@ jobs:
                 - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
                 - choco install composer --ia "/DEV=C:\tools\php"
                 - export PATH=/c/tools/php:$PATH
+            script:
+                - composer complete-check
 
         -
             stage: test
@@ -130,6 +132,8 @@ jobs:
                 - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
                 - choco install composer --ia "/DEV=C:\tools\php"
                 - export PATH=/c/tools/php:$PATH
+            script:
+                - composer complete-check
 
         -
             stage: test
@@ -142,6 +146,8 @@ jobs:
                 - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
                 - choco install composer --ia "/DEV=C:\tools\php"
                 - export PATH=/c/tools/php:$PATH
+            script:
+                - composer complete-check
 
     allow_failures:
         - name: ECS
