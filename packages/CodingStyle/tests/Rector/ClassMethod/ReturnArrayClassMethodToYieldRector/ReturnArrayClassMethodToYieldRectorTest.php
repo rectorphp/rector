@@ -34,7 +34,7 @@ final class ReturnArrayClassMethodToYieldRectorTest extends AbstractRectorTestCa
             ReturnArrayClassMethodToYieldRector::class => [
                 '$methodsByType' => [
                     EventSubscriberInterface::class => ['getSubscribedEvents'],
-                    ParentTestCase::class => ['#(provide|dataProvider)*#'],
+                    ParentTestCase::class => ['provide*', 'dataProvider*'],
                 ],
             ],
         ];
