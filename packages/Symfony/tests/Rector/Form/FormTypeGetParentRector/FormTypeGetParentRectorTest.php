@@ -20,8 +20,7 @@ final class FormTypeGetParentRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/abstract_type.php.inc'];
-        yield [__DIR__ . '/Fixture/abstract_type_extension.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

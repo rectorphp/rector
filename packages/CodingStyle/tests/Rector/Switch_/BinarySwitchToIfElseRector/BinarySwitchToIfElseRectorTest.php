@@ -20,10 +20,7 @@ final class BinarySwitchToIfElseRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/in_class.php.inc'];
-        yield [__DIR__ . '/Fixture/if_or.php.inc'];
-        yield [__DIR__ . '/Fixture/extra_break.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

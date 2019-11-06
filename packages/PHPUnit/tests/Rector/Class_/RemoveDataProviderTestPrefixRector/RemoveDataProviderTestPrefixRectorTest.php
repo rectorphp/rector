@@ -20,9 +20,7 @@ final class RemoveDataProviderTestPrefixRectorTest extends AbstractRectorTestCas
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/with_test_annotation.php.inc'];
-        yield [__DIR__ . '/Fixture/multiple_data_providers.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

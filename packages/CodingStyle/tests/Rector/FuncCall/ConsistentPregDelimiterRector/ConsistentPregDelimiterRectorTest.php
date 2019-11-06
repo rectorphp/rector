@@ -20,9 +20,7 @@ final class ConsistentPregDelimiterRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/escape_nette_static_call.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_concat.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

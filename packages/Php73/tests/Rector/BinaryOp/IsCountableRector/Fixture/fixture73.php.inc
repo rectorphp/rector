@@ -2,9 +2,12 @@
 
 namespace Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector\Fixture;
 
-function isCountable()
+class CountableOnPhp73
 {
-    is_array($foo) || $foo instanceof \Countable;
+    public function go($foo)
+    {
+        is_array($foo) || $foo instanceof \Countable;
+    }
 }
 
 ?>
@@ -13,9 +16,12 @@ function isCountable()
 
 namespace Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector\Fixture;
 
-function isCountable()
+class CountableOnPhp73
 {
-    is_countable($foo);
+    public function go($foo)
+    {
+        is_countable($foo);
+    }
 }
 
 ?>

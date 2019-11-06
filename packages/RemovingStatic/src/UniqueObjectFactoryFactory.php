@@ -128,7 +128,7 @@ final class UniqueObjectFactoryFactory
         $paramBuilder = $this->builderFactory->param($propertyName);
 
         $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType);
-        if ($typeNode) {
+        if ($typeNode !== null) {
             $paramBuilder->setType($typeNode);
         }
 

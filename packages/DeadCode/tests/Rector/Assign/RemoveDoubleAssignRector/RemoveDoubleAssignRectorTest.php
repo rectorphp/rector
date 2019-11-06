@@ -20,19 +20,7 @@ final class RemoveDoubleAssignRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/self_referencing.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/calls.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_dim_assign.php.inc'];
-        yield [__DIR__ . '/Fixture/property_assign.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_array_reset.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_property_assign_in_different_ifs.php.inc'];
-        yield [__DIR__ . '/Fixture/inside_if_else.php.inc'];
-        yield [__DIR__ . '/Fixture/inside_the_same_if.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_double_catch.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_double_case.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_double_assign.php.inc'];
-        yield [__DIR__ . '/Fixture/different_value.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

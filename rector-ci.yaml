@@ -1,10 +1,16 @@
 parameters:
     sets:
-        - "code-quality"
-        - "dead-code"
-        - "nette-utils-code-quality"
+        - 'coding-style'
+        - 'code-quality'
+        - 'dead-code'
+        - 'nette-utils-code-quality'
 
     exclude_paths:
-        - "/Fixture/"
-        - "/Source/"
-        - "/Expected/"
+        - '/Fixture/'
+        - '/Source/'
+        - '/Expected/'
+
+    exclude_rectors:
+        # @todo needs to check for "autoload-dev" local dependency
+        - 'Rector\Php55\Rector\String_\StringClassNameToClassConstantRector'
+        - 'Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector'

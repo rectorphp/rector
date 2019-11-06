@@ -109,7 +109,10 @@ final class ValueResolver
                 return $this->resolveClassConstFetch($expr);
             }
 
-            throw new ConstExprEvaluationException("Expression of type {$expr->getType()} cannot be evaluated");
+            throw new ConstExprEvaluationException(sprintf(
+                'Expression of type %s cannot be evaluated',
+                $expr->getType()
+            ));
         });
 
         return $this->constExprEvaluator;

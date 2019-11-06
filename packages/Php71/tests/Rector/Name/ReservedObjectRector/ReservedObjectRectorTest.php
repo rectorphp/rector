@@ -20,8 +20,7 @@ final class ReservedObjectRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/ReservedObject.php'];
-        yield [__DIR__ . '/Fixture/skip_type_declaration_object.php'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     /**

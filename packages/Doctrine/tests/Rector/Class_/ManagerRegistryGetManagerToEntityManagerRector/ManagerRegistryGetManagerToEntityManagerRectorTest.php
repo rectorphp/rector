@@ -20,9 +20,7 @@ final class ManagerRegistryGetManagerToEntityManagerRectorTest extends AbstractR
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_different_methods.php.inc'];
-        yield [__DIR__ . '/Fixture/do_not_remove_registry_on_non_get_repo_call.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

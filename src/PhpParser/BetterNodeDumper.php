@@ -180,7 +180,7 @@ final class BetterNodeDumper extends NodeDumper
 
             if ($value === null) {
                 $r .= 'null';
-            } elseif ($value === false) {
+            } elseif (!$value) {
                 $r .= 'false';
             } elseif ($value === true) {
                 $r .= 'true';

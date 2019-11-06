@@ -19,9 +19,12 @@ final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCas
 
     public function provideDataForTest(): iterable
     {
-        yield [__DIR__ . '/Fixture/import_root_namespace_classes_disabled.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureRoot');
     }
 
+    /**
+     * @return mixed[]
+     */
     protected function getRectorsWithConfiguration(): array
     {
         return [

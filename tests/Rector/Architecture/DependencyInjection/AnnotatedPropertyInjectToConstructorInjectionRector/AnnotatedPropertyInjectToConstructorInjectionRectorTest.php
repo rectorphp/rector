@@ -20,16 +20,7 @@ final class AnnotatedPropertyInjectToConstructorInjectionRectorTest extends Abst
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture2.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture3.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture4.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture5.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture6.php.inc'];
-        yield [__DIR__ . '/Fixture/fixture7.php.inc'];
-        yield [__DIR__ . '/Fixture/parent_constructor.php.inc'];
-        yield [__DIR__ . '/Fixture/parent_constructor_with_own_inject.php.inc'];
-        yield [__DIR__ . '/Fixture/parent_constructor_with_middle_class.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

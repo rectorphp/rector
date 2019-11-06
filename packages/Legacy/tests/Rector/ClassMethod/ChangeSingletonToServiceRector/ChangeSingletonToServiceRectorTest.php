@@ -20,10 +20,7 @@ final class ChangeSingletonToServiceRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/static_variable.php.inc'];
-        yield [__DIR__ . '/Fixture/protected_construct.php.inc'];
-        yield [__DIR__ . '/Fixture/non_empty_protected_construct.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

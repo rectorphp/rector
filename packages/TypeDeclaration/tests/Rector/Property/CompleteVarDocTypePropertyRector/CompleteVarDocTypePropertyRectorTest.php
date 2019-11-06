@@ -20,15 +20,7 @@ final class CompleteVarDocTypePropertyRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/keep_comment.php.inc'];
-        yield [__DIR__ . '/Fixture/property_assign.php.inc'];
-        yield [__DIR__ . '/Fixture/default_value.php.inc'];
-        yield [__DIR__ . '/Fixture/assign_conflict.php.inc'];
-        yield [__DIR__ . '/Fixture/callable_type.php.inc'];
-        yield [__DIR__ . '/Fixture/typed_array.php.inc'];
-        yield [__DIR__ . '/Fixture/typed_array_nested.php.inc'];
-        yield [__DIR__ . '/Fixture/symfony_console_command.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_more_specific.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

@@ -20,18 +20,7 @@ final class RemoveSetterOnlyPropertyAndMethodCallRectorTest extends AbstractRect
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/in_constructor.php.inc'];
-
-        yield [__DIR__ . '/Fixture/remove_dim_fetch.php.inc'];
-        yield [__DIR__ . '/Fixture/remove_multiple_dim_fetch.php.inc'];
-
-        yield [__DIR__ . '/Fixture/keep_many_to_one.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_static_property.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_public_property.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_serializable_object.php.inc'];
-        yield [__DIR__ . '/Fixture/deal_with_property_fetches.php.inc'];
-        yield [__DIR__ . '/Fixture/node_removal_on_non_expression.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

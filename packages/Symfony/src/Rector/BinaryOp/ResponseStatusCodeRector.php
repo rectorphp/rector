@@ -25,7 +25,7 @@ final class ResponseStatusCodeRector extends AbstractRector
     private const RESPONSE_CLASS = 'Symfony\Component\HttpFoundation\Response';
 
     /**
-     * @var array
+     * @var string[]
      */
     private const CODE_TO_CONST = [
         100 => 'HTTP_CONTINUE',

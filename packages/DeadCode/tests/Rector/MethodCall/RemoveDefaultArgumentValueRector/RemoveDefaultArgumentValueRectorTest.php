@@ -20,11 +20,7 @@ final class RemoveDefaultArgumentValueRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_previous_order.php.inc'];
-        yield [__DIR__ . '/Fixture/function.php.inc'];
-        yield [__DIR__ . '/Fixture/user_vendor_function.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_system_function.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

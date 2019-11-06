@@ -20,11 +20,7 @@ final class VarInlineAnnotationToAssertRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/scalar.php.inc'];
-        yield [__DIR__ . '/Fixture/assign_fresh_var.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_missing_variable.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_property.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

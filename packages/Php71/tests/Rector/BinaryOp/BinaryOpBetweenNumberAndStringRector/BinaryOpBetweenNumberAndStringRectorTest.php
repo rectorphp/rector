@@ -20,10 +20,7 @@ final class BinaryOpBetweenNumberAndStringRectorTest extends AbstractRectorTestC
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/known_static_string.php.inc'];
-        yield [__DIR__ . '/Fixture/ignore_concatenation_dot.php.inc'];
-        yield [__DIR__ . '/Fixture/edge_case.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

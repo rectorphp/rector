@@ -20,9 +20,7 @@ final class CatchExceptionNameMatchingTypeRectorTest extends AbstractRectorTestC
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/nested_call.php.inc'];
-        yield [__DIR__ . '/Fixture/skip.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

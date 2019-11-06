@@ -234,10 +234,12 @@ PHP
 
         $formBuilderParamBuilder = $this->builderFactory->param('builder');
         $formBuilderParamBuilder->setType(new FullyQualified(FormBuilderInterface::class));
+
         $formBuilderParam = $formBuilderParamBuilder->getNode();
 
         $optionsParamBuilder = $this->builderFactory->param('options');
         $optionsParamBuilder->setType('array');
+
         $optionsParam = $optionsParamBuilder->getNode();
 
         $buildFormClassMethodBuilder = $this->builderFactory->method('buildForm');
@@ -266,6 +268,7 @@ PHP
 
         $resolverParamBuilder = $this->builderFactory->param('resolver');
         $resolverParamBuilder->setType(new FullyQualified(OptionsResolver::class));
+
         $resolverParam = $resolverParamBuilder->getNode();
 
         $optionsDefaults = new Array_();
@@ -282,6 +285,7 @@ PHP
         $configureOptionsClassMethodBuilder->makePublic();
         $configureOptionsClassMethodBuilder->addParam($resolverParam);
         $configureOptionsClassMethodBuilder->addStmt($setDefaultsMethodCall);
+
         $configureOptionsClassMethod = $configureOptionsClassMethodBuilder->getNode();
 
         $classNode->stmts[] = $configureOptionsClassMethod;

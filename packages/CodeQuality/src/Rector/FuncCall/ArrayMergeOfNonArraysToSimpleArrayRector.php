@@ -14,6 +14,8 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://3v4l.org/aLf96
+ * @see https://3v4l.org/2r26K
+ * @see https://3v4l.org/anks3
  *
  * @see \Rector\CodeQuality\Tests\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector\ArrayMergeOfNonArraysToSimpleArrayRectorTest
  */

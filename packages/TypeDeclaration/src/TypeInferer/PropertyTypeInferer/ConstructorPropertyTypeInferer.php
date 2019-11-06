@@ -50,7 +50,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         }
 
         // A. infer from type declaration of parameter
-        if ($param->type) {
+        if ($param->type !== null) {
             $type = $this->resolveParamTypeToPHPStanType($param);
             if ($type instanceof MixedType) {
                 return new MixedType();

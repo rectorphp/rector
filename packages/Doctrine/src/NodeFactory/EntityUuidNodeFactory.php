@@ -50,6 +50,7 @@ final class EntityUuidNodeFactory
     {
         $uuidPropertyBuilder = $this->builderFactory->property('uuid');
         $uuidPropertyBuilder->makePrivate();
+
         $uuidProperty = $uuidPropertyBuilder->getNode();
 
         $this->decoratePropertyWithUuidAnnotations($uuidProperty, true, false);

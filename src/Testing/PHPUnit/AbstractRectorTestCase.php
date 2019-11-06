@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Testing\PHPUnit;
 
-use Iterator;
 use Nette\Utils\FileSystem;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -20,8 +19,6 @@ use Rector\Testing\Finder\RectorsFinder;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -119,15 +116,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         // restore disabled auto_import_names if changed
         if ($this->getAutoImportNames() !== null) {
             $this->setParameter(Option::AUTO_IMPORT_NAMES, false);
-        }
-    }
-
-    protected function provideEachFileInDir(string $directory): Iterator
-    {
-        $fileInfos = $this->findFilesInDirectory($directory);
-
-        foreach ($fileInfos as $fileInfo) {
-            yield [$fileInfo->getPathName()];
         }
     }
 
@@ -287,15 +275,5 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         }
 
         $this->parameterProvider->changeParameter(Option::AUTO_IMPORT_NAMES, $autoImportNames);
-    }
-
-    /**
-     * @return SplFileInfo[]
-     */
-    private function findFilesInDirectory(string $directory): array
-    {
-        $finder = Finder::create()->in($directory)->files();
-
-        return iterator_to_array($finder);
     }
 }

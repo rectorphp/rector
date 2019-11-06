@@ -21,8 +21,6 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
-     * @dataProvider provideDataForTestWithClassAnnotation()
-     * @dataProvider provideDataForTestWithNamespaceRename()
      */
     public function test(string $filePath): void
     {
@@ -31,29 +29,7 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/class_to_new.php.inc'];
-        yield [__DIR__ . '/Fixture/class_to_interface.php.inc'];
-        yield [__DIR__ . '/Fixture/interface_to_class.php.inc'];
-        yield [__DIR__ . '/Fixture/name_insensitive.php.inc'];
-        yield [__DIR__ . '/Fixture/underscore_doc.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_return_tag.php.inc'];
-        yield [__DIR__ . '/Fixture/rename_trait.php.inc'];
-        yield [__DIR__ . '/Fixture/fqnize_namespaced.php.inc'];
-    }
-
-    public function provideDataForTestWithClassAnnotation(): Iterator
-    {
-        yield [__DIR__ . '/Fixture/class_annotations.php.inc'];
-        yield [__DIR__ . '/Fixture/class_annotations_serializer_type.php.inc'];
-    }
-
-    public function provideDataForTestWithNamespaceRename(): Iterator
-    {
-        yield [__DIR__ . '/Fixture/rename_class_without_namespace.php.inc'];
-        yield [__DIR__ . '/Fixture/rename_class.php.inc'];
-        yield [__DIR__ . '/Fixture/rename_interface.php.inc'];
-        yield [__DIR__ . '/Fixture/rename_class_without_namespace_to_class_without_namespace.php.inc'];
-        yield [__DIR__ . '/Fixture/rename_class_to_class_without_namespace.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     /**
@@ -62,7 +38,7 @@ final class RenameClassRectorTest extends AbstractRectorTestCase
     public function testClassNameDuplication(): void
     {
         $this->expectException(InvalidPhpCodeException::class);
-        $this->doTestFile(__DIR__ . '/Fixture/skip_duplicated_class.php.inc');
+        $this->doTestFile(__DIR__ . '/FixtureDuplication/skip_duplicated_class.php.inc');
     }
 
     /**

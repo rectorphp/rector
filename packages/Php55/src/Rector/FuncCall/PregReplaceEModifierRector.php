@@ -133,7 +133,7 @@ PHP
                 return $node;
             }
 
-            $match = Strings::match($node->value, '#(\\$|\\\\)(?<number>\d+)#');
+            $match = Strings::match($node->value, '#(\\$|\\\\|\\x0)(?<number>\d+)#');
             if (! $match) {
                 return $node;
             }

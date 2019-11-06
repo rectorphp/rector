@@ -46,12 +46,12 @@ final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     public function provideDataForTestMultipleArguments(): Iterator
     {
-        yield [__DIR__ . '/Fixture/multiple_args.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureWithMultipleArguments');
     }
 
     /**

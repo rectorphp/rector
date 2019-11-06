@@ -1,13 +1,7 @@
 <?php
 
-function identicalFalseToBooleanNot()
+function identicalFalseToBooleanNot($something)
 {
-    if ($something === false) {
-    }
-
-    if (false === $something) {
-    }
-
     if (!$something === false) {
     }
 
@@ -20,14 +14,8 @@ function identicalFalseToBooleanNot()
 -----
 <?php
 
-function identicalFalseToBooleanNot()
+function identicalFalseToBooleanNot($something)
 {
-    if (!$something) {
-    }
-
-    if (!$something) {
-    }
-
     if ($something) {
     }
 

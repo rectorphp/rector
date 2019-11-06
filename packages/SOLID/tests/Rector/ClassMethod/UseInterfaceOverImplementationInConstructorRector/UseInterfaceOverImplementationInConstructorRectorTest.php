@@ -20,13 +20,7 @@ final class UseInterfaceOverImplementationInConstructorRectorTest extends Abstra
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/prefer_first_parent_interface.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_multiple_interfaces.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_simple_type.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_interface.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_sole_class.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_class_that_implements_interface_with_multiple_children.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

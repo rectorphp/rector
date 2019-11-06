@@ -23,20 +23,7 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
 
     public function provideData(): Iterator
     {
-        yield [__DIR__ . '/Source/Basic/doc.txt'];
-        yield [__DIR__ . '/Source/Basic/doc2.txt'];
-        yield [__DIR__ . '/Source/Basic/doc3.txt'];
-        yield [__DIR__ . '/Source/Basic/doc4.txt'];
-        yield [__DIR__ . '/Source/Basic/doc5.txt'];
-        yield [__DIR__ . '/Source/Basic/doc6.txt'];
-        yield [__DIR__ . '/Source/Basic/doc7.txt'];
-        yield [__DIR__ . '/Source/Basic/doc8.txt'];
-        yield [__DIR__ . '/Source/Basic/doc9.txt'];
-        yield [__DIR__ . '/Source/Basic/doc10.txt'];
-        yield [__DIR__ . '/Source/Basic/doc11.txt'];
-        yield [__DIR__ . '/Source/Basic/doc13.txt'];
-        yield [__DIR__ . '/Source/Basic/doc14.txt'];
-        yield [__DIR__ . '/Source/Basic/doc15.txt'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureBasic', '*.txt');
     }
 
     /**
@@ -52,6 +39,6 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
 
     public function provideDataEmpty(): Iterator
     {
-        yield [__DIR__ . '/Source/Basic/empty-doc.txt'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureEmpty', '*.txt');
     }
 }

@@ -20,10 +20,7 @@ final class RemoveDuplicatedInstanceOfRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/jump_around_one.php.inc'];
-        yield [__DIR__ . '/Fixture/nested.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_multiple_variables.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

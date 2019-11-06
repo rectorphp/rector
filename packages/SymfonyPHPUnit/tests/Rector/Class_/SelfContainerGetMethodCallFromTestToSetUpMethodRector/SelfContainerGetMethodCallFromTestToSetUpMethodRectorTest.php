@@ -20,12 +20,7 @@ final class SelfContainerGetMethodCallFromTestToSetUpMethodRectorTest extends Ab
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/existing_setup.php.inc'];
-        yield [__DIR__ . '/Fixture/string_service_name.php.inc'];
-        yield [__DIR__ . '/Fixture/extends_parent_class_with_property.php.inc'];
-        yield [__DIR__ . '/Fixture/instant_call.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_sessions.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

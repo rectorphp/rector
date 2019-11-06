@@ -20,8 +20,7 @@ final class CompleteImportForPartialAnnotationRectorTest extends AbstractRectorT
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/keep_non_annotations.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     /**

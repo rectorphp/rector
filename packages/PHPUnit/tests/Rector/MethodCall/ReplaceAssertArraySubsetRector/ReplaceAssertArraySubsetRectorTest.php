@@ -20,11 +20,7 @@ final class ReplaceAssertArraySubsetRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/issue_2069.php.inc'];
-        yield [__DIR__ . '/Fixture/issue_2237.php.inc'];
-        yield [__DIR__ . '/Fixture/multilevel_array.php.inc'];
-        yield [__DIR__ . '/Fixture/variable.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

@@ -20,10 +20,7 @@ final class StringifyStrNeedlesRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/trait.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_twice.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_already_string.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

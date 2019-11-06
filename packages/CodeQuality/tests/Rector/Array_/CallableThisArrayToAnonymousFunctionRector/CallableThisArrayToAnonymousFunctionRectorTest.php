@@ -20,13 +20,7 @@ final class CallableThisArrayToAnonymousFunctionRectorTest extends AbstractRecto
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
-        yield [__DIR__ . '/Fixture/skip.php.inc'];
-        yield [__DIR__ . '/Fixture/another_class.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_another_class.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_empty_first_array.php.inc'];
-        yield [__DIR__ . '/Fixture/skip_as_well.php.inc'];
-        yield [__DIR__ . '/Fixture/no_return_for_void.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string

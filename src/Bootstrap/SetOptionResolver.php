@@ -106,6 +106,8 @@ final class SetOptionResolver
 
         [$versionedSets, $unversionedSets] = $this->separateVersionedAndUnversionedSets($allSets);
 
+        /** @var string[] $unversionedSets */
+        /** @var string[][] $versionedSets */
         $setsListInString = $this->createSetListInString($unversionedSets, $versionedSets);
 
         $setNotFoundMessage = sprintf(
@@ -153,7 +155,7 @@ final class SetOptionResolver
 
     /**
      * @param string[] $allSets
-     * @return string[][]
+     * @return string[][]|string[][][]
      */
     private function separateVersionedAndUnversionedSets(array $allSets): array
     {
@@ -181,7 +183,7 @@ final class SetOptionResolver
 
     /**
      * @param string[] $unversionedSets
-     * @param string[] $versionedSets
+     * @param string[][] $versionedSets
      */
     private function createSetListInString(array $unversionedSets, array $versionedSets): string
     {
@@ -191,8 +193,8 @@ final class SetOptionResolver
             $setsListInString .= ' * ' . $unversionedSet . PHP_EOL;
         }
 
-        foreach ($versionedSets as $groupName => $configName) {
-            $setsListInString .= ' * ' . $groupName . ': ' . implode(', ', $configName) . PHP_EOL;
+        foreach ($versionedSets as $groupName => $configNames) {
+            $setsListInString .= ' * ' . $groupName . ': ' . implode(', ', $configNames) . PHP_EOL;
         }
 
         return $setsListInString;

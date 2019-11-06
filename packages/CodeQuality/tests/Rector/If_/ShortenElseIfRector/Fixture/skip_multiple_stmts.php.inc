@@ -2,7 +2,7 @@
 
 namespace Rector\Php\Tests\Rector\If_\ShortenElseIfRector\Fixture;
 
-class MultipleStmtsClass
+class SkipMultipleStmtsClass
 {
     /**
      * @var bool

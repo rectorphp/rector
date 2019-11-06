@@ -20,8 +20,7 @@ final class UseSpecificWillMethodRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/will.php.inc'];
-        yield [__DIR__ . '/Fixture/with.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string
