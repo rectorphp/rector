@@ -20,6 +20,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\NodeContainer\ParsedNodesByType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -176,13 +177,17 @@ PHP
         $hasClassMethodReturn = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Return_::class);
 
         $anonymousFunction = new Closure();
-        $anonymousFunction->params = $classMethod->params;
+        $newParams = $this->copyParams($classMethod->params);
+
+        $anonymousFunction->params = $newParams;
 
         $innerMethodCall = new MethodCall($node, $classMethod->name);
-        $innerMethodCall->args = $this->convertParamsToArgs($classMethod->params);
+        $innerMethodCall->args = $this->convertParamsToArgs($newParams);
 
         if ($classMethod->returnType !== null) {
-            $anonymousFunction->returnType = $classMethod->returnType;
+            $newReturnType = $classMethod->returnType;
+            $newReturnType->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $anonymousFunction->returnType = $newReturnType;
         }
 
         // does method return something?
@@ -208,10 +213,27 @@ PHP
     private function convertParamsToArgs(array $params): array
     {
         $args = [];
-        foreach ($params as $key => $param) {
-            $args[$key] = new Arg($param->var);
+        foreach ($params as $param) {
+            $args[] = new Arg($param->var);
         }
 
         return $args;
+    }
+
+    /**
+     * @param Param[] $params
+     * @return Param[]
+     */
+    private function copyParams(array $params): array
+    {
+        $newParams = [];
+        foreach ($params as $param) {
+            $newParam = clone $param;
+            $newParam->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $newParam->var->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $newParams[] = $newParam;
+        }
+
+        return $newParams;
     }
 }
