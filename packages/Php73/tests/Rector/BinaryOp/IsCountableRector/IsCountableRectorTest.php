@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector;
 
+use Iterator;
 use Rector\Php73\Rector\BinaryOp\IsCountableRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
@@ -11,10 +12,16 @@ final class IsCountableRectorTest extends AbstractRectorTestCase
 {
     /**
      * @requires PHP >= 7.3
+     * @dataProvider provideDataForTest()
      */
-    public function testPhp73AndHigher(): void
+    public function test(string $file): void
     {
-        $this->doTestFile(__DIR__ . '/Fixture/fixture73.php.inc');
+        $this->doTestFile($file);
+    }
+
+    public function provideDataForTest(): Iterator
+    {
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string
