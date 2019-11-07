@@ -185,16 +185,16 @@
             "@phpstan",
             "@docs"
         ],
-        "check-cs": "vendor/bin/ecs check bin packages src tests utils --ansi",
+        "check-cs": "ecs check bin packages src tests utils --ansi",
         "fix-cs": [
-            "vendor/bin/ecs check bin packages src tests utils --fix --ansi",
+            "ecs check bin packages src tests utils --fix --ansi",
             "ci/clean_trailing_spaces.sh"
         ],
-        "phpstan": "vendor/bin/phpstan analyse packages src tests --error-format symplify --ansi",
+        "phpstan": "phpstan analyse packages src tests --error-format symplify --ansi",
         "changelog": [
-            "vendor/bin/changelog-linker dump-merges --in-categories",
-            "vendor/bin/changelog-linker link",
-            "vendor/bin/changelog-linker cleanup"
+            "changelog-linker dump-merges --in-categories",
+            "changelog-linker link",
+            "changelog-linker cleanup"
         ],
         "docs": [
             "bin/rector dump-rectors -o markdown > docs/AllRectorsOverview.md",

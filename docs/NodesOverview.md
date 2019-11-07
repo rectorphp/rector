@@ -999,7 +999,7 @@ switch ($variable) {
 #### `PhpParser\Node\Stmt\Throw_`
 
 ```php
-throw new $someException();
+throw new \SomeException();
 ```
 <br>
 

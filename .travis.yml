@@ -1,97 +1,156 @@
+os: linux
 language: php
 
-matrix:
-    fast_finish: true
-    include:
-        - php: '7.1'
-          env: STATIC_ANALYSIS=true RUN_RECTOR=true
-        - php: '7.1'
-          env: COMPOSER_FLAGS="--prefer-lowest"
-        - php: '7.1'
-          env: CODING_STANDARD=true
-        - php: '7.2'
-          env: STANDALONE=true
-        - php: '7.3'
-          env: COVERAGE=true
-        - php: '7.3'
-          env: DOG_FOOD=true
-        - php: '7.4snapshot'
-    allow_failures:
-        # remove coding standard burden from contributors and fix once upon a time
-        - php: '7.1'
-          env: CODING_STANDARD=true
-        - php: '7.2'
-          env: STANDALONE=true
+php:
+    - '7.1'
+    - '7.2'
+    - '7.3'
+    - '7.4snapshot'
+
+before_install:
+    # turn off XDebug
+    - phpenv config-rm xdebug.ini || return 0
 
 install:
-    - composer update $COMPOSER_FLAGS
-
-before_script:
-    # disable xdebug
-    - if [[ $COVERAGE == "" ]]; then phpenv config-rm xdebug.ini || echo "xdebug not available"; fi
-    # increase memory for tests
-    - echo "memory_limit=2048M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-    # report inline scripts fails
-    - set -e
+    - composer install --no-progress
 
 script:
     - vendor/bin/phpunit --testsuite main
 
-    - if [[ $STATIC_ANALYSIS == true ]]; then composer phpstan; fi
-    - if [[ $CODING_STANDARD == true ]]; then composer check-cs; fi
+jobs:
+    include:
+        # Stage 1
+        -
+            stage: test
+            php: 7.1
+            name: Lowest dependencies
+            install:
+                # install lowest dependencies
+                - composer update --prefer-lowest --no-progress
 
-    # Rector demo run
-    - |
-      if [[ $STATIC_ANALYSIS == true ]]; then
-          composer docs
-          php ci/check_services_in_yaml_configs.php
-          php ci/run_all_sets.php
-      fi
+        -
+            stage: test
+            name: Simple checks
+            php: 7.1
+            script:
+                - composer docs
+                - php ci/check_services_in_yaml_configs.php
+                - php ci/run_all_sets.php
 
-    # Eat your own dog food
-    - |
-      if [[ $DOG_FOOD == true ]]; then
-          composer rector
-      fi
+        -
+            stage: test
+            name: PHPStan
+            php: 7.1
+            script:
+                - composer phpstan
 
-    # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
-    - |
-      if [[ $STANDALONE == true ]]; then
-          # 1. install locally
-          mkdir test-paths
-          cd test-paths
+        -
+            stage: test
+            php: 7.1
+            name: ECS
+            script:
+                - composer check-cs
 
-          mkdir rector-dir
-          composer require rector/rector -d rector-dir
+        -
+            stage: test
+            name: Unit tests
+            script:
+                - vendor/bin/phpunit --testsuite main
 
-          mkdir symfony-demo-dir
-          composer create-project symfony/symfony-demo symfony-demo-dir --dev
-          # missing for some reason
-          composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir
-          composer dump-autoload --no-dev -d symfony-demo-dir
+        -
+            stage: test
+            php: 7.3
+            name: Dog Food
+            script:
+                - composer rector
 
-          # 2. run an nother project
-          rector-dir/vendor/bin/rector
+        # Stage 2
+        -
+            # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
+            stage: standalone
+            php: 7.3
+            name: Standalone Run
+            script:
+                # 1. install locally
+                - mkdir test-paths
+                - cd test-paths
 
-          cd symfony-demo-dir
-          ../rector-dir/vendor/bin/rector
+                - mkdir rector-dir
+                - composer require rector/rector -d rector-dir
 
-          # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
-          ../rector-dir/vendor/bin/rector process src --set code-quality --hide-autoload-errors --dry-run
-      fi
+                - mkdir symfony-demo-dir
+                - composer create-project symfony/symfony-demo symfony-demo-dir --dev
+                # missing for some reason
+                - composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir
+                - composer dump-autoload --no-dev -d symfony-demo-dir
 
-after_script:
-    # Coverage
-    - |
-      if [[ $COVERAGE == true && $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" ]]; then
-          vendor/bin/phpunit --coverage-clover coverage.xml
-          wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
-          php php-coveralls.phar --verbose
-      fi
+                # 2. run an another project
+                - rector-dir/vendor/bin/rector
+
+                - cd symfony-demo-dir
+                - ../rector-dir/vendor/bin/rector
+
+                # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
+                - ../rector-dir/vendor/bin/rector process src --set code-quality --hide-autoload-errors --dry-run
+
+        # Stage 3
+        -
+            stage: coverage
+            php: 7.3
+            name: Test Coverage
+            if: branch = master AND type = push
+            before_install:
+                - echo "keep xdebug"
+            script:
+                - vendor/bin/phpunit --coverage-clover coverage.xml
+                - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
+                - php php-coveralls.phar --verbose
+
+        # Windows
+        - &STANDARD_WINDOWS_JOB
+            stage: test
+            name: Windows PHP 7.1
+            os: windows
+            dist: '1803-containers'
+            language: sh # No PHP currently
+            env: PHP_VERSION=7.1.32
+            install:
+                - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
+                - choco install composer --ia "/DEV=C:\tools\php"
+                - echo 'memory_limit=1G' >> 'C:\tools\php\php.ini'
+                - echo 'date.timezone="UTC"' >> 'C:\tools\php\php.ini'
+                - echo 'extension_dir=ext' >> 'C:\tools\php\php.ini'
+                - echo 'extension=php_mbstring.dll' >> 'C:\tools\php\php.ini'
+                - echo 'extension=php_openssl.dll' >> 'C:\tools\php\php.ini'
+                - echo 'extension=php_mysqli.dll' >> 'C:\tools\php\php.ini'
+                - echo 'extension=php_intl.dll' >> 'C:\tools\php\php.ini'
+                - export PATH=/c/tools/php:$PATH
+            script:
+                # @todo this is probably broken, needs fixing
+                - php vendor/phpunit/phpunit/phpunit
+
+        -
+            <<: *STANDARD_WINDOWS_JOB
+            name: Windows PHP 7.2
+            env: PHP_VERSION=7.2.23
+
+        -
+            <<: *STANDARD_WINDOWS_JOB
+            name: Windows PHP 7.3
+            env: PHP_VERSION=7.3.10
+
+    allow_failures:
+        - name: ECS
+        - name: Standalone Run
+        - os: windows
+
+matrix:
+    fast_finish: true
 
 cache:
     directories:
         - $HOME/.composer/cache
+        - tmp
 
 notifications:
     email: false
