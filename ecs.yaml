@@ -177,3 +177,5 @@ parameters:
 
         # conflicts with "PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer"
         PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer: ~
+
+    line_ending: "\n"
