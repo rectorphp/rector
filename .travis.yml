@@ -107,7 +107,7 @@ jobs:
                 - php php-coveralls.phar --verbose
 
         # Windows
-        -
+        - &STANDARD_WINDOWS_JOB
             stage: test
             name: Windows PHP 7.1
             os: windows
@@ -117,37 +117,27 @@ jobs:
             install:
                 - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
                 - choco install composer --ia "/DEV=C:\tools\php"
+                - echo 'memory_limit=1G' >> 'C:\tools\php\php.ini'
+                - echo 'date.timezone="UTC"' >> 'C:\tools\php\php.ini'
+                - echo 'extension_dir=ext' >> 'C:\tools\php\php.ini'
+                - echo 'extension=php_mbstring.dll' >> 'C:\tools\php\php.ini'
+                - echo 'extension=php_openssl.dll' >> 'C:\tools\php\php.ini'
+                - echo 'extension=php_mysqli.dll' >> 'C:\tools\php\php.ini'
+                - echo 'extension=php_intl.dll' >> 'C:\tools\php\php.ini'
                 - export PATH=/c/tools/php:$PATH
             script:
-                - composer complete-check
+                # @todo this is probably broken, needs fixing
+                - php vendor/phpunit/phpunit/phpunit
 
         -
-            stage: test
+            <<: *STANDARD_WINDOWS_JOB
             name: Windows PHP 7.2
-            os: windows
-            dist: '1803-containers'
-            language: sh # No PHP currently
             env: PHP_VERSION=7.2.23
-            install:
-                - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
-                - choco install composer --ia "/DEV=C:\tools\php"
-                - export PATH=/c/tools/php:$PATH
-            script:
-                - composer complete-check
 
         -
-            stage: test
+            <<: *STANDARD_WINDOWS_JOB
             name: Windows PHP 7.3
-            os: windows
-            dist: '1803-containers'
-            language: sh # No PHP currently
             env: PHP_VERSION=7.3.10
-            install:
-                - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
-                - choco install composer --ia "/DEV=C:\tools\php"
-                - export PATH=/c/tools/php:$PATH
-            script:
-                - composer complete-check
 
     allow_failures:
         - name: ECS
