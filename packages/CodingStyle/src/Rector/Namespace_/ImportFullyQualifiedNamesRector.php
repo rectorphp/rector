@@ -14,6 +14,8 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\ImportFullyQualifiedNamesRectorTest
+ * @see \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\NonNamespacedTest
+ * @see \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\ImportRootNamespaceClassesDisabledTest
  */
 final class ImportFullyQualifiedNamesRector extends AbstractRector
 {

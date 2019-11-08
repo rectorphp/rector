@@ -12,6 +12,7 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
+     * @dataProvider provideDataForTestFunction()
      */
     public function test(string $file): void
     {
@@ -21,6 +22,11 @@ final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
     public function provideDataForTest(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+    }
+
+    public function provideDataForTestFunction(): Iterator
+    {
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureFunction');
     }
 
     public function skippedProviderPartials(): Iterator
