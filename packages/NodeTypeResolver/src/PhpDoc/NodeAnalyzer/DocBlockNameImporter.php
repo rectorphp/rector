@@ -13,6 +13,7 @@ use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\CodingStyle\Imports\ImportSkipper;
+use Rector\Configuration\Option;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
@@ -20,6 +21,7 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class DocBlockNameImporter
 {
@@ -63,13 +65,19 @@ final class DocBlockNameImporter
      */
     private $importSkipper;
 
+    /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
     public function __construct(
         PhpDocNodeTraverser $phpDocNodeTraverser,
         StaticTypeMapper $staticTypeMapper,
         UseAddingCommander $useAddingCommander,
         NameResolver $nameResolver,
         BetterStandardPrinter $betterStandardPrinter,
-        ImportSkipper $importSkipper
+        ImportSkipper $importSkipper,
+        ParameterProvider $parameterProvider
     ) {
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -77,20 +85,17 @@ final class DocBlockNameImporter
         $this->nameResolver = $nameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->importSkipper = $importSkipper;
+        $this->parameterProvider = $parameterProvider;
     }
 
-    public function importNames(
-        PhpDocInfo $phpDocInfo,
-        Node $phpParserNode,
-        bool $shouldImportRootNamespaceClasses = true
-    ): bool {
+    public function importNames(PhpDocInfo $phpDocInfo, Node $phpParserNode): bool
+    {
         $phpDocNode = $phpDocInfo->getPhpDocNode();
 
         $this->hasPhpDocChanged = false;
 
         $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, function (PhpDocParserNode $docNode) use (
-            $phpParserNode,
-            $shouldImportRootNamespaceClasses
+            $phpParserNode
         ): PhpDocParserNode {
             if (! $docNode instanceof IdentifierTypeNode) {
                 return $docNode;
@@ -101,8 +106,9 @@ final class DocBlockNameImporter
                 return $docNode;
             }
 
+            $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES_PARAMETER);
             // Importing root namespace classes (like \DateTime) is optional
-            if (! $shouldImportRootNamespaceClasses && substr_count($staticType->getClassName(), '\\') === 0) {
+            if (! $importShortClasses && substr_count($staticType->getClassName(), '\\') === 0) {
                 return $docNode;
             }
 

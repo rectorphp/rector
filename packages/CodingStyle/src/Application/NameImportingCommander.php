@@ -6,11 +6,9 @@ namespace Rector\CodingStyle\Application;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Node\NameImporter;
 use Rector\Configuration\Option;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
@@ -54,11 +52,6 @@ final class NameImportingCommander implements CommanderInterface
     {
         $this->callableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node): ?Name {
             if (! $node instanceof Name) {
-                return null;
-            }
-
-            // skip name of UseUse
-            if ($node->getAttribute(AttributeKey::PARENT_NODE) instanceof UseUse) {
                 return null;
             }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector;
 
 use Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector;
+use Rector\Configuration\Option;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCase
@@ -14,6 +15,7 @@ final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCas
      */
     public function test(string $file): void
     {
+        $this->setParameter(Option::IMPORT_SHORT_CLASSES_PARAMETER, false);
         $this->doTestFile($file);
     }
 
@@ -22,15 +24,8 @@ final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCas
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureRoot');
     }
 
-    /**
-     * @return mixed[]
-     */
-    protected function getRectorsWithConfiguration(): array
+    protected function getRectorClass(): string
     {
-        return [
-            ImportFullyQualifiedNamesRector::class => [
-                '$shouldImportRootNamespaceClasses' => false,
-            ],
-        ];
+        return ImportFullyQualifiedNamesRector::class;
     }
 }
