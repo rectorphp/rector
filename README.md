@@ -90,7 +90,7 @@ parameters:
         - 'vendor/project-without-composer'
 ```
 
-## Exclude Paths and Rectors
+### Exclude Paths and Rectors
 
 You can also **exclude files or directories** (with regex or [fnmatch](http://php.net/manual/en/function.fnmatch.php)):
 
@@ -110,6 +110,8 @@ parameters:
         - 'Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector'
 ```
 
+### Provide PHP Version
+
 By default Rector uses the language features matching your system version of PHP. You can configure it for a different PHP version:
 
 ```yaml
@@ -117,6 +119,8 @@ By default Rector uses the language features matching your system version of PHP
 parameters:
     php_version_features: '7.2' # your version is 7.3
 ```
+
+### Import Use Statements
 
 FQN classes are imported by default every time Rector performs a change,  so you don't have to do it manually/after each run. You can disable it by:
 
