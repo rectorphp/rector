@@ -11,16 +11,16 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class InlineValidationRulesToArrayDefinitionRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideForTest()
+     * @dataProvider provideDataForTest()
      */
     public function test(string $file): void
     {
         $this->doTestFile($file);
     }
 
-    public function provideForTest(): Iterator
+    public function provideDataForTest(): Iterator
     {
-        yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     protected function getRectorClass(): string
