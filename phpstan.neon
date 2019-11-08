@@ -215,3 +215,5 @@ parameters:
         - '#Method Rector\\DeadCode\\Rector\\Stmt\\RemoveDeadStmtRector\:\:keepLivingCodeFromExpr\(\) should return array<PhpParser\\Node\\Expr\> but returns array<int, PhpParser\\Node\>#'
         - '#Parameter \#1 \$unversionedSets of method Rector\\Bootstrap\\SetOptionResolver\:\:createSetListInString\(\) expects array<string\>, array<array<string\>\|string\> given#'
         - '#Parameter \#2 \$versionedSets of method Rector\\Bootstrap\\SetOptionResolver\:\:createSetListInString\(\) expects array<array<string\>\>, array<array<string\>\|string\> given#'
+        - '#Parameter \#1 \$node of method Rector\\Rector\\AbstractRector\:\:removeNode\(\) expects PhpParser\\Node, PhpParser\\Node\|null given#'
+        - '#Cannot access property \$props on PhpParser\\Node\|null#'

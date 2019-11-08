@@ -4,7 +4,7 @@ namespace Rector\Doctrine\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRe
 
 use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Source\Apple;
 
-class StaticCall
+class TestingStaticCall
 {
     public static function process($name, $id)
     {
@@ -17,7 +17,7 @@ class CallerClassForStaticCall
     {
         $building = new Apple();
 
-        StaticCall::process('hi', $building->getId());
+        TestingStaticCall::process('hi', $building->getId());
     }
 }
 
@@ -29,7 +29,7 @@ namespace Rector\Doctrine\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRe
 
 use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector\Source\Apple;
 
-class StaticCall
+class TestingStaticCall
 {
     public static function process(string $name, \Ramsey\Uuid\UuidInterface $id)
     {
@@ -42,7 +42,7 @@ class CallerClassForStaticCall
     {
         $building = new Apple();
 
-        StaticCall::process('hi', $building->getId());
+        TestingStaticCall::process('hi', $building->getId());
     }
 }
 

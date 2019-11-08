@@ -27,6 +27,7 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Expr\UnaryPlus;
@@ -62,17 +63,12 @@ trait ComplexRemovalTrait
     /**
      * @required
      */
-    public function setPropertyManipulator(PropertyManipulator $propertyManipulator): void
-    {
-        $this->propertyManipulator = $propertyManipulator;
-    }
-
-    /**
-     * @required
-     */
-    public function setParsedNodesByType(ParsedNodesByType $parsedNodesByType): void
-    {
+    public function autowireComplextRemovalTrait(
+        PropertyManipulator $propertyManipulator,
+        ParsedNodesByType $parsedNodesByType
+    ): void {
         $this->parsedNodesByType = $parsedNodesByType;
+        $this->propertyManipulator = $propertyManipulator;
     }
 
     abstract protected function removeNode(Node $node): void;
@@ -86,6 +82,10 @@ trait ComplexRemovalTrait
 
         $classMethodCalls = $this->parsedNodesByType->findClassMethodCalls($classMethod);
         foreach ($classMethodCalls as $classMethodCall) {
+            if ($classMethodCall instanceof Array_) {
+                continue;
+            }
+
             $this->removeMethodCall($classMethodCall);
         }
     }
@@ -216,7 +216,7 @@ trait ComplexRemovalTrait
     }
 
     /**
-     * @param MethodCall|Expr\StaticCall|Array_ $node
+     * @param MethodCall|StaticCall $node
      */
     private function removeMethodCall(Node $node): void
     {

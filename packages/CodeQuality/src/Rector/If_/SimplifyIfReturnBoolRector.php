@@ -107,7 +107,11 @@ PHP
 
         /** @var Return_ $ifInnerNode */
         $ifInnerNode = $ifNode->stmts[0];
-        if (! $this->isBool($ifInnerNode->expr)) {
+
+        /** @var Expr $returnedExpr */
+        $returnedExpr = $ifInnerNode->expr;
+
+        if (! $this->isBool($returnedExpr)) {
             return true;
         }
 
@@ -117,7 +121,7 @@ PHP
         }
 
         // negate + negate → skip for now
-        if ($this->isFalse($ifInnerNode->expr) && Strings::contains($this->print($ifNode->cond), '!=')) {
+        if ($this->isFalse($returnedExpr) && Strings::contains($this->print($ifNode->cond), '!=')) {
             return true;
         }
 
