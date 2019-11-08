@@ -72,6 +72,65 @@ composer require rector/rector --dev
 **Did you have conflicts during `composer require` or on run?**
 - Use the [Docker image](#run-rector-in-docker)
 
+## Running Rector
+
+### A. Prepared Sets
+
+Featured open-source projects have **prepared sets**. You can find them in [`/config/set`](/config/set) or by running:
+
+```bash
+vendor/bin/rector sets
+```
+
+Let's say you pick the `symfony40` set and you want to upgrade your `/src` directory:
+
+```bash
+# show a list of known changes in Symfony 4.0
+vendor/bin/rector process src --set symfony40 --dry-run
+```
+
+```bash
+# apply upgrades to your code
+vendor/bin/rector process src --set symfony40
+```
+
+Some sets, such as [`code-quality`](/config/set/code-quality) can be
+used on a regular basis. You can include them in your `rector.yaml` to
+run them by default:
+
+```yaml
+# rector.yaml
+imports:
+    - { resource: 'vendor/rector/rector/config/set/code-quality/code-quality.yaml' }
+    - { resource: 'vendor/rector/rector/config/set/php/php71.yaml' }
+    - { resource: 'vendor/rector/rector/config/set/php/php72.yaml' }
+    - { resource: 'vendor/rector/rector/config/set/php/php73.yaml' }
+```
+
+>  If you use Rector in Docker, you can use absolute path, e.g.
+>  `/rector/config/set/php/php71.yaml`
+
+### B. Custom Sets
+
+1. Create a `rector.yaml` config file with your desired Rectors:
+
+    ```yaml
+    services:
+        Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector:
+            $annotation: "inject"
+    ```
+
+2. Run Rector on your `/src` directory:
+
+    ```bash
+    vendor/bin/rector process src --dry-run
+    # apply
+    vendor/bin/rector process src
+    ```
+
+
+## Features
+
 ### Extra Autoloading
 
 Rector relies on project and autoloading of its classes. To specify your own autoload file, use `--autoload-file` option:
@@ -129,62 +188,6 @@ FQN classes are imported by default every time Rector performs a change,  so you
 parameters:
     auto_import_names: false
 ```
-
-## Running Rector
-
-### A. Prepared Sets
-
-Featured open-source projects have **prepared sets**. You can find them in [`/config/set`](/config/set) or by running:
-
-```bash
-vendor/bin/rector sets
-```
-
-Let's say you pick the `symfony40` set and you want to upgrade your `/src` directory:
-
-```bash
-# show a list of known changes in Symfony 4.0
-vendor/bin/rector process src --set symfony40 --dry-run
-```
-
-```bash
-# apply upgrades to your code
-vendor/bin/rector process src --set symfony40
-```
-
-Some sets, such as [`code-quality`](/config/set/code-quality) can be
-used on a regular basis. You can include them in your `rector.yaml` to
-run them by default:
-
-```yaml
-# rector.yaml
-imports:
-    - { resource: 'vendor/rector/rector/config/set/code-quality/code-quality.yaml' }
-    - { resource: 'vendor/rector/rector/config/set/php/php71.yaml' }
-    - { resource: 'vendor/rector/rector/config/set/php/php72.yaml' }
-    - { resource: 'vendor/rector/rector/config/set/php/php73.yaml' }
-```
-
->  If you use Rector in Docker, you can use absolute path, e.g.
->  `/rector/config/set/php/php71.yaml`
-
-### B. Custom Sets
-
-1. Create a `rector.yaml` config file with your desired Rectors:
-
-    ```yaml
-    services:
-        Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector:
-            $annotation: "inject"
-    ```
-
-2. Run Rector on your `/src` directory:
-
-    ```bash
-    vendor/bin/rector process src --dry-run
-    # apply
-    vendor/bin/rector process src
-    ```
 
 ## 3 Steps to Create Your Own Rector
 
