@@ -7,6 +7,7 @@ namespace Rector\Php70\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PHPUnit\Framework\TestCase;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -83,6 +84,12 @@ PHP
 
         if (! $this->isName($node->var, 'this')) {
             return null;
+        }
+
+        if ($this->isObjectType($node->var, TestCase::class)) {
+            if ($this->isName($node->name, 'assert*')) {
+                return null;
+            }
         }
 
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
