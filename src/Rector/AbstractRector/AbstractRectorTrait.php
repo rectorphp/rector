@@ -23,6 +23,7 @@ trait AbstractRectorTrait
     use VisibilityTrait;
     use ValueResolverTrait;
     use CallableNodeTraverserTrait;
+    use ComplexRemovalTrait;
 
     protected function isNonAnonymousClass(?Node $node): bool
     {

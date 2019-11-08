@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Property;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\PropertyManipulator;
@@ -59,11 +55,11 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [Property::class];
+        return [PropertyProperty::class];
     }
 
     /**
-     * @param Property $node
+     * @param PropertyProperty $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -71,80 +67,23 @@ PHP
             return null;
         }
 
-        $propertyFetches = $this->propertyManipulator->getAllPropertyFetch($node);
-
-        // never used
-        if ($propertyFetches === []) {
-            $this->removeNode($node);
+        if ($this->propertyManipulator->isPropertyUsedInReadContext($node)) {
+            return null;
         }
 
-        $uselessAssigns = $this->resolveUselessAssignNode($propertyFetches);
-        if (count($uselessAssigns) > 0) {
-            $this->removeNode($node);
-            foreach ($uselessAssigns as $uselessAssign) {
-                $this->removeNode($uselessAssign);
-            }
-        }
+        $this->removePropertyAndUsages($node);
 
         return $node;
     }
 
-    private function shouldSkipProperty(Property $property): bool
+    private function shouldSkipProperty(PropertyProperty $propertyProperty): bool
     {
-        if (! $property->isPrivate()) {
+        if (! $this->propertyManipulator->isPrivate($propertyProperty)) {
             return true;
         }
 
         /** @var Class_|Interface_|Trait_|null $classNode */
-        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
-
-        if ($classNode === null || $classNode instanceof Trait_ || $classNode instanceof Interface_) {
-            return true;
-        }
-
-        if ($this->isDoctrineProperty($property)) {
-            return true;
-        }
-
-        if (count($property->props) !== 1) {
-            return true;
-        }
-
-        // has class $this->$variable call?
-
-        /** @var Node\Stmt\ClassLike $class */
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
-        return (bool) $this->betterNodeFinder->findFirst($class->stmts, function (Node $node): bool {
-            if (! $node instanceof PropertyFetch) {
-                return false;
-            }
-
-            return $node->name instanceof Expr;
-        });
-    }
-
-    /**
-     * Matches all-only: "$this->property = x"
-     * If these is ANY OTHER use of property, e.g. process($this->property), it returns []
-     *
-     * @param PropertyFetch[]|StaticPropertyFetch[] $propertyFetches
-     * @return Assign[]
-     */
-    private function resolveUselessAssignNode(array $propertyFetches): array
-    {
-        $uselessAssigns = [];
-
-        foreach ($propertyFetches as $propertyFetch) {
-            $propertyFetchParentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
-
-            if ($propertyFetchParentNode instanceof Assign && $propertyFetchParentNode->var === $propertyFetch) {
-                $uselessAssigns[] = $propertyFetchParentNode;
-            } else {
-                // it is used another way as well → nothing to remove
-                return [];
-            }
-        }
-
-        return $uselessAssigns;
+        $classNode = $propertyProperty->getAttribute(AttributeKey::CLASS_NODE);
+        return $classNode === null || $classNode instanceof Trait_ || $classNode instanceof Interface_;
     }
 }
