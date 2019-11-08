@@ -10,7 +10,6 @@ use Rector\CodingStyle\Application\NameImportingCommander;
 use Rector\CodingStyle\Node\NameImporter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Testing\PHPUnit\PHPUnitEnvironment;
 
@@ -24,12 +23,7 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
     /**
      * @var bool
      */
-    private $shouldImportDocBlocks = true;
-
-    /**
-     * @var bool
-     */
-    private $shouldImportRootNamespaceClasses = true;
+    private $importDocBlocks = true;
 
     /**
      * @var NameImporter
@@ -41,15 +35,10 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
      */
     private $autoImportNames = false;
 
-    public function __construct(
-        NameImporter $nameImporter,
-        bool $shouldImportDocBlocks = true,
-        bool $shouldImportRootNamespaceClasses = true,
-        bool $autoImportNames
-    ) {
+    public function __construct(NameImporter $nameImporter, bool $importDocBlocks, bool $autoImportNames)
+    {
         $this->nameImporter = $nameImporter;
-        $this->shouldImportDocBlocks = $shouldImportDocBlocks;
-        $this->shouldImportRootNamespaceClasses = $shouldImportRootNamespaceClasses;
+        $this->importDocBlocks = $importDocBlocks;
         $this->autoImportNames = $autoImportNames;
     }
 
@@ -90,43 +79,6 @@ class SomeClass
 }
 PHP
             ),
-            new ConfiguredCodeSample(
-                <<<'PHP'
-class SomeClass
-{
-    public function create()
-    {
-        return SomeAnother\AnotherClass;
-    }
-
-    public function createDate()
-    {
-        return new \DateTime(); // this remains untouched
-    }
-}
-PHP
-                ,
-                <<<'PHP'
-use SomeAnother\AnotherClass;
-
-class SomeClass
-{
-    public function create()
-    {
-        return AnotherClass;
-    }
-
-    public function createDate()
-    {
-        return new \DateTime(); // this remains untouched
-    }
-}
-PHP
-                ,
-                [
-                    '$shouldImportRootNamespaceClasses' => false,
-                ]
-            ),
         ]);
     }
 
@@ -151,20 +103,12 @@ PHP
         $this->useAddingCommander->analyseFileInfoUseStatements($node);
 
         if ($node instanceof Name) {
-            // Importing root namespace classes (like \DateTime) is optional
-            if (! $this->shouldImportRootNamespaceClasses) {
-                $name = $this->getName($node);
-                if ($name !== null && substr_count($name, '\\') === 0) {
-                    return null;
-                }
-            }
-
             return $this->nameImporter->importName($node);
         }
 
         // process doc blocks
-        if ($this->shouldImportDocBlocks) {
-            $this->docBlockManipulator->importNames($node, $this->shouldImportRootNamespaceClasses);
+        if ($this->importDocBlocks) {
+            $this->docBlockManipulator->importNames($node);
             return $node;
         }
 

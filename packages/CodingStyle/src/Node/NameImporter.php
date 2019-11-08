@@ -12,9 +12,12 @@ use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\CodingStyle\Imports\AliasUsesResolver;
 use Rector\CodingStyle\Imports\ImportSkipper;
+use Rector\Configuration\Option;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class NameImporter
 {
@@ -43,16 +46,30 @@ final class NameImporter
      */
     private $importSkipper;
 
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    /**
+     * @var ParameterProvider
+     */
+    private $parameterProvider;
+
     public function __construct(
         StaticTypeMapper $staticTypeMapper,
         AliasUsesResolver $aliasUsesResolver,
         UseAddingCommander $useAddingCommander,
-        ImportSkipper $importSkipper
+        ImportSkipper $importSkipper,
+        NameResolver $nameResolver,
+        ParameterProvider $parameterProvider
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->aliasUsesResolver = $aliasUsesResolver;
         $this->useAddingCommander = $useAddingCommander;
         $this->importSkipper = $importSkipper;
+        $this->nameResolver = $nameResolver;
+        $this->parameterProvider = $parameterProvider;
     }
 
     public function importName(Name $name): ?Name
@@ -61,16 +78,8 @@ final class NameImporter
             return null;
         }
 
-        if ($name->getAttribute('virtual_node')) {
-            return null;
-        }
-
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($name);
         if (! $staticType instanceof FullyQualifiedObjectType) {
-            return null;
-        }
-
-        if ($this->shouldSkipName($name)) {
             return null;
         }
 
@@ -153,10 +162,29 @@ final class NameImporter
             return true;
         }
 
+        // is scalar name?
+        if (in_array($name->toString(), ['true', 'false', 'bool'], true)) {
+            return true;
+        }
+
         if ($this->isNamespaceOrUseImportName($name)) {
             return true;
         }
 
-        return $this->isFunctionOrConstantImportWithSingleName($name);
+        if ($this->isFunctionOrConstantImportWithSingleName($name)) {
+            return true;
+        }
+
+        // Importing root namespace classes (like \DateTime) is optional
+        $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES_PARAMETER);
+
+        if (! $importShortClasses) {
+            $name = $this->nameResolver->getName($name);
+            if ($name !== null && substr_count($name, '\\') === 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

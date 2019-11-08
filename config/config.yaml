@@ -9,8 +9,13 @@ parameters:
     exclude_rectors: []
     autoload_paths: []
 
+    # importing FQN names
     auto_import_names: true
+    # e.g. import \DateTime
+    import_short_classes: true
+    # e.g. /** @var \Some\ClassHere */
+    import_doc_blocks: true
 
     php_version_features: ~ # what PHP version should be used for features, local PHP version is used by default
     file_extensions:
-        - php
+        - 'php'

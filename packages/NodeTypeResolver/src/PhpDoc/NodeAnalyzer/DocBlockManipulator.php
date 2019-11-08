@@ -375,18 +375,14 @@ final class DocBlockManipulator
         }
     }
 
-    public function importNames(Node $node, bool $shouldImportRootNamespaceClasses = true): void
+    public function importNames(Node $node): void
     {
         if ($node->getDocComment() === null) {
             return;
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $hasNodeChanged = $this->docBlockNameImporter->importNames(
-            $phpDocInfo,
-            $node,
-            $shouldImportRootNamespaceClasses
-        );
+        $hasNodeChanged = $this->docBlockNameImporter->importNames($phpDocInfo, $node);
 
         if ($hasNodeChanged) {
             $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
