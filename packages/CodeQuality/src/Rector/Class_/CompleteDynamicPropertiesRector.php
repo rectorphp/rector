@@ -158,10 +158,6 @@ PHP
                 return null;
             }
 
-            if ($node->name instanceof Variable) {
-                return null;
-            }
-
             $propertyName = $this->getName($node->name);
             if ($propertyName === null) {
                 return null;

@@ -10,6 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
@@ -169,6 +170,20 @@ final class NameResolver
             // is $variable::method(), unable to resolve $variable->class name
             if ($parentNode instanceof StaticCall) {
                 return null;
+            }
+
+            // skip $some->$dynamicMethodName()
+            if ($parentNode instanceof MethodCall) {
+                if ($node === $parentNode->name) {
+                    return null;
+                }
+            }
+
+            // skip $some->$dynamicPropertyName
+            if ($parentNode instanceof PropertyFetch) {
+                if ($node === $parentNode->name) {
+                    return null;
+                }
             }
         }
 
