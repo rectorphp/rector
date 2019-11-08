@@ -57,6 +57,11 @@ final class NameImportingCommander implements CommanderInterface
                 return null;
             }
 
+            // is scalar name?
+            if (in_array($node->toString(), ['true', 'false', 'bool'], true)) {
+                return null;
+            }
+
             // skip name of UseUse
             if ($node->getAttribute(AttributeKey::PARENT_NODE) instanceof UseUse) {
                 return null;
