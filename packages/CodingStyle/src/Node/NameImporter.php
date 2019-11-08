@@ -57,12 +57,15 @@ final class NameImporter
 
     public function importName(Name $name): ?Name
     {
+        if ($this->shouldSkipName($name)) {
+            return null;
+        }
+
         if ($name->getAttribute('virtual_node')) {
             return null;
         }
 
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($name);
-
         if (! $staticType instanceof FullyQualifiedObjectType) {
             return null;
         }
@@ -146,6 +149,10 @@ final class NameImporter
 
     private function shouldSkipName(Name $name): bool
     {
+        if ($name->getAttribute('virtual_node')) {
+            return true;
+        }
+
         if ($this->isNamespaceOrUseImportName($name)) {
             return true;
         }
