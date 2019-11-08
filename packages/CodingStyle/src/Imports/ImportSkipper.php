@@ -36,8 +36,10 @@ final class ImportSkipper
         $this->shortNameResolver = $shortNameResolver;
     }
 
-    public function shouldSkipName(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
-    {
+    public function shouldSkipNameForFullyQualifiedObjectType(
+        Node $node,
+        FullyQualifiedObjectType $fullyQualifiedObjectType
+    ): bool {
         if ($this->isShortNameAlreadyUsedForDifferentFullyQualifiedName($node, $fullyQualifiedObjectType)) {
             return true;
         }

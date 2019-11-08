@@ -198,6 +198,13 @@ final class UseAddingCommander implements CommanderInterface
             }
         }
 
+        $functionImports = $this->functionUseImportTypesInFilePath[$filePath] ?? [];
+        foreach ($functionImports as $useImportType) {
+            if ($fullyQualifiedObjectType->equals($useImportType)) {
+                return true;
+            }
+        }
+
         return false;
     }
 

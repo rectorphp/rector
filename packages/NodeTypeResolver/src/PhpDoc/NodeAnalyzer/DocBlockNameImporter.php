@@ -122,7 +122,7 @@ final class DocBlockNameImporter
             return $identifierTypeNode;
         }
 
-        if ($this->importSkipper->shouldSkipName($node, $fullyQualifiedObjectType)) {
+        if ($this->importSkipper->shouldSkipNameForFullyQualifiedObjectType($node, $fullyQualifiedObjectType)) {
             return $identifierTypeNode;
         }
 

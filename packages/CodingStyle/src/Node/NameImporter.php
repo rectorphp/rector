@@ -67,11 +67,7 @@ final class NameImporter
             return null;
         }
 
-        if ($this->isNamespaceOrUseImportName($name)) {
-            return null;
-        }
-
-        if ($this->isFunctionOrConstantImportWithSingleName($name)) {
+        if ($this->shouldSkipName($name)) {
             return null;
         }
 
@@ -110,7 +106,7 @@ final class NameImporter
         FullyQualifiedObjectType $fullyQualifiedObjectType
     ): ?Name {
         // the same end is already imported → skip
-        if ($this->importSkipper->shouldSkipName($name, $fullyQualifiedObjectType)) {
+        if ($this->importSkipper->shouldSkipNameForFullyQualifiedObjectType($name, $fullyQualifiedObjectType)) {
             return null;
         }
 
@@ -146,5 +142,14 @@ final class NameImporter
         } else {
             $this->useAddingCommander->addUseImport($name, $fullyQualifiedObjectType);
         }
+    }
+
+    private function shouldSkipName(Name $name): bool
+    {
+        if ($this->isNamespaceOrUseImportName($name)) {
+            return true;
+        }
+
+        return $this->isFunctionOrConstantImportWithSingleName($name);
     }
 }
