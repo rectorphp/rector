@@ -6,6 +6,7 @@ namespace Rector\Php70\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -76,6 +77,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $node->var instanceof Variable) {
+            return null;
+        }
+
         if (! $this->isName($node->var, 'this')) {
             return null;
         }
@@ -85,18 +90,13 @@ PHP
             return null;
         }
 
-        $methodName = $this->getName($node);
+        $methodName = $this->getName($node->name);
         if ($methodName === null) {
             return null;
         }
 
         $isStaticMethod = $this->parsedNodesByType->isStaticMethod($methodName, $className);
         if (! $isStaticMethod) {
-            return null;
-        }
-
-        $methodName = $this->getName($node);
-        if ($methodName === null) {
             return null;
         }
 
