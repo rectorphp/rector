@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Utils\DocumentationGenerator\Command;
 
 use Nette\Utils\Strings;
-use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -94,6 +93,7 @@ use PhpParser\Node\Stmt\Unset_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\Node\Stmt\While_;
+use PhpParser\Node\UnionType;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\Console\Command\AbstractCommand;
 use Rector\Console\Shell;
@@ -393,6 +393,8 @@ final class DumpNodesCommand extends AbstractCommand
                     $node = new Param($someVariableNode);
                 } elseif ($nodeClass === Arg::class) {
                     $node = new Arg($someVariableNode);
+                } elseif ($nodeClass === UnionType::class) {
+                    $node = new UnionType([new Identifier('string'), new Identifier('null')]);
                 } else {
                     throw new ShouldNotHappenException(sprintf(
                         'Implement a new printer for "%s" node in "%s"',

@@ -1351,32 +1351,6 @@ Import fully qualified names to use statements
  }
 ```
 
-```yaml
-services:
-    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector:
-        $shouldImportRootNamespaceClasses: false
-```
-
-↓
-
-```diff
-+use SomeAnother\AnotherClass;
-+
- class SomeClass
- {
-     public function create()
-     {
--        return SomeAnother\AnotherClass;
-+        return AnotherClass;
-     }
-
-     public function createDate()
-     {
-         return new \DateTime(); // this remains untouched
-     }
- }
-```
-
 <br>
 
 ### `MakeInheritedMethodVisibilitySameAsParentRector`
