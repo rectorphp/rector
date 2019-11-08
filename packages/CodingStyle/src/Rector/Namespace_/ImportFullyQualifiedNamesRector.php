@@ -6,11 +6,13 @@ namespace Rector\CodingStyle\Rector\Namespace_;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use Rector\CodingStyle\Application\NameImportingCommander;
 use Rector\CodingStyle\Node\NameImporter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Testing\PHPUnit\PHPUnitEnvironment;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector\ImportFullyQualifiedNamesRectorTest
@@ -34,14 +36,21 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
      */
     private $nameImporter;
 
+    /**
+     * @var bool
+     */
+    private $autoImportNames = false;
+
     public function __construct(
         NameImporter $nameImporter,
         bool $shouldImportDocBlocks = true,
-        bool $shouldImportRootNamespaceClasses = true
+        bool $shouldImportRootNamespaceClasses = true,
+        bool $autoImportNames
     ) {
         $this->nameImporter = $nameImporter;
         $this->shouldImportDocBlocks = $shouldImportDocBlocks;
         $this->shouldImportRootNamespaceClasses = $shouldImportRootNamespaceClasses;
+        $this->autoImportNames = $autoImportNames;
     }
 
     public function getDefinition(): RectorDefinition
@@ -134,6 +143,11 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        /** prevents duplicated run with @see NameImportingCommander  */
+        if ($this->autoImportNames && ! PHPUnitEnvironment::isPHPUnitRun()) {
+            return null;
+        }
+
         $this->useAddingCommander->analyseFileInfoUseStatements($node);
 
         if ($node instanceof Name) {
