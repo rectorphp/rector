@@ -17,9 +17,11 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use ReflectionClass;
 use ReflectionMethod;
 
 /**
@@ -32,9 +34,15 @@ final class RemoveDelegatingParentCallRector extends AbstractRector
      */
     private $parsedNodesByType;
 
-    public function __construct(ParsedNodesByType $parsedNodesByType)
+    /**
+     * @var ValueResolver
+     */
+    private $valueResolver;
+
+    public function __construct(ParsedNodesByType $parsedNodesByType, ValueResolver $valueResolver)
     {
         $this->parsedNodesByType = $parsedNodesByType;
+        $this->valueResolver = $valueResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -168,7 +176,7 @@ PHP
         if (! $this->areArgsAndParamsEqual($staticCall->args, $classMethod->params)) {
             return false;
         }
-        return ! $this->isParentClassMethodVisibilityOverride($classMethod, $staticCall);
+        return ! $this->isParentClassMethodVisibilityOrDefaultOverride($classMethod, $staticCall);
     }
 
     private function hasRequiredAnnotation(Node $node): bool
@@ -206,8 +214,10 @@ PHP
         return true;
     }
 
-    private function isParentClassMethodVisibilityOverride(ClassMethod $classMethod, StaticCall $staticCall): bool
-    {
+    private function isParentClassMethodVisibilityOrDefaultOverride(
+        ClassMethod $classMethod,
+        StaticCall $staticCall
+    ): bool {
         /** @var string $className */
         $className = $staticCall->getAttribute(AttributeKey::CLASS_NAME);
 
@@ -223,12 +233,60 @@ PHP
             if ($parentClassMethod->isProtected() && $classMethod->isPublic()) {
                 return true;
             }
+            if (! $this->areNodesEqual($parentClassMethod->params, $classMethod->params)) {
+                return true;
+            }
         }
 
+        return $this->checkOverrideUsingReflection($classMethod, $parentClassName, $methodName);
+    }
+
+    private function getReflectionMethod(string $className, string $methodName): ?ReflectionMethod
+    {
+        if (! method_exists($className, $methodName)) {
+            //internal classes don't have __construct method
+            if ($methodName === '__construct' && class_exists($className)) {
+                return (new ReflectionClass($className))->getConstructor();
+            }
+            return null;
+        }
+        return new ReflectionMethod($className, $methodName);
+    }
+
+    private function areParameterDefaultsDifferent(
+        ClassMethod $classMethod,
+        ReflectionMethod $reflectionMethod
+    ): bool {
+        foreach ($reflectionMethod->getParameters() as $key => $parameter) {
+            $methodParam = $classMethod->params[$key];
+
+            if ($parameter->isDefaultValueAvailable() !== isset($methodParam->default)) {
+                return true;
+            }
+            if ($parameter->isDefaultValueAvailable() && $methodParam->default !== null &&
+                $parameter->getDefaultValue() !== $this->valueResolver->getValue($methodParam->default)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function checkOverrideUsingReflection(
+        ClassMethod $classMethod,
+        string $parentClassName,
+        string $methodName
+    ): bool {
+        $parentMethodReflection = $this->getReflectionMethod($parentClassName, $methodName);
         // 3rd party code
-        if (method_exists($parentClassName, $methodName)) {
-            $parentMethodReflection = new ReflectionMethod($parentClassName, $methodName);
+        if ($parentMethodReflection !== null) {
             if ($parentMethodReflection->isProtected() && $classMethod->isPublic()) {
+                return true;
+            }
+            if ($parentMethodReflection->isInternal()) {
+                //we can't know for certain so we assume its an override
+                return true;
+            }
+            if ($this->areParameterDefaultsDifferent($classMethod, $parentMethodReflection)) {
                 return true;
             }
         }
