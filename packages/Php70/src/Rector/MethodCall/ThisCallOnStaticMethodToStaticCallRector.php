@@ -97,11 +97,6 @@ PHP
             return null;
         }
 
-        // method name is a variable name
-        if ($node->name instanceof Variable) {
-            return null;
-        }
-
         $methodName = $this->getName($node->name);
         if ($methodName === null) {
             return null;

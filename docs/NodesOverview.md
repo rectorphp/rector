@@ -1112,3 +1112,10 @@ $someVariable
 ```
 <br>
 
+#### `PhpParser\Node\UnionType`
+
+```php
+string|null
+```
+<br>
+

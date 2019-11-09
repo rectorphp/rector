@@ -8,12 +8,12 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\UnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
@@ -128,11 +128,16 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     }
 
     /**
-     * @param Name|NullableType|Identifier $possibleSubtype
-     * @param Name|NullableType|Identifier $type
+     * @param Name|NullableType|UnionType|Identifier $possibleSubtype
+     * @param Name|NullableType|UnionType|Identifier $type
      */
     protected function isSubtypeOf(Node $possibleSubtype, Node $type): bool
     {
+        // skip until PHP 8 is out
+        if ($possibleSubtype instanceof UnionType || $type instanceof UnionType) {
+            return false;
+        }
+
         $type = $type instanceof NullableType ? $type->type : $type;
 
         if ($possibleSubtype instanceof NullableType) {
