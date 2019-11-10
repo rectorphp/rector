@@ -5,6 +5,11 @@ parameters:
         - 'dead-code'
         - 'nette-utils-code-quality'
 
+    paths:
+        - 'src'
+        - 'packages'
+        - 'tests'
+
     exclude_paths:
         - '/Fixture/'
         - '/Source/'

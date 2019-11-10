@@ -81,6 +81,12 @@ final class ProcessCommand extends AbstractCommand
     private $stubLoader;
 
     /**
+     * @var string[]
+     */
+    private $paths = [];
+
+    /**
+     * @param string[] $paths
      * @param string[] $fileExtensions
      */
     public function __construct(
@@ -94,6 +100,7 @@ final class ProcessCommand extends AbstractCommand
         ReportingExtensionRunner $reportingExtensionRunner,
         RectorNodeTraverser $rectorNodeTraverser,
         StubLoader $stubLoader,
+        array $paths,
         array $fileExtensions
     ) {
         $this->filesFinder = $phpFilesFinder;
@@ -109,6 +116,7 @@ final class ProcessCommand extends AbstractCommand
         $this->stubLoader = $stubLoader;
 
         parent::__construct();
+        $this->paths = $paths;
     }
 
     protected function configure(): void
@@ -117,7 +125,7 @@ final class ProcessCommand extends AbstractCommand
         $this->setDescription('Upgrade or refactor source code with provided rectors');
         $this->addArgument(
             Option::SOURCE,
-            InputArgument::REQUIRED | InputArgument::IS_ARRAY,
+            InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
             'Files or directories to be upgraded.'
         );
         $this->addOption(
@@ -160,7 +168,7 @@ final class ProcessCommand extends AbstractCommand
         $this->rectorGuard->ensureSomeRectorsAreRegistered();
         $this->stubLoader->loadStubs();
 
-        $source = (array) $input->getArgument(Option::SOURCE);
+        $source = $this->resolvesSourcePaths($input);
 
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, $this->fileExtensions);
 
@@ -186,5 +194,21 @@ final class ProcessCommand extends AbstractCommand
         }
 
         return Shell::CODE_SUCCESS;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolvesSourcePaths(InputInterface $input): array
+    {
+        $commandLinePaths = (array) $input->getArgument(Option::SOURCE);
+
+        // manual command line value has priority
+        if (count($commandLinePaths) > 0) {
+            return $commandLinePaths;
+        }
+
+        // fallback to config defined paths
+        return $this->paths;
     }
 }
