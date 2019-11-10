@@ -181,6 +181,18 @@ parameters:
     php_version_features: '7.2' # your version is 7.3
 ```
 
+### Paths
+
+If you're annoyed by repeating paths in arguments, you can move them to config instead:
+
+```yaml
+# rector.yaml
+parameters:
+    paths:
+        - 'src'
+        - 'tests'
+```
+
 ### Import Use Statements
 
 FQN classes are imported by default every time Rector performs a change,  so you don't have to do it manually/after each run. You can disable it by:

@@ -5,6 +5,8 @@ imports:
     - { resource: '../utils/**/config/config.yaml', ignore_errors: true }
 
 parameters:
+    # processed paths
+    paths: []
     exclude_paths: []
     exclude_rectors: []
     autoload_paths: []
@@ -16,6 +18,8 @@ parameters:
     # e.g. /** @var \Some\ClassHere */
     import_doc_blocks: true
 
-    php_version_features: ~ # what PHP version should be used for features, local PHP version is used by default
+    # what PHP version is used for features, composer.json version, then local PHP version is used by default
+    php_version_features: ~
+
     file_extensions:
         - 'php'
