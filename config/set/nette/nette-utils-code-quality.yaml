@@ -5,7 +5,6 @@ services:
         file_get_contents: ['Nette\Utils\FileSystem', 'read']
         unlink: ['Nette\Utils\FileSystem', 'delete']
         rmdir: ['Nette\Utils\FileSystem', 'delete']
-        file_put_contents: ['Nette\Utils\FileSystem', 'write']
 
     # strings
     Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector: ~
@@ -14,3 +13,4 @@ services:
     Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector: ~
     Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector: ~
     Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector: ~
+    Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector: ~

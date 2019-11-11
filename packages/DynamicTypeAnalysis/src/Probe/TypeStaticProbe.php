@@ -54,7 +54,7 @@ final class TypeStaticProbe
             }
 
             $arrayValueTypes = array_unique($arrayValueTypes);
-            $arrayValueTypes = implode($arrayValueTypes, '|');
+            $arrayValueTypes = implode('|', $arrayValueTypes);
 
             return 'array:' . $arrayValueTypes;
         }

@@ -40,11 +40,7 @@ abstract class AbstractArgumentProbeRector extends AbstractRector
         }
 
         // method without body doesn't need analysis
-        if (count((array) $classMethod->stmts) === 0) {
-            return true;
-        }
-
-        return false;
+        return count((array) $classMethod->stmts) === 0;
     }
 
     protected function getClassMethodReference(ClassMethod $classMethod): ?string
