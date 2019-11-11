@@ -147,7 +147,7 @@ PHP
      */
     private function processBinaryPlusAndMinus(BinaryOp $binaryOp): ?Expr
     {
-        if ($this->isValue($binaryOp->left, 0)) {
+        if ($binaryOp instanceof Plus && $this->isValue($binaryOp->left, 0)) {
             if ($this->isNumberType($binaryOp->right)) {
                 return $binaryOp->right;
             }
