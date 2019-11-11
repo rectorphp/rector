@@ -14,8 +14,10 @@ final class StaticFixtureProvider
     {
         $fileInfos = self::findFilesInDirectory($directory, $suffix);
 
+        $key = 0;
         foreach ($fileInfos as $fileInfo) {
-            yield $fileInfo->getFilename() => [$fileInfo->getPathName()];
+            yield $key . " " . $fileInfo->getFilename() => [$fileInfo->getPathName()];
+            $key++;
         }
     }
 
