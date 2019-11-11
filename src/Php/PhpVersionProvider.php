@@ -60,7 +60,7 @@ final class PhpVersionProvider
         $projectComposerJson = Json::decode($projectComposerContent, Json::FORCE_ARRAY);
 
         // Rector's composer.json
-        if ($projectComposerJson['name'] === 'rector/rector') {
+        if (isset($projectComposerJson['name']) && $projectComposerJson['name'] === 'rector/rector') {
             return null;
         }
 
