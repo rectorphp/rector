@@ -52,9 +52,11 @@ final class NodeRemovingCommander implements CommanderInterface
             $node = $parentNode;
         }
 
-        /** @var SmartFileInfo $fileInfo */
+        /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
-        $this->affectedFilesCollector->addFile($fileInfo);
+        if ($fileInfo !== null) {
+            $this->affectedFilesCollector->addFile($fileInfo);
+        }
 
         /** @var Stmt $node */
         $this->nodesToRemove[] = $node;

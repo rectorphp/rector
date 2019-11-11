@@ -1,8 +1,8 @@
 services:
     _defaults:
-        public: true
         autowire: true
+        public: true
 
-    Rector\FileSystemRector\:
+    Rector\DynamicTypeAnalysis\:
         resource: '../src'
         exclude: '../src/{Rector/**/*Rector.php}'

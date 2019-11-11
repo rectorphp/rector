@@ -258,6 +258,10 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         $content = Json::encode($json, Json::PRETTY);
         $content = $this->inlineSections($content, ['keywords', 'bin']);
         $content = $this->inlineAuthors($content);
+
+        // make sure there is newline in the end
+        $content = trim($content) . PHP_EOL;
+
         FileSystem::write($filePath, $content);
     }
 
