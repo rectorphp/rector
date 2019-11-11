@@ -76,7 +76,7 @@ PHP
         }
 
         $else = $node->else;
-        if (count($else->stmts) > 1) {
+        if (count($else->stmts) !== 1) {
             return null;
         }
 
