@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\BinaryOp\Div;
 use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Expr\BinaryOp\Mul;
 use PhpParser\Node\Expr\BinaryOp\Plus;
+use PhpParser\Node\Expr\UnaryMinus;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -149,6 +150,9 @@ PHP
     {
         if ($this->isValue($binaryOp->left, 0)) {
             if ($this->isNumberType($binaryOp->right)) {
+                if ($binaryOp instanceof Minus) {
+                    return new UnaryMinus($binaryOp->right);
+                }
                 return $binaryOp->right;
             }
         }
