@@ -7,7 +7,6 @@ namespace Rector\PhpParser\Node\Manipulator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\NodeDumper;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -30,10 +29,12 @@ final class ClassConstManipulator
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
+
     /**
      * @var ParsedNodesByType
      */
     private $parsedNodesByType;
+
     /**
      * @var ClassManipulator
      */
@@ -45,8 +46,7 @@ final class ClassConstManipulator
         BetterStandardPrinter $betterStandardPrinter,
         ParsedNodesByType $parsedNodesByType,
         ClassManipulator $classManipulator
-    )
-    {
+    ) {
         $this->nameResolver = $nameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -67,7 +67,7 @@ final class ClassConstManipulator
 
         $searchInNodes = [$classNode];
         foreach ($this->classManipulator->getUsedTraits($classNode) as $trait) {
-            $searchInNodes[] = $this->parsedNodesByType->findTrait((string)$trait);;
+            $searchInNodes[] = $this->parsedNodesByType->findTrait((string) $trait);
         }
 
         return $this->betterNodeFinder->find($searchInNodes, function (Node $node) use ($classConst): bool {
@@ -77,7 +77,7 @@ final class ClassConstManipulator
             }
 
             // property + static fetch
-            if (!$node instanceof ClassConstFetch) {
+            if (! $node instanceof ClassConstFetch) {
                 return false;
             }
 
