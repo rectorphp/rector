@@ -198,6 +198,10 @@
             "changelog-linker link",
             "changelog-linker cleanup"
         ],
+        "check-docs": [
+            "bin/rector dump-rectors -o markdown | diff docs/AllRectorsOverview.md - ",
+            "bin/rector dump-nodes -o markdown | diff docs/NodesOverview.md - "
+        ],
         "docs": [
             "bin/rector dump-rectors -o markdown > docs/AllRectorsOverview.md",
             "bin/rector dump-nodes -o markdown > docs/NodesOverview.md"
