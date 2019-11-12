@@ -1,4 +1,4 @@
-# All 385 Rectors Overview
+# All 389 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -14,6 +14,7 @@
 - [DeadCode](#deadcode)
 - [Doctrine](#doctrine)
 - [DoctrineCodeQuality](#doctrinecodequality)
+- [DynamicTypeAnalysis](#dynamictypeanalysis)
 - [ElasticSearchDSL](#elasticsearchdsl)
 - [Guzzle](#guzzle)
 - [Laravel](#laravel)
@@ -2600,6 +2601,64 @@ Initialize collection property in Entity constructor
 
 <br>
 
+## DynamicTypeAnalysis
+
+### `AddArgumentTypeWithProbeDataRector`
+
+- class: `Rector\DynamicTypeAnalysis\Rector\ClassMethod\AddArgumentTypeWithProbeDataRector`
+
+Add argument type based on probed data
+
+```diff
+ class SomeClass
+ {
+-    public function run($arg)
++    public function run(string $arg)
+     {
+     }
+ }
+```
+
+<br>
+
+### `DecorateMethodWithArgumentTypeProbeRector`
+
+- class: `Rector\DynamicTypeAnalysis\Rector\ClassMethod\DecorateMethodWithArgumentTypeProbeRector`
+
+Add probe that records argument types to each method
+
+```diff
+ class SomeClass
+ {
+     public function run($arg)
+     {
++        \Rector\DynamicTypeAnalysis\Probe\TypeStaticProbe::recordArgumentType($arg, __METHOD__, 0);
+     }
+ }
+```
+
+<br>
+
+### `RemoveArgumentTypeProbeRector`
+
+- class: `Rector\DynamicTypeAnalysis\Rector\StaticCall\RemoveArgumentTypeProbeRector`
+
+Clean up probe that records argument types
+
+```diff
+-use Rector\DynamicTypeAnalysis\Probe\TypeStaticProbe;
+-
+ class SomeClass
+ {
+     public function run($arg)
+     {
+-        TypeStaticProbe::recordArgumentType($arg, __METHOD__, 0);
+     }
+ }
+```
+
+<br>
+
 ## ElasticSearchDSL
 
 ### `MigrateFilterToQueryRector`
@@ -2893,6 +2952,27 @@ Use Nette\Utils\Strings over bare string-functions
 -        $no = $needle !== substr($content, -strlen($needle));
 +        $yes = \Nette\Utils\Strings::endsWith($content, $needle);
 +        $no = !\Nette\Utils\Strings::endsWith($content, $needle);
+     }
+ }
+```
+
+<br>
+
+### `FilePutContentsToFileSystemWriteRector`
+
+- class: `Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector`
+
+Change file_put_contents() to FileSystem::write()
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        file_put_contents('file.txt', 'content');
++        \Nette\Utils\FileSystem::write('file.txt', 'content');
+
+         file_put_contents('file.txt', 'content_to_append', FILE_APPEND);
      }
  }
 ```
@@ -3320,7 +3400,7 @@ Removes non-existing @var annotations above the code
 
 - class: `Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector`
 
-Tests without assertion will have @doesNotPerformAssertion
+Tests without assertion will have @doesNotPerformAssertion 
 
 ```diff
  class SomeClass extends PHPUnit\Framework\TestCase
