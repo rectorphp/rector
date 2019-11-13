@@ -67,7 +67,7 @@ final class ClassConstManipulator
 
         $searchInNodes = [$classNode];
         foreach ($this->classManipulator->getUsedTraits($classNode) as $trait) {
-            $trait_ = $this->parsedNodesByType->findTrait((string)$trait);
+            $trait_ = $this->parsedNodesByType->findTrait((string) $trait);
             if ($trait !== null) {
                 $searchInNodes[] = $trait_;
             }
