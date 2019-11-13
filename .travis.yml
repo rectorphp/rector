@@ -64,6 +64,13 @@ jobs:
                 - php ci/check_services_in_yaml_configs.php
                 - php ci/run_all_sets.php
 
+        -
+            php: 7.3
+            name: Rector failure
+            script:
+                - bin/rector p src/Issue2307/Exception.php --debug --config issue2307.yaml -n
+                - bin/rector p src/Issue2307/AnotherClass.php --debug --config issue2307.yaml -n
+
         # Stage 2
         -
             # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
