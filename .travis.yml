@@ -29,14 +29,6 @@ jobs:
                 - composer update --prefer-lowest --no-progress
 
         -
-            name: Simple checks
-            php: 7.1
-            script:
-                - composer check-docs
-                - php ci/check_services_in_yaml_configs.php
-                - php ci/run_all_sets.php
-
-        -
             name: PHPStan
             php: 7.1
             script:
@@ -58,6 +50,19 @@ jobs:
             name: Rector
             script:
                 - composer rector
+
+        -
+            name: Documentation
+            php: 7.1
+            script:
+                - composer check-docs
+
+        -
+            name: Simple checks
+            php: 7.1
+            script:
+                - php ci/check_services_in_yaml_configs.php
+                - php ci/run_all_sets.php
 
         # Stage 2
         -
@@ -137,6 +142,7 @@ jobs:
     allow_failures:
         - name: ECS
         - name: Standalone Run
+        - name: Documentation
         - os: windows
 
 matrix:
