@@ -217,6 +217,8 @@ parameters:
         - '#Parameter \#2 \$versionedSets of method Rector\\Bootstrap\\SetOptionResolver\:\:createSetListInString\(\) expects array<array<string\>\>, array<array<string\>\|string\> given#'
         - '#Parameter \#1 \$node of method Rector\\Rector\\AbstractRector\:\:removeNode\(\) expects PhpParser\\Node, PhpParser\\Node\|null given#'
         - '#Cannot access property \$props on PhpParser\\Node\|null#'
+        - '#Strict comparison using \=\=\= between PhpParser\\Node\\Stmt\\Class_ and null will always evaluate to false#'
+        - '#Parameter \#1 \$nodes of method Rector\\PhpParser\\Node\\BetterNodeFinder\:\:find\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<int, PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\Trait_\|null\> given#'
 
         # test
         - '#Class Rector\\DynamicTypeAnalysis\\Tests\\Rector\\ClassMethod\\AddArgumentTypeWithProbeDataRector\\Fixture\\SomeClass not found#'
