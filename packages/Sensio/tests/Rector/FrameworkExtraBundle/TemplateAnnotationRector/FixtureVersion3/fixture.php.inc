@@ -43,17 +43,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ClassWithNamedService13Controller extends AbstractController
 {
-    public function indexAction()
+    public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('AppBundle:ClassWithNamedService13:index.html.twig');
     }
 
-    public function index2Action()
+    public function index2Action(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('AppBundle:ClassWithNamedService13:index2.html.twig', ['someKey' => 'someValue']);
     }
 
-    public function index3Action()
+    public function index3Action(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('someFile.toBe.used');
     }

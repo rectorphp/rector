@@ -34,12 +34,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ResolveAnotherMethodCall extends AbstractController
 {
-    public function createAction(Request $request)
+    public function createAction(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         return $this->processForm($request);
     }
 
-    private function processForm(Request $request): array
+    private function processForm(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('PAPPSurveyBundle:Survey:create.html.twig', [
             'form' => $request,

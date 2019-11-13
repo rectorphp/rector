@@ -31,7 +31,7 @@ class WithoutBaseClass extends \Symfony\Bundle\FrameworkBundle\Controller\Abstra
     /**
      * @Route("/change", name="facility_change")
      */
-    public function index()
+    public function index(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('AppBundle:ClassWithNamedService25:index.html.twig');
     }

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -18,7 +19,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Sensio\Helper\TemplateGuesser;
+use Rector\ValueObject\PhpVersionFeature;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 
 final class TemplateAnnotationRector extends AbstractRector
 {
@@ -133,12 +136,29 @@ PHP
             return null;
         }
 
+        $this->updateReturnType($classMethod);
         $this->refactorClassMethod($classMethod, $sensioTemplateTagValueNode);
 
         // remove annotation
         $this->docBlockManipulator->removeTagFromNode($classMethod, SensioTemplateTagValueNode::class);
 
         return $classMethod;
+    }
+
+    private function updateReturnType(ClassMethod $classMethod): void
+    {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
+            return;
+        }
+
+        if ($classMethod->returnType !== null && strpos(
+                Response::class,
+                $classMethod->returnType->toString()
+            ) !== false) {
+            return;
+        }
+
+        $classMethod->returnType = new Identifier('\Symfony\Component\HttpFoundation\Response');
     }
 
     /**
@@ -221,6 +241,7 @@ PHP
                 $innerClassMethod = $this->parsedNodesByType->findClassMethodByMethodCall($returnNode->expr);
                 if ($innerClassMethod !== null) {
                     $this->refactorClassMethod($innerClassMethod, $sensioTemplateTagValueNode);
+
                     return;
                 }
             }
@@ -238,6 +259,8 @@ PHP
         if ($returnNode && ! $returnNode->expr instanceof MethodCall) {
             $returnNode->expr = $thisRenderMethodCall;
         }
+
+        $this->updateReturnType($classMethod);
     }
 
     private function getSensioTemplateTagValueNode(ClassMethod $classMethod): ?SensioTemplateTagValueNode

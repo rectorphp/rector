@@ -43,7 +43,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ClassWithNamedService33Controller extends AbstractController
 {
-    public function indexAction()
+    public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
         if(true){
             return $this->redirectToRoute('rector_is_cool');
@@ -54,7 +54,7 @@ class ClassWithNamedService33Controller extends AbstractController
         ));
     }
 
-    public function index2Action()
+    public function index2Action(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('AppBundle:NameNotFollowingConvention:index.html.twig', array(
             'form' => $form->createView()

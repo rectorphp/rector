@@ -29,7 +29,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ClassWithNamedService45Controller extends AbstractController
 {
-    public function indexAction()
+    public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('payment/new.html.twig', array(
             'form' => $form->createView(),

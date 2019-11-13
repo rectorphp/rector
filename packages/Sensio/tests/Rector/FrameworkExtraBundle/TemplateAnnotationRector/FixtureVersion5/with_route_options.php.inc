@@ -35,7 +35,7 @@ class WithRouteOptions extends AbstractController
     /**
      * @Route("/{category}", name="report_overview", defaults={"category":null}, requirements={"category":"\d+"})
      */
-    public function index($category = null)
+    public function index($category = null): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('PAPPReportBundle:Report:report_list.html.twig', [
             'category' => $category,

@@ -37,12 +37,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ClassWithNamedService23Controller extends AbstractController
 {
-    public function indexAction()
+    public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('AppBundle:ClassWithNamedService23:index.html.twig');
     }
 
-    public function index2Action()
+    public function index2Action(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('AppBundle:ClassWithNamedService23:index.html.twig', array(
             'form' => $form->createView()
