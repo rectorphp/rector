@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -151,14 +150,17 @@ PHP
             return;
         }
 
-        if ($classMethod->returnType !== null && strpos(
-                Response::class,
-                $classMethod->returnType->toString()
-            ) !== false) {
-            return;
+        if ($classMethod->returnType !== null) {
+            $returnTypeName = $this->getName($classMethod->returnType);
+
+            if ($returnTypeName !== null) {
+                if (is_a($returnTypeName, Response::class, true)) {
+                    return;
+                }
+            }
         }
 
-        $classMethod->returnType = new Identifier('\Symfony\Component\HttpFoundation\Response');
+        $classMethod->returnType = new FullyQualified(Response::class);
     }
 
     /**
