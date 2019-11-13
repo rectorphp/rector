@@ -59,7 +59,7 @@ final class ClassConstManipulator
      */
     public function getAllClassConstFetch(ClassConst $classConst): array
     {
-        /** @var Node\Stmt\Class_ $classNode */
+        /** @var Node\Stmt\Class_|null $classNode */
         $classNode = $classConst->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return [];
@@ -67,7 +67,10 @@ final class ClassConstManipulator
 
         $searchInNodes = [$classNode];
         foreach ($this->classManipulator->getUsedTraits($classNode) as $trait) {
-            $searchInNodes[] = $this->parsedNodesByType->findTrait((string) $trait);
+            $trait_ = $this->parsedNodesByType->findTrait((string)$trait);
+            if ($trait !== null) {
+                $searchInNodes[] = $trait_;
+            }
         }
 
         return $this->betterNodeFinder->find($searchInNodes, function (Node $node) use ($classConst): bool {
