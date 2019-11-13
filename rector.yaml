@@ -1,14 +1,9 @@
 parameters:
+    auto_import_names: false
     exclude_paths:
-        - "/Fixture/"
-        - "/Expected/"
-        - "/Source/"
-        - "packages/Symfony/src/Bridge/DefaultAnalyzedSymfonyApplicationContainer.php"
-        - "src/Testing/PHPUnit/AbstractRectorTestCase.php"
-        - "packages/Php/tests/Rector/Name/ReservedObjectRector/*"
+        - 'Exception.php'
 
-        # autoload-buggy cases
-        - "*.php.inc"
-
-    # so Rector code is still PHP 7.1 compatible
-    php_version_features: '7.1'
+services:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
+        $oldToNewClasses:
+            A: B

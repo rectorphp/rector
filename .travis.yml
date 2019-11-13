@@ -64,6 +64,12 @@ jobs:
                 - php ci/check_services_in_yaml_configs.php
                 - php ci/run_all_sets.php
 
+        -
+            php: 7.3
+            name: Rector weird exclude_paths
+            script:
+                - bin/rector process src/TestingException --dry-run
+
         # Stage 2
         -
             # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
