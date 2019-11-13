@@ -1,0 +1,17 @@
+imports:
+    - { resource: 'nette-30/*' }
+
+services:
+    # Control class has remove __construct(), e.g. https://github.com/Pixidos/GPWebPay/pull/16/files#diff-fdc8251950f85c5467c63c249df05786
+    Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector: ~
+
+    Rector\Renaming\Rector\Class_\RenameClassRector:
+        # nextras/forms was split into 2 packages
+        Nextras\FormComponents\Controls\DatePicker: 'Nextras\FormComponents\Controls\DateControl'
+
+
+    Rector\Renaming\Rector\MethodCall\RenameMethodRector:
+        # see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a
+        Nette\Forms\Controls\BaseControl:
+            setType: 'setHtmlType'
+            setAttribute: 'setHtmlAttribute'
