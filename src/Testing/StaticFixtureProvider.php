@@ -16,7 +16,7 @@ final class StaticFixtureProvider
 
         $key = 0;
         foreach ($fileInfos as $fileInfo) {
-            yield $key . " " . $fileInfo->getFilename() => [$fileInfo->getPathName()];
+            yield $key . ' ' . $fileInfo->getFilename() => [$fileInfo->getPathName()];
             $key++;
         }
     }

@@ -3400,7 +3400,7 @@ Removes non-existing @var annotations above the code
 
 - class: `Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector`
 
-Tests without assertion will have @doesNotPerformAssertion 
+Tests without assertion will have @doesNotPerformAssertion
 
 ```diff
  class SomeClass extends PHPUnit\Framework\TestCase
