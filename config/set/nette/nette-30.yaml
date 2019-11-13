@@ -15,3 +15,5 @@ services:
         Nette\Forms\Controls\BaseControl:
             setType: 'setHtmlType'
             setAttribute: 'setHtmlAttribute'
+
+    Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector: ~
