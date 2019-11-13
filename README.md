@@ -1,32 +1,39 @@
-# Rector - Upgrade Your Legacy App to a Modern Codebase
+# Rector
 
-Rector is a **rec**onstruc**tor** tool - it does **instant upgrades** and **instant refactoring** of your code.
-Why refactor manually if Rector can handle 80% for you?
+## What is it?
+Rector is a command line tool that can upgrade and refactor your PHP code from legacy code to modern, clean code **instantly**. 
+<br>
 
+## How can rector help you?
+- You want to upgrade from PHP 5.3 to 7.4?  Well, Rector can do that for you.  
+- You want to switch frameworks? Well, Rector can do that for you as well. 
+<br>
+
+## Want to see?
 [![Build Status](https://img.shields.io/travis/rectorphp/rector/master.svg?style=flat-square)](https://travis-ci.org/rectorphp/rector)
 [![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
-
-
 ![Rector-showcase](docs/images/rector-showcase-var.gif)
+<br>
 
+## What can it do technical?
+- Rename classes, methods, properties, namespaces or constants
+- Complete parameter, var or return type declarations based on static analysis of your code
+- Complete PHP 7.4 property type declarations
+- Refactor Laravel facades to dependency injection
 <br>
 
 ## Sponsors
-
 Rector grows faster with your help, the more you help the more work it saves you.
 Check out [Rector's Patreon](https://www.patreon.com/rectorphp). One-time donation is welcomed [through PayPal](https://www.paypal.me/rectorphp).
-
+<br>
 Thank you:
-
+<br>
 <a href="https://spaceflow.io/en"><img src="/docs/images/spaceflow.png"></a>
-
 <br>
 
 ## Open-Source First
-
-Rector **instantly upgrades and instantly refactors the PHP code of your application**. It supports all modern versions of PHP and many open-source projects:
-
+Rector supports all modern versions of PHP and many open-source projects:
 <br>
 
 <p align="center">
@@ -42,22 +49,10 @@ Rector **instantly upgrades and instantly refactors the PHP code of your applica
     <img src="/docs/images/space.png" width=40>
     <a href="/config/set/twig"><img src="/docs/images/twig.png"></a>
 </p>
-
+...**look at the overview of [all available Rectors](/docs/AllRectorsOverview.md)** with before/after diffs and configuration examples. You can use them to build your own sets.
 <br>
 
-## What Can Rector Do for You?
-
-- Rename classes, methods, properties, namespaces or constants
-- Complete [parameter, var or return type declarations](https://www.tomasvotruba.cz/blog/2019/01/03/how-to-complete-type-declarations-without-docblocks-with-rector/) based on static analysis of your code
-- Upgrade your code from PHP 5.3 to PHP 7.4
-- [Migrate your project from Nette to Symfony](https://www.tomasvotruba.cz/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
-- [Complete PHP 7.4 property type declarations](https://www.tomasvotruba.cz/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
-- [Refactor Laravel facades to dependency injection](https://www.tomasvotruba.cz/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
-- And much more...
-
-...**look at the overview of [all available Rectors](/docs/AllRectorsOverview.md)** with before/after diffs and configuration examples. You can use them to build your own sets.
-
-## How to Apply Coding Standards?
+## Integrating Coding Standards?
 
 The AST libraries that Rector uses aren't well-suited for coding standards, so it's better to let coding standard tools do that.
 
@@ -65,7 +60,10 @@ Don't have a coding standard tool for your project? Consider adding [EasyCodingS
 
 Tip: If you have EasyCodingStandard, you can start your set with [`ecs-after-rector.yaml`](/ecs-after-rector.yaml).
 
-## Install
+<br>
+<br>
+
+## Installation
 
 ```bash
 composer require rector/rector --dev
@@ -74,8 +72,10 @@ composer require rector/rector --dev
 **Did you have conflicts during `composer require` or on run?**
 - Use the [Docker image](#run-rector-in-docker)
 
-## Running Rector
+<br>
+<br>
 
+## Running Rector
 ### A. Prepared Sets
 
 Featured open-source projects have **prepared sets**. You can find them in [`/config/set`](/config/set) or by running:
@@ -112,6 +112,8 @@ imports:
 >  If you use Rector in Docker, you can use absolute path, e.g.
 >  `/rector/config/set/php/php71.yaml`
 
+<br>
+
 ### B. Custom Sets
 
 1. Create a `rector.yaml` config file with your desired Rectors:
@@ -129,11 +131,12 @@ imports:
     # apply
     vendor/bin/rector process src
     ```
+<br>
+<br>
 
+## Extra Features
 
-## Features
-
-### Extra Autoloading
+### More Autoloading
 
 Rector relies on project and autoloading of its classes. To specify your own autoload file, use `--autoload-file` option:
 
@@ -150,6 +153,7 @@ parameters:
         - 'vendor/squizlabs/php_codesniffer/autoload.php'
         - 'vendor/project-without-composer'
 ```
+<br>
 
 ### Exclude Paths and Rectors
 
@@ -170,7 +174,7 @@ parameters:
     exclude_rectors:
         - 'Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector'
 ```
-
+<br>
 ### Provide PHP Version
 
 By default Rector uses the language features matching your system version of PHP. You can configure it for a different PHP version:
@@ -180,7 +184,7 @@ By default Rector uses the language features matching your system version of PHP
 parameters:
     php_version_features: '7.2' # your version is 7.3
 ```
-
+<br>
 ### Paths
 
 If you're annoyed by repeating paths in arguments, you can move them to config instead:
@@ -192,7 +196,7 @@ parameters:
         - 'src'
         - 'tests'
 ```
-
+<br>
 ### Import Use Statements
 
 FQN classes are imported by default every time Rector performs a change,  so you don't have to do it manually/after each run. You can disable it by:
@@ -202,8 +206,10 @@ FQN classes are imported by default every time Rector performs a change,  so you
 parameters:
     auto_import_names: false
 ```
+<br>
+<br>
 
-## 3 Steps to Create Your Own Rector
+## Create Your Own Rector in 3 Steps
 
 First, make sure it's not covered by [any existing Rectors](/docs/AllRectorsOverview.md).
 
@@ -276,7 +282,7 @@ final class MyFirstRector extends AbstractRector
     }
 }
 ```
-
+<br>
 ### 2. Register It
 
 ```yaml
@@ -284,7 +290,7 @@ final class MyFirstRector extends AbstractRector
 services:
     App\Rector\MyFirstRector: ~
 ```
-
+<br>
 ### 3. Let Rector Refactor Your Code
 
 ```bash
@@ -294,14 +300,19 @@ vendor/bin/rector process src --dry-run
 # if it's ok, apply
 vendor/bin/rector process src
 ```
-
+<br>
 That's it!
+
+<br>
+<br>
 
 ## More Detailed Documentation
 
 - **[All Rectors: Overview](/docs/AllRectorsOverview.md)**
 - [How Does Rector Work?](/docs/HowItWorks.md)
 - [Nodes Overview](/docs/NodesOverview.md)
+
+<br>
 
 ## How to Contribute
 
@@ -322,7 +333,7 @@ Just follow 3 rules:
     ```
 
 We would be happy to accept PRs that follow these guidelines.
-
+<br>
 ## Run Rector in Docker
 You can run Rector on your project using Docker:
 
@@ -337,7 +348,7 @@ Using `rector.yaml`:
 ```bash
 docker run -v $(pwd):/project rector/rector:latest process /project/app --config /project/rector.yaml --autoload-file /project/vendor/autoload.php --dry-run
 ```
-
+<br>
 ### Community Packages
 
 Do you use Rector to upgrade your code? Add it here:
