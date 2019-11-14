@@ -68,8 +68,8 @@ jobs:
             php: 7.3
             name: Rector failure
             script:
-                - bin/rector p src/Issue2307/Exception.php --debug --config issue2307.yaml -n
-                - bin/rector p src/Issue2307/AnotherClass.php --debug --config issue2307.yaml -n
+                - bin/rector p abz/Issue2307/Exception.php --debug --config issue2307.yaml -n
+                - bin/rector p abz/Issue2307/AnotherClass.php --debug --config issue2307.yaml -n
 
         # Stage 2
         -
