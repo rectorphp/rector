@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\Nette\Rector\MethodCall;
 
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\Assign;
 use Nette\Application\UI\Form;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;

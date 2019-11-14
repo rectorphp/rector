@@ -191,7 +191,8 @@ final class NodeTypeResolver
     public function getObjectType(Node $node): Type
     {
         // @todo should be resolved by NodeTypeResolver internally
-        if ($node instanceof MethodCall || $node instanceof ArrayDimFetch) {
+        if ($node instanceof ArrayDimFetch) {
+            // @todo traverse up to dim fetches
             return $this->resolve($node->var);
         }
 
@@ -340,7 +341,7 @@ final class NodeTypeResolver
 
         // false type correction of inherited method
         if ($node instanceof MethodCall) {
-            if ($this->isObjectType($node, SplFileInfo::class)) {
+            if ($this->isObjectType($node->var, SplFileInfo::class)) {
                 $methodName = $this->nameResolver->getName($node->name);
                 if ($methodName === 'getRealPath') {
                     return new UnionType([new StringType(), new ConstantBooleanType(false)]);

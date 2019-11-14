@@ -199,7 +199,7 @@ PHP
             return false;
         }
 
-        if (! $this->isObjectType($node, self::RESPONSE_CLASS)) {
+        if (! $this->isObjectType($node->var, self::RESPONSE_CLASS)) {
             return false;
         }
 

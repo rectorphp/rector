@@ -9,6 +9,9 @@ services:
         # nextras/forms was split into 2 packages
         Nextras\FormComponents\Controls\DatePicker: 'Nextras\FormComponents\Controls\DateControl'
 
+        # @see https://github.com/nette/di/commit/a0d361192f8ac35f1d9f82aab7eb351e4be395ea
+        Nette\DI\ServiceDefinition: 'Nette\DI\Definitions\ServiceDefinition'
+        Nette\DI\Statement: 'Nette\DI\Definitions\Statement'
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         # see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a
@@ -16,4 +19,13 @@ services:
             setType: 'setHtmlType'
             setAttribute: 'setHtmlAttribute'
 
+        # see https://github.com/nette/di/commit/1705a5db431423fc610a6f339f88dead1b5dc4fb
+        Nette\DI\Definitions\ServiceDefinition:
+            setClass: 'setType'
+            getClass: 'getType'
+
+        Nette\DI\Definitions\Definition:
+            isAutowired: 'getAutowired'
+
     Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector: ~
+    Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector: ~

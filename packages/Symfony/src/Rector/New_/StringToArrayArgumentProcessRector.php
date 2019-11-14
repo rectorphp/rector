@@ -64,15 +64,17 @@ PHP
     }
 
     /**
-     * @param New_ $node
+     * @param New_|MethodCall $node
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isObjectType($node, Process::class)) {
+        $expr = $node instanceof New_ ? $node->class : $node->var;
+
+        if ($this->isObjectType($expr, Process::class)) {
             return $this->processArgumentPosition($node, 0);
         }
 
-        if ($this->isObjectType($node, ProcessHelper::class)) {
+        if ($this->isObjectType($expr, ProcessHelper::class)) {
             return $this->processArgumentPosition($node, 1);
         }
 

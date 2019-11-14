@@ -101,7 +101,7 @@ PHP
                 return false;
             }
 
-            if (! $this->isObjectType($node, TreeBuilder::class)) {
+            if (! $this->isObjectType($node->var, TreeBuilder::class)) {
                 return false;
             }
 
