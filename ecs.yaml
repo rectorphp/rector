@@ -13,6 +13,7 @@ services:
             - 'Exception'
             - 'ResourceBundle'
             - 'SimpleXMLElement'
+            - 'SomeInterface'
 
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
         max_cognitive_complexity: 9
@@ -109,6 +110,7 @@ parameters:
             - 'packages/Php71/src/Rector/FuncCall/RemoveExtraParametersRector.php'
             - 'packages/SOLID/src/Analyzer/ClassConstantFetchAnalyzer.php'
             # tough logic
+            - 'packages/CodingStyle/src/Imports/ImportSkipper.php'
             - 'packages/PHPUnit/src/Rector/Class_/ArrayArgumentInTestToDataProviderRector.php'
             - 'packages/BetterPhpDocParser/src/Ast/PhpDoc/*/*TagValueNode.php'
             - 'packages/NodeTypeResolver/src/PhpDoc/NodeAnalyzer/FqnNamePhpDocNodeDecorator.php'

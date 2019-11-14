@@ -11,6 +11,9 @@ use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClass;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
+/**
+ * @see \Rector\CodingStyle\Application\NameImportingCommander
+ */
 final class AutoImportNamesParameterTest extends AbstractRectorTestCase
 {
     /**
