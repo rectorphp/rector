@@ -29,12 +29,17 @@ jobs:
                 - composer update --prefer-lowest --no-progress
 
         -
-            name: Simple checks
+            name: 'Rector Class and Sets Checks'
+            php: 7.1
+            script:
+                - php ci/check_services_in_yaml_configs.php
+                - php ci/run_all_sets.php
+
+        -
+            name: 'Simple Checks'
             php: 7.1
             script:
                 - composer check-docs
-                - php ci/check_services_in_yaml_configs.php
-                - php ci/run_all_sets.php
                 - ci/clean_trailing_spaces.sh
 
         -
@@ -137,7 +142,8 @@ jobs:
 
     allow_failures:
         - name: ECS
-        - name: Standalone Run
+        - name: 'Standalone Run'
+        - name: 'Simple Checks'
         - os: windows
 
 matrix:
