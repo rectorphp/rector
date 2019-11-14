@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 use Psr\Container\ContainerInterface;
 use Rector\Console\Application;
+use Rector\Console\Style\SymfonyStyleFactory;
+use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 @ini_set('memory_limit', '-1'); // @ intentionally: continue anyway
 
@@ -14,8 +16,14 @@ gc_disable();
 // Require Composer autoload.php
 require_once __DIR__ . '/bootstrap.php';
 
-/** @var ContainerInterface $container */
-$container = require_once __DIR__ . '/container.php';
+try {
+    /** @var ContainerInterface $container */
+    $container = require_once __DIR__ . '/container.php';
+} catch (Throwable $throwable) {
+    $symfonyStyle = (new SymfonyStyleFactory(new PrivatesCaller()))->create();
+    $symfonyStyle->error($throwable->getMessage());
+    exit(1);
+}
 
 $application = $container->get(Application::class);
 exit($application->run());
