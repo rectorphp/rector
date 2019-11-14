@@ -20,7 +20,6 @@ services:
     Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector: ~
 
     Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector: ~
-    Rector\DeadCode\Rector\Plus\RemoveZeroAndOneBinaryRector: ~
     Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector: ~
     Rector\DeadCode\Rector\Instanceof_\RemoveDuplicatedInstanceOfRector: ~
     Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector: ~
