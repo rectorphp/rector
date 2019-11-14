@@ -1,2 +1,2 @@
 services:
-    Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector: ~
+    Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector: ~
