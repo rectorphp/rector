@@ -185,13 +185,11 @@
             "@check-cs",
             "phpunit",
             "@phpstan",
-            "@docs"
-        ],
-        "check-cs": "ecs check bin packages src tests utils --ansi",
-        "fix-cs": [
-            "ecs check bin packages src tests utils --fix --ansi",
+            "@check-docs",
             "ci/clean_trailing_spaces.sh"
         ],
+        "check-cs": "ecs check bin packages src tests utils --ansi",
+        "fix-cs": "ecs check bin packages src tests utils --fix --ansi",
         "phpstan": "phpstan analyse packages src tests --error-format symplify --ansi",
         "changelog": [
             "changelog-linker dump-merges --in-categories",

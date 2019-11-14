@@ -35,6 +35,7 @@ jobs:
                 - composer check-docs
                 - php ci/check_services_in_yaml_configs.php
                 - php ci/run_all_sets.php
+                - ci/clean_trailing_spaces.sh
 
         -
             name: PHPStan
