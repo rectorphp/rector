@@ -172,6 +172,8 @@
         "files": [
             "packages/DeadCode/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",
             "packages/TypeDeclaration/tests/Rector/Property/CompleteVarDocTypePropertyRector/Source/EventDispatcher.php",
+            "packages/Renaming/tests/Rector/Class_/RenameClassRector/Source/SomeInterface.php",
+            "packages/Renaming/tests/Rector/Class_/RenameClassRector/Source/ClassImportingSameName.php",
             "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source/ChangeMeAnotherNamespace.php",
             "packages/TypeDeclaration/tests/Rector/FunctionLike/ReturnTypeDeclarationRector/Source/MyBar.php",
             "packages/Renaming/tests/Rector/Class_/RenameClassRector/Source/Twig_Extension_Sandbox.php",

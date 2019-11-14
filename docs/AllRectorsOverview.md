@@ -1,4 +1,4 @@
-# All 390 Rectors Overview
+# All 391 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -3425,7 +3425,7 @@ Removes non-existing @var annotations above the code
 
 - class: `Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector`
 
-Tests without assertion will have @doesNotPerformAssertion
+Tests without assertion will have @doesNotPerformAssertion 
 
 ```diff
  class SomeClass extends PHPUnit\Framework\TestCase
@@ -3911,6 +3911,30 @@ Replace deprecated "assertArraySubset()" method with alternative methods
 -        ], $checkedArray);
 +        $this->assertArrayHasKey('cache_directory', $checkedArray);
 +        $this->assertSame('new_value', $checkedArray['cache_directory']);
+     }
+ }
+```
+
+<br>
+
+### `ReplaceAssertArraySubsetWithDmsPolyfillRector`
+
+- class: `Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector`
+
+Change assertArraySubset() to static call of DMS\PHPUnitExtensions\ArraySubset\Assert
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ class SomeClass extends TestCase
+ {
+     public function test()
+     {
+-        self::assertArraySubset(['bar' => 0], ['bar' => '0'], true);
++        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset(['bar' => 0], ['bar' => '0'], true);
+
+-        $this->assertArraySubset(['bar' => 0], ['bar' => '0'], true);
++        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset(['bar' => 0], ['bar' => '0'], true);
      }
  }
 ```

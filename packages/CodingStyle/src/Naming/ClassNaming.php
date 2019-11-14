@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Naming;
 
 use Nette\Utils\Strings;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -22,12 +23,12 @@ final class ClassNaming
     }
 
     /**
-     * @param string|Name $name
+     * @param string|Name|Identifier $name
      * @return string
      */
     public function getShortName($name): string
     {
-        if ($name instanceof Name) {
+        if ($name instanceof Name || $name instanceof Identifier) {
             $name = $this->nameResolver->getName($name);
             if ($name === null) {
                 throw new ShouldNotHappenException();

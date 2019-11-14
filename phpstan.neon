@@ -221,3 +221,6 @@ parameters:
 
         # test
         - '#Class Rector\\DynamicTypeAnalysis\\Tests\\Rector\\ClassMethod\\AddArgumentTypeWithProbeDataRector\\Fixture\\SomeClass not found#'
+
+        # known value
+        - '#Parameter \#1 \$name of method Rector\\CodingStyle\\Naming\\ClassNaming\:\:getShortName\(\) expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|string, PhpParser\\Node\\Identifier\|null given#'
