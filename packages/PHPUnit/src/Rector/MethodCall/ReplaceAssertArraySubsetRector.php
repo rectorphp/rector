@@ -32,9 +32,9 @@ final class ReplaceAssertArraySubsetRector extends AbstractPHPUnitRector
     private $expectedKeys = [];
 
     /**
-     * @var Expr[]
+     * @var Expr[][]
      */
-    private $expectedValuesByKeys = [];
+    private $expectedValuesWithKeys = [];
 
     public function getDefinition(): RectorDefinition
     {
@@ -121,7 +121,7 @@ PHP
     private function reset(): void
     {
         $this->expectedKeys = [];
-        $this->expectedValuesByKeys = [];
+        $this->expectedValuesWithKeys = [];
     }
 
     private function matchArray(Expr $expr): ?Array_
@@ -150,8 +150,10 @@ PHP
 
             $this->expectedKeys[] = $arrayItem->key;
 
-            $key = $this->getValue($arrayItem->key);
-            $this->expectedValuesByKeys[$key] = $arrayItem->value;
+            $this->expectedValuesWithKeys[] = [
+                'key' => $arrayItem->key,
+                'value' => $arrayItem->value,
+            ];
         }
     }
 
@@ -174,11 +176,14 @@ PHP
      */
     private function addValueAsserts(Node $node): void
     {
-        foreach ($this->expectedValuesByKeys as $key => $expectedValue) {
+        foreach ($this->expectedValuesWithKeys as $expectedValueWithKey) {
+            $expectedKey = $expectedValueWithKey['key'];
+            $expectedValue = $expectedValueWithKey['value'];
+
             $assertSame = $this->createPHPUnitCallWithName($node, 'assertSame');
             $assertSame->args[0] = new Arg($expectedValue);
 
-            $arrayDimFetch = new ArrayDimFetch($node->args[1]->value, BuilderHelpers::normalizeValue($key));
+            $arrayDimFetch = new ArrayDimFetch($node->args[1]->value, BuilderHelpers::normalizeValue($expectedKey));
             $assertSame->args[1] = new Arg($arrayDimFetch);
 
             $this->addNodeAfterNode($assertSame, $node);
