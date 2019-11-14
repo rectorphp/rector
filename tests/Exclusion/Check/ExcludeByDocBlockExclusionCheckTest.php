@@ -6,7 +6,7 @@ namespace Rector\Tests\Exclusion\Check;
 
 use Iterator;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
-use Rector\DeadCode\Rector\Plus\RemoveZeroAndOneBinaryRector;
+use Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ExcludeByDocBlockExclusionCheckTest extends AbstractRectorTestCase
@@ -31,7 +31,7 @@ final class ExcludeByDocBlockExclusionCheckTest extends AbstractRectorTestCase
     {
         return [
             RemoveEmptyClassMethodRector::class => [],
-            RemoveZeroAndOneBinaryRector::class => [],
+            RemoveDeadZeroAndOneOperationRector::class => [],
         ];
     }
 }

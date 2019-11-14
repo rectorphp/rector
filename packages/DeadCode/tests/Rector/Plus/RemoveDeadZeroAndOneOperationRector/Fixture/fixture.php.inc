@@ -8,8 +8,9 @@ class SomeClass
     {
         $value = 5 * 1;
         $value = 1 * 5;
-
+        $value = 5 / 1;
         $value = 5 + 0;
+        $value = 5 - 0;
     }
 }
 
@@ -25,7 +26,8 @@ class SomeClass
     {
         $value = 5;
         $value = 5;
-
+        $value = 5;
+        $value = 5;
         $value = 5;
     }
 }

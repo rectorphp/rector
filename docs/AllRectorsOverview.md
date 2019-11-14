@@ -1,4 +1,4 @@
-# All 389 Rectors Overview
+# All 388 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -2267,25 +2267,6 @@ Remove unused private properties
  class SomeClass
  {
 -    private $property;
- }
-```
-
-<br>
-
-### `RemoveZeroAndOneBinaryRector`
-
-- class: `Rector\DeadCode\Rector\Plus\RemoveZeroAndOneBinaryRector`
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $value = 5 * 1;
--        $value = 5 + 0;
-+        $value = 5;
-+        $value = 5;
-     }
  }
 ```
 

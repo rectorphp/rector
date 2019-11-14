@@ -6,8 +6,10 @@ class Assigns
 {
     public function run(int $value)
     {
+        $value -= 0;
         $value += 0;
         $value *= 1;
+        $value /= 1;
     }
 }
 
@@ -21,6 +23,8 @@ class Assigns
 {
     public function run(int $value)
     {
+        $value;
+        $value;
         $value;
         $value;
     }
