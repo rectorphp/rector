@@ -1,3 +1,7 @@
+parameters:
+    autoload_paths:
+        - 'abz'
+
 services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
