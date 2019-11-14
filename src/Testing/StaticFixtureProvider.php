@@ -14,10 +14,8 @@ final class StaticFixtureProvider
     {
         $fileInfos = self::findFilesInDirectory($directory, $suffix);
 
-        $key = 0;
         foreach ($fileInfos as $fileInfo) {
-            yield $key . ' ' . $fileInfo->getFilename() => [$fileInfo->getPathName()];
-            $key++;
+            yield [$fileInfo->getPathName()];
         }
     }
 
@@ -29,6 +27,8 @@ final class StaticFixtureProvider
         $finder = Finder::create()->in($directory)->files()
             ->name($suffix);
 
-        return iterator_to_array($finder);
+        $fileInfos = iterator_to_array($finder);
+
+        return array_values($fileInfos);
     }
 }
