@@ -7,6 +7,7 @@ namespace Rector\PhpParser\Node\Manipulator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\ClassConst;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -29,14 +30,28 @@ final class ClassConstManipulator
      */
     private $betterStandardPrinter;
 
+    /**
+     * @var ParsedNodesByType
+     */
+    private $parsedNodesByType;
+
+    /**
+     * @var ClassManipulator
+     */
+    private $classManipulator;
+
     public function __construct(
         NameResolver $nameResolver,
         BetterNodeFinder $betterNodeFinder,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        ParsedNodesByType $parsedNodesByType,
+        ClassManipulator $classManipulator
     ) {
         $this->nameResolver = $nameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->parsedNodesByType = $parsedNodesByType;
+        $this->classManipulator = $classManipulator;
     }
 
     /**
@@ -44,12 +59,21 @@ final class ClassConstManipulator
      */
     public function getAllClassConstFetch(ClassConst $classConst): array
     {
+        /** @var Node\Stmt\Class_|null $classNode */
         $classNode = $classConst->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return [];
         }
 
-        return $this->betterNodeFinder->find($classNode, function (Node $node) use ($classConst): bool {
+        $searchInNodes = [$classNode];
+        foreach ($this->classManipulator->getUsedTraits($classNode) as $trait) {
+            $trait_ = $this->parsedNodesByType->findTrait((string) $trait);
+            if ($trait !== null) {
+                $searchInNodes[] = $trait_;
+            }
+        }
+
+        return $this->betterNodeFinder->find($searchInNodes, function (Node $node) use ($classConst): bool {
             // itself
             if ($this->betterStandardPrinter->areNodesEqual($node, $classConst)) {
                 return false;
