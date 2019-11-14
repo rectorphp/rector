@@ -83,7 +83,8 @@ PHP
             return null;
         }
 
-        if (! $this->isObjectType($node, 'PHPUnit\Framework\MockObject\Builder\InvocationMocker')) {
+        $callerNode = $node instanceof StaticCall ? $node->class : $node->var;
+        if (! $this->isObjectType($callerNode, 'PHPUnit\Framework\MockObject\Builder\InvocationMocker')) {
             return null;
         }
 
@@ -105,12 +106,16 @@ PHP
     private function processWithCall(Node $node): Node
     {
         foreach ($node->args as $i => $argNode) {
-            if ($argNode->value instanceof MethodCall) {
-                $methodCall = $argNode->value;
-                if ($this->isName($methodCall->name, 'equalTo')) {
-                    $node->args[$i] = $methodCall->args[0];
-                }
+            if (! $argNode->value instanceof MethodCall) {
+                continue;
             }
+
+            $methodCall = $argNode->value;
+            if (! $this->isName($methodCall->name, 'equalTo')) {
+                continue;
+            }
+
+            $node->args[$i] = $methodCall->args[0];
         }
 
         return $node;

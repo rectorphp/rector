@@ -1,4 +1,4 @@
-# All 388 Rectors Overview
+# All 390 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -2916,6 +2916,28 @@ Replace mysql_pconnect() with mysqli_connect() with host p: prefix
 
 ## Nette
 
+### `AddDatePickerToDateControlRector`
+
+- class: `Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector`
+
+Nextras/Form upgrade of addDatePicker method call to DateControl assign
+
+```diff
+ use Nette\Application\UI\Form;
+
+ class SomeClass
+ {
+     public function run()
+     {
+         $form = new Form();
+-        $form->addDatePicker('key', 'Label');
++        $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
+     }
+ }
+```
+
+<br>
+
 ### `EndsWithFunctionToNetteUtilsStringsRector`
 
 - class: `Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector`
@@ -3007,6 +3029,28 @@ Use Nette\Utils\Strings over bare preg_* functions
          $content = 'Hi my name is Tom';
 -        preg_match('#Hi#', $content, $matches);
 +        $matches = \Nette\Utils\Strings::match($content, '#Hi#');
+     }
+ }
+```
+
+<br>
+
+### `SetClassWithArgumentToSetFactoryRector`
+
+- class: `Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector`
+
+Change setClass with class and arguments to separated methods
+
+```diff
+ use Nette\DI\ContainerBuilder;
+
+ class SomeClass
+ {
+     public function run(ContainerBuilder $containerBuilder)
+     {
+         $containerBuilder->addDefinition('...')
+-            ->setClass('SomeClass', [1, 2]);
++            ->setFactory('SomeClass', [1, 2]);
      }
  }
 ```

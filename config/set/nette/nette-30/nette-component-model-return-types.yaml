@@ -1,0 +1,28 @@
+services:
+    # scalar type hints, see https://github.com/nette/component-model/commit/f69df2ca224cad7b07f1c8835679393263ea6771
+    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
+        Nette\ComponentModel\Component:
+            lookup: 'Nette\ComponentModel\IComponent'
+            lookupPath: '?string'
+            monitor: 'void'
+            unmonitor: 'void'
+            attached: 'void'
+            detached: 'void'
+            getName: '?string'
+
+        Nette\ComponentModel\IComponent:
+            getName: '?string'
+            getParent: '?Nette\ComponentModel\IContainer'
+
+        Nette\ComponentModel\Container:
+            removeComponent: 'void'
+            getComponent: '?Nette\ComponentModel\IComponent'
+            createComponent: '?Nette\ComponentModel\IComponent'
+            getComponents: 'Iterator'
+            validateChildComponent: 'void'
+            _isCloning: '?Nette\ComponentModel\IComponent'
+
+        Nette\ComponentModel\IContainer:
+            removeComponent: 'void'
+            getComponent: '?Nette\ComponentModel\IContainer'
+            getComponents: 'Iterator'

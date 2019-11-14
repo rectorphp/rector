@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Ref: https://github.com/symfony/symfony/blob/master/UPGRADE-4.0.md#console
@@ -84,7 +85,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, 'Symfony\Component\DependencyInjection\ContainerInterface')) {
+        if (! $this->isObjectType($node->var, ContainerInterface::class)) {
             return null;
         }
 

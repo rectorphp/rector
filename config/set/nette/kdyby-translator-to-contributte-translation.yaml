@@ -1,0 +1,3 @@
+services:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
+        Kdyby\Translation\Translator: 'Nette\Localization\ITranslator'
