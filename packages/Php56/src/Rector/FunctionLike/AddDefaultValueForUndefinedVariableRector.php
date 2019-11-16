@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Global_;
 use PhpParser\Node\Stmt\Static_;
 use PhpParser\Node\Stmt\StaticVar;
 use PhpParser\Node\Stmt\Unset_;
@@ -169,6 +170,11 @@ PHP
     private function shouldSkipVariable(Variable $variable): bool
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
+
+        if ($parentNode instanceof Global_) {
+            return true;
+        }
+
         if ($parentNode instanceof Node) {
             if ($parentNode instanceof Assign || $parentNode instanceof AssignRef || $this->isStaticVariable(
                 $parentNode

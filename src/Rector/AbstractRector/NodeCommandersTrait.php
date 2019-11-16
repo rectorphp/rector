@@ -99,9 +99,19 @@ trait NodeCommandersTrait
         $this->notifyNodeChangeFileInfo($positionNode);
     }
 
-    protected function addPropertyToClass(Class_ $classNode, Type $propertyType, string $propertyName): void
+    protected function addPropertyToClass(Class_ $classNode, ?Type $propertyType, string $propertyName): void
     {
         $this->propertyAddingCommander->addPropertyToClass($propertyName, $propertyType, $classNode);
+
+        $this->notifyNodeChangeFileInfo($classNode);
+    }
+
+    protected function addPropertyWithoutConstructorToClass(
+        Class_ $classNode,
+        ?Type $propertyType,
+        string $propertyName
+    ): void {
+        $this->propertyAddingCommander->addPropertyWithoutConstructorToClass($propertyName, $propertyType, $classNode);
 
         $this->notifyNodeChangeFileInfo($classNode);
     }
