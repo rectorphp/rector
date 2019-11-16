@@ -1,4 +1,4 @@
-# All 403 Rectors Overview
+# All 404 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -16,6 +16,7 @@
 - [DoctrineCodeQuality](#doctrinecodequality)
 - [DynamicTypeAnalysis](#dynamictypeanalysis)
 - [ElasticSearchDSL](#elasticsearchdsl)
+- [FileSystemRector](#filesystemrector)
 - [Guzzle](#guzzle)
 - [Laravel](#laravel)
 - [Legacy](#legacy)
@@ -2698,6 +2699,16 @@ Migrates addFilter to addQuery
      }
  }
 ```
+
+<br>
+
+## FileSystemRector
+
+### `RemoveProjectFileRector`
+
+- class: `Rector\FileSystemRector\Rector\Removing\RemoveProjectFileRector`
+
+Remove file relative to project directory
 
 <br>
 
