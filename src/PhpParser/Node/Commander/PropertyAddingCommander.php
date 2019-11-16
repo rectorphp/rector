@@ -19,9 +19,14 @@ use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 final class PropertyAddingCommander implements CommanderInterface
 {
     /**
-     * @var Type[][]
+     * @var Type[][]|null[][]
      */
     private $propertiesByClass = [];
+
+    /**
+     * @var Type[][]|null[][]
+     */
+    private $propertiesWithoutConstructorByClass = [];
 
     /**
      * @var ClassManipulator
@@ -33,9 +38,17 @@ final class PropertyAddingCommander implements CommanderInterface
         $this->classManipulator = $classManipulator;
     }
 
-    public function addPropertyToClass(string $propertyName, Type $propertyType, Class_ $classNode): void
+    public function addPropertyToClass(string $propertyName, ?Type $propertyType, Class_ $classNode): void
     {
         $this->propertiesByClass[spl_object_hash($classNode)][$propertyName] = $propertyType;
+    }
+
+    public function addPropertyWithoutConstructorToClass(
+        string $propertyName,
+        ?Type $propertyType,
+        Class_ $classNode
+    ): void {
+        $this->propertiesWithoutConstructorByClass[spl_object_hash($classNode)][$propertyName] = $propertyType;
     }
 
     /**
@@ -55,7 +68,7 @@ final class PropertyAddingCommander implements CommanderInterface
 
     public function isActive(): bool
     {
-        return count($this->propertiesByClass) > 0;
+        return count($this->propertiesByClass) > 0 || count($this->propertiesWithoutConstructorByClass) > 0;
     }
 
     public function getPriority(): int
@@ -65,11 +78,16 @@ final class PropertyAddingCommander implements CommanderInterface
 
     private function createNodeVisitor(): NodeVisitor
     {
-        return new class($this->classManipulator, $this->propertiesByClass) extends NodeVisitorAbstract {
+        return new class($this->classManipulator, $this->propertiesByClass, $this->propertiesWithoutConstructorByClass) extends NodeVisitorAbstract {
             /**
-             * @var Type[][]
+             * @var Type[][]|null[][]
              */
             private $propertiesByClass = [];
+
+            /**
+             * @var Type[][]|null[][]
+             */
+            private $propertiesWithoutConstructorByClass = [];
 
             /**
              * @var ClassManipulator
@@ -77,12 +95,17 @@ final class PropertyAddingCommander implements CommanderInterface
             private $classManipulator;
 
             /**
-             * @param Type[][] $propertiesByClass
+             * @param Type[][]|null[][] $propertiesByClass
+             * @param Type[][]|null[][] $propertiesWithoutConstructorByClass
              */
-            public function __construct(ClassManipulator $classManipulator, array $propertiesByClass)
-            {
+            public function __construct(
+                ClassManipulator $classManipulator,
+                array $propertiesByClass,
+                array $propertiesWithoutConstructorByClass
+            ) {
                 $this->classManipulator = $classManipulator;
                 $this->propertiesByClass = $propertiesByClass;
+                $this->propertiesWithoutConstructorByClass = $propertiesWithoutConstructorByClass;
             }
 
             public function enterNode(Node $node): ?Node
@@ -99,6 +122,13 @@ final class PropertyAddingCommander implements CommanderInterface
                 $classProperties = $this->propertiesByClass[spl_object_hash($classNode)] ?? [];
                 foreach ($classProperties as $propertyName => $propertyType) {
                     $this->classManipulator->addConstructorDependency($classNode, $propertyName, $propertyType);
+                }
+
+                $classPropertiesWithoutConstructor = $this->propertiesWithoutConstructorByClass[spl_object_hash(
+                    $classNode
+                )] ?? [];
+                foreach ($classPropertiesWithoutConstructor as $propertyName => $propertyType) {
+                    $this->classManipulator->addPropertyToClass($classNode, $propertyName, $propertyType);
                 }
 
                 return $classNode;

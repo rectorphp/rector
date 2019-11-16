@@ -75,7 +75,7 @@ final class ClassManipulator
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
-    public function addConstructorDependency(Class_ $classNode, string $name, Type $type): void
+    public function addConstructorDependency(Class_ $classNode, string $name, ?Type $type): void
     {
         // add property
         // @todo should be factory
@@ -127,7 +127,7 @@ final class ClassManipulator
         return $nodes;
     }
 
-    public function addPropertyToClass(Class_ $classNode, string $name, Type $type): void
+    public function addPropertyToClass(Class_ $classNode, string $name, ?Type $type): void
     {
         if ($this->hasClassProperty($classNode, $name)) {
             return;
@@ -137,7 +137,7 @@ final class ClassManipulator
         $this->addAsFirstMethod($classNode, $propertyNode);
     }
 
-    public function addSimplePropertyAssignToClass(Class_ $classNode, string $name, Type $type): void
+    public function addSimplePropertyAssignToClass(Class_ $classNode, string $name, ?Type $type): void
     {
         $propertyAssignNode = $this->nodeFactory->createPropertyAssignment($name);
         $this->addConstructorDependencyWithCustomAssign($classNode, $name, $type, $propertyAssignNode);
@@ -146,7 +146,7 @@ final class ClassManipulator
     public function addConstructorDependencyWithCustomAssign(
         Class_ $classNode,
         string $name,
-        Type $type,
+        ?Type $type,
         Assign $assign
     ): void {
         $constructorMethod = $classNode->getMethod('__construct');
@@ -401,7 +401,7 @@ final class ClassManipulator
     private function addParameterAndAssignToMethod(
         ClassMethod $classMethod,
         string $name,
-        Type $type,
+        ?Type $type,
         Assign $assign
     ): void {
         if ($this->hasMethodParameter($classMethod, $name)) {

@@ -145,25 +145,29 @@ final class NodeFactory
         return $methodBuilder->getNode();
     }
 
-    public function createParamFromNameAndType(string $name, Type $type): Param
+    public function createParamFromNameAndType(string $name, ?Type $type): Param
     {
         $paramBuild = $this->builderFactory->param($name);
 
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
-        if ($typeNode !== null) {
-            $paramBuild->setType($typeNode);
+        if ($type !== null) {
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
+            if ($typeNode !== null) {
+                $paramBuild->setType($typeNode);
+            }
         }
 
         return $paramBuild->getNode();
     }
 
-    public function createPrivatePropertyFromNameAndType(string $name, Type $type): Property
+    public function createPrivatePropertyFromNameAndType(string $name, ?Type $type): Property
     {
-        $docComment = $this->createVarDoc($type);
-
         $propertyBuilder = $this->builderFactory->property($name);
         $propertyBuilder->makePrivate();
-        $propertyBuilder->setDocComment($docComment);
+
+        if ($type !== null) {
+            $docComment = $this->createVarDoc($type);
+            $propertyBuilder->setDocComment($docComment);
+        }
 
         return $propertyBuilder->getNode();
     }
