@@ -9,6 +9,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRe
  */
 function someFunction($a, $b, $c) {
 }
+
 ?>
 -----
 <?php
@@ -22,4 +23,5 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ParamTypeDeclarationRe
  */
 function someFunction($a, int $b, $c) {
 }
+
 ?>

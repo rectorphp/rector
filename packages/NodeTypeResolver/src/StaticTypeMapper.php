@@ -12,6 +12,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -127,7 +128,7 @@ final class StaticTypeMapper
     }
 
     /**
-     * @return Identifier|Name|NullableType|null
+     * @return Identifier|Name|NullableType|PhpParserUnionType|null
      */
     public function mapPHPStanTypeToPhpParserNode(Type $phpStanType, ?string $kind = null): ?Node
     {
@@ -258,6 +259,10 @@ final class StaticTypeMapper
 
             if ($nullabledTypeNode instanceof NullableType) {
                 return $nullabledTypeNode;
+            }
+
+            if ($nullabledTypeNode instanceof PhpParserUnionType) {
+                throw new ShouldNotHappenException();
             }
 
             return new NullableType($nullabledTypeNode);
@@ -684,10 +689,15 @@ final class StaticTypeMapper
     }
 
     /**
-     * @return FullyQualified|null
+     * @return Name|FullyQualified|PhpParserUnionType|null
      */
     private function matchTypeForUnionedObjectTypes(UnionType $unionType): ?Node
     {
+        $phpParserUnionType = $this->matchPhpParserUnionType($unionType);
+        if ($phpParserUnionType !== null) {
+            return $phpParserUnionType;
+        }
+
         // we need exactly one type
         foreach ($unionType->getTypes() as $unionedType) {
             if (! $unionedType instanceof TypeWithClassName) {
@@ -750,5 +760,25 @@ final class StaticTypeMapper
         }
 
         return null;
+    }
+
+    private function matchPhpParserUnionType(UnionType $unionType): ?PhpParserUnionType
+    {
+        if (! $this->phpVersionProvider->isAtLeast(PhpVersionFeature::UNION_TYPES)) {
+            return null;
+        }
+
+        $phpParserUnionedTypes = [];
+        foreach ($unionType->getTypes() as $unionedType) {
+            /** @var Identifier|Name|null $phpParserNode */
+            $phpParserNode = $this->mapPHPStanTypeToPhpParserNode($unionedType);
+            if ($phpParserNode === null) {
+                return null;
+            }
+
+            $phpParserUnionedTypes[] = $phpParserNode;
+        }
+
+        return new PhpParserUnionType($phpParserUnionedTypes);
     }
 }

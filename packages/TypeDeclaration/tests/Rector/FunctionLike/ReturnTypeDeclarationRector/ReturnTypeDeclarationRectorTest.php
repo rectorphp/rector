@@ -27,4 +27,10 @@ final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
     {
         return ReturnTypeDeclarationRector::class;
     }
+
+    protected function getPhpVersion(): string
+    {
+        // to prevent union types
+        return '7.4';
+    }
 }

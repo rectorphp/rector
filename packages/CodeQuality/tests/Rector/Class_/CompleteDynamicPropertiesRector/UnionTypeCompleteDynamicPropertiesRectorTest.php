@@ -8,7 +8,7 @@ use Iterator;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class CompleteDynamicPropertiesRectorTest extends AbstractRectorTestCase
+final class UnionTypeCompleteDynamicPropertiesRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
@@ -20,17 +20,11 @@ final class CompleteDynamicPropertiesRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureUnionTypes');
     }
 
     protected function getRectorClass(): string
     {
         return CompleteDynamicPropertiesRector::class;
-    }
-
-    protected function getPhpVersion(): string
-    {
-        // prevents union types
-        return '7.4';
     }
 }
