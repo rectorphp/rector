@@ -35,4 +35,9 @@ final class PhpVersionFeature
      * @var string
      */
     public const OBJECT_TYPE = '7.2';
+
+    /**
+     * @var string
+     */
+    public const UNION_TYPES = '8.0';
 }

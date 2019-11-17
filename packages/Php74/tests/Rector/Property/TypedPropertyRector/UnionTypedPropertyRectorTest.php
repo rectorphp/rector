@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector;
+namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector;
 
 use Iterator;
+use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
+use Rector\ValueObject\PhpVersionFeature;
 
-final class ParamTypeDeclarationRectorTest extends AbstractRectorTestCase
+final class UnionTypedPropertyRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
@@ -20,17 +21,16 @@ final class ParamTypeDeclarationRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureUnionTypes');
     }
 
     protected function getRectorClass(): string
     {
-        return ParamTypeDeclarationRector::class;
+        return TypedPropertyRector::class;
     }
 
     protected function getPhpVersion(): string
     {
-        // prevent union types
-        return '7.4';
+        return PhpVersionFeature::UNION_TYPES;
     }
 }

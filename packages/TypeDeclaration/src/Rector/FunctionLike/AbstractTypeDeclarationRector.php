@@ -167,7 +167,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     }
 
     /**
-     * @return Name|NullableType|Identifier|null
+     * @return Name|NullableType|Identifier|UnionType|null
      */
     protected function resolveChildTypeNode(Type $type): ?Node
     {

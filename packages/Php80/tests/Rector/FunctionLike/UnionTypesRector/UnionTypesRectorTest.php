@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector;
+namespace Rector\Php80\Tests\Rector\FunctionLike\UnionTypesRector;
 
 use Iterator;
+use Rector\Php80\Rector\FunctionLike\UnionTypesRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 
-final class ParamTypeDeclarationRectorTest extends AbstractRectorTestCase
+final class UnionTypesRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
@@ -25,12 +25,6 @@ final class ParamTypeDeclarationRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return ParamTypeDeclarationRector::class;
-    }
-
-    protected function getPhpVersion(): string
-    {
-        // prevent union types
-        return '7.4';
+        return UnionTypesRector::class;
     }
 }

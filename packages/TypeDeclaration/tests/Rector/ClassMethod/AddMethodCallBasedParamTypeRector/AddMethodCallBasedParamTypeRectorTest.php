@@ -27,4 +27,10 @@ final class AddMethodCallBasedParamTypeRectorTest extends AbstractRectorTestCase
     {
         return AddMethodCallBasedParamTypeRector::class;
     }
+
+    protected function getPhpVersion(): string
+    {
+        // prevents union types
+        return '7.4';
+    }
 }

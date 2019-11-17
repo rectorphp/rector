@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 
-final class ParamTypeDeclarationRectorTest extends AbstractRectorTestCase
+final class UnionTypeParamTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
@@ -20,17 +20,11 @@ final class ParamTypeDeclarationRectorTest extends AbstractRectorTestCase
 
     public function provideDataForTest(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureUnionType');
     }
 
     protected function getRectorClass(): string
     {
         return ParamTypeDeclarationRector::class;
-    }
-
-    protected function getPhpVersion(): string
-    {
-        // prevent union types
-        return '7.4';
     }
 }

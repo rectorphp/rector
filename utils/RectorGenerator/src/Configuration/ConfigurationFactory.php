@@ -7,6 +7,7 @@ namespace Rector\Utils\RectorGenerator\Configuration;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\Exception\FileSystem\FileNotFoundException;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Set\Set;
 use Rector\Utils\RectorGenerator\Exception\ConfigurationException;
 use Rector\Utils\RectorGenerator\Node\NodeClassProvider;
@@ -114,6 +115,8 @@ final class ConfigurationFactory
                     continue 2;
                 }
             }
+
+            throw new ShouldNotHappenException(sprintf('Node endings with "%s" was not found', $nodeType));
         }
 
         return array_unique($fqnNodeTypes);

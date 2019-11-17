@@ -36,19 +36,19 @@ final class TypedPropertyRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'PHP'
-final class SomeClass 
+final class SomeClass
 {
-    /** 
-     * @var int 
+    /**
+     * @var int
      */
-    private count; 
+    private count;
 }
 PHP
                     ,
                     <<<'PHP'
-final class SomeClass 
+final class SomeClass
 {
-    private int count; 
+    private int count;
 }
 PHP
                 ),
