@@ -7,6 +7,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\Closure\AddClosureReturnTypeRector
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
+use Rector\ValueObject\PhpVersionFeature;
 
 final class AddClosureReturnTypeRectorTest extends AbstractRectorTestCase
 {
@@ -30,7 +31,6 @@ final class AddClosureReturnTypeRectorTest extends AbstractRectorTestCase
 
     protected function getPhpVersion(): string
     {
-        // prevent union types
-        return '7.4';
+        return PhpVersionFeature::BEFORE_UNION_TYPES;
     }
 }

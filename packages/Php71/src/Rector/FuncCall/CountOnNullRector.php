@@ -19,6 +19,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see https://3v4l.org/Bndc9
@@ -80,7 +81,7 @@ PHP
             $identicalNode = new Identical($countedNode, $this->createNull());
             $ternaryNode = new Ternary($identicalNode, new LNumber(0), $node);
         } else {
-            if ($this->isAtLeastPhpVersion('7.3')) {
+            if ($this->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE)) {
                 $conditionNode = new FuncCall(new Name('is_countable'), [new Arg($countedNode)]);
             } else {
                 $conditionNode = new BooleanOr(

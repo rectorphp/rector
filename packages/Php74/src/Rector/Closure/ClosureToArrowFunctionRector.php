@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see https://wiki.php.net/rfc/arrow_functions_v2
@@ -62,7 +63,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion('7.4')) {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::ARROW_FUNCTION)) {
             return null;
         }
 

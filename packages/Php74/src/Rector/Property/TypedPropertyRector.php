@@ -11,6 +11,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @source https://wiki.php.net/rfc/typed_properties_v2#proposal
@@ -69,7 +70,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion('7.4')) {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
             return null;
         }
 

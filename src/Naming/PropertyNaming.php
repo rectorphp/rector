@@ -9,9 +9,17 @@ use PHPStan\Type\ObjectType;
 
 final class PropertyNaming
 {
-    public function fqnToVariableName(ObjectType $objectType): string
+    /**
+     * @param ObjectType|string $objectType
+     * @return string
+     */
+    public function fqnToVariableName($objectType): string
     {
-        return lcfirst($this->fqnToShortName($objectType->getClassName()));
+        if ($objectType instanceof ObjectType) {
+            $objectType = $objectType->getClassName();
+        }
+
+        return lcfirst($this->fqnToShortName($objectType));
     }
 
     /**

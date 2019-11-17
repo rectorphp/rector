@@ -20,6 +20,7 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see https://3v4l.org/GL6II
@@ -210,7 +211,7 @@ PHP
             $propertyBuilder->makePublic();
             $property = $propertyBuilder->getNode();
 
-            if ($this->isAtLeastPhpVersion('7.4')) {
+            if ($this->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
                 $phpStanNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
                 if ($phpStanNode !== null) {
                     $property->type = $phpStanNode;

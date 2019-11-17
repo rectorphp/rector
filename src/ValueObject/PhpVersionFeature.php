@@ -39,5 +39,35 @@ final class PhpVersionFeature
     /**
      * @var string
      */
+    public const IS_COUNTABLE = '7.3';
+
+    /**
+     * @var string
+     */
+    public const ARROW_FUNCTION = '7.4';
+
+    /**
+     * @var string
+     */
+    public const LITERAL_SEPARATOR = '7.4';
+
+    /**
+     * @var string
+     */
+    public const NULL_COALESCE_ASSIGN = '7.4';
+
+    /**
+     * @var string
+     */
+    public const TYPED_PROPERTIES = '7.4';
+
+    /**
+     * @var string
+     */
+    public const BEFORE_UNION_TYPES = '7.4';
+
+    /**
+     * @var string
+     */
     public const UNION_TYPES = '8.0';
 }

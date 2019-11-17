@@ -8,7 +8,7 @@ if (class_exists('Symfony\Bundle\FrameworkBundle\Test\WebTestCase')) {
     return;
 }
 
-class WebTestCase
+class WebTestCase extends KernelTestCase
 {
 
 }
