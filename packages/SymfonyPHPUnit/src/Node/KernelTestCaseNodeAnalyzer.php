@@ -6,8 +6,10 @@ namespace Rector\SymfonyPHPUnit\Node;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticPropertyFetch;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final class KernelTestCaseNodeAnalyzer
 {
@@ -16,33 +18,46 @@ final class KernelTestCaseNodeAnalyzer
      */
     private $nameResolver;
 
-    public function __construct(NameResolver $nameResolver)
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
+    public function __construct(NameResolver $nameResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->nameResolver = $nameResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
+    }
+
+    public function isOnContainerGetMethodCall(Node $node): bool
+    {
+        return $this->isSelfContainerGetMethodCall($node);
+    }
+
+    /**
+     * Is inside setUp() class method
+     */
+    public function isSetUpOrEmptyMethod(Node $node): bool
+    {
+        $methodName = $node->getAttribute(AttributeKey::METHOD_NAME);
+
+        return $methodName === 'setUp' || $methodName === null;
     }
 
     /**
      * Matches:
      * self::$container->get()
      */
-    public function isSelfContainerGetMethodCall(Node $node): bool
+    private function isSelfContainerGetMethodCall(Node $node): bool
     {
         if (! $node instanceof MethodCall) {
             return false;
         }
 
-        if (! $node->var instanceof StaticPropertyFetch) {
+        if (! $this->nameResolver->isName($node->name, 'get')) {
             return false;
         }
 
-        if (! $this->nameResolver->isName($node->var->class, 'self')) {
-            return false;
-        }
-
-        if (! $this->nameResolver->isName($node->var->name, 'container')) {
-            return false;
-        }
-
-        return $this->nameResolver->isName($node->name, 'get');
+        return $this->nodeTypeResolver->isObjectType($node->var, ContainerInterface::class);
     }
 }

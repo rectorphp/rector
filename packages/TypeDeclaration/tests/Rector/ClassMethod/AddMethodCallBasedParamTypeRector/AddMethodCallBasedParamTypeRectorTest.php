@@ -7,6 +7,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedPara
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedParamTypeRector;
+use Rector\ValueObject\PhpVersionFeature;
 
 final class AddMethodCallBasedParamTypeRectorTest extends AbstractRectorTestCase
 {
@@ -30,7 +31,6 @@ final class AddMethodCallBasedParamTypeRectorTest extends AbstractRectorTestCase
 
     protected function getPhpVersion(): string
     {
-        // prevents union types
-        return '7.4';
+        return PhpVersionFeature::BEFORE_UNION_TYPES;
     }
 }

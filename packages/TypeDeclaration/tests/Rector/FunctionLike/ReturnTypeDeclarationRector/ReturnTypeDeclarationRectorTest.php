@@ -7,6 +7,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclaration
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
+use Rector\ValueObject\PhpVersionFeature;
 
 final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
@@ -30,7 +31,6 @@ final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
 
     protected function getPhpVersion(): string
     {
-        // to prevent union types
-        return '7.4';
+        return PhpVersionFeature::BEFORE_UNION_TYPES;
     }
 }

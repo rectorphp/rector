@@ -21,6 +21,7 @@ use PhpParser\Node\Stmt\TraitUse;
 use PHPStan\Type\Type;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -59,13 +60,19 @@ final class ClassManipulator
      */
     private $betterStandardPrinter;
 
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+
     public function __construct(
         NameResolver $nameResolver,
         NodeFactory $nodeFactory,
         ChildAndParentClassManipulator $childAndParentClassManipulator,
         CallableNodeTraverser $callableNodeTraverser,
         NodeRemovingCommander $nodeRemovingCommander,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nameResolver = $nameResolver;
@@ -73,6 +80,7 @@ final class ClassManipulator
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
     public function addConstructorDependency(Class_ $classNode, string $name, ?Type $type): void
@@ -339,6 +347,19 @@ final class ClassManipulator
         }
 
         $classMethod->stmts = array_merge($stmts, (array) $classMethod->stmts);
+    }
+
+    public function findPropertyByType(Class_ $class, string $serviceType): ?Property
+    {
+        foreach ($class->getProperties() as $property) {
+            if (! $this->nodeTypeResolver->isObjectType($property, $serviceType)) {
+                continue;
+            }
+
+            return $property;
+        }
+
+        return null;
     }
 
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool

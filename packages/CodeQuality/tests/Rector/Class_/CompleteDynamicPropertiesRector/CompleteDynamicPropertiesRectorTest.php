@@ -7,6 +7,7 @@ namespace Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector
 use Iterator;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\ValueObject\PhpVersionFeature;
 
 final class CompleteDynamicPropertiesRectorTest extends AbstractRectorTestCase
 {
@@ -30,7 +31,6 @@ final class CompleteDynamicPropertiesRectorTest extends AbstractRectorTestCase
 
     protected function getPhpVersion(): string
     {
-        // prevents union types
-        return '7.4';
+        return PhpVersionFeature::BEFORE_UNION_TYPES;
     }
 }

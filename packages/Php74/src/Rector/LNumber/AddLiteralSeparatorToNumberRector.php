@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\LNumber;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see https://wiki.php.net/rfc/numeric_literal_separator
@@ -69,7 +70,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion('7.4')) {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::LITERAL_SEPARATOR)) {
             return null;
         }
 

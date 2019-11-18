@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector;
+namespace Rector\PHPUnit\Tests\Rector\Class_\SelfContainerGetMethodCallFromTestToInjectPropertyRector;
 
 use Iterator;
+use Rector\PHPUnit\Rector\Class_\SelfContainerGetMethodCallFromTestToInjectPropertyRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
-use Rector\ValueObject\PhpVersionFeature;
 
-final class CorrectionTest extends AbstractRectorTestCase
+final class SelfContainerGetMethodCallFromTestToInjectPropertyRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
@@ -26,11 +25,6 @@ final class CorrectionTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return ReturnTypeDeclarationRector::class;
-    }
-
-    protected function getPhpVersion(): string
-    {
-        return PhpVersionFeature::BEFORE_UNION_TYPES;
+        return SelfContainerGetMethodCallFromTestToInjectPropertyRector::class;
     }
 }

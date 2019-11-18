@@ -7,7 +7,6 @@ namespace Rector\SymfonyPHPUnit;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\SymfonyPHPUnit\Node\KernelTestCaseNodeAnalyzer;
@@ -43,25 +42,30 @@ final class SelfContainerMethodCallCollector
     /**
      * @return string[]
      */
-    public function collectContainerGetServiceTypes(Class_ $class): array
+    public function collectContainerGetServiceTypes(Class_ $class, bool $skipSetUpMethod = true): array
     {
         $serviceTypes = [];
 
         $this->callableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
-            &$serviceTypes
+            &$serviceTypes,
+            $skipSetUpMethod
         ) {
-            if (! $this->kernelTestCaseNodeAnalyzer->isSelfContainerGetMethodCall($node)) {
+            if (! $this->kernelTestCaseNodeAnalyzer->isOnContainerGetMethodCall($node)) {
                 return null;
             }
 
-            // skip setUp() method
-            $methodName = $node->getAttribute(AttributeKey::METHOD_NAME);
-            if ($methodName === 'setUp' || $methodName === null) {
-                return null;
+            if ($skipSetUpMethod) {
+                if ($this->kernelTestCaseNodeAnalyzer->isSetUpOrEmptyMethod($node)) {
+                    return null;
+                }
             }
 
             /** @var MethodCall $node */
             $serviceType = $this->valueResolver->getValue($node->args[0]->value);
+            if ($serviceType === null || ! is_string($serviceType)) {
+                return null;
+            }
+
             if ($this->shouldSkipServiceType($serviceType)) {
                 return null;
             }
