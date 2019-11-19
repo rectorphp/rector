@@ -1,4 +1,2 @@
 services:
-    # add relations uuid properties
-    Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector: ~
     Rector\Doctrine\Rector\Class_\AlwaysInitializeUuidInEntityRector: ~

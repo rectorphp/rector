@@ -52,10 +52,6 @@ abstract class ParentSingleTableInheritanceWithIdentifier
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $identifier;
-    public function __construct()
-    {
-        $this->uuid = \Ramsey\Uuid\Uuid::uuid4();
-    }
 }
 
 /**

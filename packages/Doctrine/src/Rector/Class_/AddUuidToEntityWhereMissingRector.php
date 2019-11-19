@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
 use Rector\Doctrine\Provider\EntityWithMissingUuidProvider;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -17,6 +16,8 @@ use Rector\RectorDefinition\RectorDefinition;
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
  *
  * @see \Rector\Doctrine\Tests\Rector\Class_\AddUuidToEntityWhereMissingRector\AddUuidToEntityWhereMissingRectorTest
+ *
+ * default value is initialized in @see AlwaysInitializeUuidInEntityRector
  */
 final class AddUuidToEntityWhereMissingRector extends AbstractRector
 {
@@ -35,13 +36,7 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
      */
     private $entityWithMissingUuidProvider;
 
-    /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
     public function __construct(
-        ClassManipulator $classManipulator,
         EntityUuidNodeFactory $entityUuidNodeFactory,
         UuidMigrationDataCollector $uuidMigrationDataCollector,
         EntityWithMissingUuidProvider $entityWithMissingUuidProvider
@@ -49,7 +44,6 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
         $this->entityUuidNodeFactory = $entityUuidNodeFactory;
         $this->uuidMigrationDataCollector = $uuidMigrationDataCollector;
         $this->entityWithMissingUuidProvider = $entityWithMissingUuidProvider;
-        $this->classManipulator = $classManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -79,15 +73,9 @@ final class AddUuidToEntityWhereMissingRector extends AbstractRector
             return null;
         }
 
-        // 1. add to start of the class, so it can be easily seen
+        // add to start of the class, so it can be easily seen
         $uuidProperty = $this->entityUuidNodeFactory->createTemporaryUuidProperty();
         $node->stmts = array_merge([$uuidProperty], $node->stmts);
-
-        $assignExpression = $this->entityUuidNodeFactory->createUuidPropertyDefaultValueAssign('uuid');
-        $stmts = [$assignExpression];
-
-        // 2. add default value to uuid property
-        $this->classManipulator->addStmtsToClassMethodIfNotThereYet($node, '__construct', $stmts);
 
         /** @var string $class */
         $class = $this->getName($node);
