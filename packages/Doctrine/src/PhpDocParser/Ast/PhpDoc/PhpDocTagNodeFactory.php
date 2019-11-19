@@ -78,9 +78,9 @@ final class PhpDocTagNodeFactory
         return new SpacelessPhpDocTagNode(JoinTableTagValueNode::SHORT_NAME, $joinTableTagValueNode);
     }
 
-    public function createJoinColumnTagNode(): PhpDocTagNode
+    public function createJoinColumnTagNode(bool $isNullable): PhpDocTagNode
     {
-        $joinColumnTagValueNode = new JoinColumnTagValueNode(null, 'uuid', null, false);
+        $joinColumnTagValueNode = new JoinColumnTagValueNode(null, 'uuid', null, $isNullable);
 
         return new SpacelessPhpDocTagNode(JoinColumnTagValueNode::SHORT_NAME, $joinColumnTagValueNode);
     }
