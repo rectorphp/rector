@@ -51,7 +51,6 @@ class AlreadyHasConstructor
 
     public function __construct()
     {
-        $this->uuid = \Ramsey\Uuid\Uuid::uuid4();
         $this->id = 5;
     }
 }

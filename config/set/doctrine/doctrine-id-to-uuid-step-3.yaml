@@ -1,9 +1,3 @@
 services:
-    # properties
-    Rector\Doctrine\Rector\Property\AddUuidAnnotationsToIdPropertyRector: ~
-    Rector\Doctrine\Rector\Property\RemoveTemporaryUuidColumnPropertyRector: ~
-    Rector\Doctrine\Rector\Property\RemoveTemporaryUuidRelationPropertyRector: ~
-
-    # methods
-    Rector\Doctrine\Rector\ClassMethod\ChangeGetIdTypeToUuidRector: ~
-    Rector\Doctrine\Rector\ClassMethod\ChangeSetIdTypeToUuidRector: ~
+    # add relations uuid properties
+    Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector: ~
