@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Rector\Php52\Rector\Switch_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Switch_;
+use PHPStan\Type\Constant\ConstantIntegerType;
+use PHPStan\Type\ConstantType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -69,7 +73,37 @@ PHP
         foreach ($node->cases as $case) {
             foreach ($case->stmts as $key => $caseStmt) {
                 if ($caseStmt instanceof Continue_) {
-                    $case->stmts[$key] = new Break_();
+                    $case->stmts[$key] = $this->processContinueStatement($caseStmt);
+                }
+            }
+        }
+
+        return $node;
+    }
+
+    private function processContinueStatement(Continue_ $node): Node
+    {
+        if ($node->num === null) {
+            return new Break_();
+        } elseif ($node->num instanceof LNumber) {
+            if ($this->getValue($node->num) <= 1) {
+                return new Break_();
+            }
+        } elseif ($node->num instanceof Variable) {
+            return $this->processVariableNum($node, $node->num);
+        }
+
+        return $node;
+    }
+
+    private function processVariableNum(Continue_ $node, Variable $numVariable): Node
+    {
+        $staticType = $this->getStaticType($numVariable);
+
+        if ($staticType instanceof ConstantType) {
+            if ($staticType instanceof ConstantIntegerType) {
+                if ($staticType->getValue() <= 1) {
+                    return new Break_();
                 }
             }
         }
