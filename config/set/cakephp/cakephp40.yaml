@@ -3,6 +3,7 @@
 services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
         Cake\Database\Type: 'Cake\Database\TypeFactory'
+        Cake\Console\ConsoleErrorHandler: 'Cake\Error\ConsoleErrorHandler'
 
     Rector\Renaming\Rector\Constant\RenameClassConstantRector:
         Cake\View\View:
@@ -42,16 +43,83 @@ services:
             middleware: 'Cake\Http\MiddlewareQueue'
         Cake\Console\Shell:
             initialize: 'void'
+        Cake\Controller\Component:
+            initialize: 'void'
         Cake\Controller\Controller:
             initialize: 'void'
             render: 'Cake\Http\Response'
+        Cake\ORM\Behavior:
+            initialize: 'void'
         Cake\ORM\Table:
             initialize: 'void'
             updateAll: 'int'
             deleteAll: 'int'
             validationDefault: 'Cake\Validation\Validator'
+            buildRules: 'Cake\ORM\RulesChecker'
         Cake\View\Helper:
             initialize: 'void'
+
+    Rector\Rector\Typehint\ParentTypehintedArgumentRector:
+        $typehintForArgumentByMethodAndClass:
+            Cake\ORM\Behavior:
+                beforeFind:
+                    $event: 'Cake\Event\EventInterface'
+                buildValidator:
+                    $event: 'Cake\Event\EventInterface'
+                buildRules:
+                    $event: 'Cake\Event\EventInterface'
+                beforeRules:
+                    $event: 'Cake\Event\EventInterface'
+                afterRules:
+                    $event: 'Cake\Event\EventInterface'
+                beforeSave:
+                    $event: 'Cake\Event\EventInterface'
+                afterSave:
+                    $event: 'Cake\Event\EventInterface'
+                beforeDelete:
+                    $event: 'Cake\Event\EventInterface'
+                afterDelete:
+                    $event: 'Cake\Event\EventInterface'
+            Cake\ORM\Table:
+                beforeFind:
+                    $event: 'Cake\Event\EventInterface'
+                buildValidator:
+                    $event: 'Cake\Event\EventInterface'
+                buildRules:
+                    $event: 'Cake\Event\EventInterface'
+                beforeRules:
+                    $event: 'Cake\Event\EventInterface'
+                afterRules:
+                    $event: 'Cake\Event\EventInterface'
+                beforeSave:
+                    $event: 'Cake\Event\EventInterface'
+                afterSave:
+                    $event: 'Cake\Event\EventInterface'
+                beforeDelete:
+                    $event: 'Cake\Event\EventInterface'
+                afterDelete:
+                    $event: 'Cake\Event\EventInterface'
+            Cake\Controller\Controller:
+                beforeFilter:
+                    $event: 'Cake\Event\EventInterface'
+                afterFilter:
+                    $event: 'Cake\Event\EventInterface'
+                beforeRender:
+                    $event: 'Cake\Event\EventInterface'
+                beforeRedirect:
+                    $event: 'Cake\Event\EventInterface'
+            Cake\Controller\Component:
+                shutdown:
+                    $event: 'Cake\Event\EventInterface'
+                startup:
+                    $event: 'Cake\Event\EventInterface'
+                beforeFilter:
+                    $event: 'Cake\Event\EventInterface'
+                beforeRender:
+                    $event: 'Cake\Event\EventInterface'
+                beforeRedirect:
+                    $event: 'Cake\Event\EventInterface'
+
 
     Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector:
         $methodNamesByTypes:
