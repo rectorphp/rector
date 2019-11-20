@@ -77,7 +77,22 @@ final class UseImportsAdder
         );
 
         $newUses = $this->createUses($useImportTypes, $functionUseImportTypes, $namespaceName);
-        $namespace->stmts = array_merge($newUses, $namespace->stmts);
+        $wasAdded = false;
+
+        foreach ($namespace->stmts as $key => $stmt) {
+            if (! $stmt instanceof Use_) {
+                continue;
+            }
+
+            // add use statements now
+            array_splice($namespace->stmts, $key + 1, 0, $newUses);
+            $wasAdded = true;
+        }
+
+        // fallback to previous approach, if no stmts were added
+        if ($wasAdded === false) {
+            $namespace->stmts = array_merge($newUses, $namespace->stmts);
+        }
     }
 
     /**
