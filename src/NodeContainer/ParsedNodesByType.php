@@ -379,6 +379,11 @@ final class ParsedNodesByType
                 return true;
             }
 
+            // probably magic method → we don't know
+            if (! method_exists($className, $methodName)) {
+                return false;
+            }
+
             $methodReflection = $reflectionClass->getMethod($methodName);
             return $methodReflection->isStatic();
         }
