@@ -90,7 +90,7 @@ final class UseImportsAdder
         }
 
         // fallback to previous approach, if no stmts were added
-        if (!$wasAdded) {
+        if (! $wasAdded) {
             $namespace->stmts = array_merge($newUses, $namespace->stmts);
         }
     }
