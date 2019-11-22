@@ -6,4 +6,5 @@ services:
 
     Rector\Utils\DocumentationGenerator\:
         resource: '../src'
-        exclude: '../src/ValueObject/*'
+        exclude:
+            - '../src/ValueObject/*'

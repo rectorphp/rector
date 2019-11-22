@@ -33,7 +33,7 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
         "jetbrains/phpstorm-stubs": "^2019.2",
-        "ocramius/package-versions": "^1.5",
+        "ocramius/package-versions": "^1.4|^1.5",
         "phpunit/phpunit": "^7.5|^8.4",
         "symplify/changelog-linker": "^6.1",
         "symplify/easy-coding-standard": "^6.1",

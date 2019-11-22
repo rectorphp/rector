@@ -5,4 +5,6 @@ services:
 
     Rector\Autodiscovery\:
         resource: '../src'
-        exclude: '../src/{Rector/**/*Rector.php,ValueObject/*}'
+        exclude:
+            - '../src/Rector/**/*Rector.php'
+            - '../src/ValueObject/*'
