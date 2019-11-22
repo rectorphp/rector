@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Bridge\Contract;
+namespace Rector\Doctrine\Contract\Mapper;
 
 interface DoctrineEntityAndRepositoryMapperInterface
 {

@@ -6,3 +6,6 @@ services:
     Rector\Doctrine\:
         resource: '../src'
         exclude: '../src/{Rector/**/*Rector.php,ValueObject/*}'
+
+    Rector\Doctrine\Contract\Mapper\DoctrineEntityAndRepositoryMapperInterface:
+        alias: 'Rector\Doctrine\Mapper\DefaultDoctrineEntityAndRepositoryMapper'
