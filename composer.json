@@ -24,10 +24,10 @@
         "phpstan/phpstan": "^0.11.13",
         "phpstan/phpstan-phpunit": "^0.11.2",
         "sebastian/diff": "^3.0",
-        "symfony/console": "^3.4|^4.2",
-        "symfony/dependency-injection": "^3.4|^4.2",
-        "symfony/finder": "^3.4|^4.2",
-        "symfony/process": "^3.4|^4.2",
+        "symfony/console": "^3.4|^4.4|^5.0",
+        "symfony/dependency-injection": "^3.4|^4.4|^5.0",
+        "symfony/finder": "^3.4|^4.4|^5.0",
+        "symfony/process": "^3.4|^4.4|^5.0",
         "symplify/package-builder": "^6.1"
     },
     "require-dev": {
