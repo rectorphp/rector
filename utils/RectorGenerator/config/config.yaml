@@ -6,4 +6,6 @@ services:
 
     Rector\Utils\RectorGenerator\:
         resource: '../src'
-        exclude: '../src/{Exception/*,ValueObject/*}'
+        exclude:
+            - '../src/Exception/*'
+            - '../src/ValueObject/*'

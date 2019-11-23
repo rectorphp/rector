@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Application;
 
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Error
 {

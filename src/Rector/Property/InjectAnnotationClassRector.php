@@ -22,7 +22,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 
 /**
@@ -95,7 +95,7 @@ class SomeController
      * @var EntityManager
      */
     private $entityManager;
-    
+
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = entityManager;

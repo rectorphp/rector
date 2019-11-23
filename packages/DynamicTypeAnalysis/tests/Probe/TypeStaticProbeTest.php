@@ -12,7 +12,6 @@ use stdClass;
 final class TypeStaticProbeTest extends TestCase
 {
     /**
-     * @param mixed $value
      * @dataProvider provideDataForTest()
      */
     public function test($value, string $methodName, int $argumentPosition, string $expectedProbeItem): void
@@ -27,7 +26,6 @@ final class TypeStaticProbeTest extends TestCase
     }
 
     /**
-     * @param mixed $value
      * @dataProvider provideDataForTestResolveValueTypeToString()
      */
     public function testResolveValueTypeToString($value, string $expectedValueTypeString): void

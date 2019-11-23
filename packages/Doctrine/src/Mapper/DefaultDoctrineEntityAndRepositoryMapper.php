@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Bridge\Doctrine;
+namespace Rector\Doctrine\Mapper;
 
 use Nette\Utils\Strings;
-use Rector\Bridge\Contract\DoctrineEntityAndRepositoryMapperInterface;
+use Rector\Doctrine\Contract\Mapper\DoctrineEntityAndRepositoryMapperInterface;
 
 final class DefaultDoctrineEntityAndRepositoryMapper implements DoctrineEntityAndRepositoryMapperInterface
 {

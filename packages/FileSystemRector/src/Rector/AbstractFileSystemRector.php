@@ -17,7 +17,7 @@ use Rector\PhpParser\Parser\Parser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Rector\AbstractRector\AbstractRectorTrait;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use TypeError;
 
 abstract class AbstractFileSystemRector implements FileSystemRectorInterface

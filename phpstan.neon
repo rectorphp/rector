@@ -226,3 +226,7 @@ parameters:
         - '#Parameter \#1 \$name of method Rector\\CodingStyle\\Naming\\ClassNaming\:\:getShortName\(\) expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|string, PhpParser\\Node\\Identifier\|null given#'
 
         - '#Parameter \#1 \$type of method PhpParser\\Builder\\Param\:\:setType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
+
+        # mixed removed
+        - '#In method "(.*?)", parameter (.*?) has no type\-hint and no @param annotation\. More info\: http\://bit\.ly/usetypehint#'
+        - '#In method "(.*?)", there is no return type and no @return annotation\. More info\: http\://bit\.ly/usetypehint#'

@@ -65,9 +65,6 @@ PHP
         return [Node::class];
     }
 
-    /**
-     * @param Node $node
-     */
     public function refactor(Node $node): ?Node
     {
         if ($this->shouldSkip($node)) {

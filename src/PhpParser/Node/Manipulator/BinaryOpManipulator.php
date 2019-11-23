@@ -40,9 +40,6 @@ final class BinaryOpManipulator
         return null;
     }
 
-    /**
-     * @param mixed $firstCondition
-     */
     private function validateCondition($firstCondition): void
     {
         if (is_callable($firstCondition)) {

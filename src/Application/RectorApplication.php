@@ -15,8 +15,8 @@ use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\Testing\Application\EnabledRectorsProvider;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 
 /**

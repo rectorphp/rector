@@ -429,9 +429,6 @@ final class NodeTypeResolver
         }
     }
 
-    /**
-     * @param mixed $requiredType
-     */
     private function ensureRequiredTypeIsStringOrObjectType($requiredType, string $location): void
     {
         if (is_string($requiredType)) {

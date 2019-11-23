@@ -20,7 +20,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class Application extends SymfonyApplication
 {
@@ -63,8 +63,6 @@ final class Application extends SymfonyApplication
             $xdebug->check();
             unset($xdebug);
         }
-
-        $this->configuration->setConfigFilePathFromInput($input);
 
         $shouldFollowByNewline = false;
 

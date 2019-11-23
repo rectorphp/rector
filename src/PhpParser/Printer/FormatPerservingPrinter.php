@@ -6,7 +6,7 @@ namespace Rector\PhpParser\Printer;
 
 use Nette\Utils\FileSystem;
 use PhpParser\Node;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\Tests\PhpParser\Printer\FormatPerservingPrinterTest

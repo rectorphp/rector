@@ -15,7 +15,7 @@ use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\PSR4\Composer\PSR4AutoloadPathsProvider;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app

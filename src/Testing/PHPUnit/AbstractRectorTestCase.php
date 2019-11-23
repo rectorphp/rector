@@ -20,8 +20,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Yaml\Yaml;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 {
@@ -160,9 +160,6 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         return PhpRectorInterface::class;
     }
 
-    /**
-     * @param mixed $value
-     */
     protected function setParameter(string $name, $value): void
     {
         $parameterProvider = self::$container->get(ParameterProvider::class);

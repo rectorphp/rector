@@ -162,7 +162,6 @@ final class PropertyManipulator
 
     /**
      * @param PropertyFetch|Expr\StaticPropertyFetch $node
-     * @return bool
      */
     private function isReadContext(Node $node): bool
     {

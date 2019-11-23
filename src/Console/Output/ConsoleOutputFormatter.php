@@ -12,7 +12,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Reporting\FileDiff;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ConsoleOutputFormatter implements OutputFormatterInterface
 {

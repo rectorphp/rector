@@ -26,7 +26,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanExtensions\Utils\PHPStanValueResolver;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class GetAttributeReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {

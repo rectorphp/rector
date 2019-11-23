@@ -105,7 +105,7 @@ final class SymfonyContainerFactory
             }
         });
 
-        $containerBuilder->compile();
+        $containerBuilder->compile(true);
 
         // solves "You have requested a synthetic service ("kernel"). The DIC does not know how to construct this service"
         $containerBuilder->set('kernel', $kernel);

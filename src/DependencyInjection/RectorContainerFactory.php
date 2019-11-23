@@ -5,30 +5,36 @@ declare(strict_types=1);
 namespace Rector\DependencyInjection;
 
 use Psr\Container\ContainerInterface;
-use Rector\Bootstrap\SetOptionResolver;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\HttpKernel\RectorKernel;
 use Rector\Set\Set;
-use Symplify\PackageBuilder\Configuration\ConfigFileFinder;
 use Symplify\PackageBuilder\Console\Input\InputDetector;
+use Symplify\SetConfigResolver\SetResolver;
 
 final class RectorContainerFactory
 {
     /**
-     * @var SetOptionResolver
+     * @var SetResolver
      */
-    private $setOptionResolver;
+    private $setResolver;
 
     public function __construct()
     {
-        $this->setOptionResolver = new SetOptionResolver();
+        $this->setResolver = new SetResolver();
     }
 
     public function createFromSet(string $set): ContainerInterface
     {
-        $configFiles = $this->resolveConfigs($set);
+        $configs = [];
+        $configs[] = $this->resolveConfigFromSet($set);
 
-        return $this->createFromConfigs($configFiles);
+        $localConfigs = $this->resolveLocalConfigs();
+        if ($localConfigs !== []) {
+            // local config has priority, so it's first here
+            $configs = array_merge($localConfigs, $configs);
+        }
+
+        return $this->createFromConfigs($configs);
     }
 
     /**
@@ -53,20 +59,31 @@ final class RectorContainerFactory
     /**
      * @return string[]
      */
-    private function resolveConfigs(string $set): array
+    private function resolveLocalConfigs(): array
     {
-        $config = $this->setOptionResolver->detectFromNameAndDirectory($set, Set::SET_DIRECTORY);
+        $configs = [];
+
+        // local config has priority
+        $localConfigs = ['rector.yml', 'rector.yaml'];
+        foreach ($localConfigs as $localConfig) {
+            $configRealPath = getcwd() . DIRECTORY_SEPARATOR . $localConfig;
+            if (! file_exists($configRealPath)) {
+                continue;
+            }
+
+            $configs[] = $configRealPath;
+        }
+
+        return $configs;
+    }
+
+    private function resolveConfigFromSet(string $set): string
+    {
+        $config = $this->setResolver->detectFromNameAndDirectory($set, Set::SET_DIRECTORY);
         if ($config === null) {
             throw new ShouldNotHappenException(sprintf('Config file for "%s" set was not found', $set));
         }
 
-        // copied mostly from https://github.com/rectorphp/rector/blob/master/bin/container.php
-        $configFiles = [];
-        $configFiles[] = $config;
-        // local config has priority
-        $configFiles[] = ConfigFileFinder::provide('rector', ['rector.yml', 'rector.yaml']);
-
-        // remove empty values
-        return array_filter($configFiles);
+        return $config;
     }
 }

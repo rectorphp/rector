@@ -14,7 +14,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\NodeVisitorFactory\NodeRemovingNodeVisitorFactory;
 use Rector\Rector\AffectedFilesCollector;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NodeRemovingCommander implements CommanderInterface
 {

@@ -143,9 +143,6 @@ PHP
         }
     }
 
-    /**
-     * @return mixed
-     */
     private function resolveArgumentValue(Arg $arg)
     {
         $resolvedValue = $this->getValue($arg->value);
@@ -161,9 +158,6 @@ PHP
         return $resolvedValue;
     }
 
-    /**
-     * @param mixed $value
-     */
     private function normalizeValueToArgument($value): Arg
     {
         // class constants → turn string to composite
@@ -206,7 +200,6 @@ PHP
     /**
      * @param Arg[] $argumentNodes
      * @param mixed[] $before
-     * @return mixed
      */
     private function resolveArgumentValuesToBeforeRecipe(array $argumentNodes, int $position, array $before)
     {

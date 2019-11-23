@@ -13,7 +13,7 @@ use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\HttpKernel\RectorKernel;
 use ReflectionClass;
 use Symfony\Component\Yaml\Yaml;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTestCase
 {

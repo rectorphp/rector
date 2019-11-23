@@ -5,7 +5,12 @@ services:
 
     Rector\BetterPhpDocParser\:
         resource: '../src'
-        exclude: '../src/{ValueObject/*,*/*Info.php,*Info.php,Attributes/Ast/PhpDoc/*,PhpDocNode/*}'
+        exclude:
+            - '../src/ValueObject/*'
+            - '../src/*/*Info.php'
+            - '../src/*Info.php'
+            - '../src/Attributes/Ast/PhpDoc/*'
+            - '../src/PhpDocNode/*'
 
     PHPStan\PhpDocParser\Lexer\Lexer: ~
     PHPStan\PhpDocParser\Parser\TypeParser: ~

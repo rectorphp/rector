@@ -5,4 +5,7 @@ services:
 
     Rector\TypeDeclaration\:
         resource: '../src/'
-        exclude: '../src/{Rector/**/*Rector.php,Exception,ValueObject/*}'
+        exclude:
+            - '../src/Rector/**/*Rector.php'
+            - '../src/Exception/*'
+            - '../src/ValueObject/*'

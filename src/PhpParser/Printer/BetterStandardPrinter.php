@@ -21,7 +21,7 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\Tests\PhpParser\Printer\BetterStandardPrinterTest

@@ -263,7 +263,6 @@ PHP
     }
 
     /**
-     * @param Node $node
      * @return string[]|null
      */
     private function resolveAssignPropertyToVariableOrNull(Node $node): ?array

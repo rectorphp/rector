@@ -7,7 +7,7 @@ namespace Rector\FileSystemRector\Parser;
 use PhpParser\Node;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\PhpParser\Parser\Parser;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileInfoParser
 {

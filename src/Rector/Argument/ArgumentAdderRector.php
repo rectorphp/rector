@@ -222,9 +222,6 @@ PHP
         return in_array('method_call', $scope, true);
     }
 
-    /**
-     * @param mixed $defaultValue
-     */
     private function addClassMethodParam(
         ClassMethod $classMethod,
         string $name,

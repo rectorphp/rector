@@ -6,8 +6,8 @@ namespace Rector\Tests\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
 use Rector\DependencyInjection\RectorContainerFactory;
-use Rector\Exception\Configuration\SetNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symplify\EasyCodingStandard\Exception\Configuration\SetNotFoundException;
 
 final class RectorContainerFactoryTest extends TestCase
 {

@@ -6,15 +6,6 @@ imports:
     - { resource: 'vendor/symplify/easy-coding-standard/config/set/clean-code.yaml' }
 
 services:
-    Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
-        allow_classes:
-            - 'SomeClass' # from PHPUnit
-            - 'PHPUnit\Framework\TestCase' # usually part of node construction, it can be missed
-            - 'Exception'
-            - 'ResourceBundle'
-            - 'SimpleXMLElement'
-            - 'SomeInterface'
-
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
         max_cognitive_complexity: 9
 
@@ -51,6 +42,8 @@ parameters:
     skip:
         # rather useless
         Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff: ~
+        PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer: ~
+        Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer: ~
 
         PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff.Underscore: ~
         Symplify\CodingStandard\Sniffs\Architecture\DuplicatedClassShortNameSniff: ~
@@ -65,26 +58,6 @@ parameters:
             - 'packages/Php74/src/Rector/Double/RealToFloatTypeCastRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenReferenceSniff: ~
-
-        Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer:
-            # classes might not exist
-            - 'packages/*Class.php'
-            - 'bin/bootstrap.php'
-            - '*/packages/*/src/Rector/*Rector.php'
-            - 'src/Rector/MethodCall/MethodCallToAnotherMethodCallWithArgumentsRector.php'
-            - 'src/Rector/Constant/RenameClassConstantsUseToStringsRector.php'
-            - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver.php'
-            - '*/packages/NodeTypeResolver/**/PerNodeTypeResolver/**TypeResolver/*Test.php'
-            - '*RectorTest.php'
-            - 'src/Rector/AbstractPHPUnitRector.php'
-            - 'src/Rector/Class_/ParentClassToTraitsRector.php'
-            # required for exact string match with "\"
-            - 'packages/NodeTypeResolver/src/Php/AbstractTypeInfo.php'
-            # example in description
-            - 'src/Rector/Annotation/RenameAnnotationRector.php'
-            - 'packages/NetteToSymfony/src/Event/EventInfosFactory.php'
-            - 'packages/NetteTesterToPHPUnit/src/AssertManipulator.php'
-            - 'src/PhpParser/Node/Manipulator/CallManipulator.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
             - 'src/Util/*.php'

@@ -6,7 +6,7 @@ namespace Rector\DependencyInjection\Loader;
 
 use Nette\Utils\Strings;
 use Rector\Exception\DependencyInjection\ClassNotFoundException;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ClassExistenceValidator
 {

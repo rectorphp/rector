@@ -93,7 +93,6 @@ PHP
     }
 
     /**
-     * @param Class_ $class
      * @return string[]|null
      */
     private function matchStaticPropertyFetchAndGetSingletonMethodName(Class_ $class): ?array

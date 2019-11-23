@@ -101,9 +101,6 @@ PHP
         return $node;
     }
 
-    /**
-     * @param mixed $preference
-     */
     private function ensurePreferenceIsValid($preference): void
     {
         $allowedPreferences = [self::PREFER_THIS, self::PREFER_SELF];

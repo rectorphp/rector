@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\FileSystemRector;
 
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileSystemFileProcessor
 {

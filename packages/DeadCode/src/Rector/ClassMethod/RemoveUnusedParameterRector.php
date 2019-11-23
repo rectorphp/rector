@@ -154,8 +154,6 @@ PHP
     }
 
     /**
-     * @param ClassMethod $classMethod
-     * @param string      $methodName
      * @param Class_[]    $childrenOfClass
      * @return Param[]
      */

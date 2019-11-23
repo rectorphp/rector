@@ -11,7 +11,7 @@ use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Error\ExceptionCorrector;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Reporting\FileDiff;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 
 final class ErrorAndDiffCollector

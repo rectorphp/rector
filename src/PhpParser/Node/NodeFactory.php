@@ -129,8 +129,6 @@ final class NodeFactory
 
     /**
      * Creates "($arg)"
-     *
-     * @param mixed $argument
      */
     public function createArg($argument): Arg
     {
@@ -226,7 +224,6 @@ final class NodeFactory
     }
 
     /**
-     * @param mixed $item
      * @param string|int|null $key
      */
     private function createArrayItem($item, $key = null): ArrayItem

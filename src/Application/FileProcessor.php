@@ -14,7 +14,7 @@ use Rector\PhpParser\Parser\Parser;
 use Rector\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Rector\AffectedFilesCollector;
 use Rector\Stubs\StubLoader;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileProcessor
 {

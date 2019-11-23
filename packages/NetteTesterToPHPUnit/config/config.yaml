@@ -5,4 +5,5 @@ services:
 
     Rector\NetteTesterToPHPUnit\:
         resource: '../src'
-        exclude: '../src/{Rector/**/*Rector.php}'
+        exclude:
+            - '../src/Rector/**/*Rector.php'

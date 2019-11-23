@@ -24,7 +24,6 @@ final class ClassNaming
 
     /**
      * @param string|Name|Identifier $name
-     * @return string
      */
     public function getShortName($name): string
     {

@@ -71,7 +71,6 @@ final class BetterNodeFinder
     }
 
     /**
-     * @param Node $node
      * @param string[] $types
      */
     public function findFirstAncestorInstancesOf(Node $node, array $types): ?Node

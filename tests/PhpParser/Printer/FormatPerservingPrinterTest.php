@@ -7,8 +7,8 @@ namespace Rector\Tests\PhpParser\Printer;
 use Nette\Utils\FileSystem;
 use Rector\HttpKernel\RectorKernel;
 use Rector\PhpParser\Printer\FormatPerservingPrinter;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FormatPerservingPrinterTest extends AbstractKernelTestCase
 {

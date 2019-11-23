@@ -7,8 +7,8 @@ namespace Rector\Tests\FileSystem\FilesFinder;
 use Iterator;
 use Rector\FileSystem\FilesFinder;
 use Rector\HttpKernel\RectorKernel;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FilesFinderTest extends AbstractKernelTestCase
 {
