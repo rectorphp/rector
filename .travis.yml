@@ -2,7 +2,6 @@ os: linux
 language: php
 
 php:
-    - '7.1'
     - '7.2'
     - '7.3'
     - '7.4snapshot'
@@ -22,7 +21,7 @@ jobs:
         # Stage 1
         -
             stage: test
-            php: 7.1
+            php: 7.2
             name: Lowest dependencies
             install:
                 # install lowest dependencies
@@ -30,12 +29,12 @@ jobs:
 
         -
             name: PHPStan
-            php: 7.1
+            php: 7.2
             script:
                 - composer phpstan
 
         -
-            php: 7.1
+            php: 7.2
             name: ECS
             script:
                 - composer check-cs
@@ -53,13 +52,13 @@ jobs:
 
         -
             name: Documentation
-            php: 7.1
+            php: 7.2
             script:
                 - composer check-docs
 
         -
             name: Simple checks
-            php: 7.1
+            php: 7.2
             script:
                 - php ci/check_services_in_yaml_configs.php
                 - php ci/run_all_sets.php
@@ -109,11 +108,11 @@ jobs:
         # Windows
         - &STANDARD_WINDOWS_JOB
             stage: test
-            name: Windows PHP 7.1
+            name: Windows PHP 7.2
             os: windows
             dist: '1803-containers'
             language: sh # No PHP currently
-            env: PHP_VERSION=7.1.32
+            env: PHP_VERSION=7.2.23
             install:
                 - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
                 - choco install composer --ia "/DEV=C:\tools\php"
@@ -128,11 +127,6 @@ jobs:
             script:
                 # @todo this is probably broken, needs fixing
                 - php vendor/phpunit/phpunit/phpunit
-
-        -
-            <<: *STANDARD_WINDOWS_JOB
-            name: Windows PHP 7.2
-            env: PHP_VERSION=7.2.23
 
         -
             <<: *STANDARD_WINDOWS_JOB
