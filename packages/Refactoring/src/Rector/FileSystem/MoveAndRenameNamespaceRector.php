@@ -9,7 +9,7 @@ use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\Naming\NamespaceMatcher;
 use Rector\PSR4\FileRelocationResolver;
 use Rector\RectorDefinition\RectorDefinition;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MoveAndRenameNamespaceRector extends AbstractFileSystemRector
 {

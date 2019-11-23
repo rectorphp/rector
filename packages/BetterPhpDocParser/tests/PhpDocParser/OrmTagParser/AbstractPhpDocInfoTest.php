@@ -10,8 +10,8 @@ use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\HttpKernel\RectorKernel;
 use Rector\PhpParser\Node\BetterNodeFinder;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
 {

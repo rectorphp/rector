@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Application\FileSystem;
 
 use Rector\ValueObject\MovedClassValueObject;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemovedAndAddedFilesCollector
 {

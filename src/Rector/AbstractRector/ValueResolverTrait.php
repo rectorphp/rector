@@ -26,17 +26,11 @@ trait ValueResolverTrait
         $this->valueResolver = $valueResolver;
     }
 
-    /**
-     * @return mixed
-     */
     protected function getValue(Expr $expr)
     {
         return $this->valueResolver->getValue($expr);
     }
 
-    /**
-     * @param mixed $expectedValue
-     */
     protected function isValue(Expr $expr, $expectedValue): bool
     {
         return $this->getValue($expr) === $expectedValue;

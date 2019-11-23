@@ -29,7 +29,6 @@ final class ValueResolverTest extends AbstractKernelTestCase
 
     /**
      * @dataProvider dataProvider
-     * @param mixed $expected
      */
     public function test($expected, Expr $expr): void
     {

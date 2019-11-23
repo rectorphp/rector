@@ -12,7 +12,7 @@ use Rector\Autodiscovery\ValueObject\NodesWithFileDestinationValueObject;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\PSR4\FileRelocationResolver;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileMover
 {

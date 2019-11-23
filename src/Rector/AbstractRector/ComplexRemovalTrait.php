@@ -73,9 +73,6 @@ trait ComplexRemovalTrait
 
     abstract protected function removeNode(Node $node): void;
 
-    /**
-     * @param ClassMethod $classMethod
-     */
     protected function removeClassMethodAndUsages(ClassMethod $classMethod): void
     {
         $this->removeNode($classMethod);

@@ -220,9 +220,6 @@ PHP
         });
     }
 
-    /**
-     * @param Class_ $class
-     */
     private function removeAssignGetRepositoryCalls(Class_ $class): void
     {
         $this->traverseNodesWithCallable($class->stmts, function (Node $node) {

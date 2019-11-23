@@ -37,7 +37,7 @@ services:
     Symplify\PackageBuilder\Reflection\PrivatesAccessor: ~
 
     Symplify\PackageBuilder\FileSystem\FileSystem: ~
-    Symplify\PackageBuilder\FileSystem\FinderSanitizer: ~
+    Symplify\SmartFileSystem\Finder\FinderSanitizer: ~
 
     Symplify\PackageBuilder\Parameter\ParameterProvider: ~
     Symplify\PackageBuilder\Reflection\PrivatesCaller: ~

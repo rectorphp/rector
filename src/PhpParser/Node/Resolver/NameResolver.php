@@ -25,7 +25,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NameResolver
 {

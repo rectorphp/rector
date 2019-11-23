@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Exception\Application;
 
 use Exception;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 
 final class FileProcessingException extends Exception

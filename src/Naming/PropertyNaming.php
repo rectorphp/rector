@@ -11,7 +11,6 @@ final class PropertyNaming
 {
     /**
      * @param ObjectType|string $objectType
-     * @return string
      */
     public function fqnToVariableName($objectType): string
     {

@@ -14,7 +14,7 @@ use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\Tests\Rector\Psr4\MultipleClassFileToPsr4ClassesRector\MultipleClassFileToPsr4ClassesRectorTest
@@ -42,14 +42,14 @@ namespace App\Exceptions;
 
 use Exception;
 
-final class FirstException extends Exception 
+final class FirstException extends Exception
 {
-    
+
 }
 
 final class SecondException extends Exception
 {
-    
+
 }
 PHP
                     ,
@@ -59,9 +59,9 @@ namespace App\Exceptions;
 
 use Exception;
 
-final class FirstException extends Exception 
+final class FirstException extends Exception
 {
-    
+
 }
 
 // new file: "app/Exceptions/SecondException.php"
@@ -71,7 +71,7 @@ use Exception;
 
 final class SecondException extends Exception
 {
-    
+
 }
 PHP
                 ),

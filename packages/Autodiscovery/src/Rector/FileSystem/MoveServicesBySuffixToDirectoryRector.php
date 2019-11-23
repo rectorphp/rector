@@ -10,7 +10,7 @@ use Rector\Autodiscovery\FileMover\FileMover;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -49,7 +49,7 @@ final class MoveServicesBySuffixToDirectoryRector extends AbstractFileSystemRect
     {
         return new RectorDefinition('Move classes by their suffix to their own group/directory', [new ConfiguredCodeSample(
             <<<'PHP'
-// file: app/Entity/ProductRepository.php 
+// file: app/Entity/ProductRepository.php
 
 namespace App/Entity;
 
@@ -59,7 +59,7 @@ class ProductRepository
 PHP
             ,
             <<<'PHP'
-// file: app/Repository/ProductRepository.php 
+// file: app/Repository/ProductRepository.php
 
 namespace App/Repository;
 

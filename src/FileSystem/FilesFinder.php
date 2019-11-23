@@ -8,8 +8,8 @@ use Nette\Utils\Strings;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\FileSystem\FileSystem;
-use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\Tests\FileSystem\FilesFinder\FilesFinderTest

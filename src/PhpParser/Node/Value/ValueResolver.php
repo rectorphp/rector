@@ -18,7 +18,7 @@ use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see \Rector\Tests\PhpParser\Node\Value\ValueResolverTest
@@ -166,9 +166,6 @@ final class ValueResolver
         return $fileInfo->getPathname();
     }
 
-    /**
-     * @return mixed
-     */
     private function resolveClassConstFetch(ClassConstFetch $classConstFetch)
     {
         $class = $this->nameResolver->getName($classConstFetch->class);

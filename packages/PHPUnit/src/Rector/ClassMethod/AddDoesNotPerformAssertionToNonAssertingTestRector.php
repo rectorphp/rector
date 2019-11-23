@@ -20,7 +20,7 @@ use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Reflection\ClassMethodReflectionFactory;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see https://phpunit.readthedocs.io/en/7.3/annotations.html#doesnotperformassertions

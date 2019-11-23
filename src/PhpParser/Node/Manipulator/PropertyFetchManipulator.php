@@ -304,7 +304,6 @@ final class PropertyFetchManipulator
     }
 
     /**
-     * @param Node $node
      * @return PropertyFetch|StaticPropertyFetch|null
      */
     public function matchPropertyFetch(Node $node): ?Node

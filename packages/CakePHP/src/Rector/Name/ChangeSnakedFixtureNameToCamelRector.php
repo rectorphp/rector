@@ -44,9 +44,6 @@ PHP
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getNodeTypes(): array
     {
         return [Property::class];
@@ -54,7 +51,6 @@ PHP
 
     /**
      * @param Property $node
-     * @return Node|null
      */
     public function refactor(Node $node): ?Node
     {
@@ -78,10 +74,6 @@ PHP
         return $node;
     }
 
-    /**
-     * @param String_ $name
-     * @return String_
-     */
     private function renameFixtureName(String_ $name): String_
     {
         [$prefix, $table] = explode('.', $name->value);

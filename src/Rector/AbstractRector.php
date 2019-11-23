@@ -23,7 +23,7 @@ use Rector\Php\PhpVersionProvider;
 use Rector\Rector\AbstractRector\AbstractRectorTrait;
 use Rector\Rector\AbstractRector\NodeCommandersTrait;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {

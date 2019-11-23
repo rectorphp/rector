@@ -74,9 +74,6 @@ trait NodeFactoryTrait
         return new ConstFetch(new Name('true'));
     }
 
-    /**
-     * @param mixed $argument
-     */
     protected function createArg($argument): Arg
     {
         return $this->nodeFactory->createArg($argument);

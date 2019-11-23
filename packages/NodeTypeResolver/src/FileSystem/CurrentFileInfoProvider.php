@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\FileSystem;
 
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CurrentFileInfoProvider
 {

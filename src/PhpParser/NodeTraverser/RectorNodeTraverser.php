@@ -91,7 +91,6 @@ final class RectorNodeTraverser extends NodeTraverser
 
     /**
      * @param mixed[] $configuration
-     * @param PhpRectorInterface $phpRector
      */
     private function addRectorConfiguration(array $configuration, PhpRectorInterface $phpRector): void
     {

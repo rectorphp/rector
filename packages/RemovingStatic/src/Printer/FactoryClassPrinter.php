@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Symfony\Component\Filesystem\Filesystem;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FactoryClassPrinter
 {

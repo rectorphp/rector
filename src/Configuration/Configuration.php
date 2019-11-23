@@ -11,7 +11,6 @@ use Rector\Exception\Rector\RectorNotFoundOrNotValidRectorClassException;
 use Rector\Rector\AbstractRector;
 use Rector\Testing\PHPUnit\PHPUnitEnvironment;
 use Symfony\Component\Console\Input\InputInterface;
-use Symplify\PackageBuilder\Configuration\ConfigFileFinder;
 
 final class Configuration
 {
@@ -57,19 +56,9 @@ final class Configuration
         $this->setRule($input->getOption(Option::OPTION_RULE));
     }
 
-    public function setConfigFilePathFromInput(InputInterface $input): void
+    public function setFirstResolverConfig(?string $firstResolvedConfig): void
     {
-        if ($input->getParameterOption('--config')) {
-            $this->configFilePath = $input->getParameterOption('--config');
-            return;
-        }
-
-        if ($input->getParameterOption('-c')) {
-            $this->configFilePath = $input->getParameterOption('-c');
-            return;
-        }
-
-        $this->configFilePath = ConfigFileFinder::provide('rector');
+        $this->configFilePath = $firstResolvedConfig;
     }
 
     public function getConfigFilePath(): ?string

@@ -8,7 +8,7 @@ use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\PSR4\FileRelocationResolver;
 use Rector\RectorDefinition\RectorDefinition;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MoveAndRenameClassRector extends AbstractFileSystemRector
 {

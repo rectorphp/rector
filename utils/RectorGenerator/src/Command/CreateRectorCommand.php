@@ -19,8 +19,8 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\PackageBuilder\FileSystem\FinderSanitizer;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CreateRectorCommand extends Command implements ContributorCommandInterface
 {

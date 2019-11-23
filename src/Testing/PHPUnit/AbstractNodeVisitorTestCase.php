@@ -12,8 +12,8 @@ use Rector\HttpKernel\RectorKernel;
 use Rector\PhpParser\BetterNodeDumper;
 use Rector\PhpParser\Parser\Parser;
 use Rector\Testing\StaticFixtureProvider;
-use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Class can be used to test node visitors
