@@ -9,5 +9,6 @@ class SkipPhpUnit extends TestCase
     public function testMe()
     {
         $this->assertTrue(True);
+        $this->markTestSkipped('uups');
     }
 }
