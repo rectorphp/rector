@@ -87,9 +87,7 @@ PHP
         }
 
         if ($this->isObjectType($node->var, TestCase::class)) {
-            if ($this->isName($node->name, 'assert*')) {
-                return null;
-            }
+            return null;
         }
 
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
