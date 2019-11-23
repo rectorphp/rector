@@ -65,4 +65,9 @@ final class Option
      * @var string
      */
     public const EXCLUDE_RECTORS_PARAMETER = 'exclude_rectors';
+
+    /**
+     * @var string
+     */
+    public const MUST_MATCH_GIT_DIFF = 'must-match-git-diff';
 }

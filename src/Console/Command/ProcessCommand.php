@@ -148,6 +148,13 @@ final class ProcessCommand extends AbstractCommand
             'Hide autoload errors for the moment.'
         );
 
+        $this->addOption(
+            Option::MUST_MATCH_GIT_DIFF,
+            null,
+            InputOption::VALUE_NONE,
+            'Execute only on file matching the git diff.'
+        );
+
         $this->addOption(Option::OPTION_RULE, 'r', InputOption::VALUE_REQUIRED, 'Run only this single rule.');
 
         $availableOutputFormatters = $this->outputFormatterCollector->getNames();

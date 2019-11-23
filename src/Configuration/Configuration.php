@@ -45,12 +45,18 @@ final class Configuration
     private $areAnyPhpRectorsLoaded = false;
 
     /**
+     * @var bool
+     */
+    private $mustMatchGitDiff = false;
+
+    /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
      */
     public function resolveFromInput(InputInterface $input): void
     {
         $this->isDryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
         $this->hideAutoloadErrors = (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS);
+        $this->mustMatchGitDiff = (bool) $input->getOption(Option::MUST_MATCH_GIT_DIFF);
         $this->showProgressBar = $this->canShowProgressBar($input);
 
         $this->setRule($input->getOption(Option::OPTION_RULE));
@@ -113,6 +119,11 @@ final class Configuration
     public function setAreAnyPhpRectorsLoaded(bool $areAnyPhpRectorsLoaded): void
     {
         $this->areAnyPhpRectorsLoaded = $areAnyPhpRectorsLoaded;
+    }
+
+    public function mustMatchGitDiff(): bool
+    {
+        return $this->mustMatchGitDiff;
     }
 
     private function canShowProgressBar(InputInterface $input): bool
