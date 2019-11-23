@@ -9,6 +9,32 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+## Unreleased
+
+### Changed
+
+- [#2346] [PHP] ContinueToBreakInSwitchRector skip continue with argument >1, Thanks to [@fsok]
+- [#2344] Bump to Symfony 4.4/5 and PHP 7.2+
+- [#2343] allow Symfony 5, bump min to Symfony 4.4
+
+### Fixed
+
+- [#2349] [Php 70] Fix this call on static for PHPUnit non-assert
+
+## [v0.5.23] - 2019-11-20
+
+### Added
+
+- [#2332] [PHPUnit][Symfony] Add jakzal-injetor Rector
+- [#2338] [ID to UUID] Add middle step to initalize default uuid value
+- [#2337] Add more refactorings for CakePHP 4, Thanks to [@markstory]
+- [#2331] [PHP 8.0] Add union types
+- [#2329] [PHP Deglobalize] Add ChangeGlobalVariablesToPropertiesRector
+
+### Fixed
+
+- [#2341] fix magic static
+
 ## [v0.5.22]
 
 ### Added
@@ -1535,3 +1561,15 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@nissim94]: https://github.com/nissim94
 [@franmomu]: https://github.com/franmomu
 [v0.5.20]: https://github.com/rectorphp/rector/compare/v0.5.19...v0.5.20
+[#2349]: https://github.com/rectorphp/rector/pull/2349
+[#2346]: https://github.com/rectorphp/rector/pull/2346
+[#2344]: https://github.com/rectorphp/rector/pull/2344
+[#2343]: https://github.com/rectorphp/rector/pull/2343
+[#2341]: https://github.com/rectorphp/rector/pull/2341
+[#2338]: https://github.com/rectorphp/rector/pull/2338
+[#2337]: https://github.com/rectorphp/rector/pull/2337
+[#2332]: https://github.com/rectorphp/rector/pull/2332
+[#2331]: https://github.com/rectorphp/rector/pull/2331
+[#2329]: https://github.com/rectorphp/rector/pull/2329
+[@fsok]: https://github.com/fsok
+[v0.5.23]: https://github.com/rectorphp/rector/compare/v0.5.22...v0.5.23
