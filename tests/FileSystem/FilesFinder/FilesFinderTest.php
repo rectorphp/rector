@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Tests\FileSystem\FilesFinder;
 
 use Iterator;
+use Nette\Utils\FileSystem;
 use Rector\FileSystem\FilesFinder;
 use Rector\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
@@ -58,5 +59,27 @@ final class FilesFinderTest extends AbstractKernelTestCase
         sort($foundFileNames);
         sort($expectedFoundFileNames);
         $this->assertSame($expectedFoundFileNames, $foundFileNames);
+    }
+
+    public function testMatchGitDiff(): void
+    {
+        $dir = sys_get_temp_dir() . '/' . mt_rand();
+        mkdir($dir);
+        chdir($dir);
+        shell_exec('git init');
+
+        $filename = $dir . '/tmp.php';
+        touch($filename);
+        touch($dir . '/tmp.yml');
+
+        shell_exec('git add --all && git commit -m "first commit"');
+
+        FileSystem::write($filename, '<?php echo ' . mt_rand() . ';');
+        FileSystem::write($dir . '/tmp.yml', '');
+
+        $foundFiles = $this->filesFinder->findInDirectoriesAndFiles([$dir], ['php'], true);
+        $this->assertCount(1, $foundFiles);
+
+        FileSystem::delete($filename);
     }
 }

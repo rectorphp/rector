@@ -177,7 +177,11 @@ final class ProcessCommand extends AbstractCommand
 
         $source = $this->resolvesSourcePaths($input);
 
-        $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, $this->fileExtensions);
+        $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles(
+            $source,
+            $this->fileExtensions,
+            $this->configuration->mustMatchGitDiff()
+        );
 
         $this->additionalAutoloader->autoloadWithInputAndSource($input, $source);
 
