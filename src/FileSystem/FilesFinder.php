@@ -61,9 +61,9 @@ final class FilesFinder
      * @param string[] $suffixes
      * @return SmartFileInfo[]
      */
-    public function findInDirectoriesAndFiles(array $source, array $suffixes): array
+    public function findInDirectoriesAndFiles(array $source, array $suffixes, bool $matchDiff = false): array
     {
-        $cacheKey = md5(serialize($source) . serialize($suffixes));
+        $cacheKey = md5(serialize($source) . serialize($suffixes) . (int) $matchDiff);
         if (isset($this->fileInfosBySourceAndSuffixes[$cacheKey])) {
             return $this->fileInfosBySourceAndSuffixes[$cacheKey];
         }
@@ -77,7 +77,28 @@ final class FilesFinder
 
         $smartFileInfos = array_merge($smartFileInfos, $this->findInDirectories($directories, $suffixes));
 
+        if ($matchDiff) {
+            $gitDiffFiles = $this->getGitDiff();
+
+            $smartFileInfos = array_filter($smartFileInfos, function ($splFile) use ($gitDiffFiles): bool {
+                return in_array($splFile->getRealPath(), $gitDiffFiles, true);
+            });
+
+            $smartFileInfos = array_values($smartFileInfos);
+        }
+
         return $this->fileInfosBySourceAndSuffixes[$cacheKey] = $smartFileInfos;
+    }
+
+    /**
+     * @return string[] The absolute path to the file matching the git diff shell command.
+     */
+    private function getGitDiff(): array
+    {
+        $plainDiff = shell_exec('git diff --name-only') ?: '';
+        $relativePaths = explode(PHP_EOL, trim($plainDiff));
+
+        return array_values(array_filter(array_map('realpath', $relativePaths)));
     }
 
     /**

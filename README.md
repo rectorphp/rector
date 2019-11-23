@@ -201,6 +201,13 @@ parameters:
     auto_import_names: false
 ```
 
+### Limit Execution to Changed Files
+
+Execution can be limited to changed files using the `process` option `--must-match-git-diff`.
+This option will filter the files included by the configuration, creating an intersection with the files listed in `git diff`.
+
+This option is useful in CI.
+
 ## 3 Steps to Create Your Own Rector
 
 First, make sure it's not covered by [any existing Rectors](/docs/AllRectorsOverview.md).
