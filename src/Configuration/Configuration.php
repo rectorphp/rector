@@ -56,7 +56,7 @@ final class Configuration
     {
         $this->isDryRun = (bool) $input->getOption(Option::OPTION_DRY_RUN);
         $this->hideAutoloadErrors = (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS);
-        $this->mustMatchGitDiff = (bool) $input->getOption(Option::MUST_MATCH_GIT_DIFF);
+        $this->mustMatchGitDiff = (bool) $input->getOption(Option::MATCH_GIT_DIFF);
         $this->showProgressBar = $this->canShowProgressBar($input);
 
         $this->setRule($input->getOption(Option::OPTION_RULE));

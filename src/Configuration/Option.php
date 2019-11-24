@@ -69,5 +69,5 @@ final class Option
     /**
      * @var string
      */
-    public const MUST_MATCH_GIT_DIFF = 'must-match-git-diff';
+    public const MATCH_GIT_DIFF = 'match-git-diff';
 }

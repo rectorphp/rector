@@ -149,7 +149,7 @@ final class ProcessCommand extends AbstractCommand
         );
 
         $this->addOption(
-            Option::MUST_MATCH_GIT_DIFF,
+            Option::MATCH_GIT_DIFF,
             null,
             InputOption::VALUE_NONE,
             'Execute only on file matching the git diff.'
