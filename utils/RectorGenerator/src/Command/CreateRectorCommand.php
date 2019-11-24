@@ -97,7 +97,7 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('Create a new Rector, in proper location, with new tests');
+        $this->setDescription('Create a new Rector, in a proper location, with new tests');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -108,35 +108,62 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         // setup psr-4 autoload, if not already in
         $this->composerPackageAutoloadUpdater->processComposerAutoload($configuration);
 
+        $templateFileInfos = $this->findTemplateFileInfos();
+        $isUnwantedOverride = $this->isUnwantedOverride($templateFileInfos, $templateVariables, $configuration);
+
+        if ($isUnwantedOverride) {
+            $this->symfonyStyle->warning(
+                'The rule already exists and you decided to keep the original. No files were changed'
+            );
+            return ShellCode::SUCCESS;
+        }
+
         foreach ($this->findTemplateFileInfos() as $smartFileInfo) {
             $destination = $this->resolveDestination($smartFileInfo, $templateVariables, $configuration);
 
             $content = $this->resolveContent($smartFileInfo, $templateVariables);
 
             if ($configuration->getPackage() === 'Rector') {
-                $content = Strings::replace($content, '#Rector\\\\Rector\\\\#ms', 'Rector\\');
-                $content = Strings::replace(
-                    $content,
-                    '#use Rector\\\\AbstractRector;#',
-                    'use Rector\\Rector\\AbstractRector;'
-                );
+                $content = $this->addOneMoreRectorNesting($content);
             }
 
             FileSystem::write($destination, $content);
 
             $this->generatedFiles[] = $destination;
 
-            // is test case?
+            // is a test case?
             if (Strings::endsWith($destination, 'Test.php')) {
                 $this->testCasePath = dirname($destination);
             }
         }
 
-        $this->appendToLevelConfig($configuration, $templateVariables);
+        $this->appendRectorServiceToSetConfig($configuration, $templateVariables);
 
         $this->printSuccess($configuration->getName());
 
         return ShellCode::SUCCESS;
+    }
+
+    /**
+     * @param SmartFileInfo[] $templateFileInfos
+     * @param mixed[] $templateVariables
+     */
+    private function isUnwantedOverride(
+        array $templateFileInfos,
+        array $templateVariables,
+        Configuration $configuration
+    ) {
+        foreach ($templateFileInfos as $templateFileInfo) {
+            $destination = $this->resolveDestination($templateFileInfo, $templateVariables, $configuration);
+
+            if (! file_exists($destination)) {
+                continue;
+            }
+
+            return ! $this->symfonyStyle->confirm('Files for this rules already exist. Should we override them?');
+        }
+
+        return false;
     }
 
     /**
@@ -189,33 +216,33 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     /**
      * @param string[] $templateVariables
      */
-    private function appendToLevelConfig(Configuration $configuration, array $templateVariables): void
+    private function appendRectorServiceToSetConfig(Configuration $configuration, array $templateVariables): void
     {
-        if ($configuration->getLevelConfig() === null) {
+        if ($configuration->getSetConfig() === null) {
             return;
         }
 
-        if (! file_exists($configuration->getLevelConfig())) {
+        if (! file_exists($configuration->getSetConfig())) {
             return;
         }
 
         $rectorFqnName = $this->applyVariables(self::RECTOR_FQN_NAME_PATTERN, $templateVariables);
 
-        $levelConfigContent = FileSystem::read($configuration->getLevelConfig());
+        $setConfigContent = FileSystem::read($configuration->getSetConfig());
 
         // already added
-        if (Strings::contains($levelConfigContent, $rectorFqnName)) {
+        if (Strings::contains($setConfigContent, $rectorFqnName)) {
             return;
         }
 
-        $levelConfigContent = trim($levelConfigContent) . sprintf(
+        $setConfigContent = trim($setConfigContent) . sprintf(
             '%s%s: ~%s',
             PHP_EOL,
-            Strings::indent($rectorFqnName, 4, ' '),
+            $this->indentFourSpaces($rectorFqnName),
             PHP_EOL
         );
 
-        FileSystem::write($configuration->getLevelConfig(), $levelConfigContent);
+        FileSystem::write($configuration->getSetConfig(), $setConfigContent);
     }
 
     private function printSuccess(string $name): void
@@ -225,7 +252,7 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         $this->symfonyStyle->listing($this->generatedFiles);
 
         $this->symfonyStyle->success(sprintf(
-            'Now make these tests green again:%svendor/bin/phpunit %s',
+            'Now make these tests green:%svendor/bin/phpunit %s',
             PHP_EOL . PHP_EOL,
             $this->testCasePath
         ));
@@ -237,5 +264,21 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     private function applyVariables(string $content, array $variables): string
     {
         return str_replace(array_keys($variables), array_values($variables), $content);
+    }
+
+    private function addOneMoreRectorNesting(string $content): string
+    {
+        $content = Strings::replace($content, '#Rector\\\\Rector\\\\#ms', 'Rector\\');
+
+        return Strings::replace(
+            $content,
+            '#use Rector\\\\AbstractRector;#',
+            'use Rector\\Rector\\AbstractRector;'
+        );
+    }
+
+    private function indentFourSpaces(string $string): string
+    {
+        return Strings::indent($string, 4, ' ');
     }
 }

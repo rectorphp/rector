@@ -82,7 +82,7 @@
             "Rector\\Php72\\": "packages/Php72/src",
             "Rector\\Php73\\": "packages/Php73/src",
             "Rector\\Php74\\": "packages/Php74/src",
-            "Rector\\Php80\\": "packages/Php80/src"
+            "Rector\\Php80\\": "packages/Php80/src",
             "Rector\\RemovingStatic\\": "packages/RemovingStatic/src",
             "Rector\\Renaming\\": "packages/Renaming/src",
             "Rector\\Restoration\\": "packages/Restoration/src",
@@ -143,7 +143,7 @@
             "Rector\\Php72\\Tests\\": "packages/Php72/tests",
             "Rector\\Php73\\Tests\\": "packages/Php73/tests",
             "Rector\\Php74\\Tests\\": "packages/Php74/tests",
-            "Rector\\Php80\\Tests\\": "packages/Php80/tests"
+            "Rector\\Php80\\Tests\\": "packages/Php80/tests",
             "Rector\\RemovingStatic\\Tests\\": "packages/RemovingStatic/tests",
             "Rector\\Renaming\\Tests\\": "packages/Renaming/tests",
             "Rector\\Restoration\\Tests\\": "packages/Restoration/tests",

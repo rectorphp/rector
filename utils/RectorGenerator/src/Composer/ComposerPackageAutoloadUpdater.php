@@ -46,7 +46,7 @@ final class ComposerPackageAutoloadUpdater
 
         // ask user
         $isConfirmed = $this->symfonyStyle->confirm(sprintf(
-            'Can we update composer.json autoload section with "%s" namespace?%s Or you have to handle it manually',
+            'Can we update "composer.json" autoload with "%s" namespace?%s Handle it manually otherwise',
             $package->getSrcNamespace(),
             PHP_EOL
         ));
