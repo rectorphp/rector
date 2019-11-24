@@ -674,7 +674,7 @@ final class ParsedNodesByType
                 return true;
             }
 
-            /** @var string $className */
+            /** @var string|null $className */
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
             if ($className === null) {
