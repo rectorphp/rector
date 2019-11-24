@@ -677,6 +677,10 @@ final class ParsedNodesByType
             /** @var string $className */
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
+            if ($className === null) {
+                return false;
+            }
+
             return $this->nameResolver->isName($node->class, $className);
         }
 
