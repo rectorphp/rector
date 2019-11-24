@@ -11,7 +11,6 @@ use Rector\Console\Output\JsonOutputFormatter;
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Utils\DocumentationGenerator\Command\DumpNodesCommand;
 use Rector\Utils\DocumentationGenerator\Command\DumpRectorsCommand;
-use Rector\Utils\RectorGenerator\Contract\ContributorCommandInterface;
 use Symfony\Component\Console\Application as SymfonyApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -41,7 +40,6 @@ final class Application extends SymfonyApplication
     {
         parent::__construct(self::NAME, PrettyVersions::getVersion('rector/rector')->getPrettyVersion());
 
-        $commands = $this->filterCommandsByScope($commands);
         $this->addCommands($commands);
         $this->configuration = $configuration;
     }
@@ -112,24 +110,6 @@ final class Application extends SymfonyApplication
         $this->addCustomOptions($defaultInputDefinition);
 
         return $defaultInputDefinition;
-    }
-
-    /**
-     * @param Command[] $commands
-     * @return Command[]
-     */
-    private function filterCommandsByScope(array $commands): array
-    {
-        // nothing to filter
-        if (file_exists(getcwd() . '/bin/rector')) {
-            return $commands;
-        }
-
-        $filteredCommands = array_filter($commands, function (Command $command): bool {
-            return ! $command instanceof ContributorCommandInterface;
-        });
-
-        return array_values($filteredCommands);
     }
 
     private function getNewWorkingDir(InputInterface $input): string

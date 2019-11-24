@@ -8,7 +8,6 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Rector\Utils\RectorGenerator\Composer\ComposerPackageAutoloadUpdater;
 use Rector\Utils\RectorGenerator\Configuration\ConfigurationFactory;
-use Rector\Utils\RectorGenerator\Contract\ContributorCommandInterface;
 use Rector\Utils\RectorGenerator\TemplateVariablesFactory;
 use Rector\Utils\RectorGenerator\ValueObject\Configuration;
 use Rector\Utils\RectorGenerator\ValueObject\Package;
@@ -22,7 +21,7 @@ use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class CreateRectorCommand extends Command implements ContributorCommandInterface
+final class CreateRectorCommand extends Command
 {
     /**
      * @var string
