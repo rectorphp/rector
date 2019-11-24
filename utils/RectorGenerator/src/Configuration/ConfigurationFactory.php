@@ -6,15 +6,13 @@ namespace Rector\Utils\RectorGenerator\Configuration;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use Rector\Exception\FileSystem\FileNotFoundException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Set\Set;
-use Rector\Utils\RectorGenerator\Exception\ConfigurationException;
+use Rector\Utils\RectorGenerator\Guard\RecipeGuard;
 use Rector\Utils\RectorGenerator\Node\NodeClassProvider;
 use Rector\Utils\RectorGenerator\ValueObject\Configuration;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\Yaml\Yaml;
 
 final class ConfigurationFactory
 {
@@ -23,9 +21,15 @@ final class ConfigurationFactory
      */
     private $nodeClassProvider;
 
-    public function __construct(NodeClassProvider $nodeClassProvider)
+    /**
+     * @var RecipeGuard
+     */
+    private $recipeGuard;
+
+    public function __construct(NodeClassProvider $nodeClassProvider, RecipeGuard $recipeGuard)
     {
         $this->nodeClassProvider = $nodeClassProvider;
+        $this->recipeGuard = $recipeGuard;
     }
 
     /**
@@ -33,7 +37,7 @@ final class ConfigurationFactory
      */
     public function createFromRectorRecipe(array $rectorRecipe): Configuration
     {
-        $this->ensureRecipeIsValid($rectorRecipe);
+        $this->recipeGuard->ensureRecipeIsValid($rectorRecipe);
 
         $fqnNodeTypes = $this->resolveFullyQualifiedNodeTypes($rectorRecipe['node_types']);
         $category = $this->resolveCategoryFromFqnNodeTypes($fqnNodeTypes);
@@ -49,49 +53,6 @@ final class ConfigurationFactory
             array_filter((array) $rectorRecipe['source']),
             $this->resolveSetConfig($rectorRecipe['set'])
         );
-    }
-
-    private function ensureConfigFileIsFound(string $configFile): void
-    {
-        if (file_exists($configFile)) {
-            return;
-        }
-
-        throw new FileNotFoundException(sprintf('First, create config file "%s"', $configFile));
-    }
-
-    /**
-     * @param mixed[] $rectorRecipe
-     */
-    private function ensureRecipeIsValid(array $rectorRecipe): void
-    {
-        $requiredKeys = [
-            'package',
-            'name',
-            'node_types',
-            'code_before',
-            'code_after',
-            'description',
-            'source',
-            'set',
-        ];
-
-        if (count(array_intersect(array_keys($rectorRecipe), $requiredKeys)) === count($requiredKeys)) {
-            if (count($rectorRecipe['node_types']) < 1) {
-                throw new ConfigurationException(sprintf(
-                    '"%s" option requires at least one node, e.g. "FuncCall"',
-                    'node_types'
-                ));
-            }
-
-            return;
-        }
-
-        throw new ConfigurationException(sprintf(
-            'Make sure "%s" keys are present in the "%s" config',
-            implode('", "', $requiredKeys),
-            $configFile
-        ));
     }
 
     /**

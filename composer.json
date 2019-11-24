@@ -82,6 +82,7 @@
             "Rector\\Php72\\": "packages/Php72/src",
             "Rector\\Php73\\": "packages/Php73/src",
             "Rector\\Php74\\": "packages/Php74/src",
+            "Rector\\Php80\\": "packages/Php80/src"
             "Rector\\RemovingStatic\\": "packages/RemovingStatic/src",
             "Rector\\Renaming\\": "packages/Renaming/src",
             "Rector\\Restoration\\": "packages/Restoration/src",
@@ -101,8 +102,7 @@
             "Rector\\Utils\\RectorGenerator\\": "utils/RectorGenerator/src",
             "Rector\\StrictCodeQuality\\": "packages/StrictCodeQuality/src",
             "Rector\\DynamicTypeAnalysis\\": "packages/DynamicTypeAnalysis/src",
-            "Rector\\PhpDeglobalize\\": "packages/PhpDeglobalize/src",
-            "Rector\\Php80\\": "packages/Php80/src"
+            "Rector\\PhpDeglobalize\\": "packages/PhpDeglobalize/src"
         }
     },
     "autoload-dev": {
@@ -143,6 +143,7 @@
             "Rector\\Php72\\Tests\\": "packages/Php72/tests",
             "Rector\\Php73\\Tests\\": "packages/Php73/tests",
             "Rector\\Php74\\Tests\\": "packages/Php74/tests",
+            "Rector\\Php80\\Tests\\": "packages/Php80/tests"
             "Rector\\RemovingStatic\\Tests\\": "packages/RemovingStatic/tests",
             "Rector\\Renaming\\Tests\\": "packages/Renaming/tests",
             "Rector\\Restoration\\Tests\\": "packages/Restoration/tests",
@@ -159,8 +160,7 @@
             "Rector\\ZendToSymfony\\Tests\\": "packages/ZendToSymfony/tests",
             "Rector\\StrictCodeQuality\\Tests\\": "packages/StrictCodeQuality/tests",
             "Rector\\DynamicTypeAnalysis\\Tests\\": "packages/DynamicTypeAnalysis/tests",
-            "Rector\\PhpDeglobalize\\Tests\\": "packages/PhpDeglobalize/tests",
-            "Rector\\Php80\\Tests\\": "packages/Php80/tests"
+            "Rector\\PhpDeglobalize\\Tests\\": "packages/PhpDeglobalize/tests"
         },
         "classmap": [
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",

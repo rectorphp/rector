@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Rector\Utils\RectorGenerator\Command;
 
 use Nette\Utils\FileSystem;
-use Nette\Utils\Json;
 use Nette\Utils\Strings;
+use Rector\Utils\RectorGenerator\Composer\ComposerPackageAutoloadUpdater;
 use Rector\Utils\RectorGenerator\Configuration\ConfigurationFactory;
 use Rector\Utils\RectorGenerator\Contract\ContributorCommandInterface;
 use Rector\Utils\RectorGenerator\TemplateVariablesFactory;
 use Rector\Utils\RectorGenerator\ValueObject\Configuration;
+use Rector\Utils\RectorGenerator\ValueObject\Package;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
@@ -33,11 +33,6 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
      * @var string
      */
     private const RECTOR_FQN_NAME_PATTERN = 'Rector\_Package_\Rector\_Category_\_Name_';
-
-    /**
-     * @var string
-     */
-    private const UTILS_KEYWORD = 'Utils';
 
     /**
      * @var string
@@ -75,6 +70,11 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     private $rectorRecipe = [];
 
     /**
+     * @var ComposerPackageAutoloadUpdater
+     */
+    private $composerPackageAutoloadUpdater;
+
+    /**
      * @param mixed[] $rectorRecipe
      */
     public function __construct(
@@ -82,6 +82,7 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         ConfigurationFactory $configurationFactory,
         FinderSanitizer $finderSanitizer,
         TemplateVariablesFactory $templateVariablesFactory,
+        ComposerPackageAutoloadUpdater $composerPackageAutoloadUpdater,
         array $rectorRecipe
     ) {
         parent::__construct();
@@ -90,6 +91,7 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         $this->finderSanitizer = $finderSanitizer;
         $this->templateVariablesFactory = $templateVariablesFactory;
         $this->rectorRecipe = $rectorRecipe;
+        $this->composerPackageAutoloadUpdater = $composerPackageAutoloadUpdater;
     }
 
     protected function configure(): void
@@ -104,14 +106,10 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         $templateVariables = $this->templateVariablesFactory->createFromConfiguration($configuration);
 
         // setup psr-4 autoload, if not already in
-        $this->processComposerAutoload($templateVariables);
+        $this->composerPackageAutoloadUpdater->processComposerAutoload($configuration);
 
         foreach ($this->findTemplateFileInfos() as $smartFileInfo) {
             $destination = $this->resolveDestination($smartFileInfo, $templateVariables, $configuration);
-
-            dump($templateVariables);
-            dump($destination);
-            die;
 
             $content = $this->resolveContent($smartFileInfo, $templateVariables);
 
@@ -142,61 +140,6 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     }
 
     /**
-     * @param mixed[] $templateVariables
-     */
-    private function processComposerAutoload(array $templateVariables): void
-    {
-        // @todo decouple to own service...
-
-        $composerJsonFilePath = getcwd() . '/composer.json';
-        $composerJson = $this->loadFileToJson($composerJsonFilePath);
-
-        $package = $templateVariables['_Package_'];
-
-        // skip core, already autoloaded
-        if ($package === 'Rector') {
-            return;
-        }
-
-        if ($package === self::UTILS_KEYWORD) {
-            $namespace = 'Utils\\Rector\\';
-            $namespaceTest = 'Utils\\Rector\\Tests\\';
-        } else {
-            $namespace = 'Rector\\' . $package . '\\';
-            $namespaceTest = 'Rector\\' . $package . '\\Tests\\';
-        }
-
-        // already autoloaded?
-        if (isset($composerJson['autoload']['psr-4'][$namespace])) {
-            return;
-        }
-
-        if ($package === self::UTILS_KEYWORD) {
-            $srcDirectory = 'utils/rector/src';
-            $testsDirectory = 'utils/rector/tests';
-        } else {
-            $srcDirectory = 'packages/' . $package . '/src';
-            $testsDirectory = 'packages/' . $package . '/tests';
-        }
-
-        // is the namespace already in composer.json? → skip it
-        if (isset($composerJson['autoload']['psr-4'][$namespace])) {
-            if ($composerJson['autoload-dev']['psr-4'][$namespaceTest]) {
-                return;
-            }
-        }
-
-        $composerJson['autoload']['psr-4'][$namespace] = $srcDirectory;
-        $composerJson['autoload-dev']['psr-4'][$namespaceTest] = $testsDirectory;
-
-        $this->saveJsonToFile($composerJsonFilePath, $composerJson);
-
-        // rebuild new namespace
-        $composerDumpProcess = new Process(['composer', 'dump']);
-        $composerDumpProcess->run();
-    }
-
-    /**
      * @return SmartFileInfo[]
      */
     private function findTemplateFileInfos(): array
@@ -224,7 +167,7 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         }
 
         // special keyword for 3rd party Rectors, not for core Github contribution
-        if ($configuration->getPackage() === self::UTILS_KEYWORD) {
+        if ($configuration->getPackage() === Package::UTILS) {
             $destination = Strings::replace($destination, '#packages\/_Package_#', 'utils/rector');
         }
 
@@ -289,66 +232,10 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     }
 
     /**
-     * @return mixed[]
-     */
-    private function loadFileToJson(string $filePath): array
-    {
-        $fileContent = FileSystem::read($filePath);
-        return Json::decode($fileContent, Json::FORCE_ARRAY);
-    }
-
-    /**
-     * @param mixed[] $json
-     */
-    private function saveJsonToFile(string $filePath, array $json): void
-    {
-        $content = Json::encode($json, Json::PRETTY);
-        $content = $this->inlineSections($content, ['keywords', 'bin']);
-        $content = $this->inlineAuthors($content);
-
-        // make sure there is newline in the end
-        $content = trim($content) . PHP_EOL;
-
-        FileSystem::write($filePath, $content);
-    }
-
-    /**
      * @param mixed[] $variables
      */
     private function applyVariables(string $content, array $variables): string
     {
         return str_replace(array_keys($variables), array_values($variables), $content);
-    }
-
-    /**
-     * @param string[] $sections
-     */
-    private function inlineSections(string $jsonContent, array $sections): string
-    {
-        foreach ($sections as $section) {
-            $pattern = '#("' . preg_quote($section, '#') . '": )\[(.*?)\](,)#ms';
-            $jsonContent = Strings::replace($jsonContent, $pattern, function (array $match): string {
-                $inlined = Strings::replace($match[2], '#\s+#', ' ');
-                $inlined = trim($inlined);
-                $inlined = '[' . $inlined . ']';
-                return $match[1] . $inlined . $match[3];
-            });
-        }
-
-        return $jsonContent;
-    }
-
-    private function inlineAuthors(string $jsonContent): string
-    {
-        $pattern = '#(?<start>"authors": \[\s+)(?<content>.*?)(?<end>\s+\](,))#ms';
-        $jsonContent = Strings::replace($jsonContent, $pattern, function (array $match): string {
-            $inlined = Strings::replace($match['content'], '#\s+#', ' ');
-            $inlined = trim($inlined);
-            $inlined = Strings::replace($inlined, '#},#', "},\n       ");
-
-            return $match['start'] . $inlined . $match['end'];
-        });
-
-        return $jsonContent;
     }
 }
