@@ -2,6 +2,8 @@ imports:
     - { resource: 'nette-to-symfony/*.yaml' }
 
 services:
+    Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector: ~
+
     Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector: ~
     Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector: ~
     Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector: ~
