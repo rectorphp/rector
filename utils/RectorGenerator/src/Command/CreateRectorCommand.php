@@ -5,24 +5,23 @@ declare(strict_types=1);
 namespace Rector\Utils\RectorGenerator\Command;
 
 use Nette\Utils\FileSystem;
-use Nette\Utils\Json;
 use Nette\Utils\Strings;
+use Rector\Utils\RectorGenerator\Composer\ComposerPackageAutoloadUpdater;
 use Rector\Utils\RectorGenerator\Configuration\ConfigurationFactory;
-use Rector\Utils\RectorGenerator\Contract\ContributorCommandInterface;
 use Rector\Utils\RectorGenerator\TemplateVariablesFactory;
 use Rector\Utils\RectorGenerator\ValueObject\Configuration;
+use Rector\Utils\RectorGenerator\ValueObject\Package;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class CreateRectorCommand extends Command implements ContributorCommandInterface
+final class CreateRectorCommand extends Command
 {
     /**
      * @var string
@@ -64,32 +63,59 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
      */
     private $templateVariablesFactory;
 
+    /**
+     * @var mixed[]
+     */
+    private $rectorRecipe = [];
+
+    /**
+     * @var ComposerPackageAutoloadUpdater
+     */
+    private $composerPackageAutoloadUpdater;
+
+    /**
+     * @param mixed[] $rectorRecipe
+     */
     public function __construct(
         SymfonyStyle $symfonyStyle,
         ConfigurationFactory $configurationFactory,
         FinderSanitizer $finderSanitizer,
-        TemplateVariablesFactory $templateVariablesFactory
+        TemplateVariablesFactory $templateVariablesFactory,
+        ComposerPackageAutoloadUpdater $composerPackageAutoloadUpdater,
+        array $rectorRecipe
     ) {
         parent::__construct();
         $this->symfonyStyle = $symfonyStyle;
         $this->configurationFactory = $configurationFactory;
         $this->finderSanitizer = $finderSanitizer;
         $this->templateVariablesFactory = $templateVariablesFactory;
+        $this->rectorRecipe = $rectorRecipe;
+        $this->composerPackageAutoloadUpdater = $composerPackageAutoloadUpdater;
     }
 
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
-        $this->setDescription('Create a new Rector, in proper location, with new tests');
+        $this->setDescription('Create a new Rector, in a proper location, with new tests');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $configuration = $this->configurationFactory->createFromConfigFile(getcwd() . '/create-rector.yaml');
+        $configuration = $this->configurationFactory->createFromRectorRecipe($this->rectorRecipe);
         $templateVariables = $this->templateVariablesFactory->createFromConfiguration($configuration);
 
         // setup psr-4 autoload, if not already in
-        $this->processComposerAutoload($templateVariables);
+        $this->composerPackageAutoloadUpdater->processComposerAutoload($configuration);
+
+        $templateFileInfos = $this->findTemplateFileInfos();
+        $isUnwantedOverride = $this->isUnwantedOverride($templateFileInfos, $templateVariables, $configuration);
+
+        if ($isUnwantedOverride) {
+            $this->symfonyStyle->warning(
+                'The rule already exists and you decided to keep the original. No files were changed'
+            );
+            return ShellCode::SUCCESS;
+        }
 
         foreach ($this->findTemplateFileInfos() as $smartFileInfo) {
             $destination = $this->resolveDestination($smartFileInfo, $templateVariables, $configuration);
@@ -97,24 +123,20 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
             $content = $this->resolveContent($smartFileInfo, $templateVariables);
 
             if ($configuration->getPackage() === 'Rector') {
-                $content = Strings::replace($content, '#Rector\\\\Rector\\\\#ms', 'Rector\\');
-                $content = Strings::replace(
-                    $content,
-                    '#use Rector\\\\AbstractRector;#',
-                    'use Rector\\Rector\\AbstractRector;'
-                );
+                $content = $this->addOneMoreRectorNesting($content);
             }
 
             FileSystem::write($destination, $content);
 
             $this->generatedFiles[] = $destination;
 
+            // is a test case?
             if (Strings::endsWith($destination, 'Test.php')) {
                 $this->testCasePath = dirname($destination);
             }
         }
 
-        $this->appendToLevelConfig($configuration, $templateVariables);
+        $this->appendRectorServiceToSetConfig($configuration, $templateVariables);
 
         $this->printSuccess($configuration->getName());
 
@@ -122,36 +144,25 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     }
 
     /**
+     * @param SmartFileInfo[] $templateFileInfos
      * @param mixed[] $templateVariables
      */
-    private function processComposerAutoload(array $templateVariables): void
-    {
-        $composerJsonFilePath = getcwd() . '/composer.json';
-        $composerJson = $this->loadFileToJson($composerJsonFilePath);
+    private function isUnwantedOverride(
+        array $templateFileInfos,
+        array $templateVariables,
+        Configuration $configuration
+    ) {
+        foreach ($templateFileInfos as $templateFileInfo) {
+            $destination = $this->resolveDestination($templateFileInfo, $templateVariables, $configuration);
 
-        $package = $templateVariables['_Package_'];
+            if (! file_exists($destination)) {
+                continue;
+            }
 
-        // skip core, already autoloaded
-        if ($package === 'Rector') {
-            return;
+            return ! $this->symfonyStyle->confirm('Files for this rules already exist. Should we override them?');
         }
 
-        $namespace = 'Rector\\' . $package . '\\';
-        $namespaceTest = 'Rector\\' . $package . '\\Tests\\';
-
-        // already autoloaded?
-        if (isset($composerJson['autoload']['psr-4'][$namespace])) {
-            return;
-        }
-
-        $composerJson['autoload']['psr-4'][$namespace] = 'packages/' . $package . '/src';
-        $composerJson['autoload-dev']['psr-4'][$namespaceTest] = 'packages/' . $package . '/tests';
-
-        $this->saveJsonToFile($composerJsonFilePath, $composerJson);
-
-        // rebuild new namespace
-        $composerDumpProcess = new Process(['composer', 'dump']);
-        $composerDumpProcess->run();
+        return false;
     }
 
     /**
@@ -181,6 +192,11 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
             $destination = Strings::replace($destination, '#packages\/_Package_/src/Rector#', 'src/Rector');
         }
 
+        // special keyword for 3rd party Rectors, not for core Github contribution
+        if ($configuration->getPackage() === Package::UTILS) {
+            $destination = Strings::replace($destination, '#packages\/_Package_#', 'utils/rector');
+        }
+
         if (! Strings::match($destination, '#fixture[\d+]*\.php\.inc#')) {
             $destination = rtrim($destination, '.inc');
         }
@@ -199,33 +215,33 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     /**
      * @param string[] $templateVariables
      */
-    private function appendToLevelConfig(Configuration $configuration, array $templateVariables): void
+    private function appendRectorServiceToSetConfig(Configuration $configuration, array $templateVariables): void
     {
-        if ($configuration->getLevelConfig() === null) {
+        if ($configuration->getSetConfig() === null) {
             return;
         }
 
-        if (! file_exists($configuration->getLevelConfig())) {
+        if (! file_exists($configuration->getSetConfig())) {
             return;
         }
 
         $rectorFqnName = $this->applyVariables(self::RECTOR_FQN_NAME_PATTERN, $templateVariables);
 
-        $levelConfigContent = FileSystem::read($configuration->getLevelConfig());
+        $setConfigContent = FileSystem::read($configuration->getSetConfig());
 
         // already added
-        if (Strings::contains($levelConfigContent, $rectorFqnName)) {
+        if (Strings::contains($setConfigContent, $rectorFqnName)) {
             return;
         }
 
-        $levelConfigContent = trim($levelConfigContent) . sprintf(
+        $setConfigContent = trim($setConfigContent) . sprintf(
             '%s%s: ~%s',
             PHP_EOL,
-            Strings::indent($rectorFqnName, 4, ' '),
+            $this->indentFourSpaces($rectorFqnName),
             PHP_EOL
         );
 
-        FileSystem::write($configuration->getLevelConfig(), $levelConfigContent);
+        FileSystem::write($configuration->getSetConfig(), $setConfigContent);
     }
 
     private function printSuccess(string $name): void
@@ -235,34 +251,10 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         $this->symfonyStyle->listing($this->generatedFiles);
 
         $this->symfonyStyle->success(sprintf(
-            'Now make these tests green again:%svendor/bin/phpunit %s',
+            'Now make these tests green:%svendor/bin/phpunit %s',
             PHP_EOL . PHP_EOL,
             $this->testCasePath
         ));
-    }
-
-    /**
-     * @return mixed[]
-     */
-    private function loadFileToJson(string $filePath): array
-    {
-        $fileContent = FileSystem::read($filePath);
-        return Json::decode($fileContent, Json::FORCE_ARRAY);
-    }
-
-    /**
-     * @param mixed[] $json
-     */
-    private function saveJsonToFile(string $filePath, array $json): void
-    {
-        $content = Json::encode($json, Json::PRETTY);
-        $content = $this->inlineSections($content, ['keywords', 'bin']);
-        $content = $this->inlineAuthors($content);
-
-        // make sure there is newline in the end
-        $content = trim($content) . PHP_EOL;
-
-        FileSystem::write($filePath, $content);
     }
 
     /**
@@ -273,35 +265,19 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         return str_replace(array_keys($variables), array_values($variables), $content);
     }
 
-    /**
-     * @param string[] $sections
-     */
-    private function inlineSections(string $jsonContent, array $sections): string
+    private function addOneMoreRectorNesting(string $content): string
     {
-        foreach ($sections as $section) {
-            $pattern = '#("' . preg_quote($section, '#') . '": )\[(.*?)\](,)#ms';
-            $jsonContent = Strings::replace($jsonContent, $pattern, function (array $match): string {
-                $inlined = Strings::replace($match[2], '#\s+#', ' ');
-                $inlined = trim($inlined);
-                $inlined = '[' . $inlined . ']';
-                return $match[1] . $inlined . $match[3];
-            });
-        }
+        $content = Strings::replace($content, '#Rector\\\\Rector\\\\#ms', 'Rector\\');
 
-        return $jsonContent;
+        return Strings::replace(
+            $content,
+            '#use Rector\\\\AbstractRector;#',
+            'use Rector\\Rector\\AbstractRector;'
+        );
     }
 
-    private function inlineAuthors(string $jsonContent): string
+    private function indentFourSpaces(string $string): string
     {
-        $pattern = '#(?<start>"authors": \[\s+)(?<content>.*?)(?<end>\s+\](,))#ms';
-        $jsonContent = Strings::replace($jsonContent, $pattern, function (array $match): string {
-            $inlined = Strings::replace($match['content'], '#\s+#', ' ');
-            $inlined = trim($inlined);
-            $inlined = Strings::replace($inlined, '#},#', "},\n       ");
-
-            return $match['start'] . $inlined . $match['end'];
-        });
-
-        return $jsonContent;
+        return Strings::indent($string, 4, ' ');
     }
 }

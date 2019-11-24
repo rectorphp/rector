@@ -41,7 +41,7 @@ final class Configuration
     /**
      * @var string|null
      */
-    private $levelConfig;
+    private $setConfig;
 
     /**
      * @var string[]
@@ -66,7 +66,7 @@ final class Configuration
         string $codeBefore,
         string $codeAfter,
         array $source,
-        ?string $levelConfig
+        ?string $setConfig
     ) {
         $this->package = $package;
         $this->setName($name);
@@ -76,7 +76,7 @@ final class Configuration
         $this->codeAfter = $codeAfter;
         $this->description = $description;
         $this->source = $source;
-        $this->levelConfig = $levelConfig;
+        $this->setConfig = $setConfig;
     }
 
     public function getDescription(): string
@@ -125,9 +125,9 @@ final class Configuration
         return $this->source;
     }
 
-    public function getLevelConfig(): ?string
+    public function getSetConfig(): ?string
     {
-        return $this->levelConfig;
+        return $this->setConfig;
     }
 
     private function setName(string $name): void

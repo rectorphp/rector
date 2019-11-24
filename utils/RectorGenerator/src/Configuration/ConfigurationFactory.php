@@ -6,15 +6,13 @@ namespace Rector\Utils\RectorGenerator\Configuration;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use Rector\Exception\FileSystem\FileNotFoundException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Set\Set;
-use Rector\Utils\RectorGenerator\Exception\ConfigurationException;
+use Rector\Utils\RectorGenerator\Guard\RecipeGuard;
 use Rector\Utils\RectorGenerator\Node\NodeClassProvider;
 use Rector\Utils\RectorGenerator\ValueObject\Configuration;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\Yaml\Yaml;
 
 final class ConfigurationFactory
 {
@@ -23,75 +21,38 @@ final class ConfigurationFactory
      */
     private $nodeClassProvider;
 
-    public function __construct(NodeClassProvider $nodeClassProvider)
+    /**
+     * @var RecipeGuard
+     */
+    private $recipeGuard;
+
+    public function __construct(NodeClassProvider $nodeClassProvider, RecipeGuard $recipeGuard)
     {
         $this->nodeClassProvider = $nodeClassProvider;
-    }
-
-    public function createFromConfigFile(string $configFile): Configuration
-    {
-        $this->ensureConfigFileIsFound($configFile);
-
-        $config = (array) Yaml::parseFile($configFile);
-        $this->ensureConfigIsValid($config, $configFile);
-
-        $fqnNodeTypes = $this->resolveFullyQualifiedNodeTypes($config['node_types']);
-        $category = $this->resolveCategoryFromFqnNodeTypes($fqnNodeTypes);
-
-        return new Configuration(
-            $config['package'],
-            $config['name'],
-            $category,
-            $this->resolveFullyQualifiedNodeTypes($config['node_types']),
-            $config['description'],
-            trim(ltrim($config['code_before'], '<?php')),
-            trim(ltrim($config['code_after'], '<?php')),
-            array_filter((array) $config['source']),
-            $this->resolveSetConfig($config['set'])
-        );
-    }
-
-    private function ensureConfigFileIsFound(string $configFile): void
-    {
-        if (file_exists($configFile)) {
-            return;
-        }
-
-        throw new FileNotFoundException(sprintf('First, create config file "%s"', $configFile));
+        $this->recipeGuard = $recipeGuard;
     }
 
     /**
-     * @param mixed[][] $config
+     * @param mixed[] $rectorRecipe
      */
-    private function ensureConfigIsValid(array $config, string $configFile): void
+    public function createFromRectorRecipe(array $rectorRecipe): Configuration
     {
-        $requiredKeys = [
-            'package',
-            'name',
-            'node_types',
-            'code_before',
-            'code_after',
-            'description',
-            'source',
-            'set',
-        ];
+        $this->recipeGuard->ensureRecipeIsValid($rectorRecipe);
 
-        if (count(array_intersect(array_keys($config), $requiredKeys)) === count($requiredKeys)) {
-            if (count($config['node_types']) < 1) {
-                throw new ConfigurationException(sprintf(
-                    '"%s" option requires at least one node, e.g. "FuncCall"',
-                    'node_types'
-                ));
-            }
+        $fqnNodeTypes = $this->resolveFullyQualifiedNodeTypes($rectorRecipe['node_types']);
+        $category = $this->resolveCategoryFromFqnNodeTypes($fqnNodeTypes);
 
-            return;
-        }
-
-        throw new ConfigurationException(sprintf(
-            'Make sure "%s" keys are present in the "%s" config',
-            implode('", "', $requiredKeys),
-            $configFile
-        ));
+        return new Configuration(
+            $rectorRecipe['package'],
+            $rectorRecipe['name'],
+            $category,
+            $this->resolveFullyQualifiedNodeTypes($rectorRecipe['node_types']),
+            $rectorRecipe['description'],
+            trim(ltrim($rectorRecipe['code_before'], '<?php')),
+            trim(ltrim($rectorRecipe['code_after'], '<?php')),
+            array_filter((array) $rectorRecipe['source']),
+            $this->resolveSetConfig($rectorRecipe['set'])
+        );
     }
 
     /**
