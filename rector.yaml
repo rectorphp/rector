@@ -12,3 +12,7 @@ parameters:
 
     # so Rector code is still PHP 7.1 compatible
     php_version_features: '7.1'
+
+
+    rector_recipe:
+        package: "Utils"

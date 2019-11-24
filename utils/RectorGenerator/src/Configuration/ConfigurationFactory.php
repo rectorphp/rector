@@ -28,26 +28,26 @@ final class ConfigurationFactory
         $this->nodeClassProvider = $nodeClassProvider;
     }
 
-    public function createFromConfigFile(string $configFile): Configuration
+    /**
+     * @param mixed[] $rectorRecipe
+     */
+    public function createFromRectorRecipe(array $rectorRecipe): Configuration
     {
-        $this->ensureConfigFileIsFound($configFile);
+        $this->ensureRecipeIsValid($rectorRecipe);
 
-        $config = (array) Yaml::parseFile($configFile);
-        $this->ensureConfigIsValid($config, $configFile);
-
-        $fqnNodeTypes = $this->resolveFullyQualifiedNodeTypes($config['node_types']);
+        $fqnNodeTypes = $this->resolveFullyQualifiedNodeTypes($rectorRecipe['node_types']);
         $category = $this->resolveCategoryFromFqnNodeTypes($fqnNodeTypes);
 
         return new Configuration(
-            $config['package'],
-            $config['name'],
+            $rectorRecipe['package'],
+            $rectorRecipe['name'],
             $category,
-            $this->resolveFullyQualifiedNodeTypes($config['node_types']),
-            $config['description'],
-            trim(ltrim($config['code_before'], '<?php')),
-            trim(ltrim($config['code_after'], '<?php')),
-            array_filter((array) $config['source']),
-            $this->resolveSetConfig($config['set'])
+            $this->resolveFullyQualifiedNodeTypes($rectorRecipe['node_types']),
+            $rectorRecipe['description'],
+            trim(ltrim($rectorRecipe['code_before'], '<?php')),
+            trim(ltrim($rectorRecipe['code_after'], '<?php')),
+            array_filter((array) $rectorRecipe['source']),
+            $this->resolveSetConfig($rectorRecipe['set'])
         );
     }
 
@@ -61,9 +61,9 @@ final class ConfigurationFactory
     }
 
     /**
-     * @param mixed[][] $config
+     * @param mixed[] $rectorRecipe
      */
-    private function ensureConfigIsValid(array $config, string $configFile): void
+    private function ensureRecipeIsValid(array $rectorRecipe): void
     {
         $requiredKeys = [
             'package',
@@ -76,8 +76,8 @@ final class ConfigurationFactory
             'set',
         ];
 
-        if (count(array_intersect(array_keys($config), $requiredKeys)) === count($requiredKeys)) {
-            if (count($config['node_types']) < 1) {
+        if (count(array_intersect(array_keys($rectorRecipe), $requiredKeys)) === count($requiredKeys)) {
+            if (count($rectorRecipe['node_types']) < 1) {
                 throw new ConfigurationException(sprintf(
                     '"%s" option requires at least one node, e.g. "FuncCall"',
                     'node_types'

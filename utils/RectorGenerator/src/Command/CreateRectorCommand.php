@@ -37,6 +37,11 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
     /**
      * @var string
      */
+    private const UTILS_KEYWORD = 'Utils';
+
+    /**
+     * @var string
+     */
     private $testCasePath;
 
     /**
@@ -64,17 +69,27 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
      */
     private $templateVariablesFactory;
 
+    /**
+     * @var mixed[]
+     */
+    private $rectorRecipe = [];
+
+    /**
+     * @param mixed[] $rectorRecipe
+     */
     public function __construct(
         SymfonyStyle $symfonyStyle,
         ConfigurationFactory $configurationFactory,
         FinderSanitizer $finderSanitizer,
-        TemplateVariablesFactory $templateVariablesFactory
+        TemplateVariablesFactory $templateVariablesFactory,
+        array $rectorRecipe
     ) {
         parent::__construct();
         $this->symfonyStyle = $symfonyStyle;
         $this->configurationFactory = $configurationFactory;
         $this->finderSanitizer = $finderSanitizer;
         $this->templateVariablesFactory = $templateVariablesFactory;
+        $this->rectorRecipe = $rectorRecipe;
     }
 
     protected function configure(): void
@@ -85,7 +100,7 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $configuration = $this->configurationFactory->createFromConfigFile(getcwd() . '/create-rector.yaml');
+        $configuration = $this->configurationFactory->createFromRectorRecipe($this->rectorRecipe);
         $templateVariables = $this->templateVariablesFactory->createFromConfiguration($configuration);
 
         // setup psr-4 autoload, if not already in
@@ -93,6 +108,10 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
 
         foreach ($this->findTemplateFileInfos() as $smartFileInfo) {
             $destination = $this->resolveDestination($smartFileInfo, $templateVariables, $configuration);
+
+            dump($templateVariables);
+            dump($destination);
+            die;
 
             $content = $this->resolveContent($smartFileInfo, $templateVariables);
 
@@ -109,6 +128,7 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
 
             $this->generatedFiles[] = $destination;
 
+            // is test case?
             if (Strings::endsWith($destination, 'Test.php')) {
                 $this->testCasePath = dirname($destination);
             }
@@ -126,6 +146,8 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
      */
     private function processComposerAutoload(array $templateVariables): void
     {
+        // @todo decouple to own service...
+
         $composerJsonFilePath = getcwd() . '/composer.json';
         $composerJson = $this->loadFileToJson($composerJsonFilePath);
 
@@ -136,16 +158,36 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
             return;
         }
 
-        $namespace = 'Rector\\' . $package . '\\';
-        $namespaceTest = 'Rector\\' . $package . '\\Tests\\';
+        if ($package === self::UTILS_KEYWORD) {
+            $namespace = 'Utils\\Rector\\';
+            $namespaceTest = 'Utils\\Rector\\Tests\\';
+        } else {
+            $namespace = 'Rector\\' . $package . '\\';
+            $namespaceTest = 'Rector\\' . $package . '\\Tests\\';
+        }
 
         // already autoloaded?
         if (isset($composerJson['autoload']['psr-4'][$namespace])) {
             return;
         }
 
-        $composerJson['autoload']['psr-4'][$namespace] = 'packages/' . $package . '/src';
-        $composerJson['autoload-dev']['psr-4'][$namespaceTest] = 'packages/' . $package . '/tests';
+        if ($package === self::UTILS_KEYWORD) {
+            $srcDirectory = 'utils/rector/src';
+            $testsDirectory = 'utils/rector/tests';
+        } else {
+            $srcDirectory = 'packages/' . $package . '/src';
+            $testsDirectory = 'packages/' . $package . '/tests';
+        }
+
+        // is the namespace already in composer.json? → skip it
+        if (isset($composerJson['autoload']['psr-4'][$namespace])) {
+            if ($composerJson['autoload-dev']['psr-4'][$namespaceTest]) {
+                return;
+            }
+        }
+
+        $composerJson['autoload']['psr-4'][$namespace] = $srcDirectory;
+        $composerJson['autoload-dev']['psr-4'][$namespaceTest] = $testsDirectory;
 
         $this->saveJsonToFile($composerJsonFilePath, $composerJson);
 
@@ -179,6 +221,11 @@ final class CreateRectorCommand extends Command implements ContributorCommandInt
         if ($configuration->getPackage() === 'Rector') {
             $destination = Strings::replace($destination, '#packages\/_Package_/tests/Rector#', 'tests/Rector');
             $destination = Strings::replace($destination, '#packages\/_Package_/src/Rector#', 'src/Rector');
+        }
+
+        // special keyword for 3rd party Rectors, not for core Github contribution
+        if ($configuration->getPackage() === self::UTILS_KEYWORD) {
+            $destination = Strings::replace($destination, '#packages\/_Package_#', 'utils/rector');
         }
 
         if (! Strings::match($destination, '#fixture[\d+]*\.php\.inc#')) {
