@@ -23,9 +23,9 @@ use Nette\Application\UI\Control;
 
 class SomeController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
-    public function action()
+    public function action(): \Symfony\Component\HttpFoundation\Response
     {
-        $this->render(__DIR__ . '/poll.latte', ['param' => 'some value']);
+        return $this->render(__DIR__ . '/poll.latte', ['param' => 'some value']);
     }
 }
 
