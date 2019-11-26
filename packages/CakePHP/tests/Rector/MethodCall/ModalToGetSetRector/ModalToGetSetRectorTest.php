@@ -44,6 +44,10 @@ final class ModalToGetSetRectorTest extends AbstractRectorTestCase
                             'minimal_argument_count' => 2,
                             'first_argument_type_to_set' => 'array',
                         ],
+                        'makeEntity' => [
+                            'get' => 'createEntity',
+                            'set' => 'generateEntity',
+                        ],
                         'method' => null,
                     ],
                 ],
