@@ -362,6 +362,20 @@ final class ClassManipulator
         return null;
     }
 
+    /**
+     * @return string[]
+     */
+    public function getImplementedInterfaceNames(Class_ $class): array
+    {
+        $implementedInterfaceNames = [];
+
+        foreach ($class->implements as $implement) {
+            $implementedInterfaceNames[] = $this->nameResolver->getName($implement);
+        }
+
+        return $implementedInterfaceNames;
+    }
+
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
     {
         foreach ($classNode->stmts as $key => $classStmt) {
@@ -495,19 +509,5 @@ final class ClassManipulator
         }
 
         return false;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getImplementedInterfaceNames(Class_ $class): array
-    {
-        $implementedInterfaceNames = [];
-
-        foreach ($class->implements as $implement) {
-            $implementedInterfaceNames[] = $this->nameResolver->getName($implement);
-        }
-
-        return $implementedInterfaceNames;
     }
 }

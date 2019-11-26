@@ -21,7 +21,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\Type\ObjectType;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
@@ -271,6 +271,10 @@ PHP
             $node->var = new PropertyFetch(new Variable('this'), 'session');
 
             $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+            if (! $class instanceof Class_) {
+                throw new ShouldNotHappenException();
+            }
+
             $this->addPropertyToClass($class, new FullyQualifiedObjectType('Nette\Http\Session'), 'session');
 
             return $node;

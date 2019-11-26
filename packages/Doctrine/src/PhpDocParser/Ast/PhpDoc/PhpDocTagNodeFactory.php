@@ -51,15 +51,7 @@ final class PhpDocTagNodeFactory
 
     public function createIdColumnTag(): PhpDocTagNode
     {
-        $columnTagValueNode = new ColumnTagValueNode(
-            null,
-            'integer',
-            null,
-            null,
-            null,
-            null,
-            null
-        );
+        $columnTagValueNode = new ColumnTagValueNode(null, 'integer', null, null, null, null, null);
 
         return new SpacelessPhpDocTagNode($columnTagValueNode::SHORT_NAME, $columnTagValueNode);
     }

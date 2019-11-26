@@ -60,11 +60,11 @@ PHP
                 '$typehintForParameterByMethodByClass' => [
                     'SomeClass' => [
                         'process' => [
-                            0 => 'string'
-                        ]
-                    ]
-                ]
-            ])
+                            0 => 'string',
+                        ],
+                    ],
+                ],
+            ]),
         ]);
     }
 
@@ -137,7 +137,7 @@ PHP
         }
 
         // skip interface without parents
-        /** @var $class Interface_ */
+        /** @var Interface_ $class */
         return ! (bool) $class->extends;
     }
 
@@ -165,7 +165,7 @@ PHP
     private function refactorClassMethodWithTypehintByParameterPosition(Node $node, $typehintByParameterPosition): void
     {
         foreach ($typehintByParameterPosition as $parameterPosition => $type) {
-            if (!isset($node->params[$parameterPosition])) {
+            if (! isset($node->params[$parameterPosition])) {
                 continue;
             }
 

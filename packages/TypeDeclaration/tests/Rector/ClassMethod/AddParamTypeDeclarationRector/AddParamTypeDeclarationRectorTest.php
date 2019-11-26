@@ -30,11 +30,11 @@ final class AddParamTypeDeclarationRectorTest extends AbstractRectorTestCase
                 '$typehintForParameterByMethodByClass' => [
                     ParentInterfaceWithChangeTypeInterface::class => [
                         'process' => [
-                            0 => 'string'
-                        ]
-                    ]
-                ]
-            ]
+                            0 => 'string',
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 }

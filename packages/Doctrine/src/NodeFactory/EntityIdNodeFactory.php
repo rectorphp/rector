@@ -55,7 +55,6 @@ final class EntityIdNodeFactory
 
         $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createIdColumnTag());
 
-
         $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createGeneratedValueTag('AUTO'));
     }
 }
