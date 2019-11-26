@@ -95,7 +95,7 @@ PHP
         foreach ($this->methodNamesByTypes as $type => $methodNamesToGetAndSetNames) {
             /** @var string[] $methodNames */
             $methodNames = array_keys($methodNamesToGetAndSetNames);
-            if (! $this->isObjectType($methodCall, $type)) {
+            if (! $this->isObjectType($methodCall->var, $type)) {
                 continue;
             }
 
