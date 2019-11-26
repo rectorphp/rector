@@ -331,9 +331,10 @@ That's it!
 
 ## More Detailed Documentation
 
-- **[All Rectors: Overview](/docs/AllRectorsOverview.md)**
+- **[All Rectors Overview](/docs/AllRectorsOverview.md)**
 - [How Does Rector Work?](/docs/HowItWorks.md)
-- [Nodes Overview](/docs/NodesOverview.md)
+- [PHP Parser Nodes Overview](/docs/NodesOverview.md)
+- [Generate Rector from Recipe](/docs/RectorRecipe.md)
 
 ## How to Contribute
 
