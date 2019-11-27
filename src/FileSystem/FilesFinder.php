@@ -147,14 +147,21 @@ final class FilesFinder
         }
 
         $finder->filter(function (SplFileInfo $splFileInfo): bool {
+            /** @var string|false $realPath */
+            $realPath = $splFileInfo->getRealPath();
+            if ($realPath === false) {
+                //dead symlink
+                return false;
+            }
+
             // return false to remove file
             foreach ($this->excludePaths as $excludePath) {
-                if (Strings::match($splFileInfo->getRealPath(), '#' . preg_quote($excludePath, '#') . '#')) {
+                if (Strings::match($realPath, '#' . preg_quote($excludePath, '#') . '#')) {
                     return false;
                 }
 
                 $excludePath = $this->normalizeForFnmatch($excludePath);
-                if (fnmatch($excludePath, $splFileInfo->getRealPath())) {
+                if (fnmatch($excludePath, $realPath)) {
                     return false;
                 }
             }
