@@ -1,4 +1,4 @@
-# All 391 Rectors Overview
+# All 395 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -37,6 +37,8 @@
 - [Php72](#php72)
 - [Php73](#php73)
 - [Php74](#php74)
+- [Php80](#php80)
+- [PhpDeglobalize](#phpdeglobalize)
 - [PhpSpecToPHPUnit](#phpspectophpunit)
 - [Refactoring](#refactoring)
 - [RemovingStatic](#removingstatic)
@@ -127,8 +129,7 @@ Move interface to "Contract" namespace
 
  interface Rule
  {
--}
-+}
+ }
 ```
 
 <br>
@@ -3183,6 +3184,14 @@ Rename "*.phpt" file to "*Test.php" file
 
 ## NetteToSymfony
 
+### `DeleteFactoryInterfaceRector`
+
+- class: `Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector`
+
+Interface factories are not needed in Symfony. Clear constructor injection is used instead
+
+<br>
+
 ### `FromHttpRequestGetHeaderToHeadersGetRector`
 
 - class: `Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector`
@@ -3233,18 +3242,20 @@ Migrate Nette Component to Symfony Controller
 
 ```diff
  use Nette\Application\UI\Control;
++use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Symfony\Component\HttpFoundation\Response;
 
 -class SomeControl extends Control
-+class SomeController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
++class SomeController extends AbstractController
  {
 -    public function render()
 -    {
 -        $this->template->param = 'some value';
 -        $this->template->render(__DIR__ . '/poll.latte');
 -    }
-+     public function some()
++     public function some(): Response
 +     {
-+         $this->render(__DIR__ . '/poll.latte', ['param' => 'some value']);
++         return $this->render(__DIR__ . '/poll.latte', ['param' => 'some value']);
 +     }
  }
 ```
@@ -3941,6 +3952,31 @@ Change assertArraySubset() to static call of DMS\PHPUnitExtensions\ArraySubset\A
 
 <br>
 
+### `SelfContainerGetMethodCallFromTestToInjectPropertyRector`
+
+- class: `Rector\PHPUnit\Rector\Class_\SelfContainerGetMethodCallFromTestToInjectPropertyRector`
+
+Change $container->get() calls in PHPUnit to @inject properties autowired by jakzal/phpunit-injector
+
+```diff
+ use PHPUnit\Framework\TestCase;
+ class SomeClassTest extends TestCase {
++    /**
++     * @var SomeService
++     * @inject
++     */
++    private $someService;
+     public function test()
+     {
+-        $someService = $this->getContainer()->get(SomeService::class);
++        $someService = $this->someService;
+     }
+ }
+ class SomeService { }
+```
+
+<br>
+
 ### `SimplifyForeachInstanceOfRector`
 
 - class: `Rector\PHPUnit\Rector\Foreach_\SimplifyForeachInstanceOfRector`
@@ -4550,7 +4586,7 @@ Changes PHP 4 style constructor to __construct.
 
 - class: `Rector\Php70\Rector\FuncCall\RandomFunctionRector`
 
-Changes rand, srand and getrandmax by new md_* alternatives.
+Changes rand, srand and getrandmax by new mt_* alternatives.
 
 ```diff
 -rand();
@@ -5414,6 +5450,59 @@ Changes property `@var` annotations from annotation to type.
 -     */
 -    private count;
 +    private int count;
+ }
+```
+
+<br>
+
+## Php80
+
+### `UnionTypesRector`
+
+- class: `Rector\Php80\Rector\FunctionLike\UnionTypesRector`
+
+Change docs types to union types, where possible (properties are covered by TypedPropertiesRector)
+
+```diff
+ class SomeClass {
+     /**
+      * @param array|int $number
+      * @return bool|float
+      */
+-    public function go($number)
++    public function go(array|int $number): bool|float
+     {
+     }
+ }
+```
+
+<br>
+
+## PhpDeglobalize
+
+### `ChangeGlobalVariablesToPropertiesRector`
+
+- class: `Rector\PhpDeglobalize\Rector\Class_\ChangeGlobalVariablesToPropertiesRector`
+
+Change global $variables to private properties
+
+```diff
+ class SomeClass
+ {
++    private $variable;
+     public function go()
+     {
+-        global $variable;
+-        $variable = 5;
++        $this->variable = 5;
+     }
+
+     public function run()
+     {
+-        global $variable;
+-        var_dump($variable);
++        var_dump($this->variable);
+     }
  }
 ```
 

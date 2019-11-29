@@ -31,7 +31,7 @@ final class RandomFunctionRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Changes rand, srand and getrandmax by new md_* alternatives.',
+            'Changes rand, srand and getrandmax by new mt_* alternatives.',
             [new CodeSample('rand();', 'mt_rand();')]
         );
     }
