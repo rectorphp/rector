@@ -4550,7 +4550,7 @@ Changes PHP 4 style constructor to __construct.
 
 - class: `Rector\Php70\Rector\FuncCall\RandomFunctionRector`
 
-Changes rand, srand and getrandmax by new md_* alternatives.
+Changes rand, srand and getrandmax by new mt_* alternatives.
 
 ```diff
 -rand();
