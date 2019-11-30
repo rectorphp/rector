@@ -8,11 +8,13 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Cast\Int_;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeTraverser;
 use PHPStan\Type\IntegerType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -104,9 +106,13 @@ PHP
         $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use (
             $classMethod,
             &$hasReturn
-        ): void {
+        ): ?int {
+            if ($node instanceof FunctionLike) {
+                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+            }
+
             if (! $node instanceof Return_) {
-                return;
+                return null;
             }
 
             // is there return without nesting?
@@ -115,6 +121,8 @@ PHP
             }
 
             $this->setReturnTo0InsteadOfNull($node);
+
+            return null;
         });
 
         if ($hasReturn) {
