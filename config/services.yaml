@@ -94,3 +94,7 @@ services:
             autoload_paths:
                 # https://regex101.com/r/aXEZYk/1
                 - '#(autoload|include|bootstrap)((ed)?_(path(s)?|dir(s)?|file(s)?))?#'
+            auto_import_names:
+                - 'auto_imort_names'
+                - 'auto_names'
+                - 'import_name(space)?(s)?'

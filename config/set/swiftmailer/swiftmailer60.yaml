@@ -1,0 +1,4 @@
+services:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
+        # swiftmailer 60
+        Swift_Mime_Message: 'Swift_Mime_SimpleMessage'
