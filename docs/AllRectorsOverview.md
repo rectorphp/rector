@@ -5445,9 +5445,9 @@ Changes property `@var` annotations from annotation to type.
 ```diff
  final class SomeClass
  {
--    /**
--     * @var int
--     */
+    /**
+     * @var int
+     */
 -    private count;
 +    private int count;
  }
