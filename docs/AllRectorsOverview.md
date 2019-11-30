@@ -5440,7 +5440,7 @@ Change fn() function name, since it will be reserved keyword
 
 - class: `Rector\Php74\Rector\Property\TypedPropertyRector`
 
-Changes property `@var` annotations from annotation to type.
+Applies property type based on `@var` annotations and inference.
 
 ```diff
  final class SomeClass
