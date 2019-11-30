@@ -149,7 +149,7 @@ final class FilesFinder
         $finder->filter(function (SplFileInfo $splFileInfo): bool {
             /** @var string|false $realPath */
             $realPath = $splFileInfo->getRealPath();
-            if ($realPath === false) {
+            if (!$realPath) {
                 //dead symlink
                 return false;
             }
