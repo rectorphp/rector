@@ -33,7 +33,7 @@ final class TypedPropertyRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
-            'Applies property type based on `@var` annotations and inferance.',
+            'Applies property type based on `@var` annotations and inference.',
             [
                 new CodeSample(
                     <<<'PHP'
