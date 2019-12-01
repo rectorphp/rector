@@ -27,7 +27,8 @@ services:
         Cake\Http\Cookie\Cookie:
             getStringValue: 'getScalarValue'
         Cake\Validation\Validator:
-            containsNonAlphaNumeric: notAlphaNumeric
+            containsNonAlphaNumeric: 'notAlphaNumeric'
+            errors: 'validate'
 
     Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
         $oldToNewMethodByClasses:
