@@ -17,3 +17,8 @@ phpstan-paths.txt
 /laravel-dir
 
 uuid-migration.json
+
+# compiler
+/compiler/composer.lock
+/compiler/vendor
+/tmp
