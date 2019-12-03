@@ -145,3 +145,7 @@ services:
             styles:
                 set: 'setStyle'
                 get: 'getStyle'
+        Cake\ORM\EntityInterface:
+            isNew:
+                set: 'setNew'
+                get: 'isNew'
