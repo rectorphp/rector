@@ -151,12 +151,14 @@ final class PropertyManipulator
         return $this->getProperty($propertyProperty)->isPrivate();
     }
 
-    protected function getProperty(PropertyProperty $propertyProperty): Property
+    private function getProperty(PropertyProperty $propertyProperty): Property
     {
         $property = $propertyProperty->getAttribute(AttributeKey::PARENT_NODE);
+
         if (! $property instanceof Property) {
             throw new ShouldNotHappenException('PropertyProperty should always have Property as parent');
         }
+
         return $property;
     }
 
