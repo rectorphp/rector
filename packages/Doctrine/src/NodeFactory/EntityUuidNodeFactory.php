@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Doctrine\NodeFactory;
 
 use Nette\Utils\Strings;
-use PhpParser\BuilderFactory;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -18,14 +17,10 @@ use PhpParser\Node\Stmt\Property;
 use Ramsey\Uuid\Uuid;
 use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\PhpParser\Node\NodeFactory;
 
 final class EntityUuidNodeFactory
 {
-    /**
-     * @var BuilderFactory
-     */
-    private $builderFactory;
-
     /**
      * @var PhpDocTagNodeFactory
      */
@@ -36,22 +31,24 @@ final class EntityUuidNodeFactory
      */
     private $docBlockManipulator;
 
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
     public function __construct(
-        BuilderFactory $builderFactory,
         PhpDocTagNodeFactory $phpDocTagNodeFactory,
-        DocBlockManipulator $docBlockManipulator
+        DocBlockManipulator $docBlockManipulator,
+        NodeFactory $nodeFactory
     ) {
-        $this->builderFactory = $builderFactory;
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function createTemporaryUuidProperty(): Property
     {
-        $uuidPropertyBuilder = $this->builderFactory->property('uuid');
-        $uuidPropertyBuilder->makePrivate();
-
-        $uuidProperty = $uuidPropertyBuilder->getNode();
+        $uuidProperty = $this->nodeFactory->createPrivateProperty('uuid');
 
         $this->decoratePropertyWithUuidAnnotations($uuidProperty, true, false);
 

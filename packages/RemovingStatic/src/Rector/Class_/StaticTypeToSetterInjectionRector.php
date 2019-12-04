@@ -70,17 +70,17 @@ final class CheckoutEntityFactory
      * @var SomeStaticClass
      */
     private $someStaticClass;
-    
+
     public function setSomeStaticClass(SomeStaticClass $someStaticClass)
     {
         $this->someStaticClass = $someStaticClass;
     }
-    
+
     public function run()
     {
         return $this->someStaticClass->go();
     }
-}               
+}
 PHP
                 ,
                 [
@@ -153,10 +153,7 @@ PHP
 
             $setEntityFactoryMethod = $this->createSetEntityFactoryClassMethod($variableName, $param, $assign);
 
-            $entityFactoryPropertyBuilder = $this->builderFactory->property($variableName);
-            $entityFactoryPropertyBuilder->makePrivate();
-            $entityFactoryProperty = $entityFactoryPropertyBuilder->getNode();
-
+            $entityFactoryProperty = $this->nodeFactory->createPrivateProperty($variableName);
             $this->docBlockManipulator->changeVarTag($entityFactoryProperty, $objectType);
 
             $class->stmts = array_merge([$entityFactoryProperty, $setEntityFactoryMethod], $class->stmts);

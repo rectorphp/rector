@@ -7,6 +7,7 @@ namespace Rector\PhpParser\Node;
 use PhpParser\BuilderFactory;
 use PhpParser\BuilderHelpers;
 use PhpParser\Comment\Doc;
+use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -167,7 +168,11 @@ final class NodeFactory
             $propertyBuilder->setDocComment($docComment);
         }
 
-        return $propertyBuilder->getNode();
+        $property = $propertyBuilder->getNode();
+
+        $this->decorateParentPropertyProperty($property);
+
+        return $property;
     }
 
     /**
@@ -221,6 +226,42 @@ final class NodeFactory
             new Identifier('__construct'),
             $this->convertParamNodesToArgNodes($params)
         );
+    }
+
+    public function createPrivateProperty(string $name): Property
+    {
+        $propertyBuilder = $this->builderFactory->property($name);
+        $propertyBuilder->makePrivate();
+        $property = $propertyBuilder->getNode();
+
+        $this->decorateParentPropertyProperty($property);
+
+        return $property;
+    }
+
+    public function createStaticProtectedPropertyWithDefault(string $name, Node $node): Property
+    {
+        $propertyBuilder = $this->builderFactory->property($name);
+        $propertyBuilder->makeProtected();
+        $propertyBuilder->makeStatic();
+        $propertyBuilder->setDefault($node);
+
+        $property = $propertyBuilder->getNode();
+
+        $this->decorateParentPropertyProperty($property);
+
+        return $property;
+    }
+
+    public function createPublicProperty(string $name): Property
+    {
+        $propertyBuilder = $this->builderFactory->property($name);
+        $propertyBuilder->makePublic();
+        $property = $propertyBuilder->getNode();
+
+        $this->decorateParentPropertyProperty($property);
+
+        return $property;
     }
 
     /**
@@ -284,5 +325,12 @@ final class NodeFactory
         }
 
         return $args;
+    }
+
+    private function decorateParentPropertyProperty(Property $property): void
+    {
+        // complete property property parent, needed for other operations
+        $propertyProperty = $property->props[0];
+        $propertyProperty->setAttribute(AttributeKey::PARENT_NODE, $property);
     }
 }

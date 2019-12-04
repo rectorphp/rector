@@ -22,6 +22,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\StaticTypeMapper;
+use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class UniqueObjectFactoryFactory
@@ -51,18 +52,25 @@ final class UniqueObjectFactoryFactory
      */
     private $staticTypeMapper;
 
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
     public function __construct(
         NameResolver $nameResolver,
         BuilderFactory $builderFactory,
         PropertyNaming $propertyNaming,
         DocBlockManipulator $docBlockManipulator,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        NodeFactory $nodeFactory
     ) {
         $this->nameResolver = $nameResolver;
         $this->builderFactory = $builderFactory;
         $this->propertyNaming = $propertyNaming;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->nodeFactory = $nodeFactory;
     }
 
     public function createFactoryClass(Class_ $class, ObjectType $objectType): Class_
@@ -110,11 +118,8 @@ final class UniqueObjectFactoryFactory
         $properties = [];
 
         $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
-        $propertyBuilder = $this->builderFactory->property($propertyName);
-        $propertyBuilder->makePrivate();
 
-        $property = $propertyBuilder->getNode();
-
+        $property = $this->nodeFactory->createPrivateProperty($propertyName);
         $this->docBlockManipulator->changeVarTag($property, $objectType);
 
         $properties[] = $property;
