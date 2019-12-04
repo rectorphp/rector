@@ -145,6 +145,13 @@ PHP
                 }
             }
 
+            // nullable aase
+            if ($currentType instanceof UnionType && $inferedType instanceof UnionType) {
+                if ($inferedType->isSubTypeOf($currentType)->yes()) {
+                    return null;
+                }
+            }
+
             // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
             if ($this->isAtLeastPhpVersion('7.4') && $isSubtype) {
                 $node->returnType = $inferredReturnNode;
