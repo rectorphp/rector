@@ -25,6 +25,12 @@ final class StubLoader
 
         $stubDirectory = __DIR__ . '/../../stubs';
 
+        // stubs might not exists on composer install, to prevent PHPStorm duplicated confusion
+        // @see https://github.com/rectorphp/rector/issues/1899
+        if (! file_exists($stubDirectory)) {
+            return;
+        }
+
         $robotLoader = new RobotLoader();
         $robotLoader->addDirectory($stubDirectory);
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_rector_stubs');

@@ -29,3 +29,4 @@ phpstan.neon export-ignore
 phpunit.xml export-ignore
 rector.yaml export-ignore
 utils export-ignore
+stubs export-ignore
