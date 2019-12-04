@@ -7,6 +7,7 @@ namespace Rector\Symfony\Rector\Process;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -43,6 +44,10 @@ final class ProcessBuilderInstanceRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $node->class instanceof Name) {
+            return null;
+        }
+
         if (! $this->isName($node->class, ProcessBuilder::class)) {
             return null;
         }

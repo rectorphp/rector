@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
 use Rector\Exception\Rector\InvalidRectorConfigurationException;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -143,6 +144,10 @@ PHP
     private function processToThis(Node $node): ?MethodCall
     {
         if ($node instanceof MethodCall) {
+            return null;
+        }
+
+        if (! $node->class instanceof Name) {
             return null;
         }
 

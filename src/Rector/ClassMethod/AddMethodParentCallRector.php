@@ -135,6 +135,10 @@ PHP
                 return false;
             }
 
+            if (! $node->class instanceof Name) {
+                return false;
+            }
+
             if (! $this->isName($node->class, 'parent')) {
                 return false;
             }

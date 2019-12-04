@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -50,6 +51,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $node->class instanceof Name) {
+            return null;
+        }
+
         if (! $this->isName($node->class, 'ReflectionFunction')) {
             return null;
         }
