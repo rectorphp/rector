@@ -323,6 +323,10 @@ final class StaticTypeMapper
             return $phpStanType->getClassName();
         }
 
+        if ($phpStanType instanceof ObjectWithoutClassType) {
+            return 'object';
+        }
+
         if ($phpStanType instanceof ClosureType) {
             return '\\' . Closure::class;
         }
