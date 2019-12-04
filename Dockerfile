@@ -7,7 +7,7 @@ COPY stubs stubs
 RUN  composer install --no-dev --optimize-autoloader --prefer-dist
 
 
-FROM php:7.3-cli
+FROM php:7.4-cli
 WORKDIR /rector
 
 COPY . .
