@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\StaticCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
@@ -69,6 +70,10 @@ PHP
     {
         $class = $node->getAttribute(AttributeKey::CLASS_NODE);
         if (! $class instanceof Class_) {
+            return null;
+        }
+
+        if (! $node->class instanceof Name) {
             return null;
         }
 

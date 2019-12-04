@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
@@ -85,6 +86,10 @@ final class RemoveExtraParametersRector extends AbstractRector
         }
 
         if ($node instanceof StaticCall) {
+            if (! $node->class instanceof Name) {
+                return true;
+            }
+
             if ($this->isName($node->class, 'parent')) {
                 return true;
             }

@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -159,19 +160,14 @@ PHP
             $defaultValue = $parameterConfiguration['default_value'] ?? null;
             $type = $parameterConfiguration['type'] ?? null;
 
-            if ($this->shouldSkipParameter($node, $position, $name)) {
-                continue;
-            }
-
-            // is correct scope?
-            if (! $this->isInCorrectScope($node, $parameterConfiguration)) {
+            if ($this->shouldSkipParameter($node, $position, $name, $parameterConfiguration)) {
                 continue;
             }
 
             if ($node instanceof ClassMethod) {
                 $this->addClassMethodParam($node, $name, $defaultValue, $type, $position);
-            } elseif ($node instanceof StaticCall && $this->isName($node->class, 'parent')) {
-                $node->args[$position] = new Arg(new Variable($name));
+            } elseif ($node instanceof StaticCall) {
+                $this->processStaticCall($node, $position, $name);
             } else {
                 $arg = new Arg(BuilderHelpers::normalizeValue($defaultValue));
                 $node->args[$position] = $arg;
@@ -181,8 +177,9 @@ PHP
 
     /**
      * @param ClassMethod|MethodCall|StaticCall $node
+     * @param mixed[] $parameterConfiguration
      */
-    private function shouldSkipParameter(Node $node, int $position, string $name): bool
+    private function shouldSkipParameter(Node $node, int $position, string $name, array $parameterConfiguration): bool
     {
         if ($node instanceof ClassMethod) {
             // already added?
@@ -190,7 +187,12 @@ PHP
         }
 
         // already added?
-        return isset($node->args[$position]) && $this->isName($node->args[$position], $name);
+        if (isset($node->args[$position]) && $this->isName($node->args[$position], $name)) {
+            return true;
+        }
+
+        // is correct scope?
+        return ! $this->isInCorrectScope($node, $parameterConfiguration);
     }
 
     /**
@@ -211,6 +213,10 @@ PHP
         }
 
         if ($node instanceof StaticCall) {
+            if (! $node->class instanceof Name) {
+                return false;
+            }
+
             if ($this->isName($node->class, 'parent')) {
                 return in_array('parent_call', $scope, true);
             }
@@ -235,5 +241,18 @@ PHP
         }
 
         $classMethod->params[$position] = $param;
+    }
+
+    private function processStaticCall(StaticCall $staticCall, int $position, $name): void
+    {
+        if (! $staticCall->class instanceof Name) {
+            return;
+        }
+
+        if (! $this->isName($staticCall->class, 'parent')) {
+            return;
+        }
+
+        $staticCall->args[$position] = new Arg(new Variable($name));
     }
 }
