@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\StringType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -77,7 +76,10 @@ PHP
             return null;
         }
 
-        $defaultNameProperty = $this->createDefaultNameProperty($commandName);
+        $defaultNameProperty = $this->nodeFactory->createStaticProtectedPropertyWithDefault(
+            'defaultName',
+            $commandName
+        );
 
         $node->stmts = array_merge([$defaultNameProperty], (array) $node->stmts);
 
@@ -124,16 +126,6 @@ PHP
         $this->removeConstructorIfHasOnlySetNameMethodCall($class);
 
         return $commandName;
-    }
-
-    private function createDefaultNameProperty(Node $commandNameNode): Property
-    {
-        $propertyBuilder = $this->builderFactory->property('defaultName');
-        $propertyBuilder->makeProtected();
-        $propertyBuilder->makeStatic();
-        $propertyBuilder->setDefault($commandNameNode);
-
-        return $propertyBuilder->getNode();
     }
 
     private function matchCommandNameNodeInConstruct(Expr $expr): ?Node

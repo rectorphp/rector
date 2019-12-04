@@ -135,6 +135,7 @@ jobs:
 
     allow_failures:
         - name: ECS
+        - name: Rector
         - name: Standalone Run
         - name: Documentation
         - os: windows

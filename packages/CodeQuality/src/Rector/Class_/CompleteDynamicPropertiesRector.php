@@ -207,9 +207,7 @@ PHP
                 continue;
             }
 
-            $propertyBuilder = $this->builderFactory->property($propertyName);
-            $propertyBuilder->makePublic();
-            $property = $propertyBuilder->getNode();
+            $property = $this->nodeFactory->createPublicProperty($propertyName);
 
             if ($this->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
                 $phpStanNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
