@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
@@ -75,8 +74,8 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
         $this->callableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (
             Node $node
         ) use (&$returns): ?int {
-            if ($node instanceof Function_ || $node instanceof Closure || $node instanceof ArrowFunction) {
-                // skip Return_ nodes in nested functions
+            // skip Return_ nodes in nested functions
+            if ($node instanceof FunctionLike) {
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
 
