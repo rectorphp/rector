@@ -19,12 +19,12 @@ final class PhpVersionFeature
     /**
      * @var string
      */
-    public const ITERABLE_TYPE = '7.0';
+    public const SPACESHIP = '7.0';
 
     /**
      * @var string
      */
-    public const SPACESHIP = '7.0';
+    public const ITERABLE_TYPE = '7.1';
 
     /**
      * @var string
