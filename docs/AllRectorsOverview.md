@@ -306,14 +306,8 @@ Changes settype() to (type) where possible
 Add preg_quote delimiter when missing
 
 ```diff
- class SomeClass
- {
-     public function test()
-     {
--        return preg_quote('name');
-+        return preg_quote('name', '#');
-     }
- }
+-'#' . preg_quote('name') . '#';
++'#' . preg_quote('name', '#') . '#';
 ```
 
 <br>
@@ -5923,8 +5917,7 @@ services:
 -        return SomeStaticClass::go();
 +        return $this->someStaticClass->go();
      }
--}
-+}
+ }
 ```
 
 <br>

@@ -4,9 +4,11 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\AddPregQuoteDelimiterRector\F
 
 class SomeClass
 {
-    public function test()
+    public function test($input)
     {
-        return preg_quote('name');
+        $patttern1 =  '/' . preg_quote('name'). '/';
+        $patttern2 =  '#' . preg_quote('name'). '#';
+        $patttern3 =  '#\d' . preg_quote('name'). '\d#';
     }
 }
 
@@ -18,9 +20,11 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\AddPregQuoteDelimiterRector\F
 
 class SomeClass
 {
-    public function test()
+    public function test($input)
     {
-        return preg_quote('name', '#');
+        $patttern1 =  '/' . preg_quote('name', '/'). '/';
+        $patttern2 =  '#' . preg_quote('name', '#'). '#';
+        $patttern3 =  '#\d' . preg_quote('name', '#'). '\d#';
     }
 }
 
