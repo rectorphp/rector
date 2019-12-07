@@ -72,6 +72,7 @@ services:
         Phalcon\Validation\Message: 'Phalcon\Messages\Message'
         Phalcon\Validation\Message\Group: 'Phalcon\Messages\Messages'
         Phalcon\Validation\Validator: 'Phalcon\Validation\AbstractValidator'
+        Phalcon\Text: 'Phalcon\Helper\Str'
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         Phalcon\Acl\AdapterInterface:
@@ -87,6 +88,8 @@ services:
             addResourceAccess: 'addComponentAccess'
             dropResourceAccess: 'dropComponentAccess'
             getResources: 'getComponents'
+        Phalcon\Cli\Console:
+            addModules: 'registerModules'
         Phalcon\Dispatcher:
             setModelBinding: 'setModelBinder'
         Phalcon\Assets\Manager:
@@ -98,6 +101,8 @@ services:
             isSoapRequested: 'isSoap'
         Phalcon\Paginator:
             getPaginate: 'paginate'
+        Phalcon\Mvc\Model\Criteria:
+            order: 'orderBy'
 
     Rector\Renaming\Rector\ConstFetch\RenameConstantRector:
         FILTER_SPECIAL_CHARS: 'FILTER_SPECIAL'
