@@ -15,11 +15,16 @@ use Symplify\SetConfigResolver\ConfigResolver;
 @ini_set('memory_limit', '-1'); // @ intentionally: continue anyway
 
 // Performance boost
+error_reporting(E_ALL);
+ini_set('display_errors', 'stderr');
 gc_disable();
+
+define('__RECTOR_RUNNING__', true);
 
 // Require Composer autoload.php
 $autoloadIncluder = new AutoloadIncluder(getcwd());
-$autoloadIncluder->includeCwdVendorAutoloadIfExists();
+$autoloadIncluder->autoloadProjectAutoloaderFile('/../../autoload.php');
+//$autoloadIncluder->includeCwdVendorAutoloadIfExists();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 
 try {
@@ -65,15 +70,15 @@ final class AutoloadIncluder
         $this->currentWorkingDirectory = $currentWorkingDirectory;
     }
 
-    public function includeCwdVendorAutoloadIfExists(): void
-    {
-        $projectAutoload = $this->currentWorkingDirectory . '/vendor/autoload.php';
-        if (! is_file($projectAutoload)) {
-            return;
-        }
-
-        require $projectAutoload;
-    }
+//    public function includeCwdVendorAutoloadIfExists(): void
+//    {
+//        $projectAutoload = $this->currentWorkingDirectory . '/vendor/autoload.php';
+//        if (! is_file($projectAutoload)) {
+//            return;
+//        }
+//
+//        require $projectAutoload;
+//    }
 
     public function includeDependencyOrRepositoryVendorAutoloadIfExists(): void
     {
@@ -94,9 +99,9 @@ final class AutoloadIncluder
             $this->includeProjectsAutoload($composerJsonPath);
         } else {
             $errorMessage = sprintf(
-                'Composer autoload.php was not found in paths "%s".%sHave you ran "composer update"?',
-                PHP_EOL,
-                implode('", "', self::POSSIBLE_AUTOLOAD_PATHS)
+                'Composer autoload.php was not found in these paths: "%s".%sHave you ran "composer install"?',
+                implode('", "', self::POSSIBLE_AUTOLOAD_PATHS),
+                PHP_EOL
             );
 
             die($errorMessage);
@@ -105,14 +110,7 @@ final class AutoloadIncluder
 
     private function includeProjectsAutoload(string $composerJsonPath): void
     {
-        $contents = file_get_contents($composerJsonPath);
-
-        $composerSettings = json_decode($contents, true);
-        if (! is_array($composerSettings)) {
-            die(sprintf('Failed to load "%s"', $composerJsonPath));
-        }
-
-        $vendorPath = $composerSettings['config']['vendor-dir'] ?? $this->currentWorkingDirectory . '/vendor';
+        $vendorPath = $this->resolveVendorPath($composerJsonPath);
 
         if (! is_dir($vendorPath)) {
             die(sprintf('Please check if "composer install" was run already (expected to find "%s")', $vendorPath));
@@ -121,9 +119,49 @@ final class AutoloadIncluder
         require $vendorPath . '/autoload.php';
     }
 
+    /**
+     * Inspired by https://github.com/phpstan/phpstan-src/blob/e2308ecaf49a9960510c47f5a992ce7b27f6dba2/bin/phpstan#L19
+     */
+    public function autoloadProjectAutoloaderFile(string $file): void
+    {
+        $path = dirname(__DIR__) . $file;
+        if (!extension_loaded('phar')) {
+            if (is_file($path)) {
+                require_once $path;
+            }
+        } else {
+            $pharPath = \Phar::running(false);
+            if ($pharPath === '') {
+                if (is_file($path)) {
+                    require_once $path;
+                }
+            } else {
+                $path = dirname($pharPath) . $file;
+                if (is_file($path)) {
+                    require_once $path;
+                }
+            }
+        }
+    }
+
     private function isRectorVendorLoaded(): bool
     {
         return class_exists('Rector\HttpKernel\RectorKernel');
+    }
+
+    /**
+     * Supports custom vendor-dir in composer.json
+     */
+    private function resolveVendorPath(string $composerJsonPath): string
+    {
+        $contents = file_get_contents($composerJsonPath);
+
+        $composerSettings = json_decode($contents, true);
+        if (!is_array($composerSettings)) {
+            die(sprintf('Failed to load "%s"', $composerJsonPath));
+        }
+
+        return (string) $composerSettings['config']['vendor-dir'] ?? $this->currentWorkingDirectory . '/vendor';
     }
 }
 
