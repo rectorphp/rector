@@ -9,4 +9,8 @@ php bin/compile [version] [repository]
 
 Default `version` is `master`, and default `repository` is `https://github.com/rector/rector.git`.
 
-The compiled PHAR will be in `tmp/rector.phar`.
+The compiled PHAR will be in `tmp/rector.phar`. Test it:
+
+```bash
+php ../tmp/rector.phar
+```
