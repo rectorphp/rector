@@ -88,7 +88,7 @@ final class ConfigurationFactory
      */
     private function resolveCategoryFromFqnNodeTypes(array $fqnNodeTypes): string
     {
-        return Strings::after($fqnNodeTypes[0], '\\', -1);
+        return (string) Strings::after($fqnNodeTypes[0], '\\', -1);
     }
 
     private function resolveSetConfig(string $set): ?string

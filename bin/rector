@@ -3,10 +3,14 @@
 
 declare(strict_types=1);
 
-use Psr\Container\ContainerInterface;
+use Rector\Configuration\Configuration;
 use Rector\Console\Application;
 use Rector\Console\Style\SymfonyStyleFactory;
+use Rector\DependencyInjection\RectorContainerFactory;
+use Rector\Set\Set;
+use Symfony\Component\Console\Input\ArgvInput;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use Symplify\SetConfigResolver\ConfigResolver;
 
 @ini_set('memory_limit', '-1'); // @ intentionally: continue anyway
 
@@ -14,11 +18,21 @@ use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 gc_disable();
 
 // Require Composer autoload.php
-require_once __DIR__ . '/bootstrap.php';
+$autoloadIncluder = new AutoloadIncluder(getcwd());
+$autoloadIncluder->includeCwdVendorAutoloadIfExists();
+$autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 
 try {
-    /** @var ContainerInterface $container */
-    $container = require_once __DIR__ . '/container.php';
+    $rectorConfigsResolver = new RectorConfigsResolver();
+    $configs = $rectorConfigsResolver->provide();
+
+    // Build DI container
+    $rectorContainerFactory = new RectorContainerFactory();
+    $container = $rectorContainerFactory->createFromConfigs($configs);
+
+    /** @var Configuration $configuration */
+    $configuration = $container->get(Configuration::class);
+    $configuration->setFirstResolverConfig($rectorConfigsResolver->getFirstResolvedConfig());
 } catch (Throwable $throwable) {
     $symfonyStyle = (new SymfonyStyleFactory(new PrivatesCaller()))->create();
     $symfonyStyle->error($throwable->getMessage());
@@ -27,3 +41,143 @@ try {
 
 $application = $container->get(Application::class);
 exit($application->run());
+
+
+final class AutoloadIncluder
+{
+    /**
+     * @var string[]
+     */
+    private const POSSIBLE_AUTOLOAD_PATHS = [
+        // dev repository or prefixed rector
+        __DIR__ . '/../vendor/autoload.php',
+        // composer require
+        __DIR__ . '/../../../../vendor/autoload.php',
+    ];
+
+    /**
+     * @var string
+     */
+    private $currentWorkingDirectory;
+
+    public function __construct(string $currentWorkingDirectory)
+    {
+        $this->currentWorkingDirectory = $currentWorkingDirectory;
+    }
+
+    public function includeCwdVendorAutoloadIfExists(): void
+    {
+        $projectAutoload = $this->currentWorkingDirectory . '/vendor/autoload.php';
+        if (! is_file($projectAutoload)) {
+            return;
+        }
+
+        require $projectAutoload;
+    }
+
+    public function includeDependencyOrRepositoryVendorAutoloadIfExists(): void
+    {
+        // rector vendor is already loaded → skip
+        if ($this->isRectorVendorLoaded()) {
+            return;
+        }
+
+        foreach (self::POSSIBLE_AUTOLOAD_PATHS as $possibleAutoloadPath) {
+            if (is_file($possibleAutoloadPath)) {
+                require $possibleAutoloadPath;
+                break;
+            }
+        }
+
+        $composerJsonPath = $this->currentWorkingDirectory . '/composer.json';
+        if (file_exists($composerJsonPath)) {
+            $this->includeProjectsAutoload($composerJsonPath);
+        } else {
+            $errorMessage = sprintf(
+                'Composer autoload.php was not found in paths "%s".%sHave you ran "composer update"?',
+                PHP_EOL,
+                implode('", "', self::POSSIBLE_AUTOLOAD_PATHS)
+            );
+
+            die($errorMessage);
+        }
+    }
+
+    private function includeProjectsAutoload(string $composerJsonPath): void
+    {
+        $contents = file_get_contents($composerJsonPath);
+
+        $composerSettings = json_decode($contents, true);
+        if (! is_array($composerSettings)) {
+            die(sprintf('Failed to load "%s"', $composerJsonPath));
+        }
+
+        $vendorPath = $composerSettings['config']['vendor-dir'] ?? $this->currentWorkingDirectory . '/vendor';
+
+        if (! is_dir($vendorPath)) {
+            die(sprintf('Please check if "composer install" was run already (expected to find "%s")', $vendorPath));
+        }
+
+        require $vendorPath . '/autoload.php';
+    }
+
+    private function isRectorVendorLoaded(): bool
+    {
+        return class_exists('Rector\HttpKernel\RectorKernel');
+    }
+}
+
+
+final class RectorConfigsResolver
+{
+    /**
+     * @var ConfigResolver
+     */
+    private $configResolver;
+
+    public function __construct()
+    {
+        $this->configResolver = new ConfigResolver();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function provide(): array
+    {
+        $configs = [];
+
+        // Detect configuration from --set
+        $input = new ArgvInput();
+
+        $setConfig = $this->configResolver->resolveSetFromInputAndDirectory($input, Set::SET_DIRECTORY);
+        if ($setConfig !== null) {
+            $configs[] = $setConfig;
+        }
+
+        // And from --config or default one
+        $inputOrFallbackConfig = $this->configResolver->resolveFromInputWithFallback(
+            $input,
+            ['rector.yml', 'rector.yaml']
+        );
+        if ($inputOrFallbackConfig !== null) {
+            $configs[] = $inputOrFallbackConfig;
+        }
+
+        // resolve: parameters > sets
+        $parameterSetsConfigs = $this->configResolver->resolveFromParameterSetsFromConfigFiles(
+            $configs,
+            Set::SET_DIRECTORY
+        );
+        if ($parameterSetsConfigs !== []) {
+            $configs = array_merge($configs, $parameterSetsConfigs);
+        }
+
+        return $configs;
+    }
+
+    public function getFirstResolvedConfig(): ?string
+    {
+        return $this->configResolver->getFirstResolvedConfig();
+    }
+}

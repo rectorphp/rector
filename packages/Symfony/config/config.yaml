@@ -10,7 +10,7 @@ services:
         autowire: true
 
     Rector\Symfony\:
-        resource: '../src/'
+        resource: '../src'
         exclude:
             - '../src/Rector/**/*Rector.php'
             - '../src/PhpDocParser/Ast/PhpDoc/*'

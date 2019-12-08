@@ -12,6 +12,7 @@ parameters:
 
     autoload_directories:
         - stubs
+        - compiler/src
 
     excludes_analyse:
         - "*/Expected/*"
@@ -234,3 +235,14 @@ parameters:
         -
             message: '#Class Rector\\Tests\\Rector\\StaticCall\\SwapClassMethodArgumentsRector\\Fixture\\SomeClass not found#'
             path: tests/Rector/StaticCall/SwapClassMethodArgumentsRector/SwapClassMethodArgumentsRectorTest.php
+
+        - '#Please provide a @param annotation to further specify the type of the array#'
+        - '#PhpParser\\Node\\Expr\\Error#'
+
+        -
+            message: '#Parameter \#1 \$node of method Rector\\PhpParser\\Printer\\BetterStandardPrinter\:\:print\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node\|null, object given#'
+            path: utils/DocumentationGenerator/src/Command/DumpNodesCommand.p
+
+        -
+             message: "#Internal error: Cannot find function 'inlineSections#"
+             path: utils/Composer/bin/SortNamespaces.php

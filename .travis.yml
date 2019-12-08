@@ -1,4 +1,5 @@
 os: linux
+dist: xenial
 language: php
 
 php:
@@ -18,6 +19,19 @@ script:
 
 jobs:
     include:
+        -
+            stage: compile
+            php: 7.2
+            name: "Compile Rector to prefixed PHAR"
+            before_install:
+                - cd compiler
+            install:
+                - composer install
+            script:
+                - bin/compile
+                # run prefixed Rector
+                - ../tmp/rector.phar
+
         # Stage 1
         -
             stage: test

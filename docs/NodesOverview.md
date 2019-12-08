@@ -1040,8 +1040,7 @@ try {
     function someFunction()
     {
     }
-} function logException()
-{
+} catch (\SomeType $someTypeException) {
 }
 ```
 <br>
