@@ -13,6 +13,40 @@ parameters:
     # so Rector code is still PHP 7.1 compatible
     php_version_features: '7.1'
 
-
+    # @see utils/RectorGenerator/config/config.yaml
     rector_recipe:
-        package: "Utils"
+        # run "bin/rector create" to create a new Rector + tests from this config
+        package: "Rector"
+        name: "SwapClassMethodArgumentsRector"
+        node_types:
+            # put main node first, it is used to create namespace
+            - "StaticCall"
+            - "MethodCall"
+            - "ClassMethod"
+
+        description: "Reorder class method arguments, including their calls"
+        code_before: >
+            <?php
+
+            class SomeClass
+            {
+                public static function run($first, $second)
+                {
+                    self::run($first, $second);
+                }
+            }
+
+        code_after: >
+            <?php
+
+            class SomeClass
+            {
+                public static function run($second, $first)
+                {
+                    self::run($second, $first);
+                }
+            }
+
+        source: # e.g. link to RFC or headline in upgrade guide, 1 or more in the list
+            - ""
+        set: "" # e.g. symfony30, target config to append this rector to

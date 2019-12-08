@@ -20,6 +20,7 @@ use Rector\RectorDefinition\RectorDefinition;
 final class AddPregQuoteDelimiterRector extends AbstractRector
 {
     /**
+     * @var string
      * @see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
      */
     private const ALL_MODIFIERS = 'imsxeADSUXJu';
