@@ -21,13 +21,14 @@ gc_disable();
 
 define('__RECTOR_RUNNING__', true);
 
-// Require Composer autoload.php
-$autoloadIncluder = new AutoloadIncluder(getcwd());
-$autoloadIncluder->autoloadProjectAutoloaderFile('/../../autoload.php');
-//$autoloadIncluder->includeCwdVendorAutoloadIfExists();
-$autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
-
 try {
+    // Require Composer autoload.php
+    $autoloadIncluder = new AutoloadIncluder();
+    $autoloadIncluder->includeCwdVendorAutoloadIfExists();
+    $autoloadIncluder->autoloadProjectAutoloaderFile('/../../autoload.php');
+
+    $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
+
     $rectorConfigsResolver = new RectorConfigsResolver();
     $configs = $rectorConfigsResolver->provide();
 
@@ -50,73 +51,24 @@ exit($application->run());
 
 final class AutoloadIncluder
 {
-    /**
-     * @var string[]
-     */
-    private const POSSIBLE_AUTOLOAD_PATHS = [
-        // dev repository or prefixed rector
-        __DIR__ . '/../vendor/autoload.php',
-        // composer require
-        __DIR__ . '/../../../../vendor/autoload.php',
-    ];
-
-    /**
-     * @var string
-     */
-    private $currentWorkingDirectory;
-
-    public function __construct(string $currentWorkingDirectory)
+    public function includeCwdVendorAutoloadIfExists(): void
     {
-        $this->currentWorkingDirectory = $currentWorkingDirectory;
-    }
-
-//    public function includeCwdVendorAutoloadIfExists(): void
-//    {
-//        $projectAutoload = $this->currentWorkingDirectory . '/vendor/autoload.php';
-//        if (! is_file($projectAutoload)) {
-//            return;
-//        }
-//
-//        require $projectAutoload;
-//    }
-
-    public function includeDependencyOrRepositoryVendorAutoloadIfExists(): void
-    {
-        // rector vendor is already loaded → skip
-        if ($this->isRectorVendorLoaded()) {
+        $cwdVendorAutoload = getcwd() . '/vendor/autoload.php';
+        if (!is_file($cwdVendorAutoload)) {
             return;
         }
 
-        foreach (self::POSSIBLE_AUTOLOAD_PATHS as $possibleAutoloadPath) {
-            if (is_file($possibleAutoloadPath)) {
-                require $possibleAutoloadPath;
-                break;
-            }
-        }
-
-        $composerJsonPath = $this->currentWorkingDirectory . '/composer.json';
-        if (file_exists($composerJsonPath)) {
-            $this->includeProjectsAutoload($composerJsonPath);
-        } else {
-            $errorMessage = sprintf(
-                'Composer autoload.php was not found in these paths: "%s".%sHave you ran "composer install"?',
-                implode('", "', self::POSSIBLE_AUTOLOAD_PATHS),
-                PHP_EOL
-            );
-
-            die($errorMessage);
-        }
+        require_once $cwdVendorAutoload;
     }
 
-    private function includeProjectsAutoload(string $composerJsonPath): void
+    public function includeDependencyOrRepositoryVendorAutoloadIfExists(): void
     {
-        $vendorPath = $this->resolveVendorPath($composerJsonPath);
-
-        if (! is_dir($vendorPath)) {
-            die(sprintf('Please check if "composer install" was run already (expected to find "%s")', $vendorPath));
+        $devOrPharVendorAutoload = __DIR__ . '/../vendor/autoload.php';
+        if (! is_file($devOrPharVendorAutoload)) {
+            return;
         }
 
-        require $vendorPath . '/autoload.php';
+        require_once $devOrPharVendorAutoload;
     }
 
     /**
@@ -130,7 +82,7 @@ final class AutoloadIncluder
                 require_once $path;
             }
         } else {
-            $pharPath = \Phar::running(false);
+            $pharPath = Phar::running(false);
             if ($pharPath === '') {
                 if (is_file($path)) {
                     require_once $path;
@@ -143,28 +95,7 @@ final class AutoloadIncluder
             }
         }
     }
-
-    private function isRectorVendorLoaded(): bool
-    {
-        return class_exists('Rector\HttpKernel\RectorKernel');
-    }
-
-    /**
-     * Supports custom vendor-dir in composer.json
-     */
-    private function resolveVendorPath(string $composerJsonPath): string
-    {
-        $contents = file_get_contents($composerJsonPath);
-
-        $composerSettings = json_decode($contents, true);
-        if (!is_array($composerSettings)) {
-            die(sprintf('Failed to load "%s"', $composerJsonPath));
-        }
-
-        return (string) $composerSettings['config']['vendor-dir'] ?? $this->currentWorkingDirectory . '/vendor';
-    }
 }
-
 
 final class RectorConfigsResolver
 {
