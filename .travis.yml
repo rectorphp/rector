@@ -17,6 +17,15 @@ install:
 script:
     - vendor/bin/phpunit --testsuite main
 
+stages:
+    # phar + deploy
+    - compile
+    - phar
+    # tests
+    - test
+    - standalone
+    - coverage
+
 jobs:
     include:
         -
