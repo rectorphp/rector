@@ -21,14 +21,13 @@ gc_disable();
 
 define('__RECTOR_RUNNING__', true);
 
+// Require Composer autoload.php
+$autoloadIncluder = new AutoloadIncluder();
+$autoloadIncluder->includeCwdVendorAutoloadIfExists();
+$autoloadIncluder->autoloadProjectAutoloaderFile('/../../autoload.php');
+$autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
+
 try {
-    // Require Composer autoload.php
-    $autoloadIncluder = new AutoloadIncluder();
-    $autoloadIncluder->includeCwdVendorAutoloadIfExists();
-    $autoloadIncluder->autoloadProjectAutoloaderFile('/../../autoload.php');
-
-    $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
-
     $rectorConfigsResolver = new RectorConfigsResolver();
     $configs = $rectorConfigsResolver->provide();
 
@@ -51,6 +50,11 @@ exit($application->run());
 
 final class AutoloadIncluder
 {
+    /**
+     * @var string[]
+     */
+    private $alreadyLoadedAutoloadFiles = [];
+
     public function includeCwdVendorAutoloadIfExists(): void
     {
         $cwdVendorAutoload = getcwd() . '/vendor/autoload.php';
@@ -58,17 +62,22 @@ final class AutoloadIncluder
             return;
         }
 
-        require_once $cwdVendorAutoload;
+        $this->loadIfNotLoadedYet($cwdVendorAutoload, __METHOD__ . '()" on line ' . __LINE__);
     }
 
     public function includeDependencyOrRepositoryVendorAutoloadIfExists(): void
     {
+        // Rector's vendor is already loaded
+        if (class_exists('Rector\HttpKernel\RectorKernel')) {
+            return;
+        }
+
         $devOrPharVendorAutoload = __DIR__ . '/../vendor/autoload.php';
         if (! is_file($devOrPharVendorAutoload)) {
             return;
         }
 
-        require_once $devOrPharVendorAutoload;
+        $this->loadIfNotLoadedYet($devOrPharVendorAutoload, __METHOD__ . '()" on line ' . __LINE__);
     }
 
     /**
@@ -79,21 +88,45 @@ final class AutoloadIncluder
         $path = dirname(__DIR__) . $file;
         if (!extension_loaded('phar')) {
             if (is_file($path)) {
-                require_once $path;
+                $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
             }
         } else {
             $pharPath = Phar::running(false);
             if ($pharPath === '') {
                 if (is_file($path)) {
-                    require_once $path;
+                    $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
                 }
             } else {
                 $path = dirname($pharPath) . $file;
                 if (is_file($path)) {
-                    require_once $path;
+                    $this->loadIfNotLoadedYet($path, __METHOD__ . '()" on line ' . __LINE__);
                 }
             }
         }
+    }
+
+    private function loadIfNotLoadedYet(string $file, string $location): void
+    {
+        if (in_array($file, $this->alreadyLoadedAutoloadFiles, true)) {
+            return;
+        }
+
+        if ($this->isDebugOption()) {
+            echo sprintf(sprintf(
+                'File "%s" is about to be loaded in "%s"' . PHP_EOL,
+                $file,
+                $location
+            ));
+        }
+
+        $this->alreadyLoadedAutoloadFiles[] = realpath($file);
+
+        require_once $file;
+    }
+
+    private function isDebugOption(): bool
+    {
+        return in_array('--debug', $_SERVER['argv'], true);
     }
 }
 

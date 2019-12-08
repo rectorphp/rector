@@ -12,6 +12,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
+/**
+ * Inspired by @see https://github.com/phpstan/phpstan-src/blob/f939d23155627b5c2ec6eef36d976dddea22c0c5/compiler/src/Console/CompileCommand.php
+ */
 final class CompileCommand extends Command
 {
     /**
@@ -63,9 +66,8 @@ final class CompileCommand extends Command
     {
         $this->processFactory->setOutput($output);
 
-        // this breaks phpstan dependency, as whole /conf is removed
-        //		$this->processFactory->create(['composer', 'require', '--no-update', 'dg/composer-cleaner:^2.0'], $this->buildDir);
-        // exclude this with "clearn ignore: https://github.com/dg/composer-cleaner#configuration + uncomment and try again :)
+        // this breaks phpstan dependency by removing whole "/conf" directory - https://github.com/dg/composer-cleaner#configuration
+        $this->processFactory->create(['composer', 'require', '--no-update', 'dg/composer-cleaner:^2.0'], $this->buildDir);
 
         $composerJsonFile = $this->buildDir . '/composer.json';
 
@@ -106,5 +108,7 @@ final class CompileCommand extends Command
     private function restoreComposerJson(string $composerJsonFile): void
     {
         $this->filesystem->dumpFile($composerJsonFile, $this->originalComposerJsonFileContent);
+
+        // re-run @todo composer update on root
     }
 }
