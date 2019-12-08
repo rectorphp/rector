@@ -230,3 +230,7 @@ parameters:
         # mixed removed
         - '#In method "(.*?)", parameter (.*?) has no type\-hint and no @param annotation\. More info\: http\://bit\.ly/usetypehint#'
         - '#In method "(.*?)", there is no return type and no @return annotation\. More info\: http\://bit\.ly/usetypehint#'
+
+        -
+            message: '#Class Rector\\Tests\\Rector\\StaticCall\\SwapClassMethodArgumentsRector\\Fixture\\SomeClass not found#'
+            path: tests/Rector/StaticCall/SwapClassMethodArgumentsRector/SwapClassMethodArgumentsRectorTest.php

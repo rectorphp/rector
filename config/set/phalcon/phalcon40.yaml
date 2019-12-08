@@ -1,5 +1,11 @@
 # https://docs.phalcon.io/4.0/en/upgrade#general-notes
 services:
+    # !!! be careful not to run this twice, since it swaps arguments back and forth
+    # see https://github.com/rectorphp/rector/issues/2408#issue-534441142
+    Rector\Rector\StaticCall\SwapClassMethodArgumentsRector:
+        Phalcon\Model:
+            assign: [0, 2, 1]
+
     Rector\Renaming\Rector\Class_\RenameClassRector:
         Phalcon\Acl\Adapter: 'Phalcon\Acl\Adapter\AbstractAdapter'
         Phalcon\Acl\Resource: 'Phalcon\Acl\Component'
