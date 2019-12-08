@@ -347,7 +347,7 @@ PHP
         $presenterPart = Strings::substring($presenterPart, 0, -Strings::length('Presenter'));
         $presenterPart = RectorStrings::camelCaseToDashes($presenterPart);
 
-        $match = Strings::match($this->getName($classMethod), '#^(action|render)(?<short_action_name>.*?$)#sm');
+        $match = (array) Strings::match($this->getName($classMethod), '#^(action|render)(?<short_action_name>.*?$)#sm');
         $actionPart = lcfirst($match['short_action_name']);
 
         return $presenterPart . '/' . $actionPart;

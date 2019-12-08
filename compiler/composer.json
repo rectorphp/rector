@@ -16,10 +16,5 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^8.4"
-    },
-    "extra": {
-        "cleaner-ignore": {
-            "phpstan/phpstan": ["conf"]
-        }
     }
 }

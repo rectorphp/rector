@@ -6,7 +6,10 @@ function runContinueZeroes($random)
 {
     continue 0;
     break 0;
+}
 
+function breakIt()
+{
     $five = 5;
     continue $five;
 
@@ -23,7 +26,10 @@ function runContinueZeroes($random)
 {
     continue;
     break;
+}
 
+function breakIt()
+{
     $five = 5;
     continue 5;
 

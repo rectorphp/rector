@@ -15,16 +15,34 @@ use PhpParser\NodeDumper;
 
 final class BetterNodeDumper extends NodeDumper
 {
-    private $dumpComments;
+    /**
+     * @var bool
+     */
+    private $dumpComments = false;
 
-    private $dumpPositions;
+    /**
+     * @var bool
+     */
+    private $dumpPositions = false;
 
+    /**
+     * @var int[]
+     */
     private $printedNodes = [];
 
+    /**
+     * @var int
+     */
     private $nodeIds = 0;
 
+    /**
+     * @var bool
+     */
     private $skipEmpty = true;
 
+    /**
+     * @var string[]
+     */
     private $filterAttributes = [];
 
     /**

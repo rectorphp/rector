@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php71\Tests\Rector\FuncCall\RemoveExtraParametersRector\Source;
 
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class MagicEventDispatcher
 {

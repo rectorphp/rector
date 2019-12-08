@@ -8,7 +8,11 @@ class EdgeCases
     {
         $order = $someQueryBuilder->getQuery()->getOneOrNullResult();
         return $order ? true : false;
+    }
 
+    public function go(): bool
+    {
+        $order = $someQueryBuilder->getQuery()->getOneOrNullResult();
         return $order ? false : true;
     }
 
@@ -16,7 +20,11 @@ class EdgeCases
     {
         $order = false;
         return $order ? true : false;
+    }
 
+    public function switchBack(): bool
+    {
+        $order = false;
         return $order ? false : true;
     }
 }
@@ -33,7 +41,11 @@ class EdgeCases
     {
         $order = $someQueryBuilder->getQuery()->getOneOrNullResult();
         return (bool) $order;
+    }
 
+    public function go(): bool
+    {
+        $order = $someQueryBuilder->getQuery()->getOneOrNullResult();
         return !(bool) $order;
     }
 
@@ -41,7 +53,11 @@ class EdgeCases
     {
         $order = false;
         return $order;
+    }
 
+    public function switchBack(): bool
+    {
+        $order = false;
         return !$order;
     }
 }

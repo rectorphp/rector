@@ -69,7 +69,7 @@ PHP
             $defaultCases[] = $case;
         }
 
-        if ($defaultCases < 2) {
+        if (count($defaultCases) < 2) {
             return null;
         }
 

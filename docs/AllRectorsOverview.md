@@ -6768,7 +6768,7 @@ Make Symfony commands lazy
 Make event object a first argument of dispatch() method, event name as second
 
 ```diff
- use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
  class SomeClass
  {

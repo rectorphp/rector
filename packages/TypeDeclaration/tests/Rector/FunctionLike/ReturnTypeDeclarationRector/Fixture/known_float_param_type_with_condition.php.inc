@@ -2,15 +2,15 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
 
-class KnownFloat
+class KnownFloatParamTypeWithCondition
 {
-    public function getFloating()
+    public function getFloatingTanks(float $float)
     {
         if (true) {
-            return 5.2;
+            return $float;
         }
 
-        return 5.3;
+        return 5.0;
     }
 }
 
@@ -20,15 +20,15 @@ class KnownFloat
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
 
-class KnownFloat
+class KnownFloatParamTypeWithCondition
 {
-    public function getFloating(): float
+    public function getFloatingTanks(float $float): float
     {
         if (true) {
-            return 5.2;
+            return $float;
         }
 
-        return 5.3;
+        return 5.0;
     }
 }
 

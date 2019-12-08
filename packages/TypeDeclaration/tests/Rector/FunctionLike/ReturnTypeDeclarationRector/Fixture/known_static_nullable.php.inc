@@ -6,7 +6,7 @@ class KnownStaticNullable
 {
     public function getMoreItems()
     {
-        if (true) {
+        if ((bool) rand(0, 100)) {
             return null;
         }
 
@@ -32,7 +32,7 @@ class KnownStaticNullable
 {
     public function getMoreItems(): ?array
     {
-        if (true) {
+        if ((bool) rand(0, 100)) {
             return null;
         }
 

@@ -42,7 +42,7 @@ services:
     Symplify\PackageBuilder\Strings\StringFormatConverter: ~
 
     # alises
-    Symfony\Component\EventDispatcher\EventDispatcherInterface: '@Rector\EventDispatcher\AutowiredEventDispatcher'
+    Symfony\Contracts\EventDispatcher\EventDispatcherInterface: '@Rector\EventDispatcher\AutowiredEventDispatcher'
     Rector\Bridge\Contract\AnalyzedApplicationContainerInterface: '@Rector\Symfony\Bridge\DefaultAnalyzedSymfonyApplicationContainer'
 
     OndraM\CiDetector\CiDetector: ~

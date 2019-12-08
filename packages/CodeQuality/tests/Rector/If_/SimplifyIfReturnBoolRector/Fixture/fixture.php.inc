@@ -1,35 +1,53 @@
 <?php
 
+namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
+
 use PhpCsFixer\Tokenizer\Token;
 
-function simplifyIfReturnBool()
+class SomeClass
 {
-    $docToken = new Token([]);
-    if (strpos($docToken->getContent(), "\n") === false) {
-        return true;
+    public function first()
+    {
+        $docToken = new Token([]);
+        if (strpos($docToken->getContent(), "\n") === false) {
+            return true;
+        }
+
+        return false;
     }
 
-    return false;
+    public function second()
+    {
+        $docToken = new Token([]);
+        if (strpos($docToken->getContent(), "\n") !== false) {
+            return true;
+        }
 
-
-    if (strpos($docToken->getContent(), "\n") !== false) {
-        return true;
+        return false;
     }
-
-    return false;
 }
 
 ?>
 -----
 <?php
 
+namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector\Fixture;
+
 use PhpCsFixer\Tokenizer\Token;
 
-function simplifyIfReturnBool()
+class SomeClass
 {
-    $docToken = new Token([]);
-    return strpos($docToken->getContent(), "\n") === false;
-    return strpos($docToken->getContent(), "\n") !== false;
+    public function first()
+    {
+        $docToken = new Token([]);
+        return strpos($docToken->getContent(), "\n") === false;
+    }
+
+    public function second()
+    {
+        $docToken = new Token([]);
+        return strpos($docToken->getContent(), "\n") !== false;
+    }
 }
 
 ?>

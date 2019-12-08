@@ -6,7 +6,7 @@ class KnownStaticNullableFloat
 {
     public function getFloating()
     {
-        if (true) {
+        if ((bool) rand(0, 10)) {
             return 5.2;
         }
 
@@ -25,7 +25,7 @@ class KnownStaticNullableFloat
 {
     public function getFloating(): float
     {
-        if (true) {
+        if ((bool) rand(0, 10)) {
             return 5.2;
         }
 

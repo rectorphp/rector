@@ -21,6 +21,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -36,6 +37,8 @@ use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantBooleanType;
+use PHPStan\Type\Constant\ConstantFloatType;
+use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -326,6 +329,23 @@ final class NodeTypeResolver
 
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
+
+        if ($node instanceof Scalar) {
+            if ($nodeScope === null) {
+                if ($node instanceof Node\Scalar\DNumber) {
+                    return new ConstantFloatType($node->value);
+                }
+
+                if ($node instanceof Node\Scalar\String_) {
+                    return new ConstantStringType($node->value);
+                }
+
+                if ($node instanceof Node\Scalar\LNumber) {
+                    return new ConstantIntegerType($node->value);
+                }
+            }
+        }
+
         if (! $node instanceof Expr || $nodeScope === null) {
             return new MixedType();
         }
@@ -335,9 +355,6 @@ final class NodeTypeResolver
                 return new ObjectWithoutClassType();
             }
         }
-
-        // make object type specific to alias or FQN
-        $staticType = $nodeScope->getType($node);
 
         // false type correction of inherited method
         if ($node instanceof MethodCall) {
@@ -349,6 +366,7 @@ final class NodeTypeResolver
             }
         }
 
+        $staticType = $nodeScope->getType($node);
         if (! $staticType instanceof ObjectType) {
             return $staticType;
         }

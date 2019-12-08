@@ -2,15 +2,12 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
 
-class KnownFloat
+class KnownFloatInVariable
 {
     public function getFloating()
     {
-        if (true) {
-            return 5.2;
-        }
-
-        return 5.3;
+        $value = 5.3;
+        return $value;
     }
 }
 
@@ -20,15 +17,12 @@ class KnownFloat
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\ReturnTypeDeclarationRector\Fixture;
 
-class KnownFloat
+class KnownFloatInVariable
 {
     public function getFloating(): float
     {
-        if (true) {
-            return 5.2;
-        }
-
-        return 5.3;
+        $value = 5.3;
+        return $value;
     }
 }
 

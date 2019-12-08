@@ -133,7 +133,8 @@ PHP
 
     private function getFactoryPropertyName(string $factoryFullQualifiedName): string
     {
-        $className = (new ReflectionClass($factoryFullQualifiedName))->getShortName();
+        $reflectionClass = new ReflectionClass($factoryFullQualifiedName);
+        $className = $reflectionClass->getShortName();
 
         return Strings::firstLower($className);
     }

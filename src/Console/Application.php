@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

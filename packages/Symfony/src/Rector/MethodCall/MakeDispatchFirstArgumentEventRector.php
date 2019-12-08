@@ -13,7 +13,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @see https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
@@ -26,7 +26,7 @@ final class MakeDispatchFirstArgumentEventRector extends AbstractRector
         return new RectorDefinition('Make event object a first argument of dispatch() method, event name as second', [
             new CodeSample(
                 <<<'PHP'
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class SomeClass
 {
@@ -38,7 +38,7 @@ class SomeClass
 PHP
                 ,
                 <<<'PHP'
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class SomeClass
 {

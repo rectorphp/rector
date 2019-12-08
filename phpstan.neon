@@ -1,11 +1,13 @@
 includes:
      - 'utils/PHPStanExtensions/config/phpstan-extensions.neon'
-     - 'vendor/symplify/phpstan-extensions/config/config.neon'
+     - 'vendor/symplify/phpstan-extensions/config/php.level.neon'
+     - 'vendor/symplify/phpstan-extensions/config/symfony.level.neon'
+
      - 'vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon'
-     # bleeing edge
-     - 'vendor/phpstan/phpstan/conf/bleedingEdge.neon'
 
 parameters:
+    checkGenericClassInNonGenericObjectType: false
+
     # to allow installing with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false
     level: max
@@ -246,3 +248,30 @@ parameters:
         -
              message: "#Internal error: Cannot find function 'inlineSections#"
              path: utils/Composer/bin/SortNamespaces.php
+
+        # mixed
+        - '#in iterable type Iterator#'
+        - '#with no typehint specified#'
+        - '#return type has no value type specified in iterable type array#'
+        - '#has no return typehint#'
+        - '#Offset int\|string\|null does not exist on array<PhpParser\\Node\\Stmt>\|null#'
+        - '#class-string<T of object>\|T of object#'
+        - '#with no value type specified in iterable type array#'
+        - '#type specified in iterable type (array|iterable)#'
+
+        # known values
+        - '#Offset 0 does not exist on array<PhpParser\\Node\\Stmt>\|null#'
+        - '#Parameter \#1 \$left of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
+        - '#Parameter \#2 \$right of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
+        - '#Parameter \#3 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver::processNodes\(\) expects Closure\(PhpParser\\Node, PHPStan\\Analyser\\Scope\): void, Closure\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\): void given#'
+
+        # false positive
+        - '#Array \(array\) does not accept key#'
+        - '#Array \(array<int, PhpParser\\Node\\Arg>\) does not accept key#'
+        - '#Comparison operation "<" between 0 and 2 is always true#'
+        - '#Property Rector\\Compiler\\Process\\SymfonyProcess::\$process type has no value type specified in iterable type Symfony\\Component\\Process\\Process#'
+        - '#Method Rector\\Compiler\\Process\\SymfonyProcess::getProcess\(\) return type has no value type specified in iterable type Symfony\\Component\\Process\\Process#'
+        - '#Method Rector\\Compiler\\Contract\\Process\\ProcessInterface::getProcess\(\) return type has no value type specified in iterable type Symfony\\Component\\Process\\Process#'
+
+        # phpstan compiler bug
+        - '#Parameter \#1 \$docComment of method PhpParser\\Builder\\Property::setDocComment\(\) expects _HumbugBox3be60b26ad9d\\PhpParser\\Comment\\Doc\|string, PhpParser\\Comment\\Doc given#'

@@ -52,8 +52,7 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
                 continue;
             }
 
-            $staticType = $this->nodeTypeResolver->resolveNodeToPHPStanType($localReturnNode->expr);
-            $types[] = $staticType;
+            $types[] = $this->nodeTypeResolver->resolveNodeToPHPStanType($localReturnNode->expr);
         }
 
         return $this->typeFactory->createMixedPassedOrUnionType($types);

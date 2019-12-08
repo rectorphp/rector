@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector;
 
 use Iterator;
-use Nette\Configurator;
 use Rector\Rector\Constant\RenameClassConstantsUseToStringsRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\Source\OldClassWithConstants;
 
 final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTestCase
 {
@@ -32,7 +32,7 @@ final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTes
         return [
             RenameClassConstantsUseToStringsRector::class => [
                 '$oldConstantsToNewValuesByType' => [
-                    Configurator::class => [
+                    OldClassWithConstants::class => [
                         'DEVELOPMENT' => 'development',
                         'PRODUCTION' => 'production',
                     ],
