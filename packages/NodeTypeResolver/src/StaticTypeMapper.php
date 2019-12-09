@@ -116,6 +116,10 @@ final class StaticTypeMapper
             return new IdentifierTypeNode('string');
         }
 
+        if ($phpStanType instanceof BooleanType) {
+            return new IdentifierTypeNode('bool');
+        }
+
         if ($phpStanType instanceof FloatType) {
             return new IdentifierTypeNode('float');
         }
