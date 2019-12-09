@@ -1,0 +1,18 @@
+{
+    "alias": "rector.phar",
+    "banner": false,
+    "base-path": "../..",
+    "check-requirements": false,
+    "compactors": [
+        "KevinGH\\Box\\Compactor\\PhpScoper"
+    ],
+    "directories": [
+        "config",
+        "src",
+        "packages",
+        "stubs",
+        "vendor"
+    ],
+    "output": "tmp/rector.phar",
+    "php-scoper": "compiler/build/scoper.inc.php"
+}

@@ -16,8 +16,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
-use Rector\NetteToSymfony\Route\RouteInfo;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
+use Rector\NetteToSymfony\ValueObject\RouteInfo;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
@@ -88,7 +88,7 @@ final class SomePresenter
     public function run()
     {
     }
-}                
+}
 PHP
                     ,
                     <<<'PHP'
@@ -115,7 +115,7 @@ final class SomePresenter
     public function run()
     {
     }
-}                
+}
 PHP
                 ),
             ]
@@ -347,7 +347,7 @@ PHP
         $presenterPart = Strings::substring($presenterPart, 0, -Strings::length('Presenter'));
         $presenterPart = RectorStrings::camelCaseToDashes($presenterPart);
 
-        $match = Strings::match($this->getName($classMethod), '#^(action|render)(?<short_action_name>.*?$)#sm');
+        $match = (array) Strings::match($this->getName($classMethod), '#^(action|render)(?<short_action_name>.*?$)#sm');
         $actionPart = lcfirst($match['short_action_name']);
 
         return $presenterPart . '/' . $actionPart;

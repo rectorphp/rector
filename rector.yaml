@@ -10,8 +10,8 @@ parameters:
         # autoload-buggy cases
         - "*.php.inc"
 
-    # so Rector code is still PHP 7.1 compatible
-    php_version_features: '7.1'
+    # so Rector code is still PHP 7.2 compatible
+    php_version_features: '7.2'
 
     # @see utils/RectorGenerator/config/config.yaml
     rector_recipe:

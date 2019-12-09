@@ -68,6 +68,7 @@ parameters:
 
         Symplify\CodingStandard\Fixer\Naming\PropertyNameMatchingTypeFixer:
             - 'packages/NodeTypeResolver/src/PHPStan/Scope/NodeScopeResolver.php'
+            - 'compiler/src/*'
 
         Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
             # hidden API
@@ -149,6 +150,7 @@ parameters:
         Symplify\CodingStandard\Sniffs\Commenting\AnnotationTypeExistsSniff:
             - '*PhpDocNodeFactory.php'
             - '*AnnotationReader.php'
+            - 'compiler/src/*'
 
         # conflicts with "PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer"
         PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer: ~

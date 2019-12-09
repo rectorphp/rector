@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\DependencyInjection;
 
-use Nette\DI\Container;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Broker\Broker;
+use PHPStan\DependencyInjection\Container;
 use PHPStan\DependencyInjection\ContainerFactory;
 
 final class PHPStanServicesFactory

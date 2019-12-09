@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
+use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver as PHPStanNodeScopeResolver;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
@@ -75,7 +76,7 @@ final class NodeScopeResolver
         $scope = $this->scopeFactory->createFromFile($filePath);
 
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
-        $nodeCallback = function (Node $node, Scope $scope): void {
+        $nodeCallback = function (Node $node, MutatingScope $scope): void {
             // the class reflection is resolved AFTER entering to class node
             // so we need to get it from the first after this one
             if ($node instanceof Class_ || $node instanceof Interface_) {
@@ -100,6 +101,7 @@ final class NodeScopeResolver
             }
         };
 
+        /** @var MutatingScope $scope */
         $this->phpStanNodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
 
         return $nodes;
@@ -118,7 +120,7 @@ final class NodeScopeResolver
     /**
      * @param Class_|Interface_ $classOrInterfaceNode
      */
-    private function resolveClassOrInterfaceScope(Node $classOrInterfaceNode, Scope $scope): Scope
+    private function resolveClassOrInterfaceScope(Node $classOrInterfaceNode, MutatingScope $scope): MutatingScope
     {
         $className = $this->resolveClassName($classOrInterfaceNode);
         $classReflection = $this->broker->getClass($className);

@@ -112,6 +112,7 @@ PHP
             $node,
             [ReturnTypeDeclarationReturnTypeInferer::class]
         );
+
         if ($inferedType instanceof MixedType) {
             return null;
         }
@@ -138,22 +139,15 @@ PHP
 
             $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
 
-            // is current class implementation/subtype
-            if ($currentType instanceof ObjectType && $inferedType instanceof ObjectType) {
-                if (is_a($currentType->getClassName(), $inferedType->getClassName(), true)) {
-                    return null;
-                }
+            if ($this->isCurrentObjectTypeSubType($currentType, $inferedType)) {
+                return null;
             }
 
-            // nullable aase
-            if ($currentType instanceof UnionType && $inferedType instanceof UnionType) {
-                if ($inferedType->isSubTypeOf($currentType)->yes()) {
-                    return null;
-                }
+            if ($this->isNullableTypeSubType($currentType, $inferedType)) {
+                return null;
             }
 
-            // @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
-            if ($this->isAtLeastPhpVersion('7.4') && $isSubtype) {
+            if ($this->isAtLeastPhpVersion(PhpVersionFeature::COVARIANT_RETURN) && $isSubtype) {
                 $node->returnType = $inferredReturnNode;
             } elseif (! $isSubtype) { // type override
                 $node->returnType = $inferredReturnNode;
@@ -310,5 +304,34 @@ PHP
         }
 
         return false;
+    }
+
+    /**
+     * E.g. current E, new type A, E extends A → true
+     */
+    private function isCurrentObjectTypeSubType(Type $currentType, Type $inferedType): bool
+    {
+        if (! $currentType instanceof ObjectType) {
+            return false;
+        }
+
+        if (! $inferedType instanceof ObjectType) {
+            return false;
+        }
+
+        return is_a($currentType->getClassName(), $inferedType->getClassName(), true);
+    }
+
+    private function isNullableTypeSubType(Type $currentType, Type $inferedType): bool
+    {
+        if (! $currentType instanceof UnionType) {
+            return false;
+        }
+
+        if (! $inferedType instanceof UnionType) {
+            return false;
+        }
+
+        return $inferedType->isSubTypeOf($currentType)->yes();
     }
 }

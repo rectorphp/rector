@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NetteToSymfony\Route;
+namespace Rector\NetteToSymfony\ValueObject;
 
 final class RouteInfo
 {

@@ -1,13 +1,6 @@
-# Define the line ending behavior of the different file extensions
-# Set default behavior, in case users don't have core.autocrlf set.
-* text=auto
-* text eol=lf
-
 # Denote all files that are truly binary and should not be modified.
 *.png binary
 *.jpg binary
-*.gif binary
-*.ico binary
 
 # Set syntax highlight on GitHub
 # https://github.com/github/linguist/blob/master/lib/linguist/languages.yml

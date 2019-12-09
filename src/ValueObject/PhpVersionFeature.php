@@ -67,6 +67,12 @@ final class PhpVersionFeature
     public const BEFORE_UNION_TYPES = '7.4';
 
     /**
+     * @see https://wiki.php.net/rfc/covariant-returns-and-contravariant-parameters
+     * @var string
+     */
+    public const COVARIANT_RETURN = '7.4';
+
+    /**
      * @var string
      */
     public const UNION_TYPES = '8.0';

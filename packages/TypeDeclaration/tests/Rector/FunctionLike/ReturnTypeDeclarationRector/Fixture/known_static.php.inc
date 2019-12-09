@@ -21,7 +21,7 @@ class KnownStatic
 
     public function getMoreItems()
     {
-        if (true) {
+        if (rand(0, 10)) {
             return [];
         }
 
@@ -60,7 +60,7 @@ class KnownStatic
 
     public function getMoreItems(): array
     {
-        if (true) {
+        if (rand(0, 10)) {
             return [];
         }
 

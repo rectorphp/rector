@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\NetteToSymfony\Event;
 
+use Rector\NetteToSymfony\ValueObject\EventInfo;
+
 final class EventInfosFactory
 {
     /**

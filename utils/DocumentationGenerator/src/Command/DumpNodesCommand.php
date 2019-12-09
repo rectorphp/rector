@@ -104,6 +104,7 @@ use Rector\Utils\DocumentationGenerator\Node\NodeClassProvider;
 use Rector\Utils\DocumentationGenerator\Node\NodeInfoResult;
 use Rector\Utils\DocumentationGenerator\ValueObject\NodeInfo;
 use ReflectionClass;
+use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -175,9 +176,10 @@ final class DumpNodesCommand extends AbstractCommand
                 continue;
             }
 
-            $contructorReflection = $nodeClassReflection->getConstructor();
+            /** @var ReflectionMethod $constructorReflection */
+            $constructorReflection = $nodeClassReflection->getConstructor();
 
-            if ($contructorReflection->getNumberOfRequiredParameters() === 0) {
+            if ($constructorReflection->getNumberOfRequiredParameters() === 0) {
                 $node = $nodeClassReflection->newInstance();
                 // special case
                 if ($node instanceof ArrowFunction) {
@@ -247,7 +249,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === Do_::class) {
                     $node = new Do_(new Variable('variable'));
                 } elseif ($nodeClass === Static_::class) {
-                    $node = new Static_([new Variable('static')]);
+                    $node = new Static_([new StaticVar(new Variable('static'))]);
                 } elseif ($nodeClass === TraitUse::class) {
                     $node = new TraitUse([new Name('trait')]);
                 } elseif ($nodeClass === Switch_::class) {
@@ -301,9 +303,10 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === Throw_::class) {
                     $node = new Throw_(new New_(new FullyQualified('SomeException')));
                 } elseif ($nodeClass === TryCatch::class) {
-                    $node = new TryCatch([new Function_('someFunction')], [new Function_('logException')]);
+                    $catches = [new Catch_([new FullyQualified('SomeType')], new Variable('someTypeException'))];
+                    $node = new TryCatch([new Function_('someFunction')], $catches);
                 } elseif ($nodeClass === Interface_::class) {
-                    $node = new Interface_(new Name('SomeInterface'));
+                    $node = new Interface_(new Identifier('SomeInterface'));
                 } elseif ($nodeClass === ElseIf_::class) {
                     $node = new ElseIf_(new ConstFetch(new Name('true')));
                 } elseif ($nodeClass === Goto_::class) {
@@ -315,7 +318,7 @@ final class DumpNodesCommand extends AbstractCommand
                 } elseif ($nodeClass === While_::class) {
                     $node = new While_(new Variable('variable'));
                 } elseif ($nodeClass === Class_::class) {
-                    $node = new Class_(new Name('ClassName'));
+                    $node = new Class_(new Identifier('ClassName'));
                 } elseif ($nodeClass === PostDec::class) {
                     $node = new PostDec(new Variable('someVariable'));
                 } elseif ($nodeClass === PreInc::class) {

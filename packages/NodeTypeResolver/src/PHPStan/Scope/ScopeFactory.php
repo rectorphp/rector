@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
+use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\Analyser\ScopeContext;
 use PHPStan\Analyser\ScopeFactory as PHPStanScopeFactory;
@@ -48,7 +49,7 @@ final class ScopeFactory
 
     public function createFromFile(string $filePath): Scope
     {
-        return new Scope(
+        return new MutatingScope(
             $this->phpStanScopeFactory,
             $this->broker,
             $this->betterStandardPrinter,

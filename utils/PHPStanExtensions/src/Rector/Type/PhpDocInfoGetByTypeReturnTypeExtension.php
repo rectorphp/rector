@@ -7,6 +7,7 @@ namespace Rector\PHPStanExtensions\Rector\Type;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
@@ -50,7 +51,12 @@ final class PhpDocInfoGetByTypeReturnTypeExtension implements DynamicMethodRetur
                 return null;
             }
 
-            return $expr->class->toString();
+            if ($expr->class instanceof Name) {
+                return $expr->class->toString();
+            }
+
+            // some variable
+            return null;
         }
 
         return null;

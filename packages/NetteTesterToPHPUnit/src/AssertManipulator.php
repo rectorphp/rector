@@ -219,11 +219,11 @@ final class AssertManipulator
         if (isset($typeToMethod[$value])) {
             $staticCall->name = new Identifier($typeToMethod[$value]);
             unset($staticCall->args[0]);
-            array_values($staticCall->args);
+            $staticCall->args = array_values($staticCall->args);
         } elseif ($value === 'null') {
             $staticCall->name = new Identifier('assertNull');
             unset($staticCall->args[0]);
-            array_values($staticCall->args);
+            $staticCall->args = array_values($staticCall->args);
         } else {
             $staticCall->name = new Identifier('assertInstanceOf');
         }

@@ -10,22 +10,7 @@ class KnownFloat
             return 5.2;
         }
 
-        $value = 5.3;
-        return $value;
-    }
-
-    public function getFloatingParam(float $float)
-    {
-        return $float;
-    }
-
-    public function getFloatingTanks(float $float)
-    {
-        if (true) {
-            return $float;
-        }
-
-        return 5.0;
+        return 5.3;
     }
 }
 
@@ -43,22 +28,7 @@ class KnownFloat
             return 5.2;
         }
 
-        $value = 5.3;
-        return $value;
-    }
-
-    public function getFloatingParam(float $float): float
-    {
-        return $float;
-    }
-
-    public function getFloatingTanks(float $float): float
-    {
-        if (true) {
-            return $float;
-        }
-
-        return 5.0;
+        return 5.3;
     }
 }
 

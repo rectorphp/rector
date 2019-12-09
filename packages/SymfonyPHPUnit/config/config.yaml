@@ -4,6 +4,6 @@ services:
         autowire: true
 
     Rector\SymfonyPHPUnit\:
-        resource: '../src/'
+        resource: '../src'
         exclude:
             - '../src/Rector/**/*Rector.php'

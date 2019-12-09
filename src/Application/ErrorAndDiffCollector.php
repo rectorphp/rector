@@ -10,7 +10,8 @@ use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\ConsoleDiffer\DifferAndFormatter;
 use Rector\Error\ExceptionCorrector;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
-use Rector\Reporting\FileDiff;
+use Rector\ValueObject\Application\Error;
+use Rector\ValueObject\Reporting\FileDiff;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 

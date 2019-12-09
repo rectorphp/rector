@@ -11,7 +11,7 @@ services:
             - '../src/ValueObject/*'
 
 parameters:
-    rector_recipe:
+    rector_recipe: []
 #        # run "bin/rector create" to create a new Rector + tests from this config
 #        package: "Celebrity"
 #        name: "SplitToExplodeRector"

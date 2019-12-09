@@ -4,7 +4,7 @@ services:
         autowire: true
 
     Rector\TypeDeclaration\:
-        resource: '../src/'
+        resource: '../src'
         exclude:
             - '../src/Rector/**/*Rector.php'
             - '../src/Exception/*'
