@@ -10,6 +10,7 @@ parameters:
     exclude_paths: []
     exclude_rectors: []
     autoload_paths: []
+    rector_recipe: []
 
     # importing FQN names
     auto_import_names: true
