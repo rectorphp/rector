@@ -154,6 +154,6 @@ PHP
             }
         }
 
-        return $interfaceNames;
+        return array_values($interfaceNames);
     }
 }
