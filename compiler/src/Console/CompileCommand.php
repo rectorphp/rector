@@ -94,6 +94,16 @@ final class CompileCommand extends Command
         // simplify autoload (remove not packed build directory]
         $json['autoload']['psr-4']['Rector\\'] = 'src';
 
+        // use phpstan/phpstan-src, because the phpstan.phar cannot be packed into rector.phar
+        $phpstanVersion = $json['require']['phpstan/phpstan'];
+        $json['require']['phpstan/phpstan-src'] = $phpstanVersion;
+        unset($json['require']['phpstan/phpstan']);
+
+        $json['repositories'][] = [
+            'type' => 'vcs',
+            'url' => 'https://github.com/phpstan/phpstan-src',
+        ];
+
         $encodedJson = Json::encode($json, Json::PRETTY);
 
         $this->filesystem->dumpFile($composerJsonFile, $encodedJson);
