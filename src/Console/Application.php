@@ -17,7 +17,6 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -42,14 +41,6 @@ final class Application extends SymfonyApplication
 
         $this->addCommands($commands);
         $this->configuration = $configuration;
-    }
-
-    /**
-     * @required
-     */
-    public function setDispatcher(EventDispatcherInterface $eventDispatcher): void
-    {
-        parent::setDispatcher($eventDispatcher);
     }
 
     public function doRun(InputInterface $input, OutputInterface $output): int

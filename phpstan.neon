@@ -2,7 +2,6 @@ includes:
      - 'utils/PHPStanExtensions/config/phpstan-extensions.neon'
      - 'vendor/symplify/phpstan-extensions/config/php.level.neon'
      - 'vendor/symplify/phpstan-extensions/config/symfony.level.neon'
-
      - 'vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon'
 
 parameters:
@@ -224,4 +223,4 @@ parameters:
         - '#Method Rector\\Compiler\\Contract\\Process\\ProcessInterface::getProcess\(\) return type has no value type specified in iterable type Symfony\\Component\\Process\\Process#'
 
         # phpstan compiler bug
-        - '#Parameter \#1 \$docComment of method PhpParser\\Builder\\Property::setDocComment\(\) expects _HumbugBox3be60b26ad9d\\PhpParser\\Comment\\Doc\|string, PhpParser\\Comment\\Doc given#'
+        - '#Parameter \#1 \$docComment of method PhpParser\\Builder\\Property::setDocComment\(\) expects _HumbugBox(.*?)\\PhpParser\\Comment\\Doc\|string, PhpParser\\Comment\\Doc given#'

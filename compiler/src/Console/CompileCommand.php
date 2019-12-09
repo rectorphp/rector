@@ -69,7 +69,12 @@ final class CompileCommand extends Command
         $composerJsonFile = $this->buildDir . '/composer.json';
 
         $this->fixComposerJson($composerJsonFile);
-        $this->processFactory->create(['composer', 'update', '--no-dev', '--classmap-authoritative'], $this->buildDir);
+        // @see https://github.com/dotherightthing/wpdtrt-plugin-boilerplate/issues/52
+        $this->processFactory->create(
+            ['composer', 'update', '--no-dev', '--prefer-dist', '--no-interaction', '--classmap-authoritative'],
+            $this->buildDir
+        );
+
         $this->processFactory->create(['php', 'box.phar', 'compile'], $this->dataDir);
 
         $this->restoreComposerJson($composerJsonFile);
@@ -101,7 +106,7 @@ final class CompileCommand extends Command
 
         $json['repositories'][] = [
             'type' => 'vcs',
-            'url' => 'https://github.com/phpstan/phpstan-src',
+            'url' => 'https://github.com/phpstan/phpstan-src.git',
         ];
 
         $encodedJson = Json::encode($json, Json::PRETTY);
