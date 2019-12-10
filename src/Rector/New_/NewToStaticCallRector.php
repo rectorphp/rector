@@ -53,7 +53,7 @@ class SomeClass
 PHP
                 ,
                 [
-                    'Cookie' => [['Cookie', 'create']],
+                    'Cookie' => ['Cookie', 'create'],
                 ]
             ),
         ]);
