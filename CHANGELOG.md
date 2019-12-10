@@ -9,16 +9,64 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
-## [v0.6.0] - 2019-11-26
+## [v0.6.1] - 2019-12-10
+
+**Rector is now shipped as prefixed phar - download from [rector-prefixed](https://github.com/rectorphp/rector-prefixed)** 
+
+### Added
+
+- [#2410] Added default to prevent rector from breaking, Thanks to [@jeroensmit]
+- [#2409] [Phalcon 4] Add SwapClassMethodArgumentsRector rule
+- [#2407] Added missing methods, Thanks to [@ruudboon]
+- [#2406] Added check for correct delimiter to use in preg_quote, Thanks to [@jeroensmit]
+- [#2369] Add typo auto import + Swiftmailer 60 set
+- [#2397] Add rector rule for EntityInterface::isNew(), Thanks to [@markstory]
+- [#2373] Another attempt to add Compiler + upgrade to PHPStan 0.12
+- [#2374] Add another deprecation to the cakephp40 set., Thanks to [@markstory]
+- [#2392] Fix CompleteDynamicPropertiesRector to add parent property
 
 ### Changed
 
+- [#2394] [TypeDeclaration] Object without class
+- [#2414] StaticTypeMapper - missing boolean type, Thanks to [@sojki]
+- [#2386] chore: use php 7.4 cli, Thanks to [@danielroe]
+- [#2359] Prevent crashing on dead symlinks, Thanks to [@jeroensmit]
+- [#2378] [Phalcon 4.0] init
+- [#2389] composer: lock phpstan to 0.11.19 due to breaking changes [closes [#2385]]
+- [#2390] Make sure name is passed to getName(), instead of expr
+- [#2396] prevent union sub-type nullable override
+- [#2395] prevent union sub-type nullable override
+- [#2400] return false on MethodCall name to prevent expr errors
+- [#2391] Exludes stubs on package install to prevent PHPStorm confussion
+
+### Fixed
+
+- [#2372] [Symfony] Fix ConsoleExecuteReturnInt for nested functions
+- [#2393] [TypeDeclaration] Fix returned yield nodes in nested function [closes [#2381]]
+- [#2371] Update FilesFinder.php to fix builds..., Thanks to [@mallardduck]
+- [#2411] Fix undefined offset in UseInterfaceOverImplementationInConstructorRector, Thanks to [@jeroensmit]
+- [#2368] Fix: RandomFunctionRector typo fix + regenerated docs, Thanks to [@radimvaculik]
+- [#2404] Fix - iterable type introduced in PHP 7.1, Thanks to [@sojki]
+- [#2358] fix var type on method call
+
+## [v0.6.0] - 2019-11-26
+
+### Added
+
+- [#2347] Add diff based execution, Thanks to [@EmanueleMinotto]
+
+### Changed
+
+- [#2350] [NetteToSymfony] Extend migration set
+- [#2351] Open "create" command to the public
 - [#2346] [PHP] ContinueToBreakInSwitchRector skip continue with argument >1, Thanks to [@fsok]
 - [#2344] Bump to Symfony 4.4/5 and PHP 7.2+
 - [#2343] allow Symfony 5, bump min to Symfony 4.4
 
 ### Fixed
 
+- [#2353] Fixed error on classConstFetch outside class, Thanks to [@jeroensmit]
+- [#2352] Fix description, Thanks to [@staabm]
 - [#2349] [Php 70] Fix this call on static for PHPUnit non-assert
 
 ## [v0.5.23] - 2019-11-20
@@ -1573,3 +1621,45 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#2329]: https://github.com/rectorphp/rector/pull/2329
 [@fsok]: https://github.com/fsok
 [v0.5.23]: https://github.com/rectorphp/rector/compare/v0.5.22...v0.5.23
+[#2414]: https://github.com/rectorphp/rector/pull/2414
+[#2411]: https://github.com/rectorphp/rector/pull/2411
+[#2410]: https://github.com/rectorphp/rector/pull/2410
+[#2409]: https://github.com/rectorphp/rector/pull/2409
+[#2407]: https://github.com/rectorphp/rector/pull/2407
+[#2406]: https://github.com/rectorphp/rector/pull/2406
+[#2404]: https://github.com/rectorphp/rector/pull/2404
+[#2400]: https://github.com/rectorphp/rector/pull/2400
+[#2397]: https://github.com/rectorphp/rector/pull/2397
+[#2396]: https://github.com/rectorphp/rector/pull/2396
+[#2395]: https://github.com/rectorphp/rector/pull/2395
+[#2394]: https://github.com/rectorphp/rector/pull/2394
+[#2393]: https://github.com/rectorphp/rector/pull/2393
+[#2392]: https://github.com/rectorphp/rector/pull/2392
+[#2391]: https://github.com/rectorphp/rector/pull/2391
+[#2390]: https://github.com/rectorphp/rector/pull/2390
+[#2389]: https://github.com/rectorphp/rector/pull/2389
+[#2386]: https://github.com/rectorphp/rector/pull/2386
+[#2385]: https://github.com/rectorphp/rector/pull/2385
+[#2381]: https://github.com/rectorphp/rector/pull/2381
+[#2378]: https://github.com/rectorphp/rector/pull/2378
+[#2374]: https://github.com/rectorphp/rector/pull/2374
+[#2373]: https://github.com/rectorphp/rector/pull/2373
+[#2372]: https://github.com/rectorphp/rector/pull/2372
+[#2371]: https://github.com/rectorphp/rector/pull/2371
+[#2369]: https://github.com/rectorphp/rector/pull/2369
+[#2368]: https://github.com/rectorphp/rector/pull/2368
+[#2359]: https://github.com/rectorphp/rector/pull/2359
+[#2358]: https://github.com/rectorphp/rector/pull/2358
+[#2353]: https://github.com/rectorphp/rector/pull/2353
+[#2352]: https://github.com/rectorphp/rector/pull/2352
+[#2351]: https://github.com/rectorphp/rector/pull/2351
+[#2350]: https://github.com/rectorphp/rector/pull/2350
+[#2347]: https://github.com/rectorphp/rector/pull/2347
+[@staabm]: https://github.com/staabm
+[@sojki]: https://github.com/sojki
+[@ruudboon]: https://github.com/ruudboon
+[@radimvaculik]: https://github.com/radimvaculik
+[@mallardduck]: https://github.com/mallardduck
+[@danielroe]: https://github.com/danielroe
+[@EmanueleMinotto]: https://github.com/EmanueleMinotto
+[v0.6.0]: https://github.com/rectorphp/rector/compare/v0.5.23...v0.6.0
