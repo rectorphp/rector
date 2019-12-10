@@ -17,15 +17,6 @@ install:
 script:
     - vendor/bin/phpunit --testsuite main
 
-stages:
-    # phar + deploy
-    - compile
-    - phar
-    # tests
-    - test
-    - standalone
-    - coverage
-
 jobs:
     include:
         -
@@ -44,6 +35,7 @@ jobs:
             stage: phar
             name: "Deploy PHAR to https://github.com/rectorphp/rector-prefixed"
             php: 7.2
+            if: branch = master AND type = push
             script:
                 # reuse tmp/rector.phar from previous job
                 - git clone https://${GITHUB_TOKEN}@github.com/rectorphp/rector-prefixed.git rector-prefixed > /dev/null 2>&1
