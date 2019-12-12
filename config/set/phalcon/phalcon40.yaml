@@ -79,6 +79,7 @@ services:
         Phalcon\Validation\Message\Group: 'Phalcon\Messages\Messages'
         Phalcon\Validation\Validator: 'Phalcon\Validation\AbstractValidator'
         Phalcon\Text: 'Phalcon\Helper\Str'
+        Phalcon\Session\AdapterInterface: 'SessionHandlerInterface'
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         Phalcon\Acl\AdapterInterface:
