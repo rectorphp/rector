@@ -22,6 +22,8 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\DNumber;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -332,15 +334,15 @@ final class NodeTypeResolver
 
         if ($node instanceof Scalar) {
             if ($nodeScope === null) {
-                if ($node instanceof Node\Scalar\DNumber) {
+                if ($node instanceof DNumber) {
                     return new ConstantFloatType($node->value);
                 }
 
-                if ($node instanceof Node\Scalar\String_) {
+                if ($node instanceof String_) {
                     return new ConstantStringType($node->value);
                 }
 
-                if ($node instanceof Node\Scalar\LNumber) {
+                if ($node instanceof LNumber) {
                     return new ConstantIntegerType($node->value);
                 }
             }

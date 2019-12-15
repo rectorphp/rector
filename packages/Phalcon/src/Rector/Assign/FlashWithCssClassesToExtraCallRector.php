@@ -6,6 +6,8 @@ namespace Rector\Phalcon\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -59,7 +61,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->expr instanceof Node\Expr\New_) {
+        if (! $node->expr instanceof New_) {
             return null;
         }
 
@@ -79,7 +81,7 @@ PHP
         // change the node
 
         $variable = $node->var;
-        $setCssClassesMethodCall = new Node\Expr\MethodCall($variable, 'setCssClasses', [$argument]);
+        $setCssClassesMethodCall = new MethodCall($variable, 'setCssClasses', [$argument]);
 
         $this->addNodeAfterNode($setCssClassesMethodCall, $node);
 

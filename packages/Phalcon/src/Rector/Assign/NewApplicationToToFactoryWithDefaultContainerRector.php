@@ -91,12 +91,7 @@ PHP
         if (! $expr instanceof New_) {
             return false;
         }
-
-        if (! $this->isName($expr->class, 'Phalcon\Mvc\Application')) {
-            return false;
-        }
-
-        return true;
+        return $this->isName($expr->class, 'Phalcon\Mvc\Application');
     }
 
     private function createNewContainerToFactoryDefaultAssign(Variable $variable): Assign

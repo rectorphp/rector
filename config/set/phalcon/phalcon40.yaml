@@ -116,3 +116,4 @@ services:
         FILTER_ALPHANUM: 'FILTER_ALNUM'
     Rector\Phalcon\Rector\Assign\FlashWithCssClassesToExtraCallRector: ~
     Rector\Phalcon\Rector\Assign\NewApplicationToToFactoryWithDefaultContainerRector: ~
+    Rector\Phalcon\Rector\MethodCall\AddRequestToHandleMethodCallRector: ~
