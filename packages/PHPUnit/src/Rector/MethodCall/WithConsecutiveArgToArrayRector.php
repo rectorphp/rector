@@ -132,7 +132,7 @@ PHP
         }
 
         // simple check argument count fits to method required args
-        if ((count($values) % $numberOfParameters) !== 0) {
+        if (count($values) % $numberOfParameters !== 0) {
             return null;
         }
 
