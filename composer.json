@@ -199,7 +199,7 @@
             "ecs check bin packages src tests utils compiler --fix --ansi",
             "ci/clean_trailing_spaces.sh"
         ],
-        "phpstan": "phpstan analyse packages src tests compiler/src --ansi",
+        "phpstan": "phpstan analyse packages src tests compiler/src --ansi --error-format symplify",
         "changelog": [
             "changelog-linker dump-merges --in-categories",
             "changelog-linker link",
