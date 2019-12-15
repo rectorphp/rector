@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Php53\Tests\Rector\Ternary\TernaryToElvisRector\Fixture;
+
 function elvis()
 {
     $value = $a ? $a : false;
@@ -8,6 +10,8 @@ function elvis()
 ?>
 -----
 <?php
+
+namespace Rector\Php53\Tests\Rector\Ternary\TernaryToElvisRector\Fixture;
 
 function elvis()
 {

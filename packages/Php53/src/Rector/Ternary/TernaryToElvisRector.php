@@ -6,6 +6,7 @@ namespace Rector\Php53\Rector\Ternary;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Ternary;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -55,6 +56,7 @@ PHP
             return null;
         }
 
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         $node->if = null;
 
         return $node;
