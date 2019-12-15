@@ -1,7 +1,6 @@
 includes:
      - 'utils/PHPStanExtensions/config/phpstan-extensions.neon'
-     - 'vendor/symplify/phpstan-extensions/config/php.level.neon'
-     - 'vendor/symplify/phpstan-extensions/config/symfony.level.neon'
+     - 'vendor/symplify/phpstan-extensions/config/config.neon'
      - 'vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon'
 
 parameters:
@@ -224,3 +223,7 @@ parameters:
 
         # phpstan compiler bug
         - '#Parameter \#1 \$docComment of method PhpParser\\Builder\\Property::setDocComment\(\) expects _HumbugBox(.*?)\\PhpParser\\Comment\\Doc\|string, PhpParser\\Comment\\Doc given#'
+
+        -
+            message: '#Call to function in_array\(\) with arguments PhpParser\\Node\\Expr\\Variable, array\(\) and true will always evaluate to false#'
+            path: packages/Php56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php

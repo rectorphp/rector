@@ -1,3 +1,6 @@
+services:
+    Rector\PSR4\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector: ~
+
 parameters:
     exclude_paths:
         - "/Fixture/"

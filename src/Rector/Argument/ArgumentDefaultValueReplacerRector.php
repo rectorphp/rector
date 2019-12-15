@@ -189,7 +189,7 @@ PHP
 
             // clear following arguments
             $argumentCountToClear = count($before);
-            for ($i = $position + 1; $i <= ($position + $argumentCountToClear); ++$i) {
+            for ($i = $position + 1; $i <= $position + $argumentCountToClear; ++$i) {
                 unset($argumentNodes[$i]);
             }
         }

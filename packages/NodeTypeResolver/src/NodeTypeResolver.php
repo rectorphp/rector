@@ -651,7 +651,7 @@ final class NodeTypeResolver
         return $originalType;
     }
 
-    private function getScopeNode(Node $node): Node
+    private function getScopeNode(Node $node): ?Node
     {
         return $node->getAttribute(AttributeKey::METHOD_NODE)
             ?? $node->getAttribute(AttributeKey::FUNCTION_NODE)
@@ -664,6 +664,10 @@ final class NodeTypeResolver
     private function getVariableUsages(Variable $variable): array
     {
         $scope = $this->getScopeNode($variable);
+
+        if ($scope === null) {
+            return [];
+        }
 
         return $this->betterNodeFinder->find((array) $scope->stmts, function (Node $node) use ($variable): bool {
             return $node instanceof Variable && $node->name === $variable->name;

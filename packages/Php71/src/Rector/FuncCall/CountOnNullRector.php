@@ -68,10 +68,6 @@ PHP
             return null;
         }
 
-        if (! isset($node->args[0])) {
-            return null;
-        }
-
         $countedNode = $node->args[0]->value;
         if ($this->isCountableType($countedNode)) {
             return null;
@@ -111,7 +107,14 @@ PHP
         }
 
         $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Ternary) {
+            return true;
+        }
 
-        return $parentNode instanceof Ternary;
+        if (! isset($funcCall->args[0])) {
+            return true;
+        }
+
+        return false;
     }
 }
