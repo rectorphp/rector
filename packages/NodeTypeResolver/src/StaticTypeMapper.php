@@ -622,7 +622,8 @@ final class StaticTypeMapper
 
         if ($typeNode instanceof GenericTypeNode) {
             if ($typeNode->type instanceof IdentifierTypeNode) {
-                if ($typeNode->type->name === 'array') {
+                $typeName = $typeNode->type->name;
+                if (in_array($typeName, ['array', 'iterable'], true)) {
                     $genericTypes = [];
                     foreach ($typeNode->genericTypes as $genericTypeNode) {
                         $genericTypes[] = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($genericTypeNode, $node);
@@ -630,7 +631,11 @@ final class StaticTypeMapper
 
                     $genericType = $this->typeFactory->createMixedPassedOrUnionType($genericTypes);
 
-                    return new ArrayType(new MixedType(), $genericType);
+                    if ($typeName === 'array') {
+                        return new ArrayType(new MixedType(), $genericType);
+                    }
+
+                    return new IterableType(new MixedType(), $genericType);
                 }
             }
         }
