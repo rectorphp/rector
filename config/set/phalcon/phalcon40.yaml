@@ -114,3 +114,4 @@ services:
     Rector\Renaming\Rector\ConstFetch\RenameConstantRector:
         FILTER_SPECIAL_CHARS: 'FILTER_SPECIAL'
         FILTER_ALPHANUM: 'FILTER_ALNUM'
+    Rector\Phalcon\Rector\Assign\FlashWithCssClassesToExtraCallRector: ~

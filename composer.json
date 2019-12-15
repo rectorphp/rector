@@ -102,7 +102,8 @@
             "Rector\\Utils\\RectorGenerator\\": "utils/RectorGenerator/src",
             "Rector\\StrictCodeQuality\\": "packages/StrictCodeQuality/src",
             "Rector\\DynamicTypeAnalysis\\": "packages/DynamicTypeAnalysis/src",
-            "Rector\\PhpDeglobalize\\": "packages/PhpDeglobalize/src"
+            "Rector\\PhpDeglobalize\\": "packages/PhpDeglobalize/src",
+            "Rector\\Phalcon\\": "packages/Phalcon/src"
         }
     },
     "autoload-dev": {
@@ -160,7 +161,8 @@
             "Rector\\ZendToSymfony\\Tests\\": "packages/ZendToSymfony/tests",
             "Rector\\StrictCodeQuality\\Tests\\": "packages/StrictCodeQuality/tests",
             "Rector\\DynamicTypeAnalysis\\Tests\\": "packages/DynamicTypeAnalysis/tests",
-            "Rector\\PhpDeglobalize\\Tests\\": "packages/PhpDeglobalize/tests"
+            "Rector\\PhpDeglobalize\\Tests\\": "packages/PhpDeglobalize/tests",
+            "Rector\\Phalcon\\Tests\\": "packages/Phalcon/tests"
         },
         "classmap": [
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
