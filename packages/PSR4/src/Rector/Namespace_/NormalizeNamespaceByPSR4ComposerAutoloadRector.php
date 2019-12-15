@@ -118,6 +118,9 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
         $psr4Autoloads = $this->psR4AutoloadPathsProvider->provide();
 
         foreach ($psr4Autoloads as $namespace => $path) {
+            // remove extra slash
+            $path = rtrim($path, '/');
+
             if (Strings::startsWith($smartFileInfo->getRelativeDirectoryPath(), $path)) {
                 $expectedNamespace = $namespace . $this->resolveExtraNamespace($smartFileInfo, $path);
 
