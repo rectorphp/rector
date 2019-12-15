@@ -20,21 +20,22 @@ parameters:
     rector_recipe:
         # run "bin/rector create" to create a new Rector + tests from this config
         package: "Phalcon"
-        name: "FlashWithCssClassesToExtraCallRector"
+        name: "NewApplicationToToFactoryWithDefaultContainerRector"
         node_types:
             # put main node first, it is used to create namespace
             - "Assign"
 
-        description: "Add $cssClasses in Flash to separated method call"
+        description: "Change new application to default factory with application"
         code_before: >
             <?php
 
             class SomeClass
             {
-                public function run()
+                public function run($di)
                 {
-                    $cssClasses = [];
-                    $flash = new Phalcon\Flash($cssClasses);
+                    $application = new \Phalcon\Mvc\Application($di);
+
+                    $response = $application->handle();
                 }
             }
 
@@ -43,14 +44,15 @@ parameters:
 
             class SomeClass
             {
-                public function run()
+                public function run($di)
                 {
-                    $cssClasses = [];
-                    $flash = new Phalcon\Flash();
-                    $flash->setCssClasses($cssClasses);
+                    $container = new \Phalcon\Di\FactoryDefault();
+                    $application = new \Phalcon\Mvc\Application($container);
+
+                    $response = $application->handle($_SERVER["REQUEST_URI"]);
                 }
             }
 
         source: # e.g. link to RFC or headline in upgrade guide, 1 or more in the list
-            - "https://github.com/rectorphp/rector/issues/2408#issue-534441142"
+            - "https://github.com/rectorphp/rector/issues/2408"
         set: "phalcon40" # e.g. symfony30, target config to append this rector to
