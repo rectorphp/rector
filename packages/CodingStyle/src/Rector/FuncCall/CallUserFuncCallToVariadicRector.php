@@ -63,9 +63,13 @@ PHP
         }
 
         $functionName = $this->getValue($node->args[0]->value);
+        if (! is_string($functionName)) {
+            return null;
+        }
 
         $args = [];
         $args[] = new Arg($node->args[1]->value, false, true);
+
         return $this->createFunction($functionName, $args);
     }
 }
