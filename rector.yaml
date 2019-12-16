@@ -1,3 +1,6 @@
+imports:
+    - { resource: "create-rector.yaml", ignore_errors: true }
+
 services:
     Rector\PSR4\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector: ~
 
@@ -15,41 +18,3 @@ parameters:
 
     # so Rector code is still PHP 7.2 compatible
     php_version_features: '7.2'
-
-    # @see utils/RectorGenerator/config/config.yaml
-    rector_recipe:
-        # run "bin/rector create" to create a new Rector + tests from this config
-        package: "Phalcon"
-        name: "AddRequestToHandleMethodCallRector"
-        node_types:
-            # put main node first, it is used to create namespace
-            - "MethodCall"
-
-        description: "Add $_SERVER REQUEST_URI to method call"
-        code_before: >
-            <?php
-
-            class SomeClass
-            {
-                public function run($di)
-                {
-                    $application = new \Phalcon\Mvc\Application();
-                    $response = $application->handle();
-                }
-            }
-
-        code_after: >
-            <?php
-
-            class SomeClass
-            {
-                public function run($di)
-                {
-                    $application = new \Phalcon\Mvc\Application();
-                    $response = $application->handle($_SERVER["REQUEST_URI"]);
-                }
-            }
-
-        source: # e.g. link to RFC or headline in upgrade guide, 1 or more in the list
-            - "https://github.com/rectorphp/rector/issues/2408"
-        set: "phalcon40" # e.g. symfony30, target config to append this rector to
