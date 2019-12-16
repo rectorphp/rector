@@ -54,7 +54,8 @@ final class BarewordStringRector extends AbstractRector
         // load the file!
         $fileInfo = $node->getAttribute(AttributeKey::FILE_INFO);
         if ($fileInfo === null) {
-            throw new ShouldNotHappenException();
+            // unable to process
+            return null;
         }
 
         $this->undefinedConstants = [];
