@@ -232,6 +232,7 @@ final class NodeFactory
     {
         $propertyBuilder = $this->builderFactory->property($name);
         $propertyBuilder->makePrivate();
+
         $property = $propertyBuilder->getNode();
 
         $this->decorateParentPropertyProperty($property);
@@ -257,6 +258,7 @@ final class NodeFactory
     {
         $propertyBuilder = $this->builderFactory->property($name);
         $propertyBuilder->makePublic();
+
         $property = $propertyBuilder->getNode();
 
         $this->decorateParentPropertyProperty($property);

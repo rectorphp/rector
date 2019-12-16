@@ -19,23 +19,22 @@ parameters:
     # @see utils/RectorGenerator/config/config.yaml
     rector_recipe:
         # run "bin/rector create" to create a new Rector + tests from this config
-        package: "Rector"
-        name: "SwapClassMethodArgumentsRector"
+        package: "Phalcon"
+        name: "AddRequestToHandleMethodCallRector"
         node_types:
             # put main node first, it is used to create namespace
-            - "StaticCall"
             - "MethodCall"
-            - "ClassMethod"
 
-        description: "Reorder class method arguments, including their calls"
+        description: "Add $_SERVER REQUEST_URI to method call"
         code_before: >
             <?php
 
             class SomeClass
             {
-                public static function run($first, $second)
+                public function run($di)
                 {
-                    self::run($first, $second);
+                    $application = new \Phalcon\Mvc\Application();
+                    $response = $application->handle();
                 }
             }
 
@@ -44,12 +43,13 @@ parameters:
 
             class SomeClass
             {
-                public static function run($second, $first)
+                public function run($di)
                 {
-                    self::run($second, $first);
+                    $application = new \Phalcon\Mvc\Application();
+                    $response = $application->handle($_SERVER["REQUEST_URI"]);
                 }
             }
 
         source: # e.g. link to RFC or headline in upgrade guide, 1 or more in the list
-            - ""
-        set: "" # e.g. symfony30, target config to append this rector to
+            - "https://github.com/rectorphp/rector/issues/2408"
+        set: "phalcon40" # e.g. symfony30, target config to append this rector to

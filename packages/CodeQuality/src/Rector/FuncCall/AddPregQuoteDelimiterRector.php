@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Rector\FuncCall;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Concat;
@@ -91,11 +92,11 @@ PHP
         if (! $leftMostConcatNode instanceof String_) {
             return null;
         }
-        $possibleLeftDelimiter = substr($leftMostConcatNode->value, 0, 1);
+        $possibleLeftDelimiter = Strings::substring($leftMostConcatNode->value, 0, 1);
         if (! $rightMostConcatNode instanceof String_) {
             return null;
         }
-        $possibleRightDelimiter = substr(rtrim($rightMostConcatNode->value, self::ALL_MODIFIERS), -1, 1);
+        $possibleRightDelimiter = Strings::substring(rtrim($rightMostConcatNode->value, self::ALL_MODIFIERS), -1, 1);
         if ($possibleLeftDelimiter === $possibleRightDelimiter) {
             return $possibleLeftDelimiter;
         }

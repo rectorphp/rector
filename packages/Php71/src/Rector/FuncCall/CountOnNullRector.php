@@ -110,11 +110,6 @@ PHP
         if ($parentNode instanceof Ternary) {
             return true;
         }
-
-        if (! isset($funcCall->args[0])) {
-            return true;
-        }
-
-        return false;
+        return ! isset($funcCall->args[0]);
     }
 }
