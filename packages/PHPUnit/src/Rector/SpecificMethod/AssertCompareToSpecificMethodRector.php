@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Rector\SpecificMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -37,20 +38,8 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
                 '$this->assertCount(10, $anything, "message");'
             ),
             new CodeSample(
-                '$this->assertSame($value, {function}($anything), "message");',
-                '$this->assert{function}($value, $anything, "message");'
-            ),
-            new CodeSample(
-                '$this->assertEquals($value, {function}($anything), "message");',
-                '$this->assert{function}($value, $anything, "message");'
-            ),
-            new CodeSample(
-                '$this->assertNotSame($value, {function}($anything), "message");',
-                '$this->assertNot{function}($value, $anything, "message")'
-            ),
-            new CodeSample(
-                '$this->assertNotEquals($value, {function}($anything), "message");',
-                '$this->assertNot{function}($value, $anything, "message")'
+                '$this->assertNotEquals(get_class($value), stdClass::class);',
+                '$this->assertNotInstanceOf(stdClass::class, $value);'
             ),
         ]);
     }
@@ -72,28 +61,25 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
             return null;
         }
 
+        // we need 2 args
         if (! isset($node->args[1])) {
             return null;
         }
 
-        $secondArgumentValue = $node->args[1]->value;
-        if (! $secondArgumentValue instanceof FuncCall) {
-            return null;
+        $firstArgument = $node->args[0];
+        $secondArgument = $node->args[1];
+        $firstArgumentValue = $firstArgument->value;
+        $secondArgumentValue = $secondArgument->value;
+
+        if ($secondArgumentValue instanceof FuncCall) {
+            return $this->processFuncCallArgumentValue($node, $secondArgumentValue, $firstArgument);
         }
 
-        $name = $this->getName($secondArgumentValue);
-        if ($name === null) {
-            return null;
+        if ($firstArgumentValue instanceof FuncCall) {
+            return $this->processFuncCallArgumentValue($node, $firstArgumentValue, $secondArgument);
         }
 
-        if (! isset($this->defaultOldToNewMethods[$name])) {
-            return null;
-        }
-
-        $this->renameMethod($node, $name);
-        $this->moveFunctionArgumentsUp($node);
-
-        return $node;
+        return null;
     }
 
     /**
@@ -117,10 +103,30 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
      * Handles custom error messages to not be overwrite by function with multiple args.
      * @param StaticCall|MethodCall $node
      */
-    private function moveFunctionArgumentsUp(Node $node): void
+    private function moveFunctionArgumentsUp(Node $node, FuncCall $funcCall, Arg $requiredArg): void
     {
-        /** @var FuncCall $secondArgument */
-        $secondArgument = $node->args[1]->value;
-        $node->args[1] = $secondArgument->args[0];
+        $node->args[1] = $funcCall->args[0];
+        $node->args[0] = $requiredArg;
+    }
+
+    /**
+     * @param MethodCall|StaticCall $node
+     * @return MethodCall|StaticCall|null
+     */
+    private function processFuncCallArgumentValue(Node $node, FuncCall $funcCall, Arg $requiredArg): ?Node
+    {
+        $name = $this->getName($funcCall);
+        if ($name === null) {
+            return null;
+        }
+
+        if (! isset($this->defaultOldToNewMethods[$name])) {
+            return null;
+        }
+
+        $this->renameMethod($node, $name);
+        $this->moveFunctionArgumentsUp($node, $funcCall, $requiredArg);
+
+        return $node;
     }
 }
