@@ -9,7 +9,6 @@ use Rector\Configuration\Option;
 use Rector\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector;
 use Rector\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\Source\SomeKernelClass;
 
 final class ActionInjectionToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
@@ -18,7 +17,8 @@ final class ActionInjectionToConstructorInjectionRectorTest extends AbstractRect
      */
     public function test(string $file): void
     {
-        $this->setParameter(Option::KERNEL_CLASS_PARAMETER, SomeKernelClass::class);
+        $this->setParameter(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, __DIR__ . '/xml/services.xml');
+
         $this->doTestFile($file);
     }
 

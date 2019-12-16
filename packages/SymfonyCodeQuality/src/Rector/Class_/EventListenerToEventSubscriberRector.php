@@ -19,12 +19,13 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
-use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Symfony\ServiceMapProvider;
+use Rector\Symfony\ValueObject\ServiceDefinition;
+use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 use Rector\ValueObject\PhpVersionFeature;
-use Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher;
 
 /**
  * @see \Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector\EventListenerToEventSubscriberRectorTest
@@ -66,12 +67,7 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     ];
 
     /**
-     * @var AnalyzedApplicationContainerInterface
-     */
-    private $analyzedApplicationContainer;
-
-    /**
-     * @var mixed[][]
+     * @var ServiceDefinition[][][]
      */
     private $listenerClassesToEvents = [];
 
@@ -80,9 +76,14 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
      */
     private $areListenerClassesLoaded = false;
 
-    public function __construct(AnalyzedApplicationContainerInterface $analyzedApplicationContainer)
+    /**
+     * @var ServiceMapProvider
+     */
+    private $applicationServiceMapProvider;
+
+    public function __construct(ServiceMapProvider $applicationServiceMapProvider)
     {
-        $this->analyzedApplicationContainer = $analyzedApplicationContainer;
+        $this->applicationServiceMapProvider = $applicationServiceMapProvider;
     }
 
     public function getDefinition(): RectorDefinition
@@ -182,7 +183,7 @@ PHP
     }
 
     /**
-     * @return string[][]
+     * @return ServiceDefinition[][][]
      */
     private function getListenerClassesToEventsToMethods(): array
     {
@@ -190,33 +191,22 @@ PHP
             return $this->listenerClassesToEvents;
         }
 
-        if (! $this->analyzedApplicationContainer->hasService('event_dispatcher')) {
-            $this->areListenerClassesLoaded = true;
+        $serviceMap = $this->applicationServiceMapProvider->provide();
+        $eventListeners = $serviceMap->getServicesByTag('kernel.event_listener');
 
-            return [];
-        }
+        foreach ($eventListeners as $eventListener) {
+            // skip Symfony core listeners
+            if (Strings::match((string) $eventListener->getClass(), '#^(Symfony|Sensio|Doctrine)\b#')) {
+                continue;
+            }
 
-        /** @var TraceableEventDispatcher $applicationEventDispatcher */
-        $applicationEventDispatcher = $this->analyzedApplicationContainer->getService('event_dispatcher');
-
-        foreach ($applicationEventDispatcher->getListeners() as $eventName => $listenersInEvent) {
-            foreach ($listenersInEvent as $listener) {
-                // must be array → class and method
-                if (! is_array($listener)) {
+            foreach ($eventListener->getTags() as $tag) {
+                if (! $tag instanceof EventListenerTag) {
                     continue;
                 }
 
-                $listenerClass = get_class($listener[0]);
-
-                // skip Symfony core listeners
-                if (Strings::match($listenerClass, '#^(Symfony|Sensio|Doctrine)\\\\#')) {
-                    continue;
-                }
-
-                $listenerPriority = $applicationEventDispatcher->getListenerPriority($eventName, $listener);
-
-                // group event name - method - class :)
-                $this->listenerClassesToEvents[$listenerClass][$eventName][] = [$listener[1], $listenerPriority];
+                $eventName = $tag->getEvent();
+                $this->listenerClassesToEvents[$eventListener->getClass()][$eventName][] = $eventListener;
             }
         }
 
@@ -237,8 +227,8 @@ PHP
         $classShortName = Strings::replace($classShortName, '#^(.*?)(Listener)?$#', '$1');
         $class->name = new Identifier($classShortName . 'EventSubscriber');
 
-        $clasMethod = $this->createGetSubscribedEventsClassMethod($eventsToMethods);
-        $class->stmts[] = $clasMethod;
+        $classMethod = $this->createGetSubscribedEventsClassMethod($eventsToMethods);
+        $class->stmts[] = $classMethod;
 
         return $class;
     }
@@ -255,12 +245,17 @@ PHP
         $this->makeStatic($getSubscribedEventsMethod);
 
         foreach ($eventsToMethods as $eventName => $methodNamesWithPriorities) {
-            $eventName = $this->createEventName($eventName);
+            $eventNameExpr = $this->createEventName($eventName);
 
             if (count($methodNamesWithPriorities) === 1) {
-                $this->createSingleMethod($methodNamesWithPriorities, $eventName, $eventsToMethodsArray);
+                $this->createSingleMethod($methodNamesWithPriorities, $eventNameExpr, $eventsToMethodsArray);
             } else {
-                $this->createMultipleMethods($methodNamesWithPriorities, $eventName, $eventsToMethodsArray);
+                $this->createMultipleMethods(
+                    $methodNamesWithPriorities,
+                    $eventNameExpr,
+                    $eventsToMethodsArray,
+                    $eventName
+                );
             }
         }
 
@@ -291,16 +286,21 @@ PHP
 
     /**
      * @param ClassConstFetch|String_ $expr
-     * @param mixed[] $methodNamesWithPriorities
+     * @param ServiceDefinition[] $methodNamesWithPriorities
      */
     private function createSingleMethod(
         array $methodNamesWithPriorities,
         Expr $expr,
         Array_ $eventsToMethodsArray
     ): void {
-        [$methodName, $priority] = $methodNamesWithPriorities[0];
 
-        if ($priority) {
+        /** @var EventListenerTag $eventTag */
+        $eventTag = $methodNamesWithPriorities[0]->getTags()[0];
+
+        $methodName = $eventTag->getMethod();
+        $priority = $eventTag->getPriority();
+
+        if ($priority !== 0) {
             $methodNameWithPriorityArray = new Array_();
             $methodNameWithPriorityArray->items[] = new ArrayItem(new String_($methodName));
             $methodNameWithPriorityArray->items[] = new ArrayItem(new LNumber((int) $priority));
@@ -313,28 +313,38 @@ PHP
 
     /**
      * @param ClassConstFetch|String_ $expr
-     * @param mixed[] $methodNamesWithPriorities
+     * @param ServiceDefinition[] $methodNamesWithPriorities
      */
     private function createMultipleMethods(
         array $methodNamesWithPriorities,
         Expr $expr,
-        Array_ $eventsToMethodsArray
+        Array_ $eventsToMethodsArray,
+        string $eventName
     ): void {
-        $multipleMethodsArray = new Array_();
+        $eventItems = [];
+        $alreadyUsedTags = [];
 
         foreach ($methodNamesWithPriorities as $methodNamesWithPriority) {
-            [$methodName, $priority] = $methodNamesWithPriority;
+            foreach ($methodNamesWithPriority->getTags() as $tag) {
+                if (! $tag instanceof EventListenerTag) {
+                    continue;
+                }
 
-            if ($priority) {
-                $methodNameWithPriorityArray = new Array_();
-                $methodNameWithPriorityArray->items[] = new ArrayItem(new String_($methodName));
-                $methodNameWithPriorityArray->items[] = new ArrayItem(new LNumber((int) $priority));
+                if ($eventName !== $tag->getEvent()) {
+                    continue;
+                }
 
-                $multipleMethodsArray->items[] = new ArrayItem($methodNameWithPriorityArray);
-            } else {
-                $multipleMethodsArray->items[] = new ArrayItem(new String_($methodName));
+                if (in_array($tag, $alreadyUsedTags, true)) {
+                    continue;
+                }
+
+                $eventItems[] = $this->createEventItem($tag);
+
+                $alreadyUsedTags[] = $tag;
             }
         }
+
+        $multipleMethodsArray = new Array_($eventItems);
 
         $eventsToMethodsArray->items[] = new ArrayItem($multipleMethodsArray, $expr);
     }
@@ -347,5 +357,18 @@ PHP
 
         $arrayMixedType = new ArrayType(new MixedType(), new MixedType(true));
         $this->docBlockManipulator->addReturnTag($classMethod, $arrayMixedType);
+    }
+
+    private function createEventItem(EventListenerTag $eventListenerTag): ArrayItem
+    {
+        if ($eventListenerTag->getPriority() !== 0) {
+            $methodNameWithPriorityArray = new Array_();
+            $methodNameWithPriorityArray->items[] = new ArrayItem(new String_($eventListenerTag->getMethod()));
+            $methodNameWithPriorityArray->items[] = new ArrayItem(new LNumber($eventListenerTag->getPriority()));
+
+            return new ArrayItem($methodNameWithPriorityArray);
+        }
+
+        return new ArrayItem(new String_($eventListenerTag->getMethod()));
     }
 }

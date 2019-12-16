@@ -1,8 +1,6 @@
 parameters:
-    # explicit environment of analyzed application
-    kernel_environment: ''
-    # explicit  kernel class of analyzed application
-    kernel_class: ''
+    # path to load services from
+    symfony_container_xml_path: ''
 
 services:
     _defaults:
@@ -13,4 +11,6 @@ services:
         resource: '../src'
         exclude:
             - '../src/Rector/**/*Rector.php'
+            - '../src/Exception/*'
+            - '../src/ValueObject/*'
             - '../src/PhpDocParser/Ast/PhpDoc/*'

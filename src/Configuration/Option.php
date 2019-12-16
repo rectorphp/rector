@@ -29,16 +29,6 @@ final class Option
     /**
      * @var string
      */
-    public const KERNEL_CLASS_PARAMETER = 'kernel_class';
-
-    /**
-     * @var string
-     */
-    public const KERNEL_ENVIRONMENT_PARAMETER = 'kernel_environment';
-
-    /**
-     * @var string
-     */
     public const PHP_VERSION_FEATURES = 'php_version_features';
 
     /**
@@ -70,4 +60,9 @@ final class Option
      * @var string
      */
     public const MATCH_GIT_DIFF = 'match-git-diff';
+
+    /**
+     * @var string
+     */
+    public const SYMFONY_CONTAINER_XML_PATH_PARAMETER = 'symfony_container_xml_path';
 }
