@@ -10,11 +10,11 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
-use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Symfony\ServiceMapProvider;
 
 /**
  * @see \Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\ActionInjectionToConstructorInjectionRectorTest
@@ -27,16 +27,16 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
     private $variablesToPropertyFetchCollection;
 
     /**
-     * @var AnalyzedApplicationContainerInterface
+     * @var ServiceMapProvider
      */
-    private $analyzedApplicationContainer;
+    private $applicationServiceMapProvider;
 
     public function __construct(
         VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
-        AnalyzedApplicationContainerInterface $analyzedApplicationContainer
+        ServiceMapProvider $applicationServiceMapProvider
     ) {
         $this->variablesToPropertyFetchCollection = $variablesToPropertyFetchCollection;
-        $this->analyzedApplicationContainer = $analyzedApplicationContainer;
+        $this->applicationServiceMapProvider = $applicationServiceMapProvider;
     }
 
     public function getDefinition(): RectorDefinition
@@ -49,7 +49,7 @@ final class SomeController
     public function default(ProductRepository $productRepository)
     {
         $products = $productRepository->fetchAll();
-    } 
+    }
 }
 PHP
                 ,
@@ -64,11 +64,11 @@ final class SomeController
     {
         $this->productRepository = $productRepository;
     }
-    
+
     public function default()
     {
         $products = $this->productRepository->fetchAll();
-    } 
+    }
 }
 PHP
             ),
@@ -135,7 +135,8 @@ PHP
             return false;
         }
 
-        /** @var string $typehint */
-        return $this->analyzedApplicationContainer->hasService($paramStaticType->getClassName());
+        $serviceMap = $this->applicationServiceMapProvider->provide();
+
+        return $serviceMap->hasService($paramStaticType->getClassName());
     }
 }

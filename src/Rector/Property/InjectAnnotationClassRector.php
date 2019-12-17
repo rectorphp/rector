@@ -11,19 +11,19 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Application\ErrorAndDiffCollector;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
-use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Exception\NotImplementedException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Symfony\ServiceMapProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Throwable;
 
 /**
  * @see https://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations#inject
@@ -41,11 +41,6 @@ final class InjectAnnotationClassRector extends AbstractRector
     ];
 
     /**
-     * @var AnalyzedApplicationContainerInterface
-     */
-    private $analyzedApplicationContainer;
-
-    /**
      * @var ErrorAndDiffCollector
      */
     private $errorAndDiffCollector;
@@ -56,16 +51,21 @@ final class InjectAnnotationClassRector extends AbstractRector
     private $annotationClasses = [];
 
     /**
+     * @var ServiceMapProvider
+     */
+    private $serviceMapProvider;
+
+    /**
      * @param string[] $annotationClasses
      */
     public function __construct(
-        AnalyzedApplicationContainerInterface $analyzedApplicationContainer,
+        ServiceMapProvider $serviceMapProvider,
         ErrorAndDiffCollector $errorAndDiffCollector,
         array $annotationClasses = []
     ) {
-        $this->analyzedApplicationContainer = $analyzedApplicationContainer;
         $this->errorAndDiffCollector = $errorAndDiffCollector;
         $this->annotationClasses = $annotationClasses;
+        $this->serviceMapProvider = $serviceMapProvider;
     }
 
     public function getDefinition(): RectorDefinition
@@ -199,14 +199,19 @@ PHP
 
     private function resolveJMSDIInjectType(Node $node, JMSInjectTagValueNode $jmsInjectTagValueNode): Type
     {
+        $serviceMap = $this->serviceMapProvider->provide();
         $serviceName = $jmsInjectTagValueNode->getServiceName();
+
         if ($serviceName) {
-            try {
-                if ($this->analyzedApplicationContainer->hasService($serviceName)) {
-                    return $this->analyzedApplicationContainer->getTypeForName($serviceName);
+            if (class_exists($serviceName)) {
+                return new ObjectType($serviceName);
+            }
+
+            if ($serviceMap->hasService($serviceName)) {
+                $serviceType = $serviceMap->getServiceType($serviceName);
+                if ($serviceType !== null) {
+                    return $serviceType;
                 }
-            } catch (Throwable $throwable) {
-                // resolve later in errorAndDiffCollector if @var not found
             }
         }
 

@@ -7,7 +7,6 @@ namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionR
 use Iterator;
 use Rector\Configuration\Option;
 use Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector;
-use Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeKernelClass;
 use Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\GetTrait;
 use Rector\Symfony\Tests\Rector\Source\SymfonyController;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -19,7 +18,7 @@ final class GetToConstructorInjectionRectorTest extends AbstractRectorTestCase
      */
     public function test(string $file): void
     {
-        $this->setParameter(Option::KERNEL_CLASS_PARAMETER, SomeKernelClass::class);
+        $this->setParameter(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, __DIR__ . '/xml/services.xml');
         $this->doTestFile($file);
     }
 

@@ -7,7 +7,6 @@ namespace Rector\Symfony\Tests\Rector\FrameworkBundle\ContainerGetToConstructorI
 use Iterator;
 use Rector\Configuration\Option;
 use Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector;
-use Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeKernelClass;
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentCommand;
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ThisClassCallsMethodInConstructor;
@@ -20,7 +19,10 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
      */
     public function test(string $file): void
     {
-        $this->setParameter(Option::KERNEL_CLASS_PARAMETER, SomeKernelClass::class);
+        $this->setParameter(
+            Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
+            __DIR__ . '/../GetToConstructorInjectionRector/xml/services.xml'
+        );
         $this->doTestFile($file);
     }
 

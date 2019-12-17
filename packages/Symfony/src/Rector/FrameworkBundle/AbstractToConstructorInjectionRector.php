@@ -13,11 +13,11 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\Bridge\Contract\AnalyzedApplicationContainerInterface;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
+use Rector\Symfony\ServiceMapProvider;
 
 abstract class AbstractToConstructorInjectionRector extends AbstractRector
 {
@@ -27,19 +27,19 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
     protected $propertyNaming;
 
     /**
-     * @var AnalyzedApplicationContainerInterface
+     * @var ServiceMapProvider
      */
-    protected $analyzedApplicationContainer;
+    private $applicationServiceMapProvider;
 
     /**
      * @required
      */
-    public function setAbstractToConstructorInjectionRectorDependencies(
+    public function autowireAbstractToConstructorInjectionRectorDependencies(
         PropertyNaming $propertyNaming,
-        AnalyzedApplicationContainerInterface $analyzedApplicationContainer
+        ServiceMapProvider $applicationServiceMapProvider
     ): void {
         $this->propertyNaming = $propertyNaming;
-        $this->analyzedApplicationContainer = $analyzedApplicationContainer;
+        $this->applicationServiceMapProvider = $applicationServiceMapProvider;
     }
 
     protected function processMethodCallNode(MethodCall $methodCall): ?Node
@@ -71,10 +71,10 @@ abstract class AbstractToConstructorInjectionRector extends AbstractRector
 
         $argument = $methodCallNode->args[0]->value;
 
-        if ($argument instanceof String_) {
-            $serviceName = $argument->value;
+        $serviceMap = $this->applicationServiceMapProvider->provide();
 
-            return $this->analyzedApplicationContainer->getTypeForName($serviceName);
+        if ($argument instanceof String_) {
+            return $serviceMap->getServiceType($argument->value);
         }
 
         if (! $argument instanceof ClassConstFetch) {

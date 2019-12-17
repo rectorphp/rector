@@ -9,7 +9,6 @@ use Iterator;
 use JMS\DiExtraBundle\Annotation\Inject;
 use Rector\Configuration\Option;
 use Rector\Rector\Property\InjectAnnotationClassRector;
-use Rector\Symfony\Tests\FrameworkBundle\AbstractToConstructorInjectionRectorSource\SomeKernelClass;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
@@ -19,7 +18,11 @@ final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
      */
     public function test(string $file): void
     {
-        $this->setParameter(Option::KERNEL_CLASS_PARAMETER, SomeKernelClass::class);
+        $this->setParameter(
+            Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
+            __DIR__ . '/../../../../packages/Symfony/tests/Rector/FrameworkBundle/GetToConstructorInjectionRector/xml/services.xml'
+        );
+
         $this->doTestFile($file);
     }
 

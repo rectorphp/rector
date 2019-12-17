@@ -227,3 +227,12 @@ parameters:
         -
             message: '#Call to function in_array\(\) with arguments PhpParser\\Node\\Expr\\Variable, array\(\) and true will always evaluate to false#'
             path: packages/Php56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php
+
+        # known values
+        -
+            message: '#Method Rector\\Rector\\Property\\InjectAnnotationClassRector\:\:resolveJMSDIInjectType\(\) should return PHPStan\\Type\\Type but returns PHPStan\\Type\\Type\|null#'
+            path: src/Rector/Property/InjectAnnotationClassRector.php
+
+        -
+            message: '#Method Rector\\Symfony\\Rector\\FrameworkBundle\\AbstractToConstructorInjectionRector\:\:getServiceTypeFromMethodCallArgument\(\) should return PHPStan\\Type\\Type but returns PHPStan\\Type\\Type\|null#'
+            path: packages/Symfony/src/Rector/FrameworkBundle/AbstractToConstructorInjectionRector.php

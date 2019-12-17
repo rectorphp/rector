@@ -221,6 +221,17 @@ vendor/bin/rector process src --match-git-diff
 
 This option is useful in CI with pull-requests that only change few files.
 
+### Symfony Container
+
+To work with some Symfony rules, you now need to link your container XML file
+
+```yaml
+# rector.yaml
+parameters:
+    # path to load services from
+    symfony_container_xml_path: 'var/cache/dev/AppKernelDevDebugContainer.xml'
+```
+
 ## 3 Steps to Create Your Own Rector
 
 First, make sure it's not covered by [any existing Rectors](/docs/AllRectorsOverview.md).
