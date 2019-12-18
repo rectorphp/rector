@@ -21,6 +21,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
@@ -600,7 +601,7 @@ final class StaticTypeMapper
             return new ArrayType(new MixedType(), $nestedType);
         }
 
-        if ($typeNode instanceof UnionTypeNode) {
+        if ($typeNode instanceof UnionTypeNode || $typeNode instanceof IntersectionTypeNode) {
             $unionedTypes = [];
             foreach ($typeNode->types as $unionedTypeNode) {
                 $unionedTypes[] = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($unionedTypeNode, $node);
