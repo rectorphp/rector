@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector;
 
+use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 
@@ -17,7 +18,7 @@ final class AddParamTypeDeclarationRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    public function provideDataForTest(): \Iterator
+    public function provideDataForTest(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

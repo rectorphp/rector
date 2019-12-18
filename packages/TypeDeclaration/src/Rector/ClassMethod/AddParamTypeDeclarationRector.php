@@ -129,7 +129,7 @@ PHP
                 return false;
             }
 
-            if ($class->extends) {
+            if ($class->extends !== null) {
                 return false;
             }
 
