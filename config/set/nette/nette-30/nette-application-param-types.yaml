@@ -1,0 +1,5 @@
+services:
+    # scalar type hints, see https://github.com/nette/application/commit/b71d69c507f90b48fbc1e40447d451b4b5c6f063
+    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
+        Nette\Application\UI\Control:
+            0: 'Nette\ComponentModel\IComponent'

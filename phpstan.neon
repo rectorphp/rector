@@ -42,6 +42,7 @@ parameters:
         # false positive
 #        - '#Call to function method_exists\(\) with string and (.*?) will always evaluate to false#'
         - '#PHPDoc tag \@param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
+        - '#Access to an undefined property PhpParser\\Node\\Stmt\\ClassLike\:\:\$extends#'
 
         # misuse of interface and class
         - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#'

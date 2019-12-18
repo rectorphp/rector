@@ -1,0 +1,34 @@
+services:
+    # scalar type hints, see https://github.com/nette/component-model/commit/f69df2ca224cad7b07f1c8835679393263ea6771
+    Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector:
+        Nette\ComponentModel\Component:
+            lookup:
+                0: '?string'
+                1: 'bool'
+            lookupPath:
+                0: 'string'
+                1: 'bool'
+            monitor:
+                0: 'string'
+            unmonitor:
+                0: 'string'
+            attached:
+                0: 'Nette\ComponentModel\IComponent'
+            detached:
+                0: 'Nette\ComponentModel\IComponent'
+
+        Nette\ComponentModel\Container:
+            getComponent:
+                1: 'bool'
+            createComponent:
+                0: 'string'
+
+        Nette\ComponentModel\IComponent:
+            setParent:
+                0: '?Nette\ComponentModel\IContainer'
+                1: 'string'
+
+        Nette\ComponentModel\IContainer:
+            getComponents:
+                0: 'bool'
+                1: 'string'

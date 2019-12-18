@@ -137,6 +137,7 @@ PHP
         }
 
         // skip interface without parents
+        /** @var $class Interface_ */
         return ! (bool) $class->extends;
     }
 
