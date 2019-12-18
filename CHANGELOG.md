@@ -9,6 +9,29 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+## [v0.6.2] - 2019-12-18
+
+### Added
+
+- [#2439] [PHPUnit] Add get_class double sided to AssertCompareToSpecificMethodRector
+- [#2447] [TypeDeclaration] Add AddParamTypeDeclarationRector
+- [#2450] add intersection type support to StaticTypeMapper
+- [#2448] [PHP 7.0] Add StaticCallOnNonStaticToInstanceCallRector edge case of property fetch static call
+- [#2437] [Phalcon 4.0] Add FlashWithCssClassesToExtraCallRector
+
+### Changed
+
+- [#2442] [Symfony] refactor to ServiceMap
+- [#2438] Make BarewordStringRector skip missing file
+- [#2436] Update .travis.yml, Thanks to [@andreybolonin]
+- [#2428] Document import_short_classes + import_doc_blocks, Thanks to [@gnutix]
+- [#2427] Update phalcon40.yaml, Thanks to [@ruudboon]
+
+### Fixed
+
+- [#2435] Various fixes
+- [#2420] Fix NewToStaticCallRector documentation, Thanks to [@RusiPapazov]
+
 ## [v0.6.1] - 2019-12-10
 
 **Rector is now shipped as prefixed phar - download from [rector-prefixed](https://github.com/rectorphp/rector-prefixed)** 
@@ -1663,3 +1686,18 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@danielroe]: https://github.com/danielroe
 [@EmanueleMinotto]: https://github.com/EmanueleMinotto
 [v0.6.0]: https://github.com/rectorphp/rector/compare/v0.5.23...v0.6.0
+[#2450]: https://github.com/rectorphp/rector/pull/2450
+[#2448]: https://github.com/rectorphp/rector/pull/2448
+[#2447]: https://github.com/rectorphp/rector/pull/2447
+[#2442]: https://github.com/rectorphp/rector/pull/2442
+[#2439]: https://github.com/rectorphp/rector/pull/2439
+[#2438]: https://github.com/rectorphp/rector/pull/2438
+[#2437]: https://github.com/rectorphp/rector/pull/2437
+[#2436]: https://github.com/rectorphp/rector/pull/2436
+[#2435]: https://github.com/rectorphp/rector/pull/2435
+[#2428]: https://github.com/rectorphp/rector/pull/2428
+[#2427]: https://github.com/rectorphp/rector/pull/2427
+[#2420]: https://github.com/rectorphp/rector/pull/2420
+[@andreybolonin]: https://github.com/andreybolonin
+[@RusiPapazov]: https://github.com/RusiPapazov
+[v0.6.1]: https://github.com/rectorphp/rector/compare/v0.6.0...v0.6.1
