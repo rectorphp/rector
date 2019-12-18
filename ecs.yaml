@@ -1,10 +1,3 @@
-imports:
-    - { resource: 'vendor/symplify/easy-coding-standard/config/set/psr12.yaml' }
-    - { resource: 'vendor/symplify/easy-coding-standard/config/set/php71.yaml' }
-    - { resource: 'vendor/symplify/easy-coding-standard/config/set/symplify.yaml' }
-    - { resource: 'vendor/symplify/easy-coding-standard/config/set/common.yaml' }
-    - { resource: 'vendor/symplify/easy-coding-standard/config/set/clean-code.yaml' }
-
 services:
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
         max_cognitive_complexity: 9
@@ -27,6 +20,13 @@ services:
             - 'NodeVisitorAbstract'
 
 parameters:
+    sets:
+      - 'psr12'
+      - 'php71'
+      - 'symplify'
+      - 'common'
+      - 'clean-code'
+
     exclude_files:
         - '*tests/**Source/*.php'
         # tests files
