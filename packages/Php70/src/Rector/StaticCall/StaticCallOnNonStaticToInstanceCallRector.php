@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PHPStan\Type\ObjectType;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
@@ -98,7 +99,8 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $methodName = $this->getName($node);
-        $className = $this->getName($node->class);
+
+        $className = $this->resolveStaticCallClassName($node);
         if ($methodName === null || $className === null) {
             return null;
         }
@@ -112,7 +114,6 @@ PHP
             return null;
         }
 
-        $className = $this->getName($node->class);
         $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
         if ($className === $parentClassName) {
             return null;
@@ -122,7 +123,7 @@ PHP
             return null;
         }
 
-        if ($this->isInstantiable($node)) {
+        if ($this->isInstantiable($className)) {
             $newNode = new New_($node->class);
 
             return new MethodCall($newNode, $node->name, $node->args);
@@ -143,10 +144,8 @@ PHP
         return null;
     }
 
-    private function isInstantiable(StaticCall $staticCall): bool
+    private function isInstantiable(string $className): bool
     {
-        $className = $this->getName($staticCall->class);
-
         $reflectionClass = new ReflectionClass($className);
         $classConstructorReflection = $reflectionClass->getConstructor();
 
@@ -160,5 +159,17 @@ PHP
 
         // required parameters in constructor, nothing we can do
         return ! (bool) $classConstructorReflection->getNumberOfRequiredParameters();
+    }
+
+    private function resolveStaticCallClassName(Node $node): ?string
+    {
+        if ($node->class instanceof Node\Expr\PropertyFetch) {
+            $objectType = $this->getObjectType($node->class);
+            if ($objectType instanceof ObjectType) {
+                return $objectType->getClassName();
+            }
+        }
+
+        return $this->getName($node->class);
     }
 }
