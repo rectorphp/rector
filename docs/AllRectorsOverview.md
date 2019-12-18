@@ -1,4 +1,4 @@
-# All 395 Rectors Overview
+# All 400 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -27,6 +27,7 @@
 - [PHPUnit](#phpunit)
 - [PHPUnitSymfony](#phpunitsymfony)
 - [PSR4](#psr4)
+- [Phalcon](#phalcon)
 - [Php52](#php52)
 - [Php53](#php53)
 - [Php54](#php54)
@@ -3523,23 +3524,8 @@ Turns vague php-only method in PHPUnit TestCase to more specific
 ```
 
 ```diff
--$this->assertSame($value, {function}($anything), "message");
-+$this->assert{function}($value, $anything, "message");
-```
-
-```diff
--$this->assertEquals($value, {function}($anything), "message");
-+$this->assert{function}($value, $anything, "message");
-```
-
-```diff
--$this->assertNotSame($value, {function}($anything), "message");
-+$this->assertNot{function}($value, $anything, "message")
-```
-
-```diff
--$this->assertNotEquals($value, {function}($anything), "message");
-+$this->assertNot{function}($value, $anything, "message")
+-$this->assertNotEquals(get_class($value), stdClass::class);
++$this->assertNotInstanceOf(stdClass::class, $value);
 ```
 
 <br>
@@ -4201,6 +4187,70 @@ Add response content to response code assert, so it is easier to debug
 - class: `Rector\PSR4\Rector\Namespace_\NormalizeNamespaceByPSR4ComposerAutoloadRector`
 
 Changes namespace and class names to match PSR-4 in composer.json autoload section
+
+<br>
+
+## Phalcon
+
+### `AddRequestToHandleMethodCallRector`
+
+- class: `Rector\Phalcon\Rector\MethodCall\AddRequestToHandleMethodCallRector`
+
+Add $_SERVER REQUEST_URI to method call
+
+```diff
+ class SomeClass {
+     public function run($di)
+     {
+         $application = new \Phalcon\Mvc\Application();
+-        $response = $application->handle();
++        $response = $application->handle($_SERVER["REQUEST_URI"]);
+     }
+ }
+```
+
+<br>
+
+### `FlashWithCssClassesToExtraCallRector`
+
+- class: `Rector\Phalcon\Rector\Assign\FlashWithCssClassesToExtraCallRector`
+
+Add $cssClasses in Flash to separated method call
+
+```diff
+ class SomeClass {
+     public function run()
+     {
+         $cssClasses = [];
+-        $flash = new Phalcon\Flash($cssClasses);
++        $flash = new Phalcon\Flash();
++        $flash->setCssClasses($cssClasses);
+     }
+ }
+```
+
+<br>
+
+### `NewApplicationToToFactoryWithDefaultContainerRector`
+
+- class: `Rector\Phalcon\Rector\Assign\NewApplicationToToFactoryWithDefaultContainerRector`
+
+Change new application to default factory with application
+
+```diff
+ class SomeClass
+ {
+     public function run($di)
+     {
+-        $application = new \Phalcon\Mvc\Application($di);
++        $container = new \Phalcon\Di\FactoryDefault();
++        $application = new \Phalcon\Mvc\Application($container);
+
+-        $response = $application->handle();
++        $response = $application->handle($_SERVER["REQUEST_URI"]);
+     }
+ }
+```
 
 <br>
 
@@ -7231,6 +7281,35 @@ Change param type of passed getId() to UuidInterface type declaration
 
 <br>
 
+### `AddParamTypeDeclarationRector`
+
+- class: `Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector`
+
+Add param types where needed
+
+```yaml
+services:
+    Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector:
+        $typehintForParameterByMethodByClass:
+            SomeClass:
+                process:
+                    - string
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+-    public function process($name)
++    public function process(string $name)
+     {
+     }
+ }
+```
+
+<br>
+
 ### `CompleteVarDocTypePropertyRector`
 
 - class: `Rector\TypeDeclaration\Rector\Property\CompleteVarDocTypePropertyRector`
@@ -8116,9 +8195,8 @@ Change new Object to static call
 services:
     Rector\Rector\New_\NewToStaticCallRector:
         Cookie:
-            -
-                - Cookie
-                - create
+            - Cookie
+            - create
 ```
 
 ↓
@@ -8625,6 +8703,38 @@ services:
      {
 -        return ['compiler.post_dump' => 'compile'];
 +        return [\Yet\AnotherClass::CONSTANT => 'compile'];
+     }
+ }
+```
+
+<br>
+
+### `SwapClassMethodArgumentsRector`
+
+- class: `Rector\Rector\StaticCall\SwapClassMethodArgumentsRector`
+
+Reorder class method arguments, including their calls
+
+```yaml
+services:
+    Rector\Rector\StaticCall\SwapClassMethodArgumentsRector:
+        $newArgumentPositionsByMethodAndClass:
+            SomeClass:
+                run:
+                    - 1
+                    - 0
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+-    public static function run($first, $second)
++    public static function run($second, $first)
+     {
+-        self::run($first, $second);
++        self::run($second, $first);
      }
  }
 ```

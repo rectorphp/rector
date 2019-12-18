@@ -1,0 +1,105 @@
+services:
+    Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector:
+        # scalar type hints, see https://github.com/nette/component-model/commit/f69df2ca224cad7b07f1c8835679393263ea6771
+        Nette\ComponentModel\Component:
+            lookup:
+                0: '?string'
+                1: 'bool'
+            lookupPath:
+                0: 'string'
+                1: 'bool'
+            monitor:
+                0: 'string'
+            unmonitor:
+                0: 'string'
+            attached:
+                0: 'Nette\ComponentModel\IComponent'
+            detached:
+                0: 'Nette\ComponentModel\IComponent'
+
+        Nette\ComponentModel\Container:
+            getComponent:
+                1: 'bool'
+            createComponent:
+                0: 'string'
+
+        Nette\ComponentModel\IComponent:
+            setParent:
+                0: '?Nette\ComponentModel\IContainer'
+                1: 'string'
+
+        Nette\ComponentModel\IContainer:
+            getComponents:
+                0: 'bool'
+
+        # scalar param types https://github.com/nette/security/commit/84024f612fb3f55f5d6e3e3e28eef1ad0388fa56
+        Nette\Bridges\SecurityDI\SecurityExtension:
+            __construct:
+                0: bool
+
+        Nette\Security\IUserStorage:
+            setAuthenticated:
+                0: bool
+            setIdentity:
+                0: ?Nette\Security\IIdentity
+            setExpiration:
+                1: int
+
+        Nette\Security\Identity:
+            __construct:
+                2: iterable
+            __set:
+                0: 'string'
+            '&__get':
+                0: 'string'
+            __isset:
+                0: 'string'
+
+        Nette\Security\Passwords:
+            hash:
+                0: 'string'
+            verify:
+                0: 'string'
+                1: 'string'
+            needsRehash:
+                0: 'string'
+
+        Nette\Security\Permission:
+            addRole:
+                0: 'string'
+            hasRole:
+                0: 'string'
+            getRoleParents:
+                0: 'string'
+            removeRole:
+                0: 'string'
+            addResource:
+                0: 'string'
+                1: 'string'
+            hasResource:
+                0: 'string'
+            resourceInheritsFrom:
+                0: 'string'
+                1: 'string'
+                2: 'bool'
+            removeResource:
+                0: 'string'
+            allow:
+                3: 'callable'
+            deny:
+                3: 'callable'
+            setRule:
+                0: 'bool'
+                1: 'bool'
+                5: 'callable'
+
+        Nette\Security\User:
+            logout:
+                0: 'bool'
+            getAuthenticator:
+                0: 'bool'
+            isInRole:
+                0: 'string'
+            getAuthorizator:
+                0: 'bool'
+                1: 'string'
