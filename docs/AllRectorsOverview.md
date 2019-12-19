@@ -1,4 +1,4 @@
-# All 400 Rectors Overview
+# All 401 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -7576,6 +7576,31 @@ Turns action injection in Controllers to constructor injection
 +    {
 +        $products = $this->productRepository->fetchAll();
      }
+ }
+```
+
+<br>
+
+### `AddInterfaceByTraitRector`
+
+- class: `Rector\Rector\Class_\AddInterfaceByTraitRector`
+
+Add interface by used trait
+
+```yaml
+services:
+    Rector\Rector\Class_\AddInterfaceByTraitRector:
+        $interfaceByTrait:
+            SomeTrait: SomeInterface
+```
+
+↓
+
+```diff
+-class SomeClass
++class SomeClass implements SomeInterface
+ {
+     use SomeTrait;
  }
 ```
 
