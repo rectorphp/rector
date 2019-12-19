@@ -4,7 +4,7 @@ namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
 
-class SomeClass
+class SomeClass8
 {
     /** @var AbstractType */
     protected $someOtherClass;
@@ -28,7 +28,7 @@ namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Source\AbstractType;
 
-class SomeClass
+class SomeClass8
 {
     /** @var AbstractType */
     protected $someOtherClass;
