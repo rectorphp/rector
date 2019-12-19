@@ -496,4 +496,18 @@ final class ClassManipulator
 
         return false;
     }
+
+    /**
+     * @return string[]
+     */
+    public function getImplementedInterfaceNames(Class_ $class): array
+    {
+        $implementedInterfaceNames = [];
+
+        foreach ($class->implements as $implement) {
+            $implementedInterfaceNames[] = $this->nameResolver->getName($implement);
+        }
+
+        return $implementedInterfaceNames;
+    }
 }

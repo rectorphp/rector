@@ -83,9 +83,15 @@ PHP
             return null;
         }
 
+        $implementedInterfaceNames = $this->classManipulator->getImplementedInterfaceNames($node);
+
         foreach (array_keys($usedTraitNames) as $traitName) {
             foreach ($this->interfaceByTrait as $seekedTraitName => $interfaceName) {
                 if ($traitName !== $seekedTraitName) {
+                    continue;
+                }
+
+                if (in_array($interfaceName, $implementedInterfaceNames, true)) {
                     continue;
                 }
 
