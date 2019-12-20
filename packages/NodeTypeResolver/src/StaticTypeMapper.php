@@ -512,6 +512,10 @@ final class StaticTypeMapper
             return new Identifier('string');
         }
 
+        if ($type === 'int') {
+            return new Identifier('int');
+        }
+
         if ($type === 'array') {
             return new Identifier('array');
         }
