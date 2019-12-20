@@ -13,7 +13,7 @@ parameters:
     rector_recipe: []
 
     # importing FQN names
-    auto_import_names: true
+    auto_import_names: false
     # e.g. import \DateTime
     import_short_classes: true
     # e.g. /** @var \Some\ClassHere */

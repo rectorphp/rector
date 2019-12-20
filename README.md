@@ -193,21 +193,24 @@ parameters:
 
 ### Import Use Statements
 
-FQN classes are imported by default every time Rector performs a change, so you don't have to do it manually/after each run. You can disable it by:
+FQN classes are not imported by default. If you don't to do do it manually after every Rector run, enable it by:
 
 ```yaml
 # rector.yaml
 parameters:
-    auto_import_names: false
+    auto_import_names: true
 ```
 
-You can also fine-tune how these imports are processed using these two options :
+You can also fine-tune how these imports are processed:
 
 ```yaml
 # rector.yaml
 parameters:
-    import_short_classes: false # this will not import root namespace classes, like \DateTime or \Exception
-    import_doc_blocks: false # this will not import classes used in PHP DocBlocks, like in /** @var \Some\Class */
+    # this will not import root namespace classes, like \DateTime or \Exception
+    import_short_classes: false
+
+    # this will not import classes used in PHP DocBlocks, like in /** @var \Some\Class */
+    import_doc_blocks: false
 ```
 
 ### Limit Execution to Changed Files
