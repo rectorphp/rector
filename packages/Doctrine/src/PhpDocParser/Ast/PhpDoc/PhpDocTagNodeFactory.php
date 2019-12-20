@@ -29,6 +29,13 @@ final class PhpDocTagNodeFactory
         $this->joinTableNameResolver = $joinTableNameResolver;
     }
 
+    public function createVarTagInt(): PhpDocTagNode
+    {
+        $varTagValueNode = new VarTagValueNode(new IdentifierTypeNode('int'), '', '');
+
+        return new PhpDocTagNode('@var', $varTagValueNode);
+    }
+
     public function createVarTagUuidInterface(): PhpDocTagNode
     {
         $identifierTypeNode = new IdentifierTypeNode('\\' . UuidInterface::class);
@@ -40,6 +47,21 @@ final class PhpDocTagNodeFactory
     public function createIdTag(): PhpDocTagNode
     {
         return new SpacelessPhpDocTagNode(IdTagValueNode::SHORT_NAME, new IdTagValueNode());
+    }
+
+    public function createIdColumnTag(): PhpDocTagNode
+    {
+        $columnTagValueNode = new ColumnTagValueNode(
+            null,
+            'integer',
+            null,
+            null,
+            null,
+            null,
+            null
+        );
+
+        return new SpacelessPhpDocTagNode($columnTagValueNode::SHORT_NAME, $columnTagValueNode);
     }
 
     public function createUuidColumnTag(bool $isNullable): PhpDocTagNode
@@ -57,10 +79,10 @@ final class PhpDocTagNodeFactory
         return new SpacelessPhpDocTagNode($columnTagValueNode::SHORT_NAME, $columnTagValueNode);
     }
 
-    public function createGeneratedValueTag(): PhpDocTagNode
+    public function createGeneratedValueTag(string $strategy = 'CUSTOM'): PhpDocTagNode
     {
         return new SpacelessPhpDocTagNode(GeneratedValueTagValueNode::SHORT_NAME, new GeneratedValueTagValueNode(
-            'CUSTOM'
+            $strategy
         ));
     }
 
