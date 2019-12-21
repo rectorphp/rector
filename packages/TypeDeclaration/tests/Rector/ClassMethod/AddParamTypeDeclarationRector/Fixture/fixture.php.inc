@@ -4,7 +4,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclaratio
 
 use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\ParentInterfaceWithChangeTypeInterface;
 
-class SomeClass implements ParentInterfaceWithChangeTypeInterface
+class DetectedByParentInterface implements ParentInterfaceWithChangeTypeInterface
 {
     public function process($name)
     {
@@ -19,7 +19,7 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclaratio
 
 use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\ParentInterfaceWithChangeTypeInterface;
 
-class SomeClass implements ParentInterfaceWithChangeTypeInterface
+class DetectedByParentInterface implements ParentInterfaceWithChangeTypeInterface
 {
     public function process(string $name)
     {

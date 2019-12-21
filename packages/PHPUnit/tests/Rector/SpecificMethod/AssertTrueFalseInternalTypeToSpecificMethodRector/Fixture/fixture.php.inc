@@ -2,7 +2,7 @@
 
 namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector\Fixture;
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+final class MyIsTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
@@ -23,7 +23,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 
 namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector\Fixture;
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+final class MyIsTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {

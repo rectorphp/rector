@@ -2,7 +2,7 @@
 
 namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertIssetToSpecificMethodRector\Fixture;
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+final class MyIssetTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
@@ -19,7 +19,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 
 namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertIssetToSpecificMethodRector\Fixture;
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+final class MyIssetTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Doctrine\Rector\Class_;
 
-use Doctrine\ORM\Mapping\Id;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Doctrine\NodeFactory\EntityIdNodeFactory;
@@ -21,7 +20,7 @@ final class AddEntityIdByConditionRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $detectedTraits;
+    private $detectedTraits = [];
 
     /**
      * @var ClassManipulator
@@ -36,8 +35,11 @@ final class AddEntityIdByConditionRector extends AbstractRector
     /**
      * @param string[] $detectedTraits
      */
-    public function __construct(ClassManipulator $classManipulator, EntityIdNodeFactory $entityIdNodeFactory, array $detectedTraits = [])
-    {
+    public function __construct(
+        ClassManipulator $classManipulator,
+        EntityIdNodeFactory $entityIdNodeFactory,
+        array $detectedTraits = []
+    ) {
         $this->detectedTraits = $detectedTraits;
         $this->classManipulator = $classManipulator;
         $this->entityIdNodeFactory = $entityIdNodeFactory;
@@ -72,10 +74,7 @@ class SomeClass
     }
 }
 PHP
-, [
-
-
-            ])
+, []),
         ]);
     }
 
@@ -95,7 +94,6 @@ PHP
         if ($this->isAnonymousClass($node)) {
             return null;
         }
-
 
         if (! $this->isTraitMatch($node)) {
             return null;

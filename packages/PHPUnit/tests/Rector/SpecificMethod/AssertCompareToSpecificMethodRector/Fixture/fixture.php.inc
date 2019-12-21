@@ -2,7 +2,7 @@
 
 namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertCompareToSpecificMethodRector\Fixture;
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+final class MyAssertCompareTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
@@ -21,7 +21,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 
 namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertCompareToSpecificMethodRector\Fixture;
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+final class MyAssertCompareTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {

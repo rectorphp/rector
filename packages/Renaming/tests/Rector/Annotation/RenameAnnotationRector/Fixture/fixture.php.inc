@@ -2,7 +2,7 @@
 
 namespace Rector\Renaming\Tests\Rector\Annotation\RenameAnnotationRector\Fixture;
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+final class MyRenameClassTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @scenario
@@ -18,7 +18,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 
 namespace Rector\Renaming\Tests\Rector\Annotation\RenameAnnotationRector\Fixture;
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+final class MyRenameClassTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test

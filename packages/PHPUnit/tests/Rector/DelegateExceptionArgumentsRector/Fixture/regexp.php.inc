@@ -1,6 +1,6 @@
 <?php
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+final class MyRegexpTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
@@ -12,7 +12,7 @@ final class MyTest extends \PHPUnit\Framework\TestCase
 -----
 <?php
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+final class MyRegexpTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {

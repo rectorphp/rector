@@ -4,7 +4,7 @@ namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertInstanceOfComparisonR
 
 use Foo\Bar;
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+final class MyOfComparissonTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
@@ -22,7 +22,7 @@ namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertInstanceOfComparisonR
 
 use Foo\Bar;
 
-final class MyTest extends \PHPUnit\Framework\TestCase
+final class MyOfComparissonTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
