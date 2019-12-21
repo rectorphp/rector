@@ -2,7 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector;
 
-interface ParentInterfaceWithChangeType
+interface ParentInterfaceWithChangeTypeInterface
 {
 
 }

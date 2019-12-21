@@ -2,12 +2,15 @@
 
 namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
-class SomeClass
+class VariableReAssign
 {
     private function createHtml()
     {
         $html = new \Nette\Utils\Html();
         $html->add('someContent');
+
+        $anotherHtml = $html;
+        $anotherHtml->add('someContent');
     }
 }
 
@@ -17,12 +20,15 @@ class SomeClass
 
 namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodRector\Fixture;
 
-class SomeClass
+class VariableReAssign
 {
     private function createHtml()
     {
         $html = new \Nette\Utils\Html();
         $html->addHtml('someContent');
+
+        $anotherHtml = $html;
+        $anotherHtml->addHtml('someContent');
     }
 }
 

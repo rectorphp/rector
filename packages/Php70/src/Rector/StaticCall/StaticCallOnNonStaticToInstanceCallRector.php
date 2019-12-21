@@ -7,6 +7,7 @@ namespace Rector\Php70\Rector\StaticCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\ObjectType;
 use Rector\NodeContainer\ParsedNodesByType;
@@ -163,7 +164,7 @@ PHP
 
     private function resolveStaticCallClassName(Node $node): ?string
     {
-        if ($node->class instanceof Node\Expr\PropertyFetch) {
+        if ($node->class instanceof PropertyFetch) {
             $objectType = $this->getObjectType($node->class);
             if ($objectType instanceof ObjectType) {
                 return $objectType->getClassName();
