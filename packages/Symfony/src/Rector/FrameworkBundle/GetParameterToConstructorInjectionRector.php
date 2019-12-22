@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\Rector\FrameworkBundle;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
@@ -92,6 +93,9 @@ PHP
         /** @var String_ $stringArgument */
         $stringArgument = $node->args[0]->value;
         $parameterName = $stringArgument->value;
+
+        $parameterName = Strings::replace($parameterName, '#\.#', '_');
+
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
 
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
