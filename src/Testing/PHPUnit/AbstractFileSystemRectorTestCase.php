@@ -13,6 +13,7 @@ use Rector\FileSystemRector\FileSystemFileProcessor;
 use Rector\HttpKernel\RectorKernel;
 use ReflectionClass;
 use Symfony\Component\Yaml\Yaml;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTestCase
@@ -58,6 +59,7 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
         $fileInfo = new SmartFileInfo($file);
 
         $temporaryFilePath = $this->createTemporaryFilePath($fileInfo, $file);
+
         require_once $temporaryFilePath;
 
         $this->fileSystemFileProcessor->processFileInfo(new SmartFileInfo($temporaryFilePath));
@@ -84,6 +86,12 @@ abstract class AbstractFileSystemRectorTestCase extends AbstractGenericRectorTes
     protected function getRectorInterface(): string
     {
         return FileSystemRectorInterface::class;
+    }
+
+    protected function setParameter(string $name, $value): void
+    {
+        $parameterProvider = self::$container->get(ParameterProvider::class);
+        $parameterProvider->changeParameter($name, $value);
     }
 
     private function createContainerWithProvidedRector(): void

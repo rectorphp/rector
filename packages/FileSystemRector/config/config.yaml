@@ -1,3 +1,6 @@
+parameters:
+    project_directory: ~
+
 services:
     _defaults:
         public: true

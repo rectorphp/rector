@@ -17,6 +17,7 @@ use Rector\PhpParser\Parser\Parser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Rector\AbstractRector\AbstractRectorTrait;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use TypeError;
 
@@ -28,6 +29,11 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      * @var Configuration
      */
     protected $configuration;
+
+    /**
+     * @var ParameterProvider
+     */
+    protected $parameterProvider;
 
     /**
      * @var Parser
@@ -75,7 +81,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         Configuration $configuration,
-        BetterStandardPrinter $betterStandardPrinter
+        BetterStandardPrinter $betterStandardPrinter,
+        ParameterProvider $parameterProvider
     ): void {
         $this->parser = $parser;
         $this->parserFactory = $parserFactory;
@@ -85,6 +92,7 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->configuration = $configuration;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->parameterProvider = $parameterProvider;
     }
 
     /**

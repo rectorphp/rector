@@ -15,9 +15,9 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
      * @param string[] $expectedExceptions
      * @dataProvider provideDataForTest()
      */
-    public function test(string $originaFile, array $expectedExceptions, bool $shouldDeleteOriginalFile): void
+    public function test(string $originalFile, array $expectedExceptions, bool $shouldDeleteOriginalFile): void
     {
-        $temporaryFilePath = $this->doTestFile($originaFile);
+        $temporaryFilePath = $this->doTestFile($originalFile);
 
         foreach ($expectedExceptions as $expectedExceptionLocation => $expectedFormat) {
             $this->assertFileExists($expectedExceptionLocation);
