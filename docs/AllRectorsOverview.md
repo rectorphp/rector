@@ -1,4 +1,4 @@
-# All 401 Rectors Overview
+# All 403 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -2305,6 +2305,40 @@ Removes unneeded $a = $a assigns
 
 ## Doctrine
 
+### `AddEntityIdByConditionRector`
+
+- class: `Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector`
+
+Add entity id with annotations when meets condition
+
+```yaml
+services:
+    Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector: {  }
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+     use SomeTrait;
++
++    /**
++      * @ORM\Id
++      * @ORM\Column(type="integer")
++      * @ORM\GeneratedValue(strategy="AUTO")
++      */
++     private $id;
++
++    public function getId(): int
++    {
++        return $this->id;
++    }
+ }
+```
+
+<br>
+
 ### `AddUuidAnnotationsToIdPropertyRector`
 
 - class: `Rector\Doctrine\Rector\Property\AddUuidAnnotationsToIdPropertyRector`
@@ -3184,6 +3218,54 @@ Rename "*.phpt" file to "*Test.php" file
 - class: `Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector`
 
 Interface factories are not needed in Symfony. Clear constructor injection is used instead
+
+<br>
+
+### `FormControlToControllerAndFormTypeRector`
+
+- class: `Rector\NetteToSymfony\Rector\Assign\FormControlToControllerAndFormTypeRector`
+
+Change Form that extends Control to Controller and decoupled FormType
+
+```diff
+-use Nette\Application\UI\Form;
+-use Nette\Application\UI\Control;
+-
+-class SomeForm extends Control
++class SomeFormController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
+ {
+-	public function createComponentForm()
++	/**
++	 * @Route(...)
++	 */
++	public function actionSomeForm(\Symfony\Component\HttpFoundation\Request $request): \Symfony\Component\HttpFoundation\Response
+ 	{
+-		$form = new Form();
+-		$form->addText('name', 'Your name');
++		$form = $this->createForm(SomeFormType::class);
++		$form->handleRequest($request);
+
+-		$form->onSuccess[] = [$this, 'processForm'];
++		if ($form->isSuccess() && $form->isValid()) {
++			// process me
++		}
+ 	}
++}
+
+-	public function processForm(Form $form)
+-	{
+-        // process me
+-	}
++class SomeFormType extends \Symfony\Component\Form\AbstractType
++{
++	public function buildForm(\Symfony\Component\Form\FormBuilderInterface $formBuilder, array $options)
++    {
++        $formBuilder->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
++        	'label' => 'Your name'
++        ]);
++    }
+ }
+```
 
 <br>
 
