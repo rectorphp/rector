@@ -72,7 +72,7 @@ PHP
     public function refactor(Node $node): ?Node
     {
         foreach ($this->oldToNewMethodsByClass as $type => $oldToNewMethods) {
-            if (! $this->isObjectType($node, $type)) {
+            if (! $this->isObjectType($node->var, $type)) {
                 continue;
             }
 

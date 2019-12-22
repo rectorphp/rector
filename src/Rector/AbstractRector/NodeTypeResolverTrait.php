@@ -112,7 +112,7 @@ trait NodeTypeResolverTrait
             }
 
             // method call is variable return
-            return $this->isObjectType($node, $type);
+            return $this->isObjectType($node->var, $type);
         }
 
         if ($node instanceof StaticCall) {
