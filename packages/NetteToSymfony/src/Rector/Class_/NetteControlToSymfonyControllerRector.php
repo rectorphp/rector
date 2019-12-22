@@ -21,6 +21,9 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -125,6 +128,8 @@ PHP
 
     private function processRenderMethod(ClassMethod $classMethod): void
     {
+        $this->processGetPresenterGetSessionMethodCall($classMethod);
+
         // rename method - @todo pick
         $classMethod->name = new Identifier('action');
 
@@ -242,5 +247,37 @@ PHP
         }
 
         return Strings::substring($content, 0, -Strings::length($suffix));
+    }
+
+    private function processGetPresenterGetSessionMethodCall(ClassMethod $classMethod): void
+    {
+        $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) {
+            if (! $node instanceof MethodCall) {
+                return null;
+            }
+
+            if (! $this->isName($node->name, 'getSession')) {
+                return null;
+            }
+
+            if (! $node->var instanceof MethodCall) {
+                return null;
+            }
+
+            if (! $this->isName($node->var->name, 'getPresenter')) {
+                return null;
+            }
+
+            $node->var = new PropertyFetch(new Variable('this'), 'session');
+
+            $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+            if (! $class instanceof Class_) {
+                throw new ShouldNotHappenException();
+            }
+
+            $this->addPropertyToClass($class, new FullyQualifiedObjectType('Nette\Http\Session'), 'session');
+
+            return $node;
+        });
     }
 }

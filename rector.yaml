@@ -15,3 +15,66 @@ parameters:
 
     # so Rector code is still PHP 7.2 compatible
     php_version_features: '7.2'
+
+    rector_recipe:
+        # run "bin/rector create" to create a new Rector + tests from this config
+        package: "NetteToSymfony"
+        name: "FormControlToControllerAndFormTypeRector"
+        node_types:
+            # put main node first, it is used to create namespace
+            - "Class_"
+        description: "Change Form that extends Control to Controller and decoupled FormType"
+        code_before: |
+            <?php
+
+            use Nette\Application\UI\Form;
+            use Nette\Application\UI\Control;
+
+            class SomeForm extends Control
+            {
+            	public function createComponentForm()
+            	{
+            		$form = new Form();
+            		$form->addText('name', 'Your name');
+
+            		$form->onSuccess[] = [$this, 'processForm'];
+            	}
+
+            	public function processForm(Form $form)
+            	{
+                    // process me
+            	}
+            }
+
+        code_after: |
+            <?php
+
+            class SomeFormController extends AbstractController
+            {
+            	/**
+            	 * @Route(...)
+            	 */
+            	public function actionSomeForm(Request $request): Response
+            	{
+            		$form = $this->createForm(SomeFormType::class);
+            		$form->handleRequest($request);
+
+            		if ($form->isSuccess() && $form->isValid()) {
+            			// process me
+            		}
+            	}
+            }
+
+            class SomeFormType extends \Symfony\Component\Form\AbstractType
+            {
+            	public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
+                {
+                    $builder->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
+                    	'label' => 'Your name'
+                    ]);
+                }
+            }
+
+        source: # e.g. link to RFC or headline in upgrade guide, 1 or more in the list
+            - "https://symfony.com/doc/current/forms.html#creating-form-classes"
+        set: "nette-to-symfony" # e.g. symfony30, target config to append this rector to

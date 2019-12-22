@@ -55,9 +55,9 @@ class SomeClass implements SomeInterface
 PHP
             , [
                 '$interfaceByTrait' => [
-                    'SomeTrait' => 'SomeInterface'
-                ]
-            ])
+                    'SomeTrait' => 'SomeInterface',
+                ],
+            ]),
         ]);
     }
 

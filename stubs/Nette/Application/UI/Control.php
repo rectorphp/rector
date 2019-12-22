@@ -10,5 +10,7 @@ if (class_exists('Nette\Application\UI\Control')) {
 
 class Control
 {
-
+    public function getPresenter(): ?Presenter
+    {
+    }
 }
