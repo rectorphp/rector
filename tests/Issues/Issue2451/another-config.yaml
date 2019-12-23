@@ -1,4 +1,5 @@
 services:
     Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
-        Rector\Tests\Issues\Issue2451\Source\ApiHandlerInterface:
-            handle: 'Tomaj\NetteApi\Response\ResponseInterface'
+        $typehintForMethodByClass:
+            Rector\Tests\Issues\Issue2451\Source\ApiHandlerInterface:
+                handle: 'Tomaj\NetteApi\Response\ResponseInterface'

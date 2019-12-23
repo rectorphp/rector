@@ -2,5 +2,6 @@
 
 services:
     Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
-        Sylius\Bundle\AdminApiBundle\Model\ClientManager:
-            findClientByPublicId: '?Sylius\Bundle\AdminApiBundle\Model\ClientInterface'
+        $typehintForMethodByClass:
+            Sylius\Bundle\AdminApiBundle\Model\ClientManager:
+                findClientByPublicId: '?Sylius\Bundle\AdminApiBundle\Model\ClientInterface'

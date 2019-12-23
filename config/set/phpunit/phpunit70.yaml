@@ -3,6 +3,8 @@ imports:
 
 services:
     Rector\Renaming\Rector\Annotation\RenameAnnotationRector:
-        PHPUnit\Framework\TestCase:
-            scenario: 'test'
+        $classToAnnotationMap:
+            PHPUnit\Framework\TestCase:
+                scenario: 'test'
+
     Rector\PHPUnit\Rector\Class_\RemoveDataProviderTestPrefixRector: ~

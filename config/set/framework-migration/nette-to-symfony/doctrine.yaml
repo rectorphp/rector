@@ -1,3 +1,4 @@
 services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
-        Doctrine\Common\DataFixtures\AbstractFixture: Doctrine\Bundle\FixturesBundle\Fixture
+        $oldToNewClasses:
+            Doctrine\Common\DataFixtures\AbstractFixture: Doctrine\Bundle\FixturesBundle\Fixture

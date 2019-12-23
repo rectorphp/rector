@@ -53,7 +53,9 @@ class SomeClass
 PHP
                 ,
                 [
-                    'Cookie' => ['Cookie', 'create'],
+                    '$typeToStaticCalls' => [
+                        'Cookie' => ['Cookie', 'create'],
+                    ],
                 ]
             ),
         ]);

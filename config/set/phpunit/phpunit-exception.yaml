@@ -6,6 +6,7 @@ services:
     Rector\PHPUnit\Rector\ExceptionAnnotationRector: ~
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
-        PHPUnit\Framework\TestClass:
-            setExpectedException: 'expectedException'
-            setExpectedExceptionRegExp: 'expectedException'
+        $oldToNewMethodsByClass:
+            PHPUnit\Framework\TestClass:
+                setExpectedException: 'expectedException'
+                setExpectedExceptionRegExp: 'expectedException'

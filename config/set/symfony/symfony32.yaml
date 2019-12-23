@@ -1,8 +1,9 @@
 services:
     # dependency-injection
     Rector\Rector\Argument\ArgumentAdderRector:
-        Symfony\Component\DependencyInjection\ContainerBuilder:
-            addCompilerPass:
-                2:
-                    name: 'priority'
-                    default_value: 0
+        $positionWithDefaultValueByMethodNamesByClassTypes:
+            Symfony\Component\DependencyInjection\ContainerBuilder:
+                addCompilerPass:
+                    2:
+                        name: 'priority'
+                        default_value: 0

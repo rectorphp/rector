@@ -29,8 +29,6 @@ final class AddReturnTypeDeclarationRector extends AbstractRector
      */
     public function __construct(array $typehintForMethodByClass = [])
     {
-        dump($typehintForMethodByClass);
-
         $this->typehintForMethodByClass = $typehintForMethodByClass;
     }
 

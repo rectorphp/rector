@@ -6134,7 +6134,7 @@ Replaces defined classes by new ones.
 services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            App\SomeOldClass: App\SomeNewClass
+            App\SomeOldClass: 'App\SomeNewClass'
 ```
 
 ↓
@@ -6186,7 +6186,8 @@ Turns defined function call new one.
 ```yaml
 services:
     Rector\Renaming\Rector\Function_\RenameFunctionRector:
-        view: Laravel\Templating\render
+        $oldFunctionToNewFunction:
+            view: 'Laravel\Templating\render'
 ```
 
 ↓
@@ -6230,8 +6231,9 @@ Turns method names to new ones.
 ```yaml
 services:
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
-        SomeExampleClass:
-            oldMethod: newMethod
+        $oldToNewMethodsByClass:
+            SomeExampleClass:
+                oldMethod: 'newMethod'
 ```
 
 ↓
@@ -7776,12 +7778,13 @@ This Rector adds new default arguments in calls of defined methods and class typ
 ```yaml
 services:
     Rector\Rector\Argument\ArgumentAdderRector:
-        SomeExampleClass:
-            someMethod:
-                -
-                    name: someArgument
-                    default_value: 'true'
-                    type: SomeType
+        $positionWithDefaultValueByMethodNamesByClassTypes:
+            SomeExampleClass:
+                someMethod:
+                    -
+                        name: someArgument
+                        default_value: 'true'
+                        type: SomeType
 ```
 
 ↓
@@ -7795,12 +7798,13 @@ services:
 ```yaml
 services:
     Rector\Rector\Argument\ArgumentAdderRector:
-        SomeExampleClass:
-            someMethod:
-                -
-                    name: someArgument
-                    default_value: 'true'
-                    type: SomeType
+        $positionWithDefaultValueByMethodNamesByClassTypes:
+            SomeExampleClass:
+                someMethod:
+                    -
+                        name: someArgument
+                        default_value: 'true'
+                        type: SomeType
 ```
 
 ↓

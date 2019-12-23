@@ -1,4 +1,5 @@
 services:
     Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
-        Rector\Tests\Issues\Issue2451\Source\ApiHandlerInterface:
-            bla: 'bla'
+        $typehintForMethodByClass:
+            Rector\Tests\Issues\Issue2451\Source\ApiHandlerInterface:
+                bla: 'bla'

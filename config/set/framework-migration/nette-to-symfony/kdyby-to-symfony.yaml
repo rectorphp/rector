@@ -1,21 +1,24 @@
 services:
     Rector\Rector\Visibility\ChangeMethodVisibilityRector:
-        Kdyby\Events\Subscriber:
-            getSubscribedEvents: 'static'
+        $methodToVisibilityByClass:
+            Kdyby\Events\Subscriber:
+                getSubscribedEvents: 'static'
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
-        # Kdyby → Symfony
-        Kdyby\Translation\Translator:
-            translate: 'trans'
-        Kdyby\RabbitMq\IConsumer:
-            process: 'execute'
+        $oldToNewMethodsByClass:
+            # Kdyby → Symfony
+            Kdyby\Translation\Translator:
+                translate: 'trans'
+            Kdyby\RabbitMq\IConsumer:
+                process: 'execute'
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
-        # Kdyby → Symfony
-        Kdyby\RabbitMq\IConsumer: 'OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface'
-        Kdyby\RabbitMq\IProducer: 'OldSound\RabbitMqBundle\RabbitMq\ProducerInterface'
-        Kdyby\Monolog\Logger: 'Psr\Log\LoggerInterface'
-        Kdyby\Events\Subscriber: 'Symfony\Component\EventDispatcher\EventSubscriberInterface'
-        Kdyby\Translation\Translator: 'Symfony\Contracts\Translation\TranslatorInterface'
+        $oldToNewClasses:
+            # Kdyby → Symfony
+            Kdyby\RabbitMq\IConsumer: 'OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface'
+            Kdyby\RabbitMq\IProducer: 'OldSound\RabbitMqBundle\RabbitMq\ProducerInterface'
+            Kdyby\Monolog\Logger: 'Psr\Log\LoggerInterface'
+            Kdyby\Events\Subscriber: 'Symfony\Component\EventDispatcher\EventSubscriberInterface'
+            Kdyby\Translation\Translator: 'Symfony\Contracts\Translation\TranslatorInterface'
 
     Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector: ~

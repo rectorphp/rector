@@ -4,25 +4,30 @@ imports:
 services:
     # https://github.com/rectorphp/rector/issues/1024
     Rector\Rector\Typehint\ParentTypehintedArgumentRector:
-        PHPUnit\Framework\TestCase:
-            __construct:
-                dataName: '' # no type
+        $typehintForArgumentByMethodAndClass:
+            PHPUnit\Framework\TestCase:
+                __construct:
+                    dataName: '' # no type
 
     Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector: ~
     Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector: ~
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
-        # https://github.com/sebastianbergmann/phpunit/issues/3123
-        'PHPUnit_Framework_MockObject_MockObject': 'PHPUnit\Framework\MockObject\MockObject'
-    Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector: ~
+        $oldToNewClasses:
+            # https://github.com/sebastianbergmann/phpunit/issues/3123
+            PHPUnit_Framework_MockObject_MockObject: 'PHPUnit\Framework\MockObject\MockObject'
+
+    Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector: null
 
     Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
-        PHPUnit\Framework\TestCase:
-            setUpBeforeClass: 'void'
-            setUp: 'void'
-            assertPreConditions: 'void'
-            assertPostConditions: 'void'
-            tearDown: 'void'
-            tearDownAfterClass: 'void'
-            onNotSuccessfulTest: 'void'
+        $typehintForMethodByClass:
+            PHPUnit\Framework\TestCase:
+                setUpBeforeClass: 'void'
+                setUp: 'void'
+                assertPreConditions: 'void'
+                assertPostConditions: 'void'
+                tearDown: 'void'
+                tearDownAfterClass: 'void'
+                onNotSuccessfulTest: 'void'
+
     Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector: ~

@@ -2,5 +2,6 @@
 
 services:
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
-        Cake\ORM\Entity:
-            'visibleProperties': 'getVisible'
+        $oldToNewMethodsByClass:
+            Cake\ORM\Entity:
+                'visibleProperties': 'getVisible'

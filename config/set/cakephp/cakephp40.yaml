@@ -2,33 +2,36 @@
 
 services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
-        Cake\Database\Type: 'Cake\Database\TypeFactory'
-        Cake\Console\ConsoleErrorHandler: 'Cake\Error\ConsoleErrorHandler'
+        $oldToNewClasses:
+            Cake\Database\Type: 'Cake\Database\TypeFactory'
+            Cake\Console\ConsoleErrorHandler: 'Cake\Error\ConsoleErrorHandler'
 
     Rector\Renaming\Rector\Constant\RenameClassConstantRector:
-        Cake\View\View:
-            NAME_ELEMENT: TYPE_ELEMENT
-            NAME_LAYOUT: TYPE_LAYOUT
-        Cake\Mailer\Email:
-            MESSAGE_HTML: 'Cake\Mailer\Message::MESSAGE_HTML'
-            MESSAGE_TEXT: 'Cake\Mailer\Message::MESSAGE_TEXT'
-            MESSAGE_BOTH: 'Cake\Mailer\Message::MESSAGE_BOTH'
-            EMAIL_PATTERN: 'Cake\Mailer\Message::EMAIL_PATTERN'
+        $oldToNewConstantsByClass:
+            Cake\View\View:
+                NAME_ELEMENT: 'TYPE_ELEMENT'
+                NAME_LAYOUT: 'TYPE_LAYOUT'
+            Cake\Mailer\Email:
+                MESSAGE_HTML: 'Cake\Mailer\Message::MESSAGE_HTML'
+                MESSAGE_TEXT: 'Cake\Mailer\Message::MESSAGE_TEXT'
+                MESSAGE_BOTH: 'Cake\Mailer\Message::MESSAGE_BOTH'
+                EMAIL_PATTERN: 'Cake\Mailer\Message::EMAIL_PATTERN'
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
-        Cake\Form\Form:
-            errors: 'getErrors'
-        Cake\Mailer\Email:
-            set: 'setViewVars'
-        Cake\ORM\EntityInterface:
-            unsetProperty: 'unset'
-        Cake\Cache\Cache:
-            engine: 'pool'
-        Cake\Http\Cookie\Cookie:
-            getStringValue: 'getScalarValue'
-        Cake\Validation\Validator:
-            containsNonAlphaNumeric: 'notAlphaNumeric'
-            errors: 'validate'
+        $oldToNewMethodsByClass:
+            Cake\Form\Form:
+                errors: 'getErrors'
+            Cake\Mailer\Email:
+                set: 'setViewVars'
+            Cake\ORM\EntityInterface:
+                unsetProperty: 'unset'
+            Cake\Cache\Cache:
+                engine: 'pool'
+            Cake\Http\Cookie\Cookie:
+                getStringValue: 'getScalarValue'
+            Cake\Validation\Validator:
+                containsNonAlphaNumeric: 'notAlphaNumeric'
+                errors: 'validate'
 
     Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector:
         $oldToNewMethodByClasses:
@@ -43,27 +46,28 @@ services:
                 _properties: _fields
 
     Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
-        Cake\Http\BaseApplication:
-            bootstrap: 'void'
-            bootstrapCli: 'void'
-            middleware: 'Cake\Http\MiddlewareQueue'
-        Cake\Console\Shell:
-            initialize: 'void'
-        Cake\Controller\Component:
-            initialize: 'void'
-        Cake\Controller\Controller:
-            initialize: 'void'
-            render: 'Cake\Http\Response'
-        Cake\ORM\Behavior:
-            initialize: 'void'
-        Cake\ORM\Table:
-            initialize: 'void'
-            updateAll: 'int'
-            deleteAll: 'int'
-            validationDefault: 'Cake\Validation\Validator'
-            buildRules: 'Cake\ORM\RulesChecker'
-        Cake\View\Helper:
-            initialize: 'void'
+        $typehintForMethodByClass:
+            Cake\Http\BaseApplication:
+                bootstrap: 'void'
+                bootstrapCli: 'void'
+                middleware: 'Cake\Http\MiddlewareQueue'
+            Cake\Console\Shell:
+                initialize: 'void'
+            Cake\Controller\Component:
+                initialize: 'void'
+            Cake\Controller\Controller:
+                initialize: 'void'
+                render: 'Cake\Http\Response'
+            Cake\ORM\Behavior:
+                initialize: 'void'
+            Cake\ORM\Table:
+                initialize: 'void'
+                updateAll: 'int'
+                deleteAll: 'int'
+                validationDefault: 'Cake\Validation\Validator'
+                buildRules: 'Cake\ORM\RulesChecker'
+            Cake\View\Helper:
+                initialize: 'void'
 
     Rector\Rector\Typehint\ParentTypehintedArgumentRector:
         $typehintForArgumentByMethodAndClass:
@@ -137,15 +141,16 @@ services:
               replace_with: 'withAttribute'
 
     Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
-        Cake\Console\ConsoleIo:
-            styles:
-                set: 'setStyle'
-                get: 'getStyle'
-        Cake\Console\ConsoleOutput:
-            styles:
-                set: 'setStyle'
-                get: 'getStyle'
-        Cake\ORM\EntityInterface:
-            isNew:
-                set: 'setNew'
-                get: 'isNew'
+        $methodNamesByTypes:
+            Cake\Console\ConsoleIo:
+                styles:
+                    set: 'setStyle'
+                    get: 'getStyle'
+            Cake\Console\ConsoleOutput:
+                styles:
+                    set: 'setStyle'
+                    get: 'getStyle'
+            Cake\ORM\EntityInterface:
+                isNew:
+                    set: 'setNew'
+                    get: 'isNew'
