@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\DependencyInjection\Loader;
 
+use Rector\Contract\Rector\RectorInterface;
+use Rector\DependencyInjection\Collector\RectorServiceArgumentCollector;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symplify\PackageBuilder\Yaml\FileLoader\AbstractParameterMergingYamlFileLoader;
@@ -21,10 +23,19 @@ final class TolerantRectorYamlFileLoader extends AbstractParameterMergingYamlFil
      */
     private $classExistenceValidator;
 
-    public function __construct(ContainerBuilder $containerBuilder, FileLocatorInterface $fileLocator)
-    {
+    /**
+     * @var RectorServiceArgumentCollector
+     */
+    private $rectorServiceArgumentCollector;
+
+    public function __construct(
+        ContainerBuilder $containerBuilder,
+        FileLocatorInterface $fileLocator,
+        RectorServiceArgumentCollector $rectorServiceArgumentCollector
+    ) {
         $this->parameterInImportResolver = new ParameterInImportResolver();
         $this->classExistenceValidator = new ClassExistenceValidator();
+        $this->rectorServiceArgumentCollector = $rectorServiceArgumentCollector;
 
         parent::__construct($containerBuilder, $fileLocator);
     }
@@ -41,19 +52,35 @@ final class TolerantRectorYamlFileLoader extends AbstractParameterMergingYamlFil
             return [];
         }
 
-        // @todo: merge service arguments as well
-        foreach ($configuration['services'] ?? [] as $service) {
-            if (! isset($service['arguments'])) {
-                continue;
-            }
-
-//            dump($service['arguments']);
-        }
+        $this->collectRectorServiceArguments($configuration);
 
         $this->classExistenceValidator->ensureClassesAreValid($configuration, $file);
 
-//        $configuration = $this->rectorServiceParametersShifter->process($configuration, $file);
-
         return $this->parameterInImportResolver->process($configuration);
+    }
+
+    private function collectRectorServiceArguments(array $configuration): void
+    {
+        if (! isset($configuration['services'])) {
+            return;
+        }
+
+        // merge service arguments as well
+        foreach ($configuration['services'] as $className => $service) {
+            if (! is_string($className)) {
+                continue;
+            }
+
+            // skip non-rectors
+            if (! is_a($className, RectorInterface::class, true)) {
+                continue;
+            }
+
+            if (! is_array($service)) {
+                continue;
+            }
+
+            $this->rectorServiceArgumentCollector->collectFromServiceAndRectorClass($service, $className);
+        }
     }
 }

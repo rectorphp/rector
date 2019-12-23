@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\HttpKernel;
 
 use Rector\Contract\Rector\RectorInterface;
+use Rector\DependencyInjection\Collector\RectorServiceArgumentCollector;
+use Rector\DependencyInjection\CompilerPass\MergeImportedRectorServiceArgumentsCompilerPass;
 use Rector\DependencyInjection\CompilerPass\RemoveExcludedRectorsCompilerPass;
 use Rector\DependencyInjection\Loader\TolerantRectorYamlFileLoader;
 use Symfony\Component\Config\Loader\DelegatingLoader;
@@ -28,6 +30,18 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
      * @var string[]
      */
     private $configs = [];
+
+    /**
+     * @var RectorServiceArgumentCollector
+     */
+    private $rectorServiceArgumentCollector;
+
+    public function __construct(string $environment, bool $debug)
+    {
+        $this->rectorServiceArgumentCollector = new RectorServiceArgumentCollector();
+
+        parent::__construct($environment, $debug);
+    }
 
     public function getCacheDir(): string
     {
@@ -77,6 +91,11 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
         $containerBuilder->addCompilerPass(new AutowireInterfacesCompilerPass([RectorInterface::class]));
 
         $containerBuilder->addCompilerPass(new AutoBindParametersCompilerPass());
+
+        // add all merged arguments of Rector services
+        $containerBuilder->addCompilerPass(
+            new MergeImportedRectorServiceArgumentsCompilerPass($this->rectorServiceArgumentCollector)
+        );
     }
 
     /**
@@ -89,7 +108,7 @@ final class RectorKernel extends Kernel implements ExtraConfigAwareKernelInterfa
 
         $loaderResolver = new LoaderResolver([
             new GlobFileLoader($kernelFileLocator),
-            new TolerantRectorYamlFileLoader($container, $kernelFileLocator),
+            new TolerantRectorYamlFileLoader($container, $kernelFileLocator, $this->rectorServiceArgumentCollector),
         ]);
 
         return new DelegatingLoader($loaderResolver);

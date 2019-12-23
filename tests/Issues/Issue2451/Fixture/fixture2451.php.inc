@@ -6,9 +6,8 @@ use Rector\Tests\Issues\Issue2451\Source\AbstractBaseHandler;
 
 class Issue2451 extends AbstractBaseHandler
 {
-    public function handle($params)
+    public function handle()
     {
-        // do something
     }
 }
 
@@ -22,9 +21,8 @@ use Rector\Tests\Issues\Issue2451\Source\AbstractBaseHandler;
 
 class Issue2451 extends AbstractBaseHandler
 {
-    public function handle($params): \Tomaj\NetteApi\Response\ResponseInterface
+    public function handle(): \Tomaj\NetteApi\Response\ResponseInterface
     {
-        // do something
     }
 }
 
