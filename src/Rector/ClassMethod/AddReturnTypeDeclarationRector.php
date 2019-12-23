@@ -39,14 +39,18 @@ final class AddReturnTypeDeclarationRector extends AbstractRector
                 <<<'PHP'
 class SomeClass
 {
-    public getData();
+    public getData()
+    {
+    }
 }
 PHP
                 ,
                 <<<'PHP'
 class SomeClass
 {
-    public getData(): array;
+    public getData(): array
+    {
+    }
 }
 PHP
                 ,

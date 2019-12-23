@@ -9,11 +9,12 @@ services:
     Rector\Php72\Rector\ConstFetch\BarewordStringRector: ~
 
     Rector\Renaming\Rector\Function_\RenameFunctionRector:
-        jpeg2wbmp: 'imagecreatefromjpeg' # and imagewbmp
-        png2wbmp: 'imagecreatefrompng' # or imagewbmp
-        # http://php.net/manual/en/migration72.deprecated.php#migration72.deprecated.gmp_random-function
-        gmp_random: 'gmp_random_bits' # or gmp_random_range
-        read_exif_data: 'exif_read_data'
+        $oldFunctionToNewFunction:
+            jpeg2wbmp: 'imagecreatefromjpeg' # and imagewbmp
+            png2wbmp: 'imagecreatefrompng' # or imagewbmp
+            # http://php.net/manual/en/migration72.deprecated.php#migration72.deprecated.gmp_random-function
+            gmp_random: 'gmp_random_bits' # or gmp_random_range
+            read_exif_data: 'exif_read_data'
 
     Rector\Php72\Rector\FuncCall\GetClassOnNullRector: ~
     Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector: ~

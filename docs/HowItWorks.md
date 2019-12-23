@@ -66,10 +66,10 @@ services:
     Rector\PHPUnit\Rector\ExceptionAnnotationRector: ~
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
-        $perClassOldToNewMethods:
-                'PHPUnit\Framework\TestClass':
-                    'setExpectedException': 'expectedException'
-                    'setExpectedExceptionRegExp': 'expectedException'
+        $oldToNewMethodsByClass:
+            PHPUnit\Framework\TestClass:
+                setExpectedException: 'expectedException'
+                setExpectedExceptionRegExp: 'expectedException'
 ```
 
 ### 2.3 Save File/Diff Phase

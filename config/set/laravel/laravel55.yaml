@@ -1,14 +1,17 @@
 # see: https://laravel.com/docs/5.5/upgrade
 services:
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
-        Illuminate\Console\Command:
-            fire: 'handle'
+        $oldToNewMethodsByClass:
+            Illuminate\Console\Command:
+                fire: 'handle'
 
     Rector\Rector\Property\RenamePropertyRector:
-        Illuminate\Database\Eloquent\Concerns\HasEvents:
-            events: 'dispatchesEvents'
-        Illuminate\Database\Eloquent\Relations\Pivot:
-            parent: 'pivotParent'
+        $oldToNewPropertyByTypes:
+            Illuminate\Database\Eloquent\Concerns\HasEvents:
+                events: 'dispatchesEvents'
+            Illuminate\Database\Eloquent\Relations\Pivot:
+                parent: 'pivotParent'
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
-        Illuminate\Translation\LoaderInterface: 'Illuminate\Contracts\Translation\Loader'
+        $oldToNewClasses:
+            Illuminate\Translation\LoaderInterface: 'Illuminate\Contracts\Translation\Loader'

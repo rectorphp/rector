@@ -2,5 +2,6 @@
 
 services:
     Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
-        Sylius\Bundle\CoreBundle\Templating\Helper\VariantResolverHelper:
-            resolveVariant: '?Sylius\Component\Product\Model\ProductVariantInterface'
+        $typehintForMethodByClass:
+            Sylius\Bundle\CoreBundle\Templating\Helper\VariantResolverHelper:
+                resolveVariant: '?Sylius\Component\Product\Model\ProductVariantInterface'

@@ -15,7 +15,7 @@ use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\Function_\RenameFunctionRector\RenameFunctionRectorTest
+ * @see \Rector\Renaming\Tests\Rector\Function_\RenameFunctionRector\RenameFunctionRectorTest
  */
 final class RenameFunctionRector extends AbstractRector
 {

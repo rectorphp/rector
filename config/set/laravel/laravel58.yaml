@@ -8,14 +8,16 @@ services:
     Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector: ~
 
     Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
-        Illuminate\Contracts\Cache\Repository:
-            put: 'bool'
-            forever: 'bool'
-        Illuminate\Contracts\Cache\Store:
-            put: 'bool'
-            putMany: 'bool'
-            forever: 'bool'
+        $typehintForMethodByClass:
+            Illuminate\Contracts\Cache\Repository:
+                put: 'bool'
+                forever: 'bool'
+            Illuminate\Contracts\Cache\Store:
+                put: 'bool'
+                putMany: 'bool'
+                forever: 'bool'
 
     Rector\Rector\Property\RenamePropertyRector:
-        Illuminate\Routing\UrlGenerator:
-            cachedSchema: 'cachedScheme'
+        $oldToNewPropertyByTypes:
+            Illuminate\Routing\UrlGenerator:
+                cachedSchema: 'cachedScheme'

@@ -7,11 +7,12 @@ services:
     Rector\Shopware\Rector\MethodCall\ReplaceEnlightResponseWithSymfonyResponseRector: ~
 
     Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
-        Enlight_Controller_Response_Response:
-            getHttpResponseCode: getStatusCode
-            setHttpResponseCode: setStatusCode
-            sendCookies: sendHeaders
-            setBody: setContent
+        $oldToNewMethodsByClass:
+            Enlight_Controller_Response_Response:
+                getHttpResponseCode: getStatusCode
+                setHttpResponseCode: setStatusCode
+                sendCookies: sendHeaders
+                setBody: setContent
 
     Rector\Shopware\Rector\ClassConstFetch\ShopwareVersionConstsRector: ~
     Rector\Shopware\Rector\MethodCall\ShopRegistrationServiceRector: ~

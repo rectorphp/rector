@@ -9,5 +9,6 @@ services:
     Rector\Symfony\Rector\Process\ProcessBuilderGetProcessRector: ~
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
-        'Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest': 'Symfony\Component\Validator\Test\ConstraintValidatorTestCase'
-        'Symfony\Component\Process\ProcessBuilder': 'Symfony\Component\Process\Process'
+        $oldToNewClasses:
+            'Symfony\Component\Validator\Tests\Constraints\AbstractConstraintValidatorTest': 'Symfony\Component\Validator\Test\ConstraintValidatorTestCase'
+            'Symfony\Component\Process\ProcessBuilder': 'Symfony\Component\Process\Process'

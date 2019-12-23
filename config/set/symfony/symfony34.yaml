@@ -1,7 +1,9 @@
 services:
     Rector\Rector\Argument\ArgumentRemoverRector:
-        Symfony\Component\Yaml\Yaml:
-            parse:
-                2:
-                    - 'Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'
+        $positionsByMethodNameByClassType:
+            Symfony\Component\Yaml\Yaml:
+                parse:
+                    2:
+                        - 'Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'
+
     Rector\Symfony\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector: ~

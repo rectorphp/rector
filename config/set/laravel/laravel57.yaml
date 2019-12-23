@@ -1,27 +1,31 @@
 # see: https://laravel.com/docs/5.7/upgrade
 services:
     Rector\Rector\Visibility\ChangeMethodVisibilityRector:
-        Illuminate\Routing\Router:
-            addRoute: 'public'
-        Illuminate\Contracts\Auth\Access\Gate:
-            raw: 'public'
+        $methodToVisibilityByClass:
+            Illuminate\Routing\Router:
+                addRoute: 'public'
+            Illuminate\Contracts\Auth\Access\Gate:
+                raw: 'public'
 
     Rector\Rector\Argument\ArgumentAdderRector:
-        Illuminate\Auth\Middleware\Authenticate:
-            authenticate:
-                name: 'request'
-        Illuminate\Foundation\Auth\ResetsPasswords:
-            sendResetResponse:
-                name: 'request'
-                type: 'Illuminate\Http\Illuminate\Http'
-        Illuminate\Foundation\Auth\SendsPasswordResetEmails:
-            sendResetLinkResponse:
-                name: 'request'
-                type: 'Illuminate\Http\Illuminate\Http'
+        $positionWithDefaultValueByMethodNamesByClassTypes:
+            Illuminate\Auth\Middleware\Authenticate:
+                authenticate:
+                    name: 'request'
+            Illuminate\Foundation\Auth\ResetsPasswords:
+                sendResetResponse:
+                    name: 'request'
+                    type: 'Illuminate\Http\Illuminate\Http'
+            Illuminate\Foundation\Auth\SendsPasswordResetEmails:
+                sendResetLinkResponse:
+                    name: 'request'
+                    type: 'Illuminate\Http\Illuminate\Http'
+
     Rector\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector: ~
 
     Rector\Rector\Argument\ArgumentRemoverRector:
-        Illuminate\Foundation\Application:
-            register:
-                1:
-                    name: 'options'
+        $positionsByMethodNameByClassType:
+            Illuminate\Foundation\Application:
+                register:
+                    1:
+                        name: 'options'
