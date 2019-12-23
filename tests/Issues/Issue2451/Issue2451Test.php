@@ -10,8 +10,6 @@ final class Issue2451Test extends AbstractRectorTestCase
 {
     public function test(): void
     {
-        $this->markTestSkipped('Resolve after removing shifter');
-
         $this->doTestFile(__DIR__ . '/Fixture/fixture2451.php.inc');
     }
 
