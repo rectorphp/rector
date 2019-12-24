@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -83,6 +84,20 @@ final class ClassMethodManipulator
         $arguments = $this->extractArgumentsFromCompactFuncCalls($compactFuncCalls);
 
         return $this->nameResolver->isNames($param, $arguments);
+    }
+
+    public function isNamedConstructor(ClassMethod $classMethod): bool
+    {
+        if (! $this->nameResolver->isName($classMethod, '__construct')) {
+            return false;
+        }
+
+        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
+            return false;
+        }
+
+        return $classMethod->isPrivate() || (! $classNode->isFinal() && $classMethod->isProtected());
     }
 
     public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod, ?string $methodName = null): bool

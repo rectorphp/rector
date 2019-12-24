@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -17,6 +18,16 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class RemoveDeadConstructorRector extends AbstractRector
 {
+    /**
+     * @var ClassMethodManipulator
+     */
+    private $classMethodManipulator;
+
+    public function __construct(ClassMethodManipulator $classMethodManipulator)
+    {
+        $this->classMethodManipulator = $classMethodManipulator;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Remove empty constructor', [
@@ -65,8 +76,7 @@ PHP
             return null;
         }
 
-        // Skip private / protected (on abstract classes) as they lock creating new instances via `new ClassName()`
-        if ($node->isPrivate() || (!$classNode->isFinal() && $node->isProtected())) {
+        if ($this->classMethodManipulator->isNamedConstructor($node)) {
             return null;
         }
 
