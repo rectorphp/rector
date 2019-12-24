@@ -2,7 +2,7 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\Fixture;
 
-class KeepProtectedConstructor
+abstract class KeepProtectedConstructorOnAbstractClass
 {
     protected function __construct()
     {

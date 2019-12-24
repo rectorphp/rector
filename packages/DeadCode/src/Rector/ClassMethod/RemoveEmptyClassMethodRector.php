@@ -80,6 +80,11 @@ PHP
             return null;
         }
 
+        // Skip private / protected (on abstract classes) constructors as they lock creating new instances via `new ClassName()`
+        if (($node->isPrivate() || (!$classNode->isFinal() && $node->isProtected())) && $this->isName($node, '__construct')) {
+            return null;
+        }
+
         if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($node)) {
             return null;
         }

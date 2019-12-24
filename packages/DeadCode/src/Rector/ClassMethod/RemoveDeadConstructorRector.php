@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -50,6 +52,11 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
+            return null;
+        }
+
         if (! $this->isName($node, '__construct')) {
             return null;
         }
@@ -58,8 +65,8 @@ PHP
             return null;
         }
 
-        // Skip private as they lock creating new instances via `new ClassName()`
-        if ($node->isPrivate()) {
+        // Skip private / protected (on abstract classes) as they lock creating new instances via `new ClassName()`
+        if ($node->isPrivate() || (!$classNode->isFinal() && $node->isProtected())) {
             return null;
         }
 
