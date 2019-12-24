@@ -80,8 +80,10 @@ final class FilesFinder
         if ($matchDiff) {
             $gitDiffFiles = $this->getGitDiff();
 
-            $smartFileInfos = array_filter($smartFileInfos, function ($splFile) use ($gitDiffFiles): bool {
-                return in_array($splFile->getRealPath(), $gitDiffFiles, true);
+            $smartFileInfos = array_filter($smartFileInfos, function (SmartFileInfo $fileInfo) use (
+                $gitDiffFiles
+            ): bool {
+                return in_array($fileInfo->getRealPath(), $gitDiffFiles, true);
             });
 
             $smartFileInfos = array_values($smartFileInfos);

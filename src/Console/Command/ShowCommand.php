@@ -7,11 +7,11 @@ namespace Rector\Console\Command;
 use Rector\Console\Shell;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Php\TypeAnalyzer;
+use Rector\Yaml\YamlPrinter;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
 final class ShowCommand extends AbstractCommand
@@ -32,15 +32,25 @@ final class ShowCommand extends AbstractCommand
     private $typeAnalyzer;
 
     /**
+     * @var YamlPrinter
+     */
+    private $yamlPrinter;
+
+    /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(SymfonyStyle $symfonyStyle, array $rectors, TypeAnalyzer $typeAnalyzer)
-    {
+    public function __construct(
+        SymfonyStyle $symfonyStyle,
+        array $rectors,
+        TypeAnalyzer $typeAnalyzer,
+        YamlPrinter $yamlPrinter
+    ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->rectors = $rectors;
+        $this->typeAnalyzer = $typeAnalyzer;
+        $this->yamlPrinter = $yamlPrinter;
 
         parent::__construct();
-        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     protected function configure(): void
@@ -60,7 +70,7 @@ final class ShowCommand extends AbstractCommand
                 continue;
             }
 
-            $configurationYamlContent = Yaml::dump($configuration, 10, 4, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
+            $configurationYamlContent = $this->yamlPrinter->printYamlToString($configuration);
 
             $lines = explode(PHP_EOL, $configurationYamlContent);
             $indentedContent = '      ' . implode(PHP_EOL . '      ', $lines);

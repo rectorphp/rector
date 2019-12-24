@@ -79,6 +79,11 @@ jobs:
             name: Rector
             script:
                 - composer rector
+        -
+            php: 7.3
+            name: "Scan Fatal Errors"
+            script:
+                - bin/rector scan-fatal-errors tests/Source/FatalErrors
 
         -
             name: Documentation

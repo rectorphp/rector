@@ -65,4 +65,9 @@ final class Option
      * @var string
      */
     public const SYMFONY_CONTAINER_XML_PATH_PARAMETER = 'symfony_container_xml_path';
+
+    /**
+     * @var string
+     */
+    public const DUMP = 'dump';
 }
