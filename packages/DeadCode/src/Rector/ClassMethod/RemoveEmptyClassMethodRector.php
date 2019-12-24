@@ -80,6 +80,10 @@ PHP
             return null;
         }
 
+        if ($this->classMethodManipulator->isNamedConstructor($node)) {
+            return null;
+        }
+
         if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($node)) {
             return null;
         }
