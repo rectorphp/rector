@@ -45,7 +45,7 @@ final class ErrorScanner
 
         foreach ($fileInfos as $fileInfo) {
             $currentCommandLine = $commandLine . PHP_EOL;
-            $currentCommandLine .= sprintf('include "%s";',  $fileInfo->getRelativeFilePathFromCwd());
+            $currentCommandLine .= sprintf('include "%s";', $fileInfo->getRelativeFilePathFromCwd());
 
             $currentCommandLine = sprintf("php -r '%s'", $currentCommandLine);
 
