@@ -5,7 +5,6 @@ parameters:
     exclude_paths:
         - "/Fixture/"
         - "/Expected/"
-        - "/Source/"
         - "packages/Symfony/src/Bridge/DefaultAnalyzedSymfonyApplicationContainer.php"
         - "src/Testing/PHPUnit/AbstractRectorTestCase.php"
         - "packages/Php/tests/Rector/Name/ReservedObjectRector/*"

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Scan;
 
 use Rector\FileSystem\FilesFinder;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 
 final class ErrorScanner
@@ -19,9 +20,15 @@ final class ErrorScanner
      */
     private $filesFinder;
 
-    public function __construct(FilesFinder $filesFinder)
+    /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
+
+    public function __construct(FilesFinder $filesFinder, SymfonyStyle $symfonyStyle)
     {
         $this->filesFinder = $filesFinder;
+        $this->symfonyStyle = $symfonyStyle;
     }
 
     /**
@@ -41,6 +48,9 @@ final class ErrorScanner
             $currentCommandLine .= sprintf('include "%s";',  $fileInfo->getRelativeFilePathFromCwd());
 
             $currentCommandLine = sprintf("php -r '%s'", $currentCommandLine);
+
+            $this->symfonyStyle->note('Running PHP in sub-process: ' . $currentCommandLine);
+
             $process = Process::fromShellCommandline($currentCommandLine);
             $process->run();
 
