@@ -47,7 +47,7 @@ foreach ($fileInfos as $fileInfo) {
 
 ### 2.2 Rectify Phase
 
-- When all nodes are ready, applicies iterates all active Rectors
+- When all nodes are ready, application iterates all active Rectors
 - Each node is compared to `$rector->getNodeTypes()` method to see, if this Rector should do some work on it, e.g. is this class name called `OldClassName`?
 - If it doesn't match, it goes to next node.
 - If it matches, the `$rector->reconstruct($node)` method is called
