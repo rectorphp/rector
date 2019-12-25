@@ -148,6 +148,7 @@ final class BetterPhpDocParser extends PhpDocParser
     {
         // needed for reference support in params, see https://github.com/rectorphp/rector/issues/1734
         $tagValueNode = null;
+
         foreach ($this->phpDocNodeFactories as $phpDocNodeFactory) {
             // to prevent circular reference of this service
             if ($phpDocNodeFactory instanceof PhpDocParserAwareInterface) {

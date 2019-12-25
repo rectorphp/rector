@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Rector\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\TraitUse;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -92,8 +90,7 @@ PHP
         $traitNames = array_reverse($traitNames);
 
         foreach ($traitNames as $traitName) {
-            $traitUseNode = new TraitUse([new FullyQualified($traitName)]);
-            $this->classManipulator->addAsFirstTrait($node, $traitUseNode);
+            $this->classManipulator->addAsFirstTrait($node, $traitName);
         }
 
         $this->removeParentClass($node);

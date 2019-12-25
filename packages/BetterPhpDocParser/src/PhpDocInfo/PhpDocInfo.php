@@ -209,9 +209,11 @@ final class PhpDocInfo
 
         foreach ($this->phpDocNode->children as $phpDocChildNode) {
             if ($phpDocChildNode instanceof PhpDocTagNode) {
-                if (is_a($phpDocChildNode->value, $type, true)) {
-                    return $phpDocChildNode->value;
+                if (! is_a($phpDocChildNode->value, $type, true)) {
+                    continue;
                 }
+
+                return $phpDocChildNode->value;
             }
         }
 
