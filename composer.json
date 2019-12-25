@@ -103,7 +103,8 @@
             "Rector\\StrictCodeQuality\\": "packages/StrictCodeQuality/src",
             "Rector\\DynamicTypeAnalysis\\": "packages/DynamicTypeAnalysis/src",
             "Rector\\PhpDeglobalize\\": "packages/PhpDeglobalize/src",
-            "Rector\\Phalcon\\": "packages/Phalcon/src"
+            "Rector\\Phalcon\\": "packages/Phalcon/src",
+            "Rector\\DoctrineGedmoToKnplabs\\": "packages/DoctrineGedmoToKnplabs/src"
         }
     },
     "autoload-dev": {
@@ -162,7 +163,8 @@
             "Rector\\StrictCodeQuality\\Tests\\": "packages/StrictCodeQuality/tests",
             "Rector\\DynamicTypeAnalysis\\Tests\\": "packages/DynamicTypeAnalysis/tests",
             "Rector\\PhpDeglobalize\\Tests\\": "packages/PhpDeglobalize/tests",
-            "Rector\\Phalcon\\Tests\\": "packages/Phalcon/tests"
+            "Rector\\Phalcon\\Tests\\": "packages/Phalcon/tests",
+            "Rector\\DoctrineGedmoToKnplabs\\Tests\\": "packages/DoctrineGedmoToKnplabs/tests"
         },
         "classmap": [
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",

@@ -109,9 +109,11 @@ final class ClassManipulator
         $class->stmts[] = $stmt;
     }
 
-    public function addAsFirstTrait(Class_ $class, Stmt $stmt): void
+    public function addAsFirstTrait(Class_ $class, string $traitName): void
     {
-        $this->addStatementToClassBeforeTypes($class, $stmt, TraitUse::class, Property::class);
+        $trait = new TraitUse([new Name\FullyQualified($traitName)]);
+
+        $this->addStatementToClassBeforeTypes($class, $trait, TraitUse::class, Property::class);
     }
 
     /**
@@ -389,6 +391,35 @@ final class ClassManipulator
         }
 
         return false;
+    }
+
+    public function hasClassTrait(Class_ $class, string $desiredTrait): bool
+    {
+        foreach ($class->getTraitUses() as $traitUse) {
+            foreach ($traitUse->traits as $traitTrait) {
+                if (! $this->nameResolver->isName($traitTrait, $desiredTrait)) {
+                    continue;
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function replaceTrait(Class_ $class, string $oldTrait, string $newTrait): void
+    {
+        foreach ($class->getTraitUses() as $traitUse) {
+            foreach ($traitUse->traits as $key => $traitTrait) {
+                if (! $this->nameResolver->isName($traitTrait, $oldTrait)) {
+                    continue;
+                }
+
+                $traitUse->traits[$key] = new Name\FullyQualified($newTrait);
+                break;
+            }
+        }
     }
 
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool

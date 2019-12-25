@@ -25,7 +25,6 @@ final class ClassAnnotationMatcher
         }
 
         $fullyQualifiedClassNode = $this->matchFullAnnotationClassWithUses($tag, $useNodes);
-
         if ($fullyQualifiedClassNode === null) {
             return false;
         }

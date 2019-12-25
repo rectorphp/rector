@@ -37,6 +37,9 @@ final class AnnotationReaderFactory
         $annotationReader::addGlobalIgnoredName('Gedmo\SoftDeleteable');
         $annotationReader::addGlobalIgnoredName('SoftDeleteable');
 
+        $annotationReader::addGlobalIgnoredName('Gedmo\Slug');
+        $annotationReader::addGlobalIgnoredName('Slug');
+
         // nette @inject dummy annotation
         $annotationReader::addGlobalIgnoredName('inject');
 
