@@ -69,67 +69,66 @@ services:
             Cake\View\Helper:
                 initialize: 'void'
 
-    Rector\Rector\Typehint\ParentTypehintedArgumentRector:
-        $typehintForArgumentByMethodAndClass:
+    Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector:
+        $typehintForParameterByMethodByClass:
             Cake\ORM\Behavior:
                 beforeFind:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 buildValidator:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 buildRules:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 beforeRules:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 afterRules:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 beforeSave:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 afterSave:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 beforeDelete:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 afterDelete:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
             Cake\ORM\Table:
                 beforeFind:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 buildValidator:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 buildRules:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 beforeRules:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 afterRules:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 beforeSave:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 afterSave:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 beforeDelete:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 afterDelete:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
             Cake\Controller\Controller:
                 beforeFilter:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 afterFilter:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 beforeRender:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 beforeRedirect:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
             Cake\Controller\Component:
                 shutdown:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 startup:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 beforeFilter:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 beforeRender:
-                    $event: 'Cake\Event\EventInterface'
+                    0: 'Cake\Event\EventInterface'
                 beforeRedirect:
-                    $event: 'Cake\Event\EventInterface'
-
+                    0: 'Cake\Event\EventInterface'
 
     Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector:
         $methodNamesByTypes:

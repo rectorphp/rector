@@ -7,6 +7,8 @@ namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclaratio
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
+use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Source\ClassMetadataFactory;
+use Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddParamTypeDeclarationRector\Source\ParserInterface;
 
 final class AddParamTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
@@ -31,6 +33,16 @@ final class AddParamTypeDeclarationRectorTest extends AbstractRectorTestCase
                     ParentInterfaceWithChangeTypeInterface::class => [
                         'process' => [
                             0 => 'string',
+                        ],
+                    ],
+                    ParserInterface::class => [
+                        'parse' => [
+                            0 => 'string',
+                        ],
+                    ],
+                    ClassMetadataFactory::class => [
+                        'setEntityManager' => [
+                            0 => 'Doctrine\ORM\EntityManagerInterface',
                         ],
                     ],
                 ],
