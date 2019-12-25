@@ -3,11 +3,11 @@ imports:
 
 services:
     # https://github.com/rectorphp/rector/issues/1024
-    Rector\Rector\Typehint\ParentTypehintedArgumentRector:
-        $typehintForArgumentByMethodAndClass:
+    Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector:
+        $typehintForParameterByMethodByClass:
             PHPUnit\Framework\TestCase:
                 __construct:
-                    dataName: '' # no type
+                    2: '' # no type, $dataName
 
     Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector: ~
     Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector: ~

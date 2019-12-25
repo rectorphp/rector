@@ -1,12 +1,12 @@
 services:
-    Rector\Rector\Typehint\ParentTypehintedArgumentRector:
-        $typehintForArgumentByMethodAndClass:
+    Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector:
+        $typehintForParameterByMethodByClass:
             Doctrine\ORM\Mapping\ClassMetadataFactory:
                 setEntityManager:
-                    em: 'Doctrine\ORM\EntityManagerInterface'
+                    0: 'Doctrine\ORM\EntityManagerInterface'
             Doctrine\ORM\Tools\DebugUnitOfWorkListener:
                 dumpIdentityMap:
-                    em: 'Doctrine\ORM\EntityManagerInterface'
+                    0: 'Doctrine\ORM\EntityManagerInterface'
 
     Rector\Rector\Argument\ArgumentRemoverRector:
         $positionsByMethodNameByClassType:

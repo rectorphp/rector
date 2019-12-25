@@ -18,11 +18,11 @@ services:
             'Sylius\Component\Taxonomy\Model\TaxonInterface':
                 'getParents ': 'getAncestors'
 
-    Rector\Rector\Typehint\ParentTypehintedArgumentRector:
-        $typehintForArgumentByMethodAndClass:
+    Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector:
+        $typehintForParameterByMethodByClass:
             Sylius\Bundle\CoreBundle\Context\SessionAndChannelBasedCartContext:
                 __construct:
-                    $cartStorage: 'Sylius\Component\Core\Storage\CartStorageInterface'
+                    0: 'Sylius\Component\Core\Storage\CartStorageInterface'
 
     Rector\Rector\Argument\ArgumentAdderRector:
         $positionWithDefaultValueByMethodNamesByClassTypes:

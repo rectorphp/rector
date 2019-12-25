@@ -55,7 +55,6 @@ class SomeClass
     }
 }
 PHP
-
             , [
                 '$typehintForParameterByMethodByClass' => [
                     'SomeClass' => [
@@ -141,6 +140,18 @@ PHP
         return ! (bool) $class->extends;
     }
 
+    private function refactorClassMethodWithTypehintByParameterPosition(Node $node, $typehintByParameterPosition): void
+    {
+        foreach ($typehintByParameterPosition as $parameterPosition => $type) {
+            if (! isset($node->params[$parameterPosition])) {
+                continue;
+            }
+
+            $parameter = $node->params[$parameterPosition];
+            $this->refactorParameter($parameter, $type);
+        }
+    }
+
     private function refactorParameter(Param $param, string $newType): void
     {
         // already set → no change
@@ -160,17 +171,5 @@ PHP
         }
 
         $param->type = $returnTypeNode;
-    }
-
-    private function refactorClassMethodWithTypehintByParameterPosition(Node $node, $typehintByParameterPosition): void
-    {
-        foreach ($typehintByParameterPosition as $parameterPosition => $type) {
-            if (! isset($node->params[$parameterPosition])) {
-                continue;
-            }
-
-            $parameter = $node->params[$parameterPosition];
-            $this->refactorParameter($parameter, $type);
-        }
     }
 }
