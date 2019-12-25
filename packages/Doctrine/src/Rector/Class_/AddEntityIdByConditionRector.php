@@ -91,11 +91,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->isAnonymousClass($node)) {
-            return null;
-        }
-
-        if (! $this->isTraitMatch($node)) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -115,6 +111,23 @@ PHP
                     return true;
                 }
             }
+        }
+
+        return false;
+    }
+
+    private function shouldSkip(Class_ $class): bool
+    {
+        if ($this->isAnonymousClass($class)) {
+            return true;
+        }
+
+        if (! $this->isTraitMatch($class)) {
+            return true;
+        }
+
+        if ($this->classManipulator->hasPropertyName($class, 'id')) {
+            return true;
         }
 
         return false;

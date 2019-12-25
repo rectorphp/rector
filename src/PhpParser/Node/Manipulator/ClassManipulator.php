@@ -376,6 +376,21 @@ final class ClassManipulator
         return $implementedInterfaceNames;
     }
 
+    public function hasPropertyName(Class_ $node, string $name): bool
+    {
+        foreach ($node->getProperties() as $property) {
+            foreach ($property->props as $propertyProperty) {
+                if (! $this->nameResolver->isName($propertyProperty, $name)) {
+                    continue;
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
     {
         foreach ($classNode->stmts as $key => $classStmt) {
