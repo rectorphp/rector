@@ -49,6 +49,9 @@ PHP
                     <<<'PHP'
 final class SomeClass
 {
+    /**
+     * @var int
+     */
     private int count;
 }
 PHP
