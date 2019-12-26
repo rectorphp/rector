@@ -1,4 +1,4 @@
-# All 407 Rectors Overview
+# All 408 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -3313,6 +3313,28 @@ Use Nette\Utils\Strings over bare string-functions
 
 <br>
 
+### `TemplateMagicAssignToExplicitVariableArrayRector`
+
+- class: `Rector\Nette\Rector\ClassMethod\TemplateMagicAssignToExplicitVariableArrayRector`
+
+Change $this->templates->{magic} to $this->template->render(..., $values)
+
+```diff
+ use Nette\Application\UI\Control;
+
+ class SomeControl extends Control
+ {
+     public function render()
+     {
+-        $this->template->param = 'some value';
+-        $this->template->render(__DIR__ . '/poll.latte');
++        $this->template->render(__DIR__ . '/poll.latte', ['param' => 'some value']);
+     }
+ }
+```
+
+<br>
+
 ## NetteTesterToPHPUnit
 
 ### `NetteAssertToPHPUnitAssertRector`
@@ -3482,7 +3504,7 @@ Changes "getParameter()" to "attributes->get()" from Nette to Symfony
 Migrate Nette Component to Symfony Controller
 
 ```diff
- use Nette\Application\UI\Control;
+-use Nette\Application\UI\Control;
 +use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 +use Symfony\Component\HttpFoundation\Response;
 
