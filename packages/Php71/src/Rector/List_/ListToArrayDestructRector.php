@@ -13,6 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see https://wiki.php.net/rfc/short_list_syntax
@@ -70,6 +71,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_DESTRUCT)) {
+            return null;
+        }
+
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         if ($parentNode instanceof Assign) {

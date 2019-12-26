@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\MagicConst\File;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see \Rector\Php53\Tests\Rector\FuncCall\DirNameFileConstantToDirConstantRector\DirNameFileConstantToDirConstantRectorTest
@@ -57,6 +58,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::DIR_CONSTANT)) {
+            return null;
+        }
+
         if (! $this->isName($node, 'dirname')) {
             return null;
         }

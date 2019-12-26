@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\FuncCall;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see \Rector\Php56\Tests\Rector\FuncCall\PowToExpRector\PowToExpRectorTest
@@ -37,6 +38,10 @@ final class PowToExpRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::EXP_OPERATOR)) {
+            return null;
+        }
+
         if (! $this->isName($node, 'pow')) {
             return null;
         }

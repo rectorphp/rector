@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\MagicConst\Class_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_7_4 (not confirmed yet)
@@ -59,6 +60,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::CLASSNAME_CONSTANT)) {
+            return null;
+        }
+
         return new ClassConstFetch(new Name('self'), 'class');
     }
 }

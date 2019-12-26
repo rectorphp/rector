@@ -9,6 +9,26 @@ final class PhpVersionFeature
     /**
      * @var string
      */
+    public const DIR_CONSTANT = '5.3';
+
+    /**
+     * @var string
+     */
+    public const ELVIS_OPERATOR = '5.3';
+
+    /**
+     * @var string
+     */
+    public const CLASSNAME_CONSTANT = '5.5';
+
+    /**
+     * @var string
+     */
+    public const EXP_OPERATOR = '5.6';
+
+    /**
+     * @var string
+     */
     public const SCALAR_TYPES = '7.0';
 
     /**
@@ -24,12 +44,42 @@ final class PhpVersionFeature
     /**
      * @var string
      */
+    public const DIRNAME_LEVELS = '7.0';
+
+    /**
+     * @var string
+     */
+    public const CSPRNG_FUNCTIONS = '7.0';
+
+    /**
+     * @var string
+     */
+    public const THROWABLE_TYPE = '7.0';
+
+    /**
+     * @var string
+     */
     public const ITERABLE_TYPE = '7.1';
 
     /**
      * @var string
      */
     public const VOID_TYPE = '7.1';
+
+    /**
+     * @var string
+     */
+    public const CONSTANT_VISIBILITY = '7.1';
+
+    /**
+     * @var string
+     */
+    public const ARRAY_DESTRUCT = '7.1';
+
+    /**
+     * @var string
+     */
+    public const MULTI_EXCEPTION_CATCH = '7.1';
 
     /**
      * @var string
@@ -45,6 +95,11 @@ final class PhpVersionFeature
      * @var string
      */
     public const ARRAY_KEY_FIRST_LAST = '7.3';
+
+    /**
+     * @var string
+     */
+    public const JSON_EXCEPTION = '7.3';
 
     /**
      * @var string
@@ -76,6 +131,11 @@ final class PhpVersionFeature
      * @var string
      */
     public const COVARIANT_RETURN = '7.4';
+
+    /**
+     * @var string
+     */
+    public const ARRAY_SPREAD = '7.4';
 
     /**
      * @var string

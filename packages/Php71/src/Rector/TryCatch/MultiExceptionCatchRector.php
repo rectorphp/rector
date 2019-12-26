@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\TryCatch;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see https://wiki.php.net/rfc/multiple-catch
@@ -58,6 +59,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::MULTI_EXCEPTION_CATCH)) {
+            return null;
+        }
+
         if (count($node->catches) < 2) {
             return null;
         }
