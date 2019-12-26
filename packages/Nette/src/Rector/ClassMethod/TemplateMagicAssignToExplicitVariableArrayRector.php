@@ -81,7 +81,9 @@ PHP
             return null;
         }
 
-        $magicTemplatePropertyCalls = $this->templatePropertyAssignCollector->collectTemplateFileNameVariablesAndNodesToRemove($node);
+        $magicTemplatePropertyCalls = $this->templatePropertyAssignCollector->collectTemplateFileNameVariablesAndNodesToRemove(
+            $node
+        );
 
         dump($magicTemplatePropertyCalls);
         die;

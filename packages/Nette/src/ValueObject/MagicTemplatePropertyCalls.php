@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Nette\ValueObject;
 
@@ -11,10 +13,12 @@ final class MagicTemplatePropertyCalls
      * @var Expr|null
      */
     private $templateFileExpr;
+
     /**
      * @var Node[]
      */
     private $templateVariables = [];
+
     /**
      * @var Node[]
      */

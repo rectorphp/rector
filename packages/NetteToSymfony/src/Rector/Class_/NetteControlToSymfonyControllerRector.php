@@ -21,7 +21,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Nette\TemplatePropertyAssignCollector;
-use Rector\Nette\ValueObject\MagicTemplatePropertyCalls;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
@@ -142,7 +141,9 @@ PHP
         }
 
         if ($magicTemplatePropertyCalls->getTemplateVariables() !== []) {
-            $thisRenderMethod->args[1] = new Arg($this->createTemplateVariablesArray($magicTemplatePropertyCalls->getTemplateVariables()));
+            $thisRenderMethod->args[1] = new Arg($this->createTemplateVariablesArray(
+                $magicTemplatePropertyCalls->getTemplateVariables()
+            ));
         }
 
         // add return in the end
