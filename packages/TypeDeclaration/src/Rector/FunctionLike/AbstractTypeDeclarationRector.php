@@ -19,6 +19,8 @@ use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PHPStan\Type\SelfObjectType;
 use Rector\Rector\AbstractRector;
+use Rector\TypeDeclaration\PhpParserTypeAnalyzer;
+use Rector\TypeDeclaration\VendorLock\VendorLockResolver;
 
 /**
  * @see https://wiki.php.net/rfc/scalar_type_hints_v5
@@ -31,7 +33,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     /**
      * @var string
      */
-    public const HAS_NEW_INHERITED_TYPE = 'has_new_inherited_return_type';
+    protected const HAS_NEW_INHERITED_TYPE = 'has_new_inherited_return_type';
 
     /**
      * @var DocBlockManipulator
@@ -44,14 +46,28 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     protected $parsedNodesByType;
 
     /**
+     * @var PhpParserTypeAnalyzer
+     */
+    protected $phpParserTypeAnalyzer;
+
+    /**
+     * @var VendorLockResolver
+     */
+    protected $vendorLockResolver;
+
+    /**
      * @required
      */
     public function autowireAbstractTypeDeclarationRector(
         DocBlockManipulator $docBlockManipulator,
-        ParsedNodesByType $parsedNodesByType
+        ParsedNodesByType $parsedNodesByType,
+        PhpParserTypeAnalyzer $phpParserTypeAnalyzer,
+        VendorLockResolver $vendorLockResolver
     ): void {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->parsedNodesByType = $parsedNodesByType;
+        $this->phpParserTypeAnalyzer = $phpParserTypeAnalyzer;
+        $this->vendorLockResolver = $vendorLockResolver;
     }
 
     /**
@@ -63,54 +79,6 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     }
 
     /**
-     * @param Name|NullableType|UnionType|Identifier $possibleSubtype
-     * @param Name|NullableType|UnionType|Identifier $type
-     */
-    protected function isSubtypeOf(Node $possibleSubtype, Node $type): bool
-    {
-        // skip until PHP 8 is out
-        if ($possibleSubtype instanceof UnionType || $type instanceof UnionType) {
-            return false;
-        }
-
-        // union types are not covariant
-        if ($possibleSubtype instanceof NullableType && ! $type instanceof NullableType) {
-            return false;
-        }
-
-        if (! $possibleSubtype instanceof NullableType && $type instanceof NullableType) {
-            return false;
-        }
-
-        // unwrap nullable types
-        if ($type instanceof NullableType) {
-            $type = $type->type;
-            /** @var NullableType $possibleSubtype */
-            $possibleSubtype = $possibleSubtype->type;
-        }
-
-        $possibleSubtype = $possibleSubtype->toString();
-        $type = $type->toString();
-        if (is_a($possibleSubtype, $type, true)) {
-            return true;
-        }
-
-        if (in_array($possibleSubtype, ['array', 'Traversable'], true) && $type === 'iterable') {
-            return true;
-        }
-
-        if (in_array($possibleSubtype, ['array', 'ArrayIterator'], true) && $type === 'countable') {
-            return true;
-        }
-
-        if ($type === $possibleSubtype) {
-            return true;
-        }
-
-        return ctype_upper($possibleSubtype[0]) && $type === 'object';
-    }
-
-    /**
      * @return Name|NullableType|Identifier|UnionType|null
      */
     protected function resolveChildTypeNode(Type $type): ?Node
@@ -119,9 +87,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
             return null;
         }
 
-        if ($type instanceof SelfObjectType) {
-            $type = new ObjectType($type->getClassName());
-        } elseif ($type instanceof StaticType) {
+        if ($type instanceof SelfObjectType || $type instanceof StaticType) {
             $type = new ObjectType($type->getClassName());
         }
 

@@ -131,9 +131,15 @@ PHP
 
         // should be previous overridden?
         if ($node->returnType !== null) {
-            $isSubtype = $this->isSubtypeOf($inferredReturnNode, $node->returnType);
+            $isSubtype = $this->phpParserTypeAnalyzer->isSubtypeOf($inferredReturnNode, $node->returnType);
 
             $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
+
+            if ($node instanceof ClassMethod) {
+                if ($this->vendorLockResolver->isReturnChangeVendorLockedIn($node)) {
+                    return null;
+                }
+            }
 
             if ($this->isCurrentObjectTypeSubType($currentType, $inferedType)) {
                 return null;

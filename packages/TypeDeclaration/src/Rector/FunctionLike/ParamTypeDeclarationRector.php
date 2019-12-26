@@ -15,7 +15,6 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
-use Rector\TypeDeclaration\VendorLock\VendorLockResolver;
 use Rector\ValueObject\PhpVersionFeature;
 
 /**
@@ -23,16 +22,6 @@ use Rector\ValueObject\PhpVersionFeature;
  */
 final class ParamTypeDeclarationRector extends AbstractTypeDeclarationRector
 {
-    /**
-     * @var VendorLockResolver
-     */
-    private $vendorLockResolver;
-
-    public function __construct(VendorLockResolver $vendorLockResolver)
-    {
-        $this->vendorLockResolver = $vendorLockResolver;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change @param types to type declarations if not a BC-break', [
@@ -164,7 +153,10 @@ PHP
                 if ($possibleOverrideNewReturnType !== null) {
                     if ($paramNode->type === null) {
                         $paramNode->type = $paramTypeNode;
-                    } elseif ($this->isSubtypeOf($possibleOverrideNewReturnType, $paramNode->type)) {
+                    } elseif ($this->phpParserTypeAnalyzer->isSubtypeOf(
+                        $possibleOverrideNewReturnType,
+                        $paramNode->type
+                    )) {
                         // allow override
                         $paramNode->type = $paramTypeNode;
                     }
