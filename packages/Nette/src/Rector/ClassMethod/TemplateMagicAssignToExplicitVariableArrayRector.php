@@ -98,7 +98,7 @@ PHP
         );
 
         $renderMethodCall = $this->createRenderMethodCall($node, $magicTemplatePropertyCalls);
-        $node->stmts = array_merge((array) $node->stmts, [$renderMethodCall]);
+        $node->stmts = array_merge((array) $node->stmts, [new Expression($renderMethodCall)]);
 
         $this->removeNodes($magicTemplatePropertyCalls->getNodesToRemove());
 
@@ -108,7 +108,7 @@ PHP
     private function createRenderMethodCall(
         ClassMethod $classMethod,
         MagicTemplatePropertyCalls $magicTemplatePropertyCalls
-    ): Expression {
+    ): Node\Expr\MethodCall {
         if ($this->isObjectType($classMethod, Presenter::class)) {
             return $this->actionRenderFactory->createThisTemplateRenderMethodCall($magicTemplatePropertyCalls);
         }

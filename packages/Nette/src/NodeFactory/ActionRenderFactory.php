@@ -27,23 +27,23 @@ final class ActionRenderFactory
         $this->nodeFactory = $nodeFactory;
     }
 
-    public function createThisRenderMethodCall(MagicTemplatePropertyCalls $magicTemplatePropertyCalls): Expression
+    public function createThisRenderMethodCall(MagicTemplatePropertyCalls $magicTemplatePropertyCalls): MethodCall
     {
         $thisRenderMethod = $this->nodeFactory->createMethodCall('this', 'render');
         $this->addArguments($magicTemplatePropertyCalls, $thisRenderMethod);
 
-        return new Expression($thisRenderMethod);
+        return $thisRenderMethod;
     }
 
     public function createThisTemplateRenderMethodCall(
         MagicTemplatePropertyCalls $magicTemplatePropertyCalls
-    ): Expression {
+    ): MethodCall {
         $thisTemplatePropertyFetch = new PropertyFetch(new Variable('this'), 'template');
         $thisRenderMethod = $this->nodeFactory->createMethodCall($thisTemplatePropertyFetch, 'render');
 
         $this->addArguments($magicTemplatePropertyCalls, $thisRenderMethod);
 
-        return new Expression($thisRenderMethod);
+        return new $thisRenderMethod;
     }
 
     private function createTemplateVariablesArray(array $templateVariables): Array_
