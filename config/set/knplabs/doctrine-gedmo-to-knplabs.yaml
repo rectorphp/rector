@@ -2,3 +2,4 @@
 services:
     Rector\DoctrineGedmoToKnplabs\Rector\Class_\TimestampableBehaviorRector: null
     Rector\DoctrineGedmoToKnplabs\Rector\Class_\SluggableBehaviorRector: null
+    Rector\DoctrineGedmoToKnplabs\Rector\Class_\TreeBehaviorRector: ~

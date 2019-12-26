@@ -240,3 +240,6 @@ parameters:
 
         - '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\(int, string, string, int, array\)\: bool\)\|null, Closure\(int, string\)\: void given#'
         - '#Parameter \#1 \$source of method Rector\\Scan\\ErrorScanner\:\:scanSource\(\) expects array<string\>, array<string\>\|string\|null given#'
+
+        - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\Gedmo\\(.*?)\:\:createFromNodeAndTokens\(\) should return Rector\\BetterPhpDocParser\\PhpDocNode\\Gedmo\\(.*?)\|null but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\|null#'
+
