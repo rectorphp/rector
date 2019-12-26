@@ -143,7 +143,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
 
         // special case for alias
         if ($param->type instanceof FullyQualified) {
-            $type = $this->resolveFullyQualifiedOrAlaisedObjectType($param);
+            $type = $this->resolveFullyQualifiedOrAliasedObjectType($param);
             if ($type !== null) {
                 return $type;
             }
@@ -192,7 +192,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         return false;
     }
 
-    private function resolveFullyQualifiedOrAlaisedObjectType(Param $param): ?Type
+    private function resolveFullyQualifiedOrAliasedObjectType(Param $param): ?Type
     {
         if ($param->type === null) {
             return null;
@@ -216,7 +216,8 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
                 return new FullyQualifiedObjectType($className);
             }
 
-            return new AliasedObjectType($originalName->toString());
+            // @note: $fullyQualifiedName is a guess, needs real life test
+            return new AliasedObjectType($originalName->toString(), $fullyQualifiedName);
         }
 
         return null;
