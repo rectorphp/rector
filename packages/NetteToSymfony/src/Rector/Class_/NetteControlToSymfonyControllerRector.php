@@ -8,10 +8,8 @@ use Nette\Application\UI\Control;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -22,6 +20,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\Nette\TemplatePropertyAssignCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
@@ -40,14 +39,14 @@ use Symfony\Component\HttpFoundation\Response;
 final class NetteControlToSymfonyControllerRector extends AbstractRector
 {
     /**
-     * @var Expr|null
+     * @var TemplatePropertyAssignCollector
      */
-    private $templateFileExpr;
+    private $templatePropertyAssignCollector;
 
-    /**
-     * @var Expr[]
-     */
-    private $templateVariables = [];
+    public function __construct(TemplatePropertyAssignCollector $templatePropertyAssignCollector)
+    {
+        $this->templatePropertyAssignCollector = $templatePropertyAssignCollector;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -67,7 +66,6 @@ class SomeControl extends Control
 PHP
                 ,
                 <<<'PHP'
-use Nette\Application\UI\Control;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -133,16 +131,18 @@ PHP
         // rename method - @todo pick
         $classMethod->name = new Identifier('action');
 
-        $this->collectTemplateFileNameAndVariablesAndRemoveDeadCode($classMethod);
+        [$templateFileExpr, $templateVariables, $nodesToRemove] = $this->templatePropertyAssignCollector->collectTemplateFileNameVariablesAndNodesToRemove(
+            $classMethod
+        );
 
         $thisRenderMethod = $this->createMethodCall('this', 'render');
 
-        if ($this->templateFileExpr !== null) {
-            $thisRenderMethod->args[0] = new Arg($this->templateFileExpr);
+        if ($templateFileExpr !== null) {
+            $thisRenderMethod->args[0] = new Arg($templateFileExpr);
         }
 
-        if ($this->templateVariables !== []) {
-            $thisRenderMethod->args[1] = new Arg($this->createTemplateVariablesArray());
+        if ($templateVariables !== []) {
+            $thisRenderMethod->args[1] = new Arg($this->createTemplateVariablesArray($templateVariables));
         }
 
         // add return in the end
@@ -152,92 +152,19 @@ PHP
         if ($this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             $classMethod->returnType = new FullyQualified(Response::class);
         }
+
+        $this->removeNodes($nodesToRemove);
     }
 
-    private function collectTemplateFileNameAndVariablesAndRemoveDeadCode(ClassMethod $classMethod): void
-    {
-        $this->templateFileExpr = null;
-        $this->templateVariables = [];
-
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node): void {
-            if ($node instanceof MethodCall) {
-                $this->collectTemplateFileExpr($node);
-            }
-
-            if ($node instanceof Assign) {
-                $this->collectVariableFromAssign($node);
-            }
-        });
-    }
-
-    private function createTemplateVariablesArray(): Array_
+    private function createTemplateVariablesArray(array $templateVariables): Array_
     {
         $array = new Array_();
 
-        foreach ($this->templateVariables as $name => $node) {
+        foreach ($templateVariables as $name => $node) {
             $array->items[] = new ArrayItem($node, new String_($name));
         }
 
         return $array;
-    }
-
-    /**
-     * Looks for:
-     * $this->template
-     */
-    private function isTemplatePropertyFetch(Expr $expr): bool
-    {
-        if (! $expr instanceof PropertyFetch) {
-            return false;
-        }
-
-        if (! $expr->var instanceof Variable) {
-            return false;
-        }
-
-        if (! $this->isName($expr->var, 'this')) {
-            return false;
-        }
-
-        return $this->isName($expr->name, 'template');
-    }
-
-    private function collectTemplateFileExpr(MethodCall $methodCall): void
-    {
-        if ($this->isName($methodCall->name, 'render')) {
-            if (isset($methodCall->args[0])) {
-                $this->templateFileExpr = $methodCall->args[0]->value;
-            }
-
-            $this->removeNode($methodCall);
-        }
-
-        if ($this->isName($methodCall->name, 'setFile')) {
-            $this->templateFileExpr = $methodCall->args[0]->value;
-            $this->removeNode($methodCall);
-        }
-    }
-
-    private function collectVariableFromAssign(Assign $assign): void
-    {
-        // $this->template = x
-        if ($assign->var instanceof PropertyFetch) {
-            if (! $this->isName($assign->var->var, 'template')) {
-                return;
-            }
-
-            $variableName = $this->getName($assign->var);
-            $this->templateVariables[$variableName] = $assign->expr;
-
-            $this->removeNode($assign);
-        }
-
-        // $x = $this->template
-        if ($assign->var instanceof Variable) {
-            if ($this->isTemplatePropertyFetch($assign->expr)) {
-                $this->removeNode($assign);
-            }
-        }
     }
 
     private function removeSuffix(string $content, string $suffix): string
