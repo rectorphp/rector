@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\Constant\ConstantStringType;
@@ -88,6 +90,11 @@ PHP
 
     private function isStringOrStaticNonNumbericString(Expr $expr): bool
     {
+        // replace only scalar values, not variables/constants/etc.
+        if (! $expr instanceof Scalar && ! $expr instanceof Variable) {
+            return false;
+        }
+
         $value = null;
         $exprStaticType = $this->getStaticType($expr);
 
