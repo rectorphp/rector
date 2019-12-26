@@ -70,11 +70,6 @@ jobs:
                 - composer check-cs
 
         -
-            name: 'Unit tests'
-            script:
-                - vendor/bin/phpunit --testsuite main
-
-        -
             php: 7.3
             name: Rector
             script:
