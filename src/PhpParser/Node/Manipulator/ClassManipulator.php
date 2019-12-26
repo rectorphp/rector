@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
@@ -422,6 +423,23 @@ final class ClassManipulator
         }
     }
 
+    /**
+     * @param Class_|Interface_ $classLike
+     * @return string[]
+     */
+    public function getClassLikeNodeParentInterfaceNames(ClassLike $classLike)
+    {
+        if ($classLike instanceof Class_) {
+            return $this->getClassImplementedInterfaceNames($classLike);
+        }
+
+        if ($classLike instanceof Interface_) {
+            return $this->getInterfaceExtendedInterfacesNames($classLike);
+        }
+
+        return [];
+    }
+
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
     {
         foreach ($classNode->stmts as $key => $classStmt) {
@@ -555,5 +573,43 @@ final class ClassManipulator
         }
 
         return false;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getClassImplementedInterfaceNames(Class_ $class): array
+    {
+        $interfaceNames = [];
+
+        foreach ($class->implements as $implementNode) {
+            $interfaceName = $this->nameResolver->getName($implementNode);
+            if ($interfaceName === null) {
+                continue;
+            }
+
+            $interfaceNames[] = $interfaceName;
+        }
+
+        return $interfaceNames;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getInterfaceExtendedInterfacesNames(Interface_ $interface): array
+    {
+        $interfaceNames = [];
+
+        foreach ($interface->extends as $extendNode) {
+            $interfaceName = $this->nameResolver->getName($extendNode);
+            if ($interfaceName === null) {
+                continue;
+            }
+
+            $interfaceNames[] = $interfaceName;
+        }
+
+        return $interfaceNames;
     }
 }

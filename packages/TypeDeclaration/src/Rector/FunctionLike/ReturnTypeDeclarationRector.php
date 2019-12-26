@@ -100,10 +100,6 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
-            return null;
-        }
-
         if ($this->shouldSkip($node)) {
             return null;
         }
@@ -135,9 +131,15 @@ PHP
 
         // should be previous overridden?
         if ($node->returnType !== null) {
-            $isSubtype = $this->isSubtypeOf($inferredReturnNode, $node->returnType);
+            $isSubtype = $this->phpParserTypeAnalyzer->isSubtypeOf($inferredReturnNode, $node->returnType);
 
             $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
+
+            if ($node instanceof ClassMethod) {
+                if ($this->vendorLockResolver->isReturnChangeVendorLockedIn($node)) {
+                    return null;
+                }
+            }
 
             if ($this->isCurrentObjectTypeSubType($currentType, $inferedType)) {
                 return null;
@@ -149,7 +151,8 @@ PHP
 
             if ($this->isAtLeastPhpVersion(PhpVersionFeature::COVARIANT_RETURN) && $isSubtype) {
                 $node->returnType = $inferredReturnNode;
-            } elseif (! $isSubtype) { // type override
+            } elseif (! $isSubtype) {
+                // type override with correct one
                 $node->returnType = $inferredReturnNode;
             }
         } else {
@@ -168,6 +171,10 @@ PHP
      */
     private function shouldSkip(Node $node): bool
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
+            return true;
+        }
+
         if (! $this->overrideExistingReturnTypes) {
             if ($node->returnType !== null) {
                 return true;

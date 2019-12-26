@@ -140,7 +140,10 @@ PHP
             }
 
             $position = (int) $position;
-            if ($node instanceof ClassMethod && $this->isChangeVendorLockedIn($node, $position)) {
+            if ($node instanceof ClassMethod && $this->vendorLockResolver->isParameterChangeVendorLockedIn(
+                $node,
+                $position
+            )) {
                 continue;
             }
 
@@ -150,7 +153,10 @@ PHP
                 if ($possibleOverrideNewReturnType !== null) {
                     if ($paramNode->type === null) {
                         $paramNode->type = $paramTypeNode;
-                    } elseif ($this->isSubtypeOf($possibleOverrideNewReturnType, $paramNode->type)) {
+                    } elseif ($this->phpParserTypeAnalyzer->isSubtypeOf(
+                        $possibleOverrideNewReturnType,
+                        $paramNode->type
+                    )) {
                         // allow override
                         $paramNode->type = $paramTypeNode;
                     }

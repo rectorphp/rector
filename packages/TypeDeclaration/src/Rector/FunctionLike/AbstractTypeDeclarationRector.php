@@ -8,21 +8,19 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\UnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\NodeContainer\ParsedNodesByType;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PHPStan\Type\SelfObjectType;
 use Rector\Rector\AbstractRector;
+use Rector\TypeDeclaration\PhpParserTypeAnalyzer;
+use Rector\TypeDeclaration\VendorLock\VendorLockResolver;
 
 /**
  * @see https://wiki.php.net/rfc/scalar_type_hints_v5
@@ -35,7 +33,7 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     /**
      * @var string
      */
-    public const HAS_NEW_INHERITED_TYPE = 'has_new_inherited_return_type';
+    protected const HAS_NEW_INHERITED_TYPE = 'has_new_inherited_return_type';
 
     /**
      * @var DocBlockManipulator
@@ -48,14 +46,28 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     protected $parsedNodesByType;
 
     /**
+     * @var PhpParserTypeAnalyzer
+     */
+    protected $phpParserTypeAnalyzer;
+
+    /**
+     * @var VendorLockResolver
+     */
+    protected $vendorLockResolver;
+
+    /**
      * @required
      */
     public function autowireAbstractTypeDeclarationRector(
         DocBlockManipulator $docBlockManipulator,
-        ParsedNodesByType $parsedNodesByType
+        ParsedNodesByType $parsedNodesByType,
+        PhpParserTypeAnalyzer $phpParserTypeAnalyzer,
+        VendorLockResolver $vendorLockResolver
     ): void {
         $this->docBlockManipulator = $docBlockManipulator;
         $this->parsedNodesByType = $parsedNodesByType;
+        $this->phpParserTypeAnalyzer = $phpParserTypeAnalyzer;
+        $this->vendorLockResolver = $vendorLockResolver;
     }
 
     /**
@@ -64,106 +76,6 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     public function getNodeTypes(): array
     {
         return [Function_::class, ClassMethod::class];
-    }
-
-    protected function isChangeVendorLockedIn(ClassMethod $classMethod, int $paramPosition): bool
-    {
-        if (! $this->hasParentClassOrImplementsInterface($classMethod)) {
-            return false;
-        }
-
-        $methodName = $this->getName($classMethod);
-
-        // @todo extract to some "inherited parent method" service
-        /** @var string|null $parentClassName */
-        $parentClassName = $classMethod->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-
-        if ($parentClassName !== null) {
-            $parentClassNode = $this->parsedNodesByType->findClass($parentClassName);
-            if ($parentClassNode !== null) {
-                $parentMethodNode = $parentClassNode->getMethod($methodName);
-                // @todo validate type is conflicting
-                // parent class method in local scope → it's ok
-                if ($parentMethodNode !== null) {
-                    // parent method has no type → we cannot change it here
-                    return isset($parentMethodNode->params[$paramPosition]) && $parentMethodNode->params[$paramPosition]->type === null;
-                }
-
-                // if not, look for it's parent parent - @todo recursion
-            }
-
-            if (method_exists($parentClassName, $methodName)) {
-                // @todo validate type is conflicting
-                // parent class method in external scope → it's not ok
-                return true;
-
-                // if not, look for it's parent parent - @todo recursion
-            }
-        }
-
-        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_ && ! $classNode instanceof Interface_) {
-            return false;
-        }
-
-        $interfaceNames = $this->getClassLikeNodeParentInterfaceNames($classNode);
-        foreach ($interfaceNames as $interfaceName) {
-            $interface = $this->parsedNodesByType->findInterface($interfaceName);
-            if ($interface !== null) {
-                // parent class method in local scope → it's ok
-                // @todo validate type is conflicting
-                if ($interface->getMethod($methodName) !== null) {
-                    return false;
-                }
-            }
-
-            if (method_exists($interfaceName, $methodName)) {
-                // parent class method in external scope → it's not ok
-                // @todo validate type is conflicting
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param Name|NullableType|UnionType|Identifier $possibleSubtype
-     * @param Name|NullableType|UnionType|Identifier $type
-     */
-    protected function isSubtypeOf(Node $possibleSubtype, Node $type): bool
-    {
-        // skip until PHP 8 is out
-        if ($possibleSubtype instanceof UnionType || $type instanceof UnionType) {
-            return false;
-        }
-
-        $type = $type instanceof NullableType ? $type->type : $type;
-
-        if ($possibleSubtype instanceof NullableType) {
-            $possibleSubtype = $possibleSubtype->type;
-        }
-
-        $possibleSubtype = $possibleSubtype->toString();
-        $type = $type->toString();
-
-        if (is_a($possibleSubtype, $type, true)) {
-            return true;
-        }
-
-        if (in_array($possibleSubtype, ['array', 'Traversable'], true) && $type === 'iterable') {
-            return true;
-        }
-
-        if (in_array($possibleSubtype, ['array', 'ArrayIterator'], true) && $type === 'countable') {
-            return true;
-        }
-
-        if ($type === $possibleSubtype) {
-            return true;
-        }
-
-        return ctype_upper($possibleSubtype[0]) && $type === 'object';
     }
 
     /**
@@ -175,65 +87,10 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
             return null;
         }
 
-        if ($type instanceof SelfObjectType) {
-            $type = new ObjectType($type->getClassName());
-        } elseif ($type instanceof StaticType) {
+        if ($type instanceof SelfObjectType || $type instanceof StaticType) {
             $type = new ObjectType($type->getClassName());
         }
 
         return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type);
-    }
-
-    private function hasParentClassOrImplementsInterface(ClassMethod $classMethod): bool
-    {
-        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
-            return false;
-        }
-
-        if ($classNode instanceof Class_ || $classNode instanceof Interface_) {
-            if ($classNode->extends) {
-                return true;
-            }
-        }
-
-        if ($classNode instanceof Class_) {
-            return (bool) $classNode->implements;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param Class_|Interface_ $classLike
-     * @return string[]
-     */
-    private function getClassLikeNodeParentInterfaceNames(ClassLike $classLike): array
-    {
-        $interfaces = [];
-
-        if ($classLike instanceof Class_) {
-            foreach ($classLike->implements as $implementNode) {
-                $interfaceName = $this->getName($implementNode);
-                if ($interfaceName === null) {
-                    continue;
-                }
-
-                $interfaces[] = $interfaceName;
-            }
-        }
-
-        if ($classLike instanceof Interface_) {
-            foreach ($classLike->extends as $extendNode) {
-                $interfaceName = $this->getName($extendNode);
-                if ($interfaceName === null) {
-                    continue;
-                }
-
-                $interfaces[] = $interfaceName;
-            }
-        }
-
-        return $interfaces;
     }
 }
