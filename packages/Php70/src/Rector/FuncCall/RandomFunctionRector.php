@@ -12,6 +12,7 @@ use PhpParser\Node\Scalar\LNumber;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see \Rector\Php70\Tests\Rector\FuncCall\RandomFunctionRector\RandomFunctionRectorTest
@@ -49,6 +50,10 @@ final class RandomFunctionRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::CSPRNG_FUNCTIONS)) {
+            return null;
+        }
+
         foreach ($this->oldToNewFunctionNames as $oldFunctionName => $newFunctionName) {
             if ($this->isName($node, $oldFunctionName)) {
                 $node->name = new Name($newFunctionName);

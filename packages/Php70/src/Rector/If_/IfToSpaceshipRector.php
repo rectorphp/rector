@@ -19,6 +19,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see https://wiki.php.net/rfc/combined-comparison-operator
@@ -100,6 +101,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SPACESHIP)) {
+            return null;
+        }
+
         $this->reset();
 
         if ($node->cond instanceof Equal || $node->cond instanceof Identical) {

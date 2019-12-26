@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\LNumber;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see \Rector\Php70\Tests\Rector\FuncCall\MultiDirnameRector\MultiDirnameRectorTest
@@ -43,6 +44,10 @@ final class MultiDirnameRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::DIRNAME_LEVELS)) {
+            return null;
+        }
+
         $this->nestingLevel = 0;
 
         if (! $this->isName($node, 'dirname')) {

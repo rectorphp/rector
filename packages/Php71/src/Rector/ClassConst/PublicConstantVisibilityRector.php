@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see https://wiki.php.net/rfc/class_const_visibility
@@ -54,6 +55,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::CONSTANT_VISIBILITY)) {
+            return null;
+        }
+
         // already non-public
         if (! $node->isPublic()) {
             return null;

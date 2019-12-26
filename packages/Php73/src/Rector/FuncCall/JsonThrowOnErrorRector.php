@@ -13,6 +13,7 @@ use PhpParser\Node\Scalar\LNumber;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see http://wiki.php.net/rfc/json_throw_on_error
@@ -54,6 +55,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::JSON_EXCEPTION)) {
+            return null;
+        }
+
         if ($this->isName($node, 'json_encode')) {
             return $this->processJsonEncode($node);
         }

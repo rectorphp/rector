@@ -16,6 +16,7 @@ use PHPStan\Type\Constant\ConstantStringType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see https://wiki.php.net/rfc/spread_operator_for_array
@@ -76,6 +77,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_SPREAD)) {
+            return null;
+        }
+
         if ($this->isName($node, 'array_merge')) {
             return $this->refactorArray($node);
         }

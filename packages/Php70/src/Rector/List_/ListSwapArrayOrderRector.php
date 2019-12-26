@@ -40,6 +40,10 @@ final class ListSwapArrayOrderRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion('7.0')) {
+            return null;
+        }
+
         if (! $node->var instanceof List_) {
             return null;
         }

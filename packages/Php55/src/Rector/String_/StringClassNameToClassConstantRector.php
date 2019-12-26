@@ -13,6 +13,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Util\RectorStrings;
+use Rector\ValueObject\PhpVersionFeature;
 use ReflectionClass;
 
 /**
@@ -94,6 +95,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::CLASSNAME_CONSTANT)) {
+            return null;
+        }
+
         $classLikeName = $node->value;
 
         // remove leading slash

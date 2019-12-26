@@ -10,6 +10,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see http://php.net/manual/en/language.operators.comparison.php#language.operators.comparison.ternary
@@ -52,6 +53,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::ELVIS_OPERATOR)) {
+            return null;
+        }
+
         if (! $this->areNodesEqual($node->cond, $node->if)) {
             return null;
         }

@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Function_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see https://wiki.php.net/rfc/typed_properties_v2#proposal
@@ -54,6 +55,10 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isAtLeastPhpVersion(PhpVersionFeature::THROWABLE_TYPE)) {
+            return null;
+        }
+
         // exception handle has 1 param exactly
         if (count($node->params) !== 1) {
             return null;
