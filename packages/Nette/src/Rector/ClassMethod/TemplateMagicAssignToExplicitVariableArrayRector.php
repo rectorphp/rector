@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Nette\Rector\ClassMethod;
 
+use Nette\Application\UI\Control;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Nette\TemplatePropertyAssignCollector;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -15,6 +17,16 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class TemplateMagicAssignToExplicitVariableArrayRector extends AbstractRector
 {
+    /**
+     * @var TemplatePropertyAssignCollector
+     */
+    private $templatePropertyAssignCollector;
+
+    public function __construct(TemplatePropertyAssignCollector $templatePropertyAssignCollector)
+    {
+        $this->templatePropertyAssignCollector = $templatePropertyAssignCollector;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change $this->templates->{magic} to $this->template->render(..., $values)', [
@@ -61,6 +73,19 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        if (! $this->isObjectType($node, Control::class)) {
+            return null;
+        }
+
+        if (! $node->isPublic()) {
+            return null;
+        }
+
+        $magicTemplatePropertyCalls = $this->templatePropertyAssignCollector->collectTemplateFileNameVariablesAndNodesToRemove($node);
+
+        dump($magicTemplatePropertyCalls);
+        die;
+
         // change the node
 
         return $node;

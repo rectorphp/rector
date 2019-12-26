@@ -21,6 +21,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Nette\TemplatePropertyAssignCollector;
+use Rector\Nette\ValueObject\MagicTemplatePropertyCalls;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
@@ -94,8 +95,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        // anonymous class
-        if ($node->name === null) {
+        if ($this->isAnonymousClass($node)) {
             return null;
         }
 
@@ -131,18 +131,18 @@ PHP
         // rename method - @todo pick
         $classMethod->name = new Identifier('action');
 
-        [$templateFileExpr, $templateVariables, $nodesToRemove] = $this->templatePropertyAssignCollector->collectTemplateFileNameVariablesAndNodesToRemove(
+        $magicTemplatePropertyCalls = $this->templatePropertyAssignCollector->collectTemplateFileNameVariablesAndNodesToRemove(
             $classMethod
         );
 
         $thisRenderMethod = $this->createMethodCall('this', 'render');
 
-        if ($templateFileExpr !== null) {
-            $thisRenderMethod->args[0] = new Arg($templateFileExpr);
+        if ($magicTemplatePropertyCalls->getTemplateFileExpr() !== null) {
+            $thisRenderMethod->args[0] = new Arg($magicTemplatePropertyCalls->getTemplateFileExpr());
         }
 
-        if ($templateVariables !== []) {
-            $thisRenderMethod->args[1] = new Arg($this->createTemplateVariablesArray($templateVariables));
+        if ($magicTemplatePropertyCalls->getTemplateVariables() !== []) {
+            $thisRenderMethod->args[1] = new Arg($this->createTemplateVariablesArray($magicTemplatePropertyCalls->getTemplateVariables()));
         }
 
         // add return in the end
@@ -153,7 +153,7 @@ PHP
             $classMethod->returnType = new FullyQualified(Response::class);
         }
 
-        $this->removeNodes($nodesToRemove);
+        $this->removeNodes($magicTemplatePropertyCalls->getNodesToRemove());
     }
 
     private function createTemplateVariablesArray(array $templateVariables): Array_

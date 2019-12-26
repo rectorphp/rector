@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Nette\ValueObject\MagicTemplatePropertyCalls;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
@@ -45,7 +46,7 @@ final class TemplatePropertyAssignCollector
         $this->nameResolver = $nameResolver;
     }
 
-    public function collectTemplateFileNameVariablesAndNodesToRemove(ClassMethod $classMethod): array
+    public function collectTemplateFileNameVariablesAndNodesToRemove(ClassMethod $classMethod): MagicTemplatePropertyCalls
     {
         $this->templateFileExpr = null;
         $this->templateVariables = [];
@@ -64,7 +65,7 @@ final class TemplatePropertyAssignCollector
             }
         );
 
-        return [$this->templateFileExpr, $this->templateVariables, $this->nodesToRemove];
+        return new MagicTemplatePropertyCalls($this->templateFileExpr, $this->templateVariables, $this->nodesToRemove);
     }
 
     private function collectTemplateFileExpr(Expr\MethodCall $methodCall): void
