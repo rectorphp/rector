@@ -39,6 +39,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
+use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
 
 /**
@@ -311,7 +312,9 @@ final class DocBlockManipulator
             return new MixedType();
         }
 
-        return $this->createPhpDocInfoFromNode($node)->getVarType();
+        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+
+        return $phpDocInfo->getVarType();
     }
 
     public function removeTagByName(PhpDocInfo $phpDocInfo, string $tagName): void
@@ -539,6 +542,19 @@ final class DocBlockManipulator
      */
     private function areTypesEquals(Type $firstType, Type $secondType): bool
     {
+        // aliases and types
+        if ($firstType instanceof AliasedObjectType && $secondType instanceof ObjectType) {
+            if ($firstType->getFullyQualifiedClass() === $secondType->getClassName()) {
+                return true;
+            }
+        }
+
+        if ($secondType instanceof AliasedObjectType && $firstType instanceof ObjectType) {
+            if ($secondType->getFullyQualifiedClass() === $firstType->getClassName()) {
+                return true;
+            }
+        }
+
         $firstTypeHash = $this->staticTypeMapper->createTypeHash($firstType);
         $secondTypeHash = $this->staticTypeMapper->createTypeHash($secondType);
 

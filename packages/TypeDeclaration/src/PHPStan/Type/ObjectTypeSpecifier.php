@@ -30,6 +30,7 @@ final class ObjectTypeSpecifier
         }
 
         $aliasedObjectType = $this->matchAliasedObjectType($node, $objectType);
+
         if ($aliasedObjectType !== null) {
             return $aliasedObjectType;
         }
@@ -68,11 +69,18 @@ final class ObjectTypeSpecifier
                 }
 
                 $useName = $useUse->name->toString();
-                if ($useName !== $objectType->getClassName()) {
-                    continue;
+                $alias = $useUse->alias->toString();
+                $fullyQualifiedName = $useUse->name->toString();
+
+                // A. is alias in use statement matching this class alias
+                if ($useUse->alias->toString() === $objectType->getClassName()) {
+                    return new AliasedObjectType($alias, $fullyQualifiedName);
                 }
 
-                return new AliasedObjectType($useUse->alias->toString());
+                // B. is aliased classes matching the class name
+                if ($useName === $objectType->getClassName()) {
+                    return new AliasedObjectType($alias, $fullyQualifiedName);
+                }
             }
         }
 
