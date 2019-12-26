@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Empty_;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
@@ -176,6 +177,10 @@ final class NameResolver
             }
         }
 
+        if ($node instanceof FuncCall) {
+            return $this->resolveFuncCallName($node);
+        }
+
         return (string) $node->name;
     }
 
@@ -198,5 +203,25 @@ final class NameResolver
         }
 
         return $this->getName($classLike->name);
+    }
+
+    /**
+     * If some function is namespaced, it will be used over global one.
+     * But only if it really exists.
+     */
+    private function resolveFuncCallName(Node $node): string
+    {
+        $functionName = $node->name;
+        if ($functionName instanceof Name) {
+            $namespaceName = $functionName->getAttribute('namespacedName');
+            if ($namespaceName instanceof FullyQualified) {
+                $functionFqnName = $namespaceName->toString();
+                if (function_exists($functionFqnName)) {
+                    return $functionFqnName;
+                }
+            }
+        }
+
+        return (string) $functionName;
     }
 }
