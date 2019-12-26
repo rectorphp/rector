@@ -1,4 +1,4 @@
-# All 404 Rectors Overview
+# All 407 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -14,6 +14,7 @@
 - [DeadCode](#deadcode)
 - [Doctrine](#doctrine)
 - [DoctrineCodeQuality](#doctrinecodequality)
+- [DoctrineGedmoToKnplabs](#doctrinegedmotoknplabs)
 - [DynamicTypeAnalysis](#dynamictypeanalysis)
 - [ElasticSearchDSL](#elasticsearchdsl)
 - [FileSystemRector](#filesystemrector)
@@ -162,6 +163,14 @@ services:
  {
  }
 ```
+
+<br>
+
+### `MoveValueObjectsToValueObjectDirectoryRector`
+
+- class: `Rector\Autodiscovery\Rector\FileSystem\MoveValueObjectsToValueObjectDirectoryRector`
+
+Move value object to ValueObject namespace/directory
 
 <br>
 
@@ -2608,6 +2617,148 @@ Initialize collection property in Entity constructor
 +    {
 +        $this->marketingEvents = new ArrayCollection();
 +    }
+ }
+```
+
+<br>
+
+## DoctrineGedmoToKnplabs
+
+### `SluggableBehaviorRector`
+
+- class: `Rector\DoctrineGedmoToKnplabs\Rector\Class_\SluggableBehaviorRector`
+
+Change Sluggable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
+
+```diff
+ use Gedmo\Mapping\Annotation as Gedmo;
++use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
++use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+
+-class SomeClass
++class SomeClass implements SluggableInterface
+ {
++    use SluggableTrait;
++
+     /**
+-     * @Gedmo\Slug(fields={"name"})
++     * @return string[]
+      */
+-    private $slug;
+-
+-    public function getSlug(): ?string
++    public function getSluggableFields(): array
+     {
+-        return $this->slug;
+-    }
+-
+-    public function setSlug(?string $slug): void
+-    {
+-        $this->slug = $slug;
++        return ['name'];
+     }
+ }
+```
+
+<br>
+
+### `TimestampableBehaviorRector`
+
+- class: `Rector\DoctrineGedmoToKnplabs\Rector\Class_\TimestampableBehaviorRector`
+
+Change Timestampable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
+
+```diff
+-use Gedmo\Timestampable\Traits\TimestampableEntity;
++use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
++use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+
+-class SomeClass
++class SomeClass implements TimestampableInterface
+ {
+-    use TimestampableEntity;
++    use TimestampableTrait;
+ }
+```
+
+<br>
+
+### `TreeBehaviorRector`
+
+- class: `Rector\DoctrineGedmoToKnplabs\Rector\Class_\TreeBehaviorRector`
+
+Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
+
+```diff
+-use Doctrine\Common\Collections\Collection;
+-use Gedmo\Mapping\Annotation as Gedmo;
++use Knp\DoctrineBehaviors\Contract\Entity\TreeNodeInterface;
++use Knp\DoctrineBehaviors\Model\Tree\TreeNodeTrait;
+
+-/**
+- * @Gedmo\Tree(type="nested")
+- */
+-class SomeClass
++class SomeClass implements TreeNodeInterface
+ {
+-    /**
+-     * @Gedmo\TreeLeft
+-     * @ORM\Column(name="lft", type="integer")
+-     * @var int
+-     */
+-    private $lft;
+-
+-    /**
+-     * @Gedmo\TreeRight
+-     * @ORM\Column(name="rgt", type="integer")
+-     * @var int
+-     */
+-    private $rgt;
+-
+-    /**
+-     * @Gedmo\TreeLevel
+-     * @ORM\Column(name="lvl", type="integer")
+-     * @var int
+-     */
+-    private $lvl;
+-
+-    /**
+-     * @Gedmo\TreeRoot
+-     * @ORM\ManyToOne(targetEntity="Category")
+-     * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="CASCADE")
+-     * @var Category
+-     */
+-    private $root;
+-
+-    /**
+-     * @Gedmo\TreeParent
+-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
+-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
+-     * @var Category
+-     */
+-    private $parent;
+-
+-    /**
+-     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
+-     * @var Category[]|Collection
+-     */
+-    private $children;
+-
+-    public function getRoot(): self
+-    {
+-        return $this->root;
+-    }
+-
+-    public function setParent(self $category): void
+-    {
+-        $this->parent = $category;
+-    }
+-
+-    public function getParent(): self
+-    {
+-        return $this->parent;
+-    }
++    use TreeNodeTrait;
  }
 ```
 
@@ -6134,7 +6285,7 @@ Replaces defined classes by new ones.
 services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
-            App\SomeOldClass: 'App\SomeNewClass'
+            App\SomeOldClass: App\SomeNewClass
 ```
 
 ↓
@@ -6187,7 +6338,7 @@ Turns defined function call new one.
 services:
     Rector\Renaming\Rector\Function_\RenameFunctionRector:
         $oldFunctionToNewFunction:
-            view: 'Laravel\Templating\render'
+            view: Laravel\Templating\render
 ```
 
 ↓
@@ -6231,9 +6382,9 @@ Turns method names to new ones.
 ```yaml
 services:
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
-        $oldToNewMethodsByClass:
-            SomeExampleClass:
-                oldMethod: 'newMethod'
+        SomeExampleClass:
+            $oldToNewMethodsByClass:
+                oldMethod: newMethod
 ```
 
 ↓
@@ -7740,8 +7891,10 @@ services:
 ```diff
  class SomeClass
  {
--    public getData();
-+    public getData(): array;
+-    public getData()
++    public getData(): array
+     {
+     }
  }
 ```
 
@@ -8316,9 +8469,10 @@ Change new Object to static call
 ```yaml
 services:
     Rector\Rector\New_\NewToStaticCallRector:
-        Cookie:
-            - Cookie
-            - create
+        $typeToStaticCalls:
+            Cookie:
+                - Cookie
+                - create
 ```
 
 ↓
@@ -8382,38 +8536,6 @@ services:
 +class SomeClass
  {
 +    use Nette\SmartObject;
- }
-```
-
-<br>
-
-### `ParentTypehintedArgumentRector`
-
-- class: `Rector\Rector\Typehint\ParentTypehintedArgumentRector`
-
-Changes defined parent class typehints.
-
-```yaml
-services:
-    Rector\Rector\Typehint\ParentTypehintedArgumentRector:
-        $typehintForArgumentByMethodAndClass:
-            SomeInterface:
-                read:
-                    $content: string
-```
-
-↓
-
-```diff
- interface SomeInterface
- {
-     public read(string $content);
- }
-
- class SomeClass implements SomeInterface
- {
--    public read($content);
-+    public read(string $content);
  }
 ```
 

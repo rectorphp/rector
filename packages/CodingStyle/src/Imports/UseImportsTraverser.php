@@ -80,7 +80,7 @@ final class UseImportsTraverser
         $prefixName = $groupUse->prefix->toString();
 
         foreach ($groupUse->uses as $useUse) {
-            if ($groupUse->type !== Use_::TYPE_UNKNOWN) {
+            if ($useUse->type !== $desiredType) {
                 continue;
             }
 

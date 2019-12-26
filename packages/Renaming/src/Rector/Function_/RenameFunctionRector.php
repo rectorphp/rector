@@ -39,7 +39,9 @@ final class RenameFunctionRector extends AbstractRector
                 'view("...", []);',
                 'Laravel\Templating\render("...", []);',
                 [
-                    'view' => 'Laravel\Templating\render',
+                    '$oldFunctionToNewFunction' => [
+                        'view' => 'Laravel\Templating\render',
+                    ],
                 ]
             ),
         ]);

@@ -42,12 +42,14 @@ final class ArgumentAdderRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         $configuration = [
-            'SomeExampleClass' => [
-                'someMethod' => [
-                    0 => [
-                        'name' => 'someArgument',
-                        'default_value' => 'true',
-                        'type' => 'SomeType',
+            '$positionWithDefaultValueByMethodNamesByClassTypes' => [
+                'SomeExampleClass' => [
+                    'someMethod' => [
+                        0 => [
+                            'name' => 'someArgument',
+                            'default_value' => 'true',
+                            'type' => 'SomeType',
+                        ],
                     ],
                 ],
             ],
