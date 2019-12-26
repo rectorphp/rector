@@ -3214,13 +3214,15 @@ Changes json_encode()/json_decode() to safer and more verbose Nette\Utils\Json::
 Use Nette\Utils\Strings over bare preg_* functions
 
 ```diff
++use Nette\Utils\Strings;
++
  class SomeClass
  {
      public function run()
      {
          $content = 'Hi my name is Tom';
 -        preg_match('#Hi#', $content, $matches);
-+        $matches = \Nette\Utils\Strings::match($content, '#Hi#');
++        $matches = Strings::match($content, '#Hi#');
      }
  }
 ```

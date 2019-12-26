@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace Rector\Nette\Rector\FuncCall;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\BitwiseAnd;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BitwiseNot;
 use PhpParser\Node\Expr\Cast\Bool_;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -53,12 +58,14 @@ class SomeClass
 PHP
                 ,
                 <<<'PHP'
+use Nette\Utils\Strings;
+
 class SomeClass
 {
     public function run()
     {
         $content = 'Hi my name is Tom';
-        $matches = \Nette\Utils\Strings::match($content, '#Hi#');
+        $matches = Strings::match($content, '#Hi#');
     }
 }
 PHP
@@ -107,19 +114,21 @@ PHP
      */
     private function processSplit(FuncCall $funcCall, StaticCall $matchStaticCall): Expr
     {
-        if (isset($funcCall->args[2])) {
-            if ($this->isValue($funcCall->args[2]->value, -1)) {
-                if (isset($funcCall->args[3])) {
-                    $matchStaticCall->args[] = $funcCall->args[3];
-                }
+        $matchStaticCall = $this->compensateNetteUtilsSplitDelimCapture($matchStaticCall);
 
-                return $matchStaticCall;
-            }
-
-            return $funcCall;
+        if (! isset($funcCall->args[2])) {
+            return $matchStaticCall;
         }
 
-        return $matchStaticCall;
+        if ($this->isValue($funcCall->args[2]->value, -1)) {
+            if (isset($funcCall->args[3])) {
+                $matchStaticCall->args[] = $funcCall->args[3];
+            }
+
+            return $matchStaticCall;
+        }
+
+        return $funcCall;
     }
 
     /**
@@ -192,5 +201,28 @@ PHP
         }
 
         return new Bool_($refactoredFuncCall);
+    }
+
+    /**
+     * Handles https://github.com/rectorphp/rector/issues/2348
+     */
+    private function compensateNetteUtilsSplitDelimCapture(StaticCall $staticCall): StaticCall
+    {
+        $patternValue = $this->getValue($staticCall->args[1]->value);
+        if (! is_string($patternValue)) {
+            return $staticCall;
+        }
+
+        // @see https://regex101.com/r/05MPWa/1/
+        $match = Strings::match($patternValue, '#[^\\\\]\(#');
+        if ($match === null) {
+            return $staticCall;
+        }
+
+        $delimCaptureConstant = new ConstFetch(new Name('PREG_SPLIT_DELIM_CAPTURE'));
+        $negatedDelimCaptureConstantAsInt = new BitwiseAnd(new LNumber(0), new BitwiseNot($delimCaptureConstant));
+        $staticCall->args[2] = new Arg($negatedDelimCaptureConstantAsInt);
+
+        return $staticCall;
     }
 }
