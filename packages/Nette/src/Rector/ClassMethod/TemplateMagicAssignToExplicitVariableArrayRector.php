@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Rector\Nette\Rector\ClassMethod;
 
 use Nette\Application\UI\Control;
+use Nette\Application\UI\Presenter;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use Rector\Nette\NodeFactory\ActionRenderFactory;
 use Rector\Nette\TemplatePropertyAssignCollector;
+use Rector\Nette\ValueObject\MagicTemplatePropertyCalls;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -22,9 +26,17 @@ final class TemplateMagicAssignToExplicitVariableArrayRector extends AbstractRec
      */
     private $templatePropertyAssignCollector;
 
-    public function __construct(TemplatePropertyAssignCollector $templatePropertyAssignCollector)
-    {
+    /**
+     * @var ActionRenderFactory
+     */
+    private $actionRenderFactory;
+
+    public function __construct(
+        TemplatePropertyAssignCollector $templatePropertyAssignCollector,
+        ActionRenderFactory $actionRenderFactory
+    ) {
         $this->templatePropertyAssignCollector = $templatePropertyAssignCollector;
+        $this->actionRenderFactory = $actionRenderFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -85,11 +97,22 @@ PHP
             $node
         );
 
-        dump($magicTemplatePropertyCalls);
-        die;
+        $renderMethodCall = $this->createRenderMethodCall($node, $magicTemplatePropertyCalls);
+        $node->stmts = array_merge((array) $node->stmts, [$renderMethodCall]);
 
-        // change the node
+        $this->removeNodes($magicTemplatePropertyCalls->getNodesToRemove());
 
         return $node;
+    }
+
+    private function createRenderMethodCall(
+        ClassMethod $classMethod,
+        MagicTemplatePropertyCalls $magicTemplatePropertyCalls
+    ): Expression {
+        if ($this->isObjectType($classMethod, Presenter::class)) {
+            return $this->actionRenderFactory->createThisTemplateRenderMethodCall($magicTemplatePropertyCalls);
+        }
+
+        return $this->actionRenderFactory->createThisRenderMethodCall($magicTemplatePropertyCalls);
     }
 }

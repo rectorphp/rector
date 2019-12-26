@@ -7,19 +7,16 @@ namespace Rector\NetteToSymfony\Rector\Class_;
 use Nette\Application\UI\Control;
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\Nette\NodeFactory\ActionRenderFactory;
 use Rector\Nette\TemplatePropertyAssignCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -43,9 +40,17 @@ final class NetteControlToSymfonyControllerRector extends AbstractRector
      */
     private $templatePropertyAssignCollector;
 
-    public function __construct(TemplatePropertyAssignCollector $templatePropertyAssignCollector)
-    {
+    /**
+     * @var ActionRenderFactory
+     */
+    private $actionRenderFactory;
+
+    public function __construct(
+        TemplatePropertyAssignCollector $templatePropertyAssignCollector,
+        ActionRenderFactory $actionRenderFactory
+    ) {
         $this->templatePropertyAssignCollector = $templatePropertyAssignCollector;
+        $this->actionRenderFactory = $actionRenderFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -134,17 +139,7 @@ PHP
             $classMethod
         );
 
-        $thisRenderMethod = $this->createMethodCall('this', 'render');
-
-        if ($magicTemplatePropertyCalls->getTemplateFileExpr() !== null) {
-            $thisRenderMethod->args[0] = new Arg($magicTemplatePropertyCalls->getTemplateFileExpr());
-        }
-
-        if ($magicTemplatePropertyCalls->getTemplateVariables() !== []) {
-            $thisRenderMethod->args[1] = new Arg($this->createTemplateVariablesArray(
-                $magicTemplatePropertyCalls->getTemplateVariables()
-            ));
-        }
+        $thisRenderMethod = $this->actionRenderFactory->createThisRenderMethodCall($magicTemplatePropertyCalls);
 
         // add return in the end
         $return = new Return_($thisRenderMethod);
@@ -155,17 +150,6 @@ PHP
         }
 
         $this->removeNodes($magicTemplatePropertyCalls->getNodesToRemove());
-    }
-
-    private function createTemplateVariablesArray(array $templateVariables): Array_
-    {
-        $array = new Array_();
-
-        foreach ($templateVariables as $name => $node) {
-            $array->items[] = new ArrayItem($node, new String_($name));
-        }
-
-        return $array;
     }
 
     private function removeSuffix(string $content, string $suffix): string

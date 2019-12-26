@@ -179,7 +179,7 @@ final class NodeFactory
      * @param string|Expr $variable
      * @param mixed[] $arguments
      */
-    public function createMethodCall($variable, string $method, array $arguments): MethodCall
+    public function createMethodCall($variable, string $method, array $arguments = []): MethodCall
     {
         if (is_string($variable)) {
             $variable = new Variable($variable);

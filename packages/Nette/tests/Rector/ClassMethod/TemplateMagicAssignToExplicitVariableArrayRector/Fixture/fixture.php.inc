@@ -2,9 +2,9 @@
 
 namespace Rector\Nette\Tests\Rector\ClassMethod\TemplateMagicAssignToExplicitVariableArrayRector\Fixture;
 
-use Nette\Application\UI\Control;
+use Nette\Application\UI\Presenter;
 
-class SomeControl extends Control
+class SomeControl extends Presenter
 {
     public function render()
     {
@@ -19,9 +19,9 @@ class SomeControl extends Control
 
 namespace Rector\Nette\Tests\Rector\ClassMethod\TemplateMagicAssignToExplicitVariableArrayRector\Fixture;
 
-use Nette\Application\UI\Control;
+use Nette\Application\UI\Presenter;
 
-class SomeControl extends Control
+class SomeControl extends Presenter
 {
     public function render()
     {
