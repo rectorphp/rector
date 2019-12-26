@@ -10,6 +10,7 @@ use PhpParser\Node\Name;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see https://www.tomasvotruba.cz/blog/2018/08/16/whats-new-in-php-73-in-30-seconds-in-diffs/#2-first-and-last-array-key
@@ -121,13 +122,18 @@ PHP
 
     private function shouldSkip(FuncCall $funcCall): bool
     {
-        if ($this->isAtLeastPhpVersion('7.3')) {
+        if (! $this->isNames($funcCall, ['reset', 'end'])) {
+            return true;
+        }
+
+        if ($this->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_KEY_FIRST_LAST)) {
             return false;
         }
 
         if (function_exists(self::ARRAY_KEY_FIRST) && function_exists(self::ARRAY_KEY_LAST)) {
             return false;
         }
-        return $this->isNames($funcCall, ['reset', 'end']);
+
+        return true;
     }
 }
