@@ -29,3 +29,4 @@ services:
     Rector\DeadCode\Rector\Property\RemoveNullPropertyInitializationRector: ~
     Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector: ~
     Rector\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector: ~
+    Rector\DeadCode\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector: ~
