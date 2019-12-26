@@ -243,3 +243,7 @@ parameters:
 
         - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\Gedmo\\(.*?)\:\:createFromNodeAndTokens\(\) should return Rector\\BetterPhpDocParser\\PhpDocNode\\Gedmo\\(.*?)\|null but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\|null#'
 
+
+
+        - '#Access to an undefined property PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\:\:\$type#'
+        - '#Call to an undefined method PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\:\:toString\(\)#'

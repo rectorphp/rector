@@ -111,6 +111,7 @@ parameters:
             - 'packages/NetteTesterToPHPUnit/src/AssertManipulator.php'
             - 'packages/Legacy/src/NodeAnalyzer/SingletonClassMethodAnalyzer.php'
             - 'src/Rector/AbstractRector/ComplexRemovalTrait.php'
+            - 'packages/TypeDeclaration/src/VendorLock/VendorLockResolver.php'
             # aliases
             - 'packages/CodingStyle/src/Rector/Namespace_/ImportFullyQualifiedNamesRector.php'
 
