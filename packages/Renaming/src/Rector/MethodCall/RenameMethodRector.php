@@ -53,7 +53,9 @@ PHP
                 ,
                 [
                     'SomeExampleClass' => [
-                        'oldMethod' => 'newMethod',
+                        '$oldToNewMethodsByClass' => [
+                            'oldMethod' => 'newMethod',
+                        ],
                     ],
                 ]
             ),

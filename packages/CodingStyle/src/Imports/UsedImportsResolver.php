@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -92,12 +91,12 @@ final class UsedImportsResolver
     {
         $usedFunctionImports = [];
 
-        $this->useImportsTraverser->traverserStmts($stmts, function (
+        $this->useImportsTraverser->traverserStmtsForFunctions($stmts, function (
             UseUse $useUse,
             string $name
         ) use (&$usedFunctionImports): void {
             $usedFunctionImports[] = new FullyQualifiedObjectType($name);
-        }, Use_::TYPE_FUNCTION);
+        });
 
         return $usedFunctionImports;
     }
