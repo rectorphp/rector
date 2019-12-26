@@ -44,6 +44,11 @@ final class PhpVersionFeature
     /**
      * @var string
      */
+    public const ARRAY_KEY_FIRST_LAST = '7.3';
+
+    /**
+     * @var string
+     */
     public const ARROW_FUNCTION = '7.4';
 
     /**
