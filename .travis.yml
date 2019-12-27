@@ -3,7 +3,6 @@ dist: bionic
 language: php
 
 php:
-    - '7.2'
     - '7.3'
     - '7.4'
 
@@ -52,7 +51,7 @@ jobs:
         -
             stage: test
             php: 7.2
-            name: Lowest dependencies
+            name: "7.2 with Lowest dependencies"
             install:
                 # install lowest dependencies
                 - composer update --prefer-lowest --no-progress
