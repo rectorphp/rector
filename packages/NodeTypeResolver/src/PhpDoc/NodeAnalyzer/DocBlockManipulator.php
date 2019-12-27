@@ -16,6 +16,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ArrayType;
@@ -288,7 +289,20 @@ final class DocBlockManipulator
             return;
         }
 
-        $this->removeTagFromNode($node, 'return');
+        if ($node->getDocComment()) {
+            $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+            $returnTagValueNode = $phpDocInfo->getByType(ReturnTagValueNode::class);
+
+            // overide existing type
+            if ($returnTagValueNode) {
+                $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
+                $returnTagValueNode->type = $newPHPStanPhpDocType;
+
+                $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
+                return;
+            }
+        }
+
         $this->addTypeSpecificTag($node, 'return', $newType);
     }
 

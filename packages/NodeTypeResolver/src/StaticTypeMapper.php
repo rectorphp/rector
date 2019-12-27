@@ -101,6 +101,8 @@ final class StaticTypeMapper
                 $unionTypesNodes[] = $this->mapPHPStanTypeToPHPStanPhpDocTypeNode($unionedType);
             }
 
+            $unionTypesNodes = array_unique($unionTypesNodes);
+
             return new AttributeAwareUnionTypeNode($unionTypesNodes);
         }
 
@@ -127,6 +129,10 @@ final class StaticTypeMapper
 
         if ($phpStanType instanceof ObjectType) {
             return new IdentifierTypeNode('\\' . $phpStanType->getClassName());
+        }
+
+        if ($phpStanType instanceof NullType) {
+            return new IdentifierTypeNode('null');
         }
 
         throw new NotImplementedException(__METHOD__ . ' for ' . get_class($phpStanType));
