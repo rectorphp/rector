@@ -18,6 +18,7 @@ script:
 
 stages:
     - test
+    - compile
     - name: phar
       if: (branch = master OR tag IS present) && type = push
 
