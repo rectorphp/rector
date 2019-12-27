@@ -67,18 +67,14 @@ final class TemplateVariablesFactory
             return '';
         }
 
-        $sourceDocBlock = <<<'PHP'
-/**
-%s
- */
-PHP;
-
         $sourceAsString = '';
         foreach ($source as $singleSource) {
             $sourceAsString .= ' * @see ' . $singleSource . PHP_EOL;
         }
 
-        return sprintf($sourceDocBlock, rtrim($sourceAsString));
+        $sourceAsString .= ' *';
+
+        return rtrim($sourceAsString);
     }
 
     private function createNodeTypePhp(Configuration $configuration): string

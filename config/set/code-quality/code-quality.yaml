@@ -45,3 +45,4 @@ services:
     Rector\SOLID\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector: ~
     Rector\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector: ~
     Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector: ~
+    Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector: ~

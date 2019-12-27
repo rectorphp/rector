@@ -9,9 +9,8 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
-_Source_
-
 /**
+_Source_
  * @see \Rector\_Package_\Tests\Rector\_Category_\_Name_\_Name_Test
  */
 final class _Name_ extends AbstractRector
