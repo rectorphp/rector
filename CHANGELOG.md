@@ -9,6 +9,61 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+## [v0.6.4]
+
+### Added
+
+- [#2497] [DeadCode] Add TernaryToBooleanOrFalseToBooleanAndRector
+- [#2496] [Nette] Add magic template code quality
+- [#2500] [PHP] add PHP version feature checks, Thanks to [@fsok]
+- [#2484] [Gedmo to Knp] Add TreeBehaviorRector
+- [#2476] Add ScanFatalErrors command
+- [#2479] prevent re-adding id at AddEntityIdByConditionRector
+
+### Changed
+
+- [#2482] [DoctrineGedmoToKnplabs] init set
+- [#2502] Apply HelperFunctionToConstructorInjectionRector only in non-static class method scope
+- [#2475] [RemoveEmptyClassMethodRector + RemoveDeadConstructorRector] Should not apply on protected/private constructors, Thanks to [@gnutix]
+- [#2478] Link a few more recent articles, Thanks to [@staabm]
+- [#2480] merge ParentTypehintedArgumentRector to AddParamTypeDeclarationRector
+- [#2481] init MoveValueObjectsToValueObjectDirectoryRector
+- [#2487] Skip non-variable non-scalars in BinaryOpBetweenNumberAndStringRector
+
+### Fixed
+
+- [#2485] Fix grouped use statement import
+- [#2486] Fix alias object conflict with existing type
+- [#2483] Fix typos, Thanks to [@staabm]
+- [#2501] Fix return override in case of parent vendor lock
+- [#2489] Fix name resolution in ArrayKeyFirstLastRector
+- [#2491] Fix codesample in TypedPropertyRector, Thanks to [@ruudk]
+- [#2493] fix PREG_SPLIT_DELIM_CAPTURE for split Nette Utils
+- [#2499] Fix function override under namespace
+- [#2492] [docs] Fix codesample in TypedPropertyRector, Thanks to [@ruudk]
+
+## [v0.6.3] - 2019-12-23
+
+### Added
+
+- [#2457] [Class_] Add AddInterfaceByTraitRector
+- [#2463] [Doctrine] Add AddEntityIdByConditionRector
+- [#2465] [PHP Deglobalize] Add ChangeGlobalVariablesToPropertiesRector
+- [#2461] Added int to StaticTypeMapper, Thanks to [@lulco]
+- [#2458] prevent duplicated added interface
+- [#2472] add symfony5 set
+
+### Changed
+
+- [#2464] [Nette] Control to Symfony Form + Controller
+- [#2470] merge Rector arguments on import
+- [#2459] disable imports by default
+
+### Fixed
+
+- [#2466] [Symfony] fix dot in GetParameterToConstructorInjectionRector
+- [#2467] fix rename method call
+
 ## [v0.6.2] - 2019-12-18
 
 ### Added
@@ -1701,3 +1756,41 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@andreybolonin]: https://github.com/andreybolonin
 [@RusiPapazov]: https://github.com/RusiPapazov
 [v0.6.1]: https://github.com/rectorphp/rector/compare/v0.6.0...v0.6.1
+[#2502]: https://github.com/rectorphp/rector/pull/2502
+[#2501]: https://github.com/rectorphp/rector/pull/2501
+[#2500]: https://github.com/rectorphp/rector/pull/2500
+[#2499]: https://github.com/rectorphp/rector/pull/2499
+[#2497]: https://github.com/rectorphp/rector/pull/2497
+[#2496]: https://github.com/rectorphp/rector/pull/2496
+[#2493]: https://github.com/rectorphp/rector/pull/2493
+[#2492]: https://github.com/rectorphp/rector/pull/2492
+[#2491]: https://github.com/rectorphp/rector/pull/2491
+[#2489]: https://github.com/rectorphp/rector/pull/2489
+[#2487]: https://github.com/rectorphp/rector/pull/2487
+[#2486]: https://github.com/rectorphp/rector/pull/2486
+[#2485]: https://github.com/rectorphp/rector/pull/2485
+[#2484]: https://github.com/rectorphp/rector/pull/2484
+[#2483]: https://github.com/rectorphp/rector/pull/2483
+[#2482]: https://github.com/rectorphp/rector/pull/2482
+[#2481]: https://github.com/rectorphp/rector/pull/2481
+[#2480]: https://github.com/rectorphp/rector/pull/2480
+[#2479]: https://github.com/rectorphp/rector/pull/2479
+[#2478]: https://github.com/rectorphp/rector/pull/2478
+[#2476]: https://github.com/rectorphp/rector/pull/2476
+[#2475]: https://github.com/rectorphp/rector/pull/2475
+[#2472]: https://github.com/rectorphp/rector/pull/2472
+[#2470]: https://github.com/rectorphp/rector/pull/2470
+[#2467]: https://github.com/rectorphp/rector/pull/2467
+[#2466]: https://github.com/rectorphp/rector/pull/2466
+[#2465]: https://github.com/rectorphp/rector/pull/2465
+[#2464]: https://github.com/rectorphp/rector/pull/2464
+[#2463]: https://github.com/rectorphp/rector/pull/2463
+[#2461]: https://github.com/rectorphp/rector/pull/2461
+[#2459]: https://github.com/rectorphp/rector/pull/2459
+[#2458]: https://github.com/rectorphp/rector/pull/2458
+[#2457]: https://github.com/rectorphp/rector/pull/2457
+[v0.6.4]: https://github.com/rectorphp/rector/compare/v0.6.3...v0.6.4
+[v0.6.3]: https://github.com/rectorphp/rector/compare/v0.6.2...v0.6.3
+[v0.6.2]: https://github.com/rectorphp/rector/compare/v0.6.1...v0.6.2
+[@ruudk]: https://github.com/ruudk
+[@lulco]: https://github.com/lulco
