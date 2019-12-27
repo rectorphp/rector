@@ -220,6 +220,23 @@ final class PhpDocInfo
         return null;
     }
 
+    public function removeByType(string $type): void
+    {
+        $this->ensureTypeIsTagValueNode($type, __METHOD__);
+
+        foreach ($this->phpDocNode->children as $key => $phpDocChildNode) {
+            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
+            }
+
+            if (! is_a($phpDocChildNode->value, $type, true)) {
+                continue;
+            }
+
+            unset($this->phpDocNode->children[$key]);
+        }
+    }
+
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
         $phpDocNode = $this->getPhpDocNode();

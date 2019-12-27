@@ -28,7 +28,6 @@ use PhpParser\Node\Stmt\Namespace_;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NetteToSymfony\Collector\CollectOnFormVariableMethodCallsCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -54,19 +53,12 @@ final class FormControlToControllerAndFormTypeRector extends AbstractRector
      */
     private $classNaming;
 
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
     public function __construct(
         CollectOnFormVariableMethodCallsCollector $collectOnFormVariableMethodCallsCollector,
-        ClassNaming $classNaming,
-        BetterStandardPrinter $betterStandardPrinter
+        ClassNaming $classNaming
     ) {
         $this->collectOnFormVariableMethodCallsCollector = $collectOnFormVariableMethodCallsCollector;
         $this->classNaming = $classNaming;
-        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     public function getDefinition(): RectorDefinition
@@ -269,7 +261,7 @@ PHP
         $filePath = dirname($fileInfo->getRealPath()) . DIRECTORY_SEPARATOR . 'SomeFormController.php';
 
         // @todo make temporary
-        $content = '<?php' . PHP_EOL . $this->betterStandardPrinter->print([$namespace]) . PHP_EOL;
+        $content = '<?php' . PHP_EOL . $this->print([$namespace]) . PHP_EOL;
         FileSystem::write($filePath, $content);
     }
 

@@ -12,7 +12,6 @@ use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -58,21 +57,14 @@ final class RemoveUnusedParameterRector extends AbstractRector
         '__wakeup',
     ];
 
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
     public function __construct(
         ClassManipulator $classManipulator,
         ClassMethodManipulator $classMethodManipulator,
-        ParsedNodesByType $parsedNodesByType,
-        BetterStandardPrinter $betterStandardPrinter
+        ParsedNodesByType $parsedNodesByType
     ) {
         $this->classManipulator = $classManipulator;
         $this->classMethodManipulator = $classMethodManipulator;
         $this->parsedNodesByType = $parsedNodesByType;
-        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     public function getDefinition(): RectorDefinition
@@ -187,7 +179,7 @@ PHP
             $parameters1,
             $parameters2,
             function (Param $a, Param $b): int {
-                return $this->betterStandardPrinter->areNodesEqual($a, $b) ? 0 : 1;
+                return $this->areNodesEqual($a, $b) ? 0 : 1;
             }
         );
     }

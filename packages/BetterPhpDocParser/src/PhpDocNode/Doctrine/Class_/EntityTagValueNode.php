@@ -19,12 +19,15 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode
     private $repositoryClass;
 
     /**
-     * @var bool
+     * @var bool|null
      */
-    private $readOnly = false;
+    private $readOnly;
 
-    public function __construct(?string $repositoryClass, bool $readOnly, ?string $originalContent)
-    {
+    public function __construct(
+        ?string $repositoryClass = null,
+        ?bool $readOnly = null,
+        ?string $originalContent = null
+    ) {
         $this->repositoryClass = $repositoryClass;
         $this->readOnly = $readOnly;
 
@@ -39,7 +42,9 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode
             $contentItems['repositoryClass'] = sprintf('repositoryClass="%s"', $this->repositoryClass);
         }
 
-        $contentItems['readOnly'] = sprintf('readOnly=%s', $this->readOnly ? 'true' : 'false');
+        if ($this->readOnly !== null) {
+            $contentItems['readOnly'] = sprintf('readOnly=%s', $this->readOnly ? 'true' : 'false');
+        }
 
         return $this->printContentItems($contentItems);
     }

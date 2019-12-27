@@ -228,10 +228,12 @@ final class NodeFactory
         );
     }
 
-    public function createPrivateProperty(string $name): Property
+    public function createStaticProtectedPropertyWithDefault(string $name, Node $node): Property
     {
         $propertyBuilder = $this->builderFactory->property($name);
-        $propertyBuilder->makePrivate();
+        $propertyBuilder->makeProtected();
+        $propertyBuilder->makeStatic();
+        $propertyBuilder->setDefault($node);
 
         $property = $propertyBuilder->getNode();
 
@@ -240,12 +242,10 @@ final class NodeFactory
         return $property;
     }
 
-    public function createStaticProtectedPropertyWithDefault(string $name, Node $node): Property
+    public function createPrivateProperty(string $name): Property
     {
         $propertyBuilder = $this->builderFactory->property($name);
-        $propertyBuilder->makeProtected();
-        $propertyBuilder->makeStatic();
-        $propertyBuilder->setDefault($node);
+        $propertyBuilder->makePrivate();
 
         $property = $propertyBuilder->getNode();
 

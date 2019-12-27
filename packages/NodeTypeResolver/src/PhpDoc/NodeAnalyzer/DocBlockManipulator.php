@@ -479,15 +479,10 @@ final class DocBlockManipulator
         PhpDocInfo $phpDocInfo,
         bool $shouldSkipEmptyLinesAbove = false
     ): bool {
-        // skip if has no doc comment
-        if ($node->getDocComment() === null) {
-            return false;
-        }
-
         $phpDoc = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo, $shouldSkipEmptyLinesAbove);
         if ($phpDoc !== '') {
             // no change, don't save it
-            if ($node->getDocComment()->getText() === $phpDoc) {
+            if ($node->getDocComment() && $node->getDocComment()->getText() === $phpDoc) {
                 return false;
             }
 
