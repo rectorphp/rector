@@ -3,7 +3,6 @@ dist: bionic
 language: php
 
 php:
-    - '7.2'
     - '7.3'
     - '7.4'
 
@@ -16,6 +15,11 @@ install:
 
 script:
     - vendor/bin/phpunit --testsuite main
+
+stages:
+    - test
+    - name: phar
+      if: (branch = master OR tag IS present) && type = push
 
 jobs:
     include:
@@ -35,7 +39,6 @@ jobs:
             stage: phar
             name: "Deploy PHAR to https://github.com/rectorphp/rector-prefixed"
             php: 7.2
-            if: branch = master AND type = push
             script:
                 # reuse tmp/rector.phar from previous job
                 - git clone https://${GITHUB_TOKEN}@github.com/rectorphp/rector-prefixed.git rector-prefixed > /dev/null 2>&1
@@ -45,14 +48,26 @@ jobs:
                 - git config user.email "travis@travis-ci.org"
                 - git config user.name "Travis CI"
                 - git add rector rector.phar
-                - git commit -m "Updated Rector to commit ${TRAVIS_COMMIT}"
+
+                - if [ "${TRAVIS_TAG}" != "" ]; then
+                      COMMIT_MSG="Rector ${TRAVIS_TAG}"
+                  else
+                      COMMIT_MSG="Updated Rector to commit ${TRAVIS_COMMIT}"
+                  fi
+
+                - git commit -S -m "${COMMIT_MSG}" -m "${GIT_LOG}"
                 - git push --quiet origin master
+
+                - if [ "${TRAVIS_TAG}" != "" ]; then
+                      git tag -s ${TRAVIS_TAG} -m "${TRAVIS_TAG}"
+                      git push --quiet origin ${TRAVIS_TAG}
+                  fi
 
         # Stage 1
         -
             stage: test
             php: 7.2
-            name: Lowest dependencies
+            name: "7.2 with Lowest dependencies"
             install:
                 # install lowest dependencies
                 - composer update --prefer-lowest --no-progress
@@ -93,10 +108,9 @@ jobs:
                 - php ci/check_services_in_yaml_configs.php
                 - php ci/run_all_sets.php
 
-        # Stage 2
         -
             # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
-            stage: standalone
+            stage: test
             php: 7.3
             name: Standalone Run
             script:
@@ -122,7 +136,7 @@ jobs:
                 # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
                 - ../rector-dir/vendor/bin/rector process src --set code-quality --hide-autoload-errors --dry-run
 
-        # Stage 3
+        # Stage 2
         -
             stage: coverage
             php: 7.3
