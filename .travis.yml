@@ -48,8 +48,20 @@ jobs:
                 - git config user.email "travis@travis-ci.org"
                 - git config user.name "Travis CI"
                 - git add rector rector.phar
-                - git commit -m "Updated Rector to commit ${TRAVIS_COMMIT}"
+
+                - if [ "${TRAVIS_TAG}" != "" ]; then
+                      COMMIT_MSG="Rector ${TRAVIS_TAG}"
+                  else
+                      COMMIT_MSG="Updated Rector to commit ${TRAVIS_COMMIT}"
+                  fi
+
+                - git commit -S -m "${COMMIT_MSG}" -m "${GIT_LOG}"
                 - git push --quiet origin master
+
+                - if [ "${TRAVIS_TAG}" != "" ]; then
+                      git tag -s ${TRAVIS_TAG} -m "${TRAVIS_TAG}"
+                      git push --quiet origin ${TRAVIS_TAG}
+                  fi
 
         # Stage 1
         -
