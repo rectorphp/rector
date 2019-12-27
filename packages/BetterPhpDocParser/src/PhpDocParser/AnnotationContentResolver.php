@@ -52,6 +52,11 @@ final class AnnotationContentResolver
                 $annotationContent .= $tokenIterator->currentTokenValue();
             }
 
+            // this is the end of single-line comment
+            if ($tokenIterator->currentTokenType() === Lexer::TOKEN_END) {
+                break;
+            }
+
             $tokenIterator->next();
         }
 

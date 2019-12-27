@@ -157,11 +157,13 @@ final class BetterPhpDocParser extends PhpDocParser
 
             // compare regardless sensitivity
             $currentPhpNode = $this->currentNodeProvider->getNode();
-            if ($this->isTagMatchingPhpDocNodeFactory($tag, $phpDocNodeFactory, $currentPhpNode)) {
-                $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens($currentPhpNode, $tokenIterator);
-                if ($tagValueNode !== null) {
-                    break;
-                }
+            if (! $this->isTagMatchingPhpDocNodeFactory($tag, $phpDocNodeFactory, $currentPhpNode)) {
+                continue;
+            }
+
+            $tagValueNode = $phpDocNodeFactory->createFromNodeAndTokens($currentPhpNode, $tokenIterator);
+            if ($tagValueNode !== null) {
+                break;
             }
         }
 

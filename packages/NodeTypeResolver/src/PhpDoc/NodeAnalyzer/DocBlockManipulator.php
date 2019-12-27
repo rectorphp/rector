@@ -20,10 +20,14 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
@@ -548,17 +552,13 @@ final class DocBlockManipulator
      */
     private function areTypesEquals(Type $firstType, Type $secondType): bool
     {
-        // aliases and types
-        if ($firstType instanceof AliasedObjectType && $secondType instanceof ObjectType) {
-            if ($firstType->getFullyQualifiedClass() === $secondType->getClassName()) {
-                return true;
-            }
+        if ($this->areBothSameScalarType($firstType, $secondType)) {
+            return true;
         }
 
-        if ($secondType instanceof AliasedObjectType && $firstType instanceof ObjectType) {
-            if ($secondType->getFullyQualifiedClass() === $firstType->getClassName()) {
-                return true;
-            }
+        // aliases and types
+        if ($this->areAliasedObjectMatchingFqnObject($firstType, $secondType)) {
+            return true;
         }
 
         $firstTypeHash = $this->staticTypeMapper->createTypeHash($firstType);
@@ -567,6 +567,7 @@ final class DocBlockManipulator
         if ($firstTypeHash === $secondTypeHash) {
             return true;
         }
+
         return $this->areArrayTypeWithSingleObjectChildToParent($firstType, $secondType);
     }
 
@@ -647,5 +648,43 @@ final class DocBlockManipulator
         }
 
         return $objectType->getClassName();
+    }
+
+    private function areBothSameScalarType(Type $firstType, Type $secondType): bool
+    {
+        if ($firstType instanceof StringType && $secondType instanceof StringType) {
+            return true;
+        }
+
+        if ($firstType instanceof IntegerType && $secondType instanceof IntegerType) {
+            return true;
+        }
+
+        if ($firstType instanceof FloatType && $secondType instanceof FloatType) {
+            return true;
+        }
+
+        if ($firstType instanceof BooleanType && $secondType instanceof BooleanType) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function areAliasedObjectMatchingFqnObject(Type $firstType, Type $secondType): bool
+    {
+        if ($firstType instanceof AliasedObjectType && $secondType instanceof ObjectType) {
+            if ($firstType->getFullyQualifiedClass() === $secondType->getClassName()) {
+                return true;
+            }
+        }
+
+        if ($secondType instanceof AliasedObjectType && $firstType instanceof ObjectType) {
+            if ($secondType->getFullyQualifiedClass() === $firstType->getClassName()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

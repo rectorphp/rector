@@ -79,7 +79,7 @@ use SomeOldClass;
 function someFunction(SomeOldClass $someOldClass): SomeOldClass
 {
     if ($someOldClass instanceof SomeOldClass) {
-        return new SomeOldClass; 
+        return new SomeOldClass;
     }
 }
 PHP
