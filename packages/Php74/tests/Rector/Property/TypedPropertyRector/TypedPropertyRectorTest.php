@@ -11,6 +11,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class TypedPropertyRectorTest extends AbstractRectorTestCase
 {
     /**
+     * @requires PHP >= 7.4
      * @dataProvider provideDataForTest()
      */
     public function test(string $file): void

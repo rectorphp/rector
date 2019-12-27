@@ -11,6 +11,7 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
+use Rector\TypeDeclaration\VendorLock\VendorLockResolver;
 use Rector\ValueObject\PhpVersionFeature;
 
 /**
@@ -25,9 +26,15 @@ final class TypedPropertyRector extends AbstractRector
      */
     private $propertyTypeInferer;
 
-    public function __construct(PropertyTypeInferer $propertyTypeInferer)
+    /**
+     * @var VendorLockResolver
+     */
+    private $vendorLockResolver;
+
+    public function __construct(PropertyTypeInferer $propertyTypeInferer, VendorLockResolver $vendorLockResolver)
     {
         $this->propertyTypeInferer = $propertyTypeInferer;
+        $this->vendorLockResolver = $vendorLockResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -89,6 +96,10 @@ PHP
 
         $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, 'property');
         if ($propertyTypeNode === null) {
+            return null;
+        }
+
+        if ($this->vendorLockResolver->isPropertyChangeVendorLockedIn($node)) {
             return null;
         }
 
