@@ -73,7 +73,12 @@ Tip: If you have EasyCodingStandard, you can start your set with [`ecs-after-rec
 composer require rector/rector --dev
 ```
 
-**Did you have conflicts during `composer require` or on run?**
+**Do you have conflicts during `composer require` or on run?**
+
+- Use the [Rector Prefixed](https://github.com/rectorphp/rector-prefixed)
+
+**Do you need different PHP version than Rector supports?**
+
 - Use the [Docker image](#run-rector-in-docker)
 
 ## Running Rector
