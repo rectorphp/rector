@@ -92,10 +92,9 @@ jobs:
                 - php ci/check_services_in_yaml_configs.php
                 - php ci/run_all_sets.php
 
-        # Stage 2
         -
             # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
-            stage: standalone
+            stage: test
             php: 7.3
             name: Standalone Run
             script:
@@ -121,7 +120,7 @@ jobs:
                 # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
                 - ../rector-dir/vendor/bin/rector process src --set code-quality --hide-autoload-errors --dry-run
 
-        # Stage 3
+        # Stage 2
         -
             stage: coverage
             php: 7.3
