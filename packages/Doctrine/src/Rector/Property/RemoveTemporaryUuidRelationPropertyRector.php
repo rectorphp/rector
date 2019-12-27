@@ -44,7 +44,7 @@ final class RemoveTemporaryUuidRelationPropertyRector extends AbstractRector
             return null;
         }
 
-        if ($phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class) === null) {
+        if (! $phpDocInfo->hasByType(DoctrineRelationTagValueNodeInterface::class)) {
             return null;
         }
 

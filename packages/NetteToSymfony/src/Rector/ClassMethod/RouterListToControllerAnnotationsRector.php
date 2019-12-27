@@ -334,7 +334,7 @@ PHP
             return false;
         }
 
-        return (bool) $phpDocInfo->getByType(SymfonyRouteTagValueNode::class);
+        return $phpDocInfo->hasByType(SymfonyRouteTagValueNode::class);
     }
 
     private function resolvePathFromClassAndMethodNodes(Class_ $classNode, ClassMethod $classMethod): string

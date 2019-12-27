@@ -50,7 +50,7 @@ final class DoctrineDocBlockResolver
                 return false;
             }
 
-            return (bool) $classPhpDocInfo->getByType(EntityTagValueNode::class);
+            return $classPhpDocInfo->hasByType(EntityTagValueNode::class);
         }
 
         if (is_string($class)) {
@@ -108,7 +108,7 @@ final class DoctrineDocBlockResolver
             return false;
         }
 
-        return (bool) $propertyPhpDocInfo->getByType(IdTagValueNode::class);
+        return $propertyPhpDocInfo->hasByType(IdTagValueNode::class);
     }
 
     public function getDoctrineRelationTagValueNode(Property $property): ?DoctrineRelationTagValueNodeInterface
@@ -128,11 +128,11 @@ final class DoctrineDocBlockResolver
             return false;
         }
 
-        if ($propertyPhpDocInfo->getByType(ColumnTagValueNode::class) !== null) {
+        if ($propertyPhpDocInfo->hasByType(ColumnTagValueNode::class)) {
             return true;
         }
 
-        return (bool) $propertyPhpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
+        return $propertyPhpDocInfo->hasByType(DoctrineRelationTagValueNodeInterface::class);
     }
 
     public function isInDoctrineEntityClass(Node $node): bool

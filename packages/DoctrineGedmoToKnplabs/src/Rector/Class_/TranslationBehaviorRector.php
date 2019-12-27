@@ -209,12 +209,12 @@ PHP
                 continue;
             }
 
-            if ($propertyPhpDocInfo->getByType(LocaleTagValueNode::class)) {
+            if ($propertyPhpDocInfo->hasByType(LocaleTagValueNode::class)) {
                 $this->removeNode($property);
                 continue;
             }
 
-            if (! $propertyPhpDocInfo->getByType(TranslatableTagValueNode::class)) {
+            if (! $propertyPhpDocInfo->hasByType(TranslatableTagValueNode::class)) {
                 continue;
             }
 

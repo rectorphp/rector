@@ -146,7 +146,7 @@ final class DoctrineEntityManipulator
             }
 
             $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
-            if ($phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class) === null) {
+            if (! $phpDocInfo->hasByType(DoctrineRelationTagValueNodeInterface::class)) {
                 continue;
             }
 
