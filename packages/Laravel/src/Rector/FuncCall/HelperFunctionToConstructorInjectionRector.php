@@ -223,11 +223,12 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        // we can inject only in class context
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_) {
+        if ($this->shouldSkipFuncCall($node)) {
             return null;
         }
+
+        /** @var Class_ $classNode */
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
 
         foreach ($this->functionToService as $function => $service) {
             if (! $this->isName($node, $function)) {
@@ -261,5 +262,26 @@ PHP
         }
 
         return null;
+    }
+
+    private function shouldSkipFuncCall(FuncCall $funcCall): bool
+    {
+        // we can inject only in class context
+        $classNode = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $classNode instanceof Class_) {
+            return true;
+        }
+
+        /** @var Node\Stmt\ClassMethod|null $classMethod */
+        $classMethod = $funcCall->getAttribute(AttributeKey::METHOD_NODE);
+        if ($classMethod === null) {
+            return true;
+        }
+
+        if ($classMethod->isStatic()) {
+            return true;
+        }
+
+        return false;
     }
 }
