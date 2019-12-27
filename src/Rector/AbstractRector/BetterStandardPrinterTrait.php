@@ -22,7 +22,7 @@ trait BetterStandardPrinterTrait
     /**
      * @var BetterStandardPrinter
      */
-    private $betterStandardPrinter;
+    protected $betterStandardPrinter;
 
     /**
      * @required

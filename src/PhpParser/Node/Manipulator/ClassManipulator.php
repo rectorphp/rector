@@ -440,6 +440,30 @@ final class ClassManipulator
         return [];
     }
 
+    public function hasInterface(Class_ $class, string $desiredInterface): bool
+    {
+        foreach ($class->implements as $implement) {
+            if (! $this->nameResolver->isName($implement, $desiredInterface)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function removeInterface(Class_ $class, string $desiredInterface): void
+    {
+        foreach ($class->implements as $implement) {
+            if (! $this->nameResolver->isName($implement, $desiredInterface)) {
+                continue;
+            }
+
+            $this->nodeRemovingCommander->addNode($implement);
+        }
+    }
+
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
     {
         foreach ($classNode->stmts as $key => $classStmt) {

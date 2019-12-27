@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Ramsey\Uuid\UuidInterface;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
@@ -47,6 +48,11 @@ final class PhpDocTagNodeFactory
     public function createIdTag(): PhpDocTagNode
     {
         return new SpacelessPhpDocTagNode(IdTagValueNode::SHORT_NAME, new IdTagValueNode());
+    }
+
+    public function createEntityTag(): PhpDocTagNode
+    {
+        return new SpacelessPhpDocTagNode(EntityTagValueNode::SHORT_NAME, new EntityTagValueNode());
     }
 
     public function createIdColumnTag(): PhpDocTagNode
