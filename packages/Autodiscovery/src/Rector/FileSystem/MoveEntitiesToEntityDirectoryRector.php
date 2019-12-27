@@ -107,6 +107,6 @@ PHP
             return false;
         }
 
-        return (bool) $phpDocInfo->getByType(EntityTagValueNode::class);
+        return $phpDocInfo->hasByType(EntityTagValueNode::class);
     }
 }

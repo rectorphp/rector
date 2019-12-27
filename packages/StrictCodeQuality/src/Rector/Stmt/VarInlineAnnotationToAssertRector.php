@@ -215,8 +215,7 @@ PHP
 
     private function removeVarAnnotation(Node $node, PhpDocInfo $phpDocInfo): void
     {
-        $varTagValueNode = $phpDocInfo->getByType(VarTagValueNode::class);
-        $phpDocInfo->removeTagValueNodeFromNode($varTagValueNode);
+        $phpDocInfo->removeByType(VarTagValueNode::class);
 
         $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }

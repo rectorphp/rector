@@ -44,7 +44,7 @@ final class RemoveTemporaryUuidColumnPropertyRector extends AbstractRector
             return null;
         }
 
-        if ($phpDocInfo->getByType(ColumnTagValueNode::class) === null) {
+        if (! $phpDocInfo->hasByType(ColumnTagValueNode::class)) {
             return null;
         }
 

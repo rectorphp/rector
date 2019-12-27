@@ -125,7 +125,7 @@ final class DocBlockManipulator
         // advanced check, e.g. for "Namespaced\Annotations\DI"
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
-        return (bool) $phpDocInfo->getByType($name);
+        return $phpDocInfo->hasByType($name);
     }
 
     public function addTag(Node $node, PhpDocChildNode $phpDocChildNode): void
@@ -323,10 +323,7 @@ final class DocBlockManipulator
 
         // A. remove class-based tag
         if (class_exists($tagName)) {
-            $phpDocTagNode = $phpDocInfo->getByType($tagName);
-            if ($phpDocTagNode) {
-                $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
-            }
+            $phpDocInfo->removeByType($tagName);
         }
 
         // B. remove string-based tags

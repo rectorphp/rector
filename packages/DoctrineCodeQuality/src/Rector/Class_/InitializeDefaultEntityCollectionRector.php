@@ -95,7 +95,7 @@ PHP
             return null;
         }
 
-        if ($classPhpDocInfo->getByType(EntityTagValueNode::class) === null) {
+        if (! $classPhpDocInfo->hasByType(EntityTagValueNode::class)) {
             return null;
         }
 
@@ -128,7 +128,7 @@ PHP
                 continue;
             }
 
-            if ($propertyPhpDocInfo->getByType(ToManyTagNodeInterface::class) === null) {
+            if (! $propertyPhpDocInfo->hasByType(ToManyTagNodeInterface::class)) {
                 continue;
             }
 

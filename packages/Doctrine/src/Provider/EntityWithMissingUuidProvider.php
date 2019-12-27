@@ -114,8 +114,7 @@ final class EntityWithMissingUuidProvider
     {
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
 
-        $idTagValueNode = $propertyPhpDocInfo->getByType(IdTagValueNode::class);
-        if ($idTagValueNode === null) {
+        if (! $propertyPhpDocInfo->hasByType(IdTagValueNode::class)) {
             return false;
         }
 

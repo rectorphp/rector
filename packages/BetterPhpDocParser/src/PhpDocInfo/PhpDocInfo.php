@@ -203,6 +203,11 @@ final class PhpDocInfo
         }
     }
 
+    public function hasByType(string $type): bool
+    {
+        return (bool) $this->getByType($type);
+    }
+
     public function getByType(string $type): ?PhpDocTagValueNode
     {
         $this->ensureTypeIsTagValueNode($type, __METHOD__);

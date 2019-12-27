@@ -52,7 +52,8 @@ final class AddUuidAnnotationsToIdPropertyRector extends AbstractRector
 
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $this->getPhpDocInfo($node);
-        $this->removeGeneratedValueTag($phpDocInfo);
+
+        $phpDocInfo->removeByType(GeneratedValueTagValueNode::class);
         $this->changeColumnTypeToUuidBinary($phpDocInfo);
         $this->changeSerializerTypeToString($phpDocInfo);
 
@@ -65,16 +66,6 @@ final class AddUuidAnnotationsToIdPropertyRector extends AbstractRector
     {
         $uuidObjectType = new FullyQualifiedObjectType(UuidInterface::class);
         $this->docBlockManipulator->changeVarTag($property, $uuidObjectType);
-    }
-
-    private function removeGeneratedValueTag(PhpDocInfo $phpDocInfo): void
-    {
-        $generatedTagValueNode = $phpDocInfo->getByType(GeneratedValueTagValueNode::class);
-        if ($generatedTagValueNode === null) {
-            return;
-        }
-
-        $phpDocInfo->removeTagValueNodeFromNode($generatedTagValueNode);
     }
 
     private function changeColumnTypeToUuidBinary(PhpDocInfo $phpDocInfo): void

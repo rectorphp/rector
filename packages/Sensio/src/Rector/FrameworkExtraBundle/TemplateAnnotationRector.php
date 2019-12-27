@@ -119,7 +119,7 @@ PHP
                 continue;
             }
 
-            if ((bool) $phpDocInfo->getByType(SensioTemplateTagValueNode::class)) {
+            if ($phpDocInfo->hasByType(SensioTemplateTagValueNode::class)) {
                 return true;
             }
         }

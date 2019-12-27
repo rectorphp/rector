@@ -139,13 +139,12 @@ PHP
             return null;
         }
 
-        $treeTagValueNode = $classPhpDocInfo->getByType(TreeTagValueNode::class);
-        if ($treeTagValueNode === null) {
+        if (! $classPhpDocInfo->hasByType(TreeTagValueNode::class)) {
             return null;
         }
 
         // we're in a tree entity
-        $classPhpDocInfo->removeTagValueNodeFromNode($treeTagValueNode);
+        $classPhpDocInfo->removeByType(TreeTagValueNode::class);
         $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $classPhpDocInfo);
 
         $node->implements[] = new FullyQualified('Knp\DoctrineBehaviors\Contract\Entity\TreeNodeInterface');
@@ -191,23 +190,23 @@ PHP
 
     private function shouldRemoveProperty(PhpDocInfo $phpDocInfo): bool
     {
-        if ($phpDocInfo->getByType(TreeLeftTagValueNode::class)) {
+        if ($phpDocInfo->hasByType(TreeLeftTagValueNode::class)) {
             return true;
         }
 
-        if ($phpDocInfo->getByType(TreeRightTagValueNode::class)) {
+        if ($phpDocInfo->hasByType(TreeRightTagValueNode::class)) {
             return true;
         }
 
-        if ($phpDocInfo->getByType(TreeRootTagValueNode::class)) {
+        if ($phpDocInfo->hasByType(TreeRootTagValueNode::class)) {
             return true;
         }
 
-        if ($phpDocInfo->getByType(TreeParentTagValueNode::class)) {
+        if ($phpDocInfo->hasByType(TreeParentTagValueNode::class)) {
             return true;
         }
 
-        if ($phpDocInfo->getByType(TreeLevelTagValueNode::class)) {
+        if ($phpDocInfo->hasByType(TreeLevelTagValueNode::class)) {
             return true;
         }
 
