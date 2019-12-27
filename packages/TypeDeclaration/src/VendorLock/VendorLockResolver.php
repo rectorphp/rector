@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\VendorLock;
 
+use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
@@ -41,7 +45,12 @@ final class VendorLockResolver
 
     public function isParameterChangeVendorLockedIn(ClassMethod $classMethod, int $paramPosition): bool
     {
-        if (! $this->hasParentClassOrImplementsInterface($classMethod)) {
+        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classNode === null) {
+            return false;
+        }
+
+        if (! $this->hasParentClassOrImplementsInterface($classNode)) {
             return false;
         }
 
@@ -102,7 +111,12 @@ final class VendorLockResolver
 
     public function isReturnChangeVendorLockedIn(ClassMethod $classMethod): bool
     {
-        if (! $this->hasParentClassOrImplementsInterface($classMethod)) {
+        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classNode === null) {
+            return false;
+        }
+
+        if (! $this->hasParentClassOrImplementsInterface($classNode)) {
             return false;
         }
 
@@ -160,13 +174,66 @@ final class VendorLockResolver
         return false;
     }
 
-    private function hasParentClassOrImplementsInterface(ClassMethod $classMethod): bool
+    public function isPropertyChangeVendorLockedIn(Property $property): bool
     {
-        $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return false;
         }
 
+        if (! $this->hasParentClassOrImplementsInterface($classNode)) {
+            return false;
+        }
+
+        $propertyName = $this->nameResolver->getName($property);
+
+        // @todo extract to some "inherited parent method" service
+        /** @var string|null $parentClassName */
+        $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+
+        if ($parentClassName !== null) {
+            $parentClassNode = $this->parsedNodesByType->findClass($parentClassName);
+            if ($parentClassNode !== null) {
+                $parentPropertyNode = $this->getProperty($parentClassNode, $propertyName);
+                // @todo validate type is conflicting
+                // parent class property in local scope → it's ok
+                if ($parentPropertyNode !== null) {
+                    return $parentPropertyNode->type !== null;
+                }
+
+                // if not, look for it's parent parent - @todo recursion
+            }
+
+            if (property_exists($parentClassName, $propertyName)) {
+                // @todo validate type is conflicting
+                // parent class property in external scope → it's not ok
+                return true;
+
+                // if not, look for it's parent parent - @todo recursion
+            }
+        }
+
+        return false;
+    }
+
+    // Until we have getProperty (https://github.com/nikic/PHP-Parser/pull/646)
+    private function getProperty(ClassLike $classLike, string $name)
+    {
+        $lowerName = strtolower($name);
+        foreach ($classLike->stmts as $stmt) {
+            if ($stmt instanceof Property) {
+                foreach ($stmt->props as $prop) {
+                    if ($prop instanceof PropertyProperty && $lowerName === $prop->name->toLowerString()) {
+                        return $stmt;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private function hasParentClassOrImplementsInterface(Node $classNode): bool
+    {
         if ($classNode instanceof Class_ || $classNode instanceof Interface_) {
             if ($classNode->extends) {
                 return true;
