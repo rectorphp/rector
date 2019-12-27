@@ -69,8 +69,10 @@ final class PhpDocInfoFactory
         $content = $node->getDocComment()->getText();
         $tokens = $this->lexer->tokenize($content);
 
+        $tokenIterator = new TokenIterator($tokens);
+
         /** @var AttributeAwarePhpDocNode $phpDocNode */
-        $phpDocNode = $this->phpDocParser->parse(new TokenIterator($tokens));
+        $phpDocNode = $this->phpDocParser->parse($tokenIterator);
         $phpDocNode = $this->setPositionOfLastToken($phpDocNode);
 
         $phpDocInfo = new PhpDocInfo($phpDocNode, $tokens, $content, $this->staticTypeMapper, $node);
