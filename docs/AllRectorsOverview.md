@@ -1,4 +1,4 @@
-# All 408 Rectors Overview
+# All 411 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -594,6 +594,25 @@ Simplify `in_array` and `array_keys` functions combination into `array_key_exist
 ```diff
 -in_array("key", array_keys($array), true);
 +array_key_exists("key", $array);
+```
+
+<br>
+
+### `IntvalToTypeCastRector`
+
+- class: `Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector`
+
+Change intval() to faster and readable (int) $value
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+-        return intval($value);
++        return (int) $value;
+     }
+ }
 ```
 
 <br>
@@ -2313,6 +2332,30 @@ Removes unneeded $a = $a assigns
 
 <br>
 
+### `TernaryToBooleanOrFalseToBooleanAndRector`
+
+- class: `Rector\DeadCode\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector`
+
+Change ternary of bool : false to && bool
+
+```diff
+ class SomeClass
+ {
+     public function go()
+     {
+-        return $value ? $this->getBool() : false;
++        return $value && $this->getBool();
+     }
+
+     private function getBool(): bool
+     {
+         return (bool) 5;
+     }
+ }
+```
+
+<br>
+
 ## Doctrine
 
 ### `AddEntityIdByConditionRector`
@@ -2678,6 +2721,85 @@ Change Timestampable from gedmo/doctrine-extensions to knplabs/doctrine-behavior
  {
 -    use TimestampableEntity;
 +    use TimestampableTrait;
+ }
+```
+
+<br>
+
+### `TranslationBehaviorRector`
+
+- class: `Rector\DoctrineGedmoToKnplabs\Rector\Class_\TranslationBehaviorRector`
+
+Change Translation from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
+
+```diff
+-use Gedmo\Mapping\Annotation as Gedmo;
+-use Doctrine\ORM\Mapping as ORM;
+-use Gedmo\Translatable\Translatable;
++use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
++use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
+
+-/**
+- * @ORM\Table
+- */
+-class Article implements Translatable
++class SomeClass implements TranslatableInterface
+ {
++    use TranslatableTrait;
++}
++
++
++use Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface;
++use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
++
++class SomeClassTranslation implements TranslationInterface
++{
++    use TranslationTrait;
++
+     /**
+-     * @Gedmo\Translatable
+      * @ORM\Column(length=128)
+      */
+     private $title;
+
+     /**
+-     * @Gedmo\Translatable
+      * @ORM\Column(type="text")
+      */
+     private $content;
+-
+-    /**
+-     * @Gedmo\Locale
+-     * Used locale to override Translation listener`s locale
+-     * this is not a mapped field of entity metadata, just a simple property
+-     * and it is not necessary because globally locale can be set in listener
+-     */
+-    private $locale;
+-
+-    public function setTitle($title)
+-    {
+-        $this->title = $title;
+-    }
+-
+-    public function getTitle()
+-    {
+-        return $this->title;
+-    }
+-
+-    public function setContent($content)
+-    {
+-        $this->content = $content;
+-    }
+-
+-    public function getContent()
+-    {
+-        return $this->content;
+-    }
+-
+-    public function setTranslatableLocale($locale)
+-    {
+-        $this->locale = $locale;
+-    }
  }
 ```
 
