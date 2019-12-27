@@ -722,18 +722,26 @@ final class StaticTypeMapper
             return $phpParserUnionType;
         }
 
-        // we need exactly one type
+        // do the type should be compatible with all other types, e.g. A extends B, B
         foreach ($unionType->getTypes() as $unionedType) {
             if (! $unionedType instanceof TypeWithClassName) {
                 return null;
             }
+
+            foreach ($unionType->getTypes() as $nestedUnionedType) {
+                if (! $nestedUnionedType instanceof TypeWithClassName) {
+                    return null;
+                }
+
+                if (! $this->areTypeWithClassNamesRelated($unionedType, $nestedUnionedType)) {
+                    continue 2;
+                }
+            }
+
+            return new FullyQualified($unionedType->getClassName());
         }
 
-        // @todo the type should be compatible with all other types, check with is_a()?
-        /** @var TypeWithClassName $firstObjectType */
-        $firstObjectType = $unionType->getTypes()[0];
-
-        return new FullyQualified($firstObjectType->getClassName());
+        return null;
     }
 
     private function mapScalarStringToType(string $scalarName): ?Type
@@ -804,5 +812,14 @@ final class StaticTypeMapper
         }
 
         return new PhpParserUnionType($phpParserUnionedTypes);
+    }
+
+    private function areTypeWithClassNamesRelated(TypeWithClassName $firstType, TypeWithClassName $secondType): bool
+    {
+        if (is_a($firstType->getClassName(), $secondType->getClassName(), true)) {
+            return true;
+        }
+
+        return is_a($secondType->getClassName(), $firstType->getClassName(), true);
     }
 }
