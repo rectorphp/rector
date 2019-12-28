@@ -55,7 +55,7 @@ jobs:
                 - git commit -S -m "${COMMIT_MSG}" -m "${GIT_LOG}"
                 - git push --quiet origin master
 
-                - if [ "${TRAVIS_TAG}" != "" ]; then git tag -s ${TRAVIS_TAG} -m "${TRAVIS_TAG}"; then git push --quiet origin ${TRAVIS_TAG}; fi
+                - if [ "${TRAVIS_TAG}" != "" ]; then git tag -s ${TRAVIS_TAG} -m "${TRAVIS_TAG}" && git push --quiet origin ${TRAVIS_TAG}; fi
 
         # Stage 1
         -
