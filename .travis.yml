@@ -21,6 +21,7 @@ stages:
     - compile
     - name: phar
       if: (branch = master OR tag IS present) && type = push
+    - coverage
 
 jobs:
     include:
@@ -49,25 +50,18 @@ jobs:
                 - git config user.name "Travis CI"
                 - git add rector rector.phar
 
-                - if [ "${TRAVIS_TAG}" != "" ]; then
-                      COMMIT_MSG="Rector ${TRAVIS_TAG}"
-                  else
-                      COMMIT_MSG="Updated Rector to commit ${TRAVIS_COMMIT}"
-                  fi
+                - if [ "${TRAVIS_TAG}" != "" ]; then COMMIT_MSG="Rector ${TRAVIS_TAG}"; else COMMIT_MSG="Updated Rector to commit ${TRAVIS_COMMIT}"; fi
 
                 - git commit -S -m "${COMMIT_MSG}" -m "${GIT_LOG}"
                 - git push --quiet origin master
 
-                - if [ "${TRAVIS_TAG}" != "" ]; then
-                      git tag -s ${TRAVIS_TAG} -m "${TRAVIS_TAG}"
-                      git push --quiet origin ${TRAVIS_TAG}
-                  fi
+                - if [ "${TRAVIS_TAG}" != "" ]; then git tag -s ${TRAVIS_TAG} -m "${TRAVIS_TAG}"; then git push --quiet origin ${TRAVIS_TAG}; fi
 
         # Stage 1
         -
             stage: test
             php: 7.2
-            name: "7.2 with Lowest dependencies"
+            name: "PHP: 7.2 with Lowest dependencies"
             install:
                 # install lowest dependencies
                 - composer update --prefer-lowest --no-progress
@@ -138,7 +132,7 @@ jobs:
 
         # Stage 2
         -
-            stage: test
+            stage: coverage
             php: 7.3
             name: Test Coverage
             if: branch = master AND type = push
