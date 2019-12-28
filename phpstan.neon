@@ -5,10 +5,10 @@ includes:
 
 parameters:
     checkGenericClassInNonGenericObjectType: false
+    level: max
 
     # to allow installing with various phsptan versions without reporting old errors here
     reportUnmatchedIgnoredErrors: false
-    level: max
 
     autoload_directories:
         - stubs
