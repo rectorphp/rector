@@ -176,6 +176,24 @@ parameters:
         - 'Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector'
 ```
 
+Do you want to skip just specific line with specific rule?
+
+Use `@noRector \FQN name` annotation:
+
+```php
+class SomeClass
+{
+    /**
+     * @noRector \Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector
+     */
+    public function foo()
+    {
+        /** @noRector \Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector */
+        round(1 + 0);
+    }
+}
+```
+
 ### Provide PHP Version
 
 By default Rector uses the language features matching your system version of PHP. You can configure it for a different PHP version:
