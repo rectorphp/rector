@@ -129,11 +129,6 @@ PHP
         if ($this->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_KEY_FIRST_LAST)) {
             return false;
         }
-
-        if (function_exists(self::ARRAY_KEY_FIRST) && function_exists(self::ARRAY_KEY_LAST)) {
-            return false;
-        }
-
-        return true;
+        return ! (function_exists(self::ARRAY_KEY_FIRST) && function_exists(self::ARRAY_KEY_LAST));
     }
 }

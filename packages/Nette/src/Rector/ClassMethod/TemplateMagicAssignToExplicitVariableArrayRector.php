@@ -7,6 +7,7 @@ namespace Rector\Nette\Rector\ClassMethod;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Presenter;
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Nette\NodeFactory\ActionRenderFactory;
@@ -108,7 +109,7 @@ PHP
     private function createRenderMethodCall(
         ClassMethod $classMethod,
         MagicTemplatePropertyCalls $magicTemplatePropertyCalls
-    ): Node\Expr\MethodCall {
+    ): MethodCall {
         if ($this->isObjectType($classMethod, Presenter::class)) {
             return $this->actionRenderFactory->createThisTemplateRenderMethodCall($magicTemplatePropertyCalls);
         }

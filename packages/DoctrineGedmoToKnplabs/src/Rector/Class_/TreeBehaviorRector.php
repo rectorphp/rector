@@ -205,11 +205,6 @@ PHP
         if ($phpDocInfo->hasByType(TreeParentTagValueNode::class)) {
             return true;
         }
-
-        if ($phpDocInfo->hasByType(TreeLevelTagValueNode::class)) {
-            return true;
-        }
-
-        return false;
+        return $phpDocInfo->hasByType(TreeLevelTagValueNode::class);
     }
 }

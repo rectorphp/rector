@@ -277,11 +277,6 @@ PHP
         if ($classMethod === null) {
             return true;
         }
-
-        if ($classMethod->isStatic()) {
-            return true;
-        }
-
-        return false;
+        return $classMethod->isStatic();
     }
 }

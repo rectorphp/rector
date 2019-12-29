@@ -125,11 +125,6 @@ PHP
         if (! $this->isTraitMatch($class)) {
             return true;
         }
-
-        if ($this->classManipulator->hasPropertyName($class, 'id')) {
-            return true;
-        }
-
-        return false;
+        return $this->classManipulator->hasPropertyName($class, 'id');
     }
 }

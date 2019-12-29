@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Ternary;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\Ternary;
 use PHPStan\Type\BooleanType;
 use Rector\Rector\AbstractRector;
@@ -80,6 +81,6 @@ PHP
             return null;
         }
 
-        return new Node\Expr\BinaryOp\BooleanAnd($node->cond, $node->if);
+        return new BooleanAnd($node->cond, $node->if);
     }
 }

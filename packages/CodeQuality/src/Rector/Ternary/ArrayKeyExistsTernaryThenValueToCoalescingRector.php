@@ -95,11 +95,6 @@ PHP
         if (! $this->areNodesEqual($arrayDimFetch->var, $valuesExpr)) {
             return false;
         }
-
-        if (! $this->areNodesEqual($arrayDimFetch->dim, $keyExpr)) {
-            return false;
-        }
-
-        return true;
+        return $this->areNodesEqual($arrayDimFetch->dim, $keyExpr);
     }
 }
