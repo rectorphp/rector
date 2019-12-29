@@ -30,3 +30,4 @@ services:
     Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector: ~
     Rector\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector: ~
     Rector\DeadCode\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector: ~
+    Rector\DeadCode\Rector\FunctionLike\RemoveUnusedElseForReturnedValueRector: ~
