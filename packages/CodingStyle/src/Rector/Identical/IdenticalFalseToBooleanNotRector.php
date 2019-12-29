@@ -9,9 +9,9 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BooleanNot;
-use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
@@ -101,8 +101,16 @@ final class IdenticalFalseToBooleanNotRector extends AbstractRector
             return false;
         }
 
-        return $staticType->isSuperTypeOf(new IntegerType())->yes() && $staticType->isSuperTypeOf(
-            new ConstantBooleanType(false)
-        )->yes();
+        foreach ($staticType->getTypes() as $unionedType) {
+            if ($unionedType instanceof NullType) {
+                return true;
+            }
+
+            if ($unionedType instanceof IntegerType) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
