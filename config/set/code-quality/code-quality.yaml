@@ -46,3 +46,4 @@ services:
     Rector\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector: ~
     Rector\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector: ~
     Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector: ~
+    Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector: ~

@@ -21,6 +21,8 @@ use Rector\RectorDefinition\RectorDefinition;
 use Rector\ValueObject\PhpVersionFeature;
 
 /**
+ * @see https://3v4l.org/bfsdY
+ *
  * @see \Rector\CodeQuality\Tests\Rector\Foreach_\SimplifyForeachToCoalescingRector\SimplifyForeachToCoalescingRectorTest
  */
 final class SimplifyForeachToCoalescingRector extends AbstractRector
