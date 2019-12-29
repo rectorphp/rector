@@ -8,10 +8,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeTraverser;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -19,6 +21,16 @@ use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class IfManipulator
 {
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_BREAKING_NODE_TYPES = [Return_::class, Throw_::class, Continue_::class];
+
+    /**
+     * @var string[]
+     */
+    private const SCOPE_CHANGING_NODE_TYPES = [Do_::class, While_::class, If_::class, Else_::class];
+
     /**
      * @var BetterStandardPrinter
      */
@@ -111,14 +123,14 @@ final class IfManipulator
         return null;
     }
 
-    public function isWithElseAlwaysReturnValue(If_ $if): bool
+    public function isEarlyElse(If_ $if): bool
     {
-        if (! $this->isAlwaysReturnValue((array) $if->stmts)) {
+        if (! $this->isAlwayAllowedType((array) $if->stmts, self::ALLOWED_BREAKING_NODE_TYPES)) {
             return false;
         }
 
         foreach ($if->elseifs as $elseif) {
-            if (! $this->isAlwaysReturnValue((array) $elseif->stmts)) {
+            if (! $this->isAlwayAllowedType((array) $elseif->stmts, self::ALLOWED_BREAKING_NODE_TYPES)) {
                 return false;
             }
         }
@@ -127,7 +139,7 @@ final class IfManipulator
             return false;
         }
 
-        return $this->isAlwaysReturnValue((array) $if->else->stmts);
+        return true;
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $returnNode): ?Expr
@@ -147,12 +159,17 @@ final class IfManipulator
         return null;
     }
 
-    private function isAlwaysReturnValue(array $stmts): bool
+    /**
+     * @param Node[] $stmts
+     * @param string[] $allowedTypes
+     */
+    private function isAlwayAllowedType(array $stmts, array $allowedTypes): bool
     {
         $isAlwaysReturnValue = false;
 
         $this->callableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (
-            &$isAlwaysReturnValue
+            &$isAlwaysReturnValue,
+            $allowedTypes
         ) {
             if ($this->isScopeChangingNode($node)) {
                 $isAlwaysReturnValue = false;
@@ -160,15 +177,21 @@ final class IfManipulator
                 return NodeTraverser::STOP_TRAVERSAL;
             }
 
-            if ($node instanceof Return_) {
-                if ($node->expr === null) {
-                    $isAlwaysReturnValue = false;
+            foreach ($allowedTypes as $allowedType) {
+                if (is_a($node, $allowedType, true)) {
+                    if ($allowedType === Return_::class) {
+                        if ($node->expr === null) {
+                            $isAlwaysReturnValue = false;
 
-                    return NodeTraverser::STOP_TRAVERSAL;
+                            return NodeTraverser::STOP_TRAVERSAL;
+                        }
+                    }
+
+                    $isAlwaysReturnValue = true;
                 }
-
-                $isAlwaysReturnValue = true;
             }
+
+            return null;
         });
 
         return $isAlwaysReturnValue;
@@ -176,9 +199,7 @@ final class IfManipulator
 
     private function isScopeChangingNode(Node $node): bool
     {
-        $scopeChangingNodes = [Do_::class, While_::class, If_::class, Else_::class];
-
-        foreach ($scopeChangingNodes as $scopeChangingNode) {
+        foreach (self::SCOPE_CHANGING_NODE_TYPES as $scopeChangingNode) {
             if (! is_a($node, $scopeChangingNode, true)) {
                 continue;
             }

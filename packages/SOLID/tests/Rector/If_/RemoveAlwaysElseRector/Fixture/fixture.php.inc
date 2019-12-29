@@ -1,13 +1,13 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveUnusedElseForReturnedValueRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
 
 class SomeClass
 {
     public function run($value)
     {
         if ($value) {
-            return 5;
+            throw new \InvalidStateException;
         } else {
             return 10;
         }
@@ -18,14 +18,14 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveUnusedElseForReturnedValueRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
 
 class SomeClass
 {
     public function run($value)
     {
         if ($value) {
-            return 5;
+            throw new \InvalidStateException;
         }
         return 10;
     }
