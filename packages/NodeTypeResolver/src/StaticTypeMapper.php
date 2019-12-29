@@ -422,6 +422,10 @@ final class StaticTypeMapper
             return 'callable';
         }
 
+        if ($phpStanType instanceof ResourceType) {
+            return 'resource';
+        }
+
         throw new NotImplementedException(__METHOD__ . ' for ' . get_class($phpStanType));
     }
 
