@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
@@ -57,7 +58,7 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
      */
     private function matchPropertyAssignExpr(Assign $assign, string $propertyName): ?Expr
     {
-        if ($assign->var instanceof PropertyFetch) {
+        if ($this->isPropertyFetch($assign->var)) {
             if (! $this->nameResolver->isName($assign->var, $propertyName)) {
                 return null;
             }
@@ -65,7 +66,7 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
             return $assign->expr;
         }
 
-        if ($assign->var instanceof ArrayDimFetch && $assign->var->var instanceof PropertyFetch) {
+        if ($assign->var instanceof ArrayDimFetch && $this->isPropertyFetch($assign->var->var)) {
             if (! $this->nameResolver->isName($assign->var->var, $propertyName)) {
                 return null;
             }
@@ -74,5 +75,10 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
         }
 
         return null;
+    }
+
+    private function isPropertyFetch(Node $node): bool
+    {
+        return $node instanceof PropertyFetch || $node instanceof StaticPropertyFetch;
     }
 }
