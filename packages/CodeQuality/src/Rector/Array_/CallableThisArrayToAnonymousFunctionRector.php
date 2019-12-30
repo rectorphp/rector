@@ -10,6 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -133,7 +134,15 @@ PHP
         }
 
         // can be totally empty in case of "[, $value]"
-        return $array->items[0] === null;
+        if ($array->items[0] === null) {
+            return true;
+        }
+
+        if ($array->items[1] === null) {
+            return true;
+        }
+
+        return $this->isCallbackAtFunctionName($array, 'register_shutdown_function');
     }
 
     /**
@@ -240,5 +249,20 @@ PHP
         }
 
         return $newParams;
+    }
+
+    private function isCallbackAtFunctionName(Array_ $array, string $functionName): bool
+    {
+        $parentNode = $array->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Arg) {
+            return false;
+        }
+
+        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentParentNode instanceof FuncCall) {
+            return false;
+        }
+
+        return $this->isName($parentParentNode, $functionName);
     }
 }
