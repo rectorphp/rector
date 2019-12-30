@@ -10,7 +10,14 @@ RUN  composer install --no-dev --optimize-autoloader --prefer-dist
 FROM php:7.4-cli
 WORKDIR /rector
 
-COPY . .
-COPY --from=composer /app .
+RUN groupadd -g 1000 rector
+RUN useradd -u 1000 -ms /bin/bash -g rector rector
+
+COPY . /rector
+COPY --from=composer /app /rector
+
+COPY --chown=rector:rector . /rector
+
+USER rector
 
 ENTRYPOINT [ "bin/rector" ]
