@@ -554,6 +554,13 @@ final class StaticTypeMapper
         throw new NotImplementedException(sprintf('%s for "%s"', __METHOD__, $type));
     }
 
+    public function mapPHPStanPhpDocTypeNodeToPhpDocString(TypeNode $typeNode, Node $node): string
+    {
+        $phpStanType = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, $node);
+
+        return $this->mapPHPStanTypeToDocString($phpStanType);
+    }
+
     public function mapPHPStanPhpDocTypeNodeToPHPStanType(TypeNode $typeNode, Node $node): Type
     {
         if ($typeNode instanceof IdentifierTypeNode) {

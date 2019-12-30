@@ -7,6 +7,9 @@ namespace Rector\Php74\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\MixedType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -126,7 +129,44 @@ PHP
             return;
         }
 
+        // keep string[] etc.
+        if ($this->isNonBasicArrayType($property, $varTagValueNode)) {
+            return;
+        }
+
         $propertyPhpDocInfo->removeByType(VarTagValueNode::class);
         $this->docBlockManipulator->updateNodeWithPhpDocInfo($property, $propertyPhpDocInfo);
+    }
+
+    private function isNonBasicArrayType(Property $property, VarTagValueNode $varTagValueNode): bool
+    {
+        if (! $this->isArrayGenericTypeNode($varTagValueNode) && ! $this->isArrayTypeNode($varTagValueNode)) {
+            return false;
+        }
+
+        $varTypeDocString = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPhpDocString(
+            $varTagValueNode->type,
+            $property
+        );
+
+        return $varTypeDocString !== 'array';
+    }
+
+    private function isArrayGenericTypeNode(VarTagValueNode $varTagValueNode): bool
+    {
+        if (! $varTagValueNode->type instanceof GenericTypeNode) {
+            return false;
+        }
+
+        if (! $varTagValueNode->type->type instanceof IdentifierTypeNode) {
+            return false;
+        }
+
+        return $varTagValueNode->type->type->name === 'array';
+    }
+
+    private function isArrayTypeNode(VarTagValueNode $varTagValueNode): bool
+    {
+        return $varTagValueNode->type instanceof ArrayTypeNode;
     }
 }
