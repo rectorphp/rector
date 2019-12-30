@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -141,6 +142,10 @@ PHP
     private function matchCallableMethod(Expr $objectExpr, String_ $methodExpr): ?ClassMethod
     {
         $methodName = $this->getValue($methodExpr);
+        if (! is_string($methodName)) {
+            throw new ShouldNotHappenException();
+        }
+
         $objectType = $this->getObjectType($objectExpr);
 
         if ($objectType instanceof ObjectType) {
