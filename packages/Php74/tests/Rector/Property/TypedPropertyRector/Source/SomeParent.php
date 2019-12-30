@@ -14,5 +14,5 @@ abstract class SomeParent
     /**
      * @var string
      */
-    protected string $typedName;
+    protected $typedName;
 }

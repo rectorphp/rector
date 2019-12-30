@@ -14,5 +14,5 @@ final class Child extends SomeParent
     /**
      * @var string
      */
-    protected string $typedName = 'child';
+    protected $typedName = 'child';
 }
