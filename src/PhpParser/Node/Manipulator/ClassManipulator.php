@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -112,7 +113,7 @@ final class ClassManipulator
 
     public function addAsFirstTrait(Class_ $class, string $traitName): void
     {
-        $trait = new TraitUse([new Name\FullyQualified($traitName)]);
+        $trait = new TraitUse([new FullyQualified($traitName)]);
 
         $this->addStatementToClassBeforeTypes($class, $trait, TraitUse::class, Property::class);
     }
@@ -417,7 +418,7 @@ final class ClassManipulator
                     continue;
                 }
 
-                $traitUse->traits[$key] = new Name\FullyQualified($newTrait);
+                $traitUse->traits[$key] = new FullyQualified($newTrait);
                 break;
             }
         }

@@ -293,12 +293,12 @@ final class DocBlockManipulator
             return;
         }
 
-        if ($node->getDocComment()) {
+        if ($node->getDocComment() !== null) {
             $phpDocInfo = $this->createPhpDocInfoFromNode($node);
             $returnTagValueNode = $phpDocInfo->getByType(ReturnTagValueNode::class);
 
             // overide existing type
-            if ($returnTagValueNode) {
+            if ($returnTagValueNode !== null) {
                 $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
                 $returnTagValueNode->type = $newPHPStanPhpDocType;
 
@@ -663,12 +663,7 @@ final class DocBlockManipulator
         if ($firstType instanceof FloatType && $secondType instanceof FloatType) {
             return true;
         }
-
-        if ($firstType instanceof BooleanType && $secondType instanceof BooleanType) {
-            return true;
-        }
-
-        return false;
+        return $firstType instanceof BooleanType && $secondType instanceof BooleanType;
     }
 
     private function areAliasedObjectMatchingFqnObject(Type $firstType, Type $secondType): bool

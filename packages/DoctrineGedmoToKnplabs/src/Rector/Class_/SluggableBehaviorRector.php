@@ -6,6 +6,7 @@ namespace Rector\DoctrineGedmoToKnplabs\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
@@ -130,7 +131,7 @@ PHP
 
         $this->classManipulator->addAsFirstTrait($node, 'Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait');
 
-        $node->implements[] = new Node\Name\FullyQualified('Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface');
+        $node->implements[] = new FullyQualified('Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface');
 
         $this->addGetSluggableFieldsClassMethod($node, $slugFields);
 

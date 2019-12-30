@@ -240,7 +240,7 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        $classShortName = (string) $class->name . 'Translation';
+        $classShortName = $class->name . 'Translation';
         $filePath = dirname($fileInfo->getRealPath()) . DIRECTORY_SEPARATOR . $classShortName . '.php';
 
         $namespace = $class->getAttribute(AttributeKey::PARENT_NODE);

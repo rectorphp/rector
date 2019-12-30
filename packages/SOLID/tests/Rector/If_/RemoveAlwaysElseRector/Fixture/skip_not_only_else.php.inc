@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveUnusedElseForReturnedValueRector\Fixture;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\Fixture;
 
 class SkipNotOnlyElse
 {
@@ -13,18 +13,6 @@ class SkipNotOnlyElse
             return;
         } else {
             return 10;
-        }
-    }
-
-    public function runAgain($value)
-    {
-        if ($value) {
-            return 5;
-        } elseif ($value- 1) {
-            $value = 55;
-            return 10;
-        } else {
-            return;
         }
     }
 

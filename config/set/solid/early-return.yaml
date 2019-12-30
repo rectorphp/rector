@@ -1,0 +1,2 @@
+services:
+    Rector\SOLID\Rector\If_\RemoveAlwaysElseRector: null

@@ -113,6 +113,7 @@ parameters:
             - 'src/Rector/AbstractRector/ComplexRemovalTrait.php'
             - 'packages/TypeDeclaration/src/VendorLock/VendorLockResolver.php'
             - 'packages/TypeDeclaration/src/PhpParserTypeAnalyzer.php'
+            -  'src/PhpParser/Node/Manipulator/IfManipulator.php'
             # aliases
             - 'packages/CodingStyle/src/Rector/Namespace_/ImportFullyQualifiedNamesRector.php'
 

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveUnusedElseForReturnedValueRector;
+namespace Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector;
 
 use Iterator;
-use Rector\DeadCode\Rector\FunctionLike\RemoveUnusedElseForReturnedValueRector;
+use Rector\SOLID\Rector\If_\RemoveAlwaysElseRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class RemoveUnusedElseForReturnedValueRectorTest extends AbstractRectorTestCase
+final class RemoveAlwaysElseRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
@@ -25,6 +25,6 @@ final class RemoveUnusedElseForReturnedValueRectorTest extends AbstractRectorTes
 
     protected function getRectorClass(): string
     {
-        return RemoveUnusedElseForReturnedValueRector::class;
+        return RemoveAlwaysElseRector::class;
     }
 }

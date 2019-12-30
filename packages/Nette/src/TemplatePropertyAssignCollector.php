@@ -6,6 +6,8 @@ namespace Rector\Nette;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -56,11 +58,11 @@ final class TemplatePropertyAssignCollector
         $this->callableNodeTraverser->traverseNodesWithCallable(
             (array) $classMethod->stmts,
             function (Node $node): void {
-                if ($node instanceof Expr\MethodCall) {
+                if ($node instanceof MethodCall) {
                     $this->collectTemplateFileExpr($node);
                 }
 
-                if ($node instanceof Expr\Assign) {
+                if ($node instanceof Assign) {
                     $this->collectVariableFromAssign($node);
                 }
             }
@@ -69,7 +71,7 @@ final class TemplatePropertyAssignCollector
         return new MagicTemplatePropertyCalls($this->templateFileExpr, $this->templateVariables, $this->nodesToRemove);
     }
 
-    private function collectTemplateFileExpr(Expr\MethodCall $methodCall): void
+    private function collectTemplateFileExpr(MethodCall $methodCall): void
     {
         if ($this->nameResolver->isName($methodCall->name, 'render')) {
             if (isset($methodCall->args[0])) {
@@ -85,7 +87,7 @@ final class TemplatePropertyAssignCollector
         }
     }
 
-    private function collectVariableFromAssign(Expr\Assign $assign): void
+    private function collectVariableFromAssign(Assign $assign): void
     {
         // $this->template = x
         if ($assign->var instanceof PropertyFetch) {
