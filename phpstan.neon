@@ -243,7 +243,7 @@ parameters:
 
         - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\Gedmo\\(.*?)\:\:createFromNodeAndTokens\(\) should return Rector\\BetterPhpDocParser\\PhpDocNode\\Gedmo\\(.*?)\|null but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\|null#'
 
-
-
         - '#Access to an undefined property PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\:\:\$type#'
         - '#Call to an undefined method PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\:\:toString\(\)#'
+        - '#Parameter \#1 \$expected of method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) expects class\-string<object\>, string given#'
+        - '#Unable to resolve the template type ExpectedType in call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\)#'
