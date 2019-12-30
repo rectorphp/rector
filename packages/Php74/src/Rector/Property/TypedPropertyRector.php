@@ -6,6 +6,7 @@ namespace Rector\Php74\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\MixedType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -56,9 +57,6 @@ PHP
                     <<<'PHP'
 final class SomeClass
 {
-    /**
-     * @var int
-     */
     private int count;
 }
 PHP
@@ -103,8 +101,32 @@ PHP
             return null;
         }
 
+        $this->removeVarPhpTagValueNodeIfNotComment($node);
+
         $node->type = $propertyTypeNode;
 
         return $node;
+    }
+
+    private function removeVarPhpTagValueNodeIfNotComment(Property $property): void
+    {
+        $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+        // nothing to remove
+        if ($propertyPhpDocInfo === null) {
+            return;
+        }
+
+        $varTagValueNode = $propertyPhpDocInfo->getByType(VarTagValueNode::class);
+        if ($varTagValueNode === null) {
+            return;
+        }
+
+        // has description? keep it
+        if ($varTagValueNode->description !== '') {
+            return;
+        }
+
+        $propertyPhpDocInfo->removeByType(VarTagValueNode::class);
+        $this->docBlockManipulator->updateNodeWithPhpDocInfo($property, $propertyPhpDocInfo);
     }
 }

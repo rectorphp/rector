@@ -18,9 +18,6 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\FixtureUnionTyp
 
 final class TwoTypes
 {
-    /**
-     * @var bool|string
-     */
     private bool|string $unionValue;
 }
 

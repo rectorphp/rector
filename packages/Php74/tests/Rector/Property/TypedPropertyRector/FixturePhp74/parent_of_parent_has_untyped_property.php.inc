@@ -20,5 +20,3 @@ final class Child2 extends Middle
      */
     protected string $typedName = 'child';
 }
-
-?>

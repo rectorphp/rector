@@ -28,19 +28,10 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 final class DefaultValuesForNullableIterables
 {
-    /**
-     * @var array
-     */
     private ?array $items = null;
 
-    /**
-     * @var iterable
-     */
     private ?iterable $itemsB = null;
 
-    /**
-     * @var array|null
-     */
     private ?array $nullableItems = null;
 }
 

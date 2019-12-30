@@ -58,49 +58,22 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
 final class MatchTypes
 {
-    /**
-     * @var bool
-     */
     private bool $a;
 
-    /**
-     * @var boolean
-     */
     private bool $b;
 
-    /**
-     * @var int
-     */
     private int $c;
 
-    /**
-     * @var integer
-     */
     private int $d;
 
-    /**
-     * @var float
-     */
     private float $e;
 
-    /**
-     * @var string
-     */
     private string $f;
 
-    /**
-     * @var object
-     */
     private object $g;
 
-    /**
-     * @var iterable
-     */
     private iterable $h;
 
-    /**
-     * @var self
-     */
     private self $i;
 }
 

@@ -16,5 +16,3 @@ final class Child extends SomeParent
      */
     protected string $typedName = 'child';
 }
-
-?>
