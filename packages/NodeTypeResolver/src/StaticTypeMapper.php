@@ -611,7 +611,6 @@ final class StaticTypeMapper
             }
 
             // @todo improve - making many false positives now
-
             $objectType = new ObjectType($typeNode->name);
 
             return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType($node, $objectType);
@@ -644,45 +643,33 @@ final class StaticTypeMapper
         }
 
         if ($typeNode instanceof GenericTypeNode) {
-            if ($typeNode->type instanceof IdentifierTypeNode) {
-                $typeName = $typeNode->type->name;
+            $genericMainType = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode->type, $node);
 
-                // remove extra prefix
-                $typeName = ltrim($typeName, '\\');
+            if ($genericMainType instanceof TypeWithClassName) {
+                $mainTypeAsString = $genericMainType->getClassName();
+            } else {
+                $mainTypeAsString = $typeNode->type->name;
+            }
 
-                if (in_array($typeName, ['array', 'iterable', 'Traversable'], true)) {
-                    $genericTypes = [];
-                    foreach ($typeNode->genericTypes as $genericTypeNode) {
-                        $genericTypes[] = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($genericTypeNode, $node);
-                    }
+            $genericTypes = [];
+            foreach ($typeNode->genericTypes as $genericTypeNode) {
+                $genericTypes[] = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($genericTypeNode, $node);
+            }
 
-                    $genericType = $this->typeFactory->createMixedPassedOrUnionType($genericTypes);
+            // special use case for array
+            if (in_array($mainTypeAsString, ['array', 'iterable'], true)) {
+                $genericType = $this->typeFactory->createMixedPassedOrUnionType($genericTypes);
 
-                    if ($typeName === 'array') {
-                        return new ArrayType(new MixedType(), $genericType);
-                    }
+                if ($mainTypeAsString === 'array') {
+                    return new ArrayType(new MixedType(), $genericType);
+                }
 
-                    if ($typeName === 'Traversable') {
-                        return new ObjectType('Traversable');
-                    }
-
+                if ($mainTypeAsString === 'iterable') {
                     return new IterableType(new MixedType(), $genericType);
                 }
             }
 
-            $mainType = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode->type, $node);
-            if ($mainType instanceof TypeWithClassName) {
-                $className = $mainType->getClassName();
-            } else {
-                throw new NotImplementedException();
-            }
-
-            $genericTypes = [];
-            foreach ($typeNode->genericTypes as $genericType) {
-                $genericTypes[] = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($genericType, $node);
-            }
-
-            return new GenericObjectType($className, $genericTypes);
+            return new GenericObjectType($mainTypeAsString, $genericTypes);
         }
 
         throw new NotImplementedException(__METHOD__ . ' for ' . get_class($typeNode));
