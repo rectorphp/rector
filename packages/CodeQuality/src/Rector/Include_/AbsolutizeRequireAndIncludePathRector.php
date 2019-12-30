@@ -15,9 +15,6 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * Include/Require should be followed by absolute path.
- * This Rector might introduce backwards incompatible code, when the include/require beeing changed depends on the current working directory.
- *
  * @see https://github.com/symplify/CodingStandard#includerequire-should-be-followed-by-absolute-path
  *
  * @see \Rector\CodeQuality\Tests\Rector\Include_\AbsolutizeRequireAndIncludePathRector\AbsolutizeRequireAndIncludePathRectorTest
@@ -26,7 +23,7 @@ final class AbsolutizeRequireAndIncludePathRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('include/require to absolute path', [
+        return new RectorDefinition('include/require to absolute path. This Rector might introduce backwards incompatible code, when the include/require beeing changed depends on the current working directory.', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass
