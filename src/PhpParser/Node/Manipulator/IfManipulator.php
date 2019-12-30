@@ -135,11 +135,7 @@ final class IfManipulator
             }
         }
 
-        if ($if->else === null) {
-            return false;
-        }
-
-        return true;
+        return $if->else !== null;
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $returnNode): ?Expr
