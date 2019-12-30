@@ -10,6 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -19,6 +20,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -132,7 +134,15 @@ PHP
         }
 
         // can be totally empty in case of "[, $value]"
-        return $array->items[0] === null;
+        if ($array->items[0] === null) {
+            return true;
+        }
+
+        if ($array->items[1] === null) {
+            return true;
+        }
+
+        return $this->isCallbackAtFunctionName($array, 'register_shutdown_function');
     }
 
     /**
@@ -141,6 +151,10 @@ PHP
     private function matchCallableMethod(Expr $objectExpr, String_ $methodExpr): ?ClassMethod
     {
         $methodName = $this->getValue($methodExpr);
+        if (! is_string($methodName)) {
+            throw new ShouldNotHappenException();
+        }
+
         $objectType = $this->getObjectType($objectExpr);
 
         if ($objectType instanceof ObjectType) {
@@ -235,5 +249,20 @@ PHP
         }
 
         return $newParams;
+    }
+
+    private function isCallbackAtFunctionName(Array_ $array, string $functionName): bool
+    {
+        $parentNode = $array->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Arg) {
+            return false;
+        }
+
+        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentParentNode instanceof FuncCall) {
+            return false;
+        }
+
+        return $this->isName($parentParentNode, $functionName);
     }
 }
