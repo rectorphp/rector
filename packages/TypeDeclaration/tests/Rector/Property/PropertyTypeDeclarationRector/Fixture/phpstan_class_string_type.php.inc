@@ -2,8 +2,6 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\PropertyTypeDeclarationRector\Fixture;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 class PhpstanClassStringType
 {
     /**
