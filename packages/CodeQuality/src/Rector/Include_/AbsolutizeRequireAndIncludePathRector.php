@@ -23,9 +23,11 @@ final class AbsolutizeRequireAndIncludePathRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('include/require to absolute path. This Rector might introduce backwards incompatible code, when the include/require beeing changed depends on the current working directory.', [
-            new CodeSample(
-                <<<'PHP'
+        return new RectorDefinition(
+            'include/require to absolute path. This Rector might introduce backwards incompatible code, when the include/require beeing changed depends on the current working directory.',
+            [
+                new CodeSample(
+                    <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -37,7 +39,7 @@ class SomeClass
 }
 PHP
 ,
-                <<<'PHP'
+                    <<<'PHP'
 class SomeClass
 {
     public function run()
@@ -49,8 +51,9 @@ class SomeClass
 }
 PHP
 
-            ),
-        ]);
+                ),
+            ]
+        );
     }
 
     /**

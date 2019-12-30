@@ -7,6 +7,7 @@ namespace Rector\CodeQuality\Rector\If_;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -189,11 +190,7 @@ PHP
             }
         }
 
-        if ($expr instanceof BooleanNot) {
-            return $expr;
-        }
-
-        if ($this->isStaticType($expr, BooleanType::class)) {
+        if (! $this->isBoolCastNeeded($expr)) {
             return $expr;
         }
 
@@ -234,5 +231,18 @@ PHP
         }
 
         return TypeFactoryStaticHelper::createUnionObjectType($unionedTypesWithoutNullType);
+    }
+
+    private function isBoolCastNeeded(Expr $expr): bool
+    {
+        if ($expr instanceof BooleanNot) {
+            return false;
+        }
+
+        if ($this->isStaticType($expr, BooleanType::class)) {
+            return false;
+        }
+
+        return ! $expr instanceof BinaryOp;
     }
 }
