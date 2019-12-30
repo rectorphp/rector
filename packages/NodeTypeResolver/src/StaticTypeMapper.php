@@ -662,6 +662,10 @@ final class StaticTypeMapper
                         return new ArrayType(new MixedType(), $genericType);
                     }
 
+                    if ($typeName === 'Traversable') {
+                        return new ObjectType('Traversable');
+                    }
+
                     return new IterableType(new MixedType(), $genericType);
                 }
             }
