@@ -27,14 +27,8 @@ use Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\Anot
 
 final class ClassWithNullableProperty
 {
-    /**
-     * @var AnotherClass|null
-     */
     private ?\Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $nullableClassWithDefaultNull = null;
 
-    /**
-     * @var null|AnotherClass
-     */
     private ?\Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $yetAnotherClass;
 }
 

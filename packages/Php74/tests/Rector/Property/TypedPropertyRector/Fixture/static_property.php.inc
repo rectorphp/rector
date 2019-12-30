@@ -22,9 +22,6 @@ use Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\Anot
 
 final class ClassWithStaticProperty
 {
-    /**
-     * @var iterable
-     */
     private static iterable $iterable;
 }
 

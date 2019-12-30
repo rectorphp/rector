@@ -2,13 +2,12 @@
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
-final class BoolProperty
+final class SimpleArray
 {
     /**
-     * @var bool
-     * another comment
+     * @var array
      */
-    private $isTrue = false;
+    private $foo;
 }
 
 ?>
@@ -17,12 +16,9 @@ final class BoolProperty
 
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 
-final class BoolProperty
+final class SimpleArray
 {
-    /**
-     * another comment
-     */
-    private bool $isTrue = false;
+    private array $foo;
 }
 
 ?>

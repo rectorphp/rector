@@ -28,9 +28,6 @@ class PropperParent
 
 final class MatchTypesParent extends PropperParent
 {
-    /**
-     * @var parent
-     */
     private parent $j;
 }
 

@@ -22,9 +22,6 @@ use Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\Anot
 
 final class ClassWithClassProperty
 {
-    /**
-     * @var AnotherClass
-     */
     private \Rector\TypeDeclaration\Tests\Rector\Property\TypedPropertyRector\Source\AnotherClass $anotherClass;
 }
 

@@ -31,6 +31,7 @@ use PHPStan\Type\CallableType;
 use PHPStan\Type\ClosureType;
 use PHPStan\Type\ConstantType;
 use PHPStan\Type\FloatType;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\IterableType;
@@ -554,6 +555,13 @@ final class StaticTypeMapper
         throw new NotImplementedException(sprintf('%s for "%s"', __METHOD__, $type));
     }
 
+    public function mapPHPStanPhpDocTypeNodeToPhpDocString(TypeNode $typeNode, Node $node): string
+    {
+        $phpStanType = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, $node);
+
+        return $this->mapPHPStanTypeToDocString($phpStanType);
+    }
+
     public function mapPHPStanPhpDocTypeNodeToPHPStanType(TypeNode $typeNode, Node $node): Type
     {
         if ($typeNode instanceof IdentifierTypeNode) {
@@ -638,7 +646,11 @@ final class StaticTypeMapper
         if ($typeNode instanceof GenericTypeNode) {
             if ($typeNode->type instanceof IdentifierTypeNode) {
                 $typeName = $typeNode->type->name;
-                if (in_array($typeName, ['array', 'iterable'], true)) {
+
+                // remove extra prefix
+                $typeName = ltrim($typeName, '\\');
+
+                if (in_array($typeName, ['array', 'iterable', 'Traversable'], true)) {
                     $genericTypes = [];
                     foreach ($typeNode->genericTypes as $genericTypeNode) {
                         $genericTypes[] = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($genericTypeNode, $node);
@@ -650,9 +662,27 @@ final class StaticTypeMapper
                         return new ArrayType(new MixedType(), $genericType);
                     }
 
+                    if ($typeName === 'Traversable') {
+                        return new ObjectType('Traversable');
+                    }
+
                     return new IterableType(new MixedType(), $genericType);
                 }
             }
+
+            $mainType = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode->type, $node);
+            if ($mainType instanceof TypeWithClassName) {
+                $className = $mainType->getClassName();
+            } else {
+                throw new NotImplementedException();
+            }
+
+            $genericTypes = [];
+            foreach ($typeNode->genericTypes as $genericType) {
+                $genericTypes[] = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($genericType, $node);
+            }
+
+            return new GenericObjectType($className, $genericTypes);
         }
 
         throw new NotImplementedException(__METHOD__ . ' for ' . get_class($typeNode));
