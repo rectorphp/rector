@@ -28,6 +28,7 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\CallableType;
+use PHPStan\Type\ClassStringType;
 use PHPStan\Type\ClosureType;
 use PHPStan\Type\ConstantType;
 use PHPStan\Type\FloatType;
@@ -114,6 +115,10 @@ final class StaticTypeMapper
 
         if ($phpStanType instanceof IntegerType) {
             return new IdentifierTypeNode('int');
+        }
+
+        if ($phpStanType instanceof ClassStringType) {
+            return new IdentifierTypeNode('class-string');
         }
 
         if ($phpStanType instanceof StringType) {
