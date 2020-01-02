@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,6 +21,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class CompleteImportForPartialAnnotationRector extends AbstractRector
 {
     /**
+     * @var string[][]
+     */
+    private const DEFAULT_IMPORTS_TO_RESTORE = [
+        ['Doctrine\ORM\Mapping', 'ORM'],
+        ['Symfony\Component\Validator\Constraints', 'Assert'],
+    ];
+
+    /**
      * @var mixed[]
      */
     private $useImportsToRestore = [];
@@ -29,7 +38,7 @@ final class CompleteImportForPartialAnnotationRector extends AbstractRector
      */
     public function __construct(array $useImportsToRestore = [])
     {
-        $this->useImportsToRestore = $useImportsToRestore;
+        $this->useImportsToRestore = $useImportsToRestore ?? self::DEFAULT_IMPORTS_TO_RESTORE;
     }
 
     public function getDefinition(): RectorDefinition
@@ -89,6 +98,10 @@ PHP
                 [$import, $alias] = $useImportToRestore;
                 $annotationToSeek = $alias;
             } else {
+                if (! is_string($useImportToRestore)) {
+                    throw new ShouldNotHappenException();
+                }
+
                 $import = $useImportToRestore;
                 $alias = '';
                 $annotationToSeek = Strings::after($import, '\\', -1);
