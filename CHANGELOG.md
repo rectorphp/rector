@@ -9,7 +9,43 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
-## [v0.6.4]
+## [v0.6.5] - 2020-01-03
+
+### Added
+
+- [#2524] [CodeQuality] Add AbsolutizeRequireAndIncludePathRector
+- [#2510] [CodeQuality] Add IntvalToTypeCastRector
+- [#2523] [CodeQuality] Add ArrayKeyExistsTernaryThenValueToCoalescingRector
+- [#2528] [SOLID] Add RemoveAlwaysElseRector
+- [#2536] [TypeDeclaration] Add support for PhpStan's class-string type in PropertyTypeDeclarationRector, Thanks to [@gnutix]
+- [#2505] add hasByType() method to PhpDocInfo
+- [#2514] [Doctrine/dbal] Add 2.10 and 3.0 sets
+- [#2517] add resource type to StaticTypeMapper
+- [#2519] README: add docs for [#2087]
+- [#2503] [Gedmo to Knp] Add Translatable Behavior Rector
+- [#2526] add ctor only test-case
+- [#2529] Added phpdoc, Thanks to [@staabm]
+- [#2532] [PHP 7.4] Add @var removal to TypedPropertyRector
+
+### Changed
+
+- [#2530] [CodingStyle] Skip re-escaping chars by SymplifyQuoteEscapeRector
+- [#2527] [DeadCode] RemoveUnusedElseForReturnedValueRector
+- [#2534] improve generic type conversion
+- [#2531] Apply Rector on itself
+- [#2512] Update Travis
+- [#2509] Do not suggest typed property when defined in vendored parent, Thanks to [@ruudk]
+
+### Fixed
+
+- [#2533] [CodeQuality] Fix identical boolcast
+- [#2520] [CodingStyle] Fix IdenticalFalseToBooleanNotRector for null|bool
+- [#2518] [TypeDeclaration] Fix static property type resolution
+- [#2511] Fix single-line comment and constant scalar type match
+- [#2508] Fix param type union
+- [#2507] Fix AddArrayReturnDocTypeRector for existing comment
+
+## [v0.6.4] - 2019-12-27
 
 ### Added
 
@@ -1794,3 +1830,28 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [v0.6.2]: https://github.com/rectorphp/rector/compare/v0.6.1...v0.6.2
 [@ruudk]: https://github.com/ruudk
 [@lulco]: https://github.com/lulco
+[#2536]: https://github.com/rectorphp/rector/pull/2536
+[#2534]: https://github.com/rectorphp/rector/pull/2534
+[#2533]: https://github.com/rectorphp/rector/pull/2533
+[#2532]: https://github.com/rectorphp/rector/pull/2532
+[#2531]: https://github.com/rectorphp/rector/pull/2531
+[#2530]: https://github.com/rectorphp/rector/pull/2530
+[#2529]: https://github.com/rectorphp/rector/pull/2529
+[#2528]: https://github.com/rectorphp/rector/pull/2528
+[#2527]: https://github.com/rectorphp/rector/pull/2527
+[#2526]: https://github.com/rectorphp/rector/pull/2526
+[#2524]: https://github.com/rectorphp/rector/pull/2524
+[#2523]: https://github.com/rectorphp/rector/pull/2523
+[#2520]: https://github.com/rectorphp/rector/pull/2520
+[#2519]: https://github.com/rectorphp/rector/pull/2519
+[#2518]: https://github.com/rectorphp/rector/pull/2518
+[#2517]: https://github.com/rectorphp/rector/pull/2517
+[#2514]: https://github.com/rectorphp/rector/pull/2514
+[#2512]: https://github.com/rectorphp/rector/pull/2512
+[#2511]: https://github.com/rectorphp/rector/pull/2511
+[#2510]: https://github.com/rectorphp/rector/pull/2510
+[#2509]: https://github.com/rectorphp/rector/pull/2509
+[#2508]: https://github.com/rectorphp/rector/pull/2508
+[#2507]: https://github.com/rectorphp/rector/pull/2507
+[#2505]: https://github.com/rectorphp/rector/pull/2505
+[#2503]: https://github.com/rectorphp/rector/pull/2503
