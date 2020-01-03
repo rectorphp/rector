@@ -108,7 +108,7 @@ final class StaticTypeMapper
             return new AttributeAwareUnionTypeNode($unionTypesNodes);
         }
 
-        if ($phpStanType instanceof ArrayType) {
+        if ($phpStanType instanceof ArrayType || $phpStanType instanceof IterableType) {
             $itemTypeNode = $this->mapPHPStanTypeToPHPStanPhpDocTypeNode($phpStanType->getItemType());
             return new ArrayTypeNode($itemTypeNode);
         }
