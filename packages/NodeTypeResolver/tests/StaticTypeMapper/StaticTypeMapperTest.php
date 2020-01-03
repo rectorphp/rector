@@ -63,4 +63,12 @@ final class StaticTypeMapperTest extends AbstractKernelTestCase
         /** @var ArrayTypeNode $phpStanDocTypeNode */
         $this->assertInstanceOf(IdentifierTypeNode::class, $phpStanDocTypeNode->type);
     }
+
+    public function testMixed(): void
+    {
+        $mixedType = new MixedType();
+
+        $phpStanDocTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($mixedType);
+        $this->assertInstanceOf(IdentifierTypeNode::class, $phpStanDocTypeNode);
+    }
 }

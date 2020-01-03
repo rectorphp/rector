@@ -97,6 +97,10 @@ final class StaticTypeMapper
 
     public function mapPHPStanTypeToPHPStanPhpDocTypeNode(Type $phpStanType): TypeNode
     {
+        if ($phpStanType instanceof MixedType) {
+            return new IdentifierTypeNode('mixed');
+        }
+
         if ($phpStanType instanceof UnionType) {
             $unionTypesNodes = [];
             foreach ($phpStanType->getTypes() as $unionedType) {
