@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\DependencyInjection;
 
+use Nette\Utils\FileSystem;
+use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Analyser\TypeSpecifier;
@@ -13,6 +15,12 @@ use PHPStan\DependencyInjection\ContainerFactory;
 
 final class PHPStanServicesFactory
 {
+    /**
+     * @see https://regex101.com/r/CWADBe/2
+     * @var string
+     */
+    private const BLEEDING_EDGE_PATTERN = '#\n\s+-(.*?)bleedingEdge\.neon[\'|"]?#';
+
     /**
      * @var Container
      */
@@ -31,14 +39,31 @@ final class PHPStanServicesFactory
             $additionalConfigFiles[] = $phpstanPhpunitExtensionConfig;
         }
 
+        $temporaryPhpstanNeon = null;
+
         $currentProjectConfigFile = $currentWorkingDirectory . '/phpstan.neon';
         if (file_exists($currentProjectConfigFile)) {
-            $additionalConfigFiles[] = $currentProjectConfigFile;
+            $phpstanNeonContent = FileSystem::read($currentProjectConfigFile);
+
+            // bleeding edge clean out, see https://github.com/rectorphp/rector/issues/2431
+            if (Strings::match($phpstanNeonContent, self::BLEEDING_EDGE_PATTERN)) {
+                $temporaryPhpstanNeon = $currentWorkingDirectory . '/rector-temp-phpstan.neon';
+                $clearedPhpstanNeonContent = Strings::replace($phpstanNeonContent, self::BLEEDING_EDGE_PATTERN);
+                FileSystem::write($temporaryPhpstanNeon, $clearedPhpstanNeonContent);
+
+                $additionalConfigFiles[] = $temporaryPhpstanNeon;
+            } else {
+                $additionalConfigFiles[] = $currentProjectConfigFile;
+            }
         }
 
         $additionalConfigFiles[] = __DIR__ . '/../../config/phpstan/type-extensions.neon';
-
         $this->container = $containerFactory->create(sys_get_temp_dir(), $additionalConfigFiles, []);
+
+        // clear bleeding edge fallback
+        if ($temporaryPhpstanNeon !== null) {
+            FileSystem::delete($temporaryPhpstanNeon);
+        }
     }
 
     public function createBroker(): Broker
