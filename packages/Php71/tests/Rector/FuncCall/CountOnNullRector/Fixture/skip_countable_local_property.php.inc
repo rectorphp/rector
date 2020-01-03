@@ -2,7 +2,7 @@
 
 namespace Rector\Php71\Tests\Rector\FuncCall\CountOnNullRector\Fixture;
 
-final class SkipCountableTypeProperty
+final class SkipCountableLocalProperty
 {
     private $titles = [];
 
