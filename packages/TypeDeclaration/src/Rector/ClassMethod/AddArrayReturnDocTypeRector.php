@@ -8,9 +8,11 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -116,13 +118,20 @@ PHP
             return true;
         }
 
-        if ($classMethod->returnType !== null) {
-            if (! $this->isNames($classMethod->returnType, ['array', 'iterable'])) {
-                return true;
-            }
+        if ($classMethod->returnType === null) {
+            return false;
         }
 
-        return false;
+        if (! $this->isNames($classMethod->returnType, ['array', 'iterable'])) {
+            return true;
+        }
+
+        $currentPhpDocInfo = $this->getPhpDocInfo($classMethod);
+        if ($currentPhpDocInfo === null) {
+            return false;
+        }
+
+        return $this->isSpecificIterableType($currentPhpDocInfo);
     }
 
     private function shouldSkipType(Type $newType, ClassMethod $classMethod): bool
@@ -134,7 +143,7 @@ PHP
         }
 
         if ($newType instanceof UnionType) {
-            if (count($newType->getTypes()) > self::MAX_NUMBER_OF_TYPES) {
+            if ($this->shouldSkipUnionType($newType)) {
                 return true;
             }
         }
@@ -153,6 +162,7 @@ PHP
         if ($this->isNewAndCurrentTypeBothCallable($arrayType, $classMethod)) {
             return true;
         }
+
         return $this->isMixedOfSpecificOverride($arrayType, $classMethod);
     }
 
@@ -171,6 +181,7 @@ PHP
         if (! $newArrayType->getItemType()->isCallable()->yes()) {
             return false;
         }
+
         return $currentReturnType->getItemType()->isCallable()->yes();
     }
 
@@ -186,6 +197,28 @@ PHP
         }
 
         $currentReturnType = $currentPhpDocInfo->getReturnType();
+
         return $currentReturnType instanceof ArrayType;
+    }
+
+    private function shouldSkipUnionType(UnionType $unionType): bool
+    {
+        if (count($unionType->getTypes()) > self::MAX_NUMBER_OF_TYPES) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function isSpecificIterableType(PhpDocInfo $currentPhpDocInfo): bool
+    {
+        if (! $currentPhpDocInfo->getReturnType() instanceof IterableType) {
+            return false;
+        }
+
+        /** @var IterableType $iterableType */
+        $iterableType = $currentPhpDocInfo->getReturnType();
+
+        return ! $iterableType->getItemType() instanceof MixedType;
     }
 }

@@ -97,6 +97,10 @@ final class StaticTypeMapper
 
     public function mapPHPStanTypeToPHPStanPhpDocTypeNode(Type $phpStanType): TypeNode
     {
+        if ($phpStanType instanceof MixedType) {
+            return new IdentifierTypeNode('mixed');
+        }
+
         if ($phpStanType instanceof UnionType) {
             $unionTypesNodes = [];
             foreach ($phpStanType->getTypes() as $unionedType) {
@@ -108,7 +112,7 @@ final class StaticTypeMapper
             return new AttributeAwareUnionTypeNode($unionTypesNodes);
         }
 
-        if ($phpStanType instanceof ArrayType) {
+        if ($phpStanType instanceof ArrayType || $phpStanType instanceof IterableType) {
             $itemTypeNode = $this->mapPHPStanTypeToPHPStanPhpDocTypeNode($phpStanType->getItemType());
             return new ArrayTypeNode($itemTypeNode);
         }
@@ -578,6 +582,10 @@ final class StaticTypeMapper
             $loweredName = strtolower($typeNode->name);
             if ($loweredName === '\string') {
                 return new PreSlashStringType();
+            }
+
+            if ($loweredName === 'class-string') {
+                return new ClassStringType();
             }
 
             if ($loweredName === 'self') {
