@@ -48,3 +48,4 @@ services:
     Rector\CodeQuality\Rector\FuncCall\IntvalToTypeCastRector: ~
     Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector: ~
     Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector: ~
+    Rector\CodeQuality\Rector\FunctionLike\RemoveImmediateAssignUseRector: ~
