@@ -58,6 +58,10 @@ final class PHPStanServicesFactory
         }
 
         $additionalConfigFiles[] = __DIR__ . '/../../config/phpstan/type-extensions.neon';
+
+        // enable type inferring from constructor
+        $additionalConfigFiles[] = __DIR__ . '/../../config/phpstan/better-infer.neon';
+
         $this->container = $containerFactory->create(sys_get_temp_dir(), $additionalConfigFiles, []);
 
         // clear bleeding edge fallback

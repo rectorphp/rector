@@ -26,6 +26,7 @@ use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
 use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
 use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
 use Rector\Configuration\CurrentNodeProvider;
+use Rector\Exception\ShouldNotHappenException;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -76,6 +77,11 @@ final class BetterPhpDocParser extends PhpDocParser
     private $classAnnotationMatcher;
 
     /**
+     * @var Lexer
+     */
+    private $lexer;
+
+    /**
      * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
      */
     public function __construct(
@@ -85,6 +91,7 @@ final class BetterPhpDocParser extends PhpDocParser
         MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
         CurrentNodeProvider $currentNodeProvider,
         ClassAnnotationMatcher $classAnnotationMatcher,
+        Lexer $lexer,
         array $phpDocNodeFactories = []
     ) {
         parent::__construct($typeParser, $constExprParser);
@@ -96,6 +103,15 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->phpDocNodeFactories = $phpDocNodeFactories;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
+        $this->lexer = $lexer;
+    }
+
+    public function parseString(string $docBlock): PhpDocNode
+    {
+        $tokens = $this->lexer->tokenize($docBlock);
+        $tokenIterator = new TokenIterator($tokens);
+
+        return parent::parse($tokenIterator);
     }
 
     /**
@@ -157,6 +173,10 @@ final class BetterPhpDocParser extends PhpDocParser
 
             // compare regardless sensitivity
             $currentPhpNode = $this->currentNodeProvider->getNode();
+            if ($currentPhpNode === null) {
+                continue;
+            }
+
             if (! $this->isTagMatchingPhpDocNodeFactory($tag, $phpDocNodeFactory, $currentPhpNode)) {
                 continue;
             }
@@ -323,6 +343,10 @@ final class BetterPhpDocParser extends PhpDocParser
     private function isTagMatchedByFactories(string $tag): bool
     {
         $currentPhpNode = $this->currentNodeProvider->getNode();
+        if ($currentPhpNode === null) {
+            throw new ShouldNotHappenException();
+        }
+
         foreach ($this->phpDocNodeFactories as $phpDocNodeFactory) {
             if ($this->isTagMatchingPhpDocNodeFactory($tag, $phpDocNodeFactory, $currentPhpNode)) {
                 return true;

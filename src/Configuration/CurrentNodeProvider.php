@@ -9,7 +9,7 @@ use PhpParser\Node;
 final class CurrentNodeProvider
 {
     /**
-     * @var Node
+     * @var Node|null
      */
     private $node;
 
@@ -18,7 +18,7 @@ final class CurrentNodeProvider
         $this->node = $node;
     }
 
-    public function getNode(): Node
+    public function getNode(): ?Node
     {
         return $this->node;
     }
