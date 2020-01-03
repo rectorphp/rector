@@ -1,4 +1,4 @@
-# All 414 Rectors Overview
+# All 415 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -454,6 +454,26 @@ Convert [$this, "method"] to proper anonymous function
      private function compareSize($first, $second)
      {
          return $first <=> $second;
+     }
+ }
+```
+
+<br>
+
+### `ChangeArrayPushToArrayAssignRector`
+
+- class: `Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector`
+
+Change array_push() to direct variable assign
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $items = [];
+-        array_push($items, $item);
++        $items[] = $item;
      }
  }
 ```
