@@ -584,6 +584,10 @@ final class StaticTypeMapper
                 return new PreSlashStringType();
             }
 
+            if ($loweredName === 'class-string') {
+                return new ClassStringType();
+            }
+
             if ($loweredName === 'self') {
                 /** @var string|null $className */
                 $className = $node->getAttribute(AttributeKey::CLASS_NAME);
