@@ -1,4 +1,4 @@
-# All 411 Rectors Overview
+# All 415 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -310,6 +310,27 @@ Changes settype() to (type) where possible
 
 ## CodeQuality
 
+### `AbsolutizeRequireAndIncludePathRector`
+
+- class: `Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector`
+
+include/require to absolute path. This Rector might introduce backwards incompatible code, when the include/require beeing changed depends on the current working directory.
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        require 'autoload.php';
++        require __DIR__ . '/autoload.php';
+
+         require $variable;
+     }
+ }
+```
+
+<br>
+
 ### `AddPregQuoteDelimiterRector`
 
 - class: `Rector\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector`
@@ -338,6 +359,25 @@ Split 2 assigns ands to separate line
 -        $token = 4 and $tokens[] = $token;
 +        $token = 4;
 +        $tokens[] = $token;
+     }
+ }
+```
+
+<br>
+
+### `ArrayKeyExistsTernaryThenValueToCoalescingRector`
+
+- class: `Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector`
+
+Change array_key_exists() ternary to coalesing
+
+```diff
+ class SomeClass
+ {
+     public function run($values, $keyToMatch)
+     {
+-        $result = array_key_exists($keyToMatch, $values) ? $values[$keyToMatch] : null;
++        $result = $values[$keyToMatch] ?? null;
      }
  }
 ```
@@ -675,6 +715,28 @@ If conditions is always true, perform the content right away
 -            return 'yes';
 -        }
 +        return 'yes';
+     }
+ }
+```
+
+<br>
+
+### `RemoveImmediateAssignUseRector`
+
+- class: `Rector\CodeQuality\Rector\FunctionLike\RemoveImmediateAssignUseRector`
+
+Remove assign that is immediately used in some condition later and use it directy
+
+```diff
+ class SomeClass
+ {
+     public function run($remix)
+     {
+-        $value = $remix->getThis();
+-        if ($value > 3) {
++        if ($remix->getThis() > 3) {
+             return true;
+         }
      }
  }
 ```
@@ -1646,7 +1708,7 @@ Makes array_search search for identical elements
 
 - class: `Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector`
 
-Prefer quote that not inside the string
+Prefer quote that are not inside the string
 
 ```diff
  class SomeClass
@@ -5879,9 +5941,9 @@ Changes property `@var` annotations from annotation to type.
 ```diff
  final class SomeClass
  {
-     /**
-      * @var int
-      */
+-    /**
+-     * @var int
+-     */
 -    private count;
 +    private int count;
  }
@@ -6716,6 +6778,30 @@ Finalize every class constant that is used only locally
      public function isLocalOnly()
      {
          return self::LOCAL_ONLY;
+     }
+ }
+```
+
+<br>
+
+### `RemoveAlwaysElseRector`
+
+- class: `Rector\SOLID\Rector\If_\RemoveAlwaysElseRector`
+
+Remove if for last else, if previous values were throw
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+         if ($value) {
+             throw new \InvalidStateException;
+-        } else {
+-            return 10;
+         }
++
++        return 10;
      }
  }
 ```
