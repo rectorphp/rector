@@ -26,6 +26,7 @@ final class CompleteImportForPartialAnnotationRector extends AbstractRector
     private const DEFAULT_IMPORTS_TO_RESTORE = [
         ['Doctrine\ORM\Mapping', 'ORM'],
         ['Symfony\Component\Validator\Constraints', 'Assert'],
+        ['JMS\Serializer\Annotation', 'Serializer'],
     ];
 
     /**
