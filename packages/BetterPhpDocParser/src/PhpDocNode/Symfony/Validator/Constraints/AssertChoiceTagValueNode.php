@@ -20,7 +20,7 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode
     public const CLASS_NAME = Choice::class;
 
     /**
-     * @var mixed[]|null
+     * @var mixed[]|string|null
      */
     private $callback;
 
@@ -30,9 +30,9 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode
     private $strict;
 
     /**
-     * @param mixed[]|null $callback
+     * @param mixed[]|string|null $callback
      */
-    public function __construct(?array $callback, ?bool $strict, string $annotationContent)
+    public function __construct($callback, ?bool $strict, string $annotationContent)
     {
         $this->callback = $callback;
         $this->strict = $strict;
@@ -44,7 +44,11 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode
         $contentItems = [];
 
         if ($this->callback) {
-            $contentItems['callback'] = $this->printArrayItem($this->callback, 'callback');
+            if (is_array($this->callback)) {
+                $contentItems['callback'] = $this->printArrayItem($this->callback, 'callback');
+            } else {
+                $contentItems['callback'] = sprintf('callback="%s"', $this->callback);
+            }
         }
 
         if ($this->strict !== null) {
