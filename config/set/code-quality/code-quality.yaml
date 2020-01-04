@@ -49,3 +49,4 @@ services:
     Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector: ~
     Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector: ~
     Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector: ~
+    Rector\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector: ~
