@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\For_;
+use PHPStan\Analyser\Scope;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -71,8 +73,13 @@ PHP
     {
         $countInCond = null;
         $countedValueName = null;
+        $for = $node;
 
-        $this->traverseNodesWithCallable($node->cond, function (Node $node) use (&$countInCond, &$countedValueName) {
+        $this->traverseNodesWithCallable($node->cond, function (Node $node) use (
+            &$countInCond,
+            &$countedValueName,
+            $for
+        ) {
             if (! $node instanceof FuncCall) {
                 return null;
             }
@@ -83,12 +90,7 @@ PHP
 
             $countInCond = $node;
             $valueName = $this->getName($node->args[0]->value);
-
-            if ($valueName === null) {
-                $countedValueName = self::DEFAULT_VARIABLE_COUNT_NAME;
-            } else {
-                $countedValueName = $valueName . 'Count';
-            }
+            $countedValueName = $this->createCountedValueName($valueName, $for);
 
             return new Variable($countedValueName);
         });
@@ -98,9 +100,38 @@ PHP
         }
 
         $countAssign = new Assign(new Variable($countedValueName), $countInCond);
-
         $this->addNodeBeforeNode($countAssign, $node);
 
         return $node;
+    }
+
+    private function createCountedValueName(?string $valueName, For_ $for): string
+    {
+        if ($valueName === null) {
+            $countedValueName = self::DEFAULT_VARIABLE_COUNT_NAME;
+        } else {
+            $countedValueName = $valueName . 'Count';
+        }
+
+        /** @var Scope|null $forScope */
+        $forScope = $for->getAttribute(AttributeKey::SCOPE);
+        if ($forScope === null) {
+            return $countedValueName;
+        }
+
+        // make sure variable name is unique
+        if (! $forScope->hasVariableType($countedValueName)->yes()) {
+            return $countedValueName;
+        }
+
+        // we need to add number suffix until the variable is unique
+        $i = 2;
+        $countedValueNamePart = $countedValueName;
+        while ($forScope->hasVariableType($countedValueName)->yes()) {
+            $countedValueName = $countedValueNamePart . $i;
+            ++$i;
+        }
+
+        return $countedValueName;
     }
 }
