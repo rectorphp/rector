@@ -386,6 +386,8 @@ final class ParsedNodesByType
 
     public function collect(Node $node): void
     {
+        $nodeClass = get_class($node);
+
         if ($node instanceof Class_) {
             $this->addClass($node);
             return;
@@ -397,18 +399,12 @@ final class ParsedNodesByType
                 throw new ShouldNotHappenException();
             }
 
-            $nodeClass = get_class($node);
             $this->simpleParsedNodesByType[$nodeClass][$name] = $node;
             return;
         }
 
         if ($node instanceof ClassConst) {
             $this->addClassConstant($node);
-            return;
-        }
-
-        if ($node instanceof ClassConstFetch) {
-            $this->simpleParsedNodesByType[ClassConstFetch::class][] = $node;
             return;
         }
 
@@ -438,8 +434,7 @@ final class ParsedNodesByType
         }
 
         // simple collect
-        $type = get_class($node);
-        $this->simpleParsedNodesByType[$type][] = $node;
+        $this->simpleParsedNodesByType[$nodeClass][] = $node;
     }
 
     /**

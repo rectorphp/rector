@@ -102,6 +102,12 @@ PHP
             return true;
         }
 
+        // most of factories can be only registered in config and create services there
+        // skip them for now; but in the future, detect types they create in public methods and only keep them, if they're used
+        if ($this->isName($class, '*Factory')) {
+            return true;
+        }
+
         return $class->isAbstract();
     }
 }

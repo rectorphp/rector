@@ -187,7 +187,8 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
 
     private function createContainerWithAllRectors(): void
     {
-        $coreRectorClasses = (new RectorsFinder())->findCoreRectorClasses();
+        $rectorsFinder = new RectorsFinder();
+        $coreRectorClasses = $rectorsFinder->findCoreRectorClasses();
 
         $listForConfig = [];
         foreach ($coreRectorClasses as $rectorClass) {

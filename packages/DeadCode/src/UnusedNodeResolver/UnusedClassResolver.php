@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Exception\NotImplementedException;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\Testing\PHPUnit\PHPUnitEnvironment;
 
 final class UnusedClassResolver
 {
@@ -28,6 +29,11 @@ final class UnusedClassResolver
      */
     private $parsedNodesByType;
 
+    /**
+     * @var string[]
+     */
+    private $cachedUsedClassNames = [];
+
     public function __construct(NameResolver $nameResolver, ParsedNodesByType $parsedNodesByType)
     {
         $this->nameResolver = $nameResolver;
@@ -39,12 +45,22 @@ final class UnusedClassResolver
      */
     public function getUsedClassNames(): array
     {
-        return array_merge(
+        if (! PHPUnitEnvironment::isPHPUnitRun()) {
+            if ($this->cachedUsedClassNames !== []) {
+                return $this->cachedUsedClassNames;
+            }
+        }
+
+        $cachedUsedClassNames = array_merge(
             $this->getParamNodesClassNames(),
             $this->getNewNodesClassNames(),
             $this->getStaticCallClassNames(),
             $this->getClassConstantFetchNames()
         );
+
+        $cachedUsedClassNames = $this->sortAndUniqueArray($cachedUsedClassNames);
+
+        return $this->cachedUsedClassNames = $cachedUsedClassNames;
     }
 
     public function isClassWithoutInterfaceAndNotController(Class_ $class): bool
@@ -167,5 +183,11 @@ final class UnusedClassResolver
         }
 
         return $classNames;
+    }
+
+    private function sortAndUniqueArray(array $items): array
+    {
+        sort($items);
+        return array_unique($items);
     }
 }
