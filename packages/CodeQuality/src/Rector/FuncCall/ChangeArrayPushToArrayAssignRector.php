@@ -67,6 +67,17 @@ PHP
         }
 
         $arrayDimFetch = new ArrayDimFetch($node->args[0]->value);
-        return new Assign($arrayDimFetch, $node->args[1]->value);
+
+        $position = 1;
+        while (isset($node->args[$position])) {
+            $assign = new Assign($arrayDimFetch, $node->args[$position]->value);
+            $this->addNodeAfterNode($assign, $node);
+
+            ++$position;
+        }
+
+        $this->removeNode($node);
+
+        return null;
     }
 }
