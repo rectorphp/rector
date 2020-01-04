@@ -18,12 +18,6 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
 {
     /**
-     * @warning might cause bugs with fluent interfaces like https://github.com/rectorphp/rector/issues/1646
-     * @var int
-     */
-    private const NESTED_CHAIN_METHOD_CALL_LIMIT = 15;
-
-    /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
@@ -33,9 +27,15 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
      */
     private $nodeToRemove;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var int
+     */
+    private $nestedChainMethodCallLimit;
+
+    public function __construct(BetterNodeFinder $betterNodeFinder, int $nestedChainMethodCallLimit)
     {
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->nestedChainMethodCallLimit = $nestedChainMethodCallLimit;
     }
 
     /**
@@ -49,7 +49,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
 
         if ($node->expr instanceof MethodCall && $node->expr->var instanceof MethodCall) {
             $nestedChainMethodCalls = $this->betterNodeFinder->findInstanceOf([$node->expr], MethodCall::class);
-            if (count($nestedChainMethodCalls) > self::NESTED_CHAIN_METHOD_CALL_LIMIT) {
+            if (count($nestedChainMethodCalls) > $this->nestedChainMethodCallLimit) {
                 $this->nodeToRemove = $node;
 
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
