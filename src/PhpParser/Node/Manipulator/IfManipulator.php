@@ -125,12 +125,12 @@ final class IfManipulator
 
     public function isEarlyElse(If_ $if): bool
     {
-        if (! $this->isAlwayAllowedType((array) $if->stmts, self::ALLOWED_BREAKING_NODE_TYPES)) {
+        if (! $this->isAlwaysAllowedType((array) $if->stmts, self::ALLOWED_BREAKING_NODE_TYPES)) {
             return false;
         }
 
         foreach ($if->elseifs as $elseif) {
-            if (! $this->isAlwayAllowedType((array) $elseif->stmts, self::ALLOWED_BREAKING_NODE_TYPES)) {
+            if (! $this->isAlwaysAllowedType((array) $elseif->stmts, self::ALLOWED_BREAKING_NODE_TYPES)) {
                 return false;
             }
         }
@@ -159,7 +159,7 @@ final class IfManipulator
      * @param Node[] $stmts
      * @param string[] $allowedTypes
      */
-    private function isAlwayAllowedType(array $stmts, array $allowedTypes): bool
+    private function isAlwaysAllowedType(array $stmts, array $allowedTypes): bool
     {
         $isAlwaysReturnValue = false;
 

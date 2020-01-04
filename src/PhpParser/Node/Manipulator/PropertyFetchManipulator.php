@@ -185,14 +185,14 @@ final class PropertyFetchManipulator
     /**
      * @param string[] $propertyNames
      */
-    public function isLocalPropertyOfNames(Expr $expr, array $propertyNames): bool
+    public function isLocalPropertyOfNames(Node $node, array $propertyNames): bool
     {
-        if (! $this->isLocalProperty($expr)) {
+        if (! $this->isLocalProperty($node)) {
             return false;
         }
 
-        /** @var PropertyFetch $expr */
-        return $this->nameResolver->isNames($expr->name, $propertyNames);
+        /** @var PropertyFetch $node */
+        return $this->nameResolver->isNames($node->name, $propertyNames);
     }
 
     public function isLocalProperty(Node $node): bool

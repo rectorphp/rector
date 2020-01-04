@@ -5,10 +5,19 @@ declare(strict_types=1);
 namespace Rector\MinimalScope\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Do_;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\While_;
+use PhpParser\NodeTraverser;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -19,13 +28,24 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ChangeLocalPropertyToVariableRector extends AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private const SCOPE_CHANGING_NODE_TYPES = [Do_::class, While_::class, If_::class, Else_::class];
+
+    /**
      * @var ClassManipulator
      */
     private $classManipulator;
 
-    public function __construct(ClassManipulator $classManipulator)
+    /**
+     * @var PropertyFetchManipulator
+     */
+    private $propertyFetchManipulator;
+
+    public function __construct(ClassManipulator $classManipulator, PropertyFetchManipulator $propertyFetchManipulator)
     {
         $this->classManipulator = $classManipulator;
+        $this->propertyFetchManipulator = $propertyFetchManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -136,6 +156,7 @@ PHP
     private function collectPropertyFetchByMethods(Class_ $class, array $privatePropertyNames): array
     {
         $propertyUsageByMethods = [];
+
         foreach ($privatePropertyNames as $privatePropertyName) {
             foreach ($class->getMethods() as $method) {
                 $hasProperty = (bool) $this->betterNodeFinder->findFirst($method, function (Node $node) use (
@@ -152,11 +173,112 @@ PHP
                     continue;
                 }
 
+                $isPropertyChangingInMultipleMethodCalls = $this->isPropertyChangingInMultipleMethodCalls($method,
+                    $privatePropertyName);
+
+                if ($isPropertyChangingInMultipleMethodCalls) {
+                    continue;
+                }
+
                 /** @var string $classMethodName */
                 $classMethodName = $this->getName($method);
                 $propertyUsageByMethods[$privatePropertyName][] = $classMethodName;
             }
         }
         return $propertyUsageByMethods;
+    }
+
+    /**
+     * Covers https://github.com/rectorphp/rector/pull/2558#discussion_r363036110
+     */
+    private function isPropertyChangingInMultipleMethodCalls(
+        ClassMethod $classMethod,
+        string $privatePropertyName
+    ): bool {
+        $isPropertyChanging = false;
+        $isPropertyReadInIf = false;
+        $isIfFollowedByAssign = false;
+
+        $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use (
+            &$isPropertyChanging,
+            $privatePropertyName,
+            &$isPropertyReadInIf,
+            &$isIfFollowedByAssign
+        ) {
+            if ($isPropertyReadInIf) {
+                if (! $this->propertyFetchManipulator->isLocalPropertyOfNames($node, [$privatePropertyName])) {
+                    return null;
+                }
+
+                $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+                if ($parentNode instanceof Assign) {
+                    if ($parentNode->var === $node) {
+                        $isIfFollowedByAssign = true;
+                    }
+                }
+            }
+
+            if (! $this->isScopeChangingNode($node)) {
+                return null;
+            }
+
+            if ($node instanceof If_) {
+                $this->traverseNodesWithCallable($node->cond, function (Node $node) use (
+                    $privatePropertyName,
+                    &$isPropertyReadInIf
+                ) {
+                    if (! $this->propertyFetchManipulator->isLocalPropertyOfNames($node, [$privatePropertyName])) {
+                        return null;
+                    }
+
+                    $isPropertyReadInIf = true;
+
+                    return NodeTraverser::STOP_TRAVERSAL;
+                });
+            }
+
+            // here cannot be any property assign
+            $this->traverseNodesWithCallable($node, function (Node $node) use (
+                &$isPropertyChanging,
+                $privatePropertyName
+            ) {
+                if (! $node instanceof Assign) {
+                    return null;
+                }
+
+                if (! $node->var instanceof PropertyFetch) {
+                    return null;
+                }
+
+                if (! $this->isName($node->var->name, $privatePropertyName)) {
+                    return null;
+                }
+
+                $isPropertyChanging = true;
+
+                return NodeTraverser::STOP_TRAVERSAL;
+            });
+
+            if ($isPropertyChanging === false) {
+                return null;
+            }
+
+            return NodeTraverser::STOP_TRAVERSAL;
+        });
+
+        return $isPropertyChanging || $isIfFollowedByAssign;
+    }
+
+    private function isScopeChangingNode(Node $node): bool
+    {
+        foreach (self::SCOPE_CHANGING_NODE_TYPES as $scopeChangingNode) {
+            if (! is_a($node, $scopeChangingNode, true)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

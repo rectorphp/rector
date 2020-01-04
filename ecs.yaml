@@ -75,6 +75,7 @@ parameters:
             - 'src/Rector/AbstractRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+            - 'packages/MinimalScope/src/Rector/Class_/ChangeLocalPropertyToVariableRector.php'
             # solve later
             - 'src/Console/Command/ScreenFileCommand.php'
             - 'packages/Doctrine/src/Rector/ClassMethod/AddMethodCallBasedParamTypeRector.php'
