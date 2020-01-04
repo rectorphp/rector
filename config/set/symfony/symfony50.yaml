@@ -1,3 +1,6 @@
+imports:
+    - { resource: "symfony50-types.yaml" }
+
 services:
     # https://github.com/symfony/symfony/blob/5.0/UPGRADE-5.0.md
     Rector\Renaming\Rector\Class_\RenameClassRector:
