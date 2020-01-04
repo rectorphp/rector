@@ -1,0 +1,200 @@
+services:
+    # see https://symfony.com/blog/symfony-type-declarations-return-types-and-phpunit-compatibility
+    # see https://github.com/symfony/symfony/issues/32179:
+    Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector:
+        $typehintForParameterByMethodByClass:
+            Symfony\Component\EventDispatcher\EventDispatcherInterface:
+                addListener:
+                    0: string
+                    2: int
+                removeListener:
+                    0: string
+                getListeners:
+                    0: string
+                getListenerPriority:
+                    0: string
+                hasListeners:
+                    0: string
+
+            Symfony\Component\Console\Application:
+                setCatchExceptions:
+                    0: bool
+                setAutoExit:
+                    0: bool
+                setName:
+                    0: string
+                setVersion:
+                    0: string
+                register:
+                    0: string
+                get:
+                    0: string
+                has:
+                    0: string
+                findNamespace:
+                    0: string
+                find:
+                    0: string
+                all:
+                    0: string
+                getAbbreviations:
+                    0: array
+                extractNamespace:
+                    0: string
+                    1: int
+                setDefaultCommand:
+                    0: string
+                    1: bool
+
+            Symfony\Component\Console\Command\Command:
+                mergeApplicationDefinition:
+                    0: bool
+                addArgument:
+                    0: string
+                    1: int
+                    2: string
+                addOption:
+                    0: string
+                    2: int
+                    3: string
+                setName:
+                    0: string
+                setProcessTitle:
+                    0: string
+                setHidden:
+                    0: bool
+                setDescription:
+                    0: string
+                setHelp:
+                    0: string
+                setAliases:
+                    0: iterable
+                getSynopsis:
+                    0: bool
+                addUsage:
+                    0: string
+                getHelper:
+                    0: string
+
+            Symfony\Component\Console\CommandLoader\CommandLoaderInterface:
+                get:
+                    0: string
+                has:
+                    0: string
+
+            Symfony\Component\Console\Input\InputInterface:
+                getArgument:
+                    0: string
+                setArgument:
+                    0: string
+                getOption:
+                    0: string
+                setOption:
+                    0: string
+                hasOption:
+                    0: string
+                setInteractive:
+                    0: bool
+
+            Symfony\Component\Console\Output\OutputInterface:
+                write:
+                    1: bool
+                    2: int
+                writeln:
+                    1: int
+                setVerbosity:
+                    0: int
+                setDecorated:
+                    0: bool
+
+            Symfony\Component\Process\Process:
+                signal:
+                    0: int
+                stop:
+                    0: float
+                    1: int
+                setTty:
+                    0: bool
+                setPty:
+                    0: bool
+                setWorkingDirectory:
+                    0: string
+                inheritEnvironmentVariables:
+                    0: bool
+                updateStatus:
+                    0: bool
+
+            Symfony\Component\EventDispatcher\EventDispatcher:
+                dispatch:
+                    0: object
+
+            Symfony\Contracts\Translation\TranslatorInterface:
+                setLocale:
+                    0: string
+                trans:
+                    0: ?string
+                    2: string
+                    3: string
+
+            Symfony\Component\Form\AbstractExtension:
+                getType:
+                    0: string
+                hasType:
+                    0: string
+                getTypeExtensions:
+                    0: string
+                hasTypeExtensions:
+                    0: string
+
+            Symfony\Component\Form\DataMapperInterface:
+                mapFormsToData:
+                    0: iterable
+                mapDataToForms:
+                    1: iterable
+
+            Symfony\Component\Form\Form:
+                add:
+                    1: string
+                remove:
+                    0: string
+                has:
+                    0: string
+                get:
+                    0: string
+
+            Symfony\Component\Form\FormBuilderInterface:
+                add:
+                    1: string
+                create:
+                    0: string
+                    1: string
+                get:
+                    0: string
+                remove:
+                    0: string
+                has:
+                    0: string
+
+            Symfony\Component\Form\FormExtensionInterface:
+                getTypeExtensions:
+                    0: string
+                hasTypeExtensions:
+                    0: string
+
+            Symfony\Component\Form\FormFactory:
+                create:
+                    0: string
+                createNamed:
+                    0: string
+                    1: string
+                createForProperty:
+                    0: string
+                    1: string
+                createBuilder:
+                    0: string
+                createNamedBuilder:
+                    0: string
+                    1: string
+                createBuilderForProperty:
+                    0: string
+                    1: string
