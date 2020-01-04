@@ -249,3 +249,5 @@ parameters:
         - '#Parameter \#1 \$expected of method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) expects class\-string<object\>, string given#'
         - '#Unable to resolve the template type ExpectedType in call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\)#'
         - '#Right side of \|\| is always false#'
+
+        - '#Method Rector\\NodeContainer\\ParsedNodesByType\:\:findNewNodesByClass\(\) should return array<PhpParser\\Node\\Expr\\New_\> but returns array<int, PhpParser\\Node\>#'
