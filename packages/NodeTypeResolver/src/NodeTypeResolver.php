@@ -30,11 +30,13 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\Broker;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
@@ -50,11 +52,14 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -65,6 +70,7 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
+use ReflectionProperty;
 use Symfony\Component\Finder\SplFileInfo;
 
 final class NodeTypeResolver
@@ -115,15 +121,33 @@ final class NodeTypeResolver
     private $betterNodeFinder;
 
     /**
+     * @var ParsedNodesByType
+     */
+    private $parsedNodesByType;
+
+    /**
+     * @var BetterPhpDocParser
+     */
+    private $betterPhpDocParser;
+
+    /**
+     * @var StaticTypeMapper
+     */
+    private $staticTypeMapper;
+
+    /**
      * @param PerNodeTypeResolverInterface[] $perNodeTypeResolvers
      */
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
+        BetterPhpDocParser $betterPhpDocParser,
         NameResolver $nameResolver,
+        ParsedNodesByType $parsedNodesByType,
         CallableNodeTraverser $callableNodeTraverser,
         ClassReflectionTypesResolver $classReflectionTypesResolver,
         Broker $broker,
         TypeFactory $typeFactory,
+        StaticTypeMapper $staticTypeMapper,
         ObjectTypeSpecifier $objectTypeSpecifier,
         BetterNodeFinder $betterNodeFinder,
         array $perNodeTypeResolvers
@@ -141,6 +165,9 @@ final class NodeTypeResolver
         $this->typeFactory = $typeFactory;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->parsedNodesByType = $parsedNodesByType;
+        $this->betterPhpDocParser = $betterPhpDocParser;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     /**
@@ -314,10 +341,6 @@ final class NodeTypeResolver
 
     public function getStaticType(Node $node): Type
     {
-        if ($node instanceof String_) {
-            return new ConstantStringType($node->value);
-        }
-
         if ($node instanceof Arg) {
             throw new ShouldNotHappenException('Arg does not have a type, use $arg->value instead');
         }
@@ -371,6 +394,14 @@ final class NodeTypeResolver
         $staticType = $nodeScope->getType($node);
         if (! $staticType instanceof ObjectType) {
             return $staticType;
+        }
+
+        if ($node instanceof PropertyFetch) {
+            // compensate 3rd party non-analysed property reflection
+            $vendorPropertyType = $this->getVendorPropertyFetchType($node);
+            if ($vendorPropertyType !== null) {
+                return $vendorPropertyType;
+            }
         }
 
         return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType($node, $staticType);
@@ -715,6 +746,20 @@ final class NodeTypeResolver
 
         $propertyPropertyNode = $this->getClassNodeProperty($classNode, $propertyName);
         if ($propertyPropertyNode === null) {
+            // also possible 3rd party vendor
+            if ($node instanceof PropertyFetch) {
+                $propertyOwnerStaticType = $this->getStaticType($node->var);
+            } else {
+                $propertyOwnerStaticType = $this->getStaticType($node->class);
+            }
+
+            if (! $propertyOwnerStaticType instanceof ThisType && $propertyOwnerStaticType instanceof TypeWithClassName) {
+                if ($this->parsedNodesByType->findClass($propertyOwnerStaticType->getClassName()) === null) {
+                    // positive assumption about 3rd party code
+                    return true;
+                }
+            }
+
             return false;
         }
 
@@ -794,5 +839,47 @@ final class NodeTypeResolver
         }
 
         return null;
+    }
+
+    private function getVendorPropertyFetchType(PropertyFetch $propertyFetch): ?Type
+    {
+        $varObjectType = $this->getStaticType($propertyFetch->var);
+        if (! $varObjectType instanceof TypeWithClassName) {
+            return null;
+        }
+
+        if ($this->parsedNodesByType->findClass($varObjectType->getClassName())) {
+            return null;
+        }
+
+        // 3rd party code
+        $propertyName = $this->nameResolver->getName($propertyFetch->name);
+        if ($propertyName === null) {
+            return null;
+        }
+
+        if (! property_exists($varObjectType->getClassName(), $propertyName)) {
+            return null;
+        }
+
+        // property is used
+        $propertyReflection = new ReflectionProperty($varObjectType->getClassName(), $propertyName);
+        if (! $propertyReflection->getDocComment()) {
+            return null;
+        }
+
+        $phpDocNode = $this->betterPhpDocParser->parseString((string) $propertyReflection->getDocComment());
+        $varTagValues = $phpDocNode->getVarTagValues();
+
+        if (! isset($varTagValues[0])) {
+            return null;
+        }
+
+        $typeNode = $varTagValues[0]->type;
+        if (! $typeNode instanceof TypeNode) {
+            return null;
+        }
+
+        return $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, new Nop());
     }
 }
