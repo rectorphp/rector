@@ -1,4 +1,4 @@
-# All 418 Rectors Overview
+# All 419 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -2272,6 +2272,32 @@ Remove unreachable statements
 -
 -        $removeMe = 10;
      }
+ }
+```
+
+<br>
+
+### `RemoveUnusedClassesRector`
+
+- class: `Rector\DeadCode\Rector\Class_\RemoveUnusedClassesRector`
+
+Remove unused classes without interface
+
+```diff
+ interface SomeInterface
+ {
+ }
+
+ class SomeClass implements SomeInterface
+ {
+     public function run($items)
+     {
+         return null;
+     }
+-}
+-
+-class NowhereUsedClass
+-{
  }
 ```
 
