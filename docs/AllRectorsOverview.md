@@ -1,4 +1,4 @@
-# All 415 Rectors Overview
+# All 418 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -21,6 +21,7 @@
 - [Guzzle](#guzzle)
 - [Laravel](#laravel)
 - [Legacy](#legacy)
+- [MinimalScope](#minimalscope)
 - [MysqlToMysqli](#mysqltomysqli)
 - [Nette](#nette)
 - [NetteTesterToPHPUnit](#nettetestertophpunit)
@@ -585,6 +586,28 @@ Make if conditions more explicit
 
 <br>
 
+### `ForRepeatedCountToOwnVariableRector`
+
+- class: `Rector\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector`
+
+Change count() in for function to own variable
+
+```diff
+ class SomeClass
+ {
+     public function run($items)
+     {
+-        for ($i = 5; $i <= count($items); $i++) {
++        $itemsCount = count($items);
++        for ($i = 5; $i <= $itemsCount; $i++) {
+             echo $items[$i];
+         }
+     }
+ }
+```
+
+<br>
+
 ### `ForToForeachRector`
 
 - class: `Rector\CodeQuality\Rector\For_\ForToForeachRector`
@@ -607,6 +630,28 @@ Change for() to foreach() where useful
                  $tokens[$i][0] = self::T_FN;
              }
          }
+     }
+ }
+```
+
+<br>
+
+### `ForeachItemsAssignToEmptyArrayToAssignRector`
+
+- class: `Rector\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector`
+
+Change foreach() items assign to empty array to direct assign
+
+```diff
+ class SomeClass
+ {
+     public function run($items)
+     {
+         $items2 = [];
+-        foreach ($items as $item) {
+-             $items2[] = $item;
+-        }
++        $items2 = $items;
      }
  }
 ```
@@ -3233,6 +3278,30 @@ Change singleton class to normal class that can be registered as a service
 -        }
 -
 -        return static::$instance;
+     }
+ }
+```
+
+<br>
+
+## MinimalScope
+
+### `ChangeLocalPropertyToVariableRector`
+
+- class: `Rector\MinimalScope\Rector\Class_\ChangeLocalPropertyToVariableRector`
+
+Change local property used in single method to local variable
+
+```diff
+ class SomeClass
+ {
+-    private $count;
+     public function run()
+     {
+-        $this->count = 5;
+-        return $this->count;
++        $count = 5;
++        return $count;
      }
  }
 ```
