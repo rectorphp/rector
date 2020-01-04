@@ -56,7 +56,7 @@ final class ClassConstantFetchAnalyzer
             return $this->classConstantFetchByClassAndName;
         }
 
-        foreach ($this->parsedNodesByType->getClassConstantFetches() as $classConstantFetch) {
+        foreach ($this->parsedNodesByType->getNodesByType(ClassConstFetch::class) as $classConstantFetch) {
             $this->addClassConstantFetch($classConstantFetch);
         }
 

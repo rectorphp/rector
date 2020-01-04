@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -54,6 +55,8 @@ final class ParsedNodesByType
         MethodCall::class,
         // for array callable - [$this, 'someCall']
         Array_::class,
+        // for unused classes
+        Param::class,
     ];
 
     /**
@@ -70,11 +73,6 @@ final class ParsedNodesByType
      * @var ClassConst[][]
      */
     private $constantsByType = [];
-
-    /**
-     * @var ClassConstFetch[]
-     */
-    private $classConstantFetches = [];
 
     /**
      * @var NodeTypeResolver
@@ -124,15 +122,7 @@ final class ParsedNodesByType
     }
 
     /**
-     * @return New_[]
-     */
-    public function getNewNodes(): array
-    {
-        return $this->simpleParsedNodesByType[New_::class] ?? [];
-    }
-
-    /**
-     * Due to circular reference
+     * To prevent circular reference
      * @required
      */
     public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
@@ -296,14 +286,6 @@ final class ParsedNodesByType
         return $this->constantsByType[$className][$constantName] ?? null;
     }
 
-    /**
-     * @return ClassConstFetch[]
-     */
-    public function getClassConstantFetches(): array
-    {
-        return $this->classConstantFetches;
-    }
-
     public function findFunction(string $name): ?Function_
     {
         return $this->simpleParsedNodesByType[Function_::class][$name] ?? null;
@@ -404,6 +386,8 @@ final class ParsedNodesByType
 
     public function collect(Node $node): void
     {
+        $nodeClass = get_class($node);
+
         if ($node instanceof Class_) {
             $this->addClass($node);
             return;
@@ -415,18 +399,12 @@ final class ParsedNodesByType
                 throw new ShouldNotHappenException();
             }
 
-            $nodeClass = get_class($node);
             $this->simpleParsedNodesByType[$nodeClass][$name] = $node;
             return;
         }
 
         if ($node instanceof ClassConst) {
             $this->addClassConstant($node);
-            return;
-        }
-
-        if ($node instanceof ClassConstFetch) {
-            $this->addClassConstantFetch($node);
             return;
         }
 
@@ -453,12 +431,10 @@ final class ParsedNodesByType
 
         if ($node instanceof MethodCall || $node instanceof StaticCall) {
             $this->addCall($node);
-            return;
         }
 
         // simple collect
-        $type = get_class($node);
-        $this->simpleParsedNodesByType[$type][] = $node;
+        $this->simpleParsedNodesByType[$nodeClass][] = $node;
     }
 
     /**
@@ -493,10 +469,14 @@ final class ParsedNodesByType
     public function findNewNodesByClass(string $className): array
     {
         $newNodesByClass = [];
-        foreach ($this->getNewNodes() as $newNode) {
-            if ($this->nameResolver->isName($newNode->class, $className)) {
-                $newNodesByClass[] = $newNode;
+
+        foreach ($this->getNodesByType(New_::class) as $newNode) {
+            if (! $this->nameResolver->isName($newNode->class, $className)) {
+                continue;
             }
+
+            /** @var New_ $newNode */
+            $newNodesByClass[] = $newNode;
         }
 
         return $newNodesByClass;
@@ -549,11 +529,6 @@ final class ParsedNodesByType
         $constantName = $this->nameResolver->getName($classConst);
 
         $this->constantsByType[$className][$constantName] = $classConst;
-    }
-
-    private function addClassConstantFetch(ClassConstFetch $classConstFetch): void
-    {
-        $this->classConstantFetches[] = $classConstFetch;
     }
 
     private function addMethod(ClassMethod $classMethod): void
