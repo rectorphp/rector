@@ -50,3 +50,4 @@ services:
     Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector: ~
     Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector: ~
     Rector\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector: ~
+    Rector\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector: ~
