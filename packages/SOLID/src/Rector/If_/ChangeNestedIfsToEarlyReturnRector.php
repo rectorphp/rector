@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Rector\SOLID\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\PhpParser\Node\Manipulator\IfManipulator;
@@ -123,20 +124,50 @@ PHP
             if ($nestedIfsWithOnlyReturnCount === $key + 1) {
                 $this->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
             } else {
-                if (! $nestedIfWithOnlyReturn->cond instanceof BinaryOp) {
-                    throw new NotImplementedException(__METHOD__);
-                }
-
-                $inversedCondition = $this->binaryOpManipulator->inverseCondition($nestedIfWithOnlyReturn->cond);
-                if ($inversedCondition === null) {
-                    throw new NotImplementedException(__METHOD__);
-                }
-
-                $nestedIfWithOnlyReturn->cond = $inversedCondition;
-                $nestedIfWithOnlyReturn->stmts = [clone $nextReturn];
-
-                $this->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
+                $this->addStandaloneIfsWithReturn($nestedIfWithOnlyReturn, $if, $nextReturn);
             }
         }
+    }
+
+    private function createInvertedCondition(Expr $expr): Expr
+    {
+        // inverse condition
+        if ($expr instanceof BinaryOp) {
+            $inversedCondition = $this->binaryOpManipulator->invertCondition($expr);
+            if ($inversedCondition === null) {
+                return new BooleanNot($expr);
+            }
+
+            return $inversedCondition;
+        }
+
+        return new BooleanNot($expr);
+    }
+
+    private function addStandaloneIfsWithReturn(If_ $nestedIfWithOnlyReturn, If_ $if, Return_ $return): void
+    {
+        $return = clone $return;
+
+        $invertedCondition = $this->createInvertedCondition($nestedIfWithOnlyReturn->cond);
+
+        // special case
+        if ($invertedCondition instanceof BooleanNot) {
+            if ($invertedCondition->expr instanceof BinaryOp\BooleanAnd) {
+                $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->left));
+                $booleanNotPartIf->stmts = [clone $return];
+                $this->addNodeAfterNode($booleanNotPartIf, $if);
+
+                $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->right));
+                $booleanNotPartIf->stmts = [clone $return];
+                $this->addNodeAfterNode($booleanNotPartIf, $if);
+
+                return;
+            }
+        }
+
+        $nestedIfWithOnlyReturn->cond = $invertedCondition;
+        $nestedIfWithOnlyReturn->stmts = [clone $return];
+
+        $this->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
     }
 }

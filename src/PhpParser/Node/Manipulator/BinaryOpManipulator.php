@@ -77,7 +77,7 @@ final class BinaryOpManipulator
         return new $inversedNodeClass($firstInversedNode, $secondInversedNode);
     }
 
-    public function inverseCondition(BinaryOp $binaryOp): ?BinaryOp
+    public function invertCondition(BinaryOp $binaryOp): ?BinaryOp
     {
         // no nesting
         if ($binaryOp->left instanceof BooleanOr) {

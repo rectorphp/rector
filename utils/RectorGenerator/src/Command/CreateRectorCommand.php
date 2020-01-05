@@ -235,7 +235,7 @@ final class CreateRectorCommand extends Command
         }
 
         $setConfigContent = trim($setConfigContent) . sprintf(
-            '%s%s: ~%s',
+            '%s%s: null%s',
             PHP_EOL,
             $this->indentFourSpaces($rectorFqnName),
             PHP_EOL
