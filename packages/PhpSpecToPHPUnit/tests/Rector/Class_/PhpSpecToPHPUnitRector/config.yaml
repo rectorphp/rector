@@ -1,2 +1,0 @@
-imports:
-    - { resource: '../../../../../../config/set/framework-migration/phpspec-to-phpunit.yaml' }

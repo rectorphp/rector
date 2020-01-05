@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Rector\SOLID\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\PhpParser\Node\Manipulator\IfManipulator;
@@ -101,28 +103,40 @@ PHP
             return null;
         }
 
-        // add nested if openly after this
-        $nestedIfsWithOnlyReturnCount = count($nestedIfsWithOnlyReturn);
-
-        foreach ($nestedIfsWithOnlyReturn as $key => $nestedIfWithOnlyReturn) {
-            // last item → the return node
-            if ($nestedIfsWithOnlyReturnCount === $key + 1) {
-                $this->addNodeAfterNode($nestedIfWithOnlyReturn, $node);
-            } else {
-                $inversedCondition = $this->binaryOpManipulator->inverseCondition($nestedIfWithOnlyReturn->cond);
-                if ($inversedCondition === null) {
-                    return null;
-                }
-
-                $nestedIfWithOnlyReturn->cond = $inversedCondition;
-                $nestedIfWithOnlyReturn->stmts = [clone $nextNode];
-
-                $this->addNodeAfterNode($nestedIfWithOnlyReturn, $node);
-            }
-        }
-
+        $this->processNestedIfsWIthOnlyReturn($node, $nestedIfsWithOnlyReturn, $nextNode);
         $this->removeNode($node);
 
         return null;
+    }
+
+    /**
+     * @param If_[] $nestedIfsWithOnlyReturn
+     */
+    private function processNestedIfsWIthOnlyReturn(If_ $if, array $nestedIfsWithOnlyReturn, Return_ $nextReturn): void
+    {
+        // add nested if openly after this
+        $nestedIfsWithOnlyReturnCount = count($nestedIfsWithOnlyReturn);
+
+        /** @var int $key */
+        foreach ($nestedIfsWithOnlyReturn as $key => $nestedIfWithOnlyReturn) {
+            // last item → the return node
+            if ($nestedIfsWithOnlyReturnCount === $key + 1) {
+                $this->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
+            } else {
+                if (! $nestedIfWithOnlyReturn->cond instanceof BinaryOp) {
+                    throw new NotImplementedException(__METHOD__);
+                }
+
+                $inversedCondition = $this->binaryOpManipulator->inverseCondition($nestedIfWithOnlyReturn->cond);
+                if ($inversedCondition === null) {
+                    throw new NotImplementedException(__METHOD__);
+                }
+
+                $nestedIfWithOnlyReturn->cond = $inversedCondition;
+                $nestedIfWithOnlyReturn->stmts = [clone $nextReturn];
+
+                $this->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
+            }
+        }
     }
 }

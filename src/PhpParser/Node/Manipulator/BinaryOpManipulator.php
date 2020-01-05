@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use PhpParser\Node\Expr\BooleanNot;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\AssignAndBinaryMap;
 
@@ -131,11 +132,11 @@ final class BinaryOpManipulator
             }
         }
 
-        if ($expr instanceof Expr\BooleanNot) {
+        if ($expr instanceof BooleanNot) {
             return $expr->expr;
         }
 
-        return new Expr\BooleanNot($expr);
+        return new BooleanNot($expr);
     }
 
     private function resolveInversedNodeClass(BinaryOp $binaryOp): ?string
