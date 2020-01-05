@@ -11,7 +11,7 @@ class HasVoidMethod
         return $values;
     }
 
-    public function thisReturnsVoid(): void
+    private function thisReturnsVoid(): void
     {
         return;
     }
@@ -34,7 +34,7 @@ class HasVoidMethod
         return $values;
     }
 
-    public function thisReturnsVoid(): void
+    private function thisReturnsVoid(): void
     {
         return;
     }
