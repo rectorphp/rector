@@ -123,6 +123,15 @@ final class IfManipulator
         return null;
     }
 
+    public function isIfWithOnlyStmtIf(If_ $if): bool
+    {
+        if (! $this->isIfWithoutElseAndElseIfs($if)) {
+            return false;
+        }
+
+        return $this->hasOnlyStmtOfType($if, If_::class);
+    }
+
     public function isEarlyElse(If_ $if): bool
     {
         if (! $this->isAlwaysAllowedType((array) $if->stmts, self::ALLOWED_BREAKING_NODE_TYPES)) {
@@ -136,6 +145,39 @@ final class IfManipulator
         }
 
         return $if->else !== null;
+    }
+
+    public function hasOnlyStmtOfType(If_ $if, string $desiredType): bool
+    {
+        if (count($if->stmts) !== 1) {
+            return false;
+        }
+
+        return is_a($if->stmts[0], $desiredType);
+    }
+
+    /**
+     * @return If_[]
+     */
+    public function collectNestedIfsWithOnlyReturn(If_ $if): array
+    {
+        $ifs = [];
+
+        $currentIf = $if;
+        while ($this->isIfWithOnlyStmtIf($currentIf)) {
+            $ifs[] = $currentIf;
+
+            $currentIf = $currentIf->stmts[0];
+        }
+
+        if (! $this->hasOnlyStmtOfType($currentIf, Return_::class)) {
+            return [];
+        }
+
+        // last node is with the return value
+        $ifs[] = $currentIf;
+
+        return $ifs;
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $returnNode): ?Expr
@@ -204,5 +246,14 @@ final class IfManipulator
         }
 
         return false;
+    }
+
+    private function isIfWithoutElseAndElseIfs(If_ $if): bool
+    {
+        if ($if->else !== null) {
+            return false;
+        }
+
+        return ! (bool) $if->elseifs;
     }
 }

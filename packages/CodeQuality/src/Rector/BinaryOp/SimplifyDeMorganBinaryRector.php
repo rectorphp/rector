@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\BinaryOp;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BooleanNot;
-use Rector\PhpParser\Node\AssignAndBinaryMap;
+use Rector\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -23,13 +21,13 @@ use Rector\RectorDefinition\RectorDefinition;
 final class SimplifyDeMorganBinaryRector extends AbstractRector
 {
     /**
-     * @var AssignAndBinaryMap
+     * @var BinaryOpManipulator
      */
-    private $assignAndBinaryMap;
+    private $binaryOpManipulator;
 
-    public function __construct(AssignAndBinaryMap $assignAndBinaryMap)
+    public function __construct(BinaryOpManipulator $binaryOpManipulator)
     {
-        $this->assignAndBinaryMap = $assignAndBinaryMap;
+        $this->binaryOpManipulator = $binaryOpManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -77,40 +75,6 @@ PHP
             return null;
         }
 
-        $inversedNode = $this->assignAndBinaryMap->getInversed($node->expr);
-        if ($inversedNode === null) {
-            if ($node->expr instanceof BooleanOr) {
-                $inversedNode = BooleanAnd::class;
-            } else {
-                return null;
-            }
-        }
-
-        // no nesting
-        if ($node->expr->left instanceof BooleanOr) {
-            return null;
-        }
-
-        if ($node->expr->right instanceof BooleanOr) {
-            return null;
-        }
-
-        return new $inversedNode($this->inverseNode($node->expr->left), $this->inverseNode($node->expr->right));
-    }
-
-    private function inverseNode(Expr $expr): Node
-    {
-        if ($expr instanceof BinaryOp) {
-            $inversedBinaryOp = $this->assignAndBinaryMap->getInversed($expr);
-            if ($inversedBinaryOp) {
-                return new $inversedBinaryOp($expr->left, $expr->right);
-            }
-        }
-
-        if ($expr instanceof BooleanNot) {
-            return $expr->expr;
-        }
-
-        return new BooleanNot($expr);
+        return $this->binaryOpManipulator->inverseBinaryOp($node->expr);
     }
 }
