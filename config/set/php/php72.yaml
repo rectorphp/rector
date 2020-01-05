@@ -3,10 +3,10 @@ parameters:
     enable_object_type: true
 
 services:
-    Rector\Php72\Rector\Each\WhileEachToForeachRector: ~
-    Rector\Php72\Rector\Each\ListEachRector: ~
-    Rector\Php72\Rector\Unset_\UnsetCastRector: ~
-    Rector\Php72\Rector\ConstFetch\BarewordStringRector: ~
+    Rector\Php72\Rector\Each\WhileEachToForeachRector: null
+    Rector\Php72\Rector\Each\ListEachRector: null
+    Rector\Php72\Rector\Unset_\UnsetCastRector: null
+    Rector\Php72\Rector\ConstFetch\BarewordStringRector: null
 
     Rector\Renaming\Rector\Function_\RenameFunctionRector:
         $oldFunctionToNewFunction:
@@ -16,9 +16,9 @@ services:
             gmp_random: 'gmp_random_bits' # or gmp_random_range
             read_exif_data: 'exif_read_data'
 
-    Rector\Php72\Rector\FuncCall\GetClassOnNullRector: ~
-    Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector: ~
-    Rector\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector: ~
-    Rector\Php72\Rector\FuncCall\StringsAssertNakedRector: ~
-    Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector: ~
-    Rector\Php72\Rector\FuncCall\StringifyDefineRector: ~
+    Rector\Php72\Rector\FuncCall\GetClassOnNullRector: null
+    Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector: null
+    Rector\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector: null
+    Rector\Php72\Rector\FuncCall\StringsAssertNakedRector: null
+    Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector: null
+    Rector\Php72\Rector\FuncCall\StringifyDefineRector: null

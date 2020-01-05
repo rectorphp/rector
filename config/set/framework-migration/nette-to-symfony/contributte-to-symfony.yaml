@@ -1,2 +1,2 @@
 services:
-    Rector\NetteToSymfony\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector: ~
+    Rector\NetteToSymfony\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector: null

@@ -1,3 +1,4 @@
 services:
     Rector\SOLID\Rector\If_\RemoveAlwaysElseRector: null
-    Rector\SOLID\Rector\If_\ChangeNestedIfsToEarlyReturnRector: ~
+    Rector\SOLID\Rector\If_\ChangeNestedIfsToEarlyReturnRector: null
+    Rector\SOLID\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector: null

@@ -1,2 +1,2 @@
 services:
-    Rector\Twig\Rector\SimpleFunctionAndFilterRector: ~
+    Rector\Twig\Rector\SimpleFunctionAndFilterRector: null

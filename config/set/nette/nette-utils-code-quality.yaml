@@ -8,10 +8,10 @@ services:
             rmdir: ['Nette\Utils\FileSystem', 'delete']
 
     # strings
-    Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector: ~
-    Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector: ~
-    Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector: ~
-    Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector: ~
-    Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector: ~
-    Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector: ~
-    Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector: ~
+    Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector: null
+    Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector: null
+    Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector: null
+    Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector: null
+    Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector: null
+    Rector\Nette\Rector\FuncCall\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector: null
+    Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector: null

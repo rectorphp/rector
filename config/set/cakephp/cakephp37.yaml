@@ -84,4 +84,4 @@ services:
                     set: 'setClassName'
                     get: 'getClassName'
 
-    Rector\CakePHP\Rector\Name\ChangeSnakedFixtureNameToCamelRector: ~
+    Rector\CakePHP\Rector\Name\ChangeSnakedFixtureNameToCamelRector: null

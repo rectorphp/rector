@@ -9,8 +9,8 @@ services:
                 __construct:
                     2: '' # no type, $dataName
 
-    Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector: ~
-    Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector: ~
+    Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector: null
+    Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector: null
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
@@ -30,4 +30,4 @@ services:
                 tearDownAfterClass: 'void'
                 onNotSuccessfulTest: 'void'
 
-    Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector: ~
+    Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector: null

@@ -42,14 +42,14 @@ services:
                 config:
                     minimal_argument_count: 2
                     first_argument_type_to_set: array
-                dsnClassMap: ~
+                dsnClassMap: null
             Cake\Console\ConsoleOptionParser:
-                command: ~
-                description: ~
-                epilog: ~
+                command: null
+                description: null
+                epilog: null
             Cake\Database\Connection:
-                driver: ~
-                schemaCollection: ~
+                driver: null
+                schemaCollection: null
                 useSavePoints:
                     set: 'enableSavePoints'
                     get: 'isSavePointsEnabled'
@@ -58,59 +58,59 @@ services:
                     set: 'enableAutoQuoting'
                     get: 'isAutoQuotingEnabled'
             Cake\Database\Expression\FunctionExpression:
-                name: ~
+                name: null
             Cake\Database\Expression\QueryExpression:
                 tieWith:
                     set: 'setConjunction'
                     get: 'getConjunction'
             Cake\Database\Expression\ValuesExpression:
-                columns: ~
-                values: ~
-                query: ~
+                columns: null
+                values: null
+                query: null
             Cake\Database\Query:
-                connection: ~
-                selectTypeMap: ~
+                connection: null
+                selectTypeMap: null
                 bufferResults:
                     set: 'enableBufferedResults'
                     get: 'isBufferedResultsEnabled'
             Cake\Database\Schema\CachedCollection:
-                cacheMetadata: ~
+                cacheMetadata: null
             Cake\Database\Schema\TableSchema:
-                options: ~
+                options: null
                 temporary:
                     set: 'setTemporary'
                     get: 'isTemporary'
             Cake\Database\TypeMap:
-                defaults: ~
-                types: ~
+                defaults: null
+                types: null
             Cake\Database\TypeMapTrait:
-                typeMap: ~
-                defaultTypes: ~
+                typeMap: null
+                defaultTypes: null
             Cake\ORM\Association:
-                name: ~
-                cascadeCallbacks: ~
-                source: ~
-                target: ~
-                conditions: ~
-                bindingKey: ~
-                foreignKey: ~
-                dependent: ~
-                joinType: ~
-                property: ~
-                strategy: ~
-                finder: ~
+                name: null
+                cascadeCallbacks: null
+                source: null
+                target: null
+                conditions: null
+                bindingKey: null
+                foreignKey: null
+                dependent: null
+                joinType: null
+                property: null
+                strategy: null
+                finder: null
             Cake\ORM\Association\BelongsToMany:
-                targetForeignKey: ~
-                saveStrategy: ~
-                conditions: ~
+                targetForeignKey: null
+                saveStrategy: null
+                conditions: null
             Cake\ORM\Association\HasMany:
-                saveStrategy: ~
-                foreignKey: ~
-                sort: ~
+                saveStrategy: null
+                foreignKey: null
+                sort: null
             Cake\ORM\Association\HasOne:
-                foreignKey: ~
+                foreignKey: null
             Cake\ORM\EagerLoadable:
-                config: ~
+                config: null
                 canBeJoined:
                     set: 'setCanBeJoined'
                     get: 'canBeJoined'
@@ -124,9 +124,9 @@ services:
                     set: 'enableAutoFields'
                     get: 'isAutoFieldsEnabled'
             Cake\ORM\Locator\TableLocator:
-                config: ~
+                config: null
             Cake\ORM\Query:
-                eagerLoader: ~
+                eagerLoader: null
                 hydrate:
                     set: 'enableHydration'
                     get: 'isHydrationEnabled'
@@ -134,56 +134,56 @@ services:
                     set: 'enableAutoFields'
                     get: 'isAutoFieldsEnabled'
             Cake\ORM\Table:
-                table: ~
-                alias: ~
-                registryAlias: ~
-                connection: ~
-                schema: ~
-                primaryKey: ~
-                displayField: ~
-                entityClass: ~
+                table: null
+                alias: null
+                registryAlias: null
+                connection: null
+                schema: null
+                primaryKey: null
+                displayField: null
+                entityClass: null
             Cake\Mailer\Email:
-                from: ~
-                sender: ~
-                replyTo: ~
-                readReceipt: ~
-                returnPath: ~
-                to: ~
-                cc: ~
-                bcc: ~
-                charset: ~
-                headerCharset: ~
-                emailPattern: ~
-                subject: ~
+                from: null
+                sender: null
+                replyTo: null
+                readReceipt: null
+                returnPath: null
+                to: null
+                cc: null
+                bcc: null
+                charset: null
+                headerCharset: null
+                emailPattern: null
+                subject: null
                 # template: have to be changed manually, non A → B change + array case
                 viewRender:
                     set: 'setViewRenderer'
                     get: 'getViewRenderer'
-                viewVars: ~
-                theme: ~
-                helpers: ~
-                emailFormat: ~
-                transport: ~
-                messageId: ~
-                domain: ~
-                attachments: ~
-                configTransport: ~
-                profile: ~
+                viewVars: null
+                theme: null
+                helpers: null
+                emailFormat: null
+                transport: null
+                messageId: null
+                domain: null
+                attachments: null
+                configTransport: null
+                profile: null
             Cake\Validation\Validator:
-                provider: ~
+                provider: null
             Cake\View\StringTemplateTrait:
-                templates: ~
+                templates: null
             Cake\View\ViewBuilder:
-                templatePath: ~
-                layoutPath: ~
-                plugin: ~
-                helpers: ~
-                theme: ~
-                template: ~
-                layout: ~
-                options: ~
-                name: ~
-                className: ~
+                templatePath: null
+                layoutPath: null
+                plugin: null
+                helpers: null
+                theme: null
+                template: null
+                layout: null
+                options: null
+                name: null
+                className: null
                 autoLayout:
                     set: 'enableAutoLayout'
                     get: 'isAutoLayoutEnabled'

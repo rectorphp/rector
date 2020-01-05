@@ -5,7 +5,7 @@ imports:
 
 # see: https://laravel.com/docs/5.8/upgrade
 services:
-    Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector: ~
+    Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector: null
 
     Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         $typehintForMethodByClass:

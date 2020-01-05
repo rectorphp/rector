@@ -13,11 +13,11 @@ services:
             Symfony\Component\Translation\TranslatorInterface: 'Symfony\Contracts\Translation\TranslatorInterface'
 
     # related to "Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand" deprecation, see https://github.com/rectorphp/rector/issues/1629
-    Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector: ~
+    Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector: null
 
     # https://symfony.com/blog/new-in-symfony-4-2-important-deprecations
-    Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector: ~
-    Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector: ~
+    Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector: null
+    Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector: null
 
     Rector\Rector\Argument\ArgumentAdderRector:
         $positionWithDefaultValueByMethodNamesByClassTypes:
@@ -116,5 +116,5 @@ services:
             # https://github.com/symfony/symfony/commit/f5c355e1ba399a1b3512367647d902148bdaf09f
             Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector:
                 __construct:
-                    0: ~
-                    1: ~
+                    0: null
+                    1: null

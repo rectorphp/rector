@@ -1,5 +1,5 @@
 services:
-    Rector\Php74\Rector\Property\TypedPropertyRector: ~
+    Rector\Php74\Rector\Property\TypedPropertyRector: null
 
     Rector\Renaming\Rector\Function_\RenameFunctionRector:
         $oldFunctionToNewFunction:
@@ -9,16 +9,16 @@ services:
             apache_request_headers: 'getallheaders'
             hebrevc: ['nl2br', 'hebrev']
 
-    Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector: ~
-    Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector: ~
-    Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector: ~
-    Rector\Php74\Rector\MagicConstClass\ClassConstantToSelfClassRector: ~
-    Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector: ~
-    Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector: ~
-    Rector\Php74\Rector\Double\RealToFloatTypeCastRector: ~
-    Rector\Php74\Rector\Assign\NullCoalescingOperatorRector: ~
-    Rector\Php74\Rector\Function_\ReservedFnFunctionRector: ~
-    Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector: ~
-    Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector: ~
-    Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector: ~
-    Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector: ~
+    Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector: null
+    Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector: null
+    Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector: null
+    Rector\Php74\Rector\MagicConstClass\ClassConstantToSelfClassRector: null
+    Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector: null
+    Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector: null
+    Rector\Php74\Rector\Double\RealToFloatTypeCastRector: null
+    Rector\Php74\Rector\Assign\NullCoalescingOperatorRector: null
+    Rector\Php74\Rector\Function_\ReservedFnFunctionRector: null
+    Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector: null
+    Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector: null
+    Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector: null
+    Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector: null

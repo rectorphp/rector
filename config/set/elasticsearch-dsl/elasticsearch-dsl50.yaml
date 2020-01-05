@@ -1,6 +1,6 @@
 # https://github.com/ongr-io/ElasticsearchDSL/blob/5.x/CHANGELOG.md
 services:
-    Rector\ElasticSearchDSL\Rector\MethodCall\MigrateFilterToQueryRector: ~
+    Rector\ElasticSearchDSL\Rector\MethodCall\MigrateFilterToQueryRector: null
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:

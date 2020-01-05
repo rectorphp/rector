@@ -1,11 +1,11 @@
 # from Zend 1.x (?) to Symfony 4.3 (2019)
 services:
-    Rector\ZendToSymfony\Rector\Class_\ChangeZendControllerClassToSymfonyControllerClassRector: ~
+    Rector\ZendToSymfony\Rector\Class_\ChangeZendControllerClassToSymfonyControllerClassRector: null
 
-    Rector\ZendToSymfony\Rector\ClassMethod\GetParamToClassMethodParameterAndRouteRector: ~
-    Rector\ZendToSymfony\Rector\ClassMethod\ThisRequestToRequestParameterRector: ~
-    Rector\ZendToSymfony\Rector\ClassMethod\ThisViewToThisRenderResponseRector: ~
-    Rector\ZendToSymfony\Rector\Expression\RedirectorToRedirectToUrlRector: ~
-    Rector\ZendToSymfony\Rector\MethodCall\ThisHelperToServiceMethodCallRector: ~
+    Rector\ZendToSymfony\Rector\ClassMethod\GetParamToClassMethodParameterAndRouteRector: null
+    Rector\ZendToSymfony\Rector\ClassMethod\ThisRequestToRequestParameterRector: null
+    Rector\ZendToSymfony\Rector\ClassMethod\ThisViewToThisRenderResponseRector: null
+    Rector\ZendToSymfony\Rector\Expression\RedirectorToRedirectToUrlRector: null
+    Rector\ZendToSymfony\Rector\MethodCall\ThisHelperToServiceMethodCallRector: null
 
-    Rector\ZendToSymfony\Rector\Include_\RemoveAutoloadingIncludeRector: ~
+    Rector\ZendToSymfony\Rector\Include_\RemoveAutoloadingIncludeRector: null

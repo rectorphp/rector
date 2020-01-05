@@ -1,2 +1,2 @@
 services:
-    Rector\PHPUnit\Rector\MethodCall\WithConsecutiveArgToArrayRector: ~
+    Rector\PHPUnit\Rector\MethodCall\WithConsecutiveArgToArrayRector: null

@@ -41,23 +41,23 @@ parameters:
 
     skip:
         # rather useless
-        Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff: ~
-        PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer: ~
-        Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer: ~
+        Symplify\CodingStandard\Sniffs\DependencyInjection\NoClassInstantiationSniff: null
+        PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer: null
+        Symplify\CodingStandard\Fixer\Php\ClassStringToClassConstantFixer: null
 
-        PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff.Underscore: ~
-        Symplify\CodingStandard\Sniffs\Architecture\DuplicatedClassShortNameSniff: ~
+        PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff.Underscore: null
+        Symplify\CodingStandard\Sniffs\Architecture\DuplicatedClassShortNameSniff: null
         # skip temporary due to missing "import" feature in PhpStorm
-        SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff.PartialUse: ~
+        SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff.PartialUse: null
 
         # run manually from time to time - performance demanding + not to bother user with it
-        Symplify\CodingStandard\Fixer\Order\PropertyOrderByComplexityFixer: ~
-        Symplify\CodingStandard\Fixer\Order\PrivateMethodOrderByUseFixer: ~
+        Symplify\CodingStandard\Fixer\Order\PropertyOrderByComplexityFixer: null
+        Symplify\CodingStandard\Fixer\Order\PrivateMethodOrderByUseFixer: null
 
         PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer:
             - 'packages/Php74/src/Rector/Double/RealToFloatTypeCastRector.php'
 
-        Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenReferenceSniff: ~
+        Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenReferenceSniff: null
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
             - 'src/Util/*.php'
@@ -128,7 +128,7 @@ parameters:
             # respects inherited pattern for better comparing
             - 'src/PhpParser/Printer/BetterStandardPrinter.php'
 
-        PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.FoundInWhileCondition: ~
+        PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.FoundInWhileCondition: null
 
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:
             # 3rd party parent code
@@ -158,6 +158,6 @@ parameters:
             - 'compiler/src/*'
 
         # conflicts with "PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer"
-        PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer: ~
+        PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer: null
 
     line_ending: "\n"

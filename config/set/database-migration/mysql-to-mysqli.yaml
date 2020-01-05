@@ -2,9 +2,9 @@
 # https://github.com/philip/MySQLConverterTool/blob/master/Converter.php
 # https://www.phpclasses.org/blog/package/9199/post/3-Smoothly-Migrate-your-PHP-Code-using-the-Old-MySQL-extension-to-MySQLi.html
 services:
-    Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector: ~
-    Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector: ~
-    Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector: ~
+    Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector: null
+    Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector: null
+    Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector: null
 
     # first swap arguments, then rename
     Rector\Rector\Argument\SwapFuncCallArgumentsRector:

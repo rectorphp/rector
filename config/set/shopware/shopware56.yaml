@@ -4,7 +4,7 @@ imports:
     - { resource: '../elasticsearch-dsl/elasticsearch-dsl50.yaml' }
 
 services:
-    Rector\Shopware\Rector\MethodCall\ReplaceEnlightResponseWithSymfonyResponseRector: ~
+    Rector\Shopware\Rector\MethodCall\ReplaceEnlightResponseWithSymfonyResponseRector: null
 
     Rector\Renaming\Rector\MethodCall\RenameMethodCallRector:
         $oldToNewMethodsByClass:
@@ -14,5 +14,5 @@ services:
                 sendCookies: sendHeaders
                 setBody: setContent
 
-    Rector\Shopware\Rector\ClassConstFetch\ShopwareVersionConstsRector: ~
-    Rector\Shopware\Rector\MethodCall\ShopRegistrationServiceRector: ~
+    Rector\Shopware\Rector\ClassConstFetch\ShopwareVersionConstsRector: null
+    Rector\Shopware\Rector\MethodCall\ShopRegistrationServiceRector: null

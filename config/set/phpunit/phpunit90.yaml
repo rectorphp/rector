@@ -1,2 +1,2 @@
 services:
-    Rector\PHPUnit\Rector\Class_\TestListenerToHooksRector: ~
+    Rector\PHPUnit\Rector\Class_\TestListenerToHooksRector: null
