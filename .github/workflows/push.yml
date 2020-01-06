@@ -2,6 +2,7 @@ name: PHP Checks
 
 on:
   - push
+  - pull_request
 
 jobs:
   phpstan:
