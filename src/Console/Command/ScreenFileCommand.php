@@ -106,6 +106,8 @@ final class ScreenFileCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // 1. load file
+
+        /** @var string $filePath */
         $filePath = $input->getArgument(self::FILE_ARGUMENT);
         $smartFileInfo = new SmartFileInfo($filePath);
 
