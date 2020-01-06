@@ -8,6 +8,8 @@ declare(strict_types=1);
 require __DIR__ . '/../vendor/autoload.php';
 
 use Isolated\Symfony\Component\Finder\Finder;
+use Nette\Neon\Neon;
+use Symfony\Component\Finder\SplFileInfo;
 
 $stubs = [];
 
@@ -17,7 +19,7 @@ $stubFinder->files()->name('*.php')
     ->in(__DIR__ . '/../../vendor/jetbrains/phpstorm-stubs');
 
 foreach ($stubFinder->getIterator() as $fileInfo) {
-    /** @var \Symfony\Component\Finder\SplFileInfo $fileInfo */
+    /** @var SplFileInfo $fileInfo */
     $stubs[] = $fileInfo->getPathName();
 }
 
@@ -108,7 +110,7 @@ return [
                 }
                 return $prefix . '\\' . $class;
             };
-            $neon = \Nette\Neon\Neon::decode($content);
+            $neon = Neon::decode($content);
             $updatedNeon = $neon;
             if (array_key_exists('services', $neon)) {
                 foreach ($neon['services'] as $key => $service) {
@@ -121,7 +123,7 @@ return [
                     $updatedNeon['services'][$key] = $service;
                 }
             }
-            return \Nette\Neon\Neon::encode($updatedNeon, \Nette\Neon\Neon::BLOCK);
+            return Neon::encode($updatedNeon, Neon::BLOCK);
         },
 
         // mimics https://github.com/phpstan/phpstan-src/commit/fd8f0a852207a1724ae4a262f47d9a449de70da4#diff-463a36e4a5687fb2366b5ee56cdad92d
@@ -130,9 +132,8 @@ return [
                 return $content;
             }
             $content = str_replace(sprintf('\'%s\\\\r\\\\n\'', $prefix), '\'\\\\r\\\\n\'', $content);
-            $content = str_replace(sprintf('\'%s\\\\', $prefix), '\'', $content);
-            return $content;
-        }
+            return str_replace(sprintf('\'%s\\\\', $prefix), '\'', $content);
+        },
     ],
     'whitelist' => ['Rector\*', 'PHPStan\*', 'PhpParser\*'],
 ];
