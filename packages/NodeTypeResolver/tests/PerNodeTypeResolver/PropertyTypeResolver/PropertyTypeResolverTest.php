@@ -28,7 +28,15 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         $propertyNodes = $this->getNodesForFileOfType($file, Property::class);
 
-        $this->assertEquals($expectedType->describe(VerbosityLevel::precise()), $this->nodeTypeResolver->resolve($propertyNodes[$nodePosition])->describe(VerbosityLevel::precise()));
+        $resolvedType = $this->nodeTypeResolver->resolve($propertyNodes[$nodePosition]);
+
+        // type is as expected
+        $this->assertInstanceOf(get_class($expectedType), $resolvedType);
+
+        $expectedTypeAsString = $this->getStringFromType($expectedType);
+        $resolvedTypeAsString = $this->getStringFromType($resolvedType);
+
+        $this->assertEquals($expectedTypeAsString, $resolvedTypeAsString);
     }
 
     public function provideData(): Iterator
@@ -44,5 +52,10 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
         // mimics failing test from DomainDrivenDesign set
         $unionType = TypeFactoryStaticHelper::createUnionObjectType([SomeChild::class, new NullType()]);
         yield [__DIR__ . '/Source/fixture.php', 0, $unionType];
+    }
+
+    private function getStringFromType(Type $type): string
+    {
+        return $type->describe(VerbosityLevel::precise());
     }
 }

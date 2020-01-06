@@ -12,6 +12,8 @@ use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Broker\Broker;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\DependencyInjection\ContainerFactory;
+use PHPStan\DependencyInjection\Type\DynamicReturnTypeExtensionRegistryProvider;
+use PHPStan\DependencyInjection\Type\OperatorTypeSpecifyingExtensionRegistryProvider;
 
 final class PHPStanServicesFactory
 {
@@ -90,8 +92,13 @@ final class PHPStanServicesFactory
         return $this->container->getByType(ScopeFactory::class);
     }
 
-    public function createContainer(): Container
+    public function createDynamicReturnTypeExtensionRegistryProvider(): DynamicReturnTypeExtensionRegistryProvider
     {
-        return $this->container->getByType(Container::class);
+        return $this->container->getByType(DynamicReturnTypeExtensionRegistryProvider::class);
+    }
+
+    public function createOperatorTypeSpecifyingExtensionRegistryProvider(): OperatorTypeSpecifyingExtensionRegistryProvider
+    {
+        return $this->container->getByType(OperatorTypeSpecifyingExtensionRegistryProvider::class);
     }
 }
