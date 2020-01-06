@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Nette\Application\UI;
+namespace Nette\Forms;
 
 if (class_exists('Nette\Forms\Form')) {
     return;
 }
 
-class Form extends \Nette\Forms\Form
+class Form
 {
 
 }
