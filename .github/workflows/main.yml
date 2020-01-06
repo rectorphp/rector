@@ -1,17 +1,41 @@
-name: CI
+name: PHP Checks
 
-on: [push]
+on:
+  - push
 
 jobs:
-  build:
+  phpstan:
+      name: PHPStan
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2
+          - name: Setup PHP
+            uses: shivammathur/setup-php@v1
+            with:
+                php-version: 7.2
+                coverage: none # disable xdebug, pcov
+          - run: composer install --no-progress && composer phpstan
 
-    runs-on: ubuntu-latest
+  ecs:
+      name: ECS
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2
+          - name: Setup PHP
+            uses: shivammathur/setup-php@v1
+            with:
+                php-version: 7.2
+                coverage: none # disable xdebug, pcov
+          - run: composer install --no-progress && composer check-cs
 
-    steps:
-    - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+  rector:
+      name: Rector
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2
+          - name: Setup PHP
+            uses: shivammathur/setup-php@v1
+            with:
+                php-version: 7.3
+                coverage: none # disable xdebug, pcov
+          - run: composer install --no-progress && composer rector
