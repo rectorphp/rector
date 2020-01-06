@@ -1,4 +1,4 @@
-# All 419 Rectors Overview
+# All 422 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -44,6 +44,7 @@
 - [Php80](#php80)
 - [PhpDeglobalize](#phpdeglobalize)
 - [PhpSpecToPHPUnit](#phpspectophpunit)
+- [Polyfill](#polyfill)
 - [Refactoring](#refactoring)
 - [RemovingStatic](#removingstatic)
 - [Renaming](#renaming)
@@ -6311,6 +6312,32 @@ Rename "*Spec.php" file to "*Test.php" file
 
 <br>
 
+## Polyfill
+
+### `UnwrapFutureCompatibleIfRector`
+
+- class: `Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfRector`
+
+Remove functions exists if with else for always existing
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         // session locking trough other addons
+-        if (function_exists('session_abort')) {
+-            session_abort();
+-        } else {
+-            session_write_close();
+-        }
++        session_abort();
+     }
+ }
+```
+
+<br>
+
 ## Refactoring
 
 ### `MoveAndRenameClassRector`
@@ -6812,6 +6839,62 @@ Convert missing class reference to string
 <br>
 
 ## SOLID
+
+### `ChangeIfElseValueAssignToEarlyReturnRector`
+
+- class: `Rector\SOLID\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector`
+
+Change if/else value to early return
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         if ($this->hasDocBlock($tokens, $index)) {
+-            $docToken = $tokens[$this->getDocBlockIndex($tokens, $index)];
+-        } else {
+-            $docToken = null;
++            return $tokens[$this->getDocBlockIndex($tokens, $index)];
+         }
+-
+-        return $docToken;
++        return null;
+     }
+ }
+```
+
+<br>
+
+### `ChangeNestedIfsToEarlyReturnRector`
+
+- class: `Rector\SOLID\Rector\If_\ChangeNestedIfsToEarlyReturnRector`
+
+Change nested ifs to early return
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        if ($value === 5) {
+-            if ($value2 === 10) {
+-                return 'yes';
+-            }
++        if ($value !== 5) {
++            return 'no';
++        }
++
++        if ($value2 === 10) {
++            return 'yes';
+         }
+
+         return 'no';
+     }
+ }
+```
+
+<br>
 
 ### `FinalizeClassesWithoutChildrenRector`
 
