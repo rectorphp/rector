@@ -7,11 +7,16 @@ class HasVoidMethod
     public function run(array $values)
     {
         usort($values, [$this, 'thisReturnsVoid']);
+        usort($values, [$this, 'thisReturnsNothing']);
 
         return $values;
     }
 
     private function thisReturnsVoid(): void
+    {
+    }
+
+    private function thisReturnsNothing(): void
     {
         return;
     }
@@ -30,11 +35,18 @@ class HasVoidMethod
         usort($values, function () : void {
             $this->thisReturnsVoid();
         });
+        usort($values, function () : void {
+            $this->thisReturnsNothing();
+        });
 
         return $values;
     }
 
     private function thisReturnsVoid(): void
+    {
+    }
+
+    private function thisReturnsNothing(): void
     {
         return;
     }
