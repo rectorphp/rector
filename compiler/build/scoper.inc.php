@@ -5,11 +5,10 @@ declare(strict_types=1);
 // this file will need update sometimes: https://github.com/phpstan/phpstan-src/commits/master/compiler/build/scoper.inc.php
 // automate in the future, if needed - @see https://github.com/rectorphp/rector/pull/2575#issuecomment-571133000
 
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
+use Isolated\Symfony\Component\Finder\Finder;
 use Nette\Neon\Neon;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 $stubs = [];
 
@@ -95,6 +94,7 @@ return [
             if (strpos($filePath, '.neon') === false) {
                 return $content;
             }
+
             if ($content === '') {
                 return $content;
             }
@@ -105,11 +105,15 @@ return [
                 if (strpos($class, 'PhpParser\\') === 0) {
                     return $class;
                 }
+                if (strpos($class, 'Rector\\') === 0) {
+                    return $class;
+                }
                 if (strpos($class, '@') === 0) {
                     return $class;
                 }
                 return $prefix . '\\' . $class;
             };
+
             $neon = Neon::decode($content);
             $updatedNeon = $neon;
             if (array_key_exists('services', $neon)) {
@@ -123,6 +127,7 @@ return [
                     $updatedNeon['services'][$key] = $service;
                 }
             }
+
             return Neon::encode($updatedNeon, Neon::BLOCK);
         },
 
