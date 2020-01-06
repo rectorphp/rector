@@ -1,0 +1,2 @@
+services:
+    Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfRector: null

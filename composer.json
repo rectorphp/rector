@@ -105,7 +105,8 @@
             "Rector\\PhpDeglobalize\\": "packages/PhpDeglobalize/src",
             "Rector\\Phalcon\\": "packages/Phalcon/src",
             "Rector\\DoctrineGedmoToKnplabs\\": "packages/DoctrineGedmoToKnplabs/src",
-            "Rector\\MinimalScope\\": "packages/MinimalScope/src"
+            "Rector\\MinimalScope\\": "packages/MinimalScope/src",
+            "Rector\\Polyfill\\": "packages/Polyfill/src"
         }
     },
     "autoload-dev": {
@@ -166,7 +167,8 @@
             "Rector\\PhpDeglobalize\\Tests\\": "packages/PhpDeglobalize/tests",
             "Rector\\Phalcon\\Tests\\": "packages/Phalcon/tests",
             "Rector\\DoctrineGedmoToKnplabs\\Tests\\": "packages/DoctrineGedmoToKnplabs/tests",
-            "Rector\\MinimalScope\\Tests\\": "packages/MinimalScope/tests"
+            "Rector\\MinimalScope\\Tests\\": "packages/MinimalScope/tests",
+            "Rector\\Polyfill\\Tests\\": "packages/Polyfill/tests"
         },
         "classmap": [
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
