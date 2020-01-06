@@ -6,7 +6,9 @@ namespace Rector\BetterPhpDocParser\Attributes\Ast;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\DeprecatedTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ExtendsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ImplementsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -30,7 +32,9 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareDeprecatedTagValueNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareExtendsTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareImplementsTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareInvalidTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareMethodTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
@@ -159,6 +163,16 @@ final class AttributeAwareNodeFactory
 
         if ($phpDocTagValueNode instanceof GenericTagValueNode) {
             return new AttributeAwareGenericTagValueNode($phpDocTagValueNode->value);
+        }
+
+        if ($phpDocTagValueNode instanceof ExtendsTagValueNode) {
+            $typeNode = $this->createFromTypeNode($phpDocTagValueNode->type);
+            return new AttributeAwareExtendsTagValueNode($typeNode, $phpDocTagValueNode->description);
+        }
+
+        if ($phpDocTagValueNode instanceof ImplementsTagValueNode) {
+            $typeNode = $this->createFromTypeNode($phpDocTagValueNode->type);
+            return new AttributeAwareImplementsTagValueNode($typeNode, $phpDocTagValueNode->description);
         }
 
         if ($phpDocTagValueNode instanceof InvalidTagValueNode) {
