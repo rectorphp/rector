@@ -3,11 +3,11 @@
 
 services:
     # php
-    Rector\Symfony\Rector\HttpKernel\GetRequestRector: ~
-    Rector\Symfony\Rector\Form\FormTypeGetParentRector: ~
-    Rector\Symfony\Rector\Form\OptionNameRector: ~
-    Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector: ~
-    Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector: ~
+    Rector\Symfony\Rector\HttpKernel\GetRequestRector: null
+    Rector\Symfony\Rector\Form\FormTypeGetParentRector: null
+    Rector\Symfony\Rector\Form\OptionNameRector: null
+    Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector: null
+    Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector: null
 
     # general
     Rector\Renaming\Rector\Constant\RenameClassConstantRector:
@@ -154,4 +154,4 @@ services:
             # swift mailer
             'Symfony\Bridge\Swiftmailer\DataCollector\MessageDataCollector': 'Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector'
 
-    Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector: ~
+    Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector: null

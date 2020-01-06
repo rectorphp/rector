@@ -1,5 +1,5 @@
 parameters:
-    project_directory: ~
+    project_directory: null
 
 services:
     _defaults:

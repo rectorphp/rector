@@ -1,6 +1,6 @@
 services:
     # <> → !=
-    Rector\Celebrity\Rector\NotEqual\CommonNotEqualRector: ~
+    Rector\Celebrity\Rector\NotEqual\CommonNotEqualRector: null
 
     Rector\Renaming\Rector\Function_\RenameFunctionRector:
         $oldFunctionToNewFunction:
@@ -30,11 +30,11 @@ services:
             mbsubstr: 'mb_substr'
 
     # settype($value, 'int') → (int) $value
-    Rector\Celebrity\Rector\FuncCall\SetTypeToCastRector: ~
+    Rector\Celebrity\Rector\FuncCall\SetTypeToCastRector: null
 
     # class { var $value; } → class { public $value; }
-    Rector\Php52\Rector\Property\VarToPublicPropertyRector: ~
+    Rector\Php52\Rector\Property\VarToPublicPropertyRector: null
 
     #  false or true → false || true
     #  false and true → false && true
-    Rector\Celebrity\Rector\BooleanOp\LogicalToBooleanRector: ~
+    Rector\Celebrity\Rector\BooleanOp\LogicalToBooleanRector: null

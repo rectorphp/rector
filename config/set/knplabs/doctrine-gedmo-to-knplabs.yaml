@@ -2,5 +2,5 @@
 services:
     Rector\DoctrineGedmoToKnplabs\Rector\Class_\TimestampableBehaviorRector: null
     Rector\DoctrineGedmoToKnplabs\Rector\Class_\SluggableBehaviorRector: null
-    Rector\DoctrineGedmoToKnplabs\Rector\Class_\TreeBehaviorRector: ~
-    Rector\DoctrineGedmoToKnplabs\Rector\Class_\TranslationBehaviorRector: ~
+    Rector\DoctrineGedmoToKnplabs\Rector\Class_\TreeBehaviorRector: null
+    Rector\DoctrineGedmoToKnplabs\Rector\Class_\TranslationBehaviorRector: null

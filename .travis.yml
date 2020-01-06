@@ -113,7 +113,7 @@ jobs:
                 - cd test-paths
 
                 - mkdir rector-dir
-                - composer require rector/rector -d rector-dir
+                - composer require rector/rector:@dev -d rector-dir
 
                 - mkdir symfony-demo-dir
                 - composer create-project symfony/symfony-demo symfony-demo-dir --dev
@@ -132,14 +132,11 @@ jobs:
 
         # Stage 2
         -
-            stage: coverage
+            stage: test
             php: 7.3
             name: Test Coverage
-            if: branch = master AND type = push
-            before_install:
-                - echo "keep xdebug"
             script:
-                - vendor/bin/phpunit --coverage-clover coverage.xml
+                - phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit --coverage-clover coverage.xml
                 - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
                 - php php-coveralls.phar --verbose
 

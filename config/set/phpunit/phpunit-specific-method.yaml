@@ -1,13 +1,13 @@
 services:
-    Rector\PHPUnit\Rector\SpecificMethod\AssertNotOperatorRector: ~
-    Rector\PHPUnit\Rector\SpecificMethod\AssertComparisonToSpecificMethodRector: ~
-    Rector\PHPUnit\Rector\SpecificMethod\AssertTrueFalseToSpecificMethodRector: ~
-    Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector: ~
-    Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector: ~
-    Rector\PHPUnit\Rector\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector: ~
-    Rector\PHPUnit\Rector\SpecificMethod\AssertCompareToSpecificMethodRector: ~
-    Rector\PHPUnit\Rector\SpecificMethod\AssertIssetToSpecificMethodRector: ~
-    Rector\PHPUnit\Rector\SpecificMethod\AssertInstanceOfComparisonRector: ~
-    Rector\PHPUnit\Rector\SpecificMethod\AssertPropertyExistsRector: ~
-    Rector\PHPUnit\Rector\SpecificMethod\AssertRegExpRector: ~
-    Rector\PHPUnit\Rector\Foreach_\SimplifyForeachInstanceOfRector: ~
+    Rector\PHPUnit\Rector\SpecificMethod\AssertNotOperatorRector: null
+    Rector\PHPUnit\Rector\SpecificMethod\AssertComparisonToSpecificMethodRector: null
+    Rector\PHPUnit\Rector\SpecificMethod\AssertTrueFalseToSpecificMethodRector: null
+    Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector: null
+    Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector: null
+    Rector\PHPUnit\Rector\SpecificMethod\AssertTrueFalseInternalTypeToSpecificMethodRector: null
+    Rector\PHPUnit\Rector\SpecificMethod\AssertCompareToSpecificMethodRector: null
+    Rector\PHPUnit\Rector\SpecificMethod\AssertIssetToSpecificMethodRector: null
+    Rector\PHPUnit\Rector\SpecificMethod\AssertInstanceOfComparisonRector: null
+    Rector\PHPUnit\Rector\SpecificMethod\AssertPropertyExistsRector: null
+    Rector\PHPUnit\Rector\SpecificMethod\AssertRegExpRector: null
+    Rector\PHPUnit\Rector\Foreach_\SimplifyForeachInstanceOfRector: null

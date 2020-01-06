@@ -1,4 +1,4 @@
 services:
-    Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector: ~
-    Rector\Symfony\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector: ~
-    Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector: ~
+    Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector: null
+    Rector\Symfony\Rector\FrameworkBundle\GetParameterToConstructorInjectionRector: null
+    Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector: null

@@ -4,9 +4,11 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
+        "nette/neon": "^3.0",
         "symfony/console": "^4.4|^5.0",
         "symfony/process": "^4.4|^5.0",
         "symfony/filesystem": "^4.4|^5.0",
+        "symfony/finder": "^4.4|^5.0",
         "nette/utils": "^3.0"
     },
     "autoload": {

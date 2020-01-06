@@ -251,3 +251,6 @@ parameters:
         - '#Right side of \|\| is always false#'
 
         - '#Method Rector\\NodeContainer\\ParsedNodesByType\:\:findNewNodesByClass\(\) should return array<PhpParser\\Node\\Expr\\New_\> but returns array<int, PhpParser\\Node\>#'
+
+        # fix Symplify 7.2 later
+        - '#Method (.*?) returns bool type, so the name should start with is/has/was#'

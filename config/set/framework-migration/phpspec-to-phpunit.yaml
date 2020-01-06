@@ -1,16 +1,16 @@
 # see: https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html
 services:
     # 1. first convert mocks
-    Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecMocksToPHPUnitMocksRector: ~
-    Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecPromisesToPHPUnitAssertRector: ~
+    Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecMocksToPHPUnitMocksRector: null
+    Rector\PhpSpecToPHPUnit\Rector\MethodCall\PhpSpecPromisesToPHPUnitAssertRector: null
 
     # 2. then methods
-    Rector\PhpSpecToPHPUnit\Rector\ClassMethod\PhpSpecMethodToPHPUnitMethodRector: ~
+    Rector\PhpSpecToPHPUnit\Rector\ClassMethod\PhpSpecMethodToPHPUnitMethodRector: null
 
     # 3. then the class itself
-    Rector\PhpSpecToPHPUnit\Rector\Class_\PhpSpecClassToPHPUnitClassRector: ~
-    Rector\PhpSpecToPHPUnit\Rector\Class_\AddMockPropertiesRector: ~
+    Rector\PhpSpecToPHPUnit\Rector\Class_\PhpSpecClassToPHPUnitClassRector: null
+    Rector\PhpSpecToPHPUnit\Rector\Class_\AddMockPropertiesRector: null
 
-    Rector\PhpSpecToPHPUnit\Rector\ClassMethod\MockVariableToPropertyFetchRector: ~
+    Rector\PhpSpecToPHPUnit\Rector\ClassMethod\MockVariableToPropertyFetchRector: null
 
-    Rector\PhpSpecToPHPUnit\Rector\FileSystem\RenameSpecFileToTestFileRector: ~
+    Rector\PhpSpecToPHPUnit\Rector\FileSystem\RenameSpecFileToTestFileRector: null

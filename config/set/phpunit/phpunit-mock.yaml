@@ -1,2 +1,2 @@
 services:
-    Rector\PHPUnit\Rector\MethodCall\UseSpecificWillMethodRector: ~
+    Rector\PHPUnit\Rector\MethodCall\UseSpecificWillMethodRector: null

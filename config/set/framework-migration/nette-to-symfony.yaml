@@ -2,11 +2,11 @@ imports:
     - { resource: 'nette-to-symfony/*.yaml' }
 
 services:
-    Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector: ~
+    Rector\NetteToSymfony\Rector\FileSystem\DeleteFactoryInterfaceRector: null
 
-    Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector: ~
-    Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector: ~
-    Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector: ~
+    Rector\NetteToSymfony\Rector\MethodCall\FromHttpRequestGetHeaderToHeadersGetRector: null
+    Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector: null
+    Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector: null
 
     # run(Request $appRequest): IResponse -> run(Request $appRequest): \Symfony\Component\HttpFoundation\Response
     Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
@@ -120,4 +120,4 @@ services:
                 PATCH: Symfony\Component\HttpFoundation\Request::METHOD_PATCH
                 OPTIONS: Symfony\Component\HttpFoundation\Request::METHOD_OPTIONS
 
-    Rector\NetteToSymfony\Rector\Assign\FormControlToControllerAndFormTypeRector: ~
+    Rector\NetteToSymfony\Rector\Assign\FormControlToControllerAndFormTypeRector: null

@@ -17,37 +17,37 @@ services:
             - '../src/ValueObject/*'
 
     # extra services
-    Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider: ~
+    Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider: null
 
     Symfony\Component\Console\Application:
         alias: 'Rector\Console\Application'
 
-    Symfony\Component\Console\Descriptor\TextDescriptor: ~
+    Symfony\Component\Console\Descriptor\TextDescriptor: null
 
     # PhpParser - Parser
-    PhpParser\ParserFactory: ~
-    PhpParser\BuilderFactory: ~
+    PhpParser\ParserFactory: null
+    PhpParser\BuilderFactory: null
     PhpParser\NodeVisitor\CloningVisitor:
-    PhpParser\NodeFinder: ~
+    PhpParser\NodeFinder: null
 
     # value resolver
-    Symfony\Component\Filesystem\Filesystem: ~
-    Symplify\PackageBuilder\Reflection\PrivatesAccessor: ~
+    Symfony\Component\Filesystem\Filesystem: null
+    Symplify\PackageBuilder\Reflection\PrivatesAccessor: null
 
-    Symplify\PackageBuilder\FileSystem\FileSystem: ~
-    Symplify\SmartFileSystem\Finder\FinderSanitizer: ~
+    Symplify\PackageBuilder\FileSystem\FileSystem: null
+    Symplify\SmartFileSystem\Finder\FinderSanitizer: null
 
-    Symplify\PackageBuilder\Parameter\ParameterProvider: ~
-    Symplify\PackageBuilder\Reflection\PrivatesCaller: ~
-    Symplify\PackageBuilder\Strings\StringFormatConverter: ~
+    Symplify\PackageBuilder\Parameter\ParameterProvider: null
+    Symplify\PackageBuilder\Reflection\PrivatesCaller: null
+    Symplify\PackageBuilder\Strings\StringFormatConverter: null
 
     # alises
     Symfony\Contracts\EventDispatcher\EventDispatcherInterface: '@Rector\EventDispatcher\AutowiredEventDispatcher'
 
-    OndraM\CiDetector\CiDetector: ~
+    OndraM\CiDetector\CiDetector: null
 
     # see https://github.com/symplify/packagebuilder#prevent-parameter-typos
-    Symplify\PackageBuilder\EventSubscriber\ParameterTypoProofreaderEventSubscriber: ~
+    Symplify\PackageBuilder\EventSubscriber\ParameterTypoProofreaderEventSubscriber: null
     Symplify\PackageBuilder\Parameter\ParameterTypoProofreader:
         $correctToTypos:
             # keep "exclude_" explicit, to get typos to the correct key

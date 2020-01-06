@@ -1,0 +1,40 @@
+<?php
+
+namespace Rector\SOLID\Tests\Rector\If_\ChangeNestedIfsToEarlyReturnRector\Fixture;
+
+class SomeClass
+{
+    public function run()
+    {
+        if ($value === 5) {
+            if ($value2 === 10) {
+                return 'yes';
+            }
+        }
+
+        return 'no';
+    }
+}
+
+?>
+-----
+<?php
+
+namespace Rector\SOLID\Tests\Rector\If_\ChangeNestedIfsToEarlyReturnRector\Fixture;
+
+class SomeClass
+{
+    public function run()
+    {
+        if ($value !== 5) {
+            return 'no';
+        }
+        if ($value2 === 10) {
+            return 'yes';
+        }
+
+        return 'no';
+    }
+}
+
+?>

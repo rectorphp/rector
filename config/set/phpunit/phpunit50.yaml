@@ -1,2 +1,2 @@
 services:
-    Rector\PHPUnit\Rector\GetMockRector: ~
+    Rector\PHPUnit\Rector\GetMockRector: null

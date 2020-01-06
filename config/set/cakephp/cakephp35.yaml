@@ -16,38 +16,38 @@ services:
     Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector:
         $methodNamesByTypes:
             Cake\Cache\Cache:
-                config: ~
-                registry: ~
+                config: null
+                registry: null
             Cake\Console\Shell:
-                io: ~
+                io: null
             Cake\Console\ConsoleIo:
-                outputAs: ~
+                outputAs: null
             Cake\Console\ConsoleOutput:
-                outputAs: ~
+                outputAs: null
             Cake\Database\Connection:
-                logger: ~
+                logger: null
             Cake\Database\TypedResultInterface:
-                returnType: ~
+                returnType: null
             Cake\Database\TypedResultTrait:
-                returnType: ~
+                returnType: null
             Cake\Database\Log\LoggingStatement:
-                logger: ~
+                logger: null
             Cake\Datasource\ModelAwareTrait:
-                modelType: ~
+                modelType: null
             Cake\Database\Query:
                 valueBinder:
                     get: 'getValueBinder'
                     set: 'valueBinder'
             Cake\Database\Schema\TableSchema:
-                columnType: ~
+                columnType: null
             Cake\Datasource\QueryTrait:
                 eagerLoaded:
                     get: 'isEagerLoaded'
                     set: 'eagerLoaded'
             Cake\Event\EventDispatcherInterface:
-                eventManager: ~
+                eventManager: null
             Cake\Event\EventDispatcherTrait:
-                eventManager: ~
+                eventManager: null
             Cake\Error\Debugger:
                 outputAs:
                     get: 'getOutputFormat'
@@ -60,31 +60,31 @@ services:
                     get: 'getCharset'
                     set: 'withCharset'
             Cake\I18n\I18n:
-                locale: ~
-                translator: ~
-                defaultLocale: ~
-                defaultFormatter: ~
+                locale: null
+                translator: null
+                defaultLocale: null
+                defaultFormatter: null
             Cake\ORM\Association\BelongsToMany:
-                sort: ~
+                sort: null
             Cake\ORM\LocatorAwareTrait:
-                tableLocator: ~
+                tableLocator: null
             Cake\ORM\Table:
-                validator: ~
+                validator: null
             Cake\Routing\RouteBuilder:
-                extensions: ~
-                routeClass: ~
+                extensions: null
+                routeClass: null
             Cake\Routing\RouteCollection:
-                extensions: ~
+                extensions: null
             Cake\TestSuite\TestFixture:
-                schema: ~
+                schema: null
             Cake\Utility\Security:
-                salt: ~
+                salt: null
             Cake\View\View:
-                template: ~
-                layout: ~
-                theme: ~
-                templatePath: ~
-                layoutPath: ~
+                template: null
+                layout: null
+                theme: null
+                templatePath: null
+                layoutPath: null
                 autoLayout:
                     get: 'isAutoLayoutEnabled'
                     set: 'enableAutoLayout'

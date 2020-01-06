@@ -1,4 +1,4 @@
 services:
-    Rector\PHPStan\Rector\Cast\RecastingRemovalRector: ~
-    Rector\PHPStan\Rector\Assign\PHPStormVarAnnotationRector: ~
-    Rector\PHPStan\Rector\Node\RemoveNonExistingVarAnnotationRector: ~
+    Rector\PHPStan\Rector\Cast\RecastingRemovalRector: null
+    Rector\PHPStan\Rector\Assign\PHPStormVarAnnotationRector: null
+    Rector\PHPStan\Rector\Node\RemoveNonExistingVarAnnotationRector: null

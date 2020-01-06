@@ -1,21 +1,21 @@
 services:
     # remove unused "use" statements
-    PhpCsFixer\Fixer\Import\NoUnusedImportsFixer: ~
+    PhpCsFixer\Fixer\Import\NoUnusedImportsFixer: null
 
     # order use statements A-Z
-    PhpCsFixer\Fixer\Import\OrderedImportsFixer: ~
+    PhpCsFixer\Fixer\Import\OrderedImportsFixer: null
 
     # remove leading slash ("\") at imports
-    PhpCsFixer\Fixer\Import\NoLeadingImportSlashFixer: ~
+    PhpCsFixer\Fixer\Import\NoLeadingImportSlashFixer: null
 
     # remove extra spaces from DocBlocks
-    PhpCsFixer\Fixer\Comment\NoTrailingWhitespaceInCommentFixer: ~
+    PhpCsFixer\Fixer\Comment\NoTrailingWhitespaceInCommentFixer: null
 
     # clean empty doc blocks, e.g. after annotation removal
-    PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer: ~
+    PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer: null
 
     # add spaces between class elements
-    PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer: ~
+    PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer: null
 
     # add declare strict types to start of the file
-    PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer: ~
+    PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer: null

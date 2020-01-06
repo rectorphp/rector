@@ -1,9 +1,9 @@
 services:
-    Rector\Php73\Rector\BinaryOp\IsCountableRector: ~
-    Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector: ~
-    Rector\Php73\Rector\FuncCall\SensitiveDefineRector: ~
-    Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector: ~
-    Rector\Php73\Rector\String_\SensitiveHereNowDocRector: ~
+    Rector\Php73\Rector\BinaryOp\IsCountableRector: null
+    Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector: null
+    Rector\Php73\Rector\FuncCall\SensitiveDefineRector: null
+    Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector: null
+    Rector\Php73\Rector\String_\SensitiveHereNowDocRector: null
 
     # https://wiki.php.net/rfc/deprecations_php_7_3
     Rector\Renaming\Rector\Function_\RenameFunctionRector:
@@ -23,7 +23,7 @@ services:
             mbereg_search_getregs: 'mb_ereg_search_getregs'
             mbereg_search_getpos: 'mb_ereg_search_getpos'
 
-    Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector: ~
-    Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector: ~
-    Rector\Php73\Rector\FuncCall\RegexDashEscapeRector: ~
-    Rector\Php73\Rector\FuncCall\RemoveMissingCompactVariableRector: ~
+    Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector: null
+    Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector: null
+    Rector\Php73\Rector\FuncCall\RegexDashEscapeRector: null
+    Rector\Php73\Rector\FuncCall\RemoveMissingCompactVariableRector: null

@@ -1,35 +1,35 @@
 services:
-    Rector\CodingStyle\Rector\If_\NullableCompareToNullRector: ~
-    Rector\CodingStyle\Rector\FuncCall\SimpleArrayCallableToStringRector: ~
-    Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector: ~
-    Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector: ~
-    Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector: ~
-    Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector: ~
+    Rector\CodingStyle\Rector\If_\NullableCompareToNullRector: null
+    Rector\CodingStyle\Rector\FuncCall\SimpleArrayCallableToStringRector: null
+    Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector: null
+    Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector: null
+    Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector: null
+    Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector: null
 
     # requires configuration
-    # Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector: ~
-    # Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector: ~
-    Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector: ~
-    Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector: ~
-    Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector: ~
-    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: ~
+    # Rector\CodingStyle\Rector\ClassMethod\YieldClassMethodToArrayClassMethodRector: null
+    # Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector: null
+    Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector: null
+    Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector: null
+    Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector: null
+    Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: null
 
     # 'ClassName' → ClassName::class
-    Rector\Php55\Rector\String_\StringClassNameToClassConstantRector: ~
-    Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector: ~
-    Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector: ~
-    Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector: ~
-    Rector\CodingStyle\Rector\Assign\UseIncrementAssignRector: ~
-    Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector: ~
+    Rector\Php55\Rector\String_\StringClassNameToClassConstantRector: null
+    Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector: null
+    Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector: null
+    Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector: null
+    Rector\CodingStyle\Rector\Assign\UseIncrementAssignRector: null
+    Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector: null
 
-    Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector: ~
-    Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector: ~
-    Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector: ~
-    Rector\CodingStyle\Rector\String_\ManualJsonStringToJsonEncodeArrayRector: ~
-    Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector: ~
-    Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector: ~
-    Rector\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector: ~
-    Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector: ~
+    Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector: null
+    Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector: null
+    Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector: null
+    Rector\CodingStyle\Rector\String_\ManualJsonStringToJsonEncodeArrayRector: null
+    Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector: null
+    Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector: null
+    Rector\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector: null
+    Rector\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector: null
     Rector\CodingStyle\Rector\FuncCall\FunctionCallToConstantRector:
         $functionsToConstants:
             php_sapi_name: PHP_SAPI

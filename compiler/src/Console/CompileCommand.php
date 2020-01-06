@@ -75,7 +75,9 @@ final class CompileCommand extends Command
             $this->buildDir
         );
 
-        $this->processFactory->create(['php', 'box.phar', 'compile'], $this->dataDir);
+        // the '--no-parallel' is needed, so "scoper.php.inc" can "require __DIR__ ./vendor/autoload.php"
+        // and "Nette\Neon\Neon" class can be used there
+        $this->processFactory->create(['php', 'box.phar', 'compile', '--no-parallel'], $this->dataDir);
 
         $this->restoreComposerJson($composerJsonFile);
 

@@ -1,7 +1,7 @@
 services:
-    Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector: ~
-    Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector: ~
-    Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector: ~
-    Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector: ~
-    Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector: ~
-    Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector: ~
+    Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector: null
+    Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector: null
+    Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector: null
+    Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector: null
+    Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector: null
+    Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector: null

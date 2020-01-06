@@ -18,7 +18,7 @@ services:
                         name: 'weak'
                         default_value: false
 
-    Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector: ~
+    Rector\Symfony\Rector\Console\ConsoleExceptionToErrorEventConstantRector: null
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:

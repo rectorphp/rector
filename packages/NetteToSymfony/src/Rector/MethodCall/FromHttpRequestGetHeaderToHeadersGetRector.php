@@ -77,7 +77,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, Request::class)) {
+        if (! $this->isObjectType($node->var, Request::class)) {
             return null;
         }
 

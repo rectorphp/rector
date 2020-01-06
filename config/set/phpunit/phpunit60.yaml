@@ -9,4 +9,4 @@ services:
                 # exclude this class, since it has no namespaced replacement
                 - 'PHPUnit_Framework_MockObject_MockObject'
 
-    Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector: ~
+    Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector: null

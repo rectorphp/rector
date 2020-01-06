@@ -156,4 +156,4 @@ services:
 
     Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
         $namespacePrefixesWithExcludedClasses:
-            Twig_: ~
+            Twig_: null

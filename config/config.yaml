@@ -23,7 +23,7 @@ parameters:
     import_doc_blocks: true
 
     # what PHP version is used for features, composer.json version, then local PHP version is used by default
-    php_version_features: ~
+    php_version_features: null
 
     file_extensions:
         - 'php'

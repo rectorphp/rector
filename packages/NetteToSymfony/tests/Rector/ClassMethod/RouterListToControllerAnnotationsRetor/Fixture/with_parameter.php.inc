@@ -3,6 +3,7 @@
 namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAnnotationsRetor\Fixture;
 
 use Nette\Application\IPresenter;
+use Nette\Application\IResponse;
 use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
 
@@ -23,7 +24,7 @@ final class WithParameterSomePresenter implements IPresenter
     /**
      * @todo
      */
-    public function run()
+    public function run(\Nette\Application\Request $request): IResponse
     {
     }
 }
@@ -36,6 +37,7 @@ namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\RouterListToControllerAn
 
 use Symfony\Component\Routing\Annotation\Route;
 use Nette\Application\IPresenter;
+use Nette\Application\IResponse;
 use Nette\Application\Routers\RouteList;
 
 final class WithParameterRouterFactory
@@ -54,7 +56,7 @@ final class WithParameterSomePresenter implements IPresenter
      * @todo
      * @Route(path="some-path/{id}")
      */
-    public function run()
+    public function run(\Nette\Application\Request $request): IResponse
     {
     }
 }

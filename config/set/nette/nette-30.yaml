@@ -3,7 +3,7 @@ imports:
 
 services:
     # Control class has remove __construct(), e.g. https://github.com/Pixidos/GPWebPay/pull/16/files#diff-fdc8251950f85c5467c63c249df05786
-    Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector: ~
+    Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector: null
 
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
@@ -29,5 +29,5 @@ services:
             Nette\DI\Definitions\Definition:
                 isAutowired: 'getAutowired'
 
-    Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector: ~
-    Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector: ~
+    Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector: null
+    Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector: null

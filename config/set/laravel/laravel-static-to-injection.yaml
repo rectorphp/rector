@@ -3,9 +3,9 @@ imports:
     - { resource: 'static/array-str-functions-to-static-call.yaml'}
 
 services:
-    Rector\Laravel\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector: ~
-    Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector: ~
-    Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector: ~
+    Rector\Laravel\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector: null
+    Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector: null
+    Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector: null
 
     Rector\Rector\FuncCall\FunctionToNewRector:
         $functionToNew:

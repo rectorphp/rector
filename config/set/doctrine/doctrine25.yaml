@@ -12,4 +12,4 @@ services:
         $positionsByMethodNameByClassType:
             Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister:
                 getSelectJoinColumnSQL:
-                     4: ~
+                     4: null
