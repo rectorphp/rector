@@ -188,7 +188,7 @@ PHP
      */
     private function createAnonymousFunction(ClassMethod $classMethod, Node $node): Closure
     {
-        $hasClassMethodReturn = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Return_::class);
+        $classMethodReturns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Return_::class);
 
         $anonymousFunction = new Closure();
         $newParams = $this->copyParams($classMethod->params);
@@ -205,7 +205,7 @@ PHP
         }
 
         // does method return something?
-        if ($hasClassMethodReturn !== []) {
+        if ($this->hasClassMethodReturn($classMethodReturns)) {
             $anonymousFunction->stmts[] = new Return_($innerMethodCall);
         } else {
             $anonymousFunction->stmts[] = new Expression($innerMethodCall);
@@ -218,6 +218,19 @@ PHP
         }
 
         return $anonymousFunction;
+    }
+
+    /**
+     * @param Return_[] $nodes
+     */
+    private function hasClassMethodReturn(array $nodes): bool
+    {
+        foreach($nodes as $node) {
+            if ($node->expr !== null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
