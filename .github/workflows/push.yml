@@ -10,7 +10,7 @@ jobs:
       steps:
           - uses: actions/checkout@v2
           - name: Setup PHP
-            uses: shivammathur/setup-php@verbose
+            uses: shivammathur/setup-php@v1
             with:
                 php-version: 7.2
                 coverage: none # disable xdebug, pcov
