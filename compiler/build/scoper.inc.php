@@ -2,12 +2,23 @@
 
 declare(strict_types=1);
 
+// this file will need update sometimes: https://github.com/phpstan/phpstan-src/commits/master/compiler/build/scoper.inc.php
+// automate in the future, if needed
+
+require __DIR__ . '/../vendor/autoload.php';
+
 use Isolated\Symfony\Component\Finder\Finder;
 
 $stubs = [];
+
 $stubFinder = Finder::create();
-foreach ($stubFinder->files()->name('*.php')->in(__DIR__ . '/../../stubs') as $file) {
-    $stubs[] = $file->getPathName();
+$stubFinder->files()->name('*.php')
+    ->in(__DIR__ . '/../../stubs')
+    ->in(__DIR__ . '/../../vendor/jetbrains/phpstorm-stubs');
+
+foreach ($stubFinder->getIterator() as $fileInfo) {
+    /** @var \Symfony\Component\Finder\SplFileInfo $fileInfo */
+    $stubs[] = $fileInfo->getPathName();
 }
 
 return [
@@ -76,6 +87,52 @@ return [
                 $content
             );
         },
+
+        // mimics https://github.com/phpstan/phpstan-src/commit/5a6a22e5c4d38402c8cc888d8732360941c33d43#diff-463a36e4a5687fb2366b5ee56cdad92d
+        function (string $filePath, string $prefix, string $content): string {
+            if (strpos($filePath, '.neon') === false) {
+                return $content;
+            }
+            if ($content === '') {
+                return $content;
+            }
+            $prefixClass = function (string $class) use ($prefix): string {
+                if (strpos($class, 'PHPStan\\') === 0) {
+                    return $class;
+                }
+                if (strpos($class, 'PhpParser\\') === 0) {
+                    return $class;
+                }
+                if (strpos($class, '@') === 0) {
+                    return $class;
+                }
+                return $prefix . '\\' . $class;
+            };
+            $neon = \Nette\Neon\Neon::decode($content);
+            $updatedNeon = $neon;
+            if (array_key_exists('services', $neon)) {
+                foreach ($neon['services'] as $key => $service) {
+                    if (array_key_exists('class', $service) && is_string($service['class'])) {
+                        $service['class'] = $prefixClass($service['class']);
+                    }
+                    if (array_key_exists('factory', $service) && is_string($service['factory'])) {
+                        $service['factory'] = $prefixClass($service['factory']);
+                    }
+                    $updatedNeon['services'][$key] = $service;
+                }
+            }
+            return \Nette\Neon\Neon::encode($updatedNeon, \Nette\Neon\Neon::BLOCK);
+        },
+
+        // mimics https://github.com/phpstan/phpstan-src/commit/fd8f0a852207a1724ae4a262f47d9a449de70da4#diff-463a36e4a5687fb2366b5ee56cdad92d
+        function (string $filePath, string $prefix, string $content): string {
+            if (strpos($filePath, 'src/') !== 0) {
+                return $content;
+            }
+            $content = str_replace(sprintf('\'%s\\\\r\\\\n\'', $prefix), '\'\\\\r\\\\n\'', $content);
+            $content = str_replace(sprintf('\'%s\\\\', $prefix), '\'', $content);
+            return $content;
+        }
     ],
     'whitelist' => ['Rector\*', 'PHPStan\*', 'PhpParser\*'],
 ];
