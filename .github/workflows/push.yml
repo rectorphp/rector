@@ -14,4 +14,4 @@ jobs:
             with:
                 php-version: 7.2
                 coverage: none # disable xdebug, pcov
-          - run: composer check-cs
+          - run: composer install --no-progress && composer check-cs
