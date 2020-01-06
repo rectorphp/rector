@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 // this file will need update sometimes: https://github.com/phpstan/phpstan-src/commits/master/compiler/build/scoper.inc.php
-// automate in the future, if needed
+// automate in the future, if needed - @see https://github.com/rectorphp/rector/pull/2575#issuecomment-571133000
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Isolated\Symfony\Component\Finder\Finder;
 use Nette\Neon\Neon;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 $stubs = [];

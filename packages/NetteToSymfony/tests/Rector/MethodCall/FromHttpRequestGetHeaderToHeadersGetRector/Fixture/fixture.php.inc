@@ -11,7 +11,7 @@ final class SomeController
      */
     private $httpRequest;
 
-    public static function someAction(Request $request)
+    public function someAction(Request $request)
     {
         $header = $this->httpRequest->getHeader('x');
     }
@@ -32,7 +32,7 @@ final class SomeController
      */
     private $httpRequest;
 
-    public static function someAction(Request $request)
+    public function someAction(Request $request)
     {
         $header = $request->headers->get('x');
     }
