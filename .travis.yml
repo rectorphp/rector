@@ -136,7 +136,7 @@ jobs:
             php: 7.3
             name: Test Coverage
             script:
-                - phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit --coverage-clover coverage.xml
+                - pecl install pcov; composer require pcov/clobber; vendor/bin/pcov clobber; vendor/bin/phpunit --configuration phpunit.xml --coverage-clover coverage.xml 
                 - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
                 - php php-coveralls.phar --verbose
 
