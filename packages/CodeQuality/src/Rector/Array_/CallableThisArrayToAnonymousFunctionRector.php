@@ -225,7 +225,7 @@ PHP
      */
     private function hasClassMethodReturn(array $nodes): bool
     {
-        foreach($nodes as $node) {
+        foreach ($nodes as $node) {
             if ($node->expr !== null) {
                 return true;
             }
