@@ -1,0 +1,17 @@
+name: PHP Checks
+
+on:
+  push:
+
+jobs:
+  ecs:
+      name: ECS
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2
+          - name: Setup PHP
+            uses: shivammathur/setup-php@verbose
+            with:
+                php-version: 7.2
+                coverage: none # disable xdebug, pcov
+          - run: composer check-cs
