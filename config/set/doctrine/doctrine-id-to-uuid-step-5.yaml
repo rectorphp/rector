@@ -1,9 +1,9 @@
 services:
-    Rector\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector: ~
-    Rector\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector: ~
-    Rector\Doctrine\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector: ~
-    Rector\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector: ~
+    Rector\Doctrine\Rector\MethodCall\ChangeSetIdToUuidValueRector: null
+    Rector\Doctrine\Rector\MethodCall\ChangeGetUuidMethodCallToGetIdRector: null
+    Rector\Doctrine\Rector\ClassMethod\ChangeReturnTypeOfClassMethodWithGetIdRector: null
+    Rector\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector: null
 
     # add Uuid type declarations
-    Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedParamTypeRector: ~
-    Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector: ~
+    Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedParamTypeRector: null
+    Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector: null

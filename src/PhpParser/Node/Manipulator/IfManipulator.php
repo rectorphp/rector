@@ -6,8 +6,10 @@ namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
@@ -46,14 +48,21 @@ final class IfManipulator
      */
     private $callableNodeTraverser;
 
+    /**
+     * @var StmtsManipulator
+     */
+    private $stmtsManipulator;
+
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         ConstFetchManipulator $constFetchManipulator,
-        CallableNodeTraverser $callableNodeTraverser
+        CallableNodeTraverser $callableNodeTraverser,
+        StmtsManipulator $stmtsManipulator
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->constFetchManipulator = $constFetchManipulator;
         $this->callableNodeTraverser = $callableNodeTraverser;
+        $this->stmtsManipulator = $stmtsManipulator;
     }
 
     /**
@@ -123,6 +132,15 @@ final class IfManipulator
         return null;
     }
 
+    public function isIfWithOnlyStmtIf(If_ $if): bool
+    {
+        if (! $this->isIfWithoutElseAndElseIfs($if)) {
+            return false;
+        }
+
+        return $this->hasOnlyStmtOfType($if, If_::class);
+    }
+
     public function isEarlyElse(If_ $if): bool
     {
         if (! $this->isAlwaysAllowedType((array) $if->stmts, self::ALLOWED_BREAKING_NODE_TYPES)) {
@@ -138,6 +156,83 @@ final class IfManipulator
         return $if->else !== null;
     }
 
+    public function hasOnlyStmtOfType(If_ $if, string $desiredType): bool
+    {
+        if (count($if->stmts) !== 1) {
+            return false;
+        }
+
+        return is_a($if->stmts[0], $desiredType);
+    }
+
+    /**
+     * @return If_[]
+     */
+    public function collectNestedIfsWithOnlyReturn(If_ $if): array
+    {
+        $ifs = [];
+
+        $currentIf = $if;
+        while ($this->isIfWithOnlyStmtIf($currentIf)) {
+            $ifs[] = $currentIf;
+
+            $currentIf = $currentIf->stmts[0];
+        }
+
+        if ($ifs === []) {
+            return [];
+        }
+
+        if (! $this->hasOnlyStmtOfType($currentIf, Return_::class)) {
+            return [];
+        }
+
+        // last node is with the return value
+        $ifs[] = $currentIf;
+
+        return $ifs;
+    }
+
+    public function isIfWithElse(If_ $if): bool
+    {
+        if ($if->else === null) {
+            return false;
+        }
+
+        return ! (bool) $if->elseifs;
+    }
+
+    public function isIfAndElseWithSameVariableAssignAsLastStmts(If_ $if, Expr $desiredExpr): bool
+    {
+        if (! $this->isIfWithElse($if)) {
+            return false;
+        }
+
+        $lastIfStmt = $this->stmtsManipulator->getUnwrappedLastStmt($if->stmts);
+        if (! $lastIfStmt instanceof Assign) {
+            return false;
+        }
+
+        $lastElseStmt = $this->stmtsManipulator->getUnwrappedLastStmt($if->else->stmts);
+        if (! $lastElseStmt instanceof Assign) {
+            return false;
+        }
+
+        if (! $lastIfStmt->var instanceof Variable) {
+            return false;
+        }
+
+        if (! $this->betterStandardPrinter->areNodesEqual($lastIfStmt->var, $lastElseStmt->var)) {
+            return false;
+        }
+
+        if (! $this->betterStandardPrinter->areNodesEqual($desiredExpr, $lastElseStmt->var)) {
+            return false;
+        }
+
+        return true;
+    }
+
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $returnNode): ?Expr
     {
         if ($this->betterStandardPrinter->areNodesEqual($notIdentical->left, $returnNode->expr)) {
@@ -146,10 +241,11 @@ final class IfManipulator
             }
         }
 
-        if ($this->betterStandardPrinter->areNodesEqual($notIdentical->right, $returnNode->expr)) {
-            if ($this->constFetchManipulator->isNull($notIdentical->left)) {
-                return $notIdentical->right;
-            }
+        if (! $this->betterStandardPrinter->areNodesEqual($notIdentical->right, $returnNode->expr)) {
+            return null;
+        }
+        if ($this->constFetchManipulator->isNull($notIdentical->left)) {
+            return $notIdentical->right;
         }
 
         return null;
@@ -204,5 +300,14 @@ final class IfManipulator
         }
 
         return false;
+    }
+
+    private function isIfWithoutElseAndElseIfs(If_ $if): bool
+    {
+        if ($if->else !== null) {
+            return false;
+        }
+
+        return ! (bool) $if->elseifs;
     }
 }

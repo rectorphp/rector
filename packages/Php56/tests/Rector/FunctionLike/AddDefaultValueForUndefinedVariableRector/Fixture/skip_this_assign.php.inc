@@ -12,4 +12,3 @@ $fn = function() {
 };
 
 $closure = \Closure::bind($fn, new SkipThisAssign(), '\Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\Fixture\SkipThisAssign');
-echo $closure(), "\n";

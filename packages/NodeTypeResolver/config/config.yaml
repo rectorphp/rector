@@ -10,10 +10,10 @@ services:
             # "Type" is because the file is needed for PHPStan container only
             - '../src/Type'
 
-    Rector\Php\TypeAnalyzer: ~
-    Rector\FileSystem\FilesFinder: ~
-    Rector\PhpParser\Printer\BetterStandardPrinter: ~
-    Rector\PhpParser\Node\BetterNodeFinder: ~
+    Rector\Php\TypeAnalyzer: null
+    Rector\FileSystem\FilesFinder: null
+    Rector\PhpParser\Printer\BetterStandardPrinter: null
+    Rector\PhpParser\Node\BetterNodeFinder: null
 
     # PHPStan
     PHPStan\Broker\Broker:

@@ -12,10 +12,10 @@ services:
             - '../src/Attributes/Ast/PhpDoc/*'
             - '../src/PhpDocNode/*'
 
-    PHPStan\PhpDocParser\Lexer\Lexer: ~
-    PHPStan\PhpDocParser\Parser\TypeParser: ~
-    PHPStan\PhpDocParser\Parser\ConstExprParser: ~
-    Symplify\PackageBuilder\Php\TypeAnalyzer: ~
+    PHPStan\PhpDocParser\Lexer\Lexer: null
+    PHPStan\PhpDocParser\Parser\TypeParser: null
+    PHPStan\PhpDocParser\Parser\ConstExprParser: null
+    Symplify\PackageBuilder\Php\TypeAnalyzer: null
 
     PHPStan\PhpDocParser\Parser\PhpDocParser:
         alias: 'Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser'

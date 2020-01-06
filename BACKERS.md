@@ -9,13 +9,17 @@ Development of Rector is made possible thanks to these awesome backers! Would yo
 
 Check out all the tiers - higher ones include additional goodies like placing the logo of your company in Rector's README or creating custom set for your needs.
 
-- Jan Votruba
-- Sebastian Schreiber
+- 11com7
+- Alexander Schnitzler
+- Arnaud TIERANT
 - Attila Fulop
 - Jakob Oberhummer
 - Jan Kuchař
+- Jan Votruba
 - Jan Mikes
-- Arnaud TIERANT
+- Ruud Boon
+- thechris
+- Toby
 
 **Thank you for making this happen.**
 
@@ -25,5 +29,6 @@ Check out all the tiers - higher ones include additional goodies like placing th
 
 - Musement S.p.a.
 - Sebastian Schreiber
+- John Linhart
 
 <!-- source: https://www.patreon.com/manageRewardsList -->

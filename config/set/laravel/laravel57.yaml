@@ -21,7 +21,7 @@ services:
                     name: 'request'
                     type: 'Illuminate\Http\Illuminate\Http'
 
-    Rector\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector: ~
+    Rector\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector: null
 
     Rector\Rector\Argument\ArgumentRemoverRector:
         $positionsByMethodNameByClassType:

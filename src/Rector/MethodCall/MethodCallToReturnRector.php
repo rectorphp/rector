@@ -82,7 +82,7 @@ PHP
     }
 
     /**
-     * @param Node\Stmt\Expression $node
+     * @param Expression $node
      */
     public function refactor(Node $node): ?Node
     {

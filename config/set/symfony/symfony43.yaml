@@ -2,7 +2,7 @@ services:
     # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md
 
     # https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
-    Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector: ~
+    Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector: null
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:
@@ -11,7 +11,7 @@ services:
             Symfony\Component\Security\Http\Firewall:
                 handleRequest: 'callListeners'
 
-    Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector: ~
+    Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector: null
 
     # https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
     Rector\Renaming\Rector\Class_\RenameClassRector:

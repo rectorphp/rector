@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -71,6 +72,13 @@ PHP
         $position = 1;
         while (isset($node->args[$position])) {
             $assign = new Assign($arrayDimFetch, $node->args[$position]->value);
+
+            // keep comments of first line
+            if ($position === 1) {
+                $assign = new Expression($assign);
+                $assign->setAttribute('comments', $node->getComments());
+            }
+
             $this->addNodeAfterNode($assign, $node);
 
             ++$position;

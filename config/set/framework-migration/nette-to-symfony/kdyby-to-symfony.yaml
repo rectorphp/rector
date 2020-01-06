@@ -21,4 +21,4 @@ services:
             Kdyby\Events\Subscriber: 'Symfony\Component\EventDispatcher\EventSubscriberInterface'
             Kdyby\Translation\Translator: 'Symfony\Contracts\Translation\TranslatorInterface'
 
-    Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector: ~
+    Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector: null

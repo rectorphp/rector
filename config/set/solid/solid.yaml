@@ -1,5 +1,5 @@
 services:
-    Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector: ~
+    Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector: null
 
-    Rector\SOLID\Rector\ClassConst\PrivatizeLocalClassConstantRector: ~
-    Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector: ~
+    Rector\SOLID\Rector\ClassConst\PrivatizeLocalClassConstantRector: null
+    Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector: null

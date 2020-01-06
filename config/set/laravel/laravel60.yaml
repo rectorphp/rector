@@ -8,7 +8,7 @@ services:
 
     # https://github.com/laravel/framework/commit/67a38ba0fa2acfbd1f4af4bf7d462bb4419cc091
     # covered by
-    Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector: ~
+    Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector: null
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:

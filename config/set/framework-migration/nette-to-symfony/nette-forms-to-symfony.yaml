@@ -1,2 +1,2 @@
 services:
-    Rector\NetteToSymfony\Rector\Class_\NetteFormToSymfonyFormRector: ~
+    Rector\NetteToSymfony\Rector\Class_\NetteFormToSymfonyFormRector: null

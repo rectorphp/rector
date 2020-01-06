@@ -6,4 +6,4 @@ services:
                     2:
                         - 'Symfony\Component\Yaml\Yaml::PARSE_KEYS_AS_STRINGS'
 
-    Rector\Symfony\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector: ~
+    Rector\Symfony\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector: null

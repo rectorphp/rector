@@ -7,4 +7,4 @@ services:
             PHPUnit\Framework\TestCase:
                 scenario: 'test'
 
-    Rector\PHPUnit\Rector\Class_\RemoveDataProviderTestPrefixRector: ~
+    Rector\PHPUnit\Rector\Class_\RemoveDataProviderTestPrefixRector: null

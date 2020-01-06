@@ -9,8 +9,8 @@ parameters:
 services:
     # both uses "%classes_to_defluent%
     # covers https://github.com/guzzle/guzzle/commit/668209c895049759377593eed129e0949d9565b7#diff-810cdcfdd8a6b9e1fc0d1e96d7786874
-    Rector\Rector\MethodBody\ReturnThisRemoveRector: ~
-    Rector\Rector\MethodBody\FluentReplaceRector: ~
+    Rector\Rector\MethodBody\ReturnThisRemoveRector: null
+    Rector\Rector\MethodBody\FluentReplaceRector: null
 
     Rector\Rector\Function_\FunctionToMethodCallRector:
         $functionToMethodCall:
@@ -24,7 +24,7 @@ services:
             GuzzleHttp\Pool:
                 batch: 'GuzzleHttp\Pool\batch'
 
-    Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector: ~
+    Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector: null
 
     Rector\Renaming\Rector\MethodCall\RenameMethodRector:
         $oldToNewMethodsByClass:

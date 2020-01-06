@@ -21,4 +21,4 @@ services:
                 isset: 'offsetExists'
                 unset: 'offsetUnset'
 
-    Rector\Shopware\Rector\ClassConstFetch\ShopwareVersionConstsRector: ~
+    Rector\Shopware\Rector\ClassConstFetch\ShopwareVersionConstsRector: null

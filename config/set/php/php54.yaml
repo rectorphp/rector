@@ -3,5 +3,5 @@ services:
         $oldFunctionToNewFunction:
             mysqli_param_count: 'mysqli_stmt_param_count'
 
-    Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector: ~
-    Rector\Php54\Rector\Break_\RemoveZeroBreakContinueRector: ~
+    Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector: null
+    Rector\Php54\Rector\Break_\RemoveZeroBreakContinueRector: null
