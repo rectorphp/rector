@@ -28,7 +28,10 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         $propertyNodes = $this->getNodesForFileOfType($file, Property::class);
 
-        $this->assertEquals($expectedType->describe(VerbosityLevel::precise()), $this->nodeTypeResolver->resolve($propertyNodes[$nodePosition])->describe(VerbosityLevel::precise()));
+        $this->assertEquals(
+            $expectedType->describe(VerbosityLevel::precise()),
+            $this->nodeTypeResolver->resolve($propertyNodes[$nodePosition])->describe(VerbosityLevel::precise())
+        );
     }
 
     public function provideData(): Iterator
