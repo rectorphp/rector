@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\VerbosityLevel;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\ClassThatExtendsHtml;
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Source\Html;
@@ -27,7 +28,7 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         $propertyNodes = $this->getNodesForFileOfType($file, Property::class);
 
-        $this->assertEquals($expectedType, $this->nodeTypeResolver->resolve($propertyNodes[$nodePosition]));
+        $this->assertEquals($expectedType->describe(VerbosityLevel::precise()), $this->nodeTypeResolver->resolve($propertyNodes[$nodePosition])->describe(VerbosityLevel::precise()));
     }
 
     public function provideData(): Iterator

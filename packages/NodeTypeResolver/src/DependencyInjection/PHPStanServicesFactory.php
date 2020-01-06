@@ -89,4 +89,9 @@ final class PHPStanServicesFactory
     {
         return $this->container->getByType(ScopeFactory::class);
     }
+
+    public function createContainer(): Container
+    {
+        return $this->container->getByType(Container::class);
+    }
 }
