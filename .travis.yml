@@ -136,7 +136,11 @@ jobs:
             php: 7.3
             name: Test Coverage
             script:
-                - pecl install pcov; composer require pcov/clobber; vendor/bin/pcov clobber; vendor/bin/phpunit --configuration phpunit.xml --coverage-clover coverage.xml 
+                # https://kizu514.com/blog/pcov-is-better-than-phpdbg-and-xdebug-for-code-coverage/
+                - pecl install pcov
+                - composer require pcov/clobber
+                - vendor/bin/pcov clobber
+                - vendor/bin/phpunit --configuration phpunit.xml --coverage-clover coverage.xml
                 - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
                 - php php-coveralls.phar --verbose
 
