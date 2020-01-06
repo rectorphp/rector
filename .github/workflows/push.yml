@@ -1,0 +1,41 @@
+name: PHP Checks
+
+on:
+  - push
+
+jobs:
+  phpstan:
+      name: PHPStan
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2
+          - name: Setup PHP
+            uses: shivammathur/setup-php@v1
+            with:
+                php-version: 7.2
+                coverage: none # disable xdebug, pcov
+          - run: composer install --no-progress && composer phpstan
+
+  ecs:
+      name: ECS
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2
+          - name: Setup PHP
+            uses: shivammathur/setup-php@v1
+            with:
+                php-version: 7.2
+                coverage: none # disable xdebug, pcov
+          - run: composer install --no-progress && composer check-cs
+
+  rector:
+      name: Rector
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2
+          - name: Setup PHP
+            uses: shivammathur/setup-php@v1
+            with:
+                php-version: 7.3
+                coverage: none # disable xdebug, pcov
+          - run: composer install --no-progress && composer rector
