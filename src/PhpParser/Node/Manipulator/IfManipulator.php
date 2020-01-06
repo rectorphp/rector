@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Do_;
@@ -18,6 +19,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeTraverser;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 
@@ -53,16 +55,23 @@ final class IfManipulator
      */
     private $stmtsManipulator;
 
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         ConstFetchManipulator $constFetchManipulator,
         CallableNodeTraverser $callableNodeTraverser,
-        StmtsManipulator $stmtsManipulator
+        StmtsManipulator $stmtsManipulator,
+        NameResolver $nameResolver
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->constFetchManipulator = $constFetchManipulator;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->stmtsManipulator = $stmtsManipulator;
+        $this->nameResolver = $nameResolver;
     }
 
     /**
@@ -227,6 +236,29 @@ final class IfManipulator
         }
 
         if (! $this->betterStandardPrinter->areNodesEqual($desiredExpr, $lastElseStmt->var)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Matches:
+     * if (<some_function>) {
+     * } else {
+     * }
+     */
+    public function isIfElseWithFunctionCondition(If_ $if, string $functionName): bool
+    {
+        if (! $this->isIfWithElse($if)) {
+            return false;
+        }
+
+        if (! $if->cond instanceof FuncCall) {
+            return false;
+        }
+
+        if (! $this->nameResolver->isName($if->cond, $functionName)) {
             return false;
         }
 
