@@ -27,3 +27,6 @@ services:
 
     PHPStan\Analyser\ScopeFactory:
         factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createScopeFactory']
+
+    PHPStan\DependencyInjection\Container:
+        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createContainer']
