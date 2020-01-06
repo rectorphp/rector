@@ -113,7 +113,7 @@ jobs:
                 - cd test-paths
 
                 - mkdir rector-dir
-                - composer require rector/rector -d rector-dir
+                - composer require rector/rector:@dev -d rector-dir
 
                 - mkdir symfony-demo-dir
                 - composer create-project symfony/symfony-demo symfony-demo-dir --dev
