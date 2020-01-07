@@ -67,23 +67,6 @@ jobs:
                 - composer update --prefer-lowest --no-progress
 
         -
-            name: PHPStan
-            php: 7.2
-            script:
-                - composer phpstan
-
-        -
-            php: 7.2
-            name: ECS
-            script:
-                - composer check-cs
-
-        -
-            php: 7.3
-            name: Rector
-            script:
-                - composer rector
-        -
             php: 7.3
             name: "Scan Fatal Errors"
             script:
