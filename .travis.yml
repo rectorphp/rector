@@ -67,12 +67,6 @@ jobs:
                 - composer update --prefer-lowest --no-progress
 
         -
-            php: 7.3
-            name: "Scan Fatal Errors"
-            script:
-                - bin/rector scan-fatal-errors tests/Source/FatalErrors
-
-        -
             name: Documentation
             php: 7.2
             script:
