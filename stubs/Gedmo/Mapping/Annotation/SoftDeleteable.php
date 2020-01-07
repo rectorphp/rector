@@ -8,6 +8,23 @@ if (class_exists('Gedmo\Mapping\Annotation\SoftDeleteable')) {
     return;
 }
 
+/**
+ * @Annotation
+ */
 class SoftDeleteable
 {
+    /**
+     * @var string
+     */
+    public $fieldName = 'deletedAt';
+
+    /**
+     * @var bool
+     */
+    public $timeAware = false;
+
+    /**
+     * @var bool
+     */
+    public $hardDelete = true;
 }
