@@ -8,6 +8,14 @@ class SimpleArray
     {
         return [];
     }
+
+    /**
+     * @return void[]
+     */
+    public function getAnEmptyArray(): array
+    {
+        return [];
+    }
 }
 
 ?>
@@ -22,6 +30,14 @@ class SimpleArray
      * @return mixed[]
      */
     public function getValues(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getAnEmptyArray(): array
     {
         return [];
     }
