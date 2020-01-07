@@ -145,6 +145,10 @@ final class StaticTypeMapper
             return new IdentifierTypeNode('null');
         }
 
+        if ($phpStanType instanceof NeverType) {
+            return new IdentifierTypeNode('mixed');
+        }
+
         throw new NotImplementedException(__METHOD__ . ' for ' . get_class($phpStanType));
     }
 
@@ -289,7 +293,12 @@ final class StaticTypeMapper
             return new NullableType($nullabledTypeNode);
         }
 
-        if ($phpStanType instanceof VoidType || $phpStanType instanceof MixedType || $phpStanType instanceof ResourceType || $phpStanType instanceof NullType) {
+        if ($phpStanType instanceof NeverType ||
+            $phpStanType instanceof VoidType ||
+            $phpStanType instanceof MixedType ||
+            $phpStanType instanceof ResourceType ||
+            $phpStanType instanceof NullType
+        ) {
             return null;
         }
 
@@ -486,7 +495,10 @@ final class StaticTypeMapper
 
     public function mapPHPStanPhpDocTypeToPHPStanType(PhpDocTagValueNode $phpDocTagValueNode, Node $node): Type
     {
-        if ($phpDocTagValueNode instanceof ReturnTagValueNode || $phpDocTagValueNode instanceof ParamTagValueNode || $phpDocTagValueNode instanceof VarTagValueNode) {
+        if ($phpDocTagValueNode instanceof ReturnTagValueNode ||
+            $phpDocTagValueNode instanceof ParamTagValueNode ||
+            $phpDocTagValueNode instanceof VarTagValueNode
+        ) {
             return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
         }
 

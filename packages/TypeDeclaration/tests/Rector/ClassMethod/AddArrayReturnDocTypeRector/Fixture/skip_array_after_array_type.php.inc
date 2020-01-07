@@ -28,4 +28,12 @@ class SkipArrayAfterArrayType
     {
         return ['one', 'two'];
     }
+
+    /**
+     * @return mixed[]
+     */
+    public function getAnEmptyArray(): array
+    {
+        return [];
+    }
 }
