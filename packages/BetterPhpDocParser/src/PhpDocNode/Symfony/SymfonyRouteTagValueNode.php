@@ -26,7 +26,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode
     public $name;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $path;
 
@@ -62,7 +62,7 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode
      * @param string[] $requirements
      */
     public function __construct(
-        string $path,
+        ?string $path,
         ?string $name = null,
         array $methods = [],
         array $options = [],
