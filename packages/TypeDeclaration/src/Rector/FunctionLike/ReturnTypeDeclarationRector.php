@@ -252,7 +252,7 @@ PHP
 
     private function isArrayIterableIteratorCoType(Node $node, Type $returnType): bool
     {
-        if (! $this->isNames($node->returnType, ['iterable', 'Iterator', 'array'])) {
+        if (! $this->isNames($node->returnType, ['iterable', 'Iterator', 'Traversable', 'array'])) {
             return false;
         }
 
