@@ -5,3 +5,4 @@ services:
     Rector\DoctrineGedmoToKnplabs\Rector\Class_\TreeBehaviorRector: null
     Rector\DoctrineGedmoToKnplabs\Rector\Class_\TranslationBehaviorRector: null
     Rector\DoctrineGedmoToKnplabs\Rector\Class_\SoftDeletableBehaviorRector: null
+    Rector\DoctrineGedmoToKnplabs\Rector\Class_\BlameableBehaviorRector: null
