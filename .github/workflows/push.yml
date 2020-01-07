@@ -17,7 +17,9 @@ jobs:
             with:
                 php-version: 7.2
                 coverage: none # disable xdebug, pcov
-          - run: composer install --no-progress && composer phpstan
+          - run: |
+              composer install --no-progress
+              composer phpstan
 
   ecs:
       name: ECS
@@ -29,7 +31,9 @@ jobs:
             with:
                 php-version: 7.2
                 coverage: none # disable xdebug, pcov
-          - run: composer install --no-progress && composer check-cs
+          - run: |
+              composer install --no-progress
+              composer check-cs
 
   rector:
       name: Rector
@@ -41,7 +45,9 @@ jobs:
             with:
                 php-version: 7.3
                 coverage: none # disable xdebug, pcov
-          - run: composer install --no-progress && composer rector
+          - run: |
+              composer install --no-progress
+              composer rector
 
   fatal-scan:
       name: Scan Fatal Errors
@@ -53,4 +59,6 @@ jobs:
             with:
                 php-version: 7.3
                 coverage: none # disable xdebug, pcov
-          - run: composer install --no-progress && bin/rector scan-fatal-errors tests/Source/FatalErrors
+          - run: |
+              composer install --no-progress
+              bin/rector scan-fatal-errors tests/Source/FatalErrors
