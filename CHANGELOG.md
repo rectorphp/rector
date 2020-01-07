@@ -9,6 +9,64 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+## [v0.6.7] - 2020-01-07
+
+### Added
+
+- [#2565] [DeadCode] Add RemoveUnusedClassesRector
+- [#2593] [DoctrineGedmoToKnpLabs] Add SoftDeletableBehaviorRector
+- [#2569] [Polyfill] Add UnwrapFutureCompatibleIfRector
+- [#2570] [SOLID] Add ChangeNestedIfsToEarlyReturnRector & ChangeIfElseValueAssignToEarlyReturnRector
+- [#2568] [Symfony 5] Add param types
+
+### Changed
+
+- [#2581] Try pcov for code coverage, Thanks to [@staabm]
+- [#2572] Don't return void when function contains empty return statement, Thanks to [@snapshotpl]
+- [#2575] PHPStan 0.12.4 compatibility updates, Thanks to [@ondrejmirtes]
+- [#2576] travis: try phpdbg
+- [#2598] Skip ReturnTypeDeclarationRector when the type is already defined as \Traversable, Thanks to [@gnutix]
+- [#2582] avoid direct container in the code
+- [#2584] Update compiler with PHPStan 0.12.4 workflow change
+- [#2589] Transition some travis checks to GithubActions, Thanks to [@staabm]
+- [#2592] Transition fatal-error scan to GithubAction, Thanks to [@staabm]
+- [#2583] Revert "Try pcov for code coverage"
+
+### Fixed
+
+- [#2586] fix box autoload Neon class in scoper.php.inc by --no-parallel
+- [#2588] Fix PHPStan 0.12+ [@implements] and [@extends] class annotations., Thanks to [@gnutix]
+- [#2595] Fix running AddArrayReturnDocTypeRector on empty arrays, Thanks to [@gnutix]
+- [#2566] fix ChangeArrayPushToArrayAssignRector for multiple items
+
+### Removed
+
+- [#2591] Remove travis-CI jobs which were moved to GithubAction, Thanks to [@staabm]
+- [#2567] make nested chain call remove configurable
+
+## [v0.6.6] - 2020-01-04
+
+### Added
+
+- [#2557] [CodeQuality] Add ChangeArrayPushToArrayAssignRector
+- [#2559] [CodeQuality] Add ForRepeatedCountToOwnVariableRector
+- [#2561] [CodingQuality] Add ForeachItemsAssignToEmptyArrayToAssignRector
+- [#2558] [MinimalScope] Add ChangeLocalPropertyToVariableRector
+- [#2538] [Php71] Add failing test case for CountOnNullRector, Thanks to [@gnutix]
+- [#2548] add IterableType to StaticTypeMapper::mapPHPStanTypeToPHPStanPhpDocType()
+
+### Changed
+
+- [#2541] [Restoration] Preconfigure CompleteImportForPartialAnnotationRector
+- [#2562] Prevent variable name override
+- [#2553] Improve 3rd party property type resolution
+- [#2550] allow loading bleedingEdge.neon config inside PHPStan phar
+- [#2563] prevent variable scope changing
+
+### Fixed
+
+- [#2547] fix function callback in assert callback
+
 ## [v0.6.5] - 2020-01-03
 
 ### Added
@@ -1855,3 +1913,41 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#2507]: https://github.com/rectorphp/rector/pull/2507
 [#2505]: https://github.com/rectorphp/rector/pull/2505
 [#2503]: https://github.com/rectorphp/rector/pull/2503
+[#2598]: https://github.com/rectorphp/rector/pull/2598
+[#2595]: https://github.com/rectorphp/rector/pull/2595
+[#2593]: https://github.com/rectorphp/rector/pull/2593
+[#2592]: https://github.com/rectorphp/rector/pull/2592
+[#2591]: https://github.com/rectorphp/rector/pull/2591
+[#2589]: https://github.com/rectorphp/rector/pull/2589
+[#2588]: https://github.com/rectorphp/rector/pull/2588
+[#2586]: https://github.com/rectorphp/rector/pull/2586
+[#2584]: https://github.com/rectorphp/rector/pull/2584
+[#2583]: https://github.com/rectorphp/rector/pull/2583
+[#2582]: https://github.com/rectorphp/rector/pull/2582
+[#2581]: https://github.com/rectorphp/rector/pull/2581
+[#2576]: https://github.com/rectorphp/rector/pull/2576
+[#2575]: https://github.com/rectorphp/rector/pull/2575
+[#2572]: https://github.com/rectorphp/rector/pull/2572
+[#2570]: https://github.com/rectorphp/rector/pull/2570
+[#2569]: https://github.com/rectorphp/rector/pull/2569
+[#2568]: https://github.com/rectorphp/rector/pull/2568
+[#2567]: https://github.com/rectorphp/rector/pull/2567
+[#2566]: https://github.com/rectorphp/rector/pull/2566
+[#2565]: https://github.com/rectorphp/rector/pull/2565
+[#2563]: https://github.com/rectorphp/rector/pull/2563
+[#2562]: https://github.com/rectorphp/rector/pull/2562
+[#2561]: https://github.com/rectorphp/rector/pull/2561
+[#2559]: https://github.com/rectorphp/rector/pull/2559
+[#2558]: https://github.com/rectorphp/rector/pull/2558
+[#2557]: https://github.com/rectorphp/rector/pull/2557
+[#2553]: https://github.com/rectorphp/rector/pull/2553
+[#2550]: https://github.com/rectorphp/rector/pull/2550
+[#2548]: https://github.com/rectorphp/rector/pull/2548
+[#2547]: https://github.com/rectorphp/rector/pull/2547
+[#2541]: https://github.com/rectorphp/rector/pull/2541
+[#2538]: https://github.com/rectorphp/rector/pull/2538
+[v0.6.6]: https://github.com/rectorphp/rector/compare/v0.6.5...v0.6.6
+[v0.6.5]: https://github.com/rectorphp/rector/compare/v0.6.4...v0.6.5
+[@ondrejmirtes]: https://github.com/ondrejmirtes
+[@implements]: https://github.com/implements
+[@extends]: https://github.com/extends
