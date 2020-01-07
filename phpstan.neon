@@ -254,3 +254,5 @@ parameters:
 
         # fix Symplify 7.2 later
         - '#Method (.*?) returns bool type, so the name should start with is/has/was#'
+
+        - '#Property Rector\\BetterPhpDocParser\\PhpDocNode\\Gedmo\\BlameableTagValueNode\:\:\$value has no typehint specified#'
