@@ -133,10 +133,7 @@ jobs:
 #            env: PHP_VERSION=7.3.10
 
     allow_failures:
-        - name: ECS
-        - name: Rector
         - name: Standalone Run
-        - name: Documentation
         - os: windows
 
 cache:
