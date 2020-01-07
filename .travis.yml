@@ -65,21 +65,7 @@ jobs:
             install:
                 # install lowest dependencies
                 - composer update --prefer-lowest --no-progress
-
-        -
-            name: Documentation
-            php: 7.2
-            script:
-                - composer check-docs
-
-        -
-            name: Simple checks
-            php: 7.2
-            script:
-                - php ci/check_services_in_yaml_configs.php
-                - php ci/run_all_sets.php
-
-        -
+                
             # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
             stage: test
             php: 7.3
