@@ -46,6 +46,9 @@ final class AnnotationReaderFactory
         $annotationReader::addGlobalIgnoredName('Gedmo\Blameable');
         $annotationReader::addGlobalIgnoredName('Blameable');
 
+        $annotationReader::addGlobalIgnoredName('Gedmo\Versioned');
+        $annotationReader::addGlobalIgnoredName('Versioned');
+
         // nette @inject dummy annotation
         $annotationReader::addGlobalIgnoredName('inject');
 
