@@ -49,6 +49,35 @@ jobs:
               composer install --no-progress
               composer rector
 
+  docs:
+      name: Documentation
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2
+          - name: Setup PHP
+            uses: shivammathur/setup-php@v1
+            with:
+                php-version: 7.2
+                coverage: none # disable xdebug, pcov
+          - run: |
+              composer install --no-progress
+              composer check-docs
+              
+  simple-checks:
+      name: Simple checks
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2
+          - name: Setup PHP
+            uses: shivammathur/setup-php@v1
+            with:
+                php-version: 7.2
+                coverage: none # disable xdebug, pcov
+          - run: |
+              composer install --no-progress
+              php ci/check_services_in_yaml_configs.php
+              php ci/run_all_sets.php
+              
   fatal-scan:
       name: Scan Fatal Errors
       runs-on: ubuntu-latest
