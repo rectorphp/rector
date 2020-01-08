@@ -131,19 +131,32 @@ PHP
         });
     }
 
+    private function findPreviousNodeUsageInForeach(Node $node, Expr $expr): ?Node
+    {
+        return $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use ($expr) {
+            if ($node === $expr) {
+                return false;
+            }
+
+            if (! $this->areNodesEqual($node, $expr)) {
+                return false;
+            }
+
+            return $node->getAttribute(AttributeKey::PARENT_NODE) instanceof Foreach_;
+        });
+    }
+
     private function shouldSkipAsPartOfNestedForeach(Foreach_ $foreach): bool
     {
-        $previousForeachVariableUsage = $this->findPreviousNodeUsage($foreach, $foreach->expr);
+        $previousForeachVariableUsage = $this->findPreviousNodeUsageInForeach($foreach, $foreach->expr);
         if ($previousForeachVariableUsage === null) {
             return false;
         }
 
+        /** @var Foreach_ $previousForeachVariableUsageParentNode */
         $previousForeachVariableUsageParentNode = $previousForeachVariableUsage->getAttribute(
             AttributeKey::PARENT_NODE
         );
-        if (! $previousForeachVariableUsageParentNode instanceof Foreach_) {
-            return false;
-        }
 
         return $this->areNodesEqual($previousForeachVariableUsageParentNode->valueVar, $foreach->expr);
     }
