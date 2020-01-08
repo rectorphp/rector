@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
+use PHPStan\Analyser\Scope;
 use Rector\Commander\CommanderCollector;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Contract\Rector\PhpRectorInterface;
@@ -275,5 +276,27 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private function hasNodeChanged(Node $originalNode, Node $node): bool
     {
         return ! $this->areNodesEqual($originalNode, $node);
+    }
+
+    protected function createCountedValueName(string $countedValueName, ?Scope $scope): string
+    {
+        if ($scope === null) {
+            return $countedValueName;
+        }
+
+        // make sure variable name is unique
+        if (! $scope->hasVariableType($countedValueName)->yes()) {
+            return $countedValueName;
+        }
+
+        // we need to add number suffix until the variable is unique
+        $i = 2;
+        $countedValueNamePart = $countedValueName;
+        while ($scope->hasVariableType($countedValueName)->yes()) {
+            $countedValueName = $countedValueNamePart . $i;
+            ++$i;
+        }
+
+        return $countedValueName;
     }
 }

@@ -90,7 +90,7 @@ PHP
 
             $countInCond = $node;
             $valueName = $this->getName($node->args[0]->value);
-            $countedValueName = $this->createCountedValueName($valueName, $for);
+            $countedValueName = $this->createCountedValueName($valueName, $for->getAttribute(AttributeKey::SCOPE));
 
             return new Variable($countedValueName);
         });
@@ -105,7 +105,7 @@ PHP
         return $node;
     }
 
-    private function createCountedValueName(?string $valueName, For_ $for): string
+    protected function createCountedValueName(?string $valueName, ?Scope $scope): string
     {
         if ($valueName === null) {
             $countedValueName = self::DEFAULT_VARIABLE_COUNT_NAME;
@@ -113,25 +113,6 @@ PHP
             $countedValueName = $valueName . 'Count';
         }
 
-        /** @var Scope|null $forScope */
-        $forScope = $for->getAttribute(AttributeKey::SCOPE);
-        if ($forScope === null) {
-            return $countedValueName;
-        }
-
-        // make sure variable name is unique
-        if (! $forScope->hasVariableType($countedValueName)->yes()) {
-            return $countedValueName;
-        }
-
-        // we need to add number suffix until the variable is unique
-        $i = 2;
-        $countedValueNamePart = $countedValueName;
-        while ($forScope->hasVariableType($countedValueName)->yes()) {
-            $countedValueName = $countedValueNamePart . $i;
-            ++$i;
-        }
-
-        return $countedValueName;
+        return parent::createCountedValueName($countedValueName, $scope);
     }
 }
