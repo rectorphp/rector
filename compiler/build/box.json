@@ -10,7 +10,6 @@
         "config",
         "src",
         "packages",
-        "stubs",
         "vendor"
     ],
     "output": "tmp/rector.phar",
