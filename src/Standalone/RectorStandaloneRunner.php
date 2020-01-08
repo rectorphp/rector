@@ -161,9 +161,12 @@ final class RectorStandaloneRunner
         /** @var ErrorAndDiffCollector $errorAndDiffCollector */
         $errorAndDiffCollector = $this->container->get(ErrorAndDiffCollector::class);
 
+        /** @var Configuration $configuration */
+        $configuration = $this->container->get(Configuration::class);
+
         /** @var ConsoleOutputFormatter $consoleOutputFormatter */
         $consoleOutputFormatter = $this->container->get(ConsoleOutputFormatter::class);
-        $consoleOutputFormatter->report($errorAndDiffCollector);
+        $consoleOutputFormatter->report($errorAndDiffCollector, $configuration);
     }
 
     private function finish(): void

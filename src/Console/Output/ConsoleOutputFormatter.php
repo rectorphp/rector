@@ -48,7 +48,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             return;
         }
 
-        $changes = count($errorAndDiffCollector->getFileDiffs()) + $errorAndDiffCollector->getRemovedAndAddedFilesCount();
+        $changes = $errorAndDiffCollector->getFileDiffsCount() + $errorAndDiffCollector->getRemovedAndAddedFilesCount();
         $message = 'Rector is done!';
         if ($changes > 0) {
             $message .= sprintf(

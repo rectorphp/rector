@@ -122,6 +122,11 @@ final class ErrorAndDiffCollector
         return $this->fileDiffs;
     }
 
+    public function getFileDiffsCount(): int
+    {
+        return count($this->getFileDiffs());
+    }
+
     public function addAutoloadError(AnalysedCodeException $analysedCodeException, SmartFileInfo $fileInfo): void
     {
         $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
