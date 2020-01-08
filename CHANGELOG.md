@@ -9,6 +9,23 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+## [v0.6.8]
+
+### Added
+
+- [#2601] [DoctrineGemoToKnplabs] Add LoggableBehaviorRector
+- [#2599] [DoctrineGemoToKnplabs] Add BlameableBehaviorRector
+
+### Changed
+
+- [#2605] more reliable way getting last stmt, Thanks to [@Jaapze]
+- [#2603] Transition more jobs to GithubAction, Thanks to [@staabm]
+
+### Fixed
+
+- [#2607] [CodeQuality] Fix nested foreach case in ForeachItemsAssignToEmptyArrayToAssignRector
+- [#2600] [Symfony] fix process error of controller with Internationalized routing, Thanks to [@ghostika]
+
 ## [v0.6.7] - 2020-01-07
 
 ### Added
@@ -1951,3 +1968,13 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@ondrejmirtes]: https://github.com/ondrejmirtes
 [@implements]: https://github.com/implements
 [@extends]: https://github.com/extends
+[#2607]: https://github.com/rectorphp/rector/pull/2607
+[#2605]: https://github.com/rectorphp/rector/pull/2605
+[#2603]: https://github.com/rectorphp/rector/pull/2603
+[#2601]: https://github.com/rectorphp/rector/pull/2601
+[#2600]: https://github.com/rectorphp/rector/pull/2600
+[#2599]: https://github.com/rectorphp/rector/pull/2599
+[v0.6.8]: https://github.com/rectorphp/rector/compare/v0.6.7...v0.6.8
+[v0.6.7]: https://github.com/rectorphp/rector/compare/v0.6.6...v0.6.7
+[@ghostika]: https://github.com/ghostika
+[@Jaapze]: https://github.com/Jaapze
