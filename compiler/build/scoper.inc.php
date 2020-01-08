@@ -14,7 +14,6 @@ $stubs = [];
 
 $stubFinder = Finder::create();
 $stubFinder->files()->name('*.php')
-    ->in(__DIR__ . '/../../stubs')
     ->in(__DIR__ . '/../../vendor/jetbrains/phpstorm-stubs');
 
 foreach ($stubFinder->getIterator() as $fileInfo) {
