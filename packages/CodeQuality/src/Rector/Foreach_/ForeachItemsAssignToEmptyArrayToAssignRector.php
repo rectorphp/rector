@@ -75,6 +75,11 @@ PHP
             return null;
         }
 
+        // covers https://github.com/Symplify/Symplify/pull/1733/checks?check_run_id=379368887#step:5:64
+        if ($this->shouldSkipAsPartOfNestedForeach($node)) {
+            return null;
+        }
+
         $previousDeclarationParentNode = $previousDeclaration->getAttribute(AttributeKey::PARENT_NODE);
         if (! $previousDeclarationParentNode instanceof Assign) {
             return null;
@@ -124,5 +129,22 @@ PHP
 
             return $this->areNodesEqual($node, $expr);
         });
+    }
+
+    private function shouldSkipAsPartOfNestedForeach(Foreach_ $foreach): bool
+    {
+        $previousForeachVariableUsage = $this->findPreviousNodeUsage($foreach, $foreach->expr);
+        if ($previousForeachVariableUsage === null) {
+            return false;
+        }
+
+        $previousForeachVariableUsageParentNode = $previousForeachVariableUsage->getAttribute(
+            AttributeKey::PARENT_NODE
+        );
+        if (! $previousForeachVariableUsageParentNode instanceof Foreach_) {
+            return false;
+        }
+
+        return $this->areNodesEqual($previousForeachVariableUsageParentNode->valueVar, $foreach->expr);
     }
 }
