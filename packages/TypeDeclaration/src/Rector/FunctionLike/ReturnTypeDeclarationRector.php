@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
@@ -205,6 +206,11 @@ PHP
 
         // is array <=> iterable <=> Iterator co-type? → skip
         if ($this->isArrayIterableIteratorCoType($node, $returnType)) {
+            return true;
+        }
+
+        // is class-string<T> type? → skip
+        if ($returnType instanceof GenericObjectType && $returnType->getClassName() === 'class-string') {
             return true;
         }
 
