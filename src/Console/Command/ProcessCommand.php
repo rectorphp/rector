@@ -190,7 +190,7 @@ final class ProcessCommand extends AbstractCommand
         // report diffs and errors
         $outputFormat = (string) $input->getOption(Option::OPTION_OUTPUT_FORMAT);
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
-        $outputFormatter->report($this->errorAndDiffCollector, $this->configuration);
+        $outputFormatter->report($this->errorAndDiffCollector);
 
         $this->reportingExtensionRunner->run();
 

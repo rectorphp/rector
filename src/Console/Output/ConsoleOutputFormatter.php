@@ -32,13 +32,22 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
      */
     private $betterStandardPrinter;
 
-    public function __construct(SymfonyStyle $symfonyStyle, BetterStandardPrinter $betterStandardPrinter)
-    {
+    /**
+     * @var Configuration
+     */
+    private $configuration;
+
+    public function __construct(
+        SymfonyStyle $symfonyStyle,
+        BetterStandardPrinter $betterStandardPrinter,
+        Configuration $configuration
+    ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->configuration = $configuration;
     }
 
-    public function report(ErrorAndDiffCollector $errorAndDiffCollector, Configuration $configuration): void
+    public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
     {
         $this->reportFileDiffs($errorAndDiffCollector->getFileDiffs());
         $this->reportErrors($errorAndDiffCollector->getErrors());
@@ -48,14 +57,15 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             return;
         }
 
-        $changes = $errorAndDiffCollector->getFileDiffsCount() + $errorAndDiffCollector->getRemovedAndAddedFilesCount();
+        $changeCount = $errorAndDiffCollector->getFileDiffsCount()
+                     + $errorAndDiffCollector->getRemovedAndAddedFilesCount();
         $message = 'Rector is done!';
-        if ($changes > 0) {
+        if ($changeCount > 0) {
             $message .= sprintf(
                 ' %d file%s %s.',
-                $changes,
-                $changes > 1 ? 's' : '',
-                $configuration->isDryRun() ? 'would have changed (dry-run)' : 'have been changed'
+                $changeCount,
+                $changeCount > 1 ? 's' : '',
+                $this->configuration->isDryRun() ? 'would have changed (dry-run)' : 'have been changed'
             );
         }
 

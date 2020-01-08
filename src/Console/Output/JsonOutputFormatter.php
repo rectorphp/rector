@@ -38,7 +38,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         return self::NAME;
     }
 
-    public function report(ErrorAndDiffCollector $errorAndDiffCollector, Configuration $configuration): void
+    public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
     {
         $errorsArray = [
             'meta' => [
