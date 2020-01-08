@@ -19,6 +19,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
@@ -43,6 +44,7 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTextNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePropertyTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareTemplateTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareThrowsTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareArrayTypeNode;
@@ -173,6 +175,14 @@ final class AttributeAwareNodeFactory
         if ($phpDocTagValueNode instanceof ImplementsTagValueNode) {
             $typeNode = $this->createFromTypeNode($phpDocTagValueNode->type);
             return new AttributeAwareImplementsTagValueNode($typeNode, $phpDocTagValueNode->description);
+        }
+
+        if ($phpDocTagValueNode instanceof TemplateTagValueNode) {
+            return new AttributeAwareTemplateTagValueNode(
+                $phpDocTagValueNode->name,
+                $phpDocTagValueNode->bound,
+                $phpDocTagValueNode->description
+            );
         }
 
         if ($phpDocTagValueNode instanceof InvalidTagValueNode) {
