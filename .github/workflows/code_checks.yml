@@ -1,4 +1,4 @@
-name: Code Checks
+name: Code_Checks
 
 on:
     pull_request:
