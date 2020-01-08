@@ -1,4 +1,4 @@
-# All 422 Rectors Overview
+# All 425 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -2799,6 +2799,90 @@ Initialize collection property in Entity constructor
 
 ## DoctrineGedmoToKnplabs
 
+### `BlameableBehaviorRector`
+
+- class: `Rector\DoctrineGedmoToKnplabs\Rector\Class_\BlameableBehaviorRector`
+
+Change Blameable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
+
+```diff
+-use Gedmo\Mapping\Annotation as Gedmo;
+ use Doctrine\ORM\Mapping as ORM;
++use Knp\DoctrineBehaviors\Contract\Entity\BlameableInterface;
++use Knp\DoctrineBehaviors\Model\Blameable\BlameableTrait;
+
+ /**
+  * @ORM\Entity
+  */
+-class SomeClass
++class SomeClass implements BlameableInterface
+ {
+-    /**
+-     * @Gedmo\Blameable(on="create")
+-     */
+-    private $createdBy;
+-
+-    /**
+-     * @Gedmo\Blameable(on="update")
+-     */
+-    private $updatedBy;
+-
+-    /**
+-     * @Gedmo\Blameable(on="change", field={"title", "body"})
+-     */
+-    private $contentChangedBy;
+-
+-    public function getCreatedBy()
+-    {
+-        return $this->createdBy;
+-    }
+-
+-    public function getUpdatedBy()
+-    {
+-        return $this->updatedBy;
+-    }
+-
+-    public function getContentChangedBy()
+-    {
+-        return $this->contentChangedBy;
+-    }
++    use BlameableTrait;
+ }
+```
+
+<br>
+
+### `LoggableBehaviorRector`
+
+- class: `Rector\DoctrineGedmoToKnplabs\Rector\Class_\LoggableBehaviorRector`
+
+Change Loggable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
+
+```diff
+-use Gedmo\Mapping\Annotation as Gedmo;
+ use Doctrine\ORM\Mapping as ORM;
++use Knp\DoctrineBehaviors\Model\Loggable\LoggableTrait;
++use Knp\DoctrineBehaviors\Contract\Entity\LoggableInterface;
+
+ /**
+  * @ORM\Entity
+- * @Gedmo\Loggable
+  */
+-class SomeClass
++class SomeClass implements LoggableInterface
+ {
++    use LoggableTrait;
++
+     /**
+-     * @Gedmo\Versioned
+      * @ORM\Column(name="title", type="string", length=8)
+      */
+     private $title;
+ }
+```
+
+<br>
+
 ### `SluggableBehaviorRector`
 
 - class: `Rector\DoctrineGedmoToKnplabs\Rector\Class_\SluggableBehaviorRector`
@@ -2832,6 +2916,43 @@ Change Sluggable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 -        $this->slug = $slug;
 +        return ['name'];
      }
+ }
+```
+
+<br>
+
+### `SoftDeletableBehaviorRector`
+
+- class: `Rector\DoctrineGedmoToKnplabs\Rector\Class_\SoftDeletableBehaviorRector`
+
+Change SoftDeletable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
+
+```diff
+-use Gedmo\Mapping\Annotation as Gedmo;
++use Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface;
++use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
+
+-/**
+- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
+- */
+-class SomeClass
++class SomeClass implements SoftDeletableInterface
+ {
+-    /**
+-     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+-     */
+-    private $deletedAt;
+-
+-    public function getDeletedAt()
+-    {
+-        return $this->deletedAt;
+-    }
+-
+-    public function setDeletedAt($deletedAt)
+-    {
+-        $this->deletedAt = $deletedAt;
+-    }
++    use SoftDeletableTrait;
  }
 ```
 
