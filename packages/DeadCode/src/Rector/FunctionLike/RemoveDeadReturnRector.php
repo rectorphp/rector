@@ -73,7 +73,8 @@ PHP
             return null;
         }
 
-        $lastStmt = array_values(array_slice($node->stmts, -1))[0];
+        $stmtValues = array_values($node->stmts);
+        $lastStmt = end($stmtValues);
         if (! $lastStmt instanceof Return_) {
             return null;
         }
