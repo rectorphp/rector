@@ -40,20 +40,19 @@ final class JsonOutputFormatter implements OutputFormatterInterface
 
     public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
     {
-        $fileDiffs = $errorAndDiffCollector->getFileDiffs();
-
         $errorsArray = [
             'meta' => [
                 'version' => $this->configuration->getPrettyVersion(),
                 'config' => $this->configuration->getConfigFilePath(),
             ],
             'totals' => [
-                'changed_files' => count($fileDiffs),
+                'changed_files' => $errorAndDiffCollector->getFileDiffsCount(),
                 'removed_and_added_files_count' => $errorAndDiffCollector->getRemovedAndAddedFilesCount(),
                 'removed_node_count' => $errorAndDiffCollector->getRemovedNodeCount(),
             ],
         ];
 
+        $fileDiffs = $errorAndDiffCollector->getFileDiffs();
         ksort($fileDiffs);
         foreach ($fileDiffs as $fileDiff) {
             $relativeFilePath = $fileDiff->getRelativeFilePath();

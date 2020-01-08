@@ -200,7 +200,7 @@ final class ProcessCommand extends AbstractCommand
         }
 
         // inverse error code for CI dry-run
-        if ($this->configuration->isDryRun() && count($this->errorAndDiffCollector->getFileDiffs())) {
+        if ($this->configuration->isDryRun() && $this->errorAndDiffCollector->getFileDiffsCount()) {
             return Shell::CODE_ERROR;
         }
 

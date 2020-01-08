@@ -6,6 +6,7 @@ namespace Rector\Console\Output;
 
 use Nette\Utils\Strings;
 use Rector\Application\ErrorAndDiffCollector;
+use Rector\Configuration\Configuration;
 use Rector\Contract\Console\Output\OutputFormatterInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
@@ -31,10 +32,19 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
      */
     private $betterStandardPrinter;
 
-    public function __construct(SymfonyStyle $symfonyStyle, BetterStandardPrinter $betterStandardPrinter)
-    {
+    /**
+     * @var Configuration
+     */
+    private $configuration;
+
+    public function __construct(
+        SymfonyStyle $symfonyStyle,
+        BetterStandardPrinter $betterStandardPrinter,
+        Configuration $configuration
+    ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->configuration = $configuration;
     }
 
     public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
@@ -47,10 +57,19 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             return;
         }
 
-        $this->symfonyStyle->success(sprintf(
-            'Rector is done! %d changed files',
-            count($errorAndDiffCollector->getFileDiffs()) + $errorAndDiffCollector->getRemovedAndAddedFilesCount()
-        ));
+        $changeCount = $errorAndDiffCollector->getFileDiffsCount()
+                     + $errorAndDiffCollector->getRemovedAndAddedFilesCount();
+        $message = 'Rector is done!';
+        if ($changeCount > 0) {
+            $message .= sprintf(
+                ' %d file%s %s.',
+                $changeCount,
+                $changeCount > 1 ? 's' : '',
+                $this->configuration->isDryRun() ? 'would have changed (dry-run)' : 'have been changed'
+            );
+        }
+
+        $this->symfonyStyle->success($message);
     }
 
     public function getName(): string
