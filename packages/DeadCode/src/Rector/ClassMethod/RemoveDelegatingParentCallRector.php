@@ -86,11 +86,12 @@ PHP
             return null;
         }
 
-        if (count((array) $node->stmts) !== 1) {
+        if ($node->stmts === null || count((array) $node->stmts) !== 1) {
             return null;
         }
 
-        $onlyStmt = $this->unwrapExpression($node->stmts[0]);
+        $stmtsValues = array_values($node->stmts);
+        $onlyStmt = $this->unwrapExpression($stmtsValues[0]);
 
         // are both return?
         if ($this->isMethodReturnType($node, 'void') && ! $onlyStmt instanceof Return_) {
