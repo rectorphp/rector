@@ -88,8 +88,8 @@ composer require rector/rector --dev
 
 Try the demo and get familiar with rector
 
--[Rector demo](https://github.com/rectorphp/demo)
--[Rector training](https://github.com/rectorphp/rector-training)
+- [Rector demo](https://github.com/rectorphp/demo)
+- [Rector training](https://github.com/rectorphp/rector-training)
 
 ### B. Prepared Sets
 
