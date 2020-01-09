@@ -65,7 +65,7 @@ jobs:
             install:
                 # install lowest dependencies
                 - composer update --prefer-lowest --no-progress
-                
+
             # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
             stage: test
             php: 7.3
@@ -103,42 +103,12 @@ jobs:
                 - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
                 - php php-coveralls.phar --verbose
 
-        # Windows
-        # skip for now, doesn't work, so it only slows down travis
-#        - &STANDARD_WINDOWS_JOB
-#            stage: skipped
-#            name: Windows PHP 7.2
-#            os: windows
-#            dist: '1803-containers'
-#            language: sh # No PHP currently
-#            env: PHP_VERSION=7.2.23
-#            install:
-#                - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
-#                - choco install composer --ia "/DEV=C:\tools\php"
-#                - echo 'memory_limit=1G' >> 'C:\tools\php\php.ini'
-#                - echo 'date.timezone="UTC"' >> 'C:\tools\php\php.ini'
-#                - echo 'extension_dir=ext' >> 'C:\tools\php\php.ini'
-#                - echo 'extension=php_mbstring.dll' >> 'C:\tools\php\php.ini'
-#                - echo 'extension=php_openssl.dll' >> 'C:\tools\php\php.ini'
-#                - echo 'extension=php_mysqli.dll' >> 'C:\tools\php\php.ini'
-#                - echo 'extension=php_intl.dll' >> 'C:\tools\php\php.ini'
-#                - export PATH=/c/tools/php:$PATH
-#            script:
-#                # @todo this is probably broken, needs fixing
-#                - php vendor/bin/phpunit
-#
-#        -
-#            <<: *STANDARD_WINDOWS_JOB
-#            name: Windows PHP 7.3
-#            env: PHP_VERSION=7.3.10
-
     allow_failures:
         - name: Standalone Run
         - os: windows
 
 cache:
     directories:
-        - $HOME/.composer/cache
         - tmp
 
 notifications:
