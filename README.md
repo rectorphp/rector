@@ -84,7 +84,14 @@ composer require rector/rector --dev
 
 ## Running Rector
 
-### A. Prepared Sets
+### A. Get Started
+
+Try the demo and get familiar with rector
+
+- [Rector demo](https://github.com/rectorphp/demo)
+- [Rector training](https://github.com/rectorphp/rector-training)
+
+### B. Prepared Sets
 
 Featured open-source projects have **prepared sets**. You can find them in [`/config/set`](/config/set) or by running:
 
@@ -118,7 +125,7 @@ parameters:
         - 'php73'
 ```
 
-### B. Custom Sets
+### C. Custom Sets
 
 1. Create a `rector.yaml` config file with your desired Rectors:
 
