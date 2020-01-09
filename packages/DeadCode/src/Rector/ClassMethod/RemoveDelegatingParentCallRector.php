@@ -86,7 +86,7 @@ PHP
             return null;
         }
 
-        if (count((array) $node->stmts) !== 1) {
+        if ($node->stmts === null || count((array) $node->stmts) !== 1) {
             return null;
         }
 
