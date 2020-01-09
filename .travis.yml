@@ -3,12 +3,13 @@ dist: bionic
 language: php
 
 php:
+    # 7.2 is covered in minimal dependencies
     - '7.3'
     - '7.4'
 
 before_install:
     # turn off XDebug
-    - phpenv config-rm xdebug.ini || return 0
+    - phpenv config-rm xdebug.ini
 
 install:
     - composer install --no-progress
@@ -18,7 +19,8 @@ script:
 
 stages:
     - test
-    - compile
+    - name: compile
+      if: (branch = master OR tag IS present) && type = push
     - name: phar
       if: (branch = master OR tag IS present) && type = push
     - coverage
@@ -65,7 +67,8 @@ jobs:
             install:
                 # install lowest dependencies
                 - composer update --prefer-lowest --no-progress
-                
+
+        -
             # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
             stage: test
             php: 7.3
@@ -100,41 +103,12 @@ jobs:
             name: Test Coverage
             script:
                 - phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit --coverage-clover coverage.xml
+                # Coveralls.io
                 - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
                 - php php-coveralls.phar --verbose
 
-        # Windows
-        # skip for now, doesn't work, so it only slows down travis
-#        - &STANDARD_WINDOWS_JOB
-#            stage: skipped
-#            name: Windows PHP 7.2
-#            os: windows
-#            dist: '1803-containers'
-#            language: sh # No PHP currently
-#            env: PHP_VERSION=7.2.23
-#            install:
-#                - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
-#                - choco install composer --ia "/DEV=C:\tools\php"
-#                - echo 'memory_limit=1G' >> 'C:\tools\php\php.ini'
-#                - echo 'date.timezone="UTC"' >> 'C:\tools\php\php.ini'
-#                - echo 'extension_dir=ext' >> 'C:\tools\php\php.ini'
-#                - echo 'extension=php_mbstring.dll' >> 'C:\tools\php\php.ini'
-#                - echo 'extension=php_openssl.dll' >> 'C:\tools\php\php.ini'
-#                - echo 'extension=php_mysqli.dll' >> 'C:\tools\php\php.ini'
-#                - echo 'extension=php_intl.dll' >> 'C:\tools\php\php.ini'
-#                - export PATH=/c/tools/php:$PATH
-#            script:
-#                # @todo this is probably broken, needs fixing
-#                - php vendor/bin/phpunit
-#
-#        -
-#            <<: *STANDARD_WINDOWS_JOB
-#            name: Windows PHP 7.3
-#            env: PHP_VERSION=7.3.10
-
     allow_failures:
         - name: Standalone Run
-        - os: windows
 
 cache:
     directories:
