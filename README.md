@@ -92,7 +92,7 @@ Featured open-source projects have **prepared sets**. You can find them in [`/co
 vendor/bin/rector sets
 ```
 
-Let's say you pick the `symfony40` set and you want to upgrade your `/src` directory:
+Let's say you pick the [`symfony40`](https://github.com/rectorphp/rector/tree/master/config/set/symfony) set and you want to upgrade your `/src` directory:
 
 ```bash
 # show a list of known changes in Symfony 4.0
