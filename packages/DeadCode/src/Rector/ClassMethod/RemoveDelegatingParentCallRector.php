@@ -90,7 +90,8 @@ PHP
             return null;
         }
 
-        $onlyStmt = $this->unwrapExpression($node->stmts[0]);
+        $stmtsValues = array_values($node->stmts);
+        $onlyStmt = $this->unwrapExpression($stmtsValues[0]);
 
         // are both return?
         if ($this->isMethodReturnType($node, 'void') && ! $onlyStmt instanceof Return_) {
