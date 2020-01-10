@@ -131,7 +131,7 @@ PHP
             return false;
         }
 
-        return $this->isSpecificIterableType($currentPhpDocInfo);
+        return $currentPhpDocInfo->getReturnType() instanceof IterableType;
     }
 
     private function shouldSkipType(Type $newType, ClassMethod $classMethod): bool
@@ -208,17 +208,5 @@ PHP
         }
 
         return false;
-    }
-
-    private function isSpecificIterableType(PhpDocInfo $currentPhpDocInfo): bool
-    {
-        if (! $currentPhpDocInfo->getReturnType() instanceof IterableType) {
-            return false;
-        }
-
-        /** @var IterableType $iterableType */
-        $iterableType = $currentPhpDocInfo->getReturnType();
-
-        return ! $iterableType->getItemType() instanceof MixedType;
     }
 }
