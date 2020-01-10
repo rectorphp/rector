@@ -6,7 +6,7 @@ namespace Rector\Compiler\Console;
 
 use Nette\Utils\FileSystem as NetteFileSystem;
 use Nette\Utils\Json;
-use Rector\Compiler\Process\ProcessFactory;
+use Rector\Compiler\Process\InstantlyRunningSymfonyProcess;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,19 +18,9 @@ use Symfony\Component\Filesystem\Filesystem;
 final class CompileCommand extends Command
 {
     /**
-     * @var string
-     */
-    public const NAME = 'rector:compile';
-
-    /**
      * @var Filesystem
      */
     private $filesystem;
-
-    /**
-     * @var ProcessFactory
-     */
-    private $processFactory;
 
     /**
      * @var string
@@ -47,37 +37,36 @@ final class CompileCommand extends Command
      */
     private $originalComposerJsonFileContent;
 
-    public function __construct(ProcessFactory $processFactory, string $dataDir, string $buildDir)
+    public function __construct(string $dataDir, string $buildDir)
     {
         parent::__construct();
         $this->filesystem = new Filesystem();
-        $this->processFactory = $processFactory;
         $this->dataDir = $dataDir;
         $this->buildDir = $buildDir;
     }
 
     protected function configure(): void
     {
-        $this->setName(self::NAME);
+        $this->setName('rector:compile');
         $this->setDescription('Compile prefixed rector.phar');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->processFactory->setOutput($output);
-
         $composerJsonFile = $this->buildDir . '/composer.json';
 
         $this->fixComposerJson($composerJsonFile);
+
         // @see https://github.com/dotherightthing/wpdtrt-plugin-boilerplate/issues/52
-        $this->processFactory->create(
+        new InstantlyRunningSymfonyProcess(
             ['composer', 'update', '--no-dev', '--prefer-dist', '--no-interaction', '--classmap-authoritative'],
-            $this->buildDir
+            $this->buildDir,
+            $output
         );
 
         // the '--no-parallel' is needed, so "scoper.php.inc" can "require __DIR__ ./vendor/autoload.php"
         // and "Nette\Neon\Neon" class can be used there
-        $this->processFactory->create(['php', 'box.phar', 'compile', '--no-parallel'], $this->dataDir);
+        new InstantlyRunningSymfonyProcess(['php', 'box.phar', 'compile', '--no-parallel'], $this->dataDir, $output);
 
         $this->restoreComposerJson($composerJsonFile);
 
