@@ -28,10 +28,10 @@
         "symfony/dependency-injection": "^4.4|^5.0",
         "symfony/finder": "^4.4|^5.0",
         "symfony/process": "^4.4|^5.0",
-        "symplify/package-builder": "^7.2",
-        "symplify/set-config-resolver": "^7.2",
+        "symplify/auto-bind-parameter": "^7.2",
         "symplify/autowire-array-parameter": "^7.2",
-        "symplify/auto-bind-parameter": "^7.2"
+        "symplify/package-builder": "^7.2",
+        "symplify/set-config-resolver": "^7.2"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
