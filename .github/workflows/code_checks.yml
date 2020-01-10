@@ -99,8 +99,8 @@ jobs:
                     coverage: none # disable xdebug, pcov
             -   run: composer install --no-progress
             -   run: |
-                  php ci/check_services_in_yaml_configs.php
-                  php ci/run_all_sets.php
+                    php ci/check_services_in_yaml_configs.php
+                    php ci/run_all_sets.php
 
     fatal_scan:
         runs-on: ubuntu-latest
