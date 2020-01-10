@@ -130,7 +130,13 @@ PHP
             return false;
         }
 
-        return $currentPhpDocInfo->getReturnType() instanceof IterableType;
+        $returnType = $currentPhpDocInfo->getReturnType();
+
+        if ($returnType instanceof ArrayType && $returnType->getItemType() instanceof MixedType) {
+            return true;
+        }
+
+        return $returnType instanceof IterableType;
     }
 
     private function shouldSkipType(Type $newType, ClassMethod $classMethod): bool
