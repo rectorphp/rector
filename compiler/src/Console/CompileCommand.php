@@ -83,6 +83,7 @@ final class CompileCommand extends Command
         $json = $this->removeDevKeys($json);
 
         $json = $this->replacePHPStanWithPHPStanSrc($json);
+        $json = $this->addReplace($json);
 
         $encodedJson = Json::encode($json, Json::PRETTY);
 
@@ -123,6 +124,18 @@ final class CompileCommand extends Command
         foreach ($keysToRemove as $keyToRemove) {
             unset($json[$keyToRemove]);
         }
+
+        return $json;
+    }
+
+    /**
+     * This prevent installing packages, that are not needed here.
+     */
+    private function addReplace(array $json): array
+    {
+        $json['replace'] = [
+            'symfony/var-dumper' => '*',
+        ];
 
         return $json;
     }
