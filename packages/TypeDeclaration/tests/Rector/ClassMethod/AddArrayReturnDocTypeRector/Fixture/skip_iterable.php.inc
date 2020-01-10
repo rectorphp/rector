@@ -18,8 +18,6 @@ final class SkipIterable
     public function someDataProvider(): iterable
     {
         yield [42];
-        yield ['42'];
-        yield [42.0];
         yield [[42]];
     }
 }
