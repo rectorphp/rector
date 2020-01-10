@@ -165,6 +165,13 @@ final class ProcessCommand extends AbstractCommand
             sprintf('Select output format: "%s".', implode('", "', $availableOutputFormatters)),
             ConsoleOutputFormatter::NAME
         );
+
+        $this->addOption(
+            Option::OPTION_NO_PROGRESS_BAR,
+            null,
+            InputOption::VALUE_NONE,
+            'Hide progress bar. Useful e.g. for nicer CI output.'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

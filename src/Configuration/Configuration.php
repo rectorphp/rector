@@ -128,7 +128,9 @@ final class Configuration
 
     private function canShowProgressBar(InputInterface $input): bool
     {
-        return $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== JsonOutputFormatter::NAME;
+        $noProgressBar = (bool) $input->getOption(Option::OPTION_NO_PROGRESS_BAR);
+
+        return ! $noProgressBar && $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== JsonOutputFormatter::NAME;
     }
 
     private function setRule(?string $rule): void
