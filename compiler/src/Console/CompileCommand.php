@@ -80,25 +80,9 @@ final class CompileCommand extends Command
 
         $json = Json::decode($fileContent, Json::FORCE_ARRAY);
 
-        // remove dev dependencies (they create conflicts)
-        unset($json['require-dev'], $json['autoload-dev']);
+        $json = $this->removeDevKeys($json);
 
-        unset($json['replace']);
-
-        $json['name'] = 'rector/rector';
-
-        // simplify autoload (remove not packed build directory]
-        $json['autoload']['psr-4']['Rector\\'] = 'src';
-
-        // use phpstan/phpstan-src, because the phpstan.phar cannot be packed into rector.phar
-        $phpstanVersion = $json['require']['phpstan/phpstan'];
-        $json['require']['phpstan/phpstan-src'] = $phpstanVersion;
-        unset($json['require']['phpstan/phpstan']);
-
-        $json['repositories'][] = [
-            'type' => 'vcs',
-            'url' => 'https://github.com/phpstan/phpstan-src.git',
-        ];
+        $json = $this->replacePHPStanWithPHPStanSrc($json);
 
         $encodedJson = Json::encode($json, Json::PRETTY);
 
@@ -113,5 +97,33 @@ final class CompileCommand extends Command
         $this->filesystem->dumpFile($composerJsonFile, $this->originalComposerJsonFileContent);
 
         // re-run @todo composer update on root
+    }
+
+    /**
+     * Use phpstan/phpstan-src, because the phpstan.phar cannot be packed into rector.phar
+     */
+    private function replacePHPStanWithPHPStanSrc(array $json): array
+    {
+        $phpstanVersion = $json['require']['phpstan/phpstan'];
+        $json['require']['phpstan/phpstan-src'] = $phpstanVersion;
+        unset($json['require']['phpstan/phpstan']);
+
+        $json['repositories'][] = [
+            'type' => 'vcs',
+            'url' => 'https://github.com/phpstan/phpstan-src.git',
+        ];
+
+        return $json;
+    }
+
+    private function removeDevKeys(array $json): array
+    {
+        $keysToRemove = ['require-dev', 'autoload-dev', 'replace'];
+
+        foreach ($keysToRemove as $keyToRemove) {
+            unset($json[$keyToRemove]);
+        }
+
+        return $json;
     }
 }
