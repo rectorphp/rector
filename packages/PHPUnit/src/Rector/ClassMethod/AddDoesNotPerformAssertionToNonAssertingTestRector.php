@@ -167,7 +167,7 @@ PHP
         }
 
         // A. try "->assert" shallow search first for performance
-        $hasDirectAssertCall = (bool) $this->hasDirectAssertCall($classMethod);
+        $hasDirectAssertCall = $this->hasDirectAssertCall($classMethod);
         if ($hasDirectAssertCall) {
             $this->containsAssertCallByClassMethod[$cacheHash] = $hasDirectAssertCall;
             return $hasDirectAssertCall;
@@ -187,7 +187,18 @@ PHP
                 return false;
             }
 
-            return $this->isNames($node->name, ['assert*', 'expectException*', 'setExpectedException*']);
+            return $this->isNames($node->name, [
+                // prophecy
+                'should*',
+                'should',
+                'expect*',
+                'expect',
+                // phpunit
+                '*assert',
+                'assert*',
+                'expectException*',
+                'setExpectedException*',
+            ]);
         });
     }
 
