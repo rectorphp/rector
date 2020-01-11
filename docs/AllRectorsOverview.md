@@ -1,4 +1,4 @@
-# All 426 Rectors Overview
+# All 427 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -177,6 +177,21 @@ Move value object to ValueObject namespace/directory
 <br>
 
 ## CakePHP
+
+### `AppUsesStaticCallToUseStatementRector`
+
+- class: `Rector\CakePHP\Rector\StaticCall\AppUsesStaticCallToUseStatementRector`
+
+Change App::uses() to use imports
+
+```diff
+-App::uses('NotificationListener', 'Event');
++use Event\NotificationListener;
+
+ CakeEventManager::instance()->attach(new NotificationListener());
+```
+
+<br>
 
 ### `ChangeSnakedFixtureNameToCamelRector`
 

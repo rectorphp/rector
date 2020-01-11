@@ -1,0 +1,2 @@
+services:
+    Rector\CakePHP\Rector\StaticCall\AppUsesStaticCallToUseStatementRector: null
