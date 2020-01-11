@@ -2,7 +2,7 @@
 
 namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector\Fixture;
 
-class SkipFalsePositive2
+class SkipNonEmptyDimKey2
 {
     public function mapWithKeys(array $array, callable $fn): array
     {
