@@ -753,14 +753,7 @@ final class NodeTypeResolver
                 $propertyOwnerStaticType = $this->getStaticType($node->class);
             }
 
-            if (! $propertyOwnerStaticType instanceof ThisType && $propertyOwnerStaticType instanceof TypeWithClassName) {
-                if ($this->parsedNodesByType->findClass($propertyOwnerStaticType->getClassName()) === null) {
-                    // positive assumption about 3rd party code
-                    return true;
-                }
-            }
-
-            return false;
+            return ! $propertyOwnerStaticType instanceof ThisType && $propertyOwnerStaticType instanceof TypeWithClassName;
         }
 
         return $propertyPropertyNode->default instanceof Array_;
