@@ -114,6 +114,11 @@ final class StaticTypeMapper
 
         if ($phpStanType instanceof ArrayType || $phpStanType instanceof IterableType) {
             $itemTypeNode = $this->mapPHPStanTypeToPHPStanPhpDocTypeNode($phpStanType->getItemType());
+
+            if ($itemTypeNode instanceof UnionTypeNode) {
+                return $this->convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes($itemTypeNode);
+            }
+
             return new ArrayTypeNode($itemTypeNode);
         }
 
@@ -867,5 +872,25 @@ final class StaticTypeMapper
         }
 
         return is_a($secondType->getClassName(), $firstType->getClassName(), true);
+    }
+
+    private function convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes(
+        UnionTypeNode $unionTypeNode
+    ): AttributeAwareUnionTypeNode {
+        $unionedArrayType = [];
+        foreach ($unionTypeNode->types as $unionedType) {
+            if ($unionedType instanceof UnionTypeNode) {
+                foreach ($unionedType->types as $key => $subUnionedType) {
+                    $unionedType->types[$key] = new ArrayTypeNode($subUnionedType);
+                }
+
+                $unionedArrayType[] = $unionedType;
+                continue;
+            }
+
+            $unionedArrayType[] = new ArrayTypeNode($unionedType);
+        }
+
+        return new AttributeAwareUnionTypeNode($unionedArrayType);
     }
 }
