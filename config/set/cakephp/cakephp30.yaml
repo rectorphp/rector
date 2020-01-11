@@ -1,0 +1,4 @@
+services:
+    # @see https://github.com/cakephp/upgrade/tree/master/src/Shell/Task
+    Rector\CakePHP\Rector\StaticCall\AppUsesStaticCallToUseStatementRector: null
+    Rector\CakePHP\Rector\Name\ImplicitShortClassNameUseStatementRector: null

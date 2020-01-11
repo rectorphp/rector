@@ -1,4 +1,4 @@
-# All 426 Rectors Overview
+# All 428 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -178,6 +178,21 @@ Move value object to ValueObject namespace/directory
 
 ## CakePHP
 
+### `AppUsesStaticCallToUseStatementRector`
+
+- class: `Rector\CakePHP\Rector\StaticCall\AppUsesStaticCallToUseStatementRector`
+
+Change App::uses() to use imports
+
+```diff
+-App::uses('NotificationListener', 'Event');
++use Event\NotificationListener;
+
+ CakeEventManager::instance()->attach(new NotificationListener());
+```
+
+<br>
+
 ### `ChangeSnakedFixtureNameToCamelRector`
 
 - class: `Rector\CakePHP\Rector\Name\ChangeSnakedFixtureNameToCamelRector`
@@ -195,6 +210,23 @@ Changes $fixtues style from snake_case to CamelCase.
 +        'app.Users',
 +        'some_plugin.Posts/SpeectialPosts',
      ];
+```
+
+<br>
+
+### `ImplicitShortClassNameUseStatementRector`
+
+- class: `Rector\CakePHP\Rector\Name\ImplicitShortClassNameUseStatementRector`
+
+Collect implicit class names and add imports
+
+```diff
+ use App\Foo\Plugin;
++use Cake\TestSuite\Fixture\TestFixture;
+
+ class LocationsFixture extends TestFixture implements Plugin
+ {
+ }
 ```
 
 <br>

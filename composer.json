@@ -173,6 +173,7 @@
             "Rector\\Polyfill\\Tests\\": "packages/Polyfill/tests"
         },
         "classmap": [
+            "packages/CakePHP/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
             "packages/Symfony/tests/Rector/FrameworkBundle/ContainerGetToConstructorInjectionRector/Source",
             "packages/NodeTypeResolver/tests/PerNodeTypeResolver/ParamTypeResolver/Source",
@@ -182,7 +183,8 @@
             "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source",
             "tests/Issues/Issue1243/Source",
             "packages/Autodiscovery/tests/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
-            "packages/Autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected"
+            "packages/Autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected",
+            "packages/CakePHP/tests/Rector/StaticCall/AppUsesStaticCallToUseStatementRector/Source"
         ],
         "files": [
             "packages/DeadCode/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",
