@@ -48,8 +48,8 @@ jobs:
                 - cp tmp/rector.phar rector-prefixed/rector.phar
                 - cp tmp/rector.phar rector-prefixed/rector
                 - cd rector-prefixed
-                - git config user.email "travis@travis-ci.org"
-                - git config user.name "Travis CI"
+                - git config user.name "TomasVotruba"
+                - git config user.email "tomas.vot@gmail.com"
                 - git add rector rector.phar
 
                 - if [ "${TRAVIS_TAG}" != "" ]; then COMMIT_MSG="Rector ${TRAVIS_TAG}"; else COMMIT_MSG="Updated Rector to commit ${TRAVIS_COMMIT}"; fi
