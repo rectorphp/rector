@@ -1,4 +1,4 @@
-# All 425 Rectors Overview
+# All 426 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -5271,6 +5271,19 @@ Changes multiple dirname() calls to one with nesting level
 ```diff
 -dirname(dirname($path));
 +dirname($path, 2);
+```
+
+<br>
+
+### `NonVariableToVariableOnFunctionCallRector`
+
+- class: `Rector\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector`
+
+Transform non variable like arguments to variable where a function or method expects an argument passed by reference
+
+```diff
+-reset(a());
++$a = a(); reset($a);
 ```
 
 <br>
