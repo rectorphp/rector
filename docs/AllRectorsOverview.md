@@ -1,4 +1,4 @@
-# All 427 Rectors Overview
+# All 428 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -210,6 +210,23 @@ Changes $fixtues style from snake_case to CamelCase.
 +        'app.Users',
 +        'some_plugin.Posts/SpeectialPosts',
      ];
+```
+
+<br>
+
+### `ImplicitShortClassNameUseStatementRector`
+
+- class: `Rector\CakePHP\Rector\Name\ImplicitShortClassNameUseStatementRector`
+
+Collect implicit class names and add imports
+
+```diff
+ use App\Foo\Plugin;
++use Cake\TestSuite\Fixture\TestFixture;
+
+ class LocationsFixture extends TestFixture implements Plugin
+ {
+ }
 ```
 
 <br>

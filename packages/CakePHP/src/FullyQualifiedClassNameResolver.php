@@ -12,43 +12,14 @@ use Nette\Utils\Strings;
 final class FullyQualifiedClassNameResolver
 {
     /**
-     * A map of old => new for use statements that are missing
-     *
-     * @var string[]
+     * @var ImplicitNameResolver
      */
-    public $implicitMap = [
-        'App' => 'Cake\Core\App',
-        'AppController' => 'App\Controller\AppController',
-        'AppHelper' => 'App\View\Helper\AppHelper',
-        'AppModel' => 'App\Model\AppModel',
-        'Cache' => 'Cake\Cache\Cache',
-        'CakeEventListener' => 'Cake\Event\EventListener',
-        'CakeLog' => 'Cake\Log\Log',
-        'CakePlugin' => 'Cake\Core\Plugin',
-        'CakeTestCase' => 'Cake\TestSuite\TestCase',
-        'CakeTestFixture' => 'Cake\TestSuite\Fixture\TestFixture',
-        'Component' => 'Cake\Controller\Component',
-        'ComponentRegistry' => 'Cake\Controller\ComponentRegistry',
-        'Configure' => 'Cake\Core\Configure',
-        'ConnectionManager' => 'Cake\Database\ConnectionManager',
-        'Controller' => 'Cake\Controller\Controller',
-        'Debugger' => 'Cake\Error\Debugger',
-        'ExceptionRenderer' => 'Cake\Error\ExceptionRenderer',
-        'Helper' => 'Cake\View\Helper',
-        'HelperRegistry' => 'Cake\View\HelperRegistry',
-        'Inflector' => 'Cake\Utility\Inflector',
-        'Model' => 'Cake\Model\Model',
-        'ModelBehavior' => 'Cake\Model\Behavior',
-        'Object' => 'Cake\Core\Object',
-        'Router' => 'Cake\Routing\Router',
-        'Shell' => 'Cake\Console\Shell',
-        'View' => 'Cake\View\View',
-        // Also apply to already renamed ones
-        'Log' => 'Cake\Log\Log',
-        'Plugin' => 'Cake\Core\Plugin',
-        'TestCase' => 'Cake\TestSuite\TestCase',
-        'TestFixture' => 'Cake\TestSuite\Fixture\TestFixture',
-    ];
+    private $implicitNameResolver;
+
+    public function __construct(ImplicitNameResolver $implicitNameResolver)
+    {
+        $this->implicitNameResolver = $implicitNameResolver;
+    }
 
     /**
      * This value used to be directory
@@ -58,9 +29,11 @@ final class FullyQualifiedClassNameResolver
     {
         $pseudoNamespace = $this->normalizeFileSystemSlashes($pseudoNamespace);
 
-        // A. is knowinly renamed class?
-        if (isset($this->implicitMap[$shortClass])) {
-            return $this->implicitMap[$shortClass];
+        $resolvedShortClass = $this->implicitNameResolver->resolve($shortClass);
+
+        // A. is known renamed class?
+        if ($resolvedShortClass !== null) {
+            return $resolvedShortClass;
         }
 
         // Chop Lib out as locations moves those files to the top level.
