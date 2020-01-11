@@ -16,13 +16,4 @@ final class SkipAlreadyHas
      * - "[Aliased\PackageName]      "Message => Aliased\PackageName
      */
     public const PACKAGE_NAME_PATTERN = '#\[(?<package>[-\w\\\\]+)\]( ){1,}#';
-
-    /**
-     * @var mixed[]
-     */
-    public const ARRAY_CONST = [
-        'key' => 'value',
-        'key2' => ['value2', 1234],
-        1 => null,
-    ];
 }
