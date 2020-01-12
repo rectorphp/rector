@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Utils\PHPStanAttributeTypeSyncer\Generator;
 
+use Nette\Utils\Strings;
 use Rector\Utils\PHPStanAttributeTypeSyncer\ClassNaming\AttributeClassNaming;
 use Rector\Utils\PHPStanAttributeTypeSyncer\NodeFactory\AttributeAwareClassFactory;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -37,10 +38,7 @@ final class AttributeAwareNodeGenerator extends AbstractAttributeAwareNodeGenera
 
     public function generateFromPhpDocParserNodeClass(string $phpDocParserNodeClass): void
     {
-        $shortClassName = $this->attributeClassNaming->createAttributeAwareShortClassName($phpDocParserNodeClass);
-
-        // write file
-        $targetFilePath = __DIR__ . '/../../../../packages/AttributeAwarePhpDoc/src/Ast/PhpDoc/' . $shortClassName . '.php';
+        $targetFilePath = $this->resolveTargetFilePath($phpDocParserNodeClass);
 
         // prevent file override
         if (file_exists($targetFilePath)) {
@@ -67,5 +65,16 @@ final class AttributeAwareNodeGenerator extends AbstractAttributeAwareNodeGenera
             $missingNodeClass,
             $attributeAwareFullyQualifiedClassName
         ));
+    }
+
+    private function resolveTargetFilePath(string $phpDocParserNodeClass): string
+    {
+        $shortClassName = $this->attributeClassNaming->createAttributeAwareShortClassName($phpDocParserNodeClass);
+
+        if (Strings::contains($phpDocParserNodeClass, '\\Type\\')) {
+            return __DIR__ . '/../../../../packages/AttributeAwarePhpDoc/src/Ast/Type/' . $shortClassName . '.php';
+        }
+
+        return __DIR__ . '/../../../../packages/AttributeAwarePhpDoc/src/Ast/PhpDoc/' . $shortClassName . '.php';
     }
 }

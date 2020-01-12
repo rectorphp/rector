@@ -40,6 +40,8 @@ final class AttributeClassNaming
 
     public function createAttributeAwareFactoryClassName(string $nodeClass): string
     {
-        return Paths::NAMESPACE_NODE_FACTORY . '\\' . $this->createAttributeAwareFactoryShortClassName($nodeClass);
+        return Paths::NAMESPACE_PHPDOC_NODE_FACTORY . '\\' . $this->createAttributeAwareFactoryShortClassName(
+            $nodeClass
+        );
     }
 }

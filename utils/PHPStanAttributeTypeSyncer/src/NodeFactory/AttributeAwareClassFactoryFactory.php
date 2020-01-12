@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Utils\PHPStanAttributeTypeSyncer\NodeFactory;
 
+use Nette\Utils\Strings;
 use PhpParser\Builder\Param;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
@@ -45,7 +46,13 @@ final class AttributeAwareClassFactoryFactory
 
     public function createFromPhpDocParserNodeClass(string $nodeClass): Namespace_
     {
-        $namespaceBuilder = $this->builderFactory->namespace(Paths::NAMESPACE_NODE_FACTORY);
+        if (Strings::contains($nodeClass, '\\Type\\')) {
+            $namespace = Paths::NAMESPACE_TYPE_NODE_FACTORY;
+        } else {
+            $namespace = Paths::NAMESPACE_PHPDOC_NODE_FACTORY;
+        }
+
+        $namespaceBuilder = $this->builderFactory->namespace($namespace);
 
         $shortClassName = $this->attributeClassNaming->createAttributeAwareFactoryShortClassName($nodeClass);
 

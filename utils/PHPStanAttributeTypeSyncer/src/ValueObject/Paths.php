@@ -14,5 +14,15 @@ final class Paths
     /**
      * @var string
      */
-    public const NAMESPACE_NODE_FACTORY = 'Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory';
+    public const NAMESPACE_TYPE_NODE = 'Rector\AttributeAwarePhpDoc\Ast\Type';
+
+    /**
+     * @var string
+     */
+    public const NAMESPACE_PHPDOC_NODE_FACTORY = 'Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\PhpDoc';
+
+    /**
+     * @var string
+     */
+    public const NAMESPACE_TYPE_NODE_FACTORY = 'Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\Type';
 }
