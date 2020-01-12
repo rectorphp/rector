@@ -4,24 +4,45 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\Type;
 
-final class AttributeAwareIntersectionTypeNodeFactory implements \Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface
+use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIntersectionTypeNode;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
+use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
+final class AttributeAwareIntersectionTypeNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
 {
+    /**
+     * @var AttributeAwareNodeFactory
+     */
+    private $attributeAwareNodeFactory;
+
     public function getOriginalNodeClass(): string
     {
-        return \PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode::class;
+        return IntersectionTypeNode::class;
     }
 
-    public function isMatch(\PHPStan\PhpDocParser\Ast\Node $node): bool
+    public function isMatch(Node $node): bool
     {
-        return is_a($node, \PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode::class, true);
+        return is_a($node, IntersectionTypeNode::class, true);
     }
 
     /**
-     * @param \PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode $node
+     * @param IntersectionTypeNode $node
      */
-    public function create(
-        \PHPStan\PhpDocParser\Ast\Node $node
-    ): \Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface {
-        return new \Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIntersectionTypeNode($node->types);
+    public function create(Node $node): AttributeAwareNodeInterface
+    {
+        foreach ($node->types as $key => $intersectionedType) {
+            $node->types[$key] = $this->attributeAwareNodeFactory->createFromNode($intersectionedType);
+        }
+
+        return new AttributeAwareIntersectionTypeNode($node->types);
+    }
+
+    public function setAttributeAwareNodeFactory(AttributeAwareNodeFactory $attributeAwareNodeFactory): void
+    {
+        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
     }
 }

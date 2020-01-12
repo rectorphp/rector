@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\Ast\Type;
 
-final class AttributeAwareUnionTypeNode extends \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode implements \Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
+final class AttributeAwareUnionTypeNode extends UnionTypeNode implements AttributeAwareNodeInterface
 {
-    use \Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
+    use AttributeTrait;
 
     /**
      * Preserve common format

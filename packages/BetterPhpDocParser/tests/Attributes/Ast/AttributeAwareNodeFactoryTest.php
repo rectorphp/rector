@@ -65,8 +65,6 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
         /** @var PropertyTagValueNode $propertyTagValueNode */
         $nullableTypeNode = $propertyTagValueNode->type;
 
-        dump($nullableTypeNode);
-
         $this->assertInstanceOf(NullableTypeNode::class, $nullableTypeNode);
         $this->assertInstanceOf(AttributeAwareNullableTypeNode::class, $nullableTypeNode);
 

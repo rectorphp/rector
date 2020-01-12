@@ -4,27 +4,43 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\PhpDoc;
 
-final class AttributeAwareThrowsTagValueNodeFactory implements \Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface
+use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareThrowsTagValueNode;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
+use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
+final class AttributeAwareThrowsTagValueNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
 {
+    /**
+     * @var AttributeAwareNodeFactory
+     */
+    private $attributeAwareNodeFactory;
+
     public function getOriginalNodeClass(): string
     {
-        return \PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode::class;
+        return ThrowsTagValueNode::class;
     }
 
-    public function isMatch(\PHPStan\PhpDocParser\Ast\Node $node): bool
+    public function isMatch(Node $node): bool
     {
-        return is_a($node, \PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode::class, true);
+        return is_a($node, ThrowsTagValueNode::class, true);
     }
 
     /**
-     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode $node
+     * @param ThrowsTagValueNode $node
      */
-    public function create(
-        \PHPStan\PhpDocParser\Ast\Node $node
-    ): \Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface {
-        return new \Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareThrowsTagValueNode(
-            $node->type,
-            $node->description
-        );
+    public function create(Node $node): AttributeAwareNodeInterface
+    {
+        $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type);
+
+        return new AttributeAwareThrowsTagValueNode($node->type, $node->description);
+    }
+
+    public function setAttributeAwareNodeFactory(AttributeAwareNodeFactory $attributeAwareNodeFactory): void
+    {
+        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
     }
 }

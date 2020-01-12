@@ -4,28 +4,29 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\PhpDoc;
 
-final class AttributeAwareTemplateTagValueNodeFactory implements \Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface
+use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareTemplateTagValueNode;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
+final class AttributeAwareTemplateTagValueNodeFactory implements AttributeNodeAwareFactoryInterface
 {
     public function getOriginalNodeClass(): string
     {
-        return \PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode::class;
+        return TemplateTagValueNode::class;
     }
 
-    public function isMatch(\PHPStan\PhpDocParser\Ast\Node $node): bool
+    public function isMatch(Node $node): bool
     {
-        return is_a($node, \PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode::class, true);
+        return is_a($node, TemplateTagValueNode::class, true);
     }
 
     /**
-     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode $node
+     * @param TemplateTagValueNode $node
      */
-    public function create(
-        \PHPStan\PhpDocParser\Ast\Node $node
-    ): \Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface {
-        return new \Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareTemplateTagValueNode(
-            $node->name,
-            $node->bound,
-            $node->description
-        );
+    public function create(Node $node): AttributeAwareNodeInterface
+    {
+        return new AttributeAwareTemplateTagValueNode($node->name, $node->bound, $node->description);
     }
 }

@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc;
 
-final class AttributeAwarePhpDocTextNode extends \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode implements \Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
+use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
+final class AttributeAwarePhpDocTextNode extends PhpDocTextNode implements AttributeAwareNodeInterface
 {
-    use \Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
+    use AttributeTrait;
 }

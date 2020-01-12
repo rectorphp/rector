@@ -4,24 +4,43 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\Type;
 
-final class AttributeAwareNullableTypeNodeFactory implements \Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface
+use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareNullableTypeNode;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
+use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
+final class AttributeAwareNullableTypeNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
 {
+    /**
+     * @var AttributeAwareNodeFactory
+     */
+    private $attributeAwareNodeFactory;
+
     public function getOriginalNodeClass(): string
     {
-        return \PHPStan\PhpDocParser\Ast\Type\NullableTypeNode::class;
+        return NullableTypeNode::class;
     }
 
-    public function isMatch(\PHPStan\PhpDocParser\Ast\Node $node): bool
+    public function isMatch(Node $node): bool
     {
-        return is_a($node, \PHPStan\PhpDocParser\Ast\Type\NullableTypeNode::class, true);
+        return is_a($node, NullableTypeNode::class, true);
     }
 
     /**
-     * @param \PHPStan\PhpDocParser\Ast\Type\NullableTypeNode $node
+     * @param NullableTypeNode $node
      */
-    public function create(
-        \PHPStan\PhpDocParser\Ast\Node $node
-    ): \Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface {
-        return new \Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareNullableTypeNode($node->type);
+    public function create(Node $node): AttributeAwareNodeInterface
+    {
+        $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type);
+
+        return new AttributeAwareNullableTypeNode($node->type);
+    }
+
+    public function setAttributeAwareNodeFactory(AttributeAwareNodeFactory $attributeAwareNodeFactory): void
+    {
+        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
     }
 }

@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\Ast\Type;
 
-final class AttributeAwareNullableTypeNode extends \PHPStan\PhpDocParser\Ast\Type\NullableTypeNode implements \Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface
+use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
+use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
+final class AttributeAwareNullableTypeNode extends NullableTypeNode implements AttributeAwareNodeInterface
 {
-    use \Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
+    use AttributeTrait;
 
     public function __toString(): string
     {

@@ -4,24 +4,60 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\PhpDoc;
 
-final class AttributeAwarePhpDocNodeFactory implements \Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface
+use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
+use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
+use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
+final class AttributeAwarePhpDocNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
 {
-    public function getOriginalNodeClass(): string
+    /**
+     * @var AttributeAwareNodeFactory
+     */
+    private $attributeAwareNodeFactory;
+
+    /**
+     * @var PhpDocNodeTraverser
+     */
+    private $phpDocNodeTraverser;
+
+    public function __construct(PhpDocNodeTraverser $phpDocNodeTraverser)
     {
-        return \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode::class;
+        $this->phpDocNodeTraverser = $phpDocNodeTraverser;
     }
 
-    public function isMatch(\PHPStan\PhpDocParser\Ast\Node $node): bool
+    public function getOriginalNodeClass(): string
     {
-        return is_a($node, \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode::class, true);
+        return PhpDocNode::class;
+    }
+
+    public function isMatch(Node $node): bool
+    {
+        return is_a($node, PhpDocNode::class, true);
     }
 
     /**
-     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $node
+     * @param PhpDocNode $node
      */
-    public function create(
-        \PHPStan\PhpDocParser\Ast\Node $node
-    ): \Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface {
-        return new \Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode($node->children);
+    public function create(Node $node): AttributeAwareNodeInterface
+    {
+        $this->phpDocNodeTraverser->traverseWithCallable($node, function (Node $node): AttributeAwareNodeInterface {
+            if ($node instanceof AttributeAwareNodeInterface) {
+                return $node;
+            }
+
+            return $this->attributeAwareNodeFactory->createFromNode($node);
+        });
+
+        return new AttributeAwarePhpDocNode($node->children);
+    }
+
+    public function setAttributeAwareNodeFactory(AttributeAwareNodeFactory $attributeAwareNodeFactory): void
+    {
+        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
     }
 }

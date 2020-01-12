@@ -8252,8 +8252,7 @@ Change $this->getParam() calls to action method arguments + Sdd symfony @Route
 +public function someAction($id)
  {
 -    $id = $this->getParam('id');
--}
-+}
+ }
 ```
 
 <br>

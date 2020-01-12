@@ -4,27 +4,29 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\PhpDoc;
 
-final class AttributeAwareInvalidTagValueNodeFactory implements \Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface
+use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareInvalidTagValueNode;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
+final class AttributeAwareInvalidTagValueNodeFactory implements AttributeNodeAwareFactoryInterface
 {
     public function getOriginalNodeClass(): string
     {
-        return \PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode::class;
+        return InvalidTagValueNode::class;
     }
 
-    public function isMatch(\PHPStan\PhpDocParser\Ast\Node $node): bool
+    public function isMatch(Node $node): bool
     {
-        return is_a($node, \PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode::class, true);
+        return is_a($node, InvalidTagValueNode::class, true);
     }
 
     /**
-     * @param \PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode $node
+     * @param InvalidTagValueNode $node
      */
-    public function create(
-        \PHPStan\PhpDocParser\Ast\Node $node
-    ): \Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface {
-        return new \Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareInvalidTagValueNode(
-            $node->value,
-            $node->exception
-        );
+    public function create(Node $node): AttributeAwareNodeInterface
+    {
+        return new AttributeAwareInvalidTagValueNode($node->value, $node->exception);
     }
 }

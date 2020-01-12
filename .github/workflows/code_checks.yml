@@ -101,6 +101,7 @@ jobs:
             -   run: |
                     php ci/check_services_in_yaml_configs.php
                     php ci/run_all_sets.php
+                    bin/rector sync-types
 
     fatal_scan:
         runs-on: ubuntu-latest

@@ -4,27 +4,47 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\Type;
 
-final class AttributeAwareGenericTypeNodeFactory implements \Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface
+use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
+use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
+final class AttributeAwareGenericTypeNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
 {
+    /**
+     * @var AttributeAwareNodeFactory
+     */
+    private $attributeAwareNodeFactory;
+
     public function getOriginalNodeClass(): string
     {
-        return \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode::class;
+        return GenericTypeNode::class;
     }
 
-    public function isMatch(\PHPStan\PhpDocParser\Ast\Node $node): bool
+    public function isMatch(Node $node): bool
     {
-        return is_a($node, \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode::class, true);
+        return is_a($node, GenericTypeNode::class, true);
     }
 
     /**
-     * @param \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $node
+     * @param GenericTypeNode $node
      */
-    public function create(
-        \PHPStan\PhpDocParser\Ast\Node $node
-    ): \Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface {
-        return new \Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareGenericTypeNode(
-            $node->type,
-            $node->genericTypes
-        );
+    public function create(Node $node): AttributeAwareNodeInterface
+    {
+        $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type);
+
+        foreach ($node->genericTypes as $key => $genericType) {
+            $node->genericTypes[$key] = $this->attributeAwareNodeFactory->createFromNode($genericType);
+        }
+
+        return new AttributeAwareGenericTypeNode($node->type, $node->genericTypes);
+    }
+
+    public function setAttributeAwareNodeFactory(AttributeAwareNodeFactory $attributeAwareNodeFactory): void
+    {
+        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
     }
 }

@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc;
 
-final class AttributeAwareMethodTagValueParameterNode extends \PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueParameterNode implements \Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface
+use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueParameterNode;
+use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+
+final class AttributeAwareMethodTagValueParameterNode extends MethodTagValueParameterNode implements AttributeAwareNodeInterface
 {
-    use \Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
+    use AttributeTrait;
 }
