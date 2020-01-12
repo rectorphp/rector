@@ -6,7 +6,7 @@ use Symfony\Component\Yaml\Yaml;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-### 11. CONFIGURE INPUT
+### CONFIGURE INPUT HERE
 $diffPath = 'https://github.com/symfony/symfony/commit/53a4711520d52bccd20fa6e616731114fa6eb61f.diff';
 $classNamePrefix = 'Doctrine';
 

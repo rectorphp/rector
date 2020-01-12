@@ -31,6 +31,7 @@ use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactoryCollector;
 use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareDeprecatedTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareExtendsTagValueNode;
@@ -69,13 +70,21 @@ final class AttributeAwareNodeFactory
      */
     private $phpDocNodeTraverser;
 
-    public function __construct(PhpDocNodeTraverser $phpDocNodeTraverser)
-    {
+    /**
+     * @var AttributeAwareNodeFactoryCollector
+     */
+    private $attributeAwareNodeFactoryCollector;
+
+    public function __construct(
+        PhpDocNodeTraverser $phpDocNodeTraverser,
+        AttributeAwareNodeFactoryCollector $attributeAwareNodeFactoryCollector
+    ) {
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
+        $this->attributeAwareNodeFactoryCollector = $attributeAwareNodeFactoryCollector;
     }
 
     /**
-     * @return PhpDocNode|PhpDocChildNode|PhpDocTagValueNode AttributeAwareNodeInterface
+     * @return PhpDocNode|PhpDocChildNode|PhpDocTagValueNode|AttributeAwareNodeInterface
      */
     public function createFromNode(Node $node): AttributeAwareNodeInterface
     {
@@ -93,6 +102,14 @@ final class AttributeAwareNodeFactory
             });
 
             return new AttributeAwarePhpDocNode($node->children);
+        }
+
+        foreach ($this->attributeAwareNodeFactoryCollector->provide() as $attributeNodeAwareFactory) {
+            if (! $attributeNodeAwareFactory->isMatch($node)) {
+                continue;
+            }
+
+            return $attributeNodeAwareFactory->create($node);
         }
 
         if ($node instanceof PhpDocTagNode) {
