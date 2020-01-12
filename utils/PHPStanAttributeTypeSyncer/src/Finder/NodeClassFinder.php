@@ -16,8 +16,7 @@ final class NodeClassFinder
         return $this->findClassesByNamePatternInDirectories(
             '*Node.php',
             [
-                // @todo not sure if needed
-                //                __DIR__ . '/../../../../vendor/phpstan/phpdoc-parser/src/Ast/Type',
+                __DIR__ . '/../../../../vendor/phpstan/phpdoc-parser/src/Ast/Type',
                 __DIR__ . '/../../../../vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc',
             ]
         );
