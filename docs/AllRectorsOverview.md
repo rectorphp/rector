@@ -1,4 +1,4 @@
-# All 428 Rectors Overview
+# All 429 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -6500,6 +6500,24 @@ Remove functions exists if with else for always existing
 +        session_abort();
      }
  }
+```
+
+<br>
+
+### `UnwrapFutureCompatibleIfPhpVersionRector`
+
+- class: `Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector`
+
+Remove php version checks if they are passed
+
+```diff
+ // current PHP: 7.2
+-if (version_compare(PHP_VERSION, '7.2', '<')) {
+-    return 'is PHP 7.1-';
+-} else {
+-    return 'is PHP 7.2+';
+-}
++return 'is PHP 7.2+';
 ```
 
 <br>
