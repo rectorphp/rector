@@ -6480,9 +6480,9 @@ Rename "*Spec.php" file to "*Test.php" file
 
 ## Polyfill
 
-### `UnwrapFutureCompatibleIfRector`
+### `UnwrapFutureCompatibleIfFunctionExistsRector`
 
-- class: `Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfRector`
+- class: `Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector`
 
 Remove functions exists if with else for always existing
 

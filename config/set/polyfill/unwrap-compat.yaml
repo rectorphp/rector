@@ -1,2 +1,2 @@
 services:
-    Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfRector: null
+    Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector: null
