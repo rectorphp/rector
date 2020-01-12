@@ -1,5 +1,6 @@
 services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
+        # see https://github.com/doctrine/persistence/pull/71
         $oldToNewClasses:
             Doctrine\Common\Persistence\Event\LifecycleEventArgs: Doctrine\Persistence\Event\LifecycleEventArgs
             Doctrine\Common\Persistence\Event\LoadClassMetadataEventArgs: Doctrine\Persistence\Event\LoadClassMetadataEventArgs

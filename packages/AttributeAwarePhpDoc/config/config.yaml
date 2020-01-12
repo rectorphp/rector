@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire: true
+        public: true
+
+    Rector\AttributeAwarePhpDoc\:
+        resource: '../src'
+        exclude:
+            - '../src/Ast/*'
