@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type;
+namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc\Type;
 
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;

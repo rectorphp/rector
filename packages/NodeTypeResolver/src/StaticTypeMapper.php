@@ -49,7 +49,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
-use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\Type\AttributeAwareUnionTypeNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\Type\AttributeAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\Type\PreSlashStringType;
 use Rector\Exception\NotImplementedException;
 use Rector\Exception\ShouldNotHappenException;

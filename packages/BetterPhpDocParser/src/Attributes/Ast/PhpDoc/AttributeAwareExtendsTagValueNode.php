@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc;
+namespace Rector\AttributeAwarePhpDoc\Ast\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\ExtendsTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
