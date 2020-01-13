@@ -201,6 +201,20 @@ class SomeClass
 }
 ```
 
+### Filter Rectors
+
+If you have a configuration file for Rector including many sets and Rectors, you might want at times to run only a single
+Rector from them. The `--filter-rector` argument allows that, for example : 
+
+```bash
+vendor/bin/rector process --set solid --filter-rector "Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector" src/
+```
+
+Will only run `FinalizeClassesWithoutChildrenRector`.
+
+Please note that the backslash in the Rector's fully-qualified class name needs to be properly escaped (by surrounding
+the string in double quotes).
+
 ### Provide PHP Version
 
 By default Rector uses the language features matching your system version of PHP. You can configure it for a different PHP version:

@@ -37,7 +37,7 @@ final class Configuration
     /**
      * @var string|null
      */
-    private $rule;
+    private $filteredRector;
 
     /**
      * @var bool
@@ -59,7 +59,7 @@ final class Configuration
         $this->mustMatchGitDiff = (bool) $input->getOption(Option::MATCH_GIT_DIFF);
         $this->showProgressBar = $this->canShowProgressBar($input);
 
-        $this->setRule($input->getOption(Option::OPTION_RULE));
+        $this->setFilteredRector($input->getOption(Option::OPTION_FILTER_RECTOR));
     }
 
     public function setFirstResolverConfig(?string $firstResolvedConfig): void
@@ -102,11 +102,6 @@ final class Configuration
         return $this->showProgressBar;
     }
 
-    public function getRule(): ?string
-    {
-        return $this->rule;
-    }
-
     public function areAnyPhpRectorsLoaded(): bool
     {
         if (PHPUnitEnvironment::isPHPUnitRun()) {
@@ -133,13 +128,18 @@ final class Configuration
         return ! $noProgressBar && $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== JsonOutputFormatter::NAME;
     }
 
-    private function setRule(?string $rule): void
+    public function getFilteredRector(): ?string
     {
-        if ($rule) {
-            $this->ensureIsValidRectorClass($rule);
-            $this->rule = $rule;
+        return $this->filteredRector;
+    }
+
+    private function setFilteredRector(?string $rector): void
+    {
+        if ($rector) {
+            $this->ensureIsValidRectorClass($rector);
+            $this->filteredRector = $rector;
         } else {
-            $this->rule = null;
+            $this->filteredRector = null;
         }
     }
 
