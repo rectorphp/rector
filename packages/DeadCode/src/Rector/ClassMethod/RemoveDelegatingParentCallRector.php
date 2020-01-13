@@ -234,9 +234,16 @@ PHP
             if ($parentClassMethod->isProtected() && $classMethod->isPublic()) {
                 return true;
             }
-            if (! $this->areNodesEqual($parentClassMethod->params, $classMethod->params)) {
-                return true;
+
+            foreach ($parentClassMethod->params as $key => $parentParam) {
+                if (!isset($classMethod->params[$key])) {
+                    if ($parentParam->default !== null) {
+                        continue;
+                    };
+                }
+                $this->areNodesEqual($parentParam, $classMethod->params[$key]);
             }
+
         }
 
         return $this->checkOverrideUsingReflection($classMethod, $parentClassName, $methodName);
@@ -259,6 +266,12 @@ PHP
         ReflectionMethod $reflectionMethod
     ): bool {
         foreach ($reflectionMethod->getParameters() as $key => $parameter) {
+            if (!isset($classMethod->params[$key])) {
+                if ($parameter->isDefaultValueAvailable()) {
+                    continue;
+                }
+                return true;
+            }
             $methodParam = $classMethod->params[$key];
 
             if ($parameter->isDefaultValueAvailable() !== isset($methodParam->default)) {
