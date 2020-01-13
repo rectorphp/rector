@@ -236,14 +236,11 @@ PHP
             }
 
             foreach ($parentClassMethod->params as $key => $parentParam) {
-                if (!isset($classMethod->params[$key])) {
-                    if ($parentParam->default !== null) {
-                        continue;
-                    };
+                if (! isset($classMethod->params[$key]) && $parentParam->default !== null) {
+                    continue;
                 }
                 $this->areNodesEqual($parentParam, $classMethod->params[$key]);
             }
-
         }
 
         return $this->checkOverrideUsingReflection($classMethod, $parentClassName, $methodName);
@@ -266,7 +263,7 @@ PHP
         ReflectionMethod $reflectionMethod
     ): bool {
         foreach ($reflectionMethod->getParameters() as $key => $parameter) {
-            if (!isset($classMethod->params[$key])) {
+            if (! isset($classMethod->params[$key])) {
                 if ($parameter->isDefaultValueAvailable()) {
                     continue;
                 }

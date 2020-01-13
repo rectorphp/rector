@@ -116,6 +116,7 @@ parameters:
             - 'packages/TypeDeclaration/src/VendorLock/VendorLockResolver.php'
             - 'packages/TypeDeclaration/src/PhpParserTypeAnalyzer.php'
             -  'src/PhpParser/Node/Manipulator/IfManipulator.php'
+            -  'packages/DeadCode/src/Rector/ClassMethod/RemoveDelegatingParentCallRector.php'
             # aliases
             - 'packages/CodingStyle/src/Rector/Namespace_/ImportFullyQualifiedNamesRector.php'
 
