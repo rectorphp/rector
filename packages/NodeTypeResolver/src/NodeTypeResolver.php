@@ -35,8 +35,8 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
-use PHPStan\Broker\Broker;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
@@ -101,9 +101,9 @@ final class NodeTypeResolver
     private $classReflectionTypesResolver;
 
     /**
-     * @var Broker
+     * @var ReflectionProvider
      */
-    private $broker;
+    private $reflectionProvider;
 
     /**
      * @var TypeFactory
@@ -145,7 +145,7 @@ final class NodeTypeResolver
         ParsedNodesByType $parsedNodesByType,
         CallableNodeTraverser $callableNodeTraverser,
         ClassReflectionTypesResolver $classReflectionTypesResolver,
-        Broker $broker,
+        ReflectionProvider $reflectionProvider,
         TypeFactory $typeFactory,
         StaticTypeMapper $staticTypeMapper,
         ObjectTypeSpecifier $objectTypeSpecifier,
@@ -161,7 +161,7 @@ final class NodeTypeResolver
 
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->classReflectionTypesResolver = $classReflectionTypesResolver;
-        $this->broker = $broker;
+        $this->reflectionProvider = $reflectionProvider;
         $this->typeFactory = $typeFactory;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -811,7 +811,7 @@ final class NodeTypeResolver
      */
     private function getClassLikeTypesByClassName(string $className): array
     {
-        $classReflection = $this->broker->getClass($className);
+        $classReflection = $this->reflectionProvider->getClass($className);
 
         $classLikeTypes = $this->classReflectionTypesResolver->resolve($classReflection);
 

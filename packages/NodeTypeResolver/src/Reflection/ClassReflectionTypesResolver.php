@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\Reflection;
 
-use PHPStan\Broker\Broker;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 
 final class ClassReflectionTypesResolver
 {
     /**
-     * @var Broker
+     * @var ReflectionProvider
      */
-    private $broker;
+    private $reflectionProvider;
 
-    public function __construct(Broker $broker)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
-        $this->broker = $broker;
+        $this->reflectionProvider = $reflectionProvider;
     }
 
     /**
@@ -48,7 +48,7 @@ final class ClassReflectionTypesResolver
 
         // to cover traits of parent classes
         foreach ($classReflection->getParentClassesNames() as $parentClassName) {
-            $parentClassReflection = $this->broker->getClass($parentClassName);
+            $parentClassReflection = $this->reflectionProvider->getClass($parentClassName);
 
             foreach ($parentClassReflection->getTraits() as $parentClassTrait) {
                 $types[] = $parentClassTrait->getName();
