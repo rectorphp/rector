@@ -15,7 +15,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see \Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfRector\UnwrapFutureCompatibleIfRectorTest
  */
-final class UnwrapFutureCompatibleIfRector extends AbstractRector
+final class UnwrapFutureCompatibleIfFunctionExistsRector extends AbstractRector
 {
     /**
      * @var IfManipulator

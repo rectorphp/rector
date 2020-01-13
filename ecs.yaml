@@ -161,4 +161,8 @@ parameters:
         # conflicts with "PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer"
         PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer: null
 
+        PhpCsFixer\Fixer\Strict\StrictComparisonFixer:
+            # part of the comparison logic
+            - 'packages/Polyfill/src/ConditionEvaluator.php'
+
     line_ending: "\n"

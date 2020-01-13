@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfRector;
+namespace Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
 
 use Iterator;
-use Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfRector;
+use Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class UnwrapFutureCompatibleIfRectorTest extends AbstractRectorTestCase
+final class UnwrapFutureCompatibleIfPhpVersionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
@@ -25,6 +25,6 @@ final class UnwrapFutureCompatibleIfRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return UnwrapFutureCompatibleIfRector::class;
+        return UnwrapFutureCompatibleIfPhpVersionRector::class;
     }
 }

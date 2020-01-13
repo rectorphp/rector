@@ -43,7 +43,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     /**
      * @var PhpVersionProvider
      */
-    private $phpVersionProvider;
+    protected $phpVersionProvider;
 
     /**
      * @var ExclusionManager
