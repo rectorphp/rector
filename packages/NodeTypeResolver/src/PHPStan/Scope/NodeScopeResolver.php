@@ -13,8 +13,8 @@ use PhpParser\NodeTraverser;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver as PHPStanNodeScopeResolver;
 use PHPStan\Analyser\Scope;
-use PHPStan\Broker\Broker;
 use PHPStan\Node\UnreachableStatementNode;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
@@ -37,9 +37,9 @@ final class NodeScopeResolver
     private $scopeFactory;
 
     /**
-     * @var Broker
+     * @var ReflectionProvider
      */
-    private $broker;
+    private $reflectionProvider;
 
     /**
      * @var RemoveDeepChainMethodCallNodeVisitor
@@ -54,13 +54,13 @@ final class NodeScopeResolver
     public function __construct(
         ScopeFactory $scopeFactory,
         PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
-        Broker $broker,
+        ReflectionProvider $reflectionProvider,
         RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor,
         TraitNodeScopeCollector $traitNodeScopeCollector
     ) {
         $this->scopeFactory = $scopeFactory;
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
-        $this->broker = $broker;
+        $this->reflectionProvider = $reflectionProvider;
         $this->removeDeepChainMethodCallNodeVisitor = $removeDeepChainMethodCallNodeVisitor;
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
     }
@@ -123,7 +123,7 @@ final class NodeScopeResolver
     private function resolveClassOrInterfaceScope(Node $classOrInterfaceNode, MutatingScope $scope): MutatingScope
     {
         $className = $this->resolveClassName($classOrInterfaceNode);
-        $classReflection = $this->broker->getClass($className);
+        $classReflection = $this->reflectionProvider->getClass($className);
 
         return $scope->enterClass($classReflection);
     }

@@ -9,11 +9,11 @@ use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Analyser\TypeSpecifier;
-use PHPStan\Broker\Broker;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\DependencyInjection\ContainerFactory;
 use PHPStan\DependencyInjection\Type\DynamicReturnTypeExtensionRegistryProvider;
 use PHPStan\DependencyInjection\Type\OperatorTypeSpecifyingExtensionRegistryProvider;
+use PHPStan\Reflection\ReflectionProvider;
 
 final class PHPStanServicesFactory
 {
@@ -72,9 +72,9 @@ final class PHPStanServicesFactory
         }
     }
 
-    public function createBroker(): Broker
+    public function createReflectionProvider(): ReflectionProvider
     {
-        return $this->container->getByType(Broker::class);
+        return $this->container->getByType(ReflectionProvider::class);
     }
 
     public function createNodeScopeResolver(): NodeScopeResolver

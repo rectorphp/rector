@@ -15,7 +15,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
-use PHPStan\Broker\Broker;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -38,9 +38,9 @@ final class PropertyFetchManipulator
     private $nodeTypeResolver;
 
     /**
-     * @var Broker
+     * @var ReflectionProvider
      */
-    private $broker;
+    private $reflectionProvider;
 
     /**
      * @var NameResolver
@@ -59,12 +59,12 @@ final class PropertyFetchManipulator
 
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
-        Broker $broker,
+        ReflectionProvider $reflectionProvider,
         NameResolver $nameResolver,
         CallableNodeTraverser $callableNodeTraverser
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->broker = $broker;
+        $this->reflectionProvider = $reflectionProvider;
         $this->nameResolver = $nameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
     }
@@ -345,11 +345,11 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        if (! $this->broker->hasClass($propertyFetchType)) {
+        if (! $this->reflectionProvider->hasClass($propertyFetchType)) {
             return false;
         }
 
-        $classReflection = $this->broker->getClass($propertyFetchType);
+        $classReflection = $this->reflectionProvider->getClass($propertyFetchType);
         if (! $classReflection->hasProperty($propertyName)) {
             return false;
         }

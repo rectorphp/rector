@@ -12,20 +12,20 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
-use PHPStan\Broker\Broker;
 use PHPStan\Broker\FunctionNotFoundException;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class CallReflection
 {
     /**
-     * @var Broker
+     * @var ReflectionProvider
      */
-    private $broker;
+    private $reflectionProvider;
 
     /**
      * @var NodeTypeResolver
@@ -37,9 +37,12 @@ final class CallReflection
      */
     private $nameResolver;
 
-    public function __construct(Broker $broker, NodeTypeResolver $nodeTypeResolver, NameResolver $nameResolver)
-    {
-        $this->broker = $broker;
+    public function __construct(
+        ReflectionProvider $reflectionProvider,
+        NodeTypeResolver $nodeTypeResolver,
+        NameResolver $nameResolver
+    ) {
+        $this->reflectionProvider = $reflectionProvider;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nameResolver = $nameResolver;
     }
@@ -98,7 +101,7 @@ final class CallReflection
             return ParametersAcceptorSelector::selectFromArgs(
                 $scope,
                 $args,
-                $this->broker->getFunction($name, $scope)->getVariants()
+                $this->reflectionProvider->getFunction($name, $scope)->getVariants()
             )->getParameters();
         } catch (FunctionNotFoundException $functionNotFoundException) {
             return [];
