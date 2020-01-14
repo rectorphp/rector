@@ -93,7 +93,10 @@ parameters:
             - 'packages/NodeTypeResolver/src/PhpDoc/NodeAnalyzer/FqnNamePhpDocNodeDecorator.php'
             - 'packages/NodeTypeResolver/src/PHPStan/Type/StaticTypeAnalyzer.php'
             - 'src/NodeContainer/ParsedNodesByType.php'
+
+            - 'packages/PHPStanStaticTypeMapper/src/PHPStanStaticTypeMapper.php'
             - 'packages/NodeTypeResolver/src/StaticTypeMapper.php'
+
             - 'packages/PHPStan/src/Rector/Node/RemoveNonExistingVarAnnotationRector.php'
             - 'packages/Architecture/src/Rector/Class_/ConstructorInjectionToActionInjectionRector.php'
             - 'src/PhpParser/Node/Commander/NodeRemovingCommander.php'
