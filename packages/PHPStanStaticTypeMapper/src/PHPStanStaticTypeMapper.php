@@ -37,7 +37,6 @@ use PHPStan\Type\VerbosityLevel;
 use PHPStan\Type\VoidType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\Exception\NotImplementedException;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\Php\PhpVersionProvider;
 use Rector\PHPStan\Type\AliasedObjectType;
@@ -47,7 +46,6 @@ use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\ValueObject\PhpVersionFeature;
-use Traversable;
 
 final class PHPStanStaticTypeMapper
 {
@@ -166,39 +164,7 @@ final class PHPStanStaticTypeMapper
             return new FullyQualified($phpStanType->getClassName());
         }
 
-        if ($phpStanType instanceof UnionType) {
-            // match array types
-            $arrayNode = $this->matchArrayTypes($phpStanType);
-            if ($arrayNode !== null) {
-                return $arrayNode;
-            }
-
-            // special case for nullable
-            $nullabledType = $this->matchTypeForNullableUnionType($phpStanType);
-            if ($nullabledType === null) {
-                // use first unioned type in case of unioned object types
-                return $this->matchTypeForUnionedObjectTypes($phpStanType);
-            }
-
-            $nullabledTypeNode = $this->mapToPhpParserNode($nullabledType);
-            if ($nullabledTypeNode === null) {
-                return null;
-            }
-
-            if ($nullabledTypeNode instanceof NullableType) {
-                return $nullabledTypeNode;
-            }
-
-            if ($nullabledTypeNode instanceof PhpParserUnionType) {
-                throw new ShouldNotHappenException();
-            }
-
-            return new NullableType($nullabledTypeNode);
-        }
-
-        if ($phpStanType instanceof VoidType ||
-            $phpStanType instanceof ResourceType
-        ) {
+        if ($phpStanType instanceof VoidType || $phpStanType instanceof ResourceType) {
             return null;
         }
 
@@ -339,124 +305,5 @@ final class PHPStanStaticTypeMapper
         }
 
         return new AttributeAwareUnionTypeNode($unionedArrayType);
-    }
-
-    private function matchTypeForNullableUnionType(UnionType $unionType): ?Type
-    {
-        if (count($unionType->getTypes()) !== 2) {
-            return null;
-        }
-
-        $firstType = $unionType->getTypes()[0];
-        $secondType = $unionType->getTypes()[1];
-
-        if ($firstType instanceof NullType) {
-            return $secondType;
-        }
-
-        if ($secondType instanceof NullType) {
-            return $firstType;
-        }
-
-        return null;
-    }
-
-    /**
-     * @return Name|FullyQualified|PhpParserUnionType|null
-     */
-    private function matchTypeForUnionedObjectTypes(UnionType $unionType): ?Node
-    {
-        $phpParserUnionType = $this->matchPhpParserUnionType($unionType);
-        if ($phpParserUnionType !== null) {
-            return $phpParserUnionType;
-        }
-
-        // do the type should be compatible with all other types, e.g. A extends B, B
-        foreach ($unionType->getTypes() as $unionedType) {
-            if (! $unionedType instanceof TypeWithClassName) {
-                return null;
-            }
-
-            foreach ($unionType->getTypes() as $nestedUnionedType) {
-                if (! $nestedUnionedType instanceof TypeWithClassName) {
-                    return null;
-                }
-
-                if (! $this->areTypeWithClassNamesRelated($unionedType, $nestedUnionedType)) {
-                    continue 2;
-                }
-            }
-
-            return new FullyQualified($unionedType->getClassName());
-        }
-
-        return null;
-    }
-
-    private function areTypeWithClassNamesRelated(TypeWithClassName $firstType, TypeWithClassName $secondType): bool
-    {
-        if (is_a($firstType->getClassName(), $secondType->getClassName(), true)) {
-            return true;
-        }
-
-        return is_a($secondType->getClassName(), $firstType->getClassName(), true);
-    }
-
-    private function matchArrayTypes(UnionType $unionType): ?Identifier
-    {
-        $isNullableType = false;
-        $hasIterable = false;
-
-        foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof IterableType) {
-                $hasIterable = true;
-                continue;
-            }
-
-            if ($unionedType instanceof ArrayType) {
-                continue;
-            }
-
-            if ($unionedType instanceof NullType) {
-                $isNullableType = true;
-                continue;
-            }
-
-            if ($unionedType instanceof ObjectType) {
-                if ($unionedType->getClassName() === Traversable::class) {
-                    $hasIterable = true;
-                    continue;
-                }
-            }
-
-            return null;
-        }
-
-        $type = $hasIterable ? 'iterable' : 'array';
-        if ($isNullableType) {
-            return new Identifier('?' . $type);
-        }
-
-        return new Identifier($type);
-    }
-
-    private function matchPhpParserUnionType(UnionType $unionType): ?PhpParserUnionType
-    {
-        if (! $this->phpVersionProvider->isAtLeast(PhpVersionFeature::UNION_TYPES)) {
-            return null;
-        }
-
-        $phpParserUnionedTypes = [];
-        foreach ($unionType->getTypes() as $unionedType) {
-            /** @var Identifier|Name|null $phpParserNode */
-            $phpParserNode = $this->mapToPhpParserNode($unionedType);
-            if ($phpParserNode === null) {
-                return null;
-            }
-
-            $phpParserUnionedTypes[] = $phpParserNode;
-        }
-
-        return new PhpParserUnionType($phpParserUnionedTypes);
     }
 }
