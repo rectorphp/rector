@@ -155,7 +155,12 @@ final class ProcessCommand extends AbstractCommand
             'Execute only on file(s) matching the git diff.'
         );
 
-        $this->addOption(Option::OPTION_RULE, 'r', InputOption::VALUE_REQUIRED, 'Run only this single rule.');
+        $this->addOption(
+            Option::OPTION_ONLY,
+            'r',
+            InputOption::VALUE_REQUIRED,
+            'Run only one single Rector from the loaded Rectors (in services, sets, etc).'
+        );
 
         $availableOutputFormatters = $this->outputFormatterCollector->getNames();
         $this->addOption(

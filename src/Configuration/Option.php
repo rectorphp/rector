@@ -44,7 +44,7 @@ final class Option
     /**
      * @var string
      */
-    public const OPTION_RULE = 'rule';
+    public const OPTION_ONLY = 'only';
 
     /**
      * @var string
