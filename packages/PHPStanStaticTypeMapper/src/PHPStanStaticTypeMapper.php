@@ -8,15 +8,15 @@ use Closure;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\CallableType;
-use PHPStan\Type\ClassStringType;
 use PHPStan\Type\ClosureType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -34,6 +34,7 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use PHPStan\Type\VerbosityLevel;
 use PHPStan\Type\VoidType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\Exception\NotImplementedException;
@@ -45,6 +46,8 @@ use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ParentStaticType;
 use Rector\PHPStan\Type\SelfObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
+use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
+use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\ValueObject\PhpVersionFeature;
 use Traversable;
 
@@ -55,30 +58,24 @@ final class PHPStanStaticTypeMapper
      */
     private $phpVersionProvider;
 
-    public function __construct(PhpVersionProvider $phpVersionProvider)
+    /**
+     * @var TypeMapperInterface[]
+     */
+    private $typeMappers = [];
+
+    /**
+     * @param TypeMapperInterface[] $typeMappers
+     */
+    public function __construct(PhpVersionProvider $phpVersionProvider, array $typeMappers)
     {
         $this->phpVersionProvider = $phpVersionProvider;
+        $this->typeMappers = $typeMappers;
     }
 
-    public function mapToPHPStanPhpDocTypeNode(Type $phpStanType)
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
-        if ($phpStanType instanceof MixedType) {
-            return new IdentifierTypeNode('mixed');
-        }
-
-        if ($phpStanType instanceof UnionType) {
-            $unionTypesNodes = [];
-            foreach ($phpStanType->getTypes() as $unionedType) {
-                $unionTypesNodes[] = $this->mapToPHPStanPhpDocTypeNode($unionedType);
-            }
-
-            $unionTypesNodes = array_unique($unionTypesNodes);
-
-            return new AttributeAwareUnionTypeNode($unionTypesNodes);
-        }
-
-        if ($phpStanType instanceof ArrayType || $phpStanType instanceof IterableType) {
-            $itemTypeNode = $this->mapToPHPStanPhpDocTypeNode($phpStanType->getItemType());
+        if ($type instanceof ArrayType || $type instanceof IterableType) {
+            $itemTypeNode = $this->mapToPHPStanPhpDocTypeNode($type->getItemType());
 
             if ($itemTypeNode instanceof UnionTypeNode) {
                 return $this->convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes($itemTypeNode);
@@ -87,39 +84,20 @@ final class PHPStanStaticTypeMapper
             return new ArrayTypeNode($itemTypeNode);
         }
 
-        if ($phpStanType instanceof IntegerType) {
-            return new IdentifierTypeNode('int');
+        foreach ($this->typeMappers as $typeMapper) {
+            if (! is_a($type, $typeMapper->getNodeClass(), true)) {
+                continue;
+            }
+
+            // prevents circular dependency
+            if ($typeMapper instanceof PHPStanStaticTypeMapperAwareInterface) {
+                $typeMapper->setPHPStanStaticTypeMapper($this);
+            }
+
+            return $typeMapper->mapToPHPStanPhpDocTypeNode($type);
         }
 
-        if ($phpStanType instanceof ClassStringType) {
-            return new IdentifierTypeNode('class-string');
-        }
-
-        if ($phpStanType instanceof StringType) {
-            return new IdentifierTypeNode('string');
-        }
-
-        if ($phpStanType instanceof BooleanType) {
-            return new IdentifierTypeNode('bool');
-        }
-
-        if ($phpStanType instanceof FloatType) {
-            return new IdentifierTypeNode('float');
-        }
-
-        if ($phpStanType instanceof ObjectType) {
-            return new IdentifierTypeNode('\\' . $phpStanType->getClassName());
-        }
-
-        if ($phpStanType instanceof NullType) {
-            return new IdentifierTypeNode('null');
-        }
-
-        if ($phpStanType instanceof NeverType) {
-            return new IdentifierTypeNode('mixed');
-        }
-
-        throw new NotImplementedException(__METHOD__ . ' for ' . get_class($phpStanType));
+        throw new NotImplementedException(__METHOD__ . ' for ' . get_class($type));
     }
 
     /**
@@ -144,36 +122,12 @@ final class PHPStanStaticTypeMapper
             return new Identifier('self');
         }
 
-        if ($phpStanType instanceof IntegerType) {
-            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
-                return new Identifier('int');
+        foreach ($this->typeMappers as $typeMapper) {
+            if (! is_a($phpStanType, $typeMapper->getNodeClass(), true)) {
+                continue;
             }
 
-            return null;
-        }
-
-        if ($phpStanType instanceof StringType) {
-            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
-                return new Identifier('string');
-            }
-
-            return null;
-        }
-
-        if ($phpStanType instanceof BooleanType) {
-            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
-                return new Identifier('bool');
-            }
-
-            return null;
-        }
-
-        if ($phpStanType instanceof FloatType) {
-            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
-                return new Identifier('float');
-            }
-
-            return null;
+            return $typeMapper->mapToPhpParserNode($phpStanType);
         }
 
         if ($phpStanType instanceof ArrayType) {
@@ -204,13 +158,13 @@ final class PHPStanStaticTypeMapper
             return new Identifier('callable');
         }
 
-        if ($phpStanType instanceof ShortenedObjectType) {
-            return new Name\FullyQualified($phpStanType->getFullyQualifiedName());
-        }
-
-        if ($phpStanType instanceof AliasedObjectType) {
-            return new Name($phpStanType->getClassName());
-        }
+//        if ($phpStanType instanceof ShortenedObjectType) {
+//            return new FullyQualified($phpStanType->getFullyQualifiedName());
+//        }
+//
+//        if ($phpStanType instanceof AliasedObjectType) {
+//            return new Name($phpStanType->getClassName());
+//        }
 
         if ($phpStanType instanceof TypeWithClassName) {
             $lowerCasedClassName = strtolower($phpStanType->getClassName());
@@ -230,7 +184,7 @@ final class PHPStanStaticTypeMapper
                 return null;
             }
 
-            return new Name\FullyQualified($phpStanType->getClassName());
+            return new FullyQualified($phpStanType->getClassName());
         }
 
         if ($phpStanType instanceof UnionType) {
@@ -263,11 +217,8 @@ final class PHPStanStaticTypeMapper
             return new NullableType($nullabledTypeNode);
         }
 
-        if ($phpStanType instanceof NeverType ||
-            $phpStanType instanceof VoidType ||
-            $phpStanType instanceof MixedType ||
-            $phpStanType instanceof ResourceType ||
-            $phpStanType instanceof NullType
+        if ($phpStanType instanceof VoidType ||
+            $phpStanType instanceof ResourceType
         ) {
             return null;
         }
@@ -331,16 +282,8 @@ final class PHPStanStaticTypeMapper
             return '\\' . Closure::class;
         }
 
-        if ($phpStanType instanceof StringType) {
-            return 'string';
-        }
-
-        if ($phpStanType instanceof IntegerType) {
-            return 'int';
-        }
-
-        if ($phpStanType instanceof NullType) {
-            return 'null';
+        if ($phpStanType instanceof StringType || $phpStanType instanceof NullType || $phpStanType instanceof IntegerType || $phpStanType instanceof MixedType || $phpStanType instanceof FloatType || $phpStanType instanceof CallableType || $phpStanType instanceof ResourceType) {
+            return $phpStanType->describe(VerbosityLevel::typeOnly());
         }
 
         if ($phpStanType instanceof ArrayType) {
@@ -369,16 +312,8 @@ final class PHPStanStaticTypeMapper
             return implode('|', $docStringTypes);
         }
 
-        if ($phpStanType instanceof MixedType) {
-            return 'mixed';
-        }
-
-        if ($phpStanType instanceof FloatType) {
-            return 'float';
-        }
-
         if ($phpStanType instanceof VoidType) {
-            if ($this->phpVersionProvider->isAtLeast('7.1')) {
+            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
                 // the void type is better done in PHP code
                 return '';
             }
@@ -387,12 +322,8 @@ final class PHPStanStaticTypeMapper
             return 'void';
         }
 
-        if ($phpStanType instanceof BooleanType) {
-            return 'bool';
-        }
-
         if ($phpStanType instanceof IterableType) {
-            if ($this->phpVersionProvider->isAtLeast('7.1')) {
+            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
                 // the void type is better done in PHP code
                 return '';
             }
@@ -400,16 +331,12 @@ final class PHPStanStaticTypeMapper
             return 'iterable';
         }
 
+        if ($phpStanType instanceof BooleanType) {
+            return 'bool';
+        }
+
         if ($phpStanType instanceof NeverType) {
             return 'mixed';
-        }
-
-        if ($phpStanType instanceof CallableType) {
-            return 'callable';
-        }
-
-        if ($phpStanType instanceof ResourceType) {
-            return 'resource';
         }
 
         throw new NotImplementedException(__METHOD__ . ' for ' . get_class($phpStanType));
@@ -456,7 +383,7 @@ final class PHPStanStaticTypeMapper
     }
 
     /**
-     * @return Name|Name\FullyQualified|PhpParserUnionType|null
+     * @return Name|FullyQualified|PhpParserUnionType|null
      */
     private function matchTypeForUnionedObjectTypes(UnionType $unionType): ?Node
     {
@@ -481,7 +408,7 @@ final class PHPStanStaticTypeMapper
                 }
             }
 
-            return new Name\FullyQualified($unionedType->getClassName());
+            return new FullyQualified($unionedType->getClassName());
         }
 
         return null;
