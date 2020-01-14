@@ -30,7 +30,6 @@ use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\ResourceType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\StringType;
-use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
@@ -122,6 +121,7 @@ final class PHPStanStaticTypeMapper
         }
 
         foreach ($this->typeMappers as $typeMapper) {
+            // it cannot be is_a for SelfObjectType, because type classes inherit from each other
             if (! is_a($phpStanType, $typeMapper->getNodeClass(), true)) {
                 continue;
             }
@@ -131,10 +131,6 @@ final class PHPStanStaticTypeMapper
 
         if ($phpStanType instanceof ArrayType) {
             return new Identifier('array');
-        }
-
-        if ($phpStanType instanceof ThisType) {
-            return new Identifier('self');
         }
 
         if ($phpStanType instanceof StaticType) {
