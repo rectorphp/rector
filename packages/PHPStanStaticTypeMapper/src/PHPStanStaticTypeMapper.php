@@ -43,7 +43,6 @@ use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\Php\PhpVersionProvider;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
-use Rector\PHPStan\Type\ParentStaticType;
 use Rector\PHPStan\Type\SelfObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
@@ -136,10 +135,6 @@ final class PHPStanStaticTypeMapper
 
         if ($phpStanType instanceof ThisType) {
             return new Identifier('self');
-        }
-
-        if ($phpStanType instanceof ParentStaticType) {
-            return new Identifier('parent');
         }
 
         if ($phpStanType instanceof StaticType) {
