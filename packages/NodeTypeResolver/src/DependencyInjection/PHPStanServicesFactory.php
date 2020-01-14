@@ -13,8 +13,13 @@ use PHPStan\DependencyInjection\Container;
 use PHPStan\DependencyInjection\ContainerFactory;
 use PHPStan\DependencyInjection\Type\DynamicReturnTypeExtensionRegistryProvider;
 use PHPStan\DependencyInjection\Type\OperatorTypeSpecifyingExtensionRegistryProvider;
+use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
 
+/**
+ * Factory so Symfony app can use services from PHPStan container
+ * @see packages/NodeTypeResolver/config/config.yaml:17
+ */
 final class PHPStanServicesFactory
 {
     /**
@@ -100,5 +105,10 @@ final class PHPStanServicesFactory
     public function createOperatorTypeSpecifyingExtensionRegistryProvider(): OperatorTypeSpecifyingExtensionRegistryProvider
     {
         return $this->container->getByType(OperatorTypeSpecifyingExtensionRegistryProvider::class);
+    }
+
+    public function createTypeNodeResolver(): TypeNodeResolver
+    {
+        return $this->container->getByType(TypeNodeResolver::class);
     }
 }

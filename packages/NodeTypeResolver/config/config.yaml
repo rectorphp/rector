@@ -33,3 +33,6 @@ services:
 
     PHPStan\DependencyInjection\Type\OperatorTypeSpecifyingExtensionRegistryProvider:
         factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createOperatorTypeSpecifyingExtensionRegistryProvider']
+
+    PHPStan\PhpDoc\TypeNodeResolver:
+        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createTypeNodeResolver']

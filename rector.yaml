@@ -1,7 +1,5 @@
 services:
     Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector: null
-#    Rector\SOLID\Rector\If_\ChangeNestedIfsToEarlyReturnRector: null
-#    Rector\SOLID\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector: null
 
 imports:
     - { resource: "create-rector.yaml", ignore_errors: true }
