@@ -71,6 +71,7 @@
             "Rector\\Nette\\": "packages/Nette/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\PHPStan\\": "packages/PHPStan/src",
+            "Rector\\PHPStanStaticTypeMapper\\": "packages/PHPStanStaticTypeMapper/src",
             "Rector\\PHPUnitSymfony\\": "packages/PHPUnitSymfony/src",
             "Rector\\PHPUnit\\": "packages/PHPUnit/src",
             "Rector\\PSR4\\": "packages/PSR4/src",
