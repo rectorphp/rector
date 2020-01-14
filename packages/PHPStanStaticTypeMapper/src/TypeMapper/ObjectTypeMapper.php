@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
-use PHP_CodeSniffer\Reports\Full;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
@@ -58,34 +54,9 @@ final class ObjectTypeMapper implements TypeMapperInterface
             if ($type->getClassName() === 'object') {
                 return new Identifier('object');
             }
-
-            return new FullyQualified($type->getClassName());
-
-            //            if ($type->getClassName()) {
-//                dump($type);
-//                die;
-//            }
-//
-//            if ($type->getClassName() === 'object') {
-//                dump($type);
-//                die;
-//            } else {
-//                die;
-//            }
-//
-//            return new Identifier('object');
         }
 
-        // ...
-        dump($type->getFullyQualifiedName());
-        die;
-
         // fallback
-        return new FullyQualified($type->getFullyQualifiedName());
-
-        dump($type);
-        die;
-
-        return null;
+        return new FullyQualified($type->getClassName());
     }
 }

@@ -158,14 +158,6 @@ final class PHPStanStaticTypeMapper
             return new Identifier('callable');
         }
 
-//        if ($phpStanType instanceof ShortenedObjectType) {
-//            return new FullyQualified($phpStanType->getFullyQualifiedName());
-//        }
-//
-//        if ($phpStanType instanceof AliasedObjectType) {
-//            return new Name($phpStanType->getClassName());
-//        }
-
         if ($phpStanType instanceof TypeWithClassName) {
             $lowerCasedClassName = strtolower($phpStanType->getClassName());
             if ($lowerCasedClassName === 'callable') {
