@@ -203,8 +203,7 @@ class SomeClass
 
 ### Filter Rectors
 
-If you have a configuration file for Rector including many sets and Rectors, you might want at times to run only a single
-Rector from them. The `--only` argument allows that, for example : 
+If you have a configuration file for Rector including many sets and Rectors, you might want at times to run only a single Rector from them. The `--only` argument allows that, for example : 
 
 ```bash
 vendor/bin/rector process --set solid --only "Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector" src/
@@ -212,8 +211,7 @@ vendor/bin/rector process --set solid --only "Rector\SOLID\Rector\Class_\Finaliz
 
 Will only run `Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector`.
 
-Please note that the backslash in the Rector's fully-qualified class name needs to be properly escaped (by surrounding
-the string in double quotes).
+Please note that the backslash in the Rector's fully-qualified class name needs to be properly escaped (by surrounding the string in double quotes).
 
 ### Provide PHP Version
 
