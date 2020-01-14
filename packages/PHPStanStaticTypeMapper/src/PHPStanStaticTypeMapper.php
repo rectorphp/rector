@@ -134,10 +134,6 @@ final class PHPStanStaticTypeMapper
             return new Identifier('array');
         }
 
-        if ($phpStanType instanceof IterableType) {
-            return new Identifier('iterable');
-        }
-
         if ($phpStanType instanceof ThisType) {
             return new Identifier('self');
         }
