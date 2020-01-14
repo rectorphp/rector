@@ -11,13 +11,4 @@ final class SkipIterable
     {
         yield self::class;
     }
-
-    /**
-     * @return iterable<mixed>
-     */
-    public function someDataProvider(): iterable
-    {
-        yield [42];
-        yield [[42]];
-    }
 }
