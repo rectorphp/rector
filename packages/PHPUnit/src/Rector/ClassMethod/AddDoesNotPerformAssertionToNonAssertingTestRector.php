@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\NodeContainer\ParsedNodesByType;
@@ -131,7 +131,7 @@ PHP
 
         if ($classMethod->getDocComment() !== null) {
             $text = $classMethod->getDocComment();
-            if (Strings::match($text->getText(), '#@expectedException\b#')) {
+            if (Strings::match($text->getText(), '#@(doesNotPerformAssertion|expectedException\b)#')) {
                 return true;
             }
         }
@@ -167,7 +167,7 @@ PHP
         }
 
         // A. try "->assert" shallow search first for performance
-        $hasDirectAssertCall = (bool) $this->hasDirectAssertCall($classMethod);
+        $hasDirectAssertCall = $this->hasDirectAssertCall($classMethod);
         if ($hasDirectAssertCall) {
             $this->containsAssertCallByClassMethod[$cacheHash] = $hasDirectAssertCall;
             return $hasDirectAssertCall;
@@ -187,7 +187,18 @@ PHP
                 return false;
             }
 
-            return $this->isNames($node->name, ['assert*', 'expectException*', 'setExpectedException*']);
+            return $this->isNames($node->name, [
+                // prophecy
+                'should*',
+                'should',
+                'expect*',
+                'expect',
+                // phpunit
+                '*assert',
+                'assert*',
+                'expectException*',
+                'setExpectedException*',
+            ]);
         });
     }
 

@@ -1,4 +1,4 @@
-# All 425 Rectors Overview
+# All 429 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -178,6 +178,21 @@ Move value object to ValueObject namespace/directory
 
 ## CakePHP
 
+### `AppUsesStaticCallToUseStatementRector`
+
+- class: `Rector\CakePHP\Rector\StaticCall\AppUsesStaticCallToUseStatementRector`
+
+Change App::uses() to use imports
+
+```diff
+-App::uses('NotificationListener', 'Event');
++use Event\NotificationListener;
+
+ CakeEventManager::instance()->attach(new NotificationListener());
+```
+
+<br>
+
 ### `ChangeSnakedFixtureNameToCamelRector`
 
 - class: `Rector\CakePHP\Rector\Name\ChangeSnakedFixtureNameToCamelRector`
@@ -195,6 +210,23 @@ Changes $fixtues style from snake_case to CamelCase.
 +        'app.Users',
 +        'some_plugin.Posts/SpeectialPosts',
      ];
+```
+
+<br>
+
+### `ImplicitShortClassNameUseStatementRector`
+
+- class: `Rector\CakePHP\Rector\Name\ImplicitShortClassNameUseStatementRector`
+
+Collect implicit class names and add imports
+
+```diff
+ use App\Foo\Plugin;
++use Cake\TestSuite\Fixture\TestFixture;
+
+ class LocationsFixture extends TestFixture implements Plugin
+ {
+ }
 ```
 
 <br>
@@ -5275,6 +5307,19 @@ Changes multiple dirname() calls to one with nesting level
 
 <br>
 
+### `NonVariableToVariableOnFunctionCallRector`
+
+- class: `Rector\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector`
+
+Transform non variable like arguments to variable where a function or method expects an argument passed by reference
+
+```diff
+-reset(a());
++$a = a(); reset($a);
+```
+
+<br>
+
 ### `Php4ConstructorRector`
 
 - class: `Rector\Php70\Rector\FunctionLike\Php4ConstructorRector`
@@ -6435,9 +6480,9 @@ Rename "*Spec.php" file to "*Test.php" file
 
 ## Polyfill
 
-### `UnwrapFutureCompatibleIfRector`
+### `UnwrapFutureCompatibleIfFunctionExistsRector`
 
-- class: `Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfRector`
+- class: `Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector`
 
 Remove functions exists if with else for always existing
 
@@ -6455,6 +6500,24 @@ Remove functions exists if with else for always existing
 +        session_abort();
      }
  }
+```
+
+<br>
+
+### `UnwrapFutureCompatibleIfPhpVersionRector`
+
+- class: `Rector\Polyfill\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector`
+
+Remove php version checks if they are passed
+
+```diff
+ // current PHP: 7.2
+-if (version_compare(PHP_VERSION, '7.2', '<')) {
+-    return 'is PHP 7.1-';
+-} else {
+-    return 'is PHP 7.2+';
+-}
++return 'is PHP 7.2+';
 ```
 
 <br>
@@ -8207,8 +8270,7 @@ Change $this->getParam() calls to action method arguments + Sdd symfony @Route
 +public function someAction($id)
  {
 -    $id = $this->getParam('id');
--}
-+}
+ }
 ```
 
 <br>

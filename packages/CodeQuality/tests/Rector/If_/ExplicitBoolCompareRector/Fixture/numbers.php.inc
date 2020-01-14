@@ -9,10 +9,6 @@ final class Numbers
         if (!$item) {
             return 'empty';
         }
-
-        if ($item) {
-            return 'not empty';
-        }
     }
 
     public function go(float $item)
@@ -39,10 +35,6 @@ final class Numbers
     {
         if ($item === 0) {
             return 'empty';
-        }
-
-        if ($item !== 0) {
-            return 'not empty';
         }
     }
 

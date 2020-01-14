@@ -1,93 +1,136 @@
 name: Code_Checks
 
 on:
-    pull_request:
+    pull_request: null
     push:
         branches:
             - master
 
 jobs:
-    phpstan:
-        name: PHPStan
+    tests:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                php: ['7.3', '7.4']
+
+        name: PHP ${{ matrix.php }} tests
+        steps:
+            -   uses: actions/checkout@v2
+            -
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.2
+                    coverage: none # disable xdebug, pcov
+            -   run: composer install --no-progress
+            -   run: vendor/bin/phpunit
+
+    test_lowest_dependencies:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v1
-              with:
-                  php-version: 7.2
-                  coverage: none # disable xdebug, pcov
-            - run: |
-                  composer install --no-progress
-                  composer phpstan
+            -   uses: actions/checkout@v2
+            -   run: git fetch --depth=100000 origin
+
+            # see https://github.com/shivammathur/setup-php
+            -
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.2
+                    coverage: none
+
+            -   run: composer update --no-progress --prefer-lowest
+            -   run: vendor/bin/phpunit
+
+    phpstan:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.2
+                    coverage: none # disable xdebug, pcov
+            -   run: composer install --no-progress
+            -   run: composer phpstan
 
     ecs:
-        name: ECS
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v1
-              with:
-                  php-version: 7.2
-                  coverage: none # disable xdebug, pcov
-            - run: |
-                  composer install --no-progress
-                  composer check-cs
+            -   uses: actions/checkout@v2
+            -
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.2
+                    coverage: none # disable xdebug, pcov
+            -   run: composer install --no-progress
+            -   run: composer check-cs
 
     rector:
-        name: Rector
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v1
-              with:
-                  php-version: 7.3
-                  coverage: none # disable xdebug, pcov
-            - run: |
-                  composer install --no-progress
-                  composer rector
+            -   uses: actions/checkout@v2
+            -
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.3
+                    coverage: none # disable xdebug, pcov
+            -   run: composer install --no-progress
+            -   run: composer rector
 
     docs:
-        name: Documentation
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v1
-              with:
-                  php-version: 7.2
-                  coverage: none # disable xdebug, pcov
-            - run: |
-                  composer install --no-progress
-                  composer check-docs
+            -   uses: actions/checkout@v2
+            -
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.2
+                    coverage: none # disable xdebug, pcov
+            -   run: composer install --no-progress
+            -   run: composer check-docs
 
-    simple-checks:
-        name: Simple checks
+    simple_checks:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v1
-              with:
-                  php-version: 7.2
-                  coverage: none # disable xdebug, pcov
-            - run: |
-                  composer install --no-progress
-                  php ci/check_services_in_yaml_configs.php
-                  php ci/run_all_sets.php
+            -   uses: actions/checkout@v2
+            -
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.2
+                    coverage: none # disable xdebug, pcov
+            -   run: composer install --no-progress
+            -   run: |
+                    php ci/check_services_in_yaml_configs.php
+                    php ci/run_all_sets.php
+                    bin/rector sync-types
 
-    fatal-scan:
-        name: Scan Fatal Errors
+    fatal_scan:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v1
-              with:
-                  php-version: 7.3
-                  coverage: none # disable xdebug, pcov
-            - run: |
-                  composer install --no-progress
-                  bin/rector scan-fatal-errors tests/Source/FatalErrors
+            -   uses: actions/checkout@v2
+            -
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.3
+                    coverage: none # disable xdebug, pcov
+            -   run: composer install --no-progress
+            -   run: bin/rector scan-fatal-errors tests/Source/FatalErrors
+
+    code_coverage:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.3
+                    coverage: none # disable xdebug, pcov
+
+            -   run: composer install --no-progress
+
+            -   run: |
+                    phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit --coverage-clover coverage.xml
+                    # Coveralls.io
+                    wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
+                    php php-coveralls.phar --verbose
+                env:
+                    COVERALLS_REPO_TOKEN: 'Ew7FYsOKM3T3s1nEsPHJkSe6jdVIFHME8'

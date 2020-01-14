@@ -12,7 +12,7 @@ use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
-use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\AttributeAwareParamTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\Contract\NameAwarePhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;

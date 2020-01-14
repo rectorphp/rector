@@ -113,6 +113,10 @@ PHP
             return null;
         }
 
+        if ($onlyStatement->var->dim !== null) {
+            return null;
+        }
+
         if (! $this->areNodesEqual($foreach->valueVar, $onlyStatement->expr)) {
             return null;
         }

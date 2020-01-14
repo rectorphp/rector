@@ -29,6 +29,11 @@ final class Option
     /**
      * @var string
      */
+    public const OPTION_NO_PROGRESS_BAR = 'no-progress-bar';
+
+    /**
+     * @var string
+     */
     public const PHP_VERSION_FEATURES = 'php_version_features';
 
     /**

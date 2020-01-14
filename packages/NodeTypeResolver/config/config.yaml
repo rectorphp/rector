@@ -16,8 +16,8 @@ services:
     Rector\PhpParser\Node\BetterNodeFinder: null
 
     # PHPStan
-    PHPStan\Broker\Broker:
-        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createBroker']
+    PHPStan\Reflection\ReflectionProvider:
+        factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createReflectionProvider']
 
     PHPStan\Analyser\NodeScopeResolver:
         factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createNodeScopeResolver']
