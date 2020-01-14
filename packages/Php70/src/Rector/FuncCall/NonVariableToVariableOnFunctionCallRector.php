@@ -25,8 +25,8 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParameterReflection;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php70\Reflection\CallReflection;
 use Rector\Php70\ValueObject\VariableAssignPair;
+use Rector\PHPStan\Reflection\CallReflectionResolver;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -44,18 +44,18 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
     private const DEFAULT_VARIABLE_NAME = 'tmp';
 
     /**
-     * @var CallReflection
+     * @var CallReflectionResolver
      */
-    private $callReflection;
+    private $callReflectionResolver;
 
     /**
      * @var ClassNaming
      */
     private $classNaming;
 
-    public function __construct(CallReflection $callReflection, ClassNaming $classNaming)
+    public function __construct(CallReflectionResolver $callReflectionResolver, ClassNaming $classNaming)
     {
-        $this->callReflection = $callReflection;
+        $this->callReflectionResolver = $callReflectionResolver;
         $this->classNaming = $classNaming;
     }
 
@@ -85,7 +85,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
             return null;
         }
 
-        $arguments = $this->getNonVariableArguments($node, $scope);
+        $arguments = $this->getNonVariableArguments($node);
 
         if ($arguments === []) {
             return null;
@@ -111,12 +111,21 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
      *
      * @return array<int, Expr>
      */
-    private function getNonVariableArguments(Node $node, Scope $scope): array
+    private function getNonVariableArguments(Node $node): array
     {
         $arguments = [];
 
+        $parametersAcceptor = $this->callReflectionResolver->resolveParametersAcceptor(
+            $this->callReflectionResolver->resolveCall($node),
+            $node
+        );
+
+        if ($parametersAcceptor === null) {
+            return [];
+        }
+
         /** @var ParameterReflection $parameter */
-        foreach ($this->callReflection->getParameterReflections($node, $scope) as $key => $parameter) {
+        foreach ($parametersAcceptor->getParameters() as $key => $parameter) {
             // omitted optional parameter
             if (! isset($node->args[$key])) {
                 continue;
