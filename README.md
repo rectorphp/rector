@@ -325,7 +325,7 @@ final class MyFirstRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         // we only care about "set*" method names
-        if (! $this->isName($node, 'set*')) {
+        if (! $this->isName($node->name, 'set*')) {
             // return null to skip it
             return null;
         }

@@ -6,3 +6,4 @@ services:
     Rector\PHPStanStaticTypeMapper\:
         resource: '../src'
         exclude:
+            - '../src/ValueObject/*'

@@ -763,7 +763,7 @@ const SOME_CLASS_CONSTANT = 'default value';
 #### `PhpParser\Node\Stmt\ClassMethod`
 
 ```php
-function someMethod()
+public function someMethod()
 {
 }
 ```
