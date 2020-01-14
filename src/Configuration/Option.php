@@ -44,7 +44,7 @@ final class Option
     /**
      * @var string
      */
-    public const OPTION_FILTER_RECTOR = 'filter-rector';
+    public const OPTION_ONLY = 'only';
 
     /**
      * @var string

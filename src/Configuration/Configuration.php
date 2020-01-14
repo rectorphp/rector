@@ -37,7 +37,7 @@ final class Configuration
     /**
      * @var string|null
      */
-    private $filteredRector;
+    private $onlyRector;
 
     /**
      * @var bool
@@ -59,7 +59,7 @@ final class Configuration
         $this->mustMatchGitDiff = (bool) $input->getOption(Option::MATCH_GIT_DIFF);
         $this->showProgressBar = $this->canShowProgressBar($input);
 
-        $this->setFilteredRector($input->getOption(Option::OPTION_FILTER_RECTOR));
+        $this->setOnlyRector($input->getOption(Option::OPTION_ONLY));
     }
 
     public function setFirstResolverConfig(?string $firstResolvedConfig): void
@@ -128,18 +128,18 @@ final class Configuration
         return ! $noProgressBar && $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== JsonOutputFormatter::NAME;
     }
 
-    public function getFilteredRector(): ?string
+    public function getOnlyRector(): ?string
     {
-        return $this->filteredRector;
+        return $this->onlyRector;
     }
 
-    private function setFilteredRector(?string $rector): void
+    private function setOnlyRector(?string $rector): void
     {
         if ($rector) {
             $this->ensureIsValidRectorClass($rector);
-            $this->filteredRector = $rector;
+            $this->onlyRector = $rector;
         } else {
-            $this->filteredRector = null;
+            $this->onlyRector = null;
         }
     }
 
