@@ -59,7 +59,10 @@ final class Configuration
         $this->mustMatchGitDiff = (bool) $input->getOption(Option::MATCH_GIT_DIFF);
         $this->showProgressBar = $this->canShowProgressBar($input);
 
-        $this->setOnlyRector($input->getOption(Option::OPTION_ONLY));
+        /** @var string|null $onlyRector */
+        $onlyRector = $input->getOption(Option::OPTION_ONLY);
+
+        $this->setOnlyRector($onlyRector);
     }
 
     public function setFirstResolverConfig(?string $firstResolvedConfig): void
@@ -121,13 +124,6 @@ final class Configuration
         return $this->mustMatchGitDiff;
     }
 
-    private function canShowProgressBar(InputInterface $input): bool
-    {
-        $noProgressBar = (bool) $input->getOption(Option::OPTION_NO_PROGRESS_BAR);
-
-        return ! $noProgressBar && $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== JsonOutputFormatter::NAME;
-    }
-
     public function getOnlyRector(): ?string
     {
         return $this->onlyRector;
@@ -141,6 +137,13 @@ final class Configuration
         } else {
             $this->onlyRector = null;
         }
+    }
+
+    private function canShowProgressBar(InputInterface $input): bool
+    {
+        $noProgressBar = (bool) $input->getOption(Option::OPTION_NO_PROGRESS_BAR);
+
+        return ! $noProgressBar && $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== JsonOutputFormatter::NAME;
     }
 
     private function ensureIsValidRectorClass(string $rector): void
