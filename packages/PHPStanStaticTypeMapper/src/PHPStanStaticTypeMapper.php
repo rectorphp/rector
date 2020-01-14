@@ -101,19 +101,6 @@ final class PHPStanStaticTypeMapper
      */
     public function mapToPhpParserNode(Type $phpStanType, ?string $kind = null): ?Node
     {
-        if ($phpStanType instanceof VoidType) {
-            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::VOID_TYPE)) {
-                if (in_array($kind, ['param', 'property'], true)) {
-                    // param cannot be void
-                    return null;
-                }
-
-                return new Identifier('void');
-            }
-
-            return null;
-        }
-
         if ($phpStanType instanceof SelfObjectType) {
             return new Identifier('self');
         }
@@ -124,7 +111,7 @@ final class PHPStanStaticTypeMapper
                 continue;
             }
 
-            return $typeMapper->mapToPhpParserNode($phpStanType);
+            return $typeMapper->mapToPhpParserNode($phpStanType, $kind);
         }
 
         if ($phpStanType instanceof ArrayType) {
