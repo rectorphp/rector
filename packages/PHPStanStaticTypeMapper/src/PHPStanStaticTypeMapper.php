@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanStaticTypeMapper;
 
+use Closure;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -19,6 +20,7 @@ use PHPStan\Type\ClassStringType;
 use PHPStan\Type\ClosureType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
@@ -36,8 +38,10 @@ use PHPStan\Type\VoidType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\Exception\NotImplementedException;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\Php\PhpVersionProvider;
 use Rector\PHPStan\Type\AliasedObjectType;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ParentStaticType;
 use Rector\PHPStan\Type\SelfObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
@@ -274,6 +278,138 @@ final class PHPStanStaticTypeMapper
             }
 
             return null;
+        }
+
+        throw new NotImplementedException(__METHOD__ . ' for ' . get_class($phpStanType));
+    }
+
+    public function mapToDocString(Type $phpStanType, ?Type $parentType = null): string
+    {
+        if ($phpStanType instanceof UnionType || $phpStanType instanceof IntersectionType) {
+            $stringTypes = [];
+
+            foreach ($phpStanType->getTypes() as $unionedType) {
+                $stringTypes[] = $this->mapToDocString($unionedType);
+            }
+
+            // remove empty values, e.g. void/iterable
+            $stringTypes = array_unique($stringTypes);
+            $stringTypes = array_filter($stringTypes);
+
+            $joinCharacter = $phpStanType instanceof IntersectionType ? '&' : '|';
+
+            return implode($joinCharacter, $stringTypes);
+        }
+
+        if ($phpStanType instanceof AliasedObjectType) {
+            // no preslash for alias
+            return $phpStanType->getClassName();
+        }
+
+        if ($phpStanType instanceof ShortenedObjectType) {
+            return '\\' . $phpStanType->getFullyQualifiedName();
+        }
+
+        if ($phpStanType instanceof FullyQualifiedObjectType) {
+            // always prefixed with \\
+            return '\\' . $phpStanType->getClassName();
+        }
+
+        if ($phpStanType instanceof ObjectType) {
+            if (ClassExistenceStaticHelper::doesClassLikeExist($phpStanType->getClassName())) {
+                return '\\' . $phpStanType->getClassName();
+            }
+
+            return $phpStanType->getClassName();
+        }
+
+        if ($phpStanType instanceof ObjectWithoutClassType) {
+            return 'object';
+        }
+
+        if ($phpStanType instanceof ClosureType) {
+            return '\\' . Closure::class;
+        }
+
+        if ($phpStanType instanceof StringType) {
+            return 'string';
+        }
+
+        if ($phpStanType instanceof IntegerType) {
+            return 'int';
+        }
+
+        if ($phpStanType instanceof NullType) {
+            return 'null';
+        }
+
+        if ($phpStanType instanceof ArrayType) {
+            if ($phpStanType->getItemType() instanceof UnionType) {
+                $unionedTypesAsString = [];
+                foreach ($phpStanType->getItemType()->getTypes() as $unionedArrayItemType) {
+                    $unionedTypesAsString[] = $this->mapToDocString($unionedArrayItemType, $phpStanType) . '[]';
+                }
+
+                $unionedTypesAsString = array_values($unionedTypesAsString);
+                $unionedTypesAsString = array_unique($unionedTypesAsString);
+
+                return implode('|', $unionedTypesAsString);
+            }
+
+            $docString = $this->mapToDocString($phpStanType->getItemType(), $parentType);
+
+            // @todo improve this
+            $docStringTypes = explode('|', $docString);
+            $docStringTypes = array_filter($docStringTypes);
+
+            foreach ($docStringTypes as $key => $docStringType) {
+                $docStringTypes[$key] = $docStringType . '[]';
+            }
+
+            return implode('|', $docStringTypes);
+        }
+
+        if ($phpStanType instanceof MixedType) {
+            return 'mixed';
+        }
+
+        if ($phpStanType instanceof FloatType) {
+            return 'float';
+        }
+
+        if ($phpStanType instanceof VoidType) {
+            if ($this->phpVersionProvider->isAtLeast('7.1')) {
+                // the void type is better done in PHP code
+                return '';
+            }
+
+            // fallback for PHP 7.0 and older, where void type was only in docs
+            return 'void';
+        }
+
+        if ($phpStanType instanceof BooleanType) {
+            return 'bool';
+        }
+
+        if ($phpStanType instanceof IterableType) {
+            if ($this->phpVersionProvider->isAtLeast('7.1')) {
+                // the void type is better done in PHP code
+                return '';
+            }
+
+            return 'iterable';
+        }
+
+        if ($phpStanType instanceof NeverType) {
+            return 'mixed';
+        }
+
+        if ($phpStanType instanceof CallableType) {
+            return 'callable';
+        }
+
+        if ($phpStanType instanceof ResourceType) {
+            return 'resource';
         }
 
         throw new NotImplementedException(__METHOD__ . ' for ' . get_class($phpStanType));

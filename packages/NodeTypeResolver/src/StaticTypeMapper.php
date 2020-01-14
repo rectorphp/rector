@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver;
 
-use Closure;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -12,8 +11,11 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\UseUse;
 use PhpParser\Node\UnionType as PhpParserUnionType;
+use PHPStan\Analyser\NameScope;
 use PHPStan\Analyser\Scope;
+use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
@@ -29,15 +31,11 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\CallableType;
 use PHPStan\Type\ClassStringType;
-use PHPStan\Type\ClosureType;
 use PHPStan\Type\ConstantType;
 use PHPStan\Type\FloatType;
-use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntegerType;
-use PHPStan\Type\IntersectionType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NeverType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
@@ -46,16 +44,13 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
-use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\BetterPhpDocParser\Type\PreSlashStringType;
 use Rector\Exception\NotImplementedException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\Php\PhpVersionProvider;
-use Rector\PHPStan\Type\AliasedObjectType;
+use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\ParentStaticType;
 use Rector\PHPStan\Type\SelfObjectType;
@@ -64,15 +59,10 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
 /**
- * Maps PhpParser <=> PHPStan <=> PHPStan doc <=> string type nodes to between all possible formats
+ * Maps PhpParser <=> PHPStan <=> PHPStan doc <=> string type nodes between all possible formats
  */
 final class StaticTypeMapper
 {
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
     /**
      * @var TypeFactory
      */
@@ -88,16 +78,28 @@ final class StaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
 
+    /**
+     * @var TypeNodeResolver
+     */
+    private $typeNodeResolver;
+
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
     public function __construct(
-        PhpVersionProvider $phpVersionProvider,
         TypeFactory $typeFactory,
         ObjectTypeSpecifier $objectTypeSpecifier,
-        PHPStanStaticTypeMapper $phpStanStaticTypeMapper
+        PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
+        TypeNodeResolver $typeNodeResolver,
+        NameResolver $nameResolver
     ) {
-        $this->phpVersionProvider = $phpVersionProvider;
         $this->typeFactory = $typeFactory;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
+        $this->typeNodeResolver = $typeNodeResolver;
+        $this->nameResolver = $nameResolver;
     }
 
     public function mapPHPStanTypeToPHPStanPhpDocTypeNode(Type $phpStanType): TypeNode
@@ -115,137 +117,7 @@ final class StaticTypeMapper
 
     public function mapPHPStanTypeToDocString(Type $phpStanType, ?Type $parentType = null): string
     {
-        if ($phpStanType instanceof UnionType || $phpStanType instanceof IntersectionType) {
-            $stringTypes = [];
-
-            foreach ($phpStanType->getTypes() as $unionedType) {
-                $stringTypes[] = $this->mapPHPStanTypeToDocString($unionedType);
-            }
-
-            // remove empty values, e.g. void/iterable
-            $stringTypes = array_unique($stringTypes);
-            $stringTypes = array_filter($stringTypes);
-
-            $joinCharacter = $phpStanType instanceof IntersectionType ? '&' : '|';
-
-            return implode($joinCharacter, $stringTypes);
-        }
-
-        if ($phpStanType instanceof AliasedObjectType) {
-            // no preslash for alias
-            return $phpStanType->getClassName();
-        }
-
-        if ($phpStanType instanceof ShortenedObjectType) {
-            return '\\' . $phpStanType->getFullyQualifiedName();
-        }
-
-        if ($phpStanType instanceof FullyQualifiedObjectType) {
-            // always prefixed with \\
-            return '\\' . $phpStanType->getClassName();
-        }
-
-        if ($phpStanType instanceof ObjectType) {
-            if (ClassExistenceStaticHelper::doesClassLikeExist($phpStanType->getClassName())) {
-                return '\\' . $phpStanType->getClassName();
-            }
-
-            return $phpStanType->getClassName();
-        }
-
-        if ($phpStanType instanceof ObjectWithoutClassType) {
-            return 'object';
-        }
-
-        if ($phpStanType instanceof ClosureType) {
-            return '\\' . Closure::class;
-        }
-
-        if ($phpStanType instanceof StringType) {
-            return 'string';
-        }
-
-        if ($phpStanType instanceof IntegerType) {
-            return 'int';
-        }
-
-        if ($phpStanType instanceof NullType) {
-            return 'null';
-        }
-
-        if ($phpStanType instanceof ArrayType) {
-            if ($phpStanType->getItemType() instanceof UnionType) {
-                $unionedTypesAsString = [];
-                foreach ($phpStanType->getItemType()->getTypes() as $unionedArrayItemType) {
-                    $unionedTypesAsString[] = $this->mapPHPStanTypeToDocString(
-                        $unionedArrayItemType,
-                        $phpStanType
-                    ) . '[]';
-                }
-
-                $unionedTypesAsString = array_values($unionedTypesAsString);
-                $unionedTypesAsString = array_unique($unionedTypesAsString);
-
-                return implode('|', $unionedTypesAsString);
-            }
-
-            $docString = $this->mapPHPStanTypeToDocString($phpStanType->getItemType(), $parentType);
-
-            // @todo improve this
-            $docStringTypes = explode('|', $docString);
-            $docStringTypes = array_filter($docStringTypes);
-
-            foreach ($docStringTypes as $key => $docStringType) {
-                $docStringTypes[$key] = $docStringType . '[]';
-            }
-
-            return implode('|', $docStringTypes);
-        }
-
-        if ($phpStanType instanceof MixedType) {
-            return 'mixed';
-        }
-
-        if ($phpStanType instanceof FloatType) {
-            return 'float';
-        }
-
-        if ($phpStanType instanceof VoidType) {
-            if ($this->phpVersionProvider->isAtLeast('7.1')) {
-                // the void type is better done in PHP code
-                return '';
-            }
-
-            // fallback for PHP 7.0 and older, where void type was only in docs
-            return 'void';
-        }
-
-        if ($phpStanType instanceof BooleanType) {
-            return 'bool';
-        }
-
-        if ($phpStanType instanceof IterableType) {
-            if ($this->phpVersionProvider->isAtLeast('7.1')) {
-                // the void type is better done in PHP code
-                return '';
-            }
-
-            return 'iterable';
-        }
-
-        if ($phpStanType instanceof NeverType) {
-            return 'mixed';
-        }
-
-        if ($phpStanType instanceof CallableType) {
-            return 'callable';
-        }
-
-        if ($phpStanType instanceof ResourceType) {
-            return 'resource';
-        }
-
-        throw new NotImplementedException(__METHOD__ . ' for ' . get_class($phpStanType));
+        return $this->phpStanStaticTypeMapper->mapToDocString($phpStanType, $parentType);
     }
 
     public function mapPhpParserNodePHPStanType(Node $node): Type
@@ -385,6 +257,27 @@ final class StaticTypeMapper
 
     public function mapPHPStanPhpDocTypeNodeToPHPStanType(TypeNode $typeNode, Node $node): Type
     {
+        $nameScope = $this->createNameScopeFromNode($node);
+        // @todo use in the future
+
+        $type = $this->typeNodeResolver->resolve($typeNode, $nameScope);
+        if ($typeNode instanceof GenericTypeNode) {
+            return $type;
+        }
+
+        $customType = $this->customMapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, $node);
+        if ($type === $customType) {
+            return $type;
+        }
+
+        return $customType;
+    }
+
+    /**
+     * @deprecated Move gradualy to @see \PHPStan\PhpDoc\TypeNodeResolver from PHPStan
+     */
+    private function customMapPHPStanPhpDocTypeNodeToPHPStanType(TypeNode $typeNode, Node $node): Type
+    {
         if ($typeNode instanceof IdentifierTypeNode) {
             $type = $this->mapScalarStringToType($typeNode->name);
             if ($type !== null) {
@@ -467,36 +360,6 @@ final class StaticTypeMapper
             return new ThisType($className);
         }
 
-        if ($typeNode instanceof GenericTypeNode) {
-            $genericMainType = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode->type, $node);
-
-            if ($genericMainType instanceof TypeWithClassName) {
-                $mainTypeAsString = $genericMainType->getClassName();
-            } else {
-                $mainTypeAsString = $typeNode->type->name;
-            }
-
-            $genericTypes = [];
-            foreach ($typeNode->genericTypes as $genericTypeNode) {
-                $genericTypes[] = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($genericTypeNode, $node);
-            }
-
-            // special use case for array
-            if (in_array($mainTypeAsString, ['array', 'iterable'], true)) {
-                $genericType = $this->typeFactory->createMixedPassedOrUnionType($genericTypes);
-
-                if ($mainTypeAsString === 'array') {
-                    return new ArrayType(new MixedType(), $genericType);
-                }
-
-                if ($mainTypeAsString === 'iterable') {
-                    return new IterableType(new MixedType(), $genericType);
-                }
-            }
-
-            return new GenericObjectType($mainTypeAsString, $genericTypes);
-        }
-
         throw new NotImplementedException(__METHOD__ . ' for ' . get_class($typeNode));
     }
 
@@ -548,5 +411,31 @@ final class StaticTypeMapper
         }
 
         return null;
+    }
+
+    /**
+     * @see https://github.com/phpstan/phpstan-src/blob/8376548f76e2c845ae047e3010e873015b796818/src/Analyser/NameScope.php#L32
+     */
+    private function createNameScopeFromNode(Node $node): NameScope
+    {
+        $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
+        $useNodes = $node->getAttribute(AttributeKey::USE_NODES);
+
+        $uses = [];
+        if ($useNodes) {
+            foreach ($useNodes as $useNode) {
+                foreach ($useNode->uses as $useUse) {
+                    /** @var UseUse $useUse */
+                    $aliasName = $useUse->getAlias()->name;
+                    $useName = $this->nameResolver->getName($useUse->name);
+
+                    $uses[$aliasName] = $useName;
+                }
+            }
+        }
+
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+
+        return new NameScope($namespace, $uses, $className);
     }
 }
