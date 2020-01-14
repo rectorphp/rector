@@ -122,14 +122,6 @@ final class PHPStanStaticTypeMapper
             return null;
         }
 
-        if ($phpStanType instanceof CallableType || $phpStanType instanceof ClosureType) {
-            if ($kind === 'property') {
-                return null;
-            }
-
-            return new Identifier('callable');
-        }
-
         if ($phpStanType instanceof TypeWithClassName) {
             $lowerCasedClassName = strtolower($phpStanType->getClassName());
             if ($lowerCasedClassName === 'callable') {
