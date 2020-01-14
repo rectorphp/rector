@@ -143,18 +143,6 @@ final class PHPStanStaticTypeMapper
             return new FullyQualified($phpStanType->getClassName());
         }
 
-        if ($phpStanType instanceof VoidType || $phpStanType instanceof ResourceType) {
-            return null;
-        }
-
-        if ($phpStanType instanceof ObjectWithoutClassType) {
-            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::OBJECT_TYPE)) {
-                return new Identifier('object');
-            }
-
-            return null;
-        }
-
         throw new NotImplementedException(__METHOD__ . ' for ' . get_class($phpStanType));
     }
 
