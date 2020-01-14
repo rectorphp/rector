@@ -76,7 +76,11 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $propertyType = $this->propertyTypeInferer->inferProperty($node);
-        $isInheritdoc = Strings::contains($node->getAttribute('comments')[0]->getText(), '@inheritdoc');
+        /** @var \PhpParser\Comment\Doc $attribute */
+        $attribute = $node->getAttribute('comments')[0];
+        $attributeText = !is_null($attribute) ? $attribute->getText() : '';
+        $isInheritdoc = Strings::contains(Strings::lower($attributeText), '@inheritdoc');
+
         if ($propertyType instanceof MixedType || $isInheritdoc) {
             return null;
         }
