@@ -22,6 +22,7 @@ services:
 parameters:
     sets:
       - 'psr12'
+      - 'php70'
       - 'php71'
       - 'symplify'
       - 'common'
@@ -159,5 +160,9 @@ parameters:
 
         # conflicts with "PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer"
         PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer: null
+
+        PhpCsFixer\Fixer\Strict\StrictComparisonFixer:
+            # part of the comparison logic
+            - 'packages/Polyfill/src/ConditionEvaluator.php'
 
     line_ending: "\n"

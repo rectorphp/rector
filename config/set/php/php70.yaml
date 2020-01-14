@@ -23,3 +23,4 @@ services:
 
     Rector\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector: null
     Rector\Php70\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector: null
+    Rector\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector: null

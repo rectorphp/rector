@@ -1,0 +1,25 @@
+<?php
+
+namespace Rector\PHPUnit\Tests\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector\Fixture;
+
+use Rector\PHPUnit\Tests\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector\Source\Denormalizer;
+use Rector\PHPUnit\Tests\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector\Source\DenormalizerInterface;
+
+class SkipProphecyAssertions extends \PHPUnit\Framework\TestCase
+{
+    public function testDenormalize(): void
+    {
+        $badData = ['42'];
+        $fixedData = [42];
+
+        $type = 'anything';
+
+        /** @var DenormalizerInterface $denormalizer */
+        $denormalizer = $this->prophesize(DenormalizerInterface::class);
+        $denormalizer
+            ->denormalize($fixedData, $type)
+            ->shouldBeCalled(); // this is an assertion here
+
+        (new Denormalizer($denormalizer))->handle($badData, $type);
+    }
+}

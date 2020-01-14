@@ -75,7 +75,7 @@ PHP
                 <<<'PHP'
 public function someAction($id)
 {
-}                
+}
 PHP
             )]
         );

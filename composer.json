@@ -21,17 +21,17 @@
         "nikic/php-parser": "^4.3",
         "ondram/ci-detector": "^3.1",
         "phpstan/phpdoc-parser": "^0.4",
-        "phpstan/phpstan": "^0.12.4",
+        "phpstan/phpstan": "^0.12.5",
         "phpstan/phpstan-phpunit": "^0.12",
         "sebastian/diff": "^3.0",
         "symfony/console": "^4.4|^5.0",
         "symfony/dependency-injection": "^4.4|^5.0",
         "symfony/finder": "^4.4|^5.0",
         "symfony/process": "^4.4|^5.0",
-        "symplify/package-builder": "^7.2",
-        "symplify/set-config-resolver": "^7.2",
+        "symplify/auto-bind-parameter": "^7.2",
         "symplify/autowire-array-parameter": "^7.2",
-        "symplify/auto-bind-parameter": "^7.2"
+        "symplify/package-builder": "^7.2",
+        "symplify/set-config-resolver": "^7.2"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
@@ -50,6 +50,7 @@
             "Rector\\": "src",
             "Rector\\Autodiscovery\\": "packages/Autodiscovery/src",
             "Rector\\Architecture\\": "packages/Architecture/src",
+            "Rector\\AttributeAwarePhpDoc\\": "packages/AttributeAwarePhpDoc/src",
             "Rector\\BetterPhpDocParser\\": "packages/BetterPhpDocParser/src",
             "Rector\\CakePHP\\": "packages/CakePHP/src",
             "Rector\\Celebrity\\": "packages/Celebrity/src",
@@ -102,6 +103,7 @@
             "Rector\\ZendToSymfony\\": "packages/ZendToSymfony/src",
             "Rector\\Utils\\DocumentationGenerator\\": "utils/DocumentationGenerator/src",
             "Rector\\Utils\\RectorGenerator\\": "utils/RectorGenerator/src",
+            "Rector\\Utils\\PHPStanAttributeTypeSyncer\\": "utils/PHPStanAttributeTypeSyncer/src",
             "Rector\\StrictCodeQuality\\": "packages/StrictCodeQuality/src",
             "Rector\\DynamicTypeAnalysis\\": "packages/DynamicTypeAnalysis/src",
             "Rector\\PhpDeglobalize\\": "packages/PhpDeglobalize/src",
@@ -173,6 +175,7 @@
             "Rector\\Polyfill\\Tests\\": "packages/Polyfill/tests"
         },
         "classmap": [
+            "packages/CakePHP/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",
             "packages/Symfony/tests/Rector/FrameworkBundle/AbstractToConstructorInjectionRectorSource",
             "packages/Symfony/tests/Rector/FrameworkBundle/ContainerGetToConstructorInjectionRector/Source",
             "packages/NodeTypeResolver/tests/PerNodeTypeResolver/ParamTypeResolver/Source",
@@ -182,7 +185,8 @@
             "tests/Rector/Namespace_/PseudoNamespaceToNamespaceRector/Source",
             "tests/Issues/Issue1243/Source",
             "packages/Autodiscovery/tests/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
-            "packages/Autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected"
+            "packages/Autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected",
+            "packages/CakePHP/tests/Rector/StaticCall/AppUsesStaticCallToUseStatementRector/Source"
         ],
         "files": [
             "packages/DeadCode/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",

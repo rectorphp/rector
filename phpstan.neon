@@ -256,3 +256,6 @@ parameters:
         - '#Method (.*?) returns bool type, so the name should start with is/has/was#'
 
         - '#Property Rector\\BetterPhpDocParser\\PhpDocNode\\Gedmo\\BlameableTagValueNode\:\:\$value has no typehint specified#'
+
+        # known value
+        - "#^Parameter \\#1 \\$variable of class Rector\\\\Php70\\\\ValueObject\\\\VariableAssignPair constructor expects PhpParser\\\\Node\\\\Expr\\\\ArrayDimFetch\\|PhpParser\\\\Node\\\\Expr\\\\PropertyFetch\\|PhpParser\\\\Node\\\\Expr\\\\StaticPropertyFetch\\|PhpParser\\\\Node\\\\Expr\\\\Variable, PhpParser\\\\Node\\\\Expr given\\.$#"

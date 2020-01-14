@@ -3,7 +3,6 @@
 Rector is a **rec**onstruc**tor** tool - it does **instant upgrades** and **instant refactoring** of your code.
 Why refactor manually if Rector can handle 80% for you?
 
-[![Build Status with Travis CI](https://img.shields.io/travis/rectorphp/rector/master.svg?style=flat-square)](https://travis-ci.org/rectorphp/rector)
 [![Build Status Github Actions](https://img.shields.io/github/workflow/status/rectorphp/rector/Code_Checks?style=flat-square)](https://github.com/rectorphp/rector/actions)
 [![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)

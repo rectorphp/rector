@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Application;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
@@ -155,7 +156,9 @@ final class UseAddingCommander implements CommanderInterface
         // B. no namespace? add in the top
         // first clean
         $nodes = $this->useImportsRemover->removeImportsFromStmts($nodes, $removedShortUses);
+        $useImportTypes = $this->filterOutNonNamespacedNames($useImportTypes);
         // then add, to prevent adding + removing false positive of same short use
+
         return $this->useImportsAdder->addImportsToStmts($nodes, $useImportTypes, $functionUseImportTypes);
     }
 
@@ -286,5 +289,25 @@ final class UseAddingCommander implements CommanderInterface
         $filePath = $this->getRealPathFromNode($node);
 
         return $this->useImportTypesInFilePath[$filePath] ?? [];
+    }
+
+    /**
+     * Prevents
+     * @param FullyQualifiedObjectType[] $useImportTypes
+     * @return FullyQualifiedObjectType[]
+     */
+    private function filterOutNonNamespacedNames(array $useImportTypes): array
+    {
+        $namespacedUseImportTypes = [];
+
+        foreach ($useImportTypes as $useImportType) {
+            if (! Strings::contains($useImportType->getClassName(), '\\')) {
+                continue;
+            }
+
+            $namespacedUseImportTypes[] = $useImportType;
+        }
+
+        return $namespacedUseImportTypes;
     }
 }

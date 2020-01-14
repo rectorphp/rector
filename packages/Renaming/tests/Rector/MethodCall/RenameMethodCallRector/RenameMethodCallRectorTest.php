@@ -8,6 +8,7 @@ use Iterator;
 use Nette\Utils\Html;
 use Rector\Renaming\Rector\MethodCall\RenameMethodCallRector;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodCallRector\Source\ClassMethodToBeSkipped;
+use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodCallRector\Source\SomeTranslator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RenameMethodCallRectorTest extends AbstractRectorTestCase
@@ -42,6 +43,10 @@ final class RenameMethodCallRectorTest extends AbstractRectorTestCase
                     ],
                     ClassMethodToBeSkipped::class => [
                         'createHtml' => 'testHtml',
+                    ],
+                    SomeTranslator::class => [
+                        '__' => 'trans',
+                        '__t' => 'trans',
                     ],
                 ],
             ],
