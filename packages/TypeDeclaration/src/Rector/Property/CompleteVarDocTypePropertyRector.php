@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Property;
 
 use Nette\Utils\Strings;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
@@ -76,9 +77,9 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $propertyType = $this->propertyTypeInferer->inferProperty($node);
-        /** @var \PhpParser\Comment\Doc $attribute */
+        /** @var Doc $attribute */
         $attribute = $node->getAttribute('comments')[0];
-        $attributeText = !is_null($attribute) ? $attribute->getText() : '';
+        $attributeText = $attribute !== null ? $attribute->getText() : '';
         $isInheritdoc = Strings::contains(Strings::lower($attributeText), '@inheritdoc');
 
         if ($propertyType instanceof MixedType || $isInheritdoc) {
