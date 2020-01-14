@@ -1,0 +1,41 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
+
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\ClosureType;
+use PHPStan\Type\Type;
+use Rector\Exception\NotImplementedException;
+use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+
+final class ClosureTypeMapper implements TypeMapperInterface
+{
+    public function getNodeClass(): string
+    {
+        return ClosureType::class;
+    }
+
+    /**
+     * @param ClosureType $type
+     */
+    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    {
+        throw new NotImplementedException();
+    }
+
+    /**
+     * @param ClosureType $type
+     */
+    public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
+    {
+        if ($kind === 'property') {
+            return null;
+        }
+
+        return new Identifier('callable');
+    }
+}
