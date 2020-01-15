@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\PHPStan\Reflection;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -13,17 +14,27 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Broker\FunctionNotFoundException;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\Native\NativeFunctionReflection;
 use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ClosureType;
+use PHPStan\TrinaryLogic;
+use PHPStan\Type\Constant\ConstantStringType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PHPStan\Reflection\Php\ClosureInvokeMethodReflection;
 
 final class CallReflectionResolver
 {
+    /**
+     * Took from https://github.com/phpstan/phpstan-src/blob/8376548f76e2c845ae047e3010e873015b796818/src/Type/Constant/ConstantStringType.php#L158
+     *
+     * @see https://regex101.com/r/IE6lcM/4
+     *
+     * @var string
+     */
+    private const STATIC_METHOD_REGEXP = '#^([a-zA-Z_\\x7f-\\xff\\\\][a-zA-Z0-9_\\x7f-\\xff\\\\]*)::([a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)\\z#';
+
     /**
      * @var ReflectionProvider
      */
@@ -83,11 +94,17 @@ final class CallReflectionResolver
         }
 
         $type = $scope->getType($funcCall->name);
-        if (! $type instanceof ClosureType) {
-            return null;
+
+        if (! $type instanceof ConstantStringType) {
+            return new NativeFunctionReflection(
+                '{closure}',
+                $type->getCallableParametersAcceptors($scope),
+                null,
+                TrinaryLogic::createMaybe()
+            );
         }
 
-        return new ClosureInvokeMethodReflection($type->getMethod('__invoke', $scope), $type);
+        return $this->resolveConstantString($type, $scope);
     }
 
     /**
@@ -141,5 +158,36 @@ final class CallReflectionResolver
         }
 
         return $parametersAcceptor;
+    }
+
+    /**
+     * @return FunctionReflection|MethodReflection|null
+     */
+    private function resolveConstantString(ConstantStringType $constantStringType, Scope $scope)
+    {
+        $value = $constantStringType->getValue();
+
+        // 'my_function'
+        $functionName = new Name($value);
+        if ($this->reflectionProvider->hasFunction($functionName, null)) {
+            return $this->reflectionProvider->getFunction($functionName, null);
+        }
+
+        // 'MyClass::myStaticFunction'
+        $matches = Strings::match($value, self::STATIC_METHOD_REGEXP);
+        if ($matches === null) {
+            return null;
+        }
+
+        if (! $this->reflectionProvider->hasClass($matches[1])) {
+            return null;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($matches[1]);
+        if (! $classReflection->hasMethod($matches[2])) {
+            return null;
+        }
+
+        return $classReflection->getMethod($matches[2], $scope);
     }
 }

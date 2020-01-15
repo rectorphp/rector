@@ -25,11 +25,6 @@ function methodCalls()
     $aClass = new AClass();
     $aClass->baz(baz());
     $aClass->child()->bar(bar());
-
-    $anonymousClass = new class {
-        public function bar(&$baz) {}
-    };
-    $anonymousClass->bar(baz());
 }
 
 ?>
@@ -64,12 +59,6 @@ function methodCalls()
     $aClass->baz($baz);
     $bar = bar();
     $aClass->child()->bar($bar);
-
-    $anonymousClass = new class {
-        public function bar(&$baz) {}
-    };
-    $baz = baz();
-    $anonymousClass->bar($baz);
 }
 
 ?>
