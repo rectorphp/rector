@@ -13,6 +13,7 @@ final class FunctionSupportResolver
      */
     private const FUNCTIONS_BY_VERSION = [
         '5.6' => ['session_abort'],
+        '7.0' => ['random_int', 'random_bytes'],
     ];
 
     /**
