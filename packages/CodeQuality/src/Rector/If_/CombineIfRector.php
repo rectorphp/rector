@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Rector\If_;
 
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Stmt\If_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
