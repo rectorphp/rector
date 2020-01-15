@@ -48,7 +48,7 @@ Rector **instantly upgrades and instantly refactors the PHP code of your applica
 ## What Can Rector Do for You?
 
 - Rename classes, methods, properties, namespaces or constants
-- Complete [parameter, var or return type declarations](https://www.tomasvotruba.czom/blog/2019/01/03/how-to-complete-type-declarations-without-docblocks-with-rector/) based on static analysis of your code
+- Complete [parameter, var or return type declarations](https://www.tomasvotruba.com/blog/2019/01/03/how-to-complete-type-declarations-without-docblocks-with-rector/) based on static analysis of your code
 - Upgrade your code from PHP 5.3 to PHP 7.4
 - [Migrate your project from Nette to Symfony](https://www.tomasvotruba.com/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
 - [Complete PHP 7.4 property type declarations](https://www.tomasvotruba.com/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
