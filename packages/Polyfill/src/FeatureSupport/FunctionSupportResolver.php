@@ -17,7 +17,7 @@ final class FunctionSupportResolver
         '7.1' => ['is_iterable'],
         '7.2' => ['spl_object_id', 'stream_isatty'],
         '7.3' => ['array_key_first', 'array_key_last', 'hrtime', 'is_countable'],
-        '7.4' => ['get_mangled_object_vars', 'mb_str_split', 'password_algos']
+        '7.4' => ['get_mangled_object_vars', 'mb_str_split', 'password_algos'],
     ];
 
     /**
