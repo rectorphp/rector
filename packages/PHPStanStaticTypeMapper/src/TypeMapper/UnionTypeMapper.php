@@ -18,13 +18,12 @@ use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Php\PhpVersionProvider;
-use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\ValueObject\PhpVersionFeature;
 
-final class UnionTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMapperAwareInterface
+final class UnionTypeMapper implements TypeMapperInterface
 {
     /**
      * @var PHPStanStaticTypeMapper
@@ -71,7 +70,7 @@ final class UnionTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMap
     /**
      * @required
      */
-    public function setPHPStanStaticTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

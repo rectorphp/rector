@@ -43,7 +43,6 @@ use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\SelfObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
-use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\ValueObject\PhpVersionFeature;
 
@@ -70,9 +69,8 @@ final class PHPStanStaticTypeMapper
 
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
-        if ($type instanceof ArrayType || $type instanceof IterableType) {
+        if ($type instanceof ArrayType) {
             $itemTypeNode = $this->mapToPHPStanPhpDocTypeNode($type->getItemType());
-
             if ($itemTypeNode instanceof UnionTypeNode) {
                 return $this->convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes($itemTypeNode);
             }
@@ -83,11 +81,6 @@ final class PHPStanStaticTypeMapper
         foreach ($this->typeMappers as $typeMapper) {
             if (! is_a($type, $typeMapper->getNodeClass(), true)) {
                 continue;
-            }
-
-            // prevents circular dependency
-            if ($typeMapper instanceof PHPStanStaticTypeMapperAwareInterface) {
-                $typeMapper->setPHPStanStaticTypeMapper($this);
             }
 
             return $typeMapper->mapToPHPStanPhpDocTypeNode($type);

@@ -22,4 +22,6 @@ interface TypeMapperInterface
      * @return Identifier|Name|NullableType|UnionType|null
      */
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node;
+
+    public function mapToDocString(Type $phpStanType, ?Type $parentType = null): string;
 }
