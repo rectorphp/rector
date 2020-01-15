@@ -13,11 +13,6 @@ function funcCalls()
     allByRef(bar(), baz());
     allByRef(1, 2);
 
-    $anonymousFunction = function (&$bar) {};
-    $staticAnonymousFunction = static function (&$bar) {};
-    $anonymousFunction(bar());
-    $staticAnonymousFunction(bar());
-
     return byRef(1, bar());
 }
 
@@ -43,13 +38,6 @@ function funcCalls()
     $tmp = 1;
     $tmp2 = 2;
     allByRef($tmp, $tmp2);
-
-    $anonymousFunction = function (&$bar) {};
-    $staticAnonymousFunction = static function (&$bar) {};
-    $bar = bar();
-    $anonymousFunction($bar);
-    $bar = bar();
-    $staticAnonymousFunction($bar);
     $bar = bar();
 
     return byRef(1, $bar);

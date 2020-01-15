@@ -15,7 +15,6 @@ services:
             - '../src/DependencyInjection/Loader/*'
             - '../src/HttpKernel/*'
             - '../src/ValueObject/*'
-            - '../src/PHPStan/Reflection/Php/*'
 
     # extra services
     Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider: null
