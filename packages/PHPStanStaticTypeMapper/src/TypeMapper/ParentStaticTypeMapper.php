@@ -9,6 +9,7 @@ use PhpParser\Node\Identifier;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
+use PHPStan\Type\VerbosityLevel;
 use Rector\PHPStan\Type\ParentStaticType;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
@@ -33,5 +34,10 @@ final class ParentStaticTypeMapper implements TypeMapperInterface
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
         return new Identifier('parent');
+    }
+
+    public function mapToDocString(Type $type, ?Type $parentType = null): string
+    {
+        return $type->describe(VerbosityLevel::typeOnly());
     }
 }

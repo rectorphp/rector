@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
+use PHPStan\Type\VerbosityLevel;
 use Rector\Php\PhpVersionProvider;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\ValueObject\PhpVersionFeature;
@@ -49,5 +50,10 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
         }
 
         return new Identifier('object');
+    }
+
+    public function mapToDocString(Type $type, ?Type $parentType = null): string
+    {
+        return $type->describe(VerbosityLevel::typeOnly());
     }
 }

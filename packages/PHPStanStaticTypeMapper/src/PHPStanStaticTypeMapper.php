@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanStaticTypeMapper;
 
-use Closure;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -15,44 +14,17 @@ use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\BooleanType;
-use PHPStan\Type\CallableType;
-use PHPStan\Type\ClosureType;
-use PHPStan\Type\FloatType;
-use PHPStan\Type\IntegerType;
-use PHPStan\Type\IntersectionType;
-use PHPStan\Type\IterableType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\NeverType;
-use PHPStan\Type\NullType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\ObjectWithoutClassType;
-use PHPStan\Type\ResourceType;
 use PHPStan\Type\StaticType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
-use PHPStan\Type\VerbosityLevel;
-use PHPStan\Type\VoidType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\Exception\NotImplementedException;
-use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
-use Rector\Php\PhpVersionProvider;
-use Rector\PHPStan\Type\AliasedObjectType;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\PHPStan\Type\SelfObjectType;
-use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\ValueObject\PhpVersionFeature;
 
 final class PHPStanStaticTypeMapper
 {
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
     /**
      * @var TypeMapperInterface[]
      */
@@ -61,14 +33,14 @@ final class PHPStanStaticTypeMapper
     /**
      * @param TypeMapperInterface[] $typeMappers
      */
-    public function __construct(PhpVersionProvider $phpVersionProvider, array $typeMappers)
+    public function __construct(array $typeMappers)
     {
-        $this->phpVersionProvider = $phpVersionProvider;
         $this->typeMappers = $typeMappers;
     }
 
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
+        // @todo move to ArrayTypeMapper
         if ($type instanceof ArrayType) {
             $itemTypeNode = $this->mapToPHPStanPhpDocTypeNode($type->getItemType());
             if ($itemTypeNode instanceof UnionTypeNode) {
@@ -94,10 +66,6 @@ final class PHPStanStaticTypeMapper
      */
     public function mapToPhpParserNode(Type $phpStanType, ?string $kind = null): ?Node
     {
-        if ($phpStanType instanceof SelfObjectType) {
-            return new Identifier('self');
-        }
-
         foreach ($this->typeMappers as $typeMapper) {
             // it cannot be is_a for SelfObjectType, because type classes inherit from each other
             if (! is_a($phpStanType, $typeMapper->getNodeClass(), true)) {
@@ -141,54 +109,13 @@ final class PHPStanStaticTypeMapper
 
     public function mapToDocString(Type $phpStanType, ?Type $parentType = null): string
     {
-        if ($phpStanType instanceof UnionType || $phpStanType instanceof IntersectionType) {
-            $stringTypes = [];
-
-            foreach ($phpStanType->getTypes() as $unionedType) {
-                $stringTypes[] = $this->mapToDocString($unionedType);
+        foreach ($this->typeMappers as $typeMapper) {
+            // it cannot be is_a for SelfObjectType, because type classes inherit from each other
+            if (! is_a($phpStanType, $typeMapper->getNodeClass(), true)) {
+                continue;
             }
 
-            // remove empty values, e.g. void/iterable
-            $stringTypes = array_unique($stringTypes);
-            $stringTypes = array_filter($stringTypes);
-
-            $joinCharacter = $phpStanType instanceof IntersectionType ? '&' : '|';
-
-            return implode($joinCharacter, $stringTypes);
-        }
-
-        if ($phpStanType instanceof AliasedObjectType) {
-            // no preslash for alias
-            return $phpStanType->getClassName();
-        }
-
-        if ($phpStanType instanceof ShortenedObjectType) {
-            return '\\' . $phpStanType->getFullyQualifiedName();
-        }
-
-        if ($phpStanType instanceof FullyQualifiedObjectType) {
-            // always prefixed with \\
-            return '\\' . $phpStanType->getClassName();
-        }
-
-        if ($phpStanType instanceof ObjectType) {
-            if (ClassExistenceStaticHelper::doesClassLikeExist($phpStanType->getClassName())) {
-                return '\\' . $phpStanType->getClassName();
-            }
-
-            return $phpStanType->getClassName();
-        }
-
-        if ($phpStanType instanceof ObjectWithoutClassType) {
-            return 'object';
-        }
-
-        if ($phpStanType instanceof ClosureType) {
-            return '\\' . Closure::class;
-        }
-
-        if ($phpStanType instanceof StringType || $phpStanType instanceof NullType || $phpStanType instanceof IntegerType || $phpStanType instanceof MixedType || $phpStanType instanceof FloatType || $phpStanType instanceof CallableType || $phpStanType instanceof ResourceType) {
-            return $phpStanType->describe(VerbosityLevel::typeOnly());
+            return $typeMapper->mapToDocString($phpStanType, $parentType);
         }
 
         if ($phpStanType instanceof ArrayType) {
@@ -215,33 +142,6 @@ final class PHPStanStaticTypeMapper
             }
 
             return implode('|', $docStringTypes);
-        }
-
-        if ($phpStanType instanceof VoidType) {
-            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
-                // the void type is better done in PHP code
-                return '';
-            }
-
-            // fallback for PHP 7.0 and older, where void type was only in docs
-            return 'void';
-        }
-
-        if ($phpStanType instanceof IterableType) {
-            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
-                // the void type is better done in PHP code
-                return '';
-            }
-
-            return 'iterable';
-        }
-
-        if ($phpStanType instanceof BooleanType) {
-            return 'bool';
-        }
-
-        if ($phpStanType instanceof NeverType) {
-            return 'mixed';
         }
 
         throw new NotImplementedException(__METHOD__ . ' for ' . get_class($phpStanType));

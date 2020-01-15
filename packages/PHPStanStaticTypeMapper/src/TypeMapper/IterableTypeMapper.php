@@ -11,9 +11,12 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\Type;
+use PHPStan\Type\VerbosityLevel;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
+use Rector\Php\PhpVersionProvider;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\ValueObject\PhpVersionFeature;
 
 final class IterableTypeMapper implements TypeMapperInterface
 {
@@ -23,9 +26,19 @@ final class IterableTypeMapper implements TypeMapperInterface
     private $phpStanStaticTypeMapper;
 
     /**
+     * @var PhpVersionProvider
+     */
+    private $phpVersionProvider;
+
+    public function __construct(PhpVersionProvider $phpVersionProvider)
+    {
+        $this->phpVersionProvider = $phpVersionProvider;
+    }
+
+    /**
      * @required
      */
-    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    public function autowireIterableTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
@@ -54,6 +67,19 @@ final class IterableTypeMapper implements TypeMapperInterface
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
         return new Identifier('iterable');
+    }
+
+    /**
+     * @param IterableType $type
+     */
+    public function mapToDocString(Type $type, ?Type $parentType = null): string
+    {
+        if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
+            // iterable type is better done in PHP code, than in doc
+            return '';
+        }
+
+        return $type->describe(VerbosityLevel::typeOnly());
     }
 
     private function convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes(
