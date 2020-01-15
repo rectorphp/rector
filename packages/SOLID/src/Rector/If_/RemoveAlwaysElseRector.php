@@ -5,30 +5,25 @@ declare(strict_types=1);
 namespace Rector\SOLID\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Exit_;
+use PhpParser\Node\Stmt\Continue_;
+use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
-use Rector\PhpParser\Node\Manipulator\IfManipulator;
+use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Throw_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElseRector\RemoveAlwaysElseRectorTest
+ * @see \Rector\SOLID\Tests\Rector\If_\RemoveAlwaysElse\SplitIfsRectorTest
  */
 final class RemoveAlwaysElseRector extends AbstractRector
 {
-    /**
-     * @var IfManipulator
-     */
-    private $ifManipulator;
-
-    public function __construct(IfManipulator $ifManipulator)
-    {
-        $this->ifManipulator = $ifManipulator;
-    }
-
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Remove if for last else, if previous values were throw', [
+        return new RectorDefinition('Split if statement, when if condition always break execution flow', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass
@@ -75,16 +70,37 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->ifManipulator->isEarlyElse($node)) {
+        if ($this->lastStatementBreaksFlow($node)) {
             return null;
         }
-
-        foreach ($node->else->stmts as $elseStmt) {
-            $this->addNodeAfterNode($elseStmt, $node);
+        if ($node->elseifs !== []) {
+            $newNode = new If_($node->cond);
+            $newNode->stmts = $node->stmts;
+            $this->addNodeBeforeNode($newNode, $node);
+            /** @var ElseIf_ $firstElseIf */
+            $firstElseIf = array_shift($node->elseifs);
+            $node->cond = $firstElseIf->cond;
+            $node->stmts = $firstElseIf->stmts;
+            return $node;
         }
 
-        $node->else = null;
+        if ($node->else !== null) {
+            foreach ($node->else->stmts as $stmt) {
+                $this->addNodeAfterNode($stmt, $node);
+            }
+            $node->else = null;
+            return $node;
+        }
 
-        return $node;
+        return null;
+    }
+
+    protected function lastStatementBreaksFlow(Node $node): bool
+    {
+        $lastStmt = end($node->stmts);
+        return ! ($lastStmt instanceof Return_
+            || $lastStmt instanceof Throw_
+            || $lastStmt instanceof Continue_
+            || ($lastStmt instanceof Expression && $lastStmt->expr instanceof Exit_));
     }
 }
