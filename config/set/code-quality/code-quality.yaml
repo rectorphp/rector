@@ -1,4 +1,4 @@
-services:
+    services:
     Rector\CodeQuality\Rector\Assign\CombinedAssignRector: null
     Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector: null
     Rector\CodeQuality\Rector\Foreach_\ForeachToInArrayRector: null
@@ -25,6 +25,7 @@ services:
     Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector: null
     Rector\CodeQuality\Rector\If_\SimplifyIfIssetToNullCoalescingRector: null
     Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector: null
+    Rector\CodeQuality\Rector\If_\CombineIfRector: null
     Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector: null
     Rector\CodeQuality\Rector\Ternary\SimplifyDuplicatedTernaryRector: null
     Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector: null
