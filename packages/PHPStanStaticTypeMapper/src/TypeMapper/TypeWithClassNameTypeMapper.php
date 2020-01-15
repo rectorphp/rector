@@ -6,38 +6,47 @@ namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\CallableType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
-use Rector\Exception\NotImplementedException;
+use Rector\Php\PhpVersionProvider;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\ValueObject\PhpVersionFeature;
 
-final class CallableTypeMapper implements TypeMapperInterface
+final class TypeWithClassNameTypeMapper implements TypeMapperInterface
 {
+    /**
+     * @var PhpVersionProvider
+     */
+    private $phpVersionProvider;
+
+    public function __construct(PhpVersionProvider $phpVersionProvider)
+    {
+        $this->phpVersionProvider = $phpVersionProvider;
+    }
+
     public function getNodeClass(): string
     {
-        return CallableType::class;
+        return StringType::class;
     }
 
     /**
-     * @param CallableType $type
+     * @param StringType $type
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
-        throw new NotImplementedException();
+        return new IdentifierTypeNode('string');
     }
 
-    /**
-     * @param CallableType $type
-     */
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
-        if ($kind === 'property') {
+        if (! $this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
             return null;
         }
 
-        return new Identifier('callable');
+        return new Identifier('string');
     }
 
     public function mapToDocString(Type $type, ?Type $parentType = null): string

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
+use Closure;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -37,5 +38,10 @@ final class ClosureTypeMapper implements TypeMapperInterface
         }
 
         return new Identifier('callable');
+    }
+
+    public function mapToDocString(Type $type, ?Type $parentType = null): string
+    {
+        return '\\' . Closure::class;
     }
 }

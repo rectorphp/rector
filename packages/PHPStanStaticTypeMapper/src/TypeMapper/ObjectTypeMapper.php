@@ -13,8 +13,11 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\VerbosityLevel;
+use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\PHPStan\Type\SelfObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
@@ -38,6 +41,10 @@ final class ObjectTypeMapper implements TypeMapperInterface
      */
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
+        if ($type instanceof SelfObjectType) {
+            return new Identifier('self');
+        }
+
         if ($type instanceof ShortenedObjectType) {
             return new FullyQualified($type->getFullyQualifiedName());
         }
@@ -58,5 +65,32 @@ final class ObjectTypeMapper implements TypeMapperInterface
 
         // fallback
         return new FullyQualified($type->getClassName());
+    }
+
+    /**
+     * @param ObjectType $type
+     */
+    public function mapToDocString(Type $type, ?Type $parentType = null): string
+    {
+        if ($type instanceof AliasedObjectType) {
+            // no preslash for alias
+            return $type->getClassName();
+        }
+
+        if ($type instanceof ShortenedObjectType) {
+            return '\\' . $type->getFullyQualifiedName();
+        }
+
+        if ($type instanceof FullyQualifiedObjectType) {
+            // always prefixed with \\
+            return '\\' . $type->getClassName();
+        }
+
+        if (ClassExistenceStaticHelper::doesClassLikeExist($type->getClassName())) {
+            // FQN by default
+            return '\\' . $type->describe(VerbosityLevel::typeOnly());
+        }
+
+        return $type->getClassName();
     }
 }

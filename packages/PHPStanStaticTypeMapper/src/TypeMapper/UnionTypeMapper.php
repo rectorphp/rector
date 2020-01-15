@@ -18,13 +18,12 @@ use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Php\PhpVersionProvider;
-use Rector\PHPStanStaticTypeMapper\Contract\PHPStanStaticTypeMapperAwareInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\ValueObject\PhpVersionFeature;
 
-final class UnionTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMapperAwareInterface
+final class UnionTypeMapper implements TypeMapperInterface
 {
     /**
      * @var PHPStanStaticTypeMapper
@@ -47,6 +46,14 @@ final class UnionTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMap
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
     }
 
+    /**
+     * @required
+     */
+    public function autowireUnionTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    {
+        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
+    }
+
     public function getNodeClass(): string
     {
         return UnionType::class;
@@ -66,14 +73,6 @@ final class UnionTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMap
         $unionTypesNodes = array_unique($unionTypesNodes);
 
         return new AttributeAwareUnionTypeNode($unionTypesNodes);
-    }
-
-    /**
-     * @required
-     */
-    public function setPHPStanStaticTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
-    {
-        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
 
     /**
@@ -108,6 +107,24 @@ final class UnionTypeMapper implements TypeMapperInterface, PHPStanStaticTypeMap
         }
 
         return new NullableType($nullabledTypeNode);
+    }
+
+    /**
+     * @param UnionType $type
+     */
+    public function mapToDocString(Type $type, ?Type $parentType = null): string
+    {
+        $docStrings = [];
+
+        foreach ($type->getTypes() as $unionedType) {
+            $docStrings[] = $this->phpStanStaticTypeMapper->mapToDocString($unionedType);
+        }
+
+        // remove empty values, e.g. void/iterable
+        $docStrings = array_unique($docStrings);
+        $docStrings = array_filter($docStrings);
+
+        return implode('|', $docStrings);
     }
 
     private function matchArrayTypes(UnionType $unionType): ?Identifier

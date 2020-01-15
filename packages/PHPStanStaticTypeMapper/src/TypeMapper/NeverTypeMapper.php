@@ -33,4 +33,9 @@ final class NeverTypeMapper implements TypeMapperInterface
     {
         return null;
     }
+
+    public function mapToDocString(Type $type, ?Type $parentType = null): string
+    {
+        return 'mixed';
+    }
 }

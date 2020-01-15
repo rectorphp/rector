@@ -50,4 +50,12 @@ final class BooleanTypeMapper implements TypeMapperInterface
 
         return new Identifier('bool');
     }
+
+    /**
+     * @param BooleanType $type
+     */
+    public function mapToDocString(Type $type, ?Type $parentType = null): string
+    {
+        return 'bool';
+    }
 }

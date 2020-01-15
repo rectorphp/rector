@@ -9,51 +9,32 @@ use PhpParser\Node\Identifier;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use PHPStan\Type\IterableType;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\Type;
-use PHPStan\Type\VerbosityLevel;
+use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareUnionTypeNode;
-use Rector\Php\PhpVersionProvider;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use Rector\ValueObject\PhpVersionFeature;
 
-final class IterableTypeMapper implements TypeMapperInterface
+final class ArrayTypeMapper implements TypeMapperInterface
 {
     /**
      * @var PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
 
-    /**
-     * @var PhpVersionProvider
-     */
-    private $phpVersionProvider;
-
-    public function __construct(PhpVersionProvider $phpVersionProvider)
-    {
-        $this->phpVersionProvider = $phpVersionProvider;
-    }
-
-    /**
-     * @required
-     */
-    public function autowireIterableTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
-    {
-        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
-    }
-
     public function getNodeClass(): string
     {
-        return IterableType::class;
+        return ArrayType::class;
     }
 
     /**
-     * @param IterableType $type
+     * @param ArrayType $type
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getItemType());
+
         if ($itemTypeNode instanceof UnionTypeNode) {
             return $this->convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes($itemTypeNode);
         }
@@ -62,26 +43,65 @@ final class IterableTypeMapper implements TypeMapperInterface
     }
 
     /**
-     * @param IterableType $type
+     * @param ArrayType $type
      */
     public function mapToPhpParserNode(Type $type, ?string $kind = null): ?Node
     {
-        return new Identifier('iterable');
+        return new Identifier('array');
     }
 
     /**
-     * @param IterableType $type
+     * @param ArrayType $type
      */
     public function mapToDocString(Type $type, ?Type $parentType = null): string
     {
-        if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
-            // iterable type is better done in PHP code, than in doc
-            return '';
+        $itemType = $type->getItemType();
+
+        if ($itemType instanceof UnionType) {
+            return $this->mapArrayUnionTypeToDocString($type, $itemType);
         }
 
-        return $type->describe(VerbosityLevel::typeOnly());
+        $docString = $this->phpStanStaticTypeMapper->mapToDocString($type->getItemType(), $parentType);
+
+        // @todo improve this
+        $docStringTypes = explode('|', $docString);
+        $docStringTypes = array_filter($docStringTypes);
+
+        foreach ($docStringTypes as $key => $docStringType) {
+            $docStringTypes[$key] = $docStringType . '[]';
+        }
+
+        return implode('|', $docStringTypes);
     }
 
+    /**
+     * @required
+     */
+    public function autowireArrayTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    {
+        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
+    }
+
+    private function mapArrayUnionTypeToDocString(ArrayType $arrayType, UnionType $unionType): string
+    {
+        $unionedTypesAsString = [];
+
+        foreach ($unionType->getTypes() as $unionedArrayItemType) {
+            $unionedTypesAsString[] = $this->phpStanStaticTypeMapper->mapToDocString(
+                $unionedArrayItemType,
+                $arrayType
+            ) . '[]';
+        }
+
+        $unionedTypesAsString = array_values($unionedTypesAsString);
+        $unionedTypesAsString = array_unique($unionedTypesAsString);
+
+        return implode('|', $unionedTypesAsString);
+    }
+
+    /**
+     * @todo improve
+     */
     private function convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes(
         UnionTypeNode $unionTypeNode
     ): AttributeAwareUnionTypeNode {

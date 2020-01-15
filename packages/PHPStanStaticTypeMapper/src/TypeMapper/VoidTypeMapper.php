@@ -54,4 +54,15 @@ final class VoidTypeMapper implements TypeMapperInterface
 
         return new Identifier('void');
     }
+
+    public function mapToDocString(Type $type, ?Type $parentType = null): string
+    {
+        if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::SCALAR_TYPES)) {
+            // the void type is better done in PHP code
+            return '';
+        }
+
+        // fallback for PHP 7.0 and older, where void type was only in docs
+        return 'void';
+    }
 }
