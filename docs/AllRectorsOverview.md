@@ -1,4 +1,4 @@
-# All 429 Rectors Overview
+# All 430 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -508,6 +508,29 @@ Change array_push() to direct variable assign
          $items = [];
 -        array_push($items, $item);
 +        $items[] = $item;
+     }
+ }
+```
+
+<br>
+
+### `CombineIfRector`
+
+- class: `Rector\CodeQuality\Rector\If_\CombineIfRector`
+
+Merges nested if statements
+
+```diff
+ class SomeClass {
+     public function run()
+     {
+-        if ($cond1) {
+-            if ($cond2) {
+-                return 'foo';
+-            }
++        if ($cond1 && $cond2) {
++            return 'foo';
+         }
      }
  }
 ```
