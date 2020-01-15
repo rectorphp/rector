@@ -1,4 +1,4 @@
-# All 429 Rectors Overview
+# All 430 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -1191,6 +1191,29 @@ Changes in_array() with single element to ===
 +        if (strtolower($type) === '$this') {
              return strtolower($type);
          }
+     }
+ }
+```
+
+<br>
+
+### `SplitIfsRector`
+
+- class: `Rector\CodeQuality\Rector\If_\SplitIfsRector`
+
+Merges nested if statements
+
+```diff
+ class SomeClass {
+     public function run()
+     {
+         if ($cond1) {
+             return 'foo';
+-        } else {
+-            return 'bar';
+         }
++
++        return 'bar';
      }
  }
 ```
