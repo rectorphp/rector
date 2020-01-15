@@ -1,4 +1,4 @@
-    services:
+services:
     Rector\CodeQuality\Rector\Assign\CombinedAssignRector: null
     Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector: null
     Rector\CodeQuality\Rector\Foreach_\ForeachToInArrayRector: null
