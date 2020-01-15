@@ -9,6 +9,8 @@ class MyClass
 
 function stringyCalls()
 {
+    'reset'(bar());
+
     $functionName = 'reset';
     $functionName(bar());
 
@@ -29,6 +31,9 @@ class MyClass
 
 function stringyCalls()
 {
+    $bar = bar();
+    'reset'($bar);
+
     $functionName = 'reset';
     $bar = bar();
     $functionName($bar);

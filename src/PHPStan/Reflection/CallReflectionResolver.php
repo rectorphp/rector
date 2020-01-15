@@ -19,7 +19,12 @@ use PHPStan\Reflection\ParametersAcceptor;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\TrinaryLogic;
+use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Constant\ConstantArrayTypeAndMethod;
+use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\ObjectWithoutClassType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -95,16 +100,24 @@ final class CallReflectionResolver
 
         $type = $scope->getType($funcCall->name);
 
-        if (! $type instanceof ConstantStringType) {
-            return new NativeFunctionReflection(
-                '{closure}',
-                $type->getCallableParametersAcceptors($scope),
-                null,
-                TrinaryLogic::createMaybe()
-            );
+        if ($type instanceof ObjectType) {
+            return $this->resolveInvokable($type);
         }
 
-        return $this->resolveConstantString($type, $scope);
+        if ($type instanceof ConstantStringType) {
+            return $this->resolveConstantString($type, $scope);
+        }
+
+        if ($type instanceof ConstantArrayType) {
+            return $this->resolveConstantArray($type, $scope);
+        }
+
+        return new NativeFunctionReflection(
+            '{closure}',
+            $type->getCallableParametersAcceptors($scope),
+            null,
+            TrinaryLogic::createMaybe()
+        );
     }
 
     /**
@@ -161,6 +174,27 @@ final class CallReflectionResolver
     }
 
     /**
+     * @see https://github.com/phpstan/phpstan-src/blob/b1fd47bda2a7a7d25091197b125c0adf82af6757/src/Type/ObjectType.php#L705
+     */
+    private function resolveInvokable(ObjectType $objectType): ?MethodReflection
+    {
+        $className = $objectType->getClassName();
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return null;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
+
+        if (! $classReflection->hasNativeMethod('__invoke')) {
+            return null;
+        }
+
+        return $classReflection->getNativeMethod('__invoke');
+    }
+
+    /**
+     * @see https://github.com/phpstan/phpstan-src/blob/b1fd47bda2a7a7d25091197b125c0adf82af6757/src/Type/Constant/ConstantStringType.php#L147
+     *
      * @return FunctionReflection|MethodReflection|null
      */
     private function resolveConstantString(ConstantStringType $constantStringType, Scope $scope)
@@ -189,5 +223,84 @@ final class CallReflectionResolver
         }
 
         return $classReflection->getMethod($matches[2], $scope);
+    }
+
+    /**
+     * @see https://github.com/phpstan/phpstan-src/blob/b1fd47bda2a7a7d25091197b125c0adf82af6757/src/Type/Constant/ConstantArrayType.php#L188
+     */
+    private function resolveConstantArray(ConstantArrayType $constantArrayType, Scope $scope): ?MethodReflection
+    {
+        $typeAndMethodName = $this->findTypeAndMethodName($constantArrayType);
+        if ($typeAndMethodName === null) {
+            return null;
+        }
+
+        if ($typeAndMethodName->isUnknown() || ! $typeAndMethodName->getCertainty()->yes()) {
+            return null;
+        }
+
+        $method = $typeAndMethodName
+            ->getType()
+            ->getMethod($typeAndMethodName->getMethod(), $scope);
+
+        if (! $scope->canCallMethod($method)) {
+            return null;
+        }
+
+        return $method;
+    }
+
+    /**
+     * @see https://github.com/phpstan/phpstan-src/blob/b1fd47bda2a7a7d25091197b125c0adf82af6757/src/Type/Constant/ConstantArrayType.php#L209
+     */
+    private function findTypeAndMethodName(ConstantArrayType $constantArrayType): ?ConstantArrayTypeAndMethod
+    {
+        if (! $this->areKeyTypesValid($constantArrayType)) {
+            return null;
+        }
+
+        [$classOrObject, $method] = $constantArrayType->getValueTypes();
+
+        if (! $method instanceof ConstantStringType) {
+            return ConstantArrayTypeAndMethod::createUnknown();
+        }
+
+        if ($classOrObject instanceof ConstantStringType) {
+            if (! $this->reflectionProvider->hasClass($classOrObject->getValue())) {
+                return ConstantArrayTypeAndMethod::createUnknown();
+            }
+
+            $type = new ObjectType($this->reflectionProvider->getClass($classOrObject->getValue())->getName());
+        } elseif ((new ObjectWithoutClassType())->isSuperTypeOf($classOrObject)->yes()) {
+            $type = $classOrObject;
+        } else {
+            return ConstantArrayTypeAndMethod::createUnknown();
+        }
+
+        $has = $type->hasMethod($method->getValue());
+        if (! $has->no()) {
+            return ConstantArrayTypeAndMethod::createConcrete($type, $method->getValue(), $has);
+        }
+
+        return null;
+    }
+
+    private function areKeyTypesValid(ConstantArrayType $constantArrayType): bool
+    {
+        $keyTypes = $constantArrayType->getKeyTypes();
+
+        if (count($keyTypes) !== 2) {
+            return false;
+        }
+
+        if ($keyTypes[0]->isSuperTypeOf(new ConstantIntegerType(0))->no()) {
+            return false;
+        }
+
+        if ($keyTypes[1]->isSuperTypeOf(new ConstantIntegerType(1))->no()) {
+            return false;
+        }
+
+        return true;
     }
 }
