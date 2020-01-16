@@ -100,8 +100,23 @@ jobs:
             -   run: composer install --no-progress
             -   run: |
                     php ci/check_services_in_yaml_configs.php
+            -   run: |
                     php ci/run_all_sets.php
+
+    phpstan_types_checks:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.2
+                    coverage: none # disable xdebug, pcov
+            -   run: composer install --no-progress
+            -   run: |
                     bin/rector sync-types
+            -   run: |
+                    bin/rector check-static-type-mappers
 
     fatal_scan:
         runs-on: ubuntu-latest
