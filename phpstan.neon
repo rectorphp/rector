@@ -222,6 +222,9 @@ parameters:
         - '#Property Rector\\Compiler\\Process\\SymfonyProcess::\$process type has no value type specified in iterable type Symfony\\Component\\Process\\Process#'
         - '#Method Rector\\Compiler\\Process\\SymfonyProcess::getProcess\(\) return type has no value type specified in iterable type Symfony\\Component\\Process\\Process#'
         - '#Method Rector\\Compiler\\Contract\\Process\\ProcessInterface::getProcess\(\) return type has no value type specified in iterable type Symfony\\Component\\Process\\Process#'
+        -
+            message: '#Else branch is unreachable because ternary operator condition is always true#'
+            path: packages/TypeDeclaration/src/Rector/Property/CompleteVarDocTypePropertyRector.php
 
         # phpstan compiler bug
         - '#Parameter \#1 \$docComment of method PhpParser\\Builder\\Property::setDocComment\(\) expects _HumbugBox(.*?)\\PhpParser\\Comment\\Doc\|string, PhpParser\\Comment\\Doc given#'
