@@ -173,6 +173,7 @@
             "Rector\\Phalcon\\Tests\\": "packages/Phalcon/tests",
             "Rector\\DoctrineGedmoToKnplabs\\Tests\\": "packages/DoctrineGedmoToKnplabs/tests",
             "Rector\\MinimalScope\\Tests\\": "packages/MinimalScope/tests",
+            "Rector\\Utils\\PHPStanStaticTypeMapperChecker\\": "utils/PHPStanStaticTypeMapperChecker/src",
             "Rector\\Polyfill\\Tests\\": "packages/Polyfill/tests"
         },
         "classmap": [
