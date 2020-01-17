@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPControllerToSymfonyControllerRector;
+namespace Rector\CakePHPToSymfony\Tests\Rector\ClassMethod\CakePHPControllerActionToSymfonyControllerActionRector;
 
 use Iterator;
-use Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerToSymfonyControllerRector;
+use Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerActionToSymfonyControllerActionRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class CakePHPControllerToSymfonyControllerRectorTest extends AbstractRectorTestCase
+final class CakePHPControllerActionToSymfonyControllerActionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideDataForTest()
@@ -25,6 +25,6 @@ final class CakePHPControllerToSymfonyControllerRectorTest extends AbstractRecto
 
     protected function getRectorClass(): string
     {
-        return CakePHPControllerToSymfonyControllerRector::class;
+        return CakePHPControllerActionToSymfonyControllerActionRector::class;
     }
 }

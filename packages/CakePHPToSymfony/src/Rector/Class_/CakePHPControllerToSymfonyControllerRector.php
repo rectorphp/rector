@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\CakePHPToSymfony\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -27,8 +29,6 @@ class HomepageController extends AppController
 {
     public function index()
     {
-        $value = 5;
-        $this->set('name', $value);
     }
 }
 PHP
@@ -41,15 +41,11 @@ class HomepageController extends AbstractController
 {
     public function index(): Response
     {
-        $value = 5;
-        return $this->renderResponse('homepage/index.ctp', [
-            'name' => $value
-        ]);
     }
 }
 PHP
 
-            )
+            ),
         ]);
     }
 
@@ -58,15 +54,19 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
 
     /**
-     * @param \PhpParser\Node\Stmt\Class_ $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        // change the node
+        if (! $this->isObjectType($node, 'AppController')) {
+            return null;
+        }
+
+        $node->extends = new FullyQualified('Symfony\Bundle\FrameworkBundle\Controller\AbstractController');
 
         return $node;
     }
