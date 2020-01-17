@@ -1540,6 +1540,19 @@ Import fully qualified names to use statements
 
 <br>
 
+You can ignore root namespaces like `\DateTime` setting the parameter `import_short_classes` to `false`:
+
+```yaml
+# rector.yaml
+
+parameters:
+    sets:
+        - 'coding-style'
+    import_short_classes: false
+```
+
+<br>
+
 ### `MakeInheritedMethodVisibilitySameAsParentRector`
 
 - class: `Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector`
