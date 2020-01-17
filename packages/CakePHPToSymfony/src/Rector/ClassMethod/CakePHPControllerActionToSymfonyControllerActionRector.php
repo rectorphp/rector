@@ -16,10 +16,10 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
 use Rector\CodeQuality\CompactConverter;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -30,7 +30,7 @@ use Rector\RectorDefinition\RectorDefinition;
  *
  * @see \Rector\CakePHPToSymfony\Tests\Rector\ClassMethod\CakePHPControllerActionToSymfonyControllerActionRector\CakePHPControllerActionToSymfonyControllerActionRectorTest
  */
-final class CakePHPControllerActionToSymfonyControllerActionRector extends AbstractRector
+final class CakePHPControllerActionToSymfonyControllerActionRector extends AbstractCakePHPRector
 {
     /**
      * @var ClassNaming
@@ -95,13 +95,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Node\Stmt\Class_|null $classNode */
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
-            return null;
-        }
-
-        if (! $this->isObjectType($classNode, 'AppController')) {
+        if (! $this->isInCakePHPController($node)) {
             return null;
         }
 

@@ -1,4 +1,4 @@
-# All 435 Rectors Overview
+# All 436 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -305,6 +305,38 @@ Migrate CakePHP 2.4 Controller action to Symfony 5
 +        return $this->renderResponse('homepage/index.twig', [
 +            'name' => $value
 +        ]);
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerComponentToSymfonyRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerComponentToSymfonyRector`
+
+Migrate CakePHP 2.4 Controller $components property to Symfony 5
+
+```diff
+ class MessagesController extends \AppController
+ {
+-    public $components = ['Overview'];
++    private function __construct(OverviewComponent $overviewComponent)
++    {
++        $this->overviewComponent->filter();
++    }
+
+     public function someAction()
+     {
+-        $this->Overview->filter();
++        $this->overviewComponent->filter();
+     }
+ }
+
+ class OverviewComponent extends \Component
+ {
+     public function filter()
+     {
      }
  }
 ```
