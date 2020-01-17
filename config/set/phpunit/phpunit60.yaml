@@ -10,3 +10,4 @@ services:
                 - 'PHPUnit_Framework_MockObject_MockObject'
 
     Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector: null
+    Rector\PHPUnit\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector: null
