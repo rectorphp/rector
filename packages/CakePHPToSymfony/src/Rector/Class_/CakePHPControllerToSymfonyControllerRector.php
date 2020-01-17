@@ -7,7 +7,7 @@ namespace Rector\CakePHPToSymfony\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Rector\AbstractRector;
+use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -18,7 +18,7 @@ use Rector\RectorDefinition\RectorDefinition;
  *
  * @see \Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPControllerToSymfonyControllerRector\CakePHPControllerToSymfonyControllerRectorTest
  */
-final class CakePHPControllerToSymfonyControllerRector extends AbstractRector
+final class CakePHPControllerToSymfonyControllerRector extends AbstractCakePHPRector
 {
     public function getDefinition(): RectorDefinition
     {
@@ -62,7 +62,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, 'AppController')) {
+        if (! $this->isInCakePHPController($node)) {
             return null;
         }
 

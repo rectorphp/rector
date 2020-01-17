@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -24,7 +24,7 @@ use Rector\RectorDefinition\RectorDefinition;
  *
  * @see \Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPControllerHelperToSymfonyRector\CakePHPControllerHelperToSymfonyRectorTest
  */
-final class CakePHPControllerHelperToSymfonyRector extends AbstractRector
+final class CakePHPControllerHelperToSymfonyRector extends AbstractCakePHPRector
 {
     /**
      * @var ClassManipulator
@@ -81,7 +81,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectType($node, 'AppController')) {
+        if (! $this->isInCakePHPController($node)) {
             return null;
         }
 
