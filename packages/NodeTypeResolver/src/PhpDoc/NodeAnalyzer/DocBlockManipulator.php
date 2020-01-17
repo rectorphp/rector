@@ -547,6 +547,15 @@ final class DocBlockManipulator
         return $paramTypes[$paramName] ?? new MixedType();
     }
 
+    public function isInheritdoc(Node $node): bool
+    {
+        /** @var Doc $attribute */
+        $attribute = $node->getAttribute('comments')[0];
+        $attributeText = $attribute !== null ? $attribute->getText() : '';
+
+        return Strings::contains(Strings::lower($attributeText), '@inheritdoc');
+    }
+
     /**
      * @todo Extract this logic to own service
      */
