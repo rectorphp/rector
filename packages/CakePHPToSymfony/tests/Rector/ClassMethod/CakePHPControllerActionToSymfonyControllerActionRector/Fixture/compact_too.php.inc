@@ -22,7 +22,7 @@ class CompactTooController extends \AppController
     public function index(): \Symfony\Component\HttpFoundation\Response
     {
         $value = 5;
-        return $this->render('homepage/index.twig', ['clientId' => $clientId, 'states' => $states, 'invoiceTemplates' => $invoiceTemplates]);
+        return $this->render('compacttoo/index.twig', ['clientId' => $clientId, 'states' => $states, 'invoiceTemplates' => $invoiceTemplates]);
     }
 }
 

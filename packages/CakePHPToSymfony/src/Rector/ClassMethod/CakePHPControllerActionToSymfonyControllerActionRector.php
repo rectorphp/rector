@@ -171,13 +171,7 @@ PHP
                 /** @var FuncCall $compactFuncCall */
                 $compactFuncCall = $setValue[0]->value;
 
-                $array = $this->compactConverter->convertToArray($compactFuncCall);
-
-                // ...
-                dump($array);
-
-                // is it compact?
-                die;
+                return $this->compactConverter->convertToArray($compactFuncCall);
             }
         }
 
