@@ -64,6 +64,10 @@ PHP
             return null;
         }
 
+        if (count($node->stmts) > 0) {
+            return null;
+        }
+
         $this->removeNode($node);
 
         return null;
