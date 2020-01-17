@@ -7,7 +7,6 @@ Why refactor manually if Rector can handle 80% for you?
 [![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
 
-
 ![Rector-showcase](docs/images/rector-showcase-var.gif)
 
 <br>
@@ -300,7 +299,7 @@ Create a class that extends [`Rector\Rector\AbstractRector`](/src/Rector/Abstrac
 
 declare(strict_types=1);
 
-namespace App\Rector;
+namespace Utils\Rector;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -312,15 +311,6 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class MyFirstRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
-    {
-        // what does this do?
-        // minimalistic before/after sample - to explain in code
-        return new RectorDefinition('Change method calls from set* to change*.', [
-            new CodeSample('$user->setPassword("123456");', '$user->changePassword("123456");')
-        ]);
-    }
-
     /**
      * @return string[]
      */
@@ -350,7 +340,56 @@ final class MyFirstRector extends AbstractRector
         // return $node if you modified it
         return $node;
     }
+
+    /**
+     * From this method documentation is generated.
+     */
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Change method calls from set* to change*.', [
+                new CodeSample(
+                    // code before
+                    '$user->setPassword("123456");',
+                    // code after
+                    '$user->changePassword("123456");'
+                ),
+            ]
+        );
+    }
 }
+```
+
+This is how file structure should look like:
+
+```bash
+/src/YourCode.php
+/utils/Rector/MyFirstRector.php
+rector.yaml
+composer.json
+```
+
+We also need to load Rector rules in `composer.json`:
+
+```json
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "src"
+        }   
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Utils\\": "utils"
+        }    
+    }
+}
+```
+
+After adding this to `composer.json`, be sure to reload composer class map: 
+
+```bash
+composer dump-autoload
 ```
 
 ### 2. Register It
@@ -358,10 +397,12 @@ final class MyFirstRector extends AbstractRector
 ```yaml
 # rector.yaml
 services:
-    App\Rector\MyFirstRector: ~
+    Utils\Rector\MyFirstRector: ~
 ```
 
 ### 3. Let Rector Refactor Your Code
+
+The `rector.yaml` config is loaded by default, so we can skip it.
 
 ```bash
 # see the diff first
@@ -372,6 +413,12 @@ vendor/bin/rector process src
 ```
 
 That's it!
+
+### Generate Rector Rule
+
+Do you want to save time with making rules and tests? 
+
+Use [`create` command](/docs/RectorRecipe.md).
 
 ## More Detailed Documentation
 
