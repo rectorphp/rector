@@ -30,3 +30,4 @@ services:
     Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector: null
     Rector\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector: null
     Rector\DeadCode\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector: null
+    Rector\PHPUnit\Rector\ClassMethod\RemoveEmptyTestMethodRector: null

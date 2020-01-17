@@ -1,4 +1,4 @@
-# All 430 Rectors Overview
+# All 432 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -4536,6 +4536,27 @@ Fix data provider annotation typos
 
 <br>
 
+### `GetMockBuilderGetMockToCreateMockRector`
+
+- class: `Rector\PHPUnit\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector`
+
+Remove getMockBuilder() to createMock()
+
+```diff
+ class SomeTest extends \PHPUnit\Framework\TestCase
+ {
+     public function test()
+     {
+-        $applicationMock = $this->getMockBuilder('SomeClass')
+-           ->disableOriginalConstructor()
+-           ->getMock();
++        $applicationMock = $this->createMock('SomeClass');
+     }
+ }
+```
+
+<br>
+
 ### `GetMockRector`
 
 - class: `Rector\PHPUnit\Rector\GetMockRector`
@@ -4577,6 +4598,28 @@ Data provider methods cannot start with "test" prefix
      {
          return ['123'];
      }
+ }
+```
+
+<br>
+
+### `RemoveEmptyTestMethodRector`
+
+- class: `Rector\PHPUnit\Rector\ClassMethod\RemoveEmptyTestMethodRector`
+
+Remove empty test methods
+
+```diff
+ class SomeTest extends \PHPUnit\Framework\TestCase
+ {
+-    /**
+-     * testGetTranslatedModelField method
+-     *
+-     * @return void
+-     */
+-    public function testGetTranslatedModelField()
+-    {
+-    }
  }
 ```
 
