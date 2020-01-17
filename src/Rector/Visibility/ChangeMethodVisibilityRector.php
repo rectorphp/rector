@@ -67,8 +67,10 @@ class MyClass extends FrameworkClass
 PHP
                 ,
                 [
-                    'FrameworkClass' => [
-                        'someMethod' => 'protected',
+                    '$methodToVisibilityByClass' => [
+                        'FrameworkClass' => [
+                            'someMethod' => 'protected',
+                        ],
                     ],
                 ]
             )]

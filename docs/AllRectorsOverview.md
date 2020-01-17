@@ -8722,7 +8722,8 @@ Change visibility of method from parent class.
 ```yaml
 services:
     Rector\Rector\Visibility\ChangeMethodVisibilityRector:
-        FrameworkClass:
+        $methodToVisibilityByClass:
+            FrameworkClass:
             someMethod: protected
 ```
 
