@@ -1,4 +1,4 @@
-# All 432 Rectors Overview
+# All 434 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -8,6 +8,7 @@
 - [Architecture](#architecture)
 - [Autodiscovery](#autodiscovery)
 - [CakePHP](#cakephp)
+- [CakePHPToSymfony](#cakephptosymfony)
 - [Celebrity](#celebrity)
 - [CodeQuality](#codequality)
 - [CodingStyle](#codingstyle)
@@ -279,6 +280,55 @@ services:
 -$object = $object->withParam('paging', ['a value']);
 +$config = $object->getAttribute('paging');
 +$object = $object->withAttribute('paging', ['a value']);
+```
+
+<br>
+
+## CakePHPToSymfony
+
+### `CakePHPControllerActionToSymfonyControllerActionRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerActionToSymfonyControllerActionRector`
+
+Migrate CakePHP 2.4 Controller action to Symfony 5
+
+```diff
++use Symfony\Component\HttpFoundation\Response;
++
+ class HomepageController extends \AppController
+ {
+-    public function index()
++    public function index(): Response
+     {
+         $value = 5;
+-        $this->set('name', $value);
++        return $this->renderResponse('homepage/index.twig', [
++            'name' => $value
++        ]);
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerToSymfonyControllerRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerToSymfonyControllerRector`
+
+Migrate CakePHP 2.4 Controller to Symfony 5
+
+```diff
+-class HomepageController extends AppController
++use Symfony\Component\HttpFoundation\Response;
++use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++
++class HomepageController extends AbstractController
+ {
+-    public function index()
++    public function index(): Response
+     {
+     }
+ }
 ```
 
 <br>
@@ -8724,7 +8774,7 @@ services:
     Rector\Rector\Visibility\ChangeMethodVisibilityRector:
         $methodToVisibilityByClass:
             FrameworkClass:
-            someMethod: protected
+                someMethod: protected
 ```
 
 ↓

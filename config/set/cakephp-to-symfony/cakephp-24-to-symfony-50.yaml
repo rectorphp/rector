@@ -1,0 +1,3 @@
+services:
+    Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerToSymfonyControllerRector: null
+    Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerActionToSymfonyControllerActionRector: null
