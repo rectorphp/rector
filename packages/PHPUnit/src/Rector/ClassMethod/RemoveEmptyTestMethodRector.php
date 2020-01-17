@@ -64,6 +64,10 @@ PHP
             return null;
         }
 
+        if ($node->stmts === null) {
+            return null;
+        }
+
         if (count($node->stmts) > 0) {
             return null;
         }
