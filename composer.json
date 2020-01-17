@@ -111,7 +111,8 @@
             "Rector\\Phalcon\\": "packages/Phalcon/src",
             "Rector\\DoctrineGedmoToKnplabs\\": "packages/DoctrineGedmoToKnplabs/src",
             "Rector\\MinimalScope\\": "packages/MinimalScope/src",
-            "Rector\\Polyfill\\": "packages/Polyfill/src"
+            "Rector\\Polyfill\\": "packages/Polyfill/src",
+            "Rector\\CakePHPToSymfony\\": "packages/CakePHPToSymfony/src"
         }
     },
     "autoload-dev": {
@@ -174,7 +175,8 @@
             "Rector\\DoctrineGedmoToKnplabs\\Tests\\": "packages/DoctrineGedmoToKnplabs/tests",
             "Rector\\MinimalScope\\Tests\\": "packages/MinimalScope/tests",
             "Rector\\Utils\\PHPStanStaticTypeMapperChecker\\": "utils/PHPStanStaticTypeMapperChecker/src",
-            "Rector\\Polyfill\\Tests\\": "packages/Polyfill/tests"
+            "Rector\\Polyfill\\Tests\\": "packages/Polyfill/tests",
+            "Rector\\CakePHPToSymfony\\Tests\\": "packages/CakePHPToSymfony/tests"
         },
         "classmap": [
             "packages/CakePHP/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",
