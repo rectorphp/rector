@@ -1,4 +1,4 @@
-# All 434 Rectors Overview
+# All 435 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -305,6 +305,29 @@ Migrate CakePHP 2.4 Controller action to Symfony 5
 +        return $this->renderResponse('homepage/index.twig', [
 +            'name' => $value
 +        ]);
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerHelperToSymfonyRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerHelperToSymfonyRector`
+
+Migrate CakePHP 2.4 Controller $helpers and $components property to Symfony 5
+
+```diff
+ class HomepageController extends AppController
+ {
+-    public $helpers = ['Flash'];
+-
+     public function index()
+     {
+-        $this->Flash->success(__('Your post has been saved.'));
+-        $this->Flash->error(__('Unable to add your post.'));
++        $this->addFlash('success', __('Your post has been saved.'));
++        $this->addFlash('error', __('Unable to add your post.'));
      }
  }
 ```
