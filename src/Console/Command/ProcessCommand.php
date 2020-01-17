@@ -15,6 +15,7 @@ use Rector\Console\Shell;
 use Rector\Extension\ReportingExtensionRunner;
 use Rector\FileSystem\FilesFinder;
 use Rector\Guard\RectorGuard;
+use Rector\Linter\Linter;
 use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Stubs\StubLoader;
 use Symfony\Component\Console\Input\InputArgument;
@@ -86,6 +87,11 @@ final class ProcessCommand extends AbstractCommand
     private $paths = [];
 
     /**
+     * @var Linter
+     */
+    private $linter;
+
+    /**
      * @param string[] $paths
      * @param string[] $fileExtensions
      */
@@ -100,6 +106,7 @@ final class ProcessCommand extends AbstractCommand
         ReportingExtensionRunner $reportingExtensionRunner,
         RectorNodeTraverser $rectorNodeTraverser,
         StubLoader $stubLoader,
+        Linter $linter,
         array $paths,
         array $fileExtensions
     ) {
@@ -114,9 +121,10 @@ final class ProcessCommand extends AbstractCommand
         $this->reportingExtensionRunner = $reportingExtensionRunner;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->stubLoader = $stubLoader;
+        $this->paths = $paths;
+        $this->linter = $linter;
 
         parent::__construct();
-        $this->paths = $paths;
     }
 
     protected function configure(): void
@@ -202,6 +210,10 @@ final class ProcessCommand extends AbstractCommand
             $this->fileExtensions,
             $this->configuration->mustMatchGitDiff()
         );
+
+        foreach ($phpFileInfos as $phpFileInfo) {
+            $this->linter->lintFile($phpFileInfo);
+        }
 
         $this->additionalAutoloader->autoloadWithInputAndSource($input, $source);
 
