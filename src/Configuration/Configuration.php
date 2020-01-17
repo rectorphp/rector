@@ -50,6 +50,11 @@ final class Configuration
     private $mustMatchGitDiff = false;
 
     /**
+     * @var string
+     */
+    private $outputFile;
+
+    /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
      */
     public function resolveFromInput(InputInterface $input): void
@@ -58,6 +63,9 @@ final class Configuration
         $this->hideAutoloadErrors = (bool) $input->getOption(Option::HIDE_AUTOLOAD_ERRORS);
         $this->mustMatchGitDiff = (bool) $input->getOption(Option::MATCH_GIT_DIFF);
         $this->showProgressBar = $this->canShowProgressBar($input);
+
+        $outputFileOption = $input->getOption(Option::OPTION_OUTPUT_FILE);
+        $this->outputFile = $outputFileOption ? (string) $outputFileOption : null;
 
         /** @var string|null $onlyRector */
         $onlyRector = $input->getOption(Option::OPTION_ONLY);
@@ -127,6 +135,11 @@ final class Configuration
     public function getOnlyRector(): ?string
     {
         return $this->onlyRector;
+    }
+
+    public function getOutputFile(): ?string
+    {
+        return $this->outputFile;
     }
 
     private function setOnlyRector(?string $rector): void
