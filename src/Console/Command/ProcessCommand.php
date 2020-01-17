@@ -134,6 +134,7 @@ final class ProcessCommand extends AbstractCommand
             InputOption::VALUE_NONE,
             'See diff of changes, do not save them to files.'
         );
+
         $this->addOption(
             Option::OPTION_AUTOLOAD_FILE,
             'a',
@@ -176,6 +177,13 @@ final class ProcessCommand extends AbstractCommand
             null,
             InputOption::VALUE_NONE,
             'Hide progress bar. Useful e.g. for nicer CI output.'
+        );
+
+        $this->addOption(
+            Option::OPTION_OUTPUT_FILE,
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Location for file to dump result in. Useful for Docker or automated processes'
         );
     }
 

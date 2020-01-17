@@ -259,3 +259,4 @@ parameters:
 
         # known value
         - "#^Parameter \\#1 \\$variable of class Rector\\\\Php70\\\\ValueObject\\\\VariableAssignPair constructor expects PhpParser\\\\Node\\\\Expr\\\\ArrayDimFetch\\|PhpParser\\\\Node\\\\Expr\\\\PropertyFetch\\|PhpParser\\\\Node\\\\Expr\\\\StaticPropertyFetch\\|PhpParser\\\\Node\\\\Expr\\\\Variable, PhpParser\\\\Node\\\\Expr given\\.$#"
+        - '#Cannot cast \(array<string\>\)\|string\|true to string#'

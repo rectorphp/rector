@@ -74,5 +74,5 @@ final class Option
     /**
      * @var string
      */
-    public const DUMP = 'dump';
+    public const OPTION_OUTPUT_FILE = 'output-file';
 }
