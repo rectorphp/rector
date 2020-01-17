@@ -23,7 +23,6 @@ services:
         alias: 'Rector\Console\Application'
 
     Symfony\Component\Console\Descriptor\TextDescriptor: null
-    Symfony\Component\Process\PhpExecutableFinder: null
 
     # PhpParser - Parser
     PhpParser\ParserFactory: null
