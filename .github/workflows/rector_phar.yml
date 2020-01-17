@@ -5,6 +5,8 @@ on:
     push:
         branches:
             - master
+        tags:
+            - "**"
 
 jobs:
     compile_and_deploy_rector_phar:
@@ -36,8 +38,7 @@ jobs:
                 name: ''
                 if: github.event_name == 'push'
                 run: |
-                    # see https://github.community/t5/GitHub-Actions/How-to-get-just-the-tag-name/m-p/32163/highlight/true#M1024
-                    CURRENT_TAG=$(echo $GITHUB_REF | cut -d / -f 3)
+                    [[ $GITHUB_REF == refs/tags/* ]] && CURRENT_TAG=${GITHUB_REF#refs/tags/} || CURRENT_TAG=""
 
                     git clone https://${ACCESS_TOKEN}@github.com/rectorphp/rector-prefixed.git rector-prefixed > /dev/null 2>&1
                     cp tmp/rector.phar rector-prefixed/rector.phar
