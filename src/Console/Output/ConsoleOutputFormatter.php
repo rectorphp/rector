@@ -50,7 +50,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
     public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
     {
-        if ($this->configuration->getConfigFilePath()) {
+        if ($this->configuration->getOutputFile()) {
             $this->symfonyStyle->error(sprintf(
                 'Option "--%s" can be used only with "--%s %s"',
                 Option::OPTION_OUTPUT_FILE,
