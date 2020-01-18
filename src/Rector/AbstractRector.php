@@ -299,4 +299,19 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         return $countedValueName;
     }
+
+    /**
+     * @param Node\Stmt[] $stmts
+     */
+    protected function unwrapStmts(array $stmts, Node $node): void
+    {
+        foreach ($stmts as $key => $ifStmt) {
+            if ($key === 0) {
+                // move comment from if to first element to keep it
+                $ifStmt->setAttribute('comments', $node->getComments());
+            }
+
+            $this->addNodeAfterNode($ifStmt, $node);
+        }
+    }
 }

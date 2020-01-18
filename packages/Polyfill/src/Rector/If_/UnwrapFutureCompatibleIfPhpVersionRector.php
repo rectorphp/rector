@@ -104,14 +104,7 @@ PHP
         }
 
         // else is always used
-        foreach ($if->else->stmts as $key => $elseStmt) {
-            if ($key === 0) {
-                // move comment from if to first element to keep it
-                $elseStmt->setAttribute('comments', $if->getComments());
-            }
-
-            $this->addNodeAfterNode($elseStmt, $if);
-        }
+        $this->unwrapStmts($if->else->stmts, $if);
 
         $this->removeNode($if);
     }
@@ -123,15 +116,7 @@ PHP
             return;
         }
 
-        // no else/else → if is always used
-        foreach ($if->stmts as $key => $ifStmt) {
-            if ($key === 0) {
-                // move comment from if to first element to keep it
-                $ifStmt->setAttribute('comments', $if->getComments());
-            }
-
-            $this->addNodeAfterNode($ifStmt, $if);
-        }
+        $this->unwrapStmts($if->stmts, $if);
 
         $this->removeNode($if);
     }
