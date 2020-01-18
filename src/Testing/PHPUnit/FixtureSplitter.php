@@ -13,7 +13,7 @@ final class FixtureSplitter
     /**
      * @var string
      */
-    private const SPLIT_LINE = '#-----\n#';
+    public const SPLIT_LINE = '#-----\n#';
 
     /**
      * @var string
