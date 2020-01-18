@@ -6,9 +6,11 @@ namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use Iterator;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Throw_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
@@ -122,6 +124,11 @@ PHP
 
         // nothing to change in PHP code - @todo add @var annotation fallback?
         if ($inferredReturnNode === null) {
+            return null;
+        }
+
+        // prevent void overriding exception
+        if ($this->isVoidDueToThrow($node, $inferredReturnNode)) {
             return null;
         }
 
@@ -346,5 +353,18 @@ PHP
         }
 
         return $inferedType->isSubTypeOf($currentType)->yes();
+    }
+
+    private function isVoidDueToThrow(Node $node, $inferredReturnNode): bool
+    {
+        if (! $inferredReturnNode instanceof Identifier) {
+            return false;
+        }
+
+        if ($inferredReturnNode->name !== 'void') {
+            return false;
+        }
+
+        return (bool) $this->betterNodeFinder->findFirstInstanceOf($node->stmts, Throw_::class);
     }
 }
