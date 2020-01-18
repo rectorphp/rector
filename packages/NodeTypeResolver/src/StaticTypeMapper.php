@@ -44,6 +44,7 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\BetterPhpDocParser\Type\PreSlashStringType;
 use Rector\Exception\NotImplementedException;
@@ -202,6 +203,12 @@ final class StaticTypeMapper
             }
 
             throw new ShouldNotHappenException();
+        }
+
+        if ($type instanceof UnionType) {
+            $types = $type->getTypes();
+            sort($types);
+            $type = new UnionType($types);
         }
 
         return $this->mapPHPStanTypeToDocString($type);
