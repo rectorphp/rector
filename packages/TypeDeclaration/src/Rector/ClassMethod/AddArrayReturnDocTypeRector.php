@@ -12,7 +12,6 @@ use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -131,7 +130,13 @@ PHP
             return false;
         }
 
-        return $this->isSpecificIterableType($currentPhpDocInfo);
+        $returnType = $currentPhpDocInfo->getReturnType();
+
+        if ($returnType instanceof ArrayType && $returnType->getItemType() instanceof MixedType) {
+            return true;
+        }
+
+        return $returnType instanceof IterableType;
     }
 
     private function shouldSkipType(Type $newType, ClassMethod $classMethod): bool
@@ -208,17 +213,5 @@ PHP
         }
 
         return false;
-    }
-
-    private function isSpecificIterableType(PhpDocInfo $currentPhpDocInfo): bool
-    {
-        if (! $currentPhpDocInfo->getReturnType() instanceof IterableType) {
-            return false;
-        }
-
-        /** @var IterableType $iterableType */
-        $iterableType = $currentPhpDocInfo->getReturnType();
-
-        return ! $iterableType->getItemType() instanceof MixedType;
     }
 }
