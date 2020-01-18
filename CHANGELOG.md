@@ -115,7 +115,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 - [#2565] [DeadCode] Add RemoveUnusedClassesRector
 - [#2593] [DoctrineGedmoToKnpLabs] Add SoftDeletableBehaviorRector
-- [#2569] [Polyfill] Add UnwrapFutureCompatibleIfRector
+- [#2569] [Polyfill] Add UnwrapFutureCompatibleIfFunctionExistsRector
 - [#2570] [SOLID] Add ChangeNestedIfsToEarlyReturnRector & ChangeIfElseValueAssignToEarlyReturnRector
 - [#2568] [Symfony 5] Add param types
 

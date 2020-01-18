@@ -248,9 +248,9 @@ final class IfManipulator
      * } else {
      * }
      */
-    public function isIfElseWithFunctionCondition(If_ $if, string $functionName): bool
+    public function isIfOrIfElseWithFunctionCondition(If_ $if, string $functionName): bool
     {
-        if (! $this->isIfWithElse($if)) {
+        if ((bool) $if->elseifs) {
             return false;
         }
 
