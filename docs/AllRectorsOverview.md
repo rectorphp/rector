@@ -1,4 +1,4 @@
-# All 436 Rectors Overview
+# All 437 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -360,6 +360,25 @@ Migrate CakePHP 2.4 Controller $helpers and $components property to Symfony 5
 -        $this->Flash->error(__('Unable to add your post.'));
 +        $this->addFlash('success', __('Your post has been saved.'));
 +        $this->addFlash('error', __('Unable to add your post.'));
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerRedirectToSymfonyRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerRedirectToSymfonyRector`
+
+Migrate CakePHP 2.4 Controller redirect() to Symfony 5
+
+```diff
+ class RedirectController extends \AppController
+ {
+     public function index()
+     {
+-        $this->redirect('boom');
++        return $this->redirect('boom');
      }
  }
 ```
