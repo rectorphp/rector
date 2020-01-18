@@ -103,19 +103,4 @@ PHP
 
         return null;
     }
-
-    /**
-     * @param Node\Stmt[] $stmts
-     */
-    private function unwrapStmts(array $stmts, Node $node): void
-    {
-        foreach ($stmts as $key => $ifStmt) {
-            if ($key === 0) {
-                // move comment from if to first element to keep it
-                $ifStmt->setAttribute('comments', $node->getComments());
-            }
-
-            $this->addNodeAfterNode($ifStmt, $node);
-        }
-    }
 }
