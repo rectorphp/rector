@@ -376,17 +376,17 @@ We also need to load Rector rules in `composer.json`:
     "autoload": {
         "psr-4": {
             "App\\": "src"
-        }   
+        }
     },
     "autoload-dev": {
         "psr-4": {
             "Utils\\": "utils"
-        }    
+        }
     }
 }
 ```
 
-After adding this to `composer.json`, be sure to reload composer class map: 
+After adding this to `composer.json`, be sure to reload composer class map:
 
 ```bash
 composer dump-autoload
@@ -416,7 +416,7 @@ That's it!
 
 ### Generate Rector Rule
 
-Do you want to save time with making rules and tests? 
+Do you want to save time with making rules and tests?
 
 Use [`create` command](/docs/RectorRecipe.md).
 

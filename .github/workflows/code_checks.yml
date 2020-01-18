@@ -88,7 +88,7 @@ jobs:
             -   run: composer install --no-progress
             -   run: composer check-docs
 
-    simple_checks:
+    simple_check_services_in_yaml_configs:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
@@ -98,12 +98,31 @@ jobs:
                     php-version: 7.2
                     coverage: none # disable xdebug, pcov
             -   run: composer install --no-progress
-            -   run: |
-                    php ci/check_services_in_yaml_configs.php
-            -   run: |
-                    php ci/run_all_sets.php
-            -   run: |
-                    php ci/check_keep_fixtures.php
+            -   run: php ci/check_services_in_yaml_configs.php
+
+    simple_run_all_sets:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.2
+                    coverage: none # disable xdebug, pcov
+            -   run: composer install --no-progress
+            -   run: php ci/run_all_sets.php
+
+    simple_keep_fixtures_checks:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.2
+                    coverage: none # disable xdebug, pcov
+            -   run: composer install --no-progress
+            -   run: php ci/check_keep_fixtures.php
 
     phpstan_types_checks:
         runs-on: ubuntu-latest
