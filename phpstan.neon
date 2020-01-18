@@ -9,7 +9,7 @@ parameters:
     level: max
 
     # to allow installing with various phsptan versions without reporting old errors here
-    reportUnmatchedIgnoredErrors: false
+#    reportUnmatchedIgnoredErrors: false
 
     autoload_directories:
         - stubs
@@ -171,8 +171,6 @@ parameters:
         - '#Parameter \#1 \$sprintfFuncCall of method Rector\\PhpParser\\NodeTransformer\:\:transformSprintfToArray\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node given#'
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\OrmTagParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
 
-        - '#Parameter \#1 \$phpDocTagValueNode of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:removeTagValueNodeFromNode\(\) expects PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode, PHPStan\\PhpDocParser\\Ast\\PhpDoc\\VarTagValueNode\|null given#'
-
         - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\JMS\\SerializerTypePhpDocNodeFactory::resolveTypeAnnotation\(\) should return JMS\\Serializer\\Annotation\\Type\|null but returns object\|null#'
 
         # known value
@@ -216,19 +214,7 @@ parameters:
         - '#Parameter \#3 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver::processNodes\(\) expects Closure\(PhpParser\\Node, PHPStan\\Analyser\\Scope\): void, Closure\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\): void given#'
 
         # false positive
-        - '#Array \(array\) does not accept key#'
-        - '#Array \(array<int, PhpParser\\Node\\Arg>\) does not accept key#'
         - '#Comparison operation "<" between 0 and 2 is always true#'
-        - '#Property Rector\\Compiler\\Process\\SymfonyProcess::\$process type has no value type specified in iterable type Symfony\\Component\\Process\\Process#'
-        - '#Method Rector\\Compiler\\Process\\SymfonyProcess::getProcess\(\) return type has no value type specified in iterable type Symfony\\Component\\Process\\Process#'
-        - '#Method Rector\\Compiler\\Contract\\Process\\ProcessInterface::getProcess\(\) return type has no value type specified in iterable type Symfony\\Component\\Process\\Process#'
-
-        # phpstan compiler bug
-        - '#Parameter \#1 \$docComment of method PhpParser\\Builder\\Property::setDocComment\(\) expects _HumbugBox(.*?)\\PhpParser\\Comment\\Doc\|string, PhpParser\\Comment\\Doc given#'
-
-        -
-            message: '#Call to function in_array\(\) with arguments PhpParser\\Node\\Expr\\Variable, array\(\) and true will always evaluate to false#'
-            path: packages/Php56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php
 
         # known values
         -
@@ -245,17 +231,12 @@ parameters:
         - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\Gedmo\\(.*?)\:\:createFromNodeAndTokens\(\) should return Rector\\BetterPhpDocParser\\PhpDocNode\\Gedmo\\(.*?)\|null but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\|null#'
 
         - '#Access to an undefined property PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\:\:\$type#'
-        - '#Call to an undefined method PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\:\:toString\(\)#'
         - '#Parameter \#1 \$expected of method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) expects class\-string<object\>, string given#'
         - '#Unable to resolve the template type ExpectedType in call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\)#'
         - '#Right side of \|\| is always false#'
 
-        - '#Method Rector\\NodeContainer\\ParsedNodesByType\:\:findNewNodesByClass\(\) should return array<PhpParser\\Node\\Expr\\New_\> but returns array<int, PhpParser\\Node\>#'
-
         # fix Symplify 7.2 later
         - '#Method (.*?) returns bool type, so the name should start with is/has/was#'
-
-        - '#Property Rector\\BetterPhpDocParser\\PhpDocNode\\Gedmo\\BlameableTagValueNode\:\:\$value has no typehint specified#'
 
         # known value
         - "#^Parameter \\#1 \\$variable of class Rector\\\\Php70\\\\ValueObject\\\\VariableAssignPair constructor expects PhpParser\\\\Node\\\\Expr\\\\ArrayDimFetch\\|PhpParser\\\\Node\\\\Expr\\\\PropertyFetch\\|PhpParser\\\\Node\\\\Expr\\\\StaticPropertyFetch\\|PhpParser\\\\Node\\\\Expr\\\\Variable, PhpParser\\\\Node\\\\Expr given\\.$#"

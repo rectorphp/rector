@@ -167,6 +167,9 @@ PHP
         return $this->isName($node, 'compact');
     }
 
+    /**
+     * Creates "$this->render('...', [...])";
+     */
     private function createThisRenderMethodCall(ClassMethod $classMethod): MethodCall
     {
         $thisVariable = new Variable('this');
