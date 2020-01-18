@@ -1,12 +1,11 @@
 <?php
 
-namespace Rector\CakePHPToSymfony\Tests\Rector\ClassMethod\CakePHPControllerActionToSymfonyControllerActionRector\Fixture;
+namespace Rector\CakePHPToSymfony\Tests\Rector\ClassMethod\CakePHPControllerRenderToSymfonyRector\Fixture;
 
 class CompactTooController extends \AppController
 {
     public function index()
     {
-        $value = 5;
         $this->set(compact('clientId', 'states', 'invoiceTemplates'));
     }
 }
@@ -15,13 +14,12 @@ class CompactTooController extends \AppController
 -----
 <?php
 
-namespace Rector\CakePHPToSymfony\Tests\Rector\ClassMethod\CakePHPControllerActionToSymfonyControllerActionRector\Fixture;
+namespace Rector\CakePHPToSymfony\Tests\Rector\ClassMethod\CakePHPControllerRenderToSymfonyRector\Fixture;
 
 class CompactTooController extends \AppController
 {
-    public function index(): \Symfony\Component\HttpFoundation\Response
+    public function index()
     {
-        $value = 5;
         return $this->render('compacttoo/index.twig', ['clientId' => $clientId, 'states' => $states, 'invoiceTemplates' => $invoiceTemplates]);
     }
 }
