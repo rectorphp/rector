@@ -60,12 +60,24 @@ final class TemplatePathResolver
     {
         $viewPropertyValue = $this->resolveViewPropertyValue($classMethod);
         if ($viewPropertyValue !== null) {
+            $viewPropertyValue = Strings::lower($viewPropertyValue);
             return $viewPropertyValue . '.twig';
         }
 
         $classAndMethodValue = $this->resolveFromClassAndMethod($classMethod);
 
         return $classAndMethodValue . '.twig';
+    }
+
+    public function resolveClassNameTemplatePart(ClassMethod $classMethod): string
+    {
+        /** @var string $className */
+        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+        $shortClassName = $this->classNaming->getShortName($className);
+
+        $shortClassName = Strings::replace($shortClassName, '#Controller$#i');
+
+        return Strings::lower($shortClassName);
     }
 
     private function resolveViewPropertyValue(ClassMethod $classMethod): ?string
@@ -91,9 +103,10 @@ final class TemplatePathResolver
         if ($setViewProperty === null) {
             return null;
         }
+
         $setViewValue = $this->valueResolver->getValue($setViewProperty);
         if (is_string($setViewValue)) {
-            return $setViewValue;
+            return Strings::lower($setViewValue);
         }
 
         return null;
@@ -101,13 +114,7 @@ final class TemplatePathResolver
 
     private function resolveFromClassAndMethod(ClassMethod $classMethod): string
     {
-        /** @var string $className */
-        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        $shortClassName = $this->classNaming->getShortName($className);
-
-        $shortClassName = Strings::replace($shortClassName, '#Controller$#i');
-        $shortClassName = Strings::lower($shortClassName);
-
+        $shortClassName = $this->resolveClassNameTemplatePart($classMethod);
         $methodName = $classMethod->getAttribute(AttributeKey::METHOD_NAME);
 
         return $shortClassName . '/' . $methodName;

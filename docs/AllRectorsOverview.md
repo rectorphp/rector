@@ -1,4 +1,4 @@
-# All 437 Rectors Overview
+# All 438 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -301,10 +301,6 @@ Migrate CakePHP 2.4 Controller action to Symfony 5
 +    public function index(): Response
      {
          $value = 5;
--        $this->set('name', $value);
-+        return $this->renderResponse('homepage/index.twig', [
-+            'name' => $value
-+        ]);
      }
  }
 ```
@@ -379,6 +375,25 @@ Migrate CakePHP 2.4 Controller redirect() to Symfony 5
      {
 -        $this->redirect('boom');
 +        return $this->redirect('boom');
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerRenderToSymfonyRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerRenderToSymfonyRector`
+
+Migrate CakePHP 2.4 Controller render() to Symfony 5
+
+```diff
+ class RedirectController extends \AppController
+ {
+     public function index()
+     {
+-        $this->render('custom_file');
++        return $this->render('redirect/custom_file.twig');
      }
  }
 ```

@@ -4,3 +4,4 @@ services:
     Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerHelperToSymfonyRector: null
     Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerComponentToSymfonyRector: null
     Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerRedirectToSymfonyRector: null
+    Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerRenderToSymfonyRector: null
