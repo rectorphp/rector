@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\CakePHPToSymfony\Rector\ClassMethod;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -17,9 +16,8 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
+use Rector\CakePHPToSymfony\Rector\TemplatePathResolver;
 use Rector\CodeQuality\CompactConverter;
-use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -28,24 +26,26 @@ use Rector\RectorDefinition\RectorDefinition;
  * @see https://symfony.com/doc/5.0/controller.html
  * @see https://symfony.com/doc/5.0/controller.html#rendering-templates
  *
+ * @see https://stackoverflow.com/a/21647715/1348344 for $this->view
+ *
  * @see \Rector\CakePHPToSymfony\Tests\Rector\ClassMethod\CakePHPControllerActionToSymfonyControllerActionRector\CakePHPControllerActionToSymfonyControllerActionRectorTest
  */
 final class CakePHPControllerActionToSymfonyControllerActionRector extends AbstractCakePHPRector
 {
     /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    /**
      * @var CompactConverter
      */
     private $compactConverter;
 
-    public function __construct(ClassNaming $classNaming, CompactConverter $compactConverter)
+    /**
+     * @var TemplatePathResolver
+     */
+    private $templatePathResolver;
+
+    public function __construct(CompactConverter $compactConverter, TemplatePathResolver $templatePathResolver)
     {
-        $this->classNaming = $classNaming;
         $this->compactConverter = $compactConverter;
+        $this->templatePathResolver = $templatePathResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -137,20 +137,6 @@ PHP
         return $setMethodCallArgs;
     }
 
-    private function resolveTemplateName(ClassMethod $classMethod): string
-    {
-        /** @var string $className */
-        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        $shortClassName = $this->classNaming->getShortName($className);
-
-        $shortClassName = Strings::replace($shortClassName, '#Controller$#i');
-        $shortClassName = Strings::lower($shortClassName);
-
-        $methodName = $classMethod->getAttribute(AttributeKey::METHOD_NAME);
-
-        return $shortClassName . '/' . $methodName . '.twig';
-    }
-
     /**
      * @param Arg[][] $setValues
      */
@@ -186,7 +172,7 @@ PHP
         $thisVariable = new Variable('this');
         $thisRenderMethodCall = new MethodCall($thisVariable, 'render');
 
-        $templateName = $this->resolveTemplateName($classMethod);
+        $templateName = $this->templatePathResolver->resolveForClassMethod($classMethod);
         $thisRenderMethodCall->args[] = new Arg(new String_($templateName));
 
         $setValues = $this->collectAndRemoveSetMethodCallArgs((array) $classMethod->stmts);
