@@ -21,6 +21,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
@@ -28,6 +29,16 @@ use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
 final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
 {
+    /**
+     * @var PropertyFetchManipulator
+     */
+    private $propertyFetchManipulator;
+
+    public function __construct(PropertyFetchManipulator $propertyFetchManipulator)
+    {
+        $this->propertyFetchManipulator = $propertyFetchManipulator;
+    }
+
     public function inferProperty(Property $property): Type
     {
         /** @var Class_|null $class */
@@ -44,7 +55,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
 
         $propertyName = $this->nameResolver->getName($property);
 
-        $param = $this->resolveParamForPropertyFetch($classMethod, $propertyName);
+        $param = $this->propertyFetchManipulator->resolveParamForPropertyFetch($classMethod, $propertyName);
         if ($param === null) {
             return new MixedType();
         }
