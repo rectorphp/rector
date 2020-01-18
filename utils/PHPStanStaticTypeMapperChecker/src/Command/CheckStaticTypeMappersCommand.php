@@ -64,8 +64,6 @@ final class CheckStaticTypeMappersCommand extends AbstractCommand
         $this->symfonyStyle->error('Some classes are missing nodes');
         $this->symfonyStyle->listing($missingNodeClasses);
 
-        die;
-
         return Shell::CODE_ERROR;
     }
 

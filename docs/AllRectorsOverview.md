@@ -1,4 +1,4 @@
-# All 432 Rectors Overview
+# All 438 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -8,6 +8,7 @@
 - [Architecture](#architecture)
 - [Autodiscovery](#autodiscovery)
 - [CakePHP](#cakephp)
+- [CakePHPToSymfony](#cakephptosymfony)
 - [Celebrity](#celebrity)
 - [CodeQuality](#codequality)
 - [CodingStyle](#codingstyle)
@@ -279,6 +280,144 @@ services:
 -$object = $object->withParam('paging', ['a value']);
 +$config = $object->getAttribute('paging');
 +$object = $object->withAttribute('paging', ['a value']);
+```
+
+<br>
+
+## CakePHPToSymfony
+
+### `CakePHPControllerActionToSymfonyControllerActionRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerActionToSymfonyControllerActionRector`
+
+Migrate CakePHP 2.4 Controller action to Symfony 5
+
+```diff
++use Symfony\Component\HttpFoundation\Response;
++
+ class HomepageController extends \AppController
+ {
+-    public function index()
++    public function index(): Response
+     {
+         $value = 5;
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerComponentToSymfonyRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerComponentToSymfonyRector`
+
+Migrate CakePHP 2.4 Controller $components property to Symfony 5
+
+```diff
+ class MessagesController extends \AppController
+ {
+-    public $components = ['Overview'];
++    private function __construct(OverviewComponent $overviewComponent)
++    {
++        $this->overviewComponent->filter();
++    }
+
+     public function someAction()
+     {
+-        $this->Overview->filter();
++        $this->overviewComponent->filter();
+     }
+ }
+
+ class OverviewComponent extends \Component
+ {
+     public function filter()
+     {
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerHelperToSymfonyRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerHelperToSymfonyRector`
+
+Migrate CakePHP 2.4 Controller $helpers and $components property to Symfony 5
+
+```diff
+ class HomepageController extends AppController
+ {
+-    public $helpers = ['Flash'];
+-
+     public function index()
+     {
+-        $this->Flash->success(__('Your post has been saved.'));
+-        $this->Flash->error(__('Unable to add your post.'));
++        $this->addFlash('success', __('Your post has been saved.'));
++        $this->addFlash('error', __('Unable to add your post.'));
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerRedirectToSymfonyRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerRedirectToSymfonyRector`
+
+Migrate CakePHP 2.4 Controller redirect() to Symfony 5
+
+```diff
+ class RedirectController extends \AppController
+ {
+     public function index()
+     {
+-        $this->redirect('boom');
++        return $this->redirect('boom');
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerRenderToSymfonyRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerRenderToSymfonyRector`
+
+Migrate CakePHP 2.4 Controller render() to Symfony 5
+
+```diff
+ class RedirectController extends \AppController
+ {
+     public function index()
+     {
+-        $this->render('custom_file');
++        return $this->render('redirect/custom_file.twig');
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerToSymfonyControllerRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerToSymfonyControllerRector`
+
+Migrate CakePHP 2.4 Controller to Symfony 5
+
+```diff
+-class HomepageController extends AppController
++use Symfony\Component\HttpFoundation\Response;
++use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++
++class HomepageController extends AbstractController
+ {
+-    public function index()
++    public function index(): Response
+     {
+     }
+ }
 ```
 
 <br>
@@ -8724,7 +8863,7 @@ services:
     Rector\Rector\Visibility\ChangeMethodVisibilityRector:
         $methodToVisibilityByClass:
             FrameworkClass:
-            someMethod: protected
+                someMethod: protected
 ```
 
 ↓

@@ -111,7 +111,8 @@
             "Rector\\Phalcon\\": "packages/Phalcon/src",
             "Rector\\DoctrineGedmoToKnplabs\\": "packages/DoctrineGedmoToKnplabs/src",
             "Rector\\MinimalScope\\": "packages/MinimalScope/src",
-            "Rector\\Polyfill\\": "packages/Polyfill/src"
+            "Rector\\Polyfill\\": "packages/Polyfill/src",
+            "Rector\\CakePHPToSymfony\\": "packages/CakePHPToSymfony/src"
         }
     },
     "autoload-dev": {
@@ -174,7 +175,8 @@
             "Rector\\DoctrineGedmoToKnplabs\\Tests\\": "packages/DoctrineGedmoToKnplabs/tests",
             "Rector\\MinimalScope\\Tests\\": "packages/MinimalScope/tests",
             "Rector\\Utils\\PHPStanStaticTypeMapperChecker\\": "utils/PHPStanStaticTypeMapperChecker/src",
-            "Rector\\Polyfill\\Tests\\": "packages/Polyfill/tests"
+            "Rector\\Polyfill\\Tests\\": "packages/Polyfill/tests",
+            "Rector\\CakePHPToSymfony\\Tests\\": "packages/CakePHPToSymfony/tests"
         },
         "classmap": [
             "packages/CakePHP/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",
@@ -188,7 +190,8 @@
             "tests/Issues/Issue1243/Source",
             "packages/Autodiscovery/tests/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
             "packages/Autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected",
-            "packages/CakePHP/tests/Rector/StaticCall/AppUsesStaticCallToUseStatementRector/Source"
+            "packages/CakePHP/tests/Rector/StaticCall/AppUsesStaticCallToUseStatementRector/Source",
+            "packages/CakePHPToSymfony/tests/Rector/Class_/CakePHPControllerComponentToSymfonyRector/Source"
         ],
         "files": [
             "packages/DeadCode/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",
