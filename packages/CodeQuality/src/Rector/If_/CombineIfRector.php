@@ -69,6 +69,9 @@ PHP
         $subIf = $node->stmts[0];
         $node->cond = new BooleanAnd($node->cond, $subIf->cond);
         $node->stmts = $subIf->stmts;
+
+        $node->setAttribute('comments', array_merge($node->getComments(), $subIf->getComments()));
+
         return $node;
     }
 
