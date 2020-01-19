@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CakePHPToSymfony\Rector;
+namespace Rector\CakePHPToSymfony;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
