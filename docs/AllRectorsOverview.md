@@ -7381,7 +7381,7 @@ Finalize every class constant that is used only locally
 
 - class: `Rector\SOLID\Rector\If_\RemoveAlwaysElseRector`
 
-Remove if for last else, if previous values were throw
+Split if statement, when if condition always break execution flow
 
 ```diff
  class SomeClass
