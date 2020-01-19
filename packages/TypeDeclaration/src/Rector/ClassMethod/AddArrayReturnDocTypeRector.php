@@ -141,25 +141,14 @@ PHP
 
     private function shouldSkipType(Type $newType, ClassMethod $classMethod): bool
     {
-        if ($newType instanceof ArrayType) {
-            if ($this->shouldSkipArrayType($newType, $classMethod)) {
-                return true;
-            }
+        if ($newType instanceof ArrayType && $this->shouldSkipArrayType($newType, $classMethod)) {
+            return true;
         }
 
-        if ($newType instanceof UnionType) {
-            if ($this->shouldSkipUnionType($newType)) {
-                return true;
-            }
+        if ($newType instanceof UnionType && $this->shouldSkipUnionType($newType)) {
+            return true;
         }
-
-        if ($newType instanceof ConstantArrayType) {
-            if (count($newType->getValueTypes()) > self::MAX_NUMBER_OF_TYPES) {
-                return true;
-            }
-        }
-
-        return false;
+        return $newType instanceof ConstantArrayType && count($newType->getValueTypes()) > self::MAX_NUMBER_OF_TYPES;
     }
 
     private function shouldSkipArrayType(ArrayType $arrayType, ClassMethod $classMethod): bool
@@ -208,10 +197,6 @@ PHP
 
     private function shouldSkipUnionType(UnionType $unionType): bool
     {
-        if (count($unionType->getTypes()) > self::MAX_NUMBER_OF_TYPES) {
-            return true;
-        }
-
-        return false;
+        return count($unionType->getTypes()) > self::MAX_NUMBER_OF_TYPES;
     }
 }

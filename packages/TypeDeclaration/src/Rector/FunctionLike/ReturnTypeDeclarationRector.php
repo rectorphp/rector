@@ -143,10 +143,8 @@ PHP
 
             $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
 
-            if ($node instanceof ClassMethod) {
-                if ($this->vendorLockResolver->isReturnChangeVendorLockedIn($node)) {
-                    return null;
-                }
+            if ($node instanceof ClassMethod && $this->vendorLockResolver->isReturnChangeVendorLockedIn($node)) {
+                return null;
             }
 
             if ($this->isCurrentObjectTypeSubType($currentType, $inferedType)) {
@@ -183,10 +181,8 @@ PHP
             return true;
         }
 
-        if (! $this->overrideExistingReturnTypes) {
-            if ($node->returnType !== null) {
-                return true;
-            }
+        if (! $this->overrideExistingReturnTypes && $node->returnType !== null) {
+            return true;
         }
 
         if (! $node instanceof ClassMethod) {
@@ -307,10 +303,8 @@ PHP
             return true;
         }
 
-        if ($type instanceof ObjectType) {
-            if ($type->getClassName() === Iterator::class) {
-                return true;
-            }
+        if ($type instanceof ObjectType && $type->getClassName() === Iterator::class) {
+            return true;
         }
 
         if ($type instanceof UnionType || $type instanceof IntersectionType) {

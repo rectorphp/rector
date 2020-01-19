@@ -270,12 +270,10 @@ final class BetterStandardPrinter extends Standard
         $shouldReindex = false;
 
         foreach ($class->stmts as $key => $stmt) {
-            if ($stmt instanceof TraitUse) {
-                // remove empty ones
-                if (count($stmt->traits) === 0) {
-                    unset($class->stmts[$key]);
-                    $shouldReindex = true;
-                }
+            // remove empty ones
+            if ($stmt instanceof TraitUse && count($stmt->traits) === 0) {
+                unset($class->stmts[$key]);
+                $shouldReindex = true;
             }
         }
 

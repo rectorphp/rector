@@ -148,19 +148,15 @@ PHP
      */
     private function processBinaryPlusAndMinus(BinaryOp $binaryOp): ?Expr
     {
-        if ($this->isValue($binaryOp->left, 0)) {
-            if ($this->isNumberType($binaryOp->right)) {
-                if ($binaryOp instanceof Minus) {
-                    return new UnaryMinus($binaryOp->right);
-                }
-                return $binaryOp->right;
+        if ($this->isValue($binaryOp->left, 0) && $this->isNumberType($binaryOp->right)) {
+            if ($binaryOp instanceof Minus) {
+                return new UnaryMinus($binaryOp->right);
             }
+            return $binaryOp->right;
         }
 
-        if ($this->isValue($binaryOp->right, 0)) {
-            if ($this->isNumberType($binaryOp->left)) {
-                return $binaryOp->left;
-            }
+        if ($this->isValue($binaryOp->right, 0) && $this->isNumberType($binaryOp->left)) {
+            return $binaryOp->left;
         }
 
         return null;
@@ -171,18 +167,12 @@ PHP
      */
     private function processBinaryMulAndDiv(BinaryOp $binaryOp): ?Expr
     {
-        if ($binaryOp instanceof Mul) {
-            if ($this->isValue($binaryOp->left, 1)) {
-                if ($this->isNumberType($binaryOp->right)) {
-                    return $binaryOp->right;
-                }
-            }
+        if ($binaryOp instanceof Mul && $this->isValue($binaryOp->left, 1) && $this->isNumberType($binaryOp->right)) {
+            return $binaryOp->right;
         }
 
-        if ($this->isValue($binaryOp->right, 1)) {
-            if ($this->isNumberType($binaryOp->left)) {
-                return $binaryOp->left;
-            }
+        if ($this->isValue($binaryOp->right, 1) && $this->isNumberType($binaryOp->left)) {
+            return $binaryOp->left;
         }
 
         return null;

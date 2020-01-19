@@ -255,12 +255,8 @@ final class DocBlockManipulator
         }
 
         // prevent existing type override by mixed
-        if (! $currentVarType instanceof MixedType) {
-            if ($newType instanceof ConstantArrayType) {
-                if ($newType->getItemType() instanceof NeverType) {
-                    return;
-                }
-            }
+        if (! $currentVarType instanceof MixedType && $newType instanceof ConstantArrayType && $newType->getItemType() instanceof NeverType) {
+            return;
         }
 
         if ($this->hasTag($node, '@var')) {
@@ -478,11 +474,12 @@ final class DocBlockManipulator
         // has any type node?
 
         foreach ($phpDocInfo->getPhpDocNode()->children as $phpDocChildNode) {
-            if ($phpDocChildNode instanceof PhpDocTagNode) {
-                // is custom class, it can contain some type info
-                if (Strings::startsWith(get_class($phpDocChildNode->value), 'Rector\\')) {
-                    return true;
-                }
+            // is custom class, it can contain some type info
+            if ($phpDocChildNode instanceof PhpDocTagNode && Strings::startsWith(
+                get_class($phpDocChildNode->value),
+                'Rector\\'
+            )) {
+                return true;
             }
         }
 
@@ -668,18 +665,9 @@ final class DocBlockManipulator
 
     private function areAliasedObjectMatchingFqnObject(Type $firstType, Type $secondType): bool
     {
-        if ($firstType instanceof AliasedObjectType && $secondType instanceof ObjectType) {
-            if ($firstType->getFullyQualifiedClass() === $secondType->getClassName()) {
-                return true;
-            }
+        if ($firstType instanceof AliasedObjectType && $secondType instanceof ObjectType && $firstType->getFullyQualifiedClass() === $secondType->getClassName()) {
+            return true;
         }
-
-        if ($secondType instanceof AliasedObjectType && $firstType instanceof ObjectType) {
-            if ($secondType->getFullyQualifiedClass() === $firstType->getClassName()) {
-                return true;
-            }
-        }
-
-        return false;
+        return $secondType instanceof AliasedObjectType && $firstType instanceof ObjectType && $secondType->getFullyQualifiedClass() === $firstType->getClassName();
     }
 }

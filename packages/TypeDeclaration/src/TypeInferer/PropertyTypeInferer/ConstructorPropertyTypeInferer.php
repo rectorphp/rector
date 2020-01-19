@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -89,53 +88,6 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
     public function getPriority(): int
     {
         return 800;
-    }
-
-    /**
-     * In case the property name is different to param name:
-     *
-     * E.g.:
-     * (SomeType $anotherValue)
-     * $this->value = $anotherValue;
-     * ↓
-     * $anotherValue param
-     */
-    private function resolveParamForPropertyFetch(ClassMethod $classMethod, string $propertyName): ?Param
-    {
-        $assignedParamName = null;
-
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $propertyName,
-            &$assignedParamName
-        ): ?int {
-            if (! $node instanceof Assign) {
-                return null;
-            }
-
-            if (! $this->nameResolver->isName($node->var, $propertyName)) {
-                return null;
-            }
-
-            $assignedParamName = $this->nameResolver->getName($node->expr);
-
-            return NodeTraverser::STOP_TRAVERSAL;
-        });
-
-        /** @var string|null $assignedParamName */
-        if ($assignedParamName === null) {
-            return null;
-        }
-
-        /** @var Param $param */
-        foreach ((array) $classMethod->params as $param) {
-            if (! $this->nameResolver->isName($param, $assignedParamName)) {
-                continue;
-            }
-
-            return $param;
-        }
-
-        return null;
     }
 
     private function resolveParamTypeToPHPStanType(Param $param): Type

@@ -124,7 +124,7 @@ PHP
 
         // skip class without parents/interfaces
         if ($class instanceof Class_) {
-            if ($class->implements) {
+            if ($class->implements !== []) {
                 return false;
             }
 

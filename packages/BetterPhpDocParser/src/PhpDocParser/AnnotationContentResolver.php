@@ -121,14 +121,13 @@ final class AnnotationContentResolver
             return true;
         }
 
-        if ($localTokenIterator->isCurrentTokenType(Lexer::TOKEN_IDENTIFIER)) {
-            if ($localTokenIterator->currentTokenValue() === $name) {
-                // consume "=" as well
-                $localTokenIterator->next();
-                $localTokenIterator->tryConsumeTokenType(Lexer::TOKEN_EQUAL);
-
-                return true;
-            }
+        if ($localTokenIterator->isCurrentTokenType(Lexer::TOKEN_IDENTIFIER) &&
+            $localTokenIterator->currentTokenValue() === $name
+        ) {
+            // consume "=" as well
+            $localTokenIterator->next();
+            $localTokenIterator->tryConsumeTokenType(Lexer::TOKEN_EQUAL);
+            return true;
         }
 
         return false;

@@ -148,7 +148,7 @@ PHP
      */
     private function getComponentClasses(): array
     {
-        if ($this->componentsClasses) {
+        if ($this->componentsClasses !== []) {
             return $this->componentsClasses;
         }
 

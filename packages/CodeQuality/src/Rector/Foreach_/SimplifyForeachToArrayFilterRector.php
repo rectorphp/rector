@@ -121,7 +121,7 @@ PHP
             return true;
         }
 
-        if ($ifNode->elseifs) {
+        if ($ifNode->elseifs !== []) {
             return true;
         }
 

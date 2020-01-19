@@ -84,11 +84,11 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRecto
 
             /** @var Name|null $originalName */
             $originalName = $node->getAttribute('originalName');
-            if ($originalName instanceof Name) {
-                if ($currentNamespace . '\\' . $originalName->toString() === $this->getName($node)) {
-                    // this needs to be imported
-                    $newUseImports[] = $this->getName($node);
-                }
+            if ($originalName instanceof Name &&
+                $currentNamespace . '\\' . $originalName->toString() === $this->getName($node)
+            ) {
+                // this needs to be imported
+                $newUseImports[] = $this->getName($node);
             }
         });
 

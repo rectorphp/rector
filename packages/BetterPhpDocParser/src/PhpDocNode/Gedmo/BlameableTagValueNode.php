@@ -54,11 +54,8 @@ final class BlameableTagValueNode extends AbstractTagValueNode
         }
 
         if ($this->field) {
-            if (is_array($this->field)) {
-                $contentItems['field'] = $this->printArrayItem($this->field, 'field');
-            } else {
-                $contentItems['field'] = $this->field;
-            }
+            $contentItems['field'] = is_array($this->field) ?
+                $this->printArrayItem($this->field, 'field') : $this->field;
         }
 
         if ($this->value !== null) {

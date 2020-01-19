@@ -251,10 +251,10 @@ final class UseAddingCommander implements CommanderInterface
         $useImportTypes = $this->getUseImportTypesByNode($node);
 
         foreach ($useImportTypes as $useImportType) {
-            if (! $useImportType->equals($fullyQualifiedObjectType)) {
-                if ($useImportType->areShortNamesEqual($fullyQualifiedObjectType)) {
-                    return false;
-                }
+            if (! $useImportType->equals($fullyQualifiedObjectType) &&
+                $useImportType->areShortNamesEqual($fullyQualifiedObjectType)
+            ) {
+                return false;
             }
 
             if ($useImportType->equals($fullyQualifiedObjectType)) {

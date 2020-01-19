@@ -82,7 +82,7 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $match = $this->ifManipulator->isIfOrIfElseWithFunctionCondition($node, 'function_exists');
-        if ($match === false) {
+        if (! $match) {
             return null;
         }
 

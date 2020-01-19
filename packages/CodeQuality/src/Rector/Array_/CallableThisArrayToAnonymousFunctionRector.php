@@ -211,10 +211,8 @@ PHP
             $anonymousFunction->stmts[] = new Expression($innerMethodCall);
         }
 
-        if ($node instanceof Variable) {
-            if (! $this->isName($node, 'this')) {
-                $anonymousFunction->uses[] = new ClosureUse($node);
-            }
+        if ($node instanceof Variable && ! $this->isName($node, 'this')) {
+            $anonymousFunction->uses[] = new ClosureUse($node);
         }
 
         return $anonymousFunction;

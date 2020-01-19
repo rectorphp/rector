@@ -158,10 +158,8 @@ PHP
             return $expr;
         }
 
-        if ($expr->if instanceof Variable) {
-            if ($this->isIteratorToArrayFuncCall($expr->else)) {
-                return $expr->if;
-            }
+        if ($expr->if instanceof Variable && $this->isIteratorToArrayFuncCall($expr->else)) {
+            return $expr->if;
         }
 
         return $expr;

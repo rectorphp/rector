@@ -153,10 +153,8 @@ PHP
         if ($classMethod->returnType !== null) {
             $returnTypeName = $this->getName($classMethod->returnType);
 
-            if ($returnTypeName !== null) {
-                if (is_a($returnTypeName, Response::class, true)) {
-                    return;
-                }
+            if ($returnTypeName !== null && is_a($returnTypeName, Response::class, true)) {
+                return;
             }
         }
 
@@ -237,15 +235,13 @@ PHP
         /** @var Return_|null $returnNode */
         $returnNode = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
 
-        if ($returnNode !== null) {
-            if ($returnNode->expr instanceof MethodCall) {
-                // go inside called method
-                $innerClassMethod = $this->parsedNodesByType->findClassMethodByMethodCall($returnNode->expr);
-                if ($innerClassMethod !== null) {
-                    $this->refactorClassMethod($innerClassMethod, $sensioTemplateTagValueNode);
+        if ($returnNode !== null && $returnNode->expr instanceof MethodCall) {
+            // go inside called method
+            $innerClassMethod = $this->parsedNodesByType->findClassMethodByMethodCall($returnNode->expr);
+            if ($innerClassMethod !== null) {
+                $this->refactorClassMethod($innerClassMethod, $sensioTemplateTagValueNode);
 
-                    return;
-                }
+                return;
             }
         }
 

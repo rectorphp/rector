@@ -89,11 +89,9 @@ PHP
 
     private function refactorReturnTypeDeclaration(ClassMethod $classMethod): void
     {
-        if ($classMethod->returnType !== null) {
-            // already set
-            if ($this->isName($classMethod->returnType, 'int')) {
-                return;
-            }
+        // already set
+        if ($classMethod->returnType !== null && $this->isName($classMethod->returnType, 'int')) {
+            return;
         }
 
         $classMethod->returnType = new Identifier('int');

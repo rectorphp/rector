@@ -91,12 +91,10 @@ final class VendorLockResolver
         $interfaceNames = $this->classManipulator->getClassLikeNodeParentInterfaceNames($classNode);
         foreach ($interfaceNames as $interfaceName) {
             $interface = $this->parsedNodesByType->findInterface($interfaceName);
-            if ($interface !== null) {
-                // parent class method in local scope → it's ok
-                // @todo validate type is conflicting
-                if ($interface->getMethod($methodName) !== null) {
-                    return false;
-                }
+            // parent class method in local scope → it's ok
+            // @todo validate type is conflicting
+            if ($interface !== null && $interface->getMethod($methodName) !== null) {
+                return false;
             }
 
             if (method_exists($interfaceName, $methodName)) {
@@ -156,12 +154,10 @@ final class VendorLockResolver
         $interfaceNames = $this->classManipulator->getClassLikeNodeParentInterfaceNames($classNode);
         foreach ($interfaceNames as $interfaceName) {
             $interface = $this->parsedNodesByType->findInterface($interfaceName);
-            if ($interface !== null) {
-                // parent class method in local scope → it's ok
-                // @todo validate type is conflicting
-                if ($interface->getMethod($methodName) !== null) {
-                    return false;
-                }
+            // parent class method in local scope → it's ok
+            // @todo validate type is conflicting
+            if ($interface !== null && $interface->getMethod($methodName) !== null) {
+                return false;
             }
 
             if (method_exists($interfaceName, $methodName)) {
@@ -234,10 +230,8 @@ final class VendorLockResolver
 
     private function hasParentClassOrImplementsInterface(Node $classNode): bool
     {
-        if ($classNode instanceof Class_ || $classNode instanceof Interface_) {
-            if ($classNode->extends) {
-                return true;
-            }
+        if (($classNode instanceof Class_ || $classNode instanceof Interface_) && $classNode->extends) {
+            return true;
         }
 
         if ($classNode instanceof Class_) {

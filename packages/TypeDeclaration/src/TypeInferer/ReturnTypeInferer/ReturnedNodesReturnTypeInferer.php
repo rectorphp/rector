@@ -30,10 +30,8 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
     {
         /** @var Class_|Trait_|Interface_|null $classLike */
         $classLike = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
-        if ($functionLike instanceof ClassMethod) {
-            if ($classLike instanceof Interface_) {
-                return new MixedType();
-            }
+        if ($functionLike instanceof ClassMethod && $classLike instanceof Interface_) {
+            return new MixedType();
         }
 
         $localReturnNodes = $this->collectReturns($functionLike);

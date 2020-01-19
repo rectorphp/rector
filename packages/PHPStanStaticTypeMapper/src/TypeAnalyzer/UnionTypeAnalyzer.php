@@ -34,11 +34,9 @@ final class UnionTypeAnalyzer
                 continue;
             }
 
-            if ($unionedType instanceof ObjectType) {
-                if ($unionedType->getClassName() === Traversable::class) {
-                    $hasIterable = true;
-                    continue;
-                }
+            if ($unionedType instanceof ObjectType && $unionedType->getClassName() === Traversable::class) {
+                $hasIterable = true;
+                continue;
             }
 
             return null;
