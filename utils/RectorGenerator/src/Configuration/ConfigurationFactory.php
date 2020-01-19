@@ -51,7 +51,8 @@ final class ConfigurationFactory
             $this->normalizeCode($rectorRecipe['code_before']),
             $this->normalizeCode($rectorRecipe['code_after']),
             array_filter((array) $rectorRecipe['source']),
-            $this->resolveSetConfig($rectorRecipe['set'])
+            $this->resolveSetConfig($rectorRecipe['set']),
+            $this->detectPhpSnippet($rectorRecipe['code_before'])
         );
     }
 
@@ -142,5 +143,10 @@ final class ConfigurationFactory
         }
 
         return trim($code);
+    }
+
+    private function detectPhpSnippet(string $code): bool
+    {
+        return Strings::startsWith($code, '<?php');
     }
 }

@@ -54,6 +54,11 @@ final class Configuration
     private $source = [];
 
     /**
+     * @var bool
+     */
+    private $isPhpSnippet = false;
+
+    /**
      * @param string[] $nodeTypes
      * @param string[] $source
      */
@@ -66,7 +71,8 @@ final class Configuration
         string $codeBefore,
         string $codeAfter,
         array $source,
-        ?string $setConfig
+        ?string $setConfig,
+        bool $isPhpSnippet
     ) {
         $this->package = $package;
         $this->setName($name);
@@ -77,6 +83,7 @@ final class Configuration
         $this->description = $description;
         $this->source = $source;
         $this->setConfig = $setConfig;
+        $this->isPhpSnippet = $isPhpSnippet;
     }
 
     public function getDescription(): string
@@ -128,6 +135,11 @@ final class Configuration
     public function getSetConfig(): ?string
     {
         return $this->setConfig;
+    }
+
+    public function isPhpSnippet(): bool
+    {
+        return $this->isPhpSnippet;
     }
 
     private function setName(string $name): void
