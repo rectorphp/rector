@@ -11,3 +11,4 @@ services:
     # .tpl templates to twig
     Rector\CakePHPToSymfony\Rector\Echo_\CakePHPTemplateLinkToTwigRector: null
     Rector\CakePHPToSymfony\Rector\Echo_\CakePHPTemplateTranslateToTwigRector: null
+    Rector\CakePHPToSymfony\Rector\Echo_\CakePHPTemplateHToTwigRector: null

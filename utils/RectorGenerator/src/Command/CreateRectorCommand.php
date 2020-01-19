@@ -96,6 +96,7 @@ final class CreateRectorCommand extends Command
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
+        $this->setAliases(['c']);
         $this->setDescription('[Dev] Create a new Rector, in a proper location, with new tests');
     }
 
