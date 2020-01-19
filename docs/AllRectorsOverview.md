@@ -1,4 +1,4 @@
-# All 440 Rectors Overview
+# All 441 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -418,6 +418,19 @@ Migrate CakePHP 2.4 Controller to Symfony 5
      {
      }
  }
+```
+
+<br>
+
+### `CakePHPTemplateHToTwigRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Echo_\CakePHPTemplateHToTwigRector`
+
+Migrate CakePHP 2.4 h() function calls to Twig
+
+```diff
+-<h3><?php echo h($value); ?></h3>
++<h3>{{ value|escape }}</h3>
 ```
 
 <br>
