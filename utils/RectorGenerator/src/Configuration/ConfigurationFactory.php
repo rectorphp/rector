@@ -48,8 +48,8 @@ final class ConfigurationFactory
             $category,
             $this->resolveFullyQualifiedNodeTypes($rectorRecipe['node_types']),
             $rectorRecipe['description'],
-            trim(ltrim($rectorRecipe['code_before'], '<?php')),
-            trim(ltrim($rectorRecipe['code_after'], '<?php')),
+            $this->normalizeCode($rectorRecipe['code_before']),
+            $this->normalizeCode($rectorRecipe['code_after']),
             array_filter((array) $rectorRecipe['source']),
             $this->resolveSetConfig($rectorRecipe['set'])
         );
@@ -133,5 +133,14 @@ final class ConfigurationFactory
 
         // in case of forgotten _
         return Strings::endsWith($nodeClass, '\\' . $nodeType . '_');
+    }
+
+    private function normalizeCode(string $code): string
+    {
+        if (Strings::startsWith($code, '<?php')) {
+            $code = ltrim($code, '<?php');
+        }
+
+        return trim($code);
     }
 }
