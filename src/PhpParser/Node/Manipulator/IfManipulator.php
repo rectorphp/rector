@@ -221,9 +221,7 @@ final class IfManipulator
         if ($this->betterStandardPrinter->areNodesEqual(
             $notIdentical->left,
             $returnNode->expr
-        ) && $this->constFetchManipulator->isNull(
-            $notIdentical->right
-        )) {
+        ) && $this->constFetchManipulator->isNull($notIdentical->right)) {
             return $notIdentical->left;
         }
 
