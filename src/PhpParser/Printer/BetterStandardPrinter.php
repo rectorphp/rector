@@ -53,7 +53,11 @@ final class BetterStandardPrinter extends Standard
         // detect per print
         $this->detectTabOrSpaceIndentCharacter($stmts);
 
-        return parent::printFormatPreserving($stmts, $origStmts, $origTokens);
+        $content = parent::printFormatPreserving($stmts, $origStmts, $origTokens);
+
+        // remove dead <?php structures
+        $clearContent = Strings::replace($content, '#\<\?php(\s)\?\>\n?#');
+        return Strings::replace($clearContent, '#\<\?php(\s+)\?\>#');
     }
 
     /**

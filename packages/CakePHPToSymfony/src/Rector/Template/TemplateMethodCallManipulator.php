@@ -11,7 +11,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use Rector\CakePHPToSymfony\Rector\TemplatePathResolver;
+use Rector\CakePHPToSymfony\TemplatePathResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
