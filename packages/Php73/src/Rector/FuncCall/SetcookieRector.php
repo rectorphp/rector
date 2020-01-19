@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Rector\Php73\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,6 +24,17 @@ use Rector\ValueObject\PhpVersionFeature;
  */
 final class SetcookieRector extends AbstractRector
 {
+    /**
+     * Conversion table from argument index to options name
+     */
+    private const KNOWN_OPTIONS = [
+        2 => 'expires',
+        3 => 'path',
+        4 => 'domain',
+        5 => 'secure',
+        6 => 'httponly',
+    ];
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -65,7 +79,29 @@ PHP
             return null;
         }
 
+        /** @var FuncCall $node */
+        $node->args = $this->composeNewArgs($node);
+
         return $node;
+    }
+
+    /**
+     * @return Arg[]
+     */
+    private function composeNewArgs(FuncCall $funcCall): array
+    {
+        $items = [];
+
+        $args = $funcCall->args;
+        unset($args[0]);
+        unset($args[1]);
+
+        foreach ($args as $idx => $arg) {
+            $newKey = new String_(self::KNOWN_OPTIONS[$idx]);
+            $items[] = new ArrayItem($arg->value, $newKey);
+        }
+
+        return [$funcCall->args[0], $funcCall->args[1], new Arg(new Array_($items))];
     }
 
     private function shouldSkip(FuncCall $funcCall): bool
