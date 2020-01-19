@@ -430,7 +430,7 @@ Migrate CakePHP 2.4 template method calls to Twig
 
 ```diff
  <li>
--    <?php echo $this->Html->link(__('List Rights'), ['action' => 'index']); ?>
+-    <?php echo $this->Html->link('List Rights', ['action' => 'index']); ?>
 +    <a href="{{ path('index') }}">List Rights</a>
  </li>
 ```

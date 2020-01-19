@@ -159,12 +159,13 @@ jobs:
                 uses: shivammathur/setup-php@v1
                 with:
                     php-version: 7.3
-                    coverage: none # disable xdebug, pcov
+                    coverage: pcov
 
             -   run: composer install --no-progress
 
+            # https://kizu514.com/blog/pcov-is-better-than-phpdbg-and-xdebug-for-code-coverage/
             -   run: |
-                    phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit --coverage-clover coverage.xml
+                    vendor/bin/phpunit --coverage-clover coverage.xml
                     # Coveralls.io
                     wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
                     php php-coveralls.phar --verbose
