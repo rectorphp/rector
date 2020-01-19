@@ -48,12 +48,10 @@ final class TemplateFinder
     private function createFixtureSmartFileInfo(bool $isPhpSnippet): SmartFileInfo
     {
         if ($isPhpSnippet) {
-            $fixtureFileInfo = new SmartFileInfo(self::TEMPLATES_FIXTURE_DIRECTORY . '/fixture.php.inc');
+            return new SmartFileInfo(self::TEMPLATES_FIXTURE_DIRECTORY . '/fixture.php.inc');
+        }
 
         // is html snippet
-        } else {
-            $fixtureFileInfo = new SmartFileInfo(self::TEMPLATES_FIXTURE_DIRECTORY . '/html_fixture.php.inc');
-        }
-        return $fixtureFileInfo;
+        return new SmartFileInfo(self::TEMPLATES_FIXTURE_DIRECTORY . '/html_fixture.php.inc');
     }
 }
