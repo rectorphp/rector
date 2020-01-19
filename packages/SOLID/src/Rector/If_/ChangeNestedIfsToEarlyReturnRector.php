@@ -152,18 +152,14 @@ PHP
         $invertedCondition = $this->createInvertedCondition($nestedIfWithOnlyReturn->cond);
 
         // special case
-        if ($invertedCondition instanceof BooleanNot) {
-            if ($invertedCondition->expr instanceof BooleanAnd) {
-                $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->left));
-                $booleanNotPartIf->stmts = [clone $return];
-                $this->addNodeAfterNode($booleanNotPartIf, $if);
-
-                $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->right));
-                $booleanNotPartIf->stmts = [clone $return];
-                $this->addNodeAfterNode($booleanNotPartIf, $if);
-
-                return;
-            }
+        if ($invertedCondition instanceof BooleanNot && $invertedCondition->expr instanceof BooleanAnd) {
+            $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->left));
+            $booleanNotPartIf->stmts = [clone $return];
+            $this->addNodeAfterNode($booleanNotPartIf, $if);
+            $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->right));
+            $booleanNotPartIf->stmts = [clone $return];
+            $this->addNodeAfterNode($booleanNotPartIf, $if);
+            return;
         }
 
         $nestedIfWithOnlyReturn->cond = $invertedCondition;

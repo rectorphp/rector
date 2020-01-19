@@ -75,10 +75,8 @@ PHP
         // only relevant inside the class
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($nodeScope instanceof Scope) {
-            if (! $nodeScope->isInClass()) {
-                return null;
-            }
+        if ($nodeScope instanceof Scope && ! $nodeScope->isInClass()) {
+            return null;
         }
 
         // possibly already changed
@@ -129,19 +127,14 @@ PHP
             return false;
         }
 
-        if ($this->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value)) {
-            if (! $this->isNull($ternary->cond->right)) {
-                return true;
-            }
+        if ($this->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value) && ! $this->isNull(
+            $ternary->cond->right
+        )) {
+            return true;
         }
-
-        if ($this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
-            if (! $this->isNull($ternary->cond->left)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value) && ! $this->isNull(
+            $ternary->cond->left
+        );
     }
 
     /**
@@ -153,18 +146,13 @@ PHP
             return false;
         }
 
-        if ($this->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value)) {
-            if ($this->isNull($ternary->cond->right)) {
-                return true;
-            }
+        if ($this->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value) && $this->isNull(
+            $ternary->cond->right
+        )) {
+            return true;
         }
-
-        if ($this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
-            if ($this->isNull($ternary->cond->left)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value) && $this->isNull(
+            $ternary->cond->left
+        );
     }
 }

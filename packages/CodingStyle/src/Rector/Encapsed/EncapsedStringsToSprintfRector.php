@@ -96,10 +96,8 @@ PHP
     private function createSprintfFuncCallOrConcat(string $string, array $argumentVariables): Node
     {
         // special case for variable with PHP_EOL
-        if ($string === '%s') {
-            if (count($argumentVariables) === 2) {
-                return new Concat($argumentVariables[0], $argumentVariables[1]);
-            }
+        if ($string === '%s' && count($argumentVariables) === 2) {
+            return new Concat($argumentVariables[0], $argumentVariables[1]);
         }
 
         $arguments = [new Arg(new String_($string))];

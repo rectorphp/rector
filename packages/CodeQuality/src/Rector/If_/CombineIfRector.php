@@ -85,7 +85,7 @@ PHP
             return true;
         }
 
-        if ($node->elseifs) {
+        if ($node->elseifs !== []) {
             return true;
         }
 
@@ -96,10 +96,6 @@ PHP
         if ($node->stmts[0]->else !== null) {
             return true;
         }
-
-        if ($node->stmts[0]->elseifs) {
-            return true;
-        }
-        return false;
+        return (bool) $node->stmts[0]->elseifs;
     }
 }

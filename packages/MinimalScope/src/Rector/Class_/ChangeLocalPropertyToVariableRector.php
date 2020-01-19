@@ -169,7 +169,7 @@ PHP
                     return (bool) $this->isName($node->name, $privatePropertyName);
                 });
 
-                if ($hasProperty === false) {
+                if (! $hasProperty) {
                     continue;
                 }
 
@@ -211,10 +211,8 @@ PHP
                 }
 
                 $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-                if ($parentNode instanceof Assign) {
-                    if ($parentNode->var === $node) {
-                        $isIfFollowedByAssign = true;
-                    }
+                if ($parentNode instanceof Assign && $parentNode->var === $node) {
+                    $isIfFollowedByAssign = true;
                 }
             }
 
@@ -259,7 +257,7 @@ PHP
                 return NodeTraverser::STOP_TRAVERSAL;
             });
 
-            if ($isPropertyChanging === false) {
+            if (! $isPropertyChanging) {
                 return null;
             }
 

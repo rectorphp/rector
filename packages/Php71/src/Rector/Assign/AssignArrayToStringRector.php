@@ -77,10 +77,10 @@ PHP
         $variableNode = $arrayDimFetchNode->var;
 
         // set default value to property
-        if ($variableNode instanceof PropertyFetch || $variableNode instanceof StaticPropertyFetch) {
-            if ($this->processProperty($variableNode)) {
-                return $node;
-            }
+        if (($variableNode instanceof PropertyFetch || $variableNode instanceof StaticPropertyFetch) &&
+            $this->processProperty($variableNode)
+        ) {
+            return $node;
         }
 
         // fallback to variable, property or static property = '' set

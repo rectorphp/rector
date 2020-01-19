@@ -54,10 +54,8 @@ final class SelfContainerMethodCallCollector
                 return null;
             }
 
-            if ($skipSetUpMethod) {
-                if ($this->kernelTestCaseNodeAnalyzer->isSetUpOrEmptyMethod($node)) {
-                    return null;
-                }
+            if ($skipSetUpMethod && $this->kernelTestCaseNodeAnalyzer->isSetUpOrEmptyMethod($node)) {
+                return null;
             }
 
             /** @var MethodCall $node */

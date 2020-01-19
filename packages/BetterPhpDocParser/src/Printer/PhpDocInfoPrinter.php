@@ -207,14 +207,12 @@ final class PhpDocInfoPrinter
             --$from;
         }
 
-        if ($shouldSkipEmptyLinesAbove) {
-            // skip extra empty lines above if this is the last one
-            if (Strings::contains($this->tokens[$from][0], PHP_EOL) && Strings::contains(
-                $this->tokens[$from + 1][0],
-                PHP_EOL
-            )) {
-                ++$from;
-            }
+        // skip extra empty lines above if this is the last one
+        if ($shouldSkipEmptyLinesAbove &&
+            Strings::contains($this->tokens[$from][0], PHP_EOL) &&
+            Strings::contains($this->tokens[$from + 1][0], PHP_EOL)
+        ) {
+            ++$from;
         }
 
         return $this->appendToOutput($output, $from, $to, $positionJumpSet);
@@ -234,21 +232,15 @@ final class PhpDocInfoPrinter
             $output .= ' ';
         }
 
-        if ($phpDocTagNode->getAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES)) {
-            if (property_exists($phpDocTagNode->value, 'description') && $phpDocTagNode->value->description) {
-                $quotedDescription = preg_quote($phpDocTagNode->value->description, '#');
-
-                $pattern = Strings::replace($quotedDescription, '#[\s]+#', '\s+');
-
-                $nodeOutput = Strings::replace(
-                    $nodeOutput,
-                    '#' . $pattern . '#',
-                    $phpDocTagNode->value->description
-                );
-
-                if (substr_count($nodeOutput, "\n") !== 0) {
-                    $nodeOutput = Strings::replace($nodeOutput, "#\n#", PHP_EOL . '  * ');
-                }
+        if ($phpDocTagNode->getAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES) && (property_exists(
+            $phpDocTagNode->value,
+            'description'
+        ) && $phpDocTagNode->value->description)) {
+            $quotedDescription = preg_quote($phpDocTagNode->value->description, '#');
+            $pattern = Strings::replace($quotedDescription, '#[\s]+#', '\s+');
+            $nodeOutput = Strings::replace($nodeOutput, '#' . $pattern . '#', $phpDocTagNode->value->description);
+            if (substr_count($nodeOutput, "\n") !== 0) {
+                $nodeOutput = Strings::replace($nodeOutput, "#\n#", PHP_EOL . '  * ');
             }
         }
 

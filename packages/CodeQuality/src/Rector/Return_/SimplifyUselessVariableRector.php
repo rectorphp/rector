@@ -133,12 +133,8 @@ PHP
     private function isPreviousExpressionVisuallySimilar(Expression $previousExpression, Node $previousNode): bool
     {
         $prePreviousExpression = $previousExpression->getAttribute(AttributeKey::PREVIOUS_STATEMENT);
-        if ($prePreviousExpression instanceof Expression && $prePreviousExpression->expr instanceof AssignOp) {
-            if ($this->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $prePreviousExpression instanceof Expression &&
+            $prePreviousExpression->expr instanceof AssignOp &&
+            $this->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var);
     }
 }

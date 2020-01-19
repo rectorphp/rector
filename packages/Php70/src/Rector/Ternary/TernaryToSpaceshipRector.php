@@ -97,10 +97,11 @@ PHP
      */
     private function processSmallerThanTernary(Ternary $node, Ternary $nestedTernary): ?Spaceship
     {
-        if ($node->cond instanceof Smaller && $nestedTernary->cond instanceof Greater) {
-            if ($this->areValues([$node->if, $nestedTernary->if, $nestedTernary->else], [-1, 1, 0])) {
-                return new Spaceship($node->cond->left, $node->cond->right);
-            }
+        if ($node->cond instanceof Smaller && $nestedTernary->cond instanceof Greater && $this->areValues(
+            [$node->if, $nestedTernary->if, $nestedTernary->else],
+            [-1, 1, 0]
+        )) {
+            return new Spaceship($node->cond->left, $node->cond->right);
         }
 
         return null;
@@ -111,10 +112,11 @@ PHP
      */
     private function processGreaterThanTernary(Ternary $node, Ternary $nestedTernary): ?Spaceship
     {
-        if ($node->cond instanceof Greater && $nestedTernary->cond instanceof Smaller) {
-            if ($this->areValues([$node->if, $nestedTernary->if, $nestedTernary->else], [-1, 1, 0])) {
-                return new Spaceship($node->cond->right, $node->cond->left);
-            }
+        if ($node->cond instanceof Greater && $nestedTernary->cond instanceof Smaller && $this->areValues(
+            [$node->if, $nestedTernary->if, $nestedTernary->else],
+            [-1, 1, 0]
+        )) {
+            return new Spaceship($node->cond->right, $node->cond->left);
         }
 
         return null;

@@ -112,18 +112,14 @@ final class DoctrineEntityManipulator
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
 
         $shouldUpdate = false;
-        if ($relationTagValueNode instanceof MappedByNodeInterface) {
-            if ($relationTagValueNode->getMappedBy()) {
-                $shouldUpdate = true;
-                $relationTagValueNode->removeMappedBy();
-            }
+        if ($relationTagValueNode instanceof MappedByNodeInterface && $relationTagValueNode->getMappedBy()) {
+            $shouldUpdate = true;
+            $relationTagValueNode->removeMappedBy();
         }
 
-        if ($relationTagValueNode instanceof InversedByNodeInterface) {
-            if ($relationTagValueNode->getInversedBy()) {
-                $shouldUpdate = true;
-                $relationTagValueNode->removeInversedBy();
-            }
+        if ($relationTagValueNode instanceof InversedByNodeInterface && $relationTagValueNode->getInversedBy()) {
+            $shouldUpdate = true;
+            $relationTagValueNode->removeInversedBy();
         }
 
         if (! $shouldUpdate) {

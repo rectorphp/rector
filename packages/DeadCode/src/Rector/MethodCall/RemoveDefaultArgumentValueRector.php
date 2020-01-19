@@ -195,10 +195,8 @@ PHP
             return [];
         }
 
-        if ($keysToKeep !== []) {
-            if (max($keysToKeep) > max($keysToRemove)) {
-                return [];
-            }
+        if ($keysToKeep !== [] && max($keysToKeep) > max($keysToRemove)) {
+            return [];
         }
 
         return $keysToRemove;

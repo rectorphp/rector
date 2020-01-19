@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CakePHPToSymfony\Rector\Echo_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\InlineHTML;
 use Rector\Rector\AbstractRector;
@@ -37,7 +38,7 @@ final class CakePHPTemplateTranslateToTwigRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         $expr = $node->exprs[0];
-        if (! $expr instanceof Node\Expr\FuncCall) {
+        if (! $expr instanceof FuncCall) {
             return null;
         }
 
@@ -48,7 +49,7 @@ final class CakePHPTemplateTranslateToTwigRector extends AbstractRector
         $translatedValue = $expr->args[0]->value;
         $translatedValue = $this->getValue($translatedValue);
 
-        $html = sprintf('{{ \'%s\'|trans }}', $translatedValue);
+        $html = sprintf("{{ '%s'|trans }}", $translatedValue);
 
         return new InlineHTML($html);
     }

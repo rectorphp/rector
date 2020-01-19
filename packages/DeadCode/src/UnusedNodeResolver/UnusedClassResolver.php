@@ -45,10 +45,8 @@ final class UnusedClassResolver
      */
     public function getUsedClassNames(): array
     {
-        if (! PHPUnitEnvironment::isPHPUnitRun()) {
-            if ($this->cachedUsedClassNames !== []) {
-                return $this->cachedUsedClassNames;
-            }
+        if (! PHPUnitEnvironment::isPHPUnitRun() && $this->cachedUsedClassNames !== []) {
+            return $this->cachedUsedClassNames;
         }
 
         $cachedUsedClassNames = array_merge(
@@ -76,12 +74,7 @@ final class UnusedClassResolver
         if ($this->nameResolver->isNames($class, ['*Controller', '*Presenter'])) {
             return false;
         }
-
-        if ($this->nameResolver->isName($class, '*Test')) {
-            return false;
-        }
-
-        return true;
+        return ! $this->nameResolver->isName($class, '*Test');
     }
 
     public function isClassUsed(Class_ $class): bool

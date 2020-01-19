@@ -214,10 +214,8 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     {
         $tokens = $this->lexer->getTokens();
         $lastToken = array_pop($tokens);
-        if ($lastToken) {
-            if (Strings::contains($lastToken[1], "\n")) {
-                $prettyPrintContent = trim($prettyPrintContent) . PHP_EOL;
-            }
+        if ($lastToken && Strings::contains($lastToken[1], "\n")) {
+            $prettyPrintContent = trim($prettyPrintContent) . PHP_EOL;
         }
 
         return $prettyPrintContent;

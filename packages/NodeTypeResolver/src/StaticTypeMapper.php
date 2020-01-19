@@ -272,12 +272,7 @@ final class StaticTypeMapper
             return $type;
         }
 
-        $customType = $this->customMapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, $node);
-        if ($type === $customType) {
-            return $type;
-        }
-
-        return $customType;
+        return $this->customMapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, $node);
     }
 
     /**

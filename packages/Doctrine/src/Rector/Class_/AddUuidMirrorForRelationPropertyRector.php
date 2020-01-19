@@ -111,14 +111,8 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
         }
 
         $oneToOneTagValueNode = $propertyPhpDocInfo->getByType(OneToOneTagValueNode::class);
-        if ($oneToOneTagValueNode !== null) {
-            // skip mappedBy oneToOne, as the column doesn't really exist
-            if ($oneToOneTagValueNode->getMappedBy()) {
-                return true;
-            }
-        }
-
-        return false;
+        // skip mappedBy oneToOne, as the column doesn't really exist
+        return $oneToOneTagValueNode !== null && $oneToOneTagValueNode->getMappedBy();
     }
 
     /**

@@ -114,10 +114,8 @@ PHP
     private function processArgumentPosition(Expr $expr, int $argumentPosition): Expr
     {
         $oldValue = $expr->args[$argumentPosition]->value;
-        if (! $oldValue instanceof LNumber) {
-            if (! $this->getStaticType($oldValue) instanceof ConstantIntegerType) {
-                return $expr;
-            }
+        if (! $oldValue instanceof LNumber && ! $this->getStaticType($oldValue) instanceof ConstantIntegerType) {
+            return $expr;
         }
 
         $newArgumentValue = new Mul($oldValue, new LNumber(60));

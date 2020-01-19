@@ -115,11 +115,9 @@ final class ShortNameResolver
             &$shortNames
         ): void {
             // class name is used!
-            if ($node instanceof ClassLike) {
-                if ($node->name instanceof Identifier) {
-                    $shortNames[$node->name->toString()] = $node->name->toString();
-                    return;
-                }
+            if ($node instanceof ClassLike && $node->name instanceof Identifier) {
+                $shortNames[$node->name->toString()] = $node->name->toString();
+                return;
             }
 
             if (! $node instanceof Name) {

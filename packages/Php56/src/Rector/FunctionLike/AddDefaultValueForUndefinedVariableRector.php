@@ -136,12 +136,10 @@ PHP
             return true;
         }
 
-        if ($parentNode instanceof Node) {
-            if ($parentNode instanceof Assign || $parentNode instanceof AssignRef || $this->isStaticVariable(
-                $parentNode
-            )) {
-                return true;
-            }
+        if ($parentNode instanceof Node &&
+            ($parentNode instanceof Assign || $parentNode instanceof AssignRef || $this->isStaticVariable($parentNode)
+        )) {
+            return true;
         }
 
         if ($parentNode instanceof Unset_ || $parentNode instanceof Node\Expr\Cast\Unset_) {

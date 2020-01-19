@@ -159,11 +159,9 @@ PHP
             }
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof Assign) {
-                // is the left assign - not use of one
-                if ($parentNode->var instanceof Variable && $parentNode->var === $node) {
-                    return false;
-                }
+            // is the left assign - not use of one
+            if ($parentNode instanceof Assign && ($parentNode->var instanceof Variable && $parentNode->var === $node)) {
+                return false;
             }
 
             // simple variable only
@@ -270,15 +268,11 @@ PHP
         VariableNodeUseInfo $nodeByTypeAndPosition
     ): bool {
         // this node was just used, skip to next one
-        if ($previousNode !== null) {
-            if ($previousNode->isType(VariableNodeUseInfo::TYPE_ASSIGN) && $nodeByTypeAndPosition->isType(
-                VariableNodeUseInfo::TYPE_USE
-            )) {
-                return true;
-            }
-        }
-
-        return false;
+        return $previousNode !== null && ($previousNode->isType(
+            VariableNodeUseInfo::TYPE_ASSIGN
+        ) && $nodeByTypeAndPosition->isType(
+            VariableNodeUseInfo::TYPE_USE
+        ));
     }
 
     private function shouldRemoveAssignNode(

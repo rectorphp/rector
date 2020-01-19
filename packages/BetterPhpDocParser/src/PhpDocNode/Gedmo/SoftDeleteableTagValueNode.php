@@ -49,11 +49,11 @@ final class SoftDeleteableTagValueNode extends AbstractTagValueNode
             $contentItems['fieldName'] = $this->fieldName;
         }
 
-        if ($this->timeAware !== false) {
+        if ($this->timeAware) {
             $contentItems['timeAware'] = sprintf('strict=%s', $this->timeAware ? 'true' : 'false');
         }
 
-        if ($this->hardDelete !== false) {
+        if ($this->hardDelete) {
             $contentItems['hardDelete'] = sprintf('strict=%s', $this->hardDelete ? 'true' : 'false');
         }
 

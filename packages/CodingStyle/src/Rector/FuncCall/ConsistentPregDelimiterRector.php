@@ -149,12 +149,10 @@ PHP
 
         $arg->value->value = Strings::replace($value, self::INNER_PATTERN_PATTERN, function (array $match): string {
             $innerPattern = $match['content'];
-            if (strlen($innerPattern) > 2) {
-                // change delimiter
-                if ($innerPattern[0] === $innerPattern[strlen($innerPattern) - 1]) {
-                    $innerPattern[0] = $this->delimiter;
-                    $innerPattern[strlen($innerPattern) - 1] = $this->delimiter;
-                }
+            // change delimiter
+            if (strlen($innerPattern) > 2 && $innerPattern[0] === $innerPattern[strlen($innerPattern) - 1]) {
+                $innerPattern[0] = $this->delimiter;
+                $innerPattern[strlen($innerPattern) - 1] = $this->delimiter;
             }
 
             return $innerPattern . $match['close'];
