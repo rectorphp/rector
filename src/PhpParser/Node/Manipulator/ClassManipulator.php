@@ -6,6 +6,7 @@ namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -474,7 +475,7 @@ final class ClassManipulator
         $this->callableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use (
             $oldToNewPropertyNames
         ) {
-            if (! $node instanceof Node\Expr\PropertyFetch) {
+            if (! $node instanceof PropertyFetch) {
                 return null;
             }
 

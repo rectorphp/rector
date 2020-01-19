@@ -77,16 +77,12 @@ PHP
 
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
-        if ($parentNode instanceof Assign) {
-            if ($parentNode->var === $node) {
-                return new Array_((array) $node->items);
-            }
+        if ($parentNode instanceof Assign && $parentNode->var === $node) {
+            return new Array_((array) $node->items);
         }
 
-        if ($parentNode instanceof Foreach_) {
-            if ($parentNode->valueVar === $node) {
-                return new Array_((array) $node->items);
-            }
+        if ($parentNode instanceof Foreach_ && $parentNode->valueVar === $node) {
+            return new Array_((array) $node->items);
         }
 
         return null;

@@ -133,10 +133,8 @@ PHP
             }
         } else {
             $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-            if ($nextNode instanceof Return_) {
-                if ($nextNode->expr instanceof Ternary) {
-                    $this->processTernary($nextNode->expr);
-                }
+            if ($nextNode instanceof Return_ && $nextNode->expr instanceof Ternary) {
+                $this->processTernary($nextNode->expr);
             }
         }
 

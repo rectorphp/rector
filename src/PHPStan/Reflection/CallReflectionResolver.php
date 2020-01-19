@@ -296,11 +296,6 @@ final class CallReflectionResolver
         if ($keyTypes[0]->isSuperTypeOf(new ConstantIntegerType(0))->no()) {
             return false;
         }
-
-        if ($keyTypes[1]->isSuperTypeOf(new ConstantIntegerType(1))->no()) {
-            return false;
-        }
-
-        return true;
+        return ! $keyTypes[1]->isSuperTypeOf(new ConstantIntegerType(1))->no();
     }
 }

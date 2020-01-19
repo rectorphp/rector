@@ -132,11 +132,6 @@ PHP
         if (! $this->isName($node->var->var, 'this')) {
             return false;
         }
-
-        if (! $this->isName($node->var->name, 'Flash')) {
-            return false;
-        }
-
-        return true;
+        return $this->isName($node->var->name, 'Flash');
     }
 }

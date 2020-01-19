@@ -195,12 +195,7 @@ final class IfManipulator
         if (! $this->betterStandardPrinter->areNodesEqual($lastIfStmt->var, $lastElseStmt->var)) {
             return false;
         }
-
-        if (! $this->betterStandardPrinter->areNodesEqual($desiredExpr, $lastElseStmt->var)) {
-            return false;
-        }
-
-        return true;
+        return $this->betterStandardPrinter->areNodesEqual($desiredExpr, $lastElseStmt->var);
     }
 
     /**
@@ -218,20 +213,18 @@ final class IfManipulator
         if (! $if->cond instanceof FuncCall) {
             return false;
         }
-
-        if (! $this->nameResolver->isName($if->cond, $functionName)) {
-            return false;
-        }
-
-        return true;
+        return $this->nameResolver->isName($if->cond, $functionName);
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $returnNode): ?Expr
     {
-        if ($this->betterStandardPrinter->areNodesEqual($notIdentical->left, $returnNode->expr)) {
-            if ($this->constFetchManipulator->isNull($notIdentical->right)) {
-                return $notIdentical->left;
-            }
+        if ($this->betterStandardPrinter->areNodesEqual(
+            $notIdentical->left,
+            $returnNode->expr
+        ) && $this->constFetchManipulator->isNull(
+            $notIdentical->right
+        )) {
+            return $notIdentical->left;
         }
 
         if (! $this->betterStandardPrinter->areNodesEqual($notIdentical->right, $returnNode->expr)) {

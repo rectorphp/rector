@@ -114,10 +114,8 @@ final class OnContainerGetCallManipulator
                 return null;
             }
 
-            if ($skipSetUpMethod) {
-                if ($this->kernelTestCaseNodeAnalyzer->isSetUpOrEmptyMethod($node)) {
-                    return null;
-                }
+            if ($skipSetUpMethod && $this->kernelTestCaseNodeAnalyzer->isSetUpOrEmptyMethod($node)) {
+                return null;
             }
 
             if (! $this->kernelTestCaseNodeAnalyzer->isOnContainerGetMethodCall($node)) {

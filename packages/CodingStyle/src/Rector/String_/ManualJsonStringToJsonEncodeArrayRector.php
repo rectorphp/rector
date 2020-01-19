@@ -353,10 +353,8 @@ PHP
         }
 
         $firstArgumentValue = $node->args[0]->value;
-        if ($firstArgumentValue instanceof String_) {
-            if ($firstArgumentValue->value !== '","') {
-                return false;
-            }
+        if ($firstArgumentValue instanceof String_ && $firstArgumentValue->value !== '","') {
+            return false;
         }
 
         return true;

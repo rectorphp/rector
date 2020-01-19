@@ -82,10 +82,8 @@ PHP
             return null;
         }
 
-        if (count($node->args) === 2) {
-            if ($this->isStringOrUnionStringOnlyType($node->args[1]->value)) {
-                $node->args = array_reverse($node->args);
-            }
+        if (count($node->args) === 2 && $this->isStringOrUnionStringOnlyType($node->args[1]->value)) {
+            $node->args = array_reverse($node->args);
         }
 
         return $node;

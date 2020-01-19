@@ -166,10 +166,8 @@ PHP
         $namesToArgs = $this->resolveNamesToArgs($className, $argNodes);
 
         // set default data in between
-        if ($position + 1 !== $optionsPosition) {
-            if (! isset($methodCall->args[$position + 1])) {
-                $methodCall->args[$position + 1] = new Arg($this->createNull());
-            }
+        if ($position + 1 !== $optionsPosition && ! isset($methodCall->args[$position + 1])) {
+            $methodCall->args[$position + 1] = new Arg($this->createNull());
         }
 
         // @todo extend current options - array analyzer

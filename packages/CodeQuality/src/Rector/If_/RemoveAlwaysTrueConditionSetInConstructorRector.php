@@ -213,10 +213,8 @@ PHP
 
         $this->traverseNodesWithCallable($stmts, function (Node $node) use ($propertyName, &$resolvedTypes): ?int {
             // skip constructor
-            if ($node instanceof ClassMethod) {
-                if ($this->isName($node, '__construct')) {
-                    return NodeTraverser::DONT_TRAVERSE_CHILDREN;
-                }
+            if ($node instanceof ClassMethod && $this->isName($node, '__construct')) {
+                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
 
             if (! $this->isPropertyFetchAssignOfPropertyName($node, $propertyName)) {

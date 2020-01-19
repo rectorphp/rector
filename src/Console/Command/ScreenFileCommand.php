@@ -180,16 +180,12 @@ final class ScreenFileCommand extends AbstractCommand
             $data = $this->decorateAssign($node, $data);
         }
 
-        if ($node instanceof Namespace_) {
-            if ($node->name !== null) {
-                $data['name'] = $this->nameResolver->getName($node->name);
-            }
+        if ($node instanceof Namespace_ && $node->name !== null) {
+            $data['name'] = $this->nameResolver->getName($node->name);
         }
 
-        if ($node instanceof FuncCall) {
-            if ($node->name !== null) {
-                $data['name'] = $this->nameResolver->getName($node->name);
-            }
+        if ($node instanceof FuncCall && $node->name !== null) {
+            $data['name'] = $this->nameResolver->getName($node->name);
         }
 
         if ($node instanceof Variable) {

@@ -16,10 +16,10 @@ final class MultilineSpaceFormatPreserver
 {
     public function resolveCurrentPhpDocNodeText(AttributeAwareNodeInterface $attributeAwareNode): ?string
     {
-        if ($attributeAwareNode instanceof PhpDocTagNode) {
-            if (property_exists($attributeAwareNode->value, 'description')) {
-                return $attributeAwareNode->value->description;
-            }
+        if ($attributeAwareNode instanceof PhpDocTagNode &&
+            property_exists($attributeAwareNode->value, 'description')
+        ) {
+            return $attributeAwareNode->value->description;
         }
 
         if ($attributeAwareNode instanceof PhpDocTextNode) {
@@ -45,20 +45,19 @@ final class MultilineSpaceFormatPreserver
         AttributeAwareNodeInterface $attributeAwareNode,
         string $newText
     ): AttributeAwareNodeInterface {
-        if ($attributeAwareNode instanceof PhpDocTagNode) {
-            if (property_exists($attributeAwareNode->value, 'description')) {
-                $attributeAwareNode->value->description = $newText;
-            }
+        if ($attributeAwareNode instanceof PhpDocTagNode && property_exists(
+            $attributeAwareNode->value,
+            'description'
+        )) {
+            $attributeAwareNode->value->description = $newText;
         }
 
         if ($attributeAwareNode instanceof PhpDocTextNode) {
             $attributeAwareNode->text = $newText;
         }
 
-        if ($attributeAwareNode instanceof AttributeAwarePhpDocTagNode) {
-            if ($attributeAwareNode->value instanceof AttributeAwareGenericTagValueNode) {
-                $attributeAwareNode->value->value = $newText;
-            }
+        if ($attributeAwareNode instanceof AttributeAwarePhpDocTagNode && $attributeAwareNode->value instanceof AttributeAwareGenericTagValueNode) {
+            $attributeAwareNode->value->value = $newText;
         }
 
         return $attributeAwareNode;

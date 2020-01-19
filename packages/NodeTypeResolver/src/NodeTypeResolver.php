@@ -177,10 +177,8 @@ final class NodeTypeResolver
     {
         $this->ensureRequiredTypeIsStringOrObjectType($requiredType, __METHOD__);
 
-        if (is_string($requiredType)) {
-            if (Strings::contains($requiredType, '*')) {
-                return $this->isFnMatch($node, $requiredType);
-            }
+        if (is_string($requiredType) && Strings::contains($requiredType, '*')) {
+            return $this->isFnMatch($node, $requiredType);
         }
 
         $resolvedType = $this->getObjectType($node);
@@ -199,10 +197,12 @@ final class NodeTypeResolver
             return true;
         }
 
-        if ($resolvedType instanceof TypeWithClassName) {
-            if (is_a($resolvedType->getClassName(), $requiredType->getClassName(), true)) {
-                return true;
-            }
+        if ($resolvedType instanceof TypeWithClassName && is_a(
+            $resolvedType->getClassName(),
+            $requiredType->getClassName(),
+            true
+        )) {
+            return true;
         }
 
         if ($this->isUnionNullTypeOfRequiredType($requiredType, $resolvedType)) {
@@ -319,11 +319,11 @@ final class NodeTypeResolver
             return true;
         }
 
-        if ($node instanceof PropertyFetch || $node instanceof StaticPropertyFetch) {
-            // PHPStan false positive, when variable has type[] docblock, but default array is missing
-            if (! $this->isPropertyFetchWithArrayDefault($node)) {
-                return false;
-            }
+        // PHPStan false positive, when variable has type[] docblock, but default array is missing
+        if (($node instanceof PropertyFetch || $node instanceof StaticPropertyFetch) && ! $this->isPropertyFetchWithArrayDefault(
+            $node
+        )) {
+            return false;
         }
 
         if ($nodeStaticType instanceof MixedType) {
@@ -355,19 +355,15 @@ final class NodeTypeResolver
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
 
-        if ($node instanceof Scalar) {
-            if ($nodeScope === null) {
-                if ($node instanceof DNumber) {
-                    return new ConstantFloatType($node->value);
-                }
-
-                if ($node instanceof String_) {
-                    return new ConstantStringType($node->value);
-                }
-
-                if ($node instanceof LNumber) {
-                    return new ConstantIntegerType($node->value);
-                }
+        if ($node instanceof Scalar && $nodeScope === null) {
+            if ($node instanceof DNumber) {
+                return new ConstantFloatType($node->value);
+            }
+            if ($node instanceof String_) {
+                return new ConstantStringType($node->value);
+            }
+            if ($node instanceof LNumber) {
+                return new ConstantIntegerType($node->value);
             }
         }
 
@@ -375,19 +371,15 @@ final class NodeTypeResolver
             return new MixedType();
         }
 
-        if ($node instanceof New_) {
-            if ($this->isAnonymousClass($node->class)) {
-                return new ObjectWithoutClassType();
-            }
+        if ($node instanceof New_ && $this->isAnonymousClass($node->class)) {
+            return new ObjectWithoutClassType();
         }
 
         // false type correction of inherited method
-        if ($node instanceof MethodCall) {
-            if ($this->isObjectType($node->var, SplFileInfo::class)) {
-                $methodName = $this->nameResolver->getName($node->name);
-                if ($methodName === 'getRealPath') {
-                    return new UnionType([new StringType(), new ConstantBooleanType(false)]);
-                }
+        if ($node instanceof MethodCall && $this->isObjectType($node->var, SplFileInfo::class)) {
+            $methodName = $this->nameResolver->getName($node->name);
+            if ($methodName === 'getRealPath') {
+                return new UnionType([new StringType(), new ConstantBooleanType(false)]);
             }
         }
 
@@ -601,10 +593,8 @@ final class NodeTypeResolver
         }
 
         // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
-        if ($node instanceof New_) {
-            if ($this->isAnonymousClass($node->class)) {
-                return new ObjectWithoutClassType();
-            }
+        if ($node instanceof New_ && $this->isAnonymousClass($node->class)) {
+            return new ObjectWithoutClassType();
         }
 
         $type = $nodeScope->getType($node);
@@ -841,7 +831,7 @@ final class NodeTypeResolver
             return null;
         }
 
-        if ($this->parsedNodesByType->findClass($varObjectType->getClassName())) {
+        if ($this->parsedNodesByType->findClass($varObjectType->getClassName()) !== null) {
             return null;
         }
 

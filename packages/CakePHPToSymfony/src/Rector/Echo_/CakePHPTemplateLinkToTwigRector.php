@@ -81,12 +81,9 @@ PHP
 
         # e.g. |trans https://symfony.com/doc/current/translation/templates.html#using-twig-filters
         $labelFilters = [];
-        if ($label instanceof FuncCall) {
-            if ($this->isName($label, '__')) {
-                $labelFilters[] = 'trans';
-
-                $label = $label->args[0]->value;
-            }
+        if ($label instanceof FuncCall && $this->isName($label, '__')) {
+            $labelFilters[] = 'trans';
+            $label = $label->args[0]->value;
         }
 
         $parametersValue = $this->getValue($parameters);
@@ -112,23 +109,18 @@ PHP
         if (! $this->isName($expr->var, 'this')) {
             return false;
         }
-
-        if (! $this->isName($expr->name, 'Html')) {
-            return false;
-        }
-
-        return true;
+        return $this->isName($expr->name, 'Html');
     }
 
     private function createAHtml(string $routeName, array $labelFilters, string $labelValue): string
     {
         $aHtml = Html::el('a');
-        $aHtml->href = sprintf('{{ path(\'%s\') }}', $routeName);
+        $aHtml->href = sprintf("{{ path('%s') }}", $routeName);
 
         if ($labelFilters !== []) {
             $labelFilterAsString = implode('|', $labelFilters);
 
-            $labelValue = sprintf('{{ \'%s\'|%s }}', $labelValue, $labelFilterAsString);
+            $labelValue = sprintf("{{ '%s'|%s }}", $labelValue, $labelFilterAsString);
         }
 
         $aHtml->setText($labelValue);

@@ -17,10 +17,6 @@ abstract class AbstractCakePHPRector extends AbstractRector
         }
 
         $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class !== null) {
-            return true;
-        }
-
-        return false;
+        return $class !== null;
     }
 }

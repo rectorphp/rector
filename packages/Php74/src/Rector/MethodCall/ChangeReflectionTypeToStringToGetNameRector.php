@@ -98,10 +98,8 @@ PHP
                 return $this->refactorIfHasReturnTypeWasCalled($node->expr);
             }
 
-            if ($node->expr instanceof Variable) {
-                if ($this->isObjectType($node->expr, 'ReflectionType')) {
-                    return $this->createMethodCall($node->expr, 'getName');
-                }
+            if ($node->expr instanceof Variable && $this->isObjectType($node->expr, 'ReflectionType')) {
+                return $this->createMethodCall($node->expr, 'getName');
             }
         }
 

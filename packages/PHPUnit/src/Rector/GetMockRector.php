@@ -48,10 +48,8 @@ final class GetMockRector extends AbstractPHPUnitRector
             return null;
         }
 
-        if ($node instanceof MethodCall) {
-            if ($node->var instanceof MethodCall) {
-                return null;
-            }
+        if ($node instanceof MethodCall && $node->var instanceof MethodCall) {
+            return null;
         }
 
         // narrow args to one

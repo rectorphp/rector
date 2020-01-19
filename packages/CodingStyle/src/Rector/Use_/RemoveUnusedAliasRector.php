@@ -205,16 +205,12 @@ PHP
             }
 
             if ($parentNode instanceof Class_) {
-                if ($parentNode->name !== null) {
-                    if ($this->areNamesEqual($parentNode->name, $usedName)) {
-                        $parentNode->name = new Identifier($lastName);
-                    }
+                if ($parentNode->name !== null && $this->areNamesEqual($parentNode->name, $usedName)) {
+                    $parentNode->name = new Identifier($lastName);
                 }
 
-                if ($parentNode->extends !== null) {
-                    if ($this->areNamesEqual($parentNode->extends, $usedName)) {
-                        $parentNode->extends = new Name($lastName);
-                    }
+                if ($parentNode->extends !== null && $this->areNamesEqual($parentNode->extends, $usedName)) {
+                    $parentNode->extends = new Name($lastName);
                 }
 
                 foreach ($parentNode->implements as $key => $implementNode) {
@@ -227,10 +223,8 @@ PHP
             }
 
             if ($parentNode instanceof Param) {
-                if ($parentNode->type !== null) {
-                    if ($this->areNamesEqual($parentNode->type, $usedName)) {
-                        $parentNode->type = new Name($lastName);
-                    }
+                if ($parentNode->type !== null && $this->areNamesEqual($parentNode->type, $usedName)) {
+                    $parentNode->type = new Name($lastName);
                 }
 
                 continue;
@@ -245,10 +239,8 @@ PHP
             }
 
             if ($parentNode instanceof ClassMethod) {
-                if ($parentNode->returnType !== null) {
-                    if ($this->areNamesEqual($parentNode->returnType, $usedName)) {
-                        $parentNode->returnType = new Name($lastName);
-                    }
+                if ($parentNode->returnType !== null && $this->areNamesEqual($parentNode->returnType, $usedName)) {
+                    $parentNode->returnType = new Name($lastName);
                 }
 
                 continue;

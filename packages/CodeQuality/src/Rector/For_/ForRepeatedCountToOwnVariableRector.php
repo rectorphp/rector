@@ -107,11 +107,7 @@ PHP
 
     protected function createCountedValueName(?string $valueName, ?Scope $scope): string
     {
-        if ($valueName === null) {
-            $countedValueName = self::DEFAULT_VARIABLE_COUNT_NAME;
-        } else {
-            $countedValueName = $valueName . 'Count';
-        }
+        $countedValueName = $valueName === null ? self::DEFAULT_VARIABLE_COUNT_NAME : $valueName . 'Count';
 
         return parent::createCountedValueName($countedValueName, $scope);
     }

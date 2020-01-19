@@ -48,10 +48,11 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node instanceof ClassConstFetch) {
-            if ($this->isObjectType($node, self::CONSOLE_EVENTS_CLASS) && $this->isName($node->name, 'EXCEPTION')) {
-                return $this->createClassConstant(self::CONSOLE_EVENTS_CLASS, 'ERROR');
-            }
+        if ($node instanceof ClassConstFetch && (
+            $this->isObjectType($node, self::CONSOLE_EVENTS_CLASS) &&
+            $this->isName($node->name, 'EXCEPTION'))
+        ) {
+            return $this->createClassConstant(self::CONSOLE_EVENTS_CLASS, 'ERROR');
         }
 
         if ($node instanceof String_ && $node->value === 'console.exception') {
