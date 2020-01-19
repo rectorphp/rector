@@ -270,9 +270,7 @@ PHP
         // this node was just used, skip to next one
         return $previousNode !== null && ($previousNode->isType(
             VariableNodeUseInfo::TYPE_ASSIGN
-        ) && $nodeByTypeAndPosition->isType(
-            VariableNodeUseInfo::TYPE_USE
-        ));
+        ) && $nodeByTypeAndPosition->isType(VariableNodeUseInfo::TYPE_USE));
     }
 
     private function shouldRemoveAssignNode(
