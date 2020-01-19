@@ -18,6 +18,8 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeVisitor\NameResolver;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodingStyle\Imports\ShortNameResolver;
 use Rector\CodingStyle\Naming\ClassNaming;
@@ -335,21 +337,13 @@ PHP
 
             /** @var PhpDocInfo $phpDocInfo */
             $phpDocInfo = $this->getPhpDocInfo($node);
-            if ($phpDocInfo->getVarType()) {
-                $varType = $phpDocInfo->getVarType();
-                if ($varType instanceof AliasedObjectType) {
-                    $possibleDocAliases[] = $varType->getClassName();
-                }
 
-                $returnType = $phpDocInfo->getReturnType();
-                if ($returnType instanceof AliasedObjectType) {
-                    $possibleDocAliases[] = $returnType->getClassName();
-                }
+            if ($phpDocInfo->getVarType()) {
+                $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getVarType(), $possibleDocAliases);
+                $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getReturnType(), $possibleDocAliases);
 
                 foreach ($phpDocInfo->getParamTypes() as $paramType) {
-                    if ($paramType instanceof AliasedObjectType) {
-                        $possibleDocAliases[] = $paramType->getClassName();
-                    }
+                    $possibleDocAliases = $this->appendPossibleAliases($paramType, $possibleDocAliases);
                 }
             }
 
@@ -361,5 +355,21 @@ PHP
         });
 
         return array_unique($possibleDocAliases);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function appendPossibleAliases(Type $varType, array $possibleDocAliases): array
+    {
+        if ($varType instanceof AliasedObjectType) {
+            $possibleDocAliases[] = $varType->getClassName();
+        }
+        if ($varType instanceof UnionType) {
+            foreach ($varType->getTypes() as $type) {
+                $possibleDocAliases = $this->appendPossibleAliases($type, $possibleDocAliases);
+            }
+        }
+        return $possibleDocAliases;
     }
 }
