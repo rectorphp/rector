@@ -1,4 +1,4 @@
-# All 438 Rectors Overview
+# All 440 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -418,6 +418,34 @@ Migrate CakePHP 2.4 Controller to Symfony 5
      {
      }
  }
+```
+
+<br>
+
+### `CakePHPTemplateLinkToTwigRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Echo_\CakePHPTemplateLinkToTwigRector`
+
+Migrate CakePHP 2.4 template method calls to Twig
+
+```diff
+ <li>
+-    <?php echo $this->Html->link(__('List Rights'), ['action' => 'index']); ?>
++    <a href="{{ path('index') }}">List Rights</a>
+ </li>
+```
+
+<br>
+
+### `CakePHPTemplateTranslateToTwigRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Echo_\CakePHPTemplateTranslateToTwigRector`
+
+Migrate CakePHP 2.4 template method calls with translate to Twig
+
+```diff
+-<h3><?php echo __("Actions"); ?></h3>
++<h3>{{ "Actions"|trans }}</h3>
 ```
 
 <br>
