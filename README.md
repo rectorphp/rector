@@ -70,9 +70,9 @@ Tip: If you have EasyCodingStandard, you can start your set with [`ecs-after-rec
 
 ## Try Rector Online
 
-Too litle time to download? 
+Too litle time to download?
 
-We have **[online demo](https://getrector.org/demo) just for you!** 
+We have **[online demo](https://getrector.org/demo) just for you!**
 
 ## Install
 

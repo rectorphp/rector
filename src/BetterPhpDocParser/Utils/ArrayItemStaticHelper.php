@@ -35,6 +35,11 @@ final class ArrayItemStaticHelper
     {
         // 1. remove unused items
         foreach (array_keys($contentItems) as $key) {
+            // generic key
+            if (is_int($key)) {
+                continue;
+            }
+
             if (in_array($key, $orderedVisibleItems, true)) {
                 continue;
             }

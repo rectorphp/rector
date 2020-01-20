@@ -36,6 +36,6 @@ final class AssertChoicePhpDocNodeFactory extends AbstractPhpDocNodeFactory
 
         $annotationContent = $this->resolveContentFromTokenIterator($tokenIterator);
 
-        return new AssertChoiceTagValueNode($choice->callback, $choice->strict, $annotationContent);
+        return new AssertChoiceTagValueNode($choice->callback, $choice->strict, $annotationContent, $choice->choices);
     }
 }
