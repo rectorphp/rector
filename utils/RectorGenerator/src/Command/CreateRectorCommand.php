@@ -8,26 +8,20 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Rector\Utils\RectorGenerator\Composer\ComposerPackageAutoloadUpdater;
 use Rector\Utils\RectorGenerator\Configuration\ConfigurationFactory;
+use Rector\Utils\RectorGenerator\FileSystem\TemplateFileSystem;
+use Rector\Utils\RectorGenerator\Finder\TemplateFinder;
 use Rector\Utils\RectorGenerator\TemplateVariablesFactory;
 use Rector\Utils\RectorGenerator\ValueObject\Configuration;
-use Rector\Utils\RectorGenerator\ValueObject\Package;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class CreateRectorCommand extends Command
 {
-    /**
-     * @var string
-     */
-    private const TEMPLATES_DIRECTORY = __DIR__ . '/../../templates';
-
     /**
      * @var string
      */
@@ -54,11 +48,6 @@ final class CreateRectorCommand extends Command
     private $configurationFactory;
 
     /**
-     * @var FinderSanitizer
-     */
-    private $finderSanitizer;
-
-    /**
      * @var TemplateVariablesFactory
      */
     private $templateVariablesFactory;
@@ -74,28 +63,41 @@ final class CreateRectorCommand extends Command
     private $composerPackageAutoloadUpdater;
 
     /**
+     * @var TemplateFinder
+     */
+    private $templateFinder;
+
+    /**
+     * @var TemplateFileSystem
+     */
+    private $templateFileSystem;
+
+    /**
      * @param mixed[] $rectorRecipe
      */
     public function __construct(
         SymfonyStyle $symfonyStyle,
         ConfigurationFactory $configurationFactory,
-        FinderSanitizer $finderSanitizer,
         TemplateVariablesFactory $templateVariablesFactory,
         ComposerPackageAutoloadUpdater $composerPackageAutoloadUpdater,
+        TemplateFinder $templateFinder,
+        TemplateFileSystem $templateFileSystem,
         array $rectorRecipe
     ) {
         parent::__construct();
         $this->symfonyStyle = $symfonyStyle;
         $this->configurationFactory = $configurationFactory;
-        $this->finderSanitizer = $finderSanitizer;
         $this->templateVariablesFactory = $templateVariablesFactory;
         $this->rectorRecipe = $rectorRecipe;
         $this->composerPackageAutoloadUpdater = $composerPackageAutoloadUpdater;
+        $this->templateFinder = $templateFinder;
+        $this->templateFileSystem = $templateFileSystem;
     }
 
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
+        $this->setAliases(['c']);
         $this->setDescription('[Dev] Create a new Rector, in a proper location, with new tests');
     }
 
@@ -107,7 +109,7 @@ final class CreateRectorCommand extends Command
         // setup psr-4 autoload, if not already in
         $this->composerPackageAutoloadUpdater->processComposerAutoload($configuration);
 
-        $templateFileInfos = $this->findTemplateFileInfos();
+        $templateFileInfos = $this->templateFinder->find($configuration->isPhpSnippet());
         $isUnwantedOverride = $this->isUnwantedOverride($templateFileInfos, $templateVariables, $configuration);
 
         if ($isUnwantedOverride) {
@@ -117,8 +119,12 @@ final class CreateRectorCommand extends Command
             return ShellCode::SUCCESS;
         }
 
-        foreach ($this->findTemplateFileInfos() as $smartFileInfo) {
-            $destination = $this->resolveDestination($smartFileInfo, $templateVariables, $configuration);
+        foreach ($templateFileInfos as $smartFileInfo) {
+            $destination = $this->templateFileSystem->resolveDestination(
+                $smartFileInfo,
+                $templateVariables,
+                $configuration
+            );
 
             $content = $this->resolveContent($smartFileInfo, $templateVariables);
 
@@ -153,7 +159,11 @@ final class CreateRectorCommand extends Command
         Configuration $configuration
     ) {
         foreach ($templateFileInfos as $templateFileInfo) {
-            $destination = $this->resolveDestination($templateFileInfo, $templateVariables, $configuration);
+            $destination = $this->templateFileSystem->resolveDestination(
+                $templateFileInfo,
+                $templateVariables,
+                $configuration
+            );
 
             if (! file_exists($destination)) {
                 continue;
@@ -163,45 +173,6 @@ final class CreateRectorCommand extends Command
         }
 
         return false;
-    }
-
-    /**
-     * @return SmartFileInfo[]
-     */
-    private function findTemplateFileInfos(): array
-    {
-        $finder = Finder::create()->files()
-            ->in(self::TEMPLATES_DIRECTORY);
-
-        return $this->finderSanitizer->sanitize($finder);
-    }
-
-    /**
-     * @param string[] $templateVariables
-     */
-    private function resolveDestination(
-        SmartFileInfo $smartFileInfo,
-        array $templateVariables,
-        Configuration $configuration
-    ): string {
-        $destination = $smartFileInfo->getRelativeFilePathFromDirectory(self::TEMPLATES_DIRECTORY);
-
-        // normalize core package
-        if ($configuration->getPackage() === 'Rector') {
-            $destination = Strings::replace($destination, '#packages\/_Package_/tests/Rector#', 'tests/Rector');
-            $destination = Strings::replace($destination, '#packages\/_Package_/src/Rector#', 'src/Rector');
-        }
-
-        // special keyword for 3rd party Rectors, not for core Github contribution
-        if ($configuration->getPackage() === Package::UTILS) {
-            $destination = Strings::replace($destination, '#packages\/_Package_#', 'utils/rector');
-        }
-
-        if (! Strings::match($destination, '#fixture[\d+]*\.php\.inc#')) {
-            $destination = rtrim($destination, '.inc');
-        }
-
-        return $this->applyVariables($destination, $templateVariables);
     }
 
     /**
