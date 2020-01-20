@@ -106,7 +106,7 @@ PHP
 
     private function shouldSkip(FuncCall $funcCall): bool
     {
-        if (! $this->isNames($funcCall, ['setcookie'])) {
+        if (! $this->isNames($funcCall, ['setcookie', 'setrawcookie'])) {
             return true;
         }
 

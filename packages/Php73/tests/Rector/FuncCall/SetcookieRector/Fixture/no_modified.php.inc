@@ -11,5 +11,7 @@ if (false) {
     setcookie($name, $value, $expire);
     setcookie($name, $value, ...$args);
     setcookie(...$args);
+    setrawcookie('name');
+    setrawcookie('name', 'value');
 }
 ?>

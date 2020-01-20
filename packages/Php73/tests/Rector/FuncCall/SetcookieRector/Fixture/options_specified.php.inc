@@ -14,6 +14,7 @@ if (false) {
     setcookie('name', 'value', 0, '', '');
     setcookie('name', 'value', 0, '', '', false);
     setcookie('name', 'value', 0, '', '', false, false);
+    setrawcookie('name', 'value', 3600);
 }
 ?>
 -----
@@ -33,5 +34,6 @@ if (false) {
     setcookie('name', 'value', ['expires' => 0, 'path' => '', 'domain' => '']);
     setcookie('name', 'value', ['expires' => 0, 'path' => '', 'domain' => '', 'secure' => false]);
     setcookie('name', 'value', ['expires' => 0, 'path' => '', 'domain' => '', 'secure' => false, 'httponly' => false]);
+    setrawcookie('name', 'value', ['expires' => 3600]);
 }
 ?>
