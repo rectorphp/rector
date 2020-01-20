@@ -30,13 +30,19 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode
     private $strict;
 
     /**
+     * @var array|null
+     */
+    private $choices;
+
+    /**
      * @param mixed[]|string|null $callback
      */
-    public function __construct($callback, ?bool $strict, string $annotationContent)
+    public function __construct($callback, ?bool $strict, string $annotationContent, ?array $choices)
     {
         $this->callback = $callback;
         $this->strict = $strict;
         $this->resolveOriginalContentSpacingAndOrder($annotationContent);
+        $this->choices = $choices;
     }
 
     public function __toString(): string
@@ -49,6 +55,8 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode
             } else {
                 $contentItems['callback'] = sprintf('callback="%s"', $this->callback);
             }
+        } elseif ($this->choices) {
+            $contentItems[] = $this->printArrayItem($this->choices);
         }
 
         if ($this->strict !== null) {
