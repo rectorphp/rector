@@ -8,11 +8,16 @@ before_install:
     # turn off XDebug
     - phpenv config-rm xdebug.ini
 
+stages:
+    - name: phar
+      if: (branch = master OR tag IS present) && type = push
+
 jobs:
     include:
         # inspired by https://github.com/phpstan/phpstan-src/blob/088b9fab470632cea07f08a936fb0923a59b2ecb/.travis.yml#L47-L59
         # "Deploy to https://github.com/rectorphp/rector-prefixed"
         -
+            stage: phar
             name: Compile and Release rector.phar
             if: (branch = master OR tag IS present) && type = push
             php: 7.2
