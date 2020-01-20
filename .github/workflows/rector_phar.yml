@@ -5,8 +5,9 @@ on:
     push:
         branches:
             - master
-        tags:
-            - "**"
+    release:
+        types:
+            - published
 
 jobs:
     compile_and_deploy_rector_phar:
@@ -36,7 +37,7 @@ jobs:
 
             -
                 name: ''
-                if: github.event_name == 'push'
+                if: github.event_name == 'push' || github.event_name == 'release'
                 run: |
                     [[ $GITHUB_REF == refs/tags/* ]] && CURRENT_TAG=${GITHUB_REF#refs/tags/} || CURRENT_TAG=""
 
