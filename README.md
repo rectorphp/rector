@@ -68,6 +68,12 @@ Don't have a coding standard tool for your project? Consider adding [EasyCodingS
 
 Tip: If you have EasyCodingStandard, you can start your set with [`ecs-after-rector.yaml`](/ecs-after-rector.yaml).
 
+## Try Rector Online
+
+Too litle time to download? 
+
+We have **[online demo](https://getrector.org/demo) just for you!** 
+
 ## Install
 
 ```bash
