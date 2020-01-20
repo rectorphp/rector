@@ -22,3 +22,5 @@ phpunit.xml export-ignore
 rector.yaml export-ignore
 utils export-ignore
 stubs export-ignore
+
+.travis.yml export-ignore
