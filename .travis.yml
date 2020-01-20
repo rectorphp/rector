@@ -1,0 +1,59 @@
+os: linux
+
+dist: bionic
+
+language: php
+
+before_install:
+    # turn off XDebug
+    - phpenv config-rm xdebug.ini
+
+install:
+    - composer install --no-progress
+
+stages:
+    - name: compile
+      if: (branch = master OR tag IS present) && type = push
+    - name: phar
+      if: (branch = master OR tag IS present) && type = push
+
+jobs:
+    include:
+        -
+            stage: compile
+            name: "Compile Rector to prefixed PHAR"
+            php: 7.2
+            script:
+                - cd compiler
+                - composer install
+                - bin/compile
+                - ../tmp/rector.phar
+
+        # inspired by https://github.com/phpstan/phpstan-src/blob/088b9fab470632cea07f08a936fb0923a59b2ecb/.travis.yml#L47-L59
+        -
+            stage: phar
+            name: "Deploy PHAR to https://github.com/rectorphp/rector-prefixed"
+            php: 7.2
+            script:
+                # reuse tmp/rector.phar from previous job
+                - git clone https://${GITHUB_TOKEN}@github.com/rectorphp/rector-prefixed.git rector-prefixed > /dev/null 2>&1
+                - cp tmp/rector.phar rector-prefixed/rector.phar
+                - cp tmp/rector.phar rector-prefixed/rector
+                - cd rector-prefixed
+                - git config user.name "TomasVotruba"
+                - git config user.email "tomas.vot@gmail.com"
+                - git add rector rector.phar
+
+                - if [ "${TRAVIS_TAG}" != "" ]; then COMMIT_MSG="Rector ${TRAVIS_TAG}"; else COMMIT_MSG="Updated Rector to commit ${TRAVIS_COMMIT}"; fi
+
+                - git commit -m "${COMMIT_MSG}"
+                - git push --quiet origin master
+
+                - if [ "${TRAVIS_TAG}" != "" ]; then git tag "${TRAVIS_TAG}" && git push --quiet origin ${TRAVIS_TAG}; fi
+
+cache:
+    directories:
+        - $HOME/.composer/cache
+
+notifications:
+    email: false

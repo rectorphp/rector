@@ -32,3 +32,5 @@ docker-compose.dist.yml
 /docs
 /sample
 /var
+
+.travis.yml export-ignore
