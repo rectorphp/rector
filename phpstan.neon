@@ -223,3 +223,5 @@ parameters:
 
         - '#In method "Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createPropertyReflectionFromPropertyNode", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
         - '#Method Rector\\CakePHPToSymfony\\Rector\\Template\\TemplateMethodCallManipulator\:\:matchThisRenderMethodCallBareOrInReturn\(\) should return PhpParser\\Node\\Expr\\MethodCall\|null but returns PhpParser\\Node\\Expr#'
+        # doc is not enough
+        - '#Result of \|\| is always true#'

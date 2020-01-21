@@ -83,10 +83,11 @@ final class UseAddingCommander implements CommanderInterface
         $this->currentFileInfoProvider = $currentFileInfoProvider;
     }
 
+    /**
+     * @param FullyQualifiedObjectType|AliasedObjectType $objectType
+     */
     public function addUseImport(Node $positionNode, ObjectType $objectType): void
     {
-        assert($objectType instanceof FullyQualifiedObjectType || $objectType instanceof AliasedObjectType);
-
         /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $positionNode->getAttribute(AttributeKey::FILE_INFO);
         if ($fileInfo === null) {
