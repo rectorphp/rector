@@ -31,12 +31,12 @@ final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implement
     private $cascade;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $fetch;
 
     /**
-     * @var bool
+     * @var bool|null
      */
     private $orphanRemoval = false;
 
@@ -46,19 +46,19 @@ final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implement
     private $indexBy;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $fqnTargetEntity;
 
     public function __construct(
-        ?string $mappedBy,
+        ?string $mappedBy = null,
         string $targetEntity,
-        ?array $cascade,
-        string $fetch,
-        bool $orphanRemoval,
-        ?string $indexBy,
-        ?string $originalContent,
-        string $fqnTargetEntity
+        ?array $cascade = null,
+        ?string $fetch = null,
+        ?bool $orphanRemoval = null,
+        ?string $indexBy = null,
+        ?string $originalContent = null,
+        ?string $fqnTargetEntity = null
     ) {
         $this->mappedBy = $mappedBy;
         $this->targetEntity = $targetEntity;
@@ -75,15 +75,26 @@ final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implement
     {
         $contentItems = [];
 
-        $contentItems['mappedBy'] = sprintf('mappedBy="%s"', $this->mappedBy);
+        if ($this->mappedBy !== null) {
+            $contentItems['mappedBy'] = sprintf('mappedBy="%s"', $this->mappedBy);
+        }
         $contentItems['targetEntity'] = sprintf('targetEntity="%s"', $this->targetEntity);
 
         if ($this->cascade) {
             $contentItems['cascade'] = $this->printArrayItem($this->cascade, 'cascade');
         }
-        $contentItems['fetch'] = sprintf('fetch="%s"', $this->fetch);
-        $contentItems['orphanRemoval'] = sprintf('orphanRemoval=%s', $this->orphanRemoval ? 'true' : 'false');
-        $contentItems['indexBy'] = sprintf('indexBy="%s"', $this->indexBy);
+
+        if ($this->fetch !== null) {
+            $contentItems['fetch'] = sprintf('fetch="%s"', $this->fetch);
+        }
+
+        if ($this->orphanRemoval !== null) {
+            $contentItems['orphanRemoval'] = sprintf('orphanRemoval=%s', $this->orphanRemoval ? 'true' : 'false');
+        }
+
+        if ($this->indexBy !== null) {
+            $contentItems['indexBy'] = sprintf('indexBy="%s"', $this->indexBy);
+        }
 
         return $this->printContentItems($contentItems);
     }

@@ -121,12 +121,22 @@ PHP
             $this->removeNode($belongsToProperty);
         }
 
-        $hasAndBelongsToMany = $this->classManipulator->getProperty($node, 'hasAndBelongsToMany');
-        if ($hasAndBelongsToMany !== null) {
-            $manyToManyProperties = $this->relationPropertyFactory->createManyToManyProperties($hasAndBelongsToMany);
+        $hasAndBelongsToManyProperty = $this->classManipulator->getProperty($node, 'hasAndBelongsToMany');
+        if ($hasAndBelongsToManyProperty !== null) {
+            $manyToManyProperties = $this->relationPropertyFactory->createManyToManyProperties(
+                $hasAndBelongsToManyProperty
+            );
             $relationProperties = array_merge($relationProperties, $manyToManyProperties);
 
-            $this->removeNode($hasAndBelongsToMany);
+            $this->removeNode($hasAndBelongsToManyProperty);
+        }
+
+        $hasManyProperty = $this->classManipulator->getProperty($node, 'hasMany');
+        if ($hasManyProperty !== null) {
+            $manyToManyProperties = $this->relationPropertyFactory->createOneToManyProperties($hasManyProperty);
+            $relationProperties = array_merge($relationProperties, $manyToManyProperties);
+
+            $this->removeNode($hasManyProperty);
         }
 
         if ($relationProperties !== []) {
