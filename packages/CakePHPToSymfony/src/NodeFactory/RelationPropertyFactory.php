@@ -46,11 +46,11 @@ final class RelationPropertyFactory
 
             // add @ORM\ManyToOne
             $manyToOneTagValueNode = new ManyToOneTagValueNode($className, null, null, null, null, $className);
-            $this->docBlockManipulator->addDoctrineTagValueNode($property, $manyToOneTagValueNode);
+            $this->docBlockManipulator->addTagValueNodeWithShortName($property, $manyToOneTagValueNode);
 
             // add @ORM\JoinColumn
             $joinColumnTagValueNode = new JoinColumnTagValueNode($manyToOneConfiguration['foreignKey'], null);
-            $this->docBlockManipulator->addDoctrineTagValueNode($property, $joinColumnTagValueNode);
+            $this->docBlockManipulator->addTagValueNodeWithShortName($property, $joinColumnTagValueNode);
 
             $properties[] = $property;
         }
@@ -65,6 +65,7 @@ final class RelationPropertyFactory
     {
         $hasAndBelongsToValue = $this->getPropertyDefaultValue($hasAndBelongsToManyProperty);
 
+        $properties = [];
         foreach ($hasAndBelongsToValue as $propertyName => $manyToOneConfiguration) {
             $property = $this->createPrivateProperty($propertyName);
 
@@ -72,7 +73,7 @@ final class RelationPropertyFactory
 
             // add @ORM\ManyToOne
             $manyToOneTagValueNode = new ManyToManyTagValueNode($className);
-            $this->docBlockManipulator->addDoctrineTagValueNode($property, $manyToOneTagValueNode);
+            $this->docBlockManipulator->addTagValueNodeWithShortName($property, $manyToOneTagValueNode);
 
             $properties[] = $property;
         }

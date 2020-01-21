@@ -40,7 +40,7 @@ use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
@@ -150,12 +150,9 @@ final class DocBlockManipulator
         }
     }
 
-    public function addDoctrineTagValueNode(Node $node, AbstractDoctrineTagValueNode $doctrineTagValueNode): void
+    public function addTagValueNodeWithShortName(Node $node, AbstractTagValueNode $tagValueNode): void
     {
-        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode(
-            $doctrineTagValueNode::SHORT_NAME,
-            $doctrineTagValueNode
-        );
+        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode($tagValueNode::SHORT_NAME, $tagValueNode);
         $this->addTag($node, $spacelessPhpDocTagNode);
     }
 
