@@ -191,7 +191,8 @@
             "packages/Autodiscovery/tests/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
             "packages/Autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected",
             "packages/CakePHP/tests/Rector/StaticCall/AppUsesStaticCallToUseStatementRector/Source",
-            "packages/CakePHPToSymfony/tests/Rector/Class_/CakePHPControllerComponentToSymfonyRector/Source"
+            "packages/CakePHPToSymfony/tests/Rector/Class_/CakePHPControllerComponentToSymfonyRector/Source",
+            "packages/CakePHPToSymfony/tests/Rector/Class_/CakePHPModelToDoctrineEntityRector/Source"
         ],
         "files": [
             "packages/DeadCode/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",

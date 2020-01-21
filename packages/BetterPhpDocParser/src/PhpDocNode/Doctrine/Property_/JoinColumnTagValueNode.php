@@ -56,7 +56,7 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
 
     public function __construct(
         ?string $name,
-        string $referencedColumnName,
+        ?string $referencedColumnName,
         ?bool $unique = null,
         ?bool $nullable = null,
         ?string $onDelete = null,

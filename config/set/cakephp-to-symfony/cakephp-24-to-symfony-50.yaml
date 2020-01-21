@@ -12,3 +12,4 @@ services:
     Rector\CakePHPToSymfony\Rector\Echo_\CakePHPTemplateLinkToTwigRector: null
     Rector\CakePHPToSymfony\Rector\Echo_\CakePHPTemplateTranslateToTwigRector: null
     Rector\CakePHPToSymfony\Rector\Echo_\CakePHPTemplateHToTwigRector: null
+    Rector\CakePHPToSymfony\Rector\Class_\CakePHPModelToDoctrineEntityRector: null

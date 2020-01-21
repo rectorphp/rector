@@ -26,7 +26,7 @@ final class ManyToOneTagValueNode extends AbstractDoctrineTagValueNode implement
     private $cascade;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $fetch;
 
@@ -43,7 +43,7 @@ final class ManyToOneTagValueNode extends AbstractDoctrineTagValueNode implement
     public function __construct(
         string $targetEntity,
         ?array $cascade,
-        string $fetch,
+        ?string $fetch,
         ?string $inversedBy,
         ?string $originalContent,
         string $fqnTargetEntity
@@ -65,8 +65,14 @@ final class ManyToOneTagValueNode extends AbstractDoctrineTagValueNode implement
         if ($this->cascade) {
             $contentItems['cascade'] = $this->printArrayItem($this->cascade, 'cascade');
         }
-        $contentItems['fetch'] = sprintf('fetch="%s"', $this->fetch);
-        $contentItems['inversedBy'] = sprintf('inversedBy="%s"', $this->inversedBy);
+
+        if ($this->fetch !== null) {
+            $contentItems['fetch'] = sprintf('fetch="%s"', $this->fetch);
+        }
+
+        if ($this->inversedBy !== null) {
+            $contentItems['inversedBy'] = sprintf('inversedBy="%s"', $this->inversedBy);
+        }
 
         return $this->printContentItems($contentItems);
     }
