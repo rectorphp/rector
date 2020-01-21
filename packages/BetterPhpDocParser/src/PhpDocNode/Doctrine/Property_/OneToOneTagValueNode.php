@@ -42,12 +42,12 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
     private $fetch;
 
     /**
-     * @var bool
+     * @var bool|null
      */
     private $orphanRemoval = false;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $fqnTargetEntity;
 
@@ -56,13 +56,13 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
      */
     public function __construct(
         string $targetEntity,
-        ?string $mappedBy,
-        ?string $inversedBy,
-        ?array $cascade,
-        ?string $fetch,
-        bool $orphanRemoval,
-        ?string $originalContent,
-        string $fqnTargetEntity
+        ?string $mappedBy = null,
+        ?string $inversedBy = null,
+        ?array $cascade = null,
+        ?string $fetch = null,
+        ?bool $orphanRemoval = null,
+        ?string $originalContent = null,
+        ?string $fqnTargetEntity = null
     ) {
         $this->targetEntity = $targetEntity;
         $this->mappedBy = $mappedBy;
@@ -93,8 +93,13 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
             $contentItems['cascade'] = $this->printArrayItem($this->cascade, 'cascade');
         }
 
-        $contentItems['fetch'] = sprintf('fetch="%s"', $this->fetch);
-        $contentItems['orphanRemoval'] = sprintf('orphanRemoval=%s', $this->orphanRemoval ? 'true' : 'false');
+        if ($this->fetch !== null) {
+            $contentItems['fetch'] = sprintf('fetch="%s"', $this->fetch);
+        }
+
+        if ($this->orphanRemoval !== null) {
+            $contentItems['orphanRemoval'] = sprintf('orphanRemoval=%s', $this->orphanRemoval ? 'true' : 'false');
+        }
 
         return $this->printContentItems($contentItems);
     }
@@ -104,7 +109,7 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
         return $this->targetEntity;
     }
 
-    public function getFqnTargetEntity(): string
+    public function getFqnTargetEntity(): ?string
     {
         return $this->fqnTargetEntity;
     }

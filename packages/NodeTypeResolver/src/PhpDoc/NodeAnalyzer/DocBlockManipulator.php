@@ -36,9 +36,11 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
@@ -146,6 +148,12 @@ final class DocBlockManipulator
             $phpDocNode = new AttributeAwarePhpDocNode([$phpDocChildNode]);
             $node->setDocComment(new Doc($phpDocNode->__toString()));
         }
+    }
+
+    public function addTagValueNodeWithShortName(Node $node, AbstractTagValueNode $tagValueNode): void
+    {
+        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode($tagValueNode::SHORT_NAME, $tagValueNode);
+        $this->addTag($node, $spacelessPhpDocTagNode);
     }
 
     public function removeTagFromNode(Node $node, string $name, bool $shouldSkipEmptyLinesAbove = false): void
