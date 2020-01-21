@@ -9,7 +9,9 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Imports\UsedImportsResolver;
+use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 final class UseImportsAdder
@@ -99,7 +101,7 @@ final class UseImportsAdder
     }
 
     /**
-     * @param FullyQualifiedObjectType[] $useImportTypes
+     * @param AliasedObjectType[]|FullyQualifiedObjectType[] $useImportTypes
      * @param FullyQualifiedObjectType[] $functionUseImportTypes
      * @return Use_[]
      */
@@ -136,15 +138,13 @@ final class UseImportsAdder
         return $namespace->name->toString();
     }
 
-    private function isCurrentNamespace(
-        string $namespaceName,
-        FullyQualifiedObjectType $fullyQualifiedObjectType
-    ): bool {
+    private function isCurrentNamespace(string $namespaceName, ObjectType $objectType): bool
+    {
         if ($namespaceName === null) {
             return false;
         }
 
-        $afterCurrentNamespace = Strings::after($fullyQualifiedObjectType->getClassName(), $namespaceName . '\\');
+        $afterCurrentNamespace = Strings::after($objectType->getClassName(), $namespaceName . '\\');
         if (! $afterCurrentNamespace) {
             return false;
         }

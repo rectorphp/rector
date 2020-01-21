@@ -1,4 +1,4 @@
-# All 441 Rectors Overview
+# All 442 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -417,6 +417,38 @@ Migrate CakePHP 2.4 Controller to Symfony 5
 +    public function index(): Response
      {
      }
+ }
+```
+
+<br>
+
+### `CakePHPModelToDoctrineEntityRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPModelToDoctrineEntityRector`
+
+Migrate CakePHP Model active record to Doctrine\ORM Entity and EntityRepository
+
+```diff
+-class Activity extends \AppModel
++use Doctrine\Mapping\Annotation as ORM;
++
++/**
++ * @ORM\Entity
++ */
++class Activity
+ {
+-    public $belongsTo = [
+-        'ActivityType' => [
+-            'className' => 'ActivityType',
+-            'foreignKey' => 'activity_type_id',
+-            'dependent' => false,
+-        ],
+-    ];
++    /**
++     * @ORM\ManyToOne(targetEntity="ActivityType")
++     * @ORM\JoinColumn(name="activity_type_id")
++     */
++    private $activityType;
  }
 ```
 
