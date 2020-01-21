@@ -64,6 +64,7 @@ parameters:
             - 'src/Util/*.php'
             - 'packages/BetterPhpDocParser/src/Annotation/AnnotationNaming.php'
             - 'src/Testing/PHPUnit/PHPUnitEnvironment.php'
+            - 'src/NodeDumper/NodeDumper.php'
             # honesty first
             - 'src/*Static*.php'
 

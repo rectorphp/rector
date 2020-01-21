@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-use Tracy\Debugger;
+use Rector\NodeDumper\NodeDumper;
 
 if (! function_exists('rd')) {
-    function rd($var)
+    function rd($var): void
     {
-        array_map([Debugger::class, 'dump'], func_get_args());
-        return $var;
+        NodeDumper::dumpNode($var);
     }
 }
 
