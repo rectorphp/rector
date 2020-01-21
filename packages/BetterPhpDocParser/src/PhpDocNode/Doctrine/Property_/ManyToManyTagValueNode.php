@@ -37,14 +37,14 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
     private $cascade;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $fetch;
 
     /**
-     * @var bool
+     * @var bool|null
      */
-    private $orphanRemoval = false;
+    private $orphanRemoval;
 
     /**
      * @var string|null
@@ -52,20 +52,20 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
     private $indexBy;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $fqnTargetEntity;
 
     public function __construct(
         string $targetEntity,
-        ?string $mappedBy,
-        ?string $inversedBy,
-        ?array $cascade,
-        string $fetch,
-        bool $orphanRemoval,
-        ?string $indexBy,
-        string $originalContent,
-        string $fqnTargetEntity
+        ?string $mappedBy = null,
+        ?string $inversedBy = null,
+        ?array $cascade = null,
+        ?string $fetch = null,
+        ?bool $orphanRemoval = null,
+        ?string $indexBy = null,
+        ?string $originalContent = null,
+        ?string $fqnTargetEntity = null
     ) {
         $this->targetEntity = $targetEntity;
         $this->mappedBy = $mappedBy;
@@ -76,7 +76,9 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
         $this->indexBy = $indexBy;
         $this->fqnTargetEntity = $fqnTargetEntity;
 
-        $this->resolveOriginalContentSpacingAndOrder($originalContent);
+        if ($originalContent !== null) {
+            $this->resolveOriginalContentSpacingAndOrder($originalContent);
+        }
     }
 
     public function __toString(): string
@@ -93,23 +95,31 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
             $contentItems['inversedBy'] = sprintf('inversedBy="%s"', $this->inversedBy);
         }
 
-        if ($this->cascade) {
+        if ($this->cascade !== null) {
             $contentItems['cascade'] = $this->printArrayItem($this->cascade, 'cascade');
         }
 
-        $contentItems['fetch'] = sprintf('fetch="%s"', $this->fetch);
-        $contentItems['orphanRemoval'] = sprintf('orphanRemoval=%s', $this->orphanRemoval ? 'true' : 'false');
-        $contentItems['indexBy'] = sprintf('indexBy="%s"', $this->indexBy);
+        if ($this->fetch !== null) {
+            $contentItems['fetch'] = sprintf('fetch="%s"', $this->fetch);
+        }
+
+        if ($this->orphanRemoval !== null) {
+            $contentItems['orphanRemoval'] = sprintf('orphanRemoval=%s', $this->orphanRemoval ? 'true' : 'false');
+        }
+
+        if ($this->indexBy !== null) {
+            $contentItems['indexBy'] = sprintf('indexBy="%s"', $this->indexBy);
+        }
 
         return $this->printContentItems($contentItems);
     }
 
-    public function getTargetEntity(): ?string
+    public function getTargetEntity(): string
     {
         return $this->targetEntity;
     }
 
-    public function getFqnTargetEntity(): string
+    public function getFqnTargetEntity(): ?string
     {
         return $this->fqnTargetEntity;
     }
