@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Php73\Rector\FuncCall;
 
+use function count;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -26,6 +27,7 @@ final class SetcookieRector extends AbstractRector
 {
     /**
      * Conversion table from argument index to options name
+     * @var string[]
      */
     private const KNOWN_OPTIONS = [
         2 => 'expires',
@@ -114,7 +116,7 @@ PHP
             return true;
         }
 
-        $args_count = \count($funcCall->args);
+        $args_count = count($funcCall->args);
 
         if ($args_count <= 2) {
             return true;
