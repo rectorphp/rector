@@ -10,13 +10,10 @@ composer.lock
 
 # often customized locally - example on Github is just fine
 create-rector.yaml
-phpstan-dependencies.json
-phpstan-paths.txt
 
 # tests - travis
 /laravel-dir
-
-uuid-migration.json
+/utils
 
 # compiler
 /compiler/composer.lock

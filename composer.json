@@ -102,10 +102,7 @@
             "Rector\\Twig\\": "packages/Twig/src",
             "Rector\\TypeDeclaration\\": "packages/TypeDeclaration/src",
             "Rector\\ZendToSymfony\\": "packages/ZendToSymfony/src",
-            "Rector\\Utils\\DocumentationGenerator\\": "utils/DocumentationGenerator/src",
-            "Rector\\Utils\\RectorGenerator\\": "utils/RectorGenerator/src",
-            "Rector\\Utils\\PHPStanAttributeTypeSyncer\\": "utils/PHPStanAttributeTypeSyncer/src",
-            "Rector\\Utils\\PHPStanStaticTypeMapperChecker\\": "utils/PHPStanStaticTypeMapperChecker/src",
+            "Rector\\RectorGenerator\\": "packages/RectorGenerator/src",
             "Rector\\StrictCodeQuality\\": "packages/StrictCodeQuality/src",
             "Rector\\DynamicTypeAnalysis\\": "packages/DynamicTypeAnalysis/src",
             "Rector\\PhpDeglobalize\\": "packages/PhpDeglobalize/src",
@@ -116,7 +113,7 @@
             "Rector\\CakePHPToSymfony\\": "packages/CakePHPToSymfony/src"
         },
         "files": [
-            "helpers/rector_dump_function.php"
+            "src/rector_dump_function.php"
         ]
     },
     "autoload-dev": {
@@ -176,6 +173,9 @@
             "Rector\\DynamicTypeAnalysis\\Tests\\": "packages/DynamicTypeAnalysis/tests",
             "Rector\\PhpDeglobalize\\Tests\\": "packages/PhpDeglobalize/tests",
             "Rector\\Phalcon\\Tests\\": "packages/Phalcon/tests",
+            "Rector\\Utils\\DocumentationGenerator\\": "utils/DocumentationGenerator/src",
+            "Rector\\Utils\\PHPStanAttributeTypeSyncer\\": "utils/PHPStanAttributeTypeSyncer/src",
+            "Rector\\Utils\\PHPStanStaticTypeMapperChecker\\": "utils/PHPStanStaticTypeMapperChecker/src",
             "Rector\\DoctrineGedmoToKnplabs\\Tests\\": "packages/DoctrineGedmoToKnplabs/tests",
             "Rector\\MinimalScope\\Tests\\": "packages/MinimalScope/tests",
             "Rector\\Polyfill\\Tests\\": "packages/Polyfill/tests",

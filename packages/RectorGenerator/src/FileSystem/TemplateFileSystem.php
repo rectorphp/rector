@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\RectorGenerator\FileSystem;
+namespace Rector\RectorGenerator\FileSystem;
 
 use Nette\Utils\Strings;
-use Rector\Utils\RectorGenerator\Finder\TemplateFinder;
-use Rector\Utils\RectorGenerator\ValueObject\Configuration;
-use Rector\Utils\RectorGenerator\ValueObject\Package;
+use Rector\RectorGenerator\Finder\TemplateFinder;
+use Rector\RectorGenerator\ValueObject\Configuration;
+use Rector\RectorGenerator\ValueObject\Package;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class TemplateFileSystem

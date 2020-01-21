@@ -4,7 +4,7 @@ services:
         autowire: true
         autoconfigure: true
 
-    Rector\Utils\RectorGenerator\:
+    Rector\RectorGenerator\:
         resource: '../src'
         exclude:
             - '../src/Exception/*'
