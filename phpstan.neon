@@ -225,3 +225,6 @@ parameters:
         - '#Method Rector\\CakePHPToSymfony\\Rector\\Template\\TemplateMethodCallManipulator\:\:matchThisRenderMethodCallBareOrInReturn\(\) should return PhpParser\\Node\\Expr\\MethodCall\|null but returns PhpParser\\Node\\Expr#'
         # doc is not enough
         - '#Result of \|\| is always true#'
+
+        # known value
+        - '#Access to undefined constant Rector\\BetterPhpDocParser\\PhpDocNode\\AbstractTagValueNode\:\:SHORT_NAME#'

@@ -14,7 +14,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
-use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
@@ -244,12 +243,7 @@ PHP
         SymfonyRouteTagValueNode $symfonyRouteTagValueNode,
         ClassMethod $classMethod
     ): void {
-        $symfonyRoutePhpDocTagNode = new SpacelessPhpDocTagNode(
-            SymfonyRouteTagValueNode::SHORT_NAME,
-            $symfonyRouteTagValueNode
-        );
-
-        $this->docBlockManipulator->addTag($classMethod, $symfonyRoutePhpDocTagNode);
+        $this->docBlockManipulator->addTagValueNodeWithShortName($classMethod, $symfonyRouteTagValueNode);
 
         $symfonyRouteUseObjectType = new FullyQualifiedObjectType(SymfonyRouteTagValueNode::CLASS_NAME);
         $this->addUseType($symfonyRouteUseObjectType, $classMethod);
