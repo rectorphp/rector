@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Application\AppliedRectorCollector;
 use Rector\CodingStyle\Application\NameImportingCommander;
@@ -16,7 +17,6 @@ use Rector\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\PhpParser\Node\Commander\NodeReplacingCommander;
 use Rector\PhpParser\Node\Commander\PropertyAddingCommander;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -75,9 +75,9 @@ trait NodeCommandersTrait
         $this->nodeReplacingCommander = $nodeReplacingCommander;
     }
 
-    protected function addUseType(FullyQualifiedObjectType $fullyQualifiedObjectType, Node $positionNode): void
+    protected function addUseType(ObjectType $objectType, Node $positionNode): void
     {
-        $this->useAddingCommander->addUseImport($positionNode, $fullyQualifiedObjectType);
+        $this->useAddingCommander->addUseImport($positionNode, $objectType);
     }
 
     protected function removeShortUse(string $shortUse, Node $positionNode): void
