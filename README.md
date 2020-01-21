@@ -154,7 +154,7 @@ parameters:
 
 ### Extra Autoloading
 
-Rector relies on project and autoloading of its classes. To specify your own autoload file, use `--autoload-file` option:
+Rector relies on project and autoloading of its classes by using the composer autoloader as default. To specify your own autoload file, use `--autoload-file` option:
 
 ```bash
 vendor/bin/rector process ../project --autoload-file ../project/vendor/autoload.php
