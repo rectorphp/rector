@@ -1,13 +1,12 @@
 name: Rector_PHAR
 
-on:
-    pull_request:
-    push:
-        branches:
-            - master
-    release:
-        types:
-            - published
+#on:
+#    push:
+#        branches:
+#            - master
+#    release:
+#        types:
+#            - published
 
 jobs:
     compile_and_deploy_rector_phar:
