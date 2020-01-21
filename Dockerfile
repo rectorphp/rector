@@ -7,10 +7,16 @@ COPY stubs stubs
 RUN  composer install --no-dev --optimize-autoloader --prefer-dist
 
 
-FROM php:7.4-cli
+FROM php:7.4-cli as rector
 WORKDIR /rector
 
-COPY . .
 COPY --from=composer /app .
+COPY . .
 
 ENTRYPOINT [ "bin/rector" ]
+
+
+## Used for getrector.org/demo
+FROM rector as rector-secured
+
+COPY .docker/php/security.ini /usr/local/etc/php/conf.d/security.ini
