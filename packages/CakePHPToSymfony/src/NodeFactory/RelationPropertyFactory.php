@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ManyToManyTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ManyToOneTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -73,6 +74,29 @@ final class RelationPropertyFactory
 
             // add @ORM\ManyToOne
             $manyToOneTagValueNode = new ManyToManyTagValueNode($className);
+            $this->docBlockManipulator->addTagValueNodeWithShortName($property, $manyToOneTagValueNode);
+
+            $properties[] = $property;
+        }
+
+        return $properties;
+    }
+
+    /**
+     * @return Property[]
+     */
+    public function createOneToManyProperties(Property $hasManyProperty): array
+    {
+        $propertyDefaultValue = $this->getPropertyDefaultValue($hasManyProperty);
+
+        $properties = [];
+        foreach ($propertyDefaultValue as $propertyName => $relationConfiguration) {
+            $property = $this->createPrivateProperty($propertyName);
+
+            $className = $relationConfiguration['className'];
+
+            // add @ORM\OneToMany
+            $manyToOneTagValueNode = new OneToManyTagValueNode(null, $className);
             $this->docBlockManipulator->addTagValueNodeWithShortName($property, $manyToOneTagValueNode);
 
             $properties[] = $property;
