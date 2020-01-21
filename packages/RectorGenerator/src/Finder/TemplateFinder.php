@@ -35,9 +35,10 @@ final class TemplateFinder
      */
     public function find(bool $isPhpSnippet): array
     {
-        $finder = Finder::create()->files()
-            ->in(self::TEMPLATES_DIRECTORY)
-            ->exclude(self::TEMPLATES_FIXTURE_DIRECTORY);
+        $finder = Finder::create()
+            ->files()
+            ->exclude('Fixture/')
+            ->in(self::TEMPLATES_DIRECTORY);
 
         $smartFileInfos = $this->finderSanitizer->sanitize($finder);
         $smartFileInfos[] = $this->createFixtureSmartFileInfo($isPhpSnippet);

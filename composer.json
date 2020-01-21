@@ -113,7 +113,7 @@
             "Rector\\CakePHPToSymfony\\": "packages/CakePHPToSymfony/src"
         },
         "files": [
-            "src/rector_dump_function.php"
+            "src/functions/rector_dump_function.php"
         ]
     },
     "autoload-dev": {

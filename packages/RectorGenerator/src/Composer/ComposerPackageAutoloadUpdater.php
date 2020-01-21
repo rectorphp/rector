@@ -50,7 +50,7 @@ final class ComposerPackageAutoloadUpdater
             $package->getSrcNamespace(),
             PHP_EOL
         ));
-        if ($isConfirmed === false) {
+        if (! $isConfirmed) {
             return;
         }
 
