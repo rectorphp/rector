@@ -108,22 +108,40 @@ PHP
         }
 
         $node->extends = null;
+        $this->addEntityTagToEntityClass($node);
+
+        $relationProperties = [];
 
         // extract relations
-        $belongToProperty = $this->classManipulator->getProperty($node, 'belongsTo');
-        if ($belongToProperty !== null) {
-            $manyToOneProperties = $this->relationPropertyFactory->createManyToOneProperties($belongToProperty);
-            $node->stmts = array_merge($manyToOneProperties, (array) $node->stmts);
+        $belongsToProperty = $this->classManipulator->getProperty($node, 'belongsTo');
+        if ($belongsToProperty !== null) {
+            $manyToOneProperties = $this->relationPropertyFactory->createManyToOneProperties($belongsToProperty);
+            $relationProperties = array_merge($relationProperties, $manyToOneProperties);
 
-            $this->removeNode($belongToProperty);
+            $this->removeNode($belongsToProperty);
         }
 
+        $hasAndBelongsToMany = $this->classManipulator->getProperty($node, 'hasAndBelongsToMany');
+        if ($hasAndBelongsToMany !== null) {
+            $manyToManyProperties = $this->relationPropertyFactory->createManyToManyProperties($hasAndBelongsToMany);
+            $relationProperties = array_merge($relationProperties, $manyToManyProperties);
+
+            $this->removeNode($hasAndBelongsToMany);
+        }
+
+        if ($relationProperties !== []) {
+            $node->stmts = array_merge($relationProperties, (array) $node->stmts);
+        }
+
+        return $node;
+    }
+
+    private function addEntityTagToEntityClass(Class_ $node): void
+    {
         $entityTag = $this->phpDocTagNodeFactory->createEntityTag();
         $this->docBlockManipulator->addTag($node, $entityTag);
 
         $objectType = new AliasedObjectType('ORM', 'Doctrine\Mapping\Annotation');
         $this->addUseType($objectType, $node);
-
-        return $node;
     }
 }
