@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\RectorGenerator\Command;
+namespace Rector\RectorGenerator\Command;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
-use Rector\Utils\RectorGenerator\Composer\ComposerPackageAutoloadUpdater;
-use Rector\Utils\RectorGenerator\Configuration\ConfigurationFactory;
-use Rector\Utils\RectorGenerator\FileSystem\TemplateFileSystem;
-use Rector\Utils\RectorGenerator\Finder\TemplateFinder;
-use Rector\Utils\RectorGenerator\TemplateVariablesFactory;
-use Rector\Utils\RectorGenerator\ValueObject\Configuration;
+use Rector\RectorGenerator\Composer\ComposerPackageAutoloadUpdater;
+use Rector\RectorGenerator\Configuration\ConfigurationFactory;
+use Rector\RectorGenerator\FileSystem\TemplateFileSystem;
+use Rector\RectorGenerator\Finder\TemplateFinder;
+use Rector\RectorGenerator\TemplateVariablesFactory;
+use Rector\RectorGenerator\ValueObject\Configuration;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

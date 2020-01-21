@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\RectorGenerator\ValueObject;
+namespace Rector\RectorGenerator\ValueObject;
 
 use Nette\Utils\Strings;
 
