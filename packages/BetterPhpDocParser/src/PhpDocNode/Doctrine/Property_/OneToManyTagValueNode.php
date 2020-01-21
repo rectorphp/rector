@@ -104,7 +104,7 @@ final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implement
         return $this->targetEntity;
     }
 
-    public function getFqnTargetEntity(): string
+    public function getFqnTargetEntity(): ?string
     {
         return $this->fqnTargetEntity;
     }

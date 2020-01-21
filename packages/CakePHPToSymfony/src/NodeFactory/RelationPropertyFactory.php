@@ -10,6 +10,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNo
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ManyToManyTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ManyToOneTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\OneToOneTagValueNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Value\ValueResolver;
@@ -52,6 +53,29 @@ final class RelationPropertyFactory
             // add @ORM\JoinColumn
             $joinColumnTagValueNode = new JoinColumnTagValueNode($manyToOneConfiguration['foreignKey'], null);
             $this->docBlockManipulator->addTagValueNodeWithShortName($property, $joinColumnTagValueNode);
+
+            $properties[] = $property;
+        }
+
+        return $properties;
+    }
+
+    /**
+     * @return Property[]
+     */
+    public function createOneToOneProperties(Property $hasOneProperty): array
+    {
+        $propertyDefaultValue = $this->getPropertyDefaultValue($hasOneProperty);
+
+        $properties = [];
+        foreach ($propertyDefaultValue as $propertyName => $relationConfiguration) {
+            $property = $this->createPrivateProperty($propertyName);
+
+            $className = $relationConfiguration['className'];
+
+            // add @ORM\ManyToOne
+            $manyToOneTagValueNode = new OneToOneTagValueNode($className);
+            $this->docBlockManipulator->addTagValueNodeWithShortName($property, $manyToOneTagValueNode);
 
             $properties[] = $property;
         }
