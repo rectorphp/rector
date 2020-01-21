@@ -1,4 +1,4 @@
-# All 442 Rectors Overview
+# All 443 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -6197,6 +6197,24 @@ Changes heredoc/nowdoc that contains closing word to safe wrapper name
      A
 -A
 +A_WRAP
+```
+
+<br>
+
+### `SetcookieRector`
+
+- class: `Rector\Php73\Rector\FuncCall\SetcookieRector`
+
+Convert setcookie argument to PHP7.3 option array
+
+```diff
+-setcookie('name', $value, 360);
++setcookie('name', $value, ['expires' => 360]);
+```
+
+```diff
+-setcookie('name', $name, 0, '', '', true, true);
++setcookie('name', $name, ['expires' => 0, 'path' => '', 'domain' => '', 'secure' => true, 'httponly' => true]);
 ```
 
 <br>
