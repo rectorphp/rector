@@ -17,6 +17,8 @@ use Rector\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\PhpParser\Node\Commander\NodeReplacingCommander;
 use Rector\PhpParser\Node\Commander\PropertyAddingCommander;
+use Rector\PHPStan\Type\AliasedObjectType;
+use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -75,8 +77,13 @@ trait NodeCommandersTrait
         $this->nodeReplacingCommander = $nodeReplacingCommander;
     }
 
+    /**
+     * @param FullyQualifiedObjectType|AliasedObjectType $objectType
+     */
     protected function addUseType(ObjectType $objectType, Node $positionNode): void
     {
+        assert($objectType instanceof FullyQualifiedObjectType || $objectType instanceof AliasedObjectType);
+
         $this->useAddingCommander->addUseImport($positionNode, $objectType);
     }
 
