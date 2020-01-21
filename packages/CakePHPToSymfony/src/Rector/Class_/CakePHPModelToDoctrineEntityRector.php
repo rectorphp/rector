@@ -123,20 +123,28 @@ PHP
 
         $hasAndBelongsToManyProperty = $this->classManipulator->getProperty($node, 'hasAndBelongsToMany');
         if ($hasAndBelongsToManyProperty !== null) {
-            $manyToManyProperties = $this->relationPropertyFactory->createManyToManyProperties(
+            $newRelationProperties = $this->relationPropertyFactory->createManyToManyProperties(
                 $hasAndBelongsToManyProperty
             );
-            $relationProperties = array_merge($relationProperties, $manyToManyProperties);
+            $relationProperties = array_merge($relationProperties, $newRelationProperties);
 
             $this->removeNode($hasAndBelongsToManyProperty);
         }
 
         $hasManyProperty = $this->classManipulator->getProperty($node, 'hasMany');
         if ($hasManyProperty !== null) {
-            $manyToManyProperties = $this->relationPropertyFactory->createOneToManyProperties($hasManyProperty);
-            $relationProperties = array_merge($relationProperties, $manyToManyProperties);
+            $newRelationProperties = $this->relationPropertyFactory->createOneToManyProperties($hasManyProperty);
+            $relationProperties = array_merge($relationProperties, $newRelationProperties);
 
             $this->removeNode($hasManyProperty);
+        }
+
+        $hasOneProperty = $this->classManipulator->getProperty($node, 'hasOne');
+        if ($hasOneProperty !== null) {
+            $newRelationProperties = $this->relationPropertyFactory->createOneToOneProperties($hasOneProperty);
+            $relationProperties = array_merge($relationProperties, $newRelationProperties);
+
+            $this->removeNode($hasOneProperty);
         }
 
         if ($relationProperties !== []) {
