@@ -31,7 +31,8 @@
         "symplify/auto-bind-parameter": "^7.2",
         "symplify/autowire-array-parameter": "^7.2",
         "symplify/package-builder": "^7.2",
-        "symplify/set-config-resolver": "^7.2"
+        "symplify/set-config-resolver": "^7.2",
+        "tracy/tracy": "^2.7"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
@@ -42,8 +43,7 @@
         "symplify/easy-coding-standard": "^7.2",
         "symplify/monorepo-builder": "^7.2",
         "symplify/phpstan-extensions": "^7.2",
-        "thecodingmachine/phpstan-strict-rules": "^0.12",
-        "tracy/tracy": "^2.7"
+        "thecodingmachine/phpstan-strict-rules": "^0.12"
     },
     "autoload": {
         "psr-4": {
@@ -114,7 +114,10 @@
             "Rector\\MinimalScope\\": "packages/MinimalScope/src",
             "Rector\\Polyfill\\": "packages/Polyfill/src",
             "Rector\\CakePHPToSymfony\\": "packages/CakePHPToSymfony/src"
-        }
+        },
+        "files": [
+            "helpers/rector_dump_function.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
