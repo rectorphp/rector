@@ -2,7 +2,7 @@ imports:
     - { resource: '../packages/**/config/config.yaml' }
     - { resource: 'services.yaml' }
     # only in local repository
-    - { resource: '../utils/**/config/config.yaml', ignore_errors: true }
+    - { resource: '../utils/**/config/config.yaml' }
 
 parameters:
     # processed paths
