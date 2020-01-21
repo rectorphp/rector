@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\RectorGenerator\Node;
+namespace Rector\RectorGenerator\Node;
 
 use Nette\Loaders\RobotLoader;
 

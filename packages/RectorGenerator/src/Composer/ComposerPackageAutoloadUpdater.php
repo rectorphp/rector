@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\RectorGenerator\Composer;
+namespace Rector\RectorGenerator\Composer;
 
-use Rector\Utils\RectorGenerator\FileSystem\JsonFileSystem;
-use Rector\Utils\RectorGenerator\ValueObject\Configuration;
-use Rector\Utils\RectorGenerator\ValueObject\Package;
+use Rector\RectorGenerator\FileSystem\JsonFileSystem;
+use Rector\RectorGenerator\ValueObject\Configuration;
+use Rector\RectorGenerator\ValueObject\Package;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 
@@ -50,7 +50,7 @@ final class ComposerPackageAutoloadUpdater
             $package->getSrcNamespace(),
             PHP_EOL
         ));
-        if ($isConfirmed === false) {
+        if (! $isConfirmed) {
             return;
         }
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\RectorGenerator;
+namespace Rector\RectorGenerator;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Expr\Array_;
@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
-use Rector\Utils\RectorGenerator\ValueObject\Configuration;
+use Rector\RectorGenerator\ValueObject\Configuration;
 
 final class TemplateVariablesFactory
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\RectorGenerator\FileSystem;
+namespace Rector\RectorGenerator\FileSystem;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;

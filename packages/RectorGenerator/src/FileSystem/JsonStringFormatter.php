@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\RectorGenerator\FileSystem;
+namespace Rector\RectorGenerator\FileSystem;
 
 use Nette\Utils\Strings;
 
@@ -29,14 +29,13 @@ final class JsonStringFormatter
     public function inlineAuthors(string $jsonContent): string
     {
         $pattern = '#(?<start>"authors": \[\s+)(?<content>.*?)(?<end>\s+\](,))#ms';
-        $jsonContent = Strings::replace($jsonContent, $pattern, function (array $match): string {
+
+        return Strings::replace($jsonContent, $pattern, function (array $match): string {
             $inlined = Strings::replace($match['content'], '#\s+#', ' ');
             $inlined = trim($inlined);
             $inlined = Strings::replace($inlined, '#},#', "},\n       ");
 
             return $match['start'] . $inlined . $match['end'];
         });
-
-        return $jsonContent;
     }
 }

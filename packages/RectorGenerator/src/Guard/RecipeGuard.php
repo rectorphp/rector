@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\RectorGenerator\Guard;
+namespace Rector\RectorGenerator\Guard;
 
-use Rector\Utils\RectorGenerator\Exception\ConfigurationException;
+use Rector\RectorGenerator\Exception\ConfigurationException;
 
 final class RecipeGuard
 {

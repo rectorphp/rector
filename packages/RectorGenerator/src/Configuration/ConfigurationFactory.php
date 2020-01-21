@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\Utils\RectorGenerator\Configuration;
+namespace Rector\RectorGenerator\Configuration;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\RectorGenerator\Guard\RecipeGuard;
+use Rector\RectorGenerator\Node\NodeClassProvider;
+use Rector\RectorGenerator\ValueObject\Configuration;
 use Rector\Set\Set;
-use Rector\Utils\RectorGenerator\Guard\RecipeGuard;
-use Rector\Utils\RectorGenerator\Node\NodeClassProvider;
-use Rector\Utils\RectorGenerator\ValueObject\Configuration;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
