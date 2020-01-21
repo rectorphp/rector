@@ -9,6 +9,7 @@
     "directories": [
         "config",
         "src",
+        "helpers",
         "packages",
         "vendor"
     ],
