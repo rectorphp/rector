@@ -83,7 +83,6 @@ final class DoctrineRepositoryClassMethodManipulator
         if ($findKind === 'first') {
             $this->refactorFindFirst($methodCall, $entityClass);
             return $methodCall;
-
         }
 
         if ($findKind === 'threaded') {
@@ -251,18 +250,20 @@ final class DoctrineRepositoryClassMethodManipulator
     private function refactorFindList(string $entityClass): MethodCall
     {
         // @see https://stackoverflow.com/a/42913902/1348344
-        $thisRepositoryPropertyFetch = new PropertyFetch(new Variable('this'), new Name('repository'));
+        $thisRepositoryPropertyFetch = new PropertyFetch(new Variable('this'), new Identifier('repository'));
 
         $entityAliasLetter = strtolower($entityClass[0]);
 
-        $createQueryBuilderMethodCall = new MethodCall($thisRepositoryPropertyFetch, new Identifier('createQueryBuilder'), [
-            new Arg(new String_($entityAliasLetter))
-        ]);
+        $createQueryBuilderMethodCall = new MethodCall($thisRepositoryPropertyFetch, new Identifier(
+            'createQueryBuilder'
+        ), [new Arg(new String_($entityAliasLetter))]);
 
         $getQueryMethodCall = new MethodCall($createQueryBuilderMethodCall, new Identifier('getQuery'));
 
         $getResultMethodCall = new MethodCall($getQueryMethodCall, new Identifier('getResult'));
-        $hydrateArrayClassConstFetch = new ClassConstFetch(new FullyQualified('Doctrine\ORM\Query'), new Identifier('HYDRATE_ARRAY'));
+        $hydrateArrayClassConstFetch = new ClassConstFetch(new FullyQualified('Doctrine\ORM\Query'), new Identifier(
+            'HYDRATE_ARRAY'
+        ));
         $getResultMethodCall->args[] = new Arg($hydrateArrayClassConstFetch);
 
         return $getResultMethodCall;
