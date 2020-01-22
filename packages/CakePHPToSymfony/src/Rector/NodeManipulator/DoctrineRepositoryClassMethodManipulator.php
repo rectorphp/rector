@@ -9,12 +9,14 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\NotImplementedException;
@@ -63,43 +65,40 @@ final class DoctrineRepositoryClassMethodManipulator
                     return null;
                 }
 
-                $this->refactorClassMethodByKind($node, $entityClass);
+                return $this->refactorClassMethodByKind($node, $entityClass);
             }
         );
 
         return $classMethod;
     }
 
-    private function refactorClassMethodByKind(MethodCall $methodCall, string $entityClass): void
+    private function refactorClassMethodByKind(MethodCall $methodCall, string $entityClass): Node
     {
         $findKind = $this->valueResolver->getValue($methodCall->args[0]->value);
         if ($findKind === 'all') {
-            $this->refactorMethodByAll($methodCall);
-        } elseif ($findKind === 'first') {
-            $this->refactorMethodByFirst($methodCall, $entityClass);
-        } elseif ($findKind === 'threaded') {
-            $this->refactorToRepositoryMethod($methodCall, 'findBy');
-
-            unset($methodCall->args[0]);
-
-            $conditionsArray = $this->findConfigurationByKey($methodCall, 'conditions', $entityClass);
-            if ($conditionsArray === null) {
-                return;
-            }
-
-            $methodCall->args = [new Arg($conditionsArray)];
-        } elseif ($findKind === 'count') {
-            $this->refactorToRepositoryMethod($methodCall, 'count');
-
-            $conditionsArray = $this->findConfigurationByKey($methodCall, 'conditions', $entityClass);
-            if ($conditionsArray === null) {
-                return;
-            }
-
-            $methodCall->args = [new Arg($conditionsArray)];
-        } else {
-            throw new NotImplementedException(__METHOD__);
+            $this->refactorFindAll($methodCall);
+            return $methodCall;
         }
+
+        if ($findKind === 'first') {
+            $this->refactorFindFirst($methodCall, $entityClass);
+            return $methodCall;
+
+        }
+
+        if ($findKind === 'threaded') {
+            return $this->refactorFindThreaded($methodCall, $entityClass);
+        }
+
+        if ($findKind === 'count') {
+            return $this->refactorFindCount($methodCall, $entityClass);
+        }
+
+        if ($findKind === 'list') {
+            return $this->refactorFindList($entityClass);
+        }
+
+        throw new NotImplementedException($findKind);
     }
 
     private function getItemByKey(Array_ $array, string $key): ?ArrayItem
@@ -137,7 +136,6 @@ final class DoctrineRepositoryClassMethodManipulator
         }
 
         $orderArray = $this->findConfigurationByKey($methodCall, 'order', $entityClass);
-
         if ($orderArray !== null) {
             if (count($args) === 0) {
                 $args[] = new Arg(new ConstFetch(new Name('null')));
@@ -162,7 +160,7 @@ final class DoctrineRepositoryClassMethodManipulator
         }
     }
 
-    private function refactorMethodByFirst(MethodCall $methodCall, string $entityClass): void
+    private function refactorFindFirst(MethodCall $methodCall, string $entityClass): void
     {
         $this->refactorToRepositoryMethod($methodCall, 'findOneBy');
 
@@ -179,7 +177,7 @@ final class DoctrineRepositoryClassMethodManipulator
         $methodCall->args = $this->createFindOneByArgs($entityClass, $methodCall);
     }
 
-    private function refactorMethodByAll(MethodCall $methodCall): void
+    private function refactorFindAll(MethodCall $methodCall): void
     {
         $this->refactorToRepositoryMethod($methodCall, 'findAll');
 
@@ -219,5 +217,54 @@ final class DoctrineRepositoryClassMethodManipulator
         $this->removeEntityPrefixFromConditionKeys($conditionsArrayItemArray, $entityClass);
 
         return $conditionsArrayItemArray;
+    }
+
+    private function refactorFindThreaded(MethodCall $methodCall, string $entityClass): MethodCall
+    {
+        $this->refactorToRepositoryMethod($methodCall, 'findBy');
+
+        unset($methodCall->args[0]);
+
+        $conditionsArray = $this->findConfigurationByKey($methodCall, 'conditions', $entityClass);
+        if ($conditionsArray === null) {
+            return $methodCall;
+        }
+
+        $methodCall->args = [new Arg($conditionsArray)];
+
+        return $methodCall;
+    }
+
+    private function refactorFindCount(MethodCall $methodCall, string $entityClass): MethodCall
+    {
+        $this->refactorToRepositoryMethod($methodCall, 'count');
+
+        $conditionsArray = $this->findConfigurationByKey($methodCall, 'conditions', $entityClass);
+        if ($conditionsArray === null) {
+            return $methodCall;
+        }
+
+        $methodCall->args = [new Arg($conditionsArray)];
+        return $methodCall;
+    }
+
+    private function refactorFindList(string $entityClass): MethodCall
+    {
+        // @see https://stackoverflow.com/a/42913902/1348344
+        $thisRepositoryPropertyFetch = new PropertyFetch(new Variable('this'), new Name('repository'));
+
+        $entityAliasLetter = strtolower($entityClass[0]);
+
+        $createQueryBuilderMethodCall = new MethodCall($thisRepositoryPropertyFetch, new Identifier('createQueryBuilder'), [
+            new Arg(new String_($entityAliasLetter))
+        ]);
+
+        $getQueryMethodCall = new MethodCall($createQueryBuilderMethodCall, new Identifier('getQuery'));
+
+        $getResultMethodCall = new MethodCall($getQueryMethodCall, new Identifier('getResult'));
+        $hydrateArrayClassConstFetch = new ClassConstFetch(new FullyQualified('Doctrine\ORM\Query'), new Identifier('HYDRATE_ARRAY'));
+        $getResultMethodCall->args[] = new Arg($hydrateArrayClassConstFetch);
+
+        return $getResultMethodCall;
     }
 }

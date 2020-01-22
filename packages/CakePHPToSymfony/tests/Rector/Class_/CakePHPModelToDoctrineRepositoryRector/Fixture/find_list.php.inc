@@ -4,13 +4,9 @@ namespace Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPModelToDoctrineRepo
 
 class FindList extends \AppModel
 {
-    public function getOne()
+    public function getList()
     {
-        return $this->find('list', [
-            'conditions' => ['List_.status' => 'pending'],
-        ]);
-
-        return $result;
+        return $this->find('list');
     }
 }
 

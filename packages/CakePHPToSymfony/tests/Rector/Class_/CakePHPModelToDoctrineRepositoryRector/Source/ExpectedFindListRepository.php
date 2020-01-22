@@ -12,8 +12,8 @@ class FindListRepository
     {
         $this->repository = $entityManager->getRepository(\FindList::class);
     }
-    public function getAll()
+    public function getList()
     {
-        return $this->repository->count(['article_id' => 50]);
+        return $this->repository->createQueryBuilder('f')->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
     }
 }
