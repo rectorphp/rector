@@ -18,6 +18,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\NotImplementedException;
+use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
@@ -77,24 +78,27 @@ final class DoctrineRepositoryClassMethodManipulator
         } elseif ($findKind === 'first') {
             $this->refactorMethodByFirst($methodCall, $entityClass);
         } elseif ($findKind === 'threaded') {
-            $methodCall->name = new Identifier('findBy');
+            $this->refactorToRepositoryMethod($methodCall, 'findBy');
+
             unset($methodCall->args[0]);
 
-            if (! isset($methodCall->args[1])) {
-                return;
-            }
-            $possibleArray = $methodCall->args[1]->value;
-            if (! $possibleArray instanceof Array_) {
-                return;
-            }
-            $conditionsArrayItem = $this->getItemByKey($possibleArray, 'conditions');
-            if ($conditionsArrayItem === null) {
+            $conditionsArray = $this->findConfigurationByKey($methodCall, 'conditions', $entityClass);
+            if ($conditionsArray === null) {
                 return;
             }
 
-            $methodCall->args = [new Arg($conditionsArrayItem->value)];
+            $methodCall->args = [new Arg($conditionsArray)];
+        } elseif ($findKind === 'count') {
+            $this->refactorToRepositoryMethod($methodCall, 'count');
+
+            $conditionsArray = $this->findConfigurationByKey($methodCall, 'conditions', $entityClass);
+            if ($conditionsArray === null) {
+                return;
+            }
+
+            $methodCall->args = [new Arg($conditionsArray)];
         } else {
-            throw new NotImplementedException();
+            throw new NotImplementedException(__METHOD__);
         }
     }
 
@@ -123,28 +127,24 @@ final class DoctrineRepositoryClassMethodManipulator
     /**
      * @return Arg[]
      */
-    private function createFindOneByArgs(string $entityClass, Array_ $firstArgument): array
+    private function createFindOneByArgs(string $entityClass, MethodCall $methodCall): array
     {
         $args = [];
 
-        /** @var Array_ $firstArgument */
-        $conditionsArrayItem = $this->getItemByKey($firstArgument, 'conditions');
-        if ($conditionsArrayItem !== null && $conditionsArrayItem->value instanceof Array_) {
-            $conditionArray = $conditionsArrayItem->value;
-            $this->removeEntityPrefixFromConditionKeys($conditionArray, $entityClass);
-            $args[] = new Arg($conditionArray);
+        $conditionsArray = $this->findConfigurationByKey($methodCall, 'conditions', $entityClass);
+        if ($conditionsArray !== null) {
+            $args[] = new Arg($conditionsArray);
         }
 
-        $orderItem = $this->getItemByKey($firstArgument, 'order');
-        if ($orderItem !== null) {
+        $orderArray = $this->findConfigurationByKey($methodCall, 'order', $entityClass);
+
+        if ($orderArray !== null) {
             if (count($args) === 0) {
                 $args[] = new Arg(new ConstFetch(new Name('null')));
             }
 
-            /** @var Array_ $orderArray */
-            $orderArray = $orderItem->value;
             assert(isset($orderArray->items[0]));
-            $args[] = new Arg($orderArray->items[0]->value);
+            $args[] = new Arg($orderArray->items[0]);
         }
 
         return $args;
@@ -164,23 +164,60 @@ final class DoctrineRepositoryClassMethodManipulator
 
     private function refactorMethodByFirst(MethodCall $methodCall, string $entityClass): void
     {
-        $methodCall->name = new Identifier('findOneBy');
-        unset($methodCall->args[0]);
+        $this->refactorToRepositoryMethod($methodCall, 'findOneBy');
 
+        unset($methodCall->args[0]);
         if (! isset($methodCall->args[1])) {
             return;
         }
 
         $firstArgument = $methodCall->args[1]->value;
-        assert($firstArgument instanceof Array_);
+        if (! $firstArgument instanceof Array_) {
+            return;
+        }
 
-        $methodCall->args = $this->createFindOneByArgs($entityClass, $firstArgument);
+        $methodCall->args = $this->createFindOneByArgs($entityClass, $methodCall);
     }
 
     private function refactorMethodByAll(MethodCall $methodCall): void
     {
-        $methodCall->var = new PropertyFetch(new Variable('this'), 'repository');
-        $methodCall->name = new Identifier('findAll');
+        $this->refactorToRepositoryMethod($methodCall, 'findAll');
+
         $methodCall->args = [];
+    }
+
+    private function refactorToRepositoryMethod(MethodCall $methodCall, string $methodName): void
+    {
+        $methodCall->var = new PropertyFetch(new Variable('this'), 'repository');
+        $methodCall->name = new Identifier($methodName);
+    }
+
+    private function findConfigurationByKey(
+        MethodCall $methodCall,
+        string $configurationKey,
+        string $entityClass
+    ): ?Array_ {
+        if (! isset($methodCall->args[1])) {
+            return null;
+        }
+
+        $possibleArray = $methodCall->args[1]->value;
+        if (! $possibleArray instanceof Array_) {
+            return null;
+        }
+
+        $conditionsArrayItem = $this->getItemByKey($possibleArray, $configurationKey);
+        if ($conditionsArrayItem === null) {
+            return null;
+        }
+
+        $conditionsArrayItemArray = $conditionsArrayItem->value;
+        if (! $conditionsArrayItemArray instanceof Array_) {
+            throw new ShouldNotHappenException();
+        }
+
+        $this->removeEntityPrefixFromConditionKeys($conditionsArrayItemArray, $entityClass);
+
+        return $conditionsArrayItemArray;
     }
 }

@@ -275,7 +275,8 @@ PHP
                 return true;
             }
             if ($parameter->isDefaultValueAvailable() && $methodParam->default !== null &&
-                $parameter->getDefaultValue() !== $this->valueResolver->getValue($methodParam->default)) {
+                ! $this->valueResolver->isValue($methodParam->default, $parameter->getDefaultValue())
+            ) {
                 return true;
             }
         }

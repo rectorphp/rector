@@ -20,6 +20,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see https://book.cakephp.org/2/en/models/retrieving-your-data.html#find
+ * ↓
  * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/tutorials/getting-started.html#entity-repositories
  *
  * @see \Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPModelToDoctrineRepositoryRector\CakePHPModelToDoctrineRepositoryRectorTest
