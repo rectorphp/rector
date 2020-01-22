@@ -1,7 +1,7 @@
-name: Test_With_Doctrine
+name: Test With Doctrine
 
 on:
-    pull_request:
+    pull_request: null
     push:
         branches:
             - master
@@ -15,6 +15,7 @@ jobs:
                 with:
                     php-version: 7.3
                     coverage: none
+
             -   name: Clone doctrine/orm and install safe dependencies
                 run: |
                     # cannot install dev deps (--no-dev), because doctrine/orm might inherit from them in different version
@@ -30,5 +31,4 @@ jobs:
                     # do not intall doctrine/orm phpstan, it conflicts with Retor's one
                     composer install -d orm --no-dev
 
-            -   run: |
-                    bin/rector process orm/lib --set dead-code --autoload-file orm/vendor/autoload.php
+            -   run: bin/rector process orm/lib --set dead-code --autoload-file orm/vendor/autoload.php
