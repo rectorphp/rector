@@ -1,0 +1,28 @@
+name: Code Coverage
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    code_coverage:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.3
+                    coverage: pcov
+
+            -   run: composer install --no-progress
+
+            # https://kizu514.com/blog/pcov-is-better-than-phpdbg-and-xdebug-for-code-coverage/
+            -   run: |
+                    vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+                    # Coveralls.io
+                    wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
+                    php php-coveralls.phar --verbose
+                env:
+                    COVERALLS_REPO_TOKEN: 'Ew7FYsOKM3T3s1nEsPHJkSe6jdVIFHME8'
