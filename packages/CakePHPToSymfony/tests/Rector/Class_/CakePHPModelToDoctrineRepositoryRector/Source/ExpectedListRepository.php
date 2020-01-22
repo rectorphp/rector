@@ -2,7 +2,7 @@
 
 namespace Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPModelToDoctrineRepositoryRector\Fixture;
 
-class PhoneRepository
+class FindListRepository
 {
     /**
      * @var \Doctrine\ORM\EntityRepository
@@ -10,10 +10,10 @@ class PhoneRepository
     private $repository;
     public function __construct(\Doctrine\ORM\EntityManagerInterface $entityManager)
     {
-        $this->repository = $entityManager->getRepository(\Phone::class);
+        $this->repository = $entityManager->getRepository(\FindList::class);
     }
     public function getAll()
     {
-        return $this->findBy(['article_id' => 50]);
+        return $this->repository->count(['article_id' => 50]);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPModelToDoctrineRepositoryRector\Fixture;
 
-class Phone extends \AppModel
+class FindThreaded extends \AppModel
 {
     public function getAll()
     {
@@ -18,7 +18,7 @@ class Phone extends \AppModel
 
 namespace Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPModelToDoctrineRepositoryRector\Fixture;
 
-class Phone
+class FindThreaded
 {
 }
 

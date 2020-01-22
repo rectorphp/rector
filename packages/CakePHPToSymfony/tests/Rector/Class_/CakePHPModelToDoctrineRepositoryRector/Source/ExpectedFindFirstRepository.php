@@ -2,7 +2,7 @@
 
 namespace Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPModelToDoctrineRepositoryRector\Fixture;
 
-class ActivityRepository
+class FindFirstRepository
 {
     /**
      * @var \Doctrine\ORM\EntityRepository
@@ -10,16 +10,11 @@ class ActivityRepository
     private $repository;
     public function __construct(\Doctrine\ORM\EntityManagerInterface $entityManager)
     {
-        $this->repository = $entityManager->getRepository(\Activity::class);
-    }
-    public function getAll()
-    {
-        $result = $this->repository->findAll();
-        return $result;
+        $this->repository = $entityManager->getRepository(\FindFirst::class);
     }
     public function getOne()
     {
-        $result = $this->findOneBy(['revision_number' => $versionId, 'document_id' => $documentId], 'created DESC');
+        $result = $this->repository->findOneBy(['revision_number' => $versionId, 'document_id' => $documentId], 'created DESC');
         return $result;
     }
 }
