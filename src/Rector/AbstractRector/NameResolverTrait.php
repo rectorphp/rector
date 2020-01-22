@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Rector\AbstractRector;
 
 use PhpParser\Node;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 /**
@@ -19,11 +20,17 @@ trait NameResolverTrait
     private $nameResolver;
 
     /**
+     * @var ClassNaming
+     */
+    private $classNaming;
+
+    /**
      * @required
      */
-    public function autowireNameResolverTrait(NameResolver $nameResolver): void
+    public function autowireNameResolverTrait(NameResolver $nameResolver, ClassNaming $classNaming): void
     {
         $this->nameResolver = $nameResolver;
+        $this->classNaming = $classNaming;
     }
 
     public function isName(Node $node, string $name): bool
@@ -47,5 +54,13 @@ trait NameResolverTrait
     public function getName(Node $node): ?string
     {
         return $this->nameResolver->getName($node);
+    }
+
+    /**
+     * @param string|Node\Name|Node\Identifier $name
+     */
+    protected function getShortName($name): string
+    {
+        return $this->classNaming->getShortName($name);
     }
 }

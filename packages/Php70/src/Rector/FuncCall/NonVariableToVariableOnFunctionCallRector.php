@@ -23,7 +23,6 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParameterReflection;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\ValueObject\VariableAssignPair;
 use Rector\PHPStan\Reflection\CallReflectionResolver;
@@ -48,15 +47,9 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
      */
     private $callReflectionResolver;
 
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    public function __construct(CallReflectionResolver $callReflectionResolver, ClassNaming $classNaming)
+    public function __construct(CallReflectionResolver $callReflectionResolver)
     {
         $this->callReflectionResolver = $callReflectionResolver;
-        $this->classNaming = $classNaming;
     }
 
     public function getDefinition(): RectorDefinition
@@ -176,7 +169,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
     private function getVariableNameFor(Expr $expr, Scope $scope): string
     {
         if ($expr instanceof New_ && $expr->class instanceof Name) {
-            $name = $this->classNaming->getShortName($expr->class);
+            $name = $this->getShortName($expr->class);
         } else {
             $name = $this->getName($expr);
         }

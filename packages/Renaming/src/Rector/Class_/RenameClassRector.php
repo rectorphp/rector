@@ -241,7 +241,7 @@ PHP
         $this->alreadyProcessedClasses[] = $name;
 
         $newName = $this->oldToNewClasses[$name];
-        $newClassNamePart = $this->classNaming->getShortName($newName);
+        $newClassNamePart = $this->getShortName($newName);
         $newNamespacePart = $this->classNaming->getNamespace($newName);
 
         $this->ensureClassWillNotBeDuplicate($newName, $name);

@@ -1,4 +1,4 @@
-# All 443 Rectors Overview
+# All 444 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -449,6 +449,63 @@ Migrate CakePHP Model active record to Doctrine\ORM Entity and EntityRepository
 +     * @ORM\JoinColumn(name="activity_type_id")
 +     */
 +    private $activityType;
+ }
+```
+
+<br>
+
+### `CakePHPModelToDoctrineRepositoryRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPModelToDoctrineRepositoryRector`
+
+Migrate CakePHP Model active record to Doctrine\ORM\Repository with repository/DQL method calls
+
+```diff
+-class Activity extends \AppModel
++use Doctrine\ORM\EntityManagerInterface;
++
++class Activity
+ {
++}
++
++class ActivityRepository
++{
++    /**
++     * @var EntityManagerInterface
++     */
++    private $repository;
++
++    public function __construct(EntityManagerInterface $entityManager)
++    {
++        $this->repository = $entityManager->getRepository(Activity::class);
++    }
++
+     public function getAll()
+     {
+-        $result = $this->find('all');
++        $result = $this->repository->findAll();
+
+         return $result;
+     }
+
+     public function getOne()
+     {
+-        $result = $this->find('first', [
+-            'conditions' => [
+-                'DocumentVersionsSave.revision_number' => $versionId,
+-                'DocumentVersionsSave.document_id' => $documentId,
+-            ],
+-            'order' => [
+-                'created DESC',
+-            ],
+-        ]);
++        $result = $this->findOneBy([
++            'revision_number' => $versionId,
++            'document_id' => $documentId,
++        ], 'created DESC');
+
+         return $result;
+     }
  }
 ```
 
