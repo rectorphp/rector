@@ -9,7 +9,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\RectorDefinition\CodeSample;
@@ -28,19 +27,13 @@ final class CakePHPControllerComponentToSymfonyRector extends AbstractCakePHPRec
     private $classManipulator;
 
     /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    /**
      * @var string[]
      */
     private $componentsClasses = [];
 
-    public function __construct(ClassManipulator $classManipulator, ClassNaming $classNaming)
+    public function __construct(ClassManipulator $classManipulator)
     {
         $this->classManipulator = $classManipulator;
-        $this->classNaming = $classNaming;
     }
 
     public function getDefinition(): RectorDefinition
@@ -131,7 +124,7 @@ PHP
         $oldProperyNameToNewPropertyName = [];
 
         foreach ($componentClasses as $componentName => $componentClass) {
-            $componentClassShortName = $this->classNaming->getShortName($componentClass);
+            $componentClassShortName = $this->getShortName($componentClass);
             $propertyShortName = lcfirst($componentClassShortName);
             $this->addPropertyToClass($node, new ObjectType($componentClass), $propertyShortName);
 
@@ -179,7 +172,7 @@ PHP
 
         foreach ($componentNames as $componentName) {
             foreach ($componentsClasses as $componentClass) {
-                $shortComponentClass = $this->classNaming->getShortName($componentClass);
+                $shortComponentClass = $this->getShortName($componentClass);
                 if (! Strings::startsWith($shortComponentClass, $componentName)) {
                     continue;
                 }

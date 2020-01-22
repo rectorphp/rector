@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Rector\AbstractRector;
 
+use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
@@ -41,6 +42,16 @@ trait BetterStandardPrinterTrait
     public function print($node): string
     {
         return $this->betterStandardPrinter->print($node);
+    }
+
+    /**
+     * @param Node|Node[]|null $node
+     */
+    public function printToFile($node, string $filePath): void
+    {
+        $content = $this->print($node);
+        $content = '<?php' . PHP_EOL . PHP_EOL . $content . PHP_EOL;
+        FileSystem::write($filePath, $content);
     }
 
     /**

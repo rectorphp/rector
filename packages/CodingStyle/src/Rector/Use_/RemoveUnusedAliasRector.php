@@ -22,7 +22,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodingStyle\Imports\ShortNameResolver;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
@@ -46,18 +45,12 @@ final class RemoveUnusedAliasRector extends AbstractRector
     private $resolvedDocPossibleAliases = [];
 
     /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    /**
      * @var ShortNameResolver
      */
     private $shortNameResolver;
 
-    public function __construct(ClassNaming $classNaming, ShortNameResolver $shortNameResolver)
+    public function __construct(ShortNameResolver $shortNameResolver)
     {
-        $this->classNaming = $classNaming;
         $this->shortNameResolver = $shortNameResolver;
     }
 
@@ -163,7 +156,7 @@ PHP
 
         $shortNames = $this->shortNameResolver->resolveForNode($use);
         foreach ($shortNames as $alias => $useImport) {
-            $shortName = $this->classNaming->getShortName($useImport);
+            $shortName = $this->getShortName($useImport);
             if ($shortName === $alias) {
                 continue;
             }

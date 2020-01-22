@@ -132,6 +132,7 @@ parameters:
         Symplify\CodingStandard\Sniffs\ControlStructure\SprintfOverContactSniff:
             # respects inherited pattern for better comparing
             - 'src/PhpParser/Printer/BetterStandardPrinter.php'
+            - 'src/Rector/AbstractRector/BetterStandardPrinterTrait.php'
 
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.FoundInWhileCondition: null
 
