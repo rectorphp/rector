@@ -1,0 +1,22 @@
+name: PHPStan Compatibility Check
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    phpstan_types_checks:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.2
+                    coverage: none # disable xdebug, pcov
+            -   run: composer install --no-progress
+            -   run: |
+                    bin/rector sync-types
+            -   run: |
+                    bin/rector check-static-type-mappers

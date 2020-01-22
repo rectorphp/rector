@@ -1,4 +1,4 @@
-name: Standalone_Run
+name: Standalone Run
 
 on:
     pull_request: null

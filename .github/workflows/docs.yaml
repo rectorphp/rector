@@ -1,0 +1,19 @@
+name: Docs
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    docs:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.2
+                    coverage: none # disable xdebug, pcov
+            -   run: composer install --no-progress
+            -   run: composer check-docs
