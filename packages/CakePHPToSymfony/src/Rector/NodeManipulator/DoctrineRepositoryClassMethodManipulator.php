@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CakePHPToSymfony\Rector\NodeFactory;
+namespace Rector\CakePHPToSymfony\Rector\NodeManipulator;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -22,7 +22,7 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
-final class DoctrineRepositoryClassMethodFactory
+final class DoctrineRepositoryClassMethodManipulator
 {
     /**
      * @var CallableNodeTraverser
@@ -62,32 +62,37 @@ final class DoctrineRepositoryClassMethodFactory
                     return null;
                 }
 
-                $this->createMethodByKind($node, $entityClass);
+                $this->refactorClassMethodByKind($node, $entityClass);
             }
         );
 
         return $classMethod;
     }
 
-    private function createMethodByKind(MethodCall $methodCall, string $entityClass): void
+    private function refactorClassMethodByKind(MethodCall $methodCall, string $entityClass): void
     {
         $findKind = $this->valueResolver->getValue($methodCall->args[0]->value);
         if ($findKind === 'all') {
-            $methodCall->var = new PropertyFetch(new Variable('this'), 'repository');
-            $methodCall->name = new Identifier('findAll');
-            $methodCall->args = [];
+            $this->refactorMethodByAll($methodCall);
         } elseif ($findKind === 'first') {
-            $methodCall->name = new Identifier('findOneBy');
+            $this->refactorMethodByFirst($methodCall, $entityClass);
+        } elseif ($findKind === 'threaded') {
+            $methodCall->name = new Identifier('findBy');
             unset($methodCall->args[0]);
 
             if (! isset($methodCall->args[1])) {
                 return;
             }
+            $possibleArray = $methodCall->args[1]->value;
+            if (! $possibleArray instanceof Array_) {
+                return;
+            }
+            $conditionsArrayItem = $this->getItemByKey($possibleArray, 'conditions');
+            if ($conditionsArrayItem === null) {
+                return;
+            }
 
-            $firstArgument = $methodCall->args[1]->value;
-            assert($firstArgument instanceof Array_);
-
-            $methodCall->args = $this->createFindOneByArgs($entityClass, $firstArgument);
+            $methodCall->args = [new Arg($conditionsArrayItem->value)];
         } else {
             throw new NotImplementedException();
         }
@@ -100,7 +105,7 @@ final class DoctrineRepositoryClassMethodFactory
                 continue;
             }
 
-            if ($this->valueResolver->getValue($arrayItem->key) !== $key) {
+            if (! $this->valueResolver->isValue($arrayItem->key, $key)) {
                 continue;
             }
 
@@ -110,11 +115,9 @@ final class DoctrineRepositoryClassMethodFactory
         return null;
     }
 
-    private function clearStringFromEntityPrefix(String_ $string, string $entityClass): String_
+    private function clearStringFromEntityPrefix(String_ $string, string $entityClass): void
     {
         $string->value = Strings::replace($string->value, '#^' . $entityClass . '\.#');
-
-        return $string;
     }
 
     /**
@@ -155,7 +158,29 @@ final class DoctrineRepositoryClassMethodFactory
                 continue;
             }
 
-            $conditionArrayItem->key = $this->clearStringFromEntityPrefix($conditionArrayItem->key, $entityClass);
+            $this->clearStringFromEntityPrefix($conditionArrayItem->key, $entityClass);
         }
+    }
+
+    private function refactorMethodByFirst(MethodCall $methodCall, string $entityClass): void
+    {
+        $methodCall->name = new Identifier('findOneBy');
+        unset($methodCall->args[0]);
+
+        if (! isset($methodCall->args[1])) {
+            return;
+        }
+
+        $firstArgument = $methodCall->args[1]->value;
+        assert($firstArgument instanceof Array_);
+
+        $methodCall->args = $this->createFindOneByArgs($entityClass, $firstArgument);
+    }
+
+    private function refactorMethodByAll(MethodCall $methodCall): void
+    {
+        $methodCall->var = new PropertyFetch(new Variable('this'), 'repository');
+        $methodCall->name = new Identifier('findAll');
+        $methodCall->args = [];
     }
 }
