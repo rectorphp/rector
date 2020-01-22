@@ -2,21 +2,14 @@
 
 namespace Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPModelToDoctrineRepositoryRector\Fixture;
 
-class Activity extends \AppModel
+class FindFirst extends \AppModel
 {
-    public function getAll()
-    {
-        $result = $this->find('all');
-
-        return $result;
-    }
-
     public function getOne()
     {
         $result = $this->find('first', [
             'conditions' => [
-                'Activity.revision_number' => $versionId,
-                'Activity.document_id' => $documentId,
+                'FindFirst.revision_number' => $versionId,
+                'FindFirst.document_id' => $documentId,
             ],
             'order' => [
                 'created DESC',
@@ -33,7 +26,7 @@ class Activity extends \AppModel
 
 namespace Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPModelToDoctrineRepositoryRector\Fixture;
 
-class Activity
+class FindFirst
 {
 }
 

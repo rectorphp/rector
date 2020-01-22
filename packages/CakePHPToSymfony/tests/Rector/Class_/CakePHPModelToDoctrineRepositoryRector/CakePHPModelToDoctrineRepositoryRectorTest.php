@@ -13,18 +13,39 @@ final class CakePHPModelToDoctrineRepositoryRectorTest extends AbstractRectorTes
     /**
      * @dataProvider provideDataForTest()
      */
-    public function test(string $file): void
+    public function test(string $file, string $expectedRepositoryFilePath, string $expectedRepositoryContentFile): void
     {
         $this->doTestFile($file);
 
-        $repositoryFilePath = $this->getTempPath() . '/ActivityRepository.php';
-        $this->assertFileExists($repositoryFilePath);
-        $this->assertFileEquals(__DIR__ . '/Source/ExpectedActivityRepository.php', $repositoryFilePath);
+        $this->assertFileExists($expectedRepositoryFilePath);
+        $this->assertFileEquals($expectedRepositoryContentFile, $expectedRepositoryFilePath);
     }
 
     public function provideDataForTest(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        yield [
+            __DIR__ . '/Fixture/find_first.inc',
+            $this->getTempPath() . '/FindFirstRepository.php',
+            __DIR__ . '/Source/ExpectedFindFirstRepository.php',
+        ];
+
+        yield [
+            __DIR__ . '/Fixture/find_all.php.inc',
+            $this->getTempPath() . '/FindAllRepository.php',
+            __DIR__ . '/Source/ExpectedFindAllRepository.php',
+        ];
+
+        yield [
+            __DIR__ . '/Fixture/find_threaded.php.inc',
+            $this->getTempPath() . '/FindThreadedRepository.php',
+            __DIR__ . '/Source/ExpectedFindThreadedRepository.php',
+        ];
+
+        yield [
+            __DIR__ . '/Fixture/find_count.php.inc',
+            $this->getTempPath() . '/FindCountRepository.php',
+            __DIR__ . '/Source/ExpectedFindCountRepository.php',
+        ];
     }
 
     protected function getRectorClass(): string

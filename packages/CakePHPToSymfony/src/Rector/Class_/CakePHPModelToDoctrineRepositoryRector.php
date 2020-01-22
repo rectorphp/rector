@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeTraverser;
 use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
 use Rector\CakePHPToSymfony\Rector\NodeFactory\DoctrineNodeFactory;
-use Rector\CakePHPToSymfony\Rector\NodeFactory\DoctrineRepositoryClassMethodFactory;
+use Rector\CakePHPToSymfony\Rector\NodeManipulator\DoctrineRepositoryClassMethodManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,6 +20,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see https://book.cakephp.org/2/en/models/retrieving-your-data.html#find
+ * ↓
  * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/tutorials/getting-started.html#entity-repositories
  *
  * @see \Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPModelToDoctrineRepositoryRector\CakePHPModelToDoctrineRepositoryRectorTest
@@ -27,9 +28,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class CakePHPModelToDoctrineRepositoryRector extends AbstractCakePHPRector
 {
     /**
-     * @var DoctrineRepositoryClassMethodFactory
+     * @var DoctrineRepositoryClassMethodManipulator
      */
-    private $doctrineRepositoryClassMethodFactory;
+    private $doctrineRepositoryClassMethodManipulator;
 
     /**
      * @var DoctrineNodeFactory
@@ -37,10 +38,10 @@ final class CakePHPModelToDoctrineRepositoryRector extends AbstractCakePHPRector
     private $doctrineNodeFactory;
 
     public function __construct(
-        DoctrineRepositoryClassMethodFactory $doctrineRepositoryClassMethodFactory,
+        DoctrineRepositoryClassMethodManipulator $doctrineRepositoryClassMethodManipulator,
         DoctrineNodeFactory $doctrineNodeFactory
     ) {
-        $this->doctrineRepositoryClassMethodFactory = $doctrineRepositoryClassMethodFactory;
+        $this->doctrineRepositoryClassMethodManipulator = $doctrineRepositoryClassMethodManipulator;
         $this->doctrineNodeFactory = $doctrineNodeFactory;
     }
 
@@ -247,7 +248,7 @@ PHP
         $repositoryClass->stmts[] = $this->doctrineNodeFactory->createConstructorWithGetRepositoryAssign($entityClass);
 
         foreach ($repositoryMethods as $repositoryMethod) {
-            $doctrineRepositoryClassMethod = $this->doctrineRepositoryClassMethodFactory->createFromCakePHPClassMethod(
+            $doctrineRepositoryClassMethod = $this->doctrineRepositoryClassMethodManipulator->createFromCakePHPClassMethod(
                 $repositoryMethod,
                 $entityClass
             );
