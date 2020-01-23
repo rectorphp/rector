@@ -19,6 +19,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\CakePHPToSymfony\Contract\NodeManipulator\RepositoryFindMethodCallManipulatorInterface;
 use Rector\Exception\NotImplementedException;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -42,14 +43,24 @@ final class DoctrineRepositoryClassMethodManipulator
      */
     private $valueResolver;
 
+    /**
+     * @var RepositoryFindMethodCallManipulatorInterface[]
+     */
+    private $repositoryFindMethodCallManipulators = [];
+
+    /**
+     * @param RepositoryFindMethodCallManipulatorInterface[] $repositoryFindMethodCallManipulators
+     */
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,
         NameResolver $nameResolver,
-        ValueResolver $valueResolver
+        ValueResolver $valueResolver,
+        array $repositoryFindMethodCallManipulators
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nameResolver = $nameResolver;
         $this->valueResolver = $valueResolver;
+        $this->repositoryFindMethodCallManipulators = $repositoryFindMethodCallManipulators;
     }
 
     public function createFromCakePHPClassMethod(ClassMethod $classMethod, string $entityClass): ClassMethod
@@ -75,9 +86,13 @@ final class DoctrineRepositoryClassMethodManipulator
     private function refactorClassMethodByKind(MethodCall $methodCall, string $entityClass): Node
     {
         $findKind = $this->valueResolver->getValue($methodCall->args[0]->value);
-        if ($findKind === 'all') {
-            $this->refactorFindAll($methodCall);
-            return $methodCall;
+
+        foreach ($this->repositoryFindMethodCallManipulators as $repositoryFindMethodCallManipulator) {
+            if ($findKind !== $repositoryFindMethodCallManipulator->getKeyName()) {
+                continue;
+            }
+
+            return $repositoryFindMethodCallManipulator->processMethodCall($methodCall);
         }
 
         if ($findKind === 'first') {
@@ -174,13 +189,6 @@ final class DoctrineRepositoryClassMethodManipulator
         }
 
         $methodCall->args = $this->createFindOneByArgs($entityClass, $methodCall);
-    }
-
-    private function refactorFindAll(MethodCall $methodCall): void
-    {
-        $this->refactorToRepositoryMethod($methodCall, 'findAll');
-
-        $methodCall->args = [];
     }
 
     private function refactorToRepositoryMethod(MethodCall $methodCall, string $methodName): void
