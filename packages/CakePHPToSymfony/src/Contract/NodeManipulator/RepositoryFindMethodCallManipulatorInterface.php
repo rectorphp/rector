@@ -10,5 +10,5 @@ interface RepositoryFindMethodCallManipulatorInterface
 {
     public function getKeyName(): string;
 
-    public function processMethodCall(MethodCall $methodCall): MethodCall;
+    public function processMethodCall(MethodCall $methodCall, string $entityClass): MethodCall;
 }

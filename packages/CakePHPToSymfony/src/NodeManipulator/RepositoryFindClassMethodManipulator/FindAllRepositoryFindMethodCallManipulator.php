@@ -14,7 +14,7 @@ final class FindAllRepositoryFindMethodCallManipulator extends AbstractRepositor
         return 'all';
     }
 
-    public function processMethodCall(MethodCall $methodCall): MethodCall
+    public function processMethodCall(MethodCall $methodCall, string $entityClass): MethodCall
     {
         $this->refactorToRepositoryMethod($methodCall, 'findAll');
 
