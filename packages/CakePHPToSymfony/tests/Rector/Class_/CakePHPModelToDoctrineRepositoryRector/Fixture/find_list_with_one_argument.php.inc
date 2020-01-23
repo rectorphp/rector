@@ -2,15 +2,13 @@
 
 namespace Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPModelToDoctrineRepositoryRector\Fixture;
 
-class FindList extends \AppModel
+class FindListWithOneArgument extends \AppModel
 {
-    public function getOne()
+    public function getList()
     {
         return $this->find('list', [
-            'conditions' => ['List_.status' => 'pending'],
+            'fields' => ['User.username']
         ]);
-
-        return $result;
     }
 }
 
@@ -20,7 +18,7 @@ class FindList extends \AppModel
 
 namespace Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPModelToDoctrineRepositoryRector\Fixture;
 
-class FindList
+class FindListWithOneArgument
 {
 }
 

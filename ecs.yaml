@@ -151,6 +151,7 @@ parameters:
             - 'packages/Php72/src/Rector/Each/ListEachRector.php'
             - 'packages/DeadCode/src/Rector/ClassMethod/RemoveOverriddenValuesRector.php'
             - 'packages/PhpSpecToPHPUnit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php'
+            - 'packages/CakePHPToSymfony/tests/Rector/Class_/CakePHPModelToDoctrineRepositoryRector/CakePHPModelToDoctrineRepositoryRectorTest.php'
 
         PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer:
             - 'packages/BetterPhpDocParser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php'

@@ -46,6 +46,19 @@ final class CakePHPModelToDoctrineRepositoryRectorTest extends AbstractRectorTes
             $this->getTempPath() . '/FindCountRepository.php',
             __DIR__ . '/Source/ExpectedFindCountRepository.php',
         ];
+
+        yield [
+            __DIR__ . '/Fixture/find_list.php.inc',
+            $this->getTempPath() . '/FindListRepository.php',
+            __DIR__ . '/Source/ExpectedFindListRepository.php',
+        ];
+
+//        WIP
+//        yield [
+//            __DIR__ . '/Fixture/find_list_with_one_argument.php.inc',
+//            $this->getTempPath() . '/FindListWithOneArgumentRepository.php',
+//            __DIR__ . '/Source/ExpectedFindListWithOneArgumentRepository.php',
+//        ];
     }
 
     protected function getRectorClass(): string
