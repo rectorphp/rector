@@ -15,7 +15,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
-use Rector\CakePHPToSymfony\Rector\Template\TemplateMethodCallManipulator;
+use Rector\CakePHPToSymfony\Template\TemplateMethodCallManipulator;
 use Rector\CakePHPToSymfony\TemplatePathResolver;
 use Rector\CodeQuality\CompactConverter;
 use Rector\RectorDefinition\CodeSample;

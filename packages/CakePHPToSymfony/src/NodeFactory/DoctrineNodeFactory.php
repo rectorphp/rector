@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CakePHPToSymfony\Rector\NodeFactory;
+namespace Rector\CakePHPToSymfony\NodeFactory;
 
 use Doctrine\ORM\EntityManagerInterface;
 use PhpParser\BuilderFactory;
