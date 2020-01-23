@@ -104,10 +104,6 @@ final class DoctrineRepositoryClassMethodManipulator
             return $this->refactorFindThreaded($methodCall, $entityClass);
         }
 
-        if ($findKind === 'count') {
-            return $this->refactorFindCount($methodCall, $entityClass);
-        }
-
         if ($findKind === 'list') {
             return $this->refactorFindList($entityClass);
         }
@@ -239,19 +235,6 @@ final class DoctrineRepositoryClassMethodManipulator
 
         $methodCall->args = [new Arg($conditionsArray)];
 
-        return $methodCall;
-    }
-
-    private function refactorFindCount(MethodCall $methodCall, string $entityClass): MethodCall
-    {
-        $this->refactorToRepositoryMethod($methodCall, 'count');
-
-        $conditionsArray = $this->findConfigurationByKey($methodCall, 'conditions', $entityClass);
-        if ($conditionsArray === null) {
-            return $methodCall;
-        }
-
-        $methodCall->args = [new Arg($conditionsArray)];
         return $methodCall;
     }
 
