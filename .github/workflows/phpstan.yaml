@@ -18,4 +18,5 @@ jobs:
             -   run: |
                     composer install --no-progress
                     composer require staabm/annotate-pull-request-from-checkstyle:^1.0
+            # turn the phpstan errors (formatted in checkstyle-format) into github pull request check annotations
             -   run: composer phpstan -- --error-format=checkstyle | vendor/bin/cs2pr
