@@ -7,8 +7,6 @@ Why refactor manually if Rector can handle 80% for you?
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
 [![SonarCube](https://sonarcloud.io/dashboard?id=rectorphp_rector)](https://img.shields.io/badge/SonarCube_Debt-%3C30-brightgreen.svg?style=flat-square)
 
-Rector PHAR release: [!Release of rector.phar Status with Travis CI](https://img.shields.io/travis/rectorphp/rector/master.svg?style=flat-square)](https://travis-ci.org/rectorphp/rector)
-
 ![Rector-showcase](docs/images/rector-showcase-var.gif)
 
 <br>
