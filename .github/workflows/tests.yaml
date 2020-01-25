@@ -20,7 +20,7 @@ jobs:
                 with:
                     php-version: 7.2
                     coverage: none # disable xdebug, pcov
-            # report phpunit errors into files-changed tab
+            # report phpunit errors into files-changed PR tab
             -   name: Setup Problem Matchers for PHPUnit
                 run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
                 
@@ -38,7 +38,7 @@ jobs:
                 with:
                     php-version: 7.2
                     coverage: none
-            # report phpunit errors into files-changed tab
+            # report phpunit errors into files-changed PR tab
             -   name: Setup Problem Matchers for PHPUnit
                 run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
