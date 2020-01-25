@@ -5,7 +5,7 @@ Why refactor manually if Rector can handle 80% for you?
 
 [![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
-[![SonarCube](https://sonarcloud.io/dashboard?id=rectorphp_rector)](https://img.shields.io/badge/SonarCube_Debt-%3C30-brightgreen.svg?style=flat-square)
+[![SonarCube](https://img.shields.io/badge/SonarCube_Debt-%3C30-brightgreen.svg?style=flat-square)](https://sonarcloud.io/dashboard?id=rectorphp_rector)
 
 ![Rector-showcase](docs/images/rector-showcase-var.gif)
 
