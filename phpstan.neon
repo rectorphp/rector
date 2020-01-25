@@ -16,7 +16,6 @@ parameters:
         - compiler/src
 
     excludes_analyse:
-        - "*/Expected/*"
         # complex printer
         - "packages/ContributorTools/src/Command/DumpNodesCommand.php"
         - "utils/phpstan/generate-paths.php"
