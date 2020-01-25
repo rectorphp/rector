@@ -20,6 +20,10 @@ jobs:
                 with:
                     php-version: 7.2
                     coverage: none # disable xdebug, pcov
+            # report phpunit errors into files-changed tab
+            -   name: Setup Problem Matchers for PHPUnit
+                run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+                
             -   run: composer install --no-progress
             -   run: vendor/bin/phpunit
 
@@ -34,6 +38,9 @@ jobs:
                 with:
                     php-version: 7.2
                     coverage: none
+            # report phpunit errors into files-changed tab
+            -   name: Setup Problem Matchers for PHPUnit
+                run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
             -   run: composer update --no-progress --prefer-lowest
             -   run: vendor/bin/phpunit
