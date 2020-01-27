@@ -10,7 +10,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -175,7 +174,7 @@ final class NodeTypeResolver
             return $this->isFnMatch($node, $requiredType);
         }
 
-        $resolvedType = $this->getObjectType($node);
+        $resolvedType = $this->resolve($node);
         if ($resolvedType instanceof MixedType) {
             return false;
         }
@@ -212,17 +211,6 @@ final class NodeTypeResolver
         }
 
         return false;
-    }
-
-    public function getObjectType(Node $node): Type
-    {
-        // @todo should be resolved by NodeTypeResolver internally
-        if ($node instanceof ArrayDimFetch) {
-            // @todo traverse up to dim fetches
-            return $this->resolve($node->var);
-        }
-
-        return $this->resolve($node);
     }
 
     public function resolve(Node $node): Type
@@ -467,7 +455,7 @@ final class NodeTypeResolver
 
     private function isFnMatch(Node $node, string $requiredType): bool
     {
-        $objectType = $this->getObjectType($node);
+        $objectType = $this->resolve($node);
 
         $classNames = TypeUtils::getDirectClassNames($objectType);
         foreach ($classNames as $className) {
