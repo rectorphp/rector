@@ -17,7 +17,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
@@ -234,10 +233,6 @@ final class NodeTypeResolver
     {
         if ($node instanceof ClassMethod || $node instanceof ClassConst) {
             return $this->resolveClassNode($node);
-        }
-
-        if ($node instanceof StaticCall) {
-            return $this->resolveStaticCallType($node);
         }
 
         if ($node instanceof ClassConstFetch) {
@@ -538,42 +533,11 @@ final class NodeTypeResolver
         return $this->resolve($classNode);
     }
 
-    private function resolveStaticCallType(StaticCall $staticCall): Type
-    {
-        $classType = $this->resolve($staticCall->class);
-        $methodName = $this->nameResolver->getName($staticCall->name);
-
-        // no specific method found, return class types, e.g. <ClassType>::$method()
-        if (! is_string($methodName)) {
-            return $classType;
-        }
-
-        $classNames = TypeUtils::getDirectClassNames($classType);
-        foreach ($classNames as $className) {
-            if (! method_exists($className, $methodName)) {
-                continue;
-            }
-
-            /** @var Scope|null $nodeScope */
-            $nodeScope = $staticCall->getAttribute(AttributeKey::SCOPE);
-            if ($nodeScope === null) {
-                return $classType;
-            }
-
-            return $nodeScope->getType($staticCall);
-        }
-
-        return $classType;
-    }
-
     private function resolveFirstType(Node $node): Type
     {
-        // nodes that cannot be resolver by PHPStan
-        $nodeClass = get_class($node);
-
         foreach ($this->perNodeTypeResolvers as $perNodeTypeResolver) {
             foreach ($perNodeTypeResolver->getNodeClasses() as $nodeClass) {
-                if (! is_a($node, $nodeClass, true)) {
+                if (! is_a($node, $nodeClass)) {
                     continue;
                 }
 
@@ -583,7 +547,6 @@ final class NodeTypeResolver
 
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-
         if ($nodeScope === null) {
             return new MixedType();
         }
