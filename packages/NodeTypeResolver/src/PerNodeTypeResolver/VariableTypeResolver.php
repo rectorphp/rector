@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -22,7 +21,7 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
 /**
  * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\VariableTypeResolverTest
  */
-final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
+final class VariableTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
      * @var DocBlockManipulator
@@ -86,7 +85,10 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface, NodeTy
         return $this->docBlockManipulator->getVarType($variableNode);
     }
 
-    public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    /**
+     * @required
+     */
+    public function autowireNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
