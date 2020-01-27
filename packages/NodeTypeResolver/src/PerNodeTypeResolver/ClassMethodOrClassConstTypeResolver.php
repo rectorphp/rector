@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Cast;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
-final class CastTypeResolver implements PerNodeTypeResolverInterface
+final class ClassMethodOrClassConstTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
      * @var NodeTypeResolver
@@ -30,14 +34,20 @@ final class CastTypeResolver implements PerNodeTypeResolverInterface
      */
     public function getNodeClasses(): array
     {
-        return [Cast::class];
+        return [ClassMethod::class, ClassConst::class];
     }
 
     /**
-     * @param Node\Expr\Cast $node
+     * @param ClassMethod|ClassConst $node
      */
     public function resolve(Node $node): Type
     {
-        return $this->nodeTypeResolver->resolve($node->expr);
+        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($classNode === null) {
+            // anonymous class
+            return new ObjectWithoutClassType();
+        }
+
+        return $this->nodeTypeResolver->resolve($classNode);
     }
 }

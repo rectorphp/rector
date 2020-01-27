@@ -23,9 +23,7 @@ use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\PropertyProperty;
@@ -229,10 +227,6 @@ final class NodeTypeResolver
 
     public function resolve(Node $node): Type
     {
-        if ($node instanceof ClassMethod || $node instanceof ClassConst) {
-            return $this->resolveClassNode($node);
-        }
-
         $type = $this->resolveFirstType($node);
         if (! $type instanceof TypeWithClassName) {
             return $type;
@@ -507,20 +501,6 @@ final class NodeTypeResolver
         }
 
         return is_a($resolvedType->getClassName(), $objectType->getClassName(), true);
-    }
-
-    /**
-     * @param ClassConst|ClassMethod $node
-     */
-    private function resolveClassNode(Node $node): Type
-    {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
-            // anonymous class
-            return new ObjectWithoutClassType();
-        }
-
-        return $this->resolve($classNode);
     }
 
     private function resolveFirstType(Node $node): Type
