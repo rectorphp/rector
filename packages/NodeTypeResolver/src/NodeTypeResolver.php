@@ -11,8 +11,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Cast;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -233,14 +231,6 @@ final class NodeTypeResolver
     {
         if ($node instanceof ClassMethod || $node instanceof ClassConst) {
             return $this->resolveClassNode($node);
-        }
-
-        if ($node instanceof ClassConstFetch) {
-            return $this->resolve($node->class);
-        }
-
-        if ($node instanceof Cast) {
-            return $this->resolve($node->expr);
         }
 
         $type = $this->resolveFirstType($node);
