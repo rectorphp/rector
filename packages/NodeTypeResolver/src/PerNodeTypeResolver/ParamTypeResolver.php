@@ -7,6 +7,7 @@ namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
@@ -75,36 +76,20 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
      */
     public function resolve(Node $node): Type
     {
-        if ($node->type !== null) {
-            if (! $node->type instanceof Node\Identifier) {
-                $resolveTypeName = $this->nameResolver->getName($node->type);
-                if ($resolveTypeName) {
-                    // @todo map the other way every type :)
-                    return new ObjectType($resolveTypeName);
-                }
-            }
+        $paramType = $this->resolveFromType($node);
+        if (! $paramType instanceof MixedType) {
+            return $paramType;
         }
 
-        $resolvedType = $this->resolveParamStaticType($node);
-        if (! $resolvedType instanceof MixedType) {
-            return $resolvedType;
+        $firstVariableUseType = $this->resolveFromFirstVariableUse($node);
+        if (! $firstVariableUseType instanceof MixedType) {
+            return $firstVariableUseType;
         }
 
-        /** @var FunctionLike $parentNode */
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-        return $this->resolveTypesFromFunctionDocBlock($node, $parentNode);
+        return $this->resolveFromFunctionDocBlock($node);
     }
 
-    private function resolveTypesFromFunctionDocBlock(Param $param, FunctionLike $functionLike): Type
-    {
-        /** @var string $paramName */
-        $paramName = $this->nameResolver->getName($param);
-
-        return $this->docBlockManipulator->getParamTypeByName($functionLike, '$' . $paramName);
-    }
-
-    private function resolveParamStaticType(Param $param): Type
+    private function resolveFromFirstVariableUse(Param $param): Type
     {
         $classMethod = $param->getAttribute(AttributeKey::METHOD_NODE);
         if ($classMethod === null) {
@@ -134,5 +119,29 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
         );
 
         return $paramStaticType;
+    }
+
+    private function resolveFromFunctionDocBlock(Param $param): Type
+    {
+        /** @var FunctionLike $parentNode */
+        $parentNode = $param->getAttribute(AttributeKey::PARENT_NODE);
+
+        /** @var string $paramName */
+        $paramName = $this->nameResolver->getName($param);
+
+        return $this->docBlockManipulator->getParamTypeByName($parentNode, '$' . $paramName);
+    }
+
+    private function resolveFromType(Node $node)
+    {
+        if ($node->type !== null && ! $node->type instanceof Identifier) {
+            $resolveTypeName = $this->nameResolver->getName($node->type);
+            if ($resolveTypeName) {
+                // @todo map the other way every type :)
+                return new ObjectType($resolveTypeName);
+            }
+        }
+
+        return new MixedType();
     }
 }

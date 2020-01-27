@@ -6,11 +6,15 @@ namespace Rector\Compiler\Console;
 
 use Nette\Utils\FileSystem as NetteFileSystem;
 use Nette\Utils\Json;
+use Rector\Console\Style\SymfonyStyleFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
+use Symplify\PackageBuilder\Console\ShellCode;
+use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 /**
  * Inspired by @see https://github.com/phpstan/phpstan-src/blob/f939d23155627b5c2ec6eef36d976dddea22c0c5/compiler/src/Console/CompileCommand.php
@@ -37,12 +41,20 @@ final class CompileCommand extends Command
      */
     private $originalComposerJsonFileContent;
 
+    /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
+
     public function __construct(string $dataDir, string $buildDir)
     {
         parent::__construct();
         $this->filesystem = new Filesystem();
         $this->dataDir = $dataDir;
         $this->buildDir = $buildDir;
+
+        $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
+        $this->symfonyStyle = $symfonyStyleFactory->create();
     }
 
     protected function configure(): void
@@ -54,6 +66,8 @@ final class CompileCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $composerJsonFile = $this->buildDir . '/composer.json';
+
+        $this->symfonyStyle->note('Loading ' . $composerJsonFile);
 
         $this->fixComposerJson($composerJsonFile);
 
@@ -79,7 +93,7 @@ final class CompileCommand extends Command
 
         $this->restoreComposerJson($composerJsonFile);
 
-        return 0;
+        return ShellCode::SUCCESS;
     }
 
     private function fixComposerJson(string $composerJsonFile): void
