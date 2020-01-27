@@ -10,14 +10,10 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Cast;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
@@ -26,9 +22,7 @@ use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\PropertyProperty;
@@ -60,7 +54,6 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeContainer\ParsedNodesByType;
-use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -181,7 +174,7 @@ final class NodeTypeResolver
             return $this->isFnMatch($node, $requiredType);
         }
 
-        $resolvedType = $this->getObjectType($node);
+        $resolvedType = $this->resolve($node);
         if ($resolvedType instanceof MixedType) {
             return false;
         }
@@ -220,35 +213,8 @@ final class NodeTypeResolver
         return false;
     }
 
-    public function getObjectType(Node $node): Type
-    {
-        // @todo should be resolved by NodeTypeResolver internally
-        if ($node instanceof ArrayDimFetch) {
-            // @todo traverse up to dim fetches
-            return $this->resolve($node->var);
-        }
-
-        return $this->resolve($node);
-    }
-
     public function resolve(Node $node): Type
     {
-        if ($node instanceof ClassMethod || $node instanceof ClassConst) {
-            return $this->resolveClassNode($node);
-        }
-
-        if ($node instanceof StaticCall) {
-            return $this->resolveStaticCallType($node);
-        }
-
-        if ($node instanceof ClassConstFetch) {
-            return $this->resolve($node->class);
-        }
-
-        if ($node instanceof Cast) {
-            return $this->resolve($node->expr);
-        }
-
         $type = $this->resolveFirstType($node);
         if (! $type instanceof TypeWithClassName) {
             return $type;
@@ -465,11 +431,6 @@ final class NodeTypeResolver
         foreach ($perNodeTypeResolver->getNodeClasses() as $nodeClass) {
             $this->perNodeTypeResolvers[$nodeClass] = $perNodeTypeResolver;
         }
-
-        // in-code setter injection to drop CompilerPass requirement for 3rd party package install
-        if ($perNodeTypeResolver instanceof NodeTypeResolverAwareInterface) {
-            $perNodeTypeResolver->setNodeTypeResolver($this);
-        }
     }
 
     private function ensureRequiredTypeIsStringOrObjectType($requiredType, string $location): void
@@ -494,7 +455,7 @@ final class NodeTypeResolver
 
     private function isFnMatch(Node $node, string $requiredType): bool
     {
-        $objectType = $this->getObjectType($node);
+        $objectType = $this->resolve($node);
 
         $classNames = TypeUtils::getDirectClassNames($objectType);
         foreach ($classNames as $className) {
@@ -530,60 +491,20 @@ final class NodeTypeResolver
         return is_a($resolvedType->getClassName(), $objectType->getClassName(), true);
     }
 
-    /**
-     * @param ClassConst|ClassMethod $node
-     */
-    private function resolveClassNode(Node $node): Type
-    {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode === null) {
-            // anonymous class
-            return new ObjectWithoutClassType();
-        }
-
-        return $this->resolve($classNode);
-    }
-
-    private function resolveStaticCallType(StaticCall $staticCall): Type
-    {
-        $classType = $this->resolve($staticCall->class);
-        $methodName = $this->nameResolver->getName($staticCall->name);
-
-        // no specific method found, return class types, e.g. <ClassType>::$method()
-        if (! is_string($methodName)) {
-            return $classType;
-        }
-
-        $classNames = TypeUtils::getDirectClassNames($classType);
-        foreach ($classNames as $className) {
-            if (! method_exists($className, $methodName)) {
-                continue;
-            }
-
-            /** @var Scope|null $nodeScope */
-            $nodeScope = $staticCall->getAttribute(AttributeKey::SCOPE);
-            if ($nodeScope === null) {
-                return $classType;
-            }
-
-            return $nodeScope->getType($staticCall);
-        }
-
-        return $classType;
-    }
-
     private function resolveFirstType(Node $node): Type
     {
-        // nodes that cannot be resolver by PHPStan
-        $nodeClass = get_class($node);
+        foreach ($this->perNodeTypeResolvers as $perNodeTypeResolver) {
+            foreach ($perNodeTypeResolver->getNodeClasses() as $nodeClass) {
+                if (! is_a($node, $nodeClass)) {
+                    continue;
+                }
 
-        if (isset($this->perNodeTypeResolvers[$nodeClass])) {
-            return $this->perNodeTypeResolvers[$nodeClass]->resolve($node);
+                return $perNodeTypeResolver->resolve($node);
+            }
         }
 
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-
         if ($nodeScope === null) {
             return new MixedType();
         }

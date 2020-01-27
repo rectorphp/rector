@@ -314,7 +314,7 @@ final class ParsedNodesByType
             return null;
         }
 
-        $objectType = $this->nodeTypeResolver->getObjectType($staticCall->class);
+        $objectType = $this->nodeTypeResolver->resolve($staticCall->class);
 
         $classNames = TypeUtils::getDirectClassNames($objectType);
         foreach ($classNames as $className) {

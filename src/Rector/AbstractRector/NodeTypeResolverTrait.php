@@ -98,7 +98,7 @@ trait NodeTypeResolverTrait
 
     protected function getObjectType(Node $node): Type
     {
-        return $this->nodeTypeResolver->getObjectType($node);
+        return $this->nodeTypeResolver->resolve($node);
     }
 
     /**
