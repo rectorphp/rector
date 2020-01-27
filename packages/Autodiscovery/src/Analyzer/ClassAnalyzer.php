@@ -79,7 +79,7 @@ final class ClassAnalyzer
 
         // resolve constructor types
         foreach ($constructClassMethod->params as $param) {
-            $paramType = $this->nodeTypeResolver->getObjectType($param);
+            $paramType = $this->nodeTypeResolver->resolve($param);
             if (! $paramType instanceof ObjectType) {
                 continue;
             }
