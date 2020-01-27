@@ -62,6 +62,11 @@ final class RectorsFinder
 
             $rector = $reflectionClass->newInstanceWithoutConstructor();
             if (! $rector instanceof RectorInterface) {
+                // lowercase letter bug in RototLoader
+                if (Strings::endsWith($class, 'rector')) {
+                    continue;
+                }
+
                 throw new ShouldNotHappenException(sprintf(
                     '"%s" found something that looks like Rector but does not implements "%s" interface.',
                     __METHOD__,
