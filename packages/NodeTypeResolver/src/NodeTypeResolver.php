@@ -270,6 +270,7 @@ final class NodeTypeResolver
             if (is_a($nodeType->getClassName(), 'SimpleXMLElement', true)) {
                 return true;
             }
+
             return is_a($nodeType->getClassName(), 'ResourceBundle', true);
         }
 
@@ -694,6 +695,7 @@ final class NodeTypeResolver
                 }
 
                 $paramStaticType = $this->getStaticType($node);
+
                 return NodeTraverser::STOP_TRAVERSAL;
             }
         );
