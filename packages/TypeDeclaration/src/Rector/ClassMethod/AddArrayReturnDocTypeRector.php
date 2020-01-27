@@ -97,6 +97,10 @@ PHP
             return null;
         }
 
+        if ($this->docBlockManipulator->isInheritdoc($node)) {
+            return null;
+        }
+
         $inferedType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers(
             $node,
             [ReturnTypeDeclarationReturnTypeInferer::class]
