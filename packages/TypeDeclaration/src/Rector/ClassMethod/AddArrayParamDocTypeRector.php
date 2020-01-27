@@ -103,7 +103,9 @@ PHP
             }
 
             $type = $this->paramTypeInferer->inferParam($param);
-            if ($type instanceof MixedType) {
+            $isInheritdoc = $this->docBlockManipulator->isInheritdoc($node);
+
+            if ($type instanceof MixedType || $isInheritdoc) {
                 return null;
             }
 
