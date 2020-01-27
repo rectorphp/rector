@@ -6,11 +6,11 @@ namespace Rector\Compiler\Console;
 
 use Nette\Utils\FileSystem as NetteFileSystem;
 use Nette\Utils\Json;
-use Rector\Compiler\Process\InstantlyRunningSymfonyProcess;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
 
 /**
  * Inspired by @see https://github.com/phpstan/phpstan-src/blob/f939d23155627b5c2ec6eef36d976dddea22c0c5/compiler/src/Console/CompileCommand.php
@@ -58,15 +58,24 @@ final class CompileCommand extends Command
         $this->fixComposerJson($composerJsonFile);
 
         // @see https://github.com/dotherightthing/wpdtrt-plugin-boilerplate/issues/52
-        new InstantlyRunningSymfonyProcess(
-            ['composer', 'update', '--no-dev', '--prefer-dist', '--no-interaction', '--classmap-authoritative'],
-            $this->buildDir,
-            $output
-        );
+        $process = new Process([
+            'composer',
+            'update',
+            '--no-dev',
+            '--prefer-dist',
+            '--no-interaction',
+            '--classmap-authoritative',
+        ], $this->buildDir, null, null, null);
+        $process->mustRun(static function (string $type, string $buffer) use ($output): void {
+            $output->write($buffer);
+        });
 
         // the '--no-parallel' is needed, so "scoper.php.inc" can "require __DIR__ ./vendor/autoload.php"
         // and "Nette\Neon\Neon" class can be used there
-        new InstantlyRunningSymfonyProcess(['php', 'box.phar', 'compile', '--no-parallel'], $this->dataDir, $output);
+        $process = new Process(['php', 'box.phar', 'compile', '--no-parallel'], $this->dataDir, null, null, null);
+        $process->mustRun(static function (string $type, string $buffer) use ($output): void {
+            $output->write($buffer);
+        });
 
         $this->restoreComposerJson($composerJsonFile);
 
