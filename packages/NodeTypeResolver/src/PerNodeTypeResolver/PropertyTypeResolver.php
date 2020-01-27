@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -17,12 +16,20 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 /**
  * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\PropertyTypeResolverTest
  */
-final class PropertyTypeResolver implements PerNodeTypeResolverInterface, NodeTypeResolverAwareInterface
+final class PropertyTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
+
+    /**
+     * @required
+     */
+    public function autowirePropertyTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    {
+        $this->nodeTypeResolver = $nodeTypeResolver;
+    }
 
     /**
      * @return string[]

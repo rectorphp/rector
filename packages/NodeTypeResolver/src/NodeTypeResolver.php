@@ -60,7 +60,6 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeContainer\ParsedNodesByType;
-use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -464,11 +463,6 @@ final class NodeTypeResolver
     {
         foreach ($perNodeTypeResolver->getNodeClasses() as $nodeClass) {
             $this->perNodeTypeResolvers[$nodeClass] = $perNodeTypeResolver;
-        }
-
-        // in-code setter injection to drop CompilerPass requirement for 3rd party package install
-        if ($perNodeTypeResolver instanceof NodeTypeResolverAwareInterface) {
-            $perNodeTypeResolver->setNodeTypeResolver($this);
         }
     }
 
