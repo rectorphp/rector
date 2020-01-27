@@ -234,8 +234,12 @@ PHP
             if ($parentClassMethod->isProtected() && $classMethod->isPublic()) {
                 return true;
             }
-            if (! $this->areNodesEqual($parentClassMethod->params, $classMethod->params)) {
-                return true;
+
+            foreach ($parentClassMethod->params as $key => $parentParam) {
+                if (! isset($classMethod->params[$key]) && $parentParam->default !== null) {
+                    continue;
+                }
+                $this->areNodesEqual($parentParam, $classMethod->params[$key]);
             }
         }
 
@@ -259,13 +263,20 @@ PHP
         ReflectionMethod $reflectionMethod
     ): bool {
         foreach ($reflectionMethod->getParameters() as $key => $parameter) {
+            if (! isset($classMethod->params[$key])) {
+                if ($parameter->isDefaultValueAvailable()) {
+                    continue;
+                }
+                return true;
+            }
             $methodParam = $classMethod->params[$key];
 
             if ($parameter->isDefaultValueAvailable() !== isset($methodParam->default)) {
                 return true;
             }
             if ($parameter->isDefaultValueAvailable() && $methodParam->default !== null &&
-                $parameter->getDefaultValue() !== $this->valueResolver->getValue($methodParam->default)) {
+                ! $this->valueResolver->isValue($methodParam->default, $parameter->getDefaultValue())
+            ) {
                 return true;
             }
         }

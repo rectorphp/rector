@@ -182,14 +182,11 @@ PHP
         }
 
         // count($values)
-        if ($condExprs[0]->right instanceof FuncCall) {
-            if ($this->isName($condExprs[0]->right, 'count')) {
-                /** @var FuncCall $countFuncCall */
-                $countFuncCall = $condExprs[0]->right;
-                $this->iteratedExpr = $countFuncCall->args[0]->value;
-
-                return true;
-            }
+        if ($condExprs[0]->right instanceof FuncCall && $this->isName($condExprs[0]->right, 'count')) {
+            /** @var FuncCall $countFuncCall */
+            $countFuncCall = $condExprs[0]->right;
+            $this->iteratedExpr = $countFuncCall->args[0]->value;
+            return true;
         }
 
         return false;
@@ -288,10 +285,8 @@ PHP
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         while ($parentNode !== null && ! $parentNode instanceof Expression) {
-            if ($parentNode instanceof Assign) {
-                if ($this->areNodesEqual($parentNode->var, $previousNode)) {
-                    return true;
-                }
+            if ($parentNode instanceof Assign && $this->areNodesEqual($parentNode->var, $previousNode)) {
+                return true;
             }
 
             $previousNode = $parentNode;

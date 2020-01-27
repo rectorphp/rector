@@ -9,12 +9,17 @@ use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Analyser\TypeSpecifier;
-use PHPStan\Broker\Broker;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\DependencyInjection\ContainerFactory;
 use PHPStan\DependencyInjection\Type\DynamicReturnTypeExtensionRegistryProvider;
 use PHPStan\DependencyInjection\Type\OperatorTypeSpecifyingExtensionRegistryProvider;
+use PHPStan\PhpDoc\TypeNodeResolver;
+use PHPStan\Reflection\ReflectionProvider;
 
+/**
+ * Factory so Symfony app can use services from PHPStan container
+ * @see packages/NodeTypeResolver/config/config.yaml:17
+ */
 final class PHPStanServicesFactory
 {
     /**
@@ -72,9 +77,9 @@ final class PHPStanServicesFactory
         }
     }
 
-    public function createBroker(): Broker
+    public function createReflectionProvider(): ReflectionProvider
     {
-        return $this->container->getByType(Broker::class);
+        return $this->container->getByType(ReflectionProvider::class);
     }
 
     public function createNodeScopeResolver(): NodeScopeResolver
@@ -100,5 +105,10 @@ final class PHPStanServicesFactory
     public function createOperatorTypeSpecifyingExtensionRegistryProvider(): OperatorTypeSpecifyingExtensionRegistryProvider
     {
         return $this->container->getByType(OperatorTypeSpecifyingExtensionRegistryProvider::class);
+    }
+
+    public function createTypeNodeResolver(): TypeNodeResolver
+    {
+        return $this->container->getByType(TypeNodeResolver::class);
     }
 }

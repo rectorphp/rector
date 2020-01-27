@@ -6,9 +6,11 @@ namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use Iterator;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Throw_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
@@ -125,6 +127,11 @@ PHP
             return null;
         }
 
+        // prevent void overriding exception
+        if ($this->isVoidDueToThrow($node, $inferredReturnNode)) {
+            return null;
+        }
+
         // already overridden by previous populateChild() method run
         if ($node->returnType && $node->returnType->getAttribute(self::DO_NOT_CHANGE)) {
             return null;
@@ -136,10 +143,8 @@ PHP
 
             $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($node->returnType);
 
-            if ($node instanceof ClassMethod) {
-                if ($this->vendorLockResolver->isReturnChangeVendorLockedIn($node)) {
-                    return null;
-                }
+            if ($node instanceof ClassMethod && $this->vendorLockResolver->isReturnChangeVendorLockedIn($node)) {
+                return null;
             }
 
             if ($this->isCurrentObjectTypeSubType($currentType, $inferedType)) {
@@ -176,10 +181,8 @@ PHP
             return true;
         }
 
-        if (! $this->overrideExistingReturnTypes) {
-            if ($node->returnType !== null) {
-                return true;
-            }
+        if (! $this->overrideExistingReturnTypes && $node->returnType !== null) {
+            return true;
         }
 
         if (! $node instanceof ClassMethod) {
@@ -300,10 +303,8 @@ PHP
             return true;
         }
 
-        if ($type instanceof ObjectType) {
-            if ($type->getClassName() === Iterator::class) {
-                return true;
-            }
+        if ($type instanceof ObjectType && $type->getClassName() === Iterator::class) {
+            return true;
         }
 
         if ($type instanceof UnionType || $type instanceof IntersectionType) {
@@ -346,5 +347,18 @@ PHP
         }
 
         return $inferedType->isSubTypeOf($currentType)->yes();
+    }
+
+    private function isVoidDueToThrow(Node $node, $inferredReturnNode): bool
+    {
+        if (! $inferredReturnNode instanceof Identifier) {
+            return false;
+        }
+
+        if ($inferredReturnNode->name !== 'void') {
+            return false;
+        }
+
+        return (bool) $this->betterNodeFinder->findFirstInstanceOf($node->stmts, Throw_::class);
     }
 }

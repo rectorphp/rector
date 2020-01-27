@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,16 +20,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  */
 final class MultipleClassFileToPsr4ClassesRector extends AbstractFileSystemRector
 {
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    public function __construct(ClassNaming $classNaming)
-    {
-        $this->classNaming = $classNaming;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -110,7 +99,7 @@ PHP
                 continue;
             }
 
-            $classShortName = $this->classNaming->getShortName($className);
+            $classShortName = $this->getShortName($className);
             if ($smartFileInfo->getBasenameWithoutSuffix() === $classShortName) {
                 return false;
             }

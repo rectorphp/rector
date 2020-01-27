@@ -102,10 +102,8 @@ final class TemplatePropertyAssignCollector
         }
 
         // $x = $this->template
-        if ($assign->var instanceof Variable) {
-            if ($this->isTemplatePropertyFetch($assign->expr)) {
-                $this->nodesToRemove[] = $assign;
-            }
+        if ($assign->var instanceof Variable && $this->isTemplatePropertyFetch($assign->expr)) {
+            $this->nodesToRemove[] = $assign;
         }
     }
 

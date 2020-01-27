@@ -163,17 +163,13 @@ final class NameResolver
             }
 
             // skip $some->$dynamicMethodName()
-            if ($parentNode instanceof MethodCall) {
-                if ($node === $parentNode->name) {
-                    return null;
-                }
+            if ($parentNode instanceof MethodCall && $node === $parentNode->name) {
+                return null;
             }
 
             // skip $some->$dynamicPropertyName
-            if ($parentNode instanceof PropertyFetch) {
-                if ($node === $parentNode->name) {
-                    return null;
-                }
+            if ($parentNode instanceof PropertyFetch && $node === $parentNode->name) {
+                return null;
             }
         }
 

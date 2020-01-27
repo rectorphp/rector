@@ -144,9 +144,9 @@ final class RectorApplication
         }
 
         // active only one rule
-        if ($this->configuration->getRule() !== null) {
-            $rule = $this->configuration->getRule();
-            $this->enabledRectorsProvider->addEnabledRector($rule);
+        if ($this->configuration->getOnlyRector() !== null) {
+            $onlyRector = $this->configuration->getOnlyRector();
+            $this->enabledRectorsProvider->addEnabledRector($onlyRector);
         }
 
         // 2. change nodes with Rectors

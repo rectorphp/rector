@@ -186,10 +186,8 @@ PHP
 
         $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         // no need to preslash "use \SomeNamespace" of imported namespace
-        if ($parentNode instanceof UseUse) {
-            if ($parentNode->type === Use_::TYPE_NORMAL || $parentNode->type === Use_::TYPE_UNKNOWN) {
-                return new Name($newName);
-            }
+        if ($parentNode instanceof UseUse && ($parentNode->type === Use_::TYPE_NORMAL || $parentNode->type === Use_::TYPE_UNKNOWN)) {
+            return new Name($newName);
         }
 
         return new FullyQualified($newName);
@@ -243,7 +241,7 @@ PHP
         $this->alreadyProcessedClasses[] = $name;
 
         $newName = $this->oldToNewClasses[$name];
-        $newClassNamePart = $this->classNaming->getShortName($newName);
+        $newClassNamePart = $this->getShortName($newName);
         $newNamespacePart = $this->classNaming->getNamespace($newName);
 
         $this->ensureClassWillNotBeDuplicate($newName, $name);

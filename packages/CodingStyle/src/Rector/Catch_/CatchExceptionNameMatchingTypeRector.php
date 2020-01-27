@@ -7,7 +7,6 @@ namespace Rector\CodingStyle\Rector\Catch_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Catch_;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -17,16 +16,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class CatchExceptionNameMatchingTypeRector extends AbstractRector
 {
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    public function __construct(ClassNaming $classNaming)
-    {
-        $this->classNaming = $classNaming;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Type and name of catch exception should match', [
@@ -80,7 +69,7 @@ PHP
         }
 
         $type = $node->types[0];
-        $typeShortName = $this->classNaming->getShortName($type);
+        $typeShortName = $this->getShortName($type);
 
         $oldVariableName = $this->getName($node->var);
         if (! $oldVariableName) {

@@ -17,7 +17,7 @@
         "doctrine/inflector": "^1.3",
         "jean85/pretty-package-versions": "^1.2",
         "nette/robot-loader": "^3.2",
-        "nette/utils": "^3.0",
+        "nette/utils": "^3.1",
         "nikic/php-parser": "^4.3",
         "ondram/ci-detector": "^3.1",
         "phpstan/phpdoc-parser": "^0.4",
@@ -31,7 +31,8 @@
         "symplify/auto-bind-parameter": "^7.2",
         "symplify/autowire-array-parameter": "^7.2",
         "symplify/package-builder": "^7.2",
-        "symplify/set-config-resolver": "^7.2"
+        "symplify/set-config-resolver": "^7.2",
+        "tracy/tracy": "^2.7"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
@@ -42,8 +43,7 @@
         "symplify/easy-coding-standard": "^7.2",
         "symplify/monorepo-builder": "^7.2",
         "symplify/phpstan-extensions": "^7.2",
-        "thecodingmachine/phpstan-strict-rules": "^0.12",
-        "tracy/tracy": "^2.7"
+        "thecodingmachine/phpstan-strict-rules": "^0.12"
     },
     "autoload": {
         "psr-4": {
@@ -71,6 +71,7 @@
             "Rector\\Nette\\": "packages/Nette/src",
             "Rector\\NodeTypeResolver\\": "packages/NodeTypeResolver/src",
             "Rector\\PHPStan\\": "packages/PHPStan/src",
+            "Rector\\PHPStanStaticTypeMapper\\": "packages/PHPStanStaticTypeMapper/src",
             "Rector\\PHPUnitSymfony\\": "packages/PHPUnitSymfony/src",
             "Rector\\PHPUnit\\": "packages/PHPUnit/src",
             "Rector\\PSR4\\": "packages/PSR4/src",
@@ -101,17 +102,19 @@
             "Rector\\Twig\\": "packages/Twig/src",
             "Rector\\TypeDeclaration\\": "packages/TypeDeclaration/src",
             "Rector\\ZendToSymfony\\": "packages/ZendToSymfony/src",
-            "Rector\\Utils\\DocumentationGenerator\\": "utils/DocumentationGenerator/src",
-            "Rector\\Utils\\RectorGenerator\\": "utils/RectorGenerator/src",
-            "Rector\\Utils\\PHPStanAttributeTypeSyncer\\": "utils/PHPStanAttributeTypeSyncer/src",
+            "Rector\\RectorGenerator\\": "packages/RectorGenerator/src",
             "Rector\\StrictCodeQuality\\": "packages/StrictCodeQuality/src",
             "Rector\\DynamicTypeAnalysis\\": "packages/DynamicTypeAnalysis/src",
             "Rector\\PhpDeglobalize\\": "packages/PhpDeglobalize/src",
             "Rector\\Phalcon\\": "packages/Phalcon/src",
             "Rector\\DoctrineGedmoToKnplabs\\": "packages/DoctrineGedmoToKnplabs/src",
             "Rector\\MinimalScope\\": "packages/MinimalScope/src",
-            "Rector\\Polyfill\\": "packages/Polyfill/src"
-        }
+            "Rector\\Polyfill\\": "packages/Polyfill/src",
+            "Rector\\CakePHPToSymfony\\": "packages/CakePHPToSymfony/src"
+        },
+        "files": [
+            "src/functions/rector_dump_function.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -170,9 +173,13 @@
             "Rector\\DynamicTypeAnalysis\\Tests\\": "packages/DynamicTypeAnalysis/tests",
             "Rector\\PhpDeglobalize\\Tests\\": "packages/PhpDeglobalize/tests",
             "Rector\\Phalcon\\Tests\\": "packages/Phalcon/tests",
+            "Rector\\Utils\\DocumentationGenerator\\": "utils/DocumentationGenerator/src",
+            "Rector\\Utils\\PHPStanAttributeTypeSyncer\\": "utils/PHPStanAttributeTypeSyncer/src",
+            "Rector\\Utils\\PHPStanStaticTypeMapperChecker\\": "utils/PHPStanStaticTypeMapperChecker/src",
             "Rector\\DoctrineGedmoToKnplabs\\Tests\\": "packages/DoctrineGedmoToKnplabs/tests",
             "Rector\\MinimalScope\\Tests\\": "packages/MinimalScope/tests",
-            "Rector\\Polyfill\\Tests\\": "packages/Polyfill/tests"
+            "Rector\\Polyfill\\Tests\\": "packages/Polyfill/tests",
+            "Rector\\CakePHPToSymfony\\Tests\\": "packages/CakePHPToSymfony/tests"
         },
         "classmap": [
             "packages/CakePHP/tests/Rector/Name/ImplicitShortClassNameUseStatementRector/Source",
@@ -186,7 +193,9 @@
             "tests/Issues/Issue1243/Source",
             "packages/Autodiscovery/tests/Rector/FileSystem/MoveInterfacesToContractNamespaceDirectoryRector/Expected",
             "packages/Autodiscovery/tests/Rector/FileSystem/MoveServicesBySuffixToDirectoryRector/Expected",
-            "packages/CakePHP/tests/Rector/StaticCall/AppUsesStaticCallToUseStatementRector/Source"
+            "packages/CakePHP/tests/Rector/StaticCall/AppUsesStaticCallToUseStatementRector/Source",
+            "packages/CakePHPToSymfony/tests/Rector/Class_/CakePHPControllerComponentToSymfonyRector/Source",
+            "packages/CakePHPToSymfony/tests/Rector/Class_/CakePHPModelToDoctrineEntityRector/Source"
         ],
         "files": [
             "packages/DeadCode/tests/Rector/MethodCall/RemoveDefaultArgumentValueRector/Source/UserDefined.php",

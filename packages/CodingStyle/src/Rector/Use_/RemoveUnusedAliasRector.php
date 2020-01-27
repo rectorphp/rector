@@ -18,9 +18,10 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeVisitor\NameResolver;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodingStyle\Imports\ShortNameResolver;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
@@ -44,18 +45,12 @@ final class RemoveUnusedAliasRector extends AbstractRector
     private $resolvedDocPossibleAliases = [];
 
     /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    /**
      * @var ShortNameResolver
      */
     private $shortNameResolver;
 
-    public function __construct(ClassNaming $classNaming, ShortNameResolver $shortNameResolver)
+    public function __construct(ShortNameResolver $shortNameResolver)
     {
-        $this->classNaming = $classNaming;
         $this->shortNameResolver = $shortNameResolver;
     }
 
@@ -161,7 +156,7 @@ PHP
 
         $shortNames = $this->shortNameResolver->resolveForNode($use);
         foreach ($shortNames as $alias => $useImport) {
-            $shortName = $this->classNaming->getShortName($useImport);
+            $shortName = $this->getShortName($useImport);
             if ($shortName === $alias) {
                 continue;
             }
@@ -203,16 +198,12 @@ PHP
             }
 
             if ($parentNode instanceof Class_) {
-                if ($parentNode->name !== null) {
-                    if ($this->areNamesEqual($parentNode->name, $usedName)) {
-                        $parentNode->name = new Identifier($lastName);
-                    }
+                if ($parentNode->name !== null && $this->areNamesEqual($parentNode->name, $usedName)) {
+                    $parentNode->name = new Identifier($lastName);
                 }
 
-                if ($parentNode->extends !== null) {
-                    if ($this->areNamesEqual($parentNode->extends, $usedName)) {
-                        $parentNode->extends = new Name($lastName);
-                    }
+                if ($parentNode->extends !== null && $this->areNamesEqual($parentNode->extends, $usedName)) {
+                    $parentNode->extends = new Name($lastName);
                 }
 
                 foreach ($parentNode->implements as $key => $implementNode) {
@@ -225,10 +216,8 @@ PHP
             }
 
             if ($parentNode instanceof Param) {
-                if ($parentNode->type !== null) {
-                    if ($this->areNamesEqual($parentNode->type, $usedName)) {
-                        $parentNode->type = new Name($lastName);
-                    }
+                if ($parentNode->type !== null && $this->areNamesEqual($parentNode->type, $usedName)) {
+                    $parentNode->type = new Name($lastName);
                 }
 
                 continue;
@@ -243,10 +232,8 @@ PHP
             }
 
             if ($parentNode instanceof ClassMethod) {
-                if ($parentNode->returnType !== null) {
-                    if ($this->areNamesEqual($parentNode->returnType, $usedName)) {
-                        $parentNode->returnType = new Name($lastName);
-                    }
+                if ($parentNode->returnType !== null && $this->areNamesEqual($parentNode->returnType, $usedName)) {
+                    $parentNode->returnType = new Name($lastName);
                 }
 
                 continue;
@@ -335,21 +322,13 @@ PHP
 
             /** @var PhpDocInfo $phpDocInfo */
             $phpDocInfo = $this->getPhpDocInfo($node);
-            if ($phpDocInfo->getVarType()) {
-                $varType = $phpDocInfo->getVarType();
-                if ($varType instanceof AliasedObjectType) {
-                    $possibleDocAliases[] = $varType->getClassName();
-                }
 
-                $returnType = $phpDocInfo->getReturnType();
-                if ($returnType instanceof AliasedObjectType) {
-                    $possibleDocAliases[] = $returnType->getClassName();
-                }
+            if ($phpDocInfo->getVarType()) {
+                $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getVarType(), $possibleDocAliases);
+                $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getReturnType(), $possibleDocAliases);
 
                 foreach ($phpDocInfo->getParamTypes() as $paramType) {
-                    if ($paramType instanceof AliasedObjectType) {
-                        $possibleDocAliases[] = $paramType->getClassName();
-                    }
+                    $possibleDocAliases = $this->appendPossibleAliases($paramType, $possibleDocAliases);
                 }
             }
 
@@ -361,5 +340,21 @@ PHP
         });
 
         return array_unique($possibleDocAliases);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function appendPossibleAliases(Type $varType, array $possibleDocAliases): array
+    {
+        if ($varType instanceof AliasedObjectType) {
+            $possibleDocAliases[] = $varType->getClassName();
+        }
+        if ($varType instanceof UnionType) {
+            foreach ($varType->getTypes() as $type) {
+                $possibleDocAliases = $this->appendPossibleAliases($type, $possibleDocAliases);
+            }
+        }
+        return $possibleDocAliases;
     }
 }

@@ -177,12 +177,12 @@ PHP
         if ($assignToVariable->expr instanceof MethodCall) {
             /** @var MethodCall $assignedMethodCall */
             $assignedMethodCall = $assignToVariable->expr;
-            if ($this->isName($assignedMethodCall->var, 'this')) {
-                if ($this->isName($assignedMethodCall->name, 'createMock')) {
-                    $firstArgumentValue = $assignedMethodCall->args[0]->value;
-
-                    return $this->getValue($firstArgumentValue);
-                }
+            if ($this->isName($assignedMethodCall->var, 'this') && $this->isName(
+                $assignedMethodCall->name,
+                'createMock'
+            )) {
+                $firstArgumentValue = $assignedMethodCall->args[0]->value;
+                return $this->getValue($firstArgumentValue);
             }
         }
 

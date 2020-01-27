@@ -1,0 +1,60 @@
+name: Rector_PHAR
+
+on:
+    push:
+        branches:
+            - master
+    release:
+        types:
+            - published
+
+jobs:
+    compile_and_deploy_rector_phar:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v1
+              with:
+                  php-version: 7.2
+                  coverage: none # disable xdebug, pcov
+
+            - run: |
+                  cd compiler
+                  composer install
+
+            - run: |
+                  cd compiler
+                  bin/compile
+
+            - run: |
+                # remove local vendor, to prevent duplicated content
+                rm -rf vendor
+                # remove local phpstan.neon, that loads just removed configs
+                rm phpstan.neon
+                tmp/rector.phar
+
+            -
+                name: ''
+                if: github.event_name == 'push' || github.event_name == 'release'
+                run: |
+                    [[ $GITHUB_REF == refs/tags/* ]] && CURRENT_TAG=${GITHUB_REF#refs/tags/} || CURRENT_TAG=""
+
+                    git clone https://${ACCESS_TOKEN}@github.com/rectorphp/rector-prefixed.git rector-prefixed > /dev/null 2>&1
+                    cp tmp/rector.phar rector-prefixed/rector.phar
+                    cp tmp/rector.phar rector-prefixed/rector
+
+                    cd rector-prefixed
+                    git config user.name "TomasVotruba"
+                    git config user.email "tomas.vot@gmail.com"
+                    git add rector rector.phar
+
+                    if [ "${CURRENT_TAG}" != "" ]; then COMMIT_MSG="Rector ${CURRENT_TAG}"; else COMMIT_MSG="Updated Rector to commit ${GITHUB_SHA}"; fi
+
+                    git commit -m "${COMMIT_MSG}"
+                    git push --quiet origin master
+
+                    if [ "${CURRENT_TAG}" != "" ]; then git tag "${CURRENT_TAG}" && git push --quiet origin ${CURRENT_TAG}; fi
+
+                env:
+                    ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}

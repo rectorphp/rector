@@ -104,6 +104,11 @@ final class PhpVersionFeature
     /**
      * @var string
      */
+    public const SETCOOKIE_ACCEPT_ARRAY_OPTIONS = '7.3';
+
+    /**
+     * @var string
+     */
     public const ARROW_FUNCTION = '7.4';
 
     /**

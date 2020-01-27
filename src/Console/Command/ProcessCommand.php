@@ -114,9 +114,9 @@ final class ProcessCommand extends AbstractCommand
         $this->reportingExtensionRunner = $reportingExtensionRunner;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->stubLoader = $stubLoader;
+        $this->paths = $paths;
 
         parent::__construct();
-        $this->paths = $paths;
     }
 
     protected function configure(): void
@@ -134,6 +134,7 @@ final class ProcessCommand extends AbstractCommand
             InputOption::VALUE_NONE,
             'See diff of changes, do not save them to files.'
         );
+
         $this->addOption(
             Option::OPTION_AUTOLOAD_FILE,
             'a',
@@ -155,7 +156,12 @@ final class ProcessCommand extends AbstractCommand
             'Execute only on file(s) matching the git diff.'
         );
 
-        $this->addOption(Option::OPTION_RULE, 'r', InputOption::VALUE_REQUIRED, 'Run only this single rule.');
+        $this->addOption(
+            Option::OPTION_ONLY,
+            'r',
+            InputOption::VALUE_REQUIRED,
+            'Run only one single Rector from the loaded Rectors (in services, sets, etc).'
+        );
 
         $availableOutputFormatters = $this->outputFormatterCollector->getNames();
         $this->addOption(
@@ -172,6 +178,13 @@ final class ProcessCommand extends AbstractCommand
             InputOption::VALUE_NONE,
             'Hide progress bar. Useful e.g. for nicer CI output.'
         );
+
+        $this->addOption(
+            Option::OPTION_OUTPUT_FILE,
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Location for file to dump result in. Useful for Docker or automated processes'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -180,6 +193,7 @@ final class ProcessCommand extends AbstractCommand
         $this->configuration->setAreAnyPhpRectorsLoaded((bool) $this->rectorNodeTraverser->getPhpRectorCount());
 
         $this->rectorGuard->ensureSomeRectorsAreRegistered();
+        $this->rectorGuard->ensureGetNodeTypesAreNodes();
         $this->stubLoader->loadStubs();
 
         $source = $this->resolvesSourcePaths($input);

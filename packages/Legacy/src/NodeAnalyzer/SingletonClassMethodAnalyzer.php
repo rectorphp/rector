@@ -117,10 +117,8 @@ final class SingletonClassMethodAnalyzer
         }
 
         // matching: "! self::$static"
-        if ($expr instanceof BooleanNot) {
-            if ($expr->expr instanceof StaticPropertyFetch) {
-                return $expr->expr;
-            }
+        if ($expr instanceof BooleanNot && $expr->expr instanceof StaticPropertyFetch) {
+            return $expr->expr;
         }
 
         return null;

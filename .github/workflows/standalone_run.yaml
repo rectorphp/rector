@@ -1,0 +1,43 @@
+name: Standalone Run
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    standalone_run:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.2
+                    coverage: none # disable xdebug, pcov
+                    extensions: "intl"
+
+            # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
+            -   run: |
+                    # 1. install locally
+                    mkdir test-paths
+                    cd test-paths
+
+                    mkdir rector-dir
+                    composer require rector/rector:@dev -d rector-dir --no-progress
+
+                    mkdir symfony-demo-dir
+                    composer create-project symfony/symfony-demo symfony-demo-dir --dev --no-progress
+
+                    # missing for some reason
+                    composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir --no-progress
+                    composer dump-autoload --no-dev -d symfony-demo-dir
+
+                    # 2. run an another project
+                    rector-dir/vendor/bin/rector
+
+                    cd symfony-demo-dir
+                    ../rector-dir/vendor/bin/rector
+
+                    # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
+                    ../rector-dir/vendor/bin/rector process src --set code-quality --hide-autoload-errors

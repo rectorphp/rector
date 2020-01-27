@@ -13,6 +13,9 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
+ * @see https://github.com/sebastianbergmann/phpunit/blob/5.7.0/src/Framework/TestCase.php#L1623
+ * @see https://github.com/sebastianbergmann/phpunit/blob/6.0.0/src/Framework/TestCase.php#L1452
+ *
  * @see \Rector\PHPUnit\Tests\Rector\GetMockRector\GetMockRectorTest
  */
 final class GetMockRector extends AbstractPHPUnitRector
@@ -45,8 +48,13 @@ final class GetMockRector extends AbstractPHPUnitRector
             return null;
         }
 
-        if (count($node->args) !== 1) {
+        if ($node instanceof MethodCall && $node->var instanceof MethodCall) {
             return null;
+        }
+
+        // narrow args to one
+        if (count($node->args) > 1) {
+            $node->args = [$node->args[0]];
         }
 
         $node->name = new Identifier('createMock');

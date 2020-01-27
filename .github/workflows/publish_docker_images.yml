@@ -1,0 +1,39 @@
+name: Build docker images
+on:
+    push:
+        # Publish `master` as Docker `latest` image.
+        branches:
+            - master
+
+        # Publish `v1.2.3` tags as releases.
+        tags:
+            - v*
+
+jobs:
+    publish_images:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Build images
+              run: |
+                  # Strip git ref prefix from version
+                  VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+                  # Strip "v" prefix from tag name
+                  [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+                  # Use Docker `latest` tag convention
+                  [ "$VERSION" == "master" ] && VERSION=latest
+
+                  docker pull rector/rector || true
+                  docker build . --target rector --cache-from rector/rector --tag rector/rector:$VERSION
+                  docker build . --target rector-secured --cache-from rector/rector --tag rector/rector-secured:$VERSION
+
+            - name: Log into registry
+              run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+            - name: Push images
+              run: |
+                  docker push rector/rector
+                  docker push rector/rector-secured

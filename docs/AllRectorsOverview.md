@@ -1,4 +1,4 @@
-# All 429 Rectors Overview
+# All 444 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -8,6 +8,7 @@
 - [Architecture](#architecture)
 - [Autodiscovery](#autodiscovery)
 - [CakePHP](#cakephp)
+- [CakePHPToSymfony](#cakephptosymfony)
 - [Celebrity](#celebrity)
 - [CodeQuality](#codequality)
 - [CodingStyle](#codingstyle)
@@ -283,6 +284,274 @@ services:
 
 <br>
 
+## CakePHPToSymfony
+
+### `CakePHPControllerActionToSymfonyControllerActionRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerActionToSymfonyControllerActionRector`
+
+Migrate CakePHP 2.4 Controller action to Symfony 5
+
+```diff
++use Symfony\Component\HttpFoundation\Response;
++
+ class HomepageController extends \AppController
+ {
+-    public function index()
++    public function index(): Response
+     {
+         $value = 5;
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerComponentToSymfonyRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerComponentToSymfonyRector`
+
+Migrate CakePHP 2.4 Controller $components property to Symfony 5
+
+```diff
+ class MessagesController extends \AppController
+ {
+-    public $components = ['Overview'];
++    private function __construct(OverviewComponent $overviewComponent)
++    {
++        $this->overviewComponent->filter();
++    }
+
+     public function someAction()
+     {
+-        $this->Overview->filter();
++        $this->overviewComponent->filter();
+     }
+ }
+
+ class OverviewComponent extends \Component
+ {
+     public function filter()
+     {
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerHelperToSymfonyRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerHelperToSymfonyRector`
+
+Migrate CakePHP 2.4 Controller $helpers and $components property to Symfony 5
+
+```diff
+ class HomepageController extends AppController
+ {
+-    public $helpers = ['Flash'];
+-
+     public function index()
+     {
+-        $this->Flash->success(__('Your post has been saved.'));
+-        $this->Flash->error(__('Unable to add your post.'));
++        $this->addFlash('success', __('Your post has been saved.'));
++        $this->addFlash('error', __('Unable to add your post.'));
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerRedirectToSymfonyRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerRedirectToSymfonyRector`
+
+Migrate CakePHP 2.4 Controller redirect() to Symfony 5
+
+```diff
+ class RedirectController extends \AppController
+ {
+     public function index()
+     {
+-        $this->redirect('boom');
++        return $this->redirect('boom');
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerRenderToSymfonyRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerRenderToSymfonyRector`
+
+Migrate CakePHP 2.4 Controller render() to Symfony 5
+
+```diff
+ class RedirectController extends \AppController
+ {
+     public function index()
+     {
+-        $this->render('custom_file');
++        return $this->render('redirect/custom_file.twig');
+     }
+ }
+```
+
+<br>
+
+### `CakePHPControllerToSymfonyControllerRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPControllerToSymfonyControllerRector`
+
+Migrate CakePHP 2.4 Controller to Symfony 5
+
+```diff
+-class HomepageController extends AppController
++use Symfony\Component\HttpFoundation\Response;
++use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++
++class HomepageController extends AbstractController
+ {
+-    public function index()
++    public function index(): Response
+     {
+     }
+ }
+```
+
+<br>
+
+### `CakePHPModelToDoctrineEntityRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPModelToDoctrineEntityRector`
+
+Migrate CakePHP Model active record to Doctrine\ORM Entity and EntityRepository
+
+```diff
+-class Activity extends \AppModel
++use Doctrine\Mapping\Annotation as ORM;
++
++/**
++ * @ORM\Entity
++ */
++class Activity
+ {
+-    public $belongsTo = [
+-        'ActivityType' => [
+-            'className' => 'ActivityType',
+-            'foreignKey' => 'activity_type_id',
+-            'dependent' => false,
+-        ],
+-    ];
++    /**
++     * @ORM\ManyToOne(targetEntity="ActivityType")
++     * @ORM\JoinColumn(name="activity_type_id")
++     */
++    private $activityType;
+ }
+```
+
+<br>
+
+### `CakePHPModelToDoctrineRepositoryRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPModelToDoctrineRepositoryRector`
+
+Migrate CakePHP Model active record to Doctrine\ORM\Repository with repository/DQL method calls
+
+```diff
+-class Activity extends \AppModel
++use Doctrine\ORM\EntityManagerInterface;
++
++class Activity
+ {
++}
++
++class ActivityRepository
++{
++    /**
++     * @var EntityManagerInterface
++     */
++    private $repository;
++
++    public function __construct(EntityManagerInterface $entityManager)
++    {
++        $this->repository = $entityManager->getRepository(Activity::class);
++    }
++
+     public function getAll()
+     {
+-        $result = $this->find('all');
++        $result = $this->repository->findAll();
+
+         return $result;
+     }
+
+     public function getOne()
+     {
+-        $result = $this->find('first', [
+-            'conditions' => [
+-                'DocumentVersionsSave.revision_number' => $versionId,
+-                'DocumentVersionsSave.document_id' => $documentId,
+-            ],
+-            'order' => [
+-                'created DESC',
+-            ],
+-        ]);
++        $result = $this->findOneBy([
++            'revision_number' => $versionId,
++            'document_id' => $documentId,
++        ], 'created DESC');
+
+         return $result;
+     }
+ }
+```
+
+<br>
+
+### `CakePHPTemplateHToTwigRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Echo_\CakePHPTemplateHToTwigRector`
+
+Migrate CakePHP 2.4 h() function calls to Twig
+
+```diff
+-<h3><?php echo h($value); ?></h3>
++<h3>{{ value|escape }}</h3>
+```
+
+<br>
+
+### `CakePHPTemplateLinkToTwigRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Echo_\CakePHPTemplateLinkToTwigRector`
+
+Migrate CakePHP 2.4 template method calls to Twig
+
+```diff
+ <li>
+-    <?php echo $this->Html->link('List Rights', ['action' => 'index']); ?>
++    <a href="{{ path('index') }}">List Rights</a>
+ </li>
+```
+
+<br>
+
+### `CakePHPTemplateTranslateToTwigRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Echo_\CakePHPTemplateTranslateToTwigRector`
+
+Migrate CakePHP 2.4 template method calls with translate to Twig
+
+```diff
+-<h3><?php echo __("Actions"); ?></h3>
++<h3>{{ "Actions"|trans }}</h3>
+```
+
+<br>
+
 ## Celebrity
 
 ### `CommonNotEqualRector`
@@ -508,6 +777,29 @@ Change array_push() to direct variable assign
          $items = [];
 -        array_push($items, $item);
 +        $items[] = $item;
+     }
+ }
+```
+
+<br>
+
+### `CombineIfRector`
+
+- class: `Rector\CodeQuality\Rector\If_\CombineIfRector`
+
+Merges nested if statements
+
+```diff
+ class SomeClass {
+     public function run()
+     {
+-        if ($cond1) {
+-            if ($cond2) {
+-                return 'foo';
+-            }
++        if ($cond1 && $cond2) {
++            return 'foo';
+         }
      }
  }
 ```
@@ -4513,6 +4805,27 @@ Fix data provider annotation typos
 
 <br>
 
+### `GetMockBuilderGetMockToCreateMockRector`
+
+- class: `Rector\PHPUnit\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector`
+
+Remove getMockBuilder() to createMock()
+
+```diff
+ class SomeTest extends \PHPUnit\Framework\TestCase
+ {
+     public function test()
+     {
+-        $applicationMock = $this->getMockBuilder('SomeClass')
+-           ->disableOriginalConstructor()
+-           ->getMock();
++        $applicationMock = $this->createMock('SomeClass');
+     }
+ }
+```
+
+<br>
+
 ### `GetMockRector`
 
 - class: `Rector\PHPUnit\Rector\GetMockRector`
@@ -4554,6 +4867,28 @@ Data provider methods cannot start with "test" prefix
      {
          return ['123'];
      }
+ }
+```
+
+<br>
+
+### `RemoveEmptyTestMethodRector`
+
+- class: `Rector\PHPUnit\Rector\ClassMethod\RemoveEmptyTestMethodRector`
+
+Remove empty test methods
+
+```diff
+ class SomeTest extends \PHPUnit\Framework\TestCase
+ {
+-    /**
+-     * testGetTranslatedModelField method
+-     *
+-     * @return void
+-     */
+-    public function testGetTranslatedModelField()
+-    {
+-    }
  }
 ```
 
@@ -5923,6 +6258,24 @@ Changes heredoc/nowdoc that contains closing word to safe wrapper name
 
 <br>
 
+### `SetcookieRector`
+
+- class: `Rector\Php73\Rector\FuncCall\SetcookieRector`
+
+Convert setcookie argument to PHP7.3 option array
+
+```diff
+-setcookie('name', $value, 360);
++setcookie('name', $value, ['expires' => 360]);
+```
+
+```diff
+-setcookie('name', $name, 0, '', '', true, true);
++setcookie('name', $name, ['expires' => 0, 'path' => '', 'domain' => '', 'secure' => true, 'httponly' => true]);
+```
+
+<br>
+
 ### `StringifyStrNeedlesRector`
 
 - class: `Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector`
@@ -7148,7 +7501,7 @@ Finalize every class constant that is used only locally
 
 - class: `Rector\SOLID\Rector\If_\RemoveAlwaysElseRector`
 
-Remove if for last else, if previous values were throw
+Split if statement, when if condition always break execution flow
 
 ```diff
  class SomeClass
@@ -8656,8 +9009,9 @@ Change visibility of method from parent class.
 ```yaml
 services:
     Rector\Rector\Visibility\ChangeMethodVisibilityRector:
-        FrameworkClass:
-            someMethod: protected
+        $methodToVisibilityByClass:
+            FrameworkClass:
+                someMethod: protected
 ```
 
 ↓

@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -21,6 +20,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
@@ -28,6 +28,16 @@ use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
 final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
 {
+    /**
+     * @var PropertyFetchManipulator
+     */
+    private $propertyFetchManipulator;
+
+    public function __construct(PropertyFetchManipulator $propertyFetchManipulator)
+    {
+        $this->propertyFetchManipulator = $propertyFetchManipulator;
+    }
+
     public function inferProperty(Property $property): Type
     {
         /** @var Class_|null $class */
@@ -44,7 +54,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
 
         $propertyName = $this->nameResolver->getName($property);
 
-        $param = $this->resolveParamForPropertyFetch($classMethod, $propertyName);
+        $param = $this->propertyFetchManipulator->resolveParamForPropertyFetch($classMethod, $propertyName);
         if ($param === null) {
             return new MixedType();
         }
@@ -78,53 +88,6 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
     public function getPriority(): int
     {
         return 800;
-    }
-
-    /**
-     * In case the property name is different to param name:
-     *
-     * E.g.:
-     * (SomeType $anotherValue)
-     * $this->value = $anotherValue;
-     * ↓
-     * $anotherValue param
-     */
-    private function resolveParamForPropertyFetch(ClassMethod $classMethod, string $propertyName): ?Param
-    {
-        $assignedParamName = null;
-
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $propertyName,
-            &$assignedParamName
-        ): ?int {
-            if (! $node instanceof Assign) {
-                return null;
-            }
-
-            if (! $this->nameResolver->isName($node->var, $propertyName)) {
-                return null;
-            }
-
-            $assignedParamName = $this->nameResolver->getName($node->expr);
-
-            return NodeTraverser::STOP_TRAVERSAL;
-        });
-
-        /** @var string|null $assignedParamName */
-        if ($assignedParamName === null) {
-            return null;
-        }
-
-        /** @var Param $param */
-        foreach ((array) $classMethod->params as $param) {
-            if (! $this->nameResolver->isName($param, $assignedParamName)) {
-                continue;
-            }
-
-            return $param;
-        }
-
-        return null;
     }
 
     private function resolveParamTypeToPHPStanType(Param $param): Type

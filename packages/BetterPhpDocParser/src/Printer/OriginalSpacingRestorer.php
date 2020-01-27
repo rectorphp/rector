@@ -67,15 +67,16 @@ final class OriginalSpacingRestorer
             if ($tokens[$i][1] === Lexer::TOKEN_HORIZONTAL_WS) {
                 $value = $tokens[$i][0];
 
-                if ($node instanceof DoctrineTagNodeInterface) {
-                    // give back "\s+\*" as well
-                    if ($i - 1 > $start) { // do not overlap to previous node
-                        if (isset($tokens[$i - 1]) && $tokens[$i - 1][1] === Lexer::TOKEN_PHPDOC_EOL) {
-                            $previousTokenValue = $tokens[$i - 1][0];
-                            if (Strings::match($previousTokenValue, '#\s+\*#m')) {
-                                $value = $previousTokenValue . $value;
-                            }
-                        }
+                // give back "\s+\*" as well
+                // do not overlap to previous node
+                if ($node instanceof DoctrineTagNodeInterface &&
+                    $i - 1 > $start &&
+                    isset($tokens[$i - 1]) &&
+                    $tokens[$i - 1][1] === Lexer::TOKEN_PHPDOC_EOL
+                ) {
+                    $previousTokenValue = $tokens[$i - 1][0];
+                    if (Strings::match($previousTokenValue, '#\s+\*#m')) {
+                        $value = $previousTokenValue . $value;
                     }
                 }
 

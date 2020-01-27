@@ -82,11 +82,9 @@ PHP
         }
 
         // add preslash to string
-        if (! Strings::startsWith($includeValue, '/')) {
-            // keep dots
-            if (! Strings::startsWith($includeValue, '.')) {
-                $node->expr->value = '/' . $includeValue;
-            }
+        // keep dots
+        if (! Strings::startsWith($includeValue, '/') && ! Strings::startsWith($includeValue, '.')) {
+            $node->expr->value = '/' . $includeValue;
         }
 
         $node->expr = new Concat(new Dir(), $node->expr);

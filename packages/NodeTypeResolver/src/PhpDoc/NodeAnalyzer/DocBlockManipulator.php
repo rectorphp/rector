@@ -36,9 +36,11 @@ use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
@@ -148,6 +150,12 @@ final class DocBlockManipulator
         }
     }
 
+    public function addTagValueNodeWithShortName(Node $node, AbstractTagValueNode $tagValueNode): void
+    {
+        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode($tagValueNode::SHORT_NAME, $tagValueNode);
+        $this->addTag($node, $spacelessPhpDocTagNode);
+    }
+
     public function removeTagFromNode(Node $node, string $name, bool $shouldSkipEmptyLinesAbove = false): void
     {
         if ($node->getDocComment() === null) {
@@ -255,12 +263,8 @@ final class DocBlockManipulator
         }
 
         // prevent existing type override by mixed
-        if (! $currentVarType instanceof MixedType) {
-            if ($newType instanceof ConstantArrayType) {
-                if ($newType->getItemType() instanceof NeverType) {
-                    return;
-                }
-            }
+        if (! $currentVarType instanceof MixedType && $newType instanceof ConstantArrayType && $newType->getItemType() instanceof NeverType) {
+            return;
         }
 
         if ($this->hasTag($node, '@var')) {
@@ -478,11 +482,12 @@ final class DocBlockManipulator
         // has any type node?
 
         foreach ($phpDocInfo->getPhpDocNode()->children as $phpDocChildNode) {
-            if ($phpDocChildNode instanceof PhpDocTagNode) {
-                // is custom class, it can contain some type info
-                if (Strings::startsWith(get_class($phpDocChildNode->value), 'Rector\\')) {
-                    return true;
-                }
+            // is custom class, it can contain some type info
+            if ($phpDocChildNode instanceof PhpDocTagNode && Strings::startsWith(
+                get_class($phpDocChildNode->value),
+                'Rector\\'
+            )) {
+                return true;
             }
         }
 
@@ -677,18 +682,9 @@ final class DocBlockManipulator
 
     private function areAliasedObjectMatchingFqnObject(Type $firstType, Type $secondType): bool
     {
-        if ($firstType instanceof AliasedObjectType && $secondType instanceof ObjectType) {
-            if ($firstType->getFullyQualifiedClass() === $secondType->getClassName()) {
-                return true;
-            }
+        if ($firstType instanceof AliasedObjectType && $secondType instanceof ObjectType && $firstType->getFullyQualifiedClass() === $secondType->getClassName()) {
+            return true;
         }
-
-        if ($secondType instanceof AliasedObjectType && $firstType instanceof ObjectType) {
-            if ($secondType->getFullyQualifiedClass() === $firstType->getClassName()) {
-                return true;
-            }
-        }
-
-        return false;
+        return $secondType instanceof AliasedObjectType && $firstType instanceof ObjectType && $secondType->getFullyQualifiedClass() === $firstType->getClassName();
     }
 }

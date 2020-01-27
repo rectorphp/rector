@@ -6,7 +6,9 @@ namespace Rector\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
@@ -463,6 +465,34 @@ final class ClassManipulator
 
             $this->nodeRemovingCommander->addNode($implement);
         }
+    }
+
+    /**
+     * @param string[] $oldToNewPropertyNames
+     */
+    public function renamePropertyFetches(Class_ $class, array $oldToNewPropertyNames): void
+    {
+        $this->callableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use (
+            $oldToNewPropertyNames
+        ) {
+            if (! $node instanceof PropertyFetch) {
+                return null;
+            }
+
+            if (! $this->nameResolver->isName($node->var, 'this')) {
+                return null;
+            }
+
+            foreach ($oldToNewPropertyNames as $oldPropertyName => $newPropertyName) {
+                if (! $this->nameResolver->isName($node->name, $oldPropertyName)) {
+                    continue;
+                }
+
+                $node->name = new Identifier($newPropertyName);
+            }
+
+            return null;
+        });
     }
 
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool

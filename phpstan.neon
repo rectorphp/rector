@@ -43,13 +43,9 @@ parameters:
         # false positive
 #        - '#Call to function method_exists\(\) with string and (.*?) will always evaluate to false#'
         - '#PHPDoc tag \@param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
-        - '#Access to an undefined property PhpParser\\Node\\Stmt\\ClassLike\:\:\$extends#'
 
         # misuse of interface and class
         - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#'
-        - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer::getContainer\(\) should return Symfony\\Component\\DependencyInjection\\ContainerBuilder but returns Symfony\\Component\\DependencyInjection\\Container#'
-
-        - '#Property Rector\\DependencyInjection\\Loader\\RectorServiceParametersShifter::\$serviceKeywords \(array<string>\) does not accept ReflectionProperty#'
         - '#Strict comparison using === between string and null will always evaluate to false#'
 
         # false positive - type is set by annotation above
@@ -112,7 +108,6 @@ parameters:
 
         # false positive 0.11.5
         - '#Unreachable statement \- code above always terminates#'
-        - '#Method Rector\\NodeTypeResolver\\NodeVisitor\\(.*?)\:\:enterNode\(\) should return int\|PhpParser\\Node\|void\|null but return statement is missing#'
         - '#Negated boolean expression is always true#'
         - '#Strict comparison using \=\=\= between PhpParser\\Node and null will always evaluate to false#'
 
@@ -133,29 +128,21 @@ parameters:
         - '#Cannot cast array<string\>\|bool\|string\|null to string#'
         - '#Method Rector\\Legacy\\Rector\\ClassMethod\\ChangeSingletonToServiceRector\:\:matchStaticPropertyFetchAndGetSingletonMethodName\(\) should return array<string\>\|null but returns array<int, string\|null\>#'
 
-        - '#Parameter \#1 \$rule of method Rector\\Configuration\\Configuration\:\:setRule\(\) expects string\|null, array<string\>\|bool\|string\|null given#'
-        - '#Empty catch block\. If you are sure this is meant to be empty, please add a "// @ignoreException" comment in the catch block#'
-
         - '#Method Rector\\Rector\\AbstractRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
         - '#Parameter \#2 \$currentNode of method Rector\\CodingStyle\\Rector\\String_\\ManualJsonStringToJsonEncodeArrayRector\:\:matchNextExpressionAssignConcatToSameVariable\(\) expects PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Expr\\AssignOp\\Concat, PhpParser\\Node given#'
         - '#Method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
 
         # array is callable
-        - '#Parameter \#2 \$listener of method Symfony\\Component\\EventDispatcher\\Debug\\TraceableEventDispatcher\:\:getListenerPriority\(\) expects callable\(\)\: mixed, array given#'
-        - '#Parameter \#1 \$kernelClass of method Rector\\Symfony\\Bridge\\DependencyInjection\\SymfonyContainerFactory\:\:createFromKernelClass\(\) expects string, string\|null given#'
         - '#If condition is always true#'
 
         - '#Ternary operator condition is always true#'
 
-        - '#Method Rector\\Symfony\\Bridge\\DefaultAnalyzedSymfonyApplicationContainer\:\:getService\(\) should return object but returns object\|null#'
         - '#Call to function property_exists\(\) with string and (.*?) will always evaluate to false#'
         - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\ClassLike\:\:\$stmts#'
 
         - '#Property Rector\\TypeDeclaration\\TypeInferer\\(.*?)\:\:\$(.*?)TypeInferers \(array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\(.*?)TypeInfererInterface\>\) does not accept array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface\>#'
         # sense-less errors
 
-        - '#In method "Rector\\Rector\\Property\\InjectAnnotationClassRector\:\:resolveJMSDIInjectType", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
-        - '#Instanceof between PHPStan\\Type\\Type and PHPStan\\Type\\VoidType will always evaluate to false#'
         - '#Parameter \#1 \$functionLike of method Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockManipulator\:\:getParamTypesByName\(\) expects PhpParser\\Node\\Expr\\Closure\|PhpParser\\Node\\Stmt\\ClassMethod\|PhpParser\\Node\\Stmt\\Function_, PhpParser\\Node\\FunctionLike given#'
 
         # PHP 7.4 1_000 support
@@ -171,14 +158,11 @@ parameters:
         - '#Parameter \#1 \$sprintfFuncCall of method Rector\\PhpParser\\NodeTransformer\:\:transformSprintfToArray\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node given#'
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\OrmTagParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
 
-        - '#Parameter \#1 \$phpDocTagValueNode of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:removeTagValueNodeFromNode\(\) expects PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode, PHPStan\\PhpDocParser\\Ast\\PhpDoc\\VarTagValueNode\|null given#'
-
         - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\JMS\\SerializerTypePhpDocNodeFactory::resolveTypeAnnotation\(\) should return JMS\\Serializer\\Annotation\\Type\|null but returns object\|null#'
 
         # known value
         - '#Method Rector\\StrictCodeQuality\\Rector\\Stmt\\VarInlineAnnotationToAssertRector\:\:findVariableByName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns PhpParser\\Node\|null#'
 
-        - '#In method "Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createPropertyReflectionFromPropertyNode", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
         - '#Method Rector\\PhpParser\\Node\\Manipulator\\MethodCallManipulator\:\:findAssignToVariableName\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
         - '#Method Rector\\PhpParser\\Node\\Manipulator\\MethodCallManipulator\:\:findMethodCallsIncludingChain\(\) should return array<PhpParser\\Node\\Expr\\MethodCall\> but returns array<object\>#'
         - '#Method Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory\:\:createUnionOrSingleType\(\) should return PHPStan\\Type\\MixedType\|PHPStan\\Type\\UnionType but returns PHPStan\\Type\\Type#'
@@ -216,49 +200,37 @@ parameters:
         - '#Parameter \#3 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver::processNodes\(\) expects Closure\(PhpParser\\Node, PHPStan\\Analyser\\Scope\): void, Closure\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\): void given#'
 
         # false positive
-        - '#Array \(array\) does not accept key#'
-        - '#Array \(array<int, PhpParser\\Node\\Arg>\) does not accept key#'
         - '#Comparison operation "<" between 0 and 2 is always true#'
-        - '#Property Rector\\Compiler\\Process\\SymfonyProcess::\$process type has no value type specified in iterable type Symfony\\Component\\Process\\Process#'
-        - '#Method Rector\\Compiler\\Process\\SymfonyProcess::getProcess\(\) return type has no value type specified in iterable type Symfony\\Component\\Process\\Process#'
-        - '#Method Rector\\Compiler\\Contract\\Process\\ProcessInterface::getProcess\(\) return type has no value type specified in iterable type Symfony\\Component\\Process\\Process#'
+
         -
             message: '#Else branch is unreachable because ternary operator condition is always true#'
             path: packages/NodeTypeResolver/src/PhpDoc/NodeAnalyzer/DocBlockManipulator.php
-
-        # phpstan compiler bug
-        - '#Parameter \#1 \$docComment of method PhpParser\\Builder\\Property::setDocComment\(\) expects _HumbugBox(.*?)\\PhpParser\\Comment\\Doc\|string, PhpParser\\Comment\\Doc given#'
-
-        -
-            message: '#Call to function in_array\(\) with arguments PhpParser\\Node\\Expr\\Variable, array\(\) and true will always evaluate to false#'
-            path: packages/Php56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php
-
-        # known values
-        -
-            message: '#Method Rector\\Rector\\Property\\InjectAnnotationClassRector\:\:resolveJMSDIInjectType\(\) should return PHPStan\\Type\\Type but returns PHPStan\\Type\\Type\|null#'
-            path: src/Rector/Property/InjectAnnotationClassRector.php
 
         -
             message: '#Method Rector\\Symfony\\Rector\\FrameworkBundle\\AbstractToConstructorInjectionRector\:\:getServiceTypeFromMethodCallArgument\(\) should return PHPStan\\Type\\Type but returns PHPStan\\Type\\Type\|null#'
             path: packages/Symfony/src/Rector/FrameworkBundle/AbstractToConstructorInjectionRector.php
 
         - '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\(int, string, string, int, array\)\: bool\)\|null, Closure\(int, string\)\: void given#'
-        - '#Parameter \#1 \$source of method Rector\\Scan\\ErrorScanner\:\:scanSource\(\) expects array<string\>, array<string\>\|string\|null given#'
 
         - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\Gedmo\\(.*?)\:\:createFromNodeAndTokens\(\) should return Rector\\BetterPhpDocParser\\PhpDocNode\\Gedmo\\(.*?)\|null but returns PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\|null#'
 
-        - '#Access to an undefined property PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\:\:\$type#'
-        - '#Call to an undefined method PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\:\:toString\(\)#'
         - '#Parameter \#1 \$expected of method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) expects class\-string<object\>, string given#'
         - '#Unable to resolve the template type ExpectedType in call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\)#'
         - '#Right side of \|\| is always false#'
 
-        - '#Method Rector\\NodeContainer\\ParsedNodesByType\:\:findNewNodesByClass\(\) should return array<PhpParser\\Node\\Expr\\New_\> but returns array<int, PhpParser\\Node\>#'
-
         # fix Symplify 7.2 later
         - '#Method (.*?) returns bool type, so the name should start with is/has/was#'
 
-        - '#Property Rector\\BetterPhpDocParser\\PhpDocNode\\Gedmo\\BlameableTagValueNode\:\:\$value has no typehint specified#'
-
         # known value
         - "#^Parameter \\#1 \\$variable of class Rector\\\\Php70\\\\ValueObject\\\\VariableAssignPair constructor expects PhpParser\\\\Node\\\\Expr\\\\ArrayDimFetch\\|PhpParser\\\\Node\\\\Expr\\\\PropertyFetch\\|PhpParser\\\\Node\\\\Expr\\\\StaticPropertyFetch\\|PhpParser\\\\Node\\\\Expr\\\\Variable, PhpParser\\\\Node\\\\Expr given\\.$#"
+        - '#Cannot cast \(array<string\>\)\|string\|true to string#'
+
+        - '#In method "Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createPropertyReflectionFromPropertyNode", caught "Throwable" must be rethrown\. Either catch a more specific exception or add a "throw" clause in the "catch" block to propagate the exception\. More info\: http\://bit\.ly/failloud#'
+        - '#Method Rector\\CakePHPToSymfony\\Template\\TemplateMethodCallManipulator\:\:matchThisRenderMethodCallBareOrInReturn\(\) should return PhpParser\\Node\\Expr\\MethodCall\|null but returns PhpParser\\Node\\Expr#'
+        # doc is not enough
+        - '#Result of \|\| is always true#'
+
+        # known value
+        - '#Access to undefined constant Rector\\BetterPhpDocParser\\PhpDocNode\\AbstractTagValueNode\:\:SHORT_NAME#'
+        - '#Parameter \#1 \$name of method Rector\\Rector\\AbstractRector\:\:getShortName\(\) expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|string, PhpParser\\Node\\Identifier\|null given#'
+        - '#Parameter \#1 \$entityClass of method Rector\\CakePHPToSymfony\\Rector\\NodeFactory\\DoctrineNodeFactory\:\:createConstructorWithGetRepositoryAssign\(\) expects string, string\|null given#'

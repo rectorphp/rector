@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Polyfill\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\If_;
 use Rector\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Polyfill\FeatureSupport\FunctionSupportResolver;
@@ -13,7 +14,7 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfRector\UnwrapFutureCompatibleIfRectorTest
+ * @see \Rector\Polyfill\Tests\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector\UnwrapFutureCompatibleIfFunctionExistsRectorTest
  */
 final class UnwrapFutureCompatibleIfFunctionExistsRector extends AbstractRector
 {
@@ -80,12 +81,12 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $match = $this->ifManipulator->isIfElseWithFunctionCondition($node, 'function_exists');
-        if ($match === false) {
+        $match = $this->ifManipulator->isIfOrIfElseWithFunctionCondition($node, 'function_exists');
+        if (! $match) {
             return null;
         }
 
-        /** @var Node\Expr\FuncCall $funcCall */
+        /** @var FuncCall $funcCall */
         $funcCall = $node->cond;
 
         $functionToExistName = $this->getValue($funcCall->args[0]->value);
@@ -97,15 +98,7 @@ PHP
             return null;
         }
 
-        foreach ($node->stmts as $key => $ifStmt) {
-            if ($key === 0) {
-                // move comment from if to first element to keep it
-                $ifStmt->setAttribute('comments', $node->getComments());
-            }
-
-            $this->addNodeAfterNode($ifStmt, $node);
-        }
-
+        $this->unwrapStmts($node->stmts, $node);
         $this->removeNode($node);
 
         return null;

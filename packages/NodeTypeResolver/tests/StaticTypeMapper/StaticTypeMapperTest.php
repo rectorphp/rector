@@ -49,7 +49,10 @@ final class StaticTypeMapperTest extends AbstractKernelTestCase
         $genericTypeNode = new GenericTypeNode(new IdentifierTypeNode('Traversable'), []);
         yield [$genericTypeNode, GenericObjectType::class];
 
-        $genericTypeNode = new GenericTypeNode(new IdentifierTypeNode('iterable'), []);
+        $genericTypeNode = new GenericTypeNode(new IdentifierTypeNode('iterable'), [
+            new IdentifierTypeNode('string'),
+        ]);
+
         yield [$genericTypeNode, IterableType::class];
     }
 

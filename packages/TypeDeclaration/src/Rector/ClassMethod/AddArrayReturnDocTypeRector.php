@@ -12,7 +12,6 @@ use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -131,30 +130,25 @@ PHP
             return false;
         }
 
-        return $this->isSpecificIterableType($currentPhpDocInfo);
+        $returnType = $currentPhpDocInfo->getReturnType();
+
+        if ($returnType instanceof ArrayType && $returnType->getItemType() instanceof MixedType) {
+            return true;
+        }
+
+        return $returnType instanceof IterableType;
     }
 
     private function shouldSkipType(Type $newType, ClassMethod $classMethod): bool
     {
-        if ($newType instanceof ArrayType) {
-            if ($this->shouldSkipArrayType($newType, $classMethod)) {
-                return true;
-            }
+        if ($newType instanceof ArrayType && $this->shouldSkipArrayType($newType, $classMethod)) {
+            return true;
         }
 
-        if ($newType instanceof UnionType) {
-            if ($this->shouldSkipUnionType($newType)) {
-                return true;
-            }
+        if ($newType instanceof UnionType && $this->shouldSkipUnionType($newType)) {
+            return true;
         }
-
-        if ($newType instanceof ConstantArrayType) {
-            if (count($newType->getValueTypes()) > self::MAX_NUMBER_OF_TYPES) {
-                return true;
-            }
-        }
-
-        return false;
+        return $newType instanceof ConstantArrayType && count($newType->getValueTypes()) > self::MAX_NUMBER_OF_TYPES;
     }
 
     private function shouldSkipArrayType(ArrayType $arrayType, ClassMethod $classMethod): bool
@@ -203,22 +197,6 @@ PHP
 
     private function shouldSkipUnionType(UnionType $unionType): bool
     {
-        if (count($unionType->getTypes()) > self::MAX_NUMBER_OF_TYPES) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function isSpecificIterableType(PhpDocInfo $currentPhpDocInfo): bool
-    {
-        if (! $currentPhpDocInfo->getReturnType() instanceof IterableType) {
-            return false;
-        }
-
-        /** @var IterableType $iterableType */
-        $iterableType = $currentPhpDocInfo->getReturnType();
-
-        return ! $iterableType->getItemType() instanceof MixedType;
+        return count($unionType->getTypes()) > self::MAX_NUMBER_OF_TYPES;
     }
 }

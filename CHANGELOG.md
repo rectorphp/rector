@@ -9,7 +9,90 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
-## [v0.6.8]
+## [v0.6.11]
+
+### Added
+
+- [#2683] [PHPUnit] Add ClassMethod/RemoveEmptyTestMethodRector
+- [#2692] Add PHP Linter
+- [#2676] Add CheckStaticTypeMappersCommand to CI
+- [#2655] Rename --rule argument into --only, add documentation., Thanks to [@gnutix]
+- [#2663] Add support for stringy calls in CallReflectionResolver, Thanks to [@Lctrs]
+- [#2674] Added CombineIfRector, Thanks to [@jeroensmit]
+- [#2670] Add support for invokable and array callables in CallReflectionResolver, Thanks to [@Lctrs]
+- [#2685] Add --output-file
+
+### Changed
+
+- [#2690] [PHPUnit] Improve GetMockRector
+- [#2662] Good bye CallManipulator, Thanks to [@Lctrs]
+- [#2654] Merge pull request [#2654] from rectorphp/polyfill-php
+- [#2687] Changed ChangeMethodVisibilityRector yaml config, Thanks to [@C0pyR1ght]
+- [#2657] Migrate from PHPStan's Broker to ReflectionProvider, Thanks to [@Lctrs]
+- [#2658] Introduce a CallReflectionResolver, Thanks to [@Lctrs]
+- [#2659] Update rector-prefixed only on push to master, Thanks to [@Lctrs]
+- [#2660] Decouple PHPStanStaticTypeMapper
+- [#2681] Merge pull request [#2681] from rectorphp/phpunit4
+- [#2682] Merge pull request [#2682] from rectorphp/get-mock
+- [#2664] Merge pull request [#2664] from rectorphp/static-type-mapper-collector
+- [#2666] Merge pull request [#2666] from rectorphp/type-mapper-col-2
+- [#2671] Merge pull request [#2671] from rectorphp/type-mapper-col-3
+- [#2672] Merge pull request [#2672] from jeroensmit/RemoveDelegatingParentCallDefault, Thanks to [@jeroensmit]
+- [#2673] Merge pull request [#2673] from staabm/patch-3, Thanks to [@staabm]
+
+### Fixed
+
+- [#2668] Fixed url, Thanks to [@palpalani]
+- [#2686] Fix sync releases with rector-prefixed, Thanks to [@Lctrs]
+
+## [v0.6.10] - 2020-01-12
+
+### Added
+
+- [#2640] [AddDoesNotPerformAssertionToNonAssertingTestRector] Add failing test for Prophecy assertions., Thanks to [@gnutix]
+- [#2638] [CodingStyle] Prevent adding non-namespaced imports to non-namespaced class
+- [#2546] [Php70] add a rector to pass only variables as arguments by reference, Thanks to [@Lctrs]
+- [#2648] [Doctrine 2.0] Add class rename set
+- [#2644] [CakePHP 3.0] add class renames
+- [#2643] [CakePHP 3.0] Add AppUsesStaticCallToUseStatementRector
+- [#2613] Add support for PHPStan 0.12+ [@template] annotation., Thanks to [@gnutix]
+- [#2649] Add PHPStanAttributeTypeSyncer
+- [#2622] added link, Thanks to [@C0pyR1ght]
+- [#2623] added get started to readme, Thanks to [@C0pyR1ght]
+- [#2624] Add Gmagick to Imagick set
+- [#2629] Add a --no-progress-bar option (inspired from ECS) for nicer CI output., Thanks to [@gnutix]
+
+### Changed
+
+- [#2587] [ForeachItemsAssignToEmptyArrayToAssignRector] apply on code it should not, Thanks to [@gnutix]
+- [#2610] Improve Rector success message., Thanks to [@gnutix]
+- [#2618] More reliable way getting first stmt item, Thanks to [@Jaapze]
+- [#2645] Extend AddDoesNotPerformAssertionToNonAssertingTestRector by catching more test messages
+- [#2641] use Github Actions to compiler and publish prefixed rector.phar
+- [#2635] Test with Doctrine
+- [#2625] REAME changed URL to relative path, Thanks to [@C0pyR1ght]
+
+### Fixed
+
+- [#2636] [AddDoesNotPerformAssertionToNonAssertingTestRector] fix skipping if annotation already exists (fixes infinite loop too), Thanks to [@gnutix]
+- [#2619] [CI] Fix GitHub actions phar build
+- [#2637] [CountOnNullRector] fix Rector applying on properties with phpdocs array, Thanks to [@gnutix]
+- [#2617] Fix PHPStan [@return] class-string<T>, Thanks to [@gnutix]
+- [#2639] fix pattern miss matching
+- [#2646] Fix Union Array type StaticTypeMapper to string
+
+### Removed
+
+- [#2633] drop redundant interface and factory, remove symfony/var-dumper from rector.phar
+- [#2609] Remove stubs/ from rector.phar, Thanks to [@gnutix]
+
+## [v0.6.9] - 2020-01-08
+
+### Fixed
+
+- [#2608] Fix non-direct parent foreach in ForeachItemsAssignToEmptyArrayToAssignRector
+
+## [v0.6.8] - 2020-01-08
 
 ### Added
 
@@ -32,7 +115,7 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 - [#2565] [DeadCode] Add RemoveUnusedClassesRector
 - [#2593] [DoctrineGedmoToKnpLabs] Add SoftDeletableBehaviorRector
-- [#2569] [Polyfill] Add UnwrapFutureCompatibleIfRector
+- [#2569] [Polyfill] Add UnwrapFutureCompatibleIfFunctionExistsRector
 - [#2570] [SOLID] Add ChangeNestedIfsToEarlyReturnRector & ChangeIfElseValueAssignToEarlyReturnRector
 - [#2568] [Symfony 5] Add param types
 
@@ -1978,3 +2061,63 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [v0.6.7]: https://github.com/rectorphp/rector/compare/v0.6.6...v0.6.7
 [@ghostika]: https://github.com/ghostika
 [@Jaapze]: https://github.com/Jaapze
+[#2692]: https://github.com/rectorphp/rector/pull/2692
+[#2690]: https://github.com/rectorphp/rector/pull/2690
+[#2687]: https://github.com/rectorphp/rector/pull/2687
+[#2686]: https://github.com/rectorphp/rector/pull/2686
+[#2685]: https://github.com/rectorphp/rector/pull/2685
+[#2683]: https://github.com/rectorphp/rector/pull/2683
+[#2682]: https://github.com/rectorphp/rector/pull/2682
+[#2681]: https://github.com/rectorphp/rector/pull/2681
+[#2676]: https://github.com/rectorphp/rector/pull/2676
+[#2674]: https://github.com/rectorphp/rector/pull/2674
+[#2673]: https://github.com/rectorphp/rector/pull/2673
+[#2672]: https://github.com/rectorphp/rector/pull/2672
+[#2671]: https://github.com/rectorphp/rector/pull/2671
+[#2670]: https://github.com/rectorphp/rector/pull/2670
+[#2668]: https://github.com/rectorphp/rector/pull/2668
+[#2666]: https://github.com/rectorphp/rector/pull/2666
+[#2664]: https://github.com/rectorphp/rector/pull/2664
+[#2663]: https://github.com/rectorphp/rector/pull/2663
+[#2662]: https://github.com/rectorphp/rector/pull/2662
+[#2660]: https://github.com/rectorphp/rector/pull/2660
+[#2659]: https://github.com/rectorphp/rector/pull/2659
+[#2658]: https://github.com/rectorphp/rector/pull/2658
+[#2657]: https://github.com/rectorphp/rector/pull/2657
+[#2655]: https://github.com/rectorphp/rector/pull/2655
+[#2654]: https://github.com/rectorphp/rector/pull/2654
+[#2649]: https://github.com/rectorphp/rector/pull/2649
+[#2648]: https://github.com/rectorphp/rector/pull/2648
+[#2646]: https://github.com/rectorphp/rector/pull/2646
+[#2645]: https://github.com/rectorphp/rector/pull/2645
+[#2644]: https://github.com/rectorphp/rector/pull/2644
+[#2643]: https://github.com/rectorphp/rector/pull/2643
+[#2641]: https://github.com/rectorphp/rector/pull/2641
+[#2640]: https://github.com/rectorphp/rector/pull/2640
+[#2639]: https://github.com/rectorphp/rector/pull/2639
+[#2638]: https://github.com/rectorphp/rector/pull/2638
+[#2637]: https://github.com/rectorphp/rector/pull/2637
+[#2636]: https://github.com/rectorphp/rector/pull/2636
+[#2635]: https://github.com/rectorphp/rector/pull/2635
+[#2633]: https://github.com/rectorphp/rector/pull/2633
+[#2629]: https://github.com/rectorphp/rector/pull/2629
+[#2625]: https://github.com/rectorphp/rector/pull/2625
+[#2624]: https://github.com/rectorphp/rector/pull/2624
+[#2623]: https://github.com/rectorphp/rector/pull/2623
+[#2622]: https://github.com/rectorphp/rector/pull/2622
+[#2619]: https://github.com/rectorphp/rector/pull/2619
+[#2618]: https://github.com/rectorphp/rector/pull/2618
+[#2617]: https://github.com/rectorphp/rector/pull/2617
+[#2613]: https://github.com/rectorphp/rector/pull/2613
+[#2610]: https://github.com/rectorphp/rector/pull/2610
+[#2609]: https://github.com/rectorphp/rector/pull/2609
+[#2608]: https://github.com/rectorphp/rector/pull/2608
+[#2587]: https://github.com/rectorphp/rector/pull/2587
+[#2546]: https://github.com/rectorphp/rector/pull/2546
+[v0.6.9]: https://github.com/rectorphp/rector/compare/v0.6.8...v0.6.9
+[v0.6.11]: https://github.com/rectorphp/rector/compare/v0.6.10...v0.6.11
+[v0.6.10]: https://github.com/rectorphp/rector/compare/v0.6.9...v0.6.10
+[@template]: https://github.com/template
+[@palpalani]: https://github.com/palpalani
+[@Lctrs]: https://github.com/Lctrs
+[@C0pyR1ght]: https://github.com/C0pyR1ght

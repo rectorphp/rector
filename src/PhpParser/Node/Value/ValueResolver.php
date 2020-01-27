@@ -55,6 +55,11 @@ final class ValueResolver
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
+    public function isValue(Expr $expr, $value): bool
+    {
+        return $this->getValue($expr) === $value;
+    }
+
     /**
      * @return mixed|null
      */

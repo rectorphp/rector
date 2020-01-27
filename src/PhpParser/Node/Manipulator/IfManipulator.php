@@ -11,30 +11,13 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Continue_;
-use PhpParser\Node\Stmt\Do_;
-use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Throw_;
-use PhpParser\Node\Stmt\While_;
-use PhpParser\NodeTraverser;
 use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class IfManipulator
 {
-    /**
-     * @var string[]
-     */
-    private const ALLOWED_BREAKING_NODE_TYPES = [Return_::class, Throw_::class, Continue_::class];
-
-    /**
-     * @var string[]
-     */
-    private const SCOPE_CHANGING_NODE_TYPES = [Do_::class, While_::class, If_::class, Else_::class];
-
     /**
      * @var BetterStandardPrinter
      */
@@ -44,11 +27,6 @@ final class IfManipulator
      * @var ConstFetchManipulator
      */
     private $constFetchManipulator;
-
-    /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
 
     /**
      * @var StmtsManipulator
@@ -63,13 +41,11 @@ final class IfManipulator
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         ConstFetchManipulator $constFetchManipulator,
-        CallableNodeTraverser $callableNodeTraverser,
         StmtsManipulator $stmtsManipulator,
         NameResolver $nameResolver
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->constFetchManipulator = $constFetchManipulator;
-        $this->callableNodeTraverser = $callableNodeTraverser;
         $this->stmtsManipulator = $stmtsManipulator;
         $this->nameResolver = $nameResolver;
     }
@@ -150,21 +126,6 @@ final class IfManipulator
         return $this->hasOnlyStmtOfType($if, If_::class);
     }
 
-    public function isEarlyElse(If_ $if): bool
-    {
-        if (! $this->isAlwaysAllowedType((array) $if->stmts, self::ALLOWED_BREAKING_NODE_TYPES)) {
-            return false;
-        }
-
-        foreach ($if->elseifs as $elseif) {
-            if (! $this->isAlwaysAllowedType((array) $elseif->stmts, self::ALLOWED_BREAKING_NODE_TYPES)) {
-                return false;
-            }
-        }
-
-        return $if->else !== null;
-    }
-
     public function hasOnlyStmtOfType(If_ $if, string $desiredType): bool
     {
         if (count($if->stmts) !== 1) {
@@ -234,12 +195,7 @@ final class IfManipulator
         if (! $this->betterStandardPrinter->areNodesEqual($lastIfStmt->var, $lastElseStmt->var)) {
             return false;
         }
-
-        if (! $this->betterStandardPrinter->areNodesEqual($desiredExpr, $lastElseStmt->var)) {
-            return false;
-        }
-
-        return true;
+        return $this->betterStandardPrinter->areNodesEqual($desiredExpr, $lastElseStmt->var);
     }
 
     /**
@@ -248,29 +204,25 @@ final class IfManipulator
      * } else {
      * }
      */
-    public function isIfElseWithFunctionCondition(If_ $if, string $functionName): bool
+    public function isIfOrIfElseWithFunctionCondition(If_ $if, string $functionName): bool
     {
-        if (! $this->isIfWithElse($if)) {
+        if ((bool) $if->elseifs) {
             return false;
         }
 
         if (! $if->cond instanceof FuncCall) {
             return false;
         }
-
-        if (! $this->nameResolver->isName($if->cond, $functionName)) {
-            return false;
-        }
-
-        return true;
+        return $this->nameResolver->isName($if->cond, $functionName);
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $returnNode): ?Expr
     {
-        if ($this->betterStandardPrinter->areNodesEqual($notIdentical->left, $returnNode->expr)) {
-            if ($this->constFetchManipulator->isNull($notIdentical->right)) {
-                return $notIdentical->left;
-            }
+        if ($this->betterStandardPrinter->areNodesEqual(
+            $notIdentical->left,
+            $returnNode->expr
+        ) && $this->constFetchManipulator->isNull($notIdentical->right)) {
+            return $notIdentical->left;
         }
 
         if (! $this->betterStandardPrinter->areNodesEqual($notIdentical->right, $returnNode->expr)) {
@@ -281,57 +233,6 @@ final class IfManipulator
         }
 
         return null;
-    }
-
-    /**
-     * @param Node[] $stmts
-     * @param string[] $allowedTypes
-     */
-    private function isAlwaysAllowedType(array $stmts, array $allowedTypes): bool
-    {
-        $isAlwaysReturnValue = false;
-
-        $this->callableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use (
-            &$isAlwaysReturnValue,
-            $allowedTypes
-        ) {
-            if ($this->isScopeChangingNode($node)) {
-                $isAlwaysReturnValue = false;
-
-                return NodeTraverser::STOP_TRAVERSAL;
-            }
-
-            foreach ($allowedTypes as $allowedType) {
-                if (is_a($node, $allowedType, true)) {
-                    if ($allowedType === Return_::class) {
-                        if ($node->expr === null) {
-                            $isAlwaysReturnValue = false;
-
-                            return NodeTraverser::STOP_TRAVERSAL;
-                        }
-                    }
-
-                    $isAlwaysReturnValue = true;
-                }
-            }
-
-            return null;
-        });
-
-        return $isAlwaysReturnValue;
-    }
-
-    private function isScopeChangingNode(Node $node): bool
-    {
-        foreach (self::SCOPE_CHANGING_NODE_TYPES as $scopeChangingNode) {
-            if (! is_a($node, $scopeChangingNode, true)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
     }
 
     private function isIfWithoutElseAndElseIfs(If_ $if): bool

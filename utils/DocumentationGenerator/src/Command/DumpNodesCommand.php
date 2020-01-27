@@ -270,6 +270,7 @@ final class DumpNodesCommand extends AbstractCommand
                     $node = new Function_('some_function');
                 } elseif ($nodeClass === ClassMethod::class) {
                     $node = new ClassMethod('someMethod');
+                    $node->flags |= Class_::MODIFIER_PUBLIC;
                 } elseif ($nodeClass === Case_::class) {
                     $node = new Case_(new ConstFetch(new Name('true')));
                 } elseif ($nodeClass === Use_::class) {

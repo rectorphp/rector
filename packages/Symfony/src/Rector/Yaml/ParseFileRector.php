@@ -83,13 +83,6 @@ final class ParseFileRector extends AbstractRector
         }
 
         $nodeType = $nodeScope->getType($possibleFileNode);
-
-        if ($nodeType instanceof ConstantStringType) {
-            if (Strings::match($nodeType->getValue(), '#\.(yml|yaml)$#')) {
-                return true;
-            }
-        }
-
-        return false;
+        return $nodeType instanceof ConstantStringType && Strings::match($nodeType->getValue(), '#\.(yml|yaml)$#');
     }
 }

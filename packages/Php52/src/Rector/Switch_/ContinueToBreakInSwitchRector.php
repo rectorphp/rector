@@ -100,12 +100,8 @@ PHP
     {
         $staticType = $this->getStaticType($numVariable);
 
-        if ($staticType instanceof ConstantType) {
-            if ($staticType instanceof ConstantIntegerType) {
-                if ($staticType->getValue() <= 1) {
-                    return new Break_();
-                }
-            }
+        if ($staticType instanceof ConstantType && $staticType instanceof ConstantIntegerType && $staticType->getValue() <= 1) {
+            return new Break_();
         }
 
         return $node;

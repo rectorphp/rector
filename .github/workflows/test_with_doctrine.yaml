@@ -1,0 +1,34 @@
+name: Test With Doctrine
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    test_with_doctrine:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.3
+                    coverage: none
+
+            -   name: Clone doctrine/orm and install safe dependencies
+                run: |
+                    # cannot install dev deps (--no-dev), because doctrine/orm might inherit from them in different version
+                    composer install --no-progress --no-dev
+                    git clone https://github.com/doctrine/orm.git
+
+                    # older version have breaking "object" type
+                    composer require doctrine/cache:^1.10 -d orm --no-update
+
+                    # remove phsptan config to prevent rector loading configs
+                    rm phpstan.neon
+
+                    # do not intall doctrine/orm phpstan, it conflicts with Retor's one
+                    composer install -d orm --no-dev
+
+            -   run: bin/rector process orm/lib --set dead-code --autoload-file orm/vendor/autoload.php

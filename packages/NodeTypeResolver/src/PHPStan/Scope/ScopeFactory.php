@@ -9,18 +9,18 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Analyser\ScopeContext;
 use PHPStan\Analyser\ScopeFactory as PHPStanScopeFactory;
 use PHPStan\Analyser\TypeSpecifier;
-use PHPStan\Broker\Broker;
 use PHPStan\DependencyInjection\Type\DynamicReturnTypeExtensionRegistryProvider;
 use PHPStan\DependencyInjection\Type\OperatorTypeSpecifyingExtensionRegistryProvider;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Properties\PropertyReflectionFinder;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class ScopeFactory
 {
     /**
-     * @var Broker
+     * @var ReflectionProvider
      */
-    private $broker;
+    private $reflectionProvider;
 
     /**
      * @var TypeSpecifier
@@ -48,14 +48,14 @@ final class ScopeFactory
     private $operatorTypeSpecifyingExtensionRegistryProvider;
 
     public function __construct(
-        Broker $broker,
+        ReflectionProvider $reflectionProvider,
         TypeSpecifier $typeSpecifier,
         PHPStanScopeFactory $phpStanScopeFactory,
         BetterStandardPrinter $betterStandardPrinter,
         DynamicReturnTypeExtensionRegistryProvider $dynamicReturnTypeExtensionRegistryProvider,
         OperatorTypeSpecifyingExtensionRegistryProvider $operatorTypeSpecifyingExtensionRegistryProvider
     ) {
-        $this->broker = $broker;
+        $this->reflectionProvider = $reflectionProvider;
         $this->typeSpecifier = $typeSpecifier;
         $this->phpStanScopeFactory = $phpStanScopeFactory;
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -67,7 +67,7 @@ final class ScopeFactory
     {
         return new MutatingScope(
             $this->phpStanScopeFactory,
-            $this->broker,
+            $this->reflectionProvider,
             $this->dynamicReturnTypeExtensionRegistryProvider->getRegistry(),
             $this->operatorTypeSpecifyingExtensionRegistryProvider->getRegistry(),
             $this->betterStandardPrinter,

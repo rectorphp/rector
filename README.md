@@ -3,10 +3,9 @@
 Rector is a **rec**onstruc**tor** tool - it does **instant upgrades** and **instant refactoring** of your code.
 Why refactor manually if Rector can handle 80% for you?
 
-[![Build Status Github Actions](https://img.shields.io/github/workflow/status/rectorphp/rector/Code_Checks?style=flat-square)](https://github.com/rectorphp/rector/actions)
 [![Coverage Status](https://img.shields.io/coveralls/rectorphp/rector/master.svg?style=flat-square)](https://coveralls.io/github/rectorphp/rector?branch=master)
 [![Downloads](https://img.shields.io/packagist/dt/rector/rector.svg?style=flat-square)](https://packagist.org/packages/rector/rector)
-
+[![SonarCube](https://img.shields.io/badge/SonarCube_Debt-%3C30-brightgreen.svg?style=flat-square)](https://sonarcloud.io/dashboard?id=rectorphp_rector)
 
 ![Rector-showcase](docs/images/rector-showcase-var.gif)
 
@@ -48,13 +47,13 @@ Rector **instantly upgrades and instantly refactors the PHP code of your applica
 ## What Can Rector Do for You?
 
 - Rename classes, methods, properties, namespaces or constants
-- Complete [parameter, var or return type declarations](https://www.tomasvotruba.cz/blog/2019/01/03/how-to-complete-type-declarations-without-docblocks-with-rector/) based on static analysis of your code
+- Complete [parameter, var or return type declarations](https://www.tomasvotruba.com/blog/2019/01/03/how-to-complete-type-declarations-without-docblocks-with-rector/) based on static analysis of your code
 - Upgrade your code from PHP 5.3 to PHP 7.4
-- [Migrate your project from Nette to Symfony](https://www.tomasvotruba.cz/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
-- [Complete PHP 7.4 property type declarations](https://www.tomasvotruba.cz/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
-- [Refactor Laravel facades to dependency injection](https://www.tomasvotruba.cz/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
-- [Prepare a codebase before huge upgrades](https://www.tomasvotruba.cz/blog/2019/12/16/8-steps-you-can-make-before-huge-upgrade-to-make-it-faster-cheaper-and-more-stable/)
-- [Get rid of technical debt](https://www.tomasvotruba.cz/blog/2019/12/09/how-to-get-rid-of-technical-debt-or-what-we-would-have-done-differently-2-years-ago/)
+- [Migrate your project from Nette to Symfony](https://www.tomasvotruba.com/blog/2019/02/21/how-we-migrated-from-nette-to-symfony-in-3-weeks-part-1/)
+- [Complete PHP 7.4 property type declarations](https://www.tomasvotruba.com/blog/2018/11/15/how-to-get-php-74-typed-properties-to-your-code-in-few-seconds/)
+- [Refactor Laravel facades to dependency injection](https://www.tomasvotruba.com/blog/2019/03/04/how-to-turn-laravel-from-static-to-dependency-injection-in-one-day/)
+- [Prepare a codebase before huge upgrades](https://www.tomasvotruba.com/blog/2019/12/16/8-steps-you-can-make-before-huge-upgrade-to-make-it-faster-cheaper-and-more-stable/)
+- [Get rid of technical debt](https://www.tomasvotruba.com/blog/2019/12/09/how-to-get-rid-of-technical-debt-or-what-we-would-have-done-differently-2-years-ago/)
 - And much more...
 
 ...**look at the overview of [all available Rectors](/docs/AllRectorsOverview.md)** with before/after diffs and configuration examples. You can use them to build your own sets.
@@ -66,6 +65,12 @@ The AST libraries that Rector uses aren't well-suited for coding standards, so i
 Don't have a coding standard tool for your project? Consider adding [EasyCodingStandard](https://github.com/Symplify/EasyCodingStandard), [PHP CS Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) or [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer).
 
 Tip: If you have EasyCodingStandard, you can start your set with [`ecs-after-rector.yaml`](/ecs-after-rector.yaml).
+
+## Try Rector Online
+
+Too litle time to download?
+
+We have **[online demo](https://getrector.org/demo) just for you!**
 
 ## Install
 
@@ -147,7 +152,7 @@ parameters:
 
 ### Extra Autoloading
 
-Rector relies on project and autoloading of its classes. To specify your own autoload file, use `--autoload-file` option:
+Rector relies on project and autoloading of its classes by using the composer autoloader as default. To specify your own autoload file, use `--autoload-file` option:
 
 ```bash
 vendor/bin/rector process ../project --autoload-file ../project/vendor/autoload.php
@@ -200,6 +205,18 @@ class SomeClass
     }
 }
 ```
+
+### Filter Rectors
+
+If you have a configuration file for Rector including many sets and Rectors, you might want at times to run only a single Rector from them. The `--only` argument allows that, for example :
+
+```bash
+vendor/bin/rector process --set solid --only "Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector" src/
+```
+
+Will only run `Rector\SOLID\Rector\Class_\FinalizeClassesWithoutChildrenRector`.
+
+Please note that the backslash in the Rector's fully-qualified class name needs to be properly escaped (by surrounding the string in double quotes).
 
 ### Provide PHP Version
 
@@ -288,7 +305,7 @@ Create a class that extends [`Rector\Rector\AbstractRector`](/src/Rector/Abstrac
 
 declare(strict_types=1);
 
-namespace App\Rector;
+namespace Utils\Rector;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -300,15 +317,6 @@ use Rector\RectorDefinition\RectorDefinition;
 
 final class MyFirstRector extends AbstractRector
 {
-    public function getDefinition(): RectorDefinition
-    {
-        // what does this do?
-        // minimalistic before/after sample - to explain in code
-        return new RectorDefinition('Change method calls from set* to change*.', [
-            new CodeSample('$user->setPassword("123456");', '$user->changePassword("123456");')
-        ]);
-    }
-
     /**
      * @return string[]
      */
@@ -325,7 +333,7 @@ final class MyFirstRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         // we only care about "set*" method names
-        if (! $this->isName($node, 'set*')) {
+        if (! $this->isName($node->name, 'set*')) {
             // return null to skip it
             return null;
         }
@@ -338,7 +346,56 @@ final class MyFirstRector extends AbstractRector
         // return $node if you modified it
         return $node;
     }
+
+    /**
+     * From this method documentation is generated.
+     */
+    public function getDefinition(): RectorDefinition
+    {
+        return new RectorDefinition(
+            'Change method calls from set* to change*.', [
+                new CodeSample(
+                    // code before
+                    '$user->setPassword("123456");',
+                    // code after
+                    '$user->changePassword("123456");'
+                ),
+            ]
+        );
+    }
 }
+```
+
+This is how file structure should look like:
+
+```bash
+/src/YourCode.php
+/utils/Rector/MyFirstRector.php
+rector.yaml
+composer.json
+```
+
+We also need to load Rector rules in `composer.json`:
+
+```json
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Utils\\": "utils"
+        }
+    }
+}
+```
+
+After adding this to `composer.json`, be sure to reload composer class map:
+
+```bash
+composer dump-autoload
 ```
 
 ### 2. Register It
@@ -346,10 +403,12 @@ final class MyFirstRector extends AbstractRector
 ```yaml
 # rector.yaml
 services:
-    App\Rector\MyFirstRector: ~
+    Utils\Rector\MyFirstRector: ~
 ```
 
 ### 3. Let Rector Refactor Your Code
+
+The `rector.yaml` config is loaded by default, so we can skip it.
 
 ```bash
 # see the diff first
@@ -360,6 +419,12 @@ vendor/bin/rector process src
 ```
 
 That's it!
+
+### Generate Rector Rule
+
+Do you want to save time with making rules and tests?
+
+Use [`create` command](/docs/RectorRecipe.md).
 
 ## More Detailed Documentation
 

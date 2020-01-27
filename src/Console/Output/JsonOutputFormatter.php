@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Console\Output;
 
+use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
 use Rector\Application\ErrorAndDiffCollector;
 use Rector\Configuration\Configuration;
@@ -89,6 +90,11 @@ final class JsonOutputFormatter implements OutputFormatterInterface
 
         $json = Json::encode($errorsArray, Json::PRETTY);
 
-        $this->symfonyStyle->writeln($json);
+        $outputFile = $this->configuration->getOutputFile();
+        if ($outputFile !== null) {
+            FileSystem::write($outputFile, $json . PHP_EOL);
+        } else {
+            $this->symfonyStyle->writeln($json);
+        }
     }
 }

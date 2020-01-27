@@ -7,6 +7,7 @@ namespace Rector\Console\Output;
 use Nette\Utils\Strings;
 use Rector\Application\ErrorAndDiffCollector;
 use Rector\Configuration\Configuration;
+use Rector\Configuration\Option;
 use Rector\Contract\Console\Output\OutputFormatterInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
@@ -49,6 +50,15 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
     public function report(ErrorAndDiffCollector $errorAndDiffCollector): void
     {
+        if ($this->configuration->getOutputFile()) {
+            $this->symfonyStyle->error(sprintf(
+                'Option "--%s" can be used only with "--%s %s"',
+                Option::OPTION_OUTPUT_FILE,
+                Option::OPTION_OUTPUT_FORMAT,
+                'json'
+            ));
+        }
+
         $this->reportFileDiffs($errorAndDiffCollector->getFileDiffs());
         $this->reportErrors($errorAndDiffCollector->getErrors());
         $this->reportRemovedFilesAndNodes($errorAndDiffCollector);

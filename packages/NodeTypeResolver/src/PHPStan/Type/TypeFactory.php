@@ -92,9 +92,7 @@ final class TypeFactory
         $unwrappedTypes = [];
         foreach ($types as $key => $type) {
             if ($type instanceof UnionType) {
-                foreach ($type->getTypes() as $subUnionedType) {
-                    $unwrappedTypes[] = $subUnionedType;
-                }
+                $unwrappedTypes = $type->getTypes();
 
                 unset($types[$key]);
             }

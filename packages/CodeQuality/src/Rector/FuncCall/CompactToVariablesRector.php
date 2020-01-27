@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\String_;
+use Rector\CodeQuality\CompactConverter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -21,6 +18,16 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class CompactToVariablesRector extends AbstractRector
 {
+    /**
+     * @var CompactConverter
+     */
+    private $compactConverter;
+
+    public function __construct(CompactConverter $compactConverter)
+    {
+        $this->compactConverter = $compactConverter;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change compact() call to own array', [
@@ -71,13 +78,6 @@ PHP
             return null;
         }
 
-        $array = new Array_();
-
-        foreach ($node->args as $arg) {
-            $variableName = $this->getValue($arg->value);
-            $array->items[] = new ArrayItem(new Variable($variableName), new String_($variableName));
-        }
-
-        return $array;
+        return $this->compactConverter->convertToArray($node);
     }
 }

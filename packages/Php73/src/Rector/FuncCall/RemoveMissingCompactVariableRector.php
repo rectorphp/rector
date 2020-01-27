@@ -82,7 +82,7 @@ PHP
             unset($node->args[$key]);
         }
 
-        if (! $node->args) {
+        if ($node->args === []) {
             return new Array_();
         }
 
