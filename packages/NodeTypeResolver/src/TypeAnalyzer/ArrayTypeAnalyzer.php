@@ -9,9 +9,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
@@ -24,6 +22,7 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class ArrayTypeAnalyzer
@@ -43,14 +42,21 @@ final class ArrayTypeAnalyzer
      */
     private $nameResolver;
 
+    /**
+     * @var ClassManipulator
+     */
+    private $classManipulator;
+
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         PregMatchTypeCorrector $pregMatchTypeCorrector,
-        NameResolver $nameResolver
+        NameResolver $nameResolver,
+        ClassManipulator $classManipulator
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->pregMatchTypeCorrector = $pregMatchTypeCorrector;
         $this->nameResolver = $nameResolver;
+        $this->classManipulator = $classManipulator;
     }
 
     public function isArrayType(Node $node): bool
@@ -102,9 +108,10 @@ final class ArrayTypeAnalyzer
             return false;
         }
 
-        $propertyPropertyNode = $this->getClassNodeProperty($classNode, $propertyName);
-        if ($propertyPropertyNode !== null) {
-            return $propertyPropertyNode->default instanceof Array_;
+        $property = $this->classManipulator->getProperty($classNode, $propertyName);
+        if ($property !== null) {
+            $propertyProperty = $property->props[0];
+            return $propertyProperty->default instanceof Array_;
         }
 
         // also possible 3rd party vendor
@@ -132,21 +139,5 @@ final class ArrayTypeAnalyzer
         }
 
         return true;
-    }
-
-    /**
-     * @param Trait_|Class_ $classLike
-     */
-    private function getClassNodeProperty(ClassLike $classLike, string $name): ?PropertyProperty
-    {
-        foreach ($classLike->getProperties() as $property) {
-            foreach ($property->props as $propertyProperty) {
-                if ($this->nameResolver->isName($propertyProperty, $name)) {
-                    return $propertyProperty;
-                }
-            }
-        }
-
-        return null;
     }
 }
