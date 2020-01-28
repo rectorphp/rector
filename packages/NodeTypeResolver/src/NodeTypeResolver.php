@@ -4,40 +4,27 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver;
 
-use Countable;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Nop;
-use PhpParser\Node\Stmt\PropertyProperty;
-use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\Accessory\HasOffsetType;
-use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
-use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
-use PHPStan\Type\StringType;
-use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
@@ -47,9 +34,9 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
+use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 use ReflectionProperty;
@@ -102,9 +89,9 @@ final class NodeTypeResolver
     private $staticTypeMapper;
 
     /**
-     * @var PregMatchTypeCorrector
+     * @var ArrayTypeAnalyzer
      */
-    private $pregMatchTypeCorrector;
+    private $arrayTypeAnalyzer;
 
     /**
      * @param PerNodeTypeResolverInterface[] $perNodeTypeResolvers
@@ -118,7 +105,6 @@ final class NodeTypeResolver
         TypeFactory $typeFactory,
         StaticTypeMapper $staticTypeMapper,
         ObjectTypeSpecifier $objectTypeSpecifier,
-        PregMatchTypeCorrector $pregMatchTypeCorrector,
         array $perNodeTypeResolvers
     ) {
         $this->nameResolver = $nameResolver;
@@ -134,7 +120,15 @@ final class NodeTypeResolver
         $this->parsedNodesByType = $parsedNodesByType;
         $this->betterPhpDocParser = $betterPhpDocParser;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->pregMatchTypeCorrector = $pregMatchTypeCorrector;
+    }
+
+    /**
+     * Prevents circular dependency
+     * @required
+     */
+    public function autowireNodeTypeResolver(ArrayTypeAnalyzer $arrayTypeAnalyzer): void
+    {
+        $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
     }
 
     /**
@@ -189,26 +183,6 @@ final class NodeTypeResolver
         return $this->unionWithParentClassesInterfacesAndUsedTraits($type);
     }
 
-    public function isStringOrUnionStringOnlyType(Node $node): bool
-    {
-        $nodeType = $this->getStaticType($node);
-        if ($nodeType instanceof StringType) {
-            return true;
-        }
-
-        if ($nodeType instanceof UnionType) {
-            foreach ($nodeType->getTypes() as $singleType) {
-                if ($singleType->isSuperTypeOf(new StringType())->no()) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
     /**
      * e.g. string|null, ObjectNull|null
      */
@@ -222,49 +196,20 @@ final class NodeTypeResolver
         return $nodeType->isSuperTypeOf(new NullType())->yes();
     }
 
-    public function isCountableType(Node $node): bool
-    {
-        $nodeType = $this->getStaticType($node);
-        $nodeType = $this->pregMatchTypeCorrector->correct($node, $nodeType);
-
-        if ($this->isCountableObjectType($nodeType)) {
-            return true;
-        }
-
-        return $this->isArrayType($node);
-    }
-
-    public function isArrayType(Node $node): bool
-    {
-        $nodeStaticType = $this->getStaticType($node);
-
-        $nodeStaticType = $this->pregMatchTypeCorrector->correct($node, $nodeStaticType);
-        if ($this->isIntersectionArrayType($nodeStaticType)) {
-            return true;
-        }
-
-        // PHPStan false positive, when variable has type[] docblock, but default array is missing
-        if (($node instanceof PropertyFetch || $node instanceof StaticPropertyFetch) && ! $this->isPropertyFetchWithArrayDefault(
-            $node
-        )) {
-            return false;
-        }
-
-        if ($nodeStaticType instanceof MixedType) {
-            if ($nodeStaticType->isExplicitMixed()) {
-                return false;
-            }
-
-            if ($this->isPropertyFetchWithArrayDefault($node)) {
-                return true;
-            }
-        }
-
-        return $nodeStaticType instanceof ArrayType;
-    }
-
     public function getStaticType(Node $node): Type
     {
+        if ($this->isArrayExpr($node)) {
+            /** @var Scope $scope */
+            $scope = $node->getAttribute(AttributeKey::SCOPE);
+            /** @var Expr $node */
+            $arrayType = $scope->getType($node);
+            if ($arrayType instanceof ArrayType) {
+                return $arrayType;
+            }
+
+            return new ArrayType(new MixedType(), new MixedType());
+        }
+
         if ($node instanceof Arg) {
             throw new ShouldNotHappenException('Arg does not have a type, use $arg->value instead');
         }
@@ -297,20 +242,6 @@ final class NodeTypeResolver
         }
 
         return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType($node, $staticType);
-    }
-
-    public function resolveNodeToPHPStanType(Expr $expr): Type
-    {
-        if ($this->isArrayType($expr)) {
-            $arrayType = $this->getStaticType($expr);
-            if ($arrayType instanceof ArrayType) {
-                return $arrayType;
-            }
-
-            return new ArrayType(new MixedType(), new MixedType());
-        }
-
-        return $this->getStaticType($expr);
     }
 
     public function isNullableObjectType(Node $node): bool
@@ -489,58 +420,6 @@ final class NodeTypeResolver
         return $this->typeFactory->createObjectTypeOrUnionType($allTypes);
     }
 
-    private function isIntersectionArrayType(Type $nodeType): bool
-    {
-        if (! $nodeType instanceof IntersectionType) {
-            return false;
-        }
-
-        foreach ($nodeType->getTypes() as $intersectionNodeType) {
-            if ($intersectionNodeType instanceof ArrayType || $intersectionNodeType instanceof HasOffsetType || $intersectionNodeType instanceof NonEmptyArrayType) {
-                continue;
-            }
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * phpstan bug workaround - https://phpstan.org/r/0443f283-244c-42b8-8373-85e7deb3504c
-     */
-    private function isPropertyFetchWithArrayDefault(Node $node): bool
-    {
-        if (! $node instanceof PropertyFetch && ! $node instanceof StaticPropertyFetch) {
-            return false;
-        }
-
-        /** @var Class_|Trait_|Interface_|null $classNode */
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode instanceof Interface_ || $classNode === null) {
-            return false;
-        }
-
-        $propertyName = $this->nameResolver->getName($node->name);
-        if ($propertyName === null) {
-            return false;
-        }
-
-        $propertyPropertyNode = $this->getClassNodeProperty($classNode, $propertyName);
-        if ($propertyPropertyNode === null) {
-            // also possible 3rd party vendor
-            if ($node instanceof PropertyFetch) {
-                $propertyOwnerStaticType = $this->getStaticType($node->var);
-            } else {
-                $propertyOwnerStaticType = $this->getStaticType($node->class);
-            }
-
-            return ! $propertyOwnerStaticType instanceof ThisType && $propertyOwnerStaticType instanceof TypeWithClassName;
-        }
-
-        return $propertyPropertyNode->default instanceof Array_;
-    }
-
     private function isAnonymousClass(Node $node): bool
     {
         if (! $node instanceof Class_) {
@@ -561,22 +440,6 @@ final class NodeTypeResolver
         $classLikeTypes = $this->classReflectionTypesResolver->resolve($classReflection);
 
         return array_unique($classLikeTypes);
-    }
-
-    /**
-     * @param Trait_|Class_ $classLike
-     */
-    private function getClassNodeProperty(ClassLike $classLike, string $name): ?PropertyProperty
-    {
-        foreach ($classLike->getProperties() as $property) {
-            foreach ($property->props as $propertyProperty) {
-                if ($this->nameResolver->isName($propertyProperty, $name)) {
-                    return $propertyProperty;
-                }
-            }
-        }
-
-        return null;
     }
 
     private function getVendorPropertyFetchType(PropertyFetch $propertyFetch): ?Type
@@ -621,21 +484,8 @@ final class NodeTypeResolver
         return $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, new Nop());
     }
 
-    private function isCountableObjectType(Type $type): bool
+    private function isArrayExpr(Node $node): bool
     {
-        if (! $type instanceof ObjectType) {
-            return false;
-        }
-
-        if (is_a($type->getClassName(), Countable::class, true)) {
-            return true;
-        }
-
-        // @see https://github.com/rectorphp/rector/issues/2028
-        if (is_a($type->getClassName(), 'SimpleXMLElement', true)) {
-            return true;
-        }
-
-        return is_a($type->getClassName(), 'ResourceBundle', true);
+        return $node instanceof Expr && $this->arrayTypeAnalyzer->isArrayType($node);
     }
 }

@@ -90,7 +90,12 @@ PHP
             $isNegated = false;
         }
 
-        if ($this->isStaticType($conditionNode, BooleanType::class)) {
+        if ($conditionNode instanceof Expr\Cast\Bool_) {
+            return null;
+        }
+
+        $conditionStaticType = $this->getStaticType($conditionNode);
+        if ($conditionStaticType instanceof BooleanType) {
             return null;
         }
 

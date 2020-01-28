@@ -47,7 +47,7 @@ final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements R
                     continue;
                 }
 
-                $yieldValueStaticType = $this->nodeTypeResolver->resolveNodeToPHPStanType($yieldNode->value);
+                $yieldValueStaticType = $this->nodeTypeResolver->getStaticType($yieldNode->value);
                 $types[] = new ArrayType(new MixedType(), $yieldValueStaticType);
             }
 

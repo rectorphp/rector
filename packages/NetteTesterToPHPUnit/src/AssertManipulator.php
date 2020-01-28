@@ -19,6 +19,7 @@ use PHPStan\Type\BooleanType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
 use Rector\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -77,13 +78,19 @@ final class AssertManipulator
      */
     private $docBlockManipulator;
 
+    /**
+     * @var StringTypeAnalyzer
+     */
+    private $stringTypeAnalyzer;
+
     public function __construct(
         NameResolver $nameResolver,
         NodeTypeResolver $nodeTypeResolver,
         ValueResolver $valueResolver,
         NodeAddingCommander $nodeAddingCommander,
         NodeRemovingCommander $nodeRemovingCommander,
-        DocBlockManipulator $docBlockManipulator
+        DocBlockManipulator $docBlockManipulator,
+        StringTypeAnalyzer $stringTypeAnalyzer
     ) {
         $this->nameResolver = $nameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -91,6 +98,7 @@ final class AssertManipulator
         $this->nodeAddingCommander = $nodeAddingCommander;
         $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->docBlockManipulator = $docBlockManipulator;
+        $this->stringTypeAnalyzer = $stringTypeAnalyzer;
     }
 
     /**
@@ -135,7 +143,7 @@ final class AssertManipulator
 
     private function processContainsCall(StaticCall $staticCall): void
     {
-        if ($this->nodeTypeResolver->isStringOrUnionStringOnlyType($staticCall->args[1]->value)) {
+        if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($staticCall->args[1]->value)) {
             $name = $this->nameResolver->isName(
                 $staticCall,
                 'contains'
