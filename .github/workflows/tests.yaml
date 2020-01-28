@@ -18,9 +18,10 @@ jobs:
             -   uses: actions/checkout@v2
             -   uses: shivammathur/setup-php@v1
                 with:
-                    php-version: 7.2
+                    php-version: ${{ matrix.php }}
                     coverage: none # disable xdebug, pcov
             # report phpunit errors into files-changed PR tab
+            # https://github.com/actions/toolkit/blob/master/docs/problem-matchers.md
             -   name: Setup Problem Matchers for PHPUnit
                 run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
                 
