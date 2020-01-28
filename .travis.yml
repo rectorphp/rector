@@ -37,7 +37,7 @@ jobs:
                 - if [ "${TRAVIS_TAG}" != "" ]; then COMMIT_MSG="Rector ${TRAVIS_TAG}"; else COMMIT_MSG="Updated Rector to commit ${TRAVIS_COMMIT}"; fi
 
                 - git commit -m "${COMMIT_MSG}"
-                - git push --quiet origin master
+                - git push --quiet origin master -f
 
                 - if [ "${TRAVIS_TAG}" != "" ]; then git tag "${TRAVIS_TAG}" && git push --quiet origin ${TRAVIS_TAG}; fi
 
