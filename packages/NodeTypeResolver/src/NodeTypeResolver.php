@@ -484,12 +484,14 @@ final class NodeTypeResolver
 
     private function resolveArrayType(Expr $expr): ArrayType
     {
-        /** @var Scope $scope */
+        /** @var Scope|null $scope */
         $scope = $expr->getAttribute(AttributeKey::SCOPE);
 
-        $arrayType = $scope->getType($expr);
-        if ($arrayType instanceof ArrayType) {
-            return $arrayType;
+        if ($scope instanceof Scope) {
+            $arrayType = $scope->getType($expr);
+            if ($arrayType instanceof ArrayType) {
+                return $arrayType;
+            }
         }
 
         return new ArrayType(new MixedType(), new MixedType());
