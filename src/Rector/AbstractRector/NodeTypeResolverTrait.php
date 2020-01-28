@@ -16,6 +16,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer;
+use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -39,16 +40,23 @@ trait NodeTypeResolverTrait
     private $countableTypeAnalyzer;
 
     /**
+     * @var StringTypeAnalyzer
+     */
+    private $stringTypeAnalyzer;
+
+    /**
      * @required
      */
     public function autowireTypeAnalyzerDependencies(
         NodeTypeResolver $nodeTypeResolver,
         ArrayTypeAnalyzer $arrayTypeAnalyzer,
-        CountableTypeAnalyzer $countableTypeAnalyzer
+        CountableTypeAnalyzer $countableTypeAnalyzer,
+        StringTypeAnalyzer $stringTypeAnalyzer
     ): void {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
         $this->countableTypeAnalyzer = $countableTypeAnalyzer;
+        $this->stringTypeAnalyzer = $stringTypeAnalyzer;
     }
 
     /**
@@ -75,7 +83,7 @@ trait NodeTypeResolverTrait
 
     protected function isStringOrUnionStringOnlyType(Node $node): bool
     {
-        return $this->nodeTypeResolver->isStringOrUnionStringOnlyType($node);
+        return $this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($node);
     }
 
     protected function isNumberType(Node $node): bool

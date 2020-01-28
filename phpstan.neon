@@ -230,3 +230,4 @@ parameters:
         - '#Access to undefined constant Rector\\BetterPhpDocParser\\PhpDocNode\\AbstractTagValueNode\:\:SHORT_NAME#'
         - '#Parameter \#1 \$name of method Rector\\Rector\\AbstractRector\:\:getShortName\(\) expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|string, PhpParser\\Node\\Identifier\|null given#'
         - '#Parameter \#1 \$entityClass of method Rector\\CakePHPToSymfony\\Rector\\NodeFactory\\DoctrineNodeFactory\:\:createConstructorWithGetRepositoryAssign\(\) expects string, string\|null given#'
+        - '#Parameter \#1 \$node of method PHPStan\\Analyser\\Scope\:\:getType\(\) expects PhpParser\\Node\\Expr, PhpParser\\Node given#'

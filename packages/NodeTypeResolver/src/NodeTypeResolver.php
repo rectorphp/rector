@@ -25,7 +25,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
@@ -184,26 +183,6 @@ final class NodeTypeResolver
         return $this->unionWithParentClassesInterfacesAndUsedTraits($type);
     }
 
-    public function isStringOrUnionStringOnlyType(Node $node): bool
-    {
-        $nodeType = $this->getStaticType($node);
-        if ($nodeType instanceof StringType) {
-            return true;
-        }
-
-        if ($nodeType instanceof UnionType) {
-            foreach ($nodeType->getTypes() as $singleType) {
-                if ($singleType->isSuperTypeOf(new StringType())->no()) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
     /**
      * e.g. string|null, ObjectNull|null
      */
@@ -219,18 +198,16 @@ final class NodeTypeResolver
 
     public function getStaticType(Node $node): Type
     {
-        if ($node instanceof Expr) {
-            if ($this->arrayTypeAnalyzer->isArrayType($node)) {
-                /** @var Scope $scope */
-                $scope = $node->getAttribute(AttributeKey::SCOPE);
-                $arrayType = $scope->getType($node);
-
-                if ($arrayType instanceof ArrayType) {
-                    return $arrayType;
-                }
-
-                return new ArrayType(new MixedType(), new MixedType());
+        if ($this->isArrayExpr($node)) {
+            /** @var Scope $scope */
+            $scope = $node->getAttribute(AttributeKey::SCOPE);
+            /** @var Expr $node */
+            $arrayType = $scope->getType($node);
+            if ($arrayType instanceof ArrayType) {
+                return $arrayType;
             }
+
+            return new ArrayType(new MixedType(), new MixedType());
         }
 
         if ($node instanceof Arg) {
@@ -505,5 +482,10 @@ final class NodeTypeResolver
         }
 
         return $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, new Nop());
+    }
+
+    private function isArrayExpr(Node $node): bool
+    {
+        return $node instanceof Expr && $this->arrayTypeAnalyzer->isArrayType($node);
     }
 }
