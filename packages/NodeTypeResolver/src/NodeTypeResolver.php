@@ -172,14 +172,6 @@ final class NodeTypeResolver
             return true;
         }
 
-        if ($resolvedType instanceof TypeWithClassName && is_a(
-            $resolvedType->getClassName(),
-            $requiredType->getClassName(),
-            true
-        )) {
-            return true;
-        }
-
         if ($this->isUnionNullTypeOfRequiredType($requiredType, $resolvedType)) {
             return true;
         }
@@ -439,14 +431,20 @@ final class NodeTypeResolver
 
         $classNames = TypeUtils::getDirectClassNames($objectType);
         foreach ($classNames as $className) {
-            if ($this->isObjectTypeFnMatch($className, $requiredType)) {
-                return true;
+            if (! fnmatch($requiredType, $className, FNM_NOESCAPE)) {
+                continue;
             }
+
+            return true;
         }
 
         return false;
     }
 
+    /**
+     * Matches:
+     * - Type|null
+     */
     private function isUnionNullTypeOfRequiredType(ObjectType $objectType, Type $resolvedType): bool
     {
         if (! $resolvedType instanceof UnionType) {
@@ -461,14 +459,14 @@ final class NodeTypeResolver
         $secondType = $resolvedType->getTypes()[1];
 
         if ($firstType instanceof NullType && $secondType instanceof ObjectType) {
-            $resolvedType = $secondType;
-        } elseif ($secondType instanceof NullType && $firstType instanceof ObjectType) {
-            $resolvedType = $firstType;
-        } else {
-            return false;
+            return $objectType->equals($firstType);
         }
 
-        return is_a($resolvedType->getClassName(), $objectType->getClassName(), true);
+        if ($secondType instanceof NullType && $firstType instanceof ObjectType) {
+            return $objectType->equals($secondType);
+        }
+
+        return false;
     }
 
     private function resolveFirstType(Node $node): Type
@@ -596,18 +594,12 @@ final class NodeTypeResolver
         return $className === null || Strings::contains($className, 'AnonymousClass');
     }
 
-    private function isObjectTypeFnMatch(string $className, string $requiredType): bool
-    {
-        return fnmatch($requiredType, $className, FNM_NOESCAPE);
-    }
-
     /**
      * @return string[]
      */
     private function getClassLikeTypesByClassName(string $className): array
     {
         $classReflection = $this->reflectionProvider->getClass($className);
-
         $classLikeTypes = $this->classReflectionTypesResolver->resolve($classReflection);
 
         return array_unique($classLikeTypes);
