@@ -10,7 +10,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -27,7 +26,6 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ReflectionProvider;
@@ -56,12 +54,10 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 use ReflectionProperty;
 use Symfony\Component\Finder\SplFileInfo;
@@ -77,16 +73,6 @@ final class NodeTypeResolver
      * @var NameResolver
      */
     private $nameResolver;
-
-    /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
 
     /**
      * @var ClassReflectionTypesResolver
@@ -109,11 +95,6 @@ final class NodeTypeResolver
     private $objectTypeSpecifier;
 
     /**
-     * @var BetterNodeFinder
-     */
-    private $betterNodeFinder;
-
-    /**
      * @var ParsedNodesByType
      */
     private $parsedNodesByType;
@@ -129,38 +110,39 @@ final class NodeTypeResolver
     private $staticTypeMapper;
 
     /**
+     * @var PregMatchTypeCorrector
+     */
+    private $pregMatchTypeCorrector;
+
+    /**
      * @param PerNodeTypeResolverInterface[] $perNodeTypeResolvers
      */
     public function __construct(
-        BetterStandardPrinter $betterStandardPrinter,
         BetterPhpDocParser $betterPhpDocParser,
         NameResolver $nameResolver,
         ParsedNodesByType $parsedNodesByType,
-        CallableNodeTraverser $callableNodeTraverser,
         ClassReflectionTypesResolver $classReflectionTypesResolver,
         ReflectionProvider $reflectionProvider,
         TypeFactory $typeFactory,
         StaticTypeMapper $staticTypeMapper,
         ObjectTypeSpecifier $objectTypeSpecifier,
-        BetterNodeFinder $betterNodeFinder,
+        PregMatchTypeCorrector $pregMatchTypeCorrector,
         array $perNodeTypeResolvers
     ) {
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nameResolver = $nameResolver;
 
         foreach ($perNodeTypeResolvers as $perNodeTypeResolver) {
             $this->addPerNodeTypeResolver($perNodeTypeResolver);
         }
 
-        $this->callableNodeTraverser = $callableNodeTraverser;
         $this->classReflectionTypesResolver = $classReflectionTypesResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->typeFactory = $typeFactory;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->parsedNodesByType = $parsedNodesByType;
         $this->betterPhpDocParser = $betterPhpDocParser;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->pregMatchTypeCorrector = $pregMatchTypeCorrector;
     }
 
     /**
@@ -260,7 +242,7 @@ final class NodeTypeResolver
     {
         $nodeType = $this->getStaticType($node);
 
-        $nodeType = $this->correctPregMatchType($node, $nodeType);
+        $nodeType = $this->pregMatchTypeCorrector->correct($node, $nodeType);
         if ($nodeType instanceof ObjectType) {
             if (is_a($nodeType->getClassName(), Countable::class, true)) {
                 return true;
@@ -270,6 +252,7 @@ final class NodeTypeResolver
             if (is_a($nodeType->getClassName(), 'SimpleXMLElement', true)) {
                 return true;
             }
+
             return is_a($nodeType->getClassName(), 'ResourceBundle', true);
         }
 
@@ -280,7 +263,7 @@ final class NodeTypeResolver
     {
         $nodeStaticType = $this->getStaticType($node);
 
-        $nodeStaticType = $this->correctPregMatchType($node, $nodeStaticType);
+        $nodeStaticType = $this->pregMatchTypeCorrector->correct($node, $nodeStaticType);
         if ($this->isIntersectionArrayType($nodeStaticType)) {
             return true;
         }
@@ -312,10 +295,7 @@ final class NodeTypeResolver
         }
 
         if ($node instanceof Param) {
-            $paramStaticType = $this->resolveParamStaticType($node);
-            if ($paramStaticType !== null) {
-                return $paramStaticType;
-            }
+            return $this->resolve($node);
         }
 
         /** @var Scope|null $nodeScope */
@@ -553,71 +533,6 @@ final class NodeTypeResolver
         return $this->typeFactory->createObjectTypeOrUnionType($allTypes);
     }
 
-    /**
-     * Special case for "preg_match(), preg_match_all()" - with 3rd argument
-     * @covers https://github.com/rectorphp/rector/issues/786
-     */
-    private function correctPregMatchType(Node $node, Type $originalType): Type
-    {
-        if (! $node instanceof Variable) {
-            return $originalType;
-        }
-
-        if ($originalType instanceof ArrayType) {
-            return $originalType;
-        }
-
-        foreach ($this->getVariableUsages($node) as $usage) {
-            $possiblyArg = $usage->getAttribute(AttributeKey::PARENT_NODE);
-            if (! $possiblyArg instanceof Arg) {
-                continue;
-            }
-
-            $funcCallNode = $possiblyArg->getAttribute(AttributeKey::PARENT_NODE);
-            if (! $funcCallNode instanceof FuncCall) {
-                continue;
-            }
-
-            if (! $this->nameResolver->isNames($funcCallNode, ['preg_match', 'preg_match_all'])) {
-                continue;
-            }
-
-            if (! isset($funcCallNode->args[2])) {
-                continue;
-            }
-
-            // are the same variables
-            if (! $this->betterStandardPrinter->areNodesEqual($funcCallNode->args[2]->value, $node)) {
-                continue;
-            }
-            return new ArrayType(new MixedType(), new MixedType());
-        }
-        return $originalType;
-    }
-
-    private function getScopeNode(Node $node): ?Node
-    {
-        return $node->getAttribute(AttributeKey::METHOD_NODE)
-            ?? $node->getAttribute(AttributeKey::FUNCTION_NODE)
-            ?? $node->getAttribute(AttributeKey::NAMESPACE_NODE);
-    }
-
-    /**
-     * @return Node[]
-     */
-    private function getVariableUsages(Variable $variable): array
-    {
-        $scope = $this->getScopeNode($variable);
-
-        if ($scope === null) {
-            return [];
-        }
-
-        return $this->betterNodeFinder->find((array) $scope->stmts, function (Node $node) use ($variable): bool {
-            return $node instanceof Variable && $node->name === $variable->name;
-        });
-    }
-
     private function isIntersectionArrayType(Type $nodeType): bool
     {
         if (! $nodeType instanceof IntersectionType) {
@@ -668,37 +583,6 @@ final class NodeTypeResolver
         }
 
         return $propertyPropertyNode->default instanceof Array_;
-    }
-
-    private function resolveParamStaticType(Param $param): Type
-    {
-        $classMethod = $param->getAttribute(AttributeKey::METHOD_NODE);
-        if ($classMethod === null) {
-            return new MixedType();
-        }
-
-        /** @var string $paramName */
-        $paramName = $this->nameResolver->getName($param);
-        $paramStaticType = new MixedType();
-
-        // special case for param inside method/function
-        $this->callableNodeTraverser->traverseNodesWithCallable(
-            (array) $classMethod->stmts,
-            function (Node $node) use ($paramName, &$paramStaticType): ?int {
-                if (! $node instanceof Variable) {
-                    return null;
-                }
-
-                if (! $this->nameResolver->isName($node, $paramName)) {
-                    return null;
-                }
-
-                $paramStaticType = $this->getStaticType($node);
-                return NodeTraverser::STOP_TRAVERSAL;
-            }
-        );
-
-        return $paramStaticType;
     }
 
     private function isAnonymousClass(Node $node): bool
