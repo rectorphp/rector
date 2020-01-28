@@ -200,7 +200,7 @@ final class NodeTypeResolver
 
         if ($nodeType instanceof UnionType) {
             foreach ($nodeType->getTypes() as $singleType) {
-                if (! $singleType instanceof StringType) {
+                if ($singleType->isSuperTypeOf(new StringType())->no()) {
                     return false;
                 }
             }
@@ -227,19 +227,10 @@ final class NodeTypeResolver
     public function isCountableType(Node $node): bool
     {
         $nodeType = $this->getStaticType($node);
-
         $nodeType = $this->pregMatchTypeCorrector->correct($node, $nodeType);
-        if ($nodeType instanceof ObjectType) {
-            if (is_a($nodeType->getClassName(), Countable::class, true)) {
-                return true;
-            }
 
-            // @see https://github.com/rectorphp/rector/issues/2028
-            if (is_a($nodeType->getClassName(), 'SimpleXMLElement', true)) {
-                return true;
-            }
-
-            return is_a($nodeType->getClassName(), 'ResourceBundle', true);
+        if ($this->isCountableObjectType($nodeType)) {
+            return true;
         }
 
         return $this->isArrayType($node);
@@ -332,10 +323,6 @@ final class NodeTypeResolver
             }
 
             return new ArrayType(new MixedType(), new MixedType());
-        }
-
-        if ($this->isStringOrUnionStringOnlyType($expr)) {
-            return new StringType();
         }
 
         return $this->getStaticType($expr);
@@ -647,5 +634,23 @@ final class NodeTypeResolver
         }
 
         return $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, new Nop());
+    }
+
+    private function isCountableObjectType(Type $type): bool
+    {
+        if (! $type instanceof ObjectType) {
+            return false;
+        }
+
+        if (is_a($type->getClassName(), Countable::class, true)) {
+            return true;
+        }
+
+        // @see https://github.com/rectorphp/rector/issues/2028
+        if (is_a($type->getClassName(), 'SimpleXMLElement', true)) {
+            return true;
+        }
+
+        return is_a($type->getClassName(), 'ResourceBundle', true);
     }
 }
