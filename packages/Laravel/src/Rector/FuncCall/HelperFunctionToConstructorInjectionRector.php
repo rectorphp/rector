@@ -9,6 +9,9 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\Laravel\FunctionToServiceMap;
+use Rector\Laravel\ValueObject\ArrayFunctionToMethodCall;
+use Rector\Laravel\ValueObject\FunctionToMethodCall;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
@@ -24,152 +27,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class HelperFunctionToConstructorInjectionRector extends AbstractRector
 {
     /**
-     * @var string[][]
+     * @var FunctionToServiceMap
      */
-    private $functionToService = [
-        // set/get
-        'config' => [
-            'type' => 'Illuminate\Contracts\Config\Repository',
-            'property' => 'configRepository',
-            'array_method' => 'set',
-            'non_array_method' => 'get',
-        ],
-        'session' => [
-            'type' => 'Illuminate\Session\SessionManager',
-            'property' => 'sessionManager',
-            'array_method' => 'put',
-            'non_array_method' => 'get',
-        ],
+    private $functionToServiceMap;
 
-        // methods if args/property fetch
-        'policy' => [
-            'type' => 'Illuminate\Contracts\Auth\Access\Gate',
-            'property' => 'policy',
-            'method_if_args' => 'getPolicyFor',
-        ],
-        'cookie' => [
-            'type' => 'Illuminate\Contracts\Cookie\Factory',
-            'property' => 'cookieFactory',
-            'method_if_args' => 'make',
-        ],
-        // router
-        'put' => [
-            'type' => 'Illuminate\Routing\Router',
-            'property' => 'router',
-            'method_if_args' => 'put',
-        ],
-        'get' => [
-            'type' => 'Illuminate\Routing\Router',
-            'property' => 'router',
-            'method_if_args' => 'get',
-        ],
-        'post' => [
-            'type' => 'Illuminate\Routing\Router',
-            'property' => 'router',
-            'method_if_args' => 'post',
-        ],
-        'patch' => [
-            'type' => 'Illuminate\Routing\Router',
-            'property' => 'router',
-            'method_if_args' => 'patch',
-        ],
-        'delete' => [
-            'type' => 'Illuminate\Routing\Router',
-            'property' => 'router',
-            'method_if_args' => 'delete',
-        ],
-        'resource' => [
-            'type' => 'Illuminate\Routing\Router',
-            'property' => 'router',
-            'method_if_args' => 'resource',
-        ],
-        'response' => [
-            'type' => 'Illuminate\Contracts\Routing\ResponseFactory',
-            'property' => 'responseFactory',
-            'method_if_args' => 'make',
-        ],
-
-        'info' => [
-            'type' => 'Illuminate\Log\Writer',
-            'property' => 'logWriter',
-            'method_if_args' => 'info',
-        ],
-        'view' => [
-            'type' => 'Illuminate\Contracts\View\Factory',
-            'property' => 'viewFactory',
-            'method_if_args' => 'make',
-        ],
-        'bcrypt' => [
-            'type' => 'Illuminate\Hashing\BcryptHasher',
-            'property' => 'bcryptHasher',
-            'method_if_args' => 'make',
-        ],
-        'redirect' => [
-            'type' => 'Illuminate\Routing\Redirector',
-            'property' => 'redirector',
-            'method_if_args' => 'back',
-        ],
-        'back' => [
-            'type' => 'Illuminate\Routing\Redirector',
-            'property' => 'redirector',
-            'method_if_args' => 'back',
-            'method_if_no_args' => 'back',
-        ],
-        'broadcast' => [
-            'type' => 'Illuminate\Contracts\Broadcasting\Factory',
-            'property' => 'broadcastFactory',
-            'method_if_args' => 'event',
-        ],
-        'event' => [
-            'type' => 'Illuminate\Events\Dispatcher',
-            'property' => 'eventDispatcher',
-            'method_if_args' => 'fire',
-        ],
-        'dispatch' => [
-            'type' => 'Illuminate\Events\Dispatcher',
-            'property' => 'eventDispatcher',
-            'method_if_args' => 'dispatch',
-        ],
-        'route' => [
-            'type' => 'Illuminate\Routing\UrlGenerator',
-            'property' => 'urlGenerator',
-            'method_if_args' => 'route',
-        ],
-        'auth' => [
-            'type' => 'Illuminate\Contracts\Auth\Guard',
-            'property' => 'guard',
-        ],
-        'asset' => [
-            'type' => 'Illuminate\Routing\UrlGenerator',
-            'property' => 'urlGenerator',
-            'method_if_args' => 'asset',
-        ],
-        'url' => [
-            'type' => 'Illuminate\Contracts\Routing\UrlGenerator',
-            'property' => 'urlGenerator',
-            'method_if_args' => 'to',
-        ],
-        'action' => [
-            'type' => 'Illuminate\Routing\UrlGenerator',
-            'property' => 'urlGenerator',
-            'method_if_args' => 'action',
-        ],
-        'trans' => [
-            'type' => 'Illuminate\Translation\Translator',
-            'property' => 'translator',
-            'method_if_args' => 'trans',
-        ],
-        'trans_choice' => [
-            'type' => 'Illuminate\Translation\Translator',
-            'property' => 'translator',
-            'method_if_args' => 'transChoice',
-        ],
-        'logger' => [
-            'type' => 'Illuminate\Log\Writer',
-            'property' => 'logWriter',
-            'method_if_args' => 'debug',
-        ],
-    ];
+    public function __construct(FunctionToServiceMap $functionToServiceMap)
+    {
+        $this->functionToServiceMap = $functionToServiceMap;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -230,38 +95,45 @@ PHP
         /** @var Class_ $classNode */
         $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
 
-        foreach ($this->functionToService as $function => $service) {
-            if (! $this->isName($node, $function)) {
-                continue;
-            }
-
-            $this->addPropertyToClass($classNode, new FullyQualifiedObjectType($service['type']), $service['property']);
-            $propertyFetchNode = $this->createPropertyFetch('this', $service['property']);
-
-            if (count($node->args) === 0) {
-                if (isset($service['method_if_no_args'])) {
-                    return new MethodCall($propertyFetchNode, $service['method_if_no_args']);
-                }
-
-                return $propertyFetchNode;
-            }
-
-            if (isset($service['method_if_args']) && count($node->args) >= 1) {
-                return new MethodCall($propertyFetchNode, $service['method_if_args'], $node->args);
-            }
-
-            if (isset($service['array_method']) && $this->isArrayType($node->args[0]->value)) {
-                return new MethodCall($propertyFetchNode, $service['array_method'], $node->args);
-            }
-
-            if (isset($service['non_array_method']) && ! $this->isArrayType($node->args[0]->value)) {
-                return new MethodCall($propertyFetchNode, $service['non_array_method'], $node->args);
-            }
-
-            throw new ShouldNotHappenException();
+        $functionName = $this->getName($node);
+        if ($functionName === null) {
+            return null;
         }
 
-        return null;
+        $functionChange = $this->functionToServiceMap->findByFunction($functionName);
+        if ($functionChange === null) {
+            return null;
+        }
+
+        $objectType = new FullyQualifiedObjectType($functionChange->getClass());
+        $this->addPropertyToClass($classNode, $objectType, $functionChange->getProperty());
+
+        $propertyFetchNode = $this->createPropertyFetch('this', $functionChange->getProperty());
+
+        if (count($node->args) === 0) {
+            if ($functionChange instanceof FunctionToMethodCall && $functionChange->getMethodIfNoArgs()) {
+                return new MethodCall($propertyFetchNode, $functionChange->getMethodIfNoArgs());
+            }
+
+            return $propertyFetchNode;
+        }
+
+        if ($this->isFunctionToMethodCallWithArgs($node, $functionChange)) {
+            /** @var FunctionToMethodCall $functionChange */
+            return new MethodCall($propertyFetchNode, $functionChange->getMethodIfArgs(), $node->args);
+        }
+
+        if ($functionChange instanceof ArrayFunctionToMethodCall) {
+            if ($functionChange->getArrayMethod() && $this->isArrayType($node->args[0]->value)) {
+                return new MethodCall($propertyFetchNode, $functionChange->getArrayMethod(), $node->args);
+            }
+
+            if ($functionChange->getNonArrayMethod() && ! $this->isArrayType($node->args[0]->value)) {
+                return new MethodCall($propertyFetchNode, $functionChange->getNonArrayMethod(), $node->args);
+            }
+        }
+
+        throw new ShouldNotHappenException();
     }
 
     private function shouldSkipFuncCall(FuncCall $funcCall): bool
@@ -277,6 +149,23 @@ PHP
         if ($classMethod === null) {
             return true;
         }
+
         return $classMethod->isStatic();
+    }
+
+    /**
+     * @param FunctionToMethodCall|ArrayFunctionToMethodCall $functionChange
+     */
+    private function isFunctionToMethodCallWithArgs(Node $node, $functionChange): bool
+    {
+        if (! $functionChange instanceof FunctionToMethodCall) {
+            return false;
+        }
+
+        if ($functionChange->getMethodIfArgs() === null) {
+            return false;
+        }
+
+        return count($node->args) >= 1;
     }
 }

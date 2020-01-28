@@ -199,15 +199,8 @@ final class NodeTypeResolver
     public function getStaticType(Node $node): Type
     {
         if ($this->isArrayExpr($node)) {
-            /** @var Scope $scope */
-            $scope = $node->getAttribute(AttributeKey::SCOPE);
             /** @var Expr $node */
-            $arrayType = $scope->getType($node);
-            if ($arrayType instanceof ArrayType) {
-                return $arrayType;
-            }
-
-            return new ArrayType(new MixedType(), new MixedType());
+            return $this->resolveArrayType($node);
         }
 
         if ($node instanceof Arg) {
@@ -487,5 +480,20 @@ final class NodeTypeResolver
     private function isArrayExpr(Node $node): bool
     {
         return $node instanceof Expr && $this->arrayTypeAnalyzer->isArrayType($node);
+    }
+
+    private function resolveArrayType(Expr $expr): ArrayType
+    {
+        /** @var Scope|null $scope */
+        $scope = $expr->getAttribute(AttributeKey::SCOPE);
+
+        if ($scope instanceof Scope) {
+            $arrayType = $scope->getType($expr);
+            if ($arrayType instanceof ArrayType) {
+                return $arrayType;
+            }
+        }
+
+        return new ArrayType(new MixedType(), new MixedType());
     }
 }
