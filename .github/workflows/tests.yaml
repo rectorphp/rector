@@ -40,6 +40,8 @@ jobs:
                     php-version: 7.2
                     coverage: none
             # report phpunit errors into files-changed PR tab
+            # https://github.com/actions/toolkit/blob/master/docs/problem-matchers.md
+
             -   name: Setup Problem Matchers for PHPUnit
                 run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
