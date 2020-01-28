@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
 
-use PhpParser\Node\Scalar;
 use PhpParser\Node;
+use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\MagicConst;
