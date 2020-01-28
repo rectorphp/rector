@@ -196,6 +196,10 @@ final class NodeTypeResolver
         return $nodeType->isSuperTypeOf(new NullType())->yes();
     }
 
+    /**
+     * @deprecated
+     * Use @see NodeTypeResolver::resolve() instead
+     */
     public function getStaticType(Node $node): Type
     {
         if ($this->isArrayExpr($node)) {
