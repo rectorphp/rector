@@ -14,6 +14,8 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
+use Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -27,11 +29,26 @@ trait NodeTypeResolverTrait
     private $nodeTypeResolver;
 
     /**
+     * @var ArrayTypeAnalyzer
+     */
+    private $arrayTypeAnalyzer;
+
+    /**
+     * @var CountableTypeAnalyzer
+     */
+    private $countableTypeAnalyzer;
+
+    /**
      * @required
      */
-    public function autowireTypeAnalyzerDependencies(NodeTypeResolver $nodeTypeResolver): void
-    {
+    public function autowireTypeAnalyzerDependencies(
+        NodeTypeResolver $nodeTypeResolver,
+        ArrayTypeAnalyzer $arrayTypeAnalyzer,
+        CountableTypeAnalyzer $countableTypeAnalyzer
+    ): void {
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
+        $this->countableTypeAnalyzer = $countableTypeAnalyzer;
     }
 
     /**
@@ -88,12 +105,12 @@ trait NodeTypeResolverTrait
 
     protected function isCountableType(Node $node): bool
     {
-        return $this->nodeTypeResolver->isCountableType($node);
+        return $this->countableTypeAnalyzer->isCountableType($node);
     }
 
     protected function isArrayType(Node $node): bool
     {
-        return $this->nodeTypeResolver->isArrayType($node);
+        return $this->arrayTypeAnalyzer->isArrayType($node);
     }
 
     protected function getObjectType(Node $node): Type
