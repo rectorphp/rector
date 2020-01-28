@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Symfony\ValueObject\ServiceMap;
 
-use PhpParser\Node\Expr;
-use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeUtils;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 
 final class ServiceMap
@@ -24,14 +21,6 @@ final class ServiceMap
     public function __construct(array $services)
     {
         $this->services = $services;
-    }
-
-    /**
-     * @return ServiceDefinition[]
-     */
-    public function getServices(): array
-    {
-        return $this->services;
     }
 
     public function hasService(string $id): bool
@@ -87,12 +76,5 @@ final class ServiceMap
         }
 
         return $servicesWithTag;
-    }
-
-    public function getServiceIdFromNode(Expr $expr, Scope $scope): ?string
-    {
-        $strings = TypeUtils::getConstantStrings($scope->getType($expr));
-
-        return count($strings) === 1 ? $strings[0]->getValue() : null;
     }
 }
