@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Scalar\DNumber;
@@ -90,7 +91,7 @@ PHP
             $isNegated = false;
         }
 
-        if ($conditionNode instanceof Expr\Cast\Bool_) {
+        if ($conditionNode instanceof Bool_) {
             return null;
         }
 
