@@ -17,9 +17,6 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
-use PhpParser\Node\Scalar\DNumber;
-use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
@@ -33,9 +30,6 @@ use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantBooleanType;
-use PHPStan\Type\Constant\ConstantFloatType;
-use PHPStan\Type\Constant\ConstantIntegerType;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
@@ -293,16 +287,8 @@ final class NodeTypeResolver
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
 
-        if ($node instanceof Scalar && $nodeScope === null) {
-            if ($node instanceof DNumber) {
-                return new ConstantFloatType($node->value);
-            }
-            if ($node instanceof String_) {
-                return new ConstantStringType($node->value);
-            }
-            if ($node instanceof LNumber) {
-                return new ConstantIntegerType($node->value);
-            }
+        if ($node instanceof Scalar) {
+            return $this->resolve($node);
         }
 
         if (! $node instanceof Expr || $nodeScope === null) {
