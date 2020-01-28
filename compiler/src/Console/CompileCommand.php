@@ -6,7 +6,6 @@ namespace Rector\Compiler\Console;
 
 use Nette\Utils\FileSystem as NetteFileSystem;
 use Nette\Utils\Json;
-use Rector\Console\Style\SymfonyStyleFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,7 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 
 /**
  * Inspired by @see https://github.com/phpstan/phpstan-src/blob/f939d23155627b5c2ec6eef36d976dddea22c0c5/compiler/src/Console/CompileCommand.php
@@ -53,7 +52,7 @@ final class CompileCommand extends Command
         $this->dataDir = $dataDir;
         $this->buildDir = $buildDir;
 
-        $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesCaller());
+        $symfonyStyleFactory = new SymfonyStyleFactory();
         $this->symfonyStyle = $symfonyStyleFactory->create();
     }
 

@@ -17,9 +17,6 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
-use PhpParser\Node\Scalar\DNumber;
-use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
@@ -33,9 +30,6 @@ use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantBooleanType;
-use PHPStan\Type\Constant\ConstantFloatType;
-use PHPStan\Type\Constant\ConstantIntegerType;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
@@ -172,14 +166,6 @@ final class NodeTypeResolver
             return true;
         }
 
-        if ($resolvedType instanceof TypeWithClassName && is_a(
-            $resolvedType->getClassName(),
-            $requiredType->getClassName(),
-            true
-        )) {
-            return true;
-        }
-
         if ($this->isUnionNullTypeOfRequiredType($requiredType, $resolvedType)) {
             return true;
         }
@@ -301,16 +287,8 @@ final class NodeTypeResolver
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
 
-        if ($node instanceof Scalar && $nodeScope === null) {
-            if ($node instanceof DNumber) {
-                return new ConstantFloatType($node->value);
-            }
-            if ($node instanceof String_) {
-                return new ConstantStringType($node->value);
-            }
-            if ($node instanceof LNumber) {
-                return new ConstantIntegerType($node->value);
-            }
+        if ($node instanceof Scalar) {
+            return $this->resolve($node);
         }
 
         if (! $node instanceof Expr || $nodeScope === null) {
@@ -439,14 +417,20 @@ final class NodeTypeResolver
 
         $classNames = TypeUtils::getDirectClassNames($objectType);
         foreach ($classNames as $className) {
-            if ($this->isObjectTypeFnMatch($className, $requiredType)) {
-                return true;
+            if (! fnmatch($requiredType, $className, FNM_NOESCAPE)) {
+                continue;
             }
+
+            return true;
         }
 
         return false;
     }
 
+    /**
+     * Matches:
+     * - Type|null
+     */
     private function isUnionNullTypeOfRequiredType(ObjectType $objectType, Type $resolvedType): bool
     {
         if (! $resolvedType instanceof UnionType) {
@@ -461,14 +445,14 @@ final class NodeTypeResolver
         $secondType = $resolvedType->getTypes()[1];
 
         if ($firstType instanceof NullType && $secondType instanceof ObjectType) {
-            $resolvedType = $secondType;
-        } elseif ($secondType instanceof NullType && $firstType instanceof ObjectType) {
-            $resolvedType = $firstType;
-        } else {
-            return false;
+            return $objectType->equals($firstType);
         }
 
-        return is_a($resolvedType->getClassName(), $objectType->getClassName(), true);
+        if ($secondType instanceof NullType && $firstType instanceof ObjectType) {
+            return $objectType->equals($secondType);
+        }
+
+        return false;
     }
 
     private function resolveFirstType(Node $node): Type
@@ -596,18 +580,12 @@ final class NodeTypeResolver
         return $className === null || Strings::contains($className, 'AnonymousClass');
     }
 
-    private function isObjectTypeFnMatch(string $className, string $requiredType): bool
-    {
-        return fnmatch($requiredType, $className, FNM_NOESCAPE);
-    }
-
     /**
      * @return string[]
      */
     private function getClassLikeTypesByClassName(string $className): array
     {
         $classReflection = $this->reflectionProvider->getClass($className);
-
         $classLikeTypes = $this->classReflectionTypesResolver->resolve($classReflection);
 
         return array_unique($classLikeTypes);
