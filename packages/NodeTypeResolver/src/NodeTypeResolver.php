@@ -29,7 +29,6 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IntersectionType;
@@ -54,7 +53,6 @@ use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 use ReflectionProperty;
-use Symfony\Component\Finder\SplFileInfo;
 
 final class NodeTypeResolver
 {
@@ -271,31 +269,18 @@ final class NodeTypeResolver
             throw new ShouldNotHappenException('Arg does not have a type, use $arg->value instead');
         }
 
-        if ($node instanceof Param) {
+        if ($node instanceof Param || $node instanceof Scalar) {
             return $this->resolve($node);
         }
 
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-
-        if ($node instanceof Scalar) {
-            return $this->resolve($node);
-        }
-
         if (! $node instanceof Expr || $nodeScope === null) {
             return new MixedType();
         }
 
         if ($node instanceof New_ && $this->isAnonymousClass($node->class)) {
             return new ObjectWithoutClassType();
-        }
-
-        // false type correction of inherited method
-        if ($node instanceof MethodCall && $this->isObjectType($node->var, SplFileInfo::class)) {
-            $methodName = $this->nameResolver->getName($node->name);
-            if ($methodName === 'getRealPath') {
-                return new UnionType([new StringType(), new ConstantBooleanType(false)]);
-            }
         }
 
         $staticType = $nodeScope->getType($node);

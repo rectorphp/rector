@@ -44,16 +44,21 @@ final class ChangeGetIdTypeToUuidRector extends AbstractRector
             return null;
         }
 
-        // is already set?
-        if ($node->returnType !== null) {
-            $currentType = $this->getName($node->returnType);
-            if ($currentType === UuidInterface::class) {
-                return null;
-            }
+        if ($this->hasUuidReturnType($node)) {
+            return null;
         }
 
         $node->returnType = new FullyQualified(UuidInterface::class);
 
         return $node;
+    }
+
+    private function hasUuidReturnType(Node $node): bool
+    {
+        if ($node->returnType === null) {
+            return false;
+        }
+
+        return $this->isName($node->returnType, UuidInterface::class);
     }
 }
