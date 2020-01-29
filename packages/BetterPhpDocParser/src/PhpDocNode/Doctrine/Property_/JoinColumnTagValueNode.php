@@ -83,10 +83,6 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
     {
         $contentItems = [];
 
-        if ($this->nullable !== null) {
-            $contentItems['nullable'] = sprintf('nullable=%s', $this->nullable ? 'true' : 'false');
-        }
-
         if ($this->name) {
             $contentItems['name'] = sprintf('name="%s"', $this->name);
         }
@@ -95,7 +91,12 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
             $contentItems['referencedColumnName'] = sprintf('referencedColumnName="%s"', $this->referencedColumnName);
         }
 
-        if ($this->unique !== null) {
+        if ($this->nullable !== null) {
+            $contentItems['nullable'] = sprintf('nullable=%s', $this->nullable ? 'true' : 'false');
+        }
+
+        // skip default value
+        if ($this->unique !== null && $this->unique) {
             $contentItems['unique'] = sprintf('unique=%s', $this->unique ? 'true' : 'false');
         }
 
@@ -134,13 +135,13 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
         return $this->nullable;
     }
 
-    public function changeName(string $newName): void
-    {
-        $this->name = $newName;
-    }
-
     public function getTag(): ?string
     {
         return $this->tag ?: self::SHORT_NAME;
+    }
+
+    public function getUnique(): ?bool
+    {
+        return $this->unique;
     }
 }

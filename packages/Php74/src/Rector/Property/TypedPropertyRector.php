@@ -139,7 +139,6 @@ PHP
         }
 
         $propertyPhpDocInfo->removeByType(VarTagValueNode::class);
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($property, $propertyPhpDocInfo);
     }
 
     private function isNonBasicArrayType(Property $property, VarTagValueNode $varTagValueNode): bool

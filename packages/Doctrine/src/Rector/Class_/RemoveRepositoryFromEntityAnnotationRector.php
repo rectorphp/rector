@@ -72,7 +72,6 @@ PHP
         $doctrineEntityTag->removeRepositoryClass();
 
         // save the entity tag
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $phpDocInfo);
 
         return $node;
     }

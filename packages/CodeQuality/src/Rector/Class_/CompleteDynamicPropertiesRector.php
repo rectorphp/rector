@@ -96,6 +96,7 @@ PHP
 
         /** @var string $class */
         $class = $this->getName($node);
+
         // properties are accessed via magic, nothing we can do
         if (method_exists($class, '__set') || method_exists($class, '__get')) {
             return null;

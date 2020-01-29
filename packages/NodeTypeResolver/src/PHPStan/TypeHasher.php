@@ -61,4 +61,9 @@ final class TypeHasher
 
         return $this->phpStanStaticTypeMapper->mapToDocString($type);
     }
+
+    public function areTypesEqual(Type $firstType, Type $secondType): bool
+    {
+        return $this->createTypeHash($firstType) === $this->createTypeHash($secondType);
+    }
 }

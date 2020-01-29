@@ -151,7 +151,6 @@ final class DocBlockManipulator
             $phpDocInfo = $this->createPhpDocInfoFromNode($node);
             $phpDocNode = $phpDocInfo->getPhpDocNode();
             $phpDocNode->children[] = $phpDocChildNode;
-            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
         } else {
             $phpDocNode = new AttributeAwarePhpDocNode([$phpDocChildNode]);
             $node->setDocComment(new Doc($phpDocNode->__toString()));
@@ -164,16 +163,18 @@ final class DocBlockManipulator
         $this->addTag($node, $spacelessPhpDocTagNode);
     }
 
-    public function removeTagFromNode(Node $node, string $name, bool $shouldSkipEmptyLinesAbove = false): void
+    /**
+     * @deprecated
+     * Use @see PhpDocInfo::removeByType(x) directly
+     */
+    public function removeTagFromNode(Node $node, string $name): void
     {
         if ($node->getDocComment() === null) {
             return;
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-
         $this->removeTagByName($phpDocInfo, $name);
-        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo, $shouldSkipEmptyLinesAbove);
     }
 
     public function changeType(Node $node, Type $oldType, Type $newType): void
@@ -183,16 +184,8 @@ final class DocBlockManipulator
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $hasNodeChanged = $this->docBlockClassRenamer->renamePhpDocType(
-            $phpDocInfo->getPhpDocNode(),
-            $oldType,
-            $newType,
-            $node
-        );
 
-        if ($hasNodeChanged) {
-            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
-        }
+        $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
     }
 
     public function replaceAnnotationInNode(Node $node, string $oldAnnotation, string $newAnnotation): void
@@ -203,8 +196,6 @@ final class DocBlockManipulator
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
         $this->replaceTagByAnother($phpDocInfo->getPhpDocNode(), $oldAnnotation, $newAnnotation);
-
-        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
     public function getReturnType(Node $node): Type
@@ -284,10 +275,6 @@ final class DocBlockManipulator
 
             $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
             $varTagValueNode->type = $phpDocType;
-
-            // update doc :)
-            $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
         } else {
             $this->addTypeSpecificTag($node, 'var', $newType);
         }
@@ -314,7 +301,6 @@ final class DocBlockManipulator
                 $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
                 $returnTagValueNode->type = $newPHPStanPhpDocType;
 
-                $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
                 return;
             }
         }
@@ -412,11 +398,7 @@ final class DocBlockManipulator
         }
 
         $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-        $hasNodeChanged = $this->docBlockNameImporter->importNames($phpDocInfo, $node);
-
-        if ($hasNodeChanged) {
-            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
-        }
+        $this->docBlockNameImporter->importNames($phpDocInfo, $node);
     }
 
     /**
@@ -467,8 +449,6 @@ final class DocBlockManipulator
         if (! $this->hasPhpDocChanged) {
             return;
         }
-
-        $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 
     /**
@@ -502,26 +482,30 @@ final class DocBlockManipulator
         return false;
     }
 
-    public function updateNodeWithPhpDocInfo(
-        Node $node,
-        PhpDocInfo $phpDocInfo,
-        bool $shouldSkipEmptyLinesAbove = false
-    ): bool {
-        $phpDoc = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo, $shouldSkipEmptyLinesAbove);
-        if ($phpDoc !== '') {
-            // no change, don't save it
-            if ($node->getDocComment() && $node->getDocComment()->getText() === $phpDoc) {
-                return false;
-            }
+    public function updateNodeWithPhpDocInfo(Node $node, bool $shouldSkipEmptyLinesAbove = false): void
+    {
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-            $node->setDocComment(new Doc($phpDoc));
-            return true;
+        // nothing to change
+        if ($phpDocInfo === null) {
+            return;
         }
 
-        // no comments, null
-        $node->setAttribute('comments', null);
+        $phpDoc = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo, $shouldSkipEmptyLinesAbove);
+        if ($phpDoc === '') {
+            // no comments, null
+            $node->setAttribute('comments', null);
+            return;
+        }
 
-        return true;
+        // no change, don't save it
+        // this is needed to prevent short classes override with FQN with same value → people don't like that for some reason
+
+        if ($node->getDocComment() && $node->getDocComment()->getText() === $phpDoc) {
+            return;
+        }
+
+        $node->setDocComment(new Doc($phpDoc));
     }
 
     public function getDoctrineFqnTargetEntity(Node $node): ?string
@@ -574,10 +558,7 @@ final class DocBlockManipulator
             return true;
         }
 
-        $firstTypeHash = $this->typeHasher->createTypeHash($firstType);
-        $secondTypeHash = $this->typeHasher->createTypeHash($secondType);
-
-        if ($firstTypeHash === $secondTypeHash) {
+        if ($this->typeHasher->areTypesEqual($firstType, $secondType)) {
             return true;
         }
 
@@ -604,8 +585,6 @@ final class DocBlockManipulator
                 $docStringType
             ), '', '');
             $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@' . $name, $varTagValueNode);
-
-            $this->updateNodeWithPhpDocInfo($node, $phpDocInfo);
         } else {
             // create completely new docblock
             $varDocComment = sprintf("/**\n * @%s %s\n */", $name, $docStringType);

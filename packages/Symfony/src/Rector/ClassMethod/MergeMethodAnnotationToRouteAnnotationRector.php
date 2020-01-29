@@ -102,8 +102,6 @@ PHP
 
         $phpDocInfo->removeTagValueNodeFromNode($symfonyMethodPhpDocTagValueNode);
 
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $phpDocInfo);
-
         return $node;
     }
 }

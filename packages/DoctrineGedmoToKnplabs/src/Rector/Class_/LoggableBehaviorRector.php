@@ -101,7 +101,6 @@ PHP
         }
 
         $classPhpDocInfo->removeByType(LoggableTagValueNode::class);
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $classPhpDocInfo);
 
         // remove tag from properties
         $this->removeVersionedTagFromProperties($node);
@@ -126,7 +125,6 @@ PHP
             }
 
             $propertyPhpDocInfo->removeByType(VersionedTagValueNode::class);
-            $this->docBlockManipulator->updateNodeWithPhpDocInfo($property, $propertyPhpDocInfo);
         }
     }
 }

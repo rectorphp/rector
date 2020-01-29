@@ -23,7 +23,7 @@ array(
                 5: Simple
             )
             attributes: array(
-                classNode: null
+                PhpParser\Node\Stmt\ClassLike: null
                 className: null
                 methodName: null
             )
@@ -34,7 +34,7 @@ array(
                 name: Identifier #3(
                     name: foo
                     attributes: array(
-                        classNode: Stmt_Class #2
+                        PhpParser\Node\Stmt\ClassLike: Stmt_Class #2
                         className: Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitorTest\Simple\foo
                         methodName: null
                     )
@@ -46,27 +46,27 @@ array(
                         name: Identifier #5(
                             name: bar
                             attributes: array(
-                                classNode: Stmt_Class #2
+                                PhpParser\Node\Stmt\ClassLike: Stmt_Class #2
                                 className: Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitorTest\Simple\foo
                                 methodName: bar
                             )
                         )
                         attributes: array(
-                            classNode: Stmt_Class #2
+                            PhpParser\Node\Stmt\ClassLike: Stmt_Class #2
                             className: Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitorTest\Simple\foo
                             methodName: bar
                         )
                     )
                 )
                 attributes: array(
-                    classNode: Stmt_Class #2
+                    PhpParser\Node\Stmt\ClassLike: Stmt_Class #2
                     className: Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitorTest\Simple\foo
                     methodName: null
                 )
             )
         )
         attributes: array(
-            classNode: null
+            PhpParser\Node\Stmt\ClassLike: null
             className: null
             methodName: null
         )

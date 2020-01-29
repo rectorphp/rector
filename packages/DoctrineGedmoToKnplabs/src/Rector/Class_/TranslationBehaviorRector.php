@@ -261,7 +261,7 @@ PHP
 
         foreach ($translatedPropertyToPhpDocInfos as $translatedPropertyName => $translatedPhpDocInfo) {
             $property = $this->nodeFactory->createPrivateProperty($translatedPropertyName);
-            $this->docBlockManipulator->updateNodeWithPhpDocInfo($property, $translatedPhpDocInfo);
+            $property->setAttribute(AttributeKey::PHP_DOC_INFO, $translatedPhpDocInfo);
 
             $class->stmts[] = $property;
         }

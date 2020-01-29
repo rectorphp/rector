@@ -64,6 +64,15 @@ trait BetterStandardPrinterTrait
     }
 
     /**
+     * @param Node|Node[]|null $firstNode
+     * @param Node|Node[]|null $secondNode
+     */
+    protected function areNodesWithoutCommentsEqual($firstNode, $secondNode): bool
+    {
+        return $this->betterStandardPrinter->areNodesWithoutCommentsEqual($firstNode, $secondNode);
+    }
+
+    /**
      * @param Node[] $availableNodes
      */
     protected function isNodeEqual(Node $singleNode, array $availableNodes): bool

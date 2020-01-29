@@ -58,8 +58,8 @@ class ManyToManyWithExtraName
     private $itemRole;
     /**
      * @ORM\ManyToOne(targetEntity="Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\BarEntity")
-     * @ORM\JoinColumn(referencedColumnName="uuid", nullable=true)
      * @Serializer\Type("Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector\Fixture\BarEntity")
+     * @ORM\JoinColumn(referencedColumnName="uuid", nullable=true)
      */
     private $itemRoleUuid;
 }

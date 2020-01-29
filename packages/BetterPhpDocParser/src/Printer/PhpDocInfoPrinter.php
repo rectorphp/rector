@@ -113,7 +113,15 @@ final class PhpDocInfoPrinter
             $output .= $this->printNode($phpDocChildNode, null, $i + 1, $nodeCount, $shouldSkipEmptyLinesAbove);
         }
 
-        return $this->printEnd($output);
+        $output = $this->printEnd($output);
+
+        // @see
+        // fix missing start
+        if (! Strings::match($output, '#^(\/\/|\/\*\*|\/\*)#') && $output) {
+            $output = '/**' . $output;
+        }
+
+        return $output;
     }
 
     private function isPhpDocNodeEmpty(PhpDocNode $phpDocNode): bool
@@ -145,12 +153,11 @@ final class PhpDocInfoPrinter
         $output = '';
 
         /** @var StartEndValueObject|null $startEndValueObject */
-        $startEndValueObject = $attributeAwareNode->getAttribute(Attribute::PHP_DOC_NODE_INFO) ?: $startEndValueObject;
+        $startEndValueObject = $attributeAwareNode->getAttribute(Attribute::START_END) ?: $startEndValueObject;
         $attributeAwareNode = $this->multilineSpaceFormatPreserver->fixMultilineDescriptions($attributeAwareNode);
 
         if ($startEndValueObject !== null) {
             $isLastToken = ($nodeCount === $i);
-
             $output = $this->addTokensFromTo(
                 $output,
                 $this->currentTokenPosition,
@@ -271,7 +278,7 @@ final class PhpDocInfoPrinter
         );
 
         foreach ($removedNodes as $removedNode) {
-            $removedPhpDocNodeInfo = $removedNode->getAttribute(Attribute::PHP_DOC_NODE_INFO);
+            $removedPhpDocNodeInfo = $removedNode->getAttribute(Attribute::START_END);
 
             // change start position to start of the line, so the whole line is removed
             $seekPosition = $removedPhpDocNodeInfo->getStart();

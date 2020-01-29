@@ -18,7 +18,7 @@ use Rector\RectorDefinition\RectorDefinition;
 final class FunctionCallToConstantRector extends AbstractRector
 {
     /**
-     * @var string[]string
+     * @var string[]
      */
     private $functionsToConstants = [];
 

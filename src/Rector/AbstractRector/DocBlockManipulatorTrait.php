@@ -6,6 +6,7 @@ namespace Rector\Rector\AbstractRector;
 
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 
@@ -38,10 +39,18 @@ trait DocBlockManipulatorTrait
 
     protected function getPhpDocInfo(Node $node): ?PhpDocInfo
     {
+        if ($node->getAttribute(AttributeKey::PHP_DOC_INFO)) {
+            return $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        }
+
+        // @todo always use PhpDocInfo even for empty nodes, for consisteny object API; same way Nop node does
         if ($node->getDocComment() === null) {
             return null;
         }
 
-        return $this->docBlockManipulator->createPhpDocInfoFromNode($node);
+        $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($node);
+        $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
+
+        return $phpDocInfo;
     }
 }

@@ -23,10 +23,10 @@ final class AppliedRectorCollector
      */
     public function getRectorClasses(SmartFileInfo $smartFileInfo): array
     {
-        if (isset($this->rectorClassesByFile[$smartFileInfo->getRealPath()])) {
-            return array_unique($this->rectorClassesByFile[$smartFileInfo->getRealPath()]);
+        if (! isset($this->rectorClassesByFile[$smartFileInfo->getRealPath()])) {
+            return [];
         }
 
-        return [];
+        return array_unique($this->rectorClassesByFile[$smartFileInfo->getRealPath()]);
     }
 }

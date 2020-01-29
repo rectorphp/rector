@@ -30,7 +30,7 @@ array(
                 5: RandomProperty
             )
             attributes: array(
-                classNode: null
+                PhpParser\Node\Stmt\ClassLike: null
                 className: null
                 methodName: null
             )
@@ -41,7 +41,7 @@ array(
                 name: Identifier #3(
                     name: foo
                     attributes: array(
-                        classNode: Stmt_Class #2
+                        PhpParser\Node\Stmt\ClassLike: Stmt_Class #2
                         className: Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitorTest\RandomProperty\foo
                         methodName: null
                     )
@@ -53,7 +53,7 @@ array(
                         name: Identifier #5(
                             name: bar
                             attributes: array(
-                                classNode: Stmt_Class #2
+                                PhpParser\Node\Stmt\ClassLike: Stmt_Class #2
                                 className: Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitorTest\RandomProperty\foo
                                 methodName: bar
                             )
@@ -70,32 +70,32 @@ array(
                                                 name: Identifier #10(
                                                     name: baz
                                                     attributes: array(
-                                                        classNode: Stmt_Class #8
+                                                        PhpParser\Node\Stmt\ClassLike: Stmt_Class #8
                                                         className: null
                                                         methodName: baz
                                                     )
                                                 )
                                                 attributes: array(
-                                                    classNode: Stmt_Class #8
+                                                    PhpParser\Node\Stmt\ClassLike: Stmt_Class #8
                                                     className: null
                                                     methodName: baz
                                                 )
                                             )
                                         )
                                         attributes: array(
-                                            classNode: Stmt_Class #8
+                                            PhpParser\Node\Stmt\ClassLike: Stmt_Class #8
                                             className: null
                                             methodName: bar
                                         )
                                     )
                                     attributes: array(
-                                        classNode: Stmt_Class #2
+                                        PhpParser\Node\Stmt\ClassLike: Stmt_Class #2
                                         className: Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitorTest\RandomProperty\foo
                                         methodName: bar
                                     )
                                 )
                                 attributes: array(
-                                    classNode: Stmt_Class #2
+                                    PhpParser\Node\Stmt\ClassLike: Stmt_Class #2
                                     className: Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitorTest\RandomProperty\foo
                                     methodName: bar
                                 )
@@ -107,40 +107,40 @@ array(
                                             0: moreCode
                                         )
                                         attributes: array(
-                                            classNode: Stmt_Class #2
+                                            PhpParser\Node\Stmt\ClassLike: Stmt_Class #2
                                             className: Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitorTest\RandomProperty\foo
                                             methodName: baz
                                         )
                                     )
                                     attributes: array(
-                                        classNode: Stmt_Class #2
+                                        PhpParser\Node\Stmt\ClassLike: Stmt_Class #2
                                         className: Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitorTest\RandomProperty\foo
                                         methodName: baz
                                     )
                                 )
                                 attributes: array(
-                                    classNode: Stmt_Class #2
+                                    PhpParser\Node\Stmt\ClassLike: Stmt_Class #2
                                     className: Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitorTest\RandomProperty\foo
                                     methodName: baz
                                 )
                             )
                         )
                         attributes: array(
-                            classNode: Stmt_Class #2
+                            PhpParser\Node\Stmt\ClassLike: Stmt_Class #2
                             className: Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitorTest\RandomProperty\foo
                             methodName: bar
                         )
                     )
                 )
                 attributes: array(
-                    classNode: Stmt_Class #2
+                    PhpParser\Node\Stmt\ClassLike: Stmt_Class #2
                     className: Rector\NodeTypeResolver\Tests\NodeVisitor\FunctionMethodAndClassNodeVisitorTest\RandomProperty\foo
                     methodName: null
                 )
             )
         )
         attributes: array(
-            classNode: null
+            PhpParser\Node\Stmt\ClassLike: null
             className: null
             methodName: null
         )

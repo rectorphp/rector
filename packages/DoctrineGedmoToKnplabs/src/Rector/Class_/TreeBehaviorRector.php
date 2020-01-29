@@ -148,7 +148,6 @@ PHP
 
         // we're in a tree entity
         $classPhpDocInfo->removeByType(TreeTagValueNode::class);
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $classPhpDocInfo);
 
         $node->implements[] = new FullyQualified('Knp\DoctrineBehaviors\Contract\Entity\TreeNodeInterface');
         $this->classManipulator->addAsFirstTrait($node, 'Knp\DoctrineBehaviors\Model\Tree\TreeNodeTrait');
