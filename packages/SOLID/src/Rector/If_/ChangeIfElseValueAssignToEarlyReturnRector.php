@@ -101,10 +101,11 @@ PHP
             return null;
         }
 
+        $lastIfStmtKey = array_key_last($node->stmts);
+
         /** @var Assign $assign */
         $assign = $this->stmtsManipulator->getUnwrappedLastStmt($node->stmts);
 
-        $lastIfStmtKey = array_key_last($node->stmts);
         $node->stmts[$lastIfStmtKey] = new Return_($assign->expr);
 
         /** @var Assign $assign */

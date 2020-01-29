@@ -46,14 +46,15 @@ final class JMSInjectTagValueNode extends AbstractTagValueNode
         $itemContents = [];
 
         if ($this->serviceName) {
-            $itemContents[] = $this->serviceName;
+            $itemContents[] = '"' . $this->serviceName . '"';
         }
 
         if ($this->required !== null) {
             $itemContents[] = sprintf('required=%s', $this->required ? 'true' : 'false');
         }
 
-        if ($this->strict !== null) {
+        // skip default
+        if (! $this->strict) {
             $itemContents[] = sprintf('strict=%s', $this->strict ? 'true' : 'false');
         }
 
@@ -61,9 +62,7 @@ final class JMSInjectTagValueNode extends AbstractTagValueNode
             return '';
         }
 
-        $stringContent = implode(', ', $itemContents);
-
-        return '(' . $stringContent . ')';
+        return $this->printContentItems($itemContents);
     }
 
     public function getServiceName(): ?string

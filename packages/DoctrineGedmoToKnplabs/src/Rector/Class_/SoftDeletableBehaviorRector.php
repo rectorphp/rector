@@ -110,7 +110,6 @@ PHP
         $node->implements[] = new FullyQualified('Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface');
 
         $classPhpDocInfo->removeByType(SoftDeleteableTagValueNode::class);
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $classPhpDocInfo);
 
         return $node;
     }

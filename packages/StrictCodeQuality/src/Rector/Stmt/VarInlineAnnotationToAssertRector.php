@@ -73,13 +73,13 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $phpDocInfo = $this->getPhpDocInfo($node);
-        if ($phpDocInfo === null) {
+        // skip properties
+        if ($node instanceof Property) {
             return null;
         }
 
-        // skip properties
-        if ($node instanceof Property) {
+        $phpDocInfo = $this->getPhpDocInfo($node);
+        if ($phpDocInfo === null) {
             return null;
         }
 
@@ -133,6 +133,7 @@ PHP
         if (! $node instanceof Expression) {
             return false;
         }
+
         if (! $node->expr instanceof Assign) {
             return false;
         }
@@ -149,7 +150,7 @@ PHP
 
     private function refactorFreshlyCreatedNode(Node $node, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
     {
-        $node->setAttribute('comments', []);
+        $node->setAttribute('comments', null);
         $type = $phpDocInfo->getVarType();
 
         $assertFuncCall = $this->createFuncCallBasedOnType($type, $variable);
@@ -157,7 +158,8 @@ PHP
             return null;
         }
 
-        $this->removeVarAnnotation($variable, $phpDocInfo);
+        $phpDocInfo->removeByType(VarTagValueNode::class);
+
         $this->addNodeBeforeNode($assertFuncCall, $node);
 
         return $node;
@@ -166,7 +168,6 @@ PHP
     private function refactorAlreadyCreatedNode(Node $node, PhpDocInfo $phpDocInfo, Variable $variable): ?Node
     {
         $varTagValue = $phpDocInfo->getVarTagValue();
-
         $phpStanType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
             $varTagValue->type,
             $variable
@@ -177,7 +178,6 @@ PHP
             return null;
         }
 
-        $this->removeVarAnnotation($variable, $phpDocInfo);
         $this->addNodeAfterNode($assertFuncCall, $node);
 
         return $node;
@@ -211,12 +211,5 @@ PHP
         }
 
         return null;
-    }
-
-    private function removeVarAnnotation(Node $node, PhpDocInfo $phpDocInfo): void
-    {
-        $phpDocInfo->removeByType(VarTagValueNode::class);
-
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $phpDocInfo);
     }
 }

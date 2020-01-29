@@ -268,9 +268,15 @@ PHP
         VariableNodeUseInfo $nodeByTypeAndPosition
     ): bool {
         // this node was just used, skip to next one
-        return $previousNode !== null && ($previousNode->isType(
-            VariableNodeUseInfo::TYPE_ASSIGN
-        ) && $nodeByTypeAndPosition->isType(VariableNodeUseInfo::TYPE_USE));
+        if ($previousNode === null) {
+            return false;
+        }
+
+        if (! $previousNode->isType(VariableNodeUseInfo::TYPE_ASSIGN)) {
+            return false;
+        }
+
+        return $nodeByTypeAndPosition->isType(VariableNodeUseInfo::TYPE_USE);
     }
 
     private function shouldRemoveAssignNode(
@@ -301,7 +307,7 @@ PHP
         $isVariableAssigned = (bool) $this->betterNodeFinder->findFirst($assignNode->expr, function (Node $node) use (
             $nodeByTypeAndPosition
         ): bool {
-            return $this->areNodesEqual($node, $nodeByTypeAndPosition->getVariableNode());
+            return $this->areNodesWithoutCommentsEqual($node, $nodeByTypeAndPosition->getVariableNode());
         });
 
         return ! $isVariableAssigned;

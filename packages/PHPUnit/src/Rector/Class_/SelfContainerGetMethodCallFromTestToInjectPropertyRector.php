@@ -165,7 +165,5 @@ PHP
         $phpDocInfo = $this->getPhpDocInfo($privateProperty);
         $phpDocNode = $phpDocInfo->getPhpDocNode();
         $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@inject', new GenericTagValueNode(''));
-
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($privateProperty, $phpDocInfo);
     }
 }

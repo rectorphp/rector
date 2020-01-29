@@ -32,6 +32,11 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     protected $hasNewlineAfterOpening = false;
 
     /**
+     * @var string|null
+     */
+    protected $originalContent;
+
+    /**
      * @param mixed[] $item
      */
     protected function printArrayItem(array $item, ?string $key = null): string
@@ -60,6 +65,10 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
         }
 
         if ($contentItems === []) {
+            if ($this->originalContent !== null && Strings::endsWith($this->originalContent, '()')) {
+                return '()';
+            }
+
             return '';
         }
 
@@ -131,6 +140,7 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
             return;
         }
 
+        $this->originalContent = $originalContent;
         $this->orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($originalContent);
         $this->hasNewlineAfterOpening = (bool) Strings::match($originalContent, '#^\(\s+#m');
         $this->hasNewlineBeforeClosing = (bool) Strings::match($originalContent, '#\s+\)$#m');

@@ -14,6 +14,7 @@ use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
+use Rector\NodeTypeResolver\NodeVisitor\PhpDocInfoNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeScopeResolver;
 
@@ -64,6 +65,11 @@ final class NodeScopeAndMetadataDecorator
      */
     private $configuration;
 
+    /**
+     * @var PhpDocInfoNodeVisitor
+     */
+    private $phpDocInfoNodeVisitor;
+
     public function __construct(
         NodeScopeResolver $nodeScopeResolver,
         ParentAndNextNodeVisitor $parentAndNextNodeVisitor,
@@ -73,6 +79,7 @@ final class NodeScopeAndMetadataDecorator
         StatementNodeVisitor $statementNodeVisitor,
         FileInfoNodeVisitor $fileInfoNodeVisitor,
         NodeCollectorNodeVisitor $nodeCollectorNodeVisitor,
+        PhpDocInfoNodeVisitor $phpDocInfoNodeVisitor,
         Configuration $configuration
     ) {
         $this->nodeScopeResolver = $nodeScopeResolver;
@@ -84,6 +91,7 @@ final class NodeScopeAndMetadataDecorator
         $this->fileInfoNodeVisitor = $fileInfoNodeVisitor;
         $this->nodeCollectorNodeVisitor = $nodeCollectorNodeVisitor;
         $this->configuration = $configuration;
+        $this->phpDocInfoNodeVisitor = $phpDocInfoNodeVisitor;
     }
 
     /**
@@ -117,6 +125,7 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser->addVisitor($this->parentAndNextNodeVisitor);
         $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
+        $nodeTraverser->addVisitor($this->phpDocInfoNodeVisitor);
 
         $nodes = $nodeTraverser->traverse($nodes);
 

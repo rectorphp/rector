@@ -110,7 +110,11 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
         $contentItems = [];
 
         if ($this->name !== null) {
-            $contentItems['name'] = sprintf('name="%s"', $this->name);
+            if ($this->originalContent !== null && ! in_array('name', (array) $this->orderedVisibleItems, true)) {
+                $contentItems[] = '"' . $this->name . '"';
+            } else {
+                $contentItems['name'] = sprintf('name="%s"', $this->name);
+            }
         }
 
         if ($this->schema !== null) {

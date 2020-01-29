@@ -29,7 +29,7 @@ use Rector\RectorDefinition\RectorDefinition;
 final class VersionCompareFuncCallToConstantRector extends AbstractRector
 {
     /**
-     * @var string[]string
+     * @var string[]
      */
     private $operatorToComparison = [
         '=' => Identical::class,

@@ -2,53 +2,125 @@
 
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveOverriddenValuesRector\Fixture;
 
-final class ReferenceUse
+use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpParser\Node\Manipulator\IfManipulator;
+use Rector\PhpParser\Node\Manipulator\StmtsManipulator;
+use Rector\Rector\AbstractRector;
+use Rector\RectorDefinition\CodeSample;
+use Rector\RectorDefinition\RectorDefinition;
+
+/**
+ * @see https://engineering.helpscout.com/reducing-complexity-with-guard-clauses-in-php-and-javascript-74600fd865c7
+ *
+ * @see \Rector\SOLID\Tests\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector\ChangeIfElseValueAssignToEarlyReturnRectorTest
+ */
+final class ChangeIfElseValueAssignToEarlyReturnRector extends AbstractRector
 {
-    public function run(&$directories)
+    /**
+     * @var IfManipulator
+     */
+    private $ifManipulator;
+
+    /**
+     * @var StmtsManipulator
+     */
+    private $stmtsManipulator;
+
+    public function __construct(IfManipulator $ifManipulator, StmtsManipulator $stmtsManipulator)
     {
-        $directories = 1;
-        $directories = 4;
-        $directories = 5;
+        $this->ifManipulator = $ifManipulator;
+        $this->stmtsManipulator = $stmtsManipulator;
     }
 
-    public function plusRun(&$directories)
+    public function getDefinition(): RectorDefinition
     {
-        $directories = 1;
-        $directories += 4;
-    }
+        return new RectorDefinition('Change if/else value to early return', [
+            new CodeSample(
+                <<<'PHP'
+class SomeClass
+{
+    public function run()
+    {
+        if ($this->hasDocBlock($tokens, $index)) {
+            $docToken = $tokens[$this->getDocBlockIndex($tokens, $index)];
+        } else {
+            $docToken = null;
+        }
 
-    public function get(&$directories)
-    {
-        $directories = 1;
-        $directories = 4;
-        return $directories;
+        return $docToken;
     }
 }
-
-?>
------
-<?php
-
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveOverriddenValuesRector\Fixture;
-
-final class ReferenceUse
+PHP
+                ,
+                <<<'PHP'
+class SomeClass
 {
-    public function run(&$directories)
+    public function run()
     {
-        $directories = 5;
-    }
-
-    public function plusRun(&$directories)
-    {
-        $directories = 1;
-        $directories += 4;
-    }
-
-    public function get(&$directories)
-    {
-        $directories = 4;
-        return $directories;
+        if ($this->hasDocBlock($tokens, $index)) {
+            return $tokens[$this->getDocBlockIndex($tokens, $index)];
+        }
+        return null;
     }
 }
+PHP
 
-?>
+            ),
+        ]);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getNodeTypes(): array
+    {
+        return [If_::class];
+    }
+
+    /**
+     * @param If_ $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $nextNode instanceof Return_) {
+            return null;
+        }
+
+        if ($nextNode->expr === null) {
+            return null;
+        }
+
+        if (! $this->ifManipulator->isIfAndElseWithSameVariableAssignAsLastStmts($node, $nextNode->expr)) {
+            return null;
+        }
+
+        $lastIfStmtKey = array_key_last($node->stmts);
+
+        /** @var Assign $assign */
+        $assign = $this->stmtsManipulator->getUnwrappedLastStmt($node->stmts);
+
+        $node->stmts[$lastIfStmtKey] = new Return_($assign->expr);
+
+        /** @var Assign $assign */
+        $assign = $this->stmtsManipulator->getUnwrappedLastStmt($node->else->stmts);
+        $lastElseStmtKey = array_key_last($node->else->stmts);
+
+        $elseStmts = $node->else->stmts;
+        $elseStmts[$lastElseStmtKey] = new Return_($assign->expr);
+
+        $node->else = null;
+
+        foreach ($elseStmts as $elseStmt) {
+            $this->addNodeAfterNode($elseStmt, $node);
+        }
+
+        $this->removeNode($nextNode);
+
+        return $node;
+    }
+}

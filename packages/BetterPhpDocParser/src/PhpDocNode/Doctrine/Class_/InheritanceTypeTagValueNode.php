@@ -18,9 +18,10 @@ final class InheritanceTypeTagValueNode extends AbstractDoctrineTagValueNode
      */
     private $value;
 
-    public function __construct(?string $value)
+    public function __construct(?string $value, ?string $originalContent)
     {
         $this->value = $value;
+        $this->resolveOriginalContentSpacingAndOrder($originalContent);
     }
 
     public function __toString(): string
@@ -29,6 +30,10 @@ final class InheritanceTypeTagValueNode extends AbstractDoctrineTagValueNode
             return '';
         }
 
-        return '("' . $this->value . '")';
+        if ($this->originalContent && ! in_array('value', (array) $this->orderedVisibleItems, true)) {
+            return '("' . $this->value . '")';
+        }
+
+        return '(value="' . $this->value . '")';
     }
 }

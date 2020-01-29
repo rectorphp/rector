@@ -7,30 +7,18 @@ namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 
 final class VarDocPropertyTypeInferer implements PropertyTypeInfererInterface
 {
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    public function __construct(DocBlockManipulator $docBlockManipulator)
-    {
-        $this->docBlockManipulator = $docBlockManipulator;
-    }
-
     public function inferProperty(Property $property): Type
     {
-        if ($property->getDocComment() === null) {
-            return new MixedType();
-        }
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
-
-        return $phpDocInfo->getVarType();
+        return $phpDocInfo ? $phpDocInfo->getVarType() : new MixedType();
     }
 
     public function getPriority(): int

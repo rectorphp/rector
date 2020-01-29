@@ -13,9 +13,11 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\InversedByNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\MappedByNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\InheritanceTypeTagValueNode;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -56,11 +58,11 @@ final class DoctrineEntityManipulator
 
     public function resolveOtherProperty(Property $property): ?string
     {
-        if ($property->getDocComment() === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return null;
         }
-
-        $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
 
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
         if ($relationTagValueNode === null) {
@@ -103,12 +105,11 @@ final class DoctrineEntityManipulator
 
     public function removeMappedByOrInversedByFromProperty(Property $property): void
     {
-        $doc = $property->getDocComment();
-        if ($doc === null) {
-            return;
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return null;
         }
 
-        $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
 
         $shouldUpdate = false;
@@ -125,8 +126,6 @@ final class DoctrineEntityManipulator
         if (! $shouldUpdate) {
             return;
         }
-
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($property, $phpDocInfo);
     }
 
     /**

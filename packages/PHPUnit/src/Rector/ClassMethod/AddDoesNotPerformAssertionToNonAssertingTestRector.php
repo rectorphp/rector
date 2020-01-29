@@ -155,8 +155,6 @@ PHP
         $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@doesNotPerformAssertion', new GenericTagValueNode(
             ''
         ));
-
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($classMethod, $phpDocInfo);
     }
 
     private function containsAssertCall(ClassMethod $classMethod): bool

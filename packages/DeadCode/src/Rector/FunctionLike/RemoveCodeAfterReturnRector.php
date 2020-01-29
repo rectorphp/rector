@@ -66,6 +66,7 @@ PHP
         }
 
         $isDeadAfterReturn = false;
+        $isDeadAfterReturnRemoved = false;
 
         foreach ($node->stmts as $key => $stmt) {
             if ($isDeadAfterReturn) {
@@ -75,12 +76,17 @@ PHP
                 }
 
                 unset($node->stmts[$key]);
+                $isDeadAfterReturnRemoved = true;
             }
 
             if ($stmt instanceof Return_) {
                 $isDeadAfterReturn = true;
                 continue;
             }
+        }
+
+        if ($isDeadAfterReturnRemoved === false) {
+            return null;
         }
 
         return $node;
