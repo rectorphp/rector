@@ -6,7 +6,6 @@ namespace Rector\NodeTypeResolver;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -14,50 +13,18 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Analyser\NameScope;
-use PHPStan\Analyser\Scope;
-use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\BooleanType;
-use PHPStan\Type\CallableType;
-use PHPStan\Type\ClassStringType;
-use PHPStan\Type\ConstantType;
-use PHPStan\Type\FloatType;
-use PHPStan\Type\IntegerType;
-use PHPStan\Type\IterableType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\ObjectWithoutClassType;
-use PHPStan\Type\ResourceType;
-use PHPStan\Type\StaticType;
-use PHPStan\Type\StringType;
-use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use PHPStan\Type\VoidType;
-use Rector\BetterPhpDocParser\Type\PreSlashStringType;
 use Rector\Exception\NotImplementedException;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeMapper;
+use Rector\NodeTypeResolver\TypeMapper\PhpParserNodeMapper;
 use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
-use Rector\PHPStan\Type\ParentStaticType;
-use Rector\PHPStan\Type\SelfObjectType;
-use Rector\PHPStan\Type\ShortenedObjectType;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
 /**
  * Maps PhpParser <=> PHPStan <=> PHPStan doc <=> string type nodes between all possible formats
@@ -65,42 +32,35 @@ use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 final class StaticTypeMapper
 {
     /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
-     * @var ObjectTypeSpecifier
-     */
-    private $objectTypeSpecifier;
-
-    /**
      * @var PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
-
-    /**
-     * @var TypeNodeResolver
-     */
-    private $typeNodeResolver;
 
     /**
      * @var NameResolver
      */
     private $nameResolver;
 
+    /**
+     * @var PhpParserNodeMapper
+     */
+    private $phpParserNodeMapper;
+
+    /**
+     * @var PhpDocTypeMapper
+     */
+    private $phpDocTypeMapper;
+
     public function __construct(
-        TypeFactory $typeFactory,
-        ObjectTypeSpecifier $objectTypeSpecifier,
         PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
-        TypeNodeResolver $typeNodeResolver,
-        NameResolver $nameResolver
+        NameResolver $nameResolver,
+        PhpParserNodeMapper $phpParserNodeMapper,
+        PhpDocTypeMapper $phpDocTypeMapper
     ) {
-        $this->typeFactory = $typeFactory;
-        $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
-        $this->typeNodeResolver = $typeNodeResolver;
         $this->nameResolver = $nameResolver;
+        $this->phpParserNodeMapper = $phpParserNodeMapper;
+        $this->phpDocTypeMapper = $phpDocTypeMapper;
     }
 
     public function mapPHPStanTypeToPHPStanPhpDocTypeNode(Type $phpStanType): TypeNode
@@ -123,47 +83,7 @@ final class StaticTypeMapper
 
     public function mapPhpParserNodePHPStanType(Node $node): Type
     {
-        if ($node instanceof Expr) {
-            /** @var Scope $scope */
-            $scope = $node->getAttribute(AttributeKey::SCOPE);
-
-            return $scope->getType($node);
-        }
-
-        if ($node instanceof NullableType) {
-            $types = [];
-            $types[] = $this->mapPhpParserNodePHPStanType($node->type);
-            $types[] = new NullType();
-
-            return $this->typeFactory->createMixedPassedOrUnionType($types);
-        }
-
-        if ($node instanceof Identifier) {
-            if ($node->name === 'string') {
-                return new StringType();
-            }
-
-            $type = $this->mapScalarStringToType($node->name);
-            if ($type !== null) {
-                return $type;
-            }
-        }
-
-        if ($node instanceof FullyQualified) {
-            return new FullyQualifiedObjectType($node->toString());
-        }
-
-        if ($node instanceof Name) {
-            $name = $node->toString();
-
-            if (ClassExistenceStaticHelper::doesClassLikeExist($name)) {
-                return new FullyQualifiedObjectType($node->toString());
-            }
-
-            return new MixedType();
-        }
-
-        throw new NotImplementedException(__METHOD__ . 'for type ' . get_class($node));
+        return $this->phpParserNodeMapper->mapToPHPStanType($node);
     }
 
     public function mapPHPStanPhpDocTypeToPHPStanType(PhpDocTagValueNode $phpDocTagValueNode, Node $node): Type
@@ -176,42 +96,6 @@ final class StaticTypeMapper
         }
 
         throw new NotImplementedException(__METHOD__ . ' for ' . get_class($phpDocTagValueNode));
-    }
-
-    public function createTypeHash(Type $type): string
-    {
-        if ($type instanceof MixedType) {
-            return serialize($type);
-        }
-
-        if ($type instanceof ArrayType) {
-            // @todo sort to make different order identical
-            return $this->createTypeHash($type->getItemType()) . '[]';
-        }
-
-        if ($type instanceof ShortenedObjectType) {
-            return $type->getFullyQualifiedName();
-        }
-
-        if ($type instanceof FullyQualifiedObjectType || $type instanceof ObjectType) {
-            return $type->getClassName();
-        }
-
-        if ($type instanceof ConstantType) {
-            if (method_exists($type, 'getValue')) {
-                return get_class($type) . $type->getValue();
-            }
-
-            throw new ShouldNotHappenException();
-        }
-
-        if ($type instanceof UnionType) {
-            $types = $type->getTypes();
-            sort($types);
-            $type = new UnionType($types);
-        }
-
-        return $this->mapPHPStanTypeToDocString($type);
     }
 
     /**
@@ -265,154 +149,8 @@ final class StaticTypeMapper
     public function mapPHPStanPhpDocTypeNodeToPHPStanType(TypeNode $typeNode, Node $node): Type
     {
         $nameScope = $this->createNameScopeFromNode($node);
-        // @todo use in the future
 
-        $type = $this->typeNodeResolver->resolve($typeNode, $nameScope);
-        if ($typeNode instanceof GenericTypeNode) {
-            return $type;
-        }
-
-        return $this->customMapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, $node);
-    }
-
-    /**
-     * @deprecated Move gradualy to @see \PHPStan\PhpDoc\TypeNodeResolver from PHPStan
-     */
-    private function customMapPHPStanPhpDocTypeNodeToPHPStanType(TypeNode $typeNode, Node $node): Type
-    {
-        if ($typeNode instanceof IdentifierTypeNode) {
-            $type = $this->mapScalarStringToType($typeNode->name);
-            if ($type !== null) {
-                return $type;
-            }
-
-            $loweredName = strtolower($typeNode->name);
-            if ($loweredName === '\string') {
-                return new PreSlashStringType();
-            }
-
-            if ($loweredName === 'class-string') {
-                return new ClassStringType();
-            }
-
-            if ($loweredName === 'self') {
-                /** @var string|null $className */
-                $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-                if ($className === null) {
-                    // self outside the class, e.g. in a function
-                    return new MixedType();
-                }
-
-                return new SelfObjectType($className);
-            }
-
-            if ($loweredName === 'parent') {
-                /** @var string|null $parentClassName */
-                $parentClassName = $node->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-                if ($parentClassName === null) {
-                    return new MixedType();
-                }
-
-                return new ParentStaticType($parentClassName);
-            }
-
-            if ($loweredName === 'static') {
-                /** @var string|null $className */
-                $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-                if ($className === null) {
-                    return new MixedType();
-                }
-
-                return new StaticType($className);
-            }
-
-            if ($loweredName === 'iterable') {
-                return new IterableType(new MixedType(), new MixedType());
-            }
-
-            // @todo improve - making many false positives now
-            $objectType = new ObjectType($typeNode->name);
-
-            return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType($node, $objectType);
-        }
-
-        if ($typeNode instanceof ArrayTypeNode) {
-            $nestedType = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode->type, $node);
-
-            return new ArrayType(new MixedType(), $nestedType);
-        }
-
-        if ($typeNode instanceof UnionTypeNode || $typeNode instanceof IntersectionTypeNode) {
-            $unionedTypes = [];
-            foreach ($typeNode->types as $unionedTypeNode) {
-                $unionedTypes[] = $this->mapPHPStanPhpDocTypeNodeToPHPStanType($unionedTypeNode, $node);
-            }
-
-            // to prevent missing class error, e.g. in tests
-            return $this->typeFactory->createMixedPassedOrUnionType($unionedTypes);
-        }
-
-        if ($typeNode instanceof ThisTypeNode) {
-            if ($node === null) {
-                throw new ShouldNotHappenException();
-            }
-            /** @var string $className */
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-
-            return new ThisType($className);
-        }
-
-        throw new NotImplementedException(__METHOD__ . ' for ' . get_class($typeNode));
-    }
-
-    private function mapScalarStringToType(string $scalarName): ?Type
-    {
-        $loweredScalarName = Strings::lower($scalarName);
-        if ($loweredScalarName === 'string') {
-            return new StringType();
-        }
-
-        if (in_array($loweredScalarName, ['float', 'real', 'double'], true)) {
-            return new FloatType();
-        }
-
-        if (in_array($loweredScalarName, ['int', 'integer'], true)) {
-            return new IntegerType();
-        }
-
-        if (in_array($loweredScalarName, ['false', 'true', 'bool', 'boolean'], true)) {
-            return new BooleanType();
-        }
-
-        if ($loweredScalarName === 'array') {
-            return new ArrayType(new MixedType(), new MixedType());
-        }
-
-        if ($loweredScalarName === 'null') {
-            return new NullType();
-        }
-
-        if ($loweredScalarName === 'void') {
-            return new VoidType();
-        }
-
-        if ($loweredScalarName === 'object') {
-            return new ObjectWithoutClassType();
-        }
-
-        if ($loweredScalarName === 'resource') {
-            return new ResourceType();
-        }
-
-        if (in_array($loweredScalarName, ['callback', 'callable'], true)) {
-            return new CallableType();
-        }
-
-        if ($loweredScalarName === 'mixed') {
-            return new MixedType(true);
-        }
-
-        return null;
+        return $this->phpDocTypeMapper->mapToPHPStanType($typeNode, $node, $nameScope);
     }
 
     /**

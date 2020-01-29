@@ -11,17 +11,12 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\NodeTypeResolver\StaticTypeMapper;
+use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\PHPStan\TypeFactoryStaticHelper;
 use Rector\TypeDeclaration\ValueObject\NestedArrayTypeValueObject;
 
 final class TypeNormalizer
 {
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
     /**
      * @var TypeFactory
      */
@@ -32,10 +27,15 @@ final class TypeNormalizer
      */
     private $collectedNestedArrayTypes = [];
 
-    public function __construct(StaticTypeMapper $staticTypeMapper, TypeFactory $typeFactory)
+    /**
+     * @var TypeHasher
+     */
+    private $typeHasher;
+
+    public function __construct(TypeFactory $typeFactory, TypeHasher $typeHasher)
     {
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->typeFactory = $typeFactory;
+        $this->typeHasher = $typeHasher;
     }
 
     /**
@@ -84,7 +84,7 @@ final class TypeNormalizer
         $uniqueTypes = [];
         $removedKeys = [];
         foreach ($type->getValueTypes() as $key => $valueType) {
-            $typeHash = $this->staticTypeMapper->createTypeHash($valueType);
+            $typeHash = $this->typeHasher->createTypeHash($valueType);
 
             $valueType = $this->uniqueateConstantArrayType($valueType);
             $valueType = $this->normalizeArrayOfUnionToUnionArray($valueType);

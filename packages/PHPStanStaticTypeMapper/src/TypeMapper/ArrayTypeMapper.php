@@ -23,6 +23,14 @@ final class ArrayTypeMapper implements TypeMapperInterface
      */
     private $phpStanStaticTypeMapper;
 
+    /**
+     * @required
+     */
+    public function autowireArrayTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    {
+        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
+    }
+
     public function getNodeClass(): string
     {
         return ArrayType::class;
@@ -72,14 +80,6 @@ final class ArrayTypeMapper implements TypeMapperInterface
         }
 
         return implode('|', $docStringTypes);
-    }
-
-    /**
-     * @required
-     */
-    public function autowireArrayTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
-    {
-        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
 
     private function mapArrayUnionTypeToDocString(ArrayType $arrayType, UnionType $unionType): string

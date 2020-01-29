@@ -45,6 +45,7 @@ use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Exception\MissingTagException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\ShortenedObjectType;
@@ -94,6 +95,11 @@ final class DocBlockManipulator
      */
     private $docBlockNameImporter;
 
+    /**
+     * @var TypeHasher
+     */
+    private $typeHasher;
+
     public function __construct(
         PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
@@ -101,7 +107,8 @@ final class DocBlockManipulator
         PhpDocNodeTraverser $phpDocNodeTraverser,
         StaticTypeMapper $staticTypeMapper,
         DocBlockClassRenamer $docBlockClassRenamer,
-        DocBlockNameImporter $docBlockNameImporter
+        DocBlockNameImporter $docBlockNameImporter,
+        TypeHasher $typeHasher
     ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
@@ -110,6 +117,7 @@ final class DocBlockManipulator
         $this->staticTypeMapper = $staticTypeMapper;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
         $this->docBlockNameImporter = $docBlockNameImporter;
+        $this->typeHasher = $typeHasher;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -566,8 +574,8 @@ final class DocBlockManipulator
             return true;
         }
 
-        $firstTypeHash = $this->staticTypeMapper->createTypeHash($firstType);
-        $secondTypeHash = $this->staticTypeMapper->createTypeHash($secondType);
+        $firstTypeHash = $this->typeHasher->createTypeHash($firstType);
+        $secondTypeHash = $this->typeHasher->createTypeHash($secondType);
 
         if ($firstTypeHash === $secondTypeHash) {
             return true;

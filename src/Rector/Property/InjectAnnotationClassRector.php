@@ -140,7 +140,6 @@ PHP
             }
 
             $type = $this->resolveType($node, $injectTagValueNode);
-
             return $this->refactorPropertyWithAnnotation($node, $type, $tagClass);
         }
 
