@@ -5,40 +5,40 @@ dist: bionic
 language: php
 
 before_install:
-    # turn off XDebug
+    # Turn off XDebug
     - phpenv config-rm xdebug.ini
 
 jobs:
     include:
-        # inspired by https://github.com/phpstan/phpstan-src/blob/088b9fab470632cea07f08a936fb0923a59b2ecb/.travis.yml#L47-L59
-        # "Deploy to https://github.com/rectorphp/rector-prefixed"
-        -
-            name: Compile and Release rector.phar
-            if: (branch = master OR tag IS present) && type = push
-            php: 7.2
-            script:
-                - cd compiler
-                - composer install
-                - travis_retry bin/compile
-                - ../tmp/rector.phar
+        # Inspired by https://github.com/phpstan/phpstan-src/blob/088b9fab470632cea07f08a936fb0923a59b2ecb/.travis.yml#L47-L59
+        # Deploy to https://github.com/rectorphp/rector-prefixed
+        - name: Compile and Release rector.phar
+          if: (branch = master OR tag IS present) && type = push
+          php: 7.2
+          script: |
+              (
+                  cd compiler/
+                  composer install --no-interaction --no-suggest
+                  travis_retry php bin/compile
+                  php ../tmp/rector.phar
+              )
+              # Reuse tmp/rector.phar from previous run
+              git clone --quiet "https://${GITHUB_TOKEN}@github.com/rectorphp/rector-prefixed.git" rector-prefixed
+              cp tmp/rector.phar rector-prefixed/rector.phar
+              cp tmp/rector.phar rector-prefixed/rector
+              (
+                  cd rector-prefixed/
+                  git config user.name "TomasVotruba"
+                  git config user.email "tomas.vot@gmail.com"
+                  git add rector rector.phar
 
-                - cd ..
+                  COMMIT_MSG="Updated Rector to commit ${TRAVIS_COMMIT}"
+                  if [ -n "${TRAVIS_TAG}" ]; then COMMIT_MSG="Rector ${TRAVIS_TAG}"; fi
+                  git commit -m "${COMMIT_MSG}"
+                  git push --quiet --force origin master
 
-                # reuse tmp/rector.phar from previous job
-                - git clone https://${GITHUB_TOKEN}@github.com/rectorphp/rector-prefixed.git rector-prefixed > /dev/null 2>&1
-                - cp tmp/rector.phar rector-prefixed/rector.phar
-                - cp tmp/rector.phar rector-prefixed/rector
-                - cd rector-prefixed
-                - git config user.name "TomasVotruba"
-                - git config user.email "tomas.vot@gmail.com"
-                - git add rector rector.phar
-
-                - if [ "${TRAVIS_TAG}" != "" ]; then COMMIT_MSG="Rector ${TRAVIS_TAG}"; else COMMIT_MSG="Updated Rector to commit ${TRAVIS_COMMIT}"; fi
-
-                - git commit -m "${COMMIT_MSG}"
-                - git push --quiet origin master -f
-
-                - if [ "${TRAVIS_TAG}" != "" ]; then git tag "${TRAVIS_TAG}" && git push --quiet origin ${TRAVIS_TAG}; fi
+                  if [ -n "${TRAVIS_TAG}" ]; then git tag "${TRAVIS_TAG}" && git push --quiet origin; fi
+              )
 
 notifications:
     email: false
