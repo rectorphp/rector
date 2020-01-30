@@ -81,6 +81,15 @@ final class PhpDocInfoPrinter
      */
     public function printFormatPreserving(PhpDocInfo $phpDocInfo, bool $shouldSkipEmptyLinesAbove = false): string
     {
+        if ($phpDocInfo->getTokens() === []) {
+            // completely new noe, just print string version of it
+            if ($phpDocInfo->getPhpDocNode()->children === []) {
+                return '';
+            }
+
+            return (string) $phpDocInfo->getPhpDocNode();
+        }
+
         $this->attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
         $this->tokens = $phpDocInfo->getTokens();
 
@@ -93,7 +102,7 @@ final class PhpDocInfoPrinter
         return $this->printPhpDocNode($this->attributeAwarePhpDocNode, $shouldSkipEmptyLinesAbove);
     }
 
-    private function printPhpDocNode(
+    public function printPhpDocNode(
         AttributeAwarePhpDocNode $attributeAwarePhpDocNode,
         bool $shouldSkipEmptyLinesAbove = false
     ): string {

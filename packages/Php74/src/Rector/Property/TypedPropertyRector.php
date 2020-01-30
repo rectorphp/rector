@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Type\MixedType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -112,7 +113,7 @@ PHP
 
     private function removeVarPhpTagValueNodeIfNotComment(Property $property): void
     {
-        $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
         // nothing to remove
         if ($propertyPhpDocInfo === null) {
             return;

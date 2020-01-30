@@ -7,6 +7,7 @@ namespace Rector\Doctrine\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
 
@@ -39,7 +40,7 @@ final class RemoveTemporaryUuidRelationPropertyRector extends AbstractRector
             return null;
         }
 
-        $phpDocInfo = $this->getPhpDocInfo($node);
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return null;
         }

@@ -15,6 +15,7 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\NodeContainer\ParsedNodesByType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
@@ -150,7 +151,7 @@ PHP
 
         // B. extend current doc
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $this->getPhpDocInfo($classMethod);
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         $phpDocNode = $phpDocInfo->getPhpDocNode();
         $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@doesNotPerformAssertion', new GenericTagValueNode(
             ''

@@ -29,7 +29,6 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
@@ -55,11 +54,6 @@ use Rector\PHPStan\Type\ShortenedObjectType;
  */
 final class DocBlockManipulator
 {
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
     /**
      * @var PhpDocInfoPrinter
      */
@@ -100,17 +94,21 @@ final class DocBlockManipulator
      */
     private $typeHasher;
 
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
     public function __construct(
-        PhpDocInfoFactory $phpDocInfoFactory,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
         PhpDocNodeTraverser $phpDocNodeTraverser,
         StaticTypeMapper $staticTypeMapper,
         DocBlockClassRenamer $docBlockClassRenamer,
         DocBlockNameImporter $docBlockNameImporter,
-        TypeHasher $typeHasher
+        TypeHasher $typeHasher,
+        PhpDocInfoFactory $phpDocInfoFactory
     ) {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
@@ -118,6 +116,7 @@ final class DocBlockManipulator
         $this->docBlockClassRenamer = $docBlockClassRenamer;
         $this->docBlockNameImporter = $docBlockNameImporter;
         $this->typeHasher = $typeHasher;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -137,8 +136,8 @@ final class DocBlockManipulator
             return false;
         }
 
-        // advanced check, e.g. for "Namespaced\Annotations\DI"
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
         return $phpDocInfo->hasByType($name);
     }
@@ -147,14 +146,13 @@ final class DocBlockManipulator
     {
         $phpDocChildNode = $this->attributeAwareNodeFactory->createFromNode($phpDocChildNode);
 
-        if ($node->getDocComment() !== null) {
-            $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-            $phpDocNode = $phpDocInfo->getPhpDocNode();
-            $phpDocNode->children[] = $phpDocChildNode;
-        } else {
-            $phpDocNode = new AttributeAwarePhpDocNode([$phpDocChildNode]);
-            $node->setDocComment(new Doc($phpDocNode->__toString()));
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         }
+
+        $phpDocInfo->addPhpDocTagNode($phpDocChildNode);
     }
 
     public function addTagValueNodeWithShortName(Node $node, AbstractTagValueNode $tagValueNode): void
@@ -169,11 +167,12 @@ final class DocBlockManipulator
      */
     public function removeTagFromNode(Node $node, string $name): void
     {
-        if ($node->getDocComment() === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return;
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
         $this->removeTagByName($phpDocInfo, $name);
     }
 
@@ -183,28 +182,30 @@ final class DocBlockManipulator
             return;
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
         $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo->getPhpDocNode(), $oldType, $newType, $node);
     }
 
     public function replaceAnnotationInNode(Node $node, string $oldAnnotation, string $newAnnotation): void
     {
-        if ($node->getDocComment() === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return;
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
         $this->replaceTagByAnother($phpDocInfo->getPhpDocNode(), $oldAnnotation, $newAnnotation);
     }
 
     public function getReturnType(Node $node): Type
     {
-        if ($node->getDocComment() === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return new MixedType();
         }
-
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         return $phpDocInfo->getReturnType();
     }
@@ -217,11 +218,11 @@ final class DocBlockManipulator
      */
     public function getParamTypesByName(FunctionLike $functionLike): array
     {
-        if ($functionLike->getDocComment() === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $functionLike->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return [];
         }
-
-        $phpDocInfo = $this->createPhpDocInfoFromNode($functionLike);
 
         $paramTypesByName = [];
 
@@ -238,16 +239,15 @@ final class DocBlockManipulator
     }
 
     /**
-     * @final
      * @return PhpDocTagNode[]
      */
     public function getTagsByName(Node $node, string $name): array
     {
-        if ($node->getDocComment() === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return [];
         }
-
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         return $phpDocInfo->getTagsByName($name);
     }
@@ -292,8 +292,10 @@ final class DocBlockManipulator
             return;
         }
 
-        if ($node->getDocComment() !== null) {
-            $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+        if ($phpDocInfo !== null) {
             $returnTagValueNode = $phpDocInfo->getByType(ReturnTagValueNode::class);
 
             // overide existing type
@@ -324,11 +326,11 @@ final class DocBlockManipulator
 
     public function getVarType(Node $node): Type
     {
-        if ($node->getDocComment() === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return new MixedType();
         }
-
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         return $phpDocInfo->getVarType();
     }
@@ -393,11 +395,11 @@ final class DocBlockManipulator
 
     public function importNames(Node $node): void
     {
-        if ($node->getDocComment() === null) {
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return;
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
         $this->docBlockNameImporter->importNames($phpDocInfo, $node);
     }
 
@@ -406,11 +408,11 @@ final class DocBlockManipulator
      */
     public function changeUnderscoreType(Node $node, string $namespacePrefix, array $excludedClasses): void
     {
-        if ($node->getDocComment() === null) {
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return;
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
         $phpDocNode = $phpDocInfo->getPhpDocNode();
         $phpParserNode = $node;
 
@@ -465,7 +467,8 @@ final class DocBlockManipulator
             return true;
         }
 
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
         // has any type node?
 
@@ -484,14 +487,28 @@ final class DocBlockManipulator
 
     public function updateNodeWithPhpDocInfo(Node $node, bool $shouldSkipEmptyLinesAbove = false): void
     {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
         // nothing to change
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return;
         }
 
-        $phpDoc = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo, $shouldSkipEmptyLinesAbove);
+        // new node, needs to be reparsed
+        if ($phpDocInfo->getPhpDocNode()->children !== [] && $phpDocInfo->getTokens() === []) {
+            $phpDoc = $this->phpDocInfoPrinter->printPhpDocNode(
+                $phpDocInfo->getPhpDocNode(),
+                $shouldSkipEmptyLinesAbove
+            );
+
+            // slight correction
+            if (Strings::match($phpDoc, '#^ * #m')) {
+                $phpDoc = Strings::replace($phpDoc, '#\s+\*/$#m', "\n */");
+            }
+        } else {
+            $phpDoc = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo, $shouldSkipEmptyLinesAbove);
+        }
+
         if ($phpDoc === '') {
             // no comments, null
             $node->setAttribute('comments', null);
@@ -510,11 +527,11 @@ final class DocBlockManipulator
 
     public function getDoctrineFqnTargetEntity(Node $node): ?string
     {
-        if ($node->getDocComment() === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return null;
         }
-
-        $phpDocInfo = $this->createPhpDocInfoFromNode($node);
 
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
         if ($relationTagValueNode === null) {
@@ -522,18 +539,6 @@ final class DocBlockManipulator
         }
 
         return $relationTagValueNode->getFqnTargetEntity();
-    }
-
-    public function createPhpDocInfoFromNode(Node $node): PhpDocInfo
-    {
-        if ($node->getDocComment() === null) {
-            throw new ShouldNotHappenException(sprintf(
-                'Node must have a comment. Check `$node->getDocComment() !== null` before passing it to %s',
-                __METHOD__
-            ));
-        }
-
-        return $this->phpDocInfoFactory->createFromNode($node);
     }
 
     public function getParamTypeByName(FunctionLike $functionLike, string $paramName): Type
@@ -576,15 +581,17 @@ final class DocBlockManipulator
             return;
         }
 
-        // there might be no phpdoc at all
-        if ($node->getDocComment() !== null) {
-            $phpDocInfo = $this->createPhpDocInfoFromNode($node);
-            $phpDocNode = $phpDocInfo->getPhpDocNode();
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
+        // there might be no phpdoc at all
+        if ($phpDocInfo !== null) {
             $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode(
                 $docStringType
             ), '', '');
-            $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@' . $name, $varTagValueNode);
+
+            $varTagValueNode = new AttributeAwarePhpDocTagNode('@' . $name, $varTagValueNode);
+            $phpDocInfo->addPhpDocTagNode($varTagValueNode);
         } else {
             // create completely new docblock
             $varDocComment = sprintf("/**\n * @%s %s\n */", $name, $docStringType);

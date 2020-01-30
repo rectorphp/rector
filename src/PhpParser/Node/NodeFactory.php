@@ -30,6 +30,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
@@ -49,10 +50,19 @@ final class NodeFactory
      */
     private $staticTypeMapper;
 
-    public function __construct(BuilderFactory $builderFactory, StaticTypeMapper $staticTypeMapper)
-    {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(
+        BuilderFactory $builderFactory,
+        StaticTypeMapper $staticTypeMapper,
+        PhpDocInfoFactory $phpDocInfoFactory
+    ) {
         $this->builderFactory = $builderFactory;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -164,11 +174,16 @@ final class NodeFactory
         $propertyBuilder->makePrivate();
 
         if ($type !== null) {
+            // @todo use PhpDocInfo approach
             $docComment = $this->createVarDoc($type);
             $propertyBuilder->setDocComment($docComment);
         }
 
         $property = $propertyBuilder->getNode();
+
+        // add PHP_DOC_INFO
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+        $property->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
 
         $this->decorateParentPropertyProperty($property);
 

@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\SoftDeleteableTagValueNode;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -91,7 +92,7 @@ PHP
     public function refactor(Node $node): ?Node
     {
         // Gedmo\Mapping\Annotation\SoftDeleteable
-        $classPhpDocInfo = $this->getPhpDocInfo($node);
+        $classPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($classPhpDocInfo === null) {
             return null;
         }

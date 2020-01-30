@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\NodeContainer\ParsedNodesByType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -114,7 +115,7 @@ PHP
     private function classHasTemplateAnnotations(Class_ $node): bool
     {
         foreach ($node->getMethods() as $classMethod) {
-            $phpDocInfo = $this->getPhpDocInfo($classMethod);
+            $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($phpDocInfo === null) {
                 continue;
             }
@@ -263,7 +264,7 @@ PHP
 
     private function getSensioTemplateTagValueNode(ClassMethod $classMethod): ?SensioTemplateTagValueNode
     {
-        $phpDocInfo = $this->getPhpDocInfo($classMethod);
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return null;
         }

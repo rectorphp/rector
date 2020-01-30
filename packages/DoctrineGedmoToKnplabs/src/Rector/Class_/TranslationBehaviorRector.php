@@ -207,7 +207,7 @@ PHP
         $removedPropertyNameToPhpDocInfo = [];
 
         foreach ($class->getProperties() as $property) {
-            $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($propertyPhpDocInfo === null) {
                 continue;
             }

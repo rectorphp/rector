@@ -24,6 +24,8 @@ use Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector;
 use Rector\Exclusion\ExclusionManager;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\Php\PhpVersionProvider;
 use Rector\Rector\AbstractRector\AbstractRectorTrait;
 use Rector\Rector\AbstractRector\NodeCommandersTrait;
@@ -70,6 +72,16 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected $phpDocInfoPrinter;
 
     /**
+     * @var DocBlockManipulator
+     */
+    protected $docBlockManipulator;
+
+    /**
+     * @var StaticTypeMapper
+     */
+    protected $staticTypeMapper;
+
+    /**
      * Run once in the every end of one processed file
      */
     protected function tearDown(): void
@@ -86,7 +98,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         ExclusionManager $exclusionManager,
         CommanderCollector $commanderCollector,
         CurrentFileInfoProvider $currentFileInfoProvider,
-        PhpDocInfoPrinter $phpDocInfoPrinter
+        PhpDocInfoPrinter $phpDocInfoPrinter,
+        DocBlockManipulator $docBlockManipulator,
+        StaticTypeMapper $staticTypeMapper
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
@@ -95,6 +109,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->commanderCollector = $commanderCollector;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
+        $this->docBlockManipulator = $docBlockManipulator;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     /**
@@ -123,8 +139,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? clone $node;
         $originalNodeWithAttributes = clone $node;
-        $originalComment = $node->getComments();
-        $originalDocComment = $node->getDocComment();
         $node = $this->refactor($node);
 
         // nothing to change → continue

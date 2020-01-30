@@ -85,7 +85,7 @@ PHP
             }
         }
 
-        if ($isDeadAfterReturnRemoved === false) {
+        if (! $isDeadAfterReturnRemoved) {
             return null;
         }
 

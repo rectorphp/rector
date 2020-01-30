@@ -18,7 +18,7 @@ final class VarDocPropertyTypeInferer implements PropertyTypeInfererInterface
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        return $phpDocInfo ? $phpDocInfo->getVarType() : new MixedType();
+        return $phpDocInfo !== null ? $phpDocInfo->getVarType() : new MixedType();
     }
 
     public function getPriority(): int

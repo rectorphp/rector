@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\BlameableTagValueNode;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -123,7 +124,7 @@ PHP
     private function isGedmoBlameableClass(Class_ $class): bool
     {
         foreach ($class->getProperties() as $property) {
-            $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($propertyPhpDocInfo === null) {
                 continue;
             }
@@ -143,7 +144,7 @@ PHP
         $removedPropertyNames = [];
 
         foreach ($class->getProperties() as $property) {
-            $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($propertyPhpDocInfo === null) {
                 continue;
             }

@@ -12,8 +12,9 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToOneTagNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
@@ -26,28 +27,23 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     private const COLLECTION_TYPE = 'Doctrine\Common\Collections\Collection';
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var TypeFactory
      */
     private $typeFactory;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator, TypeFactory $typeFactory)
+    public function __construct(TypeFactory $typeFactory)
     {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->typeFactory = $typeFactory;
     }
 
     public function inferProperty(Property $property): Type
     {
-        if ($property->getDocComment() === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return new MixedType();
         }
 
-        $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
         if ($relationTagValueNode === null) {
             return new MixedType();

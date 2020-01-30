@@ -10,6 +10,8 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PHPUnit\Manipulator\OnContainerGetCallManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -154,16 +156,21 @@ PHP
      */
     private function addInjectAnnotationToProperties(array $properties): void
     {
-        foreach ($properties as $privateProperty) {
-            $this->addInjectAnnotationToProperty($privateProperty);
+        foreach ($properties as $property) {
+            $this->addInjectAnnotationToProperty($property);
         }
     }
 
     private function addInjectAnnotationToProperty(Property $privateProperty): void
     {
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $this->getPhpDocInfo($privateProperty);
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
-        $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@inject', new GenericTagValueNode(''));
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $privateProperty->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+        if ($phpDocInfo === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $injectTag = new AttributeAwarePhpDocTagNode('@inject', new GenericTagValueNode(''));
+        $phpDocInfo->addPhpDocTagNode($injectTag);
     }
 }

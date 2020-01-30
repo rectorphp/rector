@@ -84,11 +84,12 @@ PHP
             return null;
         }
 
-        $phpDocInfo = $this->getPhpDocInfo($node);
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return null;
         }
 
+        /** @var SensioMethodTagValueNode|null $symfonyMethodPhpDocTagValueNode */
         $symfonyMethodPhpDocTagValueNode = $phpDocInfo->getByType(SensioMethodTagValueNode::class);
         if ($symfonyMethodPhpDocTagValueNode === null) {
             return null;

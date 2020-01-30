@@ -85,6 +85,7 @@ PHP
             return null;
         }
 
+        $hasChanged = false;
         foreach ($node->stmts as $key => $stmt) {
             $currentStmtVariableName = null;
 
@@ -101,12 +102,17 @@ PHP
             }
 
             if ($this->shouldAddEmptyLine($currentStmtVariableName, $node, $key)) {
+                $hasChanged = true;
                 // insert newline before
                 array_splice($node->stmts, $key, 0, [new Nop()]);
             }
 
             $this->previousPreviousStmtVariableName = $this->previousStmtVariableName;
             $this->previousStmtVariableName = $currentStmtVariableName;
+        }
+
+        if (! $hasChanged) {
+            return null;
         }
 
         return $node;

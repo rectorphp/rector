@@ -105,7 +105,7 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
         }
 
         /** @var PhpDocInfo|null $propertyPhpDocInfo */
-        $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($propertyPhpDocInfo === null) {
             return true;
         }
@@ -155,7 +155,7 @@ final class AddUuidMirrorForRelationPropertyRector extends AbstractRector
     private function mirrorPhpDocInfoToUuid(Property $property): void
     {
         /** @var PhpDocInfo $propertyPhpDocInfo */
-        $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
 
         $newPropertyPhpDocInfo = clone $propertyPhpDocInfo;
 

@@ -14,8 +14,11 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\BooleanType;
+use Prophecy\Doubler\Generator\Node\MethodNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -248,12 +251,13 @@ final class AssertManipulator
 
         $this->nodeRemovingCommander->addNode($staticCall);
 
+        /** @var ClassMethod|null $methodNode */
         $methodNode = $staticCall->getAttribute(AttributeKey::METHOD_NODE);
         if ($methodNode === null) {
             return;
         }
 
-        $phpDocTagNode = new PhpDocTextNode('@doesNotPerformAssertions');
+        $phpDocTagNode = new PhpDocTagNode('@doesNotPerformAssertions', new GenericTagValueNode(''));
         $this->docBlockManipulator->addTag($methodNode, $phpDocTagNode);
     }
 

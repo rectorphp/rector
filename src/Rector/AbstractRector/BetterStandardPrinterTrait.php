@@ -86,7 +86,7 @@ trait BetterStandardPrinterTrait
             $availableNode = clone $availableNode;
             $availableNode->setAttribute('comments', null);
 
-            if ($this->areNodesEqual($singleNode, $availableNode)) {
+            if ($this->areNodesWithoutCommentsEqual($singleNode, $availableNode)) {
                 return true;
             }
         }

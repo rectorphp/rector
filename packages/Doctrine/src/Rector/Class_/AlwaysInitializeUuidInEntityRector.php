@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
@@ -82,7 +83,7 @@ final class AlwaysInitializeUuidInEntityRector extends AbstractRector
     private function resolveUuidPropertyFromClass(Class_ $class): ?Property
     {
         foreach ($class->getProperties() as $property) {
-            $propertyPhpDoc = $this->getPhpDocInfo($property);
+            $propertyPhpDoc = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($propertyPhpDoc === null) {
                 continue;
             }
