@@ -7,11 +7,12 @@ namespace Rector\Doctrine\Provider;
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeContainer\ParsedNodesByType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -38,11 +39,6 @@ final class EntityWithMissingUuidProvider
     private $nameResolver;
 
     /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
      * @var Class_[]
      */
     private $entitiesWithMissingUuidProperty = [];
@@ -51,14 +47,12 @@ final class EntityWithMissingUuidProvider
         ParsedNodesByType $parsedNodesByType,
         DoctrineDocBlockResolver $doctrineDocBlockResolver,
         ClassManipulator $classManipulator,
-        NameResolver $nameResolver,
-        PhpDocInfoFactory $phpDocInfoFactory
+        NameResolver $nameResolver
     ) {
         $this->parsedNodesByType = $parsedNodesByType;
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
         $this->classManipulator = $classManipulator;
         $this->nameResolver = $nameResolver;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -112,8 +106,8 @@ final class EntityWithMissingUuidProvider
 
     private function isPropertyClassIdWithUuidType(Property $property): bool
     {
-        $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
-
+        /** @var PhpDocInfo $propertyPhpDocInfo */
+        $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
         if (! $propertyPhpDocInfo->hasByType(IdTagValueNode::class)) {
             return false;
         }

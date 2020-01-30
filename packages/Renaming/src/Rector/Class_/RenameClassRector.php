@@ -149,7 +149,7 @@ PHP
      */
     private function refactorPhpDoc(Node $node): void
     {
-        $nodePhpDocInfo = $this->getPhpDocInfo($node);
+        $nodePhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($nodePhpDocInfo === null) {
             return;
         }

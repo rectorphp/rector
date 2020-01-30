@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -69,7 +70,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $phpDocInfo = $this->getPhpDocInfo($node);
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return null;
         }

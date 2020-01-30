@@ -110,6 +110,7 @@ PHP
 
         /** @var Assign $assign */
         $assign = $this->stmtsManipulator->getUnwrappedLastStmt($node->else->stmts);
+
         $lastElseStmtKey = array_key_last($node->else->stmts);
 
         $elseStmts = $node->else->stmts;

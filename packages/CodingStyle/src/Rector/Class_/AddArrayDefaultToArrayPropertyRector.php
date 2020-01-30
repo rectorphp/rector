@@ -123,7 +123,7 @@ PHP
             $property = $node->getAttribute(AttributeKey::PARENT_NODE);
 
             // we need docblock
-            $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($propertyPhpDocInfo === null) {
                 return null;
             }

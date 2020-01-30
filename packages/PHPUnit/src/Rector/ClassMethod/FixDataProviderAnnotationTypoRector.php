@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\PHPUnit\Rector\ClassMethod;
 
-use Nette\Utils\Strings;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -70,28 +71,28 @@ PHP
             return null;
         }
 
-        if ($node->getDocComment() === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return null;
         }
 
-        $textDocComment = $node->getDocComment()->getText();
-
-        $fixedTextDocComment = Strings::replace($textDocComment, '#@(?<annotationName>\w+)#', function (
-            $match
-        ): ?string {
-            // more than 2 letter difference, probably not a typo
-            if (levenshtein($match['annotationName'], 'dataProvider') > 4) {
-                return null;
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
+        foreach ($phpDocNode->children as $phpDocChildNode) {
+            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
             }
 
-            return '@dataProvider';
-        });
+            $annotationName = $phpDocChildNode->name;
+            $annotationName = trim($annotationName, '()@');
 
-        if ($textDocComment === $fixedTextDocComment) {
-            return null;
+            // more than 2 letter difference, probably not a typo
+            if (levenshtein($annotationName, 'dataProvider') > 4) {
+                continue;
+            }
+
+            $phpDocChildNode->name = '@dataProvider ';
         }
-
-        $node->setDocComment(new Doc($fixedTextDocComment));
 
         return $node;
     }

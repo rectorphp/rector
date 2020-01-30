@@ -15,6 +15,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Application\ErrorAndDiffCollector;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
 use Rector\Exception\NotImplementedException;
@@ -125,7 +126,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $phpDocInfo = $this->getPhpDocInfo($node);
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return null;
         }
@@ -220,7 +221,10 @@ PHP
             }
         }
 
-        $varType = $this->docBlockManipulator->getVarType($node);
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+        $varType = $phpDocInfo->getVarType();
         if (! $varType instanceof MixedType) {
             return $varType;
         }

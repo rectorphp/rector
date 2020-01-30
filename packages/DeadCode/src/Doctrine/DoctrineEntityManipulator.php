@@ -105,9 +105,10 @@ final class DoctrineEntityManipulator
 
     public function removeMappedByOrInversedByFromProperty(Property $property): void
     {
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
-            return null;
+            return;
         }
 
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
@@ -126,29 +127,6 @@ final class DoctrineEntityManipulator
         if (! $shouldUpdate) {
             return;
         }
-    }
-
-    /**
-     * @return string[]
-     */
-    public function resolveRelationPropertyNames(Class_ $class): array
-    {
-        $manyToOnePropertyNames = [];
-
-        foreach ($class->getProperties() as $property) {
-            if ($property->getDocComment() === null) {
-                continue;
-            }
-
-            $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
-            if (! $phpDocInfo->hasByType(DoctrineRelationTagValueNodeInterface::class)) {
-                continue;
-            }
-
-            $manyToOnePropertyNames[] = $this->nameResolver->getName($property);
-        }
-
-        return $manyToOnePropertyNames;
     }
 
     public function isMethodCallOnDoctrineEntity(Node $node, string $methodName): bool

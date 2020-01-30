@@ -14,6 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TreeParentTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TreeRightTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TreeRootTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TreeTagValueNode;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -137,7 +138,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $classPhpDocInfo = $this->getPhpDocInfo($node);
+        $classPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($classPhpDocInfo === null) {
             return null;
         }
@@ -157,7 +158,7 @@ PHP
         $removedPropertyNames = [];
 
         foreach ($node->getProperties() as $property) {
-            $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($propertyPhpDocInfo === null) {
                 continue;
             }

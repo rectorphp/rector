@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
@@ -53,11 +54,25 @@ final class PhpDocInfoFactory
 
     public function createFromNode(Node $node): PhpDocInfo
     {
-        if ($node->hasAttribute(AttributeKey::PHP_DOC_INFO)) {
-            return $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        /** needed for @see PhpDocNodeFactoryInterface */
+        $this->currentNodeProvider->setNode($node);
+
+        if ($node->getDocComment() === null) {
+            $content = '';
+            $tokens = [];
+            $phpDocNode = new AttributeAwarePhpDocNode([]);
+        } else {
+            $content = $node->getDocComment()->getText();
+
+            $tokens = $this->lexer->tokenize($content);
+            $tokenIterator = new TokenIterator($tokens);
+
+            /** @var AttributeAwarePhpDocNode $phpDocNode */
+            $phpDocNode = $this->phpDocParser->parse($tokenIterator);
+            $phpDocNode = $this->setPositionOfLastToken($phpDocNode);
         }
 
-        $phpDocInfo = $this->createPhpDocInfo($node);
+        $phpDocInfo = new PhpDocInfo($phpDocNode, $tokens, $content, $this->staticTypeMapper, $node);
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
 
         return $phpDocInfo;
@@ -85,22 +100,5 @@ final class PhpDocInfoFactory
         }
 
         return $attributeAwarePhpDocNode;
-    }
-
-    private function createPhpDocInfo(Node $node): PhpDocInfo
-    {
-        /** needed for @see PhpDocNodeFactoryInterface */
-        $this->currentNodeProvider->setNode($node);
-
-        $content = $node->getDocComment()->getText();
-        $tokens = $this->lexer->tokenize($content);
-
-        $tokenIterator = new TokenIterator($tokens);
-
-        /** @var AttributeAwarePhpDocNode $phpDocNode */
-        $phpDocNode = $this->phpDocParser->parse($tokenIterator);
-        $phpDocNode = $this->setPositionOfLastToken($phpDocNode);
-
-        return new PhpDocInfo($phpDocNode, $tokens, $content, $this->staticTypeMapper, $node);
     }
 }

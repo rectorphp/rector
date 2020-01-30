@@ -15,6 +15,9 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Tester\TestCase;
 
+/**
+ * @see \Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPUnitClassRector\NetteTesterPHPUnitRectorTest
+ */
 final class NetteTesterClassToPHPUnitClassRector extends AbstractRector
 {
     public function getDefinition(): RectorDefinition

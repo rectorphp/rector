@@ -21,6 +21,7 @@ use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -88,7 +89,7 @@ PHP
         }
 
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $this->getPhpDocInfo($node);
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         $phpDocInfo->removeByType(VarTagValueNode::class);
 
         return $node;

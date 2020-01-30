@@ -12,7 +12,6 @@ use Rector\Doctrine\AbstractRector\DoctrineTrait;
 trait AbstractRectorTrait
 {
     use AppliedRectorCollectorTrait;
-    use DocBlockManipulatorTrait;
     use DoctrineTrait;
     use NodeTypeResolverTrait;
     use NameResolverTrait;

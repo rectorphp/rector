@@ -14,8 +14,9 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 
@@ -27,11 +28,6 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
     private $typeFactory;
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var Type[]
      *
      * @see \Doctrine\DBAL\Platforms\MySqlPlatform::initializeDoctrineTypeMappings()
@@ -39,10 +35,9 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
      */
     private $doctrineTypeToScalarType = [];
 
-    public function __construct(TypeFactory $typeFactory, DocBlockManipulator $docBlockManipulator)
+    public function __construct(TypeFactory $typeFactory)
     {
         $this->typeFactory = $typeFactory;
-        $this->docBlockManipulator = $docBlockManipulator;
 
         $this->doctrineTypeToScalarType = [
             'tinyint' => new BooleanType(),
@@ -84,11 +79,11 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
 
     public function inferProperty(Property $property): Type
     {
-        if ($property->getDocComment() === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return new MixedType();
         }
-
-        $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($property);
 
         $doctrineColumnTagValueNode = $phpDocInfo->getByType(ColumnTagValueNode::class);
         if ($doctrineColumnTagValueNode === null) {

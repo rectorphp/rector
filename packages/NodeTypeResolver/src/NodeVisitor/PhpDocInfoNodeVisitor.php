@@ -6,19 +6,19 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 
 final class PhpDocInfoNodeVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var DocBlockManipulator
+     * @var PhpDocInfoFactory
      */
-    private $docBlockManipulator;
+    private $phpDocInfoFactory;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
     {
-        $this->docBlockManipulator = $docBlockManipulator;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -26,12 +26,12 @@ final class PhpDocInfoNodeVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if (empty($node->getComments())) {
+        if ($node->getDocComment() === null) {
             $node->setAttribute(AttributeKey::PHP_DOC_INFO, null);
             return;
         }
 
-        $phpDocInfo = $this->docBlockManipulator->createPhpDocInfoFromNode($node);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
 
         return $node;
