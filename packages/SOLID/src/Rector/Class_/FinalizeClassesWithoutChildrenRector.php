@@ -6,7 +6,6 @@ namespace Rector\SOLID\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\NodeContainer\ParsedNodesByType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -16,16 +15,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class FinalizeClassesWithoutChildrenRector extends AbstractRector
 {
-    /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    public function __construct(ParsedNodesByType $parsedNodesByType)
-    {
-        $this->parsedNodesByType = $parsedNodesByType;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Finalize every class that has no children', [
@@ -84,7 +73,7 @@ PHP
 
         /** @var string $class */
         $class = $this->getName($node);
-        if ($this->parsedNodesByType->hasClassChildren($class)) {
+        if ($this->classLikeParsedNodesFinder->hasClassChildren($class)) {
             return null;
         }
 

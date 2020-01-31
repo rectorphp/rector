@@ -257,7 +257,7 @@ PHP
 
     private function completeImplicitRoutes(): void
     {
-        $presenterClasses = $this->parsedNodesByType->findClassesBySuffix('Presenter');
+        $presenterClasses = $this->classLikeParsedNodesFinder->findClassesBySuffix('Presenter');
 
         foreach ($presenterClasses as $presenterClass) {
             foreach ($presenterClass->getMethods() as $classMethod) {

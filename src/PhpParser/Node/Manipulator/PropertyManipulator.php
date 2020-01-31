@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Doctrine\AbstractRector\DoctrineTrait;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeContainer\ParsedNodesByType;
+use Rector\NodeContainer\ClassLikeParsedNodesFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\BetterNodeFinder;
@@ -44,11 +44,6 @@ final class PropertyManipulator
     private $nameResolver;
 
     /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
      * @var DocBlockManipulator
      */
     private $docBlockManipulator;
@@ -58,20 +53,25 @@ final class PropertyManipulator
      */
     private $assignManipulator;
 
+    /**
+     * @var ClassLikeParsedNodesFinder
+     */
+    private $classLikeParsedNodesFinder;
+
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         NameResolver $nameResolver,
-        ParsedNodesByType $parsedNodesByType,
         DocBlockManipulator $docBlockManipulator,
-        AssignManipulator $assignManipulator
+        AssignManipulator $assignManipulator,
+        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nameResolver = $nameResolver;
-        $this->parsedNodesByType = $parsedNodesByType;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->assignManipulator = $assignManipulator;
+        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
     }
 
     /**
@@ -85,7 +85,7 @@ final class PropertyManipulator
             return [];
         }
 
-        $nodesToSearch = $this->parsedNodesByType->findUsedTraitsInClass($classNode);
+        $nodesToSearch = $this->classLikeParsedNodesFinder->findUsedTraitsInClass($classNode);
         $nodesToSearch[] = $classNode;
 
         /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
