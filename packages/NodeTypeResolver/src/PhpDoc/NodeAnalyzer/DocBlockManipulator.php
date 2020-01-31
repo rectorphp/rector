@@ -16,7 +16,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
@@ -35,7 +34,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Rector\NodeTypeResolver\Exception\MissingTagException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\NodeTypeResolver\StaticTypeMapper;
@@ -237,15 +235,14 @@ final class DocBlockManipulator
             return;
         }
 
-        if ($this->hasTag($node, '@var')) {
-            // just change the type
-            $varTag = $this->getTagByName($node, '@var');
-
-            /** @var VarTagValueNode $varTagValueNode */
-            $varTagValueNode = $varTag->value;
-
-            $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
-            $varTagValueNode->type = $phpDocType;
+        if ($phpDocInfo !== null) {
+            $currentVarTagValue = $phpDocInfo->getVarTagValue();
+            if ($currentVarTagValue !== null) {
+                $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
+                $currentVarTagValue->type = $phpDocType;
+            } else {
+                $this->addTypeSpecificTag($node, 'var', $newType);
+            }
         } else {
             $this->addTypeSpecificTag($node, 'var', $newType);
         }
@@ -283,20 +280,6 @@ final class DocBlockManipulator
 
         $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
         $returnTagValueNode->type = $newPHPStanPhpDocType;
-    }
-
-    /**
-     * @final
-     */
-    public function getTagByName(Node $node, string $name): PhpDocTagNode
-    {
-        if (! $this->hasTag($node, $name)) {
-            throw new MissingTagException(sprintf('Tag "%s" was not found at "%s" node.', $name, get_class($node)));
-        }
-
-        /** @var PhpDocTagNode[] $foundTags */
-        $foundTags = $this->getTagsByName($node, $name);
-        return array_shift($foundTags);
     }
 
     public function replaceTagByAnother(PhpDocNode $phpDocNode, string $oldTag, string $newTag): void
@@ -489,6 +472,9 @@ final class DocBlockManipulator
             // create completely new docblock
             $varDocComment = sprintf("/**\n * @%s %s\n */", $name, $docStringType);
             $node->setDocComment(new Doc($varDocComment));
+
+            // bind new content with node
+            $this->phpDocInfoFactory->createFromNode($node);
         }
     }
 }
