@@ -19,7 +19,6 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -28,6 +27,7 @@ use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\PHPStan\Tests\Rector\Node\RemoveNonExistingVarAnnotationRector\RemoveNonExistingVarAnnotationRectorTest
+ *
  * @see https://github.com/phpstan/phpstan/commit/d17e459fd9b45129c5deafe12bca56f30ea5ee99#diff-9f3541876405623b0d18631259763dc1
  */
 final class RemoveNonExistingVarAnnotationRector extends AbstractRector
@@ -74,22 +74,29 @@ PHP
             return null;
         }
 
-        $variableName = $this->getVarTagVariableName($node);
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return null;
+        }
+
+        $varTagValue = $phpDocInfo->getVarTagValue();
+        if ($varTagValue === null) {
+            return null;
+        }
+
+        $variableName = $varTagValue->variableName;
         if ($variableName === null) {
             return null;
         }
 
-        $nodeContent = $this->print($node);
-        // clear phpdoc - @see https://regex101.com/r/uwY5KW/1
-        $nodeContentWithoutPhpDoc = Strings::replace($nodeContent, '#\/\*\*(.*?)*\/#');
+        $nodeContentWithoutPhpDoc = $this->printWithoutComments($node);
 
         // it's there
         if (Strings::match($nodeContentWithoutPhpDoc, '#' . preg_quote($variableName, '#') . '\b#')) {
             return null;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         $phpDocInfo->removeByType(VarTagValueNode::class);
 
         return $node;
@@ -109,19 +116,5 @@ PHP
             && ! $node instanceof While_
             && ! $node instanceof Switch_
             && ! $node instanceof Nop;
-    }
-
-    private function getVarTagVariableName(Node $node): ?string
-    {
-        if (! $this->docBlockManipulator->hasTag($node, 'var')) {
-            return null;
-        }
-
-        $varTag = $this->docBlockManipulator->getTagByName($node, 'var');
-
-        /** @var AttributeAwareVarTagValueNode $varTagValue */
-        $varTagValue = $varTag->value;
-
-        return $varTagValue->variableName;
     }
 }

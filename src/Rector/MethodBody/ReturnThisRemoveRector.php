@@ -7,6 +7,8 @@ namespace Rector\Rector\MethodBody;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -100,7 +102,11 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        $this->docBlockManipulator->removeTagFromNode($methodNode, 'return');
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $methodNode->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo instanceof PhpDocInfo) {
+            $phpDocInfo->removeByType(ReturnTagValueNode::class);
+        }
 
         return null;
     }

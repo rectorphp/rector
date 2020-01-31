@@ -15,19 +15,12 @@ use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\FloatType;
-use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
@@ -41,13 +34,9 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Exception\MissingTagException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\TypeHasher;
+use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\NodeTypeResolver\StaticTypeMapper;
-use Rector\PHPStan\Type\AliasedObjectType;
-use Rector\PHPStan\Type\ShortenedObjectType;
 
 /**
  * @see \Rector\NodeTypeResolver\Tests\PhpDoc\NodeAnalyzer\DocBlockManipulatorTest
@@ -90,14 +79,14 @@ final class DocBlockManipulator
     private $docBlockNameImporter;
 
     /**
-     * @var TypeHasher
-     */
-    private $typeHasher;
-
-    /**
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
+
+    /**
+     * @var TypeComparator
+     */
+    private $typeComparator;
 
     public function __construct(
         PhpDocInfoPrinter $phpDocInfoPrinter,
@@ -106,8 +95,8 @@ final class DocBlockManipulator
         StaticTypeMapper $staticTypeMapper,
         DocBlockClassRenamer $docBlockClassRenamer,
         DocBlockNameImporter $docBlockNameImporter,
-        TypeHasher $typeHasher,
-        PhpDocInfoFactory $phpDocInfoFactory
+        PhpDocInfoFactory $phpDocInfoFactory,
+        TypeComparator $typeComparator
     ) {
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
@@ -115,8 +104,8 @@ final class DocBlockManipulator
         $this->staticTypeMapper = $staticTypeMapper;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
         $this->docBlockNameImporter = $docBlockNameImporter;
-        $this->typeHasher = $typeHasher;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->typeComparator = $typeComparator;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -161,21 +150,6 @@ final class DocBlockManipulator
         $this->addTag($node, $spacelessPhpDocTagNode);
     }
 
-    /**
-     * @deprecated
-     * Use @see PhpDocInfo::removeByType(x) directly
-     */
-    public function removeTagFromNode(Node $node, string $name): void
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return;
-        }
-
-        $this->removeTagByName($phpDocInfo, $name);
-    }
-
     public function changeType(Node $node, Type $oldType, Type $newType): void
     {
         if (! $this->hasNodeTypeTags($node)) {
@@ -197,17 +171,6 @@ final class DocBlockManipulator
         }
 
         $this->replaceTagByAnother($phpDocInfo->getPhpDocNode(), $oldAnnotation, $newAnnotation);
-    }
-
-    public function getReturnType(Node $node): Type
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return new MixedType();
-        }
-
-        return $phpDocInfo->getReturnType();
     }
 
     /**
@@ -254,10 +217,16 @@ final class DocBlockManipulator
 
     public function changeVarTag(Node $node, Type $newType): void
     {
-        $currentVarType = $this->getVarType($node);
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo instanceof PhpDocInfo) {
+            $currentVarType = $phpDocInfo->getVarType();
+        } else {
+            $currentVarType = new MixedType();
+        }
 
         // make sure the tags are not identical, e.g imported class vs FQN class
-        if ($this->areTypesEquals($currentVarType, $newType)) {
+        if ($this->typeComparator->areTypesEquals($currentVarType, $newType)) {
             return;
         }
 
@@ -266,15 +235,14 @@ final class DocBlockManipulator
             return;
         }
 
-        if ($this->hasTag($node, '@var')) {
-            // just change the type
-            $varTag = $this->getTagByName($node, '@var');
-
-            /** @var VarTagValueNode $varTagValueNode */
-            $varTagValueNode = $varTag->value;
-
-            $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
-            $varTagValueNode->type = $phpDocType;
+        if ($phpDocInfo !== null) {
+            $currentVarTagValue = $phpDocInfo->getVarTagValue();
+            if ($currentVarTagValue !== null) {
+                $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
+                $currentVarTagValue->type = $phpDocType;
+            } else {
+                $this->addTypeSpecificTag($node, 'var', $newType);
+            }
         } else {
             $this->addTypeSpecificTag($node, 'var', $newType);
         }
@@ -285,96 +253,33 @@ final class DocBlockManipulator
 
     public function addReturnTag(Node $node, Type $newType): void
     {
-        $currentReturnType = $this->getReturnType($node);
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+        $currentReturnType = $phpDocInfo !== null ? $phpDocInfo->getReturnType() : new MixedType();
 
         // make sure the tags are not identical, e.g imported class vs FQN class
-        if ($this->areTypesEquals($currentReturnType, $newType)) {
+        if ($this->typeComparator->areTypesEquals($currentReturnType, $newType)) {
             return;
         }
 
         /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        if ($phpDocInfo !== null) {
-            $returnTagValueNode = $phpDocInfo->getByType(ReturnTagValueNode::class);
-
-            // overide existing type
-            if ($returnTagValueNode !== null) {
-                $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
-                $returnTagValueNode->type = $newPHPStanPhpDocType;
-
-                return;
-            }
-        }
-
-        $this->addTypeSpecificTag($node, 'return', $newType);
-    }
-
-    /**
-     * @final
-     */
-    public function getTagByName(Node $node, string $name): PhpDocTagNode
-    {
-        if (! $this->hasTag($node, $name)) {
-            throw new MissingTagException(sprintf('Tag "%s" was not found at "%s" node.', $name, get_class($node)));
-        }
-
-        /** @var PhpDocTagNode[] $foundTags */
-        $foundTags = $this->getTagsByName($node, $name);
-        return array_shift($foundTags);
-    }
-
-    public function getVarType(Node $node): Type
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
-            return new MixedType();
+            $this->addTypeSpecificTag($node, 'return', $newType);
+            return;
         }
 
-        return $phpDocInfo->getVarType();
-    }
+        $returnTagValueNode = $phpDocInfo->getByType(ReturnTagValueNode::class);
 
-    public function removeTagByName(PhpDocInfo $phpDocInfo, string $tagName): void
-    {
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
-
-        // A. remove class-based tag
-        if (class_exists($tagName)) {
-            $phpDocInfo->removeByType($tagName);
+        // overide existing type
+        if ($returnTagValueNode === null) {
+            return;
         }
 
-        // B. remove string-based tags
-        $tagName = AnnotationNaming::normalizeName($tagName);
-        $phpDocTagNodes = $phpDocInfo->getTagsByName($tagName);
-        foreach ($phpDocTagNodes as $phpDocTagNode) {
-            $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
-        }
-    }
-
-    /**
-     * @param PhpDocTagNode|PhpDocTagValueNode $phpDocTagOrPhpDocTagValueNode
-     */
-    public function removeTagFromPhpDocNode(PhpDocNode $phpDocNode, $phpDocTagOrPhpDocTagValueNode): void
-    {
-        // remove specific tag
-        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
-            if ($phpDocChildNode === $phpDocTagOrPhpDocTagValueNode) {
-                unset($phpDocNode->children[$key]);
-                return;
-            }
-        }
-
-        // or by type
-        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
-                continue;
-            }
-
-            if ($phpDocChildNode->value === $phpDocTagOrPhpDocTagValueNode) {
-                unset($phpDocNode->children[$key]);
-            }
-        }
+        $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
+        $returnTagValueNode->type = $newPHPStanPhpDocType;
     }
 
     public function replaceTagByAnother(PhpDocNode $phpDocNode, string $oldTag, string $newTag): void
@@ -541,35 +446,6 @@ final class DocBlockManipulator
         return $relationTagValueNode->getFqnTargetEntity();
     }
 
-    public function getParamTypeByName(FunctionLike $functionLike, string $paramName): Type
-    {
-        $this->ensureParamNameStartsWithDollar($paramName, __METHOD__);
-
-        $paramTypes = $this->getParamTypesByName($functionLike);
-        return $paramTypes[$paramName] ?? new MixedType();
-    }
-
-    /**
-     * @todo Extract this logic to own service
-     */
-    private function areTypesEquals(Type $firstType, Type $secondType): bool
-    {
-        if ($this->areBothSameScalarType($firstType, $secondType)) {
-            return true;
-        }
-
-        // aliases and types
-        if ($this->areAliasedObjectMatchingFqnObject($firstType, $secondType)) {
-            return true;
-        }
-
-        if ($this->typeHasher->areTypesEqual($firstType, $secondType)) {
-            return true;
-        }
-
-        return $this->areArrayTypeWithSingleObjectChildToParent($firstType, $secondType);
-    }
-
     /**
      * All class-type tags are FQN by default to keep default convention through the code.
      * Some people prefer FQN, some short. FQN can be shorten with \Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector later, while short prolonged not
@@ -596,80 +472,9 @@ final class DocBlockManipulator
             // create completely new docblock
             $varDocComment = sprintf("/**\n * @%s %s\n */", $name, $docStringType);
             $node->setDocComment(new Doc($varDocComment));
+
+            // bind new content with node
+            $this->phpDocInfoFactory->createFromNode($node);
         }
-    }
-
-    private function ensureParamNameStartsWithDollar(string $paramName, string $location): void
-    {
-        if (Strings::startsWith($paramName, '$')) {
-            return;
-        }
-
-        throw new ShouldNotHappenException(sprintf(
-            'Param name "%s" must start with "$" in "%s()" method.',
-            $paramName,
-            $location
-        ));
-    }
-
-    /**
-     * E.g.  class A extends B, class B → A[] is subtype of B[] → keep A[]
-     */
-    private function areArrayTypeWithSingleObjectChildToParent(Type $firstType, Type $secondType): bool
-    {
-        if (! $firstType instanceof ArrayType || ! $secondType instanceof ArrayType) {
-            return false;
-        }
-
-        $firstArrayItemType = $firstType->getItemType();
-        $secondArrayItemType = $secondType->getItemType();
-
-        if ($firstArrayItemType instanceof ObjectType && $secondArrayItemType instanceof ObjectType) {
-            $firstFqnClassName = $this->getFqnClassName($firstArrayItemType);
-            $secondFqnClassName = $this->getFqnClassName($secondArrayItemType);
-
-            if (is_a($firstFqnClassName, $secondFqnClassName, true)) {
-                return true;
-            }
-
-            if (is_a($secondFqnClassName, $firstFqnClassName, true)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function getFqnClassName(ObjectType $objectType): string
-    {
-        if ($objectType instanceof ShortenedObjectType) {
-            return $objectType->getFullyQualifiedName();
-        }
-
-        return $objectType->getClassName();
-    }
-
-    private function areBothSameScalarType(Type $firstType, Type $secondType): bool
-    {
-        if ($firstType instanceof StringType && $secondType instanceof StringType) {
-            return true;
-        }
-
-        if ($firstType instanceof IntegerType && $secondType instanceof IntegerType) {
-            return true;
-        }
-
-        if ($firstType instanceof FloatType && $secondType instanceof FloatType) {
-            return true;
-        }
-        return $firstType instanceof BooleanType && $secondType instanceof BooleanType;
-    }
-
-    private function areAliasedObjectMatchingFqnObject(Type $firstType, Type $secondType): bool
-    {
-        if ($firstType instanceof AliasedObjectType && $secondType instanceof ObjectType && $firstType->getFullyQualifiedClass() === $secondType->getClassName()) {
-            return true;
-        }
-        return $secondType instanceof AliasedObjectType && $firstType instanceof ObjectType && $secondType->getFullyQualifiedClass() === $firstType->getClassName();
     }
 }

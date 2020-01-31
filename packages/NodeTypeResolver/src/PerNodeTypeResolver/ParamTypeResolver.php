@@ -13,10 +13,10 @@ use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
@@ -31,11 +31,6 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
     private $nameResolver;
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
@@ -45,13 +40,9 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
      */
     private $nodeTypeResolver;
 
-    public function __construct(
-        NameResolver $nameResolver,
-        DocBlockManipulator $docBlockManipulator,
-        CallableNodeTraverser $callableNodeTraverser
-    ) {
+    public function __construct(NameResolver $nameResolver, CallableNodeTraverser $callableNodeTraverser)
+    {
         $this->nameResolver = $nameResolver;
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->callableNodeTraverser = $callableNodeTraverser;
     }
 
@@ -129,7 +120,13 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
         /** @var string $paramName */
         $paramName = $this->nameResolver->getName($param);
 
-        return $this->docBlockManipulator->getParamTypeByName($parentNode, '$' . $paramName);
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $parentNode->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return new MixedType();
+        }
+
+        return $phpDocInfo->getParamType($paramName);
     }
 
     private function resolveFromType(Node $node)
