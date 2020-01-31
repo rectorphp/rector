@@ -12,8 +12,8 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
@@ -25,17 +25,9 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
      */
     private $propertyFetchManipulator;
 
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    public function __construct(
-        PropertyFetchManipulator $propertyFetchManipulator,
-        DocBlockManipulator $docBlockManipulator
-    ) {
+    public function __construct(PropertyFetchManipulator $propertyFetchManipulator)
+    {
         $this->propertyFetchManipulator = $propertyFetchManipulator;
-        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function inferParam(Param $param): Type
@@ -80,7 +72,13 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
                 return null;
             }
 
-            $methodReturnType = $this->docBlockManipulator->getReturnType($methodNode);
+            /** @var PhpDocInfo|null $phpDocInfo */
+            $phpDocInfo = $methodNode->getAttribute(AttributeKey::PHP_DOC_INFO);
+            if ($phpDocInfo === null) {
+                return null;
+            }
+
+            $methodReturnType = $phpDocInfo->getReturnType();
             if ($methodReturnType instanceof MixedType) {
                 return null;
             }

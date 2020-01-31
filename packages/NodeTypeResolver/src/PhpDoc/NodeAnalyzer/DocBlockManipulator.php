@@ -175,17 +175,6 @@ final class DocBlockManipulator
         $this->replaceTagByAnother($phpDocInfo->getPhpDocNode(), $oldAnnotation, $newAnnotation);
     }
 
-    public function getReturnType(Node $node): Type
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return new MixedType();
-        }
-
-        return $phpDocInfo->getReturnType();
-    }
-
     /**
      * With "name" as key
      *
@@ -267,7 +256,10 @@ final class DocBlockManipulator
 
     public function addReturnTag(Node $node, Type $newType): void
     {
-        $currentReturnType = $this->getReturnType($node);
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+        $currentReturnType = $phpDocInfo !== null ? $phpDocInfo->getReturnType() : new MixedType();
 
         // make sure the tags are not identical, e.g imported class vs FQN class
         if ($this->typeComparator->areTypesEquals($currentReturnType, $newType)) {
