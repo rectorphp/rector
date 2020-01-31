@@ -19,6 +19,7 @@ use Rector\RectorDefinition\RectorDefinition;
 /**
  * @see https://thephp.cc/news/2016/02/questioning-phpunit-best-practices
  * @see https://github.com/sebastianbergmann/phpunit/commit/17c09b33ac5d9cad1459ace0ae7b1f942d1e9afd
+ *
  * @see \Rector\PHPUnit\Tests\Rector\ExceptionAnnotationRector\ExceptionAnnotationRectorTest
  */
 final class ExceptionAnnotationRector extends AbstractPHPUnitRector
@@ -82,13 +83,19 @@ PHP
             return null;
         }
 
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return null;
+        }
+
         foreach ($this->annotationToMethod as $annotation => $method) {
-            if (! $this->docBlockManipulator->hasTag($node, $annotation)) {
+            if (! $phpDocInfo->hasByName($annotation)) {
                 continue;
             }
 
             /** @var GenericTagValueNode[] $tags */
-            $tags = $this->docBlockManipulator->getTagsByName($node, $annotation);
+            $tags = $phpDocInfo->getTagsByName($annotation);
 
             $methodCallExpressions = array_map(function (PhpDocTagNode $phpDocTagNode) use ($method): Expression {
                 $methodCall = $this->createMethodCallExpressionFromTag($phpDocTagNode, $method);
@@ -97,11 +104,7 @@ PHP
 
             $node->stmts = array_merge($methodCallExpressions, (array) $node->stmts);
 
-            /** @var PhpDocInfo|null $phpDocInfo */
-            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($phpDocInfo !== null) {
-                $phpDocInfo->removeByName($annotation);
-            }
+            $phpDocInfo->removeByName($annotation);
         }
 
         return $node;

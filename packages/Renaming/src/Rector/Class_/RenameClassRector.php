@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -149,8 +150,9 @@ PHP
      */
     private function refactorPhpDoc(Node $node): void
     {
-        $nodePhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($nodePhpDocInfo === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return;
         }
 

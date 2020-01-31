@@ -7,10 +7,6 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -62,11 +58,6 @@ final class DocBlockManipulator
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
-
-    /**
-     * @var bool
-     */
-    private $hasPhpDocChanged = false;
 
     /**
      * @var DocBlockClassRenamer
@@ -171,48 +162,6 @@ final class DocBlockManipulator
         }
 
         $this->replaceTagByAnother($phpDocInfo->getPhpDocNode(), $oldAnnotation, $newAnnotation);
-    }
-
-    /**
-     * With "name" as key
-     *
-     * @param Function_|ClassMethod|Closure  $functionLike
-     * @return Type[]
-     */
-    public function getParamTypesByName(FunctionLike $functionLike): array
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $functionLike->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return [];
-        }
-
-        $paramTypesByName = [];
-
-        foreach ($phpDocInfo->getParamTagValues() as $paramTagValueNode) {
-            $parameterName = $paramTagValueNode->parameterName;
-
-            $paramTypesByName[$parameterName] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
-                $paramTagValueNode,
-                $functionLike
-            );
-        }
-
-        return $paramTypesByName;
-    }
-
-    /**
-     * @return PhpDocTagNode[]
-     */
-    public function getTagsByName(Node $node, string $name): array
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return [];
-        }
-
-        return $phpDocInfo->getTagsByName($name);
     }
 
     public function changeVarTag(Node $node, Type $newType): void
@@ -348,14 +297,8 @@ final class DocBlockManipulator
             $nameParts = explode('_', $staticType->getClassName());
             $node->name = '\\' . implode('\\', $nameParts);
 
-            $this->hasPhpDocChanged = true;
-
             return $node;
         });
-
-        if (! $this->hasPhpDocChanged) {
-            return;
-        }
     }
 
     /**
