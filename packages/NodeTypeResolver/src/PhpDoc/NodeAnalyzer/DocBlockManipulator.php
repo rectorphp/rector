@@ -15,7 +15,6 @@ use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -159,21 +158,6 @@ final class DocBlockManipulator
     {
         $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode($tagValueNode::SHORT_NAME, $tagValueNode);
         $this->addTag($node, $spacelessPhpDocTagNode);
-    }
-
-    /**
-     * @deprecated
-     * Use @see PhpDocInfo::removeByType(x) directly
-     */
-    public function removeTagFromNode(Node $node, string $name): void
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return;
-        }
-
-        $this->removeTagByName($phpDocInfo, $name);
     }
 
     public function changeType(Node $node, Type $oldType, Type $newType): void
@@ -333,48 +317,6 @@ final class DocBlockManipulator
         }
 
         return $phpDocInfo->getVarType();
-    }
-
-    public function removeTagByName(PhpDocInfo $phpDocInfo, string $tagName): void
-    {
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
-
-        // A. remove class-based tag
-        if (class_exists($tagName)) {
-            $phpDocInfo->removeByType($tagName);
-        }
-
-        // B. remove string-based tags
-        $tagName = AnnotationNaming::normalizeName($tagName);
-        $phpDocTagNodes = $phpDocInfo->getTagsByName($tagName);
-        foreach ($phpDocTagNodes as $phpDocTagNode) {
-            $this->removeTagFromPhpDocNode($phpDocNode, $phpDocTagNode);
-        }
-    }
-
-    /**
-     * @param PhpDocTagNode|PhpDocTagValueNode $phpDocTagOrPhpDocTagValueNode
-     */
-    public function removeTagFromPhpDocNode(PhpDocNode $phpDocNode, $phpDocTagOrPhpDocTagValueNode): void
-    {
-        // remove specific tag
-        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
-            if ($phpDocChildNode === $phpDocTagOrPhpDocTagValueNode) {
-                unset($phpDocNode->children[$key]);
-                return;
-            }
-        }
-
-        // or by type
-        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
-            if (! $phpDocChildNode instanceof PhpDocTagNode) {
-                continue;
-            }
-
-            if ($phpDocChildNode->value === $phpDocTagOrPhpDocTagValueNode) {
-                unset($phpDocNode->children[$key]);
-            }
-        }
     }
 
     public function replaceTagByAnother(PhpDocNode $phpDocNode, string $oldTag, string $newTag): void

@@ -222,6 +222,11 @@ final class PhpDocInfo
         return (bool) $this->getByType($type);
     }
 
+    public function hasByName(string $name): bool
+    {
+        return (bool) $this->getTagsByName($name);
+    }
+
     public function getByType(string $type): ?PhpDocTagValueNode
     {
         $this->ensureTypeIsTagValueNode($type, __METHOD__);
@@ -256,6 +261,21 @@ final class PhpDocInfo
         }
     }
 
+    public function removeByName(string $nameToRemove): void
+    {
+        foreach ($this->phpDocNode->children as $key => $phpDocChildNode) {
+            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
+            }
+
+            if (! $this->areAnnotationNamesEqual($nameToRemove, $phpDocChildNode->name)) {
+                continue;
+            }
+
+            unset($this->phpDocNode->children[$key]);
+        }
+    }
+
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
         $phpDocNode = $this->getPhpDocNode();
@@ -282,5 +302,13 @@ final class PhpDocInfo
             $location,
             PhpDocTagValueNode::class
         ));
+    }
+
+    private function areAnnotationNamesEqual(string $firstAnnotationName, string $secondAnnotationName): bool
+    {
+        $firstAnnotationName = trim($firstAnnotationName, '@');
+        $secondAnnotationName = trim($secondAnnotationName, '@');
+
+        return $firstAnnotationName === $secondAnnotationName;
     }
 }

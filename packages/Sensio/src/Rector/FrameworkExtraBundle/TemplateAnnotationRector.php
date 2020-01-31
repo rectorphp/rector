@@ -12,6 +12,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -139,8 +140,11 @@ PHP
         $this->updateReturnType($classMethod);
         $this->refactorClassMethod($classMethod, $sensioTemplateTagValueNode);
 
-        // remove annotation
-        $this->docBlockManipulator->removeTagFromNode($classMethod, SensioTemplateTagValueNode::class);
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo instanceof PhpDocInfo) {
+            $phpDocInfo->removeByType(SensioTemplateTagValueNode::class);
+        }
 
         return $classMethod;
     }

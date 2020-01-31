@@ -10,6 +10,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -95,7 +97,11 @@ PHP
 
             $node->stmts = array_merge($methodCallExpressions, (array) $node->stmts);
 
-            $this->docBlockManipulator->removeTagFromNode($node, $annotation);
+            /** @var PhpDocInfo|null $phpDocInfo */
+            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+            if ($phpDocInfo !== null) {
+                $phpDocInfo->removeByName($annotation);
+            }
         }
 
         return $node;
