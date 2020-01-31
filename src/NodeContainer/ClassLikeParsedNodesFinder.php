@@ -134,10 +134,6 @@ final class ClassLikeParsedNodesFinder
             return false;
         }
 
-        if ($currentClassName === $desiredClass) {
-            return false;
-        }
-
-        return true;
+        return $currentClassName !== $desiredClass;
     }
 }
