@@ -191,7 +191,11 @@ PHP
         }
 
         $this->docBlockManipulator->changeVarTag($property, $type);
-        $this->docBlockManipulator->removeTagFromNode($property, $tagClass);
+
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo instanceof PhpDocInfo) {
+            $phpDocInfo->removeByType($tagClass);
+        }
 
         $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {

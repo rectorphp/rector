@@ -12,6 +12,8 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\NodeTransformer;
@@ -156,8 +158,11 @@ PHP
 
         $this->removeNode($parentNode);
 
-        // remove doc block
-        $this->docBlockManipulator->removeTagFromNode($classMethod, 'return');
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo instanceof PhpDocInfo) {
+            $phpDocInfo->removeByType(ReturnTagValueNode::class);
+        }
 
         // change return typehint
         $classMethod->returnType = new FullyQualified(Iterator::class);

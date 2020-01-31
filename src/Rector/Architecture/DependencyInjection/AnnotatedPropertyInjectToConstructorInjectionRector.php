@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\UnionType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -76,7 +77,9 @@ PHP
             return null;
         }
 
-        $this->docBlockManipulator->removeTagFromNode($node, self::INJECT_ANNOTATION);
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo->removeByName(self::INJECT_ANNOTATION);
 
         // set to private
         $this->makePrivate($node);
@@ -89,11 +92,18 @@ PHP
 
     private function shouldSkipProperty(Node $node): bool
     {
-        if (! $this->docBlockManipulator->hasTag($node, self::INJECT_ANNOTATION)) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return true;
         }
+
+        if (! $phpDocInfo->hasByName(self::INJECT_ANNOTATION)) {
+            return true;
+        }
+
         // it needs @var tag as well, to get the type
-        return ! $this->docBlockManipulator->hasTag($node, 'var');
+        return ! $phpDocInfo->getVarTagValue();
     }
 
     private function addPropertyToCollector(Property $property): void
