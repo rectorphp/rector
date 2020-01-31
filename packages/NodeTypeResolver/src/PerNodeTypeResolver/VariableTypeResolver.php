@@ -11,10 +11,10 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -23,11 +23,6 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
  */
 final class VariableTypeResolver implements PerNodeTypeResolverInterface
 {
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
     /**
      * @var NameResolver
      */
@@ -43,12 +38,8 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
      */
     private $traitNodeScopeCollector;
 
-    public function __construct(
-        DocBlockManipulator $docBlockManipulator,
-        NameResolver $nameResolver,
-        TraitNodeScopeCollector $traitNodeScopeCollector
-    ) {
-        $this->docBlockManipulator = $docBlockManipulator;
+    public function __construct(NameResolver $nameResolver, TraitNodeScopeCollector $traitNodeScopeCollector)
+    {
         $this->nameResolver = $nameResolver;
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
     }
@@ -82,7 +73,12 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
         }
 
         // get from annotation
-        return $this->docBlockManipulator->getVarType($variableNode);
+        $phpDocInfo = $variableNode->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo instanceof PhpDocInfo) {
+            $phpDocInfo->getVarType();
+        }
+
+        return new MixedType();
     }
 
     /**

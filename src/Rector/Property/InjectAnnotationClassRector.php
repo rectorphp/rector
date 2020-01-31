@@ -173,7 +173,10 @@ PHP
         }
 
         if ($phpDocTagValueNode instanceof PHPDIInjectTagValueNode) {
-            return $this->docBlockManipulator->getVarType($node);
+            /** @var PhpDocInfo $phpDocInfo */
+            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+            return $phpDocInfo->getVarType();
         }
 
         throw new ShouldNotHappenException();

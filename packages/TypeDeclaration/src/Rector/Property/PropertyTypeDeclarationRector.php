@@ -7,6 +7,8 @@ namespace Rector\TypeDeclaration\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
@@ -51,7 +53,14 @@ final class PropertyTypeDeclarationRector extends AbstractRector
         }
 
         // is already set
-        $currentVarType = $this->docBlockManipulator->getVarType($node);
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo instanceof PhpDocInfo) {
+            $currentVarType = $phpDocInfo->getVarType();
+        } else {
+            $currentVarType = new MixedType();
+        }
+
         if (! $currentVarType instanceof MixedType) {
             return null;
         }
