@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -104,8 +105,13 @@ PHP
             return null;
         }
 
-        $paramWithTypes = $this->docBlockManipulator->getParamTypesByName($node);
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return null;
+        }
 
+        $paramWithTypes = $phpDocInfo->getParamTypesByName();
         // no tags, nothing to complete here
         if ($paramWithTypes === []) {
             return null;

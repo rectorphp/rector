@@ -276,6 +276,26 @@ final class PhpDocInfo
         }
     }
 
+    /**
+     * With "name" as key
+     * @return Type[]
+     */
+    public function getParamTypesByName(): array
+    {
+        $paramTypesByName = [];
+
+        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValueNode) {
+            $parameterName = $paramTagValueNode->parameterName;
+
+            $paramTypesByName[$parameterName] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
+                $paramTagValueNode,
+                $this->node
+            );
+        }
+
+        return $paramTypesByName;
+    }
+
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
         $phpDocNode = $this->getPhpDocNode();
