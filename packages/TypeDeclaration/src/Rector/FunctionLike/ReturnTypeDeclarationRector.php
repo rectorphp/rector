@@ -243,14 +243,14 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        $childrenClassLikes = $this->parsedNodesByType->findChildrenOfClass($className);
+        $childrenClassLikes = $this->classLikeParsedNodesFinder->findChildrenOfClass($className);
         if ($childrenClassLikes === []) {
             return;
         }
 
         // update their methods as well
         foreach ($childrenClassLikes as $childClassLike) {
-            $usedTraits = $this->parsedNodesByType->findUsedTraitsInClass($childClassLike);
+            $usedTraits = $this->classLikeParsedNodesFinder->findUsedTraitsInClass($childClassLike);
             foreach ($usedTraits as $trait) {
                 $this->addReturnTypeToChildMethod($trait, $classMethod, $returnType);
             }

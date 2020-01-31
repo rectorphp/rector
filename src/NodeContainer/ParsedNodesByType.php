@@ -114,6 +114,14 @@ final class ParsedNodesByType
     }
 
     /**
+     * @return Interface_[]
+     */
+    public function getInterfaces(): array
+    {
+        return $this->simpleParsedNodesByType[Interface_::class] ?? [];
+    }
+
+    /**
      * @return Class_[]
      */
     public function getClasses(): array
@@ -125,7 +133,7 @@ final class ParsedNodesByType
      * To prevent circular reference
      * @required
      */
-    public function setNodeTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    public function autowireParsedNodesByType(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -146,90 +154,9 @@ final class ParsedNodesByType
     }
 
     /**
-     * @return Class_[]|Interface_[]
+     * Guessing the nearest neighboor.
+     * Used e.g. for "XController"
      */
-    public function findClassesAndInterfacesByType(string $type): array
-    {
-        return array_merge($this->findChildrenOfClass($type), $this->findImplementersOfInterface($type));
-    }
-
-    /**
-     * @return Class_[]
-     */
-    public function findChildrenOfClass(string $class): array
-    {
-        $childrenClasses = [];
-
-        foreach ($this->classes as $classNode) {
-            $currentClassName = $classNode->getAttribute(AttributeKey::CLASS_NAME);
-            if ($currentClassName === null) {
-                continue;
-            }
-
-            if (! is_a($currentClassName, $class, true)) {
-                continue;
-            }
-
-            if ($currentClassName === $class) {
-                continue;
-            }
-
-            $childrenClasses[] = $classNode;
-        }
-
-        return $childrenClasses;
-    }
-
-    /**
-     * @return Interface_[]
-     */
-    public function findImplementersOfInterface(string $interface): array
-    {
-        $implementerInterfaces = [];
-        foreach ($this->simpleParsedNodesByType[Interface_::class] ?? [] as $interfaceNode) {
-            $className = $interfaceNode->getAttribute(AttributeKey::CLASS_NAME);
-            if ($className === null) {
-                return [];
-            }
-
-            if (! is_a($className, $interface, true)) {
-                continue;
-            }
-
-            if ($className === $interface) {
-                continue;
-            }
-
-            $implementerInterfaces[] = $interfaceNode;
-        }
-
-        return $implementerInterfaces;
-    }
-
-    /**
-     * @return Trait_[]
-     */
-    public function findUsedTraitsInClass(ClassLike $classLike): array
-    {
-        $traits = [];
-
-        foreach ($classLike->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $trait) {
-                $traitName = $this->nameResolver->getName($trait);
-                if ($traitName === null) {
-                    continue;
-                }
-
-                $foundTrait = $this->findTrait($traitName);
-                if ($foundTrait !== null) {
-                    $traits[] = $foundTrait;
-                }
-            }
-        }
-
-        return $traits;
-    }
-
     public function findByShortName(string $shortName): ?Class_
     {
         foreach ($this->classes as $className => $classNode) {
@@ -239,29 +166,6 @@ final class ParsedNodesByType
         }
 
         return null;
-    }
-
-    /**
-     * @return Class_[]
-     */
-    public function findClassesBySuffix(string $suffix): array
-    {
-        $classNodes = [];
-
-        foreach ($this->classes as $className => $classNode) {
-            if (! Strings::endsWith($className, $suffix)) {
-                continue;
-            }
-
-            $classNodes[] = $classNode;
-        }
-
-        return $classNodes;
-    }
-
-    public function hasClassChildren(string $class): bool
-    {
-        return $this->findChildrenOfClass($class) !== [];
     }
 
     /**

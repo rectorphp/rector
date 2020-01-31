@@ -82,7 +82,7 @@ PHP
         }
 
         // 3. does it have any children
-        if ($this->parsedNodesByType->findChildrenOfClass($className) === []) {
+        if ($this->classLikeParsedNodesFinder->findChildrenOfClass($className) === []) {
             return null;
         }
 

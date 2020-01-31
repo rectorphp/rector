@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassMethodManipulator;
@@ -33,11 +32,6 @@ final class RemoveUnusedParameterRector extends AbstractRector
     private $classMethodManipulator;
 
     /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
      * @var string[]
      */
     private $magicMethods = [
@@ -59,12 +53,10 @@ final class RemoveUnusedParameterRector extends AbstractRector
 
     public function __construct(
         ClassManipulator $classManipulator,
-        ClassMethodManipulator $classMethodManipulator,
-        ParsedNodesByType $parsedNodesByType
+        ClassMethodManipulator $classMethodManipulator
     ) {
         $this->classManipulator = $classManipulator;
         $this->classMethodManipulator = $classMethodManipulator;
-        $this->parsedNodesByType = $parsedNodesByType;
     }
 
     public function getDefinition(): RectorDefinition
@@ -130,7 +122,7 @@ PHP
             return null;
         }
 
-        $childrenOfClass = $this->parsedNodesByType->findChildrenOfClass($class);
+        $childrenOfClass = $this->classLikeParsedNodesFinder->findChildrenOfClass($class);
         $unusedParameters = $this->getUnusedParameters($node, $methodName, $childrenOfClass);
 
         foreach ($childrenOfClass as $childClassNode) {
