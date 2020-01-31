@@ -60,11 +60,6 @@ final class DocBlockManipulator
     private $staticTypeMapper;
 
     /**
-     * @var bool
-     */
-    private $hasPhpDocChanged = false;
-
-    /**
      * @var DocBlockClassRenamer
      */
     private $docBlockClassRenamer;
@@ -302,14 +297,8 @@ final class DocBlockManipulator
             $nameParts = explode('_', $staticType->getClassName());
             $node->name = '\\' . implode('\\', $nameParts);
 
-            $this->hasPhpDocChanged = true;
-
             return $node;
         });
-
-        if (! $this->hasPhpDocChanged) {
-            return;
-        }
     }
 
     /**
