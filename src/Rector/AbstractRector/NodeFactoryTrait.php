@@ -101,6 +101,8 @@ trait NodeFactoryTrait
      */
     protected function createFunction(string $name, array $arguments = []): FuncCall
     {
+        $arguments = $this->createArgs($arguments);
+
         return new FuncCall(new Name($name), $arguments);
     }
 

@@ -321,7 +321,7 @@ PHP
             }
 
             /** @var PhpDocInfo $phpDocInfo */
-            $phpDocInfo = $this->getPhpDocInfo($node);
+            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
             if ($phpDocInfo->getVarType()) {
                 $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getVarType(), $possibleDocAliases);

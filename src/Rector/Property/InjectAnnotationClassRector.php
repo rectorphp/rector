@@ -6,6 +6,7 @@ namespace Rector\Rector\Property;
 
 use DI\Annotation\Inject as PHPDIInject;
 use JMS\DiExtraBundle\Annotation\Inject as JMSInject;
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
@@ -14,6 +15,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Application\ErrorAndDiffCollector;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
 use Rector\Exception\NotImplementedException;
@@ -124,7 +126,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $phpDocInfo = $this->getPhpDocInfo($node);
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return null;
         }
@@ -139,7 +141,12 @@ PHP
                 continue;
             }
 
+            if ($this->isParameterInject($injectTagValueNode)) {
+                return null;
+            }
+
             $type = $this->resolveType($node, $injectTagValueNode);
+
             return $this->refactorPropertyWithAnnotation($node, $type, $tagClass);
         }
 
@@ -214,7 +221,10 @@ PHP
             }
         }
 
-        $varType = $this->docBlockManipulator->getVarType($node);
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+        $varType = $phpDocInfo->getVarType();
         if (! $varType instanceof MixedType) {
             return $varType;
         }
@@ -232,5 +242,19 @@ PHP
         }
 
         return new MixedType();
+    }
+
+    private function isParameterInject(PhpDocTagValueNode $phpDocTagValueNode): bool
+    {
+        if (! $phpDocTagValueNode instanceof JMSInjectTagValueNode) {
+            return false;
+        }
+
+        $serviceName = $phpDocTagValueNode->getServiceName();
+        if ($serviceName === null) {
+            return false;
+        }
+
+        return (bool) Strings::match($serviceName, '#%(.*?)%#');
     }
 }

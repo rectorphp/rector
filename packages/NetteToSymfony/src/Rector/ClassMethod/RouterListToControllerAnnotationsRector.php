@@ -18,6 +18,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
 use Rector\NodeContainer\ParsedNodesByType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -323,7 +324,7 @@ PHP
         }
 
         // already has Route tag
-        $phpDocInfo = $this->getPhpDocInfo($node);
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return false;
         }
@@ -335,8 +336,10 @@ PHP
     {
         /** @var string $presenterName */
         $presenterName = $this->getName($classNode);
+
         /** @var string $presenterPart */
         $presenterPart = Strings::after($presenterName, '\\', -1);
+
         /** @var string $presenterPart */
         $presenterPart = Strings::substring($presenterPart, 0, -Strings::length('Presenter'));
         $presenterPart = RectorStrings::camelCaseToDashes($presenterPart);

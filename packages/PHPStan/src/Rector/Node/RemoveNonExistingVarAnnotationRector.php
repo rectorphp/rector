@@ -18,7 +18,10 @@ use PhpParser\Node\Stmt\Static_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\While_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -76,12 +79,18 @@ PHP
             return null;
         }
 
+        $nodeContent = $this->print($node);
+        // clear phpdoc - @see https://regex101.com/r/uwY5KW/1
+        $nodeContentWithoutPhpDoc = Strings::replace($nodeContent, '#\/\*\*(.*?)*\/#');
+
         // it's there
-        if (Strings::match($this->print($node), '#' . preg_quote($variableName, '#') . '\b#')) {
+        if (Strings::match($nodeContentWithoutPhpDoc, '#' . preg_quote($variableName, '#') . '\b#')) {
             return null;
         }
 
-        $this->docBlockManipulator->removeTagFromNode($node, 'var');
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo->removeByType(VarTagValueNode::class);
 
         return $node;
     }

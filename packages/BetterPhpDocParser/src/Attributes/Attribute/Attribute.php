@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Attributes\Attribute;
 
+use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
+
 final class Attribute
 {
     /**
@@ -12,9 +14,10 @@ final class Attribute
     public const HAS_DESCRIPTION_WITH_ORIGINAL_SPACES = 'has_description_with_restored_spaces';
 
     /**
+     * @experiment
      * @var string
      */
-    public const PHP_DOC_NODE_INFO = 'php_doc_node_info';
+    public const START_END = StartEndValueObject::class;
 
     /**
      * @var string

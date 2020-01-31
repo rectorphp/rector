@@ -10,6 +10,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Nop;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -21,6 +22,16 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class PHPStormVarAnnotationRector extends AbstractRector
 {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
+    {
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Change various @var annotation formats to one PHPStorm understands', [
@@ -51,6 +62,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
+        /** @var Node\Stmt\Expression|null $expression */
         $expression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
 
         // unable to analyze
@@ -85,6 +97,10 @@ PHP
 
         // switch docs
         $expression->setDocComment($this->createDocComment($nextNode));
+
+        $expressionPhpDocInfo = $this->phpDocInfoFactory->createFromNode($expression);
+        $expression->setAttribute(AttributeKey::PHP_DOC_INFO, $expressionPhpDocInfo);
+
         // invoke override
         $expression->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
@@ -94,6 +110,8 @@ PHP
             return null;
         }
 
+        // remove commnets
+        $nextNode->setAttribute(AttributeKey::PHP_DOC_INFO, null);
         $nextNode->setAttribute('comments', null);
 
         return $node;

@@ -13,7 +13,6 @@ final class SkipAlreadyHas
      * - "[package-name] "Message => package-name
      * - "[aliased-package-name] "Message => aliased-package-name
      * - "[Aliased\PackageName] "Message => Aliased\PackageName
-     * - "[Aliased\PackageName]      "Message => Aliased\PackageName
      */
     public const PACKAGE_NAME_PATTERN = '#\[(?<package>[-\w\\\\]+)\]( ){1,}#';
 }

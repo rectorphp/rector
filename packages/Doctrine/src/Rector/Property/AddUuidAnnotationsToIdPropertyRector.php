@@ -11,6 +11,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\RectorDefinition;
@@ -48,16 +49,14 @@ final class AddUuidAnnotationsToIdPropertyRector extends AbstractRector
             return null;
         }
 
-        $this->changeVarToUuidInterface($node);
-
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $this->getPhpDocInfo($node);
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+
+        $this->changeVarToUuidInterface($node);
 
         $phpDocInfo->removeByType(GeneratedValueTagValueNode::class);
         $this->changeColumnTypeToUuidBinary($phpDocInfo);
         $this->changeSerializerTypeToString($phpDocInfo);
-
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $phpDocInfo);
 
         return $node;
     }
@@ -65,6 +64,7 @@ final class AddUuidAnnotationsToIdPropertyRector extends AbstractRector
     private function changeVarToUuidInterface(Property $property): void
     {
         $uuidObjectType = new FullyQualifiedObjectType(UuidInterface::class);
+
         $this->docBlockManipulator->changeVarTag($property, $uuidObjectType);
     }
 

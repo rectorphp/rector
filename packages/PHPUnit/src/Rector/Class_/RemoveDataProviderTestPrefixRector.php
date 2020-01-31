@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Rector\Class_;
 
 use Nette\Utils\Strings;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -20,16 +23,6 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class RemoveDataProviderTestPrefixRector extends AbstractPHPUnitRector
 {
-    /**
-     * @var string
-     */
-    private const DATA_PROVIDER_ANNOTATION_PATTERN = '#(@dataProvider\s+)(?<providerMethodName>test\w+)#';
-
-    /**
-     * @var string
-     */
-    private const DATA_PROVIDER_EXACT_NAME_PATTERN = '#(@dataProvider\s+)(%s)#';
-
     /**
      * @var string[]
      */
@@ -98,7 +91,6 @@ PHP
         $this->providerMethodNamesToNewNames = [];
 
         $this->renameDataProviderAnnotationsAndCollectRenamedMethods($node);
-
         $this->renameProviderMethods($node);
 
         return $node;
@@ -107,31 +99,37 @@ PHP
     private function renameDataProviderAnnotationsAndCollectRenamedMethods(Class_ $class): void
     {
         foreach ($class->getMethods() as $classMethod) {
-            if ($classMethod->getDocComment() === null) {
+            /** @var PhpDocInfo|null $phpDocInfo */
+            $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+            if ($phpDocInfo === null) {
                 continue;
             }
 
-            $docCommentText = $classMethod->getDocComment()->getText();
-            if (! Strings::match($docCommentText, self::DATA_PROVIDER_ANNOTATION_PATTERN)) {
+            $dataProviderTags = $phpDocInfo->getTagsByName('dataProvider');
+            if ($dataProviderTags === []) {
                 continue;
             }
 
-            // replace the name in the doc
-            $matches = Strings::matchAll($docCommentText, self::DATA_PROVIDER_ANNOTATION_PATTERN);
-            foreach ($matches as $match) {
-                $currentProviderMethodName = $match['providerMethodName'];
+            foreach ($dataProviderTags as $dataProviderTag) {
+                // @todo use custom annotation object!
+                /** @var PhpDocTagNode $dataProviderTag */
+                if (! $dataProviderTag->value instanceof GenericTagValueNode) {
+                    continue;
+                }
 
-                $newMethodName = Strings::substring($currentProviderMethodName, strlen('test'));
-                $newMethodName = lcfirst($newMethodName);
+                $oldMethodName = $dataProviderTag->value->value;
+                if (! Strings::startsWith($oldMethodName, 'test')) {
+                    continue;
+                }
 
-                $currentMethodPattern = sprintf(self::DATA_PROVIDER_EXACT_NAME_PATTERN, $currentProviderMethodName);
+                $newMethodName = $this->createNewMethodName($oldMethodName);
+                $dataProviderTag->value->value = $newMethodName;
 
-                $docCommentText = Strings::replace($docCommentText, $currentMethodPattern, '$1' . $newMethodName);
+                $oldMethodName = trim($oldMethodName, '()');
+                $newMethodName = trim($newMethodName, '()');
 
-                $this->providerMethodNamesToNewNames[$currentProviderMethodName] = $newMethodName;
+                $this->providerMethodNamesToNewNames[$oldMethodName] = $newMethodName;
             }
-
-            $classMethod->setDocComment(new Doc($docCommentText));
         }
     }
 
@@ -146,5 +144,12 @@ PHP
                 $classMethod->name = new Identifier($newName);
             }
         }
+    }
+
+    private function createNewMethodName(string $oldMethodName): string
+    {
+        $newMethodName = Strings::substring($oldMethodName, strlen('test'));
+
+        return lcfirst($newMethodName);
     }
 }

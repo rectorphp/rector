@@ -207,7 +207,7 @@ PHP
         $removedPropertyNameToPhpDocInfo = [];
 
         foreach ($class->getProperties() as $property) {
-            $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($propertyPhpDocInfo === null) {
                 continue;
             }
@@ -261,7 +261,7 @@ PHP
 
         foreach ($translatedPropertyToPhpDocInfos as $translatedPropertyName => $translatedPhpDocInfo) {
             $property = $this->nodeFactory->createPrivateProperty($translatedPropertyName);
-            $this->docBlockManipulator->updateNodeWithPhpDocInfo($property, $translatedPhpDocInfo);
+            $property->setAttribute(AttributeKey::PHP_DOC_INFO, $translatedPhpDocInfo);
 
             $class->stmts[] = $property;
         }

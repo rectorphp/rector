@@ -21,6 +21,7 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -35,6 +36,11 @@ final class BetterStandardPrinter extends Standard
     private $tabOrSpaceIndentCharacter = ' ';
 
     /**
+     * @var DocBlockManipulator
+     */
+    private $docBlockManipulator;
+
+    /**
      * @param mixed[] $options
      */
     public function __construct(array $options = [])
@@ -46,6 +52,14 @@ final class BetterStandardPrinter extends Standard
         $this->insertionMap['Stmt_ClassMethod->returnType'] = [')', false, ': ', null];
         $this->insertionMap['Stmt_Function->returnType'] = [')', false, ': ', null];
         $this->insertionMap['Expr_Closure->returnType'] = [')', false, ': ', null];
+    }
+
+    /**
+     * @required
+     */
+    public function autowireBetterStandardPrinter(DocBlockManipulator $docBlockManipulator): void
+    {
+        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function printFormatPreserving(array $stmts, array $origStmts, array $origTokens): string
@@ -63,6 +77,17 @@ final class BetterStandardPrinter extends Standard
     /**
      * @param Node|Node[]|null $node
      */
+    public function printWithoutComments($node): string
+    {
+        $printerNode = $this->print($node);
+
+        $nodeWithoutComments = $this->removeComments($printerNode);
+        return trim($nodeWithoutComments);
+    }
+
+    /**
+     * @param Node|Node[]|null $node
+     */
     public function print($node): string
     {
         if ($node === null) {
@@ -71,12 +96,6 @@ final class BetterStandardPrinter extends Standard
 
         if ($node instanceof EncapsedStringPart) {
             return 'UNABLE_TO_PRINT_ENCAPSED_STRING';
-        }
-
-        // remove comments, for value compare
-        if ($node instanceof Node) {
-            $node = clone $node;
-            $node->setAttribute('comments', null);
         }
 
         if (! is_array($node)) {
@@ -93,6 +112,15 @@ final class BetterStandardPrinter extends Standard
     public function areNodesEqual($firstNode, $secondNode): bool
     {
         return $this->print($firstNode) === $this->print($secondNode);
+    }
+
+    /**
+     * @param Node|Node[]|null $firstNode
+     * @param Node|Node[]|null $secondNode
+     */
+    public function areNodesWithoutCommentsEqual($firstNode, $secondNode): bool
+    {
+        return $this->printWithoutComments($firstNode) === $this->printWithoutComments($secondNode);
     }
 
     /**
@@ -150,6 +178,8 @@ final class BetterStandardPrinter extends Standard
         // reindex positions for printer
         $nodes = array_values($nodes);
 
+        $this->moveCommentsFromAttributeObjectToCommentsAttribute($nodes);
+
         $content = parent::pArray($nodes, $origNodes, $pos, $indentAdjustment, $parentNodeType, $subNodeName, $fixup);
 
         if ($content === null) {
@@ -191,11 +221,16 @@ final class BetterStandardPrinter extends Standard
     }
 
     /**
-     * Add space after "use ("
+     * Add space:
+     * "use("
+     * ↓
+     * "use ("
      */
     protected function pExpr_Closure(Closure $closure): string
     {
-        return Strings::replace(parent::pExpr_Closure($closure), '#( use)\(#', '$1 (');
+        $closureContent = parent::pExpr_Closure($closure);
+
+        return Strings::replace($closureContent, '#( use)\(#', '$1 (');
     }
 
     /**
@@ -244,6 +279,16 @@ final class BetterStandardPrinter extends Standard
         }
 
         return parent::pScalar_String($node);
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    protected function pStmts(array $nodes, bool $indent = true): string
+    {
+        $this->moveCommentsFromAttributeObjectToCommentsAttribute($nodes);
+
+        return parent::pStmts($nodes, $indent);
     }
 
     /**
@@ -338,5 +383,26 @@ final class BetterStandardPrinter extends Standard
         }
 
         return false;
+    }
+
+    /**
+     * @todo decopule
+     */
+    private function moveCommentsFromAttributeObjectToCommentsAttribute(array $nodes): void
+    {
+        // move phpdoc from node to "comment" attirbute
+        foreach ($nodes as $node) {
+            if (! $node instanceof Node) {
+                continue;
+            }
+
+            $this->docBlockManipulator->updateNodeWithPhpDocInfo($node);
+        }
+    }
+
+    private function removeComments(string $printerNode): string
+    {
+        $printerNode = Strings::replace($printerNode, '#\/*\*(.*?)\*\/#');
+        return Strings::replace($printerNode, '#\/\/(.*?)$#m');
     }
 }

@@ -9,6 +9,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\LoggableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\VersionedTagValueNode;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -91,7 +92,7 @@ PHP
     public function refactor(Node $node): ?Node
     {
         // change the node
-        $classPhpDocInfo = $this->getPhpDocInfo($node);
+        $classPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($classPhpDocInfo === null) {
             return null;
         }
@@ -101,7 +102,6 @@ PHP
         }
 
         $classPhpDocInfo->removeByType(LoggableTagValueNode::class);
-        $this->docBlockManipulator->updateNodeWithPhpDocInfo($node, $classPhpDocInfo);
 
         // remove tag from properties
         $this->removeVersionedTagFromProperties($node);
@@ -116,7 +116,7 @@ PHP
     private function removeVersionedTagFromProperties(Class_ $class): void
     {
         foreach ($class->getProperties() as $property) {
-            $propertyPhpDocInfo = $this->getPhpDocInfo($property);
+            $propertyPhpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
             if ($propertyPhpDocInfo === null) {
                 continue;
             }
@@ -126,7 +126,6 @@ PHP
             }
 
             $propertyPhpDocInfo->removeByType(VersionedTagValueNode::class);
-            $this->docBlockManipulator->updateNodeWithPhpDocInfo($property, $propertyPhpDocInfo);
         }
     }
 }

@@ -233,3 +233,6 @@ parameters:
         - '#Parameter \#1 \$node of method PHPStan\\Analyser\\Scope\:\:getType\(\) expects PhpParser\\Node\\Expr, PhpParser\\Node given#'
 
         - '#Parameter \#2 \$name of class PhpParser\\Node\\Expr\\MethodCall constructor expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Identifier\|string, string\|null given#'
+        - '#Ternary operator condition is always false#'
+
+        - '#Parameter \#1 \$tagValueNode of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:addTagValueNodeWithShortName\(\) expects Rector\\BetterPhpDocParser\\PhpDocNode\\AbstractTagValueNode, PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|Rector\\BetterPhpDocParser\\PhpDocNode\\Doctrine\\Property_\\JoinColumnTagValueNode given#'

@@ -14,12 +14,18 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\Scope;
+use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
+use Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector;
 use Rector\Commander\CommanderCollector;
 use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Contract\Rector\PhpRectorInterface;
+use Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector;
 use Rector\Exclusion\ExclusionManager;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\Php\PhpVersionProvider;
 use Rector\Rector\AbstractRector\AbstractRectorTrait;
 use Rector\Rector\AbstractRector\NodeCommandersTrait;
@@ -61,6 +67,21 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private $currentFileInfoProvider;
 
     /**
+     * @var PhpDocInfoPrinter
+     */
+    protected $phpDocInfoPrinter;
+
+    /**
+     * @var DocBlockManipulator
+     */
+    protected $docBlockManipulator;
+
+    /**
+     * @var StaticTypeMapper
+     */
+    protected $staticTypeMapper;
+
+    /**
      * Run once in the every end of one processed file
      */
     protected function tearDown(): void
@@ -76,7 +97,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         BuilderFactory $builderFactory,
         ExclusionManager $exclusionManager,
         CommanderCollector $commanderCollector,
-        CurrentFileInfoProvider $currentFileInfoProvider
+        CurrentFileInfoProvider $currentFileInfoProvider,
+        PhpDocInfoPrinter $phpDocInfoPrinter,
+        DocBlockManipulator $docBlockManipulator,
+        StaticTypeMapper $staticTypeMapper
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
@@ -84,6 +108,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->exclusionManager = $exclusionManager;
         $this->commanderCollector = $commanderCollector;
         $this->currentFileInfoProvider = $currentFileInfoProvider;
+        $this->phpDocInfoPrinter = $phpDocInfoPrinter;
+        $this->docBlockManipulator = $docBlockManipulator;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     /**
@@ -112,8 +139,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? clone $node;
         $originalNodeWithAttributes = clone $node;
-        $originalComment = $node->getComments();
-        $originalDocComment = $node->getDocComment();
         $node = $this->refactor($node);
 
         // nothing to change → continue
@@ -126,10 +151,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             $this->mirrorAttributes($originalNodeWithAttributes, $node);
             $this->updateAttributes($node);
             $this->keepFileInfoAttribute($node, $originalNode);
-            $this->notifyNodeChangeFileInfo($node);
-
-            // doc block has changed
-        } elseif ($node->getComments() !== $originalComment || $node->getDocComment() !== $originalDocComment) {
             $this->notifyNodeChangeFileInfo($node);
         }
 
@@ -275,6 +296,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     private function hasNodeChanged(Node $originalNode, Node $node): bool
     {
+        if ($this->isNameIdentical($node, $originalNode)) {
+            return false;
+        }
+
         return ! $this->areNodesEqual($originalNode, $node);
     }
 
@@ -313,5 +338,19 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
             $this->addNodeAfterNode($ifStmt, $node);
         }
+    }
+
+    private function isNameIdentical(Node $node, Node $originalNode): bool
+    {
+        if (static::class !== ImportFullyQualifiedNamesRector::class) {
+            return false;
+        }
+
+        if (! $originalNode instanceof Name) {
+            return false;
+        }
+
+        // names are the same
+        return $this->areNodesEqual($originalNode->getAttribute('originalName'), $node);
     }
 }

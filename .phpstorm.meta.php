@@ -38,6 +38,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE,
+    \Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO,
 );
 
 expectedArguments(
@@ -61,4 +62,5 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION,
     \Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE,
+    \Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO,
 );

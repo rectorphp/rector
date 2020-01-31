@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
@@ -18,24 +17,17 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use ReflectionClass;
 
 final class DoctrineDocBlockResolver
 {
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var ParsedNodesByType
      */
     private $parsedNodesByType;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator, ParsedNodesByType $parsedNodesByType)
+    public function __construct(ParsedNodesByType $parsedNodesByType)
     {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->parsedNodesByType = $parsedNodesByType;
     }
 
@@ -45,12 +37,12 @@ final class DoctrineDocBlockResolver
     public function isDoctrineEntityClass($class): bool
     {
         if ($class instanceof Class_) {
-            $classPhpDocInfo = $this->getPhpDocInfo($class);
-            if ($classPhpDocInfo === null) {
+            $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
+            if ($phpDocInfo === null) {
                 return false;
             }
 
-            return $classPhpDocInfo->hasByType(EntityTagValueNode::class);
+            return $phpDocInfo->hasByType(EntityTagValueNode::class);
         }
 
         if (is_string($class)) {
@@ -103,36 +95,36 @@ final class DoctrineDocBlockResolver
 
     public function hasPropertyDoctrineIdTag(Property $property): bool
     {
-        $propertyPhpDocInfo = $this->getPhpDocInfo($property);
-        if ($propertyPhpDocInfo === null) {
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return false;
         }
 
-        return $propertyPhpDocInfo->hasByType(IdTagValueNode::class);
+        return $phpDocInfo->hasByType(IdTagValueNode::class);
     }
 
     public function getDoctrineRelationTagValueNode(Property $property): ?DoctrineRelationTagValueNodeInterface
     {
-        $propertyPhpDocInfo = $this->getPhpDocInfo($property);
-        if ($propertyPhpDocInfo === null) {
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return null;
         }
 
-        return $propertyPhpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
+        return $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
     }
 
     public function isDoctrineProperty(Property $property): bool
     {
-        $propertyPhpDocInfo = $this->getPhpDocInfo($property);
-        if ($propertyPhpDocInfo === null) {
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return false;
         }
 
-        if ($propertyPhpDocInfo->hasByType(ColumnTagValueNode::class)) {
+        if ($phpDocInfo->hasByType(ColumnTagValueNode::class)) {
             return true;
         }
 
-        return $propertyPhpDocInfo->hasByType(DoctrineRelationTagValueNodeInterface::class);
+        return $phpDocInfo->hasByType(DoctrineRelationTagValueNodeInterface::class);
     }
 
     public function isInDoctrineEntityClass(Node $node): bool
@@ -144,14 +136,5 @@ final class DoctrineDocBlockResolver
         }
 
         return $this->isDoctrineEntityClass($classNode);
-    }
-
-    private function getPhpDocInfo(Node $node): ?PhpDocInfo
-    {
-        if ($node->getDocComment() === null) {
-            return null;
-        }
-
-        return $this->docBlockManipulator->createPhpDocInfoFromNode($node);
     }
 }

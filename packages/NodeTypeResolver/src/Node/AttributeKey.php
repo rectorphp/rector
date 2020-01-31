@@ -4,12 +4,20 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\Node;
 
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Namespace_;
+use PHPStan\Analyser\Scope;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
+
 final class AttributeKey
 {
     /**
      * @var string
      */
-    public const SCOPE = 'scope';
+    public const SCOPE = Scope::class;
 
     /**
      * @var string
@@ -19,7 +27,7 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const NAMESPACE_NODE = 'namespaceNode';
+    public const NAMESPACE_NODE = Namespace_::class;
 
     /**
      * @var string
@@ -35,7 +43,7 @@ final class AttributeKey
      * @todo split Class node, interface node and trait node, to be compatible with other SpecificNode|null, values
      * @var string
      */
-    public const CLASS_NODE = 'classNode';
+    public const CLASS_NODE = ClassLike::class;
 
     /**
      * @var string
@@ -50,7 +58,7 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const METHOD_NODE = 'methodNode';
+    public const METHOD_NODE = ClassMethod::class;
 
     /**
      * Internal php-parser name.
@@ -96,7 +104,7 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const FILE_INFO = 'fileInfo';
+    public const FILE_INFO = SmartFileInfo::class;
 
     /**
      * @var string
@@ -117,5 +125,10 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const FUNCTION_NODE = 'function_node';
+    public const FUNCTION_NODE = Function_::class;
+
+    /**
+     * @var string
+     */
+    public const PHP_DOC_INFO = PhpDocInfo::class;
 }

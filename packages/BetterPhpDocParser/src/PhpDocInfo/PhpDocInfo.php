@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -16,7 +17,9 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
+use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 
@@ -76,6 +79,17 @@ final class PhpDocInfo
     public function getOriginalContent(): string
     {
         return $this->originalContent;
+    }
+
+    public function addPhpDocTagNode(PhpDocChildNode $phpDocChildNode): void
+    {
+        $this->phpDocNode->children[] = $phpDocChildNode;
+    }
+
+    public function addTagValueNodeWithShortName(AbstractTagValueNode $tagValueNode): void
+    {
+        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode($tagValueNode::SHORT_NAME, $tagValueNode);
+        $this->addPhpDocTagNode($spacelessPhpDocTagNode);
     }
 
     public function getPhpDocNode(): AttributeAwarePhpDocNode

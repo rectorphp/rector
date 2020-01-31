@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Autodiscovery\FileMover\FileMover;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -102,7 +103,7 @@ PHP
             return false;
         }
 
-        $phpDocInfo = $this->getPhpDocInfo($class);
+        $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($phpDocInfo === null) {
             return false;
         }

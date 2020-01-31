@@ -12,6 +12,7 @@ use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -125,7 +126,7 @@ PHP
             return true;
         }
 
-        $currentPhpDocInfo = $this->getPhpDocInfo($classMethod);
+        $currentPhpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($currentPhpDocInfo === null) {
             return false;
         }
@@ -162,7 +163,7 @@ PHP
 
     private function isNewAndCurrentTypeBothCallable(ArrayType $newArrayType, ClassMethod $classMethod): bool
     {
-        $currentPhpDocInfo = $this->getPhpDocInfo($classMethod);
+        $currentPhpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($currentPhpDocInfo === null) {
             return false;
         }
@@ -185,7 +186,7 @@ PHP
             return false;
         }
 
-        $currentPhpDocInfo = $this->getPhpDocInfo($classMethod);
+        $currentPhpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         if ($currentPhpDocInfo === null) {
             return false;
         }
