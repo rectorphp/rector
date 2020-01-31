@@ -76,6 +76,7 @@ parameters:
             - 'src/Rector/AbstractRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+            - 'packages/NodeTypeResolver/src/PhpDoc/NodeAnalyzer/DocBlockManipulator.php'
             - 'packages/MinimalScope/src/Rector/Class_/ChangeLocalPropertyToVariableRector.php'
             - 'packages/CodingStyle/src/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php'
             # solve later
