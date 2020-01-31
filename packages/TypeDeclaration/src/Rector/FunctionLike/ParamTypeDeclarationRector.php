@@ -202,12 +202,12 @@ PHP
             return;
         }
 
-        $childrenClassLikes = $this->parsedNodesByType->findClassesAndInterfacesByType($className);
+        $childrenClassLikes = $this->classLikeParsedNodesFinder->findClassesAndInterfacesByType($className);
 
         // update their methods as well
         foreach ($childrenClassLikes as $childClassLike) {
             if ($childClassLike instanceof Class_) {
-                $usedTraits = $this->parsedNodesByType->findUsedTraitsInClass($childClassLike);
+                $usedTraits = $this->classLikeParsedNodesFinder->findUsedTraitsInClass($childClassLike);
 
                 foreach ($usedTraits as $trait) {
                     $this->addParamTypeToMethod($trait, $position, $node, $paramType);

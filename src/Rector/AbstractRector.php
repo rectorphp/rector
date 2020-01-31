@@ -22,6 +22,7 @@ use Rector\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Contract\Rector\PhpRectorInterface;
 use Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector;
 use Rector\Exclusion\ExclusionManager;
+use Rector\NodeContainer\ClassLikeParsedNodesFinder;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -82,6 +83,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected $staticTypeMapper;
 
     /**
+     * @var ClassLikeParsedNodesFinder
+     */
+    protected $classLikeParsedNodesFinder;
+
+    /**
      * Run once in the every end of one processed file
      */
     protected function tearDown(): void
@@ -100,7 +106,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         CurrentFileInfoProvider $currentFileInfoProvider,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         DocBlockManipulator $docBlockManipulator,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
@@ -111,6 +118,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
     }
 
     /**

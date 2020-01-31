@@ -7,6 +7,7 @@ namespace Rector\PhpParser\Node\Manipulator;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\NodeContainer\ClassLikeParsedNodesFinder;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\NodeFactory;
@@ -29,14 +30,21 @@ final class ChildAndParentClassManipulator
      */
     private $nameResolver;
 
+    /**
+     * @var ClassLikeParsedNodesFinder
+     */
+    private $classLikeParsedNodesFinder;
+
     public function __construct(
         ParsedNodesByType $parsedNodesByType,
         NodeFactory $nodeFactory,
-        NameResolver $nameResolver
+        NameResolver $nameResolver,
+        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder
     ) {
         $this->parsedNodesByType = $parsedNodesByType;
         $this->nodeFactory = $nodeFactory;
         $this->nameResolver = $nameResolver;
+        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
     }
 
     /**
@@ -72,7 +80,7 @@ final class ChildAndParentClassManipulator
             return;
         }
 
-        $childClassNodes = $this->parsedNodesByType->findChildrenOfClass($className);
+        $childClassNodes = $this->classLikeParsedNodesFinder->findChildrenOfClass($className);
 
         foreach ($childClassNodes as $childClassNode) {
             if ($childClassNode->getMethod('__construct') === null) {
