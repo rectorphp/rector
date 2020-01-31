@@ -230,6 +230,10 @@ final class ParsedNodesByType
         return $traits;
     }
 
+    /**
+     * Guessing the nearest neighboor.
+     * Used e.g. for "XController"
+     */
     public function findByShortName(string $shortName): ?Class_
     {
         foreach ($this->classes as $className => $classNode) {
