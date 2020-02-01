@@ -92,29 +92,33 @@ PHP
             return null;
         }
 
-        if ($this->propertyManipulator->isPropertyUsedInReadContext($node)) {
-            return null;
-        }
-
         $propertyFetches = $this->propertyManipulator->getAllPropertyFetch($node);
 
+        /** @var ClassMethod[] $methodsToCheck */
         $methodsToCheck = [];
         foreach ($propertyFetches as $propertyFetch) {
             $methodName = $propertyFetch->getAttribute(AttributeKey::METHOD_NAME);
             if ($methodName !== '__construct') {
                 //this rector does not remove empty constructors
-                $methodsToCheck[$methodName] =
-                    $propertyFetch->getAttribute(AttributeKey::METHOD_NODE);
+                $methodsToCheck[$methodName] = $propertyFetch->getAttribute(AttributeKey::METHOD_NODE);
             }
         }
 
-        $this->removePropertyAndUsages($node);
+        $vendorLockedClassMethodNames = $this->getVendorLockedClassMethodNames($methodsToCheck);
+        $this->removePropertyAndUsages($node, $vendorLockedClassMethodNames);
 
         /** @var ClassMethod $method */
         foreach ($methodsToCheck as $method) {
-            if ($this->methodHasNoStmtsLeft($method)) {
-                $this->removeClassMethodAndUsages($method);
+            if (! $this->methodHasNoStmtsLeft($method)) {
+                continue;
             }
+
+            $classMethodName = $this->getName($method->name);
+            if (in_array($classMethodName, $vendorLockedClassMethodNames, true)) {
+                continue;
+            }
+
+            $this->removeClassMethodAndUsages($method);
         }
 
         return $node;
@@ -138,6 +142,68 @@ PHP
 
         /** @var Class_|Interface_|Trait_|null $classNode */
         $classNode = $propertyProperty->getAttribute(AttributeKey::CLASS_NODE);
-        return $classNode === null || $classNode instanceof Trait_ || $classNode instanceof Interface_;
+        if ($classNode === null) {
+            return true;
+        }
+
+        if ($classNode instanceof Trait_) {
+            return true;
+        }
+
+        if ($classNode instanceof Interface_) {
+            return true;
+        }
+
+        if ($this->propertyManipulator->isPropertyUsedInReadContext($propertyProperty)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function isClassMethodRemovalVendorLocked(ClassMethod $classMethod): bool
+    {
+        $classMethodName = $this->getName($classMethod);
+
+        /** @var Class_|null $class */
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if ($class === null) {
+            return false;
+        }
+
+        // required by interface?
+        foreach ($class->implements as $implement) {
+            $implementedInterfaceName = $this->getName($implement);
+
+            if (interface_exists($implementedInterfaceName)) {
+                $interfaceMethods = get_class_methods($implementedInterfaceName);
+                if (in_array($classMethodName, $interfaceMethods, true)) {
+                    return true;
+                }
+            }
+        }
+
+        // required by abstract class?
+        // @todo
+
+        return false;
+    }
+
+    /**
+     * @param ClassMethod[] $methodsToCheck
+     * @return string[]
+     */
+    private function getVendorLockedClassMethodNames(array $methodsToCheck): array
+    {
+        $vendorLockedClassMethodsNames = [];
+        foreach ($methodsToCheck as $method) {
+            if (! $this->isClassMethodRemovalVendorLocked($method)) {
+                continue;
+            }
+
+            $vendorLockedClassMethodsNames[] = $this->getName($method);
+        }
+
+        return $vendorLockedClassMethodsNames;
     }
 }
