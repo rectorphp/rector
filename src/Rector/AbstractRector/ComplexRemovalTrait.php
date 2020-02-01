@@ -241,12 +241,13 @@ trait ComplexRemovalTrait
     }
 
     /**
+     * @param StaticPropertyFetch|PropertyFetch $expr
      * @param string[] $classMethodNamesToSkip
      */
-    private function shouldSkipPropertyForClassMethod(PropertyFetch $propertyFetch, array $classMethodNamesToSkip): bool
+    private function shouldSkipPropertyForClassMethod(Expr $expr, array $classMethodNamesToSkip): bool
     {
-        /** @var ClassMethod|null $methodNode */
-        $classMethodNode = $propertyFetch->getAttribute(AttributeKey::METHOD_NODE);
+        /** @var ClassMethod|null $classMethodNode */
+        $classMethodNode = $expr->getAttribute(AttributeKey::METHOD_NODE);
         if ($classMethodNode === null) {
             return false;
         }

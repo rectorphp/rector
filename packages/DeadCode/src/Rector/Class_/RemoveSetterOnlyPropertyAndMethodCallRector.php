@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
@@ -15,6 +17,7 @@ use Rector\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\TypeDeclaration\VendorLock\VendorLockResolver;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
@@ -28,9 +31,15 @@ final class RemoveSetterOnlyPropertyAndMethodCallRector extends AbstractRector
      */
     private $propertyManipulator;
 
-    public function __construct(PropertyManipulator $propertyManipulator)
+    /**
+     * @var VendorLockResolver
+     */
+    private $vendorLockResolver;
+
+    public function __construct(PropertyManipulator $propertyManipulator, VendorLockResolver $vendorLockResolver)
     {
         $this->propertyManipulator = $propertyManipulator;
+        $this->vendorLockResolver = $vendorLockResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -93,22 +102,14 @@ PHP
         }
 
         $propertyFetches = $this->propertyManipulator->getAllPropertyFetch($node);
+        $classMethodsToCheck = $this->collectClassMethodsToCheck($propertyFetches);
 
-        /** @var ClassMethod[] $methodsToCheck */
-        $methodsToCheck = [];
-        foreach ($propertyFetches as $propertyFetch) {
-            $methodName = $propertyFetch->getAttribute(AttributeKey::METHOD_NAME);
-            if ($methodName !== '__construct') {
-                //this rector does not remove empty constructors
-                $methodsToCheck[$methodName] = $propertyFetch->getAttribute(AttributeKey::METHOD_NODE);
-            }
-        }
+        $vendorLockedClassMethodNames = $this->getVendorLockedClassMethodNames($classMethodsToCheck);
 
-        $vendorLockedClassMethodNames = $this->getVendorLockedClassMethodNames($methodsToCheck);
         $this->removePropertyAndUsages($node, $vendorLockedClassMethodNames);
 
         /** @var ClassMethod $method */
-        foreach ($methodsToCheck as $method) {
+        foreach ($classMethodsToCheck as $method) {
             if (! $this->methodHasNoStmtsLeft($method)) {
                 continue;
             }
@@ -154,39 +155,34 @@ PHP
             return true;
         }
 
-        if ($this->propertyManipulator->isPropertyUsedInReadContext($propertyProperty)) {
-            return true;
-        }
-
-        return false;
+        return $this->propertyManipulator->isPropertyUsedInReadContext($propertyProperty);
     }
 
-    private function isClassMethodRemovalVendorLocked(ClassMethod $classMethod): bool
+    /**
+     * @param PropertyFetch[]|StaticPropertyFetch[] $propertyFetches
+     * @return ClassMethod[]
+     */
+    private function collectClassMethodsToCheck(array $propertyFetches): array
     {
-        $classMethodName = $this->getName($classMethod);
+        $classMethodsToCheck = [];
 
-        /** @var Class_|null $class */
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if ($class === null) {
-            return false;
-        }
-
-        // required by interface?
-        foreach ($class->implements as $implement) {
-            $implementedInterfaceName = $this->getName($implement);
-
-            if (interface_exists($implementedInterfaceName)) {
-                $interfaceMethods = get_class_methods($implementedInterfaceName);
-                if (in_array($classMethodName, $interfaceMethods, true)) {
-                    return true;
-                }
+        foreach ($propertyFetches as $propertyFetch) {
+            $methodName = $propertyFetch->getAttribute(AttributeKey::METHOD_NAME);
+            // this rector does not remove empty constructors
+            if ($methodName === '__construct') {
+                continue;
             }
+
+            /** @var ClassMethod|null $classMethod */
+            $classMethod = $propertyFetch->getAttribute(AttributeKey::METHOD_NODE);
+            if ($classMethod === null) {
+                continue;
+            }
+
+            $classMethodsToCheck[$methodName] = $classMethod;
         }
 
-        // required by abstract class?
-        // @todo
-
-        return false;
+        return $classMethodsToCheck;
     }
 
     /**
@@ -197,7 +193,7 @@ PHP
     {
         $vendorLockedClassMethodsNames = [];
         foreach ($methodsToCheck as $method) {
-            if (! $this->isClassMethodRemovalVendorLocked($method)) {
+            if (! $this->vendorLockResolver->isClassMethodRemovalVendorLocked($method)) {
                 continue;
             }
 
