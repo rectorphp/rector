@@ -88,6 +88,8 @@ composer require rector/rector --dev
 
 ## Running Rector
 
+**Important warning**: Because of limitations in PHP parser, Rector will change all class usages in your code to FQNs. This can be fixed afterwards by using [TODO]() rule from [TODO]().
+
 ### A. Get Started
 
 Try the demo and get familiar with rector
