@@ -342,20 +342,7 @@ final class DocBlockManipulator
             return;
         }
 
-        // new node, needs to be reparsed
-        if ($phpDocInfo->getPhpDocNode()->children !== [] && $phpDocInfo->getTokens() === []) {
-            $phpDoc = $this->phpDocInfoPrinter->printPhpDocNode(
-                $phpDocInfo->getPhpDocNode(),
-                $shouldSkipEmptyLinesAbove
-            );
-
-            // slight correction
-            if (Strings::match($phpDoc, '#^ * #m')) {
-                $phpDoc = Strings::replace($phpDoc, '#\s+\*/$#m', "\n */");
-            }
-        } else {
-            $phpDoc = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo, $shouldSkipEmptyLinesAbove);
-        }
+        $phpDoc = $this->printPhpDocInfoToString($shouldSkipEmptyLinesAbove, $phpDocInfo);
 
         if ($phpDoc === '') {
             // no comments, null
@@ -419,5 +406,15 @@ final class DocBlockManipulator
             // bind new content with node
             $this->phpDocInfoFactory->createFromNode($node);
         }
+    }
+
+    private function printPhpDocInfoToString(bool $shouldSkipEmptyLinesAbove, PhpDocInfo $phpDocInfo): string
+    {
+        // new node, needs to be reparsed
+        if ($phpDocInfo->getPhpDocNode()->children !== [] && $phpDocInfo->getTokens() === []) {
+            return (string) $phpDocInfo->getPhpDocNode();
+        }
+
+        return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo, $shouldSkipEmptyLinesAbove);
     }
 }

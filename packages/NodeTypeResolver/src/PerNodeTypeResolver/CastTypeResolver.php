@@ -34,7 +34,7 @@ final class CastTypeResolver implements PerNodeTypeResolverInterface
     }
 
     /**
-     * @param Node\Expr\Cast $node
+     * @param Cast $node
      */
     public function resolve(Node $node): Type
     {

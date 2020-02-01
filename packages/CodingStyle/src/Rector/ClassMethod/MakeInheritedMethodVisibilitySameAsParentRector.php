@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
@@ -139,7 +140,7 @@ PHP
             return false;
         }
 
-        /** @var Node\Stmt\Class_|null $class */
+        /** @var Class_|null $class */
         $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
         if ($class === null) {
             return false;

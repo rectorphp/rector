@@ -76,7 +76,7 @@ PHP
             return null;
         }
 
-        /** @var Node\Stmt\If_ $subIf */
+        /** @var If_ $subIf */
         $subIf = $node->stmts[0];
         $node->cond = new BooleanAnd($node->cond, $subIf->cond);
         $node->stmts = $subIf->stmts;

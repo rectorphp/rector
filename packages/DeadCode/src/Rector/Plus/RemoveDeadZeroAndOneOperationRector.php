@@ -62,10 +62,10 @@ PHP
             Minus::class,
             Mul::class,
             Div::class,
-            Node\Expr\AssignOp\Plus::class,
-            Node\Expr\AssignOp\Minus::class,
-            Node\Expr\AssignOp\Mul::class,
-            Node\Expr\AssignOp\Div::class,
+            AssignOp\Plus::class,
+            AssignOp\Minus::class,
+            AssignOp\Mul::class,
+            AssignOp\Div::class,
         ];
     }
 
@@ -106,7 +106,7 @@ PHP
     private function processAssignOp(Node $node): ?Expr
     {
         // +=, -=
-        if ($node instanceof Node\Expr\AssignOp\Plus || $node instanceof Node\Expr\AssignOp\Minus) {
+        if ($node instanceof AssignOp\Plus || $node instanceof AssignOp\Minus) {
             if (! $this->isValue($node->expr, 0)) {
                 return null;
             }
@@ -117,7 +117,7 @@ PHP
         }
 
         // *, /
-        if ($node instanceof Node\Expr\AssignOp\Mul || $node instanceof Node\Expr\AssignOp\Div) {
+        if ($node instanceof AssignOp\Mul || $node instanceof AssignOp\Div) {
             if (! $this->isValue($node->expr, 1)) {
                 return null;
             }

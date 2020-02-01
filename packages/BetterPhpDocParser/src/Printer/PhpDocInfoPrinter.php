@@ -102,7 +102,7 @@ final class PhpDocInfoPrinter
         return $this->printPhpDocNode($this->attributeAwarePhpDocNode, $shouldSkipEmptyLinesAbove);
     }
 
-    public function printPhpDocNode(
+    private function printPhpDocNode(
         AttributeAwarePhpDocNode $attributeAwarePhpDocNode,
         bool $shouldSkipEmptyLinesAbove = false
     ): string {

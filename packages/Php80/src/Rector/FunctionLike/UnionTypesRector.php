@@ -6,6 +6,7 @@ namespace Rector\Php80\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -66,7 +67,7 @@ PHP
     }
 
     /**
-     * @param ClassMethod|Function_|Node\Expr\Closure|ArrowFunction $node
+     * @param ClassMethod|Function_|Closure|ArrowFunction $node
      */
     public function refactor(Node $node): ?Node
     {
@@ -82,7 +83,7 @@ PHP
     }
 
     /**
-     * @param ClassMethod|Function_|Node\Expr\Closure|ArrowFunction $functionLike
+     * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
      */
     private function refactorReturnType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo): void
     {
@@ -105,7 +106,7 @@ PHP
     }
 
     /**
-     * @param ClassMethod|Function_|Node\Expr\Closure|ArrowFunction $functionLike
+     * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
      */
     private function refactorParamTypes(FunctionLike $functionLike, PhpDocInfo $phpDocInfo): void
     {
