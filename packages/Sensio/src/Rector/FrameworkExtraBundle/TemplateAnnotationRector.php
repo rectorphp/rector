@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Sensio\SensioTemplateTagValueNode;
-use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -36,18 +35,9 @@ final class TemplateAnnotationRector extends AbstractRector
      */
     private $templateGuesser;
 
-    /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    public function __construct(
-        TemplateGuesser $templateGuesser,
-        ParsedNodesByType $parsedNodesByType,
-        int $version = 3
-    ) {
+    public function __construct(TemplateGuesser $templateGuesser, int $version = 3)
+    {
         $this->templateGuesser = $templateGuesser;
-        $this->parsedNodesByType = $parsedNodesByType;
         $this->version = $version;
     }
 
@@ -242,7 +232,7 @@ PHP
 
         if ($returnNode !== null && $returnNode->expr instanceof MethodCall) {
             // go inside called method
-            $innerClassMethod = $this->parsedNodesByType->findClassMethodByMethodCall($returnNode->expr);
+            $innerClassMethod = $this->functionLikeParsedNodesFinder->findClassMethodByMethodCall($returnNode->expr);
             if ($innerClassMethod !== null) {
                 $this->refactorClassMethod($innerClassMethod, $sensioTemplateTagValueNode);
 

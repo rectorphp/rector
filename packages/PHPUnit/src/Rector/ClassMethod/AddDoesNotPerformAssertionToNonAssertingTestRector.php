@@ -14,7 +14,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\FileSystemRector\Parser\FileInfoParser;
-use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\Rector\AbstractPHPUnitRector;
@@ -31,11 +30,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  */
 final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractPHPUnitRector
 {
-    /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
     /**
      * @var FileInfoParser
      */
@@ -58,12 +52,10 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
 
     public function __construct(
         DocBlockManipulator $docBlockManipulator,
-        ParsedNodesByType $parsedNodesByType,
         FileInfoParser $fileInfoParser,
         ClassMethodReflectionFactory $classMethodReflectionFactory
     ) {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->parsedNodesByType = $parsedNodesByType;
         $this->fileInfoParser = $fileInfoParser;
         $this->classMethodReflectionFactory = $classMethodReflectionFactory;
     }
@@ -234,12 +226,12 @@ PHP
     private function findClassMethod(Node $node): ?ClassMethod
     {
         if ($node instanceof MethodCall) {
-            $classMethod = $this->parsedNodesByType->findClassMethodByMethodCall($node);
+            $classMethod = $this->functionLikeParsedNodesFinder->findClassMethodByMethodCall($node);
             if ($classMethod !== null) {
                 return $classMethod;
             }
         } elseif ($node instanceof StaticCall) {
-            $classMethod = $this->parsedNodesByType->findClassMethodByStaticCall($node);
+            $classMethod = $this->functionLikeParsedNodesFinder->findClassMethodByStaticCall($node);
             if ($classMethod !== null) {
                 return $classMethod;
             }
