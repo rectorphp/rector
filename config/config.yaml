@@ -14,7 +14,7 @@ parameters:
     rector_recipe: []
 
     # lower for performance; higher to prevent bugs with fluent interfaces like https://github.com/rectorphp/rector/issues/1646, or https://github.com/rectorphp/rector/issues/2444
-    nested_chain_method_call_limit: 15
+    nested_chain_method_call_limit: 30
 
     # importing FQN names
     auto_import_names: false
