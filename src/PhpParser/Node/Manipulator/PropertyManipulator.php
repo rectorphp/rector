@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
@@ -132,7 +133,7 @@ final class PropertyManipulator
         }
 
         // has class $this->$variable call?
-        /** @var Node\Stmt\ClassLike $class */
+        /** @var ClassLike $class */
         $class = $propertyProperty->getAttribute(AttributeKey::CLASS_NODE);
         return (bool) $this->betterNodeFinder->findFirst($class->stmts, function (Node $node): bool {
             if (! $node instanceof PropertyFetch) {
@@ -163,7 +164,7 @@ final class PropertyManipulator
     }
 
     /**
-     * @param PropertyFetch|Expr\StaticPropertyFetch $node
+     * @param PropertyFetch|StaticPropertyFetch $node
      */
     private function isReadContext(Node $node): bool
     {

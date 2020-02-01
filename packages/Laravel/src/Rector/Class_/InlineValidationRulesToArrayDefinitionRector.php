@@ -179,7 +179,7 @@ PHP
             } elseif ($expressionPart instanceof Concat) {
                 $output .= $this->transformConcatExpressionToSingleString($expressionPart);
             } elseif ($expressionPart instanceof ClassConstFetch) {
-                /** @var Node\Name $name */
+                /** @var Name $name */
                 $name = $expressionPart->class->getAttribute('originalName');
 
                 $output .= implode('\\', $name->parts);

@@ -36,7 +36,7 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     private $methodNode;
 
     /**
-     * @var Node\Stmt\Function_|null
+     * @var Function_|null
      */
     private $functionNode;
 

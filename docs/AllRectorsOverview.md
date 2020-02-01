@@ -1,4 +1,4 @@
-# All 444 Rectors Overview
+# All 445 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -415,6 +415,29 @@ Migrate CakePHP 2.4 Controller to Symfony 5
  {
 -    public function index()
 +    public function index(): Response
+     {
+     }
+ }
+```
+
+<br>
+
+### `CakePHPImplicitRouteToExplicitRouteAnnotationRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPImplicitRouteToExplicitRouteAnnotationRector`
+
+Migrate CakePHP implicit routes to Symfony @route annotations
+
+```diff
+-class PaymentsController extends AppController
++use Symfony\Component\Routing\Annotation\Route;
++
++class AdminPaymentsController extends AppController
+ {
++    /**
++     * @Route(path="/payments/index", name="payments_index")
++     */
+     public function index()
      {
      }
  }

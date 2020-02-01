@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\Rector\AbstractRector;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -57,7 +59,7 @@ trait NameResolverTrait
     }
 
     /**
-     * @param string|Node\Name|Node\Identifier $name
+     * @param string|Name|Identifier $name
      */
     protected function getShortName($name): string
     {

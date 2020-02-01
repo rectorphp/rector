@@ -49,7 +49,7 @@ parameters:
         PHP_CodeSniffer\Standards\PSR2\Sniffs\Methods\MethodDeclarationSniff.Underscore: null
         Symplify\CodingStandard\Sniffs\Architecture\DuplicatedClassShortNameSniff: null
         # skip temporary due to missing "import" feature in PhpStorm
-        SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff.PartialUse: null
+#        SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff.PartialUse: null
 
         # run manually from time to time - performance demanding + not to bother user with it
         Symplify\CodingStandard\Fixer\Order\PropertyOrderByComplexityFixer: null
@@ -172,5 +172,9 @@ parameters:
         PhpCsFixer\Fixer\Strict\StrictComparisonFixer:
             # part of the comparison logic
             - 'packages/Polyfill/src/ConditionEvaluator.php'
+
+        SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff.PartialUse:
+            - "packages/DeadCode/src/Rector/Plus/RemoveDeadZeroAndOneOperationRector.php"
+            - "packages/Php56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php"
 
     line_ending: "\n"

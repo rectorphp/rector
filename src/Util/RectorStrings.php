@@ -42,6 +42,11 @@ final class RectorStrings
         return self::camelCaseToGlue($input, '-');
     }
 
+    public static function camelCaseToSlashes(string $input): string
+    {
+        return self::camelCaseToGlue($input, '/');
+    }
+
     public static function camelCaseToUnderscore(string $input): string
     {
         return self::camelCaseToGlue($input, '_');

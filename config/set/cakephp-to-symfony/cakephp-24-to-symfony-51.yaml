@@ -16,3 +16,4 @@ services:
     # Model to Doctrine
     Rector\CakePHPToSymfony\Rector\Class_\CakePHPModelToDoctrineEntityRector: null
     Rector\CakePHPToSymfony\Rector\Class_\CakePHPModelToDoctrineRepositoryRector: null
+    Rector\CakePHPToSymfony\Rector\Class_\CakePHPImplicitRouteToExplicitRouteAnnotationRector: null
