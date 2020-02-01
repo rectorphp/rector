@@ -23,17 +23,17 @@ use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInterface
 {
     /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
      * @var Type[]
      *
      * @see \Doctrine\DBAL\Platforms\MySqlPlatform::initializeDoctrineTypeMappings()
      * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/basic-mapping.html#doctrine-mapping-types
      */
     private $doctrineTypeToScalarType = [];
+
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
 
     public function __construct(TypeFactory $typeFactory)
     {

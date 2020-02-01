@@ -202,15 +202,6 @@ final class UnionTypeMapper implements TypeMapperInterface
         return new PhpParserUnionType($phpParserUnionedTypes);
     }
 
-    private function areTypeWithClassNamesRelated(TypeWithClassName $firstType, TypeWithClassName $secondType): bool
-    {
-        if (is_a($firstType->getClassName(), $secondType->getClassName(), true)) {
-            return true;
-        }
-
-        return is_a($secondType->getClassName(), $firstType->getClassName(), true);
-    }
-
     private function resolveCompatibleObjectCandidate(UnionType $unionType): ?string
     {
         foreach ($unionType->getTypes() as $unionedType) {
@@ -232,5 +223,14 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         return null;
+    }
+
+    private function areTypeWithClassNamesRelated(TypeWithClassName $firstType, TypeWithClassName $secondType): bool
+    {
+        if (is_a($firstType->getClassName(), $secondType->getClassName(), true)) {
+            return true;
+        }
+
+        return is_a($secondType->getClassName(), $firstType->getClassName(), true);
     }
 }

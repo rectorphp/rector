@@ -42,6 +42,11 @@ final class BetterPhpDocParser extends PhpDocParser
     private $isComment = false;
 
     /**
+     * @var PhpDocNodeFactoryInterface[]
+     */
+    private $phpDocNodeFactories = [];
+
+    /**
      * @var PrivatesCaller
      */
     private $privatesCaller;
@@ -60,11 +65,6 @@ final class BetterPhpDocParser extends PhpDocParser
      * @var MultilineSpaceFormatPreserver
      */
     private $multilineSpaceFormatPreserver;
-
-    /**
-     * @var PhpDocNodeFactoryInterface[]
-     */
-    private $phpDocNodeFactories = [];
 
     /**
      * @var CurrentNodeProvider

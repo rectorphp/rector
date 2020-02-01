@@ -101,6 +101,18 @@ PHP
         return $node;
     }
 
+    private function shouldSkip(Class_ $class): bool
+    {
+        if ($this->isAnonymousClass($class)) {
+            return true;
+        }
+
+        if (! $this->isTraitMatch($class)) {
+            return true;
+        }
+        return $this->classManipulator->hasPropertyName($class, 'id');
+    }
+
     private function isTraitMatch(Class_ $class): bool
     {
         $usedTraits = $this->classManipulator->getUsedTraits($class);
@@ -114,17 +126,5 @@ PHP
         }
 
         return false;
-    }
-
-    private function shouldSkip(Class_ $class): bool
-    {
-        if ($this->isAnonymousClass($class)) {
-            return true;
-        }
-
-        if (! $this->isTraitMatch($class)) {
-            return true;
-        }
-        return $this->classManipulator->hasPropertyName($class, 'id');
     }
 }

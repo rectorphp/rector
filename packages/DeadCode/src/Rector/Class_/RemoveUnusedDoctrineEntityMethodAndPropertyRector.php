@@ -27,14 +27,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRector
 {
     /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
      * @var Assign[]
      */
     private $collectionByPropertyName = [];
+
+    /**
+     * @var ParsedNodesByType
+     */
+    private $parsedNodesByType;
 
     /**
      * @var ClassUnusedPrivateClassMethodResolver

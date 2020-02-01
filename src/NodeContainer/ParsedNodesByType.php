@@ -64,19 +64,9 @@ final class ParsedNodesByType
     private $classes = [];
 
     /**
-     * @var NameResolver
-     */
-    private $nameResolver;
-
-    /**
      * @var ClassConst[][]
      */
     private $constantsByType = [];
-
-    /**
-     * @var NodeTypeResolver
-     */
-    private $nodeTypeResolver;
 
     /**
      * @var ClassMethod[][]
@@ -98,6 +88,16 @@ final class ParsedNodesByType
      * @var Array_[][][]
      */
     private $arrayCallablesByTypeAndMethod = [];
+
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    /**
+     * @var NodeTypeResolver
+     */
+    private $nodeTypeResolver;
 
     public function __construct(NameResolver $nameResolver)
     {

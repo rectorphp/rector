@@ -96,21 +96,6 @@ PHP
         return $node;
     }
 
-    private function refactorGlobalVariable(Variable $variable): ?PropertyFetch
-    {
-        if (! $this->isNames($variable, $this->globalVariableNames)) {
-            return null;
-        }
-
-        // replace with property fetch
-        $variableName = $this->getName($variable);
-        if ($variableName === null) {
-            return null;
-        }
-
-        return $this->createPropertyFetch('this', $variableName);
-    }
-
     private function collectGlobalVariableNamesAndRefactorToPropertyFetch(Node $node): void
     {
         $this->globalVariableNames = [];
@@ -141,5 +126,20 @@ PHP
         }
 
         $this->removeNode($global);
+    }
+
+    private function refactorGlobalVariable(Variable $variable): ?PropertyFetch
+    {
+        if (! $this->isNames($variable, $this->globalVariableNames)) {
+            return null;
+        }
+
+        // replace with property fetch
+        $variableName = $this->getName($variable);
+        if ($variableName === null) {
+            return null;
+        }
+
+        return $this->createPropertyFetch('this', $variableName);
     }
 }

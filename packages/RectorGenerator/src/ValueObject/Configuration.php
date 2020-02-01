@@ -44,6 +44,11 @@ final class Configuration
     private $setConfig;
 
     /**
+     * @var bool
+     */
+    private $isPhpSnippet = false;
+
+    /**
      * @var string[]
      */
     private $nodeTypes = [];
@@ -52,11 +57,6 @@ final class Configuration
      * @var string[]
      */
     private $source = [];
-
-    /**
-     * @var bool
-     */
-    private $isPhpSnippet = false;
 
     /**
      * @param string[] $nodeTypes

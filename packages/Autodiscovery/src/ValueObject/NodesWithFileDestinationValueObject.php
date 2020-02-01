@@ -9,14 +9,14 @@ use PhpParser\Node;
 final class NodesWithFileDestinationValueObject
 {
     /**
-     * @var Node[]
-     */
-    private $nodes = [];
-
-    /**
      * @var string
      */
     private $fileDestination;
+
+    /**
+     * @var Node[]
+     */
+    private $nodes = [];
 
     /**
      * @param Node[] $nodes

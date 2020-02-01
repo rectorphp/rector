@@ -103,22 +103,6 @@ PHP
         return $node;
     }
 
-    private function classHasTemplateAnnotations(Class_ $node): bool
-    {
-        foreach ($node->getMethods() as $classMethod) {
-            $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($phpDocInfo === null) {
-                continue;
-            }
-
-            if ($phpDocInfo->hasByType(SensioTemplateTagValueNode::class)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     private function replaceTemplateAnnotation(ClassMethod $classMethod): ?Node
     {
         /** @var SensioTemplateTagValueNode|null $sensioTemplateTagValueNode */
@@ -139,6 +123,32 @@ PHP
         return $classMethod;
     }
 
+    private function classHasTemplateAnnotations(Class_ $node): bool
+    {
+        foreach ($node->getMethods() as $classMethod) {
+            $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+            if ($phpDocInfo === null) {
+                continue;
+            }
+
+            if ($phpDocInfo->hasByType(SensioTemplateTagValueNode::class)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function getSensioTemplateTagValueNode(ClassMethod $classMethod): ?SensioTemplateTagValueNode
+    {
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return null;
+        }
+
+        return $phpDocInfo->getByType(SensioTemplateTagValueNode::class);
+    }
+
     private function updateReturnType(ClassMethod $classMethod): void
     {
         if (! $this->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
@@ -154,6 +164,49 @@ PHP
         }
 
         $classMethod->returnType = new FullyQualified(Response::class);
+    }
+
+    private function refactorClassMethod(
+        ClassMethod $classMethod,
+        SensioTemplateTagValueNode $sensioTemplateTagValueNode
+    ): void {
+        /** @var Return_|null $returnNode */
+        $returnNode = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
+
+        if ($returnNode !== null && $returnNode->expr instanceof MethodCall) {
+            // go inside called method
+            $innerClassMethod = $this->functionLikeParsedNodesFinder->findClassMethodByMethodCall($returnNode->expr);
+            if ($innerClassMethod !== null) {
+                $this->refactorClassMethod($innerClassMethod, $sensioTemplateTagValueNode);
+
+                return;
+            }
+        }
+
+        // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
+        $thisRenderMethodCall = $this->createThisRender($classMethod, $returnNode, $sensioTemplateTagValueNode);
+
+        if ($returnNode === null) {
+            // or add as last statement in the method
+            $classMethod->stmts[] = new Return_($thisRenderMethodCall);
+        }
+
+        // replace Return_ node value if exists and is not already in correct format
+        if ($returnNode && ! $returnNode->expr instanceof MethodCall) {
+            $returnNode->expr = $thisRenderMethodCall;
+        }
+
+        $this->updateReturnType($classMethod);
+    }
+
+    private function createThisRender(
+        ClassMethod $classMethod,
+        ?Return_ $return,
+        SensioTemplateTagValueNode $sensioTemplateTagValueNode
+    ): MethodCall {
+        $renderArguments = $this->resolveRenderArguments($classMethod, $return, $sensioTemplateTagValueNode);
+
+        return $this->createMethodCall('this', 'render', $renderArguments);
     }
 
     /**
@@ -211,58 +264,5 @@ PHP
         }
 
         return $arguments;
-    }
-
-    private function createThisRender(
-        ClassMethod $classMethod,
-        ?Return_ $return,
-        SensioTemplateTagValueNode $sensioTemplateTagValueNode
-    ): MethodCall {
-        $renderArguments = $this->resolveRenderArguments($classMethod, $return, $sensioTemplateTagValueNode);
-
-        return $this->createMethodCall('this', 'render', $renderArguments);
-    }
-
-    private function refactorClassMethod(
-        ClassMethod $classMethod,
-        SensioTemplateTagValueNode $sensioTemplateTagValueNode
-    ): void {
-        /** @var Return_|null $returnNode */
-        $returnNode = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
-
-        if ($returnNode !== null && $returnNode->expr instanceof MethodCall) {
-            // go inside called method
-            $innerClassMethod = $this->functionLikeParsedNodesFinder->findClassMethodByMethodCall($returnNode->expr);
-            if ($innerClassMethod !== null) {
-                $this->refactorClassMethod($innerClassMethod, $sensioTemplateTagValueNode);
-
-                return;
-            }
-        }
-
-        // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call
-        $thisRenderMethodCall = $this->createThisRender($classMethod, $returnNode, $sensioTemplateTagValueNode);
-
-        if ($returnNode === null) {
-            // or add as last statement in the method
-            $classMethod->stmts[] = new Return_($thisRenderMethodCall);
-        }
-
-        // replace Return_ node value if exists and is not already in correct format
-        if ($returnNode && ! $returnNode->expr instanceof MethodCall) {
-            $returnNode->expr = $thisRenderMethodCall;
-        }
-
-        $this->updateReturnType($classMethod);
-    }
-
-    private function getSensioTemplateTagValueNode(ClassMethod $classMethod): ?SensioTemplateTagValueNode
-    {
-        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
-
-        return $phpDocInfo->getByType(SensioTemplateTagValueNode::class);
     }
 }

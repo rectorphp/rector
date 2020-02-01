@@ -19,6 +19,11 @@ use Rector\PhpParser\Node\Resolver\NameResolver;
 final class EntityWithMissingUuidProvider
 {
     /**
+     * @var Class_[]
+     */
+    private $entitiesWithMissingUuidProperty = [];
+
+    /**
      * @var ParsedNodesByType
      */
     private $parsedNodesByType;
@@ -37,11 +42,6 @@ final class EntityWithMissingUuidProvider
      * @var NameResolver
      */
     private $nameResolver;
-
-    /**
-     * @var Class_[]
-     */
-    private $entitiesWithMissingUuidProperty = [];
 
     public function __construct(
         ParsedNodesByType $parsedNodesByType,

@@ -122,34 +122,6 @@ PHP
     }
 
     /**
-     * @param string[][] $propertyUsageByMethods
-     */
-    private function replacePropertyFetchesByLocalProperty(Class_ $class, array $propertyUsageByMethods): void
-    {
-        foreach ($propertyUsageByMethods as $propertyName => $methodNames) {
-            $methodName = $methodNames[0];
-            $classMethod = $class->getMethod($methodName);
-            if ($classMethod === null) {
-                continue;
-            }
-
-            $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use (
-                $propertyName
-            ) {
-                if (! $node instanceof PropertyFetch) {
-                    return null;
-                }
-
-                if (! $this->isName($node, $propertyName)) {
-                    return null;
-                }
-
-                return new Variable($propertyName);
-            });
-        }
-    }
-
-    /**
      * @param string[] $privatePropertyNames
      * @return string[][]
      */
@@ -186,6 +158,34 @@ PHP
             }
         }
         return $propertyUsageByMethods;
+    }
+
+    /**
+     * @param string[][] $propertyUsageByMethods
+     */
+    private function replacePropertyFetchesByLocalProperty(Class_ $class, array $propertyUsageByMethods): void
+    {
+        foreach ($propertyUsageByMethods as $propertyName => $methodNames) {
+            $methodName = $methodNames[0];
+            $classMethod = $class->getMethod($methodName);
+            if ($classMethod === null) {
+                continue;
+            }
+
+            $this->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use (
+                $propertyName
+            ) {
+                if (! $node instanceof PropertyFetch) {
+                    return null;
+                }
+
+                if (! $this->isName($node, $propertyName)) {
+                    return null;
+                }
+
+                return new Variable($propertyName);
+            });
+        }
     }
 
     /**

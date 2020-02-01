@@ -272,6 +272,19 @@ final class VendorLockResolver
         return false;
     }
 
+    private function hasParentClassOrImplementsInterface(Node $classNode): bool
+    {
+        if (($classNode instanceof Class_ || $classNode instanceof Interface_) && $classNode->extends) {
+            return true;
+        }
+
+        if ($classNode instanceof Class_) {
+            return (bool) $classNode->implements;
+        }
+
+        return false;
+    }
+
     // Until we have getProperty (https://github.com/nikic/PHP-Parser/pull/646)
     private function getProperty(ClassLike $classLike, string $name)
     {
@@ -286,18 +299,5 @@ final class VendorLockResolver
             }
         }
         return null;
-    }
-
-    private function hasParentClassOrImplementsInterface(Node $classNode): bool
-    {
-        if (($classNode instanceof Class_ || $classNode instanceof Interface_) && $classNode->extends) {
-            return true;
-        }
-
-        if ($classNode instanceof Class_) {
-            return (bool) $classNode->implements;
-        }
-
-        return false;
     }
 }

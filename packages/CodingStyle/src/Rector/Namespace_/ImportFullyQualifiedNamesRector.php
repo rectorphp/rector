@@ -26,14 +26,14 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
     private $importDocBlocks = true;
 
     /**
-     * @var NameImporter
-     */
-    private $nameImporter;
-
-    /**
      * @var bool
      */
     private $autoImportNames = false;
+
+    /**
+     * @var NameImporter
+     */
+    private $nameImporter;
 
     public function __construct(NameImporter $nameImporter, bool $importDocBlocks, bool $autoImportNames)
     {

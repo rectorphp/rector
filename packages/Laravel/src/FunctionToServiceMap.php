@@ -49,25 +49,6 @@ final class FunctionToServiceMap
         return null;
     }
 
-    private function initArrayFunctionToMethodCalls(): void
-    {
-        $this->arrayFunctionToMethodCalls[] = new ArrayFunctionToMethodCall(
-            'config',
-            'Illuminate\Contracts\Config\Repository',
-            'configRepository',
-            'set',
-            'get'
-        );
-
-        $this->arrayFunctionToMethodCalls[] = new ArrayFunctionToMethodCall(
-            'session',
-            'Illuminate\Session\SessionManager',
-            'sessionManager',
-            'put',
-            'get'
-        );
-    }
-
     private function initFunctionToMethodCalls(): void
     {
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
@@ -169,6 +150,25 @@ final class FunctionToServiceMap
 
         $this->functionToMethodCalls[] = new FunctionToMethodCall(
             'back', 'Illuminate\Routing\Redirector', 'redirector', 'back', 'back'
+        );
+    }
+
+    private function initArrayFunctionToMethodCalls(): void
+    {
+        $this->arrayFunctionToMethodCalls[] = new ArrayFunctionToMethodCall(
+            'config',
+            'Illuminate\Contracts\Config\Repository',
+            'configRepository',
+            'set',
+            'get'
+        );
+
+        $this->arrayFunctionToMethodCalls[] = new ArrayFunctionToMethodCall(
+            'session',
+            'Illuminate\Session\SessionManager',
+            'sessionManager',
+            'put',
+            'get'
         );
     }
 }

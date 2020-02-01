@@ -151,16 +151,6 @@ PHP
         return $node;
     }
 
-    /**
-     * @param Property[] $properties
-     */
-    private function addInjectAnnotationToProperties(array $properties): void
-    {
-        foreach ($properties as $property) {
-            $this->addInjectAnnotationToProperty($property);
-        }
-    }
-
     private function addInjectAnnotationToProperty(Property $privateProperty): void
     {
         /** @var PhpDocInfo|null $phpDocInfo */
@@ -172,5 +162,15 @@ PHP
 
         $injectTag = new AttributeAwarePhpDocTagNode('@inject', new GenericTagValueNode(''));
         $phpDocInfo->addPhpDocTagNode($injectTag);
+    }
+
+    /**
+     * @param Property[] $properties
+     */
+    private function addInjectAnnotationToProperties(array $properties): void
+    {
+        foreach ($properties as $property) {
+            $this->addInjectAnnotationToProperty($property);
+        }
     }
 }

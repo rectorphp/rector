@@ -91,15 +91,16 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType($node, $objectType);
     }
 
-    private function mapStatic(Node $node): Type
+    private function mapSelf(Node $node): Type
     {
         /** @var string|null $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
+            // self outside the class, e.g. in a function
             return new MixedType();
         }
 
-        return new StaticType($className);
+        return new SelfObjectType($className);
     }
 
     private function mapParent(Node $node): Type
@@ -113,15 +114,14 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         return new ParentStaticType($parentClassName);
     }
 
-    private function mapSelf(Node $node): Type
+    private function mapStatic(Node $node): Type
     {
         /** @var string|null $className */
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
-            // self outside the class, e.g. in a function
             return new MixedType();
         }
 
-        return new SelfObjectType($className);
+        return new StaticType($className);
     }
 }

@@ -89,25 +89,6 @@ PHP
         return $this->createSprintfFuncCallOrConcat($this->sprintfFormat, $this->argumentVariables);
     }
 
-    /**
-     * @param Expr[] $argumentVariables
-     * @return Concat|FuncCall
-     */
-    private function createSprintfFuncCallOrConcat(string $string, array $argumentVariables): Node
-    {
-        // special case for variable with PHP_EOL
-        if ($string === '%s' && count($argumentVariables) === 2) {
-            return new Concat($argumentVariables[0], $argumentVariables[1]);
-        }
-
-        $arguments = [new Arg(new String_($string))];
-        foreach ($argumentVariables as $argumentVariable) {
-            $arguments[] = new Arg($argumentVariable);
-        }
-
-        return new FuncCall(new Name('sprintf'), $arguments);
-    }
-
     private function collectEncapsedStringPart(EncapsedStringPart $encapsedStringPart): void
     {
         $stringValue = $encapsedStringPart->value;
@@ -129,5 +110,24 @@ PHP
         }
 
         $this->argumentVariables[] = $expr;
+    }
+
+    /**
+     * @param Expr[] $argumentVariables
+     * @return Concat|FuncCall
+     */
+    private function createSprintfFuncCallOrConcat(string $string, array $argumentVariables): Node
+    {
+        // special case for variable with PHP_EOL
+        if ($string === '%s' && count($argumentVariables) === 2) {
+            return new Concat($argumentVariables[0], $argumentVariables[1]);
+        }
+
+        $arguments = [new Arg(new String_($string))];
+        foreach ($argumentVariables as $argumentVariable) {
+            $arguments[] = new Arg($argumentVariable);
+        }
+
+        return new FuncCall(new Name('sprintf'), $arguments);
     }
 }

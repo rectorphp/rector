@@ -205,6 +205,26 @@ PHP
         return $this->typeFactory->createMixedPassedOrUnionTypeAndKeepConstant($resolvedTypes);
     }
 
+    private function resolvePropertyTypeAfterConstructor(ClassLike $classLike, string $propertyName): Type
+    {
+        $propertyTypeFromConstructor = null;
+
+        $constructClassMethod = $classLike->getMethod('__construct');
+        if ($constructClassMethod !== null) {
+            $propertyTypeFromConstructor = $this->resolveAssignedTypeInStmtsByPropertyName(
+                (array) $constructClassMethod->stmts,
+                $propertyName
+            );
+        }
+
+        if ($propertyTypeFromConstructor !== null) {
+            return $propertyTypeFromConstructor;
+        }
+
+        // undefined property is null by default
+        return new NullType();
+    }
+
     /**
      * @param Stmt[] $stmts
      */
@@ -247,25 +267,5 @@ PHP
         }
 
         return $this->isName($node->var, $propertyName);
-    }
-
-    private function resolvePropertyTypeAfterConstructor(ClassLike $classLike, string $propertyName): Type
-    {
-        $propertyTypeFromConstructor = null;
-
-        $constructClassMethod = $classLike->getMethod('__construct');
-        if ($constructClassMethod !== null) {
-            $propertyTypeFromConstructor = $this->resolveAssignedTypeInStmtsByPropertyName(
-                (array) $constructClassMethod->stmts,
-                $propertyName
-            );
-        }
-
-        if ($propertyTypeFromConstructor !== null) {
-            return $propertyTypeFromConstructor;
-        }
-
-        // undefined property is null by default
-        return new NullType();
     }
 }

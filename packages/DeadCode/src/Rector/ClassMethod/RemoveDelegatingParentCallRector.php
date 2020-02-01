@@ -246,6 +246,29 @@ PHP
         return $this->checkOverrideUsingReflection($classMethod, $parentClassName, $methodName);
     }
 
+    private function checkOverrideUsingReflection(
+        ClassMethod $classMethod,
+        string $parentClassName,
+        string $methodName
+    ): bool {
+        $parentMethodReflection = $this->getReflectionMethod($parentClassName, $methodName);
+        // 3rd party code
+        if ($parentMethodReflection !== null) {
+            if ($parentMethodReflection->isProtected() && $classMethod->isPublic()) {
+                return true;
+            }
+            if ($parentMethodReflection->isInternal()) {
+                //we can't know for certain so we assume its an override
+                return true;
+            }
+            if ($this->areParameterDefaultsDifferent($classMethod, $parentMethodReflection)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function getReflectionMethod(string $className, string $methodName): ?ReflectionMethod
     {
         if (! method_exists($className, $methodName)) {
@@ -280,29 +303,6 @@ PHP
                 return true;
             }
         }
-        return false;
-    }
-
-    private function checkOverrideUsingReflection(
-        ClassMethod $classMethod,
-        string $parentClassName,
-        string $methodName
-    ): bool {
-        $parentMethodReflection = $this->getReflectionMethod($parentClassName, $methodName);
-        // 3rd party code
-        if ($parentMethodReflection !== null) {
-            if ($parentMethodReflection->isProtected() && $classMethod->isPublic()) {
-                return true;
-            }
-            if ($parentMethodReflection->isInternal()) {
-                //we can't know for certain so we assume its an override
-                return true;
-            }
-            if ($this->areParameterDefaultsDifferent($classMethod, $parentMethodReflection)) {
-                return true;
-            }
-        }
-
         return false;
     }
 }

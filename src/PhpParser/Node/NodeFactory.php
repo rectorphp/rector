@@ -330,6 +330,13 @@ final class NodeFactory
         return new Doc(sprintf('/**%s * @var %s%s */', PHP_EOL, $docString, PHP_EOL));
     }
 
+    private function decorateParentPropertyProperty(Property $property): void
+    {
+        // complete property property parent, needed for other operations
+        $propertyProperty = $property->props[0];
+        $propertyProperty->setAttribute(AttributeKey::PARENT_NODE, $property);
+    }
+
     /**
      * @param Param[] $paramNodes
      * @return Arg[]
@@ -342,12 +349,5 @@ final class NodeFactory
         }
 
         return $args;
-    }
-
-    private function decorateParentPropertyProperty(Property $property): void
-    {
-        // complete property property parent, needed for other operations
-        $propertyProperty = $property->props[0];
-        $propertyProperty->setAttribute(AttributeKey::PARENT_NODE, $property);
     }
 }

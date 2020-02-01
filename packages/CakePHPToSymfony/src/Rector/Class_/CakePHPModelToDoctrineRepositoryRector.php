@@ -163,6 +163,72 @@ PHP
     }
 
     /**
+     * @return ClassMethod[]
+     */
+    private function getRepositoryMethods(Class_ $class): array
+    {
+        $repositoryMethods = [];
+
+        foreach ($class->getMethods() as $classMethod) {
+            if (! $this->inRepositoryMethod($classMethod)) {
+                continue;
+            }
+
+            $repositoryMethods[] = $classMethod;
+        }
+
+        return $repositoryMethods;
+    }
+
+    /**
+     * @param ClassMethod[] $repositoryMethods
+     */
+    private function createRepositoryClass(Class_ $class, array $repositoryMethods): Class_
+    {
+        $repositoryClassName = $this->getRepositoryShortClassName($class);
+        $repositoryClass = new Class_($repositoryClassName);
+
+        $repositoryClass->stmts[] = $this->doctrineNodeFactory->createRepositoryProperty();
+
+        $entityClass = $this->getName($class->name);
+        assert(is_string($entityClass));
+
+        $repositoryClass->stmts[] = $this->doctrineNodeFactory->createConstructorWithGetRepositoryAssign($entityClass);
+
+        foreach ($repositoryMethods as $repositoryMethod) {
+            $doctrineRepositoryClassMethod = $this->doctrineRepositoryClassMethodManipulator->createFromCakePHPClassMethod(
+                $repositoryMethod,
+                $entityClass
+            );
+            $repositoryClass->stmts[] = $doctrineRepositoryClassMethod;
+        }
+
+        return $repositoryClass;
+    }
+
+    private function createNodeToPrint(Class_ $class, Class_ $repositoryClass): Node
+    {
+        /** @var Namespace_|null $namespaceNode */
+        $namespaceNode = $class->getAttribute(AttributeKey::NAMESPACE_NODE);
+        if ($namespaceNode !== null) {
+            $namespaceNode->stmts = [$repositoryClass];
+            return $namespaceNode;
+        }
+
+        return $repositoryClass;
+    }
+
+    private function createRepositoryFilePath(Class_ $class): string
+    {
+        $repositoryClassName = $this->getRepositoryShortClassName($class);
+
+        /** @var SmartFileInfo $fileInfo */
+        $fileInfo = $class->getAttribute(AttributeKey::FILE_INFO);
+
+        return $fileInfo->getRelativeDirectoryPath() . '/' . $repositoryClassName . '.php';
+    }
+
+    /**
      * Looks for "$this->find()" call
      */
     private function inRepositoryMethod(ClassMethod $classMethod): bool
@@ -190,72 +256,6 @@ PHP
         });
 
         return $isRepositoryMethod;
-    }
-
-    /**
-     * @return ClassMethod[]
-     */
-    private function getRepositoryMethods(Class_ $class): array
-    {
-        $repositoryMethods = [];
-
-        foreach ($class->getMethods() as $classMethod) {
-            if (! $this->inRepositoryMethod($classMethod)) {
-                continue;
-            }
-
-            $repositoryMethods[] = $classMethod;
-        }
-
-        return $repositoryMethods;
-    }
-
-    private function createNodeToPrint(Class_ $class, Class_ $repositoryClass): Node
-    {
-        /** @var Namespace_|null $namespaceNode */
-        $namespaceNode = $class->getAttribute(AttributeKey::NAMESPACE_NODE);
-        if ($namespaceNode !== null) {
-            $namespaceNode->stmts = [$repositoryClass];
-            return $namespaceNode;
-        }
-
-        return $repositoryClass;
-    }
-
-    private function createRepositoryFilePath(Class_ $class): string
-    {
-        $repositoryClassName = $this->getRepositoryShortClassName($class);
-
-        /** @var SmartFileInfo $fileInfo */
-        $fileInfo = $class->getAttribute(AttributeKey::FILE_INFO);
-
-        return $fileInfo->getRelativeDirectoryPath() . '/' . $repositoryClassName . '.php';
-    }
-
-    /**
-     * @param ClassMethod[] $repositoryMethods
-     */
-    private function createRepositoryClass(Class_ $class, array $repositoryMethods): Class_
-    {
-        $repositoryClassName = $this->getRepositoryShortClassName($class);
-        $repositoryClass = new Class_($repositoryClassName);
-
-        $repositoryClass->stmts[] = $this->doctrineNodeFactory->createRepositoryProperty();
-
-        $entityClass = $this->getName($class->name);
-        assert(is_string($entityClass));
-
-        $repositoryClass->stmts[] = $this->doctrineNodeFactory->createConstructorWithGetRepositoryAssign($entityClass);
-
-        foreach ($repositoryMethods as $repositoryMethod) {
-            $doctrineRepositoryClassMethod = $this->doctrineRepositoryClassMethodManipulator->createFromCakePHPClassMethod(
-                $repositoryMethod,
-                $entityClass
-            );
-            $repositoryClass->stmts[] = $doctrineRepositoryClassMethod;
-        }
-
-        return $repositoryClass;
     }
 
     private function getRepositoryShortClassName(Class_ $class): string

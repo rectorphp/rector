@@ -197,6 +197,34 @@ PHP
         return ! $this->isInCorrectScope($node, $parameterConfiguration);
     }
 
+    private function addClassMethodParam(
+        ClassMethod $classMethod,
+        string $name,
+        $defaultValue,
+        ?string $type,
+        int $position
+    ): void {
+        $param = new Param(new Variable($name), BuilderHelpers::normalizeValue($defaultValue));
+        if ($type) {
+            $param->type = ctype_upper($type[0]) ? new FullyQualified($type) : new Identifier($type);
+        }
+
+        $classMethod->params[$position] = $param;
+    }
+
+    private function processStaticCall(StaticCall $staticCall, int $position, $name): void
+    {
+        if (! $staticCall->class instanceof Name) {
+            return;
+        }
+
+        if (! $this->isName($staticCall->class, 'parent')) {
+            return;
+        }
+
+        $staticCall->args[$position] = new Arg(new Variable($name));
+    }
+
     /**
      * @param ClassMethod|MethodCall|StaticCall $node
      * @param mixed[] $parameterConfiguration
@@ -228,33 +256,5 @@ PHP
 
         // MethodCall
         return in_array('method_call', $scope, true);
-    }
-
-    private function addClassMethodParam(
-        ClassMethod $classMethod,
-        string $name,
-        $defaultValue,
-        ?string $type,
-        int $position
-    ): void {
-        $param = new Param(new Variable($name), BuilderHelpers::normalizeValue($defaultValue));
-        if ($type) {
-            $param->type = ctype_upper($type[0]) ? new FullyQualified($type) : new Identifier($type);
-        }
-
-        $classMethod->params[$position] = $param;
-    }
-
-    private function processStaticCall(StaticCall $staticCall, int $position, $name): void
-    {
-        if (! $staticCall->class instanceof Name) {
-            return;
-        }
-
-        if (! $this->isName($staticCall->class, 'parent')) {
-            return;
-        }
-
-        $staticCall->args[$position] = new Arg(new Variable($name));
     }
 }

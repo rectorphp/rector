@@ -93,42 +93,25 @@ PHP
         return $this->refactorFuncCall($node);
     }
 
-    private function createMatchStaticCall(FuncCall $funcCall, string $methodName): StaticCall
+    private function refactorIdentical(Identical $identical): ?Bool_
     {
-        $args = [];
+        $parentNode = $identical->getAttribute(AttributeKey::PARENT_NODE);
 
-        if ($methodName === 'replace') {
-            $args[] = $funcCall->args[2];
-            $args[] = $funcCall->args[0];
-            $args[] = $funcCall->args[1];
-        } else {
-            $args[] = $funcCall->args[1];
-            $args[] = $funcCall->args[0];
-        }
-
-        return $this->createStaticCall('Nette\Utils\Strings', $methodName, $args);
-    }
-
-    /**
-     * @return FuncCall|StaticCall
-     */
-    private function processSplit(FuncCall $funcCall, StaticCall $matchStaticCall): Expr
-    {
-        $matchStaticCall = $this->compensateNetteUtilsSplitDelimCapture($matchStaticCall);
-
-        if (! isset($funcCall->args[2])) {
-            return $matchStaticCall;
-        }
-
-        if ($this->isValue($funcCall->args[2]->value, -1)) {
-            if (isset($funcCall->args[3])) {
-                $matchStaticCall->args[] = $funcCall->args[3];
+        if ($identical->left instanceof FuncCall) {
+            $refactoredFuncCall = $this->refactorFuncCall($identical->left);
+            if ($refactoredFuncCall !== null && $this->isValue($identical->right, 1)) {
+                return $this->createBoolCast($parentNode, $refactoredFuncCall);
             }
-
-            return $matchStaticCall;
         }
 
-        return $funcCall;
+        if ($identical->right instanceof FuncCall) {
+            $refactoredFuncCall = $this->refactorFuncCall($identical->right);
+            if ($refactoredFuncCall !== null && $this->isValue($identical->left, 1)) {
+                return new Bool_($refactoredFuncCall);
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -170,27 +153,6 @@ PHP
         return $matchStaticCall;
     }
 
-    private function refactorIdentical(Identical $identical): ?Bool_
-    {
-        $parentNode = $identical->getAttribute(AttributeKey::PARENT_NODE);
-
-        if ($identical->left instanceof FuncCall) {
-            $refactoredFuncCall = $this->refactorFuncCall($identical->left);
-            if ($refactoredFuncCall !== null && $this->isValue($identical->right, 1)) {
-                return $this->createBoolCast($parentNode, $refactoredFuncCall);
-            }
-        }
-
-        if ($identical->right instanceof FuncCall) {
-            $refactoredFuncCall = $this->refactorFuncCall($identical->right);
-            if ($refactoredFuncCall !== null && $this->isValue($identical->left, 1)) {
-                return new Bool_($refactoredFuncCall);
-            }
-        }
-
-        return null;
-    }
-
     /**
      * @param FuncCall|StaticCall|Assign $refactoredFuncCall
      */
@@ -201,6 +163,44 @@ PHP
         }
 
         return new Bool_($refactoredFuncCall);
+    }
+
+    private function createMatchStaticCall(FuncCall $funcCall, string $methodName): StaticCall
+    {
+        $args = [];
+
+        if ($methodName === 'replace') {
+            $args[] = $funcCall->args[2];
+            $args[] = $funcCall->args[0];
+            $args[] = $funcCall->args[1];
+        } else {
+            $args[] = $funcCall->args[1];
+            $args[] = $funcCall->args[0];
+        }
+
+        return $this->createStaticCall('Nette\Utils\Strings', $methodName, $args);
+    }
+
+    /**
+     * @return FuncCall|StaticCall
+     */
+    private function processSplit(FuncCall $funcCall, StaticCall $matchStaticCall): Expr
+    {
+        $matchStaticCall = $this->compensateNetteUtilsSplitDelimCapture($matchStaticCall);
+
+        if (! isset($funcCall->args[2])) {
+            return $matchStaticCall;
+        }
+
+        if ($this->isValue($funcCall->args[2]->value, -1)) {
+            if (isset($funcCall->args[3])) {
+                $matchStaticCall->args[] = $funcCall->args[3];
+            }
+
+            return $matchStaticCall;
+        }
+
+        return $funcCall;
     }
 
     /**

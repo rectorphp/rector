@@ -15,6 +15,11 @@ use Rector\NodeTypeResolver\StaticTypeMapper;
 final class DocBlockClassRenamer
 {
     /**
+     * @var bool
+     */
+    private $hasNodeChanged = false;
+
+    /**
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
@@ -23,11 +28,6 @@ final class DocBlockClassRenamer
      * @var PhpDocNodeTraverser
      */
     private $phpDocNodeTraverser;
-
-    /**
-     * @var bool
-     */
-    private $hasNodeChanged = false;
 
     public function __construct(StaticTypeMapper $staticTypeMapper, PhpDocNodeTraverser $phpDocNodeTraverser)
     {

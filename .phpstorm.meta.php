@@ -39,6 +39,7 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO,
+    \Rector\NodeTypeResolver\Node\AttributeKey::KIND,
 );
 
 expectedArguments(
@@ -63,4 +64,5 @@ expectedArguments(
     \Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE,
     \Rector\NodeTypeResolver\Node\AttributeKey::IS_UNREACHABLE,
     \Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO,
+    \Rector\NodeTypeResolver\Node\AttributeKey::KIND,
 );

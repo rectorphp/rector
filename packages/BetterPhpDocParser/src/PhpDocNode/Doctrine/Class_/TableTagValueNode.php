@@ -24,21 +24,6 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
     private $schema;
 
     /**
-     * @var IndexTagValueNode[]
-     */
-    private $indexes = [];
-
-    /**
-     * @var UniqueConstraintTagValueNode[]
-     */
-    private $uniqueConstraints = [];
-
-    /**
-     * @var mixed[]
-     */
-    private $options = [];
-
-    /**
      * @var bool
      */
     private $haveIndexesFinalComma = false;
@@ -67,6 +52,21 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
      * @var string|null
      */
     private $uniqueConstraintsClosingSpace;
+
+    /**
+     * @var IndexTagValueNode[]
+     */
+    private $indexes = [];
+
+    /**
+     * @var UniqueConstraintTagValueNode[]
+     */
+    private $uniqueConstraints = [];
+
+    /**
+     * @var mixed[]
+     */
+    private $options = [];
 
     /**
      * @param mixed[] $options

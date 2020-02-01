@@ -31,9 +31,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractPHPUnitRector
 {
     /**
-     * @var FileInfoParser
+     * @var bool[]
      */
-    private $fileInfoParser;
+    private $containsAssertCallByClassMethod = [];
 
     /**
      * @var ClassMethod[][]|null[][]
@@ -41,9 +41,9 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractP
     private $analyzedMethodsInFileName = [];
 
     /**
-     * @var bool[]
+     * @var FileInfoParser
      */
-    private $containsAssertCallByClassMethod = [];
+    private $fileInfoParser;
 
     /**
      * @var ClassMethodReflectionFactory

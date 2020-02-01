@@ -242,6 +242,17 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         $this->setParameter(Option::PHP_VERSION_FEATURES, $this->getPhpVersion());
     }
 
+    private function configureAutoImportParameter(): void
+    {
+        // for faster tests
+        $autoImportNames = false;
+        if ($this->getAutoImportNames() !== null) {
+            $autoImportNames = $this->getAutoImportNames();
+        }
+
+        $this->parameterProvider->changeParameter(Option::AUTO_IMPORT_NAMES, $autoImportNames);
+    }
+
     private function doTestFileMatchesExpectedContent(
         string $originalFile,
         string $expectedFile,
@@ -262,16 +273,5 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
             $expectedFileContent = FileSystem::read($expectedFile);
             $this->assertStringMatchesFormat($expectedFileContent, $changedContent, 'Caused by ' . $fixtureFile);
         }
-    }
-
-    private function configureAutoImportParameter(): void
-    {
-        // for faster tests
-        $autoImportNames = false;
-        if ($this->getAutoImportNames() !== null) {
-            $autoImportNames = $this->getAutoImportNames();
-        }
-
-        $this->parameterProvider->changeParameter(Option::AUTO_IMPORT_NAMES, $autoImportNames);
     }
 }

@@ -142,6 +142,13 @@ final class Configuration
         return $this->outputFile;
     }
 
+    private function canShowProgressBar(InputInterface $input): bool
+    {
+        $noProgressBar = (bool) $input->getOption(Option::OPTION_NO_PROGRESS_BAR);
+
+        return ! $noProgressBar && $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== JsonOutputFormatter::NAME;
+    }
+
     private function setOnlyRector(?string $rector): void
     {
         if ($rector) {
@@ -150,13 +157,6 @@ final class Configuration
         } else {
             $this->onlyRector = null;
         }
-    }
-
-    private function canShowProgressBar(InputInterface $input): bool
-    {
-        $noProgressBar = (bool) $input->getOption(Option::OPTION_NO_PROGRESS_BAR);
-
-        return ! $noProgressBar && $input->getOption(Option::OPTION_OUTPUT_FORMAT) !== JsonOutputFormatter::NAME;
     }
 
     private function ensureIsValidRectorClass(string $rector): void

@@ -31,14 +31,14 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode
     private $path;
 
     /**
-     * @var string[]
-     */
-    private $methods = [];
-
-    /**
      * @var bool
      */
     private $isPathExplicit = true;
+
+    /**
+     * @var string[]
+     */
+    private $methods = [];
 
     /**
      * @var mixed[]

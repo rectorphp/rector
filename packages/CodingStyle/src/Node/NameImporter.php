@@ -22,6 +22,11 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class NameImporter
 {
     /**
+     * @var string[]
+     */
+    private $aliasedUses = [];
+
+    /**
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
@@ -30,11 +35,6 @@ final class NameImporter
      * @var AliasUsesResolver
      */
     private $aliasUsesResolver;
-
-    /**
-     * @var string[]
-     */
-    private $aliasedUses = [];
 
     /**
      * @var UseAddingCommander
@@ -88,29 +88,36 @@ final class NameImporter
         return $this->importNameAndCollectNewUseStatement($name, $staticType);
     }
 
-    /**
-     * Skip:
-     * - namespace name
-     * - use import name
-     */
-    private function isNamespaceOrUseImportName(Name $name): bool
+    private function shouldSkipName(Name $name): bool
     {
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Namespace_) {
+        if ($name->getAttribute('virtual_node')) {
             return true;
         }
 
-        return $parentNode instanceof UseUse;
-    }
-
-    private function isFunctionOrConstantImportWithSingleName(Name $name): bool
-    {
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof ConstFetch && ! $parentNode instanceof FuncCall) {
-            return false;
+        // is scalar name?
+        if (in_array($name->toString(), ['true', 'false', 'bool'], true)) {
+            return true;
         }
 
-        return count($name->parts) === 1;
+        if ($this->isNamespaceOrUseImportName($name)) {
+            return true;
+        }
+
+        if ($this->isFunctionOrConstantImportWithSingleName($name)) {
+            return true;
+        }
+
+        // Importing root namespace classes (like \DateTime) is optional
+        $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES_PARAMETER);
+
+        if (! $importShortClasses) {
+            $name = $this->nameResolver->getName($name);
+            if ($name !== null && substr_count($name, '\\') === 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function importNameAndCollectNewUseStatement(
@@ -142,6 +149,31 @@ final class NameImporter
         return $fullyQualifiedObjectType->getShortNameNode();
     }
 
+    /**
+     * Skip:
+     * - namespace name
+     * - use import name
+     */
+    private function isNamespaceOrUseImportName(Name $name): bool
+    {
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Namespace_) {
+            return true;
+        }
+
+        return $parentNode instanceof UseUse;
+    }
+
+    private function isFunctionOrConstantImportWithSingleName(Name $name): bool
+    {
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof ConstFetch && ! $parentNode instanceof FuncCall) {
+            return false;
+        }
+
+        return count($name->parts) === 1;
+    }
+
     private function addUseImport(Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
         if ($this->useAddingCommander->hasImport($name, $fullyQualifiedObjectType)) {
@@ -154,37 +186,5 @@ final class NameImporter
         } else {
             $this->useAddingCommander->addUseImport($name, $fullyQualifiedObjectType);
         }
-    }
-
-    private function shouldSkipName(Name $name): bool
-    {
-        if ($name->getAttribute('virtual_node')) {
-            return true;
-        }
-
-        // is scalar name?
-        if (in_array($name->toString(), ['true', 'false', 'bool'], true)) {
-            return true;
-        }
-
-        if ($this->isNamespaceOrUseImportName($name)) {
-            return true;
-        }
-
-        if ($this->isFunctionOrConstantImportWithSingleName($name)) {
-            return true;
-        }
-
-        // Importing root namespace classes (like \DateTime) is optional
-        $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES_PARAMETER);
-
-        if (! $importShortClasses) {
-            $name = $this->nameResolver->getName($name);
-            if ($name !== null && substr_count($name, '\\') === 0) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

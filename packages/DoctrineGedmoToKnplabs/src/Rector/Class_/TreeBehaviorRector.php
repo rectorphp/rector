@@ -176,21 +176,6 @@ PHP
         return $node;
     }
 
-    private function removeClassMethodsForProperties(Class_ $class, array $removedPropertyNames): void
-    {
-        foreach ($removedPropertyNames as $removedPropertyName) {
-            foreach ($class->getMethods() as $method) {
-                if ($this->isName($method, 'get' . ucfirst($removedPropertyName))) {
-                    $this->removeNode($method);
-                }
-
-                if ($this->isName($method, 'set' . ucfirst($removedPropertyName))) {
-                    $this->removeNode($method);
-                }
-            }
-        }
-    }
-
     private function shouldRemoveProperty(PhpDocInfo $phpDocInfo): bool
     {
         if ($phpDocInfo->hasByType(TreeLeftTagValueNode::class)) {
@@ -209,5 +194,20 @@ PHP
             return true;
         }
         return $phpDocInfo->hasByType(TreeLevelTagValueNode::class);
+    }
+
+    private function removeClassMethodsForProperties(Class_ $class, array $removedPropertyNames): void
+    {
+        foreach ($removedPropertyNames as $removedPropertyName) {
+            foreach ($class->getMethods() as $method) {
+                if ($this->isName($method, 'get' . ucfirst($removedPropertyName))) {
+                    $this->removeNode($method);
+                }
+
+                if ($this->isName($method, 'set' . ucfirst($removedPropertyName))) {
+                    $this->removeNode($method);
+                }
+            }
+        }
     }
 }

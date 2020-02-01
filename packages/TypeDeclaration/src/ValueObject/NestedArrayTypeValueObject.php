@@ -9,14 +9,14 @@ use PHPStan\Type\Type;
 final class NestedArrayTypeValueObject
 {
     /**
-     * @var Type
-     */
-    private $type;
-
-    /**
      * @var int
      */
     private $arrayNestingLevel;
+
+    /**
+     * @var Type
+     */
+    private $type;
 
     public function __construct(Type $type, int $arrayNestingLevel)
     {

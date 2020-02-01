@@ -17,14 +17,14 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 final class ShowCommand extends AbstractCommand
 {
     /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    /**
      * @var RectorInterface[]
      */
     private $rectors = [];
+
+    /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
 
     /**
      * @var TypeAnalyzer

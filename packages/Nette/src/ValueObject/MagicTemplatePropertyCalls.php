@@ -10,9 +10,9 @@ use PhpParser\Node\Expr;
 final class MagicTemplatePropertyCalls
 {
     /**
-     * @var Expr|null
+     * @var Node[]
      */
-    private $templateFileExpr;
+    private $nodesToRemove = [];
 
     /**
      * @var Node[]
@@ -20,9 +20,9 @@ final class MagicTemplatePropertyCalls
     private $templateVariables = [];
 
     /**
-     * @var Node[]
+     * @var Expr|null
      */
-    private $nodesToRemove = [];
+    private $templateFileExpr;
 
     /**
      * @param Node[] $templateVariables

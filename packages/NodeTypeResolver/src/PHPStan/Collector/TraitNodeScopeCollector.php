@@ -12,14 +12,14 @@ use Rector\PhpParser\Printer\BetterStandardPrinter;
 final class TraitNodeScopeCollector
 {
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var Scope[]
      */
     private $scopeByTraitNodeHash = [];
+
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
 
     public function __construct(BetterStandardPrinter $betterStandardPrinter)
     {

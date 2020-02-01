@@ -104,6 +104,23 @@ final class TypeFactory
         return array_values($types);
     }
 
+    /**
+     * @param Type[] $types
+     * @return MixedType|UnionType
+     */
+    private function createUnionOrSingleType(array $types): Type
+    {
+        if (count($types) === 0) {
+            return new MixedType();
+        }
+
+        if (count($types) === 1) {
+            return $types[0];
+        }
+
+        return TypeFactoryStaticHelper::createUnionObjectType($types);
+    }
+
     private function removeValueFromConstantType(Type $type): Type
     {
         // remove values from constant types
@@ -124,22 +141,5 @@ final class TypeFactory
         }
 
         return $type;
-    }
-
-    /**
-     * @param Type[] $types
-     * @return MixedType|UnionType
-     */
-    private function createUnionOrSingleType(array $types): Type
-    {
-        if (count($types) === 0) {
-            return new MixedType();
-        }
-
-        if (count($types) === 1) {
-            return $types[0];
-        }
-
-        return TypeFactoryStaticHelper::createUnionObjectType($types);
     }
 }

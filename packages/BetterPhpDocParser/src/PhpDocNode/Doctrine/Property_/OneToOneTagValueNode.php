@@ -32,11 +32,6 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
     private $inversedBy;
 
     /**
-     * @var mixed[]|null
-     */
-    private $cascade;
-
-    /**
      * @var string|null
      */
     private $fetch;
@@ -50,6 +45,11 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
      * @var string|null
      */
     private $fqnTargetEntity;
+
+    /**
+     * @var mixed[]|null
+     */
+    private $cascade;
 
     /**
      * @param mixed[]|null $cascade

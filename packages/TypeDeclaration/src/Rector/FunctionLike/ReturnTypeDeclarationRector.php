@@ -45,14 +45,14 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
     private const DO_NOT_CHANGE = 'do_not_change';
 
     /**
-     * @var ReturnTypeInferer
-     */
-    private $returnTypeInferer;
-
-    /**
      * @var bool
      */
     private $overrideExistingReturnTypes = true;
+
+    /**
+     * @var ReturnTypeInferer
+     */
+    private $returnTypeInferer;
 
     public function __construct(ReturnTypeInferer $returnTypeInferer, bool $overrideExistingReturnTypes = true)
     {
@@ -228,6 +228,48 @@ PHP
         return false;
     }
 
+    private function isVoidDueToThrow(Node $node, $inferredReturnNode): bool
+    {
+        if (! $inferredReturnNode instanceof Identifier) {
+            return false;
+        }
+
+        if ($inferredReturnNode->name !== 'void') {
+            return false;
+        }
+
+        return (bool) $this->betterNodeFinder->findFirstInstanceOf($node->stmts, Throw_::class);
+    }
+
+    /**
+     * E.g. current E, new type A, E extends A → true
+     */
+    private function isCurrentObjectTypeSubType(Type $currentType, Type $inferedType): bool
+    {
+        if (! $currentType instanceof ObjectType) {
+            return false;
+        }
+
+        if (! $inferedType instanceof ObjectType) {
+            return false;
+        }
+
+        return is_a($currentType->getClassName(), $inferedType->getClassName(), true);
+    }
+
+    private function isNullableTypeSubType(Type $currentType, Type $inferedType): bool
+    {
+        if (! $currentType instanceof UnionType) {
+            return false;
+        }
+
+        if (! $inferedType instanceof UnionType) {
+            return false;
+        }
+
+        return $inferedType->isSubTypeOf($currentType)->yes();
+    }
+
     /**
      * Add typehint to all children class methods
      */
@@ -318,47 +360,5 @@ PHP
         }
 
         return false;
-    }
-
-    /**
-     * E.g. current E, new type A, E extends A → true
-     */
-    private function isCurrentObjectTypeSubType(Type $currentType, Type $inferedType): bool
-    {
-        if (! $currentType instanceof ObjectType) {
-            return false;
-        }
-
-        if (! $inferedType instanceof ObjectType) {
-            return false;
-        }
-
-        return is_a($currentType->getClassName(), $inferedType->getClassName(), true);
-    }
-
-    private function isNullableTypeSubType(Type $currentType, Type $inferedType): bool
-    {
-        if (! $currentType instanceof UnionType) {
-            return false;
-        }
-
-        if (! $inferedType instanceof UnionType) {
-            return false;
-        }
-
-        return $inferedType->isSubTypeOf($currentType)->yes();
-    }
-
-    private function isVoidDueToThrow(Node $node, $inferredReturnNode): bool
-    {
-        if (! $inferredReturnNode instanceof Identifier) {
-            return false;
-        }
-
-        if ($inferredReturnNode->name !== 'void') {
-            return false;
-        }
-
-        return (bool) $this->betterNodeFinder->findFirstInstanceOf($node->stmts, Throw_::class);
     }
 }

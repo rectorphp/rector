@@ -80,62 +80,6 @@ final class ScannedErrorToRectorResolver
         return $config;
     }
 
-    private function createScannedMethod(string $classMethodWithArgumentsDescription): ClassMethodWithArguments
-    {
-        $match = Strings::match($classMethodWithArgumentsDescription, self::CLASS_METHOD_ARGUMENTS_PATTERN);
-        if (! $match) {
-            throw new NotImplementedException();
-        }
-
-        $arguments = $this->createArguments((string) $match['arguments']);
-
-        return new ClassMethodWithArguments($match['class'], $match['method'], $arguments, $match['return_type'] ?? '');
-    }
-
-    /**
-     * @return Argument[]
-     */
-    private function createArguments(string $argumentsDescription): array
-    {
-        // 0 arguments
-        if ($argumentsDescription === '') {
-            return [];
-        }
-
-        $arguments = [];
-        $argumentDescriptions = Strings::split($argumentsDescription, '#\b,\b#');
-        foreach ($argumentDescriptions as $position => $argumentDescription) {
-            $match = Strings::match((string) $argumentDescription, self::ARGUMENTS_PATTERN);
-            if (! $match) {
-                throw new NotImplementedException();
-            }
-
-            $arguments[] = new Argument($match['name'], $position, $match['type'] ?? '');
-        }
-
-        return $arguments;
-    }
-
-    private function collectClassMethodParamDifferences(
-        ClassMethodWithArguments $scannedMethod,
-        ClassMethodWithArguments $shouldBeMethod
-    ): void {
-        foreach ($scannedMethod->getArguments() as $scannedMethodArgument) {
-            $shouldBeArgument = $shouldBeMethod->getArgumentByPosition($scannedMethodArgument->getPosition());
-
-            if ($shouldBeArgument === null) {
-                throw new NotImplementedException();
-            }
-
-            // types are identical, nothing to change
-            if ($scannedMethodArgument->getType() === $shouldBeArgument->getType()) {
-                continue;
-            }
-
-            $this->paramChanges[$scannedMethod->getClass()][$scannedMethod->getMethod()][$scannedMethodArgument->getPosition()] = $shouldBeArgument->getType();
-        }
-    }
-
     private function processIncompatibleParamTypeMatch(array $match): void
     {
         if (! Strings::contains($match['current'], '::')) {
@@ -162,6 +106,38 @@ final class ScannedErrorToRectorResolver
         $this->collectClassMethodReturnDifferences($scannedMethod, $shouldBeMethod);
     }
 
+    private function createScannedMethod(string $classMethodWithArgumentsDescription): ClassMethodWithArguments
+    {
+        $match = Strings::match($classMethodWithArgumentsDescription, self::CLASS_METHOD_ARGUMENTS_PATTERN);
+        if (! $match) {
+            throw new NotImplementedException();
+        }
+
+        $arguments = $this->createArguments((string) $match['arguments']);
+
+        return new ClassMethodWithArguments($match['class'], $match['method'], $arguments, $match['return_type'] ?? '');
+    }
+
+    private function collectClassMethodParamDifferences(
+        ClassMethodWithArguments $scannedMethod,
+        ClassMethodWithArguments $shouldBeMethod
+    ): void {
+        foreach ($scannedMethod->getArguments() as $scannedMethodArgument) {
+            $shouldBeArgument = $shouldBeMethod->getArgumentByPosition($scannedMethodArgument->getPosition());
+
+            if ($shouldBeArgument === null) {
+                throw new NotImplementedException();
+            }
+
+            // types are identical, nothing to change
+            if ($scannedMethodArgument->getType() === $shouldBeArgument->getType()) {
+                continue;
+            }
+
+            $this->paramChanges[$scannedMethod->getClass()][$scannedMethod->getMethod()][$scannedMethodArgument->getPosition()] = $shouldBeArgument->getType();
+        }
+    }
+
     private function collectClassMethodReturnDifferences(
         ClassMethodWithArguments $scannedMethod,
         ClassMethodWithArguments $shouldBeMethod
@@ -171,5 +147,29 @@ final class ScannedErrorToRectorResolver
         }
 
         $this->returnChanges[$scannedMethod->getClass()][$scannedMethod->getMethod()] = $shouldBeMethod->getReturnType();
+    }
+
+    /**
+     * @return Argument[]
+     */
+    private function createArguments(string $argumentsDescription): array
+    {
+        // 0 arguments
+        if ($argumentsDescription === '') {
+            return [];
+        }
+
+        $arguments = [];
+        $argumentDescriptions = Strings::split($argumentsDescription, '#\b,\b#');
+        foreach ($argumentDescriptions as $position => $argumentDescription) {
+            $match = Strings::match((string) $argumentDescription, self::ARGUMENTS_PATTERN);
+            if (! $match) {
+                throw new NotImplementedException();
+            }
+
+            $arguments[] = new Argument($match['name'], $position, $match['type'] ?? '');
+        }
+
+        return $arguments;
     }
 }

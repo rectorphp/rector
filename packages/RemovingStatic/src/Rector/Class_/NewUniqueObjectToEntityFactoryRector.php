@@ -34,14 +34,19 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector
     private $matchedObjectTypes = [];
 
     /**
-     * @var PropertyNaming
+     * @var string[]
      */
-    private $propertyNaming;
+    private $typesToServices = [];
 
     /**
      * @var string[]
      */
-    private $typesToServices = [];
+    private $classesUsingTypes = [];
+
+    /**
+     * @var PropertyNaming
+     */
+    private $propertyNaming;
 
     /**
      * @var ParsedNodesByType
@@ -52,11 +57,6 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector
      * @var StaticTypesInClassResolver
      */
     private $staticTypesInClassResolver;
-
-    /**
-     * @var string[]
-     */
-    private $classesUsingTypes = [];
 
     /**
      * @var PrivatesAccessor

@@ -175,6 +175,25 @@ PHP
         }
     }
 
+    private function isIfWithSingleReturnExpr(If_ $if): bool
+    {
+        if (count($if->stmts) !== 1) {
+            return false;
+        }
+
+        if (count($if->elseifs) > 0) {
+            return false;
+        }
+
+        $ifInnerNode = $if->stmts[0];
+        if (! $ifInnerNode instanceof Return_) {
+            return false;
+        }
+
+        // return must have value
+        return $ifInnerNode->expr !== null;
+    }
+
     private function boolCastOrNullCompareIfNeeded(Expr $expr): Expr
     {
         if ($this->isNullableType($expr)) {
@@ -195,25 +214,6 @@ PHP
         }
 
         return new Bool_($expr);
-    }
-
-    private function isIfWithSingleReturnExpr(If_ $if): bool
-    {
-        if (count($if->stmts) !== 1) {
-            return false;
-        }
-
-        if (count($if->elseifs) > 0) {
-            return false;
-        }
-
-        $ifInnerNode = $if->stmts[0];
-        if (! $ifInnerNode instanceof Return_) {
-            return false;
-        }
-
-        // return must have value
-        return $ifInnerNode->expr !== null;
     }
 
     /**
