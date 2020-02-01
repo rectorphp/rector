@@ -15,6 +15,7 @@ use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
+use ReflectionClass;
 
 final class VendorLockResolver
 {
@@ -207,6 +208,65 @@ final class VendorLockResolver
 
                 // if not, look for it's parent parent - @todo recursion
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks for:
+     * - interface required methods
+     * - abstract classes reqired method
+     *
+     * Prevent:
+     * - removing class methods, that breaks the code
+     */
+    public function isClassMethodRemovalVendorLocked(ClassMethod $classMethod): bool
+    {
+        $classMethodName = $this->nameResolver->getName($classMethod);
+
+        /** @var Class_|null $class */
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if ($class === null) {
+            return false;
+        }
+
+        // required by interface?
+        foreach ($class->implements as $implement) {
+            $implementedInterfaceName = $this->nameResolver->getName($implement);
+
+            if (interface_exists($implementedInterfaceName)) {
+                $interfaceMethods = get_class_methods($implementedInterfaceName);
+                if (in_array($classMethodName, $interfaceMethods, true)) {
+                    return true;
+                }
+            }
+        }
+
+        if ($class->extends === null) {
+            return false;
+        }
+
+        /** @var string $className */
+        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+
+        $classParents = class_parents($className);
+        foreach ($classParents as $classParent) {
+            if (! class_exists($classParent)) {
+                continue;
+            }
+
+            $parentClassReflection = new ReflectionClass($classParent);
+            if (! $parentClassReflection->hasMethod($classMethodName)) {
+                continue;
+            }
+
+            $methodReflection = $parentClassReflection->getMethod($classMethodName);
+            if (! $methodReflection->isAbstract()) {
+                continue;
+            }
+
+            return true;
         }
 
         return false;

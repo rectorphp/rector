@@ -87,10 +87,22 @@ trait ComplexRemovalTrait
         }
     }
 
-    protected function removePropertyAndUsages(PropertyProperty $propertyProperty): void
-    {
+    /**
+     * @param string[] $classMethodNamesToSkip
+     */
+    protected function removePropertyAndUsages(
+        PropertyProperty $propertyProperty,
+        array $classMethodNamesToSkip = []
+    ): void {
+        $shouldKeepProperty = false;
+
         $propertyFetches = $this->propertyManipulator->getAllPropertyFetch($propertyProperty);
         foreach ($propertyFetches as $propertyFetch) {
+            if ($this->shouldSkipPropertyForClassMethod($propertyFetch, $classMethodNamesToSkip)) {
+                $shouldKeepProperty = true;
+                continue;
+            }
+
             $assign = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
 
             while ($assign !== null && ! $assign instanceof Assign) {
@@ -102,6 +114,10 @@ trait ComplexRemovalTrait
             }
 
             $this->removeAssignNode($assign);
+        }
+
+        if ($shouldKeepProperty) {
+            return;
         }
 
         /** @var Property $property */
@@ -222,5 +238,25 @@ trait ComplexRemovalTrait
             $this->addLivingCodeBeforeNode($arg->value, $currentStatement);
         }
         $this->removeNode($node);
+    }
+
+    /**
+     * @param StaticPropertyFetch|PropertyFetch $expr
+     * @param string[] $classMethodNamesToSkip
+     */
+    private function shouldSkipPropertyForClassMethod(Expr $expr, array $classMethodNamesToSkip): bool
+    {
+        /** @var ClassMethod|null $classMethodNode */
+        $classMethodNode = $expr->getAttribute(AttributeKey::METHOD_NODE);
+        if ($classMethodNode === null) {
+            return false;
+        }
+
+        $classMethodName = $this->getName($classMethodNode);
+        if ($classMethodName === null) {
+            return false;
+        }
+
+        return in_array($classMethodName, $classMethodNamesToSkip, true);
     }
 }
