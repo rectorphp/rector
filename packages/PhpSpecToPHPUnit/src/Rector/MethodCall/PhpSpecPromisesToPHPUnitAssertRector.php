@@ -38,9 +38,14 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     private $testedClass;
 
     /**
-     * @var PropertyFetch
+     * @var bool
      */
-    private $testedObjectPropertyFetch;
+    private $isBoolAssert = false;
+
+    /**
+     * @var bool
+     */
+    private $isPrepared = false;
 
     /**
      * @see https://github.com/phpspec/phpspec/blob/master/src/PhpSpec/Wrapper/Subject.php
@@ -86,9 +91,14 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     ];
 
     /**
-     * @var bool
+     * @var string[]
      */
-    private $isBoolAssert = false;
+    private $matchersKeys = [];
+
+    /**
+     * @var PropertyFetch
+     */
+    private $testedObjectPropertyFetch;
 
     /**
      * @var PhpSpecRenaming
@@ -96,19 +106,9 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     private $phpSpecRenaming;
 
     /**
-     * @var string[]
-     */
-    private $matchersKeys = [];
-
-    /**
      * @var MatchersManipulator
      */
     private $matchersManipulator;
-
-    /**
-     * @var bool
-     */
-    private $isPrepared = false;
 
     public function __construct(PhpSpecRenaming $phpSpecRenaming, MatchersManipulator $matchersManipulator)
     {

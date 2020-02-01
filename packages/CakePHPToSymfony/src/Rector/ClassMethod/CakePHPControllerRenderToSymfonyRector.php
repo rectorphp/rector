@@ -109,6 +109,34 @@ PHP
         return $node;
     }
 
+    private function hasRenderMethodCall(ClassMethod $classMethod): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($classMethod, function (Node $node) {
+            return $this->isThisRenderMethodCall($node);
+        });
+    }
+
+    private function completeImplicitRenderMethodCall(ClassMethod $classMethod): void
+    {
+        $methodCall = $this->createThisRenderMethodCall($classMethod);
+        $return = new Return_($methodCall);
+
+        $classMethod->stmts[] = $return;
+    }
+
+    private function isThisRenderMethodCall(Node $node): bool
+    {
+        if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        if (! $this->isName($node->var, 'this')) {
+            return false;
+        }
+
+        return $this->isName($node->name, 'render');
+    }
+
     /**
      * Creates "$this->render('...', [...])";
      */
@@ -183,33 +211,5 @@ PHP
         }
 
         return $this->isName($node, 'compact');
-    }
-
-    private function hasRenderMethodCall(ClassMethod $classMethod): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst($classMethod, function (Node $node) {
-            return $this->isThisRenderMethodCall($node);
-        });
-    }
-
-    private function completeImplicitRenderMethodCall(ClassMethod $classMethod): void
-    {
-        $methodCall = $this->createThisRenderMethodCall($classMethod);
-        $return = new Return_($methodCall);
-
-        $classMethod->stmts[] = $return;
-    }
-
-    private function isThisRenderMethodCall(Node $node): bool
-    {
-        if (! $node instanceof MethodCall) {
-            return false;
-        }
-
-        if (! $this->isName($node->var, 'this')) {
-            return false;
-        }
-
-        return $this->isName($node->name, 'render');
     }
 }

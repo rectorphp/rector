@@ -113,6 +113,11 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 final class DumpNodesCommand extends AbstractCommand
 {
     /**
+     * @var DumpNodesOutputFormatterInterface[]
+     */
+    private $outputFormatters = [];
+
+    /**
      * @var BetterStandardPrinter
      */
     private $betterStandardPrinter;
@@ -126,11 +131,6 @@ final class DumpNodesCommand extends AbstractCommand
      * @var NodeInfoResult
      */
     private $nodeInfoResult;
-
-    /**
-     * @var DumpNodesOutputFormatterInterface[]
-     */
-    private $outputFormatters = [];
 
     /**
      * @param DumpNodesOutputFormatterInterface[] $outputFormatters

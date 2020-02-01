@@ -93,6 +93,15 @@ PHP
         return null;
     }
 
+    private function isAppUses($staticCall): bool
+    {
+        if (! $this->isName($staticCall->class, 'App')) {
+            return false;
+        }
+
+        return $this->isName($staticCall->name, 'uses');
+    }
+
     private function createFullyQualifiedNameFromAppUsesStaticCall(StaticCall $staticCall): string
     {
         /** @var string $shortClassName */
@@ -112,14 +121,5 @@ PHP
         $useUse = new UseUse(new Name($fullyQualifiedName));
 
         return new Use_([$useUse]);
-    }
-
-    private function isAppUses($staticCall): bool
-    {
-        if (! $this->isName($staticCall->class, 'App')) {
-            return false;
-        }
-
-        return $this->isName($staticCall->name, 'uses');
     }
 }

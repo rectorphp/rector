@@ -53,6 +53,19 @@ final class AttributeAwareNodeFactoryGenerator extends AbstractAttributeAwareNod
         $this->reportGeneratedAttributeAwareNode($phpDocParserNodeClass, $targetFilePath);
     }
 
+    private function resolveTargetFilePath(string $phpDocParserNodeClass): string
+    {
+        $shortClassName = $this->attributeClassNaming->createAttributeAwareFactoryShortClassName(
+            $phpDocParserNodeClass
+        );
+
+        if (Strings::contains($phpDocParserNodeClass, '\\Type\\')) {
+            return __DIR__ . '/../../../../packages/AttributeAwarePhpDoc/src/AttributeAwareNodeFactory/Type/' . $shortClassName . '.php';
+        }
+
+        return __DIR__ . '/../../../../packages/AttributeAwarePhpDoc/src/AttributeAwareNodeFactory/PhpDoc/' . $shortClassName . '.php';
+    }
+
     private function reportGeneratedAttributeAwareNode(string $missingNodeClass, string $filePath): void
     {
         $attributeAwareFullyQualifiedClassName = $this->attributeClassNaming->createAttributeAwareClassName(
@@ -65,18 +78,5 @@ final class AttributeAwareNodeFactoryGenerator extends AbstractAttributeAwareNod
             $attributeAwareFullyQualifiedClassName,
             $filePath
         ));
-    }
-
-    private function resolveTargetFilePath(string $phpDocParserNodeClass): string
-    {
-        $shortClassName = $this->attributeClassNaming->createAttributeAwareFactoryShortClassName(
-            $phpDocParserNodeClass
-        );
-
-        if (Strings::contains($phpDocParserNodeClass, '\\Type\\')) {
-            return __DIR__ . '/../../../../packages/AttributeAwarePhpDoc/src/AttributeAwareNodeFactory/Type/' . $shortClassName . '.php';
-        }
-
-        return __DIR__ . '/../../../../packages/AttributeAwarePhpDoc/src/AttributeAwareNodeFactory/PhpDoc/' . $shortClassName . '.php';
     }
 }

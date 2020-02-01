@@ -32,11 +32,6 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
     private $inversedBy;
 
     /**
-     * @var mixed[]|null
-     */
-    private $cascade;
-
-    /**
      * @var string|null
      */
     private $fetch;
@@ -55,6 +50,11 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
      * @var string|null
      */
     private $fqnTargetEntity;
+
+    /**
+     * @var mixed[]|null
+     */
+    private $cascade;
 
     public function __construct(
         string $targetEntity,

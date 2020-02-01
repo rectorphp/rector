@@ -17,9 +17,9 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     use AttributeTrait;
 
     /**
-     * @var string[]|null
+     * @var bool
      */
-    protected $orderedVisibleItems;
+    protected $hasNewlineAfterOpening = false;
 
     /**
      * @var bool
@@ -27,14 +27,14 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     protected $hasNewlineBeforeClosing = false;
 
     /**
-     * @var bool
-     */
-    protected $hasNewlineAfterOpening = false;
-
-    /**
      * @var string|null
      */
     protected $originalContent;
+
+    /**
+     * @var string[]|null
+     */
+    protected $orderedVisibleItems;
 
     /**
      * @param mixed[] $item

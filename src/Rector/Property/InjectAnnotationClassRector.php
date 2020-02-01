@@ -43,14 +43,14 @@ final class InjectAnnotationClassRector extends AbstractRector
     ];
 
     /**
-     * @var ErrorAndDiffCollector
-     */
-    private $errorAndDiffCollector;
-
-    /**
      * @var string[]
      */
     private $annotationClasses = [];
+
+    /**
+     * @var ErrorAndDiffCollector
+     */
+    private $errorAndDiffCollector;
 
     /**
      * @var ServiceMapProvider
@@ -166,6 +166,20 @@ PHP
         ));
     }
 
+    private function isParameterInject(PhpDocTagValueNode $phpDocTagValueNode): bool
+    {
+        if (! $phpDocTagValueNode instanceof JMSInjectTagValueNode) {
+            return false;
+        }
+
+        $serviceName = $phpDocTagValueNode->getServiceName();
+        if ($serviceName === null) {
+            return false;
+        }
+
+        return (bool) Strings::match($serviceName, '#%(.*?)%#');
+    }
+
     private function resolveType(Node $node, PhpDocTagValueNode $phpDocTagValueNode): Type
     {
         if ($phpDocTagValueNode instanceof JMSInjectTagValueNode) {
@@ -249,19 +263,5 @@ PHP
         }
 
         return new MixedType();
-    }
-
-    private function isParameterInject(PhpDocTagValueNode $phpDocTagValueNode): bool
-    {
-        if (! $phpDocTagValueNode instanceof JMSInjectTagValueNode) {
-            return false;
-        }
-
-        $serviceName = $phpDocTagValueNode->getServiceName();
-        if ($serviceName === null) {
-            return false;
-        }
-
-        return (bool) Strings::match($serviceName, '#%(.*?)%#');
     }
 }

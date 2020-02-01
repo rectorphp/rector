@@ -417,6 +417,26 @@ final class NodeTypeResolver
         return $this->typeFactory->createObjectTypeOrUnionType($allTypes);
     }
 
+    private function isArrayExpr(Node $node): bool
+    {
+        return $node instanceof Expr && $this->arrayTypeAnalyzer->isArrayType($node);
+    }
+
+    private function resolveArrayType(Expr $expr): ArrayType
+    {
+        /** @var Scope|null $scope */
+        $scope = $expr->getAttribute(AttributeKey::SCOPE);
+
+        if ($scope instanceof Scope) {
+            $arrayType = $scope->getType($expr);
+            if ($arrayType instanceof ArrayType) {
+                return $arrayType;
+            }
+        }
+
+        return new ArrayType(new MixedType(), new MixedType());
+    }
+
     private function isAnonymousClass(Node $node): bool
     {
         if (! $node instanceof Class_) {
@@ -426,17 +446,6 @@ final class NodeTypeResolver
         $className = $this->nameResolver->getName($node);
 
         return $className === null || Strings::contains($className, 'AnonymousClass');
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getClassLikeTypesByClassName(string $className): array
-    {
-        $classReflection = $this->reflectionProvider->getClass($className);
-        $classLikeTypes = $this->classReflectionTypesResolver->resolve($classReflection);
-
-        return array_unique($classLikeTypes);
     }
 
     private function getVendorPropertyFetchType(PropertyFetch $propertyFetch): ?Type
@@ -481,23 +490,14 @@ final class NodeTypeResolver
         return $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, new Nop());
     }
 
-    private function isArrayExpr(Node $node): bool
+    /**
+     * @return string[]
+     */
+    private function getClassLikeTypesByClassName(string $className): array
     {
-        return $node instanceof Expr && $this->arrayTypeAnalyzer->isArrayType($node);
-    }
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $classLikeTypes = $this->classReflectionTypesResolver->resolve($classReflection);
 
-    private function resolveArrayType(Expr $expr): ArrayType
-    {
-        /** @var Scope|null $scope */
-        $scope = $expr->getAttribute(AttributeKey::SCOPE);
-
-        if ($scope instanceof Scope) {
-            $arrayType = $scope->getType($expr);
-            if ($arrayType instanceof ArrayType) {
-                return $arrayType;
-            }
-        }
-
-        return new ArrayType(new MixedType(), new MixedType());
+        return array_unique($classLikeTypes);
     }
 }

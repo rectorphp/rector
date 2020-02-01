@@ -24,14 +24,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RequestStaticValidateToInjectRector extends AbstractRector
 {
     /**
-     * @var ClassMethodManipulator
-     */
-    private $classMethodManipulator;
-
-    /**
      * @var string[]
      */
     private $requestTypes = ['Illuminate\Http\Request', 'Request'];
+
+    /**
+     * @var ClassMethodManipulator
+     */
+    private $classMethodManipulator;
 
     public function __construct(ClassMethodManipulator $classMethodManipulator)
     {

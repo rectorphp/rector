@@ -18,14 +18,19 @@ use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 final class TemplatePropertyAssignCollector
 {
     /**
-     * @var Expr|null
-     */
-    private $templateFileExpr;
-
-    /**
      * @var Expr[]
      */
     private $templateVariables = [];
+
+    /**
+     * @var Node[]
+     */
+    private $nodesToRemove = [];
+
+    /**
+     * @var Expr|null
+     */
+    private $templateFileExpr;
 
     /**
      * @var CallableNodeTraverser
@@ -36,11 +41,6 @@ final class TemplatePropertyAssignCollector
      * @var NameResolver
      */
     private $nameResolver;
-
-    /**
-     * @var Node[]
-     */
-    private $nodesToRemove = [];
 
     public function __construct(CallableNodeTraverser $callableNodeTraverser, NameResolver $nameResolver)
     {

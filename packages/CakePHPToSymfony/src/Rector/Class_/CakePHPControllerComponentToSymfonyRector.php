@@ -22,14 +22,14 @@ use Rector\RectorDefinition\RectorDefinition;
 final class CakePHPControllerComponentToSymfonyRector extends AbstractCakePHPRector
 {
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
      * @var string[]
      */
     private $componentsClasses = [];
+
+    /**
+     * @var ClassManipulator
+     */
+    private $classManipulator;
 
     public function __construct(ClassManipulator $classManipulator)
     {
@@ -137,30 +137,6 @@ PHP
     }
 
     /**
-     * @return string[]
-     */
-    private function getComponentClasses(): array
-    {
-        if ($this->componentsClasses !== []) {
-            return $this->componentsClasses;
-        }
-
-        foreach (get_declared_classes() as $declaredClass) {
-            if ($declaredClass === 'Component') {
-                continue;
-            }
-
-            if (! is_a($declaredClass, 'Component', true)) {
-                continue;
-            }
-
-            $this->componentsClasses[] = $declaredClass;
-        }
-
-        return $this->componentsClasses;
-    }
-
-    /**
      * @param string[] $componentNames
      * @return string[]
      */
@@ -182,5 +158,29 @@ PHP
         }
 
         return $matchedComponentClasses;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getComponentClasses(): array
+    {
+        if ($this->componentsClasses !== []) {
+            return $this->componentsClasses;
+        }
+
+        foreach (get_declared_classes() as $declaredClass) {
+            if ($declaredClass === 'Component') {
+                continue;
+            }
+
+            if (! is_a($declaredClass, 'Component', true)) {
+                continue;
+            }
+
+            $this->componentsClasses[] = $declaredClass;
+        }
+
+        return $this->componentsClasses;
     }
 }

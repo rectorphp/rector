@@ -87,25 +87,6 @@ PHP
         return $node;
     }
 
-    /**
-     * @return Arg[]
-     */
-    private function composeNewArgs(FuncCall $funcCall): array
-    {
-        $items = [];
-
-        $args = $funcCall->args;
-        unset($args[0]);
-        unset($args[1]);
-
-        foreach ($args as $idx => $arg) {
-            $newKey = new String_(self::KNOWN_OPTIONS[$idx]);
-            $items[] = new ArrayItem($arg->value, $newKey);
-        }
-
-        return [$funcCall->args[0], $funcCall->args[1], new Arg(new Array_($items))];
-    }
-
     private function shouldSkip(FuncCall $funcCall): bool
     {
         if (! $this->isNames($funcCall, ['setcookie', 'setrawcookie'])) {
@@ -131,5 +112,24 @@ PHP
         }
 
         return false;
+    }
+
+    /**
+     * @return Arg[]
+     */
+    private function composeNewArgs(FuncCall $funcCall): array
+    {
+        $items = [];
+
+        $args = $funcCall->args;
+        unset($args[0]);
+        unset($args[1]);
+
+        foreach ($args as $idx => $arg) {
+            $newKey = new String_(self::KNOWN_OPTIONS[$idx]);
+            $items[] = new ArrayItem($arg->value, $newKey);
+        }
+
+        return [$funcCall->args[0], $funcCall->args[1], new Arg(new Array_($items))];
     }
 }

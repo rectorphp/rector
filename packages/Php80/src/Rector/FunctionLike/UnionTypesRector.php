@@ -85,29 +85,6 @@ PHP
     /**
      * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
      */
-    private function refactorReturnType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo): void
-    {
-        // do not override existing return type
-        if ($functionLike->getReturnType() !== null) {
-            return;
-        }
-
-        $returnType = $phpDocInfo->getReturnType();
-        if (! $returnType instanceof UnionType) {
-            return;
-        }
-
-        $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
-        if (! $phpParserUnionType instanceof PhpParserUnionType) {
-            return;
-        }
-
-        $functionLike->returnType = $phpParserUnionType;
-    }
-
-    /**
-     * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
-     */
     private function refactorParamTypes(FunctionLike $functionLike, PhpDocInfo $phpDocInfo): void
     {
         foreach ($functionLike->params as $param) {
@@ -129,5 +106,28 @@ PHP
 
             $param->type = $phpParserUnionType;
         }
+    }
+
+    /**
+     * @param ClassMethod|Function_|Closure|ArrowFunction $functionLike
+     */
+    private function refactorReturnType(FunctionLike $functionLike, PhpDocInfo $phpDocInfo): void
+    {
+        // do not override existing return type
+        if ($functionLike->getReturnType() !== null) {
+            return;
+        }
+
+        $returnType = $phpDocInfo->getReturnType();
+        if (! $returnType instanceof UnionType) {
+            return;
+        }
+
+        $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
+        if (! $phpParserUnionType instanceof PhpParserUnionType) {
+            return;
+        }
+
+        $functionLike->returnType = $phpParserUnionType;
     }
 }

@@ -120,6 +120,13 @@ PHP
         return $this->shouldSkipForDifferenceParent($assign, $anotherNode);
     }
 
+    private function isSelfReferencing(Assign $assign): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function ($subNode) use ($assign): bool {
+            return $this->areNodesEqual($assign->var, $subNode);
+        });
+    }
+
     private function areInSameClassMethod(Node $node, Node $previousExpression): bool
     {
         return $this->areNodesEqual(
@@ -155,12 +162,5 @@ PHP
     private function findParentControlStructure(Node $node): ?Node
     {
         return $this->betterNodeFinder->findFirstParentInstanceOf($node, self::CONTROL_STRUCTURE_NODES);
-    }
-
-    private function isSelfReferencing(Assign $assign): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function ($subNode) use ($assign): bool {
-            return $this->areNodesEqual($assign->var, $subNode);
-        });
     }
 }

@@ -619,17 +619,6 @@ final class ClassManipulator
         return $stmts;
     }
 
-    private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
-    {
-        foreach ($classMethod->params as $constructorParameter) {
-            if ($this->nameResolver->isName($constructorParameter->var, $name)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * @return string[]
      */
@@ -666,5 +655,16 @@ final class ClassManipulator
         }
 
         return $interfaceNames;
+    }
+
+    private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
+    {
+        foreach ($classMethod->params as $constructorParameter) {
+            if ($this->nameResolver->isName($constructorParameter->var, $name)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

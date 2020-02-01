@@ -26,6 +26,16 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 final class ProcessCommand extends AbstractCommand
 {
     /**
+     * @var string[]
+     */
+    private $fileExtensions = [];
+
+    /**
+     * @var string[]
+     */
+    private $paths = [];
+
+    /**
      * @var FilesFinder
      */
     private $filesFinder;
@@ -56,11 +66,6 @@ final class ProcessCommand extends AbstractCommand
     private $rectorApplication;
 
     /**
-     * @var string[]
-     */
-    private $fileExtensions = [];
-
-    /**
      * @var OutputFormatterCollector
      */
     private $outputFormatterCollector;
@@ -79,11 +84,6 @@ final class ProcessCommand extends AbstractCommand
      * @var StubLoader
      */
     private $stubLoader;
-
-    /**
-     * @var string[]
-     */
-    private $paths = [];
 
     /**
      * @param string[] $paths

@@ -66,6 +66,33 @@ final class TemplateMethodCallManipulator
         });
     }
 
+    private function matchThisRenderMethodCallBareOrInReturn(Node $node): ?MethodCall
+    {
+        if ($node instanceof Return_) {
+            $nodeExpr = $node->expr;
+            if ($nodeExpr === null) {
+                return null;
+            }
+
+            if (! $this->isThisRenderMethodCall($nodeExpr)) {
+                return null;
+            }
+
+            /** @var MethodCall $nodeExpr */
+            return $nodeExpr;
+        }
+
+        if ($node instanceof Expression) {
+            if (! $this->isThisRenderMethodCall($node->expr)) {
+                return null;
+            }
+
+            return $node->expr;
+        }
+
+        return null;
+    }
+
     private function refactorRenderTemplateName(Node $node, string $controllerNamePart): ?Return_
     {
         /** @var MethodCall $node */
@@ -99,32 +126,5 @@ final class TemplateMethodCallManipulator
         }
 
         return $this->nameResolver->isName($node->name, 'render');
-    }
-
-    private function matchThisRenderMethodCallBareOrInReturn(Node $node): ?MethodCall
-    {
-        if ($node instanceof Return_) {
-            $nodeExpr = $node->expr;
-            if ($nodeExpr === null) {
-                return null;
-            }
-
-            if (! $this->isThisRenderMethodCall($nodeExpr)) {
-                return null;
-            }
-
-            /** @var MethodCall $nodeExpr */
-            return $nodeExpr;
-        }
-
-        if ($node instanceof Expression) {
-            if (! $this->isThisRenderMethodCall($node->expr)) {
-                return null;
-            }
-
-            return $node->expr;
-        }
-
-        return null;
     }
 }

@@ -38,6 +38,11 @@ final class CreateRectorCommand extends Command
     private $generatedFiles = [];
 
     /**
+     * @var mixed[]
+     */
+    private $rectorRecipe = [];
+
+    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
@@ -51,11 +56,6 @@ final class CreateRectorCommand extends Command
      * @var TemplateVariablesFactory
      */
     private $templateVariablesFactory;
-
-    /**
-     * @var mixed[]
-     */
-    private $rectorRecipe = [];
 
     /**
      * @var ComposerPackageAutoloadUpdater
@@ -183,6 +183,17 @@ final class CreateRectorCommand extends Command
         return $this->applyVariables($smartFileInfo->getContents(), $templateVariables);
     }
 
+    private function addOneMoreRectorNesting(string $content): string
+    {
+        $content = Strings::replace($content, '#Rector\\\\Rector\\\\#ms', 'Rector\\');
+
+        return Strings::replace(
+            $content,
+            '#use Rector\\\\AbstractRector;#',
+            'use Rector\\Rector\\AbstractRector;'
+        );
+    }
+
     /**
      * @param string[] $templateVariables
      */
@@ -234,17 +245,6 @@ final class CreateRectorCommand extends Command
     private function applyVariables(string $content, array $variables): string
     {
         return str_replace(array_keys($variables), array_values($variables), $content);
-    }
-
-    private function addOneMoreRectorNesting(string $content): string
-    {
-        $content = Strings::replace($content, '#Rector\\\\Rector\\\\#ms', 'Rector\\');
-
-        return Strings::replace(
-            $content,
-            '#use Rector\\\\AbstractRector;#',
-            'use Rector\\Rector\\AbstractRector;'
-        );
     }
 
     private function indentFourSpaces(string $string): string

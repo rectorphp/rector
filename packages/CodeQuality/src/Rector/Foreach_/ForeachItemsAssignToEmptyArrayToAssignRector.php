@@ -135,21 +135,6 @@ PHP
         });
     }
 
-    private function findPreviousNodeUsageInForeach(Node $node, Expr $expr): ?Node
-    {
-        return $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use ($expr) {
-            if ($node === $expr) {
-                return false;
-            }
-
-            if (! $this->areNodesEqual($node, $expr)) {
-                return false;
-            }
-
-            return $node->getAttribute(AttributeKey::PARENT_NODE) instanceof Foreach_;
-        });
-    }
-
     private function shouldSkipAsPartOfNestedForeach(Foreach_ $foreach): bool
     {
         $previousForeachVariableUsage = $this->findPreviousNodeUsageInForeach($foreach, $foreach->expr);
@@ -163,5 +148,20 @@ PHP
         );
 
         return $this->areNodesEqual($previousForeachVariableUsageParentNode->valueVar, $foreach->expr);
+    }
+
+    private function findPreviousNodeUsageInForeach(Node $node, Expr $expr): ?Node
+    {
+        return $this->betterNodeFinder->findFirstPrevious($node, function (Node $node) use ($expr) {
+            if ($node === $expr) {
+                return false;
+            }
+
+            if (! $this->areNodesEqual($node, $expr)) {
+                return false;
+            }
+
+            return $node->getAttribute(AttributeKey::PARENT_NODE) instanceof Foreach_;
+        });
     }
 }

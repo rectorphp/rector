@@ -161,6 +161,11 @@ PHP
         return $this->isMixedOfSpecificOverride($arrayType, $classMethod);
     }
 
+    private function shouldSkipUnionType(UnionType $unionType): bool
+    {
+        return count($unionType->getTypes()) > self::MAX_NUMBER_OF_TYPES;
+    }
+
     private function isNewAndCurrentTypeBothCallable(ArrayType $newArrayType, ClassMethod $classMethod): bool
     {
         $currentPhpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
@@ -194,10 +199,5 @@ PHP
         $currentReturnType = $currentPhpDocInfo->getReturnType();
 
         return $currentReturnType instanceof ArrayType;
-    }
-
-    private function shouldSkipUnionType(UnionType $unionType): bool
-    {
-        return count($unionType->getTypes()) > self::MAX_NUMBER_OF_TYPES;
     }
 }

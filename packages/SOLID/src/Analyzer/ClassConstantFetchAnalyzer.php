@@ -17,6 +17,11 @@ use Rector\Testing\PHPUnit\PHPUnitEnvironment;
 final class ClassConstantFetchAnalyzer
 {
     /**
+     * @var string[][][]
+     */
+    private $classConstantFetchByClassAndName = [];
+
+    /**
      * @var ParsedNodesByType
      */
     private $parsedNodesByType;
@@ -25,11 +30,6 @@ final class ClassConstantFetchAnalyzer
      * @var NameResolver
      */
     private $nameResolver;
-
-    /**
-     * @var string[][][]
-     */
-    private $classConstantFetchByClassAndName = [];
 
     /**
      * @var NodeTypeResolver

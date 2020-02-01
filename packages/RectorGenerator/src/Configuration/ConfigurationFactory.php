@@ -92,6 +92,15 @@ final class ConfigurationFactory
         return (string) Strings::after($fqnNodeTypes[0], '\\', -1);
     }
 
+    private function normalizeCode(string $code): string
+    {
+        if (Strings::startsWith($code, '<?php')) {
+            $code = ltrim($code, '<?php');
+        }
+
+        return trim($code);
+    }
+
     private function resolveSetConfig(string $set): ?string
     {
         if ($set === '') {
@@ -121,6 +130,11 @@ final class ConfigurationFactory
         return $foundSetConfigFileInfo->getRealPath();
     }
 
+    private function detectPhpSnippet(string $code): bool
+    {
+        return Strings::startsWith($code, '<?php');
+    }
+
     private function isNodeClassMatch(string $nodeClass, string $nodeType): bool
     {
         // skip "magic", they're used less than rarely
@@ -134,19 +148,5 @@ final class ConfigurationFactory
 
         // in case of forgotten _
         return Strings::endsWith($nodeClass, '\\' . $nodeType . '_');
-    }
-
-    private function normalizeCode(string $code): string
-    {
-        if (Strings::startsWith($code, '<?php')) {
-            $code = ltrim($code, '<?php');
-        }
-
-        return trim($code);
-    }
-
-    private function detectPhpSnippet(string $code): bool
-    {
-        return Strings::startsWith($code, '<?php');
     }
 }

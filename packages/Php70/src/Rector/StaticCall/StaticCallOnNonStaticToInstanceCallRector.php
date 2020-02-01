@@ -145,6 +145,18 @@ PHP
         return null;
     }
 
+    private function resolveStaticCallClassName(Node $node): ?string
+    {
+        if ($node->class instanceof PropertyFetch) {
+            $objectType = $this->getObjectType($node->class);
+            if ($objectType instanceof ObjectType) {
+                return $objectType->getClassName();
+            }
+        }
+
+        return $this->getName($node->class);
+    }
+
     private function isInstantiable(string $className): bool
     {
         $reflectionClass = new ReflectionClass($className);
@@ -160,17 +172,5 @@ PHP
 
         // required parameters in constructor, nothing we can do
         return ! (bool) $classConstructorReflection->getNumberOfRequiredParameters();
-    }
-
-    private function resolveStaticCallClassName(Node $node): ?string
-    {
-        if ($node->class instanceof PropertyFetch) {
-            $objectType = $this->getObjectType($node->class);
-            if ($objectType instanceof ObjectType) {
-                return $objectType->getClassName();
-            }
-        }
-
-        return $this->getName($node->class);
     }
 }

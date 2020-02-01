@@ -82,23 +82,6 @@ final class ArrayTypeMapper implements TypeMapperInterface
         return implode('|', $docStringTypes);
     }
 
-    private function mapArrayUnionTypeToDocString(ArrayType $arrayType, UnionType $unionType): string
-    {
-        $unionedTypesAsString = [];
-
-        foreach ($unionType->getTypes() as $unionedArrayItemType) {
-            $unionedTypesAsString[] = $this->phpStanStaticTypeMapper->mapToDocString(
-                $unionedArrayItemType,
-                $arrayType
-            ) . '[]';
-        }
-
-        $unionedTypesAsString = array_values($unionedTypesAsString);
-        $unionedTypesAsString = array_unique($unionedTypesAsString);
-
-        return implode('|', $unionedTypesAsString);
-    }
-
     /**
      * @todo improve
      */
@@ -120,5 +103,22 @@ final class ArrayTypeMapper implements TypeMapperInterface
         }
 
         return new AttributeAwareUnionTypeNode($unionedArrayType);
+    }
+
+    private function mapArrayUnionTypeToDocString(ArrayType $arrayType, UnionType $unionType): string
+    {
+        $unionedTypesAsString = [];
+
+        foreach ($unionType->getTypes() as $unionedArrayItemType) {
+            $unionedTypesAsString[] = $this->phpStanStaticTypeMapper->mapToDocString(
+                $unionedArrayItemType,
+                $arrayType
+            ) . '[]';
+        }
+
+        $unionedTypesAsString = array_values($unionedTypesAsString);
+        $unionedTypesAsString = array_unique($unionedTypesAsString);
+
+        return implode('|', $unionedTypesAsString);
     }
 }

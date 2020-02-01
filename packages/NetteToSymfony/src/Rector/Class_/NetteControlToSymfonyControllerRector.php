@@ -128,6 +128,15 @@ PHP
         return $node;
     }
 
+    private function removeSuffix(string $content, string $suffix): string
+    {
+        if (! Strings::endsWith($content, $suffix)) {
+            return $content;
+        }
+
+        return Strings::substring($content, 0, -Strings::length($suffix));
+    }
+
     private function processRenderMethod(ClassMethod $classMethod): void
     {
         $this->processGetPresenterGetSessionMethodCall($classMethod);
@@ -150,15 +159,6 @@ PHP
         }
 
         $this->removeNodes($magicTemplatePropertyCalls->getNodesToRemove());
-    }
-
-    private function removeSuffix(string $content, string $suffix): string
-    {
-        if (! Strings::endsWith($content, $suffix)) {
-            return $content;
-        }
-
-        return Strings::substring($content, 0, -Strings::length($suffix));
     }
 
     private function processGetPresenterGetSessionMethodCall(ClassMethod $classMethod): void

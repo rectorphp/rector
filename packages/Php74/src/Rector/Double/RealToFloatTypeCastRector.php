@@ -61,11 +61,11 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->getAttribute('kind') !== Double::KIND_REAL) {
+        if ($node->getAttribute(AttributeKey::KIND) !== Double::KIND_REAL) {
             return null;
         }
 
-        $node->setAttribute('kind', Double::KIND_FLOAT);
+        $node->setAttribute(AttributeKey::KIND, Double::KIND_FLOAT);
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 
         return $node;

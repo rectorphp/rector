@@ -17,14 +17,14 @@ final class ClassMethodWithArguments
     private $method;
 
     /**
-     * @var Argument[]
-     */
-    private $arguments = [];
-
-    /**
      * @var string
      */
     private $returnType;
+
+    /**
+     * @var Argument[]
+     */
+    private $arguments = [];
 
     /**
      * @param Argument[] $arguments

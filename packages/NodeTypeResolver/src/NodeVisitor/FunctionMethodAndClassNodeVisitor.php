@@ -26,6 +26,16 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
     private $className;
 
     /**
+     * @var ClassLike[]|null[]
+     */
+    private $classStack = [];
+
+    /**
+     * @var ClassMethod[]|null[]
+     */
+    private $methodStack = [];
+
+    /**
      * @var ClassLike|null
      */
     private $classNode;
@@ -39,16 +49,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
      * @var Function_|null
      */
     private $functionNode;
-
-    /**
-     * @var ClassLike[]|null[]
-     */
-    private $classStack = [];
-
-    /**
-     * @var ClassMethod[]|null[]
-     */
-    private $methodStack = [];
 
     /**
      * @param Node[] $nodes
@@ -126,6 +126,18 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         $node->setAttribute(AttributeKey::FUNCTION_NODE, $this->functionNode);
     }
 
+    private function setClassNodeAndName(?ClassLike $classLike): void
+    {
+        $this->classNode = $classLike;
+        if ($classLike === null || $classLike->name === null) {
+            $this->className = null;
+        } elseif (isset($classLike->namespacedName)) {
+            $this->className = $classLike->namespacedName->toString();
+        } else {
+            $this->className = (string) $classLike->name;
+        }
+    }
+
     private function setParentClassName(Class_ $classNode, Node $node): void
     {
         if ($classNode->extends === null) {
@@ -138,17 +150,5 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
         }
 
         $node->setAttribute(AttributeKey::PARENT_CLASS_NAME, $parentClassResolvedName);
-    }
-
-    private function setClassNodeAndName(?ClassLike $classLike): void
-    {
-        $this->classNode = $classLike;
-        if ($classLike === null || $classLike->name === null) {
-            $this->className = null;
-        } elseif (isset($classLike->namespacedName)) {
-            $this->className = $classLike->namespacedName->toString();
-        } else {
-            $this->className = (string) $classLike->name;
-        }
     }
 }
