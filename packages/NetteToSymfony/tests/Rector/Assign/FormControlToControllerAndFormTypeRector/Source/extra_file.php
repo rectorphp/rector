@@ -1,4 +1,5 @@
 <?php
+
 namespace Rector\NetteToSymfony\Tests\Rector\Assign\FormControlToControllerAndFormTypeRector\Fixture;
 
 class SomeFormController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController

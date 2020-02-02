@@ -348,7 +348,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         foreach ($stmts as $key => $ifStmt) {
             if ($key === 0) {
                 // move comment from if to first element to keep it
-                $ifStmt->setAttribute('comments', $node->getComments());
+                $ifStmt->setAttribute(AttributeKey::PHP_DOC_INFO, $node->getAttribute(AttributeKey::PHP_DOC_INFO));
             }
 
             $this->addNodeAfterNode($ifStmt, $node);

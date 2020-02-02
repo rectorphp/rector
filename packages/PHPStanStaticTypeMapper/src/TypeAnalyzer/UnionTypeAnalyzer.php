@@ -18,6 +18,7 @@ final class UnionTypeAnalyzer
     {
         $isNullableType = false;
         $hasIterable = false;
+        $hasArray = false;
 
         foreach ($unionType->getTypes() as $unionedType) {
             if ($unionedType instanceof IterableType) {
@@ -26,6 +27,7 @@ final class UnionTypeAnalyzer
             }
 
             if ($unionedType instanceof ArrayType) {
+                $hasArray = true;
                 continue;
             }
 
@@ -42,6 +44,6 @@ final class UnionTypeAnalyzer
             return null;
         }
 
-        return new UnionTypeAnalysis($isNullableType, $hasIterable);
+        return new UnionTypeAnalysis($isNullableType, $hasIterable, $hasArray);
     }
 }

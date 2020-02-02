@@ -11,7 +11,6 @@ use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
@@ -200,37 +199,6 @@ final class DocBlockManipulator
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
     }
 
-    public function addReturnTag(Node $node, Type $newType): void
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        $currentReturnType = $phpDocInfo !== null ? $phpDocInfo->getReturnType() : new MixedType();
-
-        // make sure the tags are not identical, e.g imported class vs FQN class
-        if ($this->typeComparator->areTypesEquals($currentReturnType, $newType)) {
-            return;
-        }
-
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        if ($phpDocInfo === null) {
-            $this->addTypeSpecificTag($node, 'return', $newType);
-            return;
-        }
-
-        $returnTagValueNode = $phpDocInfo->getByType(ReturnTagValueNode::class);
-
-        // overide existing type
-        if ($returnTagValueNode === null) {
-            return;
-        }
-
-        $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
-        $returnTagValueNode->type = $newPHPStanPhpDocType;
-    }
-
     public function replaceTagByAnother(PhpDocNode $phpDocNode, string $oldTag, string $newTag): void
     {
         $oldTag = AnnotationNaming::normalizeName($oldTag);
@@ -333,7 +301,7 @@ final class DocBlockManipulator
         return false;
     }
 
-    public function updateNodeWithPhpDocInfo(Node $node, bool $shouldSkipEmptyLinesAbove = false): void
+    public function updateNodeWithPhpDocInfo(Node $node): void
     {
         // nothing to change
         /** @var PhpDocInfo|null $phpDocInfo */
@@ -342,8 +310,7 @@ final class DocBlockManipulator
             return;
         }
 
-        $phpDoc = $this->printPhpDocInfoToString($shouldSkipEmptyLinesAbove, $phpDocInfo);
-
+        $phpDoc = $this->printPhpDocInfoToString($phpDocInfo);
         if ($phpDoc === '') {
             // no comments, null
             $node->setAttribute('comments', null);
@@ -352,11 +319,12 @@ final class DocBlockManipulator
 
         // no change, don't save it
         // this is needed to prevent short classes override with FQN with same value → people don't like that for some reason
-
-        if ($node->getDocComment() && $node->getDocComment()->getText() === $phpDoc) {
+        if (! $this->haveDocCommentOrCommentsChanged($node, $phpDoc)) {
             return;
         }
 
+        // this is needed to remove duplicated // comments
+        $node->setAttribute('comments', null);
         $node->setDocComment(new Doc($phpDoc));
     }
 
@@ -408,13 +376,32 @@ final class DocBlockManipulator
         }
     }
 
-    private function printPhpDocInfoToString(bool $shouldSkipEmptyLinesAbove, PhpDocInfo $phpDocInfo): string
+    private function printPhpDocInfoToString(PhpDocInfo $phpDocInfo): string
     {
         // new node, needs to be reparsed
         if ($phpDocInfo->getPhpDocNode()->children !== [] && $phpDocInfo->getTokens() === []) {
             return (string) $phpDocInfo->getPhpDocNode();
         }
 
-        return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo, $shouldSkipEmptyLinesAbove);
+        return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
+    }
+
+    private function haveDocCommentOrCommentsChanged(Node $node, string $phpDoc): bool
+    {
+        // has it changed?
+        $docComment = $node->getDocComment();
+        if ($docComment !== null && $docComment->getText() === $phpDoc) {
+            return false;
+        }
+
+        // nothing to change
+        if ($node->getComments() !== []) {
+            $commentsContent = implode('', $node->getComments());
+            if ($commentsContent === $phpDoc) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

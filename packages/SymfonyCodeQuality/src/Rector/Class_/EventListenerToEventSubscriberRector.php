@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -82,9 +83,15 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
      */
     private $applicationServiceMapProvider;
 
-    public function __construct(ServiceMapProvider $applicationServiceMapProvider)
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(ServiceMapProvider $applicationServiceMapProvider, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->applicationServiceMapProvider = $applicationServiceMapProvider;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -348,8 +355,9 @@ PHP
             $classMethod->returnType = new Identifier('array');
         }
 
-        $arrayMixedType = new ArrayType(new MixedType(), new MixedType(true));
-        $this->docBlockManipulator->addReturnTag($classMethod, $arrayMixedType);
+        $returnType = new ArrayType(new MixedType(), new MixedType(true));
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        $phpDocInfo->changeReturnType($returnType);
     }
 
     private function createEventItem(EventListenerTag $eventListenerTag): ArrayItem

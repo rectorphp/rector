@@ -79,7 +79,7 @@ final class PhpDocInfoPrinter
      * - Print(subnode2)
      * - Tokens[subnode2.endPos .. node.endPos]
      */
-    public function printFormatPreserving(PhpDocInfo $phpDocInfo, bool $shouldSkipEmptyLinesAbove = false): string
+    public function printFormatPreserving(PhpDocInfo $phpDocInfo): string
     {
         if ($phpDocInfo->getTokens() === []) {
             // completely new noe, just print string version of it
@@ -99,13 +99,11 @@ final class PhpDocInfoPrinter
         $this->currentTokenPosition = 0;
         $this->removedNodePositions = [];
 
-        return $this->printPhpDocNode($this->attributeAwarePhpDocNode, $shouldSkipEmptyLinesAbove);
+        return $this->printPhpDocNode($this->attributeAwarePhpDocNode);
     }
 
-    private function printPhpDocNode(
-        AttributeAwarePhpDocNode $attributeAwarePhpDocNode,
-        bool $shouldSkipEmptyLinesAbove = false
-    ): string {
+    private function printPhpDocNode(AttributeAwarePhpDocNode $attributeAwarePhpDocNode): string
+    {
         // no nodes were, so empty doc
         if ($this->isPhpDocNodeEmpty($attributeAwarePhpDocNode)) {
             return '';
@@ -119,14 +117,14 @@ final class PhpDocInfoPrinter
         $nodeCount = count($attributeAwarePhpDocNode->children);
 
         foreach ($attributeAwarePhpDocNode->children as $i => $phpDocChildNode) {
-            $output .= $this->printNode($phpDocChildNode, null, $i + 1, $nodeCount, $shouldSkipEmptyLinesAbove);
+            $output .= $this->printNode($phpDocChildNode, null, $i + 1, $nodeCount);
         }
 
         $output = $this->printEnd($output);
 
         // @see
         // fix missing start
-        if (! Strings::match($output, '#^(\/\/|\/\*\*|\/\*)#') && $output) {
+        if (! Strings::match($output, '#^(\/\/|\/\*\*|\/\*|\#)#') && $output) {
             $output = '/**' . $output;
         }
 
@@ -156,8 +154,7 @@ final class PhpDocInfoPrinter
         AttributeAwareNodeInterface $attributeAwareNode,
         ?StartEndValueObject $startEndValueObject = null,
         int $i = 0,
-        int $nodeCount = 0,
-        bool $shouldSkipEmptyLinesAbove = false
+        int $nodeCount = 0
     ): string {
         $output = '';
 
@@ -171,7 +168,7 @@ final class PhpDocInfoPrinter
                 $output,
                 $this->currentTokenPosition,
                 $startEndValueObject->getStart(),
-                ! $shouldSkipEmptyLinesAbove && $isLastToken
+                $isLastToken
             );
 
             $this->currentTokenPosition = $startEndValueObject->getEnd();

@@ -261,8 +261,8 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pExpr_Array(Array_ $node): string
     {
-        if (! $node->hasAttribute('kind')) {
-            $node->setAttribute('kind', Array_::KIND_SHORT);
+        if (! $node->hasAttribute(AttributeKey::KIND)) {
+            $node->setAttribute(AttributeKey::KIND, Array_::KIND_SHORT);
         }
 
         return parent::pExpr_Array($node);

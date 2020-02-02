@@ -7,7 +7,6 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class PhpDocInfoNodeVisitor extends NodeVisitorAbstract
 {
@@ -26,13 +25,8 @@ final class PhpDocInfoNodeVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if ($node->getDocComment() === null) {
-            $node->setAttribute(AttributeKey::PHP_DOC_INFO, null);
-            return;
-        }
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
+        // also binds to the node
+        $this->phpDocInfoFactory->createFromNode($node);
 
         return $node;
     }

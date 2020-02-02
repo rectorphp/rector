@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Rector\If_;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Stmt\If_;
@@ -112,13 +113,21 @@ PHP
 
     private function combineComments(Node $firstNode, Node $secondNode): void
     {
-        $firstNode->setAttribute('comments', array_merge($firstNode->getComments(), $secondNode->getComments()));
-
-        if ($firstNode->getDocComment() === null) {
+        $comments = array_merge($firstNode->getComments(), $secondNode->getComments());
+        if ($comments === []) {
             return;
         }
 
+        $content = '';
+        foreach ($comments as $comment) {
+            if (Strings::startsWith($comment->getText(), '/*')) {
+                $content .= $comment->getText() . PHP_EOL;
+            } else {
+                $content .= $comment->getText();
+            }
+        }
+
         // update original node php doc info object
-        $this->phpDocInfoFactory->createFromNode($firstNode);
+        $this->phpDocInfoFactory->createFromString($firstNode, $content);
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\NetteToSymfony\Rector\Assign;
 
 use Nette\Application\UI\Control;
-use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -207,9 +206,7 @@ PHP
 
         $filePath = dirname($fileInfo->getRealPath()) . DIRECTORY_SEPARATOR . 'SomeFormController.php';
 
-        // @todo make temporary
-        $content = '<?php' . PHP_EOL . $this->print([$namespace]) . PHP_EOL;
-        FileSystem::write($filePath, $content);
+        $this->printToFile($namespace, $filePath);
     }
 
     private function createBuildFormClassMethod(Variable $formBuilderVariable): ClassMethod

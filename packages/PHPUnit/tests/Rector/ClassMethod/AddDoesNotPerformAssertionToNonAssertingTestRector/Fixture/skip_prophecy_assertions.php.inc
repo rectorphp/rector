@@ -18,7 +18,7 @@ class SkipProphecyAssertions extends \PHPUnit\Framework\TestCase
         $denormalizer = $this->prophesize(DenormalizerInterface::class);
         $denormalizer
             ->denormalize($fixedData, $type)
-            ->shouldBeCalled(); // this is an assertion here
+            ->shouldBeCalled();
 
         (new Denormalizer($denormalizer))->handle($badData, $type);
     }
