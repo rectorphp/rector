@@ -12,7 +12,7 @@ use stdClass;
 final class TypeStaticProbeTest extends TestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test($value, string $methodName, int $argumentPosition, string $expectedProbeItem): void
     {
@@ -20,20 +20,20 @@ final class TypeStaticProbeTest extends TestCase
         $this->assertSame($expectedProbeItem, $probeItem);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         yield [5, 'SomeMethod', 0, 'integer;SomeMethod;0' . PHP_EOL];
     }
 
     /**
-     * @dataProvider provideDataForTestResolveValueTypeToString()
+     * @dataProvider provideDataResolveValueTypeToString()
      */
     public function testResolveValueTypeToString($value, string $expectedValueTypeString): void
     {
         $this->assertSame($expectedValueTypeString, TypeStaticProbe::resolveValueTypeToString($value));
     }
 
-    public function provideDataForTestResolveValueTypeToString(): Iterator
+    public function provideDataResolveValueTypeToString(): Iterator
     {
         yield [5, 'integer'];
         yield ['hi', 'string'];

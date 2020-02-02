@@ -11,14 +11,14 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class TemplateAnnotationVersion3RectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $file): void
     {
         $this->doTestFile($file);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureVersion3');
     }

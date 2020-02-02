@@ -14,14 +14,14 @@ final class SkipParentConstructOverrideInPHP72Test extends AbstractRectorTestCas
      * @requires PHP >= 7.2
      * @see https://phpunit.readthedocs.io/en/8.3/incomplete-and-skipped-tests.html#incomplete-and-skipped-tests-requires-tables-api
      *
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $file): void
     {
         $this->doTestFile($file);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureForPhp72');
     }

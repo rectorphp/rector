@@ -15,14 +15,14 @@ use Rector\Testing\PHPUnit\AbstractNodeVisitorTestCase;
 final class FunctionMethodAndClassNodeVisitorTest extends AbstractNodeVisitorTestCase
 {
     /**
-     * @dataProvider provideDataForTest();
+     * @dataProvider provideData();
      */
     public function testVisitor(string $file): void
     {
         $this->doTestFile($file);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture', '*.php.inc');
     }

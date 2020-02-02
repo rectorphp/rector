@@ -11,20 +11,20 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class ImportFullyQualifiedNamesRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
-     * @dataProvider provideDataForTestFunction()
+     * @dataProvider provideData()
+     * @dataProvider provideDataFunction()
      */
     public function test(string $file): void
     {
         $this->doTestFile($file);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    public function provideDataForTestFunction(): Iterator
+    public function provideDataFunction(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureFunction');
     }

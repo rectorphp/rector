@@ -13,7 +13,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
 {
     /**
      * @param string[] $expectedExceptions
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $originalFile, array $expectedExceptions, bool $shouldDeleteOriginalFile): void
     {
@@ -29,7 +29,7 @@ final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemR
         }
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         // source: https://github.com/nette/utils/blob/798f8c1626a8e0e23116d90e588532725cce7d0e/src/Utils/exceptions.php
         yield 'nette_exceptions' => [

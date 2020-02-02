@@ -11,7 +11,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class CakePHPModelToDoctrineRepositoryRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $file, string $expectedRepositoryFilePath, string $expectedRepositoryContentFile): void
     {
@@ -21,7 +21,7 @@ final class CakePHPModelToDoctrineRepositoryRectorTest extends AbstractRectorTes
         $this->assertFileEquals($expectedRepositoryContentFile, $expectedRepositoryFilePath);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         yield [
             __DIR__ . '/Fixture/find_first.inc',

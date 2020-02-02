@@ -15,7 +15,7 @@ use Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\Source\Doctrine
 final class DoctrineTest extends AbstractPhpDocInfoPrinterTest
 {
     /**
-     * @dataProvider provideDataForTestClass()
+     * @dataProvider provideDataClass()
      */
     public function testClass(string $docFilePath, Node $node): void
     {
@@ -29,7 +29,7 @@ final class DoctrineTest extends AbstractPhpDocInfoPrinterTest
         );
     }
 
-    public function provideDataForTestClass(): Iterator
+    public function provideDataClass(): Iterator
     {
         yield [__DIR__ . '/Source/Doctrine/index_in_table.txt', new Class_(IndexInTable::class)];
         yield [__DIR__ . '/Source/Doctrine/case_sensitive.txt', new Class_(CaseSensitive::class)];

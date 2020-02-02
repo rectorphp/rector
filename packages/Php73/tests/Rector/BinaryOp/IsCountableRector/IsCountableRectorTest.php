@@ -12,14 +12,14 @@ final class IsCountableRectorTest extends AbstractRectorTestCase
 {
     /**
      * @requires PHP >= 7.3
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $file): void
     {
         $this->doTestFile($file);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
