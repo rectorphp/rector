@@ -102,7 +102,9 @@ class SomeFormController extends \Symfony\Bundle\FrameworkBundle\Controller\Abst
 		}
 	}
 }
-
+PHP
+                ,
+                <<<'PHP'
 class SomeFormType extends \Symfony\Component\Form\AbstractType
 {
 	public function buildForm(\Symfony\Component\Form\FormBuilderInterface $formBuilder, array $options)
@@ -113,7 +115,6 @@ class SomeFormType extends \Symfony\Component\Form\AbstractType
     }
 }
 PHP
-
             ),
         ]);
     }
