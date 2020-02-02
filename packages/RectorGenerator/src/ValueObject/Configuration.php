@@ -59,6 +59,16 @@ final class Configuration
     private $source = [];
 
     /**
+     * @var string
+     */
+    private $extraFileContent;
+
+    /**
+     * @var string
+     */
+    private $extraFileName;
+
+    /**
      * @param string[] $nodeTypes
      * @param string[] $source
      */
@@ -70,6 +80,8 @@ final class Configuration
         string $description,
         string $codeBefore,
         string $codeAfter,
+        ?string $extraFileContent = null,
+        ?string $extraFileName = null,
         array $source,
         ?string $setConfig,
         bool $isPhpSnippet
@@ -84,6 +96,8 @@ final class Configuration
         $this->source = $source;
         $this->setConfig = $setConfig;
         $this->isPhpSnippet = $isPhpSnippet;
+        $this->extraFileContent = $extraFileContent;
+        $this->extraFileName = $extraFileName;
     }
 
     public function getDescription(): string
@@ -140,6 +154,16 @@ final class Configuration
     public function isPhpSnippet(): bool
     {
         return $this->isPhpSnippet;
+    }
+
+    public function getExtraFileContent(): ?string
+    {
+        return $this->extraFileContent;
+    }
+
+    public function getExtraFileName(): string
+    {
+        return $this->extraFileName;
     }
 
     private function setName(string $name): void

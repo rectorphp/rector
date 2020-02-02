@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\RectorGenerator\Finder;
 
+use Rector\RectorGenerator\ValueObject\Configuration;
 use Symfony\Component\Finder\Finder;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -21,6 +22,11 @@ final class TemplateFinder
     private const TEMPLATES_FIXTURE_DIRECTORY = __DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/Fixture';
 
     /**
+     * @var string
+     */
+    private const TEMPLATES_SOURCE_DIRECTORY = __DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/Source';
+
+    /**
      * @var FinderSanitizer
      */
     private $finderSanitizer;
@@ -33,15 +39,27 @@ final class TemplateFinder
     /**
      * @return SmartFileInfo[]
      */
-    public function find(bool $isPhpSnippet): array
+    public function find(Configuration $configuration): array
     {
         $finder = Finder::create()
             ->files()
             ->exclude('Fixture/')
+            ->exclude('Source/')
+            ->notName('*Test.php.inc')
             ->in(self::TEMPLATES_DIRECTORY);
 
         $smartFileInfos = $this->finderSanitizer->sanitize($finder);
-        $smartFileInfos[] = $this->createFixtureSmartFileInfo($isPhpSnippet);
+        $smartFileInfos[] = $this->createFixtureSmartFileInfo($configuration->isPhpSnippet());
+
+        if ($configuration->getExtraFileContent()) {
+            $smartFileInfos[] = new SmartFileInfo(__DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/Source/extra_file.php.inc');
+            $smartFileInfos[] = new SmartFileInfo(__DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/_Name_ExtraTest.php.inc');
+        } else {
+            $smartFileInfos[] = new SmartFileInfo(__DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/_Name_Test.php.inc');
+        }
+
+        dump($smartFileInfos);
+        die;
 
         return $smartFileInfos;
     }

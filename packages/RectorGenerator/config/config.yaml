@@ -20,7 +20,7 @@ parameters:
 #            - ""
 #
 #        description: "Removes unneeded $a = $a assigns"
-#        code_before: >
+#        code_before: |
 #            <?php
 #
 #            class SomeClass
@@ -31,7 +31,7 @@ parameters:
 #                }
 #            }
 #
-#        code_after: >
+#        code_after: |
 #            <?php
 #
 #            class SomeClass
@@ -40,6 +40,17 @@ parameters:
 #                {
 #                }
 #            }
+#
+#
+#        extra_file_content: |
+#            <?php
+#
+#            class AnotherStandaloneClass
+#            {
+#
+#            }
+#
+#        extra_file_name: "AnotherStandaloneClass.php"
 #
 #        source: # e.g. link to RFC or headline in upgrade guide, 1 or more in the list
 #            - ""
