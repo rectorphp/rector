@@ -260,6 +260,9 @@ PHP
 
     private function getRepositoryShortClassName(Class_ $class): string
     {
-        return $this->getShortName($class->name) . 'Repository';
+        /** @var string $classShortName */
+        $classShortName = $class->getAttribute(AttributeKey::CLASS_SHORT_NAME);
+
+        return $classShortName . 'Repository';
     }
 }

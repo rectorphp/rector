@@ -10,9 +10,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class ShortNameResolver
@@ -27,24 +25,9 @@ final class ShortNameResolver
      */
     private $callableNodeTraverser;
 
-    /**
-     * @var NameResolver
-     */
-    private $nameResolver;
-
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    public function __construct(
-        CallableNodeTraverser $callableNodeTraverser,
-        NameResolver $nameResolver,
-        ClassNaming $classNaming
-    ) {
+    public function __construct(CallableNodeTraverser $callableNodeTraverser)
+    {
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->nameResolver = $nameResolver;
-        $this->classNaming = $classNaming;
     }
 
     /**
@@ -96,9 +79,9 @@ final class ShortNameResolver
                 return null;
             }
 
-            /** @var string $classLikeName */
-            $classLikeName = $this->nameResolver->getName($node->name);
-            $shortClassLikeNames[] = $this->classNaming->getShortName($classLikeName);
+            /** @var string $classShortName */
+            $classShortName = $node->getAttribute(AttributeKey::CLASS_SHORT_NAME);
+            $shortClassLikeNames[] = $classShortName;
         });
 
         return array_unique($shortClassLikeNames);

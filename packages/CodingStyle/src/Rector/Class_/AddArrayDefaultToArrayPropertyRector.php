@@ -92,6 +92,9 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $changedProperties = $this->collectPropertyNamesWithMissingDefaultArray($node);
+        if ($changedProperties === []) {
+            return null;
+        }
 
         $this->completeDefaultArrayToPropertyNames($node, $changedProperties);
 
