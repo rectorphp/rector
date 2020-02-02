@@ -26,11 +26,6 @@ final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implement
     private $targetEntity;
 
     /**
-     * @var mixed[]|null
-     */
-    private $cascade;
-
-    /**
      * @var string|null
      */
     private $fetch;
@@ -49,6 +44,11 @@ final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implement
      * @var string|null
      */
     private $fqnTargetEntity;
+
+    /**
+     * @var mixed[]|null
+     */
+    private $cascade;
 
     public function __construct(
         ?string $mappedBy = null,

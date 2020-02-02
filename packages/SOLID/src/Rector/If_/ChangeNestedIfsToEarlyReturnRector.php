@@ -130,21 +130,6 @@ PHP
         }
     }
 
-    private function createInvertedCondition(Expr $expr): Expr
-    {
-        // inverse condition
-        if ($expr instanceof BinaryOp) {
-            $inversedCondition = $this->binaryOpManipulator->invertCondition($expr);
-            if ($inversedCondition === null) {
-                return new BooleanNot($expr);
-            }
-
-            return $inversedCondition;
-        }
-
-        return new BooleanNot($expr);
-    }
-
     private function addStandaloneIfsWithReturn(If_ $nestedIfWithOnlyReturn, If_ $if, Return_ $return): void
     {
         $return = clone $return;
@@ -166,5 +151,20 @@ PHP
         $nestedIfWithOnlyReturn->stmts = [clone $return];
 
         $this->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
+    }
+
+    private function createInvertedCondition(Expr $expr): Expr
+    {
+        // inverse condition
+        if ($expr instanceof BinaryOp) {
+            $inversedCondition = $this->binaryOpManipulator->invertCondition($expr);
+            if ($inversedCondition === null) {
+                return new BooleanNot($expr);
+            }
+
+            return $inversedCondition;
+        }
+
+        return new BooleanNot($expr);
     }
 }

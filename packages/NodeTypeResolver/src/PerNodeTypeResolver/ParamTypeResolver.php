@@ -80,6 +80,19 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
         return $this->resolveFromFunctionDocBlock($node);
     }
 
+    private function resolveFromType(Node $node)
+    {
+        if ($node->type !== null && ! $node->type instanceof Identifier) {
+            $resolveTypeName = $this->nameResolver->getName($node->type);
+            if ($resolveTypeName) {
+                // @todo map the other way every type :)
+                return new ObjectType($resolveTypeName);
+            }
+        }
+
+        return new MixedType();
+    }
+
     private function resolveFromFirstVariableUse(Param $param): Type
     {
         $classMethod = $param->getAttribute(AttributeKey::METHOD_NODE);
@@ -127,18 +140,5 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
         }
 
         return $phpDocInfo->getParamType($paramName);
-    }
-
-    private function resolveFromType(Node $node)
-    {
-        if ($node->type !== null && ! $node->type instanceof Identifier) {
-            $resolveTypeName = $this->nameResolver->getName($node->type);
-            if ($resolveTypeName) {
-                // @todo map the other way every type :)
-                return new ObjectType($resolveTypeName);
-            }
-        }
-
-        return new MixedType();
     }
 }

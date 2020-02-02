@@ -45,16 +45,6 @@ final class ActionRenderFactory
         return $thisRenderMethod;
     }
 
-    private function createTemplateVariablesArray(array $templateVariables): Array_
-    {
-        $array = new Array_();
-        foreach ($templateVariables as $name => $node) {
-            $array->items[] = new ArrayItem($node, new String_($name));
-        }
-
-        return $array;
-    }
-
     private function addArguments(
         MagicTemplatePropertyCalls $magicTemplatePropertyCalls,
         MethodCall $methodCall
@@ -70,5 +60,15 @@ final class ActionRenderFactory
 
             $methodCall->args[1] = new Arg($templateVariablesArray);
         }
+    }
+
+    private function createTemplateVariablesArray(array $templateVariables): Array_
+    {
+        $array = new Array_();
+        foreach ($templateVariables as $name => $node) {
+            $array->items[] = new ArrayItem($node, new String_($name));
+        }
+
+        return $array;
     }
 }

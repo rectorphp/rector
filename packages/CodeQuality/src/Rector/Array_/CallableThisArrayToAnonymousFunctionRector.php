@@ -218,31 +218,19 @@ PHP
         return $anonymousFunction;
     }
 
-    /**
-     * @param Return_[] $nodes
-     */
-    private function hasClassMethodReturn(array $nodes): bool
+    private function isCallbackAtFunctionName(Array_ $array, string $functionName): bool
     {
-        foreach ($nodes as $node) {
-            if ($node->expr !== null) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param Param[] $params
-     * @return Arg[]
-     */
-    private function convertParamsToArgs(array $params): array
-    {
-        $args = [];
-        foreach ($params as $param) {
-            $args[] = new Arg($param->var);
+        $parentNode = $array->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Arg) {
+            return false;
         }
 
-        return $args;
+        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentParentNode instanceof FuncCall) {
+            return false;
+        }
+
+        return $this->isName($parentParentNode, $functionName);
     }
 
     /**
@@ -262,18 +250,30 @@ PHP
         return $newParams;
     }
 
-    private function isCallbackAtFunctionName(Array_ $array, string $functionName): bool
+    /**
+     * @param Param[] $params
+     * @return Arg[]
+     */
+    private function convertParamsToArgs(array $params): array
     {
-        $parentNode = $array->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentNode instanceof Arg) {
-            return false;
+        $args = [];
+        foreach ($params as $param) {
+            $args[] = new Arg($param->var);
         }
 
-        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parentParentNode instanceof FuncCall) {
-            return false;
-        }
+        return $args;
+    }
 
-        return $this->isName($parentParentNode, $functionName);
+    /**
+     * @param Return_[] $nodes
+     */
+    private function hasClassMethodReturn(array $nodes): bool
+    {
+        foreach ($nodes as $node) {
+            if ($node->expr !== null) {
+                return true;
+            }
+        }
+        return false;
     }
 }

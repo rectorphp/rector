@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -104,7 +105,7 @@ PHP
             return true;
         }
 
-        $kind = $node->getAttribute('kind');
+        $kind = $node->getAttribute(AttributeKey::KIND);
         if (in_array($kind, [LNumber::KIND_BIN, LNumber::KIND_OCT, LNumber::KIND_HEX], true)) {
             return true;
         }
@@ -113,6 +114,7 @@ PHP
         if (Strings::match($numericValueAsString, '#e#i')) {
             return true;
         }
+
         // too short
         return Strings::length($numericValueAsString) <= self::GROUP_SIZE;
     }

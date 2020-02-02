@@ -129,16 +129,6 @@ final class RelationPropertyFactory
         return $properties;
     }
 
-    private function createPrivateProperty(string $propertyName): Property
-    {
-        $propertyName = lcfirst($propertyName);
-
-        $propertyBuilder = new PropertyBuilder($propertyName);
-        $propertyBuilder->makePrivate();
-
-        return $propertyBuilder->getNode();
-    }
-
     private function getPropertyDefaultValue(Property $property): array
     {
         if (count((array) $property->props) !== 1) {
@@ -156,5 +146,15 @@ final class RelationPropertyFactory
         }
 
         return $value;
+    }
+
+    private function createPrivateProperty(string $propertyName): Property
+    {
+        $propertyName = lcfirst($propertyName);
+
+        $propertyBuilder = new PropertyBuilder($propertyName);
+        $propertyBuilder->makePrivate();
+
+        return $propertyBuilder->getNode();
     }
 }

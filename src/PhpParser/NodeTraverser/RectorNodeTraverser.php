@@ -13,14 +13,14 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class RectorNodeTraverser extends NodeTraverser
 {
     /**
-     * @var EnabledRectorsProvider
-     */
-    private $enabledRectorsProvider;
-
-    /**
      * @var PhpRectorInterface[]
      */
     private $allPhpRectors = [];
+
+    /**
+     * @var EnabledRectorsProvider
+     */
+    private $enabledRectorsProvider;
 
     /**
      * @var PrivatesAccessor

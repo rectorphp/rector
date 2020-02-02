@@ -121,6 +121,25 @@ PHP
     }
 
     /**
+     * @param int[] $newParameterPositions
+     */
+    private function swapParameters(ClassMethod $classMethod, array $newParameterPositions): void
+    {
+        $newArguments = [];
+        foreach ($newParameterPositions as $oldPosition => $newPosition) {
+            if (! isset($classMethod->params[$oldPosition]) || ! isset($classMethod->params[$newPosition])) {
+                continue;
+            }
+
+            $newArguments[$newPosition] = $classMethod->params[$oldPosition];
+        }
+
+        foreach ($newArguments as $newPosition => $argument) {
+            $classMethod->params[$newPosition] = $argument;
+        }
+    }
+
+    /**
      * @param MethodCall|StaticCall $node
      * @param int[] $newArgumentPositions
      */
@@ -137,25 +156,6 @@ PHP
 
         foreach ($newArguments as $newPosition => $argument) {
             $node->args[$newPosition] = $argument;
-        }
-    }
-
-    /**
-     * @param int[] $newParameterPositions
-     */
-    private function swapParameters(ClassMethod $classMethod, array $newParameterPositions): void
-    {
-        $newArguments = [];
-        foreach ($newParameterPositions as $oldPosition => $newPosition) {
-            if (! isset($classMethod->params[$oldPosition]) || ! isset($classMethod->params[$newPosition])) {
-                continue;
-            }
-
-            $newArguments[$newPosition] = $classMethod->params[$oldPosition];
-        }
-
-        foreach ($newArguments as $newPosition => $argument) {
-            $classMethod->params[$newPosition] = $argument;
         }
     }
 }

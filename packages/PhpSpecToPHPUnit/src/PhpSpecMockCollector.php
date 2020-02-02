@@ -22,16 +22,6 @@ final class PhpSpecMockCollector
     private $mocks = [];
 
     /**
-     * @var NameResolver
-     */
-    private $nameResolver;
-
-    /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
      * @var mixed[]
      */
     private $mocksWithsTypes = [];
@@ -40,6 +30,16 @@ final class PhpSpecMockCollector
      * @var mixed[]
      */
     private $propertyMocksByClass = [];
+
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
+
+    /**
+     * @var CallableNodeTraverser
+     */
+    private $callableNodeTraverser;
 
     public function __construct(NameResolver $nameResolver, CallableNodeTraverser $callableNodeTraverser)
     {

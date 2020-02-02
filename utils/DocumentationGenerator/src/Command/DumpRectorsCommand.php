@@ -16,14 +16,14 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 final class DumpRectorsCommand extends AbstractCommand
 {
     /**
-     * @var RectorsFinder
-     */
-    private $rectorsFinder;
-
-    /**
      * @var DumpRectorsOutputFormatterInterface[]
      */
     private $dumpRectorsOutputFormatterInterfaces = [];
+
+    /**
+     * @var RectorsFinder
+     */
+    private $rectorsFinder;
 
     /**
      * @param DumpRectorsOutputFormatterInterface[] $dumpRectorsOutputFormatterInterfaces

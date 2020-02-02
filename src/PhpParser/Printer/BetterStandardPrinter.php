@@ -273,7 +273,7 @@ final class BetterStandardPrinter extends Standard
      */
     protected function pScalar_String(String_ $node): string
     {
-        $kind = $node->getAttribute('kind', String_::KIND_SINGLE_QUOTED);
+        $kind = $node->getAttribute(AttributeKey::KIND, String_::KIND_SINGLE_QUOTED);
         if ($kind === String_::KIND_DOUBLE_QUOTED && $node->getAttribute('is_regular_pattern')) {
             return '"' . $node->value . '"';
         }
@@ -371,18 +371,10 @@ final class BetterStandardPrinter extends Standard
         }
     }
 
-    /**
-     * @param Node[] $nodes
-     */
-    private function containsNop(array $nodes): bool
+    private function removeComments(string $printerNode): string
     {
-        foreach ($nodes as $node) {
-            if ($node instanceof Nop) {
-                return true;
-            }
-        }
-
-        return false;
+        $printerNode = Strings::replace($printerNode, '#\/*\*(.*?)\*\/#');
+        return Strings::replace($printerNode, '#\/\/(.*?)$#m');
     }
 
     /**
@@ -400,9 +392,17 @@ final class BetterStandardPrinter extends Standard
         }
     }
 
-    private function removeComments(string $printerNode): string
+    /**
+     * @param Node[] $nodes
+     */
+    private function containsNop(array $nodes): bool
     {
-        $printerNode = Strings::replace($printerNode, '#\/*\*(.*?)\*\/#');
-        return Strings::replace($printerNode, '#\/\/(.*?)$#m');
+        foreach ($nodes as $node) {
+            if ($node instanceof Nop) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

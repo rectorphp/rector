@@ -178,28 +178,6 @@ PHP
     }
 
     /**
-     * @param string[] $removedPropertyNames
-     */
-    private function removeSetAndGetMethods(Class_ $class, array $removedPropertyNames): void
-    {
-        foreach ($removedPropertyNames as $removedPropertyName) {
-            foreach ($class->getMethods() as $method) {
-                if ($this->isName($method, 'set' . ucfirst($removedPropertyName))) {
-                    $this->removeNode($method);
-                }
-
-                if ($this->isName($method, 'get' . ucfirst($removedPropertyName))) {
-                    $this->removeNode($method);
-                }
-
-                if ($this->isName($method, 'setTranslatableLocale')) {
-                    $this->removeNode($method);
-                }
-            }
-        }
-    }
-
-    /**
      * @return PhpDocInfo[]
      */
     private function collectAndRemoveTranslatableProperties(Class_ $class): array
@@ -230,6 +208,28 @@ PHP
         }
 
         return $removedPropertyNameToPhpDocInfo;
+    }
+
+    /**
+     * @param string[] $removedPropertyNames
+     */
+    private function removeSetAndGetMethods(Class_ $class, array $removedPropertyNames): void
+    {
+        foreach ($removedPropertyNames as $removedPropertyName) {
+            foreach ($class->getMethods() as $method) {
+                if ($this->isName($method, 'set' . ucfirst($removedPropertyName))) {
+                    $this->removeNode($method);
+                }
+
+                if ($this->isName($method, 'get' . ucfirst($removedPropertyName))) {
+                    $this->removeNode($method);
+                }
+
+                if ($this->isName($method, 'setTranslatableLocale')) {
+                    $this->removeNode($method);
+                }
+            }
+        }
     }
 
     /**

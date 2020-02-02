@@ -81,15 +81,13 @@ final class ConditionResolver
         return null;
     }
 
-    private function resolveArgumentValue(FuncCall $funcCall, int $argumentPosition): ?string
+    private function isVersionCompareFuncCall(Node $node): bool
     {
-        /** @var string|null $version */
-        $version = $this->valueResolver->getValue($funcCall->args[$argumentPosition]->value);
-        if ($version === 'PHP_VERSION') {
-            return $this->phpVersionProvider->provide();
+        if (! $node instanceof FuncCall) {
+            return false;
         }
 
-        return $version;
+        return $this->nameResolver->isName($node, 'version_compare');
     }
 
     private function resolveVersionCompareConditionForFuncCall(FuncCall $funcCall)
@@ -113,12 +111,14 @@ final class ConditionResolver
         return new VersionCompareCondition($firstVersion, $secondVersion, $versionCompareSign);
     }
 
-    private function isVersionCompareFuncCall(Node $node): bool
+    private function resolveArgumentValue(FuncCall $funcCall, int $argumentPosition): ?string
     {
-        if (! $node instanceof FuncCall) {
-            return false;
+        /** @var string|null $version */
+        $version = $this->valueResolver->getValue($funcCall->args[$argumentPosition]->value);
+        if ($version === 'PHP_VERSION') {
+            return $this->phpVersionProvider->provide();
         }
 
-        return $this->nameResolver->isName($node, 'version_compare');
+        return $version;
     }
 }

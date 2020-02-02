@@ -22,16 +22,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class RemoveUnusedParameterRector extends AbstractRector
 {
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
-     * @var ClassMethodManipulator
-     */
-    private $classMethodManipulator;
-
-    /**
      * @var string[]
      */
     private $magicMethods = [
@@ -50,6 +40,16 @@ final class RemoveUnusedParameterRector extends AbstractRector
         '__unset',
         '__wakeup',
     ];
+
+    /**
+     * @var ClassManipulator
+     */
+    private $classManipulator;
+
+    /**
+     * @var ClassMethodManipulator
+     */
+    private $classMethodManipulator;
 
     public function __construct(
         ClassManipulator $classManipulator,

@@ -21,9 +21,9 @@ use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 final class CompileCommand extends Command
 {
     /**
-     * @var Filesystem
+     * @var string
      */
-    private $filesystem;
+    private $buildDir;
 
     /**
      * @var string
@@ -33,12 +33,12 @@ final class CompileCommand extends Command
     /**
      * @var string
      */
-    private $buildDir;
+    private $originalComposerJsonFileContent;
 
     /**
-     * @var string
+     * @var Filesystem
      */
-    private $originalComposerJsonFileContent;
+    private $filesystem;
 
     /**
      * @var SymfonyStyle
@@ -122,6 +122,17 @@ final class CompileCommand extends Command
         // re-run @todo composer update on root
     }
 
+    private function removeDevKeys(array $json): array
+    {
+        $keysToRemove = ['require-dev', 'autoload-dev', 'replace'];
+
+        foreach ($keysToRemove as $keyToRemove) {
+            unset($json[$keyToRemove]);
+        }
+
+        return $json;
+    }
+
     /**
      * Use phpstan/phpstan-src, because the phpstan.phar cannot be packed into rector.phar
      */
@@ -135,17 +146,6 @@ final class CompileCommand extends Command
             'type' => 'vcs',
             'url' => 'https://github.com/phpstan/phpstan-src.git',
         ];
-
-        return $json;
-    }
-
-    private function removeDevKeys(array $json): array
-    {
-        $keysToRemove = ['require-dev', 'autoload-dev', 'replace'];
-
-        foreach ($keysToRemove as $keyToRemove) {
-            unset($json[$keyToRemove]);
-        }
 
         return $json;
     }

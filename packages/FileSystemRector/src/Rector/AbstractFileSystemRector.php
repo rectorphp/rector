@@ -36,6 +36,11 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
     protected $parameterProvider;
 
     /**
+     * @var Node[]
+     */
+    private $oldStmts = [];
+
+    /**
      * @var Parser
      */
     private $parser;
@@ -54,11 +59,6 @@ abstract class AbstractFileSystemRector implements FileSystemRectorInterface
      * @var NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
-
-    /**
-     * @var Node[]
-     */
-    private $oldStmts = [];
 
     /**
      * @var RemovedAndAddedFilesCollector

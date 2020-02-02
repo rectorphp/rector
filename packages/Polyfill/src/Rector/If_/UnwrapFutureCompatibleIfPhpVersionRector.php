@@ -95,6 +95,18 @@ PHP
         return $node;
     }
 
+    private function refactorIsMatch(If_ $if): void
+    {
+        // has some elseif, we need to check them too @todo
+        if ((bool) $if->elseifs) {
+            return;
+        }
+
+        $this->unwrapStmts($if->stmts, $if);
+
+        $this->removeNode($if);
+    }
+
     private function refactorIsNotMatch(If_ $if): void
     {
         // no else → just remove the node
@@ -105,18 +117,6 @@ PHP
 
         // else is always used
         $this->unwrapStmts($if->else->stmts, $if);
-
-        $this->removeNode($if);
-    }
-
-    private function refactorIsMatch(If_ $if): void
-    {
-        // has some elseif, we need to check them too @todo
-        if ((bool) $if->elseifs) {
-            return;
-        }
-
-        $this->unwrapStmts($if->stmts, $if);
 
         $this->removeNode($if);
     }

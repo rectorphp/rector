@@ -48,6 +48,11 @@ final class ServiceMapProvider
         return $this->createServiceMapFromXml($fileContents);
     }
 
+    private function getSymfonyContainerXmlPath(): string
+    {
+        return (string) $this->parameterProvider->provideParameter(self::SYMFONY_CONTAINER_XML_PATH_PARAMETER);
+    }
+
     private function createServiceMapFromXml(string $fileContents): ServiceMap
     {
         $xml = @simplexml_load_string($fileContents);
@@ -88,49 +93,6 @@ final class ServiceMapProvider
     }
 
     /**
-     * @param mixed[] $tags
-     */
-    private function createServiceFromXml(SimpleXMLElement $attrs, array $tags): ServiceDefinition
-    {
-        $tags = $this->createTagsFromXml($tags);
-
-        return new ServiceDefinition(
-            strpos((string) $attrs->id, '.') === 0 ? Strings::substring((string) $attrs->id, 1) : (string) $attrs->id,
-            isset($attrs->class) ? (string) $attrs->class : null,
-            ! isset($attrs->public) || (string) $attrs->public !== 'false',
-            isset($attrs->synthetic) && (string) $attrs->synthetic === 'true',
-            isset($attrs->alias) ? (string) $attrs->alias : null,
-            $tags
-        );
-    }
-
-    /**
-     * @param mixed[] $tags
-     * @return TagInterface[]
-     */
-    private function createTagsFromXml(array $tags): array
-    {
-        $tagValueObjects = [];
-        foreach ($tags as $key => $tag) {
-            $data = $tag;
-            $name = $data['name'] ?? '';
-
-            if ($name === 'kernel.event_listener') {
-                $tagValueObjects[$key] = new EventListenerTag(
-                    $data['event'] ?? '',
-                    $data['method'] ?? '',
-                    (int) ($data['priority'] ?? 0)
-                );
-            } else {
-                unset($data['name']);
-                $tagValueObjects[$key] = new Tag($name, $data);
-            }
-        }
-
-        return $tagValueObjects;
-    }
-
-    /**
      * @return mixed[]
      */
     private function convertXmlToArray(SimpleXMLElement $simpleXMLElement): array
@@ -145,19 +107,6 @@ final class ServiceMapProvider
             } elseif ($value instanceof SimpleXMLElement) {
                 $data[$key] = $this->convertXmlToArray($value);
             }
-        }
-
-        return $data;
-    }
-
-    private function unWrapAttributes(array $data): array
-    {
-        if (isset($data['@attributes'])) {
-            foreach ($data['@attributes'] as $key => $value) {
-                $data[$key] = $value;
-            }
-
-            unset($data['@attributes']);
         }
 
         return $data;
@@ -181,17 +130,21 @@ final class ServiceMapProvider
         return $tags;
     }
 
-    private function convertedNestedArrayOrXml(array $value, array $data, $key): array
+    /**
+     * @param mixed[] $tags
+     */
+    private function createServiceFromXml(SimpleXMLElement $attrs, array $tags): ServiceDefinition
     {
-        foreach ($value as $subKey => $subValue) {
-            if ($subValue instanceof SimpleXMLElement) {
-                $data[$key][$subKey] = $this->convertXmlToArray($subValue);
-            } elseif (is_array($subValue)) {
-                $data[$key][$subKey] = $this->unWrapAttributes($subValue);
-            }
-        }
+        $tags = $this->createTagsFromXml($tags);
 
-        return $data;
+        return new ServiceDefinition(
+            strpos((string) $attrs->id, '.') === 0 ? Strings::substring((string) $attrs->id, 1) : (string) $attrs->id,
+            isset($attrs->class) ? (string) $attrs->class : null,
+            ! isset($attrs->public) || (string) $attrs->public !== 'false',
+            isset($attrs->synthetic) && (string) $attrs->synthetic === 'true',
+            isset($attrs->alias) ? (string) $attrs->alias : null,
+            $tags
+        );
     }
 
     /**
@@ -224,8 +177,55 @@ final class ServiceMapProvider
         return $services;
     }
 
-    private function getSymfonyContainerXmlPath(): string
+    private function unWrapAttributes(array $data): array
     {
-        return (string) $this->parameterProvider->provideParameter(self::SYMFONY_CONTAINER_XML_PATH_PARAMETER);
+        if (isset($data['@attributes'])) {
+            foreach ($data['@attributes'] as $key => $value) {
+                $data[$key] = $value;
+            }
+
+            unset($data['@attributes']);
+        }
+
+        return $data;
+    }
+
+    private function convertedNestedArrayOrXml(array $value, array $data, $key): array
+    {
+        foreach ($value as $subKey => $subValue) {
+            if ($subValue instanceof SimpleXMLElement) {
+                $data[$key][$subKey] = $this->convertXmlToArray($subValue);
+            } elseif (is_array($subValue)) {
+                $data[$key][$subKey] = $this->unWrapAttributes($subValue);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param mixed[] $tags
+     * @return TagInterface[]
+     */
+    private function createTagsFromXml(array $tags): array
+    {
+        $tagValueObjects = [];
+        foreach ($tags as $key => $tag) {
+            $data = $tag;
+            $name = $data['name'] ?? '';
+
+            if ($name === 'kernel.event_listener') {
+                $tagValueObjects[$key] = new EventListenerTag(
+                    $data['event'] ?? '',
+                    $data['method'] ?? '',
+                    (int) ($data['priority'] ?? 0)
+                );
+            } else {
+                unset($data['name']);
+                $tagValueObjects[$key] = new Tag($name, $data);
+            }
+        }
+
+        return $tagValueObjects;
     }
 }

@@ -18,14 +18,14 @@ use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 final class ShortNameResolver
 {
     /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
-    /**
      * @var string[][]
      */
     private $shortNamesByNamespaceObjectHash = [];
+
+    /**
+     * @var CallableNodeTraverser
+     */
+    private $callableNodeTraverser;
 
     /**
      * @var NameResolver

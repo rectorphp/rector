@@ -25,14 +25,14 @@ final class BlameableTagValueNode extends AbstractTagValueNode
     private $on;
 
     /**
-     * @var string|string[]
-     */
-    private $field;
-
-    /**
      * @var mixed|null
      */
     private $value;
+
+    /**
+     * @var string|string[]
+     */
+    private $field;
 
     /**
      * @param string|string[] $field

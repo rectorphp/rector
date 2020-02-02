@@ -14,9 +14,9 @@ final class FileDiff
     private $diff;
 
     /**
-     * @var SmartFileInfo
+     * @var string
      */
-    private $smartFileInfo;
+    private $diffConsoleFormatted;
 
     /**
      * @var string[]
@@ -24,9 +24,9 @@ final class FileDiff
     private $appliedRectorClasses = [];
 
     /**
-     * @var string
+     * @var SmartFileInfo
      */
-    private $diffConsoleFormatted;
+    private $smartFileInfo;
 
     /**
      * @param string[] $appliedRectorClasses

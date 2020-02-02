@@ -20,6 +20,11 @@ use Rector\Testing\PHPUnit\PHPUnitEnvironment;
 final class UnusedClassResolver
 {
     /**
+     * @var string[]
+     */
+    private $cachedUsedClassNames = [];
+
+    /**
      * @var NameResolver
      */
     private $nameResolver;
@@ -28,11 +33,6 @@ final class UnusedClassResolver
      * @var ParsedNodesByType
      */
     private $parsedNodesByType;
-
-    /**
-     * @var string[]
-     */
-    private $cachedUsedClassNames = [];
 
     public function __construct(NameResolver $nameResolver, ParsedNodesByType $parsedNodesByType)
     {

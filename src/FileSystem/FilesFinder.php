@@ -93,17 +93,6 @@ final class FilesFinder
     }
 
     /**
-     * @return string[] The absolute path to the file matching the git diff shell command.
-     */
-    private function getGitDiff(): array
-    {
-        $plainDiff = shell_exec('git diff --name-only') ?: '';
-        $relativePaths = explode(PHP_EOL, trim($plainDiff));
-
-        return array_values(array_filter(array_map('realpath', $relativePaths)));
-    }
-
-    /**
      * @param string[] $directories
      * @param string[] $suffixes
      * @return SmartFileInfo[]
@@ -130,6 +119,17 @@ final class FilesFinder
         $this->addFilterWithExcludedPaths($finder);
 
         return $this->finderSanitizer->sanitize($finder);
+    }
+
+    /**
+     * @return string[] The absolute path to the file matching the git diff shell command.
+     */
+    private function getGitDiff(): array
+    {
+        $plainDiff = shell_exec('git diff --name-only') ?: '';
+        $relativePaths = explode(PHP_EOL, trim($plainDiff));
+
+        return array_values(array_filter(array_map('realpath', $relativePaths)));
     }
 
     /**

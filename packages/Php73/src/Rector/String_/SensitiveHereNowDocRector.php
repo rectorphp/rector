@@ -55,7 +55,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! in_array($node->getAttribute('kind'), [String_::KIND_HEREDOC, String_::KIND_NOWDOC], true)) {
+        if (! in_array($node->getAttribute(AttributeKey::KIND), [String_::KIND_HEREDOC, String_::KIND_NOWDOC], true)) {
             return null;
         }
 

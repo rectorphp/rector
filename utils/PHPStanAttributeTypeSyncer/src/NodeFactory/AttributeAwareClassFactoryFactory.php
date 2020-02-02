@@ -87,18 +87,16 @@ final class AttributeAwareClassFactoryFactory
         return $classMethods;
     }
 
-    private function createIsAFuncCall(string $nodeClass): FuncCall
+    private function createGetOriginalNodeClass(string $nodeClass): ClassMethod
     {
-        return new FuncCall(new Name('is_a'), [
-            new Variable('node'),
-            $this->createClassReference($nodeClass),
-            new ConstFetch(new Name('true')),
-        ]);
-    }
+        $getOriginalNodeClassClassMethod = $this->builderFactory->method('getOriginalNodeClass');
+        $getOriginalNodeClassClassMethod->makePublic();
+        $getOriginalNodeClassClassMethod->setReturnType('string');
 
-    private function createClassReference(string $nodeClass): ClassConstFetch
-    {
-        return new ClassConstFetch(new FullyQualified($nodeClass), 'class');
+        $classReference = $this->createClassReference($nodeClass);
+        $getOriginalNodeClassClassMethod->addStmt(new Return_($classReference));
+
+        return $getOriginalNodeClassClassMethod->getNode();
     }
 
     private function createIsMatchClassMethod(string $nodeClass, Param $param): ClassMethod
@@ -113,18 +111,6 @@ final class AttributeAwareClassFactoryFactory
         $isMatchClassMethod->addStmt(new Return_($isAFuncCall));
 
         return $isMatchClassMethod->getNode();
-    }
-
-    private function createGetOriginalNodeClass(string $nodeClass): ClassMethod
-    {
-        $getOriginalNodeClassClassMethod = $this->builderFactory->method('getOriginalNodeClass');
-        $getOriginalNodeClassClassMethod->makePublic();
-        $getOriginalNodeClassClassMethod->setReturnType('string');
-
-        $classReference = $this->createClassReference($nodeClass);
-        $getOriginalNodeClassClassMethod->addStmt(new Return_($classReference));
-
-        return $getOriginalNodeClassClassMethod->getNode();
     }
 
     private function createCreateClassMethod(string $nodeClass, Param $nodeParam): ClassMethod
@@ -149,6 +135,20 @@ final class AttributeAwareClassFactoryFactory
         $createClassMethod->addStmt(new Return_($new));
 
         return $createClassMethod->getNode();
+    }
+
+    private function createClassReference(string $nodeClass): ClassConstFetch
+    {
+        return new ClassConstFetch(new FullyQualified($nodeClass), 'class');
+    }
+
+    private function createIsAFuncCall(string $nodeClass): FuncCall
+    {
+        return new FuncCall(new Name('is_a'), [
+            new Variable('node'),
+            $this->createClassReference($nodeClass),
+            new ConstFetch(new Name('true')),
+        ]);
     }
 
     private function completeNewArgs(New_ $new, string $phpDocParserNodeClass): void

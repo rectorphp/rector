@@ -26,6 +26,16 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class DocBlockNameImporter
 {
     /**
+     * @var bool
+     */
+    private $hasPhpDocChanged = false;
+
+    /**
+     * @var bool[][]
+     */
+    private $usedShortNameByClasses = [];
+
+    /**
      * @var PhpDocNodeTraverser
      */
     private $phpDocNodeTraverser;
@@ -41,19 +51,9 @@ final class DocBlockNameImporter
     private $useAddingCommander;
 
     /**
-     * @var bool
-     */
-    private $hasPhpDocChanged = false;
-
-    /**
      * @var NameResolver
      */
     private $nameResolver;
-
-    /**
-     * @var bool[][]
-     */
-    private $usedShortNameByClasses = [];
 
     /**
      * @var BetterStandardPrinter

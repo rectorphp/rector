@@ -17,14 +17,14 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 final class CheckStaticTypeMappersCommand extends AbstractCommand
 {
     /**
-     * @var SymfonyStyle
-     */
-    private $symfonyStyle;
-
-    /**
      * @var TypeMapperInterface[]
      */
     private $typeMappers = [];
+
+    /**
+     * @var SymfonyStyle
+     */
+    private $symfonyStyle;
 
     /**
      * @var PHPStanTypeClassFinder

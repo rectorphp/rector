@@ -11,14 +11,14 @@ use Symplify\PackageBuilder\Yaml\ParametersMerger;
 final class RectorServiceArgumentCollector
 {
     /**
-     * @var ParametersMerger
-     */
-    private $parametersMerger;
-
-    /**
      * @var mixed[]
      */
     private $cachedRectorServiceKeyArguments = [];
+
+    /**
+     * @var ParametersMerger
+     */
+    private $parametersMerger;
 
     public function __construct()
     {

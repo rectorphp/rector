@@ -190,48 +190,6 @@ PHP
         return $this->createFormTypeClassFromBuildFormClassMethod($buildFormClassMethod);
     }
 
-    private function createFormTypeClassFromBuildFormClassMethod(ClassMethod $buildFormClassMethod): Class_
-    {
-        $formTypeClass = new Class_('SomeFormType');
-        $formTypeClass->extends = new FullyQualified('Symfony\Component\Form\AbstractType');
-
-        $formTypeClass->stmts[] = $buildFormClassMethod;
-
-        return $formTypeClass;
-    }
-
-    /**
-     * @return Arg[]
-     */
-    private function createAddTextArgs(
-        Arg $arg,
-        ClassConstFetch $classConstFetch,
-        MethodCall $onFormVariableMethodCall
-    ): array {
-        $args = [$arg, new Arg($classConstFetch)];
-
-        if (isset($onFormVariableMethodCall->args[1])) {
-            $optionsArray = new Array_([
-                new ArrayItem($onFormVariableMethodCall->args[1]->value, new String_('label')),
-            ]);
-
-            $args[] = new Arg($optionsArray);
-        }
-
-        return $args;
-    }
-
-    private function createBuildFormClassMethod(Variable $formBuilderVariable): ClassMethod
-    {
-        $buildFormClassMethod = $this->nodeFactory->createPublicMethod('buildForm');
-        $buildFormClassMethod->params[] = new Param($formBuilderVariable, null, new FullyQualified(
-            'Symfony\Component\Form\FormBuilderInterface'
-        ));
-        $buildFormClassMethod->params[] = new Param(new Variable('options'), null, new Identifier('array'));
-
-        return $buildFormClassMethod;
-    }
-
     private function dumpFormController(Class_ $node, Class_ $formTypeClass): void
     {
         /** @var SmartFileInfo|null $fileInfo */
@@ -263,6 +221,48 @@ PHP
         // @todo make temporary
         $content = '<?php' . PHP_EOL . $this->print([$namespace]) . PHP_EOL;
         FileSystem::write($filePath, $content);
+    }
+
+    private function createBuildFormClassMethod(Variable $formBuilderVariable): ClassMethod
+    {
+        $buildFormClassMethod = $this->nodeFactory->createPublicMethod('buildForm');
+        $buildFormClassMethod->params[] = new Param($formBuilderVariable, null, new FullyQualified(
+            'Symfony\Component\Form\FormBuilderInterface'
+        ));
+        $buildFormClassMethod->params[] = new Param(new Variable('options'), null, new Identifier('array'));
+
+        return $buildFormClassMethod;
+    }
+
+    /**
+     * @return Arg[]
+     */
+    private function createAddTextArgs(
+        Arg $arg,
+        ClassConstFetch $classConstFetch,
+        MethodCall $onFormVariableMethodCall
+    ): array {
+        $args = [$arg, new Arg($classConstFetch)];
+
+        if (isset($onFormVariableMethodCall->args[1])) {
+            $optionsArray = new Array_([
+                new ArrayItem($onFormVariableMethodCall->args[1]->value, new String_('label')),
+            ]);
+
+            $args[] = new Arg($optionsArray);
+        }
+
+        return $args;
+    }
+
+    private function createFormTypeClassFromBuildFormClassMethod(ClassMethod $buildFormClassMethod): Class_
+    {
+        $formTypeClass = new Class_('SomeFormType');
+        $formTypeClass->extends = new FullyQualified('Symfony\Component\Form\AbstractType');
+
+        $formTypeClass->stmts[] = $buildFormClassMethod;
+
+        return $formTypeClass;
     }
 
     private function createActionWithFormProcess(string $formTypeClass): ClassMethod

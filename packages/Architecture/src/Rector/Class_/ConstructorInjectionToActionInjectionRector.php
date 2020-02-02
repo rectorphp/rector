@@ -26,16 +26,6 @@ use Rector\RectorDefinition\RectorDefinition;
 final class ConstructorInjectionToActionInjectionRector extends AbstractRector
 {
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    /**
      * @var Param[]
      */
     private $propertyFetchToParams = [];
@@ -44,6 +34,16 @@ final class ConstructorInjectionToActionInjectionRector extends AbstractRector
      * @var Param[]
      */
     private $propertyFetchToParamsToRemoveFromConstructor = [];
+
+    /**
+     * @var ClassManipulator
+     */
+    private $classManipulator;
+
+    /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
 
     /**
      * @var ClassMethodManipulator

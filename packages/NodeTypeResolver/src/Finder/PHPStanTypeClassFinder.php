@@ -28,6 +28,16 @@ final class PHPStanTypeClassFinder
     }
 
     /**
+     * @see https://github.com/dg/nette-robot-loader/blob/593c0e40e511c0b0700610a6a3964a210219139f/tests/Loaders/RobotLoader.phar.phpt#L33
+     */
+    private function getPhpstanPharSrcTypeDirectoryPath(): string
+    {
+        $phpstanPharRealpath = realpath(__DIR__ . '/../../../../vendor/phpstan/phpstan/phpstan.phar');
+
+        return 'phar://' . $phpstanPharRealpath . '/src/Type';
+    }
+
+    /**
      * @param string[] $classLikes
      * @return string[]
      */
@@ -46,15 +56,5 @@ final class PHPStanTypeClassFinder
             $classes[] = $classLike;
         }
         return $classes;
-    }
-
-    /**
-     * @see https://github.com/dg/nette-robot-loader/blob/593c0e40e511c0b0700610a6a3964a210219139f/tests/Loaders/RobotLoader.phar.phpt#L33
-     */
-    private function getPhpstanPharSrcTypeDirectoryPath(): string
-    {
-        $phpstanPharRealpath = realpath(__DIR__ . '/../../../../vendor/phpstan/phpstan/phpstan.phar');
-
-        return 'phar://' . $phpstanPharRealpath . '/src/Type';
     }
 }

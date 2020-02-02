@@ -16,6 +16,11 @@ use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 final class DoctrineRepositoryClassMethodManipulator
 {
     /**
+     * @var RepositoryFindMethodCallManipulatorInterface[]
+     */
+    private $repositoryFindMethodCallManipulators = [];
+
+    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
@@ -29,11 +34,6 @@ final class DoctrineRepositoryClassMethodManipulator
      * @var ValueResolver
      */
     private $valueResolver;
-
-    /**
-     * @var RepositoryFindMethodCallManipulatorInterface[]
-     */
-    private $repositoryFindMethodCallManipulators = [];
 
     /**
      * @param RepositoryFindMethodCallManipulatorInterface[] $repositoryFindMethodCallManipulators

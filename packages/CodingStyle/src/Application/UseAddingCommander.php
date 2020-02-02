@@ -33,6 +33,11 @@ final class UseAddingCommander implements CommanderInterface
     private $functionUseImportTypesInFilePath = [];
 
     /**
+     * @var string[][]
+     */
+    private $removedShortUsesInFilePath = [];
+
+    /**
      * @var UseImportsAdder
      */
     private $useImportsAdder;
@@ -46,11 +51,6 @@ final class UseAddingCommander implements CommanderInterface
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
-
-    /**
-     * @var string[][]
-     */
-    private $removedShortUsesInFilePath = [];
 
     /**
      * @var UseImportsRemover
@@ -288,16 +288,6 @@ final class UseAddingCommander implements CommanderInterface
     }
 
     /**
-     * @return FullyQualifiedObjectType[]|AliasedObjectType[]
-     */
-    private function getUseImportTypesByNode(Node $node): array
-    {
-        $filePath = $this->getRealPathFromNode($node);
-
-        return $this->useImportTypesInFilePath[$filePath] ?? [];
-    }
-
-    /**
      * Prevents
      * @param FullyQualifiedObjectType[] $useImportTypes
      * @return FullyQualifiedObjectType[]
@@ -328,5 +318,15 @@ final class UseAddingCommander implements CommanderInterface
         }
 
         return false;
+    }
+
+    /**
+     * @return FullyQualifiedObjectType[]|AliasedObjectType[]
+     */
+    private function getUseImportTypesByNode(Node $node): array
+    {
+        $filePath = $this->getRealPathFromNode($node);
+
+        return $this->useImportTypesInFilePath[$filePath] ?? [];
     }
 }

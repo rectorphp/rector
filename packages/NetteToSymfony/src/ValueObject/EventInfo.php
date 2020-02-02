@@ -7,16 +7,6 @@ namespace Rector\NetteToSymfony\ValueObject;
 final class EventInfo
 {
     /**
-     * @var string[]
-     */
-    private $oldStringAliases = [];
-
-    /**
-     * @var string[]
-     */
-    private $oldClassConstAlaises = [];
-
-    /**
      * @var string
      */
     private $class;
@@ -30,6 +20,16 @@ final class EventInfo
      * @var string
      */
     private $eventClass;
+
+    /**
+     * @var string[]
+     */
+    private $oldStringAliases = [];
+
+    /**
+     * @var string[]
+     */
+    private $oldClassConstAlaises = [];
 
     /**
      * @param string[] $oldStringAliases

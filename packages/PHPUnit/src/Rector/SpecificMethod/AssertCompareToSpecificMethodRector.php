@@ -84,6 +84,27 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
 
     /**
      * @param MethodCall|StaticCall $node
+     * @return MethodCall|StaticCall|null
+     */
+    private function processFuncCallArgumentValue(Node $node, FuncCall $funcCall, Arg $requiredArg): ?Node
+    {
+        $name = $this->getName($funcCall);
+        if ($name === null) {
+            return null;
+        }
+
+        if (! isset($this->defaultOldToNewMethods[$name])) {
+            return null;
+        }
+
+        $this->renameMethod($node, $name);
+        $this->moveFunctionArgumentsUp($node, $funcCall, $requiredArg);
+
+        return $node;
+    }
+
+    /**
+     * @param MethodCall|StaticCall $node
      */
     private function renameMethod(Node $node, string $funcName): void
     {
@@ -107,26 +128,5 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
     {
         $node->args[1] = $funcCall->args[0];
         $node->args[0] = $requiredArg;
-    }
-
-    /**
-     * @param MethodCall|StaticCall $node
-     * @return MethodCall|StaticCall|null
-     */
-    private function processFuncCallArgumentValue(Node $node, FuncCall $funcCall, Arg $requiredArg): ?Node
-    {
-        $name = $this->getName($funcCall);
-        if ($name === null) {
-            return null;
-        }
-
-        if (! isset($this->defaultOldToNewMethods[$name])) {
-            return null;
-        }
-
-        $this->renameMethod($node, $name);
-        $this->moveFunctionArgumentsUp($node, $funcCall, $requiredArg);
-
-        return $node;
     }
 }

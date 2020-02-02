@@ -18,14 +18,14 @@ use Rector\TypeDeclaration\ValueObject\NestedArrayTypeValueObject;
 final class TypeNormalizer
 {
     /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
      * @var NestedArrayTypeValueObject[]
      */
     private $collectedNestedArrayTypes = [];
+
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
 
     /**
      * @var TypeHasher

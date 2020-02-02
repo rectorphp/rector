@@ -107,6 +107,47 @@ PHP
         return $node;
     }
 
+    /**
+     * @param ClassMethod|Function_|Closure $node
+     * @return string[]
+     */
+    private function collectUndefinedVariableScope(Node $node): array
+    {
+        $undefinedVariables = [];
+        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use (&$undefinedVariables): ?int {
+            // entering new scope - break!
+            if ($node instanceof FunctionLike) {
+                return NodeTraverser::STOP_TRAVERSAL;
+            }
+
+            $this->collectDefinedVariablesFromForeach($node);
+
+            if (! $node instanceof Variable) {
+                return null;
+            }
+
+            if ($this->shouldSkipVariable($node)) {
+                return null;
+            }
+
+            /** @var string $variableName */
+            $variableName = $this->getName($node);
+
+            // defined 100 %
+            /** @var Scope $nodeScope */
+            $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
+            if ($nodeScope->hasVariableType($variableName)->yes()) {
+                return null;
+            }
+
+            $undefinedVariables[] = $variableName;
+
+            return null;
+        });
+
+        return array_unique($undefinedVariables);
+    }
+
     private function collectDefinedVariablesFromForeach(Node $node): void
     {
         if (! $node instanceof Foreach_) {
@@ -178,47 +219,6 @@ PHP
         }
 
         return false;
-    }
-
-    /**
-     * @param ClassMethod|Function_|Closure $node
-     * @return string[]
-     */
-    private function collectUndefinedVariableScope(Node $node): array
-    {
-        $undefinedVariables = [];
-        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use (&$undefinedVariables): ?int {
-            // entering new scope - break!
-            if ($node instanceof FunctionLike) {
-                return NodeTraverser::STOP_TRAVERSAL;
-            }
-
-            $this->collectDefinedVariablesFromForeach($node);
-
-            if (! $node instanceof Variable) {
-                return null;
-            }
-
-            if ($this->shouldSkipVariable($node)) {
-                return null;
-            }
-
-            /** @var string $variableName */
-            $variableName = $this->getName($node);
-
-            // defined 100 %
-            /** @var Scope $nodeScope */
-            $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-            if ($nodeScope->hasVariableType($variableName)->yes()) {
-                return null;
-            }
-
-            $undefinedVariables[] = $variableName;
-
-            return null;
-        });
-
-        return array_unique($undefinedVariables);
     }
 
     private function isListAssign(?Node $parentNode): bool

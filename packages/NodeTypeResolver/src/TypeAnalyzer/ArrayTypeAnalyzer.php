@@ -88,6 +88,23 @@ final class ArrayTypeAnalyzer
         return $nodeStaticType instanceof ArrayType;
     }
 
+    private function isIntersectionArrayType(Type $nodeType): bool
+    {
+        if (! $nodeType instanceof IntersectionType) {
+            return false;
+        }
+
+        foreach ($nodeType->getTypes() as $intersectionNodeType) {
+            if ($intersectionNodeType instanceof ArrayType || $intersectionNodeType instanceof HasOffsetType || $intersectionNodeType instanceof NonEmptyArrayType) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * phpstan bug workaround - https://phpstan.org/r/0443f283-244c-42b8-8373-85e7deb3504c
      */
@@ -122,22 +139,5 @@ final class ArrayTypeAnalyzer
         }
 
         return ! $propertyOwnerStaticType instanceof ThisType && $propertyOwnerStaticType instanceof TypeWithClassName;
-    }
-
-    private function isIntersectionArrayType(Type $nodeType): bool
-    {
-        if (! $nodeType instanceof IntersectionType) {
-            return false;
-        }
-
-        foreach ($nodeType->getTypes() as $intersectionNodeType) {
-            if ($intersectionNodeType instanceof ArrayType || $intersectionNodeType instanceof HasOffsetType || $intersectionNodeType instanceof NonEmptyArrayType) {
-                continue;
-            }
-
-            return false;
-        }
-
-        return true;
     }
 }

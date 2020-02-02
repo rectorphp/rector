@@ -56,6 +56,16 @@ final class RectorContainerFactory
         return $rectorKernel->getContainer();
     }
 
+    private function resolveConfigFromSet(string $set): string
+    {
+        $config = $this->setResolver->detectFromNameAndDirectory($set, Set::SET_DIRECTORY);
+        if ($config === null) {
+            throw new ShouldNotHappenException(sprintf('Config file for "%s" set was not found', $set));
+        }
+
+        return $config;
+    }
+
     /**
      * @return string[]
      */
@@ -75,15 +85,5 @@ final class RectorContainerFactory
         }
 
         return $configs;
-    }
-
-    private function resolveConfigFromSet(string $set): string
-    {
-        $config = $this->setResolver->detectFromNameAndDirectory($set, Set::SET_DIRECTORY);
-        if ($config === null) {
-            throw new ShouldNotHappenException(sprintf('Config file for "%s" set was not found', $set));
-        }
-
-        return $config;
     }
 }

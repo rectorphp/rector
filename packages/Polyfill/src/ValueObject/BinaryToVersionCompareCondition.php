@@ -9,9 +9,9 @@ use Rector\Polyfill\Contract\ConditionInterface;
 final class BinaryToVersionCompareCondition implements ConditionInterface
 {
     /**
-     * @var VersionCompareCondition
+     * @var mixed
      */
-    private $versionCompareCondition;
+    private $expectedValue;
 
     /**
      * @var string
@@ -19,9 +19,9 @@ final class BinaryToVersionCompareCondition implements ConditionInterface
     private $binaryClass;
 
     /**
-     * @var mixed
+     * @var VersionCompareCondition
      */
-    private $expectedValue;
+    private $versionCompareCondition;
 
     public function __construct(
         VersionCompareCondition $versionCompareCondition,
