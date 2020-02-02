@@ -15,11 +15,11 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
+use Rector\FrameworkMigration\Symfony\ImplicitToExplicitRoutingAnnotationDecorator;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -36,11 +36,6 @@ use ReflectionMethod;
 final class RouterListToControllerAnnotationsRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const HAS_FRESH_ROUTE_ANNOTATION_ATTRIBUTE = 'has_fresh_route_annotation';
-
-    /**
      * @var ParsedNodesByType
      */
     private $parsedNodesByType;
@@ -55,14 +50,21 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
      */
     private $returnTypeInferer;
 
+    /**
+     * @var ImplicitToExplicitRoutingAnnotationDecorator
+     */
+    private $implicitToExplicitRoutingAnnotationDecorator;
+
     public function __construct(
         ParsedNodesByType $parsedNodesByType,
         RouteInfoFactory $routeInfoFactory,
-        ReturnTypeInferer $returnTypeInferer
+        ReturnTypeInferer $returnTypeInferer,
+        ImplicitToExplicitRoutingAnnotationDecorator $implicitToExplicitRoutingAnnotationDecorator
     ) {
         $this->parsedNodesByType = $parsedNodesByType;
         $this->routeInfoFactory = $routeInfoFactory;
         $this->returnTypeInferer = $returnTypeInferer;
+        $this->implicitToExplicitRoutingAnnotationDecorator = $implicitToExplicitRoutingAnnotationDecorator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -163,7 +165,10 @@ PHP
 
             $symfonyRoutePhpDocTagValueNode = $this->createSymfonyRoutePhpDocTagValueNode($routeInfo);
 
-            $this->addSymfonyRouteShortTagNodeWithUse($symfonyRoutePhpDocTagValueNode, $classMethod);
+            $this->implicitToExplicitRoutingAnnotationDecorator->decorateClassMethodWithRouteAnnotation(
+                $classMethod,
+                $symfonyRoutePhpDocTagValueNode
+            );
         }
 
         // complete all other non-explicit methods, from "<presenter>/<action>"
@@ -240,21 +245,6 @@ PHP
         return new SymfonyRouteTagValueNode($routeInfo->getPath(), null, $routeInfo->getHttpMethods());
     }
 
-    private function addSymfonyRouteShortTagNodeWithUse(
-        SymfonyRouteTagValueNode $symfonyRouteTagValueNode,
-        ClassMethod $classMethod
-    ): void {
-        $this->docBlockManipulator->addTagValueNodeWithShortName($classMethod, $symfonyRouteTagValueNode);
-
-        $symfonyRouteUseObjectType = new FullyQualifiedObjectType(SymfonyRouteTagValueNode::CLASS_NAME);
-        $this->addUseType($symfonyRouteUseObjectType, $classMethod);
-
-        // remove
-        $this->removeShortUse('Route', $classMethod);
-
-        $classMethod->setAttribute(self::HAS_FRESH_ROUTE_ANNOTATION_ATTRIBUTE, true);
-    }
-
     private function completeImplicitRoutes(): void
     {
         $presenterClasses = $this->classLikeParsedNodesFinder->findClassesBySuffix('Presenter');
@@ -268,14 +258,14 @@ PHP
                 $path = $this->resolvePathFromClassAndMethodNodes($presenterClass, $classMethod);
                 $symfonyRoutePhpDocTagValueNode = new SymfonyRouteTagValueNode($path);
 
-                $this->addSymfonyRouteShortTagNodeWithUse($symfonyRoutePhpDocTagValueNode, $classMethod);
+                $this->implicitToExplicitRoutingAnnotationDecorator->decorateClassMethodWithRouteAnnotation(
+                    $classMethod,
+                    $symfonyRoutePhpDocTagValueNode
+                );
             }
         }
     }
 
-    /**
-     * @todo allow extension with custom resolvers
-     */
     private function isRouteStaticCallMatch(StaticCall $staticCall): bool
     {
         $className = $this->getName($staticCall->class);
@@ -319,7 +309,7 @@ PHP
             return true;
         }
 
-        if ($node->getAttribute(self::HAS_FRESH_ROUTE_ANNOTATION_ATTRIBUTE)) {
+        if ($node->getAttribute(ImplicitToExplicitRoutingAnnotationDecorator::HAS_ROUTE_ANNOTATION)) {
             return true;
         }
 

@@ -1,0 +1,10 @@
+parameters:
+    project_directory: null
+
+services:
+    _defaults:
+        public: true
+        autowire: true
+
+    Rector\FrameworkMigration\:
+        resource: '../src'
