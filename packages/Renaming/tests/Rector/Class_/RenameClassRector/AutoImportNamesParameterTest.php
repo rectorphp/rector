@@ -17,14 +17,14 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class AutoImportNamesParameterTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $filePath): void
     {
         $this->doTestFile($filePath);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureAutoImportNames');
     }

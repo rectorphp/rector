@@ -26,7 +26,7 @@ final class FileRelocationResolverTest extends AbstractKernelTestCase
     }
 
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $file, string $oldClass, string $newClass, string $expectedNewFileLocation): void
     {
@@ -41,7 +41,7 @@ final class FileRelocationResolverTest extends AbstractKernelTestCase
         $this->assertSame($expectedNewFileLocation, $newFileLocation);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         yield [
             __DIR__ . '/Source/SomeFile.php',

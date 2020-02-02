@@ -12,14 +12,14 @@ use Rector\ValueObject\PhpVersionFeature;
 final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTests()
+     * @dataProvider provideDatas()
      */
     public function test(string $file): void
     {
         $this->doTestFile($file);
     }
 
-    public function provideDataForTests(): Iterator
+    public function provideDatas(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

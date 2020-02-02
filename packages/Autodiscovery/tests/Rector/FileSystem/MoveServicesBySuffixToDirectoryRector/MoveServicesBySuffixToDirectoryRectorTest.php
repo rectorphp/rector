@@ -11,7 +11,7 @@ use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractFileSystemRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $originalFile, string $expectedFileLocation, string $expectedFileContent): void
     {
@@ -21,7 +21,7 @@ final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractFileSystem
         $this->assertFileEquals($expectedFileContent, $expectedFileLocation);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         yield [
             __DIR__ . '/Source/Entity/AppleRepository.php',

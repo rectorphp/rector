@@ -11,7 +11,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class RenameMethodCallBasedOnParameterRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $file): void
     {
@@ -21,7 +21,7 @@ final class RenameMethodCallBasedOnParameterRectorTest extends AbstractRectorTes
     /**
      * @return string[]
      */
-    public function provideDataForTest(): iterable
+    public function provideData(): iterable
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

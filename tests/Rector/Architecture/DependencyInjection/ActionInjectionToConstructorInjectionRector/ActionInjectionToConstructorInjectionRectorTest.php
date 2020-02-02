@@ -13,7 +13,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class ActionInjectionToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $file): void
     {
@@ -22,7 +22,7 @@ final class ActionInjectionToConstructorInjectionRectorTest extends AbstractRect
         $this->doTestFile($file);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

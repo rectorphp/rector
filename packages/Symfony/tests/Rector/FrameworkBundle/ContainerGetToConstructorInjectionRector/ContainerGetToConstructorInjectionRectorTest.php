@@ -15,7 +15,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $file): void
     {
@@ -26,7 +26,7 @@ final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorT
         $this->doTestFile($file);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

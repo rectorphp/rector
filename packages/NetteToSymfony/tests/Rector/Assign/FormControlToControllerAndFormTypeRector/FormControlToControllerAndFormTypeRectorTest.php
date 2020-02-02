@@ -4,19 +4,24 @@ declare(strict_types=1);
 
 namespace Rector\NetteToSymfony\Tests\Rector\Assign\FormControlToControllerAndFormTypeRector;
 
+use Iterator;
 use Rector\NetteToSymfony\Rector\Assign\FormControlToControllerAndFormTypeRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FormControlToControllerAndFormTypeRectorTest extends AbstractRectorTestCase
 {
-    public function test(): void
+    /**
+     * @dataProvider provideData()
+     */
+    public function test(string $inputFile, string $expectedExtraFileName, string $expectedExtraContentFilePath): void
     {
-        $this->doTestFile(__DIR__ . '/Fixture/fixture.php.inc');
+        $this->doTestFile($inputFile);
+        $this->doTestExtraFile($expectedExtraFileName, $expectedExtraContentFilePath);
+    }
 
-        $controllerFilePath = sys_get_temp_dir() . '/rector_temp_tests/SomeFormController.php';
-        $this->assertFileExists($controllerFilePath);
-
-        $this->assertFileEquals(__DIR__ . '/Source/SomeFormController.php', $controllerFilePath);
+    public function provideData(): Iterator
+    {
+        yield [__DIR__ . '/Fixture/fixture.php.inc', 'SomeFormController.php', __DIR__ . '/Source/extra_file.php'];
     }
 
     protected function getRectorClass(): string

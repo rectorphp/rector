@@ -172,6 +172,14 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         return null;
     }
 
+    protected function doTestExtraFile(string $expectedExtraFileName, string $expectedExtraContentFilePath): void
+    {
+        $expectedFilePath = sys_get_temp_dir() . '/rector_temp_tests/' . $expectedExtraFileName;
+        $this->assertFileExists($expectedFilePath);
+
+        $this->assertFileEquals($expectedExtraContentFilePath, $expectedFilePath);
+    }
+
     private function ensureConfigFileExists(): void
     {
         if (file_exists($this->provideConfig())) {
