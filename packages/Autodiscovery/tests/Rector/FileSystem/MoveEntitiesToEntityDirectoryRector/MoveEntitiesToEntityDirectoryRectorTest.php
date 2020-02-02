@@ -11,7 +11,7 @@ use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 final class MoveEntitiesToEntityDirectoryRectorTest extends AbstractFileSystemRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $originalFile, string $expectedFileLocation, string $expectedFileContent): void
     {
@@ -21,7 +21,7 @@ final class MoveEntitiesToEntityDirectoryRectorTest extends AbstractFileSystemRe
         $this->assertFileEquals($expectedFileContent, $expectedFileLocation);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         yield [
             __DIR__ . '/Source/Controller/RandomEntity.php',

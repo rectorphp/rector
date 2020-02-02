@@ -36,7 +36,7 @@ final class TypeNormalizerTest extends AbstractKernelTestCase
     }
 
     /**
-     * @dataProvider provideDataForTestNormalizeArrayOfUnionToUnionArray()
+     * @dataProvider provideDataNormalizeArrayOfUnionToUnionArray()
      */
     public function testNormalizeArrayOfUnionToUnionArray(ArrayType $arrayType, string $expectedDocString): void
     {
@@ -50,7 +50,7 @@ final class TypeNormalizerTest extends AbstractKernelTestCase
         $this->assertSame($expectedDocString, $unionDocString);
     }
 
-    public function provideDataForTestNormalizeArrayOfUnionToUnionArray(): Iterator
+    public function provideDataNormalizeArrayOfUnionToUnionArray(): Iterator
     {
         $arrayType = new ArrayType(new MixedType(), new UnionType([new StringType(), new IntegerType()]));
         yield [$arrayType, 'int[]|string[]'];

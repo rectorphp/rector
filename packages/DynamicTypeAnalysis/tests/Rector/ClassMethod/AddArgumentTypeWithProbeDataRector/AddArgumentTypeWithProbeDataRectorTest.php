@@ -19,7 +19,7 @@ final class AddArgumentTypeWithProbeDataRectorTest extends AbstractRectorTestCas
     private const METHOD_REFERENCE = SomeClass::class . '::run';
 
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $file): void
     {
@@ -28,7 +28,7 @@ final class AddArgumentTypeWithProbeDataRectorTest extends AbstractRectorTestCas
         $this->doTestFile($file);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

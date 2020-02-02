@@ -11,7 +11,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $file): void
     {
@@ -19,7 +19,7 @@ final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCas
         $this->doTestFile($file);
     }
 
-    public function provideDataForTest(): iterable
+    public function provideData(): iterable
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureRoot');
     }

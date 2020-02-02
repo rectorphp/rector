@@ -11,7 +11,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class PrivatizeLocalClassConstantRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $file): void
     {
@@ -19,19 +19,19 @@ final class PrivatizeLocalClassConstantRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @dataProvider provideDataForTestProtected()
+     * @dataProvider provideDataProtected()
      */
     public function testProtected(string $file): void
     {
         $this->doTestFile($file);
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    public function provideDataForTestProtected(): Iterator
+    public function provideDataProtected(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }

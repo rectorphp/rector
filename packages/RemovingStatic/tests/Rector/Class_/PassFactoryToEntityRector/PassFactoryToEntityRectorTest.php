@@ -13,7 +13,7 @@ use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(string $file): void
     {
@@ -28,7 +28,7 @@ final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
     }
 
     /**
-     * @dataProvider provideDataForTestMultipleArguments()
+     * @dataProvider provideDataMultipleArguments()
      */
     public function testMultipleArguments(string $file): void
     {
@@ -44,12 +44,12 @@ final class PassFactoryToEntityRectorTest extends AbstractRectorTestCase
         );
     }
 
-    public function provideDataForTest(): Iterator
+    public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
-    public function provideDataForTestMultipleArguments(): Iterator
+    public function provideDataMultipleArguments(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureWithMultipleArguments');
     }

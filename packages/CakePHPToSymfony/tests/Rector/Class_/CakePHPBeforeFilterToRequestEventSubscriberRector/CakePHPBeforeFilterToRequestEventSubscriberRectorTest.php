@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php73\Tests\Rector\String_\SensitiveHereNowDocRector;
+namespace Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPBeforeFilterToRequestEventSubscriberRector;
 
 use Iterator;
-use Rector\Php73\Rector\String_\SensitiveHereNowDocRector;
+use Rector\CakePHPToSymfony\Rector\Class_\CakePHPBeforeFilterToRequestEventSubscriberRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class SensitiveHereNowDocRectorTest extends AbstractRectorTestCase
+final class CakePHPBeforeFilterToRequestEventSubscriberRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -25,6 +25,6 @@ final class SensitiveHereNowDocRectorTest extends AbstractRectorTestCase
 
     protected function getRectorClass(): string
     {
-        return SensitiveHereNowDocRector::class;
+        return CakePHPBeforeFilterToRequestEventSubscriberRector::class;
     }
 }
