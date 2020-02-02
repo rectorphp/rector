@@ -6,11 +6,10 @@ namespace Rector\CakePHPToSymfony\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
+use Rector\FrameworkMigration\Symfony\ImplicitToExplicitRoutingAnnotationDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 use Rector\Util\RectorStrings;
@@ -24,9 +23,15 @@ use Rector\Util\RectorStrings;
 final class CakePHPImplicitRouteToExplicitRouteAnnotationRector extends AbstractCakePHPRector
 {
     /**
-     * @var string
+     * @var ImplicitToExplicitRoutingAnnotationDecorator
      */
-    private const HAS_FRESH_ROUTE_ANNOTATION_ATTRIBUTE = 'has_fresh_route_annotation';
+    private $implicitToExplicitRoutingAnnotationDecorator;
+
+    public function __construct(
+        ImplicitToExplicitRoutingAnnotationDecorator $implicitToExplicitRoutingAnnotationDecorator
+    ) {
+        $this->implicitToExplicitRoutingAnnotationDecorator = $implicitToExplicitRoutingAnnotationDecorator;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -92,7 +97,11 @@ PHP
             $name = RectorStrings::camelCaseToUnderscore($combined);
 
             $symfonyRoutePhpDocTagValueNode = $this->createSymfonyRoutePhpDocTagValueNode($path, $name);
-            $this->addSymfonyRouteShortTagNodeWithUse($symfonyRoutePhpDocTagValueNode, $classMethod);
+
+            $this->implicitToExplicitRoutingAnnotationDecorator->decorateClassMethodWithRouteAnnotation(
+                $classMethod,
+                $symfonyRoutePhpDocTagValueNode
+            );
         }
 
         return $node;
@@ -101,21 +110,5 @@ PHP
     private function createSymfonyRoutePhpDocTagValueNode(string $path, string $name): SymfonyRouteTagValueNode
     {
         return new SymfonyRouteTagValueNode($path, $name);
-    }
-
-    /**
-     * @todo reuse from RouterListToControllerAnnotationsRector
-     */
-    private function addSymfonyRouteShortTagNodeWithUse(
-        SymfonyRouteTagValueNode $symfonyRouteTagValueNode,
-        ClassMethod $classMethod
-    ): void {
-        // @todo use empty phpdoc info
-        $this->docBlockManipulator->addTagValueNodeWithShortName($classMethod, $symfonyRouteTagValueNode);
-
-        $symfonyRouteUseObjectType = new FullyQualifiedObjectType(SymfonyRouteTagValueNode::CLASS_NAME);
-        $this->addUseType($symfonyRouteUseObjectType, $classMethod);
-
-        $classMethod->setAttribute(self::HAS_FRESH_ROUTE_ANNOTATION_ATTRIBUTE, true);
     }
 }

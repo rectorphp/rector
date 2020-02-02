@@ -87,11 +87,6 @@ trait NodeCommandersTrait
         $this->useAddingCommander->addUseImport($positionNode, $objectType);
     }
 
-    protected function removeShortUse(string $shortUse, Node $positionNode): void
-    {
-        $this->useAddingCommander->removeShortUse($positionNode, $shortUse);
-    }
-
     protected function addNodeAfterNode(Node $newNode, Node $positionNode): void
     {
         $this->nodeAddingCommander->addNodeAfterNode($newNode, $positionNode);
