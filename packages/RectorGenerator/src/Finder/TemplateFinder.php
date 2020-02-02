@@ -17,16 +17,6 @@ final class TemplateFinder
     public const TEMPLATES_DIRECTORY = __DIR__ . '/../../templates';
 
     /**
-     * @var string
-     */
-    private const TEMPLATES_FIXTURE_DIRECTORY = __DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/Fixture';
-
-    /**
-     * @var string
-     */
-    private const TEMPLATES_SOURCE_DIRECTORY = __DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/Source';
-
-    /**
      * @var FinderSanitizer
      */
     private $finderSanitizer;
@@ -52,14 +42,17 @@ final class TemplateFinder
         $smartFileInfos[] = $this->createFixtureSmartFileInfo($configuration->isPhpSnippet());
 
         if ($configuration->getExtraFileContent()) {
-            $smartFileInfos[] = new SmartFileInfo(__DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/Source/extra_file.php.inc');
-            $smartFileInfos[] = new SmartFileInfo(__DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/_Name_ExtraTest.php.inc');
+            $smartFileInfos[] = new SmartFileInfo(
+                __DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/Source/extra_file.php.inc'
+            );
+            $smartFileInfos[] = new SmartFileInfo(
+                __DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/_Name_ExtraTest.php.inc'
+            );
         } else {
-            $smartFileInfos[] = new SmartFileInfo(__DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/_Name_Test.php.inc');
+            $smartFileInfos[] = new SmartFileInfo(
+                __DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/_Name_Test.php.inc'
+            );
         }
-
-        dump($smartFileInfos);
-        die;
 
         return $smartFileInfos;
     }
@@ -67,10 +60,14 @@ final class TemplateFinder
     private function createFixtureSmartFileInfo(bool $isPhpSnippet): SmartFileInfo
     {
         if ($isPhpSnippet) {
-            return new SmartFileInfo(self::TEMPLATES_FIXTURE_DIRECTORY . '/fixture.php.inc');
+            return new SmartFileInfo(
+                __DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/Fixture/fixture.php.inc'
+            );
         }
 
         // is html snippet
-        return new SmartFileInfo(self::TEMPLATES_FIXTURE_DIRECTORY . '/html_fixture.php.inc');
+        return new SmartFileInfo(
+            __DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/Fixture/html_fixture.php.inc'
+        );
     }
 }

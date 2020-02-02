@@ -41,7 +41,7 @@ final class TemplateVariablesFactory
             '_Source_' => $this->createSourceDocBlock($configuration->getSource()),
         ];
 
-        if ($configuration->getExtraFileContent()) {
+        if ($configuration->getExtraFileContent() !== null && $configuration->getExtraFileName() !== null) {
             $data['_ExtraFileName_'] = $configuration->getExtraFileName();
             $data['_ExtraFileContent_'] = trim($configuration->getExtraFileContent()) . PHP_EOL;
             $data['_ExtraFileContentExample_'] = $this->createCodeForDefinition($configuration->getExtraFileContent());

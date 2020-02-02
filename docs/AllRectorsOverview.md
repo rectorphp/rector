@@ -4507,7 +4507,7 @@ services:
  {
 -    public function test()
 +    /**
-+     * @dataProvider provideDataForTest()
++     * @dataProvider provideData()
 +     */
 +    public function test(int $number)
      {
@@ -4515,7 +4515,7 @@ services:
 +        $this->doTestSingle($number);
 +    }
 +
-+    public function provideDataForTest(): \Iterator
++    public function provideData(): \Iterator
 +    {
 +        yield [1];
 +        yield [2];

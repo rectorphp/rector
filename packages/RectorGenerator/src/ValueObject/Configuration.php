@@ -59,12 +59,12 @@ final class Configuration
     private $source = [];
 
     /**
-     * @var string
+     * @var string|null
      */
     private $extraFileContent;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $extraFileName;
 
@@ -161,7 +161,7 @@ final class Configuration
         return $this->extraFileContent;
     }
 
-    public function getExtraFileName(): string
+    public function getExtraFileName(): ?string
     {
         return $this->extraFileName;
     }
