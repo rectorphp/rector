@@ -1,4 +1,5 @@
 <?php
+
 namespace Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPBeforeFilterToRequestEventSubscriberRector\Fixture;
 
 final class SuperadminControllerEventSubscriber implements \Symfony\Component\EventDispatcher\EventSubscriberInterface

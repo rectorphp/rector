@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\SlugTagValueNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
@@ -32,9 +33,15 @@ final class SluggableBehaviorRector extends AbstractRector
      */
     private $classManipulator;
 
-    public function __construct(ClassManipulator $classManipulator)
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(ClassManipulator $classManipulator, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->classManipulator = $classManipulator;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -153,7 +160,10 @@ PHP
         $classMethod->returnType = new Identifier('array');
         $classMethod->stmts[] = new Return_($this->createArray($slugFields));
 
-        $this->docBlockManipulator->addReturnTag($classMethod, new ArrayType(new MixedType(), new StringType()));
+        $returnType = new ArrayType(new MixedType(), new StringType());
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        $phpDocInfo->changeReturnType($returnType);
+//        $this->docBlockManipulator->addReturnTag($classMethod, new ArrayType(new MixedType(), new StringType()));
 
         $this->classManipulator->addAsFirstMethod($class, $classMethod);
     }

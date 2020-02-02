@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use Iterator;
-use PhpParser\Comment;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Name\FullyQualified;
@@ -34,19 +32,14 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector
     private $methodsByType = [];
 
     /**
-     * @var Comment[]
-     */
-    private $returnComments = [];
-
-    /**
      * @var NodeTransformer
      */
     private $nodeTransformer;
 
     /**
-     * @var Doc|null
+     * @var PhpDocInfo|null
      */
-    private $returnDocComment;
+    private $returnPhpDocInfo;
 
     /**
      * @param string[][] $methodsByType
@@ -137,7 +130,7 @@ PHP
                     continue;
                 }
 
-                $this->collectComments($statement);
+                $this->returnPhpDocInfo = $statement->getAttribute(AttributeKey::PHP_DOC_INFO);
 
                 return $statement->expr;
             }
@@ -170,18 +163,12 @@ PHP
         $classMethod->stmts = array_merge((array) $classMethod->stmts, $yieldNodes);
     }
 
-    private function completeComments(Node $node): void
+    private function completeComments(ClassMethod $classMethod): void
     {
-        if ($this->returnDocComment !== null) {
-            $node->setDocComment($this->returnDocComment);
-        } elseif ($this->returnComments !== []) {
-            $node->setAttribute('comments', $this->returnComments);
+        if ($this->returnPhpDocInfo === null) {
+            return;
         }
-    }
 
-    private function collectComments(Node $node): void
-    {
-        $this->returnDocComment = $node->getDocComment();
-        $this->returnComments = $node->getComments();
+        $classMethod->setAttribute(AttributeKey::PHP_DOC_INFO, $this->returnPhpDocInfo);
     }
 }

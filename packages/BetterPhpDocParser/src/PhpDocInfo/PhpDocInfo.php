@@ -6,21 +6,26 @@ namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareReturnTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
+use Rector\Exception\NotImplementedException;
 use Rector\Exception\ShouldNotHappenException;
+use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 
 /**
@@ -59,6 +64,11 @@ final class PhpDocInfo
     private $node;
 
     /**
+     * @var TypeComparator
+     */
+    private $typeComparator;
+
+    /**
      * @param mixed[] $tokens
      */
     public function __construct(
@@ -66,7 +76,8 @@ final class PhpDocInfo
         array $tokens,
         string $originalContent,
         StaticTypeMapper $staticTypeMapper,
-        Node $node
+        Node $node,
+        TypeComparator $typeComparator
     ) {
         $this->phpDocNode = $attributeAwarePhpDocNode;
         $this->tokens = $tokens;
@@ -74,6 +85,7 @@ final class PhpDocInfo
         $this->originalContent = $originalContent;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->node = $node;
+        $this->typeComparator = $typeComparator;
     }
 
     public function getOriginalContent(): string
@@ -296,6 +308,56 @@ final class PhpDocInfo
         return $paramTypesByName;
     }
 
+    public function changeReturnType(Type $newType): void
+    {
+        // make sure the tags are not identical, e.g imported class vs FQN class
+        if ($this->typeComparator->areTypesEquals($this->getReturnType(), $newType)) {
+            return;
+        }
+
+        // overide existing type
+        $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
+
+        $currentReturnTagValueNode = $this->getReturnTagValue();
+        if ($currentReturnTagValueNode !== null) {
+            // only change type
+            $currentReturnTagValueNode->type = $newPHPStanPhpDocType;
+        } else {
+            // add completely new one
+            $returnTagValueNode = new AttributeAwareReturnTagValueNode($newPHPStanPhpDocType, '');
+            $this->addTagValueNode($returnTagValueNode);
+        }
+    }
+
+    public function getOpeningTokenValue(): ?string
+    {
+        if (! isset($this->tokens[0])) {
+            return null;
+        }
+
+        $openingToken = $this->tokens[0];
+
+        return $openingToken[0];
+    }
+
+    public function changeOpeningTokenValue(string $value): void
+    {
+        $this->tokens[0][0] = $value;
+    }
+
+    public function addBareTag(string $tag): void
+    {
+        $tag = '@' . ltrim($tag, '@');
+
+        $phpDocTagNode = new AttributeAwarePhpDocTagNode($tag, new GenericTagValueNode(''));
+        $this->addPhpDocTagNode($phpDocTagNode);
+    }
+
+    public function isEmpty(): bool
+    {
+        return $this->phpDocNode->children === [];
+    }
+
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
         $phpDocNode = $this->getPhpDocNode();
@@ -330,5 +392,17 @@ final class PhpDocInfo
         $secondAnnotationName = trim($secondAnnotationName, '@');
 
         return $firstAnnotationName === $secondAnnotationName;
+    }
+
+    private function addTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): void
+    {
+        if ($phpDocTagValueNode instanceof ReturnTagValueNode) {
+            $name = '@return';
+        } else {
+            throw new NotImplementedException();
+        }
+
+        $phpDocTagNode = new AttributeAwarePhpDocTagNode($name, $phpDocTagValueNode);
+        $this->addPhpDocTagNode($phpDocTagNode);
     }
 }

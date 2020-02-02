@@ -11,6 +11,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\IterableType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
@@ -65,8 +66,13 @@ final class UnionTypeMapper implements TypeMapperInterface
     public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
     {
         $unionTypesNodes = [];
+        $skipIterable = $this->shouldSkipIterable($type);
 
         foreach ($type->getTypes() as $unionedType) {
+            if ($unionedType instanceof IterableType && $skipIterable) {
+                continue;
+            }
+
             $unionTypesNodes[] = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($unionedType);
         }
 
@@ -232,5 +238,15 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
 
         return is_a($secondType->getClassName(), $firstType->getClassName(), true);
+    }
+
+    private function shouldSkipIterable(UnionType $unionType): bool
+    {
+        $unionTypeAnalysis = $this->unionTypeAnalyzer->analyseForNullableAndIterable($unionType);
+        if ($unionTypeAnalysis === null) {
+            return false;
+        }
+
+        return $unionTypeAnalysis->hasIterable() && $unionTypeAnalysis->hasArray();
     }
 }

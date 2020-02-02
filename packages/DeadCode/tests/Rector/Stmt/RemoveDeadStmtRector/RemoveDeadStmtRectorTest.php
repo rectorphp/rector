@@ -23,6 +23,20 @@ final class RemoveDeadStmtRectorTest extends AbstractRectorTestCase
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
+    /**
+     * @dataProvider provideDataForTestKeepComments()
+     */
+    public function testKeepComments(string $file): void
+    {
+        $this->markTestSkipped('Temporary skip removed docs');
+        $this->doTestFile($file);
+    }
+
+    public function provideDataForTestKeepComments(): Iterator
+    {
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureRemovedComments');
+    }
+
     protected function getRectorClass(): string
     {
         return RemoveDeadStmtRector::class;

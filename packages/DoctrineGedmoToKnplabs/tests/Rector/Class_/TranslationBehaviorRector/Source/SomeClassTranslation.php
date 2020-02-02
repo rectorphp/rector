@@ -1,4 +1,5 @@
 <?php
+
 namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\TranslationBehaviorRector\Fixture;
 
 /**
