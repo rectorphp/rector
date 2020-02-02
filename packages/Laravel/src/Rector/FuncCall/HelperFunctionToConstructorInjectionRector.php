@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Laravel\FunctionToServiceMap;
 use Rector\Laravel\ValueObject\ArrayFunctionToMethodCall;
@@ -144,7 +145,7 @@ PHP
             return true;
         }
 
-        /** @var Node\Stmt\ClassMethod|null $classMethod */
+        /** @var ClassMethod|null $classMethod */
         $classMethod = $funcCall->getAttribute(AttributeKey::METHOD_NODE);
         if ($classMethod === null) {
             return true;

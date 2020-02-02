@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\PHPStan\Type;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -23,7 +24,7 @@ final class ObjectTypeSpecifier
      */
     public function narrowToFullyQualifiedOrAlaisedObjectType(Node $node, ObjectType $objectType): Type
     {
-        /** @var Node\Stmt\Use_[]|null $uses */
+        /** @var Use_[]|null $uses */
         $uses = $node->getAttribute(AttributeKey::USE_NODES);
         if ($uses === null) {
             return $objectType;
@@ -56,7 +57,7 @@ final class ObjectTypeSpecifier
 
     private function matchAliasedObjectType(Node $node, ObjectType $objectType): ?AliasedObjectType
     {
-        /** @var Node\Stmt\Use_[]|null $uses */
+        /** @var Use_[]|null $uses */
         $uses = $node->getAttribute(AttributeKey::USE_NODES);
         if ($uses === null) {
             return null;
@@ -89,7 +90,7 @@ final class ObjectTypeSpecifier
 
     private function matchShortenedObjectType(Node $node, ObjectType $objectType): ?ShortenedObjectType
     {
-        /** @var Node\Stmt\Use_[]|null $uses */
+        /** @var Use_[]|null $uses */
         $uses = $node->getAttribute(AttributeKey::USE_NODES);
         if ($uses === null) {
             return null;

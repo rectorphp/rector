@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -205,7 +206,7 @@ PHP
     }
 
     /**
-     * @param Node\Stmt[] $stmts
+     * @param Stmt[] $stmts
      */
     private function resolveAssignedTypeInStmtsByPropertyName(array $stmts, string $propertyName): ?Type
     {

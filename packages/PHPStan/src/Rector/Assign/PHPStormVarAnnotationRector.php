@@ -9,6 +9,7 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -62,7 +63,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        /** @var Node\Stmt\Expression|null $expression */
+        /** @var Expression|null $expression */
         $expression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
 
         // unable to analyze
