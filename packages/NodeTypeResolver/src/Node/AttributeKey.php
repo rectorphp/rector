@@ -40,6 +40,11 @@ final class AttributeKey
     public const CLASS_NAME = 'className';
 
     /**
+     * @var string
+     */
+    public const CLASS_SHORT_NAME = 'class_short_name';
+
+    /**
      * @todo split Class node, interface node and trait node, to be compatible with other SpecificNode|null, values
      * @var string
      */

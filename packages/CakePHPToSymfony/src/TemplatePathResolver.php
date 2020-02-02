@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
@@ -33,11 +32,6 @@ final class TemplatePathResolver
     private $valueResolver;
 
     /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
-    /**
      * @var NodeRemovingCommander
      */
     private $nodeRemovingCommander;
@@ -46,13 +40,11 @@ final class TemplatePathResolver
         CallableNodeTraverser $callableNodeTraverser,
         PropertyFetchManipulator $propertyFetchManipulator,
         ValueResolver $valueResolver,
-        ClassNaming $classNaming,
         NodeRemovingCommander $nodeRemovingCommander
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->propertyFetchManipulator = $propertyFetchManipulator;
         $this->valueResolver = $valueResolver;
-        $this->classNaming = $classNaming;
         $this->nodeRemovingCommander = $nodeRemovingCommander;
     }
 
@@ -71,10 +63,8 @@ final class TemplatePathResolver
 
     public function resolveClassNameTemplatePart(ClassMethod $classMethod): string
     {
-        /** @var string $className */
-        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        $shortClassName = $this->classNaming->getShortName($className);
-
+        /** @var string $shortClassName */
+        $shortClassName = $classMethod->getAttribute(AttributeKey::CLASS_SHORT_NAME);
         $shortClassName = Strings::replace($shortClassName, '#Controller$#i');
 
         return Strings::lower($shortClassName);

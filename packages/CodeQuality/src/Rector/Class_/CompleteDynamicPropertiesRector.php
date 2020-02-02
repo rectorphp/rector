@@ -105,15 +105,16 @@ PHP
         // special case for Laravel Collection macro magic
         $fetchedLocalPropertyNameToTypes = $this->resolveFetchedLocalPropertyNameToType($node);
 
-        $propertyNames = $this->getClassPropertyNames($node);
-
-        $fetchedLocalPropertyNames = array_keys($fetchedLocalPropertyNameToTypes);
-        $propertiesToComplete = array_diff($fetchedLocalPropertyNames, $propertyNames);
+        $propertiesToComplete = $this->resolvePropertiesToComplete($node, $fetchedLocalPropertyNameToTypes);
+        if ($propertiesToComplete === []) {
+            return null;
+        }
 
         // remove other properties that are accessible from this scope
         /** @var string $class */
         $class = $this->getName($node);
         foreach ($propertiesToComplete as $key => $propertyToComplete) {
+            /** @var string $propertyToComplete */
             if (! property_exists($class, $propertyToComplete)) {
                 continue;
             }
@@ -252,5 +253,18 @@ PHP
         }
 
         return new MixedType();
+    }
+
+    /**
+     * @param Type[] $fetchedLocalPropertyNameToTypes
+     * @return string[]
+     */
+    private function resolvePropertiesToComplete(Class_ $class, array $fetchedLocalPropertyNameToTypes): array
+    {
+        $propertyNames = $this->getClassPropertyNames($class);
+
+        $fetchedLocalPropertyNames = array_keys($fetchedLocalPropertyNameToTypes);
+
+        return array_diff($fetchedLocalPropertyNames, $propertyNames);
     }
 }
