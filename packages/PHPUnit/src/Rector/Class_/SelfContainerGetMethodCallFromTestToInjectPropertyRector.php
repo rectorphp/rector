@@ -7,10 +7,7 @@ namespace Rector\PHPUnit\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PHPUnit\Manipulator\OnContainerGetCallManipulator;
@@ -153,15 +150,9 @@ PHP
 
     private function addInjectAnnotationToProperty(Property $privateProperty): void
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $privateProperty->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        if ($phpDocInfo === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $injectTag = new AttributeAwarePhpDocTagNode('@inject', new GenericTagValueNode(''));
-        $phpDocInfo->addPhpDocTagNode($injectTag);
+        $phpDocInfo->addBareTag('@inject');
     }
 
     /**

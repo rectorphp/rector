@@ -92,11 +92,8 @@ PHP
 
     private function shouldSkipProperty(Node $node): bool
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return true;
-        }
 
         if (! $phpDocInfo->hasByName(self::INJECT_ANNOTATION)) {
             return true;

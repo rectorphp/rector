@@ -133,11 +133,8 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
         /** @var string $paramName */
         $paramName = $this->nameResolver->getName($param);
 
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $parentNode->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return new MixedType();
-        }
 
         return $phpDocInfo->getParamType($paramName);
     }

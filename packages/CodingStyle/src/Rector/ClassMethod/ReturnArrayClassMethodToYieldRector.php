@@ -151,11 +151,9 @@ PHP
 
         $this->removeNode($parentNode);
 
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo instanceof PhpDocInfo) {
-            $phpDocInfo->removeByType(ReturnTagValueNode::class);
-        }
+        $phpDocInfo->removeByType(ReturnTagValueNode::class);
 
         // change return typehint
         $classMethod->returnType = new FullyQualified(Iterator::class);

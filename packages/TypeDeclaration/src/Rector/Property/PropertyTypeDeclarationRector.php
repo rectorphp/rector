@@ -53,15 +53,9 @@ final class PropertyTypeDeclarationRector extends AbstractRector
         }
 
         // is already set
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo instanceof PhpDocInfo) {
-            $currentVarType = $phpDocInfo->getVarType();
-        } else {
-            $currentVarType = new MixedType();
-        }
-
-        if (! $currentVarType instanceof MixedType) {
+        if (! $phpDocInfo->getVarType() instanceof MixedType) {
             return null;
         }
 
@@ -70,7 +64,7 @@ final class PropertyTypeDeclarationRector extends AbstractRector
             return null;
         }
 
-        $this->docBlockManipulator->changeVarTag($node, $type);
+        $phpDocInfo->changeVarType($type);
 
         return $node;
     }

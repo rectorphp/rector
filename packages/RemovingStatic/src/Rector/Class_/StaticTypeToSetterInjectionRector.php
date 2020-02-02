@@ -15,7 +15,9 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Naming\PropertyNaming;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -154,7 +156,10 @@ PHP
             $setEntityFactoryMethod = $this->createSetEntityFactoryClassMethod($variableName, $param, $assign);
 
             $entityFactoryProperty = $this->nodeFactory->createPrivateProperty($variableName);
-            $this->docBlockManipulator->changeVarTag($entityFactoryProperty, $objectType);
+
+            /** @var PhpDocInfo $phpDocInfo */
+            $phpDocInfo = $entityFactoryProperty->getAttribute(AttributeKey::PHP_DOC_INFO);
+            $phpDocInfo->changeVarType($objectType);
 
             $class->stmts = array_merge([$entityFactoryProperty, $setEntityFactoryMethod], $class->stmts);
 

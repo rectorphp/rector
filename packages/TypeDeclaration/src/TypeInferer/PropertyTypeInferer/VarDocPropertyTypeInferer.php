@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -15,10 +14,10 @@ final class VarDocPropertyTypeInferer implements PropertyTypeInfererInterface
 {
     public function inferProperty(Property $property): Type
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        return $phpDocInfo !== null ? $phpDocInfo->getVarType() : new MixedType();
+        return $phpDocInfo->getVarType();
     }
 
     public function getPriority(): int

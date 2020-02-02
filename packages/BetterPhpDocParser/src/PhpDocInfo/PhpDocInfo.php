@@ -11,8 +11,11 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
@@ -308,6 +311,32 @@ final class PhpDocInfo
         return $paramTypesByName;
     }
 
+    public function changeVarType(Type $newType): void
+    {
+        // make sure the tags are not identical, e.g imported class vs FQN class
+        if ($this->typeComparator->areTypesEquals($this->getVarType(), $newType)) {
+            return;
+        }
+
+        // prevent existing type override by mixed
+        if (! $this->getVarType() instanceof MixedType && $newType instanceof ConstantArrayType && $newType->getItemType() instanceof NeverType) {
+            return;
+        }
+
+        // override existing type
+        $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
+
+        $currentVarTagValueNode = $this->getVarTagValue();
+        if ($currentVarTagValueNode !== null) {
+            // only change type
+            $currentVarTagValueNode->type = $newPHPStanPhpDocType;
+        } else {
+            // add completely new one
+            $returnTagValueNode = new AttributeAwareVarTagValueNode($newPHPStanPhpDocType, '', '');
+            $this->addTagValueNode($returnTagValueNode);
+        }
+    }
+
     public function changeReturnType(Type $newType): void
     {
         // make sure the tags are not identical, e.g imported class vs FQN class
@@ -315,7 +344,7 @@ final class PhpDocInfo
             return;
         }
 
-        // overide existing type
+        // override existing type
         $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
 
         $currentReturnTagValueNode = $this->getReturnTagValue();
@@ -398,6 +427,8 @@ final class PhpDocInfo
     {
         if ($phpDocTagValueNode instanceof ReturnTagValueNode) {
             $name = '@return';
+        } elseif ($phpDocTagValueNode instanceof VarTagValueNode) {
+            $name = '@var';
         } else {
             throw new NotImplementedException();
         }

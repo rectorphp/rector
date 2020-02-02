@@ -16,7 +16,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 final class DoctrineNodeFactory
@@ -27,14 +27,14 @@ final class DoctrineNodeFactory
     private $builderFactory;
 
     /**
-     * @var DocBlockManipulator
+     * @var PhpDocInfoFactory
      */
-    private $docBlockManipulator;
+    private $phpDocInfoFactory;
 
-    public function __construct(BuilderFactory $builderFactory, DocBlockManipulator $docBlockManipulator)
+    public function __construct(BuilderFactory $builderFactory, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->builderFactory = $builderFactory;
-        $this->docBlockManipulator = $docBlockManipulator;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -56,23 +56,22 @@ final class DoctrineNodeFactory
 
     public function createRepositoryProperty(): Property
     {
-        $repositoryProperty = $this->builderFactory->property('repository')
-            ->makePrivate()
-            ->getNode();
+        $repositoryPropertyBuilder = $this->builderFactory->property('repository');
+        $repositoryPropertyBuilder->makePrivate();
 
-        $this->docBlockManipulator->changeVarTag(
-            $repositoryProperty,
-            new FullyQualifiedObjectType('Doctrine\ORM\EntityRepository')
-        );
+        $repositoryProperty = $repositoryPropertyBuilder->getNode();
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($repositoryProperty);
+        $phpDocInfo->changeVarType(new FullyQualifiedObjectType('Doctrine\ORM\EntityRepository'));
 
         return $repositoryProperty;
     }
 
     public function createConstructorWithGetRepositoryAssign(string $entityClass): ClassMethod
     {
-        $param = $this->builderFactory->param('entityManager')
-            ->setType(new FullyQualified(EntityManagerInterface::class))
-            ->getNode();
+        $paramBuilder = $this->builderFactory->param('entityManager');
+        $paramBuilder->setType(new FullyQualified(EntityManagerInterface::class));
+        $param = $paramBuilder->getNode();
 
         $assign = $this->createRepositoryAssign($entityClass);
 

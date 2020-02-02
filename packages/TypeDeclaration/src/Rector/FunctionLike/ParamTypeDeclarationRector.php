@@ -105,11 +105,8 @@ PHP
             return null;
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
 
         $paramWithTypes = $phpDocInfo->getParamTypesByName();
         // no tags, nothing to complete here

@@ -6,13 +6,14 @@ namespace Rector\CakePHPToSymfony\NodeFactory;
 
 use PhpParser\Builder\Property as PropertyBuilder;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ManyToManyTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ManyToOneTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\OneToManyTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\OneToOneTagValueNode;
 use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Value\ValueResolver;
 
 final class RelationPropertyFactory
@@ -23,14 +24,14 @@ final class RelationPropertyFactory
     private $valueResolver;
 
     /**
-     * @var DocBlockManipulator
+     * @var PhpDocInfoFactory
      */
-    private $docBlockManipulator;
+    private $phpDocInfoFactory;
 
-    public function __construct(ValueResolver $valueResolver, DocBlockManipulator $docBlockManipulator)
+    public function __construct(ValueResolver $valueResolver, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->valueResolver = $valueResolver;
-        $this->docBlockManipulator = $docBlockManipulator;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     /**
@@ -48,11 +49,14 @@ final class RelationPropertyFactory
 
             // add @ORM\ManyToOne
             $manyToOneTagValueNode = new ManyToOneTagValueNode($className, null, null, null, null, $className);
-            $this->docBlockManipulator->addTagValueNodeWithShortName($property, $manyToOneTagValueNode);
+
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+            $phpDocInfo->addTagValueNodeWithShortName($manyToOneTagValueNode);
 
             // add @ORM\JoinColumn
             $joinColumnTagValueNode = new JoinColumnTagValueNode($manyToOneConfiguration['foreignKey'], null);
-            $this->docBlockManipulator->addTagValueNodeWithShortName($property, $joinColumnTagValueNode);
+
+            $phpDocInfo->addTagValueNodeWithShortName($joinColumnTagValueNode);
 
             $properties[] = $property;
         }
@@ -75,7 +79,9 @@ final class RelationPropertyFactory
 
             // add @ORM\ManyToOne
             $manyToOneTagValueNode = new OneToOneTagValueNode($className);
-            $this->docBlockManipulator->addTagValueNodeWithShortName($property, $manyToOneTagValueNode);
+
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+            $phpDocInfo->addTagValueNodeWithShortName($manyToOneTagValueNode);
 
             $properties[] = $property;
         }
@@ -98,7 +104,9 @@ final class RelationPropertyFactory
 
             // add @ORM\ManyToOne
             $manyToOneTagValueNode = new ManyToManyTagValueNode($className);
-            $this->docBlockManipulator->addTagValueNodeWithShortName($property, $manyToOneTagValueNode);
+
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+            $phpDocInfo->addTagValueNodeWithShortName($manyToOneTagValueNode);
 
             $properties[] = $property;
         }
@@ -121,7 +129,10 @@ final class RelationPropertyFactory
 
             // add @ORM\OneToMany
             $manyToOneTagValueNode = new OneToManyTagValueNode(null, $className);
-            $this->docBlockManipulator->addTagValueNodeWithShortName($property, $manyToOneTagValueNode);
+
+            /** @var PhpDocInfo $phpDocInfo */
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+            $phpDocInfo->addTagValueNodeWithShortName($manyToOneTagValueNode);
 
             $properties[] = $property;
         }

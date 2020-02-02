@@ -52,20 +52,14 @@ final class AddUuidAnnotationsToIdPropertyRector extends AbstractRector
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        $this->changeVarToUuidInterface($node);
+        $uuidObjectType = new FullyQualifiedObjectType(UuidInterface::class);
+        $phpDocInfo->changeVarType($uuidObjectType);
 
         $phpDocInfo->removeByType(GeneratedValueTagValueNode::class);
         $this->changeColumnTypeToUuidBinary($phpDocInfo);
         $this->changeSerializerTypeToString($phpDocInfo);
 
         return $node;
-    }
-
-    private function changeVarToUuidInterface(Property $property): void
-    {
-        $uuidObjectType = new FullyQualifiedObjectType(UuidInterface::class);
-
-        $this->docBlockManipulator->changeVarTag($property, $uuidObjectType);
     }
 
     private function changeColumnTypeToUuidBinary(PhpDocInfo $phpDocInfo): void

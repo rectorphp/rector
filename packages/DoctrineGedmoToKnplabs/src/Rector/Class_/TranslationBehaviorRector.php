@@ -9,6 +9,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\LocaleTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TranslatableTagValueNode;
 use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
@@ -40,10 +41,19 @@ final class TranslationBehaviorRector extends AbstractRector
      */
     private $phpDocTagNodeFactory;
 
-    public function __construct(ClassManipulator $classManipulator, PhpDocTagNodeFactory $phpDocTagNodeFactory)
-    {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(
+        ClassManipulator $classManipulator,
+        PhpDocTagNodeFactory $phpDocTagNodeFactory,
+        PhpDocInfoFactory $phpDocInfoFactory
+    ) {
         $this->classManipulator = $classManipulator;
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
     public function getDefinition(): RectorDefinition
@@ -256,7 +266,11 @@ PHP
         $class->implements[] = new FullyQualified('Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface');
         $this->classManipulator->addAsFirstTrait($class, 'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait');
 
-        $this->docBlockManipulator->addTag($class, $this->phpDocTagNodeFactory->createEntityTag());
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($class);
+
+        $entityTag = $this->phpDocTagNodeFactory->createEntityTag();
+        $phpDocInfo->addPhpDocTagNode($entityTag);
+//        $this->docBlockManipulator->addTag($class, $this->phpDocTagNodeFactory->createEntityTag());
 
         foreach ($translatedPropertyToPhpDocInfos as $translatedPropertyName => $translatedPhpDocInfo) {
             $property = $this->nodeFactory->createPrivateProperty($translatedPropertyName);

@@ -18,9 +18,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Resolver\NameResolver;
@@ -43,11 +44,6 @@ final class UniqueObjectFactoryFactory
     private $propertyNaming;
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
@@ -61,14 +57,12 @@ final class UniqueObjectFactoryFactory
         NameResolver $nameResolver,
         BuilderFactory $builderFactory,
         PropertyNaming $propertyNaming,
-        DocBlockManipulator $docBlockManipulator,
         StaticTypeMapper $staticTypeMapper,
         NodeFactory $nodeFactory
     ) {
         $this->nameResolver = $nameResolver;
         $this->builderFactory = $builderFactory;
         $this->propertyNaming = $propertyNaming;
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->nodeFactory = $nodeFactory;
     }
@@ -120,7 +114,10 @@ final class UniqueObjectFactoryFactory
         $propertyName = $this->propertyNaming->fqnToVariableName($objectType);
 
         $property = $this->nodeFactory->createPrivateProperty($propertyName);
-        $this->docBlockManipulator->changeVarTag($property, $objectType);
+
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo->changeVarType($objectType);
 
         $properties[] = $property;
 
