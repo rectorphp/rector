@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -22,11 +21,8 @@ final class ReturnTagReturnTypeInferer extends AbstractTypeInferer implements Re
      */
     public function inferFunctionLike(FunctionLike $functionLike): Type
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $functionLike->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return new MixedType();
-        }
 
         return $phpDocInfo->getReturnType();
     }

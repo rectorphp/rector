@@ -15,13 +15,11 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\BooleanType;
 use Prophecy\Doubler\Generator\Node\MethodNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
 use Rector\PhpParser\Node\Commander\NodeAddingCommander;
 use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
@@ -77,11 +75,6 @@ final class AssertManipulator
     private $nodeRemovingCommander;
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var StringTypeAnalyzer
      */
     private $stringTypeAnalyzer;
@@ -92,7 +85,6 @@ final class AssertManipulator
         ValueResolver $valueResolver,
         NodeAddingCommander $nodeAddingCommander,
         NodeRemovingCommander $nodeRemovingCommander,
-        DocBlockManipulator $docBlockManipulator,
         StringTypeAnalyzer $stringTypeAnalyzer
     ) {
         $this->nameResolver = $nameResolver;
@@ -100,7 +92,6 @@ final class AssertManipulator
         $this->valueResolver = $valueResolver;
         $this->nodeAddingCommander = $nodeAddingCommander;
         $this->nodeRemovingCommander = $nodeRemovingCommander;
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
     }
 
@@ -257,8 +248,9 @@ final class AssertManipulator
             return;
         }
 
-        $phpDocTagNode = new PhpDocTagNode('@doesNotPerformAssertions', new GenericTagValueNode(''));
-        $this->docBlockManipulator->addTag($methodNode, $phpDocTagNode);
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $methodNode->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo->addBareTag('@doesNotPerformAssertions');
     }
 
     /**

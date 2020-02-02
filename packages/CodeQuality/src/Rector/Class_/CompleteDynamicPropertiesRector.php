@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\Rector\AbstractRector;
@@ -211,16 +212,20 @@ PHP
 
             $property = $this->nodeFactory->createPublicProperty($propertyName);
 
+            // fallback to doc type in PHP 7.4
+            /** @var PhpDocInfo $phpDocInfo */
+            $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+
             if ($this->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
                 $phpStanNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType);
                 if ($phpStanNode !== null) {
                     $property->type = $phpStanNode;
                 } else {
                     // fallback to doc type in PHP 7.4
-                    $this->docBlockManipulator->changeVarTag($property, $propertyType);
+                    $phpDocInfo->changeVarType($propertyType);
                 }
             } else {
-                $this->docBlockManipulator->changeVarTag($property, $propertyType);
+                $phpDocInfo->changeVarType($propertyType);
             }
 
             $newProperties[] = $property;

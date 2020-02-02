@@ -207,12 +207,10 @@ PHP
             return null;
         }
 
-        $this->docBlockManipulator->changeVarTag($property, $type);
-
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo instanceof PhpDocInfo) {
-            $phpDocInfo->removeByType($tagClass);
-        }
+        $phpDocInfo->changeVarType($type);
+        $phpDocInfo->removeByType($tagClass);
 
         $classNode = $property->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classNode instanceof Class_) {

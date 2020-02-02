@@ -102,11 +102,9 @@ PHP
             throw new ShouldNotHappenException();
         }
 
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $methodNode->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo instanceof PhpDocInfo) {
-            $phpDocInfo->removeByType(ReturnTagValueNode::class);
-        }
+        $phpDocInfo->removeByType(ReturnTagValueNode::class);
 
         return null;
     }

@@ -114,11 +114,9 @@ PHP
         $this->updateReturnType($classMethod);
         $this->refactorClassMethod($classMethod, $sensioTemplateTagValueNode);
 
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo instanceof PhpDocInfo) {
-            $phpDocInfo->removeByType(SensioTemplateTagValueNode::class);
-        }
+        $phpDocInfo->removeByType(SensioTemplateTagValueNode::class);
 
         return $classMethod;
     }
