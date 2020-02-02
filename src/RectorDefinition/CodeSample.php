@@ -18,10 +18,16 @@ final class CodeSample implements CodeSampleInterface
      */
     private $codeAfter;
 
-    public function __construct(string $codeBefore, string $codeAfter)
+    /**
+     * @var string|null
+     */
+    private $extraFileContent;
+
+    public function __construct(string $codeBefore, string $codeAfter, ?string $extraFileContent = null)
     {
         $this->codeBefore = $codeBefore;
         $this->codeAfter = $codeAfter;
+        $this->extraFileContent = $extraFileContent;
     }
 
     public function getCodeBefore(): string
@@ -32,5 +38,10 @@ final class CodeSample implements CodeSampleInterface
     public function getCodeAfter(): string
     {
         return $this->codeAfter;
+    }
+
+    public function getExtraFileAfter(): ?string
+    {
+        return $this->extraFileContent;
     }
 }

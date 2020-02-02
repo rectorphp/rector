@@ -89,14 +89,14 @@ PHP
 class SomeServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider provideDataForTest()
+     * @dataProvider provideData()
      */
     public function test(int $number)
     {
         $this->doTestSingle($number);
     }
 
-    public function provideDataForTest(): \Iterator
+    public function provideData(): \Iterator
     {
         yield [1];
         yield [2];
