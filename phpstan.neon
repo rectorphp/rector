@@ -236,3 +236,4 @@ parameters:
         - '#Ternary operator condition is always false#'
 
         - '#Parameter \#1 \$tagValueNode of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:addTagValueNodeWithShortName\(\) expects Rector\\BetterPhpDocParser\\PhpDocNode\\AbstractTagValueNode, PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode\|Rector\\BetterPhpDocParser\\PhpDocNode\\Doctrine\\Property_\\JoinColumnTagValueNode given#'
+        - '#Parameter \#1 \$eventListenerTag of method Rector\\SymfonyCodeQuality\\Rector\\Class_\\EventListenerToEventSubscriberRector\:\:createEventItem\(\) expects Rector\\Symfony\\ValueObject\\Tag\\EventListenerTag, Rector\\Symfony\\Contract\\Tag\\TagInterface given#'

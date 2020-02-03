@@ -17,3 +17,4 @@ services:
     Rector\CakePHPToSymfony\Rector\Class_\CakePHPModelToDoctrineEntityRector: null
     Rector\CakePHPToSymfony\Rector\Class_\CakePHPModelToDoctrineRepositoryRector: null
     Rector\CakePHPToSymfony\Rector\Class_\CakePHPImplicitRouteToExplicitRouteAnnotationRector: null
+    Rector\CakePHPToSymfony\Rector\Class_\CakePHPBeforeFilterToRequestEventSubscriberRector: null

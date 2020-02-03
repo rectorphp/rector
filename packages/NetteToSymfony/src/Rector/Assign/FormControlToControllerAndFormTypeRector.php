@@ -25,7 +25,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NetteToSymfony\Collector\CollectOnFormVariableMethodCallsCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
@@ -48,17 +47,10 @@ final class FormControlToControllerAndFormTypeRector extends AbstractRector
      */
     private $collectOnFormVariableMethodCallsCollector;
 
-    /**
-     * @var ClassNaming
-     */
-    private $classNaming;
-
     public function __construct(
-        CollectOnFormVariableMethodCallsCollector $collectOnFormVariableMethodCallsCollector,
-        ClassNaming $classNaming
+        CollectOnFormVariableMethodCallsCollector $collectOnFormVariableMethodCallsCollector
     ) {
         $this->collectOnFormVariableMethodCallsCollector = $collectOnFormVariableMethodCallsCollector;
-        $this->classNaming = $classNaming;
     }
 
     public function getDefinition(): RectorDefinition
@@ -199,13 +191,9 @@ PHP
             return;
         }
 
-        /** @var string $className */
-        $className = $this->getName($node);
-
         /** @var string $namespaceName */
-        $namespaceName = $this->classNaming->getNamespace($className);
-        // @todo make name dynamic
-//        $formControllerClassName = $namespace . '\\SomeFormController';
+        $namespaceName = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
+
         $formControllerClass = new Class_('SomeFormController');
         $formControllerClass->extends = new FullyQualified(
             'Symfony\Bundle\FrameworkBundle\Controller\AbstractController'

@@ -8,19 +8,24 @@ use Iterator;
 use Rector\CakePHPToSymfony\Rector\Class_\CakePHPBeforeFilterToRequestEventSubscriberRector;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
-final class CakePHPBeforeFilterToRequestEventSubscriberRectorTest extends AbstractRectorTestCase
+final class CakePHPBeforeFilterToRequestEventSubscriberRectorExtraTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
      */
-    public function test(string $file): void
+    public function test(string $inputFile, string $expectedExtraFileName, string $expectedExtraContentFilePath): void
     {
-        $this->doTestFile($file);
+        $this->doTestFile($inputFile);
+        $this->doTestExtraFile($expectedExtraFileName, $expectedExtraContentFilePath);
     }
 
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        yield [
+            __DIR__ . '/Fixture/fixture.php.inc',
+            'SuperadminControllerEventSubscriber.php',
+            __DIR__ . '/Source/extra_file.php',
+        ];
     }
 
     protected function getRectorClass(): string

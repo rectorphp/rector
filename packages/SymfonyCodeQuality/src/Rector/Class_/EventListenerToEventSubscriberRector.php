@@ -22,6 +22,7 @@ use PHPStan\Type\MixedType;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
+use Rector\Symfony\Contract\Tag\TagInterface;
 use Rector\Symfony\ServiceMapProvider;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
@@ -326,15 +327,7 @@ PHP
 
         foreach ($methodNamesWithPriorities as $methodNamesWithPriority) {
             foreach ($methodNamesWithPriority->getTags() as $tag) {
-                if (! $tag instanceof EventListenerTag) {
-                    continue;
-                }
-
-                if ($eventName !== $tag->getEvent()) {
-                    continue;
-                }
-
-                if (in_array($tag, $alreadyUsedTags, true)) {
+                if ($this->shouldSkip($eventName, $tag, $alreadyUsedTags)) {
                     continue;
                 }
 
@@ -370,5 +363,21 @@ PHP
         }
 
         return new ArrayItem(new String_($eventListenerTag->getMethod()));
+    }
+
+    /**
+     * @param TagInterface[] $alreadyUsedTags
+     */
+    private function shouldSkip(string $eventName, TagInterface $tag, array $alreadyUsedTags): bool
+    {
+        if (! $tag instanceof EventListenerTag) {
+            return true;
+        }
+
+        if ($eventName !== $tag->getEvent()) {
+            return true;
+        }
+
+        return in_array($tag, $alreadyUsedTags, true);
     }
 }

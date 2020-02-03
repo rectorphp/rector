@@ -86,9 +86,8 @@ PHP
                 continue;
             }
 
-            /** @var string $className */
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-            $shortClassName = $this->getShortName($className);
+            /** @var string $shortClassName */
+            $shortClassName = $node->getAttribute(AttributeKey::CLASS_SHORT_NAME);
 
             $methodName = $this->getName($classMethod);
 

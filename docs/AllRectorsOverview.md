@@ -1,4 +1,4 @@
-# All 445 Rectors Overview
+# All 446 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -285,6 +285,24 @@ services:
 <br>
 
 ## CakePHPToSymfony
+
+### `CakePHPBeforeFilterToRequestEventSubscriberRector`
+
+- class: `Rector\CakePHPToSymfony\Rector\Class_\CakePHPBeforeFilterToRequestEventSubscriberRector`
+
+Migrate CakePHP beforeFilter() method from controller to Event Subscriber before request
+
+```diff
+ class SuperadminController extends \AppController
+ {
+-    public function beforeFilter()
+-    {
+-    	// something
+-    }
+ }
+```
+
+<br>
 
 ### `CakePHPControllerActionToSymfonyControllerActionRector`
 
@@ -4178,24 +4196,15 @@ Change Form that extends Control to Controller and decoupled FormType
 +		$form->handleRequest($request);
 
 -		$form->onSuccess[] = [$this, 'processForm'];
+-	}
+-
+-	public function processForm(Form $form)
+-	{
+-        // process me
 +		if ($form->isSuccess() && $form->isValid()) {
 +			// process me
 +		}
  	}
-+}
-
--	public function processForm(Form $form)
--	{
--        // process me
--	}
-+class SomeFormType extends \Symfony\Component\Form\AbstractType
-+{
-+	public function buildForm(\Symfony\Component\Form\FormBuilderInterface $formBuilder, array $options)
-+    {
-+        $formBuilder->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
-+        	'label' => 'Your name'
-+        ]);
-+    }
  }
 ```
 

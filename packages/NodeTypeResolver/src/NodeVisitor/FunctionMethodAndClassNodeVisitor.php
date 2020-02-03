@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeVisitorAbstract;
+use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
@@ -24,6 +25,11 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
      * @var string|null
      */
     private $className;
+
+    /**
+     * @var string|null
+     */
+    private $classShortName;
 
     /**
      * @var ClassLike[]|null[]
@@ -49,6 +55,16 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
      * @var Function_|null
      */
     private $functionNode;
+
+    /**
+     * @var ClassNaming
+     */
+    private $classNaming;
+
+    public function __construct(ClassNaming $classNaming)
+    {
+        $this->classNaming = $classNaming;
+    }
 
     /**
      * @param Node[] $nodes
@@ -98,6 +114,7 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
 
         $node->setAttribute(AttributeKey::CLASS_NODE, $this->classNode);
         $node->setAttribute(AttributeKey::CLASS_NAME, $this->className);
+        $node->setAttribute(AttributeKey::CLASS_SHORT_NAME, $this->classShortName);
 
         if ($this->classNode instanceof Class_) {
             $this->setParentClassName($this->classNode, $node);
@@ -133,8 +150,10 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
             $this->className = null;
         } elseif (isset($classLike->namespacedName)) {
             $this->className = $classLike->namespacedName->toString();
+            $this->classShortName = $this->classNaming->getShortName($this->className);
         } else {
             $this->className = (string) $classLike->name;
+            $this->classShortName = $this->classNaming->getShortName($this->className);
         }
     }
 
