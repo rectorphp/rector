@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Rector\ClassMethod;
 
 use Nette\Utils\Strings;
-use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -133,21 +130,9 @@ PHP
 
     private function addDoesNotPerformAssertion(ClassMethod $classMethod): void
     {
-        // A. create new doc
-        $doc = $classMethod->getDocComment();
-        if ($doc === null) {
-            $text = sprintf('/**%s * @doesNotPerformAssertion%s */', PHP_EOL, PHP_EOL);
-            $classMethod->setDocComment(new Doc($text));
-            return;
-        }
-
-        // B. extend current doc
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
-        $phpDocNode->children[] = new AttributeAwarePhpDocTagNode('@doesNotPerformAssertion', new GenericTagValueNode(
-            ''
-        ));
+        $phpDocInfo->addBareTag('@doesNotPerformAssertion');
     }
 
     private function containsAssertCall(ClassMethod $classMethod): bool

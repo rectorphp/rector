@@ -16,10 +16,16 @@ final class UnionTypeAnalysis
      */
     private $hasIterable = false;
 
-    public function __construct(bool $isNullableType, bool $hasIterable)
+    /**
+     * @var bool
+     */
+    private $hasArray = false;
+
+    public function __construct(bool $isNullableType, bool $hasIterable, bool $hasArray)
     {
         $this->isNullableType = $isNullableType;
         $this->hasIterable = $hasIterable;
+        $this->hasArray = $hasArray;
     }
 
     public function isNullableType(): bool
@@ -30,5 +36,10 @@ final class UnionTypeAnalysis
     public function hasIterable(): bool
     {
         return $this->hasIterable;
+    }
+
+    public function hasArray(): bool
+    {
+        return $this->hasArray;
     }
 }

@@ -7,6 +7,9 @@ namespace Rector\DeadCode\Rector\Stmt;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -16,6 +19,16 @@ use Rector\RectorDefinition\RectorDefinition;
  */
 final class RemoveDeadStmtRector extends AbstractRector
 {
+    /**
+     * @var PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
+    {
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
+    }
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Removes dead code statements', [
@@ -40,29 +53,38 @@ PHP
         return [Expression::class];
     }
 
+    /**
+     * @param Expression $node
+     */
     public function refactor(Node $node): ?Node
     {
         $livingCode = $this->keepLivingCodeFromExpr($node->expr);
-
         if ($livingCode === []) {
-            return $this->savelyRemoveNode($node);
+            return $this->removeNodeAndKeepComments($node);
         }
 
         $firstExpr = array_shift($livingCode);
         $node->expr = $firstExpr;
 
         foreach ($livingCode as $expr) {
-            $this->addNodeAfterNode(new Expression($expr), $node);
+            $newNode = new Expression($expr);
+            $this->addNodeAfterNode($newNode, $node);
         }
 
         return null;
     }
 
-    protected function savelyRemoveNode(Node $node): ?Node
+    private function removeNodeAndKeepComments(Node $node): ?Node
     {
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+
         if ($node->getComments() !== []) {
             $nop = new Nop();
-            $nop->setAttribute('comments', $node->getComments());
+            $nop->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
+
+            $this->phpDocInfoFactory->createFromNode($nop);
+
             return $nop;
         }
 

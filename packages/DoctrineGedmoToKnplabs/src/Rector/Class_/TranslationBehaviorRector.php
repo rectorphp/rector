@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\DoctrineGedmoToKnplabs\Rector\Class_;
 
-use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
@@ -268,9 +267,6 @@ PHP
 
         $namespace->stmts[] = $class;
 
-        // @todo make temporary
-        $content = '<?php' . PHP_EOL . $this->print($namespace) . PHP_EOL;
-
-        FileSystem::write($filePath, $content);
+        $this->printToFile($namespace, $filePath);
     }
 }

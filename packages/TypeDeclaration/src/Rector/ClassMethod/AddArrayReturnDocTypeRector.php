@@ -12,6 +12,8 @@ use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use PHPStan\Type\VoidType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -107,7 +109,9 @@ PHP
             return null;
         }
 
-        $this->docBlockManipulator->addReturnTag($node, $inferedType);
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo->changeReturnType($inferedType);
 
         return $node;
     }
@@ -149,6 +153,12 @@ PHP
         if ($newType instanceof UnionType && $this->shouldSkipUnionType($newType)) {
             return true;
         }
+
+        // not an array type
+        if ($newType instanceof VoidType) {
+            return true;
+        }
+
         return $newType instanceof ConstantArrayType && count($newType->getValueTypes()) > self::MAX_NUMBER_OF_TYPES;
     }
 
@@ -196,8 +206,6 @@ PHP
             return false;
         }
 
-        $currentReturnType = $currentPhpDocInfo->getReturnType();
-
-        return $currentReturnType instanceof ArrayType;
+        return $currentPhpDocInfo->getReturnType() instanceof ArrayType;
     }
 }
