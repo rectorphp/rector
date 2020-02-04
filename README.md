@@ -131,7 +131,7 @@ parameters:
 
 ### C. Custom Sets
 
-1. Create a `rector.yaml` config file with your desired Rectors:
+1. Create a `rector.yaml` config file with your desired Rectors or provide another config file with `--config`:
 
     ```yaml
     services:
