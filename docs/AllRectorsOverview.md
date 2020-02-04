@@ -7134,9 +7134,8 @@ services:
 ```diff
  class SomeTest extends PHPUnit\Framework\TestCase
  {
--    /**
+     /**
 -     * @test
-+    /**
 +     * @scenario
       */
      public function someMethod()

@@ -7,9 +7,10 @@ namespace Rector\FrameworkMigration\Symfony;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\CodingStyle\Application\UseAddingCommander;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
@@ -21,18 +22,12 @@ final class ImplicitToExplicitRoutingAnnotationDecorator
     public const HAS_ROUTE_ANNOTATION = 'has_route_annotation';
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var UseAddingCommander
      */
     private $useAddingCommander;
 
-    public function __construct(DocBlockManipulator $docBlockManipulator, UseAddingCommander $useAddingCommander)
+    public function __construct(UseAddingCommander $useAddingCommander)
     {
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->useAddingCommander = $useAddingCommander;
     }
 
@@ -40,7 +35,9 @@ final class ImplicitToExplicitRoutingAnnotationDecorator
         ClassMethod $classMethod,
         SymfonyRouteTagValueNode $symfonyRouteTagValueNode
     ): void {
-        $this->docBlockManipulator->addTagValueNodeWithShortName($classMethod, $symfonyRouteTagValueNode);
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo->addTagValueNodeWithShortName($symfonyRouteTagValueNode);
 
         $symfonyRouteUseObjectType = new FullyQualifiedObjectType(SymfonyRouteTagValueNode::CLASS_NAME);
         $this->addUseType($symfonyRouteUseObjectType, $classMethod);

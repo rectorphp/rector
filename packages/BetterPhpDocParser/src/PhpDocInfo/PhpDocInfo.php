@@ -25,6 +25,7 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Rector\Exception\NotImplementedException;
 use Rector\Exception\ShouldNotHappenException;
@@ -404,6 +405,10 @@ final class PhpDocInfo
     private function ensureTypeIsTagValueNode(string $type, string $location): void
     {
         if (is_a($type, PhpDocTagValueNode::class, true)) {
+            return;
+        }
+
+        if (is_a($type, TypeAwareTagValueNodeInterface::class, true)) {
             return;
         }
 

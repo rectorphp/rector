@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints;
 
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AbstractConstraintTagValueNode;
 use Symfony\Component\Validator\Constraints\Choice;
 
-final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode
+final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode implements TypeAwareTagValueNodeInterface
 {
     /**
      * @var string
