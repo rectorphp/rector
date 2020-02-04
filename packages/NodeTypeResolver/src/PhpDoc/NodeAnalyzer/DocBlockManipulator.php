@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -16,7 +15,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
-use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -35,11 +33,6 @@ final class DocBlockManipulator
     private $phpDocInfoPrinter;
 
     /**
-     * @var AttributeAwareNodeFactory
-     */
-    private $attributeAwareNodeFactory;
-
-    /**
      * @var PhpDocNodeTraverser
      */
     private $phpDocNodeTraverser;
@@ -56,32 +49,14 @@ final class DocBlockManipulator
 
     public function __construct(
         PhpDocInfoPrinter $phpDocInfoPrinter,
-        AttributeAwareNodeFactory $attributeAwareNodeFactory,
         PhpDocNodeTraverser $phpDocNodeTraverser,
         StaticTypeMapper $staticTypeMapper,
         DocBlockClassRenamer $docBlockClassRenamer
     ) {
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
-        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
-    }
-
-    /**
-     * @deprecated
-     * Use
-     * @see PhpDocInfo::addBareTag()
-     * @see PhpDocInfo::addPhpDocTagNode()
-     * @see PhpDocInfo::addTagValueNode()
-     */
-    public function addTag(Node $node, PhpDocChildNode $phpDocChildNode): void
-    {
-        $phpDocChildNode = $this->attributeAwareNodeFactory->createFromNode($phpDocChildNode);
-
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocInfo->addPhpDocTagNode($phpDocChildNode);
     }
 
     public function changeType(Node $node, Type $oldType, Type $newType): void

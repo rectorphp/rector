@@ -6,14 +6,12 @@ namespace Rector\Doctrine\PhpDocParser\Ast\PhpDoc;
 
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Ramsey\Uuid\UuidInterface;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\JoinTableTagValueNode;
 use Rector\Doctrine\Uuid\JoinTableNameResolver;
@@ -30,58 +28,26 @@ final class PhpDocTagNodeFactory
         $this->joinTableNameResolver = $joinTableNameResolver;
     }
 
-    public function createVarTagInt(): PhpDocTagNode
+    public function createVarTagIntValueNode(): AttributeAwareVarTagValueNode
     {
-        $varTagValueNode = new VarTagValueNode(new IdentifierTypeNode('int'), '', '');
-
-        return new PhpDocTagNode('@var', $varTagValueNode);
+        return $this->createVarTagValueNodeWithType(new IdentifierTypeNode('int'));
     }
 
-    public function createVarTagUuidInterface(): PhpDocTagNode
+    public function createUuidInterfaceVarTagValueNode(): AttributeAwareVarTagValueNode
     {
         $identifierTypeNode = new IdentifierTypeNode('\\' . UuidInterface::class);
-        $varTagValueNode = new VarTagValueNode($identifierTypeNode, '', '');
 
-        return new PhpDocTagNode('@var', $varTagValueNode);
+        return $this->createVarTagValueNodeWithType($identifierTypeNode);
     }
 
-    public function createIdTag(): PhpDocTagNode
+    public function createIdColumnTagValueNode(): ColumnTagValueNode
     {
-        return new SpacelessPhpDocTagNode(IdTagValueNode::SHORT_NAME, new IdTagValueNode());
+        return new ColumnTagValueNode(null, 'integer', null, null, null, null, null);
     }
 
-    public function createEntityTag(): PhpDocTagNode
+    public function createUuidColumnTagValueNode(bool $isNullable): ColumnTagValueNode
     {
-        return new SpacelessPhpDocTagNode(EntityTagValueNode::SHORT_NAME, new EntityTagValueNode());
-    }
-
-    public function createIdColumnTag(): PhpDocTagNode
-    {
-        $columnTagValueNode = new ColumnTagValueNode(null, 'integer', null, null, null, null, null);
-
-        return new SpacelessPhpDocTagNode($columnTagValueNode::SHORT_NAME, $columnTagValueNode);
-    }
-
-    public function createUuidColumnTag(bool $isNullable): PhpDocTagNode
-    {
-        $columnTagValueNode = new ColumnTagValueNode(
-            null,
-            'uuid_binary',
-            null,
-            null,
-            null,
-            true,
-            $isNullable ? true : null
-        );
-
-        return new SpacelessPhpDocTagNode($columnTagValueNode::SHORT_NAME, $columnTagValueNode);
-    }
-
-    public function createGeneratedValueTag(string $strategy = 'CUSTOM'): PhpDocTagNode
-    {
-        return new SpacelessPhpDocTagNode(GeneratedValueTagValueNode::SHORT_NAME, new GeneratedValueTagValueNode(
-            $strategy
-        ));
+        return new ColumnTagValueNode(null, 'uuid_binary', null, null, null, true, $isNullable ? true : null);
     }
 
     public function createJoinTableTagNode(Property $property): PhpDocTagNode
@@ -103,5 +69,10 @@ final class PhpDocTagNodeFactory
         $joinColumnTagValueNode = new JoinColumnTagValueNode(null, 'uuid', null, $isNullable);
 
         return new SpacelessPhpDocTagNode(JoinColumnTagValueNode::SHORT_NAME, $joinColumnTagValueNode);
+    }
+
+    private function createVarTagValueNodeWithType(TypeNode $typeNode): AttributeAwareVarTagValueNode
+    {
+        return new AttributeAwareVarTagValueNode($typeNode, '', '');
     }
 }

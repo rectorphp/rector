@@ -7,6 +7,7 @@ namespace Rector\BetterPhpDocParser\PhpDocInfo;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -388,6 +389,22 @@ final class PhpDocInfo
         return $this->phpDocNode->children === [];
     }
 
+    public function addTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): void
+    {
+        if ($phpDocTagValueNode instanceof ReturnTagValueNode) {
+            $name = '@return';
+        } elseif ($phpDocTagValueNode instanceof ParamTagValueNode) {
+            $name = '@param';
+        } elseif ($phpDocTagValueNode instanceof VarTagValueNode) {
+            $name = '@var';
+        } else {
+            throw new NotImplementedException();
+        }
+
+        $phpDocTagNode = new AttributeAwarePhpDocTagNode($name, $phpDocTagValueNode);
+        $this->addPhpDocTagNode($phpDocTagNode);
+    }
+
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
         $phpDocNode = $this->getPhpDocNode();
@@ -426,19 +443,5 @@ final class PhpDocInfo
         $secondAnnotationName = trim($secondAnnotationName, '@');
 
         return $firstAnnotationName === $secondAnnotationName;
-    }
-
-    private function addTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): void
-    {
-        if ($phpDocTagValueNode instanceof ReturnTagValueNode) {
-            $name = '@return';
-        } elseif ($phpDocTagValueNode instanceof VarTagValueNode) {
-            $name = '@var';
-        } else {
-            throw new NotImplementedException();
-        }
-
-        $phpDocTagNode = new AttributeAwarePhpDocTagNode($name, $phpDocTagValueNode);
-        $this->addPhpDocTagNode($phpDocTagNode);
     }
 }
