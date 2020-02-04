@@ -69,29 +69,6 @@ final class DocBlockManipulator
         $this->docBlockClassRenamer = $docBlockClassRenamer;
     }
 
-    public function hasTag(Node $node, string $name): bool
-    {
-        if ($node->getDocComment() === null) {
-            return false;
-        }
-
-        // simple check
-        $pattern = '#@(\\\\)?' . preg_quote(ltrim($name, '@'), '#') . '#';
-        if (Strings::match($node->getDocComment()->getText(), $pattern)) {
-            return true;
-        }
-
-        // allow only class nodes further
-        if (! class_exists($name)) {
-            return false;
-        }
-
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        return $phpDocInfo->hasByType($name);
-    }
-
     /**
      * @deprecated
      * Use

@@ -7,9 +7,11 @@ namespace Rector\Autodiscovery\Analyzer;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\NodeContainer\ParsedNodesByType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class ClassAnalyzer
@@ -34,21 +36,14 @@ final class ClassAnalyzer
      */
     private $nodeTypeResolver;
 
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
     public function __construct(
         NameResolver $nameResolver,
         ParsedNodesByType $parsedNodesByType,
-        NodeTypeResolver $nodeTypeResolver,
-        DocBlockManipulator $docBlockManipulator
+        NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nameResolver = $nameResolver;
         $this->parsedNodesByType = $parsedNodesByType;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->docBlockManipulator = $docBlockManipulator;
     }
 
     public function isValueObjectClass(Class_ $class): bool
@@ -110,7 +105,9 @@ final class ClassAnalyzer
                 continue;
             }
 
-            if ($this->docBlockManipulator->hasTag($stmt, 'JMS\Serializer\Annotation\Type')) {
+            /** @var PhpDocInfo $phpDocInfo */
+            $phpDocInfo = $stmt->getAttribute(AttributeKey::PHP_DOC_INFO);
+            if ($phpDocInfo->hasByType(SerializerTypeTagValueNode::class)) {
                 continue;
             }
 
