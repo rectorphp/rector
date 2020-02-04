@@ -12,25 +12,17 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 
 /**
@@ -68,25 +60,13 @@ final class DocBlockManipulator
      */
     private $docBlockNameImporter;
 
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var TypeComparator
-     */
-    private $typeComparator;
-
     public function __construct(
         PhpDocInfoPrinter $phpDocInfoPrinter,
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
         PhpDocNodeTraverser $phpDocNodeTraverser,
         StaticTypeMapper $staticTypeMapper,
         DocBlockClassRenamer $docBlockClassRenamer,
-        DocBlockNameImporter $docBlockNameImporter,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        TypeComparator $typeComparator
+        DocBlockNameImporter $docBlockNameImporter
     ) {
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
@@ -94,8 +74,6 @@ final class DocBlockManipulator
         $this->staticTypeMapper = $staticTypeMapper;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
         $this->docBlockNameImporter = $docBlockNameImporter;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->typeComparator = $typeComparator;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -121,16 +99,19 @@ final class DocBlockManipulator
         return $phpDocInfo->hasByType($name);
     }
 
+    /**
+     * @deprecated
+     * Use
+     * @see PhpDocInfo::addBareTag()
+     * @see PhpDocInfo::addPhpDocTagNode()
+     * @see PhpDocInfo::addTagValueNode()
+     */
     public function addTag(Node $node, PhpDocChildNode $phpDocChildNode): void
     {
         $phpDocChildNode = $this->attributeAwareNodeFactory->createFromNode($phpDocChildNode);
 
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        }
-
         $phpDocInfo->addPhpDocTagNode($phpDocChildNode);
     }
 
@@ -154,49 +135,10 @@ final class DocBlockManipulator
 
     public function replaceAnnotationInNode(Node $node, string $oldAnnotation, string $newAnnotation): void
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return;
-        }
 
         $this->replaceTagByAnother($phpDocInfo->getPhpDocNode(), $oldAnnotation, $newAnnotation);
-    }
-
-    public function changeVarTag(Node $node, Type $newType): void
-    {
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo instanceof PhpDocInfo) {
-            $currentVarType = $phpDocInfo->getVarType();
-        } else {
-            $currentVarType = new MixedType();
-        }
-
-        // make sure the tags are not identical, e.g imported class vs FQN class
-        if ($this->typeComparator->areTypesEquals($currentVarType, $newType)) {
-            return;
-        }
-
-        // prevent existing type override by mixed
-        if (! $currentVarType instanceof MixedType && $newType instanceof ConstantArrayType && $newType->getItemType() instanceof NeverType) {
-            return;
-        }
-
-        if ($phpDocInfo !== null) {
-            $currentVarTagValue = $phpDocInfo->getVarTagValue();
-            if ($currentVarTagValue !== null) {
-                $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType);
-                $currentVarTagValue->type = $phpDocType;
-            } else {
-                $this->addTypeSpecificTag($node, 'var', $newType);
-            }
-        } else {
-            $this->addTypeSpecificTag($node, 'var', $newType);
-        }
-
-        // to invoke the node override
-        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
     }
 
     public function replaceTagByAnother(PhpDocNode $phpDocNode, string $oldTag, string $newTag): void
@@ -330,11 +272,8 @@ final class DocBlockManipulator
 
     public function getDoctrineFqnTargetEntity(Node $node): ?string
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return null;
-        }
 
         $relationTagValueNode = $phpDocInfo->getByType(DoctrineRelationTagValueNodeInterface::class);
         if ($relationTagValueNode === null) {
@@ -342,38 +281,6 @@ final class DocBlockManipulator
         }
 
         return $relationTagValueNode->getFqnTargetEntity();
-    }
-
-    /**
-     * All class-type tags are FQN by default to keep default convention through the code.
-     * Some people prefer FQN, some short. FQN can be shorten with \Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector later, while short prolonged not
-     */
-    private function addTypeSpecificTag(Node $node, string $name, Type $type): void
-    {
-        $docStringType = $this->staticTypeMapper->mapPHPStanTypeToDocString($type);
-        if ($docStringType === '') {
-            return;
-        }
-
-        /** @var PhpDocInfo|null $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        // there might be no phpdoc at all
-        if ($phpDocInfo !== null) {
-            $varTagValueNode = new AttributeAwareVarTagValueNode(new AttributeAwareIdentifierTypeNode(
-                $docStringType
-            ), '', '');
-
-            $varTagValueNode = new AttributeAwarePhpDocTagNode('@' . $name, $varTagValueNode);
-            $phpDocInfo->addPhpDocTagNode($varTagValueNode);
-        } else {
-            // create completely new docblock
-            $varDocComment = sprintf("/**\n * @%s %s\n */", $name, $docStringType);
-            $node->setDocComment(new Doc($varDocComment));
-
-            // bind new content with node
-            $this->phpDocInfoFactory->createFromNode($node);
-        }
     }
 
     private function printPhpDocInfoToString(PhpDocInfo $phpDocInfo): string

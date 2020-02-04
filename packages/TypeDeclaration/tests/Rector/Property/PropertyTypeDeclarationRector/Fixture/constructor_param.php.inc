@@ -34,7 +34,7 @@ class ConstructorParam
      */
     private $stringValue;
     /**
-     * @var \stdClass
+     * @var stdClass
      */
     private $docBlockService;
 

@@ -72,11 +72,8 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
                 return null;
             }
 
-            /** @var PhpDocInfo|null $phpDocInfo */
+            /** @var PhpDocInfo $phpDocInfo */
             $phpDocInfo = $methodNode->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($phpDocInfo === null) {
-                return null;
-            }
 
             $methodReturnType = $phpDocInfo->getReturnType();
             if ($methodReturnType instanceof MixedType) {

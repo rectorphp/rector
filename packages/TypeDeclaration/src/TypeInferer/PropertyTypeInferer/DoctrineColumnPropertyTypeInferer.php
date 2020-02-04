@@ -79,11 +79,8 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
 
     public function inferProperty(Property $property): Type
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return new MixedType();
-        }
 
         $doctrineColumnTagValueNode = $phpDocInfo->getByType(ColumnTagValueNode::class);
         if ($doctrineColumnTagValueNode === null) {

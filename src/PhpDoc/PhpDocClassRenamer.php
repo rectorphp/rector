@@ -21,11 +21,8 @@ final class PhpDocClassRenamer
      */
     public function changeTypeInAnnotationTypes(Node $node, array $oldToNewClasses): void
     {
-        /** @var PhpDocInfo|null $phpDocInfo */
+        /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return;
-        }
 
         $this->processAssertChoiceTagValueNode($oldToNewClasses, $phpDocInfo);
         $this->processDoctrineRelationTagValueNode($oldToNewClasses, $phpDocInfo);

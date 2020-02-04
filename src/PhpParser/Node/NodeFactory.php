@@ -263,8 +263,9 @@ final class NodeFactory
         $propertyBuilder->makePrivate();
 
         $property = $propertyBuilder->getNode();
-
         $this->decorateParentPropertyProperty($property);
+
+        $this->phpDocInfoFactory->createFromNode($property);
 
         return $property;
     }
@@ -275,8 +276,9 @@ final class NodeFactory
         $propertyBuilder->makePublic();
 
         $property = $propertyBuilder->getNode();
-
         $this->decorateParentPropertyProperty($property);
+
+        $this->phpDocInfoFactory->createFromNode($property);
 
         return $property;
     }

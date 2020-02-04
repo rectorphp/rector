@@ -583,7 +583,7 @@ class Command
      */
     protected static $defaultName;
     /**
-     * @var \Symfony\Component\Console\Application
+     * @var Application
      */
     private $application;
     /**
@@ -627,7 +627,7 @@ class Command
      */
     private $code;
     /**
-     * @var \Symfony\Component\Console\Helper\HelperSet
+     * @var HelperSet
      */
     private $helperSet;
     /**
