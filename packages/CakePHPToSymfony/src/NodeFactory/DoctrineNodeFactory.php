@@ -71,6 +71,7 @@ final class DoctrineNodeFactory
     {
         $paramBuilder = $this->builderFactory->param('entityManager');
         $paramBuilder->setType(new FullyQualified(EntityManagerInterface::class));
+
         $param = $paramBuilder->getNode();
 
         $assign = $this->createRepositoryAssign($entityClass);
