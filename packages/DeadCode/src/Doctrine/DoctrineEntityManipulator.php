@@ -19,7 +19,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\InheritanceTypeTagValue
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class DoctrineEntityManipulator
@@ -28,11 +27,6 @@ final class DoctrineEntityManipulator
      * @var NameResolver
      */
     private $nameResolver;
-
-    /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
 
     /**
      * @var DoctrineDocBlockResolver
@@ -46,12 +40,10 @@ final class DoctrineEntityManipulator
 
     public function __construct(
         NameResolver $nameResolver,
-        DocBlockManipulator $docBlockManipulator,
         DoctrineDocBlockResolver $doctrineDocBlockResolver,
         NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nameResolver = $nameResolver;
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -92,12 +84,15 @@ final class DoctrineEntityManipulator
             return false;
         }
 
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
+
         // is parent entity
-        if ($this->docBlockManipulator->hasTag($class, InheritanceTypeTagValueNode::class)) {
+        if ($phpDocInfo->hasByType(InheritanceTypeTagValueNode::class)) {
             return false;
         }
 
-        return $this->docBlockManipulator->hasTag($class, EntityTagValueNode::class);
+        return $phpDocInfo->hasByType(EntityTagValueNode::class);
     }
 
     public function removeMappedByOrInversedByFromProperty(Property $property): void
