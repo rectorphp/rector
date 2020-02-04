@@ -121,11 +121,14 @@ PHP
 
         // process doc blocks
         if ($this->importDocBlocks) {
-            /** @var PhpDocInfo $phpDocInfo */
+            /** @var PhpDocInfo|null $phpDocInfo */
             $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+            if ($phpDocInfo === null) {
+                return $node;
+            }
+
             $this->docBlockNameImporter->importNames($phpDocInfo, $node);
 
-//            $this->docBlockManipulator->importNames($node);
             return $node;
         }
 

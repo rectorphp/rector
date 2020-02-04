@@ -6,9 +6,10 @@ namespace Rector\BetterPhpDocParser\PhpDocNode\JMS;
 
 use JMS\Serializer\Annotation\Type;
 use Nette\Utils\Strings;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
-final class SerializerTypeTagValueNode extends AbstractTagValueNode
+final class SerializerTypeTagValueNode extends AbstractTagValueNode implements TypeAwareTagValueNodeInterface
 {
     /**
      * @var string

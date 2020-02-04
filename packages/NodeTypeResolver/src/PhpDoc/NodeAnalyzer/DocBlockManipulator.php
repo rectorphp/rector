@@ -11,16 +11,18 @@ use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
-use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
@@ -83,12 +85,6 @@ final class DocBlockManipulator
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
         $phpDocInfo->addPhpDocTagNode($phpDocChildNode);
-    }
-
-    public function addTagValueNodeWithShortName(Node $node, AbstractTagValueNode $tagValueNode): void
-    {
-        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode($tagValueNode::SHORT_NAME, $tagValueNode);
-        $this->addTag($node, $spacelessPhpDocTagNode);
     }
 
     public function changeType(Node $node, Type $oldType, Type $newType): void
@@ -176,26 +172,22 @@ final class DocBlockManipulator
      */
     public function hasNodeTypeTags(Node $node): bool
     {
-        $docComment = $node->getDocComment();
-        if ($docComment === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return false;
         }
 
-        if ((bool) Strings::match($docComment->getText(), '#\@(param|throws|return|var)\b#')) {
-            return true;
-        }
+        $tagValueNodesWithType = [
+            VarTagValueNode::class,
+            ThrowsTagValueNode::class,
+            ReturnTagValueNode::class,
+            VarTagValueNode::class,
+            TypeAwareTagValueNodeInterface::class,
+        ];
 
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        // has any type node?
-
-        foreach ($phpDocInfo->getPhpDocNode()->children as $phpDocChildNode) {
-            // is custom class, it can contain some type info
-            if ($phpDocChildNode instanceof PhpDocTagNode && Strings::startsWith(
-                get_class($phpDocChildNode->value),
-                'Rector\\'
-            )) {
+        foreach ($tagValueNodesWithType as $tagValueNodeWithType) {
+            if ($phpDocInfo->hasByType($tagValueNodeWithType)) {
                 return true;
             }
         }

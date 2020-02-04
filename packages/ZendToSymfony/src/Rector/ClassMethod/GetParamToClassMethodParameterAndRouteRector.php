@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -143,8 +144,10 @@ PHP
 
     private function addRouteAnnotation(ClassMethod $classMethod, RouteValueObject $routeValueObject): void
     {
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         $symfonyRoutePhpDocTagNode = $routeValueObject->getSymfonyRoutePhpDocTagNode();
-        $this->docBlockManipulator->addTagValueNodeWithShortName($classMethod, $symfonyRoutePhpDocTagNode);
+        $phpDocInfo->addTagValueNodeWithShortName($symfonyRoutePhpDocTagNode);
 
         $this->addUseType(new FullyQualifiedObjectType(SymfonyRouteTagValueNode::CLASS_NAME), $classMethod);
     }
