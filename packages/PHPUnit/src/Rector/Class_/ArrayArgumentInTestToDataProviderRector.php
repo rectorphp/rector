@@ -14,13 +14,14 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -182,13 +183,16 @@ PHP
                     $node->args[] = new Arg($paramAndArg->getVariable());
                 }
 
-                /** @var ClassMethod $methodNode */
-                $methodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
-                $this->refactorTestClassMethodParams($methodNode, $paramAndArgs);
+                /** @var ClassMethod $classMethod */
+                $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+                $this->refactorTestClassMethodParams($classMethod, $paramAndArgs);
 
                 // add data provider annotation
                 $dataProviderTagNode = $this->createDataProviderTagNode($dataProviderMethodName);
-                $this->docBlockManipulator->addTag($methodNode, $dataProviderTagNode);
+
+                /** @var PhpDocInfo $phpDocInfo */
+                $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+                $phpDocInfo->addPhpDocTagNode($dataProviderTagNode);
 
                 return null;
             }
@@ -306,6 +310,9 @@ PHP
     {
         $classMethod->params = $this->createParams($paramAndArgs);
 
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+
         foreach ($paramAndArgs as $paramAndArg) {
             $staticType = $paramAndArg->getType();
 
@@ -319,8 +326,8 @@ PHP
             /** @var TypeNode $staticTypeNode */
             $staticTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($staticType);
 
-            $paramTagNode = $this->createParamTagNode($paramName, $staticTypeNode);
-            $this->docBlockManipulator->addTag($classMethod, $paramTagNode);
+            $paramTagValueNode = $this->createParamTagNode($paramName, $staticTypeNode);
+            $phpDocInfo->addTagValueNode($paramTagValueNode);
         }
     }
 
@@ -411,8 +418,8 @@ PHP
         return $params;
     }
 
-    private function createParamTagNode(string $name, TypeNode $typeNode): PhpDocTagNode
+    private function createParamTagNode(string $name, TypeNode $typeNode): AttributeAwareParamTagValueNode
     {
-        return new PhpDocTagNode('@param', new ParamTagValueNode($typeNode, false, '$' . $name, ''));
+        return new AttributeAwareParamTagValueNode($typeNode, false, '$' . $name, '', false);
     }
 }

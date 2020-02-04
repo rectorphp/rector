@@ -7,6 +7,7 @@ namespace Rector\BetterPhpDocParser\PhpDocInfo;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -25,6 +26,7 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Rector\Exception\NotImplementedException;
 use Rector\Exception\ShouldNotHappenException;
@@ -387,6 +389,22 @@ final class PhpDocInfo
         return $this->phpDocNode->children === [];
     }
 
+    public function addTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): void
+    {
+        if ($phpDocTagValueNode instanceof ReturnTagValueNode) {
+            $name = '@return';
+        } elseif ($phpDocTagValueNode instanceof ParamTagValueNode) {
+            $name = '@param';
+        } elseif ($phpDocTagValueNode instanceof VarTagValueNode) {
+            $name = '@var';
+        } else {
+            throw new NotImplementedException();
+        }
+
+        $phpDocTagNode = new AttributeAwarePhpDocTagNode($name, $phpDocTagValueNode);
+        $this->addPhpDocTagNode($phpDocTagNode);
+    }
+
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
     {
         $phpDocNode = $this->getPhpDocNode();
@@ -407,6 +425,10 @@ final class PhpDocInfo
             return;
         }
 
+        if (is_a($type, TypeAwareTagValueNodeInterface::class, true)) {
+            return;
+        }
+
         throw new ShouldNotHappenException(sprintf(
             'Type "%s" passed to "%s()" method must be child of "%s"',
             $type,
@@ -421,19 +443,5 @@ final class PhpDocInfo
         $secondAnnotationName = trim($secondAnnotationName, '@');
 
         return $firstAnnotationName === $secondAnnotationName;
-    }
-
-    private function addTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): void
-    {
-        if ($phpDocTagValueNode instanceof ReturnTagValueNode) {
-            $name = '@return';
-        } elseif ($phpDocTagValueNode instanceof VarTagValueNode) {
-            $name = '@var';
-        } else {
-            throw new NotImplementedException();
-        }
-
-        $phpDocTagNode = new AttributeAwarePhpDocTagNode($name, $phpDocTagValueNode);
-        $this->addPhpDocTagNode($phpDocTagNode);
     }
 }

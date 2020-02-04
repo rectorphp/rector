@@ -12,12 +12,12 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Doctrine\AbstractRector\DoctrineTrait;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeContainer\ClassLikeParsedNodesFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
@@ -45,11 +45,6 @@ final class PropertyManipulator
     private $nameResolver;
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var AssignManipulator
      */
     private $assignManipulator;
@@ -63,14 +58,12 @@ final class PropertyManipulator
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         NameResolver $nameResolver,
-        DocBlockManipulator $docBlockManipulator,
         AssignManipulator $assignManipulator,
         ClassLikeParsedNodesFinder $classLikeParsedNodesFinder
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nameResolver = $nameResolver;
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->assignManipulator = $assignManipulator;
         $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
     }
@@ -122,7 +115,9 @@ final class PropertyManipulator
             return true;
         }
 
-        if ($this->docBlockManipulator->hasTag($property, SerializerTypeTagValueNode::class)) {
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo->hasByType(SerializerTypeTagValueNode::class)) {
             return true;
         }
 

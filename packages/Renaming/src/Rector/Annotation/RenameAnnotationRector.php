@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractPHPUnitRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -52,7 +53,7 @@ PHP
                     <<<'PHP'
 class SomeTest extends PHPUnit\Framework\TestCase
 {
-    /** 
+    /**
      * @scenario
      */
     public function someMethod()
@@ -89,6 +90,9 @@ PHP
         /** @var Class_ $class */
         $class = $node->getAttribute(AttributeKey::CLASS_NODE);
 
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+
         foreach ($this->classToAnnotationMap as $type => $annotationMap) {
             /** @var string $type */
             if (! $this->isObjectType($class, $type)) {
@@ -96,7 +100,7 @@ PHP
             }
 
             foreach ($annotationMap as $oldAnnotation => $newAnnotation) {
-                if (! $this->docBlockManipulator->hasTag($node, $oldAnnotation)) {
+                if (! $phpDocInfo->hasByName($oldAnnotation)) {
                     continue;
                 }
 

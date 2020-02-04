@@ -6,8 +6,10 @@ namespace Rector\CakePHPToSymfony\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\CakePHPToSymfony\NodeFactory\RelationPropertyFactory;
-use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\Rector\AbstractRector;
@@ -34,22 +36,15 @@ final class CakePHPModelToDoctrineEntityRector extends AbstractRector
     private $classManipulator;
 
     /**
-     * @var PhpDocTagNodeFactory
-     */
-    private $phpDocTagNodeFactory;
-
-    /**
      * @var RelationPropertyFactory
      */
     private $relationPropertyFactory;
 
     public function __construct(
         ClassManipulator $classManipulator,
-        PhpDocTagNodeFactory $phpDocTagNodeFactory,
         RelationPropertyFactory $relationPropertyFactory
     ) {
         $this->classManipulator = $classManipulator;
-        $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
         $this->relationPropertyFactory = $relationPropertyFactory;
     }
 
@@ -154,12 +149,13 @@ PHP
         return $node;
     }
 
-    private function addEntityTagToEntityClass(Class_ $node): void
+    private function addEntityTagToEntityClass(Class_ $class): void
     {
-        $entityTag = $this->phpDocTagNodeFactory->createEntityTag();
-        $this->docBlockManipulator->addTag($node, $entityTag);
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo->addTagValueNodeWithShortName(new EntityTagValueNode());
 
         $objectType = new AliasedObjectType('ORM', 'Doctrine\Mapping\Annotation');
-        $this->addUseType($objectType, $node);
+        $this->addUseType($objectType, $class);
     }
 }
