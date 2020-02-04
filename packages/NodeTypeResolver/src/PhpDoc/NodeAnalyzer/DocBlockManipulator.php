@@ -4,27 +4,18 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
-use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use Rector\BetterPhpDocParser\Ast\PhpDocNodeTraverser;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\StaticTypeMapper;
 
-/**
- * @see \Rector\NodeTypeResolver\Tests\PhpDoc\NodeAnalyzer\DocBlockManipulatorTest
- */
 final class DocBlockManipulator
 {
     /**
@@ -33,29 +24,13 @@ final class DocBlockManipulator
     private $phpDocInfoPrinter;
 
     /**
-     * @var PhpDocNodeTraverser
-     */
-    private $phpDocNodeTraverser;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
      * @var DocBlockClassRenamer
      */
     private $docBlockClassRenamer;
 
-    public function __construct(
-        PhpDocInfoPrinter $phpDocInfoPrinter,
-        PhpDocNodeTraverser $phpDocNodeTraverser,
-        StaticTypeMapper $staticTypeMapper,
-        DocBlockClassRenamer $docBlockClassRenamer
-    ) {
+    public function __construct(PhpDocInfoPrinter $phpDocInfoPrinter, DocBlockClassRenamer $docBlockClassRenamer)
+    {
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
-        $this->phpDocNodeTraverser = $phpDocNodeTraverser;
-        $this->staticTypeMapper = $staticTypeMapper;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
     }
 
@@ -93,50 +68,6 @@ final class DocBlockManipulator
                 $phpDocChildNode->name = $newTag;
             }
         }
-    }
-
-    /**
-     * @param string[] $excludedClasses
-     */
-    public function changeUnderscoreType(Node $node, string $namespacePrefix, array $excludedClasses): void
-    {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return;
-        }
-
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
-        $phpParserNode = $node;
-
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, function (PhpDocParserNode $node) use (
-            $namespacePrefix,
-            $excludedClasses,
-            $phpParserNode
-        ): PhpDocParserNode {
-            if (! $node instanceof IdentifierTypeNode) {
-                return $node;
-            }
-
-            $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($node, $phpParserNode);
-            if (! $staticType instanceof ObjectType) {
-                return $node;
-            }
-
-            if (! Strings::startsWith($staticType->getClassName(), $namespacePrefix)) {
-                return $node;
-            }
-
-            // excluded?
-            if (in_array($staticType->getClassName(), $excludedClasses, true)) {
-                return $node;
-            }
-
-            // change underscore to \\
-            $nameParts = explode('_', $staticType->getClassName());
-            $node->name = '\\' . implode('\\', $nameParts);
-
-            return $node;
-        });
     }
 
     /**
