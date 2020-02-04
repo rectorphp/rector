@@ -6,8 +6,11 @@ namespace Rector\CodingStyle\Rector\Namespace_;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodingStyle\Application\NameImportingCommander;
 use Rector\CodingStyle\Node\NameImporter;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -35,11 +38,21 @@ final class ImportFullyQualifiedNamesRector extends AbstractRector
      */
     private $nameImporter;
 
-    public function __construct(NameImporter $nameImporter, bool $importDocBlocks, bool $autoImportNames)
-    {
+    /**
+     * @var DocBlockNameImporter
+     */
+    private $docBlockNameImporter;
+
+    public function __construct(
+        NameImporter $nameImporter,
+        bool $importDocBlocks,
+        bool $autoImportNames,
+        DocBlockNameImporter $docBlockNameImporter
+    ) {
         $this->nameImporter = $nameImporter;
         $this->importDocBlocks = $importDocBlocks;
         $this->autoImportNames = $autoImportNames;
+        $this->docBlockNameImporter = $docBlockNameImporter;
     }
 
     public function getDefinition(): RectorDefinition
@@ -108,7 +121,11 @@ PHP
 
         // process doc blocks
         if ($this->importDocBlocks) {
-            $this->docBlockManipulator->importNames($node);
+            /** @var PhpDocInfo $phpDocInfo */
+            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+            $this->docBlockNameImporter->importNames($phpDocInfo, $node);
+
+//            $this->docBlockManipulator->importNames($node);
             return $node;
         }
 

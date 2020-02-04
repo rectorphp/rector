@@ -55,25 +55,18 @@ final class DocBlockManipulator
      */
     private $docBlockClassRenamer;
 
-    /**
-     * @var DocBlockNameImporter
-     */
-    private $docBlockNameImporter;
-
     public function __construct(
         PhpDocInfoPrinter $phpDocInfoPrinter,
         AttributeAwareNodeFactory $attributeAwareNodeFactory,
         PhpDocNodeTraverser $phpDocNodeTraverser,
         StaticTypeMapper $staticTypeMapper,
-        DocBlockClassRenamer $docBlockClassRenamer,
-        DocBlockNameImporter $docBlockNameImporter
+        DocBlockClassRenamer $docBlockClassRenamer
     ) {
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
-        $this->docBlockNameImporter = $docBlockNameImporter;
     }
 
     public function hasTag(Node $node, string $name): bool
@@ -155,16 +148,6 @@ final class DocBlockManipulator
                 $phpDocChildNode->name = $newTag;
             }
         }
-    }
-
-    public function importNames(Node $node): void
-    {
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo === null) {
-            return;
-        }
-
-        $this->docBlockNameImporter->importNames($phpDocInfo, $node);
     }
 
     /**
@@ -295,13 +278,11 @@ final class DocBlockManipulator
 
     private function haveDocCommentOrCommentsChanged(Node $node, string $phpDoc): bool
     {
-        // has it changed?
         $docComment = $node->getDocComment();
         if ($docComment !== null && $docComment->getText() === $phpDoc) {
             return false;
         }
 
-        // nothing to change
         if ($node->getComments() !== []) {
             $commentsContent = implode('', $node->getComments());
             if ($commentsContent === $phpDoc) {
