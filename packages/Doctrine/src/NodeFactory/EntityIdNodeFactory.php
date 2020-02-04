@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Rector\Doctrine\NodeFactory;
 
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\NodeFactory;
 
 final class EntityIdNodeFactory
@@ -17,22 +20,13 @@ final class EntityIdNodeFactory
     private $phpDocTagNodeFactory;
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var NodeFactory
      */
     private $nodeFactory;
 
-    public function __construct(
-        PhpDocTagNodeFactory $phpDocTagNodeFactory,
-        DocBlockManipulator $docBlockManipulator,
-        NodeFactory $nodeFactory
-    ) {
+    public function __construct(PhpDocTagNodeFactory $phpDocTagNodeFactory, NodeFactory $nodeFactory)
+    {
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->nodeFactory = $nodeFactory;
     }
 
@@ -47,14 +41,20 @@ final class EntityIdNodeFactory
 
     public function decoratePropertyWithIdAnnotations(Property $property): void
     {
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+
         // add @var int
-        $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createVarTagInt());
+        $varTagValueNode = $this->phpDocTagNodeFactory->createVarTagIntValueNode();
+        $phpDocInfo->addTagValueNode($varTagValueNode);
 
         // add @ORM\Id
-        $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createIdTag());
+        $phpDocInfo->addTagValueNodeWithShortName(new IdTagValueNode());
 
-        $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createIdColumnTag());
+        $idColumnTagValueNode = $this->phpDocTagNodeFactory->createIdColumnTagValueNode();
+        $phpDocInfo->addTagValueNodeWithShortName($idColumnTagValueNode);
 
-        $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createGeneratedValueTag('AUTO'));
+        $generatedValueTagValueNode = new GeneratedValueTagValueNode('AUTO');
+        $phpDocInfo->addTagValueNodeWithShortName($generatedValueTagValueNode);
     }
 }

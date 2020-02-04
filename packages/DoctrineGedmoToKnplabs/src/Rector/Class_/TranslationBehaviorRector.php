@@ -10,9 +10,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\LocaleTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TranslatableTagValueNode;
-use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
@@ -37,22 +37,13 @@ final class TranslationBehaviorRector extends AbstractRector
     private $classManipulator;
 
     /**
-     * @var PhpDocTagNodeFactory
-     */
-    private $phpDocTagNodeFactory;
-
-    /**
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
 
-    public function __construct(
-        ClassManipulator $classManipulator,
-        PhpDocTagNodeFactory $phpDocTagNodeFactory,
-        PhpDocInfoFactory $phpDocInfoFactory
-    ) {
+    public function __construct(ClassManipulator $classManipulator, PhpDocInfoFactory $phpDocInfoFactory)
+    {
         $this->classManipulator = $classManipulator;
-        $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
 
@@ -267,10 +258,7 @@ PHP
         $this->classManipulator->addAsFirstTrait($class, 'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait');
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($class);
-
-        $entityTag = $this->phpDocTagNodeFactory->createEntityTag();
-        $phpDocInfo->addPhpDocTagNode($entityTag);
-//        $this->docBlockManipulator->addTag($class, $this->phpDocTagNodeFactory->createEntityTag());
+        $phpDocInfo->addTagValueNodeWithShortName(new EntityTagValueNode());
 
         foreach ($translatedPropertyToPhpDocInfos as $translatedPropertyName => $translatedPhpDocInfo) {
             $property = $this->nodeFactory->createPrivateProperty($translatedPropertyName);

@@ -15,8 +15,11 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use Ramsey\Uuid\Uuid;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\GeneratedValueTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Doctrine\PhpDocParser\Ast\PhpDoc\PhpDocTagNodeFactory;
-use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\NodeFactory;
 
 final class EntityUuidNodeFactory
@@ -27,22 +30,13 @@ final class EntityUuidNodeFactory
     private $phpDocTagNodeFactory;
 
     /**
-     * @var DocBlockManipulator
-     */
-    private $docBlockManipulator;
-
-    /**
      * @var NodeFactory
      */
     private $nodeFactory;
 
-    public function __construct(
-        PhpDocTagNodeFactory $phpDocTagNodeFactory,
-        DocBlockManipulator $docBlockManipulator,
-        NodeFactory $nodeFactory
-    ) {
+    public function __construct(PhpDocTagNodeFactory $phpDocTagNodeFactory, NodeFactory $nodeFactory)
+    {
         $this->phpDocTagNodeFactory = $phpDocTagNodeFactory;
-        $this->docBlockManipulator = $docBlockManipulator;
         $this->nodeFactory = $nodeFactory;
     }
 
@@ -74,18 +68,24 @@ final class EntityUuidNodeFactory
         $this->clearVarAndOrmAnnotations($property);
         $this->replaceIntSerializerTypeWithString($property);
 
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+
         // add @var
-        $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createVarTagUuidInterface());
+        $varTagValueNode = $this->phpDocTagNodeFactory->createUuidInterfaceVarTagValueNode();
+        $phpDocInfo->addTagValueNode($varTagValueNode);
 
         if ($isId) {
             // add @ORM\Id
-            $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createIdTag());
+            $phpDocInfo->addTagValueNodeWithShortName(new IdTagValueNode());
         }
 
-        $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createUuidColumnTag($isNullable));
+        $columnTagValueNode = $this->phpDocTagNodeFactory->createUuidColumnTagValueNode($isNullable);
+        $phpDocInfo->addTagValueNodeWithShortName($columnTagValueNode);
 
         if ($isId) {
-            $this->docBlockManipulator->addTag($property, $this->phpDocTagNodeFactory->createGeneratedValueTag());
+            $generatedValueTagValueNode = new GeneratedValueTagValueNode('CUSTOM');
+            $phpDocInfo->addTagValueNodeWithShortName($generatedValueTagValueNode);
         }
     }
 

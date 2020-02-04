@@ -10,6 +10,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
@@ -18,6 +20,7 @@ use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app
+ *
  * @see \Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddArrayParamDocTypeRector\AddArrayParamDocTypeRectorTest
  */
 final class AddArrayParamDocTypeRector extends AbstractRector
@@ -97,6 +100,9 @@ PHP
             return null;
         }
 
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+
         foreach ($node->getParams() as $param) {
             if ($this->shouldSkipParam($param)) {
                 return null;
@@ -107,8 +113,8 @@ PHP
                 return null;
             }
 
-            $paramTagNode = $this->paramPhpDocNodeFactory->create($type, $param);
-            $this->docBlockManipulator->addTag($node, $paramTagNode);
+            $paramTagValueNode = $this->paramPhpDocNodeFactory->create($type, $param);
+            $phpDocInfo->addTagValueNode($paramTagValueNode);
         }
 
         return $node;

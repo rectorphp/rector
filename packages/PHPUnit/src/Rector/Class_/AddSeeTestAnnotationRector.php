@@ -10,6 +10,9 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\Composer\ComposerAutoloadedDirectoryProvider;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
@@ -85,6 +88,9 @@ PHP
             return null;
         }
 
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+
         /** @var string $className */
         $className = $this->getName($node);
 
@@ -93,7 +99,8 @@ PHP
             return null;
         }
 
-        $this->docBlockManipulator->addTag($node, $this->createSeePhpDocTagNode($testCaseClassName));
+        $seeTagNode = $this->createSeePhpDocTagNode($testCaseClassName);
+        $phpDocInfo->addPhpDocTagNode($seeTagNode);
 
         return $node;
     }
@@ -152,7 +159,7 @@ PHP
 
     private function createSeePhpDocTagNode(string $className): PhpDocTagNode
     {
-        return new PhpDocTagNode('@see', new AttributeAwareGenericTagValueNode('\\' . $className));
+        return new AttributeAwarePhpDocTagNode('@see', new AttributeAwareGenericTagValueNode('\\' . $className));
     }
 
     /**

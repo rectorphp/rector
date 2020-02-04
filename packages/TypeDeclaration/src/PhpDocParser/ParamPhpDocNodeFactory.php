@@ -7,7 +7,6 @@ namespace Rector\TypeDeclaration\PhpDocParser;
 use PhpParser\Node\Param;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
-use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PhpParser\Node\Resolver\NameResolver;
 
@@ -29,18 +28,16 @@ final class ParamPhpDocNodeFactory
         $this->staticTypeMapper = $staticTypeMapper;
     }
 
-    public function create(Type $type, Param $param): AttributeAwarePhpDocTagNode
+    public function create(Type $type, Param $param): AttributeAwareParamTagValueNode
     {
         $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($type);
 
-        $paramTagValueNode = new AttributeAwareParamTagValueNode(
+        return new AttributeAwareParamTagValueNode(
             $typeNode,
             $param->variadic,
             '$' . $this->nameResolver->getName($param),
             '',
             $param->byRef
         );
-
-        return new AttributeAwarePhpDocTagNode('@param', $paramTagValueNode);
     }
 }
