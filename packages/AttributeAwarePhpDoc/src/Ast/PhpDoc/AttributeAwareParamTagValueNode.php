@@ -8,8 +8,9 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 
-final class AttributeAwareParamTagValueNode extends ParamTagValueNode implements AttributeAwareNodeInterface
+final class AttributeAwareParamTagValueNode extends ParamTagValueNode implements AttributeAwareNodeInterface, TypeAwareTagValueNodeInterface
 {
     use AttributeTrait;
 

@@ -11,9 +11,6 @@ use PHPStan\PhpDocParser\Ast\Node as PhpDocParserNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -178,21 +175,7 @@ final class DocBlockManipulator
             return false;
         }
 
-        $tagValueNodesWithType = [
-            VarTagValueNode::class,
-            ThrowsTagValueNode::class,
-            ReturnTagValueNode::class,
-            VarTagValueNode::class,
-            TypeAwareTagValueNodeInterface::class,
-        ];
-
-        foreach ($tagValueNodesWithType as $tagValueNodeWithType) {
-            if ($phpDocInfo->hasByType($tagValueNodeWithType)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $phpDocInfo->hasByType(TypeAwareTagValueNodeInterface::class);
     }
 
     public function updateNodeWithPhpDocInfo(Node $node): void
