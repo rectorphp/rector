@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
@@ -49,13 +50,20 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector
     private $classManipulator;
 
     /**
+     * @var PhpDocTypeRenamer
+     */
+    private $phpDocTypeRenamer;
+
+    /**
      * @param string[][]|null[] $namespacePrefixesWithExcludedClasses
      */
     public function __construct(
         ClassManipulator $classManipulator,
+        PhpDocTypeRenamer $phpDocTypeRenamer,
         array $namespacePrefixesWithExcludedClasses = []
     ) {
         $this->classManipulator = $classManipulator;
+        $this->phpDocTypeRenamer = $phpDocTypeRenamer;
         $this->namespacePrefixesWithExcludedClasses = $namespacePrefixesWithExcludedClasses;
     }
 
@@ -100,7 +108,7 @@ PHP
     {
         // replace on @var/@param/@return/@throws
         foreach ($this->namespacePrefixesWithExcludedClasses as $namespacePrefix => $excludedClasses) {
-            $this->docBlockManipulator->changeUnderscoreType($node, $namespacePrefix, $excludedClasses ?? []);
+            $this->phpDocTypeRenamer->changeUnderscoreType($node, $namespacePrefix, $excludedClasses ?? []);
         }
 
         if ($node instanceof Name || $node instanceof Identifier) {
