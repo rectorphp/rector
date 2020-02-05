@@ -1,4 +1,4 @@
-# All 446 Rectors Overview
+# All 447 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -4810,6 +4810,31 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 +    $this->expectException('Exception');
 +    $this->expectExceptionMessage('Message');
      // tested code
+ }
+```
+
+<br>
+
+### `ExplicitPhpErrorApiRector`
+
+- class: `Rector\PHPUnit\Rector\MethodCall\ExplicitPhpErrorApiRector`
+
+Use explicit API for expecting PHP errors, warnings, and notices
+
+```diff
+ final class SomeTest extends \PHPUnit\Framework\TestCase
+ {
+     public function test()
+     {
+-        $this->expectException(\PHPUnit\Framework\TestCase\Deprecated::class);
+-        $this->expectException(\PHPUnit\Framework\TestCase\Error::class);
+-        $this->expectException(\PHPUnit\Framework\TestCase\Notice::class);
+-        $this->expectException(\PHPUnit\Framework\TestCase\Warning::class);
++        $this->expectDeprecation();
++        $this->expectError();
++        $this->expectNotice();
++        $this->expectWarning();
+     }
  }
 ```
 
