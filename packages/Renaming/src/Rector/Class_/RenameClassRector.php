@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Configuration\ChangeConfiguration;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDoc\PhpDocClassRenamer;
@@ -60,11 +61,14 @@ final class RenameClassRector extends AbstractRector
     public function __construct(
         ClassNaming $classNaming,
         PhpDocClassRenamer $phpDocClassRenamer,
+        ChangeConfiguration $changeConfiguration,
         array $oldToNewClasses = []
     ) {
         $this->classNaming = $classNaming;
         $this->oldToNewClasses = $oldToNewClasses;
         $this->phpDocClassRenamer = $phpDocClassRenamer;
+
+        $changeConfiguration->setOldToNewClasses($oldToNewClasses);
     }
 
     public function getDefinition(): RectorDefinition
