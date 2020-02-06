@@ -17,6 +17,7 @@ use Rector\FileSystem\FilesFinder;
 use Rector\Guard\RectorGuard;
 use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Stubs\StubLoader;
+use Rector\Yaml\YamlProcessor;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -86,6 +87,11 @@ final class ProcessCommand extends AbstractCommand
     private $stubLoader;
 
     /**
+     * @var YamlProcessor
+     */
+    private $yamlProcessor;
+
+    /**
      * @param string[] $paths
      * @param string[] $fileExtensions
      */
@@ -100,6 +106,7 @@ final class ProcessCommand extends AbstractCommand
         ReportingExtensionRunner $reportingExtensionRunner,
         RectorNodeTraverser $rectorNodeTraverser,
         StubLoader $stubLoader,
+        YamlProcessor $yamlProcessor,
         array $paths,
         array $fileExtensions
     ) {
@@ -117,6 +124,7 @@ final class ProcessCommand extends AbstractCommand
         $this->paths = $paths;
 
         parent::__construct();
+        $this->yamlProcessor = $yamlProcessor;
     }
 
     protected function configure(): void
@@ -197,6 +205,7 @@ final class ProcessCommand extends AbstractCommand
         $this->stubLoader->loadStubs();
 
         $source = $this->resolvesSourcePaths($input);
+        $this->configuration->setSource($source);
 
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles(
             $source,
@@ -205,6 +214,9 @@ final class ProcessCommand extends AbstractCommand
         );
 
         $this->additionalAutoloader->autoloadWithInputAndSource($input, $source);
+
+        // yaml
+        $this->yamlProcessor->run();
 
         $this->rectorApplication->runOnFileInfos($phpFileInfos);
 

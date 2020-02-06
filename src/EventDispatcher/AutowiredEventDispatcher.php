@@ -18,6 +18,7 @@ final class AutowiredEventDispatcher extends EventDispatcher
             $this->addSubscriber($eventSubscriber);
         }
 
+        // Symfony 4.4/5 compat
         if (method_exists(parent::class, '__construct')) {
             parent::__construct();
         }

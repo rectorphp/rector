@@ -221,4 +221,3 @@ services:
             Rector\Php\Regex\RegexPatternArgumentManipulator: Rector\Core\Php\Regex\RegexPatternArgumentManipulator
             Rector\Php\PhpVersionProvider: Rector\Core\Php\PhpVersionProvider
             Rector\Php\TypeAnalyzer: Rector\Core\Php\TypeAnalyzer
-

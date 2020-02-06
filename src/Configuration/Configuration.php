@@ -55,6 +55,11 @@ final class Configuration
     private $outputFile;
 
     /**
+     * @var mixed[]
+     */
+    private $source = [];
+
+    /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
      */
     public function resolveFromInput(InputInterface $input): void
@@ -140,6 +145,22 @@ final class Configuration
     public function getOutputFile(): ?string
     {
         return $this->outputFile;
+    }
+
+    /**
+     * @param string[] $source
+     */
+    public function setSource(array $source): void
+    {
+        $this->source = $source;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSource(): array
+    {
+        return $this->source;
     }
 
     private function canShowProgressBar(InputInterface $input): bool
