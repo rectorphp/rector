@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Yaml;
+namespace Rector\Core\Yaml;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
-use Rector\Configuration\ChangeConfiguration;
-use Rector\Configuration\Configuration;
-use Rector\FileSystem\FilesFinder;
+use Rector\Core\Configuration\ChangeConfiguration;
+use Rector\Core\Configuration\Configuration;
+use Rector\Core\FileSystem\FilesFinder;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class YamlProcessor
@@ -63,7 +63,7 @@ final class YamlProcessor
 
             foreach ($oldToNewClasses as $oldClass => $newClass) {
                 /** @var string $newContent */
-                $newContent = Strings::replace($newContent, '#' . preg_quote($oldClass) . '#', $newClass);
+                $newContent = Strings::replace($newContent, '#' . preg_quote($oldClass, '#') . '#', $newClass);
             }
 
             // nothing has changed

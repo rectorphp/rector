@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveAlwaysTrueIfConditionRectorTest extends AbstractRectorTestCase
 {

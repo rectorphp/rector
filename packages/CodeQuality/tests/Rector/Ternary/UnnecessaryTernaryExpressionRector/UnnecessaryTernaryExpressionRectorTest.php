@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Ternary\UnnecessaryTernaryExpressionRe
 
 use Iterator;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class UnnecessaryTernaryExpressionRectorTest extends AbstractRectorTestCase
 {

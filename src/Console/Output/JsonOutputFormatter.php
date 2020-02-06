@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Console\Output;
+namespace Rector\Core\Console\Output;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
-use Rector\Application\ErrorAndDiffCollector;
-use Rector\Configuration\Configuration;
-use Rector\Contract\Console\Output\OutputFormatterInterface;
+use Rector\Core\Application\ErrorAndDiffCollector;
+use Rector\Core\Configuration\Configuration;
+use Rector\Core\Contract\Console\Output\OutputFormatterInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class JsonOutputFormatter implements OutputFormatterInterface

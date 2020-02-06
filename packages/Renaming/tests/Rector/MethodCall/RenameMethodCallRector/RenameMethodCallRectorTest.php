@@ -6,10 +6,10 @@ namespace Rector\Renaming\Tests\Rector\MethodCall\RenameMethodCallRector;
 
 use Iterator;
 use Nette\Utils\Html;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\MethodCall\RenameMethodCallRector;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodCallRector\Source\ClassMethodToBeSkipped;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameMethodCallRector\Source\SomeTranslator;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RenameMethodCallRectorTest extends AbstractRectorTestCase
 {

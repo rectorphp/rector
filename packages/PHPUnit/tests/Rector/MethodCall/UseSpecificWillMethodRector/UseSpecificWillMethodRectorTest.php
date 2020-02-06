@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\MethodCall\UseSpecificWillMethodRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\MethodCall\UseSpecificWillMethodRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class UseSpecificWillMethodRectorTest extends AbstractRectorTestCase
 {

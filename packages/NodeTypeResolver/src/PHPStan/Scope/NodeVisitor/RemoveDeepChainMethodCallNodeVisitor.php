@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
-use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 
 /**
  * Skips performance trap in PHPStan: https://github.com/phpstan/phpstan/issues/254

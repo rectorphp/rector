@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\MethodCall\ServiceGetterToConstructorInjectionRector:
+    Rector\Core\Rector\MethodCall\ServiceGetterToConstructorInjectionRector:
         $methodNamesByTypesToServiceTypes:
             'Doctrine\Common\Persistence\ManagerRegistry':
                 'getConnection': 'Doctrine\DBAL\Connection'

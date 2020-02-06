@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Rector\Testing\PHPUnit;
+namespace Rector\Core\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
 use Psr\Container\ContainerInterface;
-use Rector\Application\FileProcessor;
-use Rector\Configuration\Option;
-use Rector\Contract\Rector\PhpRectorInterface;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\HttpKernel\RectorKernel;
-use Rector\Stubs\StubLoader;
-use Rector\Testing\Application\EnabledRectorsProvider;
-use Rector\Testing\Finder\RectorsFinder;
+use Rector\Core\Application\FileProcessor;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Rector\PhpRectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\Stubs\StubLoader;
+use Rector\Core\Testing\Application\EnabledRectorsProvider;
+use Rector\Core\Testing\Finder\RectorsFinder;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Container;

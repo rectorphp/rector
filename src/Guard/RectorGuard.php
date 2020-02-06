@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Guard;
+namespace Rector\Core\Guard;
 
 use PhpParser\Node;
-use Rector\Exception\NoRectorsLoadedException;
-use Rector\Exception\Rector\InvalidRectorException;
+use Rector\Core\Exception\NoRectorsLoadedException;
+use Rector\Core\Exception\Rector\InvalidRectorException;
+use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\FileSystemRector\FileSystemFileProcessor;
-use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
 
 final class RectorGuard
 {

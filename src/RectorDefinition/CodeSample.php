@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\RectorDefinition;
+namespace Rector\Core\RectorDefinition;
 
-use Rector\Contract\RectorDefinition\CodeSampleInterface;
+use Rector\Core\Contract\RectorDefinition\CodeSampleInterface;
 
 final class CodeSample implements CodeSampleInterface
 {

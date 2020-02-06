@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Rector\Application;
+namespace Rector\Core\Application;
 
 use OndraM\CiDetector\CiDetector;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\NodeScopeResolver;
-use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
-use Rector\Application\FileSystem\RemovedAndAddedFilesProcessor;
-use Rector\Configuration\Configuration;
-use Rector\Extension\FinishingExtensionRunner;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
+use Rector\Core\Configuration\Configuration;
+use Rector\Core\Extension\FinishingExtensionRunner;
+use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Rector\FileSystemRector\FileSystemFileProcessor;
-use Rector\Testing\Application\EnabledRectorsProvider;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Contract\Rector;
+namespace Rector\Core\Contract\Rector;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitor;

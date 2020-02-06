@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\MethodCall\WithConsecutiveArgToArrayRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\MethodCall\WithConsecutiveArgToArrayRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class WithConsecutiveArgToArrayRectorTest extends AbstractRectorTestCase
 {

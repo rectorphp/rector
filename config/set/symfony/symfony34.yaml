@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Argument\ArgumentRemoverRector:
+    Rector\Core\Rector\Argument\ArgumentRemoverRector:
         $positionsByMethodNameByClassType:
             Symfony\Component\Yaml\Yaml:
                 parse:

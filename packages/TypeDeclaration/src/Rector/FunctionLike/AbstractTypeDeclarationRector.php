@@ -15,10 +15,10 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
-use Rector\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PHPStan\Type\SelfObjectType;
-use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\PhpParserTypeAnalyzer;
 use Rector\TypeDeclaration\VendorLock\VendorLockResolver;
 

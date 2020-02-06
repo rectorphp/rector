@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\ClassConst\RemoveUnusedPrivateConstantRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateConstantRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveUnusedPrivateConstantRectorTest extends AbstractRectorTestCase
 {

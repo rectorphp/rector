@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\MethodCall\MethodCallToReturnRector;
+namespace Rector\Core\Tests\Rector\MethodCall\MethodCallToReturnRector;
 
 use Iterator;
-use Rector\Rector\MethodCall\MethodCallToReturnRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\MethodCall\MethodCallToReturnRector\Source\ReturnDeny;
+use Rector\Core\Rector\MethodCall\MethodCallToReturnRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\MethodCall\MethodCallToReturnRector\Source\ReturnDeny;
 
 final class MethodCallToReturnRectorTest extends AbstractRectorTestCase
 {

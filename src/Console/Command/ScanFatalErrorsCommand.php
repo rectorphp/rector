@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Console\Command;
+namespace Rector\Core\Console\Command;
 
-use Rector\Configuration\Option;
-use Rector\Console\Shell;
-use Rector\Scan\ErrorScanner;
-use Rector\Scan\ScannedErrorToRectorResolver;
-use Rector\Yaml\YamlPrinter;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Console\Shell;
+use Rector\Core\Scan\ErrorScanner;
+use Rector\Core\Scan\ScannedErrorToRectorResolver;
+use Rector\Core\Yaml\YamlPrinter;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

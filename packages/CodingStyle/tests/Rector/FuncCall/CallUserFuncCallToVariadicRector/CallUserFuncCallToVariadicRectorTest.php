@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\FuncCall\CallUserFuncCallToVariadicRec
 
 use Iterator;
 use Rector\CodingStyle\Rector\FuncCall\CallUserFuncCallToVariadicRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class CallUserFuncCallToVariadicRectorTest extends AbstractRectorTestCase
 {

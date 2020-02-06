@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\ClassMethod;
+namespace Rector\Core\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
@@ -10,13 +10,13 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\ClassMethod\AddMethodParentCallRector\AddMethodParentCallRectorTest
+ * @see \Rector\Core\Tests\Rector\ClassMethod\AddMethodParentCallRector\AddMethodParentCallRectorTest
  */
 final class AddMethodParentCallRector extends AbstractRector
 {
@@ -35,9 +35,11 @@ final class AddMethodParentCallRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Add method parent call, in case new parent method is added', [
-            new CodeSample(
-                <<<'PHP'
+        return new RectorDefinition(
+            'Add method parent call, in case new parent method is added',
+            [
+                new CodeSample(
+                    <<<'PHP'
 class SunshineCommand extends ParentClassWithNewConstructor
 {
     public function __construct()
@@ -46,8 +48,8 @@ class SunshineCommand extends ParentClassWithNewConstructor
     }
 }
 PHP
-                ,
-                <<<'PHP'
+                    ,
+                    <<<'PHP'
 class SunshineCommand extends ParentClassWithNewConstructor
 {
     public function __construct()
@@ -58,8 +60,9 @@ class SunshineCommand extends ParentClassWithNewConstructor
     }
 }
 PHP
-            ),
-        ]);
+                ),
+            ]
+        );
     }
 
     /**

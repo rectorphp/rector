@@ -154,6 +154,6 @@ services:
             'Twig_Extensions_TokenParser_Trans': 'Twig\Extensions\TokenParser\TransTokenParser'
             'Twig_Extensions_Node_Trans': 'Twig\Extensions\Node\TransNode'
 
-    Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
+    Rector\Core\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
         $namespacePrefixesWithExcludedClasses:
             Twig_: null

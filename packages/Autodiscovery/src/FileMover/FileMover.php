@@ -9,7 +9,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Autodiscovery\Configuration\CategoryNamespaceProvider;
 use Rector\Autodiscovery\ValueObject\NodesWithFileDestinationValueObject;
-use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\PSR4\FileRelocationResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;

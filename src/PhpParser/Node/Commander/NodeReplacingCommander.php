@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Commander;
+namespace Rector\Core\PhpParser\Node\Commander;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
-use Rector\Contract\PhpParser\Node\CommanderInterface;
+use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
 
 /**
  * Adds new private properties to class + to constructor

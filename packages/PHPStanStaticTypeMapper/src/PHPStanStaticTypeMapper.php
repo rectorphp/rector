@@ -11,7 +11,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
-use Rector\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedException;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class PHPStanStaticTypeMapper

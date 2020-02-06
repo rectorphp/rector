@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php72\Tests\Rector\FuncCall\StringsAssertNakedRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php72\Rector\FuncCall\StringsAssertNakedRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class StringsAssertNakedRectorTest extends AbstractRectorTestCase
 {

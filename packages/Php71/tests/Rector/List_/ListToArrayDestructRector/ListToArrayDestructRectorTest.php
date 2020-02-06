@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php71\Tests\Rector\List_\ListToArrayDestructRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php71\Rector\List_\ListToArrayDestructRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ListToArrayDestructRectorTest extends AbstractRectorTestCase
 {

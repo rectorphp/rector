@@ -12,9 +12,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\CakePHPToSymfony\TemplatePathResolver;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\Node\Value\ValueResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class TemplateMethodCallManipulator
 {

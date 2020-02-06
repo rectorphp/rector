@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\PhpParser\Printer;
+namespace Rector\Core\Tests\PhpParser\Printer;
 
 use Iterator;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\String_;
-use Rector\HttpKernel\RectorKernel;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class BetterStandardPrinterTest extends AbstractKernelTestCase

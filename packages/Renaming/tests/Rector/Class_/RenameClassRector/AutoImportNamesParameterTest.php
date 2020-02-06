@@ -6,10 +6,10 @@ namespace Rector\Renaming\Tests\Rector\Class_\RenameClassRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClass;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
  * @see \Rector\CodingStyle\Application\NameImportingCommander

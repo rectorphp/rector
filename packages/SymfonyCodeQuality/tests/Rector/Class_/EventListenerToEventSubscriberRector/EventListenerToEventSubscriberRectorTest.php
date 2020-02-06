@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\SymfonyCodeQuality\Tests\Rector\Class_\EventListenerToEventSubscriberRector;
 
-use Rector\Configuration\Option;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\SymfonyCodeQuality\Rector\Class_\EventListenerToEventSubscriberRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class EventListenerToEventSubscriberRectorTest extends AbstractRectorTestCase
 {

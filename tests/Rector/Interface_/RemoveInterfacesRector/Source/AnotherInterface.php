@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Interface_\RemoveInterfacesRector\Source;
+namespace Rector\Core\Tests\Rector\Interface_\RemoveInterfacesRector\Source;
 
 interface AnotherInterface
 {

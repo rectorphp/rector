@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PHPStan\Analyser\NameScope;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
-use Rector\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 
 final class PhpDocTypeMapper

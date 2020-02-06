@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Exception\NodeChanger;
+namespace Rector\Core\Exception\NodeChanger;
 
 use Exception;
 

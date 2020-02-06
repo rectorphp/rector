@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Refactoring\Rector\FileSystem;
 
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\Naming\NamespaceMatcher;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
-use Rector\Naming\NamespaceMatcher;
 use Rector\PSR4\FileRelocationResolver;
-use Rector\RectorDefinition\RectorDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MoveAndRenameNamespaceRector extends AbstractFileSystemRector

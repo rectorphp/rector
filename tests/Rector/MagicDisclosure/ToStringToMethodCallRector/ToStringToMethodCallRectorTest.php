@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\MagicDisclosure\ToStringToMethodCallRector;
+namespace Rector\Core\Tests\Rector\MagicDisclosure\ToStringToMethodCallRector;
 
 use Iterator;
-use Rector\Rector\MagicDisclosure\ToStringToMethodCallRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Rector\MagicDisclosure\ToStringToMethodCallRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Symfony\Component\Config\ConfigCache;
 
 final class ToStringToMethodCallRectorTest extends AbstractRectorTestCase

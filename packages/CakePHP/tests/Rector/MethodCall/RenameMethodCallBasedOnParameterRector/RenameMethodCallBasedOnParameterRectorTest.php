@@ -6,7 +6,7 @@ namespace Rector\CakePHP\Tests\Rector\MethodCall\RenameMethodCallBasedOnParamete
 
 use Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector;
 use Rector\CakePHP\Tests\Rector\MethodCall\RenameMethodCallBasedOnParameterRector\Source\SomeModelType;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RenameMethodCallBasedOnParameterRectorTest extends AbstractRectorTestCase
 {

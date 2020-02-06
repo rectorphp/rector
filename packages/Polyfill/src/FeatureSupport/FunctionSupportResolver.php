@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Polyfill\FeatureSupport;
 
-use Rector\Php\PhpVersionProvider;
+use Rector\Core\Php\PhpVersionProvider;
 
 final class FunctionSupportResolver
 {

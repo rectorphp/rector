@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\Class_\AddArrayDefaultToArrayPropertyR
 
 use Iterator;
 use Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AddArrayDefaultToArrayPropertyRectorTest extends AbstractRectorTestCase
 {

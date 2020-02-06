@@ -8,10 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\CakePHPToSymfony\Contract\NodeManipulator\RepositoryFindMethodCallManipulatorInterface;
-use Rector\Exception\NotImplementedException;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\Node\Value\ValueResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class DoctrineRepositoryClassMethodManipulator
 {

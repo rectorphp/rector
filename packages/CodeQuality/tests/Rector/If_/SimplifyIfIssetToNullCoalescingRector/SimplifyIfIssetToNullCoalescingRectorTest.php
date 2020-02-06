@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfIssetToNullCoalescingRec
 
 use Iterator;
 use Rector\CodeQuality\Rector\If_\SimplifyIfIssetToNullCoalescingRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimplifyIfIssetToNullCoalescingRectorTest extends AbstractRectorTestCase
 {

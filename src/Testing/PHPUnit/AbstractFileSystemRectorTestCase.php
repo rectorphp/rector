@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\Testing\PHPUnit;
+namespace Rector\Core\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
-use Rector\Application\FileSystem\RemovedAndAddedFilesProcessor;
-use Rector\Configuration\Configuration;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
+use Rector\Core\Configuration\Configuration;
+use Rector\Core\HttpKernel\RectorKernel;
 use Rector\FileSystemRector\Contract\FileSystemRectorInterface;
 use Rector\FileSystemRector\FileSystemFileProcessor;
-use Rector\HttpKernel\RectorKernel;
 use ReflectionClass;
 use Symfony\Component\Yaml\Yaml;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;

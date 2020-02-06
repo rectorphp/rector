@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\MysqlToMysqli\Tests\Rector\FuncCall\MysqlPConnectToMysqliConnectRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class MysqlPConnectToMysqliConnectRectorTest extends AbstractRectorTestCase
 {

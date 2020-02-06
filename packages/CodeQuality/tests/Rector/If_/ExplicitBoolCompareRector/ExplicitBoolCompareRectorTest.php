@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\ExplicitBoolCompareRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ExplicitBoolCompareRectorTest extends AbstractRectorTestCase
 {

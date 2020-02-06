@@ -6,10 +6,10 @@ namespace Rector\PhpSpecToPHPUnit\Rector;
 
 use PhpParser\Node;
 use PhpSpec\ObjectBehavior;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://gnugat.github.io/2015/09/23/phpunit-with-phpspec.html

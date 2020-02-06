@@ -14,7 +14,7 @@ use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
-use Rector\HttpKernel\RectorKernel;
+use Rector\Core\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 

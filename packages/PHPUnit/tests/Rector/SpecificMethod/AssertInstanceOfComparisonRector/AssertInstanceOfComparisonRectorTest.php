@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertInstanceOfComparisonRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertInstanceOfComparisonRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AssertInstanceOfComparisonRectorTest extends AbstractRectorTestCase
 {

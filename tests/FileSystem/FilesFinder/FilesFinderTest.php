@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\FileSystem\FilesFinder;
+namespace Rector\Core\Tests\FileSystem\FilesFinder;
 
 use Iterator;
 use Nette\Utils\FileSystem;
-use Rector\FileSystem\FilesFinder;
-use Rector\HttpKernel\RectorKernel;
+use Rector\Core\FileSystem\FilesFinder;
+use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

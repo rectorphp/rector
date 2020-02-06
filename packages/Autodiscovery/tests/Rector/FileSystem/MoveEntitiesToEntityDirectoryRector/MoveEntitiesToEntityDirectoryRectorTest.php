@@ -6,7 +6,7 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveEntitiesToEntityDirec
 
 use Iterator;
 use Rector\Autodiscovery\Rector\FileSystem\MoveEntitiesToEntityDirectoryRector;
-use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 
 final class MoveEntitiesToEntityDirectoryRectorTest extends AbstractFileSystemRectorTestCase
 {

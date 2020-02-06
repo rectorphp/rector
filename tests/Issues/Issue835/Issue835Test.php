@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Issues\Issue835;
+namespace Rector\Core\Tests\Issues\Issue835;
 
 use Iterator;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Issue835Test extends AbstractRectorTestCase
 {

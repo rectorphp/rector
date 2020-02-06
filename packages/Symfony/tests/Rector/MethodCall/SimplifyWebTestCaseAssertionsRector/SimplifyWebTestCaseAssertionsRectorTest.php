@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\MethodCall\SimplifyWebTestCaseAssertionsRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimplifyWebTestCaseAssertionsRectorTest extends AbstractRectorTestCase
 {

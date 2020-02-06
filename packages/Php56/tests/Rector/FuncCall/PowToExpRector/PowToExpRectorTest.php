@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php56\Tests\Rector\FuncCall\PowToExpRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php56\Rector\FuncCall\PowToExpRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
  * Some tests copied from:

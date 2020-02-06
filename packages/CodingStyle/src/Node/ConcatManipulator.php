@@ -7,8 +7,8 @@ namespace Rector\CodingStyle\Node;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 
 final class ConcatManipulator
 {

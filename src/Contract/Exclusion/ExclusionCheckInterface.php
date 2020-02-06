@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Contract\Exclusion;
+namespace Rector\Core\Contract\Exclusion;
 
 use PhpParser\Node;
-use Rector\Contract\Rector\PhpRectorInterface;
+use Rector\Core\Contract\Rector\PhpRectorInterface;
 
 interface ExclusionCheckInterface
 {

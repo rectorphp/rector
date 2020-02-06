@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfReturnBoolRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimplifyIfReturnBoolRectorTest extends AbstractRectorTestCase
 {

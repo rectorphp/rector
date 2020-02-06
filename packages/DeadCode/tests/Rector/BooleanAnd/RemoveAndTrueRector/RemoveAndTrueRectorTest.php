@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\BooleanAnd\RemoveAndTrueRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveAndTrueRectorTest extends AbstractRectorTestCase
 {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\ClassMethod\FixDataProviderAnnotationTypoRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\ClassMethod\FixDataProviderAnnotationTypoRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FixDataProviderAnnotationTypoRectorTest extends AbstractRectorTestCase
 {

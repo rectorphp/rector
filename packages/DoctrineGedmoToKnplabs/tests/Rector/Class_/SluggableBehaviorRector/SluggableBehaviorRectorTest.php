@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\SluggableBehaviorRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DoctrineGedmoToKnplabs\Rector\Class_\SluggableBehaviorRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SluggableBehaviorRectorTest extends AbstractRectorTestCase
 {

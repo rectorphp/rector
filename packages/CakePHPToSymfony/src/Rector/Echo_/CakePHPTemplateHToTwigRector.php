@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\InlineHTML;
 use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
-use Rector\Exception\NotImplementedException;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\CakePHPToSymfony\Tests\Rector\Echo_\CakePHPTemplateHToTwigRector\CakePHPTemplateHToTwigRectorTest

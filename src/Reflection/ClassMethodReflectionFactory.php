@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Reflection;
+namespace Rector\Core\Reflection;
 
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;

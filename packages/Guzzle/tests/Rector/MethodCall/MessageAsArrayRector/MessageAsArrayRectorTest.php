@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Guzzle\Tests\Rector\MethodCall\MessageAsArrayRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Guzzle\Rector\MethodCall\MessageAsArrayRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class MessageAsArrayRectorTest extends AbstractRectorTestCase
 {

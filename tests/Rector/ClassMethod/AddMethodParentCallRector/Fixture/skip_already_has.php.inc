@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\ClassMethod\AddMethodParentCallRector\Fixture;
+namespace Rector\Core\Tests\Rector\ClassMethod\AddMethodParentCallRector\Fixture;
 
-use Rector\Tests\Rector\ClassMethod\AddMethodParentCallRector\Source\ParentClassWithNewConstructor;
+use Rector\Core\Tests\Rector\ClassMethod\AddMethodParentCallRector\Source\ParentClassWithNewConstructor;
 
 class SkipAlreadyHas extends ParentClassWithNewConstructor
 {

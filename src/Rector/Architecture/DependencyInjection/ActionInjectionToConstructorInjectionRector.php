@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\Architecture\DependencyInjection;
+namespace Rector\Core\Rector\Architecture\DependencyInjection;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -10,14 +10,14 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
-use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Symfony\ServiceMapProvider;
 
 /**
- * @see \Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\ActionInjectionToConstructorInjectionRectorTest
+ * @see \Rector\Core\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector\ActionInjectionToConstructorInjectionRectorTest
  */
 final class ActionInjectionToConstructorInjectionRector extends AbstractRector
 {
@@ -41,9 +41,11 @@ final class ActionInjectionToConstructorInjectionRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns action injection in Controllers to constructor injection', [
-            new CodeSample(
-                <<<'PHP'
+        return new RectorDefinition(
+            'Turns action injection in Controllers to constructor injection',
+            [
+                new CodeSample(
+                    <<<'PHP'
 final class SomeController
 {
     public function default(ProductRepository $productRepository)
@@ -52,8 +54,8 @@ final class SomeController
     }
 }
 PHP
-                ,
-                <<<'PHP'
+                    ,
+                    <<<'PHP'
 final class SomeController
 {
     /**
@@ -71,8 +73,9 @@ final class SomeController
     }
 }
 PHP
-            ),
-        ]);
+                ),
+            ]
+        );
     }
 
     /**

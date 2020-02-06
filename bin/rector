@@ -3,11 +3,11 @@
 
 declare(strict_types=1);
 
-use Rector\Configuration\Configuration;
-use Rector\Console\Application;
-use Rector\Console\Style\SymfonyStyleFactory;
-use Rector\DependencyInjection\RectorContainerFactory;
-use Rector\Set\Set;
+use Rector\Core\Configuration\Configuration;
+use Rector\Core\Console\Application;
+use Rector\Core\Console\Style\SymfonyStyleFactory;
+use Rector\Core\DependencyInjection\RectorContainerFactory;
+use Rector\Core\Set\Set;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\SetConfigResolver\ConfigResolver;

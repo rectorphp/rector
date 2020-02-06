@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Ternary\SimplifyTautologyTernaryRector
 
 use Iterator;
 use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimplifyTautologyTernaryRectorTest extends AbstractRectorTestCase
 {

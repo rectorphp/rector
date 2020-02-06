@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Yaml;
+namespace Rector\Core\Yaml;
 
 use Nette\Utils\FileSystem;
 use Symfony\Component\Yaml\Yaml;

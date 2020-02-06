@@ -6,7 +6,7 @@ namespace Rector\CakePHPToSymfony\Tests\Rector\Echo_\CakePHPTemplateTranslateToT
 
 use Iterator;
 use Rector\CakePHPToSymfony\Rector\Echo_\CakePHPTemplateTranslateToTwigRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class CakePHPTemplateTranslateToTwigRectorTest extends AbstractRectorTestCase
 {

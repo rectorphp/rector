@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Scan;
+namespace Rector\Core\Scan;
 
 use Nette\Utils\Strings;
-use Rector\Exception\NotImplementedException;
-use Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\Core\ValueObject\Scan\Argument;
+use Rector\Core\ValueObject\Scan\ClassMethodWithArguments;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
-use Rector\ValueObject\Scan\Argument;
-use Rector\ValueObject\Scan\ClassMethodWithArguments;
 
 final class ScannedErrorToRectorResolver
 {
@@ -115,7 +115,12 @@ final class ScannedErrorToRectorResolver
 
         $arguments = $this->createArguments((string) $match['arguments']);
 
-        return new ClassMethodWithArguments($match['class'], $match['method'], $arguments, $match['return_type'] ?? '');
+        return new ClassMethodWithArguments(
+            $match['class'],
+            $match['method'],
+            $arguments,
+            $match['return_type'] ?? ''
+        );
     }
 
     private function collectClassMethodParamDifferences(

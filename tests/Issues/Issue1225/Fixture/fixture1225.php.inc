@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Issues\Issue1225\Fixture;
+namespace Rector\Core\Tests\Issues\Issue1225\Fixture;
 
 function issue1225()
 {
@@ -13,7 +13,7 @@ function issue1225()
 -----
 <?php
 
-namespace Rector\Tests\Issues\Issue1225\Fixture;
+namespace Rector\Core\Tests\Issues\Issue1225\Fixture;
 
 function issue1225()
 {

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\_Package_\Rector\_Category_;
 
 use PhpParser\Node;
-use Rector\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
 _Source_

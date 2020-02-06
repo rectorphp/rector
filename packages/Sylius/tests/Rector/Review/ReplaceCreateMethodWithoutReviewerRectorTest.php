@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Sylius\Tests\Rector\Review;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Sylius\Rector\Review\ReplaceCreateMethodWithoutReviewerRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ReplaceCreateMethodWithoutReviewerRectorTest extends AbstractRectorTestCase
 {

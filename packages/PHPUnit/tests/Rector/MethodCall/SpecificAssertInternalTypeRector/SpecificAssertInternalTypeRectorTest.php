@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\MethodCall\SpecificAssertInternalTypeRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SpecificAssertInternalTypeRectorTest extends AbstractRectorTestCase
 {

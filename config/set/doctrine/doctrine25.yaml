@@ -8,7 +8,7 @@ services:
                 dumpIdentityMap:
                     0: 'Doctrine\ORM\EntityManagerInterface'
 
-    Rector\Rector\Argument\ArgumentRemoverRector:
+    Rector\Core\Rector\Argument\ArgumentRemoverRector:
         $positionsByMethodNameByClassType:
             Doctrine\ORM\Persisters\Entity\AbstractEntityInheritancePersister:
                 getSelectJoinColumnSQL:

@@ -5,11 +5,11 @@ includes:
     - 'vendor/phpstan/phpstan/conf/bleedingEdge.neon'
 
 parameters:
-    checkGenericClassInNonGenericObjectType: false
+#    checkGenericClassInNonGenericObjectType: false
     level: max
 
     # to allow installing with various phsptan versions without reporting old errors here
-    reportUnmatchedIgnoredErrors: false
+#    reportUnmatchedIgnoredErrors: false
 
     autoload_directories:
         - stubs
@@ -56,7 +56,6 @@ parameters:
 
         # false positive - type is set by annotation above
         - '#Array \(array<PhpParser\\Node\\Stmt>\) does not accept PhpParser\\Node#'
-        - '#Parameter \#1 \$node of method Rector\\PhpParser\\Node\\Commander\\NodeAddingCommander::wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
 
         # irrelevant
         - '#Call to function in_array\(\) with arguments string, (.*?) and true will always evaluate to false#'
@@ -72,11 +71,8 @@ parameters:
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
         - '#Access to an undefined property PhpParser\\Node::\$(\w+)#'
 
-        # false positive, resolved in previous method
-        - '#Parameter (.*?) of method Rector\\PhpParser\\Node\\Manipulator\\IdentifierManipulator\:\:(.*?)\(\) expects PhpParser\\Node\\Expr\\ClassConstFetch\|PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Expr\\PropertyFetch\|PhpParser\\Node\\Expr\\StaticCall\|PhpParser\\Node\\Stmt\\ClassMethod, PhpParser\\Node given#'
-
         # intentionally incorrect - part of the test
-        - '#Parameter \#2 \$codeSamples of class Rector\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\Contract\\RectorDefinition\\CodeSampleInterface>, array<int, stdClass> given#'
+        - '#Parameter \#2 \$codeSamples of class Rector\\Core\\RectorDefinition\\RectorDefinition constructor expects array<Rector\\Core\\Contract\\RectorDefinition\\CodeSampleInterface>, array<int, stdClass> given#'
 
         # known values
         - '#Cannot access property \$value on PhpParser\\Node\\Expr\\ArrayItem\|null#'
@@ -88,8 +84,6 @@ parameters:
         # console argument/option
         - '#Cannot cast array<string\>\|string\|null to string#'
 
-        - '#Parameter \#1 \$nodes of method Rector\\PhpParser\\Node\\BetterNodeFinder\:\:find\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
-        - '#Method Rector\\NetteToSymfony\\Rector\\ClassMethod\\RouterListToControllerAnnotationsRector\:\:resolveAssignRouteNodes\(\) should return array<PhpParser\\Node\\Expr\\Assign\> but returns array<PhpParser\\Node\>#'
         - '#Access to an undefined property PhpParser\\Node\\Stmt\:\:\$expr#'
         - '#Cannot access property \$stmts on PhpParser\\Node\\Stmt\\Else_\|null#'
 
@@ -115,24 +109,22 @@ parameters:
         - '#Strict comparison using \=\=\= between PhpParser\\Node and null will always evaluate to false#'
 
         # known types
-        - '#Method Rector\\NodeContainer\\ParsedNodesByType\:\:(.*?)\(\) should return PhpParser\\Node\\Stmt\\(.*?)\|null but returns PhpParser\\Node\|null#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable\:\:\$name#'
         - '#Strict comparison using \=\=\= between PhpParser\\Node\\Expr\\ArrayItem and null will always evaluate to false#'
         - '#Parameter \#2 \.\.\.\$args of function array_merge expects array, array<int, string\>\|false given#'
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$args#'
 
-        - '#Parameter \#2 \$name of method Rector\\Rector\\AbstractRector\:\:isName\(\) expects string, string\|null given#'
+        - '#Parameter \#2 \$name of method Rector\\Core\\Rector\\AbstractRector\:\:isName\(\) expects string, string\|null given#'
         # cascade irrelevant
         - '#Parameter (.*?) expects array<PhpParser\\Node\\Stmt\>, array<PhpParser\\Node\> given#'
 
         # known value
-        - '#Parameter \#1 \$node of method Rector\\Rector\\AbstractRector\:\:getName\(\) expects PhpParser\\Node, PhpParser\\Node\\Identifier\|null given#'
+        - '#Parameter \#1 \$node of method Rector\\Core\\Rector\\AbstractRector\:\:getName\(\) expects PhpParser\\Node, PhpParser\\Node\\Identifier\|null given#'
         - '#Cannot cast array<string\>\|bool\|string\|null to string#'
         - '#Method Rector\\Legacy\\Rector\\ClassMethod\\ChangeSingletonToServiceRector\:\:matchStaticPropertyFetchAndGetSingletonMethodName\(\) should return array<string\>\|null but returns array<int, string\|null\>#'
 
-        - '#Method Rector\\Rector\\AbstractRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
+        - '#Method Rector\\Core\\Rector\\AbstractRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
         - '#Parameter \#2 \$currentNode of method Rector\\CodingStyle\\Rector\\String_\\ManualJsonStringToJsonEncodeArrayRector\:\:matchNextExpressionAssignConcatToSameVariable\(\) expects PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Expr\\AssignOp\\Concat, PhpParser\\Node given#'
-        - '#Method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
 
         # array is callable
         - '#If condition is always true#'
@@ -154,7 +146,6 @@ parameters:
 
         # bugs
         - '#Parameter \#1 \$items of class PhpParser\\Node\\Expr\\Array_ constructor expects array<PhpParser\\Node\\Expr\\ArrayItem\>, array<PhpParser\\Node\\Expr\\ArrayItem\|null\> given#'
-        - '#Parameter \#1 \$sprintfFuncCall of method Rector\\PhpParser\\NodeTransformer\:\:transformSprintfToArray\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node given#'
         - '#Method Rector\\BetterPhpDocParser\\Tests\\PhpDocParser\\OrmTagParser\\AbstractPhpDocInfoTest\:\:parseFileAndGetFirstNodeOfType\(\) should return PhpParser\\Node but returns PhpParser\\Node\|null#'
 
         - '#Method Rector\\BetterPhpDocParser\\PhpDocNodeFactory\\JMS\\SerializerTypePhpDocNodeFactory::resolveTypeAnnotation\(\) should return JMS\\Serializer\\Annotation\\Type\|null but returns object\|null#'
@@ -162,15 +153,10 @@ parameters:
         # known value
         - '#Method Rector\\StrictCodeQuality\\Rector\\Stmt\\VarInlineAnnotationToAssertRector\:\:findVariableByName\(\) should return PhpParser\\Node\\Expr\\Variable\|null but returns PhpParser\\Node\|null#'
 
-        - '#Method Rector\\PhpParser\\Node\\Manipulator\\MethodCallManipulator\:\:findAssignToVariableName\(\) should return PhpParser\\Node\\Expr\\Assign\|null but returns PhpParser\\Node\|null#'
-        - '#Method Rector\\PhpParser\\Node\\Manipulator\\MethodCallManipulator\:\:findMethodCallsIncludingChain\(\) should return array<PhpParser\\Node\\Expr\\MethodCall\> but returns array<object\>#'
         - '#Method Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory\:\:createUnionOrSingleType\(\) should return PHPStan\\Type\\MixedType\|PHPStan\\Type\\UnionType but returns PHPStan\\Type\\Type#'
 
         #phpstan seems to be missing the entire docblock, though it's there
         - '#.*keepLivingCodeFromExpr.*#'
-
-        # wrong deduction
-        - '#Parameter \#1 \$nodes of method Rector\\PhpParser\\Node\\BetterNodeFinder\:\:find\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<int, PhpParser\\Node\\Stmt\\Class_\|PhpParser\\Node\\Stmt\\Trait_\|null\> given#'
 
         # test
         - '#Class Rector\\DynamicTypeAnalysis\\Tests\\Rector\\ClassMethod\\AddArgumentTypeWithProbeDataRector\\Fixture\\SomeClass not found#'
@@ -179,7 +165,7 @@ parameters:
         - '#Parameter \#1 \$type of method PhpParser\\Builder\\Param\:\:setType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
 
         -
-            message: '#Class Rector\\Tests\\Rector\\StaticCall\\SwapClassMethodArgumentsRector\\Fixture\\SomeClass not found#'
+            message: '#Class Rector\\Core\\Tests\\Rector\\StaticCall\\SwapClassMethodArgumentsRector\\Fixture\\SomeClass not found#'
             path: tests/Rector/StaticCall/SwapClassMethodArgumentsRector/SwapClassMethodArgumentsRectorTest.php
 
         # mixed
@@ -239,3 +225,15 @@ parameters:
         - '#Call to an undefined method PHPStan\\Type\\Type\:\:getClassName\(\)#'
         - '#Parameter \#1 \$typeNode of method Rector\\NodeTypeResolver\\StaticTypeMapper\:\:mapPHPStanPhpDocTypeNodeToPHPStanType\(\) expects PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode, PHPStan\\PhpDocParser\\Ast\\Node given#'
         - '#Parameter \#1 \$str of function preg_quote expects string, int\|string given#'
+
+        - '#Parameter \#1 \$node of method Rector\\Core\\PhpParser\\Node\\Commander\\NodeAddingCommander\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
+        - '#Method Rector\\Core\\NodeContainer\\ParsedNodesByType\:\:findTrait\(\) should return PhpParser\\Node\\Stmt\\Trait_\|null but returns PhpParser\\Node\|null#'
+        - '#Method Rector\\Core\\NodeContainer\\ParsedNodesByType\:\:findInterface\(\) should return PhpParser\\Node\\Stmt\\Interface_\|null but returns PhpParser\\Node\|null#'
+        - '#Method Rector\\Core\\NodeContainer\\ParsedNodesByType\:\:findFunction\(\) should return PhpParser\\Node\\Stmt\\Function_\|null but returns PhpParser\\Node\|null#'
+        - '#Parameter \#2 \$propertyName of method Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\SingleMethodAssignedNodePropertyTypeInferer\:\:resolveAssignedNodeToProperty\(\) expects string, string\|null given#'
+        - '#Parameter \#1 \$sprintfFuncCall of method Rector\\Core\\PhpParser\\NodeTransformer\:\:transformSprintfToArray\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node given#'
+        - '#Parameter \#1 \$nodes of method Rector\\CodeQuality\\Rector\\Array_\\CallableThisArrayToAnonymousFunctionRector\:\:hasClassMethodReturn\(\) expects array<PhpParser\\Node\\Stmt\\Return_\>, array<PhpParser\\Node\> given#'
+        - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:find\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
+        - '#PHPDoc tag @return with type iterable<object\> is not subtype of native type array#'
+        - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createClassReflectionFromNode\(\) return type with generic class ReflectionClass does not specify its types\: T#'
+        - '#Method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'

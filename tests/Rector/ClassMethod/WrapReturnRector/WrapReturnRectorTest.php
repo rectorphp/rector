@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\ClassMethod\WrapReturnRector;
+namespace Rector\Core\Tests\Rector\ClassMethod\WrapReturnRector;
 
 use Iterator;
-use Rector\Rector\ClassMethod\WrapReturnRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
+use Rector\Core\Rector\ClassMethod\WrapReturnRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
 
 final class WrapReturnRectorTest extends AbstractRectorTestCase
 {

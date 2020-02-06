@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Autoloading;
+namespace Rector\Core\Autoloading;
 
 use Nette\Loaders\RobotLoader;
-use Rector\Configuration\Option;
-use Rector\FileSystem\FileGuard;
+use Rector\Core\Configuration\Option;
+use Rector\Core\FileSystem\FileGuard;
 use Symfony\Component\Console\Input\InputInterface;
 use Symplify\PackageBuilder\FileSystem\FileSystem;
 

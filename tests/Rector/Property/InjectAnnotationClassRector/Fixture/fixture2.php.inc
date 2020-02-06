@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
+namespace Rector\Core\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
 
-use Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeInterface;
+use Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeInterface;
 use JMS\DiExtraBundle\Annotation as DI;
-use Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface;
+use Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface;
 
 class ClassWithInjects7
 {
@@ -25,11 +25,11 @@ class ClassWithInjects7
 -----
 <?php
 
-namespace Rector\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
+namespace Rector\Core\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
 
-use Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeInterface;
+use Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeInterface;
 use JMS\DiExtraBundle\Annotation as DI;
-use Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface;
+use Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface;
 
 class ClassWithInjects7
 {
@@ -42,7 +42,7 @@ class ClassWithInjects7
      * @var SomeProductWithInterface
      */
     private $product;
-    public function __construct(\Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeInterface $session, \Rector\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface $product)
+    public function __construct(\Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeInterface $session, \Rector\Core\Tests\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector\Source\SomeProductWithInterface $product)
     {
         $this->session = $session;
         $this->product = $product;

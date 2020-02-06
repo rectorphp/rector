@@ -7,8 +7,8 @@ namespace Rector\SymfonyPHPUnit;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
-use Rector\PhpParser\Node\Value\ValueResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\SymfonyPHPUnit\Node\KernelTestCaseNodeAnalyzer;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 

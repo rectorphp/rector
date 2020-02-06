@@ -9,15 +9,15 @@ parameters:
 services:
     # both uses "%classes_to_defluent%
     # covers https://github.com/guzzle/guzzle/commit/668209c895049759377593eed129e0949d9565b7#diff-810cdcfdd8a6b9e1fc0d1e96d7786874
-    Rector\Rector\MethodBody\ReturnThisRemoveRector: null
-    Rector\Rector\MethodBody\FluentReplaceRector: null
+    Rector\Core\Rector\MethodBody\ReturnThisRemoveRector: null
+    Rector\Core\Rector\MethodBody\FluentReplaceRector: null
 
-    Rector\Rector\Function_\FunctionToMethodCallRector:
+    Rector\Core\Rector\Function_\FunctionToMethodCallRector:
         $functionToMethodCall:
             GuzzleHttp\json_decode: ['GuzzleHttp\Utils', 'jsonDecode']
             GuzzleHttp\get_path: ['GuzzleHttp\Utils', 'getPath']
 
-    Rector\Rector\StaticCall\StaticCallToFunctionRector:
+    Rector\Core\Rector\StaticCall\StaticCallToFunctionRector:
         $staticCallToFunctionByType:
             GuzzleHttp\Utils:
                 setPath: 'GuzzleHttp\set_path'

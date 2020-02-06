@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\Property;
+namespace Rector\Core\Rector\Property;
 
 use DI\Annotation\Inject as PHPDIInject;
 use JMS\DiExtraBundle\Annotation\Inject as JMSInject;
@@ -14,23 +14,23 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\Application\ErrorAndDiffCollector;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\PHPDI\PHPDIInjectTagValueNode;
-use Rector\Exception\NotImplementedException;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Application\ErrorAndDiffCollector;
+use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 use Rector\Symfony\ServiceMapProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * @see https://jmsyst.com/bundles/JMSDiExtraBundle/master/annotations#inject
  *
- * @see \Rector\Tests\Rector\Property\InjectAnnotationClassRector\InjectAnnotationClassRectorTest
+ * @see \Rector\Core\Tests\Rector\Property\InjectAnnotationClassRector\InjectAnnotationClassRectorTest
  */
 final class InjectAnnotationClassRector extends AbstractRector
 {

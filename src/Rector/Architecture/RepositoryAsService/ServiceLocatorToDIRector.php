@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\Architecture\RepositoryAsService;
+namespace Rector\Core\Rector\Architecture\RepositoryAsService;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -12,14 +12,14 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Exception\Bridge\RectorProviderException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Naming\PropertyNaming;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Doctrine\Contract\Mapper\DoctrineEntityAndRepositoryMapperInterface;
-use Rector\Exception\Bridge\RectorProviderException;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 final class ServiceLocatorToDIRector extends AbstractRector
 {

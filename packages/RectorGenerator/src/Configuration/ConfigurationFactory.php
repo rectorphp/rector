@@ -6,11 +6,11 @@ namespace Rector\RectorGenerator\Configuration;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Set\Set;
 use Rector\RectorGenerator\Guard\RecipeGuard;
 use Rector\RectorGenerator\Node\NodeClassProvider;
 use Rector\RectorGenerator\ValueObject\Configuration;
-use Rector\Set\Set;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 

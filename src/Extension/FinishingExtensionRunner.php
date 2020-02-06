@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Extension;
+namespace Rector\Core\Extension;
 
-use Rector\Contract\Extension\FinishingExtensionInterface;
+use Rector\Core\Contract\Extension\FinishingExtensionInterface;
 
 final class FinishingExtensionRunner
 {

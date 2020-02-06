@@ -6,7 +6,7 @@ namespace Rector\CakePHPToSymfony\Tests\Rector\ClassMethod\CakePHPControllerRend
 
 use Iterator;
 use Rector\CakePHPToSymfony\Rector\ClassMethod\CakePHPControllerRenderToSymfonyRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class CakePHPControllerRenderToSymfonyRectorTest extends AbstractRectorTestCase
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
+namespace Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
 
-use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeParentClient;
+use Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeParentClient;
 
 class Scoped extends SomeParentClient
 {
@@ -22,9 +22,9 @@ class Scoped extends SomeParentClient
 -----
 <?php
 
-namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
+namespace Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
 
-use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeParentClient;
+use Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeParentClient;
 
 class Scoped extends SomeParentClient
 {

@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Function_\FunctionToStaticCallRector:
+    Rector\Core\Rector\Function_\FunctionToStaticCallRector:
         $functionToStaticCall:
             # Arr
             array_add: ['Illuminate\Support\Arr', 'add']

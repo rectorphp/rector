@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Rector\Controller\RedirectToRouteRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\Controller\RedirectToRouteRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RedirectToRouteRectorTest extends AbstractRectorTestCase
 {

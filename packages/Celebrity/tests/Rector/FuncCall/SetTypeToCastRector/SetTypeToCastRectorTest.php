@@ -6,7 +6,7 @@ namespace Rector\Celebrity\Tests\Rector\FuncCall\SetTypeToCastRector;
 
 use Iterator;
 use Rector\Celebrity\Rector\FuncCall\SetTypeToCastRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SetTypeToCastRectorTest extends AbstractRectorTestCase
 {

@@ -9,7 +9,7 @@ services:
         $oldToNewClasses:
             Rector\Contract\RectorDefinition\CodeSampleInterface: Rector\Core\Contract\RectorDefinition\CodeSampleInterface
             Rector\Contract\Rector\PhpRectorInterface: Rector\Core\Contract\Rector\PhpRectorInterface
-            Rector\Contract\Rector\RectorInterface: Rector\Core\Contract\Rector\RectorInterface
+            Rector\Core\Contract\Rector\RectorInterface: Rector\Core\Contract\Rector\RectorInterface
             Rector\Contract\Exclusion\ExclusionCheckInterface: Rector\Core\Contract\Exclusion\ExclusionCheckInterface
             Rector\Contract\Console\Output\OutputFormatterInterface: Rector\Core\Contract\Console\Output\OutputFormatterInterface
             Rector\Contract\Extension\ReportingExtensionInterface: Rector\Core\Contract\Extension\ReportingExtensionInterface
@@ -47,7 +47,7 @@ services:
             Rector\Exception\ShouldNotHappenException: Rector\Core\Exception\ShouldNotHappenException
             Rector\Exception\Command\FileProcessingException: Rector\Core\Exception\Command\FileProcessingException
             Rector\RectorDefinition\ConfiguredCodeSample: Rector\Core\RectorDefinition\ConfiguredCodeSample
-            Rector\RectorDefinition\RectorDefinition: Rector\Core\RectorDefinition\RectorDefinition
+            Rector\Core\RectorDefinition\RectorDefinition: Rector\Core\RectorDefinition\RectorDefinition
             Rector\RectorDefinition\CodeSample: Rector\Core\RectorDefinition\CodeSample
             Rector\PHPStan\Reflection\CallReflectionResolver: Rector\Core\PHPStan\Reflection\CallReflectionResolver
             Rector\PhpDoc\PhpDocClassRenamer: Rector\Core\PhpDoc\PhpDocClassRenamer
@@ -70,19 +70,19 @@ services:
             Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector: Rector\Core\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector
             Rector\Rector\MethodCall\MethodCallToReturnRector: Rector\Core\Rector\MethodCall\MethodCallToReturnRector
             Rector\Rector\MethodCall\ServiceGetterToConstructorInjectionRector: Rector\Core\Rector\MethodCall\ServiceGetterToConstructorInjectionRector
-            Rector\Rector\AbstractRector: Rector\Core\Rector\AbstractRector
-            Rector\Rector\AbstractRector\NodeFactoryTrait: Rector\Core\Rector\AbstractRector\NodeFactoryTrait
-            Rector\Rector\AbstractRector\AppliedRectorCollectorTrait: Rector\Core\Rector\AbstractRector\AppliedRectorCollectorTrait
-            Rector\Rector\AbstractRector\AbstractRectorTrait: Rector\Core\Rector\AbstractRector\AbstractRectorTrait
-            Rector\Rector\AbstractRector\NodeCommandersTrait: Rector\Core\Rector\AbstractRector\NodeCommandersTrait
-            Rector\Rector\AbstractRector\ComplexRemovalTrait: Rector\Core\Rector\AbstractRector\ComplexRemovalTrait
-            Rector\Rector\AbstractRector\NodeTypeResolverTrait: Rector\Core\Rector\AbstractRector\NodeTypeResolverTrait
-            Rector\Rector\AbstractRector\NameResolverTrait: Rector\Core\Rector\AbstractRector\NameResolverTrait
-            Rector\Rector\AbstractRector\CallableNodeTraverserTrait: Rector\Core\Rector\AbstractRector\CallableNodeTraverserTrait
-            Rector\Rector\AbstractRector\ConstFetchAnalyzerTrait: Rector\Core\Rector\AbstractRector\ConstFetchAnalyzerTrait
-            Rector\Rector\AbstractRector\VisibilityTrait: Rector\Core\Rector\AbstractRector\VisibilityTrait
-            Rector\Rector\AbstractRector\ValueResolverTrait: Rector\Core\Rector\AbstractRector\ValueResolverTrait
-            Rector\Rector\AbstractRector\BetterStandardPrinterTrait: Rector\Core\Rector\AbstractRector\BetterStandardPrinterTrait
+            Rector\Core\Rector\AbstractRector: Rector\Core\Rector\AbstractRector
+            Rector\Core\Rector\AbstractRector\NodeFactoryTrait: Rector\Core\Rector\AbstractRector\NodeFactoryTrait
+            Rector\Core\Rector\AbstractRector\AppliedRectorCollectorTrait: Rector\Core\Rector\AbstractRector\AppliedRectorCollectorTrait
+            Rector\Core\Rector\AbstractRector\AbstractRectorTrait: Rector\Core\Rector\AbstractRector\AbstractRectorTrait
+            Rector\Core\Rector\AbstractRector\NodeCommandersTrait: Rector\Core\Rector\AbstractRector\NodeCommandersTrait
+            Rector\Core\Rector\AbstractRector\ComplexRemovalTrait: Rector\Core\Rector\AbstractRector\ComplexRemovalTrait
+            Rector\Core\Rector\AbstractRector\NodeTypeResolverTrait: Rector\Core\Rector\AbstractRector\NodeTypeResolverTrait
+            Rector\Core\Rector\AbstractRector\NameResolverTrait: Rector\Core\Rector\AbstractRector\NameResolverTrait
+            Rector\Core\Rector\AbstractRector\CallableNodeTraverserTrait: Rector\Core\Rector\AbstractRector\CallableNodeTraverserTrait
+            Rector\Core\Rector\AbstractRector\ConstFetchAnalyzerTrait: Rector\Core\Rector\AbstractRector\ConstFetchAnalyzerTrait
+            Rector\Core\Rector\AbstractRector\VisibilityTrait: Rector\Core\Rector\AbstractRector\VisibilityTrait
+            Rector\Core\Rector\AbstractRector\ValueResolverTrait: Rector\Core\Rector\AbstractRector\ValueResolverTrait
+            Rector\Core\Rector\AbstractRector\BetterStandardPrinterTrait: Rector\Core\Rector\AbstractRector\BetterStandardPrinterTrait
             Rector\Rector\MethodBody\FluentReplaceRector: Rector\Core\Rector\MethodBody\FluentReplaceRector
             Rector\Rector\MethodBody\NormalToFluentRector: Rector\Core\Rector\MethodBody\NormalToFluentRector
             Rector\Rector\MethodBody\ReturnThisRemoveRector: Rector\Core\Rector\MethodBody\ReturnThisRemoveRector
@@ -176,7 +176,6 @@ services:
             Rector\Naming\PropertyNaming: Rector\Core\Naming\PropertyNaming
             Rector\Commander\CommanderCollector: Rector\Core\Commander\CommanderCollector
             Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper: Rector\Core\BetterPhpDocParser\Utils\ArrayItemStaticHelper
-            Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode: Rector\Core\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode
             Rector\Reflection\ClassMethodReflectionFactory: Rector\Core\Reflection\ClassMethodReflectionFactory
             Rector\PhpParser\NodeTransformer: Rector\Core\PhpParser\NodeTransformer
             Rector\PhpParser\Node\Resolver\NameResolver: Rector\Core\PhpParser\Node\Resolver\NameResolver

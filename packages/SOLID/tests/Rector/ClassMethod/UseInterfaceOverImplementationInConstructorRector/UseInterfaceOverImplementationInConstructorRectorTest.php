@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\SOLID\Tests\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\SOLID\Rector\ClassMethod\UseInterfaceOverImplementationInConstructorRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class UseInterfaceOverImplementationInConstructorRectorTest extends AbstractRectorTestCase
 {

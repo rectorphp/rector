@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\ValueObject\Application;
+namespace Rector\Core\ValueObject\Application;
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 

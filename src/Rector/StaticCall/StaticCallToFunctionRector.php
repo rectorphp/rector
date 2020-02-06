@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\StaticCall;
+namespace Rector\Core\Rector\StaticCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\StaticCall\StaticCallToFunctionRector\StaticCallToFunctionRectorTest
+ * @see \Rector\Core\Tests\Rector\StaticCall\StaticCallToFunctionRector\StaticCallToFunctionRectorTest
  */
 final class StaticCallToFunctionRector extends AbstractRector
 {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DynamicTypeAnalysis\Tests\Rector\StaticCall\RemoveArgumentTypeProbeRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DynamicTypeAnalysis\Rector\StaticCall\RemoveArgumentTypeProbeRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveArgumentTypeProbeRectorTest extends AbstractRectorTestCase
 {

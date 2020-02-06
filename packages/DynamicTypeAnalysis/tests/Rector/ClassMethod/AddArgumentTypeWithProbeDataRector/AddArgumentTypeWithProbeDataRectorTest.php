@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\DynamicTypeAnalysis\Tests\Rector\ClassMethod\AddArgumentTypeWithProbeDataRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DynamicTypeAnalysis\Probe\ProbeStaticStorage;
 use Rector\DynamicTypeAnalysis\Probe\TypeStaticProbe;
 use Rector\DynamicTypeAnalysis\Rector\ClassMethod\AddArgumentTypeWithProbeDataRector;
 use Rector\DynamicTypeAnalysis\Tests\Rector\ClassMethod\AddArgumentTypeWithProbeDataRector\Fixture\SomeClass;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AddArgumentTypeWithProbeDataRectorTest extends AbstractRectorTestCase
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\DependencyInjection\Loader;
+namespace Rector\Core\DependencyInjection\Loader;
 
-use Rector\Contract\Rector\RectorInterface;
-use Rector\DependencyInjection\Collector\RectorServiceArgumentCollector;
+use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\DependencyInjection\Collector\RectorServiceArgumentCollector;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symplify\PackageBuilder\Yaml\FileLoader\AbstractParameterMergingYamlFileLoader;

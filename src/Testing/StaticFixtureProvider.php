@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Testing;
+namespace Rector\Core\Testing;
 
 use Iterator;
 use Symfony\Component\Finder\Finder;

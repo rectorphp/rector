@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Exception\Command;
+namespace Rector\Core\Exception\Command;
 
 use Exception;
 

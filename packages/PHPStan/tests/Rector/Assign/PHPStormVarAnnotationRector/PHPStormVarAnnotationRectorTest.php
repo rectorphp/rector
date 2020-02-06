@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPStan\Tests\Rector\Assign\PHPStormVarAnnotationRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPStan\Rector\Assign\PHPStormVarAnnotationRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class PHPStormVarAnnotationRectorTest extends AbstractRectorTestCase
 {

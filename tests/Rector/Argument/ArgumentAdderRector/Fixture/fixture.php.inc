@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
+namespace Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
 
-use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeContainerBuilder;
+use Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeContainerBuilder;
 
 class SomeClass
 {
@@ -17,9 +17,9 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
+namespace Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
 
-use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeContainerBuilder;
+use Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeContainerBuilder;
 
 class SomeClass
 {

@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Catch_\ThrowWithPreviousExceptionRecto
 
 use Iterator;
 use Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ThrowWithPreviousExceptionRectorTest extends AbstractRectorTestCase
 {

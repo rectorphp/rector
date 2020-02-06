@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\ZendToSymfony\Tests\Rector\Class_\ChangeZendControllerClassToSymfonyControllerClassRector;
 
 use Iterator;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\ZendToSymfony\Rector\Class_\ChangeZendControllerClassToSymfonyControllerClassRector;
 
 final class ChangeZendControllerClassToSymfonyControllerClassRectorTest extends AbstractRectorTestCase

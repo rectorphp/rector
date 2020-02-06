@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyStrposLowerRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimplifyStrposLowerRectorTest extends AbstractRectorTestCase
 {

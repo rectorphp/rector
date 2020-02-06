@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\DependencyInjection\CompilerPass;
+namespace Rector\Core\DependencyInjection\CompilerPass;
 
-use Rector\DependencyInjection\Collector\RectorServiceArgumentCollector;
+use Rector\Core\DependencyInjection\Collector\RectorServiceArgumentCollector;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

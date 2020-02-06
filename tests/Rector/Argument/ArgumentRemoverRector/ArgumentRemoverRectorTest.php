@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Argument\ArgumentRemoverRector;
+namespace Rector\Core\Tests\Rector\Argument\ArgumentRemoverRector;
 
 use Iterator;
-use Rector\Rector\Argument\ArgumentRemoverRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Argument\ArgumentRemoverRector\Source\Persister;
-use Rector\Tests\Rector\Argument\ArgumentRemoverRector\Source\RemoveInTheMiddle;
+use Rector\Core\Rector\Argument\ArgumentRemoverRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\Argument\ArgumentRemoverRector\Source\Persister;
+use Rector\Core\Tests\Rector\Argument\ArgumentRemoverRector\Source\RemoveInTheMiddle;
 use Symfony\Component\Yaml\Yaml;
 
 final class ArgumentRemoverRectorTest extends AbstractRectorTestCase

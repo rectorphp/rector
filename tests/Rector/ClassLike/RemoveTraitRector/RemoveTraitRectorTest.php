@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\ClassLike\RemoveTraitRector;
+namespace Rector\Core\Tests\Rector\ClassLike\RemoveTraitRector;
 
 use Iterator;
-use Rector\Rector\ClassLike\RemoveTraitRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\ClassLike\RemoveTraitRector\Source\TraitToBeRemoved;
+use Rector\Core\Rector\ClassLike\RemoveTraitRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\ClassLike\RemoveTraitRector\Source\TraitToBeRemoved;
 
 final class RemoveTraitRectorTest extends AbstractRectorTestCase
 {

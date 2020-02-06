@@ -14,7 +14,7 @@ services:
             Cake\Core\Plugin:
                 unload: 'clear'
 
-    Rector\Rector\Property\PropertyToMethodRector:
+    Rector\Core\Rector\Property\PropertyToMethodRector:
         $perClassPropertyToMethods:
             Cake\Http\Client\Response:
                 body:
@@ -67,7 +67,7 @@ services:
                 helpers:
                     get: 'helpers'
 
-    Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector:
+    Rector\Core\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector:
         $oldMethodsToNewMethodsWithArgsByType:
             Cake\Database\Query:
                 join: ['clause', ['join']]

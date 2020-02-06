@@ -6,7 +6,7 @@ namespace Rector\SymfonyPHPUnit\Naming;
 
 use Nette\Utils\Strings;
 use PHPStan\Type\ObjectType;
-use Rector\Naming\PropertyNaming;
+use Rector\Core\Naming\PropertyNaming;
 
 final class ServiceNaming
 {

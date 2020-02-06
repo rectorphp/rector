@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php73\Tests\Rector\FuncCall\RegexDashEscapeRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php73\Rector\FuncCall\RegexDashEscapeRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RegexDashEscapeRectorTest extends AbstractRectorTestCase
 {

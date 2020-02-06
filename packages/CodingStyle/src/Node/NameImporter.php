@@ -12,10 +12,10 @@ use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\CodingStyle\Imports\AliasUsesResolver;
 use Rector\CodingStyle\Imports\ImportSkipper;
-use Rector\Configuration\Option;
+use Rector\Core\Configuration\Option;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
-use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 

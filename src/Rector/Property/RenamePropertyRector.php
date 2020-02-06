@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\Property;
+namespace Rector\Core\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\Property\RenamePropertyRector\RenamePropertyRectorTest
+ * @see \Rector\Core\Tests\Rector\Property\RenamePropertyRector\RenamePropertyRectorTest
  */
 final class RenamePropertyRector extends AbstractRector
 {

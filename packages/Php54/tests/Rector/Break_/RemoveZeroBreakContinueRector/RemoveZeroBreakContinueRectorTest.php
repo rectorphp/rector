@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php54\Tests\Rector\Break_\RemoveZeroBreakContinueRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php54\Rector\Break_\RemoveZeroBreakContinueRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveZeroBreakContinueRectorTest extends AbstractRectorTestCase
 {

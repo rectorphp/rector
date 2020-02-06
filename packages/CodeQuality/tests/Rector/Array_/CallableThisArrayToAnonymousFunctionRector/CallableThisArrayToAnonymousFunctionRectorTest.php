@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Array_\CallableThisArrayToAnonymousFun
 
 use Iterator;
 use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class CallableThisArrayToAnonymousFunctionRectorTest extends AbstractRectorTestCase
 {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\Property\RemoveNullPropertyInitializationRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Property\RemoveNullPropertyInitializationRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveNullPropertyInitializationRectorTest extends AbstractRectorTestCase
 {

@@ -6,7 +6,7 @@ namespace Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPBeforeFilterToReque
 
 use Iterator;
 use Rector\CakePHPToSymfony\Rector\Class_\CakePHPBeforeFilterToRequestEventSubscriberRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class CakePHPBeforeFilterToRequestEventSubscriberRectorExtraTest extends AbstractRectorTestCase
 {

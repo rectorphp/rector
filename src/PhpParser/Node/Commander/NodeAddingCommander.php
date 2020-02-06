@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Commander;
+namespace Rector\Core\PhpParser\Node\Commander;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -11,9 +11,9 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
-use Rector\Contract\PhpParser\Node\CommanderInterface;
+use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\BetterNodeFinder;
 
 /**
  * This class collects all to-be-added expresssions (= 1 line in code)

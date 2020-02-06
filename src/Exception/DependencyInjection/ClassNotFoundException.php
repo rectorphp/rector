@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Exception\DependencyInjection;
+namespace Rector\Core\Exception\DependencyInjection;
 
 use Exception;
 

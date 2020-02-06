@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php70\Tests\Rector\Switch_\ReduceMultipleDefaultSwitchRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ReduceMultipleDefaultSwitchRectorTest extends AbstractRectorTestCase
 {

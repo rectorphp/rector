@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachToInArrayRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Foreach_\ForeachToInArrayRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ForeachToInArrayRectorTest extends AbstractRectorTestCase
 {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\Array_\RemoveDuplicatedArrayKeyRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveDuplicatedArrayKeyRectorTest extends AbstractRectorTestCase
 {

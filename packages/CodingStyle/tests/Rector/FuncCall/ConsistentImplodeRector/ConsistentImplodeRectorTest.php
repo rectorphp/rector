@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentImplodeRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ConsistentImplodeRectorTest extends AbstractRectorTestCase
 {

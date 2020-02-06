@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\ElasticSearchDSL\Tests\Rector\MethodCall\MigrateFilterToQueryRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\ElasticSearchDSL\Rector\MethodCall\MigrateFilterToQueryRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class MigrateFilterToQueryRectorTest extends AbstractRectorTestCase
 {

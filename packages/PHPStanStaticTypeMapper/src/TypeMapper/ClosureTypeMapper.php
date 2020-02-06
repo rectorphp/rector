@@ -10,7 +10,7 @@ use PhpParser\Node\Identifier;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ClosureType;
 use PHPStan\Type\Type;
-use Rector\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedException;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class ClosureTypeMapper implements TypeMapperInterface

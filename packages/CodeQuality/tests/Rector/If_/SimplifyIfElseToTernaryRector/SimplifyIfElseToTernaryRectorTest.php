@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\SimplifyIfElseToTernaryRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimplifyIfElseToTernaryRectorTest extends AbstractRectorTestCase
 {

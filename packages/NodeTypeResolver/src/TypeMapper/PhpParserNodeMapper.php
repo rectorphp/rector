@@ -6,7 +6,7 @@ namespace Rector\NodeTypeResolver\TypeMapper;
 
 use PhpParser\Node;
 use PHPStan\Type\Type;
-use Rector\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Contract\PhpParser\PhpParserNodeMapperInterface;
 
 final class PhpParserNodeMapper

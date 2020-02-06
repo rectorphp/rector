@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\AbstractRector;
+namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
-use Rector\PhpParser\Node\Manipulator\ConstFetchManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ConstFetchManipulator;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait

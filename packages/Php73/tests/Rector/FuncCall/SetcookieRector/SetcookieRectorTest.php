@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php73\Tests\Rector\FuncCall\SetcookieRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php73\Rector\FuncCall\SetcookieRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SetcookieRectorTest extends AbstractRectorTestCase
 {

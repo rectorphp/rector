@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\FileSystem;
+namespace Rector\Core\FileSystem;
 
 use Nette\Utils\Strings;
-use Rector\Exception\FileSystem\DirectoryNotFoundException;
+use Rector\Core\Exception\FileSystem\DirectoryNotFoundException;
 
 final class FilesystemTweaker
 {

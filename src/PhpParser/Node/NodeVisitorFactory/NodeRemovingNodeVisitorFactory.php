@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\NodeVisitorFactory;
+namespace Rector\Core\PhpParser\Node\NodeVisitorFactory;
 
 use PhpParser\Node;
-use Rector\PhpParser\Node\NodeFactory;
-use Rector\PhpParser\Node\NodeVisitor\NodeRemovingNodeVisitor;
-use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\PhpParser\Node\NodeVisitor\NodeRemovingNodeVisitor;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 
 final class NodeRemovingNodeVisitorFactory
 {

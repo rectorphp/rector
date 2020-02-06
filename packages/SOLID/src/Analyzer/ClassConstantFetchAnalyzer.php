@@ -8,11 +8,11 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
-use Rector\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\Testing\PHPUnit\PHPUnitEnvironment;
 
 final class ClassConstantFetchAnalyzer
 {
@@ -56,7 +56,8 @@ final class ClassConstantFetchAnalyzer
             return $this->classConstantFetchByClassAndName;
         }
 
-        foreach ($this->parsedNodesByType->getNodesByType(ClassConstFetch::class) as $classConstantFetch) {
+        $classConstFetches = $this->parsedNodesByType->getNodesByType(ClassConstFetch::class);
+        foreach ($classConstFetches as $classConstantFetch) {
             $this->addClassConstantFetch($classConstantFetch);
         }
 

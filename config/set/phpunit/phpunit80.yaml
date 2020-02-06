@@ -19,7 +19,7 @@ services:
 
     Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector: null
 
-    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
+    Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         $typehintForMethodByClass:
             PHPUnit\Framework\TestCase:
                 setUpBeforeClass: 'void'

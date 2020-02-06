@@ -18,13 +18,13 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\BooleanType;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\PhpParser\Node\Commander\NodeAddingCommander;
+use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
-use Rector\PhpParser\Node\Commander\NodeAddingCommander;
-use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\Node\Value\ValueResolver;
 
 final class AssertManipulator
 {

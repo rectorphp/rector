@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Nette\Tests\Rector\FuncCall\FilePutContentsToFileSystemWriteRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FilePutContentsToFileSystemWriteRectorTest extends AbstractRectorTestCase
 {

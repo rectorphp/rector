@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Scan;
+namespace Rector\Core\Scan;
 
-use Rector\FileSystem\FilesFinder;
+use Rector\Core\FileSystem\FilesFinder;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 

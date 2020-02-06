@@ -13,10 +13,10 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use Rector\Core\PhpParser\Node\Manipulator\ConstFetchManipulator;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\Node\Manipulator\ConstFetchManipulator;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class SingletonClassMethodAnalyzer
 {

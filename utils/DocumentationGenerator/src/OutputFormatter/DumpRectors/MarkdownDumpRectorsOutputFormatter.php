@@ -6,9 +6,9 @@ namespace Rector\Utils\DocumentationGenerator\OutputFormatter\DumpRectors;
 
 use Nette\Utils\Strings;
 use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\Contract\RectorDefinition\CodeSampleInterface;
-use Rector\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\Contract\RectorDefinition\CodeSampleInterface;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Utils\DocumentationGenerator\Contract\OutputFormatter\DumpRectorsOutputFormatterInterface;
 use Rector\Utils\DocumentationGenerator\RectorMetadataResolver;
 use Symfony\Component\Console\Style\SymfonyStyle;

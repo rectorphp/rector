@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\FuncCall\SimpleArrayCallableToStringRe
 
 use Iterator;
 use Rector\CodingStyle\Rector\FuncCall\SimpleArrayCallableToStringRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimpleArrayCallableToStringRectorTest extends AbstractRectorTestCase
 {

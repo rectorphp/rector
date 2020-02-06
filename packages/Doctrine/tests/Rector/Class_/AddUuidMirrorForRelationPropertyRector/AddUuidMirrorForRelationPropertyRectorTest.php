@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Doctrine\Tests\Rector\Class_\AddUuidMirrorForRelationPropertyRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\Class_\AddUuidMirrorForRelationPropertyRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AddUuidMirrorForRelationPropertyRectorTest extends AbstractRectorTestCase
 {

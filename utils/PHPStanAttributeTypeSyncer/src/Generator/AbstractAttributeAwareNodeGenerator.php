@@ -6,7 +6,7 @@ namespace Rector\Utils\PHPStanAttributeTypeSyncer\Generator;
 
 use Nette\Utils\FileSystem;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 
 abstract class AbstractAttributeAwareNodeGenerator
 {

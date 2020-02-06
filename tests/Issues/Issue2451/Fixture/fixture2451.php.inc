@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Issues\Issue2451\Fixture;
+namespace Rector\Core\Tests\Issues\Issue2451\Fixture;
 
-use Rector\Tests\Issues\Issue2451\Source\AbstractBaseHandler;
+use Rector\Core\Tests\Issues\Issue2451\Source\AbstractBaseHandler;
 
 class Issue2451 extends AbstractBaseHandler
 {
@@ -15,9 +15,9 @@ class Issue2451 extends AbstractBaseHandler
 -----
 <?php
 
-namespace Rector\Tests\Issues\Issue2451\Fixture;
+namespace Rector\Core\Tests\Issues\Issue2451\Fixture;
 
-use Rector\Tests\Issues\Issue2451\Source\AbstractBaseHandler;
+use Rector\Core\Tests\Issues\Issue2451\Source\AbstractBaseHandler;
 
 class Issue2451 extends AbstractBaseHandler
 {

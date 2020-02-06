@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\DependencyInjection\CompilerPass;
+namespace Rector\Core\DependencyInjection\CompilerPass;
 
-use Rector\Configuration\Option;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

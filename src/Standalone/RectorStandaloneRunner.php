@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Rector\Standalone;
+namespace Rector\Core\Standalone;
 
 use Psr\Container\ContainerInterface;
-use Rector\Application\ErrorAndDiffCollector;
-use Rector\Application\RectorApplication;
-use Rector\Autoloading\AdditionalAutoloader;
-use Rector\Configuration\Configuration;
-use Rector\Configuration\Option;
-use Rector\Console\Command\ProcessCommand;
-use Rector\Console\Output\ConsoleOutputFormatter;
-use Rector\DependencyInjection\RectorContainerFactory;
-use Rector\Exception\FileSystem\FileNotFoundException;
-use Rector\Extension\FinishingExtensionRunner;
-use Rector\Extension\ReportingExtensionRunner;
-use Rector\FileSystem\FilesFinder;
-use Rector\Guard\RectorGuard;
-use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
-use Rector\Stubs\StubLoader;
+use Rector\Core\Application\ErrorAndDiffCollector;
+use Rector\Core\Application\RectorApplication;
+use Rector\Core\Autoloading\AdditionalAutoloader;
+use Rector\Core\Configuration\Configuration;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Console\Command\ProcessCommand;
+use Rector\Core\Console\Output\ConsoleOutputFormatter;
+use Rector\Core\DependencyInjection\RectorContainerFactory;
+use Rector\Core\Exception\FileSystem\FileNotFoundException;
+use Rector\Core\Extension\FinishingExtensionRunner;
+use Rector\Core\Extension\ReportingExtensionRunner;
+use Rector\Core\FileSystem\FilesFinder;
+use Rector\Core\Guard\RectorGuard;
+use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
+use Rector\Core\Stubs\StubLoader;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;

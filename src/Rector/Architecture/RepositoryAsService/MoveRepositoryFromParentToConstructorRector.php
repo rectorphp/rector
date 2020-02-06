@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\Architecture\RepositoryAsService;
+namespace Rector\Core\Rector\Architecture\RepositoryAsService;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -12,13 +12,13 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Exception\Bridge\RectorProviderException;
+use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Doctrine\Contract\Mapper\DoctrineEntityAndRepositoryMapperInterface;
-use Rector\Exception\Bridge\RectorProviderException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
 {
@@ -42,9 +42,11 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Turns parent EntityRepository class to constructor dependency', [
-            new CodeSample(
-                <<<'PHP'
+        return new RectorDefinition(
+            'Turns parent EntityRepository class to constructor dependency',
+            [
+                new CodeSample(
+                    <<<'PHP'
 namespace App\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -53,8 +55,8 @@ final class PostRepository extends EntityRepository
 {
 }
 PHP
-                ,
-                <<<'PHP'
+                    ,
+                    <<<'PHP'
 namespace App\Repository;
 
 use App\Entity\Post;
@@ -72,8 +74,9 @@ final class PostRepository
     }
 }
 PHP
-            ),
-        ]);
+                ),
+            ]
+        );
     }
 
     /**

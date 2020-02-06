@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Printer;
+namespace Rector\Core\PhpParser\Printer;
 
 use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
- * @see \Rector\Tests\PhpParser\Printer\FormatPerservingPrinterTest
+ * @see \Rector\Core\Tests\PhpParser\Printer\FormatPerservingPrinterTest
  */
 final class FormatPerservingPrinter
 {

@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\AddPregQuoteDelimiterRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AddPregQuoteDelimiterRectorTest extends AbstractRectorTestCase
 {

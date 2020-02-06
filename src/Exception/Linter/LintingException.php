@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Exception\Linter;
+namespace Rector\Core\Exception\Linter;
 
 use Exception;
 

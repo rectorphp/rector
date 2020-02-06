@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Psr4\MultipleClassFileToPsr4ClassesRector;
+namespace Rector\Core\Tests\Rector\Psr4\MultipleClassFileToPsr4ClassesRector;
 
 use Iterator;
 use Nette\Utils\FileSystem;
-use Rector\Rector\Psr4\MultipleClassFileToPsr4ClassesRector;
-use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
+use Rector\Core\Rector\Psr4\MultipleClassFileToPsr4ClassesRector;
+use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 
 final class MultipleClassFileToPsr4ClassesRectorTest extends AbstractFileSystemRectorTestCase
 {

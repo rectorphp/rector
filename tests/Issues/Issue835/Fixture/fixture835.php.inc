@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Issues\Issue835\Fixture {
+namespace Rector\Core\Tests\Issues\Issue835\Fixture {
     use Cake\View\ViewBuilder;
 
     final class SomeController
@@ -24,7 +24,7 @@ namespace Cake\View {
 -----
 <?php
 
-namespace Rector\Tests\Issues\Issue835\Fixture {
+namespace Rector\Core\Tests\Issues\Issue835\Fixture {
     use Cake\View\ViewBuilder;
 
     final class SomeController

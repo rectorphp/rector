@@ -3,7 +3,7 @@ imports:
 
 services:
     # ref. https://github.com/sebastianbergmann/phpunit/compare/5.7.9...6.0.0
-    Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
+    Rector\Core\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
         $namespacePrefixesWithExcludedClasses:
             PHPUnit_:
                 # exclude this class, since it has no namespaced replacement

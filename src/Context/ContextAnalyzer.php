@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Context;
+namespace Rector\Core\Context;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\While_;
-use Rector\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 
 final class ContextAnalyzer
 {

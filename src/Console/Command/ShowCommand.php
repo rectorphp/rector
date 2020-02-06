@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Console\Command;
+namespace Rector\Core\Console\Command;
 
-use Rector\Console\Shell;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\Php\TypeAnalyzer;
-use Rector\Yaml\YamlPrinter;
+use Rector\Core\Console\Shell;
+use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\Php\TypeAnalyzer;
+use Rector\Core\Yaml\YamlPrinter;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

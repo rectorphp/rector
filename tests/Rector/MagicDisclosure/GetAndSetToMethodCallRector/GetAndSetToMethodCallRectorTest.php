@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
+namespace Rector\Core\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
 
 use Iterator;
-use Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\Klarka;
-use Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\SomeContainer;
+use Rector\Core\Rector\MagicDisclosure\GetAndSetToMethodCallRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\Klarka;
+use Rector\Core\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\Source\SomeContainer;
 
 final class GetAndSetToMethodCallRectorTest extends AbstractRectorTestCase
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Testing\Finder;
+namespace Rector\Core\Testing\Finder;
 
 use Nette\Loaders\RobotLoader;
 use Nette\Utils\Strings;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\Error\ExceptionCorrector;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\Error\ExceptionCorrector;
+use Rector\Core\Exception\ShouldNotHappenException;
 use ReflectionClass;
 
 final class RectorsFinder
@@ -77,12 +77,15 @@ final class RectorsFinder
             $rectors[] = $rector;
         }
 
-        usort($rectors, function (RectorInterface $firstRector, RectorInterface $secondRector): int {
-            $firstRectorShortClass = Strings::after(get_class($firstRector), '\\', -1);
-            $secondRectorShortClass = Strings::after(get_class($secondRector), '\\', -1);
+        usort(
+            $rectors,
+            function (RectorInterface $firstRector, RectorInterface $secondRector): int {
+                $firstRectorShortClass = Strings::after(get_class($firstRector), '\\', -1);
+                $secondRectorShortClass = Strings::after(get_class($secondRector), '\\', -1);
 
-            return $firstRectorShortClass <=> $secondRectorShortClass;
-        });
+                return $firstRectorShortClass <=> $secondRectorShortClass;
+            }
+        );
 
         return $rectors;
     }
