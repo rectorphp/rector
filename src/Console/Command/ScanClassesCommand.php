@@ -50,9 +50,7 @@ final class ScanClassesCommand extends AbstractCommand
         /** @var string[] $source */
         $source = (array) $input->getArgument(self::SOURCE_ARGUMENT);
 
-        // ...
         $foundClasses = $this->classFinder->findClassesInDirectories($source);
-
         $this->symfonyStyle->listing($foundClasses);
 
         $this->symfonyStyle->success(sprintf('We found %d classes', count($foundClasses)));
