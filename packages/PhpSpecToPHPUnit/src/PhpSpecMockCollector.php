@@ -9,10 +9,10 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class PhpSpecMockCollector
 {

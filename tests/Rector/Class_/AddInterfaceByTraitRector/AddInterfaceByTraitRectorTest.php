@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Class_\AddInterfaceByTraitRector;
+namespace Rector\Core\Tests\Rector\Class_\AddInterfaceByTraitRector;
 
 use Iterator;
-use Rector\Rector\Class_\AddInterfaceByTraitRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeInterface;
-use Rector\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
+use Rector\Core\Rector\Class_\AddInterfaceByTraitRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeInterface;
+use Rector\Core\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
 
 final class AddInterfaceByTraitRectorTest extends AbstractRectorTestCase
 {

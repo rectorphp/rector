@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Foreach_\ForeachItemsAssignToEmptyArra
 
 use Iterator;
 use Rector\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ForeachItemsAssignToEmptyArrayToAssignRectorTest extends AbstractRectorTestCase
 {

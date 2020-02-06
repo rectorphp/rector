@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\ZendToSymfony\Tests\Rector\MethodCall\ThisHelperToServiceMethodCallRector;
 
 use Iterator;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\ZendToSymfony\Rector\MethodCall\ThisHelperToServiceMethodCallRector;
 
 final class ThisHelperToServiceMethodCallRectorTest extends AbstractRectorTestCase

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\PhpParser\Node;
+namespace Rector\Core\Tests\PhpParser\Node;
 
 use Iterator;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
-use Rector\HttpKernel\RectorKernel;
-use Rector\PhpParser\Node\NodeFactory;
+use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\PhpParser\Node\NodeFactory;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class NodeFactoryTest extends AbstractKernelTestCase

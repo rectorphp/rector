@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Printer;
+namespace Rector\Core\PhpParser\Printer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -25,7 +25,7 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
- * @see \Rector\Tests\PhpParser\Printer\BetterStandardPrinterTest
+ * @see \Rector\Core\Tests\PhpParser\Printer\BetterStandardPrinterTest
  */
 final class BetterStandardPrinter extends Standard
 {

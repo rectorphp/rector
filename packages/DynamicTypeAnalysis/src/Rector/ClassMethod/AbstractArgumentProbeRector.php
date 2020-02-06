@@ -6,9 +6,9 @@ namespace Rector\DynamicTypeAnalysis\Rector\ClassMethod;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @see \Rector\DynamicTypeAnalysis\Tests\Rector\ClassMethod\AddArgumentTypeWithProbeDataRector\AddArgumentTypeWithProbeDataRectorTest

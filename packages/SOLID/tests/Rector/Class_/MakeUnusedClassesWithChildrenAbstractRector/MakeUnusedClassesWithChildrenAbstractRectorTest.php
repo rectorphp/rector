@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\SOLID\Tests\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class MakeUnusedClassesWithChildrenAbstractRectorTest extends AbstractRectorTestCase
 {

@@ -6,7 +6,7 @@ namespace Rector\CakePHP\Tests\Rector\StaticCall\AppUsesStaticCallToUseStatement
 
 use Iterator;
 use Rector\CakePHP\Rector\StaticCall\AppUsesStaticCallToUseStatementRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AppUsesStaticCallToUseStatementRectorTest extends AbstractRectorTestCase
 {

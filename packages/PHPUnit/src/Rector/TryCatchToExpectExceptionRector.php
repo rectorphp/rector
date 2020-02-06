@@ -12,9 +12,9 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\TryCatch;
-use Rector\Rector\AbstractPHPUnitRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\TryCatchToExpectExceptionRector\TryCatchToExpectExceptionRectorTest

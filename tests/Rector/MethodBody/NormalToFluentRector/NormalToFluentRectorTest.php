@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\MethodBody\NormalToFluentRector;
+namespace Rector\Core\Tests\Rector\MethodBody\NormalToFluentRector;
 
 use Iterator;
-use Rector\Rector\MethodBody\NormalToFluentRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\MethodBody\NormalToFluentRector\Source\FluentInterfaceClass;
+use Rector\Core\Rector\MethodBody\NormalToFluentRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\MethodBody\NormalToFluentRector\Source\FluentInterfaceClass;
 
 final class NormalToFluentRectorTest extends AbstractRectorTestCase
 {

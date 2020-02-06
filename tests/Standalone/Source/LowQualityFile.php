@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Standalone\Source;
+namespace Rector\Core\Tests\Standalone\Source;
 
 final class LowQualityFile
 {

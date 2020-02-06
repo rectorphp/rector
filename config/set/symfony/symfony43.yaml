@@ -65,7 +65,7 @@ services:
             Symfony\Component\Security\Core\Encoder\Argon2iPasswordEncoder: 'Symfony\Component\Security\Core\Encoder\SodiumPasswordEncoder'
             Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder: 'Symfony\Component\Security\Core\Encoder\NativePasswordEncoder'
 
-    Rector\Rector\Argument\ArgumentAdderRector:
+    Rector\Core\Rector\Argument\ArgumentAdderRector:
         $positionWithDefaultValueByMethodNamesByClassTypes:
             # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md#workflow
             Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface:
@@ -75,7 +75,7 @@ services:
                         default_value: []
                         # type: array
 
-    Rector\Rector\ClassMethod\AddMethodParentCallRector:
+    Rector\Core\Rector\ClassMethod\AddMethodParentCallRector:
         $methodsByParentTypes:
             Symfony\Component\EventDispatcher\EventDispatcher:
                 - '__construct'

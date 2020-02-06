@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\Include_\FollowRequireByDirRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FollowRequireByDirRectorTest extends AbstractRectorTestCase
 {

@@ -8,11 +8,11 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\Util\RectorStrings;
 use Rector\FrameworkMigration\Symfony\ImplicitToExplicitRoutingAnnotationDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
-use Rector\Util\RectorStrings;
 
 /**
  * @inspiration

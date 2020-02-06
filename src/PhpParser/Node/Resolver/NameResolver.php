@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Resolver;
+namespace Rector\Core\PhpParser\Node\Resolver;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;

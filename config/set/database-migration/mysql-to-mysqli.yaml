@@ -7,7 +7,7 @@ services:
     Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector: null
 
     # first swap arguments, then rename
-    Rector\Rector\Argument\SwapFuncCallArgumentsRector:
+    Rector\Core\Rector\Argument\SwapFuncCallArgumentsRector:
         $newArgumentPositionsByFunctionName:
             mysql_real_escape_string: [1, 0]
             mysql_select_db: [1, 0]

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\PhpParser\Printer;
+namespace Rector\Core\Tests\PhpParser\Printer;
 
 use Nette\Utils\FileSystem;
-use Rector\HttpKernel\RectorKernel;
-use Rector\PhpParser\Printer\FormatPerservingPrinter;
+use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

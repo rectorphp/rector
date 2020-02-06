@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Commander;
+namespace Rector\Core\PhpParser\Node\Commander;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
-use Rector\Contract\PhpParser\Node\CommanderInterface;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\NodeVisitorFactory\NodeRemovingNodeVisitorFactory;
+use Rector\Core\Rector\AffectedFilesCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\NodeVisitorFactory\NodeRemovingNodeVisitorFactory;
-use Rector\Rector\AffectedFilesCollector;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class NodeRemovingCommander implements CommanderInterface

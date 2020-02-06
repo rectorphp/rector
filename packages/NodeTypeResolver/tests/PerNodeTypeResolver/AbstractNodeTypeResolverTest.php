@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\Tests\PerNodeTypeResolver;
 
 use PhpParser\Node;
-use Rector\Configuration\Option;
-use Rector\HttpKernel\RectorKernel;
+use Rector\Core\Configuration\Option;
+use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Parser\Parser;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PhpParser\Parser\Parser;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;

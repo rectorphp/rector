@@ -10,11 +10,11 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 use Rector\ZendToSymfony\ValueObject\ZendClass;
 
 /**

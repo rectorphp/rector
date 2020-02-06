@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\FunctionLike\RemoveCodeAfterReturnRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveCodeAfterReturnRectorTest extends AbstractRectorTestCase
 {

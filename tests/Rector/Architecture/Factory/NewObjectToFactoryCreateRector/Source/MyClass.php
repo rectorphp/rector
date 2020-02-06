@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source;
+namespace Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source;
 
 final class MyClass
 {

@@ -16,7 +16,7 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePropertyTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareNullableTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
-use Rector\HttpKernel\RectorKernel;
+use Rector\Core\HttpKernel\RectorKernel;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase

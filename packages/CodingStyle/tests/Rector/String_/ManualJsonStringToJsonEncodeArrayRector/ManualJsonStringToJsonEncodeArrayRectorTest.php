@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\String_\ManualJsonStringToJsonEncodeAr
 
 use Iterator;
 use Rector\CodingStyle\Rector\String_\ManualJsonStringToJsonEncodeArrayRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ManualJsonStringToJsonEncodeArrayRectorTest extends AbstractRectorTestCase
 {

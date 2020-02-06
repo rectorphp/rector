@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\BetterPhpDocParser\Utils;
+namespace Rector\Core\BetterPhpDocParser\Utils;
 
 use Nette\Utils\Strings;
 

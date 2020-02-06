@@ -1,6 +1,6 @@
 # @see https://www.tomasvotruba.cz/blog/2018/07/30/hidden-gems-of-php-packages-nette-utils/
 services:
-    Rector\Rector\Function_\FunctionToStaticCallRector:
+    Rector\Core\Rector\Function_\FunctionToStaticCallRector:
         $functionToStaticCall:
             # filesystem
             file_get_contents: ['Nette\Utils\FileSystem', 'read']

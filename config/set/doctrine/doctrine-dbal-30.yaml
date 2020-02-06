@@ -7,7 +7,7 @@ services:
             Doctrine\DBAL\Driver\DriverException:
                 getErrorCode: 'getCode'
 
-    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
+    Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         $typehintForMethodByClass:
             Doctrine\DBAL\Connection:
                 ping: 'void'

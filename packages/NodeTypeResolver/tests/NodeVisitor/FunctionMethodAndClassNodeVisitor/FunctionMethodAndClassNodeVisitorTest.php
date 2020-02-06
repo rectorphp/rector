@@ -9,10 +9,10 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver as NodeNameResolver;
+use Rector\Core\Testing\PHPUnit\AbstractNodeVisitorTestCase;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
-use Rector\PhpParser\Node\Resolver\NameResolver as RectorNameResolver;
-use Rector\Testing\PHPUnit\AbstractNodeVisitorTestCase;
 
 final class FunctionMethodAndClassNodeVisitorTest extends AbstractNodeVisitorTestCase
 {
@@ -36,7 +36,7 @@ final class FunctionMethodAndClassNodeVisitorTest extends AbstractNodeVisitorTes
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver());
-        $nodeTraverser->addVisitor(new FunctionMethodAndClassNodeVisitor(new ClassNaming(new RectorNameResolver())));
+        $nodeTraverser->addVisitor(new FunctionMethodAndClassNodeVisitor(new ClassNaming(new NodeNameResolver())));
         $nodeTraverser->traverse($nodes);
     }
 

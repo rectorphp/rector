@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\FuncCall;
+namespace Rector\Core\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\FuncCall\FunctionToNewRector\FunctionToNewRectorTest
+ * @see \Rector\Core\Tests\Rector\FuncCall\FunctionToNewRector\FunctionToNewRectorTest
  */
 final class FunctionToNewRector extends AbstractRector
 {

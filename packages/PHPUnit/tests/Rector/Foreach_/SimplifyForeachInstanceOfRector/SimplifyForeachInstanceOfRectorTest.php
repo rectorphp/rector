@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\Foreach_\SimplifyForeachInstanceOfRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\Foreach_\SimplifyForeachInstanceOfRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimplifyForeachInstanceOfRectorTest extends AbstractRectorTestCase
 {

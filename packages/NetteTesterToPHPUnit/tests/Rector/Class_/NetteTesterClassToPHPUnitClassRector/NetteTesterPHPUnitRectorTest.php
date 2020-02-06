@@ -6,9 +6,9 @@ namespace Rector\NetteTesterToPHPUnit\Tests\Rector\Class_\NetteTesterClassToPHPU
 
 use Iterator;
 use Nette\Utils\FileSystem;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\NetteTesterToPHPUnit\Rector\Class_\NetteTesterClassToPHPUnitClassRector;
 use Rector\NetteTesterToPHPUnit\Rector\StaticCall\NetteAssertToPHPUnitAssertRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class NetteTesterPHPUnitRectorTest extends AbstractRectorTestCase
 {

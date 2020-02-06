@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\ClassLike;
+namespace Rector\Core\Rector\ClassLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Trait_;
+use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\ClassLike\RemoveTraitRector\RemoveTraitRectorTest
+ * @see \Rector\Core\Tests\Rector\ClassLike\RemoveTraitRector\RemoveTraitRectorTest
  */
 final class RemoveTraitRector extends AbstractRector
 {

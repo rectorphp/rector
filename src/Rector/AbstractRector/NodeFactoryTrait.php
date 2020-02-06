@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\AbstractRector;
+namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -17,7 +17,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use Rector\PhpParser\Node\NodeFactory;
+use Rector\Core\PhpParser\Node\NodeFactory;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait

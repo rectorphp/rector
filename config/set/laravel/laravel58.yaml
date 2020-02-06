@@ -7,7 +7,7 @@ imports:
 services:
     Rector\Laravel\Rector\StaticCall\MinutesToSecondsInCacheRector: null
 
-    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
+    Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         $typehintForMethodByClass:
             Illuminate\Contracts\Cache\Repository:
                 put: 'bool'
@@ -17,7 +17,7 @@ services:
                 putMany: 'bool'
                 forever: 'bool'
 
-    Rector\Rector\Property\RenamePropertyRector:
+    Rector\Core\Rector\Property\RenamePropertyRector:
         $oldToNewPropertyByTypes:
             Illuminate\Routing\UrlGenerator:
                 cachedSchema: 'cachedScheme'

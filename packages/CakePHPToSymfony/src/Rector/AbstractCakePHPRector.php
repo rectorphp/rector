@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\CakePHPToSymfony\Rector;
 
 use PhpParser\Node;
+use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
 
 abstract class AbstractCakePHPRector extends AbstractRector
 {

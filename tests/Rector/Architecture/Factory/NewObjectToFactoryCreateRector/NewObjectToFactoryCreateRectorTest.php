@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector;
+namespace Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector;
 
 use Iterator;
-use Rector\Rector\Architecture\Factory\NewObjectToFactoryCreateRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
-use Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory;
+use Rector\Core\Rector\Architecture\Factory\NewObjectToFactoryCreateRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
+use Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory;
 
 final class NewObjectToFactoryCreateRectorTest extends AbstractRectorTestCase
 {

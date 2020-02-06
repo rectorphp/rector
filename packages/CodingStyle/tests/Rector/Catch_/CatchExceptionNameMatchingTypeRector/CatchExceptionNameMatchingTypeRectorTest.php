@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\Catch_\CatchExceptionNameMatchingTypeR
 
 use Iterator;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class CatchExceptionNameMatchingTypeRectorTest extends AbstractRectorTestCase
 {

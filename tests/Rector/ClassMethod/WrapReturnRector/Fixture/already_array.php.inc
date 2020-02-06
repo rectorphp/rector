@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\ClassMethod\WrapReturnRector\Fixture;
+namespace Rector\Core\Tests\Rector\ClassMethod\WrapReturnRector\Fixture;
 
-use Rector\Tests\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
+use Rector\Core\Tests\Rector\ClassMethod\WrapReturnRector\Source\SomeReturnClass;
 
 final class AllReadyArray extends SomeReturnClass
 {

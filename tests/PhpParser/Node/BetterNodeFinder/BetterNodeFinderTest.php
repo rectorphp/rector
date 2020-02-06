@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\PhpParser\Node\BetterNodeFinder;
+namespace Rector\Core\Tests\PhpParser\Node\BetterNodeFinder;
 
 use Nette\Utils\FileSystem;
 use PhpParser\Node;
@@ -12,9 +12,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
-use Rector\HttpKernel\RectorKernel;
+use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\NodeVisitor\ParentAndNextNodeVisitor;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class BetterNodeFinderTest extends AbstractKernelTestCase

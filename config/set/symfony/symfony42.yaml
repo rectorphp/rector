@@ -1,6 +1,6 @@
 services:
     # https://github.com/symfony/symfony/pull/28447
-    Rector\Rector\New_\NewToStaticCallRector:
+    Rector\Core\Rector\New_\NewToStaticCallRector:
         $typeToStaticCalls:
             Symfony\Component\HttpFoundation\Cookie: ['Symfony\Component\HttpFoundation\Cookie', 'create']
 
@@ -19,7 +19,7 @@ services:
     Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector: null
     Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector: null
 
-    Rector\Rector\Argument\ArgumentAdderRector:
+    Rector\Core\Rector\Argument\ArgumentAdderRector:
         $positionWithDefaultValueByMethodNamesByClassTypes:
             # https://github.com/symfony/symfony/commit/fa2063efe43109aea093d6fbfc12d675dba82146
             # https://github.com/symfony/symfony/commit/e3aa90f852f69040be19da3d8729cdf02d238ec7
@@ -87,22 +87,22 @@ services:
             Symfony\Component\Form\AbstractTypeExtension:
                 getExtendedType: 'getExtendedTypes'
 
-    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
+    Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         $typehintForMethodByClass:
             Symfony\Component\Form\AbstractTypeExtension:
                 getExtendedTypes: 'iterable'
 
-    Rector\Rector\Visibility\ChangeMethodVisibilityRector:
+    Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector:
         $methodToVisibilityByClass:
             Symfony\Component\Form\AbstractTypeExtension:
                 getExtendedTypes: 'static'
 
-    Rector\Rector\ClassMethod\WrapReturnRector:
+    Rector\Core\Rector\ClassMethod\WrapReturnRector:
         $typeToMethodToWrap:
             Symfony\Component\Form\AbstractTypeExtension:
                 getExtendedTypes: 'array'
 
-    Rector\Rector\Argument\ArgumentDefaultValueReplacerRector:
+    Rector\Core\Rector\Argument\ArgumentDefaultValueReplacerRector:
         $replacesByMethodAndTypes:
             # https://github.com/symfony/symfony/commit/9493cfd5f2366dab19bbdde0d0291d0575454567
             Symfony\Component\HttpFoundation\Cookie:
@@ -111,7 +111,7 @@ services:
                 $samesite:
                     'null': 'lax'
 
-    Rector\Rector\Argument\ArgumentRemoverRector:
+    Rector\Core\Rector\Argument\ArgumentRemoverRector:
         $positionsByMethodNameByClassType:
             # https://github.com/symfony/symfony/commit/f5c355e1ba399a1b3512367647d902148bdaf09f
             Symfony\Component\HttpKernel\DataCollector\ConfigDataCollector:

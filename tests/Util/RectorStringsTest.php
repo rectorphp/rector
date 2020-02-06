@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Util;
+namespace Rector\Core\Tests\Util;
 
 use Iterator;
 use PHPUnit\Framework\TestCase;
-use Rector\Util\RectorStrings;
+use Rector\Core\Util\RectorStrings;
 
 final class RectorStringsTest extends TestCase
 {

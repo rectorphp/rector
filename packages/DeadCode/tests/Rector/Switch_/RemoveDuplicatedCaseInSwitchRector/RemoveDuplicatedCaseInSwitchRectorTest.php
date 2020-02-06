@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveDuplicatedCaseInSwitchRectorTest extends AbstractRectorTestCase
 {

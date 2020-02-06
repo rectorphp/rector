@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\ClassLike\RemoveTraitRector\Fixture;
+namespace Rector\Core\Tests\Rector\ClassLike\RemoveTraitRector\Fixture;
 
-use Rector\Tests\Rector\ClassLike\RemoveTraitRector\Source\TraitToBeRemoved;
+use Rector\Core\Tests\Rector\ClassLike\RemoveTraitRector\Source\TraitToBeRemoved;
 
 class SomeClass
 {
@@ -13,9 +13,9 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Rector\ClassLike\RemoveTraitRector\Fixture;
+namespace Rector\Core\Tests\Rector\ClassLike\RemoveTraitRector\Fixture;
 
-use Rector\Tests\Rector\ClassLike\RemoveTraitRector\Source\TraitToBeRemoved;
+use Rector\Core\Tests\Rector\ClassLike\RemoveTraitRector\Source\TraitToBeRemoved;
 
 class SomeClass
 {

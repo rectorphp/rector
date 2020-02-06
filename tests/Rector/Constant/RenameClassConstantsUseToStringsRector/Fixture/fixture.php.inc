@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\Fixture;
+namespace Rector\Core\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\Fixture;
 
-use Rector\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\Source\OldClassWithConstants;
+use Rector\Core\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\Source\OldClassWithConstants;
 
 class ClassWithExternalConstant
 {
@@ -16,9 +16,9 @@ class ClassWithExternalConstant
 -----
 <?php
 
-namespace Rector\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\Fixture;
+namespace Rector\Core\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\Fixture;
 
-use Rector\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\Source\OldClassWithConstants;
+use Rector\Core\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\Source\OldClassWithConstants;
 
 class ClassWithExternalConstant
 {

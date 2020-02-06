@@ -3,7 +3,7 @@
 namespace ChangeMe_ToNamespaced;
 
 use PHPUnit_TestCase;
-use Rector\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector\Source\Keep_This;
+use Rector\Core\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector\Source\Keep_This;
 
 class SomeTestCase
 {
@@ -25,7 +25,7 @@ class SomeTestCase
 namespace ChangeMe\ToNamespaced;
 
 use PHPUnit\TestCase;
-use Rector\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector\Source\Keep_This;
+use Rector\Core\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector\Source\Keep_This;
 
 class SomeTestCase
 {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Twig\Tests\Rector\SimpleFunctionAndFilterRector;
 
 use Iterator;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Twig\Rector\SimpleFunctionAndFilterRector;
 
 final class SimpleFunctionAndFilterRectorTest extends AbstractRectorTestCase

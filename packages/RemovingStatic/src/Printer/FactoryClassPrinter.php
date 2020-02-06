@@ -8,10 +8,10 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Symfony\Component\Filesystem\Filesystem;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

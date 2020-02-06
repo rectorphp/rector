@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector;
+namespace Rector\Core\Rector;
 
 use Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
@@ -17,20 +17,20 @@ use PHPStan\Analyser\Scope;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector;
-use Rector\Commander\CommanderCollector;
-use Rector\Contract\PhpParser\Node\CommanderInterface;
-use Rector\Contract\Rector\PhpRectorInterface;
+use Rector\Core\Commander\CommanderCollector;
+use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
+use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector;
-use Rector\Exclusion\ExclusionManager;
-use Rector\NodeContainer\ClassLikeParsedNodesFinder;
-use Rector\NodeContainer\FunctionLikeParsedNodesFinder;
+use Rector\Core\Exclusion\ExclusionManager;
+use Rector\Core\NodeContainer\ClassLikeParsedNodesFinder;
+use Rector\Core\NodeContainer\FunctionLikeParsedNodesFinder;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\NodeTypeResolver\StaticTypeMapper;
-use Rector\Php\PhpVersionProvider;
-use Rector\Rector\AbstractRector\AbstractRectorTrait;
-use Rector\Rector\AbstractRector\NodeCommandersTrait;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
+use Rector\Core\Rector\AbstractRector\NodeCommandersTrait;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\Visibility;
+namespace Rector\Core\Rector\Visibility;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\Visibility\ChangeMethodVisibilityRector\ChangeMethodVisibilityRectorTest
+ * @see \Rector\Core\Tests\Rector\Visibility\ChangeMethodVisibilityRector\ChangeMethodVisibilityRectorTest
  */
 final class ChangeMethodVisibilityRector extends AbstractRector
 {

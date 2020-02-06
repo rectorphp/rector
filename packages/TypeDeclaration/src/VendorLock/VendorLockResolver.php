@@ -11,10 +11,11 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
-use Rector\NodeContainer\ParsedNodesByType;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\PhpParser\Node\Resolver\NameResolver;
 use ReflectionClass;
 
 final class VendorLockResolver
@@ -56,6 +57,9 @@ final class VendorLockResolver
         }
 
         $methodName = $this->nameResolver->getName($classMethod);
+        if (! is_string($methodName)) {
+            throw new ShouldNotHappenException();
+        }
 
         // @todo extract to some "inherited parent method" service
         /** @var string|null $parentClassName */
@@ -120,6 +124,9 @@ final class VendorLockResolver
         }
 
         $methodName = $this->nameResolver->getName($classMethod);
+        if (! is_string($methodName)) {
+            throw new ShouldNotHappenException();
+        }
 
         // @todo extract to some "inherited parent method" service
         /** @var string|null $parentClassName */
@@ -183,6 +190,9 @@ final class VendorLockResolver
         }
 
         $propertyName = $this->nameResolver->getName($property);
+        if (! is_string($propertyName)) {
+            throw new ShouldNotHappenException();
+        }
 
         // @todo extract to some "inherited parent method" service
         /** @var string|null $parentClassName */
@@ -224,6 +234,9 @@ final class VendorLockResolver
     public function isClassMethodRemovalVendorLocked(ClassMethod $classMethod): bool
     {
         $classMethodName = $this->nameResolver->getName($classMethod);
+        if (! is_string($classMethodName)) {
+            throw new ShouldNotHappenException();
+        }
 
         /** @var Class_|null $class */
         $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
@@ -234,13 +247,20 @@ final class VendorLockResolver
         // required by interface?
         foreach ($class->implements as $implement) {
             $implementedInterfaceName = $this->nameResolver->getName($implement);
-
-            if (interface_exists($implementedInterfaceName)) {
-                $interfaceMethods = get_class_methods($implementedInterfaceName);
-                if (in_array($classMethodName, $interfaceMethods, true)) {
-                    return true;
-                }
+            if (! is_string($implementedInterfaceName)) {
+                throw new ShouldNotHappenException();
             }
+
+            if (! interface_exists($implementedInterfaceName)) {
+                continue;
+            }
+
+            $interfaceMethods = get_class_methods($implementedInterfaceName);
+            if (! in_array($classMethodName, $interfaceMethods, true)) {
+                continue;
+            }
+
+            return true;
         }
 
         if ($class->extends === null) {

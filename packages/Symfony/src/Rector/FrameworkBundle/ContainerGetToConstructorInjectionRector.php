@@ -6,9 +6,9 @@ namespace Rector\Symfony\Rector\FrameworkBundle;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

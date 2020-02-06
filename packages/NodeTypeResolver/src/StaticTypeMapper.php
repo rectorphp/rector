@@ -19,11 +19,12 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
-use Rector\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeMapper;
 use Rector\NodeTypeResolver\TypeMapper\PhpParserNodeMapper;
-use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 
 /**
@@ -168,6 +169,9 @@ final class StaticTypeMapper
                     /** @var UseUse $useUse */
                     $aliasName = $useUse->getAlias()->name;
                     $useName = $this->nameResolver->getName($useUse->name);
+                    if (! is_string($useName)) {
+                        throw new ShouldNotHappenException();
+                    }
 
                     $uses[$aliasName] = $useName;
                 }

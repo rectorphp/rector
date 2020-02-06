@@ -13,7 +13,7 @@ use PHPStan\DependencyInjection\Type\DynamicReturnTypeExtensionRegistryProvider;
 use PHPStan\DependencyInjection\Type\OperatorTypeSpecifyingExtensionRegistryProvider;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Properties\PropertyReflectionFinder;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 
 final class ScopeFactory
 {

@@ -20,12 +20,12 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeContainer\ParsedNodesByType;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://www.php.net/manual/en/language.types.callable.php#117260

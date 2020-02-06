@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\Class_\RemoveDataProviderTestPrefixRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\Class_\RemoveDataProviderTestPrefixRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveDataProviderTestPrefixRectorTest extends AbstractRectorTestCase
 {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\Foreach_\RemoveUnusedForeachKeyRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveUnusedForeachKeyRectorTest extends AbstractRectorTestCase
 {

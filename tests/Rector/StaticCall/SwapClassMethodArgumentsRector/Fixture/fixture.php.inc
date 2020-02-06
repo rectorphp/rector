@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\Fixture;
+namespace Rector\Core\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\Fixture;
 
 class SomeClass
 {
@@ -14,7 +14,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\Fixture;
+namespace Rector\Core\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\Fixture;
 
 class SomeClass
 {

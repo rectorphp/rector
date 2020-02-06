@@ -10,7 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 

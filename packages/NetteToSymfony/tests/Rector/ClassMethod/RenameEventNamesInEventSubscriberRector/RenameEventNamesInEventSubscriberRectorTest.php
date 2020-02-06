@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\NetteToSymfony\Tests\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\NetteToSymfony\Rector\ClassMethod\RenameEventNamesInEventSubscriberRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RenameEventNamesInEventSubscriberRectorTest extends AbstractRectorTestCase
 {

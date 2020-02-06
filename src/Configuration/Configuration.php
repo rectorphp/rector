@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Configuration;
+namespace Rector\Core\Configuration;
 
 use Jean85\PrettyVersions;
 use Nette\Utils\Strings;
-use Rector\Console\Output\JsonOutputFormatter;
-use Rector\Exception\Rector\RectorNotFoundOrNotValidRectorClassException;
-use Rector\Rector\AbstractRector;
-use Rector\Testing\PHPUnit\PHPUnitEnvironment;
+use Rector\Core\Console\Output\JsonOutputFormatter;
+use Rector\Core\Exception\Rector\RectorNotFoundOrNotValidRectorClassException;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
 use Symfony\Component\Console\Input\InputInterface;
 
 final class Configuration

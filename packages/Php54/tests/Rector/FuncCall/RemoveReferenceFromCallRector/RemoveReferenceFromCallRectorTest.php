@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php54\Tests\Rector\FuncCall\RemoveReferenceFromCallRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php54\Rector\FuncCall\RemoveReferenceFromCallRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveReferenceFromCallRectorTest extends AbstractRectorTestCase
 {

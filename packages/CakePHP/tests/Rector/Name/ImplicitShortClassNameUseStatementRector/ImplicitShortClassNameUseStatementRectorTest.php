@@ -6,7 +6,7 @@ namespace Rector\CakePHP\Tests\Rector\Name\ImplicitShortClassNameUseStatementRec
 
 use Iterator;
 use Rector\CakePHP\Rector\Name\ImplicitShortClassNameUseStatementRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ImplicitShortClassNameUseStatementRectorTest extends AbstractRectorTestCase
 {

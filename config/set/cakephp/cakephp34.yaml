@@ -1,6 +1,6 @@
 # source: https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html
 services:
-    Rector\Rector\Property\PropertyToMethodRector:
+    Rector\Core\Rector\Property\PropertyToMethodRector:
         $perClassPropertyToMethods:
             Cake\Network\Request:
                 params:
@@ -27,7 +27,7 @@ services:
                         method: 'getAttribute'
                         arguments: ['here']
 
-    Rector\Rector\Property\RenamePropertyRector:
+    Rector\Core\Rector\Property\RenamePropertyRector:
         $oldToNewPropertyByTypes:
             Cake\Network\Request:
                 _session: 'session'
@@ -237,7 +237,7 @@ services:
             Cake\Routing\Router:
                 parse: 'parseRequest'
 
-    Rector\Rector\Visibility\ChangeMethodVisibilityRector:
+    Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector:
         $methodToVisibilityByClass:
             Cake\Mailer\MailerAwareTrait:
                 getMailer: 'protected'
@@ -248,7 +248,7 @@ services:
         $oldToNewClasses:
             Cake\Database\Schema\Table: 'Cake\Database\Schema\TableSchema'
 
-    Rector\Rector\MethodBody\NormalToFluentRector:
+    Rector\Core\Rector\MethodBody\NormalToFluentRector:
         $fluentMethodsByType:
             Cake\Network\Response:
                 # https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html#adopting-immutable-responses

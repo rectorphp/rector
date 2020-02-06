@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Renaming\Tests\Rector\Annotation\RenameAnnotationRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\Annotation\RenameAnnotationRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RenameAnnotationRectorTest extends AbstractRectorTestCase
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\ValueObject\Scan;
+namespace Rector\Core\ValueObject\Scan;
 
 final class Argument
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\Namespace_;
+namespace Rector\Core\Rector\Namespace_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -15,16 +15,16 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector\PseudoNamespaceToNamespaceRectorTest
+ * @see \Rector\Core\Tests\Rector\Namespace_\PseudoNamespaceToNamespaceRector\PseudoNamespaceToNamespaceRectorTest
  */
 final class PseudoNamespaceToNamespaceRector extends AbstractRector
 {

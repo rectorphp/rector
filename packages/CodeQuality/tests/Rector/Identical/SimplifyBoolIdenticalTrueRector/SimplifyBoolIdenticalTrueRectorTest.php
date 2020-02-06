@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyBoolIdenticalTrueRec
 
 use Iterator;
 use Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimplifyBoolIdenticalTrueRectorTest extends AbstractRectorTestCase
 {

@@ -11,12 +11,12 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
-use Rector\Naming\NamespaceMatcher;
+use Rector\Core\Naming\NamespaceMatcher;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\RenamedNamespaceValueObject;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
-use Rector\ValueObject\RenamedNamespaceValueObject;
 
 /**
  * @see \Rector\Renaming\Tests\Rector\Namespace_\RenameNamespaceRector\RenameNamespaceRectorTest

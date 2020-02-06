@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\NodeVisitor;
+namespace Rector\Core\PhpParser\Node\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
-use Rector\PhpParser\Node\NodeFactory;
-use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 
 final class NodeRemovingNodeVisitor extends NodeVisitorAbstract
 {

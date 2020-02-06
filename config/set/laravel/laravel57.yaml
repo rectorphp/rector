@@ -1,13 +1,13 @@
 # see: https://laravel.com/docs/5.7/upgrade
 services:
-    Rector\Rector\Visibility\ChangeMethodVisibilityRector:
+    Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector:
         $methodToVisibilityByClass:
             Illuminate\Routing\Router:
                 addRoute: 'public'
             Illuminate\Contracts\Auth\Access\Gate:
                 raw: 'public'
 
-    Rector\Rector\Argument\ArgumentAdderRector:
+    Rector\Core\Rector\Argument\ArgumentAdderRector:
         $positionWithDefaultValueByMethodNamesByClassTypes:
             Illuminate\Auth\Middleware\Authenticate:
                 authenticate:
@@ -23,7 +23,7 @@ services:
 
     Rector\Laravel\Rector\StaticCall\Redirect301ToPermanentRedirectRector: null
 
-    Rector\Rector\Argument\ArgumentRemoverRector:
+    Rector\Core\Rector\Argument\ArgumentRemoverRector:
         $positionsByMethodNameByClassType:
             Illuminate\Foundation\Application:
                 register:

@@ -13,10 +13,10 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\InlineHTML;
 use Rector\CakePHPToSymfony\RouteResolver;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**

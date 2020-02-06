@@ -6,9 +6,9 @@ namespace Rector\SymfonyPHPUnit\Node;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\Node\Resolver\NameResolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final class KernelTestCaseNodeAnalyzer

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Nette\Tests\Rector\MethodCall\AddDatePickerToDateControlRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Nette\Rector\MethodCall\AddDatePickerToDateControlRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AddDatePickerToDateControlRectorTest extends AbstractRectorTestCase
 {

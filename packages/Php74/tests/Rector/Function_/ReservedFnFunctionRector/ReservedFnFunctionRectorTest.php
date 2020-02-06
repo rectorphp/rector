@@ -6,8 +6,8 @@ namespace Rector\Php74\Tests\Rector\Function_\ReservedFnFunctionRector;
 
 use Iterator;
 use PhpParser\Parser\Tokens;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php74\Rector\Function_\ReservedFnFunctionRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ReservedFnFunctionRectorTest extends AbstractRectorTestCase
 {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Nette\Tests\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Nette\Rector\MethodCall\SetClassWithArgumentToSetFactoryRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SetClassWithArgumentToSetFactoryRectorTest extends AbstractRectorTestCase
 {

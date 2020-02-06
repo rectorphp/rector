@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Nette\Utils\Strings;
-use Rector\Testing\PHPUnit\FixtureSplitter;
+use Rector\Core\Testing\PHPUnit\FixtureSplitter;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;

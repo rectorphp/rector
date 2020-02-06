@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\DependencyInjection;
+namespace Rector\Core\DependencyInjection;
 
 use Psr\Container\ContainerInterface;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\HttpKernel\RectorKernel;
-use Rector\Set\Set;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\Set\Set;
 use Symplify\PackageBuilder\Console\Input\InputDetector;
 use Symplify\SetConfigResolver\SetResolver;
 

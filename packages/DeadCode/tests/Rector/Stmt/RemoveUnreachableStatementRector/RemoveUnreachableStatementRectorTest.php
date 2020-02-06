@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\Stmt\RemoveUnreachableStatementRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveUnreachableStatementRectorTest extends AbstractRectorTestCase
 {

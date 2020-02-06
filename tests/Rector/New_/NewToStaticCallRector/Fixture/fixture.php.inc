@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\New_\NewToStaticCallRector\Fixture;
+namespace Rector\Core\Tests\Rector\New_\NewToStaticCallRector\Fixture;
 
-use Rector\Tests\Rector\New_\NewToStaticCallRector\Source\FromNewClass;
+use Rector\Core\Tests\Rector\New_\NewToStaticCallRector\Source\FromNewClass;
 
 class SomeClass
 {
@@ -16,15 +16,15 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Rector\New_\NewToStaticCallRector\Fixture;
+namespace Rector\Core\Tests\Rector\New_\NewToStaticCallRector\Fixture;
 
-use Rector\Tests\Rector\New_\NewToStaticCallRector\Source\FromNewClass;
+use Rector\Core\Tests\Rector\New_\NewToStaticCallRector\Source\FromNewClass;
 
 class SomeClass
 {
     public function run()
     {
-        \Rector\Tests\Rector\New_\NewToStaticCallRector\Source\IntoStaticClass::run($name);
+        \Rector\Core\Tests\Rector\New_\NewToStaticCallRector\Source\IntoStaticClass::run($name);
     }
 }
 

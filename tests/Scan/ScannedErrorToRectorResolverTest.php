@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Scan;
+namespace Rector\Core\Tests\Scan;
 
-use Rector\HttpKernel\RectorKernel;
-use Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Scan\ScannedErrorToRectorResolver;
+use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\Core\Scan\ScannedErrorToRectorResolver;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 

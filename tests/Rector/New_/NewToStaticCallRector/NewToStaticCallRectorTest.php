@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\New_\NewToStaticCallRector;
+namespace Rector\Core\Tests\Rector\New_\NewToStaticCallRector;
 
 use Iterator;
-use Rector\Rector\New_\NewToStaticCallRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\New_\NewToStaticCallRector\Source\FromNewClass;
-use Rector\Tests\Rector\New_\NewToStaticCallRector\Source\IntoStaticClass;
+use Rector\Core\Rector\New_\NewToStaticCallRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\New_\NewToStaticCallRector\Source\FromNewClass;
+use Rector\Core\Tests\Rector\New_\NewToStaticCallRector\Source\IntoStaticClass;
 
 final class NewToStaticCallRectorTest extends AbstractRectorTestCase
 {

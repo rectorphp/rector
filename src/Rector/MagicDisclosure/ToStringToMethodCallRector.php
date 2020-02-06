@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\MagicDisclosure;
+namespace Rector\Core\Rector\MagicDisclosure;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\MagicDisclosure\ToStringToMethodCallRector\ToStringToMethodCallRectorTest
+ * @see \Rector\Core\Tests\Rector\MagicDisclosure\ToStringToMethodCallRector\ToStringToMethodCallRectorTest
  */
 final class ToStringToMethodCallRector extends AbstractRector
 {

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Manipulator;
+namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class ClassConstManipulator
 {
@@ -56,7 +56,7 @@ final class ClassConstManipulator
     }
 
     /**
-     * @return ClassConst[]
+     * @return ClassConstFetch[]
      */
     public function getAllClassConstFetch(ClassConst $classConst): array
     {
@@ -68,13 +68,18 @@ final class ClassConstManipulator
 
         $searchInNodes = [$classNode];
         foreach ($this->classManipulator->getUsedTraits($classNode) as $trait) {
-            $trait_ = $this->parsedNodesByType->findTrait((string) $trait);
-            if ($trait !== null) {
-                $searchInNodes[] = $trait_;
+            $trait = $this->parsedNodesByType->findTrait((string) $trait);
+            if ($trait === null) {
+                continue;
             }
+
+            $searchInNodes[] = $trait;
         }
 
-        return $this->betterNodeFinder->find($searchInNodes, function (Node $node) use ($classConst): bool {
+        /** @var ClassConstFetch[] $classConstFetches */
+        $classConstFetches = $this->betterNodeFinder->find($searchInNodes, function (Node $node) use (
+            $classConst
+        ): bool {
             // itself
             if ($this->betterStandardPrinter->areNodesEqual($node, $classConst)) {
                 return false;
@@ -87,6 +92,8 @@ final class ClassConstManipulator
 
             return $this->isNameMatch($node, $classConst);
         });
+
+        return $classConstFetches;
     }
 
     private function isNameMatch(Node $node, ClassConst $classConst): bool

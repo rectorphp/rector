@@ -1,6 +1,6 @@
 services:
     # replace args
-    Rector\Rector\Argument\ArgumentDefaultValueReplacerRector:
+    Rector\Core\Rector\Argument\ArgumentDefaultValueReplacerRector:
         $replacesByMethodAndTypes:
             # covers https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.1.md#yaml
             Symfony\Component\Yaml\Yaml:

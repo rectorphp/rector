@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\FileSystem;
+namespace Rector\Core\FileSystem;
 
-use Rector\Exception\FileSystem\FileNotFoundException;
+use Rector\Core\Exception\FileSystem\FileNotFoundException;
 
 final class FileGuard
 {

@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\Application;
+namespace Rector\Core\Application;
 
 use PhpParser\Lexer;
 use PhpParser\Node;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
+use Rector\Core\PhpParser\Parser\Parser;
+use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
+use Rector\Core\Rector\AffectedFilesCollector;
+use Rector\Core\Stubs\StubLoader;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
-use Rector\PhpParser\Parser\Parser;
-use Rector\PhpParser\Printer\FormatPerservingPrinter;
-use Rector\Rector\AffectedFilesCollector;
-use Rector\Stubs\StubLoader;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileProcessor

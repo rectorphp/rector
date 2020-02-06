@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\MagicDisclosure;
+namespace Rector\Core\Rector\MagicDisclosure;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -12,14 +12,14 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\GetAndSetToMethodCallRectorTest
+ * @see \Rector\Core\Tests\Rector\MagicDisclosure\GetAndSetToMethodCallRector\GetAndSetToMethodCallRectorTest
  */
 final class GetAndSetToMethodCallRector extends AbstractRector
 {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\FileSystemRector\Parser;
 
 use PhpParser\Node;
+use Rector\Core\PhpParser\Parser\Parser;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use Rector\PhpParser\Parser\Parser;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileInfoParser

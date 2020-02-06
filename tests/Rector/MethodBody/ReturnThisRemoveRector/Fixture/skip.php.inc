@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture;
+namespace Rector\Core\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture;
 
 class SomeAnotherClass
 {

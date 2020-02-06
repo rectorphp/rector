@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Exception\Console\Output;
+namespace Rector\Core\Exception\Console\Output;
 
 use Exception;
 

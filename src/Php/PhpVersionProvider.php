@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php;
+namespace Rector\Core\Php;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
-use Rector\Configuration\Option;
-use Rector\Testing\PHPUnit\PHPUnitEnvironment;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class PhpVersionProvider

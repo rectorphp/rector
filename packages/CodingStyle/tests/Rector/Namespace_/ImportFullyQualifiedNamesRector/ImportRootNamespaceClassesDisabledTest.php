@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRector;
 
 use Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector;
-use Rector\Configuration\Option;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ImportRootNamespaceClassesDisabledTest extends AbstractRectorTestCase
 {

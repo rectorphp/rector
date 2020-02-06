@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Tests\Rector\Closure\AddClosureReturnTypeRector;
 
 use Iterator;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
-use Rector\ValueObject\PhpVersionFeature;
 
 final class AddClosureReturnTypeRectorTest extends AbstractRectorTestCase
 {

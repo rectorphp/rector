@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php\Regex;
+namespace Rector\Core\Php\Regex;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -13,12 +13,12 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
-use Rector\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class RegexPatternArgumentManipulator
 {

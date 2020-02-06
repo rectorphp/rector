@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\ValueObject\PhpVersionFeature;
 
 final class UnionTypedPropertyRectorTest extends AbstractRectorTestCase
 {

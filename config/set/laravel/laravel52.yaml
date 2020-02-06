@@ -6,7 +6,7 @@ services:
             Illuminate\Http\Exception\HttpResponseException: 'Illuminate\Foundation\Validation\ValidationException'
             Illuminate\Foundation\Composer: 'Illuminate\Support\Composer'
 
-    Rector\Rector\String_\StringToClassConstantRector:
+    Rector\Core\Rector\String_\StringToClassConstantRector:
         $stringsToClassConstants:
             artisan.start: ['Illuminate\Console\Events\ArtisanStarting', 'class']
             auth.attempting: ['Illuminate\Auth\Events\Attempting', 'class']

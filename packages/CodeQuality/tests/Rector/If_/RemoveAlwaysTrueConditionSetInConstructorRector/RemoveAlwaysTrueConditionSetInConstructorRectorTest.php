@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\RemoveAlwaysTrueConditionSetInCons
 
 use Iterator;
 use Rector\CodeQuality\Rector\If_\RemoveAlwaysTrueConditionSetInConstructorRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveAlwaysTrueConditionSetInConstructorRectorTest extends AbstractRectorTestCase
 {

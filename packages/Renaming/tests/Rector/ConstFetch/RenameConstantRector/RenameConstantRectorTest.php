@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Renaming\Tests\Rector\ConstFetch\RenameConstantRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\ConstFetch\RenameConstantRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RenameConstantRectorTest extends AbstractRectorTestCase
 {

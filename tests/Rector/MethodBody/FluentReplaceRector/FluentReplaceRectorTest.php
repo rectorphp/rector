@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\MethodBody\FluentReplaceRector;
+namespace Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector;
 
 use Iterator;
-use Rector\Rector\MethodBody\FluentReplaceRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\MethodBody\FluentReplaceRector\Source\FluentInterfaceClass;
+use Rector\Core\Rector\MethodBody\FluentReplaceRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector\Source\FluentInterfaceClass;
 
 final class FluentReplaceRectorTest extends AbstractRectorTestCase
 {

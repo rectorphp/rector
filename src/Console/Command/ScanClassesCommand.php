@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Console\Command;
+namespace Rector\Core\Console\Command;
 
-use Rector\Console\Shell;
-use Rector\FileSystem\ClassFinder;
+use Rector\Core\Console\Shell;
+use Rector\Core\FileSystem\ClassFinder;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector;
+namespace Rector\Core\Tests\Rector\Assign\PropertyAssignToMethodCallRector;
 
 use Iterator;
-use Rector\Rector\Assign\PropertyAssignToMethodCallRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
-use Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\MultiChoiceControl;
+use Rector\Core\Rector\Assign\PropertyAssignToMethodCallRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
+use Rector\Core\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\MultiChoiceControl;
 
 final class PropertyAssignToMethodCallRectorTest extends AbstractRectorTestCase
 {

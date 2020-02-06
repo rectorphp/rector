@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\DependencyInjection\Loader;
+namespace Rector\Core\DependencyInjection\Loader;
 
 use Nette\Utils\Strings;
-use Rector\Exception\DependencyInjection\ClassNotFoundException;
+use Rector\Core\Exception\DependencyInjection\ClassNotFoundException;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ClassExistenceValidator

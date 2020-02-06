@@ -1,6 +1,6 @@
 # see: https://laravel.com/docs/5.4/upgrade
 services:
-    Rector\Rector\String_\StringToClassConstantRector:
+    Rector\Core\Rector\String_\StringToClassConstantRector:
         $stringsToClassConstants:
             kernel.handled: ['Illuminate\Foundation\Http\Events\RequestHandled', 'class']
             locale.changed: ['Illuminate\Foundation\Events\LocaleUpdated', 'class']

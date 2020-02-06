@@ -19,8 +19,9 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
@@ -53,6 +54,9 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         }
 
         $propertyName = $this->nameResolver->getName($property);
+        if (! is_string($propertyName)) {
+            throw new ShouldNotHappenException();
+        }
 
         $param = $this->propertyFetchManipulator->resolveParamForPropertyFetch($classMethod, $propertyName);
         if ($param === null) {

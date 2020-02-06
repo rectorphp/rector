@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\Concat\RemoveConcatAutocastRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveConcatAutocastRectorTest extends AbstractRectorTestCase
 {

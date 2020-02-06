@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Rector\Validator\ConstraintUrlOptionRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\Validator\ConstraintUrlOptionRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ConstraintUrlOptionRectorTest extends AbstractRectorTestCase
 {

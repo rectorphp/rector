@@ -7,7 +7,7 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitorAbstract;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class StatementNodeVisitor extends NodeVisitorAbstract

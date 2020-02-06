@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\MethodCall;
+namespace Rector\Core\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\MethodCall\MethodCallToReturnRector\MethodCallToReturnRectorTest
+ * @see \Rector\Core\Tests\Rector\MethodCall\MethodCallToReturnRector\MethodCallToReturnRectorTest
  */
 final class MethodCallToReturnRector extends AbstractRector
 {

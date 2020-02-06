@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\Assign\SplitDoubleAssignRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SplitDoubleAssignRectorTest extends AbstractRectorTestCase
 {

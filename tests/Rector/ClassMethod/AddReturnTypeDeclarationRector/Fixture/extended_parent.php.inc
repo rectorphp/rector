@@ -1,7 +1,7 @@
 <?php
 
 namespace {
-    use Rector\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
+    use Rector\Core\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
 
     abstract class Abstract_Test_Case extends PHPUnitTestCase
     {
@@ -11,7 +11,7 @@ namespace {
     }
 }
 
-namespace Rector\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture
+namespace Rector\Core\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture
 {
     final class FinalTestCase extends \Abstract_Test_Case
     {
@@ -26,7 +26,7 @@ namespace Rector\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture
 <?php
 
 namespace {
-    use Rector\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
+    use Rector\Core\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
 
     abstract class Abstract_Test_Case extends PHPUnitTestCase
     {
@@ -36,7 +36,7 @@ namespace {
     }
 }
 
-namespace Rector\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture
+namespace Rector\Core\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture
 {
     final class FinalTestCase extends \Abstract_Test_Case
     {

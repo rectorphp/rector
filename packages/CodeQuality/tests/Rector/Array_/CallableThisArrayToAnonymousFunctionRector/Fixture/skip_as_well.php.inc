@@ -17,9 +17,9 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 final class PseudoNamespaceToNamespaceRector
 {

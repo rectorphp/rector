@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Application\FileSystem;
+namespace Rector\Core\Application\FileSystem;
 
-use Rector\ValueObject\MovedClassValueObject;
+use Rector\Core\ValueObject\MovedClassValueObject;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RemovedAndAddedFilesCollector

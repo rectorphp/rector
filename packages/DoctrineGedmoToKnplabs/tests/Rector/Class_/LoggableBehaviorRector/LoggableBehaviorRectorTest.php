@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DoctrineGedmoToKnplabs\Tests\Rector\Class_\LoggableBehaviorRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DoctrineGedmoToKnplabs\Rector\Class_\LoggableBehaviorRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class LoggableBehaviorRectorTest extends AbstractRectorTestCase
 {

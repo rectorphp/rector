@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Set;
+namespace Rector\Core\Set;
 
 final class Set
 {

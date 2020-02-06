@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\FunctionToStaticCallRector;
+namespace Rector\Core\Tests\FunctionToStaticCallRector;
 
 class SomeClass
 {
@@ -14,7 +14,7 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\FunctionToStaticCallRector;
+namespace Rector\Core\Tests\FunctionToStaticCallRector;
 
 class SomeClass
 {

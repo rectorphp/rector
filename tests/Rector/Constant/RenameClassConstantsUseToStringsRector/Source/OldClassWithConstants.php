@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\Source;
+namespace Rector\Core\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\Source;
 
 final class OldClassWithConstants
 {

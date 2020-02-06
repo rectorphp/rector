@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Concat\JoinStringConcatRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Concat\JoinStringConcatRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class JoinStringConcatRectorTest extends AbstractRectorTestCase
 {

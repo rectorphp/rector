@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\AbstractRector;
+namespace Rector\Core\Rector\AbstractRector;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;

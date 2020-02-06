@@ -2,7 +2,7 @@
 services:
     # !!! be careful not to run this twice, since it swaps arguments back and forth
     # see https://github.com/rectorphp/rector/issues/2408#issue-534441142
-    Rector\Rector\StaticCall\SwapClassMethodArgumentsRector:
+    Rector\Core\Rector\StaticCall\SwapClassMethodArgumentsRector:
         $newArgumentPositionsByMethodAndClass:
             Phalcon\Model:
                 assign: [0, 2, 1]

@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Nette\ValueObject\MagicTemplatePropertyCalls;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class TemplatePropertyAssignCollector
 {

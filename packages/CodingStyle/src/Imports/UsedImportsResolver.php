@@ -9,9 +9,9 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 final class UsedImportsResolver

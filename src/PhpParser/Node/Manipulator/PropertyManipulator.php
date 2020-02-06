@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Manipulator;
+namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -14,13 +14,13 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeContainer\ClassLikeParsedNodesFinder;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Doctrine\AbstractRector\DoctrineTrait;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeContainer\ClassLikeParsedNodesFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 /**
  * "private $property"

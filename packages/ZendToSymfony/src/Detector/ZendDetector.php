@@ -7,9 +7,9 @@ namespace Rector\ZendToSymfony\Detector;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\Node\Resolver\NameResolver;
 use Rector\ZendToSymfony\ValueObject\ZendClass;
 
 final class ZendDetector

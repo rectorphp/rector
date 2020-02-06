@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\CakePHPToSymfony\NodeFactory\EventSubscriberClassFactory;
 use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @inspired by

@@ -12,10 +12,10 @@ use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Exception\NotImplementedException;
-use Rector\NodeContainer\ParsedNodesByType;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\Testing\PHPUnit\PHPUnitEnvironment;
+use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
 
 final class UnusedClassResolver
 {

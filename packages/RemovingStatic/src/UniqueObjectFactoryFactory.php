@@ -19,12 +19,12 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\Naming\PropertyNaming;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Naming\PropertyNaming;
+use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
-use Rector\PhpParser\Node\NodeFactory;
-use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class UniqueObjectFactoryFactory
 {
@@ -163,7 +163,12 @@ final class UniqueObjectFactoryFactory
         }
 
         foreach ($properties as $property) {
-            $propertyFetch = new PropertyFetch(new Variable('this'), $this->nameResolver->getName($property));
+            $propertyName = $this->nameResolver->getName($property);
+            if (! is_string($propertyName)) {
+                throw new ShouldNotHappenException();
+            }
+
+            $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
             $new->args[] = new Arg($propertyFetch);
         }
 

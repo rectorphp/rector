@@ -6,10 +6,10 @@ namespace Rector\NetteTesterToPHPUnit\Rector\StaticCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NetteTesterToPHPUnit\AssertManipulator;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 final class NetteAssertToPHPUnitAssertRector extends AbstractRector
 {

@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
+use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\PhpSpecToPHPUnit\PhpSpecMockCollector;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 

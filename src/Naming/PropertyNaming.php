@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Naming;
+namespace Rector\Core\Naming;
 
 use Nette\Utils\Strings;
 use PHPStan\Type\ObjectType;

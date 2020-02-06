@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Testing\PHPUnit;
+namespace Rector\Core\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;

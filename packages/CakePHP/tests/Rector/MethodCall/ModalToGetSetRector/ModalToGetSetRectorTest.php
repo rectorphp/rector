@@ -7,7 +7,7 @@ namespace Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector;
 use Iterator;
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\Source\SomeModelType;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ModalToGetSetRectorTest extends AbstractRectorTestCase
 {

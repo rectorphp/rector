@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\Class_\AddInterfaceByTraitRector\Fixture;
+namespace Rector\Core\Tests\Rector\Class_\AddInterfaceByTraitRector\Fixture;
 
-use Rector\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
+use Rector\Core\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
 
 class SomeClass
 {
@@ -13,11 +13,11 @@ class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Rector\Class_\AddInterfaceByTraitRector\Fixture;
+namespace Rector\Core\Tests\Rector\Class_\AddInterfaceByTraitRector\Fixture;
 
-use Rector\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
+use Rector\Core\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
 
-class SomeClass implements \Rector\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeInterface
+class SomeClass implements \Rector\Core\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeInterface
 {
     use SomeTrait;
 }

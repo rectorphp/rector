@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Equal\UseIdenticalOverEqualWithSameTyp
 
 use Iterator;
 use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class UseIdenticalOverEqualWithSameTypeRectorTest extends AbstractRectorTestCase
 {

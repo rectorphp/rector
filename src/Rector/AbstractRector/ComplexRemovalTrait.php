@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\AbstractRector;
+namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -39,11 +39,11 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeContainer\ParsedNodesByType;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
+use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
-use Rector\PhpParser\Node\Manipulator\PropertyManipulator;
 
 /**
  * @property NodeRemovingCommander $nodeRemovingCommander

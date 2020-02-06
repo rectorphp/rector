@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Manipulator;
+namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class FunctionLikeManipulator
 {

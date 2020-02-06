@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\For_\RemoveDeadIfForeachForRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveDeadIfForeachForRectorTest extends AbstractRectorTestCase
 {

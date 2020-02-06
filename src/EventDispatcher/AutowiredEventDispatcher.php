@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\EventDispatcher;
+namespace Rector\Core\EventDispatcher;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

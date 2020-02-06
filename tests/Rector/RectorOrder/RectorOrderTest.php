@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\RectorOrder;
+namespace Rector\Core\Tests\Rector\RectorOrder;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertComparisonToSpecificMethodRector;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
  * Covers https://github.com/rectorphp/rector/pull/266#issuecomment-355725764

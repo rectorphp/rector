@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Restoration\Tests\Rector\ClassConstFetch\MissingClassConstantReferenceToStringRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Restoration\Rector\ClassConstFetch\MissingClassConstantReferenceToStringRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class MissingClassConstantReferenceToStringRectorTest extends AbstractRectorTestCase
 {

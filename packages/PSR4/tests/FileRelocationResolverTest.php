@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\PSR4\Tests;
 
 use Iterator;
-use Rector\HttpKernel\RectorKernel;
+use Rector\Core\HttpKernel\RectorKernel;
 use Rector\PSR4\FileRelocationResolver;
 use Rector\PSR4\Tests\Source\SomeFile;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;

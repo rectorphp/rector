@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\AbstractRector;
+namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
-use Rector\Application\AppliedRectorCollector;
+use Rector\Core\Application\AppliedRectorCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**

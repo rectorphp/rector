@@ -6,8 +6,8 @@ namespace Rector\Doctrine\Uuid;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Property;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
-use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class JoinTableNameResolver

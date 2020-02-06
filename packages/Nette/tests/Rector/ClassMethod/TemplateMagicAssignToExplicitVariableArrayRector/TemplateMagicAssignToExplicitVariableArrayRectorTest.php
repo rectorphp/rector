@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Nette\Tests\Rector\ClassMethod\TemplateMagicAssignToExplicitVariableArrayRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Nette\Rector\ClassMethod\TemplateMagicAssignToExplicitVariableArrayRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class TemplateMagicAssignToExplicitVariableArrayRectorTest extends AbstractRectorTestCase
 {

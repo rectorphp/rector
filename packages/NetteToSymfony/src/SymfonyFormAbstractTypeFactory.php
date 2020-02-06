@@ -15,8 +15,8 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
-use Rector\PhpParser\Node\NodeFactory;
-use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class SymfonyFormAbstractTypeFactory

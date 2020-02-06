@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\Expression\SimplifyMirrorAssignRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Expression\SimplifyMirrorAssignRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimplifyMirrorAssignRectorTest extends AbstractRectorTestCase
 {

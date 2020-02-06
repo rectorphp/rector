@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\DependencyInjection;
+namespace Rector\Core\Tests\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
-use Rector\DependencyInjection\RectorContainerFactory;
+use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symplify\SetConfigResolver\Exception\SetNotFoundException;
 

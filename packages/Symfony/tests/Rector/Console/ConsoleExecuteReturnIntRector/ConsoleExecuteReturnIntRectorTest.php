@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Rector\Console\ConsoleExecuteReturnIntRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\Console\ConsoleExecuteReturnIntRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ConsoleExecuteReturnIntRectorTest extends AbstractRectorTestCase
 {

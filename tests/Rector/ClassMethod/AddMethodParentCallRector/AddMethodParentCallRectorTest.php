@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\ClassMethod\AddMethodParentCallRector;
+namespace Rector\Core\Tests\Rector\ClassMethod\AddMethodParentCallRector;
 
 use Iterator;
-use Rector\Rector\ClassMethod\AddMethodParentCallRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\ClassMethod\AddMethodParentCallRector\Source\ParentClassWithNewConstructor;
+use Rector\Core\Rector\ClassMethod\AddMethodParentCallRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\ClassMethod\AddMethodParentCallRector\Source\ParentClassWithNewConstructor;
 
 final class AddMethodParentCallRectorTest extends AbstractRectorTestCase
 {

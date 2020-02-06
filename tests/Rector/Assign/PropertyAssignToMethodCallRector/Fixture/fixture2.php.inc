@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Fixture;
+namespace Rector\Core\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Fixture;
 
-use Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
+use Rector\Core\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
 
 class Some2Presenter
 {
@@ -17,9 +17,9 @@ class Some2Presenter
 -----
 <?php
 
-namespace Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Fixture;
+namespace Rector\Core\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Fixture;
 
-use Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
+use Rector\Core\Tests\Rector\Assign\PropertyAssignToMethodCallRector\Source\ChoiceControl;
 
 class Some2Presenter
 {

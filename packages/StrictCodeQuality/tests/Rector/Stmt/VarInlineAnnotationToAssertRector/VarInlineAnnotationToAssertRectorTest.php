@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\StrictCodeQuality\Tests\Rector\Stmt\VarInlineAnnotationToAssertRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\StrictCodeQuality\Rector\Stmt\VarInlineAnnotationToAssertRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class VarInlineAnnotationToAssertRectorTest extends AbstractRectorTestCase
 {

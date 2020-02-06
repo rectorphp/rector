@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\CakePHPToSymfony;
 
 use Nette\Utils\Strings;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\Util\RectorStrings;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Util\RectorStrings;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RouteResolver

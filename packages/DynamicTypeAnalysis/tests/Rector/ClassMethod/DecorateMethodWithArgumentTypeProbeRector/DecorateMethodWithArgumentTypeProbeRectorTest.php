@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DynamicTypeAnalysis\Tests\Rector\ClassMethod\DecorateMethodWithArgumentTypeProbeRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DynamicTypeAnalysis\Rector\ClassMethod\DecorateMethodWithArgumentTypeProbeRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class DecorateMethodWithArgumentTypeProbeRectorTest extends AbstractRectorTestCase
 {

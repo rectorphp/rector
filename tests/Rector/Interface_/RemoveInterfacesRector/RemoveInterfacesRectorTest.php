@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Interface_\RemoveInterfacesRector;
+namespace Rector\Core\Tests\Rector\Interface_\RemoveInterfacesRector;
 
 use Iterator;
-use Rector\Rector\Interface_\RemoveInterfacesRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Interface_\RemoveInterfacesRector\Source\SomeInterface;
+use Rector\Core\Rector\Interface_\RemoveInterfacesRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\Interface_\RemoveInterfacesRector\Source\SomeInterface;
 
 final class RemoveInterfacesRectorTest extends AbstractRectorTestCase
 {

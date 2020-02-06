@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node;
+namespace Rector\Core\PhpParser\Node;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -13,7 +13,7 @@ use PhpParser\NodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
+ * @see \Rector\Core\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
  */
 final class BetterNodeFinder
 {

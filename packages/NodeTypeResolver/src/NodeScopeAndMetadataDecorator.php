@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
-use Rector\Configuration\Configuration;
+use Rector\Core\Configuration\Configuration;
 use Rector\NodeTypeResolver\NodeVisitor\FileInfoNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;

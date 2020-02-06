@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\Architecture\Factory;
+namespace Rector\Core\Rector\Architecture\Factory;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -12,14 +12,14 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 use ReflectionClass;
 
 /**
- * @see \Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\NewObjectToFactoryCreateRectorTest
+ * @see \Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\NewObjectToFactoryCreateRectorTest
  */
 final class NewObjectToFactoryCreateRector extends AbstractRector
 {

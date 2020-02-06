@@ -11,9 +11,9 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VerbosityLevel;
-use Rector\Php\PhpVersionProvider;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\ValueObject\PhpVersionFeature;
 
 final class TypeWithClassNameTypeMapper implements TypeMapperInterface
 {

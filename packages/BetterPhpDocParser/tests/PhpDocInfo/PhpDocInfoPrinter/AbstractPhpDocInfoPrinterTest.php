@@ -10,8 +10,8 @@ use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Rector\HttpKernel\RectorKernel;
-use Rector\Testing\StaticFixtureProvider;
+use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\Testing\StaticFixtureProvider;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 abstract class AbstractPhpDocInfoPrinterTest extends AbstractKernelTestCase

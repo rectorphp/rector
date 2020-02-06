@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\Argument;
+namespace Rector\Core\Rector\Argument;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\Argument\SwapFuncCallArgumentsRector\SwapFuncCallArgumentsRectorTest
+ * @see \Rector\Core\Tests\Rector\Argument\SwapFuncCallArgumentsRector\SwapFuncCallArgumentsRectorTest
  */
 final class SwapFuncCallArgumentsRector extends AbstractRector
 {

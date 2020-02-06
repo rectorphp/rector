@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector;
 
 use Iterator;
-use Rector\Configuration\Option;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\FrameworkBundle\ContainerGetToConstructorInjectionRector;
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentClass;
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ContainerAwareParentCommand;
 use Rector\Symfony\Tests\FrameworkBundle\ContainerGetToConstructorInjectionRector\Source\ThisClassCallsMethodInConstructor;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ContainerGetToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {

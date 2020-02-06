@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\InlineHTML;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\CakePHPToSymfony\Tests\Rector\Echo_\CakePHPTemplateTranslateToTwigRector\CakePHPTemplateTranslateToTwigRectorTest

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Contract\PhpParser\Node;
+namespace Rector\Core\Contract\PhpParser\Node;
 
 use PhpParser\Node;
 

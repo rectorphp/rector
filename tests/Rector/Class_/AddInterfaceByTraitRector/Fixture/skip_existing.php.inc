@@ -1,9 +1,9 @@
 <?php
 
-namespace Rector\Tests\Rector\Class_\AddInterfaceByTraitRector\Fixture;
+namespace Rector\Core\Tests\Rector\Class_\AddInterfaceByTraitRector\Fixture;
 
-use Rector\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeInterface;
-use Rector\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
+use Rector\Core\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeInterface;
+use Rector\Core\Tests\Rector\Class_\AddInterfaceByTraitRector\Source\SomeTrait;
 
 class SkipExisting implements SomeInterface
 {

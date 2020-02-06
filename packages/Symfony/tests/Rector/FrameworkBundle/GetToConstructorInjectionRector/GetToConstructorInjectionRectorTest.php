@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector;
 
 use Iterator;
-use Rector\Configuration\Option;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\FrameworkBundle\GetToConstructorInjectionRector;
 use Rector\Symfony\Tests\Rector\FrameworkBundle\GetToConstructorInjectionRector\Source\GetTrait;
 use Rector\Symfony\Tests\Rector\Source\SymfonyController;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class GetToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {

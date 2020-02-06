@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Identical\BooleanNotIdenticalToNotIden
 
 use Iterator;
 use Rector\CodeQuality\Rector\Identical\BooleanNotIdenticalToNotIdenticalRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class BooleanNotIdenticalToNotIdenticalRectorTest extends AbstractRectorTestCase
 {

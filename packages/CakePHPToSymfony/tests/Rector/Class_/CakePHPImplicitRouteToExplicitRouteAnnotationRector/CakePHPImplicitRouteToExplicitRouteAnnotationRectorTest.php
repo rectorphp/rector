@@ -6,7 +6,7 @@ namespace Rector\CakePHPToSymfony\Tests\Rector\Class_\CakePHPImplicitRouteToExpl
 
 use Iterator;
 use Rector\CakePHPToSymfony\Rector\Class_\CakePHPImplicitRouteToExplicitRouteAnnotationRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class CakePHPImplicitRouteToExplicitRouteAnnotationRectorTest extends AbstractRectorTestCase
 {

@@ -3,7 +3,7 @@ services:
         public: true
         autowire: true
 
-    Rector\:
+    Rector\Core\:
         resource: '../src'
         exclude:
             - '../src/Rector/**/*Rector.php'
@@ -21,7 +21,7 @@ services:
     Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider: null
 
     Symfony\Component\Console\Application:
-        alias: 'Rector\Console\Application'
+        alias: 'Rector\Core\Console\Application'
 
     Symfony\Component\Console\Descriptor\TextDescriptor: null
 
@@ -43,7 +43,7 @@ services:
     Symplify\PackageBuilder\Strings\StringFormatConverter: null
 
     # alises
-    Symfony\Contracts\EventDispatcher\EventDispatcherInterface: '@Rector\EventDispatcher\AutowiredEventDispatcher'
+    Symfony\Contracts\EventDispatcher\EventDispatcherInterface: '@Rector\Core\EventDispatcher\AutowiredEventDispatcher'
 
     OndraM\CiDetector\CiDetector: null
 

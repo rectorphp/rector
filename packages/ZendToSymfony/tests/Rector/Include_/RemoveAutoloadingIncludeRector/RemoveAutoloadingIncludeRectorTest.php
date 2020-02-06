@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\ZendToSymfony\Tests\Rector\Include_\RemoveAutoloadingIncludeRector;
 
 use Iterator;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\ZendToSymfony\Rector\Include_\RemoveAutoloadingIncludeRector;
 
 final class RemoveAutoloadingIncludeRectorTest extends AbstractRectorTestCase

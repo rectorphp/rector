@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\Namespace_\ImportFullyQualifiedNamesRe
 
 use Iterator;
 use Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class NonNamespacedTest extends AbstractRectorTestCase
 {

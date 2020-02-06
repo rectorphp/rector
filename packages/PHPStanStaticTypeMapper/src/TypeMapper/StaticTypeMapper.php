@@ -11,7 +11,7 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
-use Rector\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedException;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 
 final class StaticTypeMapper implements TypeMapperInterface

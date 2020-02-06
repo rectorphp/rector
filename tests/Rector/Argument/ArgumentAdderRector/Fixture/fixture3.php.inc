@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
+namespace Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
 
-use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeContainerBuilder;
+use Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeContainerBuilder;
 
 class CustomContainerBuilder extends SomeContainerBuilder
 {
@@ -15,9 +15,9 @@ class CustomContainerBuilder extends SomeContainerBuilder
 -----
 <?php
 
-namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
+namespace Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
 
-use Rector\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeContainerBuilder;
+use Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Source\SomeContainerBuilder;
 
 class CustomContainerBuilder extends SomeContainerBuilder
 {

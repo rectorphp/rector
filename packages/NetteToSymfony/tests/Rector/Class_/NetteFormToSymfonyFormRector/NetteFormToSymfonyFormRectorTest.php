@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\NetteToSymfony\Tests\Rector\Class_\NetteFormToSymfonyFormRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\NetteToSymfony\Rector\Class_\NetteFormToSymfonyFormRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class NetteFormToSymfonyFormRectorTest extends AbstractRectorTestCase
 {

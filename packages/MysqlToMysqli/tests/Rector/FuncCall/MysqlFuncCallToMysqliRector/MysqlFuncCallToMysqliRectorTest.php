@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\MysqlToMysqli\Tests\Rector\FuncCall\MysqlFuncCallToMysqliRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class MysqlFuncCallToMysqliRectorTest extends AbstractRectorTestCase
 {

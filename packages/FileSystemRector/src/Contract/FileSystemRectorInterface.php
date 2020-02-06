@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\FileSystemRector\Contract;
 
-use Rector\Contract\Rector\RectorInterface;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 interface FileSystemRectorInterface extends RectorInterface

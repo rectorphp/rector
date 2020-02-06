@@ -6,11 +6,11 @@ namespace Rector\Doctrine\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
 use Rector\Doctrine\Provider\EntityWithMissingUuidProvider;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @sponsor Thanks https://spaceflow.io/ for sponsoring this rule - visit them on https://github.com/SpaceFlow-app

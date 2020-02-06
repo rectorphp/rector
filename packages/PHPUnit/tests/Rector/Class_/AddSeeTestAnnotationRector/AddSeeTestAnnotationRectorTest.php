@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\Class_\AddSeeTestAnnotationRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AddSeeTestAnnotationRectorTest extends AbstractRectorTestCase
 {

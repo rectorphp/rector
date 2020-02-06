@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\ClassMethod\WrapReturnRector\Source;
+namespace Rector\Core\Tests\Rector\ClassMethod\WrapReturnRector\Source;
 
 class SomeReturnClass
 {

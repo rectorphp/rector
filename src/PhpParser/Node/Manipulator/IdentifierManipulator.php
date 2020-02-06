@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Manipulator;
+namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -12,8 +12,8 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Exception\NodeChanger\NodeMissingIdentifierException;
-use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\Exception\NodeChanger\NodeMissingIdentifierException;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 
 /**
  * This class renames node identifier, e.g. ClassMethod rename:

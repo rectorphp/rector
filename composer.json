@@ -47,7 +47,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\": "src",
+            "Rector\\Core\\": "src",
             "Rector\\Autodiscovery\\": "packages/Autodiscovery/src",
             "Rector\\Architecture\\": "packages/Architecture/src",
             "Rector\\AttributeAwarePhpDoc\\": "packages/AttributeAwarePhpDoc/src",
@@ -119,7 +119,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\Tests\\": "tests",
+            "Rector\\Core\\Tests\\": "tests",
             "Rector\\Autodiscovery\\Tests\\": "packages/Autodiscovery/tests",
             "Rector\\Architecture\\Tests\\": "packages/Architecture/tests",
             "Rector\\BetterPhpDocParser\\Tests\\": "packages/BetterPhpDocParser/tests",

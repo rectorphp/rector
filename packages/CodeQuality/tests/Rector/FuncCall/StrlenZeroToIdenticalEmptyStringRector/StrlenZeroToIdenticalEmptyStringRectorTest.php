@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\StrlenZeroToIdenticalEmptyStr
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\StrlenZeroToIdenticalEmptyStringRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class StrlenZeroToIdenticalEmptyStringRectorTest extends AbstractRectorTestCase
 {

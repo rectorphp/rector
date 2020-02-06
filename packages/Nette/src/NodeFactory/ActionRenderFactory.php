@@ -11,8 +11,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Nette\ValueObject\MagicTemplatePropertyCalls;
-use Rector\PhpParser\Node\NodeFactory;
 
 final class ActionRenderFactory
 {

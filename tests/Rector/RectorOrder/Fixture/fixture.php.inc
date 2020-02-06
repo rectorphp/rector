@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\RectorOrder;
+namespace Rector\Core\Tests\RectorOrder;
 
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +19,7 @@ class SomeTest extends TestCase
 -----
 <?php
 
-namespace Rector\Tests\RectorOrder;
+namespace Rector\Core\Tests\RectorOrder;
 
 use PHPUnit\Framework\TestCase;
 

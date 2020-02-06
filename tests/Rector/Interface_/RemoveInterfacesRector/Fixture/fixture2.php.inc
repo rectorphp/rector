@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\Interface_\RemoveInterfacesRector\Fixture;
+namespace Rector\Core\Tests\Rector\Interface_\RemoveInterfacesRector\Fixture;
 
-use Rector\Tests\Rector\Interface_\RemoveInterfacesRector\Source\SomeInterface;
+use Rector\Core\Tests\Rector\Interface_\RemoveInterfacesRector\Source\SomeInterface;
 
 class SomeClass2 implements SomeInterface
 {
@@ -12,9 +12,9 @@ class SomeClass2 implements SomeInterface
 -----
 <?php
 
-namespace Rector\Tests\Rector\Interface_\RemoveInterfacesRector\Fixture;
+namespace Rector\Core\Tests\Rector\Interface_\RemoveInterfacesRector\Fixture;
 
-use Rector\Tests\Rector\Interface_\RemoveInterfacesRector\Source\SomeInterface;
+use Rector\Core\Tests\Rector\Interface_\RemoveInterfacesRector\Source\SomeInterface;
 
 class SomeClass2
 {

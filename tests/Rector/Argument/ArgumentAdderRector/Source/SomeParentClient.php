@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Source;
+namespace Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Source;
 
 class SomeParentClient
 {

@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\NodeVisitorAbstract;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\BetterNodeFinder;
 
 final class NamespaceNodeVisitor extends NodeVisitorAbstract
 {
@@ -48,7 +48,9 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
         $this->namespaceNode = null;
 
         // init basic use nodes for non-namespaced code
-        $this->useNodes = $this->betterNodeFinder->findInstanceOf($nodes, Use_::class);
+        /** @var Use_[] $uses */
+        $uses = $this->betterNodeFinder->findInstanceOf($nodes, Use_::class);
+        $this->useNodes = $uses;
 
         return null;
     }
@@ -58,7 +60,10 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
         if ($node instanceof Namespace_) {
             $this->namespaceName = $node->name !== null ? $node->name->toString() : null;
             $this->namespaceNode = $node;
-            $this->useNodes = $this->betterNodeFinder->findInstanceOf($node, Use_::class);
+
+            /** @var Use_[] $uses */
+            $uses = $this->betterNodeFinder->findInstanceOf($node, Use_::class);
+            $this->useNodes = $uses;
         }
 
         $node->setAttribute(AttributeKey::NAMESPACE_NAME, $this->namespaceName);

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Commander;
+namespace Rector\Core\Commander;
 
-use Rector\Contract\PhpParser\Node\CommanderInterface;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 
 final class CommanderCollector
 {

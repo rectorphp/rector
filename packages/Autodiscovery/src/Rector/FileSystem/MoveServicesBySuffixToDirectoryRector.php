@@ -7,9 +7,9 @@ namespace Rector\Autodiscovery\Rector\FileSystem;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\Autodiscovery\FileMover\FileMover;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**

@@ -12,10 +12,10 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://book.cakephp.org/2/en/views/helpers.html

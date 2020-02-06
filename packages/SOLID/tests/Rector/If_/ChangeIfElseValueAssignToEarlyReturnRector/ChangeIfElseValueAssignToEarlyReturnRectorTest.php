@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\SOLID\Tests\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\SOLID\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ChangeIfElseValueAssignToEarlyReturnRectorTest extends AbstractRectorTestCase
 {

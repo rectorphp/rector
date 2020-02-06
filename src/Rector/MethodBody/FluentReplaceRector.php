@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\MethodBody;
+namespace Rector\Core\Rector\MethodBody;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\MethodBody\FluentReplaceRector\FluentReplaceRectorTest
+ * @see \Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector\FluentReplaceRectorTest
  */
 final class FluentReplaceRector extends AbstractRector
 {

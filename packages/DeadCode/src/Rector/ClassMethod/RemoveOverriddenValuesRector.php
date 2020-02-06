@@ -8,13 +8,13 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
-use Rector\Context\ContextAnalyzer;
+use Rector\Core\Context\ContextAnalyzer;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\DeadCode\Data\VariableNodeUseInfo;
 use Rector\DeadCode\FlowOfControlLocator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveOverriddenValuesRector\RemoveOverriddenValuesRectorTest

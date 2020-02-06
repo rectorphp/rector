@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\AbstractRector;
+namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait

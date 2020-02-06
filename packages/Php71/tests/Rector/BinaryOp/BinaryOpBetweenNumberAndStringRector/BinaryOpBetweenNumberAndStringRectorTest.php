@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php71\Tests\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php71\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class BinaryOpBetweenNumberAndStringRectorTest extends AbstractRectorTestCase
 {

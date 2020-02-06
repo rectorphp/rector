@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Console;
+namespace Rector\Core\Console;
 
 use Composer\XdebugHandler\XdebugHandler;
 use Jean85\PrettyVersions;
-use Rector\Configuration\Configuration;
-use Rector\Console\Output\JsonOutputFormatter;
-use Rector\Exception\Configuration\InvalidConfigurationException;
+use Rector\Core\Configuration\Configuration;
+use Rector\Core\Console\Output\JsonOutputFormatter;
+use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Utils\DocumentationGenerator\Command\DumpNodesCommand;
 use Rector\Utils\DocumentationGenerator\Command\DumpRectorsCommand;
 use Symfony\Component\Console\Application as SymfonyApplication;

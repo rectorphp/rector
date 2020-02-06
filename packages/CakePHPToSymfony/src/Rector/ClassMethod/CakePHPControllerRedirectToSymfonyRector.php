@@ -14,10 +14,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\Util\RectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
-use Rector\Util\RectorStrings;
 
 /**
  * @see https://book.cakephp.org/2/en/controllers.html#flow-control

@@ -8,11 +8,11 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
+use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
-use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
-use Rector\PhpParser\Node\Value\ValueResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class TemplatePathResolver
 {

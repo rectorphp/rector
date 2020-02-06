@@ -6,8 +6,8 @@ namespace Rector\PhpSpecToPHPUnit\Rector\FileSystem;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
-use Rector\RectorDefinition\RectorDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**

@@ -8800,7 +8800,7 @@ Change $this->_view->assign = 5; to $this->render("...", $templateData);
 
 ### `ActionInjectionToConstructorInjectionRector`
 
-- class: `Rector\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector`
+- class: `Rector\Core\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector`
 
 Turns action injection in Controllers to constructor injection
 
@@ -8829,13 +8829,13 @@ Turns action injection in Controllers to constructor injection
 
 ### `AddInterfaceByTraitRector`
 
-- class: `Rector\Rector\Class_\AddInterfaceByTraitRector`
+- class: `Rector\Core\Rector\Class_\AddInterfaceByTraitRector`
 
 Add interface by used trait
 
 ```yaml
 services:
-    Rector\Rector\Class_\AddInterfaceByTraitRector:
+    Rector\Core\Rector\Class_\AddInterfaceByTraitRector:
         $interfaceByTrait:
             SomeTrait: SomeInterface
 ```
@@ -8854,7 +8854,7 @@ services:
 
 ### `AddMethodParentCallRector`
 
-- class: `Rector\Rector\ClassMethod\AddMethodParentCallRector`
+- class: `Rector\Core\Rector\ClassMethod\AddMethodParentCallRector`
 
 Add method parent call, in case new parent method is added
 
@@ -8874,13 +8874,13 @@ Add method parent call, in case new parent method is added
 
 ### `AddReturnTypeDeclarationRector`
 
-- class: `Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector`
+- class: `Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector`
 
 Changes defined return typehint of method and class.
 
 ```yaml
 services:
-    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
+    Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         $typehintForMethodByClass:
             SomeClass:
                 getData: array
@@ -8902,7 +8902,7 @@ services:
 
 ### `AnnotatedPropertyInjectToConstructorInjectionRector`
 
-- class: `Rector\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector`
+- class: `Rector\Core\Rector\Architecture\DependencyInjection\AnnotatedPropertyInjectToConstructorInjectionRector`
 
 Turns non-private properties with `@annotation` to private properties and constructor injection
 
@@ -8924,13 +8924,13 @@ Turns non-private properties with `@annotation` to private properties and constr
 
 ### `ArgumentAdderRector`
 
-- class: `Rector\Rector\Argument\ArgumentAdderRector`
+- class: `Rector\Core\Rector\Argument\ArgumentAdderRector`
 
 This Rector adds new default arguments in calls of defined methods and class types.
 
 ```yaml
 services:
-    Rector\Rector\Argument\ArgumentAdderRector:
+    Rector\Core\Rector\Argument\ArgumentAdderRector:
         $positionWithDefaultValueByMethodNamesByClassTypes:
             SomeExampleClass:
                 someMethod:
@@ -8950,7 +8950,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\Argument\ArgumentAdderRector:
+    Rector\Core\Rector\Argument\ArgumentAdderRector:
         $positionWithDefaultValueByMethodNamesByClassTypes:
             SomeExampleClass:
                 someMethod:
@@ -8976,13 +8976,13 @@ services:
 
 ### `ArgumentDefaultValueReplacerRector`
 
-- class: `Rector\Rector\Argument\ArgumentDefaultValueReplacerRector`
+- class: `Rector\Core\Rector\Argument\ArgumentDefaultValueReplacerRector`
 
 Replaces defined map of arguments in defined methods and their calls.
 
 ```yaml
 services:
-    Rector\Rector\Argument\ArgumentDefaultValueReplacerRector:
+    Rector\Core\Rector\Argument\ArgumentDefaultValueReplacerRector:
         SomeExampleClass:
             someMethod:
                 -
@@ -9003,13 +9003,13 @@ services:
 
 ### `ArgumentRemoverRector`
 
-- class: `Rector\Rector\Argument\ArgumentRemoverRector`
+- class: `Rector\Core\Rector\Argument\ArgumentRemoverRector`
 
 Removes defined arguments in defined methods and their calls.
 
 ```yaml
 services:
-    Rector\Rector\Argument\ArgumentRemoverRector:
+    Rector\Core\Rector\Argument\ArgumentRemoverRector:
         ExampleClass:
             someMethod:
                 -
@@ -9028,13 +9028,13 @@ services:
 
 ### `ChangeConstantVisibilityRector`
 
-- class: `Rector\Rector\Visibility\ChangeConstantVisibilityRector`
+- class: `Rector\Core\Rector\Visibility\ChangeConstantVisibilityRector`
 
 Change visibility of constant from parent class.
 
 ```yaml
 services:
-    Rector\Rector\Visibility\ChangeConstantVisibilityRector:
+    Rector\Core\Rector\Visibility\ChangeConstantVisibilityRector:
         ParentObject:
             SOME_CONSTANT: protected
 ```
@@ -9058,13 +9058,13 @@ services:
 
 ### `ChangeMethodVisibilityRector`
 
-- class: `Rector\Rector\Visibility\ChangeMethodVisibilityRector`
+- class: `Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector`
 
 Change visibility of method from parent class.
 
 ```yaml
 services:
-    Rector\Rector\Visibility\ChangeMethodVisibilityRector:
+    Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector:
         $methodToVisibilityByClass:
             FrameworkClass:
                 someMethod: protected
@@ -9093,13 +9093,13 @@ services:
 
 ### `ChangePropertyVisibilityRector`
 
-- class: `Rector\Rector\Visibility\ChangePropertyVisibilityRector`
+- class: `Rector\Core\Rector\Visibility\ChangePropertyVisibilityRector`
 
 Change visibility of property from parent class.
 
 ```yaml
 services:
-    Rector\Rector\Visibility\ChangePropertyVisibilityRector:
+    Rector\Core\Rector\Visibility\ChangePropertyVisibilityRector:
         FrameworkClass:
             someProperty: protected
 ```
@@ -9123,13 +9123,13 @@ services:
 
 ### `FluentReplaceRector`
 
-- class: `Rector\Rector\MethodBody\FluentReplaceRector`
+- class: `Rector\Core\Rector\MethodBody\FluentReplaceRector`
 
 Turns fluent interface calls to classic ones.
 
 ```yaml
 services:
-    Rector\Rector\MethodBody\FluentReplaceRector:
+    Rector\Core\Rector\MethodBody\FluentReplaceRector:
         $classesToDefluent:
             - SomeExampleClass
 ```
@@ -9148,13 +9148,13 @@ services:
 
 ### `FunctionToMethodCallRector`
 
-- class: `Rector\Rector\Function_\FunctionToMethodCallRector`
+- class: `Rector\Core\Rector\Function_\FunctionToMethodCallRector`
 
 Turns defined function calls to local method calls.
 
 ```yaml
 services:
-    Rector\Rector\Function_\FunctionToMethodCallRector:
+    Rector\Core\Rector\Function_\FunctionToMethodCallRector:
         view:
             - this
             - render
@@ -9171,7 +9171,7 @@ services:
 
 ### `FunctionToNewRector`
 
-- class: `Rector\Rector\FuncCall\FunctionToNewRector`
+- class: `Rector\Core\Rector\FuncCall\FunctionToNewRector`
 
 Change configured function calls to new Instance
 
@@ -9190,13 +9190,13 @@ Change configured function calls to new Instance
 
 ### `FunctionToStaticCallRector`
 
-- class: `Rector\Rector\Function_\FunctionToStaticCallRector`
+- class: `Rector\Core\Rector\Function_\FunctionToStaticCallRector`
 
 Turns defined function call to static method call.
 
 ```yaml
 services:
-    Rector\Rector\Function_\FunctionToStaticCallRector:
+    Rector\Core\Rector\Function_\FunctionToStaticCallRector:
         view:
             - SomeStaticClass
             - render
@@ -9213,13 +9213,13 @@ services:
 
 ### `GetAndSetToMethodCallRector`
 
-- class: `Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector`
+- class: `Rector\Core\Rector\MagicDisclosure\GetAndSetToMethodCallRector`
 
 Turns defined `__get`/`__set` to specific method calls.
 
 ```yaml
 services:
-    Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
+    Rector\Core\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
         SomeContainer:
             set: addService
 ```
@@ -9234,7 +9234,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
+    Rector\Core\Rector\MagicDisclosure\GetAndSetToMethodCallRector:
         $typeToMethodCalls:
             SomeContainer:
                 get: getService
@@ -9252,13 +9252,13 @@ services:
 
 ### `InjectAnnotationClassRector`
 
-- class: `Rector\Rector\Property\InjectAnnotationClassRector`
+- class: `Rector\Core\Rector\Property\InjectAnnotationClassRector`
 
 Changes properties with specified annotations class to constructor injection
 
 ```yaml
 services:
-    Rector\Rector\Property\InjectAnnotationClassRector:
+    Rector\Core\Rector\Property\InjectAnnotationClassRector:
         $annotationClasses:
             - DI\Annotation\Inject
             - JMS\DiExtraBundle\Annotation\Inject
@@ -9288,13 +9288,13 @@ services:
 
 ### `MergeInterfacesRector`
 
-- class: `Rector\Rector\Interface_\MergeInterfacesRector`
+- class: `Rector\Core\Rector\Interface_\MergeInterfacesRector`
 
 Merges old interface to a new one, that already has its methods
 
 ```yaml
 services:
-    Rector\Rector\Interface_\MergeInterfacesRector:
+    Rector\Core\Rector\Interface_\MergeInterfacesRector:
         SomeOldInterface: SomeInterface
 ```
 
@@ -9311,13 +9311,13 @@ services:
 
 ### `MethodCallToAnotherMethodCallWithArgumentsRector`
 
-- class: `Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector`
+- class: `Rector\Core\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector`
 
 Turns old method call with specific types to new one with arguments
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector:
+    Rector\Core\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector:
         Nette\DI\ServiceDefinition:
             setInject:
                 -
@@ -9338,13 +9338,13 @@ services:
 
 ### `MethodCallToReturnRector`
 
-- class: `Rector\Rector\MethodCall\MethodCallToReturnRector`
+- class: `Rector\Core\Rector\MethodCall\MethodCallToReturnRector`
 
 Wrap method call to return
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\MethodCallToReturnRector:
+    Rector\Core\Rector\MethodCall\MethodCallToReturnRector:
         $methodNamesByType:
             SomeClass:
                 - deny
@@ -9372,7 +9372,7 @@ services:
 
 ### `MoveRepositoryFromParentToConstructorRector`
 
-- class: `Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector`
+- class: `Rector\Core\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector`
 
 Turns parent EntityRepository class to constructor dependency
 
@@ -9400,7 +9400,7 @@ Turns parent EntityRepository class to constructor dependency
 
 ### `MultipleClassFileToPsr4ClassesRector`
 
-- class: `Rector\Rector\Psr4\MultipleClassFileToPsr4ClassesRector`
+- class: `Rector\Core\Rector\Psr4\MultipleClassFileToPsr4ClassesRector`
 
 Turns namespaced classes in one file to standalone PSR-4 classes.
 
@@ -9430,13 +9430,13 @@ Turns namespaced classes in one file to standalone PSR-4 classes.
 
 ### `NewObjectToFactoryCreateRector`
 
-- class: `Rector\Rector\Architecture\Factory\NewObjectToFactoryCreateRector`
+- class: `Rector\Core\Rector\Architecture\Factory\NewObjectToFactoryCreateRector`
 
 Replaces creating object instances with "new" keyword with factory method.
 
 ```yaml
 services:
-    Rector\Rector\Architecture\Factory\NewObjectToFactoryCreateRector:
+    Rector\Core\Rector\Architecture\Factory\NewObjectToFactoryCreateRector:
         MyClass:
             class: MyClassFactory
             method: create
@@ -9463,13 +9463,13 @@ services:
 
 ### `NewToStaticCallRector`
 
-- class: `Rector\Rector\New_\NewToStaticCallRector`
+- class: `Rector\Core\Rector\New_\NewToStaticCallRector`
 
 Change new Object to static call
 
 ```yaml
 services:
-    Rector\Rector\New_\NewToStaticCallRector:
+    Rector\Core\Rector\New_\NewToStaticCallRector:
         $typeToStaticCalls:
             Cookie:
                 - Cookie
@@ -9493,13 +9493,13 @@ services:
 
 ### `NormalToFluentRector`
 
-- class: `Rector\Rector\MethodBody\NormalToFluentRector`
+- class: `Rector\Core\Rector\MethodBody\NormalToFluentRector`
 
 Turns fluent interface calls to classic ones.
 
 ```yaml
 services:
-    Rector\Rector\MethodBody\NormalToFluentRector:
+    Rector\Core\Rector\MethodBody\NormalToFluentRector:
         SomeClass:
             - someFunction
             - otherFunction
@@ -9519,13 +9519,13 @@ services:
 
 ### `ParentClassToTraitsRector`
 
-- class: `Rector\Rector\Class_\ParentClassToTraitsRector`
+- class: `Rector\Core\Rector\Class_\ParentClassToTraitsRector`
 
 Replaces parent class to specific traits
 
 ```yaml
 services:
-    Rector\Rector\Class_\ParentClassToTraitsRector:
+    Rector\Core\Rector\Class_\ParentClassToTraitsRector:
         Nette\Object:
             - Nette\SmartObject
 ```
@@ -9544,13 +9544,13 @@ services:
 
 ### `PropertyAssignToMethodCallRector`
 
-- class: `Rector\Rector\Assign\PropertyAssignToMethodCallRector`
+- class: `Rector\Core\Rector\Assign\PropertyAssignToMethodCallRector`
 
 Turns property assign of specific type and property name to method call
 
 ```yaml
 services:
-    Rector\Rector\Assign\PropertyAssignToMethodCallRector:
+    Rector\Core\Rector\Assign\PropertyAssignToMethodCallRector:
         $oldPropertiesToNewMethodCallsByType:
             SomeClass:
                 oldPropertyName: oldProperty
@@ -9560,9 +9560,8 @@ services:
 ↓
 
 ```diff
--$someObject = new SomeClass;
+ $someObject = new SomeClass;
 -$someObject->oldProperty = false;
-+$someObject = new SomeClass;
 +$someObject->newMethodCall(false);
 ```
 
@@ -9570,13 +9569,13 @@ services:
 
 ### `PropertyToMethodRector`
 
-- class: `Rector\Rector\Property\PropertyToMethodRector`
+- class: `Rector\Core\Rector\Property\PropertyToMethodRector`
 
 Replaces properties assign calls be defined methods.
 
 ```yaml
 services:
-    Rector\Rector\Property\PropertyToMethodRector:
+    Rector\Core\Rector\Property\PropertyToMethodRector:
         $perClassPropertyToMethods:
             SomeObject:
                 property:
@@ -9595,7 +9594,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\Property\PropertyToMethodRector:
+    Rector\Core\Rector\Property\PropertyToMethodRector:
         $perClassPropertyToMethods:
             SomeObject:
                 property:
@@ -9616,13 +9615,13 @@ services:
 
 ### `PseudoNamespaceToNamespaceRector`
 
-- class: `Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector`
+- class: `Rector\Core\Rector\Namespace_\PseudoNamespaceToNamespaceRector`
 
 Replaces defined Pseudo_Namespaces by Namespace\Ones.
 
 ```yaml
 services:
-    Rector\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
+    Rector\Core\Rector\Namespace_\PseudoNamespaceToNamespaceRector:
         $namespacePrefixesWithExcludedClasses:
             Some_:
                 - Some_Class_To_Keep
@@ -9642,13 +9641,13 @@ services:
 
 ### `RemoveInterfacesRector`
 
-- class: `Rector\Rector\Interface_\RemoveInterfacesRector`
+- class: `Rector\Core\Rector\Interface_\RemoveInterfacesRector`
 
 Removes interfaces usage from class.
 
 ```yaml
 services:
-    Rector\Rector\Interface_\RemoveInterfacesRector:
+    Rector\Core\Rector\Interface_\RemoveInterfacesRector:
         - SomeInterface
 ```
 
@@ -9665,7 +9664,7 @@ services:
 
 ### `RemoveTraitRector`
 
-- class: `Rector\Rector\ClassLike\RemoveTraitRector`
+- class: `Rector\Core\Rector\ClassLike\RemoveTraitRector`
 
 Remove specific traits from code
 
@@ -9680,13 +9679,13 @@ Remove specific traits from code
 
 ### `RenameClassConstantsUseToStringsRector`
 
-- class: `Rector\Rector\Constant\RenameClassConstantsUseToStringsRector`
+- class: `Rector\Core\Rector\Constant\RenameClassConstantsUseToStringsRector`
 
 Replaces constant by value
 
 ```yaml
 services:
-    Rector\Rector\Constant\RenameClassConstantsUseToStringsRector:
+    Rector\Core\Rector\Constant\RenameClassConstantsUseToStringsRector:
         Nette\Configurator:
             DEVELOPMENT: development
             PRODUCTION: production
@@ -9703,13 +9702,13 @@ services:
 
 ### `RenamePropertyRector`
 
-- class: `Rector\Rector\Property\RenamePropertyRector`
+- class: `Rector\Core\Rector\Property\RenamePropertyRector`
 
 Replaces defined old properties by new ones.
 
 ```yaml
 services:
-    Rector\Rector\Property\RenamePropertyRector:
+    Rector\Core\Rector\Property\RenamePropertyRector:
         $oldToNewPropertyByTypes:
             SomeClass:
                 someOldProperty: someNewProperty
@@ -9726,7 +9725,7 @@ services:
 
 ### `ReplaceParentRepositoryCallsByRepositoryPropertyRector`
 
-- class: `Rector\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector`
+- class: `Rector\Core\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector`
 
 Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.
 
@@ -9749,7 +9748,7 @@ Handles method calls in child of Doctrine EntityRepository and moves them to "$t
 
 ### `ReplaceVariableByPropertyFetchRector`
 
-- class: `Rector\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector`
+- class: `Rector\Core\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector`
 
 Turns variable in controller action to property fetch, as follow up to action injection variable to property change.
 
@@ -9778,13 +9777,13 @@ Turns variable in controller action to property fetch, as follow up to action in
 
 ### `ReturnThisRemoveRector`
 
-- class: `Rector\Rector\MethodBody\ReturnThisRemoveRector`
+- class: `Rector\Core\Rector\MethodBody\ReturnThisRemoveRector`
 
 Removes "return $this;" from *fluent interfaces* for specified classes.
 
 ```yaml
 services:
-    Rector\Rector\MethodBody\ReturnThisRemoveRector:
+    Rector\Core\Rector\MethodBody\ReturnThisRemoveRector:
         -
             - SomeExampleClass
 ```
@@ -9810,13 +9809,13 @@ services:
 
 ### `ServiceGetterToConstructorInjectionRector`
 
-- class: `Rector\Rector\MethodCall\ServiceGetterToConstructorInjectionRector`
+- class: `Rector\Core\Rector\MethodCall\ServiceGetterToConstructorInjectionRector`
 
 Get service call to constructor injection
 
 ```yaml
 services:
-    Rector\Rector\MethodCall\ServiceGetterToConstructorInjectionRector:
+    Rector\Core\Rector\MethodCall\ServiceGetterToConstructorInjectionRector:
         $methodNamesByTypesToServiceTypes:
             FirstService:
                 getAnotherService: AnotherService
@@ -9831,7 +9830,7 @@ services:
       * @var FirstService
       */
      private $firstService;
--
+
 -    public function __construct(FirstService $firstService)
 -    {
 -        $this->firstService = $firstService;
@@ -9846,14 +9845,12 @@ services:
 -
 -class FirstService
 -{
-+
      /**
       * @var AnotherService
       */
      private $anotherService;
--
+
 -    public function __construct(AnotherService $anotherService)
-+
 +    public function __construct(FirstService $firstService, AnotherService $anotherService)
      {
 +        $this->firstService = $firstService;
@@ -9874,7 +9871,7 @@ services:
 
 ### `ServiceLocatorToDIRector`
 
-- class: `Rector\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector`
+- class: `Rector\Core\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector`
 
 Turns "$this->getRepository()" in Symfony Controller to constructor injection and private property access.
 
@@ -9904,13 +9901,13 @@ Turns "$this->getRepository()" in Symfony Controller to constructor injection an
 
 ### `StaticCallToFunctionRector`
 
-- class: `Rector\Rector\StaticCall\StaticCallToFunctionRector`
+- class: `Rector\Core\Rector\StaticCall\StaticCallToFunctionRector`
 
 Turns static call to function call.
 
 ```yaml
 services:
-    Rector\Rector\StaticCall\StaticCallToFunctionRector:
+    Rector\Core\Rector\StaticCall\StaticCallToFunctionRector:
         $staticCallToFunction:
             OldClass:
                 oldMethod: new_function
@@ -9927,13 +9924,13 @@ services:
 
 ### `StringToClassConstantRector`
 
-- class: `Rector\Rector\String_\StringToClassConstantRector`
+- class: `Rector\Core\Rector\String_\StringToClassConstantRector`
 
 Changes strings to specific constants
 
 ```yaml
 services:
-    Rector\Rector\String_\StringToClassConstantRector:
+    Rector\Core\Rector\String_\StringToClassConstantRector:
         compiler.post_dump:
             - Yet\AnotherClass
             - CONSTANT
@@ -9956,13 +9953,13 @@ services:
 
 ### `SwapClassMethodArgumentsRector`
 
-- class: `Rector\Rector\StaticCall\SwapClassMethodArgumentsRector`
+- class: `Rector\Core\Rector\StaticCall\SwapClassMethodArgumentsRector`
 
 Reorder class method arguments, including their calls
 
 ```yaml
 services:
-    Rector\Rector\StaticCall\SwapClassMethodArgumentsRector:
+    Rector\Core\Rector\StaticCall\SwapClassMethodArgumentsRector:
         $newArgumentPositionsByMethodAndClass:
             SomeClass:
                 run:
@@ -9988,7 +9985,7 @@ services:
 
 ### `SwapFuncCallArgumentsRector`
 
-- class: `Rector\Rector\Argument\SwapFuncCallArgumentsRector`
+- class: `Rector\Core\Rector\Argument\SwapFuncCallArgumentsRector`
 
 Swap arguments in function calls
 
@@ -10007,13 +10004,13 @@ Swap arguments in function calls
 
 ### `ToStringToMethodCallRector`
 
-- class: `Rector\Rector\MagicDisclosure\ToStringToMethodCallRector`
+- class: `Rector\Core\Rector\MagicDisclosure\ToStringToMethodCallRector`
 
 Turns defined code uses of "__toString()" method  to specific method calls.
 
 ```yaml
 services:
-    Rector\Rector\MagicDisclosure\ToStringToMethodCallRector:
+    Rector\Core\Rector\MagicDisclosure\ToStringToMethodCallRector:
         SomeObject: getPath
 ```
 
@@ -10031,13 +10028,13 @@ services:
 
 ### `UnsetAndIssetToMethodCallRector`
 
-- class: `Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector`
+- class: `Rector\Core\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector`
 
 Turns defined `__isset`/`__unset` calls to specific method calls.
 
 ```yaml
 services:
-    Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
+    Rector\Core\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
         SomeContainer:
             isset: hasService
 ```
@@ -10052,7 +10049,7 @@ services:
 
 ```yaml
 services:
-    Rector\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
+    Rector\Core\Rector\MagicDisclosure\UnsetAndIssetToMethodCallRector:
         SomeContainer:
             unset: removeService
 ```
@@ -10069,13 +10066,13 @@ services:
 
 ### `WrapReturnRector`
 
-- class: `Rector\Rector\ClassMethod\WrapReturnRector`
+- class: `Rector\Core\Rector\ClassMethod\WrapReturnRector`
 
 Wrap return value of specific method
 
 ```yaml
 services:
-    Rector\Rector\ClassMethod\WrapReturnRector:
+    Rector\Core\Rector\ClassMethod\WrapReturnRector:
         SomeClass:
             getItem: array
 ```

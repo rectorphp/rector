@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Console\Command;
+namespace Rector\Core\Console\Command;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
@@ -18,14 +18,14 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\TypeUtils;
-use Rector\Console\Shell;
+use Rector\Core\Console\Shell;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\StaticTypeMapper;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Testing\Application;
+namespace Rector\Core\Testing\Application;
 
 final class EnabledRectorsProvider
 {

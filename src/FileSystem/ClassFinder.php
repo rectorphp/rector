@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\FileSystem;
+namespace Rector\Core\FileSystem;
 
 use Nette\Loaders\RobotLoader;
 

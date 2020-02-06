@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Manipulator;
+namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use Rector\Exception\InvalidNodeTypeException;
+use Rector\Core\Exception\InvalidNodeTypeException;
 
 final class VisibilityManipulator
 {

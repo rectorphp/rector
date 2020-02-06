@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ReturnTypeDeclarationRector;
 
 use Iterator;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
-use Rector\ValueObject\PhpVersionFeature;
 
 final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
 {

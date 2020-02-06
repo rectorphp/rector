@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Laravel\Tests\Rector\Class_\InlineValidationRulesToArrayDefinitionRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Laravel\Rector\Class_\InlineValidationRulesToArrayDefinitionRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class InlineValidationRulesToArrayDefinitionRectorTest extends AbstractRectorTestCase
 {

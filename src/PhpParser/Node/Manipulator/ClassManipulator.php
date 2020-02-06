@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Manipulator;
+namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -23,14 +23,14 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TraitUse;
 use PHPStan\Type\Type;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
+use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
-use Rector\PhpParser\Node\NodeFactory;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class ClassManipulator
 {
@@ -376,7 +376,12 @@ final class ClassManipulator
         $implementedInterfaceNames = [];
 
         foreach ($class->implements as $implement) {
-            $implementedInterfaceNames[] = $this->nameResolver->getName($implement);
+            $interfaceName = $this->nameResolver->getName($implement);
+            if (! is_string($interfaceName)) {
+                throw new ShouldNotHappenException();
+            }
+
+            $implementedInterfaceNames[] = $interfaceName;
         }
 
         return $implementedInterfaceNames;
@@ -573,7 +578,12 @@ final class ClassManipulator
     {
         $classMethodNames = [];
         foreach ($classNode->getMethods() as $classMethod) {
-            $classMethodNames[] = $this->nameResolver->getName($classMethod);
+            $methodName = $this->nameResolver->getName($classMethod);
+            if (! is_string($methodName)) {
+                throw new ShouldNotHappenException();
+            }
+
+            $classMethodNames[] = $methodName;
         }
 
         return $classMethodNames;

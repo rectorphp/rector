@@ -18,8 +18,8 @@ use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
 use Rector\CakePHPToSymfony\Template\TemplateMethodCallManipulator;
 use Rector\CakePHPToSymfony\TemplatePathResolver;
 use Rector\CodeQuality\CompactConverter;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://book.cakephp.org/2/en/controllers.html#rendering-a-specific-view

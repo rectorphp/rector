@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php;
+namespace Rector\Core\Php;
 
 use Nette\Utils\Strings;
 

@@ -1,16 +1,16 @@
 <?php
 
-namespace Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Fixture;
+namespace Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Fixture;
 
-use Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
+use Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
 
 final class SomeOtherController
 {
     /**
-     * @var \Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory
+     * @var \Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory
      */
     private $mySomeFactory;
-    public function __construct(\Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory $mySomeFactory)
+    public function __construct(\Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory $mySomeFactory)
     {
         $this->mySomeFactory = $mySomeFactory;
     }
@@ -24,17 +24,17 @@ final class SomeOtherController
 -----
 <?php
 
-namespace Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Fixture;
+namespace Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Fixture;
 
-use Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
+use Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
 
 final class SomeOtherController
 {
     /**
-     * @var \Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory
+     * @var \Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory
      */
     private $mySomeFactory;
-    public function __construct(\Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory $mySomeFactory)
+    public function __construct(\Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory $mySomeFactory)
     {
         $this->mySomeFactory = $mySomeFactory;
     }

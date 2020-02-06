@@ -1,5 +1,5 @@
 services:
-    Rector\Rector\Visibility\ChangeMethodVisibilityRector:
+    Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector:
         $methodToVisibilityByClass:
             Kdyby\Events\Subscriber:
                 getSubscribedEvents: 'static'

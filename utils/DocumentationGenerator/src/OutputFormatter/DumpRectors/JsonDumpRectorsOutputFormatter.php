@@ -7,9 +7,9 @@ namespace Rector\Utils\DocumentationGenerator\OutputFormatter\DumpRectors;
 use Nette\Utils\DateTime;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
-use Rector\Contract\Rector\RectorInterface;
+use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 use Rector\Utils\DocumentationGenerator\Contract\OutputFormatter\DumpRectorsOutputFormatterInterface;
 use Rector\Utils\DocumentationGenerator\RectorMetadataResolver;
 

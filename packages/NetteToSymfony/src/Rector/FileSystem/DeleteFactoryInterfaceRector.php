@@ -10,8 +10,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
-use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

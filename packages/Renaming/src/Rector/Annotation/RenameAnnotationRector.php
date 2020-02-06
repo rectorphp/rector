@@ -9,13 +9,13 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Rector\AbstractPHPUnitRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractPHPUnitRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\Annotation\RenameAnnotationRector\RenameAnnotationRectorTest
+ * @see \Rector\Core\Tests\Rector\Annotation\RenameAnnotationRector\RenameAnnotationRectorTest
  */
 final class RenameAnnotationRector extends AbstractPHPUnitRector
 {

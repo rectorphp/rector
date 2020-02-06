@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Exclusion\Check;
+namespace Rector\Core\Exclusion\Check;
 
 use Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
-use Rector\Contract\Exclusion\ExclusionCheckInterface;
-use Rector\Contract\Rector\PhpRectorInterface;
+use Rector\Core\Contract\Exclusion\ExclusionCheckInterface;
+use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ExcludeByDocBlockExclusionCheck implements ExclusionCheckInterface

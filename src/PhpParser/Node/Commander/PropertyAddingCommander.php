@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Commander;
+namespace Rector\Core\PhpParser\Node\Commander;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -10,8 +10,8 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Type\Type;
-use Rector\Contract\PhpParser\Node\CommanderInterface;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
+use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 
 /**
  * Adds new private properties to class + to constructor

@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\Assign\UseIncrementAssignRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Assign\UseIncrementAssignRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class UseIncrementAssignRectorTest extends AbstractRectorTestCase
 {

@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\ChangeArrayPushToArrayAssignR
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ChangeArrayPushToArrayAssignRectorTest extends AbstractRectorTestCase
 {

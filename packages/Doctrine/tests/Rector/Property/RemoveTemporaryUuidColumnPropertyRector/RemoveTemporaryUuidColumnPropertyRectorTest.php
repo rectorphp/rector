@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Doctrine\Tests\Rector\Property\RemoveTemporaryUuidColumnPropertyRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\Property\RemoveTemporaryUuidColumnPropertyRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveTemporaryUuidColumnPropertyRectorTest extends AbstractRectorTestCase
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Manipulator;
+namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
@@ -11,13 +11,13 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\Node\Value\ValueResolver;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class ClassMethodManipulator
 {
@@ -157,9 +157,16 @@ final class ClassMethodManipulator
         }
 
         foreach ($classMethodNode->params as $paramNode) {
-            if ($this->nodeTypeResolver->isObjectType($paramNode, $type)) {
-                return $this->nameResolver->getName($paramNode);
+            if (! $this->nodeTypeResolver->isObjectType($paramNode, $type)) {
+                continue;
             }
+
+            $paramName = $this->nameResolver->getName($paramNode);
+            if (! is_string($paramName)) {
+                throw new ShouldNotHappenException();
+            }
+
+            return $paramName;
         }
 
         $paramName = $this->resolveName($classMethodNode, $possibleNames);

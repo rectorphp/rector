@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\NodeTraverser;
+namespace Rector\Core\PhpParser\NodeTraverser;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;

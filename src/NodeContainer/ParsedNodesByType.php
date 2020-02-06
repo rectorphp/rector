@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeContainer;
+namespace Rector\Core\NodeContainer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -25,11 +25,11 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\Exception\NotImplementedException;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\NotImplementedException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\Node\Resolver\NameResolver;
 use ReflectionClass;
 
 /**
@@ -105,7 +105,9 @@ final class ParsedNodesByType
     }
 
     /**
-     * @return Node[]
+     * @template T of object
+     * @param class-string<T> $type
+     * @return Node[]|iterable<T>
      */
     public function getNodesByType(string $type): array
     {
@@ -337,13 +339,15 @@ final class ParsedNodesByType
     {
         $newNodesByClass = [];
 
-        foreach ($this->getNodesByType(New_::class) as $newNode) {
-            if (! $this->nameResolver->isName($newNode->class, $className)) {
+        /** @var New_[] $news */
+        $news = $this->getNodesByType(New_::class);
+
+        foreach ($news as $new) {
+            if (! $this->nameResolver->isName($new->class, $className)) {
                 continue;
             }
 
-            /** @var New_ $newNode */
-            $newNodesByClass[] = $newNode;
+            $newNodesByClass[] = $new;
         }
 
         return $newNodesByClass;

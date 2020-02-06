@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
+namespace Rector\Core\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
 
 use JMS\DiExtraBundle\Annotation as DI;
 
@@ -16,7 +16,7 @@ class ClassWithInjects35
 -----
 <?php
 
-namespace Rector\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
+namespace Rector\Core\Tests\Rector\Property\InjectAnnotationClassRector\Fixture;
 
 use JMS\DiExtraBundle\Annotation as DI;
 
