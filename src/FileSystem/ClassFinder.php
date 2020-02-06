@@ -22,6 +22,10 @@ final class ClassFinder
         $robotLoader->setTempDirectory(sys_get_temp_dir() . '/_class_finder');
         $robotLoader->rebuild();
 
-        return array_keys($robotLoader->getIndexedClasses());
+        $classes = array_keys($robotLoader->getIndexedClasses());
+
+        sort($classes);
+
+        return $classes;
     }
 }
