@@ -6,6 +6,8 @@ use Rector\Stubs\StubLoader;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+require_once 'phar://vendor/phpstan/phpstan/phpstan.phar/vendor/jetbrains/phpstorm-stubs/PhpStormStubsMap.php';
+
 // silent deprecations, since we test them
 error_reporting(E_ALL ^ E_DEPRECATED);
 

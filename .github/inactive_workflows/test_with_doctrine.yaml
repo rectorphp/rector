@@ -1,3 +1,5 @@
+# temporary disabled till PHPStan autolaod bug is fixed
+# https://github.com/rectorphp/rector/pull/2800
 name: Test With Doctrine
 
 on:
@@ -27,6 +29,7 @@ jobs:
 
                     # remove phsptan config to prevent rector loading configs
                     rm phpstan.neon
+                    rm orm/phpstan.neon.dist
 
                     # do not intall doctrine/orm phpstan, it conflicts with Retor's one
                     composer install -d orm --no-dev
