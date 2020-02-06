@@ -27,6 +27,7 @@ jobs:
 
                     # remove phsptan config to prevent rector loading configs
                     rm phpstan.neon
+                    rm orm/phpstan.neon.dist
 
                     # do not intall doctrine/orm phpstan, it conflicts with Retor's one
                     composer install -d orm --no-dev
