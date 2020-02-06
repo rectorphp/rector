@@ -20,7 +20,7 @@ ini_set('display_errors', 'stderr');
 gc_disable();
 
 // temporary hackaround
-@include_once 'phar://vendor/phpstan/phpstan/phpstan.phar/vendor/jetbrains/phpstorm-stubs/PhpStormStubsMap.php';
+include_once 'phar://vendor/phpstan/phpstan/phpstan.phar/vendor/jetbrains/phpstorm-stubs/PhpStormStubsMap.php';
 
 // Require Composer autoload.php
 $autoloadIncluder = new AutoloadIncluder();

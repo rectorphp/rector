@@ -1,3 +1,5 @@
+# temporary disabled till PHPStan autolaod bug is fixed
+# https://github.com/rectorphp/rector/pull/2800
 name: Test With Doctrine
 
 on:

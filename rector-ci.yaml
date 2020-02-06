@@ -6,9 +6,9 @@ parameters:
         - 'nette-utils-code-quality'
 
     paths:
-        - 'src/Application'
-#        - 'packages'
-#        - 'tests'
+        - 'src'
+        - 'packages'
+        - 'tests'
 
     exclude_paths:
         - '/Fixture/'
