@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CakePHP\Rector\Name;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -13,6 +14,8 @@ use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
 /**
+ * @see \Rector\CakePHP\Tests\Rector\Name\ChangeSnakedFixtureNameToCamel\ChangeSnakedFixtureNameToCamelTest
+ *
  * @see https://book.cakephp.org/3.0/en/appendices/3-7-migration-guide.html
  */
 final class ChangeSnakedFixtureNameToCamelRector extends AbstractRector
@@ -62,21 +65,27 @@ PHP
             return null;
         }
 
-        foreach ($node->props as $i => $prop) {
-            if (! isset($prop->default->items)) {
+        foreach ($node->props as $prop) {
+            if (! $prop->default instanceof Array_) {
                 continue;
             }
-            foreach ($prop->default->items as $j => $item) {
-                $node->props[$i]->default->items[$j]->value = $this->renameFixtureName($item->value);
+
+            foreach ($prop->default->items as $item) {
+                if (! $item->value instanceof String_) {
+                    continue;
+                }
+
+                $this->renameFixtureName($item->value);
             }
         }
 
         return $node;
     }
 
-    private function renameFixtureName(String_ $name): String_
+    private function renameFixtureName(String_ $string): void
     {
-        [$prefix, $table] = explode('.', $name->value);
+        [$prefix, $table] = explode('.', $string->value);
+
         $table = array_map(
             function ($token): string {
                 $tokens = explode('_', $token);
@@ -85,8 +94,9 @@ PHP
             },
             explode('/', $table)
         );
+
         $table = implode('/', $table);
 
-        return new String_(sprintf('%s.%s', $prefix, $table), $name->getAttributes());
+        $string->value = sprintf('%s.%s', $prefix, $table);
     }
 }
