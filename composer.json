@@ -48,7 +48,6 @@
     "autoload": {
         "psr-4": {
             "Rector\\": "src",
-            "Rector\\Core\\": "src",
             "Rector\\Autodiscovery\\": "packages/Autodiscovery/src",
             "Rector\\Architecture\\": "packages/Architecture/src",
             "Rector\\AttributeAwarePhpDoc\\": "packages/AttributeAwarePhpDoc/src",
@@ -121,7 +120,6 @@
     "autoload-dev": {
         "psr-4": {
             "Rector\\Tests\\": "tests",
-            "Rector\\Core\\Tests\\": "tests",
             "Rector\\Autodiscovery\\Tests\\": "packages/Autodiscovery/tests",
             "Rector\\Architecture\\Tests\\": "packages/Architecture/tests",
             "Rector\\BetterPhpDocParser\\Tests\\": "packages/BetterPhpDocParser/tests",
@@ -220,16 +218,16 @@
             "@phpstan",
             "@docs"
         ],
-        "check-cs": "ecs check bin packages src tests utils compiler --ansi",
+        "check-cs": "vendor/bin/ecs check bin packages src tests utils compiler --ansi",
         "fix-cs": [
-            "ecs check bin packages src tests utils compiler --fix --ansi",
+            "vendor/bin/ecs check bin packages src tests utils compiler --fix --ansi",
             "ci/clean_trailing_spaces.sh"
         ],
-        "phpstan": "phpstan analyse packages src tests compiler/src --ansi --error-format symplify",
+        "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
         "changelog": [
-            "changelog-linker dump-merges --in-categories",
-            "changelog-linker link",
-            "changelog-linker cleanup"
+            "vendor/bin/changelog-linker dump-merges --in-categories",
+            "vendor/bin/changelog-linker link",
+            "vendor/bin/changelog-linker cleanup"
         ],
         "check-docs": [
             "bin/rector dump-rectors -o markdown | diff --ignore-space-change docs/AllRectorsOverview.md - ",
