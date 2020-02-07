@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\RectorDefinition;
+namespace Rector\Core\RectorDefinition;
 
-use Rector\Contract\RectorDefinition\CodeSampleInterface;
+use Rector\Core\Contract\RectorDefinition\CodeSampleInterface;
 
 /**
- * @see \Rector\Tests\RectorDefinition\RectorDefinitionTest
+ * @see \Rector\Core\Tests\RectorDefinition\RectorDefinitionTest
  */
 final class RectorDefinition
 {

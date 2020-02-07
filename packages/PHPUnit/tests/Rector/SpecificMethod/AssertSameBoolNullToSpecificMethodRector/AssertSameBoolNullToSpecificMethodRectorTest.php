@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertSameBoolNullToSpecificMethodRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AssertSameBoolNullToSpecificMethodRectorTest extends AbstractRectorTestCase
 {

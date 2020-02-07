@@ -19,13 +19,14 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Core\Configuration\ChangeConfiguration;
+use Rector\Core\PhpDoc\PhpDocClassRenamer;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpDoc\PhpDocClassRenamer;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 use Rector\Renaming\Exception\InvalidPhpCodeException;
 use ReflectionClass;
 
@@ -60,11 +61,14 @@ final class RenameClassRector extends AbstractRector
     public function __construct(
         ClassNaming $classNaming,
         PhpDocClassRenamer $phpDocClassRenamer,
+        ChangeConfiguration $changeConfiguration,
         array $oldToNewClasses = []
     ) {
         $this->classNaming = $classNaming;
         $this->oldToNewClasses = $oldToNewClasses;
         $this->phpDocClassRenamer = $phpDocClassRenamer;
+
+        $changeConfiguration->setOldToNewClasses($oldToNewClasses);
     }
 
     public function getDefinition(): RectorDefinition

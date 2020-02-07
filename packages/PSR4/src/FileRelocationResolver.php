@@ -7,7 +7,7 @@ namespace Rector\PSR4;
 use Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
-use Rector\ValueObject\RenamedNamespaceValueObject;
+use Rector\Core\ValueObject\RenamedNamespaceValueObject;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FileRelocationResolver

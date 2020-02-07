@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\Assign;
+namespace Rector\Core\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\Assign\PropertyAssignToMethodCallRector\PropertyAssignToMethodCallRectorTest
+ * @see \Rector\Core\Tests\Rector\Assign\PropertyAssignToMethodCallRector\PropertyAssignToMethodCallRectorTest
  */
 final class PropertyAssignToMethodCallRector extends AbstractRector
 {
@@ -35,7 +35,7 @@ final class PropertyAssignToMethodCallRector extends AbstractRector
         return new RectorDefinition('Turns property assign of specific type and property name to method call', [
             new ConfiguredCodeSample(
 <<<'PHP'
-$someObject = new SomeClass; 
+$someObject = new SomeClass;
 $someObject->oldProperty = false;
 PHP
                 ,

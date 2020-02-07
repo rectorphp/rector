@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source;
+namespace Rector\Core\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source;
 
 class AnotherClassWithInvalidConstants
 {
@@ -11,7 +11,7 @@ class AnotherClassWithInvalidConstants
 -----
 <?php
 
-namespace Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source;
+namespace Rector\Core\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source;
 
 class AnotherClassWithInvalidConstants
 {

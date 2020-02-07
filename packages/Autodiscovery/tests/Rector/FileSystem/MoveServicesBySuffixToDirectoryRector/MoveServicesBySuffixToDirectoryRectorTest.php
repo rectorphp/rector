@@ -6,7 +6,7 @@ namespace Rector\Autodiscovery\Tests\Rector\FileSystem\MoveServicesBySuffixToDir
 
 use Iterator;
 use Rector\Autodiscovery\Rector\FileSystem\MoveServicesBySuffixToDirectoryRector;
-use Rector\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractFileSystemRectorTestCase;
 
 final class MoveServicesBySuffixToDirectoryRectorTest extends AbstractFileSystemRectorTestCase
 {

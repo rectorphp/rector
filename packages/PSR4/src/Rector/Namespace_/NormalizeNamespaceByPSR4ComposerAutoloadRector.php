@@ -10,11 +10,11 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\PSR4\Composer\PSR4AutoloadPathsProvider;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\RectorDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**

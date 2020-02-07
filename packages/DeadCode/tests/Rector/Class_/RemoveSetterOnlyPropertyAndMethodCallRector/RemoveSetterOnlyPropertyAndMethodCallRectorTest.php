@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Class_\RemoveSetterOnlyPropertyAndMethodCallRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveSetterOnlyPropertyAndMethodCallRectorTest extends AbstractRectorTestCase
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Visibility\ChangeMethodVisibilityRector\Source;
+namespace Rector\Core\Tests\Rector\Visibility\ChangeMethodVisibilityRector\Source;
 
 class ParentObject
 {

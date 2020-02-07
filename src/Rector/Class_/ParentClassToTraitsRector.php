@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\Class_;
+namespace Rector\Core\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * Can handle cases like:
  * - https://doc.nette.org/en/2.4/migration-2-4#toc-nette-smartobject
  * - https://github.com/silverstripe/silverstripe-upgrader/issues/71#issue-320145944
- * @see \Rector\Tests\Rector\Class_\ParentClassToTraitsRector\ParentClassToTraitsRectorTest
+ * @see \Rector\Core\Tests\Rector\Class_\ParentClassToTraitsRector\ParentClassToTraitsRectorTest
  */
 final class ParentClassToTraitsRector extends AbstractRector
 {

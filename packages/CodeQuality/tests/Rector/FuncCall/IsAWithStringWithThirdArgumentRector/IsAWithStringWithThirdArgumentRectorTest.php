@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\IsAWithStringWithThirdArgumen
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class IsAWithStringWithThirdArgumentRectorTest extends AbstractRectorTestCase
 {

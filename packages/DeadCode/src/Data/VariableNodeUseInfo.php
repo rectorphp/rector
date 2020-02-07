@@ -6,7 +6,7 @@ namespace Rector\DeadCode\Data;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class VariableNodeUseInfo

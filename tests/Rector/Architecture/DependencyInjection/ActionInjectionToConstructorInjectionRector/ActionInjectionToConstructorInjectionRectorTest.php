@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector;
+namespace Rector\Core\Tests\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector;
 
 use Iterator;
-use Rector\Configuration\Option;
-use Rector\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector;
-use Rector\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Rector\Architecture\DependencyInjection\ActionInjectionToConstructorInjectionRector;
+use Rector\Core\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ActionInjectionToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {

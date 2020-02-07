@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Exception\Validator;
+namespace Rector\Core\Exception\Validator;
 
 use Exception;
 

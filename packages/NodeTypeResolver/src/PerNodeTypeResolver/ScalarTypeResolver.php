@@ -14,7 +14,7 @@ use PHPStan\Type\Constant\ConstantFloatType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Type;
-use Rector\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 
 final class ScalarTypeResolver implements PerNodeTypeResolverInterface

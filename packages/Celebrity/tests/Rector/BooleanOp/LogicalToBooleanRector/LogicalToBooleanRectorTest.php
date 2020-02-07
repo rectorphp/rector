@@ -6,7 +6,7 @@ namespace Rector\Celebrity\Tests\Rector\BooleanOp\LogicalToBooleanRector;
 
 use Iterator;
 use Rector\Celebrity\Rector\BooleanOp\LogicalToBooleanRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class LogicalToBooleanRectorTest extends AbstractRectorTestCase
 {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveDelegatingParentCallRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveDelegatingParentCallRectorTest extends AbstractRectorTestCase
 {

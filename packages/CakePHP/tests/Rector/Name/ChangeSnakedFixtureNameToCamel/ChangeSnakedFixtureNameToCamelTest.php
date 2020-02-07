@@ -6,7 +6,7 @@ namespace Rector\CakePHP\Tests\Rector\Name\ChangeSnakedFixtureNameToCamel;
 
 use Iterator;
 use Rector\CakePHP\Rector\Name\ChangeSnakedFixtureNameToCamelRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ChangeSnakedFixtureNameToCamelTest extends AbstractRectorTestCase
 {

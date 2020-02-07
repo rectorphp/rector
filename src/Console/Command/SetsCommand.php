@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Console\Command;
+namespace Rector\Core\Console\Command;
 
 use Nette\Utils\Strings;
-use Rector\Console\Shell;
-use Rector\Set\SetProvider;
+use Rector\Core\Console\Shell;
+use Rector\Core\Set\SetProvider;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

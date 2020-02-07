@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Argument\ArgumentDefaultValueReplacerRector;
+namespace Rector\Core\Tests\Rector\Argument\ArgumentDefaultValueReplacerRector;
 
 use Iterator;
-use Rector\Rector\Argument\ArgumentDefaultValueReplacerRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Rector\Argument\ArgumentDefaultValueReplacerRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ArgumentDefaultValueReplacerRectorTest extends AbstractRectorTestCase
 {

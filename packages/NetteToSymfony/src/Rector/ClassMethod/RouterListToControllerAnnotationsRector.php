@@ -15,16 +15,16 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
+use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\Util\RectorStrings;
 use Rector\FrameworkMigration\Symfony\ImplicitToExplicitRoutingAnnotationDecorator;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
-use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
-use Rector\Util\RectorStrings;
 use ReflectionMethod;
 
 /**
@@ -186,27 +186,31 @@ PHP
     private function resolveAssignRouteNodes(ClassMethod $classMethod): array
     {
         // look for <...>[] = IRoute<Type>
-        return $this->betterNodeFinder->find($classMethod->stmts, function (Node $classMethod): bool {
-            if (! $classMethod instanceof Assign) {
+
+        /** @var Assign[] $assings */
+        $assings = $this->betterNodeFinder->find($classMethod->stmts, function (Node $node): bool {
+            if (! $node instanceof Assign) {
                 return false;
             }
 
             // $routeList[] =
-            if (! $classMethod->var instanceof ArrayDimFetch) {
+            if (! $node->var instanceof ArrayDimFetch) {
                 return false;
             }
 
-            if ($this->isObjectType($classMethod->expr, IRouter::class)) {
+            if ($this->isObjectType($node->expr, IRouter::class)) {
                 return true;
             }
 
-            if ($classMethod->expr instanceof StaticCall) {
+            if ($node->expr instanceof StaticCall) {
                 // for custom static route factories
-                return $this->isRouteStaticCallMatch($classMethod->expr);
+                return $this->isRouteStaticCallMatch($node->expr);
             }
 
             return false;
         });
+
+        return $assings;
     }
 
     /**

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+namespace Rector\Core\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 
 use Iterator;
-use Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
+use Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
 
 final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
@@ -32,7 +32,7 @@ final class AddReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
         return [
             AddReturnTypeDeclarationRector::class => [
                 '$typehintForMethodByClass' => [
-                    'Rector\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass' => [
+                    'Rector\Core\Tests\Rector\Typehint\AddReturnTypeDeclarationRector\Fixture\SomeClass' => [
                         'parse' => 'array',
                         'resolve' => 'SomeType',
                         'nullable' => '?SomeType',

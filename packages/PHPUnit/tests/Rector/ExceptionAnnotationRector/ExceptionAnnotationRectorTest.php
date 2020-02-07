@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\ExceptionAnnotationRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\ExceptionAnnotationRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ExceptionAnnotationRectorTest extends AbstractRectorTestCase
 {

@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\Switch_\BinarySwitchToIfElseRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class BinarySwitchToIfElseRectorTest extends AbstractRectorTestCase
 {

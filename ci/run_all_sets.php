@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Nette\Utils\Strings;
-use Rector\Set\SetProvider;
+use Rector\Core\Set\SetProvider;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\ShellCode;

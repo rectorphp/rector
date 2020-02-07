@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyRegexPatternRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimplifyRegexPatternRectorTest extends AbstractRectorTestCase
 {

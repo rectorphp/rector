@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Phalcon\Tests\Rector\Assign\FlashWithCssClassesToExtraCallRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Phalcon\Rector\Assign\FlashWithCssClassesToExtraCallRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FlashWithCssClassesToExtraCallRectorTest extends AbstractRectorTestCase
 {

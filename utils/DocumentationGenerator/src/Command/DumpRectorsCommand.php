@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Utils\DocumentationGenerator\Command;
 
-use Rector\Console\Command\AbstractCommand;
-use Rector\Console\Shell;
-use Rector\Testing\Finder\RectorsFinder;
+use Rector\Core\Console\Command\AbstractCommand;
+use Rector\Core\Console\Shell;
+use Rector\Core\Testing\Finder\RectorsFinder;
 use Rector\Utils\DocumentationGenerator\Contract\OutputFormatter\DumpRectorsOutputFormatterInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

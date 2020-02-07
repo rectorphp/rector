@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Standalone;
+namespace Rector\Core\Standalone;
 
-use Rector\Console\Style\SymfonyStyleFactory;
-use Rector\DependencyInjection\RectorContainerFactory;
+use Rector\Core\Console\Style\SymfonyStyleFactory;
+use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 final class RectorStandaloneRunnerStaticFactory

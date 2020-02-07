@@ -7,6 +7,6 @@ services:
     Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector: null
     Rector\Laravel\Rector\FuncCall\HelperFunctionToConstructorInjectionRector: null
 
-    Rector\Rector\FuncCall\FunctionToNewRector:
+    Rector\Core\Rector\FuncCall\FunctionToNewRector:
         $functionToNew:
             collect: 'Illuminate\Support\Collection'

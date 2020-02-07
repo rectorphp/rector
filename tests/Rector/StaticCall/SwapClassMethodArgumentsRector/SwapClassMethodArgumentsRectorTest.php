@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector;
+namespace Rector\Core\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector;
 
 use Iterator;
-use Rector\Rector\StaticCall\SwapClassMethodArgumentsRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\Fixture\SomeClass;
+use Rector\Core\Rector\StaticCall\SwapClassMethodArgumentsRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\StaticCall\SwapClassMethodArgumentsRector\Fixture\SomeClass;
 
 final class SwapClassMethodArgumentsRectorTest extends AbstractRectorTestCase
 {

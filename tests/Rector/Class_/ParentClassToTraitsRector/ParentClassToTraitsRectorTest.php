@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Class_\ParentClassToTraitsRector;
+namespace Rector\Core\Tests\Rector\Class_\ParentClassToTraitsRector;
 
 use Iterator;
-use Rector\Rector\Class_\ParentClassToTraitsRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherParentObject;
-use Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject;
-use Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SecondTrait;
-use Rector\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait;
+use Rector\Core\Rector\Class_\ParentClassToTraitsRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\Class_\ParentClassToTraitsRector\Source\AnotherParentObject;
+use Rector\Core\Tests\Rector\Class_\ParentClassToTraitsRector\Source\ParentObject;
+use Rector\Core\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SecondTrait;
+use Rector\Core\Tests\Rector\Class_\ParentClassToTraitsRector\Source\SomeTrait;
 
 final class ParentClassToTraitsRectorTest extends AbstractRectorTestCase
 {

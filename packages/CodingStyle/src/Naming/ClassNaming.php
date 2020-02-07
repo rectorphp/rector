@@ -7,8 +7,8 @@ namespace Rector\CodingStyle\Naming;
 use Nette\Utils\Strings;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 
 final class ClassNaming
 {

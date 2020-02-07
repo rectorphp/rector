@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\MethodBody\FluentReplaceRector;
+namespace Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector;
 
 use Symfony\Component\Console\Command\Command;
 
@@ -18,7 +18,7 @@ class MultipleSomeCommand extends Command
 -----
 <?php
 
-namespace Rector\Tests\Rector\MethodBody\FluentReplaceRector;
+namespace Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector;
 
 use Symfony\Component\Console\Command\Command;
 

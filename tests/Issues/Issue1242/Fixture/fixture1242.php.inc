@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Issues\Issue1225\Fixture;
+namespace Rector\Core\Tests\Issues\Issue1225\Fixture;
 
 class Issue1225
 {
@@ -21,7 +21,7 @@ class Issue1225
 -----
 <?php
 
-namespace Rector\Tests\Issues\Issue1225\Fixture;
+namespace Rector\Core\Tests\Issues\Issue1225\Fixture;
 
 class Issue1225
 {

@@ -6,8 +6,8 @@ namespace Rector\CodeQuality\Tests\Rector\Class_\CompleteDynamicPropertiesRector
 
 use Iterator;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\ValueObject\PhpVersionFeature;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\ValueObject\PhpVersionFeature;
 
 final class CompleteDynamicPropertiesRectorTest extends AbstractRectorTestCase
 {

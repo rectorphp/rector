@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Testing\PHPUnit;
+namespace Rector\Core\Testing\PHPUnit;
 
 use Iterator;
 use Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\NodeDumper;
-use Rector\HttpKernel\RectorKernel;
-use Rector\PhpParser\BetterNodeDumper;
-use Rector\PhpParser\Parser\Parser;
-use Rector\Testing\StaticFixtureProvider;
+use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\PhpParser\BetterNodeDumper;
+use Rector\Core\PhpParser\Parser\Parser;
+use Rector\Core\Testing\StaticFixtureProvider;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

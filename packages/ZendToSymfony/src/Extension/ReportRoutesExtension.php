@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\ZendToSymfony\Extension;
 
-use Rector\Contract\Extension\ReportingExtensionInterface;
+use Rector\Core\Contract\Extension\ReportingExtensionInterface;
 use Rector\ZendToSymfony\Collector\RouteCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 

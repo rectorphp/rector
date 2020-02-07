@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Console\Command;
+namespace Rector\Core\Console\Command;
 
 use Nette\Utils\Strings;
 use Symfony\Component\Console\Command\Command;

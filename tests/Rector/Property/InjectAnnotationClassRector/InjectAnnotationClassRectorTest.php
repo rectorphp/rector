@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Property\InjectAnnotationClassRector;
+namespace Rector\Core\Tests\Rector\Property\InjectAnnotationClassRector;
 
 use DI\Annotation\Inject as PHPDIInject;
 use Iterator;
 use JMS\DiExtraBundle\Annotation\Inject;
-use Rector\Configuration\Option;
-use Rector\Rector\Property\InjectAnnotationClassRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Rector\Property\InjectAnnotationClassRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class InjectAnnotationClassRectorTest extends AbstractRectorTestCase
 {

@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\ClassConst\SplitGroupedConstantsAndPro
 
 use Iterator;
 use Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SplitGroupedConstantsAndPropertiesRectorTest extends AbstractRectorTestCase
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node;
+namespace Rector\Core\PhpParser\Node;
 
 use PhpParser\BuilderFactory;
 use PhpParser\BuilderHelpers;
@@ -31,12 +31,12 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Exception\NotImplementedException;
+use Rector\Core\Exception\NotImplementedException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 
 /**
- * @see \Rector\Tests\PhpParser\Node\NodeFactoryTest
+ * @see \Rector\Core\Tests\PhpParser\Node\NodeFactoryTest
  */
 final class NodeFactory
 {

@@ -19,11 +19,11 @@ use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\PhpParser\Parser\InlineCodeParser;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Parser\InlineCodeParser;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://stackoverflow.com/q/48161526/1348344
@@ -154,6 +154,7 @@ PHP
 
         $variableNodes = $this->betterNodeFinder->findInstanceOf($nodes, Variable::class);
 
+        /** @var Variable[] $filteredVariables */
         $filteredVariables = [];
         $alreadyAssignedVariables = [];
         foreach ($variableNodes as $variableNode) {

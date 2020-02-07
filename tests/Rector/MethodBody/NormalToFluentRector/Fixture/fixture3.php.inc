@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\MethodBody\NormalToFluentRector;
+namespace Rector\Core\Tests\Rector\MethodBody\NormalToFluentRector;
 
-use Rector\Tests\Rector\MethodBody\NormalToFluentRector\Source\FluentInterfaceClass;
+use Rector\Core\Tests\Rector\MethodBody\NormalToFluentRector\Source\FluentInterfaceClass;
 
 class ActionClass3
 {
@@ -19,9 +19,9 @@ class ActionClass3
 -----
 <?php
 
-namespace Rector\Tests\Rector\MethodBody\NormalToFluentRector;
+namespace Rector\Core\Tests\Rector\MethodBody\NormalToFluentRector;
 
-use Rector\Tests\Rector\MethodBody\NormalToFluentRector\Source\FluentInterfaceClass;
+use Rector\Core\Tests\Rector\MethodBody\NormalToFluentRector\Source\FluentInterfaceClass;
 
 class ActionClass3
 {

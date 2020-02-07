@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Doctrine\Tests\Rector\Class_\AddEntityIdByConditionRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector;
 use Rector\Doctrine\Tests\Rector\Class_\AddEntityIdByConditionRector\Source\SomeTrait;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AddEntityIdByConditionRectorTest extends AbstractRectorTestCase
 {

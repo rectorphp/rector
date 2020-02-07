@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DoctrineCodeQuality\Tests\Rector\Class_\InitializeDefaultEntityCollectionRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DoctrineCodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class InitializeDefaultEntityCollectionRectorTest extends AbstractRectorTestCase
 {

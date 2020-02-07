@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\Identical\SimplifyConditionsRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimplifyConditionsRectorTest extends AbstractRectorTestCase
 {

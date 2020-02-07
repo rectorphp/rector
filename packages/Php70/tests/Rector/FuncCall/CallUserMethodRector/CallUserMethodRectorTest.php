@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php70\Tests\Rector\FuncCall\CallUserMethodRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php70\Rector\FuncCall\CallUserMethodRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
  * @see https://www.mail-archive.com/php-dev@lists.php.net/msg11576.html

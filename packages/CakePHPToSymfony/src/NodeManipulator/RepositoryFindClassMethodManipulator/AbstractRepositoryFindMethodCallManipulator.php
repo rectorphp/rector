@@ -12,8 +12,8 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 
 abstract class AbstractRepositoryFindMethodCallManipulator
 {

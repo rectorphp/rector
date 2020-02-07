@@ -9,11 +9,11 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Php\Regex\RegexPatternArgumentManipulator;
-use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Php\Regex\RegexPatternArgumentManipulator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://3v4l.org/dRG8U

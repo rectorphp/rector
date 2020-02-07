@@ -10,7 +10,7 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\UnionType;
-use Rector\HttpKernel\RectorKernel;
+use Rector\Core\HttpKernel\RectorKernel;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\TypeDeclaration\TypeNormalizer;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;

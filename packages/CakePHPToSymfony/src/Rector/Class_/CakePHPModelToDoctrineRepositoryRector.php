@@ -13,9 +13,9 @@ use PhpParser\NodeTraverser;
 use Rector\CakePHPToSymfony\NodeFactory\DoctrineNodeFactory;
 use Rector\CakePHPToSymfony\NodeManipulator\DoctrineRepositoryClassMethodManipulator;
 use Rector\CakePHPToSymfony\Rector\AbstractCakePHPRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**

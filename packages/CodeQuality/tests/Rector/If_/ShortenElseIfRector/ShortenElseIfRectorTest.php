@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\ShortenElseIfRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\If_\ShortenElseIfRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ShortenElseIfRectorTest extends AbstractRectorTestCase
 {

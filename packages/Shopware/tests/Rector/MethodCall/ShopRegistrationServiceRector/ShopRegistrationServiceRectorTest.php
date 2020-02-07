@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Shopware\Tests\Rector\MethodCall\ShopRegistrationServiceRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Shopware\Rector\MethodCall\ShopRegistrationServiceRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ShopRegistrationServiceRectorTest extends AbstractRectorTestCase
 {

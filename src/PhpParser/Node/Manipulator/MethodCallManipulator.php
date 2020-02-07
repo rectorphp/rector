@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Manipulator;
+namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -10,10 +10,10 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class MethodCallManipulator
 {
@@ -83,6 +83,7 @@ final class MethodCallManipulator
         }
 
         $methodCalls = array_merge($chainMethodCalls, $onVariableMethodCalls);
+
         return $this->uniquateObjects($methodCalls);
     }
 
@@ -143,6 +144,10 @@ final class MethodCallManipulator
      * @see https://stackoverflow.com/a/4507991/1348344
      * @param object[] $objects
      * @return object[]
+     *
+     * @template T
+     * @phpstan-param array<T>|T[] $objects
+     * @phpstan-return array<T>|T[]
      */
     private function uniquateObjects(array $objects): array
     {
@@ -161,7 +166,8 @@ final class MethodCallManipulator
 
     private function findAssignToVariableName(Node $node, string $variableName): ?Assign
     {
-        return $this->betterNodeFinder->findFirst($node, function (Node $node) use ($variableName): bool {
+        /** @var Assign|null $assign */
+        $assign = $this->betterNodeFinder->findFirst($node, function (Node $node) use ($variableName): bool {
             if (! $node instanceof Assign) {
                 return false;
             }
@@ -172,6 +178,8 @@ final class MethodCallManipulator
 
             return $this->nameResolver->isName($node->var, $variableName);
         });
+
+        return $assign;
     }
 
     private function resolvePreviousNodeInSameScope(Node $parentNode): ?Node

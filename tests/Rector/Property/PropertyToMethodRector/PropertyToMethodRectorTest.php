@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Property\PropertyToMethodRector;
+namespace Rector\Core\Tests\Rector\Property\PropertyToMethodRector;
 
 use Iterator;
-use Rector\Rector\Property\PropertyToMethodRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Property\PropertyToMethodRector\Source\Translator;
+use Rector\Core\Rector\Property\PropertyToMethodRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\Property\PropertyToMethodRector\Source\Translator;
 
 final class PropertyToMethodRectorTest extends AbstractRectorTestCase
 {
@@ -38,7 +38,7 @@ final class PropertyToMethodRectorTest extends AbstractRectorTestCase
                             'set' => 'setLocale',
                         ],
                     ],
-                    'Rector\Tests\Rector\Property\PropertyToMethodRector\Fixture\SomeClassWithParameters' => [
+                    'Rector\Core\Tests\Rector\Property\PropertyToMethodRector\Fixture\SomeClassWithParameters' => [
                         'parameter' => [
                             'get' => [
                                 'method' => 'getConfig',

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Tests\Rector\ClassMethod\AddMethodCallBasedParamTypeRector;
 
 use Iterator;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedParamTypeRector;
-use Rector\ValueObject\PhpVersionFeature;
 
 final class AddMethodCallBasedParamTypeRectorTest extends AbstractRectorTestCase
 {

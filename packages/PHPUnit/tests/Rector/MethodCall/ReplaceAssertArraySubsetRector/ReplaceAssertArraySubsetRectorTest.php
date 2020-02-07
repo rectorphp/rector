@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\MethodCall\ReplaceAssertArraySubsetRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ReplaceAssertArraySubsetRectorTest extends AbstractRectorTestCase
 {

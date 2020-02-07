@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Doctrine\Tests\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\Identical\ChangeIdenticalUuidToEqualsMethodCallRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ChangeIdenticalUuidToEqualsMethodCallRectorTest extends AbstractRectorTestCase
 {

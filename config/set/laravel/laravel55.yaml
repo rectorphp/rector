@@ -5,7 +5,7 @@ services:
             Illuminate\Console\Command:
                 fire: 'handle'
 
-    Rector\Rector\Property\RenamePropertyRector:
+    Rector\Core\Rector\Property\RenamePropertyRector:
         $oldToNewPropertyByTypes:
             Illuminate\Database\Eloquent\Concerns\HasEvents:
                 events: 'dispatchesEvents'

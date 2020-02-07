@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\MethodBody;
+namespace Rector\Core\Rector\MethodBody;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\MethodBody\NormalToFluentRector\NormalToFluentRectorTest
+ * @see \Rector\Core\Tests\Rector\MethodBody\NormalToFluentRector\NormalToFluentRectorTest
  */
 final class NormalToFluentRector extends AbstractRector
 {

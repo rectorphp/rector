@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Issues\Issue594;
+namespace Rector\Core\Tests\Issues\Issue594;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Symfony\Rector\HttpKernel\GetRequestRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Issue594Test extends AbstractRectorTestCase
 {

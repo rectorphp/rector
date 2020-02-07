@@ -1,6 +1,6 @@
 services:
     # dependency-injection
-    Rector\Rector\Argument\ArgumentAdderRector:
+    Rector\Core\Rector\Argument\ArgumentAdderRector:
         $positionWithDefaultValueByMethodNamesByClassTypes:
             # added default value
             Symfony\Component\DependencyInjection\ContainerBuilder:

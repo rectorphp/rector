@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\MethodCall;
+namespace Rector\Core\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -11,15 +11,15 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
-use Rector\Naming\PropertyNaming;
+use Rector\Core\Naming\PropertyNaming;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
- * @see \Rector\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
+ * @see \Rector\Core\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
+ * @see \Rector\Core\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
  */
 final class ServiceGetterToConstructorInjectionRector extends AbstractRector
 {
@@ -72,7 +72,7 @@ class FirstService
      * @var AnotherService
      */
     private $anotherService;
-    
+
     public function __construct(AnotherService $anotherService)
     {
         $this->anotherService = $anotherService;
@@ -92,7 +92,7 @@ final class SomeClass
      * @var FirstService
      */
     private $firstService;
-    
+
     /**
      * @var AnotherService
      */

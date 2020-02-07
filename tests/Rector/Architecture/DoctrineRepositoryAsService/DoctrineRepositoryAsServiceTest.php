@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Architecture\DoctrineRepositoryAsService;
+namespace Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService;
 
 use Iterator;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
  * @covers \Rector\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector

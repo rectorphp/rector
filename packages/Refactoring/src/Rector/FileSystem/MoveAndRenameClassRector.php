@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Refactoring\Rector\FileSystem;
 
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
 use Rector\PSR4\Collector\RenamedClassesCollector;
 use Rector\PSR4\FileRelocationResolver;
-use Rector\RectorDefinition\RectorDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MoveAndRenameClassRector extends AbstractFileSystemRector

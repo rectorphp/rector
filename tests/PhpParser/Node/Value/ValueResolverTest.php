@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\PhpParser\Node\Value;
+namespace Rector\Core\Tests\PhpParser\Node\Value;
 
 use Iterator;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Plus;
 use PhpParser\Node\Name\FullyQualified;
-use Rector\HttpKernel\RectorKernel;
+use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Value\ValueResolver;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 final class ValueResolverTest extends AbstractKernelTestCase

@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\ClassConst\VarConstantCommentRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class VarConstantCommentRectorTest extends AbstractRectorTestCase
 {

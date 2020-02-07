@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\HttpKernel;
+namespace Rector\Core\HttpKernel;
 
-use Rector\Contract\Rector\RectorInterface;
-use Rector\DependencyInjection\Collector\RectorServiceArgumentCollector;
-use Rector\DependencyInjection\CompilerPass\MergeImportedRectorServiceArgumentsCompilerPass;
-use Rector\DependencyInjection\CompilerPass\RemoveExcludedRectorsCompilerPass;
-use Rector\DependencyInjection\Loader\TolerantRectorYamlFileLoader;
+use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\DependencyInjection\Collector\RectorServiceArgumentCollector;
+use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorServiceArgumentsCompilerPass;
+use Rector\Core\DependencyInjection\CompilerPass\RemoveExcludedRectorsCompilerPass;
+use Rector\Core\DependencyInjection\Loader\TolerantRectorYamlFileLoader;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\GlobFileLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;

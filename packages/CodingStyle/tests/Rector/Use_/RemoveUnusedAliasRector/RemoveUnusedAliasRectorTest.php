@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector;
 
 use Iterator;
 use Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveUnusedAliasRectorTest extends AbstractRectorTestCase
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Testing\PHPUnit;
+namespace Rector\Core\Testing\PHPUnit;
 
 use Iterator;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\Testing\StaticFixtureProvider;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Testing\StaticFixtureProvider;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 
 abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
@@ -46,7 +46,7 @@ abstract class AbstractGenericRectorTestCase extends AbstractKernelTestCase
     }
 
     /**
-     * Return interface type that extends @see \Rector\Contract\Rector\RectorInterface;
+     * Return interface type that extends @see \Rector\Core\Contract\Rector\RectorInterface;
      */
     abstract protected function getRectorInterface(): string;
 

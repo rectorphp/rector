@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Configuration;
+namespace Rector\Core\Configuration;
 
 use Jean85\PrettyVersions;
 use Nette\Utils\Strings;
-use Rector\Console\Output\JsonOutputFormatter;
-use Rector\Exception\Rector\RectorNotFoundOrNotValidRectorClassException;
-use Rector\Rector\AbstractRector;
-use Rector\Testing\PHPUnit\PHPUnitEnvironment;
+use Rector\Core\Console\Output\JsonOutputFormatter;
+use Rector\Core\Exception\Rector\RectorNotFoundOrNotValidRectorClassException;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
 use Symfony\Component\Console\Input\InputInterface;
 
 final class Configuration
@@ -53,6 +53,11 @@ final class Configuration
      * @var string
      */
     private $outputFile;
+
+    /**
+     * @var mixed[]
+     */
+    private $source = [];
 
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
@@ -140,6 +145,22 @@ final class Configuration
     public function getOutputFile(): ?string
     {
         return $this->outputFile;
+    }
+
+    /**
+     * @param string[] $source
+     */
+    public function setSource(array $source): void
+    {
+        $this->source = $source;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSource(): array
+    {
+        return $this->source;
     }
 
     private function canShowProgressBar(InputInterface $input): bool

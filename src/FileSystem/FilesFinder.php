@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\FileSystem;
+namespace Rector\Core\FileSystem;
 
 use Nette\Utils\Strings;
 use Symfony\Component\Finder\Finder;
@@ -12,7 +12,7 @@ use Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
- * @see \Rector\Tests\FileSystem\FilesFinder\FilesFinderTest
+ * @see \Rector\Core\Tests\FileSystem\FilesFinder\FilesFinderTest
  */
 final class FilesFinder
 {

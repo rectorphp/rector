@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php56\Tests\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AddDefaultValueForUndefinedVariableRectorTest extends AbstractRectorTestCase
 {

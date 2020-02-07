@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php70\Tests\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ThisCallOnStaticMethodToStaticCallRectorTest extends AbstractRectorTestCase
 {

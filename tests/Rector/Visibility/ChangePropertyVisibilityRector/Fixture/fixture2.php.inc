@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Fixture;
+namespace Rector\Core\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Fixture;
 
-use Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\ParentObject;
+use Rector\Core\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\ParentObject;
 
 class ClassThatInheritsAgain extends ParentObject
 {
@@ -13,9 +13,9 @@ class ClassThatInheritsAgain extends ParentObject
 -----
 <?php
 
-namespace Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Fixture;
+namespace Rector\Core\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Fixture;
 
-use Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\ParentObject;
+use Rector\Core\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source\ParentObject;
 
 class ClassThatInheritsAgain extends ParentObject
 {

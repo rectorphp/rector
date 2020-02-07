@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Rector\Console\Output;
+namespace Rector\Core\Console\Output;
 
 use Nette\Utils\Strings;
-use Rector\Application\ErrorAndDiffCollector;
-use Rector\Configuration\Configuration;
-use Rector\Configuration\Option;
-use Rector\Contract\Console\Output\OutputFormatterInterface;
+use Rector\Core\Application\ErrorAndDiffCollector;
+use Rector\Core\Configuration\Configuration;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Console\Output\OutputFormatterInterface;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\ValueObject\Application\Error;
+use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
-use Rector\ValueObject\Application\Error;
-use Rector\ValueObject\Reporting\FileDiff;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

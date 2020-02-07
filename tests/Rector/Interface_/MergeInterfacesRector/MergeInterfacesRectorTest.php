@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Interface_\MergeInterfacesRector;
+namespace Rector\Core\Tests\Rector\Interface_\MergeInterfacesRector;
 
 use Iterator;
-use Rector\Rector\Interface_\MergeInterfacesRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeInterface;
-use Rector\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeOldInterface;
+use Rector\Core\Rector\Interface_\MergeInterfacesRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeInterface;
+use Rector\Core\Tests\Rector\Interface_\MergeInterfacesRector\Source\SomeOldInterface;
 
 final class MergeInterfacesRectorTest extends AbstractRectorTestCase
 {

@@ -2,21 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Rector\Console\Command;
+namespace Rector\Core\Console\Command;
 
-use Rector\Application\ErrorAndDiffCollector;
-use Rector\Application\RectorApplication;
-use Rector\Autoloading\AdditionalAutoloader;
-use Rector\Configuration\Configuration;
-use Rector\Configuration\Option;
-use Rector\Console\Output\ConsoleOutputFormatter;
-use Rector\Console\Output\OutputFormatterCollector;
-use Rector\Console\Shell;
-use Rector\Extension\ReportingExtensionRunner;
-use Rector\FileSystem\FilesFinder;
-use Rector\Guard\RectorGuard;
-use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
-use Rector\Stubs\StubLoader;
+use Rector\Core\Application\ErrorAndDiffCollector;
+use Rector\Core\Application\RectorApplication;
+use Rector\Core\Autoloading\AdditionalAutoloader;
+use Rector\Core\Configuration\Configuration;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Console\Output\ConsoleOutputFormatter;
+use Rector\Core\Console\Output\OutputFormatterCollector;
+use Rector\Core\Console\Shell;
+use Rector\Core\Extension\ReportingExtensionRunner;
+use Rector\Core\FileSystem\FilesFinder;
+use Rector\Core\Guard\RectorGuard;
+use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
+use Rector\Core\Stubs\StubLoader;
+use Rector\Core\Yaml\YamlProcessor;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -86,6 +87,11 @@ final class ProcessCommand extends AbstractCommand
     private $stubLoader;
 
     /**
+     * @var YamlProcessor
+     */
+    private $yamlProcessor;
+
+    /**
      * @param string[] $paths
      * @param string[] $fileExtensions
      */
@@ -100,6 +106,7 @@ final class ProcessCommand extends AbstractCommand
         ReportingExtensionRunner $reportingExtensionRunner,
         RectorNodeTraverser $rectorNodeTraverser,
         StubLoader $stubLoader,
+        YamlProcessor $yamlProcessor,
         array $paths,
         array $fileExtensions
     ) {
@@ -117,6 +124,7 @@ final class ProcessCommand extends AbstractCommand
         $this->paths = $paths;
 
         parent::__construct();
+        $this->yamlProcessor = $yamlProcessor;
     }
 
     protected function configure(): void
@@ -197,6 +205,7 @@ final class ProcessCommand extends AbstractCommand
         $this->stubLoader->loadStubs();
 
         $source = $this->resolvesSourcePaths($input);
+        $this->configuration->setSource($source);
 
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles(
             $source,
@@ -205,6 +214,9 @@ final class ProcessCommand extends AbstractCommand
         );
 
         $this->additionalAutoloader->autoloadWithInputAndSource($input, $source);
+
+        // yaml
+        $this->yamlProcessor->run();
 
         $this->rectorApplication->runOnFileInfos($phpFileInfos);
 

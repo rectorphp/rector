@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php70\Tests\Rector\FunctionLike\Php4ConstructorRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php70\Rector\FunctionLike\Php4ConstructorRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
  * Some test cases used from:

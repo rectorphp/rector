@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\Property;
+namespace Rector\Core\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\Property\PropertyToMethodRector\PropertyToMethodRectorTest
+ * @see \Rector\Core\Tests\Rector\Property\PropertyToMethodRector\PropertyToMethodRectorTest
  */
 final class PropertyToMethodRector extends AbstractRector
 {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php72\Tests\Rector\FuncCall\StringifyDefineRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php72\Rector\FuncCall\StringifyDefineRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class StringifyDefineRectorTest extends AbstractRectorTestCase
 {

@@ -24,7 +24,7 @@ services:
                 __construct:
                     0: 'Sylius\Component\Core\Storage\CartStorageInterface'
 
-    Rector\Rector\Argument\ArgumentAdderRector:
+    Rector\Core\Rector\Argument\ArgumentAdderRector:
         $positionWithDefaultValueByMethodNamesByClassTypes:
             Sylius\Component\Mailer\Sender\SenderInterface:
                 send:
@@ -37,7 +37,7 @@ services:
                         name: '__unknown__'
                         default_value: false
 
-    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
+    Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         $typehintForMethodByClass:
             Sylius\Component\Order\Model\OrderInterface:
                 getAdjustmentsRecursively:

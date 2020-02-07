@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
+namespace Rector\Core\Tests\Rector\Argument\ArgumentAdderRector\Fixture;
 
 class SkipAnonymous
 {

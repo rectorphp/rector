@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class CollectOnFormVariableMethodCallsCollector
 {

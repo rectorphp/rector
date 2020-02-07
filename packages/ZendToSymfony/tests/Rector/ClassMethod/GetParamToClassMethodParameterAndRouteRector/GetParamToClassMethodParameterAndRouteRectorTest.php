@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\ZendToSymfony\Tests\Rector\ClassMethod\GetParamToClassMethodParameterAndRouteRector;
 
 use Iterator;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\ZendToSymfony\Rector\ClassMethod\GetParamToClassMethodParameterAndRouteRector;
 
 final class GetParamToClassMethodParameterAndRouteRectorTest extends AbstractRectorTestCase

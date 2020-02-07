@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
 final class StaticTypesInClassResolver

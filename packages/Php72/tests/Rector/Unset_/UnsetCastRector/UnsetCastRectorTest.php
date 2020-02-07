@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php72\Tests\Rector\Unset_\UnsetCastRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php72\Rector\Unset_\UnsetCastRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class UnsetCastRectorTest extends AbstractRectorTestCase
 {

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Rector\Php71\Tests\Rector\BinaryOp\IsIterableRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php71\Rector\BinaryOp\IsIterableRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\ValueObject\PhpVersionFeature;
 
 final class PolyfillRectorTest extends AbstractRectorTestCase
 {

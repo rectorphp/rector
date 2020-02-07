@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php73\Tests\Rector\BinaryOp\IsCountableRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php73\Rector\BinaryOp\IsCountableRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class IsCountableRectorTest extends AbstractRectorTestCase
 {

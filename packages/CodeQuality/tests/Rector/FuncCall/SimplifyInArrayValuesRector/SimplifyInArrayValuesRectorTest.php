@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\FuncCall\SimplifyInArrayValuesRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyInArrayValuesRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SimplifyInArrayValuesRectorTest extends AbstractRectorTestCase
 {

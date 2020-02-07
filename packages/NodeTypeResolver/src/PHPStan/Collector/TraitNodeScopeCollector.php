@@ -7,7 +7,7 @@ namespace Rector\NodeTypeResolver\PHPStan\Collector;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\VirtualNode;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 
 final class TraitNodeScopeCollector
 {

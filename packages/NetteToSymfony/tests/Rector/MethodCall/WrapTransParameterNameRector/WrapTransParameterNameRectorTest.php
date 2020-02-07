@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\WrapTransParameterNameRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\NetteToSymfony\Rector\MethodCall\WrapTransParameterNameRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class WrapTransParameterNameRectorTest extends AbstractRectorTestCase
 {

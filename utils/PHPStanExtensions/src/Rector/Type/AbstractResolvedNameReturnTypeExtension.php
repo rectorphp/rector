@@ -24,7 +24,7 @@ use PHPStan\Type\Type;
 
 /**
  * @see \Rector\PhpParser\Node\Resolver\NameResolver::getName()
- * @see \Rector\Rector\AbstractRector\NameResolverTrait::getName()
+ * @see \Rector\Core\Rector\AbstractRector\NameResolverTrait::getName()
  *
  * These returns always strings for nodes with required names, e.g. for @see ClassMethod
  */

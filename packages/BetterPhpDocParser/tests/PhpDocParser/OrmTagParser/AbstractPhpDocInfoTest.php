@@ -7,9 +7,9 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser;
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+use Rector\Core\HttpKernel\RectorKernel;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FileSystemRector\Parser\FileInfoParser;
-use Rector\HttpKernel\RectorKernel;
-use Rector\PhpParser\Node\BetterNodeFinder;
 use Symplify\PackageBuilder\Tests\AbstractKernelTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 

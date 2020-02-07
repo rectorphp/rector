@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Nette\Tests\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class PregFunctionToNetteUtilsStringsRectorTest extends AbstractRectorTestCase
 {

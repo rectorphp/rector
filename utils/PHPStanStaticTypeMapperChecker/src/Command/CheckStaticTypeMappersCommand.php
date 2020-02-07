@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Utils\PHPStanStaticTypeMapperChecker\Command;
 
 use PHPStan\Type\NonexistentParentClassType;
-use Rector\Console\Command\AbstractCommand;
-use Rector\Console\Shell;
+use Rector\Core\Console\Command\AbstractCommand;
+use Rector\Core\Console\Shell;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\Utils\PHPStanStaticTypeMapperChecker\Finder\PHPStanTypeClassFinder;
 use Symfony\Component\Console\Input\InputInterface;

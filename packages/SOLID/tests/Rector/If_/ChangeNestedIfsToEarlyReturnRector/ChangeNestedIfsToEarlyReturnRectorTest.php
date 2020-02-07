@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\SOLID\Tests\Rector\If_\ChangeNestedIfsToEarlyReturnRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\SOLID\Rector\If_\ChangeNestedIfsToEarlyReturnRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ChangeNestedIfsToEarlyReturnRectorTest extends AbstractRectorTestCase
 {

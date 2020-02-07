@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Fixture;
+namespace Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Fixture;
 
-use Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
+use Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
 
 final class SomeController
 {
@@ -16,17 +16,17 @@ final class SomeController
 -----
 <?php
 
-namespace Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Fixture;
+namespace Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Fixture;
 
-use Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
+use Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClass;
 
 final class SomeController
 {
     /**
-     * @var \Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory
+     * @var \Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory
      */
     private $myClassFactory;
-    public function __construct(\Rector\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory $myClassFactory)
+    public function __construct(\Rector\Core\Tests\Rector\Architecture\Factory\NewObjectToFactoryCreateRector\Source\MyClassFactory $myClassFactory)
     {
         $this->myClassFactory = $myClassFactory;
     }

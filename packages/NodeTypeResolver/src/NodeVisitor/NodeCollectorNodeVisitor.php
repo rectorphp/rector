@@ -6,7 +6,7 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
-use Rector\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\ParsedNodesByType;
 
 final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
 {

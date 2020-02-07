@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Legacy\Tests\Rector\ClassMethod\ChangeSingletonToServiceRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Legacy\Rector\ClassMethod\ChangeSingletonToServiceRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ChangeSingletonToServiceRectorTest extends AbstractRectorTestCase
 {

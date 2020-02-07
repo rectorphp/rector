@@ -7,7 +7,7 @@ services:
             Illuminate\Contracts\Validation\ValidatesWhenResolved:
                 validate: 'validateResolved'
 
-    Rector\Rector\Visibility\ChangeMethodVisibilityRector:
+    Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector:
         $methodToVisibilityByClass:
             Illuminate\Routing\Router:
                 addRoute: 'public'

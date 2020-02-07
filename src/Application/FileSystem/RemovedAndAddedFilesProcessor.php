@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Application\FileSystem;
+namespace Rector\Core\Application\FileSystem;
 
-use Rector\Configuration\Configuration;
-use Rector\ValueObject\MovedClassValueObject;
+use Rector\Core\Configuration\Configuration;
+use Rector\Core\ValueObject\MovedClassValueObject;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 

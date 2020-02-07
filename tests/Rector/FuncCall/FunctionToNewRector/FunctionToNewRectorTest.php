@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\FuncCall\FunctionToNewRector;
+namespace Rector\Core\Tests\Rector\FuncCall\FunctionToNewRector;
 
 use Iterator;
-use Rector\Rector\FuncCall\FunctionToNewRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Rector\FuncCall\FunctionToNewRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FunctionToNewRectorTest extends AbstractRectorTestCase
 {

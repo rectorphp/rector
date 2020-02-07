@@ -6,11 +6,11 @@ namespace Rector\Polyfill\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\If_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Polyfill\ConditionEvaluator;
 use Rector\Polyfill\ConditionResolver;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
  * @see https://www.php.net/manual/en/function.version-compare.php

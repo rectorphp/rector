@@ -298,7 +298,7 @@ Let's say we want to **change method calls from `set*` to `change*`**.
 
 ### 1. Create a New Rector and Implement Methods
 
-Create a class that extends [`Rector\Rector\AbstractRector`](/src/Rector/AbstractRector.php). It will inherit useful methods e.g. to check node type and name. See the source (or type `$this->` in an IDE) for a list of available methods.
+Create a class that extends [`Rector\Core\Rector\AbstractRector`](/src/Rector/AbstractRector.php). It will inherit useful methods e.g. to check node type and name. See the source (or type `$this->` in an IDE) for a list of available methods.
 
 ```php
 <?php
@@ -311,9 +311,9 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 final class MyFirstRector extends AbstractRector
 {

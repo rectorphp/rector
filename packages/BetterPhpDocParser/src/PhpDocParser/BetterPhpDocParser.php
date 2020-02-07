@@ -25,8 +25,8 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
 use Rector\BetterPhpDocParser\Printer\MultilineSpaceFormatPreserver;
 use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
-use Rector\Configuration\CurrentNodeProvider;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Configuration\CurrentNodeProvider;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 

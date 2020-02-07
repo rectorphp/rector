@@ -6,9 +6,9 @@ namespace Rector\Renaming\Tests\Rector\MethodCall\RenameStaticMethodRector;
 
 use Iterator;
 use Nette\Utils\Html;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Rector\MethodCall\RenameStaticMethodRector;
 use Rector\Renaming\Tests\Rector\MethodCall\RenameStaticMethodRector\Source\FormMacros;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RenameStaticMethodRectorTest extends AbstractRectorTestCase
 {

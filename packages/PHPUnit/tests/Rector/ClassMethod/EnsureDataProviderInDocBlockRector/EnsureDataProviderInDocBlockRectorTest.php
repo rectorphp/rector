@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\ClassMethod\EnsureDataProviderInDocBlockRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\ClassMethod\EnsureDataProviderInDocBlockRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class EnsureDataProviderInDocBlockRectorTest extends AbstractRectorTestCase
 {

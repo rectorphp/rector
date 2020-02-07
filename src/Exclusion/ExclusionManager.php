@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Exclusion;
+namespace Rector\Core\Exclusion;
 
 use PhpParser\Node;
-use Rector\Contract\Exclusion\ExclusionCheckInterface;
-use Rector\Contract\Rector\PhpRectorInterface;
+use Rector\Core\Contract\Exclusion\ExclusionCheckInterface;
+use Rector\Core\Contract\Rector\PhpRectorInterface;
 
 final class ExclusionManager
 {

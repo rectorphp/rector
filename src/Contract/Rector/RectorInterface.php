@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Contract\Rector;
+namespace Rector\Core\Contract\Rector;
 
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 interface RectorInterface
 {

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\Interface_;
+namespace Rector\Core\Rector\Interface_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\Interface_\RemoveInterfacesRector\RemoveInterfacesRectorTest
+ * @see \Rector\Core\Tests\Rector\Interface_\RemoveInterfacesRector\RemoveInterfacesRectorTest
  */
 final class RemoveInterfacesRector extends AbstractRector
 {

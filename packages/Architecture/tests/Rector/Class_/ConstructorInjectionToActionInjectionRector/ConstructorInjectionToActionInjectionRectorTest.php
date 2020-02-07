@@ -6,7 +6,7 @@ namespace Rector\Architecture\Tests\Rector\Class_\ConstructorInjectionToActionIn
 
 use Iterator;
 use Rector\Architecture\Rector\Class_\ConstructorInjectionToActionInjectionRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ConstructorInjectionToActionInjectionRectorTest extends AbstractRectorTestCase
 {

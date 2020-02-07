@@ -13,10 +13,10 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\Naming\PropertyNaming;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Naming\PropertyNaming;
+use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
 use Rector\Symfony\ServiceMapProvider;
 
 abstract class AbstractToConstructorInjectionRector extends AbstractRector

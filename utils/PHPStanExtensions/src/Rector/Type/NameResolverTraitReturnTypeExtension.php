@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\PHPStanExtensions\Rector\Type;
 
 use PHPStan\Reflection\MethodReflection;
-use Rector\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Rector\NameResolverTrait;
 
 final class NameResolverTraitReturnTypeExtension extends AbstractResolvedNameReturnTypeExtension

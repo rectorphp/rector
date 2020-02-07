@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Utils\PHPStanAttributeTypeSyncer\Command;
 
 use Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactoryCollector;
-use Rector\Console\Command\AbstractCommand;
-use Rector\Console\Shell;
+use Rector\Core\Console\Command\AbstractCommand;
+use Rector\Core\Console\Shell;
 use Rector\Utils\PHPStanAttributeTypeSyncer\Finder\NodeClassFinder;
 use Rector\Utils\PHPStanAttributeTypeSyncer\Generator\AttributeAwareNodeFactoryGenerator;
 use Rector\Utils\PHPStanAttributeTypeSyncer\Generator\AttributeAwareNodeGenerator;

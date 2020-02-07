@@ -6,9 +6,9 @@ namespace Rector\DeadCode\UnusedNodeResolver;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
-use Rector\NodeContainer\ParsedNodesByType;
-use Rector\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use ReflectionMethod;
 
 final class ClassUnusedPrivateClassMethodResolver

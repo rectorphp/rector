@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Doctrine\Tests\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveRepositoryFromEntityAnnotationRectorTest extends AbstractRectorTestCase
 {

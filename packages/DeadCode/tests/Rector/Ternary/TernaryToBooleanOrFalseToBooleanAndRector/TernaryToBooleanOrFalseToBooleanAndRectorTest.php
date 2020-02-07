@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class TernaryToBooleanOrFalseToBooleanAndRectorTest extends AbstractRectorTestCase
 {

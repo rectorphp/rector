@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector;
+namespace Rector\Core\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector;
 
 use Iterator;
-use Rector\Rector\Constant\RenameClassConstantsUseToStringsRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Rector\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\Source\OldClassWithConstants;
+use Rector\Core\Rector\Constant\RenameClassConstantsUseToStringsRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Tests\Rector\Constant\RenameClassConstantsUseToStringsRector\Source\OldClassWithConstants;
 
 final class RenameClassConstantsUseToStringsRectorTest extends AbstractRectorTestCase
 {

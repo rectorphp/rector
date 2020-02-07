@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\DependencyInjection\Collector;
+namespace Rector\Core\DependencyInjection\Collector;
 
 use Nette\Utils\Strings;
-use Rector\Contract\Rector\RectorInterface;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Symplify\PackageBuilder\Yaml\ParametersMerger;
 
 final class RectorServiceArgumentCollector

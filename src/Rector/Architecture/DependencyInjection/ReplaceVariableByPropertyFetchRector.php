@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\Architecture\DependencyInjection;
+namespace Rector\Core\Rector\Architecture\DependencyInjection;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
-use Rector\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
+use Rector\Core\Configuration\Rector\Architecture\DependencyInjection\VariablesToPropertyFetchCollection;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 final class ReplaceVariableByPropertyFetchRector extends AbstractRector
 {

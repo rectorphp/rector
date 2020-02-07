@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Tests\Rector\Instanceof_\RemoveDuplicatedInstanceOfRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DeadCode\Rector\Instanceof_\RemoveDuplicatedInstanceOfRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RemoveDuplicatedInstanceOfRectorTest extends AbstractRectorTestCase
 {

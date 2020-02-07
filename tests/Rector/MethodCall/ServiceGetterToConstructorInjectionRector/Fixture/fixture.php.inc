@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Fixture;
+namespace Rector\Core\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Fixture;
 
-use Rector\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
+use Rector\Core\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
 
 final class SomeClass
 {
@@ -27,9 +27,9 @@ final class SomeClass
 -----
 <?php
 
-namespace Rector\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Fixture;
+namespace Rector\Core\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Fixture;
 
-use Rector\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
+use Rector\Core\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\FirstService;
 
 final class SomeClass
 {
@@ -38,11 +38,11 @@ final class SomeClass
      */
     private $firstService;
     /**
-     * @var \Rector\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService
+     * @var \Rector\Core\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService
      */
     private $anotherService;
 
-    public function __construct(FirstService $firstService, \Rector\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService $anotherService)
+    public function __construct(FirstService $firstService, \Rector\Core\Tests\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\Source\AnotherService $anotherService)
     {
         $this->firstService = $firstService;
         $this->anotherService = $anotherService;

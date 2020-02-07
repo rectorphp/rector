@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector;
+namespace Rector\Core\Tests\Rector\MethodBody\ReturnThisRemoveRector;
 
 use Iterator;
-use Rector\Rector\MethodBody\ReturnThisRemoveRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Rector\MethodBody\ReturnThisRemoveRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase
 {
@@ -31,8 +31,8 @@ final class ReturnThisRemoveRectorTest extends AbstractRectorTestCase
         return [
             ReturnThisRemoveRector::class => [
                 '$classesToDefluent' => [
-                    'Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture\SomeClass',
-                    'Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture\SomeClassWithReturnAnnotations',
+                    'Rector\Core\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture\SomeClass',
+                    'Rector\Core\Tests\Rector\MethodBody\ReturnThisRemoveRector\Fixture\SomeClassWithReturnAnnotations',
                 ],
             ],
         ];

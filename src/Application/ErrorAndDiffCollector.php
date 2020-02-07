@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rector\Application;
+namespace Rector\Core\Application;
 
 use PhpParser\Node;
 use PHPStan\AnalysedCodeException;
-use Rector\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\ConsoleDiffer\DifferAndFormatter;
-use Rector\Error\ExceptionCorrector;
-use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
-use Rector\ValueObject\Application\Error;
-use Rector\ValueObject\Reporting\FileDiff;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
+use Rector\Core\Error\ExceptionCorrector;
+use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
+use Rector\Core\ValueObject\Application\Error;
+use Rector\Core\ValueObject\Reporting\FileDiff;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 

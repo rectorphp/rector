@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\MethodBody;
+namespace Rector\Core\Rector\MethodBody;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\ConfiguredCodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 
 /**
- * @see \Rector\Tests\Rector\MethodBody\ReturnThisRemoveRector\ReturnThisRemoveRectorTest
+ * @see \Rector\Core\Tests\Rector\MethodBody\ReturnThisRemoveRector\ReturnThisRemoveRectorTest
  */
 final class ReturnThisRemoveRector extends AbstractRector
 {
@@ -35,9 +35,11 @@ final class ReturnThisRemoveRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Removes "return $this;" from *fluent interfaces* for specified classes.', [
-            new ConfiguredCodeSample(
-                <<<'PHP'
+        return new RectorDefinition(
+            'Removes "return $this;" from *fluent interfaces* for specified classes.',
+            [
+                new ConfiguredCodeSample(
+                    <<<'PHP'
 class SomeClass
 {
     public function someFunction()
@@ -51,8 +53,8 @@ class SomeClass
     }
 }
 PHP
-                ,
-                <<<'PHP'
+                    ,
+                    <<<'PHP'
 class SomeClass
 {
     public function someFunction()
@@ -64,10 +66,11 @@ class SomeClass
     }
 }
 PHP
-                ,
-                [['SomeExampleClass']]
-            ),
-        ]);
+                    ,
+                    [['SomeExampleClass']]
+                ),
+            ]
+        );
     }
 
     /**

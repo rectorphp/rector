@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\TryCatchToExpectExceptionRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\TryCatchToExpectExceptionRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class TryCatchToExpectExceptionRectorTest extends AbstractRectorTestCase
 {

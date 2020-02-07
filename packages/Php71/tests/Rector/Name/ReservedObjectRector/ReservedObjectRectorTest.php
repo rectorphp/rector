@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php71\Tests\Rector\Name\ReservedObjectRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php71\Rector\Name\ReservedObjectRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ReservedObjectRectorTest extends AbstractRectorTestCase
 {

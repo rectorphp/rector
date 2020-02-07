@@ -7,6 +7,7 @@ namespace Rector\Renaming\Tests\Rector\Class_\RenameClassRector;
 use Iterator;
 use Manual\Twig\TwigFilter;
 use Manual_Twig_Filter;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Renaming\Exception\InvalidPhpCodeException;
 use Rector\Renaming\Rector\Class_\RenameClassRector;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Fixture\DuplicatedClass;
@@ -15,7 +16,6 @@ use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\NewClassWithoutTypo;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClass;
 use Rector\Renaming\Tests\Rector\Class_\RenameClassRector\Source\OldClassWithTypo;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class RenameClassRectorTest extends AbstractRectorTestCase
 {

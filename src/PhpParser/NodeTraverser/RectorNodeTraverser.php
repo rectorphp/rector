@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\NodeTraverser;
+namespace Rector\Core\PhpParser\NodeTraverser;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
-use Rector\Contract\Rector\PhpRectorInterface;
-use Rector\Testing\Application\EnabledRectorsProvider;
+use Rector\Core\Contract\Rector\PhpRectorInterface;
+use Rector\Core\Testing\Application\EnabledRectorsProvider;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class RectorNodeTraverser extends NodeTraverser

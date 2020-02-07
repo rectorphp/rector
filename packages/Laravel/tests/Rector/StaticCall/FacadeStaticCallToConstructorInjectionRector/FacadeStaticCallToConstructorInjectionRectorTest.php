@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Laravel\Tests\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Laravel\Rector\StaticCall\FacadeStaticCallToConstructorInjectionRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FacadeStaticCallToConstructorInjectionRectorTest extends AbstractRectorTestCase
 {

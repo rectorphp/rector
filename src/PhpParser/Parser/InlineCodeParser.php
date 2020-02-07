@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Parser;
+namespace Rector\Core\PhpParser\Parser;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -13,9 +13,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Parser;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
 
 final class InlineCodeParser
 {

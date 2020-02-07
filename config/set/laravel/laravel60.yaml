@@ -1,7 +1,7 @@
 # see https://laravel.com/docs/6.x/upgrade
 services:
     # https://github.com/laravel/docs/pull/5531/files
-    Rector\Rector\MethodCall\MethodCallToReturnRector:
+    Rector\Core\Rector\MethodCall\MethodCallToReturnRector:
         $methodNamesByType:
             Illuminate\Auth\Access\HandlesAuthorization:
                 - 'deny'
@@ -35,13 +35,13 @@ services:
         $oldToNewClasses:
             Illuminate\Support\Facades\Input: 'Illuminate\Support\Facades\Request'
 
-    Rector\Rector\Visibility\ChangeMethodVisibilityRector:
+    Rector\Core\Rector\Visibility\ChangeMethodVisibilityRector:
         $methodToVisibilityByClass:
             # https://github.com/laravel/framework/commit/e47e91417ab22e6af001db1dcbe75b87db218c1d
             Illuminate\Foundation\Http\FormRequest:
                 validationData: 'public'
 
-    Rector\Rector\Argument\ArgumentAdderRector:
+    Rector\Core\Rector\Argument\ArgumentAdderRector:
         $positionWithDefaultValueByMethodNamesByClassTypes:
             # https://github.com/laravel/framework/commit/6c1e014943a508afb2c10869c3175f7783a004e1
             Illuminate\Database\Capsule\Manager:

@@ -9,7 +9,7 @@ services:
     Rector\NetteToSymfony\Rector\ClassMethod\RouterListToControllerAnnotationsRector: null
 
     # run(Request $appRequest): IResponse -> run(Request $appRequest): \Symfony\Component\HttpFoundation\Response
-    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
+    Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         $typehintForMethodByClass:
             Nette\Application\IPresenter:
                 run: 'Symfony\Component\HttpFoundation\Response'
@@ -42,7 +42,7 @@ services:
             Symfony\Component\Config\Loader\LoaderInterface:
                 addConfig: load
 
-    Rector\Rector\Interface_\RemoveInterfacesRector:
+    Rector\Core\Rector\Interface_\RemoveInterfacesRector:
         $interfacesToRemove:
             # Removes "implements IPresenter"
             - Nette\Application\IPresenter

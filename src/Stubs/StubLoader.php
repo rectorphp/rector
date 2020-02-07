@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Stubs;
+namespace Rector\Core\Stubs;
 
 use Nette\Loaders\RobotLoader;
 

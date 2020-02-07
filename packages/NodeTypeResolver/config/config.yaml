@@ -10,10 +10,10 @@ services:
             # "Type" is because the file is needed for PHPStan container only
             - '../src/PHPStan/TypeExtension/*'
 
-    Rector\Php\TypeAnalyzer: null
-    Rector\FileSystem\FilesFinder: null
-    Rector\PhpParser\Printer\BetterStandardPrinter: null
-    Rector\PhpParser\Node\BetterNodeFinder: null
+    Rector\Core\Php\TypeAnalyzer: null
+    Rector\Core\FileSystem\FilesFinder: null
+    Rector\Core\PhpParser\Printer\BetterStandardPrinter: null
+    Rector\Core\PhpParser\Node\BetterNodeFinder: null
 
     # PHPStan
     PHPStan\Reflection\ReflectionProvider:

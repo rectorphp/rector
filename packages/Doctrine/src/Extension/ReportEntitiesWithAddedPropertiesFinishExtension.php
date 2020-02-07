@@ -6,7 +6,7 @@ namespace Rector\Doctrine\Extension;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Json;
-use Rector\Contract\Extension\FinishingExtensionInterface;
+use Rector\Core\Contract\Extension\FinishingExtensionInterface;
 use Rector\Doctrine\Collector\UuidMigrationDataCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Node\Value;
+namespace Rector\Core\PhpParser\Node\Value;
 
 use PhpParser\ConstExprEvaluationException;
 use PhpParser\ConstExprEvaluator;
@@ -13,15 +13,15 @@ use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeContainer\ParsedNodesByType;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\Node\Resolver\NameResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
- * @see \Rector\Tests\PhpParser\Node\Value\ValueResolverTest
+ * @see \Rector\Core\Tests\PhpParser\Node\Value\ValueResolverTest
  */
 final class ValueResolver
 {

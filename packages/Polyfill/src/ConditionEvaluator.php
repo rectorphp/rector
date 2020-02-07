@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Polyfill\Contract\ConditionInterface;
 use Rector\Polyfill\ValueObject\BinaryToVersionCompareCondition;
 use Rector\Polyfill\ValueObject\VersionCompareCondition;

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\NetteToSymfony\Tests\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\NetteToSymfony\Rector\MethodCall\FromRequestGetParameterToAttributesGetRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class FromRequestGetParameterToAttributesGetRectorTest extends AbstractRectorTestCase
 {

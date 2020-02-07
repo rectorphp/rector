@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Utils\DocumentationGenerator\Contract\OutputFormatter;
 
-use Rector\Contract\Rector\RectorInterface;
+use Rector\Core\Contract\Rector\RectorInterface;
 
 interface DumpRectorsOutputFormatterInterface
 {

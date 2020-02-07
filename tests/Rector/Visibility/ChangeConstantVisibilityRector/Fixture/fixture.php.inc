@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source;
+namespace Rector\Core\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source;
 
-use Rector\Tests\Rector\Visibility\ChangeConstantVisibilityRector\Source\ParentObject;
+use Rector\Core\Tests\Rector\Visibility\ChangeConstantVisibilityRector\Source\ParentObject;
 
 class ClassWithInvalidConstants extends ParentObject
 {
@@ -19,9 +19,9 @@ class ClassWithInvalidConstants extends ParentObject
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source;
+namespace Rector\Core\Tests\Rector\Visibility\ChangePropertyVisibilityRector\Source;
 
-use Rector\Tests\Rector\Visibility\ChangeConstantVisibilityRector\Source\ParentObject;
+use Rector\Core\Tests\Rector\Visibility\ChangeConstantVisibilityRector\Source\ParentObject;
 
 class ClassWithInvalidConstants extends ParentObject
 {

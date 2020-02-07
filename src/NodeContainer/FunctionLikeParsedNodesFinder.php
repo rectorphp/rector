@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeContainer;
+namespace Rector\Core\NodeContainer;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\TypeUtils;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class FunctionLikeParsedNodesFinder
 {

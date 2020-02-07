@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertFalseStrposToContainsRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\PHPUnit\Rector\SpecificMethod\AssertFalseStrposToContainsRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AssertFalseStrposToContainsRectorTest extends AbstractRectorTestCase
 {

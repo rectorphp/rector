@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Rector\Argument\SwapFuncCallArgumentsRector;
+namespace Rector\Core\Tests\Rector\Argument\SwapFuncCallArgumentsRector;
 
 use Iterator;
-use Rector\Rector\Argument\SwapFuncCallArgumentsRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Rector\Argument\SwapFuncCallArgumentsRector;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class SwapFuncCallArgumentsRectorTest extends AbstractRectorTestCase
 {

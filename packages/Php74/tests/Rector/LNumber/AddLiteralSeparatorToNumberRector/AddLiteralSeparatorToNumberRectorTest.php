@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php74\Tests\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AddLiteralSeparatorToNumberRectorTest extends AbstractRectorTestCase
 {

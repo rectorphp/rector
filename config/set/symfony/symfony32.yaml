@@ -1,6 +1,6 @@
 services:
     # dependency-injection
-    Rector\Rector\Argument\ArgumentAdderRector:
+    Rector\Core\Rector\Argument\ArgumentAdderRector:
         $positionWithDefaultValueByMethodNamesByClassTypes:
             Symfony\Component\DependencyInjection\ContainerBuilder:
                 addCompilerPass:

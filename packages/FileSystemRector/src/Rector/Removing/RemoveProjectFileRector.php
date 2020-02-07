@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\FileSystemRector\Rector\Removing;
 
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\FileSystemRector\Configuration\Option;
 use Rector\FileSystemRector\Rector\AbstractFileSystemRector;
-use Rector\RectorDefinition\RectorDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**

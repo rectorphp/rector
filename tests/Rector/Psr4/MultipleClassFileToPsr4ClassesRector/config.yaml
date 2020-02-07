@@ -1,2 +1,2 @@
 services:
-    Rector\Rector\Psr4\MultipleClassFileToPsr4ClassesRector: null
+    Rector\Core\Rector\Psr4\MultipleClassFileToPsr4ClassesRector: null

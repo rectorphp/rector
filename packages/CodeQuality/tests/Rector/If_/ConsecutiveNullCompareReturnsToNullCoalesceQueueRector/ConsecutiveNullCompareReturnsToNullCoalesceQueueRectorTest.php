@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\If_\ConsecutiveNullCompareReturnsToNul
 
 use Iterator;
 use Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRectorTest extends AbstractRectorTestCase
 {

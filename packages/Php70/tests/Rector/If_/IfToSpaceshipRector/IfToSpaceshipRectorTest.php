@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php70\Tests\Rector\If_\IfToSpaceshipRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php70\Rector\If_\IfToSpaceshipRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class IfToSpaceshipRectorTest extends AbstractRectorTestCase
 {

@@ -7,9 +7,9 @@ namespace Rector\CodingStyle\Application;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use Rector\CodingStyle\Node\NameImporter;
-use Rector\Configuration\Option;
-use Rector\Contract\PhpParser\Node\CommanderInterface;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class NameImportingCommander implements CommanderInterface

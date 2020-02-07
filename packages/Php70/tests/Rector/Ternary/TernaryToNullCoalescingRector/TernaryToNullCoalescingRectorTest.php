@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Php70\Tests\Rector\Ternary\TernaryToNullCoalescingRector;
 
 use Iterator;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
  * Some tests copied from:

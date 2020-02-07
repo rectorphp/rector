@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\FuncCall\ConsistentPregDelimiterRector
 
 use Iterator;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ConsistentPregDelimiterRectorTest extends AbstractRectorTestCase
 {

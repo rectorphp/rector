@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Issues\Issue1225;
+namespace Rector\Core\Tests\Issues\Issue1225;
 
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class Issue1225Test extends AbstractRectorTestCase
 {

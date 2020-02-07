@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Rector\MethodBody\FluentReplaceRector;
+namespace Rector\Core\Tests\Rector\MethodBody\FluentReplaceRector;
 
 use DateTime;
 use Symfony\Component\Console\Command\Command;

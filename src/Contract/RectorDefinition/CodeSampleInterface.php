@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Contract\RectorDefinition;
+namespace Rector\Core\Contract\RectorDefinition;
 
 interface CodeSampleInterface
 {

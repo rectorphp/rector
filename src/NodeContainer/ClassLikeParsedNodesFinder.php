@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeContainer;
+namespace Rector\Core\NodeContainer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Resolver\NameResolver;
 
 final class ClassLikeParsedNodesFinder
 {

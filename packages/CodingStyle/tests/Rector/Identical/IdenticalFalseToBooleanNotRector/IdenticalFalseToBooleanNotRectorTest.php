@@ -6,7 +6,7 @@ namespace Rector\CodingStyle\Tests\Rector\Identical\IdenticalFalseToBooleanNotRe
 
 use Iterator;
 use Rector\CodingStyle\Rector\Identical\IdenticalFalseToBooleanNotRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class IdenticalFalseToBooleanNotRectorTest extends AbstractRectorTestCase
 {

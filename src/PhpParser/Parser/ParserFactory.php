@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PhpParser\Parser;
+namespace Rector\Core\PhpParser\Parser;
 
 use PhpParser\Lexer;
 use PhpParser\Parser;

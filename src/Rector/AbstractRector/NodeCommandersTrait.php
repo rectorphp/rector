@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\AbstractRector;
+namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
@@ -10,13 +10,13 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\Application\AppliedRectorCollector;
 use Rector\CodingStyle\Application\NameImportingCommander;
 use Rector\CodingStyle\Application\UseAddingCommander;
-use Rector\PhpParser\Node\Commander\NodeAddingCommander;
-use Rector\PhpParser\Node\Commander\NodeRemovingCommander;
-use Rector\PhpParser\Node\Commander\NodeReplacingCommander;
-use Rector\PhpParser\Node\Commander\PropertyAddingCommander;
+use Rector\Core\Application\AppliedRectorCollector;
+use Rector\Core\PhpParser\Node\Commander\NodeAddingCommander;
+use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
+use Rector\Core\PhpParser\Node\Commander\NodeReplacingCommander;
+use Rector\Core\PhpParser\Node\Commander\PropertyAddingCommander;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 

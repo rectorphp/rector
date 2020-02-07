@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Console\Style;
+namespace Rector\Core\Console\Style;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;

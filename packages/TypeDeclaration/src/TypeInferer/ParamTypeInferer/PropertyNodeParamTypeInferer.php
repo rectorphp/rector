@@ -11,8 +11,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
@@ -37,6 +38,9 @@ final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements 
         }
 
         $paramName = $this->nameResolver->getName($param);
+        if (! is_string($paramName)) {
+            throw new ShouldNotHappenException();
+        }
 
         /** @var ClassMethod $classMethod */
         $classMethod = $param->getAttribute(AttributeKey::PARENT_NODE);

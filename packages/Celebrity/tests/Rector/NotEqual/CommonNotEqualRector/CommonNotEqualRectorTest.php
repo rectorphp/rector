@@ -6,7 +6,7 @@ namespace Rector\Celebrity\Tests\Rector\NotEqual\CommonNotEqualRector;
 
 use Iterator;
 use Rector\Celebrity\Rector\NotEqual\CommonNotEqualRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class CommonNotEqualRectorTest extends AbstractRectorTestCase
 {

@@ -6,7 +6,7 @@ namespace Rector\ZendToSymfony\ValueObject;
 
 use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
-use Rector\Util\RectorStrings;
+use Rector\Core\Util\RectorStrings;
 
 final class RouteValueObject
 {

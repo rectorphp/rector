@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\Rector\AbstractRector;
+namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
-use Rector\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait

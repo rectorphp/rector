@@ -40,12 +40,12 @@ services:
                 setRequestInfo: setRequest
                 setRequestContext: setRequest
 
-    Rector\Rector\Property\RenamePropertyRector:
+    Rector\Core\Rector\Property\RenamePropertyRector:
         $oldToNewPropertyByTypes:
             Cake\ORM\Entity:
                 _properties: _fields
 
-    Rector\Rector\ClassMethod\AddReturnTypeDeclarationRector:
+    Rector\Core\Rector\ClassMethod\AddReturnTypeDeclarationRector:
         $typehintForMethodByClass:
             Cake\Http\BaseApplication:
                 bootstrap: 'void'

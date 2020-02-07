@@ -10,13 +10,13 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Type\MixedType;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
-use Rector\RectorDefinition\RectorDefinition;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Rector\TypeDeclaration\VendorLock\VendorLockResolver;
-use Rector\ValueObject\PhpVersionFeature;
 
 /**
  * @source https://wiki.php.net/rfc/typed_properties_v2#proposal

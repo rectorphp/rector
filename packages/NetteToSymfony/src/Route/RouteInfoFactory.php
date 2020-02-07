@@ -10,10 +10,10 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
-use Rector\NodeContainer\ParsedNodesByType;
-use Rector\PhpParser\Node\Resolver\NameResolver;
-use Rector\PhpParser\Node\Value\ValueResolver;
 
 final class RouteInfoFactory
 {

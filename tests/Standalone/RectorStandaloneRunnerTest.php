@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Standalone;
+namespace Rector\Core\Tests\Standalone;
 
 use PHPUnit\Framework\TestCase;
-use Rector\Standalone\RectorStandaloneRunner;
-use Rector\Standalone\RectorStandaloneRunnerStaticFactory;
+use Rector\Core\Standalone\RectorStandaloneRunner;
+use Rector\Core\Standalone\RectorStandaloneRunnerStaticFactory;
 
 final class RectorStandaloneRunnerTest extends TestCase
 {

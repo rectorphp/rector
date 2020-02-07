@@ -6,7 +6,7 @@ namespace Rector\CodeQuality\Tests\Rector\For_\ForToForeachRector;
 
 use Iterator;
 use Rector\CodeQuality\Rector\For_\ForToForeachRector;
-use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class ForToForeachRectorTest extends AbstractRectorTestCase
 {
