@@ -19,14 +19,15 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'stderr');
 gc_disable();
 
-// temporary hackaround
-include_once 'phar://vendor/phpstan/phpstan/phpstan.phar/vendor/jetbrains/phpstorm-stubs/PhpStormStubsMap.php';
-
 // Require Composer autoload.php
 $autoloadIncluder = new AutoloadIncluder();
 $autoloadIncluder->includeCwdVendorAutoloadIfExists();
 $autoloadIncluder->autoloadProjectAutoloaderFile('/../../autoload.php');
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
+
+// temporary hackaround
+// @see https://github.com/rectorphp/rector/issues/2749#issuecomment-582312655
+include_once 'phar://vendor/phpstan/phpstan/phpstan.phar/vendor/jetbrains/phpstorm-stubs/PhpStormStubsMap.php';
 
 try {
     $rectorConfigsResolver = new RectorConfigsResolver();
