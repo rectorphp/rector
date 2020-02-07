@@ -120,27 +120,29 @@ final class NodeScopeResolver
     /**
      * @param Class_|Interface_ $classOrInterfaceNode
      */
-    private function resolveClassOrInterfaceScope(Node $classOrInterfaceNode, MutatingScope $scope): MutatingScope
-    {
+    private function resolveClassOrInterfaceScope(
+        Node $classOrInterfaceNode,
+        MutatingScope $mutatingScope
+    ): MutatingScope {
         $className = $this->resolveClassName($classOrInterfaceNode);
         $classReflection = $this->reflectionProvider->getClass($className);
 
-        return $scope->enterClass($classReflection);
+        return $mutatingScope->enterClass($classReflection);
     }
 
     /**
-     * @param Class_|Interface_|Trait_ $classOrInterfaceNode
+     * @param Class_|Interface_|Trait_ $classLike
      */
-    private function resolveClassName(ClassLike $classOrInterfaceNode): string
+    private function resolveClassName(ClassLike $classLike): string
     {
-        if (isset($classOrInterfaceNode->namespacedName)) {
-            return (string) $classOrInterfaceNode->namespacedName;
+        if (isset($classLike->namespacedName)) {
+            return (string) $classLike->namespacedName;
         }
 
-        if ($classOrInterfaceNode->name === null) {
+        if ($classLike->name === null) {
             throw new ShouldNotHappenException();
         }
 
-        return $classOrInterfaceNode->name->toString();
+        return $classLike->name->toString();
     }
 }
