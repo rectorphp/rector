@@ -60,10 +60,10 @@ final class AttributeAwareNodeFactoryGenerator extends AbstractAttributeAwareNod
         );
 
         if (Strings::contains($phpDocParserNodeClass, '\\Type\\')) {
-            return __DIR__ . '/../../../../packages/AttributeAwarePhpDoc/src/AttributeAwareNodeFactory/Type/' . $shortClassName . '.php';
+            return __DIR__ . '/../../../../packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/Type/' . $shortClassName . '.php';
         }
 
-        return __DIR__ . '/../../../../packages/AttributeAwarePhpDoc/src/AttributeAwareNodeFactory/PhpDoc/' . $shortClassName . '.php';
+        return __DIR__ . '/../../../../packages/attribute-aware-php-doc/src/AttributeAwareNodeFactory/PhpDoc/' . $shortClassName . '.php';
     }
 
     private function reportGeneratedAttributeAwareNode(string $missingNodeClass, string $filePath): void
