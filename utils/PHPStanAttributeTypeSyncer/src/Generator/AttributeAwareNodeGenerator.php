@@ -59,10 +59,10 @@ final class AttributeAwareNodeGenerator extends AbstractAttributeAwareNodeGenera
         $shortClassName = $this->attributeClassNaming->createAttributeAwareShortClassName($phpDocParserNodeClass);
 
         if (Strings::contains($phpDocParserNodeClass, '\\Type\\')) {
-            return __DIR__ . '/../../../../packages/AttributeAwarePhpDoc/src/Ast/Type/' . $shortClassName . '.php';
+            return __DIR__ . '/../../../../packages/attribute-aware-php-doc/src/Ast/Type/' . $shortClassName . '.php';
         }
 
-        return __DIR__ . '/../../../../packages/AttributeAwarePhpDoc/src/Ast/PhpDoc/' . $shortClassName . '.php';
+        return __DIR__ . '/../../../../packages/attribute-aware-php-doc/src/Ast/PhpDoc/' . $shortClassName . '.php';
     }
 
     private function reportGeneratedAttributeAwareNode(string $missingNodeClass): void

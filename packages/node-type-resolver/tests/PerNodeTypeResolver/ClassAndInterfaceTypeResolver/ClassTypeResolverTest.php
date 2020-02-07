@@ -65,7 +65,7 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
             0,
             TypeFactoryStaticHelper::createUnionObjectType(
                 [
-                    'AnonymousClass691b1ff75a776cc58f309db3866e022c',
+                    'AnonymousClassdefa360846b84894d4be1b25c2ce6da9',
                     ParentClass::class,
                     SomeInterface::class,
                     AnotherTrait::class,
