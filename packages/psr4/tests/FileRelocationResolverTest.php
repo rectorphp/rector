@@ -47,7 +47,7 @@ final class FileRelocationResolverTest extends AbstractKernelTestCase
             __DIR__ . '/Source/SomeFile.php',
             SomeFile::class,
             'Rector\PSR10\Tests\Source\SomeFile',
-            'packages/PSR10/tests/Source/SomeFile.php',
+            'packages/psr4/tests/Source/SomeFile.php',
         ];
     }
 }

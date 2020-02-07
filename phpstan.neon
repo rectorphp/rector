@@ -187,9 +187,7 @@ parameters:
         # false positive
         - '#Comparison operation "<" between 0 and 2 is always true#'
 
-        -
-            message: '#Method Rector\\Symfony\\Rector\\FrameworkBundle\\AbstractToConstructorInjectionRector\:\:getServiceTypeFromMethodCallArgument\(\) should return PHPStan\\Type\\Type but returns PHPStan\\Type\\Type\|null#'
-            path: packages/Symfony/src/Rector/FrameworkBundle/AbstractToConstructorInjectionRector.php
+        - '#Method Rector\\Symfony\\Rector\\FrameworkBundle\\AbstractToConstructorInjectionRector\:\:getServiceTypeFromMethodCallArgument\(\) should return PHPStan\\Type\\Type but returns PHPStan\\Type\\Type\|null#'
 
         - '#Parameter \#1 \$error_handler of function set_error_handler expects \(callable\(int, string, string, int, array\)\: bool\)\|null, Closure\(int, string\)\: void given#'
 

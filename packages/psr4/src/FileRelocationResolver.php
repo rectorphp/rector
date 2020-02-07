@@ -56,7 +56,7 @@ final class FileRelocationResolver
             $renamedNamespaceValueObject->getNewNamespace()
         );
 
-        return $this->replaceRalativeFilePathsWithBeforeAfter($smartFileInfo, $beforeToAfterPart);
+        return $this->replaceRelativeFilePathsWithBeforeAfter($smartFileInfo, $beforeToAfterPart);
     }
 
     public function resolveNewFileLocationFromOldClassToNewClass(
@@ -66,7 +66,7 @@ final class FileRelocationResolver
     ): string {
         $beforeToAfterPart = $this->resolveBeforeToAfterPartBetweenClassNames($oldClass, $newClass);
 
-        return $this->replaceRalativeFilePathsWithBeforeAfter($smartFileInfo, $beforeToAfterPart);
+        return $this->replaceRelativeFilePathsWithBeforeAfter($smartFileInfo, $beforeToAfterPart);
     }
 
     /**
@@ -154,7 +154,7 @@ final class FileRelocationResolver
     /**
      * @param string[] $beforeToAfterPart
      */
-    private function replaceRalativeFilePathsWithBeforeAfter(
+    private function replaceRelativeFilePathsWithBeforeAfter(
         SmartFileInfo $oldSmartFileInfo,
         array $beforeToAfterPart
     ): string {

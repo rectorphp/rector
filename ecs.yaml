@@ -54,13 +54,13 @@ parameters:
         Symplify\CodingStandard\Fixer\Order\PrivateMethodOrderByUseFixer: null
 
         PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer:
-            - 'packages/Php74/src/Rector/Double/RealToFloatTypeCastRector.php'
+            - 'packages/php-74/src/Rector/Double/RealToFloatTypeCastRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenReferenceSniff: null
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenStaticFunctionSniff:
             - 'src/Util/*.php'
-            - 'packages/BetterPhpDocParser/src/Annotation/AnnotationNaming.php'
+            - 'packages/better-php-doc-parser/src/Annotation/AnnotationNaming.php'
             - 'src/Testing/PHPUnit/PHPUnitEnvironment.php'
             # honesty first
             - 'src/*Static*.php'
@@ -73,62 +73,63 @@ parameters:
             # hidden API
             - 'src/Rector/AbstractRector.php'
 
+        # @todo resolve!!!
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
-            - 'packages/TypeDeclaration/src/TypeInferer/PropertyTypeInferer/ConstructorPropertyTypeInferer.php'
-            - 'packages/NodeTypeResolver/src/PhpDoc/NodeAnalyzer/DocBlockManipulator.php'
-            - 'packages/MinimalScope/src/Rector/Class_/ChangeLocalPropertyToVariableRector.php'
-            - 'packages/CodingStyle/src/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php'
+            - 'packages/type-declaration/src/TypeInferer/PropertyTypeInferer/ConstructorPropertyTypeInferer.php'
+            - 'packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/DocBlockManipulator.php'
+            - 'packages/minimal-scope/src/Rector/Class_/ChangeLocalPropertyToVariableRector.php'
+            - 'packages/coding-style/src/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php'
             # solve later
             - 'src/Console/Command/ScreenFileCommand.php'
-            - 'packages/Doctrine/src/Rector/ClassMethod/AddMethodCallBasedParamTypeRector.php'
-            - 'packages/TypeDeclaration/src/TypeInferer/ReturnTypeInferer/ReturnedNodesReturnTypeInferer.php'
-            - 'packages/NodeTypeResolver/src/NodeTypeResolver.php'
-            - 'packages/NodeTypeResolver/src/PerNodeTypeResolver/VariableTypeResolver.php'
-            - 'packages/Php71/src/Rector/FuncCall/RemoveExtraParametersRector.php'
-            - 'packages/SOLID/src/Analyzer/ClassConstantFetchAnalyzer.php'
+            - 'packages/doctrine/src/Rector/ClassMethod/AddMethodCallBasedParamTypeRector.php'
+            - 'packages/type-declaration/src/TypeInferer/ReturnTypeInferer/ReturnedNodesReturnTypeInferer.php'
+            - 'packages/node-type-resolver/src/NodeTypeResolver.php'
+            - 'packages/node-type-resolver/src/PerNodeTypeResolver/VariableTypeResolver.php'
+            - 'packages/php-71/src/Rector/FuncCall/RemoveExtraParametersRector.php'
+            - 'packages/solid/src/Analyzer/ClassConstantFetchAnalyzer.php'
             # tough logic
-            - 'packages/Autodiscovery/src/Analyzer/ClassAnalyzer.php'
-            - 'packages/CodingStyle/src/Imports/ImportSkipper.php'
-            - 'packages/PHPUnit/src/Rector/Class_/ArrayArgumentInTestToDataProviderRector.php'
-            - 'packages/BetterPhpDocParser/src/Ast/PhpDoc/*/*TagValueNode.php'
-            - 'packages/NodeTypeResolver/src/PhpDoc/NodeAnalyzer/FqnNamePhpDocNodeDecorator.php'
-            - 'packages/NodeTypeResolver/src/PHPStan/Type/StaticTypeAnalyzer.php'
+            - 'packages/autodiscovery/src/Analyzer/ClassAnalyzer.php'
+            - 'packages/coding-style/src/Imports/ImportSkipper.php'
+            - 'packages/phpunit/src/Rector/Class_/ArrayArgumentInTestToDataProviderRector.php'
+            - 'packages/better-php-doc-parser/src/Ast/PhpDoc/*/*TagValueNode.php'
+            - 'packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/FqnNamePhpDocNodeDecorator.php'
+            - 'packages/node-type-resolver/src/PHPStan/Type/StaticTypeAnalyzer.php'
             - 'src/NodeContainer/ParsedNodesByType.php'
 
-            - 'packages/PHPStanStaticTypeMapper/src/PHPStanStaticTypeMapper.php'
-            - 'packages/NodeTypeResolver/src/StaticTypeMapper.php'
+            - 'packages/phpstan-static-type-mapper/src/PHPStanStaticTypeMapper.php'
+            - 'packages/node-type-resolver/src/StaticTypeMapper.php'
 
-            - 'packages/PHPStan/src/Rector/Node/RemoveNonExistingVarAnnotationRector.php'
-            - 'packages/Architecture/src/Rector/Class_/ConstructorInjectionToActionInjectionRector.php'
+            - 'packages/phpstan/src/Rector/Node/RemoveNonExistingVarAnnotationRector.php'
+            - 'packages/architecture/src/Rector/Class_/ConstructorInjectionToActionInjectionRector.php'
             - 'src/PhpParser/Node/Commander/NodeRemovingCommander.php'
-            - 'packages/BetterPhpDocParser/src/*'
-            - 'packages/Symfony/src/Rector/Class_/MakeCommandLazyRector.php'
-            - 'packages/Legacy/src/Rector/ClassMethod/ChangeSingletonToServiceRector.php'
+            - 'packages/better-php-doc-parser/src/*'
+            - 'packages/symfony/src/Rector/Class_/MakeCommandLazyRector.php'
+            - 'packages/legacy/src/Rector/ClassMethod/ChangeSingletonToServiceRector.php'
+            - 'packages/coding-style/src/Rector/Use_/RemoveUnusedAliasRector.php'
+            - 'packages/nette-to-symfony/src/Route/RouteInfoFactory.php'
+            - 'utils/*/DumpNodesCommand.php'
+            - 'packages/code-quality/src/Rector/Identical/SimplifyBoolIdenticalTrueRector.php'
+            - 'packages/better-php-doc-parser/src/Attributes/Ast/AttributeAwareNodeFactory.php'
+            - 'packages/laravel/src/Rector/FuncCall/HelperFunctionToConstructorInjectionRector.php'
+            - 'packages/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php'
+            - 'packages/nette-tester-to-phpunit/src/AssertManipulator.php'
+            - 'packages/legacy/src/NodeAnalyzer/SingletonClassMethodAnalyzer.php'
             - 'src/Rector/Psr4/MultipleClassFileToPsr4ClassesRector.php'
             - 'src/PhpParser/Node/Resolver/NameResolver.php'
             - 'src/Rector/MethodBody/NormalToFluentRector.php'
-            - 'packages/CodingStyle/src/Rector/Use_/RemoveUnusedAliasRector.php'
-            - 'packages/NetteToSymfony/src/Route/RouteInfoFactory.php'
-            - 'utils/*/DumpNodesCommand.php'
-            - 'packages/CodeQuality/src/Rector/Identical/SimplifyBoolIdenticalTrueRector.php'
-            - 'packages/BetterPhpDocParser/src/Attributes/Ast/AttributeAwareNodeFactory.php'
-            - 'packages/Laravel/src/Rector/FuncCall/HelperFunctionToConstructorInjectionRector.php'
-            - 'packages/PhpSpecToPHPUnit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php'
-            - 'packages/NetteTesterToPHPUnit/src/AssertManipulator.php'
-            - 'packages/Legacy/src/NodeAnalyzer/SingletonClassMethodAnalyzer.php'
             - 'src/Rector/AbstractRector/ComplexRemovalTrait.php'
-            - 'packages/TypeDeclaration/src/VendorLock/VendorLockResolver.php'
-            - 'packages/TypeDeclaration/src/PhpParserTypeAnalyzer.php'
-            -  'src/PhpParser/Node/Manipulator/IfManipulator.php'
-            -  'packages/DeadCode/src/Rector/ClassMethod/RemoveDelegatingParentCallRector.php'
+            - 'src/PhpParser/Node/Manipulator/IfManipulator.php'
+            - 'packages/type-declaration/src/VendorLock/VendorLockResolver.php'
+            - 'packages/type-declaration/src/PhpParserTypeAnalyzer.php'
+            - 'packages/dead-code/src/Rector/ClassMethod/RemoveDelegatingParentCallRector.php'
             # aliases
-            - 'packages/CodingStyle/src/Rector/Namespace_/ImportFullyQualifiedNamesRector.php'
+            - 'packages/coding-style/src/Rector/Namespace_/ImportFullyQualifiedNamesRector.php'
 
             # copied 3rd party logic
-            - 'packages/Php70/src/EregToPcreTransformer.php'
+            - 'packages/php-70/src/EregToPcreTransformer.php'
             # dev
-            - 'packages/TypeDeclaration/src/Rector/FunctionLike/*TypeDeclarationRector.php'
-            - 'packages/Php70/src/Rector/If_/IfToSpaceshipRector.php'
+            - 'packages/type-declaration/src/Rector/FunctionLike/*TypeDeclarationRector.php'
+            - 'packages/php-70/src/Rector/If_/IfToSpaceshipRector.php'
 
         Symplify\CodingStandard\Sniffs\ControlStructure\SprintfOverContactSniff:
             # respects inherited pattern for better comparing
@@ -149,13 +150,13 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff.Found:
             # notes
-            - 'packages/Php72/src/Rector/Each/ListEachRector.php'
-            - 'packages/DeadCode/src/Rector/ClassMethod/RemoveOverriddenValuesRector.php'
-            - 'packages/PhpSpecToPHPUnit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php'
-            - 'packages/CakePHPToSymfony/tests/Rector/Class_/CakePHPModelToDoctrineRepositoryRector/CakePHPModelToDoctrineRepositoryRectorTest.php'
+            - 'packages/php-72/src/Rector/Each/ListEachRector.php'
+            - 'packages/dead-code/src/Rector/ClassMethod/RemoveOverriddenValuesRector.php'
+            - 'packages/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php'
+            - 'packages/cakephp-to-symfony/tests/Rector/Class_/CakePHPModelToDoctrineRepositoryRector/CakePHPModelToDoctrineRepositoryRectorTest.php'
 
         PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer:
-            - 'packages/BetterPhpDocParser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php'
+            - 'packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php'
             # intentional "assertEquals()"
             - 'tests/PhpParser/Node/NodeFactoryTest.php'
             - '*TypeResolverTest.php'
@@ -170,10 +171,10 @@ parameters:
 
         PhpCsFixer\Fixer\Strict\StrictComparisonFixer:
             # part of the comparison logic
-            - 'packages/Polyfill/src/ConditionEvaluator.php'
+            - 'packages/polyfill/src/ConditionEvaluator.php'
 
         SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff.PartialUse:
-            - "packages/DeadCode/src/Rector/Plus/RemoveDeadZeroAndOneOperationRector.php"
-            - "packages/Php56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php"
+            - "packages/dead-code/src/Rector/Plus/RemoveDeadZeroAndOneOperationRector.php"
+            - "packages/php-56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php"
 
     line_ending: "\n"
