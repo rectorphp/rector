@@ -96,7 +96,7 @@ services:
                 buildValidator:
                     0: 'Cake\Event\EventInterface'
                 buildRules:
-                    0: 'Cake\Event\EventInterface'
+                    0: 'Cake\ORM\RulesChecker'
                 beforeRules:
                     0: 'Cake\Event\EventInterface'
                 afterRules:
