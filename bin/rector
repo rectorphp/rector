@@ -25,10 +25,6 @@ $autoloadIncluder->includeCwdVendorAutoloadIfExists();
 $autoloadIncluder->autoloadProjectAutoloaderFile('/../../autoload.php');
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 
-// temporary hackaround
-// @see https://github.com/rectorphp/rector/issues/2749#issuecomment-582312655
-include_once 'phar://vendor/phpstan/phpstan/phpstan.phar/vendor/jetbrains/phpstorm-stubs/PhpStormStubsMap.php';
-
 try {
     $rectorConfigsResolver = new RectorConfigsResolver();
     $configs = $rectorConfigsResolver->provide();
