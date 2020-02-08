@@ -12,6 +12,9 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\Analyzer\ClassConstantFetchAnalyzer;
+use Rector\SOLID\ValueObject\ConstantVisibility;
+use ReflectionClass;
+use ReflectionClassConstant;
 
 /**
  * @see \Rector\SOLID\Tests\Rector\ClassConst\PrivatizeLocalClassConstantRector\PrivatizeLocalClassConstantRectorTest
@@ -103,22 +106,18 @@ PHP
 
         /** @var string $constant */
         $constant = $this->getName($node);
-        $parentConstIsProtected = false;
 
-        $parentClassConstant = $this->findParentClassConstant($class, $constant);
-        if ($parentClassConstant !== null) {
-            // The parent's constant is public, so this one must become public too
-            if ($parentClassConstant->isPublic()) {
-                $this->makePublic($node);
-                return $node;
-            }
+        $parentClassConstantVisibility = $this->findParentClassConstantAndRefactorIfPossible($class, $constant);
 
-            $parentConstIsProtected = $parentClassConstant->isProtected();
+        // The parent's constant is public, so this one must become public too
+        if ($parentClassConstantVisibility !== null && $parentClassConstantVisibility->isPublic()) {
+            $this->makePublic($node);
+            return $node;
         }
 
         $useClasses = $this->findClassConstantFetches($class, $constant);
 
-        return $this->changeConstantVisibility($node, $useClasses, $parentConstIsProtected, $class);
+        return $this->changeConstantVisibility($node, $useClasses, $parentClassConstantVisibility, $class);
     }
 
     private function shouldSkip(ClassConst $classConst): bool
@@ -134,26 +133,54 @@ PHP
         return count($classConst->consts) !== 1;
     }
 
-    private function findParentClassConstant(string $class, string $constant): ?ClassConst
+    private function findParentClassConstantAndRefactorIfPossible(string $class, string $constant): ?ConstantVisibility
     {
         $classNode = $this->parsedNodesByType->findClass($class);
         if ($classNode !== null && $classNode->hasAttribute(AttributeKey::PARENT_CLASS_NAME)) {
-            /** @var string $parentClassName */
-            $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-            if ($parentClassName !== '') {
-                $parentClassConstant = $this->parsedNodesByType->findClassConstant($parentClassName, $constant);
+            /** @var string $parentClass */
+            $parentClass = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
+
+            if ($parentClass !== '') {
+                $parentClassConstant = $this->parsedNodesByType->findClassConstant($parentClass, $constant);
                 if ($parentClassConstant !== null) {
                     // Make sure the parent's constant has been refactored
                     $this->refactor($parentClassConstant);
 
-                    return $parentClassConstant;
+                    return new ConstantVisibility(
+                        $parentClassConstant->isPublic(),
+                        $parentClassConstant->isProtected(),
+                        $parentClassConstant->isPrivate()
+                    );
                 }
+
                 // If the constant isn't declared in the parent, it might be declared in the parent's parent
-                return $this->findParentClassConstant($parentClassName, $constant);
             }
         }
 
-        return null;
+        $reflectionClass = new ReflectionClass($class);
+        if (! $reflectionClass->getParentClass()) {
+            return null;
+        }
+
+        $parentClass = $reflectionClass->getParentClass();
+        if (! $parentClass) {
+            return null;
+        }
+
+        /** @var ReflectionClass $parentClass */
+        $parentClassConstantReflection = $this->resolveParentClassConstantReflection(
+            $parentClass->getName(),
+            $constant
+        );
+        if ($parentClassConstantReflection === null) {
+            return null;
+        }
+
+        return new ConstantVisibility(
+            $parentClassConstantReflection->isPublic(),
+            $parentClassConstantReflection->isProtected(),
+            $parentClassConstantReflection->isPrivate()
+        );
     }
 
     private function findClassConstantFetches(string $className, string $constantName): ?array
@@ -169,18 +196,18 @@ PHP
     private function changeConstantVisibility(
         ClassConst $classConst,
         ?array $useClasses,
-        bool $parentConstIsProtected,
+        ?ConstantVisibility $constantVisibility,
         string $class
     ): Node {
         // 1. is actually never used (@todo use in "dead-code" set)
         if ($useClasses === null) {
-            $this->makePrivateOrWeaker($classConst, $parentConstIsProtected);
+            $this->makePrivateOrWeaker($classConst, $constantVisibility);
             return $classConst;
         }
 
         // 2. is only local use? → private
         if ($useClasses === [$class]) {
-            $this->makePrivateOrWeaker($classConst, $parentConstIsProtected);
+            $this->makePrivateOrWeaker($classConst, $constantVisibility);
             return $classConst;
         }
 
@@ -194,11 +221,13 @@ PHP
         return $classConst;
     }
 
-    private function makePrivateOrWeaker(ClassConst $classConst, bool $protectedRequired): void
+    private function makePrivateOrWeaker(ClassConst $classConst, ?ConstantVisibility $parentConstantVisibility): void
     {
-        if ($protectedRequired) {
+        if ($parentConstantVisibility !== null && $parentConstantVisibility->isProtected()) {
             $this->makeProtected($classConst);
-        } else {
+        } elseif ($parentConstantVisibility !== null && $parentConstantVisibility->isPrivate() && ! $parentConstantVisibility->isProtected()) {
+            $this->makePrivate($classConst);
+        } elseif ($parentConstantVisibility === null) {
             $this->makePrivate($classConst);
         }
     }
@@ -220,5 +249,20 @@ PHP
         }
 
         return $isChild;
+    }
+
+    private function resolveParentClassConstantReflection(string $class, string $constant): ?ReflectionClassConstant
+    {
+        $parentReflectionClass = new ReflectionClass($class);
+
+        while ($parentReflectionClass !== false) {
+            if ($parentReflectionClass->hasConstant($constant)) {
+                return $parentReflectionClass->getReflectionConstant($constant);
+            }
+
+            $parentReflectionClass = $parentReflectionClass->getParentClass();
+        }
+
+        return null;
     }
 }
