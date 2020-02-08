@@ -11,8 +11,11 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\StringType;
+use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -127,16 +130,11 @@ PHP
         }
 
         $arrayStaticType = $this->getStaticType($expr);
-        if ($arrayStaticType instanceof ConstantArrayType) {
-            foreach ($arrayStaticType->getKeyTypes() as $keyType) {
-                // key cannot be string
-                if ($keyType instanceof ConstantStringType) {
-                    return true;
-                }
-            }
+        if ($this->isConstantArrayTypeWithStringKeyType($arrayStaticType)) {
+            return true;
         }
 
-        return false;
+        return $arrayStaticType instanceof ArrayType && $arrayStaticType->getKeyType() instanceof StringType;
     }
 
     private function resolveValue(Expr $expr): Expr
@@ -173,5 +171,21 @@ PHP
     private function isIteratorToArrayFuncCall(Expr $expr): bool
     {
         return $expr instanceof FuncCall && $this->isName($expr, 'iterator_to_array');
+    }
+
+    private function isConstantArrayTypeWithStringKeyType(Type $type): bool
+    {
+        if (! $type instanceof ConstantArrayType) {
+            return false;
+        }
+
+        foreach ($type->getKeyTypes() as $keyType) {
+            // key cannot be string
+            if ($keyType instanceof ConstantStringType) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
