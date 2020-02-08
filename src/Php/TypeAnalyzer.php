@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Php;
 
 use Nette\Utils\Strings;
+use Rector\Core\ValueObject\PhpVersionFeature;
 
 final class TypeAnalyzer
 {
@@ -30,7 +31,7 @@ final class TypeAnalyzer
 
     public function __construct(PhpVersionProvider $phpVersionProvider)
     {
-        if ($phpVersionProvider->isAtLeast('7.2')) {
+        if ($phpVersionProvider->isAtLeast(PhpVersionFeature::OBJECT_TYPE)) {
             $this->phpSupportedTypes[] = 'object';
         }
     }
@@ -77,10 +78,5 @@ final class TypeAnalyzer
         }
 
         return $type;
-    }
-
-    public function isPhpSupported(string $type): bool
-    {
-        return in_array($type, $this->phpSupportedTypes, true);
     }
 }

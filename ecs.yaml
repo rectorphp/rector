@@ -75,6 +75,7 @@ parameters:
 
         # @todo resolve!!!
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+            - 'packages/solid/src/Rector/ClassConst/PrivatizeLocalClassConstantRector.php'
             - 'packages/type-declaration/src/TypeInferer/PropertyTypeInferer/ConstructorPropertyTypeInferer.php'
             - 'packages/node-type-resolver/src/PhpDoc/NodeAnalyzer/DocBlockManipulator.php'
             - 'packages/minimal-scope/src/Rector/Class_/ChangeLocalPropertyToVariableRector.php'

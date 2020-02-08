@@ -18,6 +18,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 
@@ -51,7 +52,7 @@ final class YieldNodesReturnTypeInferer extends AbstractTypeInferer implements R
                 $types[] = new ArrayType(new MixedType(), $yieldValueStaticType);
             }
 
-            if ($this->phpVersionProvider->isAtLeast('7.1')) {
+            if ($this->phpVersionProvider->isAtLeast(PhpVersionFeature::ITERABLE_TYPE)) {
                 // @see https://www.php.net/manual/en/language.types.iterable.php
                 $types[] = new IterableType(new MixedType(), new MixedType());
             } else {

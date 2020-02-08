@@ -235,3 +235,5 @@ parameters:
         - '#PHPDoc tag @return with type iterable<object\> is not subtype of native type array#'
         - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createClassReflectionFromNode\(\) return type with generic class ReflectionClass does not specify its types\: T#'
         - '#Method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
+        - '#Method Rector\\SOLID\\Rector\\ClassConst\\PrivatizeLocalClassConstantRector\:\:resolveParentClassConstantReflection\(\) should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
+        - '#PHPDoc tag @var for variable \$parentClass contains generic class ReflectionClass but does not specify its types\: T#'
