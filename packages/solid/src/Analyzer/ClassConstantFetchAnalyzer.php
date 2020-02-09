@@ -9,7 +9,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
 use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -22,9 +22,9 @@ final class ClassConstantFetchAnalyzer
     private $classConstantFetchByClassAndName = [];
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var NodeTypeResolver
@@ -38,11 +38,11 @@ final class ClassConstantFetchAnalyzer
 
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         ParsedNodeCollector $parsedNodeCollector
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->parsedNodeCollector = $parsedNodeCollector;
     }
 
@@ -66,7 +66,7 @@ final class ClassConstantFetchAnalyzer
 
     private function addClassConstantFetch(ClassConstFetch $classConstFetch): void
     {
-        $constantName = $this->nameResolver->getName($classConstFetch->name);
+        $constantName = $this->nodeNameResolver->getName($classConstFetch->name);
 
         if ($constantName === 'class' || $constantName === null) {
             // this is not a manual constant
@@ -105,7 +105,7 @@ final class ClassConstantFetchAnalyzer
             }
 
             foreach ($classOrInterface->getConstants() as $classConstant) {
-                if ($this->nameResolver->isName($classConstant, $constant)) {
+                if ($this->nodeNameResolver->isName($classConstant, $constant)) {
                     return $className;
                 }
             }

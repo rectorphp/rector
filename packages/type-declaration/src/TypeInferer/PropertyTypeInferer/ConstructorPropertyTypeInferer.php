@@ -53,7 +53,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
             return new MixedType();
         }
 
-        $propertyName = $this->nameResolver->getName($property);
+        $propertyName = $this->nodeNameResolver->getName($property);
         if (! is_string($propertyName)) {
             throw new ShouldNotHappenException();
         }
@@ -65,25 +65,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
 
         // A. infer from type declaration of parameter
         if ($param->type !== null) {
-            $type = $this->resolveParamTypeToPHPStanType($param);
-            if ($type instanceof MixedType) {
-                return new MixedType();
-            }
-
-            $types = [];
-
-            // it's an array - annotation → make type more precise, if possible
-            if ($type instanceof ArrayType) {
-                $types[] = $this->getResolveParamStaticTypeAsPHPStanType($classMethod, $propertyName);
-            } else {
-                $types[] = $type;
-            }
-
-            if ($this->isParamNullable($param)) {
-                $types[] = new NullType();
-            }
-
-            return $this->typeFactory->createMixedPassedOrUnionType($types);
+            return $this->resolveFromParamType($param, $classMethod, $propertyName);
         }
 
         return new MixedType();
@@ -131,7 +113,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
                 return null;
             }
 
-            if (! $this->nameResolver->isName($node, $propertyName)) {
+            if (! $this->nodeNameResolver->isName($node, $propertyName)) {
                 return null;
             }
 
@@ -165,7 +147,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
             return null;
         }
 
-        $fullyQualifiedName = $this->nameResolver->getName($param->type);
+        $fullyQualifiedName = $this->nodeNameResolver->getName($param->type);
         if (! $fullyQualifiedName) {
             return null;
         }
@@ -188,5 +170,28 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
         }
 
         return null;
+    }
+
+    private function resolveFromParamType(Param $param, ClassMethod $classMethod, string $propertyName): Type
+    {
+        $type = $this->resolveParamTypeToPHPStanType($param);
+        if ($type instanceof MixedType) {
+            return new MixedType();
+        }
+
+        $types = [];
+
+        // it's an array - annotation → make type more precise, if possible
+        if ($type instanceof ArrayType) {
+            $types[] = $this->getResolveParamStaticTypeAsPHPStanType($classMethod, $propertyName);
+        } else {
+            $types[] = $type;
+        }
+
+        if ($this->isParamNullable($param)) {
+            $types[] = new NullType();
+        }
+
+        return $this->typeFactory->createMixedPassedOrUnionType($types);
     }
 }

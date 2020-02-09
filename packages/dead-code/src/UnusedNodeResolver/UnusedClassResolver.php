@@ -14,7 +14,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
 
 final class UnusedClassResolver
@@ -25,18 +25,18 @@ final class UnusedClassResolver
     private $cachedUsedClassNames = [];
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var ParsedNodeCollector
      */
     private $parsedNodeCollector;
 
-    public function __construct(NameResolver $nameResolver, ParsedNodeCollector $parsedNodeCollector)
+    public function __construct(NodeNameResolver $nodeNameResolver, ParsedNodeCollector $parsedNodeCollector)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->parsedNodeCollector = $parsedNodeCollector;
     }
 
@@ -71,15 +71,15 @@ final class UnusedClassResolver
             return false;
         }
 
-        if ($this->nameResolver->isNames($class, ['*Controller', '*Presenter'])) {
+        if ($this->nodeNameResolver->isNames($class, ['*Controller', '*Presenter'])) {
             return false;
         }
-        return ! $this->nameResolver->isName($class, '*Test');
+        return ! $this->nodeNameResolver->isName($class, '*Test');
     }
 
     public function isClassUsed(Class_ $class): bool
     {
-        return $this->nameResolver->isNames($class, $this->getUsedClassNames());
+        return $this->nodeNameResolver->isNames($class, $this->getUsedClassNames());
     }
 
     /**
@@ -106,7 +106,7 @@ final class UnusedClassResolver
 
             if ($paramNode->type instanceof Name) {
                 /** @var string $paramTypeName */
-                $paramTypeName = $this->nameResolver->getName($paramNode->type);
+                $paramTypeName = $this->nodeNameResolver->getName($paramNode->type);
                 $classNames[] = $paramTypeName;
             } else {
                 throw new NotImplementedException();
@@ -126,7 +126,7 @@ final class UnusedClassResolver
         /** @var New_[] $newNodes */
         $newNodes = $this->parsedNodeCollector->getNodesByType(New_::class);
         foreach ($newNodes as $newNode) {
-            $newNodeClassName = $this->nameResolver->getName($newNode->class);
+            $newNodeClassName = $this->nodeNameResolver->getName($newNode->class);
             if (! is_string($newNodeClassName)) {
                 continue;
             }
@@ -147,7 +147,7 @@ final class UnusedClassResolver
         /** @var StaticCall[] $staticCallNodes */
         $staticCallNodes = $this->parsedNodeCollector->getNodesByType(StaticCall::class);
         foreach ($staticCallNodes as $staticCallNode) {
-            $staticClassName = $this->nameResolver->getName($staticCallNode->class);
+            $staticClassName = $this->nodeNameResolver->getName($staticCallNode->class);
             if (! is_string($staticClassName)) {
                 continue;
             }
@@ -167,7 +167,7 @@ final class UnusedClassResolver
 
         $classNames = [];
         foreach ($classConstFetches as $classConstFetch) {
-            $className = $this->nameResolver->getName($classConstFetch->class);
+            $className = $this->nodeNameResolver->getName($classConstFetch->class);
             if (! is_string($className)) {
                 continue;
             }

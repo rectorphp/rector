@@ -35,7 +35,7 @@ final class AllAssignNodePropertyTypeInferer extends AbstractTypeInferer impleme
             return new MixedType();
         }
 
-        $propertyName = $this->nameResolver->getName($property);
+        $propertyName = $this->nodeNameResolver->getName($property);
         if (! is_string($propertyName)) {
             throw new ShouldNotHappenException();
         }

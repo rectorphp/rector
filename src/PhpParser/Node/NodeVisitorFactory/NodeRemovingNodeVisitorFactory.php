@@ -7,7 +7,7 @@ namespace Rector\Core\PhpParser\Node\NodeVisitorFactory;
 use PhpParser\Node;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\NodeVisitor\NodeRemovingNodeVisitor;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 
 final class NodeRemovingNodeVisitorFactory
 {
@@ -17,14 +17,14 @@ final class NodeRemovingNodeVisitorFactory
     private $nodeFactory;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
-    public function __construct(NodeFactory $nodeFactory, NameResolver $nameResolver)
+    public function __construct(NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeFactory = $nodeFactory;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -32,6 +32,6 @@ final class NodeRemovingNodeVisitorFactory
      */
     public function createFromNodesToRemove(array $nodesToRemove): NodeRemovingNodeVisitor
     {
-        return new NodeRemovingNodeVisitor($nodesToRemove, $this->nodeFactory, $this->nameResolver);
+        return new NodeRemovingNodeVisitor($nodesToRemove, $this->nodeFactory, $this->nodeNameResolver);
     }
 }

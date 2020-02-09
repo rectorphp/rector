@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\Util\RectorStrings;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Strings\StringFormatConverter;
@@ -26,19 +26,19 @@ final class PhpSpecRenaming
     private $stringFormatConverter;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
-    public function __construct(StringFormatConverter $stringFormatConverter, NameResolver $nameResolver)
+    public function __construct(StringFormatConverter $stringFormatConverter, NodeNameResolver $nodeNameResolver)
     {
         $this->stringFormatConverter = $stringFormatConverter;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function renameMethod(ClassMethod $classMethod): void
     {
-        $name = $this->nameResolver->getName($classMethod);
+        $name = $this->nodeNameResolver->getName($classMethod);
         if ($name === null) {
             return;
         }

@@ -32,6 +32,24 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class RemoveNonExistingVarAnnotationRector extends AbstractRector
 {
+    /**
+     * @var class-string[]
+     */
+    private const NODES_TO_MATCH = [
+        Assign::class,
+        AssignRef::class,
+        Foreach_::class,
+        Static_::class,
+        Echo_::class,
+        Return_::class,
+        Expression::class,
+        Throw_::class,
+        If_::class,
+        While_::class,
+        Switch_::class,
+        Nop::class,
+    ];
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Removes non-existing @var annotations above the code', [
@@ -101,17 +119,14 @@ PHP
 
     private function shouldSkip(Node $node): bool
     {
-        return ! $node instanceof Assign
-            && ! $node instanceof AssignRef
-            && ! $node instanceof Foreach_
-            && ! $node instanceof Static_
-            && ! $node instanceof Echo_
-            && ! $node instanceof Return_
-            && ! $node instanceof Expression
-            && ! $node instanceof Throw_
-            && ! $node instanceof If_
-            && ! $node instanceof While_
-            && ! $node instanceof Switch_
-            && ! $node instanceof Nop;
+        foreach (self::NODES_TO_MATCH as $nodeToMatch) {
+            if (! is_a($node, $nodeToMatch, true)) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 }

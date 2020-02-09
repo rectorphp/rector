@@ -7,7 +7,7 @@ namespace Rector\Sensio\Helper;
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -17,13 +17,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class TemplateGuesser
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
-    public function __construct(NameResolver $nameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function resolveFromClassMethodNode(ClassMethod $classMethod, int $version = 5): string
@@ -38,7 +38,7 @@ final class TemplateGuesser
             throw new ShouldNotHappenException();
         }
 
-        $method = $this->nameResolver->getName($classMethod);
+        $method = $this->nodeNameResolver->getName($classMethod);
         if ($method === null) {
             throw new ShouldNotHappenException();
         }

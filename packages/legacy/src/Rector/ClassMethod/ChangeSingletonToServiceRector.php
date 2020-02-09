@@ -128,24 +128,31 @@ PHP
                 continue;
             }
 
-            if (! $property->isPublic()) {
-                // remove non-public empty
-                if ($property->stmts === []) {
-                    $this->removeNodeFromStatements($node, $property);
-                } else {
-                    $this->makePublic($property);
-                }
-            }
-        }
-
-        foreach ($node->getProperties() as $property) {
-            if (! $this->isName($property, $singletonPropertyName)) {
+            if ($property->isPublic()) {
                 continue;
             }
 
-            $this->removeNodeFromStatements($node, $property);
+            // remove non-public empty
+            if ($property->stmts === []) {
+                $this->removeNodeFromStatements($node, $property);
+            } else {
+                $this->makePublic($property);
+            }
         }
 
+        $this->removePropertyByName($node, $singletonPropertyName);
+
         return $node;
+    }
+
+    private function removePropertyByName(Class_ $class, string $propertyName): void
+    {
+        foreach ($class->getProperties() as $property) {
+            if (! $this->isName($property, $propertyName)) {
+                continue;
+            }
+
+            $this->removeNodeFromStatements($class, $property);
+        }
     }
 }

@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 
 final class LetManipulator
 {
@@ -18,21 +18,21 @@ final class LetManipulator
     private $betterNodeFinder;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
-    public function __construct(BetterNodeFinder $betterNodeFinder, NameResolver $nameResolver)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function isLetNeededInClass(Class_ $class): bool
     {
         foreach ($class->getMethods() as $method) {
             // new test
-            if ($this->nameResolver->isName($method, 'test*')) {
+            if ($this->nodeNameResolver->isName($method, 'test*')) {
                 continue;
             }
 
@@ -43,7 +43,7 @@ final class LetManipulator
                         return null;
                     }
 
-                    return $this->nameResolver->isName($node->name, 'beConstructedThrough');
+                    return $this->nodeNameResolver->isName($node->name, 'beConstructedThrough');
                 }
             );
 

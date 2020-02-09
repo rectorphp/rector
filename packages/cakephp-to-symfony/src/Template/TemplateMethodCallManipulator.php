@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\CakePHPToSymfony\TemplatePathResolver;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 
@@ -34,20 +34,20 @@ final class TemplateMethodCallManipulator
     private $callableNodeTraverser;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     public function __construct(
         ValueResolver $valueResolver,
         TemplatePathResolver $templatePathResolver,
         CallableNodeTraverser $callableNodeTraverser,
-        NameResolver $nameResolver
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->valueResolver = $valueResolver;
         $this->templatePathResolver = $templatePathResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function refactorExistingRenderMethodCall(ClassMethod $classMethod): void
@@ -121,10 +121,10 @@ final class TemplateMethodCallManipulator
             return false;
         }
 
-        if (! $this->nameResolver->isName($node->var, 'this')) {
+        if (! $this->nodeNameResolver->isName($node->var, 'this')) {
             return false;
         }
 
-        return $this->nameResolver->isName($node->name, 'render');
+        return $this->nodeNameResolver->isName($node->name, 'render');
     }
 }

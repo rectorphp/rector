@@ -8,15 +8,15 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\NodeContainer\NodeFinder\FunctionLikeParsedNodesFinder;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use ReflectionMethod;
 
 final class ClassUnusedPrivateClassMethodResolver
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var ClassManipulator
@@ -29,11 +29,11 @@ final class ClassUnusedPrivateClassMethodResolver
     private $functionLikeParsedNodesFinder;
 
     public function __construct(
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         ClassManipulator $classManipulator,
         FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder
     ) {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->classManipulator = $classManipulator;
         $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
     }
@@ -44,7 +44,7 @@ final class ClassUnusedPrivateClassMethodResolver
     public function getClassUnusedMethodNames(Class_ $class): array
     {
         /** @var string $className */
-        $className = $this->nameResolver->getName($class);
+        $className = $this->nodeNameResolver->getName($class);
 
         $classMethodCalls = $this->functionLikeParsedNodesFinder->findMethodCallsOnClass($className);
 
@@ -98,7 +98,7 @@ final class ClassUnusedPrivateClassMethodResolver
     private function filterOutInterfaceRequiredMethods(Class_ $class, array $unusedMethods): array
     {
         /** @var string $className */
-        $className = $this->nameResolver->getName($class);
+        $className = $this->nodeNameResolver->getName($class);
 
         $interfaces = class_implements($className);
 

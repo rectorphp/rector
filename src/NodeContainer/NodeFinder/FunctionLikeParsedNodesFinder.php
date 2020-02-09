@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\TypeUtils;
 use Rector\Core\NodeContainer\NodeCollector\ParsedFunctionLikeNodeCollector;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use ReflectionClass;
@@ -20,9 +20,9 @@ use ReflectionClass;
 final class FunctionLikeParsedNodesFinder
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var NodeTypeResolver
@@ -35,11 +35,11 @@ final class FunctionLikeParsedNodesFinder
     private $parsedFunctionLikeNodeCollector;
 
     public function __construct(
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector
     ) {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
     }
@@ -52,7 +52,7 @@ final class FunctionLikeParsedNodesFinder
             return null;
         }
 
-        $methodName = $this->nameResolver->getName($methodCall->name);
+        $methodName = $this->nodeNameResolver->getName($methodCall->name);
         if ($methodName === null) {
             return null;
         }
@@ -62,7 +62,7 @@ final class FunctionLikeParsedNodesFinder
 
     public function findClassMethodByStaticCall(StaticCall $staticCall): ?ClassMethod
     {
-        $methodName = $this->nameResolver->getName($staticCall->name);
+        $methodName = $this->nodeNameResolver->getName($staticCall->name);
         if ($methodName === null) {
             return null;
         }
@@ -135,7 +135,7 @@ final class FunctionLikeParsedNodesFinder
         }
 
         /** @var string|null $methodName */
-        $methodName = $this->nameResolver->getName($classMethod);
+        $methodName = $this->nodeNameResolver->getName($classMethod);
         if ($methodName === null) {
             return [];
         }

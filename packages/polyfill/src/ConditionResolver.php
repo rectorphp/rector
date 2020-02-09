@@ -12,7 +12,7 @@ use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Polyfill\Contract\ConditionInterface;
 use Rector\Polyfill\ValueObject\BinaryToVersionCompareCondition;
@@ -21,9 +21,9 @@ use Rector\Polyfill\ValueObject\VersionCompareCondition;
 final class ConditionResolver
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var ValueResolver
@@ -36,11 +36,11 @@ final class ConditionResolver
     private $phpVersionProvider;
 
     public function __construct(
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         ValueResolver $valueResolver,
         PhpVersionProvider $phpVersionProvider
     ) {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
         $this->phpVersionProvider = $phpVersionProvider;
     }
@@ -87,7 +87,7 @@ final class ConditionResolver
             return false;
         }
 
-        return $this->nameResolver->isName($node, 'version_compare');
+        return $this->nodeNameResolver->isName($node, 'version_compare');
     }
 
     private function resolveVersionCompareConditionForFuncCall(FuncCall $funcCall)

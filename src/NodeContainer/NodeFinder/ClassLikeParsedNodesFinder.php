@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ClassLikeParsedNodesFinder
@@ -21,14 +21,14 @@ final class ClassLikeParsedNodesFinder
     private $parsedNodeCollector;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
-    public function __construct(ParsedNodeCollector $parsedNodeCollector, NameResolver $nameResolver)
+    public function __construct(ParsedNodeCollector $parsedNodeCollector, NodeNameResolver $nodeNameResolver)
     {
         $this->parsedNodeCollector = $parsedNodeCollector;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -82,7 +82,7 @@ final class ClassLikeParsedNodesFinder
 
         foreach ($classLike->getTraitUses() as $traitUse) {
             foreach ($traitUse->traits as $trait) {
-                $traitName = $this->nameResolver->getName($trait);
+                $traitName = $this->nodeNameResolver->getName($trait);
                 if ($traitName === null) {
                     continue;
                 }

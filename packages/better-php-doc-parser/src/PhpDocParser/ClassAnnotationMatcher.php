@@ -43,16 +43,7 @@ final class ClassAnnotationMatcher
                     continue;
                 }
 
-                if ($useUse->alias !== null) {
-                    $unaliasedShortClass = Strings::substring($tag, Strings::length($useUse->alias->toString()));
-                    if (Strings::startsWith($unaliasedShortClass, '\\')) {
-                        return $useUse->name . $unaliasedShortClass;
-                    }
-
-                    return $useUse->name . '\\' . $unaliasedShortClass;
-                }
-
-                return $useUse->name->toString();
+                return $this->resolveName($tag, $useUse);
             }
         }
 
@@ -65,5 +56,19 @@ final class ClassAnnotationMatcher
         $shortNamePattern = preg_quote($shortName, '#');
 
         return (bool) Strings::match($tag, '#' . $shortNamePattern . '(\\\\[\w]+)?#i');
+    }
+
+    private function resolveName(string $tag, UseUse $useUse): string
+    {
+        if ($useUse->alias === null) {
+            return $useUse->name->toString();
+        }
+
+        $unaliasedShortClass = Strings::substring($tag, Strings::length($useUse->alias->toString()));
+        if (Strings::startsWith($unaliasedShortClass, '\\')) {
+            return $useUse->name . $unaliasedShortClass;
+        }
+
+        return $useUse->name . '\\' . $unaliasedShortClass;
     }
 }

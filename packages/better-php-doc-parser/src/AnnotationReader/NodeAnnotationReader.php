@@ -9,7 +9,7 @@ use Doctrine\Common\Annotations\Reader;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
@@ -25,14 +25,14 @@ final class NodeAnnotationReader
     private $reader;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
-    public function __construct(Reader $reader, NameResolver $nameResolver)
+    public function __construct(Reader $reader, NodeNameResolver $nodeNameResolver)
     {
         $this->reader = $reader;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -44,7 +44,7 @@ final class NodeAnnotationReader
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
 
         /** @var string $methodName */
-        $methodName = $this->nameResolver->getName($classMethod);
+        $methodName = $this->nodeNameResolver->getName($classMethod);
 
         $reflectionMethod = new ReflectionMethod($className, $methodName);
 
@@ -82,7 +82,7 @@ final class NodeAnnotationReader
     private function createClassReflectionFromNode(Class_ $class): ReflectionClass
     {
         /** @var string $className */
-        $className = $this->nameResolver->getName($class);
+        $className = $this->nodeNameResolver->getName($class);
 
         return new ReflectionClass($className);
     }
@@ -90,7 +90,7 @@ final class NodeAnnotationReader
     private function createPropertyReflectionFromPropertyNode(Property $property): ?ReflectionProperty
     {
         /** @var string $propertyName */
-        $propertyName = $this->nameResolver->getName($property);
+        $propertyName = $this->nodeNameResolver->getName($property);
 
         /** @var string|null $className */
         $className = $property->getAttribute(AttributeKey::CLASS_NAME);

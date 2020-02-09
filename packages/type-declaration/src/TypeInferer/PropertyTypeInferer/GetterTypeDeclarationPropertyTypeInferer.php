@@ -39,7 +39,7 @@ final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer
         }
 
         /** @var string $propertyName */
-        $propertyName = $this->nameResolver->getName($property);
+        $propertyName = $this->nodeNameResolver->getName($property);
 
         foreach ($class->getMethods() as $classMethod) {
             if (! $this->hasClassMethodOnlyStatementReturnOfPropertyFetch($classMethod, $propertyName)) {
@@ -87,6 +87,6 @@ final class GetterTypeDeclarationPropertyTypeInferer extends AbstractTypeInferer
             return false;
         }
 
-        return $this->nameResolver->isName($return->expr, $propertyName);
+        return $this->nodeNameResolver->isName($return->expr, $propertyName);
     }
 }

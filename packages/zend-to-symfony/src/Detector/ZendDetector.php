@@ -7,7 +7,7 @@ namespace Rector\ZendToSymfony\Detector;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\ZendToSymfony\ValueObject\ZendClass;
@@ -20,14 +20,14 @@ final class ZendDetector
     private $nodeTypeResolver;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
-    public function __construct(NodeTypeResolver $nodeTypeResolver, NameResolver $nameResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function isInZendController(Node $node): bool
@@ -50,6 +50,6 @@ final class ZendDetector
             return false;
         }
 
-        return $this->nameResolver->isName($classMethod, '*Action');
+        return $this->nodeNameResolver->isName($classMethod, '*Action');
     }
 }

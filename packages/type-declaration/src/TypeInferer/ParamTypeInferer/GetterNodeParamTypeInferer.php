@@ -42,7 +42,7 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
         $classMethod = $param->getAttribute(AttributeKey::PARENT_NODE);
 
         /** @var string $paramName */
-        $paramName = $this->nameResolver->getName($param);
+        $paramName = $this->nodeNameResolver->getName($param);
 
         $propertyNames = $this->propertyFetchManipulator->getPropertyNamesOfAssignOfVariable($classMethod, $paramName);
         if ($propertyNames === []) {

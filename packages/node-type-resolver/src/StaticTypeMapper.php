@@ -10,6 +10,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Analyser\NameScope;
@@ -21,7 +22,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeMapper;
 use Rector\NodeTypeResolver\TypeMapper\PhpParserNodeMapper;
@@ -38,9 +39,9 @@ final class StaticTypeMapper
     private $phpStanStaticTypeMapper;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var PhpParserNodeMapper
@@ -54,12 +55,12 @@ final class StaticTypeMapper
 
     public function __construct(
         PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         PhpParserNodeMapper $phpParserNodeMapper,
         PhpDocTypeMapper $phpDocTypeMapper
     ) {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->phpParserNodeMapper = $phpParserNodeMapper;
         $this->phpDocTypeMapper = $phpDocTypeMapper;
     }
@@ -160,26 +161,37 @@ final class StaticTypeMapper
     private function createNameScopeFromNode(Node $node): NameScope
     {
         $namespace = $node->getAttribute(AttributeKey::NAMESPACE_NAME);
-        $useNodes = $node->getAttribute(AttributeKey::USE_NODES);
 
-        $uses = [];
-        if ($useNodes) {
-            foreach ($useNodes as $useNode) {
-                foreach ($useNode->uses as $useUse) {
-                    /** @var UseUse $useUse */
-                    $aliasName = $useUse->getAlias()->name;
-                    $useName = $this->nameResolver->getName($useUse->name);
-                    if (! is_string($useName)) {
-                        throw new ShouldNotHappenException();
-                    }
+        /** @var Use_[] $useNodes */
+        $useNodes = (array) $node->getAttribute(AttributeKey::USE_NODES);
 
-                    $uses[$aliasName] = $useName;
-                }
-            }
-        }
-
+        $uses = $this->resolveUseNamesByAlias($useNodes);
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         return new NameScope($namespace, $uses, $className);
+    }
+
+    /***
+     * @param Use_[] $useNodes
+     * @return string[]
+     */
+    private function resolveUseNamesByAlias(array $useNodes): array
+    {
+        $useNamesByAlias = [];
+
+        foreach ($useNodes as $useNode) {
+            foreach ($useNode->uses as $useUse) {
+                /** @var UseUse $useUse */
+                $aliasName = $useUse->getAlias()->name;
+                $useName = $this->nodeNameResolver->getName($useUse->name);
+                if (! is_string($useName)) {
+                    throw new ShouldNotHappenException();
+                }
+
+                $useNamesByAlias[$aliasName] = $useName;
+            }
+        }
+
+        return $useNamesByAlias;
     }
 }

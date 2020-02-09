@@ -280,7 +280,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return false;
         }
 
-        $className = $this->nameResolver->getName($node);
+        $className = $this->nodeNameResolver->getName($node);
 
         return $className === null || Strings::contains($className, 'AnonymousClass');
     }

@@ -16,7 +16,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
-use Rector\TypeDeclaration\VendorLock\VendorLockResolver;
+use Rector\VendorLocker\VendorLockResolver;
 
 /**
  * @source https://wiki.php.net/rfc/typed_properties_v2#proposal

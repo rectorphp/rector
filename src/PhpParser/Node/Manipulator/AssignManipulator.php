@@ -10,24 +10,24 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class AssignManipulator
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var PropertyFetchManipulator
      */
     private $propertyFetchManipulator;
 
-    public function __construct(NameResolver $nameResolver, PropertyFetchManipulator $propertyFetchManipulator)
+    public function __construct(NodeNameResolver $nodeNameResolver, PropertyFetchManipulator $propertyFetchManipulator)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyFetchManipulator = $propertyFetchManipulator;
     }
 
@@ -62,7 +62,7 @@ final class AssignManipulator
             return false;
         }
 
-        return $this->nameResolver->isNames($propertyFetch, $propertyNames);
+        return $this->nodeNameResolver->isNames($propertyFetch, $propertyNames);
     }
 
     /**
@@ -95,7 +95,7 @@ final class AssignManipulator
             return false;
         }
 
-        return $this->nameResolver->isName($assign->expr, 'each');
+        return $this->nodeNameResolver->isName($assign->expr, 'each');
     }
 
     public function isNodeLeftPartOfAssign(Node $node): bool

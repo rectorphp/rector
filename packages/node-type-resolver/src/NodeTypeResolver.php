@@ -32,7 +32,7 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -49,9 +49,9 @@ final class NodeTypeResolver
     private $perNodeTypeResolvers = [];
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var ClassReflectionTypesResolver
@@ -98,7 +98,7 @@ final class NodeTypeResolver
      */
     public function __construct(
         BetterPhpDocParser $betterPhpDocParser,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         ParsedNodeCollector $parsedNodeCollector,
         ClassReflectionTypesResolver $classReflectionTypesResolver,
         ReflectionProvider $reflectionProvider,
@@ -107,7 +107,7 @@ final class NodeTypeResolver
         ObjectTypeSpecifier $objectTypeSpecifier,
         array $perNodeTypeResolvers
     ) {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
 
         foreach ($perNodeTypeResolvers as $perNodeTypeResolver) {
             $this->addPerNodeTypeResolver($perNodeTypeResolver);
@@ -162,15 +162,7 @@ final class NodeTypeResolver
             return true;
         }
 
-        if ($resolvedType instanceof UnionType) {
-            foreach ($resolvedType->getTypes() as $unionedType) {
-                if ($unionedType->equals($requiredType)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return $this->isMatchingUnionType($requiredType, $resolvedType);
     }
 
     public function resolve(Node $node): Type
@@ -231,11 +223,7 @@ final class NodeTypeResolver
         }
 
         if ($node instanceof PropertyFetch) {
-            // compensate 3rd party non-analysed property reflection
-            $vendorPropertyType = $this->getVendorPropertyFetchType($node);
-            if ($vendorPropertyType !== null) {
-                return $vendorPropertyType;
-            }
+            return $this->resolvePropertyFetchType($node);
         }
 
         return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType($node, $staticType);
@@ -369,11 +357,7 @@ final class NodeTypeResolver
 
         /** @var Scope|null $nodeScope */
         $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($nodeScope === null) {
-            return new MixedType();
-        }
-
-        if (! $node instanceof Expr) {
+        if ($nodeScope === null || ! $node instanceof Expr) {
             return new MixedType();
         }
 
@@ -443,7 +427,7 @@ final class NodeTypeResolver
             return false;
         }
 
-        $className = $this->nameResolver->getName($node);
+        $className = $this->nodeNameResolver->getName($node);
 
         return $className === null || Strings::contains($className, 'AnonymousClass');
     }
@@ -460,7 +444,7 @@ final class NodeTypeResolver
         }
 
         // 3rd party code
-        $propertyName = $this->nameResolver->getName($propertyFetch->name);
+        $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
         if ($propertyName === null) {
             return null;
         }
@@ -499,5 +483,31 @@ final class NodeTypeResolver
         $classLikeTypes = $this->classReflectionTypesResolver->resolve($classReflection);
 
         return array_unique($classLikeTypes);
+    }
+
+    private function isMatchingUnionType(Type $requiredType, Type $resolvedType): bool
+    {
+        if (! $resolvedType instanceof UnionType) {
+            return false;
+        }
+        foreach ($resolvedType->getTypes() as $unionedType) {
+            if (! $unionedType->equals($requiredType)) {
+                continue;
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    private function resolvePropertyFetchType(PropertyFetch $propertyFetch)
+    {
+        // compensate 3rd party non-analysed property reflection
+        $vendorPropertyType = $this->getVendorPropertyFetchType($propertyFetch);
+        if ($vendorPropertyType !== null) {
+            return $vendorPropertyType;
+        }
+
+        return new MixedType();
     }
 }

@@ -128,22 +128,8 @@ PHP
 
                 /** @var ClassLike[] $classLikes */
                 $classLikes = $this->betterNodeFinder->findClassLikes($nodes);
-                if (count($classLikes) <= 1) {
-                    continue;
-                }
-
                 foreach ($classLikes as $classLikeNode) {
-                    $this->removeAllClassLikesFromNamespaceNode($newStmt);
-                    $newStmt->stmts[] = $classLikeNode;
-
-                    $fileDestination = $this->createClassLikeFileDestination($classLikeNode, $smartFileInfo);
-
-                    // has file changed?
-                    if ($shouldDeleteFile) {
-                        $this->printNewNodesToFilePath($newStmtsSet, $fileDestination);
-                    } else {
-                        $this->printNodesToFilePath($newStmtsSet, $fileDestination);
-                    }
+                    $this->refactorClassLike($smartFileInfo, $shouldDeleteFile, $newStmt, $classLikeNode, $newStmtsSet);
                 }
             }
         }
@@ -213,5 +199,25 @@ PHP
         $currentDirectory = dirname($smartFileInfo->getRealPath());
 
         return $currentDirectory . DIRECTORY_SEPARATOR . $classLike->name . '.php';
+    }
+
+    private function refactorClassLike(
+        SmartFileInfo $smartFileInfo,
+        bool $shouldDeleteFile,
+        Namespace_ $newStmt,
+        ClassLike $classLike,
+        array $newStmtsSet
+    ): void {
+        $this->removeAllClassLikesFromNamespaceNode($newStmt);
+        $newStmt->stmts[] = $classLike;
+
+        $fileDestination = $this->createClassLikeFileDestination($classLike, $smartFileInfo);
+
+        // has file changed?
+        if ($shouldDeleteFile) {
+            $this->printNewNodesToFilePath($newStmtsSet, $fileDestination);
+        } else {
+            $this->printNodesToFilePath($newStmtsSet, $fileDestination);
+        }
     }
 }

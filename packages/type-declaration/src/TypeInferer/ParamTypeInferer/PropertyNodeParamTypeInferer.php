@@ -37,7 +37,7 @@ final class PropertyNodeParamTypeInferer extends AbstractTypeInferer implements 
             return new MixedType();
         }
 
-        $paramName = $this->nameResolver->getName($param);
+        $paramName = $this->nodeNameResolver->getName($param);
         if (! is_string($paramName)) {
             throw new ShouldNotHappenException();
         }

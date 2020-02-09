@@ -221,42 +221,10 @@ PHP
             }
 
             if ($node instanceof If_) {
-                $this->traverseNodesWithCallable($node->cond, function (Node $node) use (
-                    $privatePropertyName,
-                    &$isPropertyReadInIf
-                ) {
-                    if (! $this->propertyFetchManipulator->isLocalPropertyOfNames($node, [$privatePropertyName])) {
-                        return null;
-                    }
-
-                    $isPropertyReadInIf = true;
-
-                    return NodeTraverser::STOP_TRAVERSAL;
-                });
+                $isPropertyReadInIf = $this->refactorIf($node, $privatePropertyName);
             }
 
-            // here cannot be any property assign
-            $this->traverseNodesWithCallable($node, function (Node $node) use (
-                &$isPropertyChanging,
-                $privatePropertyName
-            ) {
-                if (! $node instanceof Assign) {
-                    return null;
-                }
-
-                if (! $node->var instanceof PropertyFetch) {
-                    return null;
-                }
-
-                if (! $this->isName($node->var->name, $privatePropertyName)) {
-                    return null;
-                }
-
-                $isPropertyChanging = true;
-
-                return NodeTraverser::STOP_TRAVERSAL;
-            });
-
+            $isPropertyChanging = $this->isPropertyChanging($node, $this, $privatePropertyName);
             if (! $isPropertyChanging) {
                 return null;
             }
@@ -278,5 +246,53 @@ PHP
         }
 
         return false;
+    }
+
+    /**
+     * @return bool|null
+     */
+    private function refactorIf(If_ $if, string $privatePropertyName)
+    {
+        $this->traverseNodesWithCallable($if->cond, function (Node $node) use (
+            $privatePropertyName,
+            &$isPropertyReadInIf
+        ) {
+            if (! $this->propertyFetchManipulator->isLocalPropertyOfNames($node, [$privatePropertyName])) {
+                return null;
+            }
+
+            $isPropertyReadInIf = true;
+
+            return NodeTraverser::STOP_TRAVERSAL;
+        });
+
+        return $isPropertyReadInIf;
+    }
+
+    private function isPropertyChanging(Node $node, self $this__, string $privatePropertyName): bool
+    {
+        $isPropertyChanging = false;
+        // here cannot be any property assign
+        $this__->traverseNodesWithCallable($node, function (Node $node) use (
+            &$isPropertyChanging,
+            $privatePropertyName
+        ) {
+            if (! $node instanceof Assign) {
+                return null;
+            }
+
+            if (! $node->var instanceof PropertyFetch) {
+                return null;
+            }
+
+            if (! $this->isName($node->var->name, $privatePropertyName)) {
+                return null;
+            }
+
+            $isPropertyChanging = true;
+
+            return NodeTraverser::STOP_TRAVERSAL;
+        });
+        return $isPropertyChanging;
     }
 }

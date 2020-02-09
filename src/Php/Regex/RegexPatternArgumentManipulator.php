@@ -15,7 +15,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -53,9 +53,9 @@ final class RegexPatternArgumentManipulator
     private $nodeTypeResolver;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var BetterNodeFinder
@@ -74,13 +74,13 @@ final class RegexPatternArgumentManipulator
 
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         ParsedNodeCollector $parsedNodeCollector,
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
@@ -108,7 +108,7 @@ final class RegexPatternArgumentManipulator
     private function processFuncCall(FuncCall $funcCall): array
     {
         foreach ($this->functionsWithPatternsToArgumentPosition as $functionName => $argumentPosition) {
-            if (! $this->nameResolver->isName($funcCall, $functionName)) {
+            if (! $this->nodeNameResolver->isName($funcCall, $functionName)) {
                 continue;
             }
 
@@ -133,7 +133,7 @@ final class RegexPatternArgumentManipulator
             }
 
             foreach ($methodNamesToArgumentPosition as $methodName => $argumentPosition) {
-                if (! $this->nameResolver->isName($staticCall, $methodName)) {
+                if (! $this->nodeNameResolver->isName($staticCall, $methodName)) {
                     continue;
                 }
 

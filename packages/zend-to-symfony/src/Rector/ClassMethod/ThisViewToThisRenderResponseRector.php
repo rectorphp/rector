@@ -58,9 +58,9 @@ public function someAction()
 {
     $templateData = [];
     $templateData['value']; = 5;
-    
+
     return $this->render("...", $templateData);
-}                
+}
 PHP
             )]
         );

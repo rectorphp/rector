@@ -77,7 +77,9 @@ final class ArrayArgumentInTestToDataProviderRector extends AbstractPHPUnitRecto
         return new RectorDefinition('Move array argument from tests into data provider [configurable]', [
             new ConfiguredCodeSample(
                 <<<'PHP'
-class SomeServiceTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class SomeServiceTest extends TestCase
 {
     public function test()
     {
@@ -87,7 +89,9 @@ class SomeServiceTest extends \PHPUnit\Framework\TestCase
 PHP
                 ,
                 <<<'PHP'
-class SomeServiceTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class SomeServiceTest extends TestCase
 {
     /**
      * @dataProvider provideData()
@@ -134,11 +138,11 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $this->ensureConfigurationIsSet($this->configuration);
-
         if (! $this->isInTestClass($node)) {
             return null;
         }
+
+        $this->ensureConfigurationIsSet($this->configuration);
 
         $this->dataProviderClassMethodRecipes = [];
 
@@ -148,53 +152,7 @@ PHP
             }
 
             foreach ($this->configuration as $singleConfiguration) {
-                if (! $this->isMethodCallMatch($node, $singleConfiguration)) {
-                    continue;
-                }
-
-                if (count($node->args) !== 1) {
-                    throw new ShouldNotHappenException();
-                }
-
-                // resolve value types
-                $firstArgumentValue = $node->args[0]->value;
-                if (! $firstArgumentValue instanceof Array_) {
-                    // nothing we can do
-                    return null;
-                }
-
-                // rename method to new one handling non-array input
-                $node->name = new Identifier($singleConfiguration['new_method']);
-
-                $dataProviderMethodName = $this->createDataProviderMethodName($node);
-
-                $this->dataProviderClassMethodRecipes[] = new DataProviderClassMethodRecipe(
-                    $dataProviderMethodName,
-                    $node->args,
-                    $this->resolveUniqueArrayStaticType($firstArgumentValue)
-                );
-
-                $node->args = [];
-                $paramAndArgs = $this->collectParamAndArgsFromArray(
-                    $firstArgumentValue,
-                    $singleConfiguration['variable_name']
-                );
-                foreach ($paramAndArgs as $paramAndArg) {
-                    $node->args[] = new Arg($paramAndArg->getVariable());
-                }
-
-                /** @var ClassMethod $classMethod */
-                $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
-                $this->refactorTestClassMethodParams($classMethod, $paramAndArgs);
-
-                // add data provider annotation
-                $dataProviderTagNode = $this->createDataProviderTagNode($dataProviderMethodName);
-
-                /** @var PhpDocInfo $phpDocInfo */
-                $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-                $phpDocInfo->addPhpDocTagNode($dataProviderTagNode);
-
-                return null;
+                $this->refactorMethodCallWithConfiguration($node, $singleConfiguration);
             }
 
             return null;
@@ -266,41 +224,13 @@ PHP
      */
     private function collectParamAndArgsFromArray(Array_ $array, string $variableName): array
     {
-        // multiple arguments
-        $i = 1;
-
-        $paramAndArgs = [];
-
         $isNestedArray = $this->isNestedArray($array);
-
-        $itemsStaticType = $this->resolveItemStaticType($array, $isNestedArray);
-
-        if (! $isNestedArray) {
-            foreach ($array->items as $arrayItem) {
-                $variable = new Variable($variableName . ($i === 1 ? '' : $i));
-
-                $paramAndArgs[] = new ParamAndArgValueObject($variable, $itemsStaticType);
-                ++$i;
-
-                if (! $arrayItem->value instanceof Array_) {
-                    break;
-                }
-            }
-        } else {
-            foreach ($array->items as $arrayItem) {
-                /** @var Array_ $nestedArray */
-                $nestedArray = $arrayItem->value;
-                foreach ($nestedArray->items as $nestedArrayItem) {
-                    $variable = new Variable($variableName . ($i === 1 ? '' : $i));
-
-                    $itemsStaticType = $this->getStaticType($nestedArrayItem->value);
-                    $paramAndArgs[] = new ParamAndArgValueObject($variable, $itemsStaticType);
-                    ++$i;
-                }
-            }
+        if ($isNestedArray) {
+            return $this->collectParamAndArgsFromNestedArray($array, $variableName);
         }
 
-        return $paramAndArgs;
+        $itemsStaticType = $this->resolveItemStaticType($array, $isNestedArray);
+        return $this->collectParamAndArgsFromNonNestedArray($array, $variableName, $itemsStaticType);
     }
 
     /**
@@ -421,5 +351,104 @@ PHP
     private function createParamTagNode(string $name, TypeNode $typeNode): AttributeAwareParamTagValueNode
     {
         return new AttributeAwareParamTagValueNode($typeNode, false, '$' . $name, '', false);
+    }
+
+    private function refactorMethodCallWithConfiguration(MethodCall $methodCall, array $singleConfiguration): void
+    {
+        if (! $this->isMethodCallMatch($methodCall, $singleConfiguration)) {
+            return;
+        }
+
+        if (count($methodCall->args) !== 1) {
+            throw new ShouldNotHappenException();
+        }
+
+        // resolve value types
+        $firstArgumentValue = $methodCall->args[0]->value;
+        if (! $firstArgumentValue instanceof Array_) {
+            // nothing we can do
+            return;
+        }
+
+        // rename method to new one handling non-array input
+        $methodCall->name = new Identifier($singleConfiguration['new_method']);
+
+        $dataProviderMethodName = $this->createDataProviderMethodName($methodCall);
+
+        $this->dataProviderClassMethodRecipes[] = new DataProviderClassMethodRecipe(
+            $dataProviderMethodName,
+            $methodCall->args,
+            $this->resolveUniqueArrayStaticType($firstArgumentValue)
+        );
+
+        $methodCall->args = [];
+
+        $paramAndArgs = $this->collectParamAndArgsFromArray(
+            $firstArgumentValue,
+            $singleConfiguration['variable_name']
+        );
+
+        foreach ($paramAndArgs as $paramAndArg) {
+            $methodCall->args[] = new Arg($paramAndArg->getVariable());
+        }
+
+        /** @var ClassMethod $classMethod */
+        $classMethod = $methodCall->getAttribute(AttributeKey::METHOD_NODE);
+
+        $this->refactorTestClassMethodParams($classMethod, $paramAndArgs);
+
+        // add data provider annotation
+        $dataProviderTagNode = $this->createDataProviderTagNode($dataProviderMethodName);
+
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo->addPhpDocTagNode($dataProviderTagNode);
+    }
+
+    /**
+     * @return ParamAndArgValueObject[]
+     */
+    private function collectParamAndArgsFromNonNestedArray(
+        Array_ $array,
+        string $variableName,
+        Type $itemsStaticType
+    ): array {
+        $i = 1;
+        $paramAndArgs = [];
+
+        foreach ($array->items as $arrayItem) {
+            $variable = new Variable($variableName . ($i === 1 ? '' : $i));
+
+            $paramAndArgs[] = new ParamAndArgValueObject($variable, $itemsStaticType);
+            ++$i;
+
+            if (! $arrayItem->value instanceof Array_) {
+                break;
+            }
+        }
+
+        return $paramAndArgs;
+    }
+
+    /**
+     * @return ParamAndArgValueObject[]
+     */
+    private function collectParamAndArgsFromNestedArray(Array_ $array, string $variableName): array
+    {
+        $paramAndArgs = [];
+        $i = 1;
+
+        foreach ($array->items as $arrayItem) {
+            /** @var Array_ $nestedArray */
+            $nestedArray = $arrayItem->value;
+            foreach ($nestedArray->items as $nestedArrayItem) {
+                $variable = new Variable($variableName . ($i === 1 ? '' : $i));
+
+                $itemsStaticType = $this->getStaticType($nestedArrayItem->value);
+                $paramAndArgs[] = new ParamAndArgValueObject($variable, $itemsStaticType);
+                ++$i;
+            }
+        }
+        return $paramAndArgs;
     }
 }
