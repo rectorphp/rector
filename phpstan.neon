@@ -9,7 +9,7 @@ parameters:
     level: max
 
     # to allow installing with various phsptan versions without reporting old errors here
-#    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: false
 
     autoload_directories:
         - stubs
@@ -237,3 +237,4 @@ parameters:
         - '#Method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
         - '#Method Rector\\SOLID\\Rector\\ClassConst\\PrivatizeLocalClassConstantRector\:\:resolveParentClassConstantReflection\(\) should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
         - '#PHPDoc tag @var for variable \$parentClass contains generic class ReflectionClass but does not specify its types\: T#'
+        - '#Method Rector\\SOLID\\Reflection\\ParentConstantReflectionResolver\:\:(.*?)\(\) should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
