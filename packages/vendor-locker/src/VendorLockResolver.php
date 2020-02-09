@@ -60,14 +60,6 @@ final class VendorLockResolver
         return $this->propertyVendorLockResolver->isVendorLocked($property);
     }
 
-    /**
-     * Checks for:
-     * - interface required methods
-     * - abstract classes reqired method
-     *
-     * Prevent:
-     * - removing class methods, that breaks the code
-     */
     public function isClassMethodRemovalVendorLocked(ClassMethod $classMethod): bool
     {
         return $this->classMethodVendorLockResolver->isRemovalVendorLocked($classMethod);
