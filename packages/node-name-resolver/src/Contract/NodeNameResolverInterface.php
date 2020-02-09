@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Contract\NameResolver;
+namespace Rector\NodeNameResolver\Contract;
 
 use PhpParser\Node;
 

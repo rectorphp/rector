@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\PhpParser\Node\NodeNameResolver;
+namespace Rector\NodeNameResolver\NodeNameResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Use_;
-use Rector\Core\Contract\NameResolver\NodeNameResolverInterface;
-use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
+use PhpParser\Node\Stmt\ClassConst;
+use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
+use Rector\NodeNameResolver\NodeNameResolver;
 
-final class UseNameResolver implements NodeNameResolverInterface
+final class ClassConstNameResolver implements NodeNameResolverInterface
 {
     /**
      * @var NodeNameResolver
@@ -26,20 +26,20 @@ final class UseNameResolver implements NodeNameResolverInterface
 
     public function getNode(): string
     {
-        return Use_::class;
+        return ClassConst::class;
     }
 
     /**
-     * @param Use_ $node
+     * @param ClassConst $node
      */
     public function resolve(Node $node): ?string
     {
-        if (count($node->uses) === 0) {
+        if (count($node->consts) === 0) {
             return null;
         }
 
-        $onlyUse = $node->uses[0];
+        $onlyConstant = $node->consts[0];
 
-        return $this->nodeNameResolver->getName($onlyUse);
+        return $this->nodeNameResolver->getName($onlyConstant);
     }
 }
