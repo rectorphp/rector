@@ -13,7 +13,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Exception\NotImplementedException;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
 
@@ -30,14 +30,14 @@ final class UnusedClassResolver
     private $nameResolver;
 
     /**
-     * @var ParsedNodesByType
+     * @var ParsedNodeCollector
      */
-    private $parsedNodesByType;
+    private $parsedNodeCollector;
 
-    public function __construct(NameResolver $nameResolver, ParsedNodesByType $parsedNodesByType)
+    public function __construct(NameResolver $nameResolver, ParsedNodeCollector $parsedNodeCollector)
     {
         $this->nameResolver = $nameResolver;
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->parsedNodeCollector = $parsedNodeCollector;
     }
 
     /**
@@ -90,7 +90,7 @@ final class UnusedClassResolver
         $classNames = [];
 
         /** @var Param[] $paramNodes */
-        $paramNodes = $this->parsedNodesByType->getNodesByType(Param::class);
+        $paramNodes = $this->parsedNodeCollector->getNodesByType(Param::class);
         foreach ($paramNodes as $paramNode) {
             if ($paramNode->type === null) {
                 continue;
@@ -124,7 +124,7 @@ final class UnusedClassResolver
         $classNames = [];
 
         /** @var New_[] $newNodes */
-        $newNodes = $this->parsedNodesByType->getNodesByType(New_::class);
+        $newNodes = $this->parsedNodeCollector->getNodesByType(New_::class);
         foreach ($newNodes as $newNode) {
             $newNodeClassName = $this->nameResolver->getName($newNode->class);
             if (! is_string($newNodeClassName)) {
@@ -145,7 +145,7 @@ final class UnusedClassResolver
         $classNames = [];
 
         /** @var StaticCall[] $staticCallNodes */
-        $staticCallNodes = $this->parsedNodesByType->getNodesByType(StaticCall::class);
+        $staticCallNodes = $this->parsedNodeCollector->getNodesByType(StaticCall::class);
         foreach ($staticCallNodes as $staticCallNode) {
             $staticClassName = $this->nameResolver->getName($staticCallNode->class);
             if (! is_string($staticClassName)) {
@@ -163,7 +163,7 @@ final class UnusedClassResolver
     private function getClassConstantFetchNames(): array
     {
         /** @var ClassConstFetch[] $classConstFetches */
-        $classConstFetches = $this->parsedNodesByType->getNodesByType(ClassConstFetch::class);
+        $classConstFetches = $this->parsedNodeCollector->getNodesByType(ClassConstFetch::class);
 
         $classNames = [];
         foreach ($classConstFetches as $classConstFetch) {

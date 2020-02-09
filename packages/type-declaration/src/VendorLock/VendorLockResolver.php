@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -26,22 +26,22 @@ final class VendorLockResolver
     private $nameResolver;
 
     /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
      * @var ClassManipulator
      */
     private $classManipulator;
 
+    /**
+     * @var ParsedNodeCollector
+     */
+    private $parsedNodeCollector;
+
     public function __construct(
         NameResolver $nameResolver,
-        ParsedNodesByType $parsedNodesByType,
+        ParsedNodeCollector $parsedNodeCollector,
         ClassManipulator $classManipulator
     ) {
         $this->nameResolver = $nameResolver;
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->classManipulator = $classManipulator;
     }
 
@@ -66,7 +66,7 @@ final class VendorLockResolver
         $parentClassName = $classMethod->getAttribute(AttributeKey::PARENT_CLASS_NAME);
 
         if ($parentClassName !== null) {
-            $parentClassNode = $this->parsedNodesByType->findClass($parentClassName);
+            $parentClassNode = $this->parsedNodeCollector->findClass($parentClassName);
             if ($parentClassNode !== null) {
                 $parentMethodNode = $parentClassNode->getMethod($methodName);
                 // @todo validate type is conflicting
@@ -95,7 +95,7 @@ final class VendorLockResolver
 
         $interfaceNames = $this->classManipulator->getClassLikeNodeParentInterfaceNames($classNode);
         foreach ($interfaceNames as $interfaceName) {
-            $interface = $this->parsedNodesByType->findInterface($interfaceName);
+            $interface = $this->parsedNodeCollector->findInterface($interfaceName);
             // parent class method in local scope → it's ok
             // @todo validate type is conflicting
             if ($interface !== null && $interface->getMethod($methodName) !== null) {
@@ -133,7 +133,7 @@ final class VendorLockResolver
         $parentClassName = $classMethod->getAttribute(AttributeKey::PARENT_CLASS_NAME);
 
         if ($parentClassName !== null) {
-            $parentClassNode = $this->parsedNodesByType->findClass($parentClassName);
+            $parentClassNode = $this->parsedNodeCollector->findClass($parentClassName);
             if ($parentClassNode !== null) {
                 $parentMethodNode = $parentClassNode->getMethod($methodName);
                 // @todo validate type is conflicting
@@ -161,7 +161,7 @@ final class VendorLockResolver
 
         $interfaceNames = $this->classManipulator->getClassLikeNodeParentInterfaceNames($classNode);
         foreach ($interfaceNames as $interfaceName) {
-            $interface = $this->parsedNodesByType->findInterface($interfaceName);
+            $interface = $this->parsedNodeCollector->findInterface($interfaceName);
             // parent class method in local scope → it's ok
             // @todo validate type is conflicting
             if ($interface !== null && $interface->getMethod($methodName) !== null) {
@@ -199,7 +199,7 @@ final class VendorLockResolver
         $parentClassName = $classNode->getAttribute(AttributeKey::PARENT_CLASS_NAME);
 
         if ($parentClassName !== null) {
-            $parentClassNode = $this->parsedNodesByType->findClass($parentClassName);
+            $parentClassNode = $this->parsedNodeCollector->findClass($parentClassName);
             if ($parentClassNode !== null) {
                 $parentPropertyNode = $this->getProperty($parentClassNode, $propertyName);
                 // @todo validate type is conflicting

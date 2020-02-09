@@ -31,7 +31,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -74,9 +74,9 @@ final class NodeTypeResolver
     private $objectTypeSpecifier;
 
     /**
-     * @var ParsedNodesByType
+     * @var ParsedNodeCollector
      */
-    private $parsedNodesByType;
+    private $parsedNodeCollector;
 
     /**
      * @var BetterPhpDocParser
@@ -99,7 +99,7 @@ final class NodeTypeResolver
     public function __construct(
         BetterPhpDocParser $betterPhpDocParser,
         NameResolver $nameResolver,
-        ParsedNodesByType $parsedNodesByType,
+        ParsedNodeCollector $parsedNodeCollector,
         ClassReflectionTypesResolver $classReflectionTypesResolver,
         ReflectionProvider $reflectionProvider,
         TypeFactory $typeFactory,
@@ -117,7 +117,7 @@ final class NodeTypeResolver
         $this->reflectionProvider = $reflectionProvider;
         $this->typeFactory = $typeFactory;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->betterPhpDocParser = $betterPhpDocParser;
         $this->staticTypeMapper = $staticTypeMapper;
     }
@@ -455,7 +455,7 @@ final class NodeTypeResolver
             return null;
         }
 
-        if ($this->parsedNodesByType->findClass($varObjectType->getClassName()) !== null) {
+        if ($this->parsedNodeCollector->findClass($varObjectType->getClassName()) !== null) {
             return null;
         }
 

@@ -13,13 +13,11 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Naming\PropertyNaming;
-use Rector\Core\NodeContainer\ParsedNodesByType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\RemovingStatic\StaticTypesInClassResolver;
-use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 /**
  * Depends on @see PassFactoryToUniqueObjectRector
@@ -49,35 +47,21 @@ final class NewUniqueObjectToEntityFactoryRector extends AbstractRector
     private $propertyNaming;
 
     /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
      * @var StaticTypesInClassResolver
      */
     private $staticTypesInClassResolver;
-
-    /**
-     * @var PrivatesAccessor
-     */
-    private $privatesAccessor;
 
     /**
      * @param string[] $typesToServices
      */
     public function __construct(
         PropertyNaming $propertyNaming,
-        ParsedNodesByType $parsedNodesByType,
         StaticTypesInClassResolver $staticTypesInClassResolver,
-        PrivatesAccessor $privatesAccessor,
         array $typesToServices = []
     ) {
         $this->typesToServices = $typesToServices;
         $this->propertyNaming = $propertyNaming;
-        $this->parsedNodesByType = $parsedNodesByType;
         $this->staticTypesInClassResolver = $staticTypesInClassResolver;
-        $this->privatesAccessor = $privatesAccessor;
     }
 
     public function getDefinition(): RectorDefinition
@@ -188,7 +172,7 @@ PHP
         }
 
         // temporary
-        $classes = $this->privatesAccessor->getPrivateProperty($this->parsedNodesByType, 'classes');
+        $classes = $this->parsedNodeCollector->getClasses();
         if ($classes === []) {
             return [];
         }

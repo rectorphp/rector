@@ -14,7 +14,7 @@ use PhpParser\Node\Scalar\MagicConst\File;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -36,9 +36,9 @@ final class ValueResolver
     private $constExprEvaluator;
 
     /**
-     * @var ParsedNodesByType
+     * @var ParsedNodeCollector
      */
-    private $parsedNodesByType;
+    private $parsedNodeCollector;
 
     /**
      * @var NodeTypeResolver
@@ -48,10 +48,10 @@ final class ValueResolver
     public function __construct(
         NameResolver $nameResolver,
         NodeTypeResolver $nodeTypeResolver,
-        ParsedNodesByType $parsedNodesByType
+        ParsedNodeCollector $parsedNodeCollector
     ) {
         $this->nameResolver = $nameResolver;
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
@@ -192,7 +192,7 @@ final class ValueResolver
             return $class;
         }
 
-        $classConstNode = $this->parsedNodesByType->findClassConstant($class, $constant);
+        $classConstNode = $this->parsedNodeCollector->findClassConstant($class, $constant);
 
         if ($classConstNode === null) {
             // fallback to the name

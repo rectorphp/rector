@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\Core\NodeContainer\ParsedNodesByType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -25,18 +24,12 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 final class AddMethodCallBasedParamTypeRector extends AbstractRector
 {
     /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
      * @var TypeFactory
      */
     private $typeFactory;
 
-    public function __construct(ParsedNodesByType $parsedNodesByType, TypeFactory $typeFactory)
+    public function __construct(TypeFactory $typeFactory)
     {
-        $this->parsedNodesByType = $parsedNodesByType;
         $this->typeFactory = $typeFactory;
     }
 
@@ -98,7 +91,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $classMethodCalls = $this->parsedNodesByType->findClassMethodCalls($node);
+        $classMethodCalls = $this->functionLikeParsedNodesFinder->findClassMethodCalls($node);
 
         $classParameterTypes = $this->getCallTypesByPosition($classMethodCalls);
 

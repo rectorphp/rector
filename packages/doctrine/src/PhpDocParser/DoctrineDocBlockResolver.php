@@ -14,7 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
@@ -22,13 +22,13 @@ use ReflectionClass;
 final class DoctrineDocBlockResolver
 {
     /**
-     * @var ParsedNodesByType
+     * @var ParsedNodeCollector
      */
-    private $parsedNodesByType;
+    private $parsedNodeCollector;
 
-    public function __construct(ParsedNodesByType $parsedNodesByType)
+    public function __construct(ParsedNodeCollector $parsedNodeCollector)
     {
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->parsedNodeCollector = $parsedNodeCollector;
     }
 
     /**
@@ -47,7 +47,7 @@ final class DoctrineDocBlockResolver
 
         if (is_string($class)) {
             if (ClassExistenceStaticHelper::doesClassLikeExist($class)) {
-                $classNode = $this->parsedNodesByType->findClass($class);
+                $classNode = $this->parsedNodeCollector->findClass($class);
                 if ($classNode !== null) {
                     return $this->isDoctrineEntityClass($classNode);
                 }

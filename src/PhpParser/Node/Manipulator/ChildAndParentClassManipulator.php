@@ -7,19 +7,14 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\NodeContainer\ClassLikeParsedNodesFinder;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
+use Rector\Core\NodeContainer\NodeFinder\ClassLikeParsedNodesFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ChildAndParentClassManipulator
 {
-    /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
     /**
      * @var NodeFactory
      */
@@ -35,16 +30,21 @@ final class ChildAndParentClassManipulator
      */
     private $classLikeParsedNodesFinder;
 
+    /**
+     * @var ParsedNodeCollector
+     */
+    private $parsedNodeCollector;
+
     public function __construct(
-        ParsedNodesByType $parsedNodesByType,
+        ParsedNodeCollector $parsedNodeCollector,
         NodeFactory $nodeFactory,
         NameResolver $nameResolver,
         ClassLikeParsedNodesFinder $classLikeParsedNodesFinder
     ) {
-        $this->parsedNodesByType = $parsedNodesByType;
         $this->nodeFactory = $nodeFactory;
         $this->nameResolver = $nameResolver;
         $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
+        $this->parsedNodeCollector = $parsedNodeCollector;
     }
 
     /**
@@ -59,7 +59,7 @@ final class ChildAndParentClassManipulator
         }
 
         // not in analyzed scope, nothing we can do
-        $parentClassNode = $this->parsedNodesByType->findClass($parentClassName);
+        $parentClassNode = $this->parsedNodeCollector->findClass($parentClassName);
         if ($parentClassNode !== null) {
             $this->completeParentConstructorBasedOnParentNode($parentClassNode, $classMethod);
             return;
@@ -142,7 +142,7 @@ final class ChildAndParentClassManipulator
                 return null;
             }
 
-            $classNode = $this->parsedNodesByType->findClass($parentClassName);
+            $classNode = $this->parsedNodeCollector->findClass($parentClassName);
         }
 
         return null;
