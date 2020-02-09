@@ -200,6 +200,10 @@ final class ClassManipulator
         return $usedTraits;
     }
 
+    /**
+     * @todo
+     * Waits on https://github.com/nikic/PHP-Parser/pull/646 to be relased
+     */
     public function getProperty(ClassLike $classLike, string $name): ?Property
     {
         foreach ($classLike->getProperties() as $property) {
