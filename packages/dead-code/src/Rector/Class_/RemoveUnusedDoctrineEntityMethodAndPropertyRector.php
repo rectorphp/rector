@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use Rector\Core\NodeContainer\ParsedNodesByType;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -32,11 +31,6 @@ final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRe
     private $collectionByPropertyName = [];
 
     /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
      * @var ClassUnusedPrivateClassMethodResolver
      */
     private $classUnusedPrivateClassMethodResolver;
@@ -52,12 +46,10 @@ final class RemoveUnusedDoctrineEntityMethodAndPropertyRector extends AbstractRe
     private $doctrineEntityManipulator;
 
     public function __construct(
-        ParsedNodesByType $parsedNodesByType,
         ClassUnusedPrivateClassMethodResolver $classUnusedPrivateClassMethodResolver,
         ClassManipulator $classManipulator,
         DoctrineEntityManipulator $doctrineEntityManipulator
     ) {
-        $this->parsedNodesByType = $parsedNodesByType;
         $this->classUnusedPrivateClassMethodResolver = $classUnusedPrivateClassMethodResolver;
         $this->classManipulator = $classManipulator;
         $this->doctrineEntityManipulator = $doctrineEntityManipulator;
@@ -265,7 +257,7 @@ PHP
         }
 
         // get the class property and remove "mappedBy/inversedBy" from annotation
-        $relatedEntityClass = $this->parsedNodesByType->findClass($targetEntity);
+        $relatedEntityClass = $this->classLikeParsedNodesFinder->findClass($targetEntity);
         if (! $relatedEntityClass instanceof Class_) {
             return null;
         }

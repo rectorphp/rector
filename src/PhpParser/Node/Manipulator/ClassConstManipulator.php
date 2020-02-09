@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
@@ -32,9 +32,9 @@ final class ClassConstManipulator
     private $betterStandardPrinter;
 
     /**
-     * @var ParsedNodesByType
+     * @var ParsedNodeCollector
      */
-    private $parsedNodesByType;
+    private $parsedNodeCollector;
 
     /**
      * @var ClassManipulator
@@ -45,13 +45,13 @@ final class ClassConstManipulator
         NameResolver $nameResolver,
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        ParsedNodesByType $parsedNodesByType,
+        ParsedNodeCollector $parsedNodeCollector,
         ClassManipulator $classManipulator
     ) {
         $this->nameResolver = $nameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->classManipulator = $classManipulator;
     }
 
@@ -68,7 +68,7 @@ final class ClassConstManipulator
 
         $searchInNodes = [$classNode];
         foreach ($this->classManipulator->getUsedTraits($classNode) as $trait) {
-            $trait = $this->parsedNodesByType->findTrait((string) $trait);
+            $trait = $this->parsedNodeCollector->findTrait((string) $trait);
             if ($trait === null) {
                 continue;
             }

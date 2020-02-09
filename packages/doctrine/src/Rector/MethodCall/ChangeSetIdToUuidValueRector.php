@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Ramsey\Uuid\Uuid;
-use Rector\Core\NodeContainer\ParsedNodesByType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -28,20 +27,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ChangeSetIdToUuidValueRector extends AbstractRector
 {
     /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
      * @var DoctrineEntityManipulator
      */
     private $doctrineEntityManipulator;
 
-    public function __construct(
-        ParsedNodesByType $parsedNodesByType,
-        DoctrineEntityManipulator $doctrineEntityManipulator
-    ) {
-        $this->parsedNodesByType = $parsedNodesByType;
+    public function __construct(DoctrineEntityManipulator $doctrineEntityManipulator)
+    {
         $this->doctrineEntityManipulator = $doctrineEntityManipulator;
     }
 
@@ -123,7 +114,7 @@ PHP
         // B. is the value constant reference?
         $argumentValue = $node->args[0]->value;
         if ($argumentValue instanceof ClassConstFetch) {
-            $classConst = $this->parsedNodesByType->findClassConstantByClassConstFetch($argumentValue);
+            $classConst = $this->parsedNodeCollector->findClassConstantByClassConstFetch($argumentValue);
             if ($classConst === null) {
                 return null;
             }

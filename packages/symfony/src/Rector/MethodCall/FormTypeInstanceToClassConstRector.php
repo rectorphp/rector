@@ -22,7 +22,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\NodeContainer\ParsedNodesByType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -42,16 +41,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class FormTypeInstanceToClassConstRector extends AbstractRector
 {
-    /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    public function __construct(ParsedNodesByType $parsedNodesByType)
-    {
-        $this->parsedNodesByType = $parsedNodesByType;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -180,7 +169,7 @@ PHP
             $methodCall->args[$optionsPosition] = new Arg($optionsArrayNode);
         }
 
-        $formTypeClassNode = $this->parsedNodesByType->findClass($className);
+        $formTypeClassNode = $this->classLikeParsedNodesFinder->findClass($className);
         if ($formTypeClassNode === null) {
             return null;
         }

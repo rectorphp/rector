@@ -6,18 +6,27 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedFunctionLikeNodeCollector;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 
 final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var ParsedNodesByType
+     * @var ParsedFunctionLikeNodeCollector
      */
-    private $parsedNodesByType;
+    private $parsedFunctionLikeNodeCollector;
 
-    public function __construct(ParsedNodesByType $parsedNodesByType)
-    {
-        $this->parsedNodesByType = $parsedNodesByType;
+    /**
+     * @var ParsedNodeCollector
+     */
+    private $parsedNodeCollector;
+
+    public function __construct(
+        ParsedNodeCollector $parsedNodeCollector,
+        ParsedFunctionLikeNodeCollector $parsedFunctionLikeNodeCollector
+    ) {
+        $this->parsedFunctionLikeNodeCollector = $parsedFunctionLikeNodeCollector;
+        $this->parsedNodeCollector = $parsedNodeCollector;
     }
 
     /**
@@ -25,10 +34,10 @@ final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if (! $this->parsedNodesByType->isCollectableNode($node)) {
-            return;
+        if ($this->parsedNodeCollector->isCollectableNode($node)) {
+            $this->parsedNodeCollector->collect($node);
         }
 
-        $this->parsedNodesByType->collect($node);
+        $this->parsedFunctionLikeNodeCollector->collect($node);
     }
 }

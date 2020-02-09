@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -27,22 +27,22 @@ final class ClassAnalyzer
     private $nameResolver;
 
     /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var ParsedNodeCollector
+     */
+    private $parsedNodeCollector;
+
     public function __construct(
         NameResolver $nameResolver,
-        ParsedNodesByType $parsedNodesByType,
+        ParsedNodeCollector $parsedNodeCollector,
         NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nameResolver = $nameResolver;
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
@@ -81,7 +81,7 @@ final class ClassAnalyzer
 
             // awesome!
             // is it services or value object?
-            $paramTypeClass = $this->parsedNodesByType->findClass($paramType->getClassName());
+            $paramTypeClass = $this->parsedNodeCollector->findClass($paramType->getClassName());
             if ($paramTypeClass === null) {
                 // not sure :/
                 continue;

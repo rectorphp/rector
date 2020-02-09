@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\FunctionLike;
-use Rector\Core\NodeContainer\ParsedNodesByType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -23,16 +22,6 @@ use ReflectionFunction;
  */
 final class RemoveDefaultArgumentValueRector extends AbstractRector
 {
-    /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    public function __construct(ParsedNodesByType $parsedNodesByType)
-    {
-        $this->parsedNodesByType = $parsedNodesByType;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Remove argument value, if it is the same as default value', [
@@ -159,7 +148,7 @@ PHP
             return [];
         }
 
-        $classMethodNode = $this->parsedNodesByType->findMethod($nodeName, $className);
+        $classMethodNode = $this->functionLikeParsedNodesFinder->findMethod($nodeName, $className);
         if ($classMethodNode !== null) {
             return $this->resolveDefaultParamValuesFromFunctionLike($classMethodNode);
         }
@@ -207,7 +196,7 @@ PHP
      */
     private function resolveFuncCallDefaultParamValues(string $nodeName): array
     {
-        $functionNode = $this->parsedNodesByType->findFunction($nodeName);
+        $functionNode = $this->functionLikeParsedNodesFinder->findFunction($nodeName);
         if ($functionNode !== null) {
             return $this->resolveDefaultParamValuesFromFunctionLike($functionNode);
         }

@@ -15,15 +15,12 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\Scope;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
-use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector;
 use Rector\Core\Commander\CommanderCollector;
-use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
-use Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector;
 use Rector\Core\Exclusion\ExclusionManager;
-use Rector\Core\NodeContainer\ClassLikeParsedNodesFinder;
-use Rector\Core\NodeContainer\FunctionLikeParsedNodesFinder;
+use Rector\Core\NodeContainer\NodeFinder\ClassLikeParsedNodesFinder;
+use Rector\Core\NodeContainer\NodeFinder\FunctionLikeParsedNodesFinder;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -84,15 +81,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected $staticTypeMapper;
 
     /**
-     * @var ClassLikeParsedNodesFinder
-     */
-    protected $classLikeParsedNodesFinder;
-    /**
-     * @var FunctionLikeParsedNodesFinder
-     */
-    protected $functionLikeParsedNodesFinder;
-
-    /**
      * Run once in the every end of one processed file
      */
     protected function tearDown(): void
@@ -111,9 +99,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         CurrentFileInfoProvider $currentFileInfoProvider,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         DocBlockManipulator $docBlockManipulator,
-        StaticTypeMapper $staticTypeMapper,
-        ClassLikeParsedNodesFinder $classLikeParsedNodesFinder,
-        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder
+        StaticTypeMapper $staticTypeMapper
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
@@ -124,8 +110,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
-        $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
     }
 
     /**

@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PHPUnit\Framework\TestCase;
-use Rector\Core\NodeContainer\ParsedNodesByType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -20,16 +19,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector
 {
-    /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    public function __construct(ParsedNodesByType $parsedNodesByType)
-    {
-        $this->parsedNodesByType = $parsedNodesByType;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Changes $this->call() to static method to static call', [
@@ -100,7 +89,7 @@ PHP
             return null;
         }
 
-        $isStaticMethod = $this->parsedNodesByType->isStaticMethod($methodName, $className);
+        $isStaticMethod = $this->functionLikeParsedNodesFinder->isStaticMethod($methodName, $className);
         if (! $isStaticMethod) {
             return null;
         }
