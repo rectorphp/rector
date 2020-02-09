@@ -12,7 +12,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
 use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -39,20 +39,20 @@ final class EntityWithMissingUuidProvider
     private $classManipulator;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     public function __construct(
         ParsedNodeCollector $parsedNodeCollector,
         DoctrineDocBlockResolver $doctrineDocBlockResolver,
         ClassManipulator $classManipulator,
-        NameResolver $nameResolver
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
         $this->classManipulator = $classManipulator;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -94,7 +94,7 @@ final class EntityWithMissingUuidProvider
                 continue;
             }
 
-            if (! $this->nameResolver->isName($classStmt, 'id')) {
+            if (! $this->nodeNameResolver->isName($classStmt, 'id')) {
                 continue;
             }
 

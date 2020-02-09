@@ -143,7 +143,7 @@ PHP
             }
 
             $position = (int) $position;
-            if ($node instanceof ClassMethod && $this->vendorLockResolver->isParameterChangeVendorLockedIn(
+            if ($node instanceof ClassMethod && $this->vendorLockResolver->isParamChangeVendorLockedIn(
                 $node,
                 $position
             )) {

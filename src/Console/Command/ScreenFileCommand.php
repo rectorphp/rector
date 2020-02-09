@@ -19,7 +19,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\TypeUtils;
 use Rector\Core\Console\Shell;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\FileSystemRector\Parser\FileInfoParser;
@@ -56,9 +56,9 @@ final class ScreenFileCommand extends AbstractCommand
     private $callableNodeTraverser;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var NodeTypeResolver
@@ -79,7 +79,7 @@ final class ScreenFileCommand extends AbstractCommand
         SymfonyStyle $symfonyStyle,
         FileInfoParser $fileInfoParser,
         CallableNodeTraverser $callableNodeTraverser,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         BetterStandardPrinter $betterStandardPrinter,
         StaticTypeMapper $staticTypeMapper
@@ -87,7 +87,7 @@ final class ScreenFileCommand extends AbstractCommand
         $this->symfonyStyle = $symfonyStyle;
         $this->fileInfoParser = $fileInfoParser;
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -172,34 +172,12 @@ final class ScreenFileCommand extends AbstractCommand
             $data = $this->decorateClassLike($node, $data);
         }
 
-        if ($node instanceof Variable) {
-            $data['name'] = $this->nameResolver->getName($node);
-        }
-
         if ($node instanceof Assign) {
             $data = $this->decorateAssign($node, $data);
         }
 
-        if ($node instanceof Namespace_ && $node->name !== null) {
-            $data['name'] = $this->nameResolver->getName($node->name);
-        }
-
-        if ($node instanceof FuncCall && $node->name !== null) {
-            $data['name'] = $this->nameResolver->getName($node->name);
-        }
-
-        if ($node instanceof Variable) {
-            $staticType = $this->nodeTypeResolver->getStaticType($node);
-
-            $classNames = TypeUtils::getDirectClassNames($staticType);
-            if ($classNames !== []) {
-                $objectTypesAsString = implode(', ', $classNames);
-                $data['variable_types'] = $objectTypesAsString;
-            } else {
-                $typeString = $this->staticTypeMapper->mapPHPStanTypeToDocString($staticType);
-                $data['variable_types'] = $typeString;
-            }
-        }
+        $data = $this->addNameData($node, $data);
+        $data = $this->addVariableTypeData($node, $data);
 
         if ($node instanceof Return_) {
             $data = $this->decorateReturn($node, $data);
@@ -264,7 +242,7 @@ final class ScreenFileCommand extends AbstractCommand
      */
     private function decorateClassLike(ClassLike $classLike, array $data): array
     {
-        $data['name'] = $this->nameResolver->getName($classLike);
+        $data['name'] = $this->nodeNameResolver->getName($classLike);
 
         $parentClassName = $classLike->getAttribute(AttributeKey::PARENT_CLASS_NAME);
         if ($parentClassName) {
@@ -318,8 +296,42 @@ final class ScreenFileCommand extends AbstractCommand
     private function decorateMethodCall(MethodCall $methodCall, array $data): array
     {
         $data['method_call_variable'] = $this->decorateNodeData($methodCall->var);
-        $data['method_call_name'] = $this->nameResolver->getName($methodCall->name);
+        $data['method_call_name'] = $this->nodeNameResolver->getName($methodCall->name);
 
+        return $data;
+    }
+
+    private function addNameData(Node $node, array $data): array
+    {
+        if ($node instanceof Variable) {
+            $data['name'] = $this->nodeNameResolver->getName($node);
+        }
+
+        if ($node instanceof Namespace_ && $node->name !== null) {
+            $data['name'] = $this->nodeNameResolver->getName($node->name);
+        }
+
+        if ($node instanceof FuncCall && $node->name !== null) {
+            $data['name'] = $this->nodeNameResolver->getName($node->name);
+        }
+
+        return $data;
+    }
+
+    private function addVariableTypeData(Node $node, array $data): array
+    {
+        if ($node instanceof Variable) {
+            $staticType = $this->nodeTypeResolver->getStaticType($node);
+
+            $classNames = TypeUtils::getDirectClassNames($staticType);
+            if ($classNames !== []) {
+                $objectTypesAsString = implode(', ', $classNames);
+                $data['variable_types'] = $objectTypesAsString;
+            } else {
+                $typeString = $this->staticTypeMapper->mapPHPStanTypeToDocString($staticType);
+                $data['variable_types'] = $typeString;
+            }
+        }
         return $data;
     }
 }

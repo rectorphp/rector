@@ -55,7 +55,7 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
         }
 
         /** @var string $propertyName */
-        $propertyName = $this->nameResolver->getName($property);
+        $propertyName = $this->nodeNameResolver->getName($property);
 
         foreach ($class->getMethods() as $classMethod) {
             if (! $this->hasClassMethodOnlyStatementReturnOfPropertyFetch($classMethod, $propertyName)) {
@@ -97,7 +97,7 @@ final class GetterPropertyTypeInferer extends AbstractTypeInferer implements Pro
             return false;
         }
 
-        return $this->nameResolver->isName($return->expr, $propertyName);
+        return $this->nodeNameResolver->isName($return->expr, $propertyName);
     }
 
     private function inferClassMethodReturnType(ClassMethod $classMethod): Type

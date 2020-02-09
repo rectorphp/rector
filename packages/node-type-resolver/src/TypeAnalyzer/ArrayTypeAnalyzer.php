@@ -20,7 +20,7 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -38,9 +38,9 @@ final class ArrayTypeAnalyzer
     private $pregMatchTypeCorrector;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var ClassManipulator
@@ -50,12 +50,12 @@ final class ArrayTypeAnalyzer
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         PregMatchTypeCorrector $pregMatchTypeCorrector,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         ClassManipulator $classManipulator
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->pregMatchTypeCorrector = $pregMatchTypeCorrector;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->classManipulator = $classManipulator;
     }
 
@@ -120,7 +120,7 @@ final class ArrayTypeAnalyzer
             return false;
         }
 
-        $propertyName = $this->nameResolver->getName($node->name);
+        $propertyName = $this->nodeNameResolver->getName($node->name);
         if ($propertyName === null) {
             return false;
         }

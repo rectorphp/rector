@@ -4512,7 +4512,9 @@ services:
 ↓
 
 ```diff
- class SomeServiceTest extends \PHPUnit\Framework\TestCase
+ use PHPUnit\Framework\TestCase;
+
+ class SomeServiceTest extends TestCase
  {
 -    public function test()
 +    /**
@@ -8781,12 +8783,11 @@ Change $this->_view->assign = 5; to $this->render("...", $templateData);
  public function someAction()
  {
 -    $this->_view->value = 5;
--}
 +    $templateData = [];
 +    $templateData['value']; = 5;
 +
 +    return $this->render("...", $templateData);
-+}
+ }
 ```
 
 <br>

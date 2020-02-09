@@ -102,6 +102,7 @@
             "Rector\\Symfony\\": "packages/symfony/src",
             "Rector\\Twig\\": "packages/twig/src",
             "Rector\\TypeDeclaration\\": "packages/type-declaration/src",
+            "Rector\\VendorLocker\\": "packages/vendor-locker/src",
             "Rector\\ZendToSymfony\\": "packages/zend-to-symfony/src",
             "Rector\\RectorGenerator\\": "packages/rector-generator/src",
             "Rector\\StrictCodeQuality\\": "packages/strict-code-quality/src",

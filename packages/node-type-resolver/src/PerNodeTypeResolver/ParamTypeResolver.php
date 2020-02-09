@@ -14,7 +14,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -26,9 +26,9 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ParamTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var CallableNodeTraverser
@@ -40,9 +40,9 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
      */
     private $nodeTypeResolver;
 
-    public function __construct(NameResolver $nameResolver, CallableNodeTraverser $callableNodeTraverser)
+    public function __construct(NodeNameResolver $nodeNameResolver, CallableNodeTraverser $callableNodeTraverser)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
     }
 
@@ -83,7 +83,7 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
     private function resolveFromType(Node $node)
     {
         if ($node->type !== null && ! $node->type instanceof Identifier) {
-            $resolveTypeName = $this->nameResolver->getName($node->type);
+            $resolveTypeName = $this->nodeNameResolver->getName($node->type);
             if ($resolveTypeName) {
                 // @todo map the other way every type :)
                 return new ObjectType($resolveTypeName);
@@ -101,7 +101,7 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
         }
 
         /** @var string $paramName */
-        $paramName = $this->nameResolver->getName($param);
+        $paramName = $this->nodeNameResolver->getName($param);
         $paramStaticType = new MixedType();
 
         // special case for param inside method/function
@@ -112,7 +112,7 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
                     return null;
                 }
 
-                if (! $this->nameResolver->isName($node, $paramName)) {
+                if (! $this->nodeNameResolver->isName($node, $paramName)) {
                     return null;
                 }
 
@@ -131,7 +131,7 @@ final class ParamTypeResolver implements PerNodeTypeResolverInterface
         $parentNode = $param->getAttribute(AttributeKey::PARENT_NODE);
 
         /** @var string $paramName */
-        $paramName = $this->nameResolver->getName($param);
+        $paramName = $this->nodeNameResolver->getName($param);
 
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $parentNode->getAttribute(AttributeKey::PHP_DOC_INFO);

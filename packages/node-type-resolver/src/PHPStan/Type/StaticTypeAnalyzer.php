@@ -50,17 +50,7 @@ final class StaticTypeAnalyzer
             return false;
         }
 
-        if ($type instanceof UnionType) {
-            foreach ($type->getTypes() as $unionedType) {
-                if (! $this->isAlwaysTruableType($unionedType)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        return true;
+        return $this->isAlwaysTruableUnionType($type);
     }
 
     public function isNullable(Type $type): bool
@@ -85,5 +75,20 @@ final class StaticTypeAnalyzer
         }
 
         return $type instanceof BooleanType || $type instanceof StringType || $type instanceof IntegerType || $type instanceof FloatType;
+    }
+
+    private function isAlwaysTruableUnionType(Type $type): bool
+    {
+        if (! $type instanceof UnionType) {
+            return false;
+        }
+
+        foreach ($type->getTypes() as $unionedType) {
+            if (! $this->isAlwaysTruableType($unionedType)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

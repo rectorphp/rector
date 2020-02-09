@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 
 final class NodeRemovingNodeVisitor extends NodeVisitorAbstract
 {
@@ -26,18 +26,18 @@ final class NodeRemovingNodeVisitor extends NodeVisitorAbstract
     private $nodeFactory;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @param Stmt[] $nodesToRemove
      */
-    public function __construct(array $nodesToRemove, NodeFactory $nodeFactory, NameResolver $nameResolver)
+    public function __construct(array $nodesToRemove, NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver)
     {
         $this->nodesToRemove = $nodesToRemove;
         $this->nodeFactory = $nodeFactory;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -59,7 +59,7 @@ final class NodeRemovingNodeVisitor extends NodeVisitorAbstract
                 continue;
             }
 
-            $methodName = $this->nameResolver->getName($node->name);
+            $methodName = $this->nodeNameResolver->getName($node->name);
             if ($methodName === null) {
                 continue;
             }

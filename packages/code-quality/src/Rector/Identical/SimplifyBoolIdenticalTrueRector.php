@@ -75,28 +75,42 @@ PHP
     private function processBoolTypeToNotBool(Node $node, Expr $leftExpr, Expr $rightExpr): ?Expr
     {
         if ($node instanceof Identical) {
-            if ($this->isTrue($rightExpr)) {
-                return $leftExpr;
-            }
-
-            if ($this->isFalse($rightExpr)) {
-                // prevent !!
-                if ($leftExpr instanceof BooleanNot) {
-                    return $leftExpr->expr;
-                }
-
-                return new BooleanNot($leftExpr);
-            }
+            return $this->refactorIdentical($leftExpr, $rightExpr);
         }
 
         if ($node instanceof NotIdentical) {
-            if ($this->isFalse($rightExpr)) {
-                return $leftExpr;
+            return $this->refactorNotIdentical($leftExpr, $rightExpr);
+        }
+
+        return null;
+    }
+
+    private function refactorIdentical(Expr $leftExpr, Expr $rightExpr): ?Expr
+    {
+        if ($this->isTrue($rightExpr)) {
+            return $leftExpr;
+        }
+
+        if ($this->isFalse($rightExpr)) {
+            // prevent !!
+            if ($leftExpr instanceof BooleanNot) {
+                return $leftExpr->expr;
             }
 
-            if ($this->isTrue($rightExpr)) {
-                return new BooleanNot($leftExpr);
-            }
+            return new BooleanNot($leftExpr);
+        }
+
+        return null;
+    }
+
+    private function refactorNotIdentical(Expr $leftExpr, Expr $rightExpr): ?Expr
+    {
+        if ($this->isFalse($rightExpr)) {
+            return $leftExpr;
+        }
+
+        if ($this->isTrue($rightExpr)) {
+            return new BooleanNot($leftExpr);
         }
 
         return null;

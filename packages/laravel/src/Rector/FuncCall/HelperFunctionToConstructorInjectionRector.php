@@ -7,6 +7,7 @@ namespace Rector\Laravel\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -125,13 +126,7 @@ PHP
         }
 
         if ($functionChange instanceof ArrayFunctionToMethodCall) {
-            if ($functionChange->getArrayMethod() && $this->isArrayType($node->args[0]->value)) {
-                return new MethodCall($propertyFetchNode, $functionChange->getArrayMethod(), $node->args);
-            }
-
-            if ($functionChange->getNonArrayMethod() && ! $this->isArrayType($node->args[0]->value)) {
-                return new MethodCall($propertyFetchNode, $functionChange->getNonArrayMethod(), $node->args);
-            }
+            return $this->createMethodCallArrayFunctionToMethodCall($node, $functionChange, $propertyFetchNode);
         }
 
         throw new ShouldNotHappenException();
@@ -168,5 +163,21 @@ PHP
         }
 
         return count($node->args) >= 1;
+    }
+
+    private function createMethodCallArrayFunctionToMethodCall(
+        FuncCall $funcCall,
+        ArrayFunctionToMethodCall $arrayFunctionToMethodCall,
+        PropertyFetch $propertyFetch
+    ) {
+        if ($arrayFunctionToMethodCall->getArrayMethod() && $this->isArrayType($funcCall->args[0]->value)) {
+            return new MethodCall($propertyFetch, $arrayFunctionToMethodCall->getArrayMethod(), $funcCall->args);
+        }
+
+        if ($arrayFunctionToMethodCall->getNonArrayMethod() && ! $this->isArrayType($funcCall->args[0]->value)) {
+            return new MethodCall($propertyFetch, $arrayFunctionToMethodCall->getNonArrayMethod(), $funcCall->args);
+        }
+
+        return null;
     }
 }

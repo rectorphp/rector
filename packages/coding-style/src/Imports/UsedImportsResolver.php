@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 
@@ -22,9 +22,9 @@ final class UsedImportsResolver
     private $betterNodeFinder;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var UseImportsTraverser
@@ -33,11 +33,11 @@ final class UsedImportsResolver
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         UseImportsTraverser $useImportsTraverser
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->useImportsTraverser = $useImportsTraverser;
     }
 
@@ -67,7 +67,7 @@ final class UsedImportsResolver
 
         // add class itself
         if ($class !== null) {
-            $className = $this->nameResolver->getName($class);
+            $className = $this->nodeNameResolver->getName($class);
             if ($className !== null) {
                 $usedImports[] = new FullyQualifiedObjectType($className);
             }

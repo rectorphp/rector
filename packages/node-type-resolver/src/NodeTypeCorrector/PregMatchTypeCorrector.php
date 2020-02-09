@@ -12,7 +12,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -24,9 +24,9 @@ final class PregMatchTypeCorrector
     private $betterNodeFinder;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var BetterStandardPrinter
@@ -35,11 +35,11 @@ final class PregMatchTypeCorrector
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
@@ -69,7 +69,7 @@ final class PregMatchTypeCorrector
                 continue;
             }
 
-            if (! $this->nameResolver->isNames($funcCallNode, ['preg_match', 'preg_match_all'])) {
+            if (! $this->nodeNameResolver->isNames($funcCallNode, ['preg_match', 'preg_match_all'])) {
                 continue;
             }
 

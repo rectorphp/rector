@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Nette\ValueObject\MagicTemplatePropertyCalls;
 
@@ -38,14 +38,14 @@ final class TemplatePropertyAssignCollector
     private $callableNodeTraverser;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, NameResolver $nameResolver)
+    public function __construct(CallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
     {
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function collectTemplateFileNameVariablesAndNodesToRemove(
@@ -73,7 +73,7 @@ final class TemplatePropertyAssignCollector
 
     private function collectTemplateFileExpr(MethodCall $methodCall): void
     {
-        if ($this->nameResolver->isName($methodCall->name, 'render')) {
+        if ($this->nodeNameResolver->isName($methodCall->name, 'render')) {
             if (isset($methodCall->args[0])) {
                 $this->templateFileExpr = $methodCall->args[0]->value;
             }
@@ -81,7 +81,7 @@ final class TemplatePropertyAssignCollector
             $this->nodesToRemove[] = $methodCall;
         }
 
-        if ($this->nameResolver->isName($methodCall->name, 'setFile')) {
+        if ($this->nodeNameResolver->isName($methodCall->name, 'setFile')) {
             $this->templateFileExpr = $methodCall->args[0]->value;
             $this->nodesToRemove[] = $methodCall;
         }
@@ -91,11 +91,11 @@ final class TemplatePropertyAssignCollector
     {
         // $this->template = x
         if ($assign->var instanceof PropertyFetch) {
-            if (! $this->nameResolver->isName($assign->var->var, 'template')) {
+            if (! $this->nodeNameResolver->isName($assign->var->var, 'template')) {
                 return;
             }
 
-            $variableName = $this->nameResolver->getName($assign->var);
+            $variableName = $this->nodeNameResolver->getName($assign->var);
             $this->templateVariables[$variableName] = $assign->expr;
 
             $this->nodesToRemove[] = $assign;
@@ -121,10 +121,10 @@ final class TemplatePropertyAssignCollector
             return false;
         }
 
-        if (! $this->nameResolver->isName($expr->var, 'this')) {
+        if (! $this->nodeNameResolver->isName($expr->var, 'this')) {
             return false;
         }
 
-        return $this->nameResolver->isName($expr->name, 'template');
+        return $this->nodeNameResolver->isName($expr->name, 'template');
     }
 }

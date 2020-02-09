@@ -14,7 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\CodingStyle\Imports\ImportSkipper;
 use Rector\Core\Configuration\Option;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -51,9 +51,9 @@ final class DocBlockNameImporter
     private $useAddingCommander;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var BetterStandardPrinter
@@ -74,7 +74,7 @@ final class DocBlockNameImporter
         PhpDocNodeTraverser $phpDocNodeTraverser,
         StaticTypeMapper $staticTypeMapper,
         UseAddingCommander $useAddingCommander,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         BetterStandardPrinter $betterStandardPrinter,
         ImportSkipper $importSkipper,
         ParameterProvider $parameterProvider
@@ -82,7 +82,7 @@ final class DocBlockNameImporter
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->useAddingCommander = $useAddingCommander;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->importSkipper = $importSkipper;
         $this->parameterProvider = $parameterProvider;
@@ -192,7 +192,7 @@ final class DocBlockNameImporter
             return true;
         }
 
-        $className = $this->nameResolver->getName($classNode);
+        $className = $this->nodeNameResolver->getName($classNode);
 
         if (isset($this->usedShortNameByClasses[$className][$shortenedObjectType->getShortName()])) {
             return $this->usedShortNameByClasses[$className][$shortenedObjectType->getShortName()];

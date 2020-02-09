@@ -18,4 +18,4 @@ jobs:
                     tools: cs2pr
             -   run: composer install --no-progress
             # turn the phpstan errors (formatted in checkstyle-format) into github pull request check annotations
-            -   run: composer phpstan -- --error-format=checkstyle | cs2pr
+            -   run: composer phpstan # -- --error-format=checkstyle | cs2pr

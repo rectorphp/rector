@@ -8,15 +8,15 @@ use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class FunctionLikeManipulator
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var CallableNodeTraverser
@@ -29,11 +29,11 @@ final class FunctionLikeManipulator
     private $propertyFetchManipulator;
 
     public function __construct(
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         CallableNodeTraverser $callableNodeTraverser,
         PropertyFetchManipulator $propertyFetchManipulator
     ) {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->propertyFetchManipulator = $propertyFetchManipulator;
     }
@@ -60,7 +60,7 @@ final class FunctionLikeManipulator
                 return null;
             }
 
-            $propertyName = $this->nameResolver->getName($node->expr);
+            $propertyName = $this->nodeNameResolver->getName($node->expr);
             if ($propertyName === null) {
                 return null;
             }

@@ -18,7 +18,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -49,18 +49,18 @@ final class ParsedFunctionLikeNodeCollector
     private $arrayCallablesByTypeAndMethod = [];
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
 
-    public function __construct(NameResolver $nameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -100,7 +100,7 @@ final class ParsedFunctionLikeNodeCollector
         }
 
         if ($node instanceof Function_) {
-            $functionName = $this->nameResolver->getName($node);
+            $functionName = $this->nodeNameResolver->getName($node);
             if ($functionName === null) {
                 return;
             }
@@ -153,7 +153,7 @@ final class ParsedFunctionLikeNodeCollector
             return;
         }
 
-        $methodName = $this->nameResolver->getName($classMethod);
+        $methodName = $this->nodeNameResolver->getName($classMethod);
         $this->methodsByType[$className][$methodName] = $classMethod;
     }
 
@@ -204,17 +204,9 @@ final class ParsedFunctionLikeNodeCollector
     private function addCall(Node $node): void
     {
         // one node can be of multiple-class types
-        if ($node instanceof MethodCall) {
-            if ($node->var instanceof MethodCall) {
-                $classType = $this->resolveNodeClassTypes($node);
-            } else {
-                $classType = $this->resolveNodeClassTypes($node->var);
-            }
-        } else {
-            $classType = $this->resolveNodeClassTypes($node->class);
-        }
+        $classType = $this->resolveClassType($node);
 
-        $methodName = $this->nameResolver->getName($node);
+        $methodName = $this->nodeNameResolver->getName($node);
         if ($classType instanceof MixedType) { // anonymous
             return;
         }
@@ -241,17 +233,17 @@ final class ParsedFunctionLikeNodeCollector
     private function isThisVariable(Node $node): bool
     {
         // $this
-        if ($node instanceof Variable && $this->nameResolver->isName($node, 'this')) {
+        if ($node instanceof Variable && $this->nodeNameResolver->isName($node, 'this')) {
             return true;
         }
 
         if ($node instanceof ClassConstFetch) {
-            if (! $this->nameResolver->isName($node->name, 'class')) {
+            if (! $this->nodeNameResolver->isName($node->name, 'class')) {
                 return false;
             }
 
             // self::class, static::class
-            if ($this->nameResolver->isNames($node->class, ['self', 'static'])) {
+            if ($this->nodeNameResolver->isNames($node->class, ['self', 'static'])) {
                 return true;
             }
 
@@ -262,7 +254,7 @@ final class ParsedFunctionLikeNodeCollector
                 return false;
             }
 
-            return $this->nameResolver->isName($node->class, $className);
+            return $this->nodeNameResolver->isName($node->class, $className);
         }
 
         return false;
@@ -286,5 +278,21 @@ final class ParsedFunctionLikeNodeCollector
         }
 
         return $this->nodeTypeResolver->resolve($node);
+    }
+
+    /**
+     * @param MethodCall|StaticCall $node
+     */
+    private function resolveClassType(Node $node): Type
+    {
+        if ($node instanceof MethodCall) {
+            if ($node->var instanceof MethodCall) {
+                return $this->resolveNodeClassTypes($node);
+            }
+
+            return $this->resolveNodeClassTypes($node->var);
+        }
+
+        return $this->resolveNodeClassTypes($node->class);
     }
 }

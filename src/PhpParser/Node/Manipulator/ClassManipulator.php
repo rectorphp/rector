@@ -26,7 +26,7 @@ use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -35,9 +35,9 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ClassManipulator
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var NodeFactory
@@ -70,7 +70,7 @@ final class ClassManipulator
     private $nodeTypeResolver;
 
     public function __construct(
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         NodeFactory $nodeFactory,
         ChildAndParentClassManipulator $childAndParentClassManipulator,
         CallableNodeTraverser $callableNodeTraverser,
@@ -79,7 +79,7 @@ final class ClassManipulator
         NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nodeFactory = $nodeFactory;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->childAndParentClassManipulator = $childAndParentClassManipulator;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeRemovingCommander = $nodeRemovingCommander;
@@ -190,7 +190,7 @@ final class ClassManipulator
         $usedTraits = [];
         foreach ($classLike->getTraitUses() as $stmt) {
             foreach ($stmt->traits as $trait) {
-                $traitName = $this->nameResolver->getName($trait);
+                $traitName = $this->nodeNameResolver->getName($trait);
                 if ($traitName !== null) {
                     $usedTraits[$traitName] = $trait;
                 }
@@ -208,7 +208,7 @@ final class ClassManipulator
                 throw new ShouldNotHappenException();
             }
 
-            if ($this->nameResolver->isName($property, $name)) {
+            if ($this->nodeNameResolver->isName($property, $name)) {
                 return $property;
             }
         }
@@ -254,7 +254,7 @@ final class ClassManipulator
     public function findMethodParamByName(ClassMethod $classMethod, string $name): ?Param
     {
         foreach ($classMethod->params as $param) {
-            if (! $this->nameResolver->isName($param, $name)) {
+            if (! $this->nodeNameResolver->isName($param, $name)) {
                 continue;
             }
 
@@ -276,7 +276,7 @@ final class ClassManipulator
             }
 
             /** @var string $propertyName */
-            $propertyName = $this->nameResolver->getName($property);
+            $propertyName = $this->nodeNameResolver->getName($property);
             $privatePropertyNames[] = $propertyName;
         }
 
@@ -299,7 +299,7 @@ final class ClassManipulator
             }
 
             /** @var string $methodName */
-            $methodName = $this->nameResolver->getName($method);
+            $methodName = $this->nodeNameResolver->getName($method);
             $publicMethodNames[] = $methodName;
         }
 
@@ -316,7 +316,7 @@ final class ClassManipulator
                 return null;
             }
 
-            if (! $this->nameResolver->isNames($node, $propertyNames)) {
+            if (! $this->nodeNameResolver->isNames($node, $propertyNames)) {
                 return null;
             }
 
@@ -376,7 +376,7 @@ final class ClassManipulator
         $implementedInterfaceNames = [];
 
         foreach ($class->implements as $implement) {
-            $interfaceName = $this->nameResolver->getName($implement);
+            $interfaceName = $this->nodeNameResolver->getName($implement);
             if (! is_string($interfaceName)) {
                 throw new ShouldNotHappenException();
             }
@@ -391,7 +391,7 @@ final class ClassManipulator
     {
         foreach ($node->getProperties() as $property) {
             foreach ($property->props as $propertyProperty) {
-                if (! $this->nameResolver->isName($propertyProperty, $name)) {
+                if (! $this->nodeNameResolver->isName($propertyProperty, $name)) {
                     continue;
                 }
 
@@ -406,7 +406,7 @@ final class ClassManipulator
     {
         foreach ($class->getTraitUses() as $traitUse) {
             foreach ($traitUse->traits as $traitTrait) {
-                if (! $this->nameResolver->isName($traitTrait, $desiredTrait)) {
+                if (! $this->nodeNameResolver->isName($traitTrait, $desiredTrait)) {
                     continue;
                 }
 
@@ -421,7 +421,7 @@ final class ClassManipulator
     {
         foreach ($class->getTraitUses() as $traitUse) {
             foreach ($traitUse->traits as $key => $traitTrait) {
-                if (! $this->nameResolver->isName($traitTrait, $oldTrait)) {
+                if (! $this->nodeNameResolver->isName($traitTrait, $oldTrait)) {
                     continue;
                 }
 
@@ -451,7 +451,7 @@ final class ClassManipulator
     public function hasInterface(Class_ $class, string $desiredInterface): bool
     {
         foreach ($class->implements as $implement) {
-            if (! $this->nameResolver->isName($implement, $desiredInterface)) {
+            if (! $this->nodeNameResolver->isName($implement, $desiredInterface)) {
                 continue;
             }
 
@@ -464,7 +464,7 @@ final class ClassManipulator
     public function removeInterface(Class_ $class, string $desiredInterface): void
     {
         foreach ($class->implements as $implement) {
-            if (! $this->nameResolver->isName($implement, $desiredInterface)) {
+            if (! $this->nodeNameResolver->isName($implement, $desiredInterface)) {
                 continue;
             }
 
@@ -484,12 +484,12 @@ final class ClassManipulator
                 return null;
             }
 
-            if (! $this->nameResolver->isName($node->var, 'this')) {
+            if (! $this->nodeNameResolver->isName($node->var, 'this')) {
                 return null;
             }
 
             foreach ($oldToNewPropertyNames as $oldPropertyName => $newPropertyName) {
-                if (! $this->nameResolver->isName($node->name, $oldPropertyName)) {
+                if (! $this->nodeNameResolver->isName($node->name, $oldPropertyName)) {
                     continue;
                 }
 
@@ -549,7 +549,7 @@ final class ClassManipulator
     private function hasClassProperty(Class_ $classNode, string $name): bool
     {
         foreach ($classNode->getProperties() as $property) {
-            if ($this->nameResolver->isName($property, $name)) {
+            if ($this->nodeNameResolver->isName($property, $name)) {
                 return true;
             }
         }
@@ -578,7 +578,7 @@ final class ClassManipulator
     {
         $classMethodNames = [];
         foreach ($classNode->getMethods() as $classMethod) {
-            $methodName = $this->nameResolver->getName($classMethod);
+            $methodName = $this->nodeNameResolver->getName($classMethod);
             if (! is_string($methodName)) {
                 throw new ShouldNotHappenException();
             }
@@ -637,7 +637,7 @@ final class ClassManipulator
         $interfaceNames = [];
 
         foreach ($class->implements as $implementNode) {
-            $interfaceName = $this->nameResolver->getName($implementNode);
+            $interfaceName = $this->nodeNameResolver->getName($implementNode);
             if ($interfaceName === null) {
                 continue;
             }
@@ -656,7 +656,7 @@ final class ClassManipulator
         $interfaceNames = [];
 
         foreach ($interface->extends as $extendNode) {
-            $interfaceName = $this->nameResolver->getName($extendNode);
+            $interfaceName = $this->nodeNameResolver->getName($extendNode);
             if ($interfaceName === null) {
                 continue;
             }
@@ -670,7 +670,7 @@ final class ClassManipulator
     private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
     {
         foreach ($classMethod->params as $constructorParameter) {
-            if ($this->nameResolver->isName($constructorParameter->var, $name)) {
+            if ($this->nodeNameResolver->isName($constructorParameter->var, $name)) {
                 return true;
             }
         }

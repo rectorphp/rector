@@ -7,24 +7,24 @@ namespace Rector\TypeDeclaration\PhpDocParser;
 use PhpParser\Node\Param;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 
 final class ParamPhpDocNodeFactory
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var StaticTypeMapper
      */
     private $staticTypeMapper;
 
-    public function __construct(NameResolver $nameResolver, StaticTypeMapper $staticTypeMapper)
+    public function __construct(NodeNameResolver $nodeNameResolver, StaticTypeMapper $staticTypeMapper)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->staticTypeMapper = $staticTypeMapper;
     }
 
@@ -35,7 +35,7 @@ final class ParamPhpDocNodeFactory
         return new AttributeAwareParamTagValueNode(
             $typeNode,
             $param->variadic,
-            '$' . $this->nameResolver->getName($param),
+            '$' . $this->nodeNameResolver->getName($param),
             '',
             $param->byRef
         );

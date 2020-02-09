@@ -16,7 +16,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class SymfonyFormAbstractTypeFactory
@@ -27,14 +27,14 @@ final class SymfonyFormAbstractTypeFactory
     private $nodeFactory;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
-    public function __construct(NodeFactory $nodeFactory, NameResolver $nameResolver)
+    public function __construct(NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeFactory = $nodeFactory;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -69,7 +69,7 @@ final class SymfonyFormAbstractTypeFactory
 
         // create symfony form from nette form method calls
         foreach ($methodCalls as $methodCall) {
-            if ($this->nameResolver->isName($methodCall->name, 'addText')) {
+            if ($this->nodeNameResolver->isName($methodCall->name, 'addText')) {
                 $optionsArray = $this->createOptionsArray($methodCall);
 
                 $formTypeClassConstant = $this->nodeFactory->createClassConstantReference(TextType::class);

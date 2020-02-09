@@ -113,20 +113,20 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
             $contentItems['scale'] = sprintf('scale=%s', $this->scale);
         }
 
-        if ($this->unique !== null) {
-            $contentItems['unique'] = sprintf('unique=%s', $this->unique ? 'true' : 'false');
-        }
-
-        if ($this->nullable !== null) {
-            $contentItems['nullable'] = sprintf('nullable=%s', $this->nullable ? 'true' : 'false');
+        if ($this->columnDefinition !== null) {
+            $contentItems['columnDefinition'] = sprintf('columnDefinition="%s"', $this->columnDefinition);
         }
 
         if ($this->options) {
             $contentItems['options'] = $this->printArrayItem($this->options, 'options');
         }
 
-        if ($this->columnDefinition !== null) {
-            $contentItems['columnDefinition'] = sprintf('columnDefinition="%s"', $this->columnDefinition);
+        if ($this->unique !== null) {
+            $contentItems['unique'] = sprintf('unique=%s', $this->unique ? 'true' : 'false');
+        }
+
+        if ($this->nullable !== null) {
+            $contentItems['nullable'] = sprintf('nullable=%s', $this->nullable ? 'true' : 'false');
         }
 
         return $this->printContentItems($contentItems);

@@ -13,7 +13,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\NodeChanger\NodeMissingIdentifierException;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 
 /**
  * This class renames node identifier, e.g. ClassMethod rename:
@@ -31,13 +31,13 @@ final class IdentifierManipulator
     ];
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
-    public function __construct(NameResolver $nameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -48,7 +48,7 @@ final class IdentifierManipulator
     {
         $this->ensureNodeHasIdentifier($node);
 
-        $oldNodeMethodName = $this->nameResolver->getName($node);
+        $oldNodeMethodName = $this->nodeNameResolver->getName($node);
         if ($oldNodeMethodName === null) {
             return;
         }
@@ -63,7 +63,7 @@ final class IdentifierManipulator
     {
         $this->ensureNodeHasIdentifier($node);
 
-        $name = $this->nameResolver->getName($node);
+        $name = $this->nodeNameResolver->getName($node);
         if ($name === null) {
             return;
         }

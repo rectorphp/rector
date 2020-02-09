@@ -59,7 +59,7 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
     private function matchPropertyAssignExpr(Assign $assign, string $propertyName): ?Expr
     {
         if ($this->isPropertyFetch($assign->var)) {
-            if (! $this->nameResolver->isName($assign->var, $propertyName)) {
+            if (! $this->nodeNameResolver->isName($assign->var, $propertyName)) {
                 return null;
             }
 
@@ -67,7 +67,7 @@ final class AssignToPropertyTypeInferer extends AbstractTypeInferer
         }
 
         if ($assign->var instanceof ArrayDimFetch && $this->isPropertyFetch($assign->var->var)) {
-            if (! $this->nameResolver->isName($assign->var->var, $propertyName)) {
+            if (! $this->nodeNameResolver->isName($assign->var->var, $propertyName)) {
                 return null;
             }
 

@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\NodeContainer\NodeFinder\ClassLikeParsedNodesFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ChildAndParentClassManipulator
@@ -21,9 +21,9 @@ final class ChildAndParentClassManipulator
     private $nodeFactory;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var ClassLikeParsedNodesFinder
@@ -38,11 +38,11 @@ final class ChildAndParentClassManipulator
     public function __construct(
         ParsedNodeCollector $parsedNodeCollector,
         NodeFactory $nodeFactory,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         ClassLikeParsedNodesFinder $classLikeParsedNodesFinder
     ) {
         $this->nodeFactory = $nodeFactory;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
         $this->parsedNodeCollector = $parsedNodeCollector;
     }
@@ -75,7 +75,7 @@ final class ChildAndParentClassManipulator
 
     public function completeChildConstructors(Class_ $classNode, ClassMethod $constructorClassMethod): void
     {
-        $className = $this->nameResolver->getName($classNode);
+        $className = $this->nodeNameResolver->getName($classNode);
         if ($className === null) {
             return;
         }

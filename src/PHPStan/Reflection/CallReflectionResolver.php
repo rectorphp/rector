@@ -25,7 +25,7 @@ use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -51,18 +51,18 @@ final class CallReflectionResolver
     private $nodeTypeResolver;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     public function __construct(
         ReflectionProvider $reflectionProvider,
         NodeTypeResolver $nodeTypeResolver,
-        NameResolver $nameResolver
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -132,7 +132,7 @@ final class CallReflectionResolver
         }
 
         $classType = $this->nodeTypeResolver->resolve($node instanceof MethodCall ? $node->var : $node->class);
-        $methodName = $this->nameResolver->getName($node->name);
+        $methodName = $this->nodeNameResolver->getName($node->name);
 
         if ($methodName === null || ! $classType->hasMethod($methodName)->yes()) {
             return null;

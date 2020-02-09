@@ -10,7 +10,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -32,18 +32,18 @@ final class PhpSpecMockCollector
     private $propertyMocksByClass = [];
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
 
-    public function __construct(NameResolver $nameResolver, CallableNodeTraverser $callableNodeTraverser)
+    public function __construct(NodeNameResolver $nodeNameResolver, CallableNodeTraverser $callableNodeTraverser)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
     }
 
@@ -52,7 +52,7 @@ final class PhpSpecMockCollector
      */
     public function resolveClassMocksFromParam(Class_ $class): array
     {
-        $className = $this->nameResolver->getName($class);
+        $className = $this->nodeNameResolver->getName($class);
 
         if (isset($this->mocks[$className])) {
             return $this->mocks[$className];
@@ -82,7 +82,7 @@ final class PhpSpecMockCollector
 
     public function isVariableMockInProperty(Variable $variable): bool
     {
-        $variableName = $this->nameResolver->getName($variable);
+        $variableName = $this->nodeNameResolver->getName($variable);
         $className = $variable->getAttribute(AttributeKey::CLASS_NAME);
 
         return in_array($variableName, $this->propertyMocksByClass[$className] ?? [], true);
@@ -90,7 +90,7 @@ final class PhpSpecMockCollector
 
     public function getTypeForClassAndVariable(Class_ $node, string $variable): string
     {
-        $className = $this->nameResolver->getName($node);
+        $className = $this->nodeNameResolver->getName($node);
 
         if (! isset($this->mocksWithsTypes[$className][$variable])) {
             throw new ShouldNotHappenException();
@@ -106,7 +106,7 @@ final class PhpSpecMockCollector
 
     private function addMockFromParam(Param $param): void
     {
-        $variable = $this->nameResolver->getName($param->var);
+        $variable = $this->nodeNameResolver->getName($param->var);
 
         /** @var string $class */
         $class = $param->getAttribute(AttributeKey::CLASS_NAME);
