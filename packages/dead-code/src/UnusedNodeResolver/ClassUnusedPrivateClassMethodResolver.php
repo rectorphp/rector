@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\NodeContainer\NodeFinder\FunctionLikeParsedNodesFinder;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 use ReflectionMethod;
 
 final class ClassUnusedPrivateClassMethodResolver

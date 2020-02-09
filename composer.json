@@ -71,6 +71,7 @@
             "Rector\\NetteToSymfony\\": "packages/nette-to-symfony/src",
             "Rector\\Nette\\": "packages/nette/src",
             "Rector\\NodeTypeResolver\\": "packages/node-type-resolver/src",
+            "Rector\\NodeNameResolver\\": "packages/node-name-resolver/src",
             "Rector\\PHPStan\\": "packages/phpstan/src",
             "Rector\\PHPStanStaticTypeMapper\\": "packages/phpstan-static-type-mapper/src",
             "Rector\\PHPUnitSymfony\\": "packages/phpunit-symfony/src",

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\PhpParser\Node\NodeNameResolver;
+namespace Rector\NodeNameResolver\NodeNameResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
-use Rector\Core\Contract\NameResolver\NodeNameResolverInterface;
-use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
+use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ParamNameResolver implements NodeNameResolverInterface
 {

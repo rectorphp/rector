@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class LetManipulator
 {

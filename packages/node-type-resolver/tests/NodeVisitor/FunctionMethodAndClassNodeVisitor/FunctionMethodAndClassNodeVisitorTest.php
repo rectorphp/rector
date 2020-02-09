@@ -9,8 +9,8 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\Testing\PHPUnit\AbstractNodeVisitorTestCase;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 

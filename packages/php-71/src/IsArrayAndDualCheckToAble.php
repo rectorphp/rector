@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
-use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class IsArrayAndDualCheckToAble
 {

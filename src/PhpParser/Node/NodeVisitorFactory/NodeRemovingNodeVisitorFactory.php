@@ -7,7 +7,7 @@ namespace Rector\Core\PhpParser\Node\NodeVisitorFactory;
 use PhpParser\Node;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\NodeVisitor\NodeRemovingNodeVisitor;
-use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class NodeRemovingNodeVisitorFactory
 {

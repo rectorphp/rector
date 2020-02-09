@@ -2,23 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\PhpParser\Node\Resolver;
+namespace Rector\NodeNameResolver;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
-use Rector\Core\Contract\NameResolver\NodeNameResolverInterface;
+use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 
-/**
- * @todo extract to own package name-resolver
- */
 final class NodeNameResolver
 {
     /**

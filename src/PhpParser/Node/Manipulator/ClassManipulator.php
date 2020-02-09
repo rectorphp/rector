@@ -26,9 +26,9 @@ use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
