@@ -6,7 +6,6 @@ namespace Rector\SOLID\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\NodeContainer\ParsedNodesByType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -16,16 +15,6 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class MakeUnusedClassesWithChildrenAbstractRector extends AbstractRector
 {
-    /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    public function __construct(ParsedNodesByType $parsedNodesByType)
-    {
-        $this->parsedNodesByType = $parsedNodesByType;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Classes that have no children nor are used, should have abstract', [
@@ -72,12 +61,12 @@ PHP
         }
 
         // 1. is in static call?
-        if ($this->parsedNodesByType->findMethodCallsOnClass($className) !== []) {
+        if ($this->functionLikeParsedNodesFinder->findMethodCallsOnClass($className) !== []) {
             return null;
         }
 
         // 2. is in new?
-        if ($this->parsedNodesByType->findNewNodesByClass($className) !== []) {
+        if ($this->parsedNodeCollector->findNewNodesByClass($className) !== []) {
             return null;
         }
 

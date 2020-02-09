@@ -2,31 +2,32 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\NodeContainer;
+namespace Rector\Core\NodeContainer\NodeFinder;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ClassLikeParsedNodesFinder
 {
     /**
-     * @var ParsedNodesByType
+     * @var ParsedNodeCollector
      */
-    private $parsedNodesByType;
+    private $parsedNodeCollector;
 
     /**
      * @var NameResolver
      */
     private $nameResolver;
 
-    public function __construct(ParsedNodesByType $parsedNodesByType, NameResolver $nameResolver)
+    public function __construct(ParsedNodeCollector $parsedNodeCollector, NameResolver $nameResolver)
     {
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nameResolver = $nameResolver;
     }
 
@@ -37,7 +38,7 @@ final class ClassLikeParsedNodesFinder
     {
         $childrenClasses = [];
 
-        foreach ($this->parsedNodesByType->getClasses() as $classNode) {
+        foreach ($this->parsedNodeCollector->getClasses() as $classNode) {
             $currentClassName = $classNode->getAttribute(AttributeKey::CLASS_NAME);
             if (! $this->isChildOrEqualClassLike($class, $currentClassName)) {
                 continue;
@@ -56,7 +57,7 @@ final class ClassLikeParsedNodesFinder
     {
         $classNodes = [];
 
-        foreach ($this->parsedNodesByType->getClasses() as $className => $classNode) {
+        foreach ($this->parsedNodeCollector->getClasses() as $className => $classNode) {
             if (! Strings::endsWith($className, $suffix)) {
                 continue;
             }
@@ -86,7 +87,7 @@ final class ClassLikeParsedNodesFinder
                     continue;
                 }
 
-                $foundTrait = $this->parsedNodesByType->findTrait($traitName);
+                $foundTrait = $this->parsedNodeCollector->findTrait($traitName);
                 if ($foundTrait !== null) {
                     $traits[] = $foundTrait;
                 }
@@ -111,7 +112,7 @@ final class ClassLikeParsedNodesFinder
     {
         $implementerInterfaces = [];
 
-        foreach ($this->parsedNodesByType->getInterfaces() as $interfaceNode) {
+        foreach ($this->parsedNodeCollector->getInterfaces() as $interfaceNode) {
             $className = $interfaceNode->getAttribute(AttributeKey::CLASS_NAME);
 
             if (! $this->isChildOrEqualClassLike($interface, $className)) {
@@ -122,6 +123,16 @@ final class ClassLikeParsedNodesFinder
         }
 
         return $implementerInterfaces;
+    }
+
+    public function findInterface(string $class): ?Interface_
+    {
+        return $this->parsedNodeCollector->findInterface($class);
+    }
+
+    public function findClass(string $name): ?Class_
+    {
+        return $this->parsedNodeCollector->findClass($name);
     }
 
     private function isChildOrEqualClassLike(string $desiredClass, ?string $currentClassName): bool

@@ -15,7 +15,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PHPStan\Type\SelfObjectType;
@@ -41,9 +41,9 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
     protected $docBlockManipulator;
 
     /**
-     * @var ParsedNodesByType
+     * @var ParsedNodeCollector
      */
-    protected $parsedNodesByType;
+    protected $parsedNodeCollector;
 
     /**
      * @var PhpParserTypeAnalyzer
@@ -60,12 +60,12 @@ abstract class AbstractTypeDeclarationRector extends AbstractRector
      */
     public function autowireAbstractTypeDeclarationRector(
         DocBlockManipulator $docBlockManipulator,
-        ParsedNodesByType $parsedNodesByType,
+        ParsedNodeCollector $parsedNodeCollector,
         PhpParserTypeAnalyzer $phpParserTypeAnalyzer,
         VendorLockResolver $vendorLockResolver
     ): void {
         $this->docBlockManipulator = $docBlockManipulator;
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->phpParserTypeAnalyzer = $phpParserTypeAnalyzer;
         $this->vendorLockResolver = $vendorLockResolver;
     }

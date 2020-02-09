@@ -5,24 +5,24 @@ declare(strict_types=1);
 namespace Rector\SOLID\NodeFinder;
 
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ParentClassConstantNodeFinder
 {
     /**
-     * @var ParsedNodesByType
+     * @var ParsedNodeCollector
      */
-    private $parsedNodesByType;
+    private $parsedNodeCollector;
 
-    public function __construct(ParsedNodesByType $parsedNodesByType)
+    public function __construct(ParsedNodeCollector $parsedNodeCollector)
     {
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->parsedNodeCollector = $parsedNodeCollector;
     }
 
     public function find(string $class, string $constant): ?ClassConst
     {
-        $classNode = $this->parsedNodesByType->findClass($class);
+        $classNode = $this->parsedNodeCollector->findClass($class);
         if ($classNode === null) {
             return null;
         }
@@ -33,6 +33,6 @@ final class ParentClassConstantNodeFinder
             return null;
         }
 
-        return $this->parsedNodesByType->findClassConstant($parentClassName, $constant);
+        return $this->parsedNodeCollector->findClassConstant($parentClassName, $constant);
     }
 }

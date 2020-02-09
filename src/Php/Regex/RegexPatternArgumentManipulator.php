@@ -13,7 +13,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
@@ -58,11 +58,6 @@ final class RegexPatternArgumentManipulator
     private $nameResolver;
 
     /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
      * @var BetterNodeFinder
      */
     private $betterNodeFinder;
@@ -72,16 +67,21 @@ final class RegexPatternArgumentManipulator
      */
     private $betterStandardPrinter;
 
+    /**
+     * @var ParsedNodeCollector
+     */
+    private $parsedNodeCollector;
+
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         NameResolver $nameResolver,
-        ParsedNodesByType $parsedNodesByType,
+        ParsedNodeCollector $parsedNodeCollector,
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nameResolver = $nameResolver;
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
@@ -204,7 +204,7 @@ final class RegexPatternArgumentManipulator
      */
     private function resolveClassConstFetchValue(ClassConstFetch $classConstFetch): array
     {
-        $classConstNode = $this->parsedNodesByType->findClassConstantByClassConstFetch($classConstFetch);
+        $classConstNode = $this->parsedNodeCollector->findClassConstantByClassConstFetch($classConstFetch);
         if ($classConstNode === null) {
             return [];
         }

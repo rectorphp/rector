@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
-use Rector\Core\NodeContainer\ParsedNodesByType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -36,11 +35,6 @@ use ReflectionMethod;
 final class RouterListToControllerAnnotationsRector extends AbstractRector
 {
     /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
      * @var RouteInfoFactory
      */
     private $routeInfoFactory;
@@ -56,12 +50,10 @@ final class RouterListToControllerAnnotationsRector extends AbstractRector
     private $implicitToExplicitRoutingAnnotationDecorator;
 
     public function __construct(
-        ParsedNodesByType $parsedNodesByType,
         RouteInfoFactory $routeInfoFactory,
         ReturnTypeInferer $returnTypeInferer,
         ImplicitToExplicitRoutingAnnotationDecorator $implicitToExplicitRoutingAnnotationDecorator
     ) {
-        $this->parsedNodesByType = $parsedNodesByType;
         $this->routeInfoFactory = $routeInfoFactory;
         $this->returnTypeInferer = $returnTypeInferer;
         $this->implicitToExplicitRoutingAnnotationDecorator = $implicitToExplicitRoutingAnnotationDecorator;
@@ -236,7 +228,7 @@ PHP
 
     private function resolveControllerClassMethod(RouteInfo $routeInfo): ?ClassMethod
     {
-        $classNode = $this->parsedNodesByType->findClass($routeInfo->getClass());
+        $classNode = $this->classLikeParsedNodesFinder->findClass($routeInfo->getClass());
         if ($classNode === null) {
             return null;
         }

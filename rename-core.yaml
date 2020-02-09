@@ -53,9 +53,9 @@ services:
             Rector\PhpDoc\PhpDocClassRenamer: Rector\Core\PhpDoc\PhpDocClassRenamer
             Rector\Util\RectorStrings: Rector\Core\Util\RectorStrings
             Rector\HttpKernel\RectorKernel: Rector\Core\HttpKernel\RectorKernel
-            Rector\NodeContainer\FunctionLikeParsedNodesFinder: Rector\Core\NodeContainer\FunctionLikeParsedNodesFinder
+            Rector\NodeContainer\FunctionLikeParsedNodesFinder: Rector\Core\NodeContainer\NodeFinder\FunctionLikeParsedNodesFinder
             Rector\NodeContainer\ClassLikeParsedNodesFinder: Rector\Core\NodeContainer\ClassLikeParsedNodesFinder
-            Rector\NodeContainer\ParsedNodesByType: Rector\Core\NodeContainer\ParsedNodesByType
+            Rector\NodeContainer\ParsedNodesByType: Rector\Core\NodeContainer\NodeCollector\ParsedNodesByType
             Rector\FileSystem\FileGuard: Rector\Core\FileSystem\FileGuard
             Rector\FileSystem\FilesystemTweaker: Rector\Core\FileSystem\FilesystemTweaker
             Rector\FileSystem\FilesFinder: Rector\Core\FileSystem\FilesFinder

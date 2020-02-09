@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
@@ -24,9 +24,9 @@ final class EntityWithMissingUuidProvider
     private $entitiesWithMissingUuidProperty = [];
 
     /**
-     * @var ParsedNodesByType
+     * @var ParsedNodeCollector
      */
-    private $parsedNodesByType;
+    private $parsedNodeCollector;
 
     /**
      * @var DoctrineDocBlockResolver
@@ -44,12 +44,12 @@ final class EntityWithMissingUuidProvider
     private $nameResolver;
 
     public function __construct(
-        ParsedNodesByType $parsedNodesByType,
+        ParsedNodeCollector $parsedNodeCollector,
         DoctrineDocBlockResolver $doctrineDocBlockResolver,
         ClassManipulator $classManipulator,
         NameResolver $nameResolver
     ) {
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
         $this->classManipulator = $classManipulator;
         $this->nameResolver = $nameResolver;
@@ -65,7 +65,7 @@ final class EntityWithMissingUuidProvider
         }
 
         $entitiesWithMissingUuidProperty = [];
-        foreach ($this->parsedNodesByType->getClasses() as $class) {
+        foreach ($this->parsedNodeCollector->getClasses() as $class) {
             if (! $this->doctrineDocBlockResolver->isDoctrineEntityClassWithIdProperty($class)) {
                 continue;
             }

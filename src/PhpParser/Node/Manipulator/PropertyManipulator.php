@@ -15,7 +15,7 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeContainer\ClassLikeParsedNodesFinder;
+use Rector\Core\NodeContainer\NodeFinder\ClassLikeParsedNodesFinder;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;

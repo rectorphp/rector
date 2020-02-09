@@ -6,7 +6,6 @@ namespace Rector\SOLID\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\Core\NodeContainer\ParsedNodesByType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -28,11 +27,6 @@ final class PrivatizeLocalClassConstantRector extends AbstractRector
     public const HAS_NEW_ACCESS_LEVEL = 'has_new_access_level';
 
     /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
      * @var ClassConstantFetchAnalyzer
      */
     private $classConstantFetchAnalyzer;
@@ -48,12 +42,10 @@ final class PrivatizeLocalClassConstantRector extends AbstractRector
     private $parentClassConstantNodeFinder;
 
     public function __construct(
-        ParsedNodesByType $parsedNodesByType,
         ClassConstantFetchAnalyzer $classConstantFetchAnalyzer,
         ParentConstantReflectionResolver $parentConstantReflectionResolver,
         ParentClassConstantNodeFinder $parentClassConstantNodeFinder
     ) {
-        $this->parsedNodesByType = $parsedNodesByType;
         $this->classConstantFetchAnalyzer = $classConstantFetchAnalyzer;
         $this->parentConstantReflectionResolver = $parentConstantReflectionResolver;
         $this->parentClassConstantNodeFinder = $parentClassConstantNodeFinder;
@@ -114,7 +106,7 @@ PHP
         $class = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         // 0. constants declared in interfaces have to be public
-        if ($this->parsedNodesByType->findInterface($class) !== null) {
+        if ($this->classLikeParsedNodesFinder->findInterface($class) !== null) {
             $this->makePublic($node);
             return $node;
         }

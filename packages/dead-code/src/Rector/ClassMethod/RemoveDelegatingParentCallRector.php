@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeContainer\ParsedNodesByType;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -30,18 +29,12 @@ use ReflectionMethod;
 final class RemoveDelegatingParentCallRector extends AbstractRector
 {
     /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
      * @var ValueResolver
      */
     private $valueResolver;
 
-    public function __construct(ParsedNodesByType $parsedNodesByType, ValueResolver $valueResolver)
+    public function __construct(ValueResolver $valueResolver)
     {
-        $this->parsedNodesByType = $parsedNodesByType;
         $this->valueResolver = $valueResolver;
     }
 
@@ -229,7 +222,7 @@ PHP
 
         /** @var string $methodName */
         $methodName = $this->getName($staticCall);
-        $parentClassMethod = $this->parsedNodesByType->findMethod($methodName, $parentClassName);
+        $parentClassMethod = $this->functionLikeParsedNodesFinder->findMethod($methodName, $parentClassName);
         if ($parentClassMethod !== null) {
             if ($parentClassMethod->isProtected() && $classMethod->isPublic()) {
                 return true;
