@@ -18,20 +18,7 @@ final class PrivatizeLocalClassConstantRectorTest extends AbstractRectorTestCase
         $this->doTestFile($file);
     }
 
-    /**
-     * @dataProvider provideDataProtected()
-     */
-    public function testProtected(string $file): void
-    {
-        $this->doTestFile($file);
-    }
-
     public function provideData(): Iterator
-    {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
-    }
-
-    public function provideDataProtected(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
