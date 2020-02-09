@@ -13,7 +13,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\NodeContainer\ParsedNodesByType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -40,15 +39,9 @@ final class RenameEventNamesInEventSubscriberRector extends AbstractRector
      */
     private $symfonyClassConstWithAliases = [];
 
-    /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    public function __construct(EventInfosFactory $eventInfosFactory, ParsedNodesByType $parsedNodesByType)
+    public function __construct(EventInfosFactory $eventInfosFactory)
     {
         $this->symfonyClassConstWithAliases = $eventInfosFactory->create();
-        $this->parsedNodesByType = $parsedNodesByType;
     }
 
     public function getDefinition(): RectorDefinition
@@ -184,7 +177,7 @@ PHP
 
     private function processMethodArgument(string $class, string $method, EventInfo $eventInfo): void
     {
-        $classMethodNode = $this->parsedNodesByType->findMethod($method, $class);
+        $classMethodNode = $this->functionLikeParsedNodesFinder->findMethod($method, $class);
         if ($classMethodNode === null) {
             return;
         }

@@ -40,7 +40,8 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
+use Rector\Core\NodeContainer\NodeFinder\FunctionLikeParsedNodesFinder;
 use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -51,24 +52,26 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 trait ComplexRemovalTrait
 {
     /**
+     * @var ParsedNodeCollector
+     */
+    protected $parsedNodeCollector;
+
+    /**
      * @var PropertyManipulator
      */
     private $propertyManipulator;
-
-    /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
 
     /**
      * @required
      */
     public function autowireComplextRemovalTrait(
         PropertyManipulator $propertyManipulator,
-        ParsedNodesByType $parsedNodesByType
+        ParsedNodeCollector $parsedNodeCollector,
+        FunctionLikeParsedNodesFinder $functionLikeParsedNodesFinder
     ): void {
-        $this->parsedNodesByType = $parsedNodesByType;
+        $this->parsedNodeCollector = $parsedNodeCollector;
         $this->propertyManipulator = $propertyManipulator;
+        $this->functionLikeParsedNodesFinder = $functionLikeParsedNodesFinder;
     }
 
     abstract protected function removeNode(Node $node): void;
@@ -77,7 +80,7 @@ trait ComplexRemovalTrait
     {
         $this->removeNode($classMethod);
 
-        $classMethodCalls = $this->parsedNodesByType->findClassMethodCalls($classMethod);
+        $classMethodCalls = $this->functionLikeParsedNodesFinder->findClassMethodCalls($classMethod);
         foreach ($classMethodCalls as $classMethodCall) {
             if ($classMethodCall instanceof Array_) {
                 continue;

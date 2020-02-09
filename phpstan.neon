@@ -225,9 +225,9 @@ parameters:
         - '#Parameter \#1 \$str of function preg_quote expects string, int\|string given#'
 
         - '#Parameter \#1 \$node of method Rector\\Core\\PhpParser\\Node\\Commander\\NodeAddingCommander\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
-        - '#Method Rector\\Core\\NodeContainer\\ParsedNodesByType\:\:findTrait\(\) should return PhpParser\\Node\\Stmt\\Trait_\|null but returns PhpParser\\Node\|null#'
-        - '#Method Rector\\Core\\NodeContainer\\ParsedNodesByType\:\:findInterface\(\) should return PhpParser\\Node\\Stmt\\Interface_\|null but returns PhpParser\\Node\|null#'
-        - '#Method Rector\\Core\\NodeContainer\\ParsedNodesByType\:\:findFunction\(\) should return PhpParser\\Node\\Stmt\\Function_\|null but returns PhpParser\\Node\|null#'
+        - '#Method Rector\\Core\\NodeContainer\\NodeCollector\\ParsedNodesByType\:\:findTrait\(\) should return PhpParser\\Node\\Stmt\\Trait_\|null but returns PhpParser\\Node\|null#'
+        - '#Method Rector\\Core\\NodeContainer\\NodeCollector\\ParsedNodesByType\:\:findInterface\(\) should return PhpParser\\Node\\Stmt\\Interface_\|null but returns PhpParser\\Node\|null#'
+        - '#Method Rector\\Core\\NodeContainer\\NodeCollector\\ParsedNodesByType\:\:findFunction\(\) should return PhpParser\\Node\\Stmt\\Function_\|null but returns PhpParser\\Node\|null#'
         - '#Parameter \#2 \$propertyName of method Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\SingleMethodAssignedNodePropertyTypeInferer\:\:resolveAssignedNodeToProperty\(\) expects string, string\|null given#'
         - '#Parameter \#1 \$sprintfFuncCall of method Rector\\Core\\PhpParser\\NodeTransformer\:\:transformSprintfToArray\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node given#'
         - '#Parameter \#1 \$nodes of method Rector\\CodeQuality\\Rector\\Array_\\CallableThisArrayToAnonymousFunctionRector\:\:hasClassMethodReturn\(\) expects array<PhpParser\\Node\\Stmt\\Return_\>, array<PhpParser\\Node\> given#'
@@ -238,3 +238,5 @@ parameters:
         - '#Method Rector\\SOLID\\Rector\\ClassConst\\PrivatizeLocalClassConstantRector\:\:resolveParentClassConstantReflection\(\) should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
         - '#PHPDoc tag @var for variable \$parentClass contains generic class ReflectionClass but does not specify its types\: T#'
         - '#Method Rector\\SOLID\\Reflection\\ParentConstantReflectionResolver\:\:(.*?)\(\) should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
+
+        - '#Method Rector\\Core\\NodeContainer\\NodeCollector\\ParsedFunctionLikeNodesByType\:\:findFunction\(\) should return PhpParser\\Node\\Stmt\\Function_\|null but returns PhpParser\\Node\|null#'

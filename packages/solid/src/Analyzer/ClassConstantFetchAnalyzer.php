@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
-use Rector\Core\NodeContainer\ParsedNodesByType;
+use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -22,11 +22,6 @@ final class ClassConstantFetchAnalyzer
     private $classConstantFetchByClassAndName = [];
 
     /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    /**
      * @var NameResolver
      */
     private $nameResolver;
@@ -36,14 +31,19 @@ final class ClassConstantFetchAnalyzer
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var ParsedNodeCollector
+     */
+    private $parsedNodeCollector;
+
     public function __construct(
-        ParsedNodesByType $parsedNodesByType,
         NodeTypeResolver $nodeTypeResolver,
-        NameResolver $nameResolver
+        NameResolver $nameResolver,
+        ParsedNodeCollector $parsedNodeCollector
     ) {
-        $this->parsedNodesByType = $parsedNodesByType;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nameResolver = $nameResolver;
+        $this->parsedNodeCollector = $parsedNodeCollector;
     }
 
     /**
@@ -56,7 +56,7 @@ final class ClassConstantFetchAnalyzer
             return $this->classConstantFetchByClassAndName;
         }
 
-        $classConstFetches = $this->parsedNodesByType->getNodesByType(ClassConstFetch::class);
+        $classConstFetches = $this->parsedNodeCollector->getNodesByType(ClassConstFetch::class);
         foreach ($classConstFetches as $classConstantFetch) {
             $this->addClassConstantFetch($classConstantFetch);
         }
@@ -99,7 +99,7 @@ final class ClassConstantFetchAnalyzer
         $classNames = TypeUtils::getDirectClassNames($type);
 
         foreach ($classNames as $className) {
-            $classOrInterface = $this->parsedNodesByType->findClassOrInterface($className);
+            $classOrInterface = $this->parsedNodeCollector->findClassOrInterface($className);
             if ($classOrInterface === null) {
                 continue;
             }

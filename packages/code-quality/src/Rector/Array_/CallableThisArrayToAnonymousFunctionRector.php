@@ -21,7 +21,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeContainer\ParsedNodesByType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -36,16 +35,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class CallableThisArrayToAnonymousFunctionRector extends AbstractRector
 {
-    /**
-     * @var ParsedNodesByType
-     */
-    private $parsedNodesByType;
-
-    public function __construct(ParsedNodesByType $parsedNodesByType)
-    {
-        $this->parsedNodesByType = $parsedNodesByType;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Convert [$this, "method"] to proper anonymous function', [
@@ -158,7 +147,7 @@ PHP
         $objectType = $this->getObjectType($objectExpr);
 
         if ($objectType instanceof ObjectType) {
-            $class = $this->parsedNodesByType->findClass($objectType->getClassName());
+            $class = $this->classLikeParsedNodesFinder->findClass($objectType->getClassName());
 
             if ($class === null) {
                 return null;
