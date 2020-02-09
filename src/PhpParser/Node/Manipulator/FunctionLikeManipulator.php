@@ -8,8 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class FunctionLikeManipulator
 {

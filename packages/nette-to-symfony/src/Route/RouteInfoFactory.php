@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
-use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NetteToSymfony\ValueObject\RouteInfo;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class RouteInfoFactory
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\PhpParser\Node\NodeNameResolver;
+namespace Rector\NodeNameResolver\NodeNameResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use Rector\Core\Contract\NameResolver\NodeNameResolverInterface;
+use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 
 final class FuncCallNameResolver implements NodeNameResolverInterface
 {

@@ -15,7 +15,7 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
-use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;

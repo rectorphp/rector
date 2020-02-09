@@ -13,7 +13,7 @@ use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\CodingStyle\Imports\AliasUsesResolver;
 use Rector\CodingStyle\Imports\ImportSkipper;
 use Rector\Core\Configuration\Option;
-use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;

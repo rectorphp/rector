@@ -7,7 +7,7 @@ namespace Rector\TypeDeclaration\PhpDocParser;
 use PhpParser\Node\Param;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
-use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 
 final class ParamPhpDocNodeFactory

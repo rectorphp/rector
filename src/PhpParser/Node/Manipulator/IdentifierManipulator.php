@@ -13,7 +13,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\NodeChanger\NodeMissingIdentifierException;
-use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 /**
  * This class renames node identifier, e.g. ClassMethod rename:
