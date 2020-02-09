@@ -112,6 +112,10 @@ return [
                 if (strpos($class, 'Rector\\') === 0) {
                     return $class;
                 }
+                // mimics https://github.com/phpstan/phpstan-src/commit/23d5ca04ab6213f53a0e6c2e77857b23a73aa41d
+                if (strpos($class, 'Hoa\\') === 0) {
+                    return $class;
+                }
                 if (strpos($class, '@') === 0) {
                     return $class;
                 }
@@ -144,5 +148,11 @@ return [
             return str_replace(sprintf('\'%s\\\\', $prefix), '\'', $content);
         },
     ],
-    'whitelist' => ['Rector\*', 'PHPStan\*', 'PhpParser\*'],
+    'whitelist' => [
+        'Rector\*',
+        'PHPStan\*',
+        'PhpParser\*',
+        // mimics https://github.com/phpstan/phpstan-src/commit/23d5ca04ab6213f53a0e6c2e77857b23a73aa41d
+        'Hoa\*',
+    ],
 ];
