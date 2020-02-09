@@ -2,49 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Rector\VendorLocker;
+namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
-use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
-use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-/**
- * @todo decouple to standalone package "packages/vendor-locker"
- */
-final class ReturnNodeVendorLockResolver
+final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockResolver
 {
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
-    /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
-     * @var ParsedNodeCollector
-     */
-    private $parsedNodeCollector;
-
-    public function __construct(
-        NodeNameResolver $nodeNameResolver,
-        ParsedNodeCollector $parsedNodeCollector,
-        ClassManipulator $classManipulator
-    ) {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->parsedNodeCollector = $parsedNodeCollector;
-        $this->classManipulator = $classManipulator;
-    }
-
-    public function isVendorLocked(ClassMethod $classMethod): bool
+    public function isVendorLocked(ClassMethod $classMethod, int $paramPosition): bool
     {
+        /** @var Class_|null $classNode */
         $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode === null) {
             return false;
@@ -54,15 +24,20 @@ final class ReturnNodeVendorLockResolver
             return false;
         }
 
-        /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
+        if (! is_string($methodName)) {
+            throw new ShouldNotHappenException();
+        }
 
         // @todo extract to some "inherited parent method" service
         /** @var string|null $parentClassName */
         $parentClassName = $classMethod->getAttribute(AttributeKey::PARENT_CLASS_NAME);
 
         if ($parentClassName !== null) {
-            return $this->isVendorLockedByParentClass($parentClassName, $methodName);
+            $vendorLock = $this->isParentClassVendorLocking($paramPosition, $parentClassName, $methodName);
+            if ($vendorLock !== null) {
+                return $vendorLock;
+            }
         }
 
         $classNode = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
@@ -71,24 +46,10 @@ final class ReturnNodeVendorLockResolver
         }
 
         $interfaceNames = $this->classManipulator->getClassLikeNodeParentInterfaceNames($classNode);
-
-        return $this->isVendorLockedByInterface($interfaceNames, $methodName);
+        return $this->isInterfaceParamVendorLockin($interfaceNames, $methodName);
     }
 
-    private function hasParentClassOrImplementsInterface(ClassLike $classLike): bool
-    {
-        if (($classLike instanceof Class_ || $classLike instanceof Interface_) && $classLike->extends) {
-            return true;
-        }
-
-        if ($classLike instanceof Class_) {
-            return (bool) $classLike->implements;
-        }
-
-        return false;
-    }
-
-    private function isVendorLockedByParentClass(string $parentClassName, string $methodName): bool
+    private function isParentClassVendorLocking(int $paramPosition, string $parentClassName, string $methodName): ?bool
     {
         $parentClassNode = $this->parsedNodeCollector->findClass($parentClassName);
         if ($parentClassNode !== null) {
@@ -96,11 +57,12 @@ final class ReturnNodeVendorLockResolver
             // @todo validate type is conflicting
             // parent class method in local scope → it's ok
             if ($parentMethodNode !== null) {
-                return $parentMethodNode->returnType !== null;
+                // parent method has no type → we cannot change it here
+                return isset($parentMethodNode->params[$paramPosition]) && $parentMethodNode->params[$paramPosition]->type === null;
             }
-
-            // if not, look for it's parent parent - @todo recursion
         }
+
+        // if not, look for it's parent parent - @todo recursion
 
         if (method_exists($parentClassName, $methodName)) {
             // @todo validate type is conflicting
@@ -110,13 +72,10 @@ final class ReturnNodeVendorLockResolver
             // if not, look for it's parent parent - @todo recursion
         }
 
-        return false;
+        return null;
     }
 
-    /**
-     * @param string[] $interfaceNames
-     */
-    private function isVendorLockedByInterface(array $interfaceNames, string $methodName): bool
+    private function isInterfaceParamVendorLockin(array $interfaceNames, string $methodName): bool
     {
         foreach ($interfaceNames as $interfaceName) {
             $interface = $this->parsedNodeCollector->findInterface($interfaceName);
