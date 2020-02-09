@@ -17,7 +17,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeContainer\NodeFinder\ClassLikeParsedNodesFinder;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Doctrine\AbstractRector\DoctrineTrait;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -40,9 +40,9 @@ final class PropertyManipulator
     private $betterStandardPrinter;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var AssignManipulator
@@ -57,13 +57,13 @@ final class PropertyManipulator
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         AssignManipulator $assignManipulator,
         ClassLikeParsedNodesFinder $classLikeParsedNodesFinder
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->assignManipulator = $assignManipulator;
         $this->classLikeParsedNodesFinder = $classLikeParsedNodesFinder;
     }
@@ -98,7 +98,7 @@ final class PropertyManipulator
             }
 
             // is it the name match?
-            if (! $this->nameResolver->areNamesEqual($node, $propertyProperty)) {
+            if (! $this->nodeNameResolver->areNamesEqual($node, $propertyProperty)) {
                 return false;
             }
             return in_array($node->getAttribute(AttributeKey::CLASS_NODE), $nodesToSearch, true);

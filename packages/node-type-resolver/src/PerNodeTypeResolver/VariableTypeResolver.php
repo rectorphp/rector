@@ -12,7 +12,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -24,9 +24,9 @@ use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 final class VariableTypeResolver implements PerNodeTypeResolverInterface
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var NodeTypeResolver
@@ -38,9 +38,9 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
      */
     private $traitNodeScopeCollector;
 
-    public function __construct(NameResolver $nameResolver, TraitNodeScopeCollector $traitNodeScopeCollector)
+    public function __construct(NodeNameResolver $nodeNameResolver, TraitNodeScopeCollector $traitNodeScopeCollector)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->traitNodeScopeCollector = $traitNodeScopeCollector;
     }
 
@@ -62,7 +62,7 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
             return $this->nodeTypeResolver->resolve($parentNode);
         }
 
-        $variableName = $this->nameResolver->getName($variableNode);
+        $variableName = $this->nodeNameResolver->getName($variableNode);
         if ($variableName === null) {
             return new MixedType();
         }
@@ -104,40 +104,44 @@ final class VariableTypeResolver implements PerNodeTypeResolverInterface
         return $nodeScope->getVariableType($variableName);
     }
 
-    private function resolveNodeScope(Node $node): ?Scope
+    private function resolveNodeScope(Variable $variable): ?Scope
     {
         /** @var Scope|null $nodeScope */
-        $nodeScope = $node->getAttribute(AttributeKey::SCOPE);
+        $nodeScope = $variable->getAttribute(AttributeKey::SCOPE);
         if ($nodeScope !== null) {
             return $nodeScope;
         }
 
         // is node in trait
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classNode = $variable->getAttribute(AttributeKey::CLASS_NODE);
         if ($classNode instanceof Trait_) {
             /** @var string $traitName */
-            $traitName = $node->getAttribute(AttributeKey::CLASS_NAME);
-            $traitNodeScope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $node);
+            $traitName = $variable->getAttribute(AttributeKey::CLASS_NAME);
+            $traitNodeScope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $variable);
             if ($traitNodeScope !== null) {
                 return $traitNodeScope;
             }
         }
 
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Node) {
-            $parentNodeScope = $parentNode->getAttribute(AttributeKey::SCOPE);
-            if ($parentNodeScope !== null) {
-                return $parentNodeScope;
-            }
-        }
+        return $this->resolveFromParentNodes($variable);
+    }
 
-        // get nearest variable scope
-        $method = $node->getAttribute(AttributeKey::METHOD_NODE);
-        if ($method instanceof Node) {
-            $methodNodeScope = $method->getAttribute(AttributeKey::SCOPE);
-            if ($methodNodeScope !== null) {
-                return $methodNodeScope;
+    private function resolveFromParentNodes(Variable $variable): ?Scope
+    {
+        $parentNodeAttributes = [AttributeKey::PARENT_NODE, AttributeKey::METHOD_NODE];
+
+        foreach ($parentNodeAttributes as $parentNodeAttribute) {
+            $parentNode = $variable->getAttribute($parentNodeAttribute);
+            if (! $parentNode instanceof Node) {
+                continue;
             }
+
+            $parentNodeScope = $parentNode->getAttribute(AttributeKey::SCOPE);
+            if ($parentNodeScope === null) {
+                continue;
+            }
+
+            return $parentNodeScope;
         }
 
         return null;

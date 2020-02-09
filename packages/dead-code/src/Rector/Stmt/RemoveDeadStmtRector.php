@@ -58,7 +58,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $livingCode = $this->keepLivingCodeFromExpr($node->expr);
+        $livingCode = $this->livingCodeManipulator->keepLivingCodeFromExpr($node->expr);
         if ($livingCode === []) {
             return $this->removeNodeAndKeepComments($node);
         }

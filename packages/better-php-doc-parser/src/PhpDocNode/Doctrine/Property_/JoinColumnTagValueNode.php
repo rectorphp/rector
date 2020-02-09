@@ -119,17 +119,6 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
         return $this->printContentItems($contentItems);
     }
 
-    public function changeNullable(bool $nullable): void
-    {
-        $this->nullable = $nullable;
-    }
-
-    public function changeReferencedColumnName(string $referencedColumnName): void
-    {
-        $this->orderedVisibleItems[] = 'referencedColumnName';
-        $this->referencedColumnName = $referencedColumnName;
-    }
-
     public function isNullable(): ?bool
     {
         return $this->nullable;

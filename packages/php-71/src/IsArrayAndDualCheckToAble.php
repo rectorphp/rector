@@ -11,23 +11,23 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 
 final class IsArrayAndDualCheckToAble
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var BinaryOpManipulator
      */
     private $binaryOpManipulator;
 
-    public function __construct(NameResolver $nameResolver, BinaryOpManipulator $binaryOpManipulator)
+    public function __construct(NodeNameResolver $nodeNameResolver, BinaryOpManipulator $binaryOpManipulator)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
 
@@ -52,7 +52,7 @@ final class IsArrayAndDualCheckToAble
         }
 
         /** @var FuncCall $funcCallNode */
-        if ($this->nameResolver->getName($funcCallNode) !== 'is_array') {
+        if ($this->nodeNameResolver->getName($funcCallNode) !== 'is_array') {
             return null;
         }
 

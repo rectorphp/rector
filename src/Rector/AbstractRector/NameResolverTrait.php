@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 
 /**
  * This could be part of @see AbstractRector, but decopuling to trait
@@ -17,9 +17,9 @@ use Rector\Core\PhpParser\Node\Resolver\NameResolver;
 trait NameResolverTrait
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var ClassNaming
@@ -29,20 +29,20 @@ trait NameResolverTrait
     /**
      * @required
      */
-    public function autowireNameResolverTrait(NameResolver $nameResolver, ClassNaming $classNaming): void
+    public function autowireNameResolverTrait(NodeNameResolver $nodeNameResolver, ClassNaming $classNaming): void
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->classNaming = $classNaming;
     }
 
     public function isName(Node $node, string $name): bool
     {
-        return $this->nameResolver->isName($node, $name);
+        return $this->nodeNameResolver->isName($node, $name);
     }
 
     public function areNamesEqual(Node $firstNode, Node $secondNode): bool
     {
-        return $this->nameResolver->areNamesEqual($firstNode, $secondNode);
+        return $this->nodeNameResolver->areNamesEqual($firstNode, $secondNode);
     }
 
     /**
@@ -50,12 +50,12 @@ trait NameResolverTrait
      */
     public function isNames(Node $node, array $names): bool
     {
-        return $this->nameResolver->isNames($node, $names);
+        return $this->nodeNameResolver->isNames($node, $names);
     }
 
     public function getName(Node $node): ?string
     {
-        return $this->nameResolver->getName($node);
+        return $this->nodeNameResolver->getName($node);
     }
 
     /**

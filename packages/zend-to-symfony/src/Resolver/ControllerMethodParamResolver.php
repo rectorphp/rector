@@ -10,7 +10,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -22,14 +22,14 @@ final class ControllerMethodParamResolver
     private $callableNodeTraverser;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
-    public function __construct(CallableNodeTraverser $callableNodeTraverser, NameResolver $nameResolver)
+    public function __construct(CallableNodeTraverser $callableNodeTraverser, NodeNameResolver $nodeNameResolver)
     {
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -45,11 +45,11 @@ final class ControllerMethodParamResolver
                 return null;
             }
 
-            if (! $this->nameResolver->isName($node->var, 'this')) {
+            if (! $this->nodeNameResolver->isName($node->var, 'this')) {
                 return null;
             }
 
-            if (! $this->nameResolver->isName($node->name, 'getParam')) {
+            if (! $this->nodeNameResolver->isName($node->name, 'getParam')) {
                 return null;
             }
 

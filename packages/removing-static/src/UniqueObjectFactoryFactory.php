@@ -22,16 +22,16 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Naming\PropertyNaming;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 
 final class UniqueObjectFactoryFactory
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var BuilderFactory
@@ -54,13 +54,13 @@ final class UniqueObjectFactoryFactory
     private $nodeFactory;
 
     public function __construct(
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         BuilderFactory $builderFactory,
         PropertyNaming $propertyNaming,
         StaticTypeMapper $staticTypeMapper,
         NodeFactory $nodeFactory
     ) {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->builderFactory = $builderFactory;
         $this->propertyNaming = $propertyNaming;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -69,7 +69,7 @@ final class UniqueObjectFactoryFactory
 
     public function createFactoryClass(Class_ $class, ObjectType $objectType): Class_
     {
-        $className = $this->nameResolver->getName($class);
+        $className = $this->nodeNameResolver->getName($class);
         if ($className === null) {
             throw new ShouldNotHappenException();
         }
@@ -163,7 +163,7 @@ final class UniqueObjectFactoryFactory
         }
 
         foreach ($properties as $property) {
-            $propertyName = $this->nameResolver->getName($property);
+            $propertyName = $this->nodeNameResolver->getName($property);
             if (! is_string($propertyName)) {
                 throw new ShouldNotHappenException();
             }

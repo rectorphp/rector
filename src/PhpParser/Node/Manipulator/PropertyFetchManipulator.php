@@ -20,7 +20,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -42,9 +42,9 @@ final class PropertyFetchManipulator
     private $reflectionProvider;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var CallableNodeTraverser
@@ -54,18 +54,18 @@ final class PropertyFetchManipulator
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         ReflectionProvider $reflectionProvider,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         CallableNodeTraverser $callableNodeTraverser
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->reflectionProvider = $reflectionProvider;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
     }
 
     public function isPropertyToSelf(PropertyFetch $propertyFetch): bool
     {
-        if (! $this->nameResolver->isName($propertyFetch->var, 'this')) {
+        if (! $this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
             return false;
         }
 
@@ -75,12 +75,12 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        if (! $this->nameResolver->isName($propertyFetch->var, 'this')) {
+        if (! $this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
             return false;
         }
 
         foreach ($class->getProperties() as $property) {
-            if ($this->nameResolver->areNamesEqual($property->props[0], $propertyFetch)) {
+            if ($this->nodeNameResolver->areNamesEqual($property->props[0], $propertyFetch)) {
                 return true;
             }
         }
@@ -108,7 +108,7 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        $nodeName = $this->nameResolver->getName($node);
+        $nodeName = $this->nodeNameResolver->getName($node);
         if ($nodeName === null) {
             return false;
         }
@@ -132,7 +132,7 @@ final class PropertyFetchManipulator
             }
 
             /** @var Assign $node */
-            $propertyName = $this->nameResolver->getName($node->expr);
+            $propertyName = $this->nodeNameResolver->getName($node->expr);
             if ($propertyName) {
                 $propertyNames[] = $propertyName;
             }
@@ -157,7 +157,7 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        if (! $this->nameResolver->isName($node->expr, $variableName)) {
+        if (! $this->nodeNameResolver->isName($node->expr, $variableName)) {
             return false;
         }
 
@@ -165,7 +165,7 @@ final class PropertyFetchManipulator
             return false;
         }
         // must be local property
-        return $this->nameResolver->isName($node->var->var, 'this');
+        return $this->nodeNameResolver->isName($node->var->var, 'this');
     }
 
     /**
@@ -178,7 +178,7 @@ final class PropertyFetchManipulator
         }
 
         /** @var PropertyFetch $node */
-        return $this->nameResolver->isNames($node->name, $propertyNames);
+        return $this->nodeNameResolver->isNames($node->name, $propertyNames);
     }
 
     public function isLocalProperty(Node $node): bool
@@ -187,7 +187,7 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        return $this->nameResolver->isName($node->var, 'this');
+        return $this->nodeNameResolver->isName($node->var, 'this');
     }
 
     /**
@@ -211,11 +211,11 @@ final class PropertyFetchManipulator
                 return null;
             }
 
-            if (! $this->nameResolver->isName($node->var, $propertyName)) {
+            if (! $this->nodeNameResolver->isName($node->var, $propertyName)) {
                 return null;
             }
 
-            $assignedParamName = $this->nameResolver->getName($node->expr);
+            $assignedParamName = $this->nodeNameResolver->getName($node->expr);
 
             return NodeTraverser::STOP_TRAVERSAL;
         });
@@ -227,7 +227,7 @@ final class PropertyFetchManipulator
 
         /** @var Param $param */
         foreach ((array) $classMethod->params as $param) {
-            if (! $this->nameResolver->isName($param, $assignedParamName)) {
+            if (! $this->nodeNameResolver->isName($param, $assignedParamName)) {
                 continue;
             }
 
@@ -277,11 +277,11 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        if (! $this->nameResolver->isName($node->var->var, 'this')) {
+        if (! $this->nodeNameResolver->isName($node->var->var, 'this')) {
             return false;
         }
 
-        return $this->nameResolver->isName($node->var->name, $propertyName);
+        return $this->nodeNameResolver->isName($node->var->name, $propertyName);
     }
 
     private function hasPublicProperty(PropertyFetch $propertyFetch, string $propertyName): bool

@@ -6,7 +6,7 @@ namespace Rector\SymfonyPHPUnit\Node;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -14,18 +14,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class KernelTestCaseNodeAnalyzer
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
 
-    public function __construct(NameResolver $nameResolver, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
@@ -54,7 +54,7 @@ final class KernelTestCaseNodeAnalyzer
             return false;
         }
 
-        if (! $this->nameResolver->isName($node->name, 'get')) {
+        if (! $this->nodeNameResolver->isName($node->name, 'get')) {
             return false;
         }
 

@@ -16,7 +16,7 @@ use Rector\BetterPhpDocParser\Contract\Doctrine\MappedByNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\InheritanceTypeTagValueNode;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -24,9 +24,9 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class DoctrineEntityManipulator
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var DoctrineDocBlockResolver
@@ -39,11 +39,11 @@ final class DoctrineEntityManipulator
     private $nodeTypeResolver;
 
     public function __construct(
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         DoctrineDocBlockResolver $doctrineDocBlockResolver,
         NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->doctrineDocBlockResolver = $doctrineDocBlockResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -123,7 +123,7 @@ final class DoctrineEntityManipulator
             return false;
         }
 
-        if (! $this->nameResolver->isName($node->name, $methodName)) {
+        if (! $this->nodeNameResolver->isName($node->name, $methodName)) {
             return false;
         }
 

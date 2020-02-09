@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\CakePHPToSymfony\Contract\NodeManipulator\RepositoryFindMethodCallManipulatorInterface;
 use Rector\Core\Exception\NotImplementedException;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 
@@ -26,9 +26,9 @@ final class DoctrineRepositoryClassMethodManipulator
     private $callableNodeTraverser;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var ValueResolver
@@ -40,12 +40,12 @@ final class DoctrineRepositoryClassMethodManipulator
      */
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         ValueResolver $valueResolver,
         array $repositoryFindMethodCallManipulators
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
         $this->repositoryFindMethodCallManipulators = $repositoryFindMethodCallManipulators;
     }
@@ -59,7 +59,7 @@ final class DoctrineRepositoryClassMethodManipulator
                     return null;
                 }
 
-                if (! $this->nameResolver->isName($node->name, 'find')) {
+                if (! $this->nodeNameResolver->isName($node->name, 'find')) {
                     return null;
                 }
 

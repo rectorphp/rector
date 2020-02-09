@@ -9,7 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symfony\Component\Filesystem\Filesystem;
@@ -18,9 +18,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class FactoryClassPrinter
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var BetterStandardPrinter
@@ -33,11 +33,11 @@ final class FactoryClassPrinter
     private $filesystem;
 
     public function __construct(
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         BetterStandardPrinter $betterStandardPrinter,
         Filesystem $filesystem
     ) {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->filesystem = $filesystem;
     }
@@ -69,7 +69,7 @@ final class FactoryClassPrinter
         }
 
         $directoryPath = Strings::before($classFileInfo->getRealPath(), DIRECTORY_SEPARATOR, -1);
-        $resolvedOldClass = $this->nameResolver->getName($oldClass);
+        $resolvedOldClass = $this->nodeNameResolver->getName($oldClass);
         if ($resolvedOldClass === null) {
             throw new ShouldNotHappenException();
         }

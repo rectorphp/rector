@@ -6,6 +6,7 @@ namespace Rector\Core\Rector\MethodBody;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
@@ -81,21 +82,12 @@ PHP
         // iterate from bottom to up, so we can merge
         for ($i = $classMethodStatementCount - 1; $i >= 0; --$i) {
             $stmt = $node->stmts[$i];
-
-            // we look only for 2+ stmts
-            if (! isset($node->stmts[$i - 1])) {
+            if ($this->shouldSkipPreviousStmt($node, $i, $stmt)) {
                 continue;
             }
 
-            // we look for 2 methods calls in a row
-            if (! $stmt instanceof Expression) {
-                continue;
-            }
-
+            /** @var Expression $prevStmt */
             $prevStmt = $node->stmts[$i - 1];
-            if (! $prevStmt instanceof Expression) {
-                continue;
-            }
 
             // here are 2 method calls statements in a row, while current one is first one
             if (! $this->isBothMethodCallMatch($stmt, $prevStmt)) {
@@ -105,7 +97,6 @@ PHP
 
                 // reset for new type
                 $this->collectedMethodCalls = [];
-
                 continue;
             }
 
@@ -192,5 +183,22 @@ PHP
         }
 
         return null;
+    }
+
+    private function shouldSkipPreviousStmt(Node $node, int $i, Stmt $stmt): bool
+    {
+        // we look only for 2+ stmts
+        if (! isset($node->stmts[$i - 1])) {
+            return true;
+        }
+
+        // we look for 2 methods calls in a row
+        if (! $stmt instanceof Expression) {
+            return true;
+        }
+
+        $prevStmt = $node->stmts[$i - 1];
+
+        return ! $prevStmt instanceof Expression;
     }
 }

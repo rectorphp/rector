@@ -20,7 +20,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
 use Rector\PHPStan\Type\SelfObjectType;
 use Rector\TypeDeclaration\PhpParserTypeAnalyzer;
-use Rector\TypeDeclaration\VendorLock\VendorLockResolver;
+use Rector\VendorLocker\VendorLockResolver;
 
 /**
  * @see https://wiki.php.net/rfc/scalar_type_hints_v5

@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -37,9 +37,9 @@ final class ClassMethodManipulator
     private $nodeTypeResolver;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var ValueResolver
@@ -50,13 +50,13 @@ final class ClassMethodManipulator
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         NodeTypeResolver $nodeTypeResolver,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         ValueResolver $valueResolver
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->valueResolver = $valueResolver;
     }
 
@@ -78,17 +78,17 @@ final class ClassMethodManipulator
                 return false;
             }
 
-            return $this->nameResolver->isName($node, 'compact');
+            return $this->nodeNameResolver->isName($node, 'compact');
         });
 
         $arguments = $this->extractArgumentsFromCompactFuncCalls($compactFuncCalls);
 
-        return $this->nameResolver->isNames($param, $arguments);
+        return $this->nodeNameResolver->isNames($param, $arguments);
     }
 
     public function isNamedConstructor(ClassMethod $classMethod): bool
     {
-        if (! $this->nameResolver->isName($classMethod, '__construct')) {
+        if (! $this->nodeNameResolver->isName($classMethod, '__construct')) {
             return false;
         }
 
@@ -102,7 +102,7 @@ final class ClassMethodManipulator
 
     public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod, ?string $methodName = null): bool
     {
-        $methodName = $methodName ?? $this->nameResolver->getName($classMethod->name);
+        $methodName = $methodName ?? $this->nodeNameResolver->getName($classMethod->name);
 
         $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
         if (! is_string($class)) {
@@ -141,7 +141,7 @@ final class ClassMethodManipulator
                 return false;
             }
 
-            return $this->nameResolver->isName($node, 'this');
+            return $this->nodeNameResolver->isName($node, 'this');
         });
     }
 
@@ -161,7 +161,7 @@ final class ClassMethodManipulator
                 continue;
             }
 
-            $paramName = $this->nameResolver->getName($paramNode);
+            $paramName = $this->nodeNameResolver->getName($paramNode);
             if (! is_string($paramName)) {
                 throw new ShouldNotHappenException();
             }
@@ -178,7 +178,7 @@ final class ClassMethodManipulator
     public function removeParameter(Param $param, ClassMethod $classMethod): void
     {
         foreach ($classMethod->params as $key => $constructorParam) {
-            if (! $this->nameResolver->areNamesEqual($constructorParam, $param)) {
+            if (! $this->nodeNameResolver->areNamesEqual($constructorParam, $param)) {
                 continue;
             }
 
@@ -233,7 +233,7 @@ final class ClassMethodManipulator
     {
         foreach ($possibleNames as $possibleName) {
             foreach ($classMethod->params as $paramNode) {
-                if ($this->nameResolver->isName($paramNode, $possibleName)) {
+                if ($this->nodeNameResolver->isName($paramNode, $possibleName)) {
                     continue 2;
                 }
             }

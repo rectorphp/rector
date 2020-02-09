@@ -6,7 +6,6 @@ namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
 
@@ -65,49 +64,45 @@ final class AnnotationContentResolver
 
     public function resolveNestedKey(string $annotationContent, string $name): string
     {
-        try {
-            $start = false;
-            $openedCurlyBracketCount = 0;
-            $tokenContents = [];
+        $start = false;
+        $openedCurlyBracketCount = 0;
+        $tokenContents = [];
 
-            $tokenIterator = $this->tokenIteratorFactory->create($annotationContent);
+        $tokenIterator = $this->tokenIteratorFactory->create($annotationContent);
 
-            while (true) {
-                // the end
-                if (in_array($tokenIterator->currentTokenType(), [Lexer::TOKEN_CLOSE_PHPDOC, Lexer::TOKEN_END], true)) {
-                    break;
-                }
-
-                $start = $this->tryStartWithKey($name, $start, $tokenIterator);
-                if (! $start) {
-                    $tokenIterator->next();
-                    continue;
-                }
-
-                $tokenContents[] = $tokenIterator->currentTokenValue();
-
-                // opening bracket {
-                if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET)) {
-                    ++$openedCurlyBracketCount;
-                }
-
-                // closing bracket }
-                if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
-                    --$openedCurlyBracketCount;
-
-                    // the final one
-                    if ($openedCurlyBracketCount === 0) {
-                        break;
-                    }
-                }
-
-                $tokenIterator->next();
+        while (true) {
+            // the end
+            if (in_array($tokenIterator->currentTokenType(), [Lexer::TOKEN_CLOSE_PHPDOC, Lexer::TOKEN_END], true)) {
+                break;
             }
 
-            return implode('', $tokenContents);
-        } catch (ParserException $parserException) {
-            throw $parserException;
+            $start = $this->tryStartWithKey($name, $start, $tokenIterator);
+            if (! $start) {
+                $tokenIterator->next();
+                continue;
+            }
+
+            $tokenContents[] = $tokenIterator->currentTokenValue();
+
+            // opening bracket {
+            if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET)) {
+                ++$openedCurlyBracketCount;
+            }
+
+            // closing bracket }
+            if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
+                --$openedCurlyBracketCount;
+
+                // the final one
+                if ($openedCurlyBracketCount === 0) {
+                    break;
+                }
+            }
+
+            $tokenIterator->next();
         }
+
+        return implode('', $tokenContents);
     }
 
     private function cleanMultilineAnnotationContent(string $annotationContent): string

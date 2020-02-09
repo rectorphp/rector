@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -22,13 +22,13 @@ final class StaticCallTypeResolver implements PerNodeTypeResolverInterface
     private $nodeTypeResolver;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
-    public function __construct(NameResolver $nameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -53,7 +53,7 @@ final class StaticCallTypeResolver implements PerNodeTypeResolverInterface
     public function resolve(Node $node): Type
     {
         $classType = $this->nodeTypeResolver->resolve($node->class);
-        $methodName = $this->nameResolver->getName($node->name);
+        $methodName = $this->nodeNameResolver->getName($node->name);
 
         // no specific method found, return class types, e.g. <ClassType>::$method()
         if (! is_string($methodName)) {

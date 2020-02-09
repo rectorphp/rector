@@ -11,18 +11,18 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\JMSInjectTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNodeFactory\AbstractPhpDocNodeFactory;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 
 final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
-    public function __construct(NameResolver $nameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function getClass(): string
@@ -45,7 +45,7 @@ final class JMSInjectPhpDocNodeFactory extends AbstractPhpDocNodeFactory
             return null;
         }
 
-        $serviceName = $inject->value === null ? $this->nameResolver->getName($node) : $inject->value;
+        $serviceName = $inject->value === null ? $this->nodeNameResolver->getName($node) : $inject->value;
 
         // needed for proper doc block formatting
         $this->resolveContentFromTokenIterator($tokenIterator);

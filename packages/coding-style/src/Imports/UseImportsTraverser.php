@@ -8,24 +8,24 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 
 final class UseImportsTraverser
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
 
-    public function __construct(NameResolver $nameResolver, CallableNodeTraverser $callableNodeTraverser)
+    public function __construct(NodeNameResolver $nodeNameResolver, CallableNodeTraverser $callableNodeTraverser)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
     }
 
@@ -58,7 +58,7 @@ final class UseImportsTraverser
                 }
 
                 foreach ($node->uses as $useUse) {
-                    $name = $this->nameResolver->getName($useUse);
+                    $name = $this->nodeNameResolver->getName($useUse);
                     $callable($useUse, $name);
                 }
             }
@@ -84,7 +84,7 @@ final class UseImportsTraverser
                 continue;
             }
 
-            $name = $prefixName . '\\' . $this->nameResolver->getName($useUse);
+            $name = $prefixName . '\\' . $this->nodeNameResolver->getName($useUse);
             $callable($useUse, $name);
         }
     }

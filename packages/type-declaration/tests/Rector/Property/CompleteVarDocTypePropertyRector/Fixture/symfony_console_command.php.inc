@@ -595,7 +595,7 @@ class Command
      */
     private $processTitle;
     /**
-     * @var \Symfony\Component\Console\Input\InputDefinition
+     * @var InputDefinition
      */
     private $definition;
     /**

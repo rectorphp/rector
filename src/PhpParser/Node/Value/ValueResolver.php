@@ -15,7 +15,7 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -26,9 +26,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ValueResolver
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var ConstExprEvaluator
@@ -46,11 +46,11 @@ final class ValueResolver
     private $nodeTypeResolver;
 
     public function __construct(
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         NodeTypeResolver $nodeTypeResolver,
         ParsedNodeCollector $parsedNodeCollector
     ) {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -76,7 +76,7 @@ final class ValueResolver
         }
 
         if ($expr instanceof ConstFetch) {
-            return $this->nameResolver->getName($expr);
+            return $this->nodeNameResolver->getName($expr);
         }
 
         $nodeStaticType = $this->nodeTypeResolver->getStaticType($expr);
@@ -173,8 +173,8 @@ final class ValueResolver
 
     private function resolveClassConstFetch(ClassConstFetch $classConstFetch)
     {
-        $class = $this->nameResolver->getName($classConstFetch->class);
-        $constant = $this->nameResolver->getName($classConstFetch->name);
+        $class = $this->nodeNameResolver->getName($classConstFetch->class);
+        $constant = $this->nodeNameResolver->getName($classConstFetch->name);
 
         if ($class === null) {
             throw new ShouldNotHappenException();

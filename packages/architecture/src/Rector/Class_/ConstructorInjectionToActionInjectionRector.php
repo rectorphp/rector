@@ -112,22 +112,13 @@ PHP
     {
         $this->reset();
 
-        // only in controllers
-        if (! $this->isName($node, '*Controller')) {
-            return null;
-        }
-
-        if ($node->isAbstract()) {
-            return null;
-        }
-
-        $constructMethod = $node->getMethod('__construct');
-        // no constructor, nothing to do
-        if ($constructMethod === null) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
         // traverse constructor dependencies and names of their properties
+        /** @var ClassMethod $constructMethod */
+        $constructMethod = $node->getMethod('__construct');
         $this->collectPropertyFetchToParams($constructMethod);
 
         // replace them in property fetches with particular class methods and use variable instead
@@ -220,23 +211,20 @@ PHP
             $param,
             &$currentlyAddedLocalVariables
         ): ?Variable {
-            if (! $node instanceof PropertyFetch) {
+            if ($this->shouldSkipClassMethod($node)) {
                 return null;
             }
 
-            if (! $this->isName($node->var, 'this')) {
+            /** @var PropertyFetch $node */
+            if (! $this->isName($node, $propertyName)) {
                 return null;
             }
 
-            if ($this->isName($node, $propertyName)) {
-                $currentlyAddedLocalVariables[] = $param;
+            $currentlyAddedLocalVariables[] = $param;
 
-                /** @var string $paramName */
-                $paramName = $this->getName($param);
-                return new Variable($paramName);
-            }
-
-            return null;
+            /** @var string $paramName */
+            $paramName = $this->getName($param);
+            return new Variable($paramName);
         });
 
         foreach ($currentlyAddedLocalVariables as $param) {
@@ -329,5 +317,31 @@ PHP
         }
 
         $this->removeNodeFromStatements($class, $constructClassMethod);
+    }
+
+    private function shouldSkipClassMethod(Node $node): bool
+    {
+        if (! $node instanceof PropertyFetch) {
+            return true;
+        }
+
+        return ! $this->isName($node->var, 'this');
+    }
+
+    private function shouldSkip(Class_ $class): bool
+    {
+        // only in controllers
+        if (! $this->isName($class, '*Controller')) {
+            return true;
+        }
+
+        if ($class->isAbstract()) {
+            return true;
+        }
+
+        $constructMethod = $class->getMethod('__construct');
+        // no constructor, nothing to do
+
+        return $constructMethod === null;
     }
 }

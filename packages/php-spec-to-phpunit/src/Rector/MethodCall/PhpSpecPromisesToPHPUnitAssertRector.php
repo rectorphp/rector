@@ -33,27 +33,12 @@ use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUnitRector
 {
     /**
-     * @var string
-     */
-    private $testedClass;
-
-    /**
-     * @var bool
-     */
-    private $isBoolAssert = false;
-
-    /**
-     * @var bool
-     */
-    private $isPrepared = false;
-
-    /**
      * @see https://github.com/phpspec/phpspec/blob/master/src/PhpSpec/Wrapper/Subject.php
      * ↓
      * @see https://phpunit.readthedocs.io/en/8.0/assertions.html
      * @var string[][]
      */
-    private $newMethodToOldMethods = [
+    private const NEW_METHOD_TO_OLD_METHODS = [
         'assertInstanceOf' => ['shouldBeAnInstanceOf', 'shouldHaveType', 'shouldReturnAnInstanceOf'],
         'assertSame' => ['shouldBe', 'shouldReturn'],
         'assertNotSame' => ['shouldNotBe', 'shouldNotReturn'],
@@ -89,6 +74,21 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         'assertFinite' => ['shouldBeFinite', 'shouldNotBeFinite'],
         'assertInfinite' => ['shouldBeInfinite', 'shouldNotBeInfinite'],
     ];
+
+    /**
+     * @var string
+     */
+    private $testedClass;
+
+    /**
+     * @var bool
+     */
+    private $isBoolAssert = false;
+
+    /**
+     * @var bool
+     */
+    private $isPrepared = false;
 
     /**
      * @var string[]
@@ -163,22 +163,13 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
 
         $this->processMatchersKeys($node);
 
-        foreach ($this->newMethodToOldMethods as $newMethod => $oldMethods) {
+        foreach (self::NEW_METHOD_TO_OLD_METHODS as $newMethod => $oldMethods) {
             if ($this->isNames($node->name, $oldMethods)) {
                 return $this->createAssertMethod($newMethod, $node->var, $node->args[0]->value ?? null);
             }
         }
 
-        if (! $node->var instanceof Variable) {
-            return null;
-        }
-
-        if (! $this->isName($node->var, 'this')) {
-            return null;
-        }
-
-        // skip "createMock" method
-        if ($this->isName($node->name, 'createMock')) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -390,5 +381,19 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         }
 
         return $this->testedObjectPropertyFetch;
+    }
+
+    private function shouldSkip(MethodCall $methodCall): bool
+    {
+        if (! $methodCall->var instanceof Variable) {
+            return true;
+        }
+
+        if (! $this->isName($methodCall->var, 'this')) {
+            return true;
+        }
+
+        // skip "createMock" method
+        return $this->isName($methodCall->name, 'createMock');
     }
 }

@@ -11,16 +11,16 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class MethodCallManipulator
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var CallableNodeTraverser
@@ -33,11 +33,11 @@ final class MethodCallManipulator
     private $betterNodeFinder;
 
     public function __construct(
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         CallableNodeTraverser $callableNodeTraverser,
         BetterNodeFinder $betterNodeFinder
     ) {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->betterNodeFinder = $betterNodeFinder;
     }
@@ -51,7 +51,7 @@ final class MethodCallManipulator
 
         $methodCallNamesOnVariable = [];
         foreach ($methodCallsOnVariable as $methodCallOnVariable) {
-            $methodName = $this->nameResolver->getName($methodCallOnVariable);
+            $methodName = $this->nodeNameResolver->getName($methodCallOnVariable);
             if ($methodName === null) {
                 continue;
             }
@@ -95,7 +95,7 @@ final class MethodCallManipulator
             return null;
         }
 
-        $variableName = $this->nameResolver->getName($variable);
+        $variableName = $this->nodeNameResolver->getName($variable);
         if ($variableName === null) {
             return null;
         }
@@ -123,7 +123,7 @@ final class MethodCallManipulator
             return [];
         }
 
-        $variableName = $this->nameResolver->getName($variable);
+        $variableName = $this->nodeNameResolver->getName($variable);
         if ($variableName === null) {
             return [];
         }
@@ -176,7 +176,7 @@ final class MethodCallManipulator
                 return false;
             }
 
-            return $this->nameResolver->isName($node->var, $variableName);
+            return $this->nodeNameResolver->isName($node->var, $variableName);
         });
 
         return $assign;
@@ -217,7 +217,7 @@ final class MethodCallManipulator
                 return null;
             }
 
-            if (! $this->nameResolver->isName($node->var, $variableName)) {
+            if (! $this->nodeNameResolver->isName($node->var, $variableName)) {
                 return null;
             }
 

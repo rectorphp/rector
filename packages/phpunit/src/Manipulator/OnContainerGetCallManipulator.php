@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -21,9 +21,9 @@ use Rector\SymfonyPHPUnit\Node\KernelTestCaseNodeAnalyzer;
 final class OnContainerGetCallManipulator
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var CallableNodeTraverser
@@ -51,14 +51,14 @@ final class OnContainerGetCallManipulator
     private $valueResolver;
 
     public function __construct(
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         CallableNodeTraverser $callableNodeTraverser,
         ServiceNaming $serviceNaming,
         NodeRemovingCommander $nodeRemovingCommander,
         KernelTestCaseNodeAnalyzer $kernelTestCaseNodeAnalyzer,
         ValueResolver $valueResolver
     ) {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->serviceNaming = $serviceNaming;
         $this->nodeRemovingCommander = $nodeRemovingCommander;
@@ -81,7 +81,7 @@ final class OnContainerGetCallManipulator
                 return null;
             }
 
-            $variableName = $this->nameResolver->getName($node);
+            $variableName = $this->nodeNameResolver->getName($node);
             if ($variableName === null) {
                 return null;
             }
@@ -151,7 +151,7 @@ final class OnContainerGetCallManipulator
         string $type,
         array &$formerVariablesByMethods
     ): void {
-        $variableName = $this->nameResolver->getName($assign->var);
+        $variableName = $this->nodeNameResolver->getName($assign->var);
         if ($variableName === null) {
             return;
         }

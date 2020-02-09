@@ -81,11 +81,12 @@ PHP
     {
         $this->reset();
 
+        $hasChanged = false;
+
         if ($node->stmts === null) {
             return null;
         }
 
-        $hasChanged = false;
         foreach ($node->stmts as $key => $stmt) {
             $currentStmtVariableName = null;
 

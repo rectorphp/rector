@@ -20,7 +20,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -64,9 +64,9 @@ final class ParsedNodeCollector
     private $simpleParsedNodesByType = [];
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var Interface_[]
@@ -78,9 +78,9 @@ final class ParsedNodeCollector
      */
     private $traits = [];
 
-    public function __construct(NameResolver $nameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -182,7 +182,7 @@ final class ParsedNodeCollector
         }
 
         if ($node instanceof Interface_ || $node instanceof Trait_) {
-            $name = $this->nameResolver->getName($node);
+            $name = $this->nodeNameResolver->getName($node);
             if ($name === null) {
                 throw new ShouldNotHappenException();
             }
@@ -216,7 +216,7 @@ final class ParsedNodeCollector
         $news = $this->getNodesByType(New_::class);
 
         foreach ($news as $new) {
-            if (! $this->nameResolver->isName($new->class, $className)) {
+            if (! $this->nodeNameResolver->isName($new->class, $className)) {
                 continue;
             }
 
@@ -228,7 +228,7 @@ final class ParsedNodeCollector
 
     public function findClassConstantByClassConstFetch(ClassConstFetch $classConstFetch): ?ClassConst
     {
-        $class = $this->nameResolver->getName($classConstFetch->class);
+        $class = $this->nodeNameResolver->getName($classConstFetch->class);
 
         if ($class === 'self') {
             /** @var string|null $class */
@@ -243,7 +243,7 @@ final class ParsedNodeCollector
         }
 
         /** @var string $constantName */
-        $constantName = $this->nameResolver->getName($classConstFetch->name);
+        $constantName = $this->nodeNameResolver->getName($classConstFetch->name);
 
         return $this->findClassConstant($class, $constantName);
     }
@@ -270,7 +270,7 @@ final class ParsedNodeCollector
             return;
         }
 
-        $constantName = $this->nameResolver->getName($classConst);
+        $constantName = $this->nodeNameResolver->getName($classConst);
 
         $this->constantsByType[$className][$constantName] = $classConst;
     }

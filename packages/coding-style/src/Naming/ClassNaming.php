@@ -8,18 +8,18 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 
 final class ClassNaming
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
-    public function __construct(NameResolver $nameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -28,7 +28,7 @@ final class ClassNaming
     public function getShortName($name): string
     {
         if ($name instanceof Name || $name instanceof Identifier) {
-            $name = $this->nameResolver->getName($name);
+            $name = $this->nodeNameResolver->getName($name);
             if ($name === null) {
                 throw new ShouldNotHappenException();
             }

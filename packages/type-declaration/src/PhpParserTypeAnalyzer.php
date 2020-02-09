@@ -34,25 +34,14 @@ final class PhpParserTypeAnalyzer
         }
 
         // unwrap nullable types
-        if ($possibleParentType instanceof NullableType) {
-            $possibleParentType = $possibleParentType->type;
-        }
+        $possibleParentType = $this->unwrapNullableAndToString($possibleParentType);
+        $possibleSubtype = $this->unwrapNullableAndToString($possibleSubtype);
 
-        if ($possibleSubtype instanceof NullableType) {
-            $possibleSubtype = $possibleSubtype->type;
-        }
-
-        $possibleSubtype = $possibleSubtype->toString();
-        $possibleParentType = $possibleParentType->toString();
         if (is_a($possibleSubtype, $possibleParentType, true)) {
             return true;
         }
 
-        if (in_array($possibleSubtype, ['array', 'Traversable'], true) && $possibleParentType === 'iterable') {
-            return true;
-        }
-
-        if (in_array($possibleSubtype, ['array', 'ArrayIterator'], true) && $possibleParentType === 'countable') {
+        if ($this->isTraversableOrIterableSubtype($possibleSubtype, $possibleParentType)) {
             return true;
         }
 
@@ -61,5 +50,26 @@ final class PhpParserTypeAnalyzer
         }
 
         return ctype_upper($possibleSubtype[0]) && $possibleParentType === 'object';
+    }
+
+    /**
+     * @param Name|NullableType|Identifier $node
+     */
+    private function unwrapNullableAndToString(Node $node): string
+    {
+        if (! $node instanceof NullableType) {
+            return $node->toString();
+        }
+
+        return $node->type->toString();
+    }
+
+    private function isTraversableOrIterableSubtype(string $possibleSubtype, string $possibleParentType): bool
+    {
+        if (in_array($possibleSubtype, ['array', 'Traversable'], true) && $possibleParentType === 'iterable') {
+            return true;
+        }
+
+        return in_array($possibleSubtype, ['array', 'ArrayIterator'], true) && $possibleParentType === 'countable';
     }
 }

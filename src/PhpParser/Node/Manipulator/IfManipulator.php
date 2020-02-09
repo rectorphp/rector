@@ -13,7 +13,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 
 final class IfManipulator
@@ -34,20 +34,20 @@ final class IfManipulator
     private $stmtsManipulator;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         ConstFetchManipulator $constFetchManipulator,
         StmtsManipulator $stmtsManipulator,
-        NameResolver $nameResolver
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->constFetchManipulator = $constFetchManipulator;
         $this->stmtsManipulator = $stmtsManipulator;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -213,7 +213,7 @@ final class IfManipulator
         if (! $if->cond instanceof FuncCall) {
             return false;
         }
-        return $this->nameResolver->isName($if->cond, $functionName);
+        return $this->nodeNameResolver->isName($if->cond, $functionName);
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $returnNode): ?Expr

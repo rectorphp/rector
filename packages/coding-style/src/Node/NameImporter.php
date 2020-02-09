@@ -13,7 +13,7 @@ use Rector\CodingStyle\Application\UseAddingCommander;
 use Rector\CodingStyle\Imports\AliasUsesResolver;
 use Rector\CodingStyle\Imports\ImportSkipper;
 use Rector\Core\Configuration\Option;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -47,9 +47,9 @@ final class NameImporter
     private $importSkipper;
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var ParameterProvider
@@ -61,14 +61,14 @@ final class NameImporter
         AliasUsesResolver $aliasUsesResolver,
         UseAddingCommander $useAddingCommander,
         ImportSkipper $importSkipper,
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         ParameterProvider $parameterProvider
     ) {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->aliasUsesResolver = $aliasUsesResolver;
         $this->useAddingCommander = $useAddingCommander;
         $this->importSkipper = $importSkipper;
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->parameterProvider = $parameterProvider;
     }
 
@@ -111,7 +111,7 @@ final class NameImporter
         $importShortClasses = $this->parameterProvider->provideParameter(Option::IMPORT_SHORT_CLASSES_PARAMETER);
 
         if (! $importShortClasses) {
-            $name = $this->nameResolver->getName($name);
+            $name = $this->nodeNameResolver->getName($name);
             if ($name !== null && substr_count($name, '\\') === 0) {
                 return true;
             }

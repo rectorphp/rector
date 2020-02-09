@@ -30,7 +30,7 @@ final class ReturnTypeDeclarationReturnTypeInferer extends AbstractTypeInferer i
         }
 
         // resolve later with more precise type, e.g. Type[]
-        if ($this->nameResolver->isNames($functionLike->getReturnType(), ['array', 'iterable'])) {
+        if ($this->nodeNameResolver->isNames($functionLike->getReturnType(), ['array', 'iterable'])) {
             return new MixedType();
         }
 

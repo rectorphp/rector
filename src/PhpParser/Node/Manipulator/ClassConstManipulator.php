@@ -10,16 +10,16 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ClassConstManipulator
 {
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var BetterNodeFinder
@@ -42,13 +42,13 @@ final class ClassConstManipulator
     private $classManipulator;
 
     public function __construct(
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         ParsedNodeCollector $parsedNodeCollector,
         ClassManipulator $classManipulator
     ) {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->parsedNodeCollector = $parsedNodeCollector;
@@ -98,7 +98,7 @@ final class ClassConstManipulator
 
     private function isNameMatch(Node $node, ClassConst $classConst): bool
     {
-        return $this->nameResolver->getName($node) === 'self::' . $this->nameResolver->getName($classConst)
-            || $this->nameResolver->getName($node) === 'static::' . $this->nameResolver->getName($classConst);
+        return $this->nodeNameResolver->getName($node) === 'self::' . $this->nodeNameResolver->getName($classConst)
+            || $this->nodeNameResolver->getName($node) === 'static::' . $this->nodeNameResolver->getName($classConst);
     }
 }

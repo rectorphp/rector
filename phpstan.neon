@@ -240,3 +240,4 @@ parameters:
         - '#Method Rector\\SOLID\\Reflection\\ParentConstantReflectionResolver\:\:(.*?)\(\) should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
 
         - '#Method Rector\\Core\\NodeContainer\\NodeCollector\\ParsedFunctionLikeNodesByType\:\:findFunction\(\) should return PhpParser\\Node\\Stmt\\Function_\|null but returns PhpParser\\Node\|null#'
+        - '#Parameter \#1 \$firstStmt of method Rector\\Core\\Rector\\MethodBody\\NormalToFluentRector\:\:isBothMethodCallMatch\(\) expects PhpParser\\Node\\Stmt\\Expression, PhpParser\\Node\\Stmt given#'

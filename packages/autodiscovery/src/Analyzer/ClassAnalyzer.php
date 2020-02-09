@@ -10,7 +10,7 @@ use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNode\JMS\SerializerTypeTagValueNode;
 use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
-use Rector\Core\PhpParser\Node\Resolver\NameResolver;
+use Rector\Core\PhpParser\Node\Resolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -22,9 +22,9 @@ final class ClassAnalyzer
     private $valueObjectStatusByClassName = [];
 
     /**
-     * @var NameResolver
+     * @var NodeNameResolver
      */
-    private $nameResolver;
+    private $nodeNameResolver;
 
     /**
      * @var NodeTypeResolver
@@ -37,11 +37,11 @@ final class ClassAnalyzer
     private $parsedNodeCollector;
 
     public function __construct(
-        NameResolver $nameResolver,
+        NodeNameResolver $nodeNameResolver,
         ParsedNodeCollector $parsedNodeCollector,
         NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->nameResolver = $nameResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->parsedNodeCollector = $parsedNodeCollector;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -52,7 +52,8 @@ final class ClassAnalyzer
             return false;
         }
 
-        $className = $this->nameResolver->getName($class);
+        /** @var string $className */
+        $className = $this->nodeNameResolver->getName($class);
 
         if (isset($this->valueObjectStatusByClassName[$className])) {
             return $this->valueObjectStatusByClassName[$className];
@@ -61,15 +62,7 @@ final class ClassAnalyzer
         $constructClassMethod = $class->getMethod('__construct');
 
         if ($constructClassMethod === null) {
-            // A. has all properties with serialize?
-            if ($this->hasAllPropertiesWithSerialize($class)) {
-                $this->valueObjectStatusByClassName[$className] = true;
-                return true;
-            }
-
-            // probably not a value object
-            $this->valueObjectStatusByClassName[$className] = false;
-            return false;
+            return $this->analyseWithoutConstructor($class, $className);
         }
 
         // resolve constructor types
@@ -115,5 +108,18 @@ final class ClassAnalyzer
         }
 
         return true;
+    }
+
+    private function analyseWithoutConstructor(Class_ $class, ?string $className): bool
+    {
+        // A. has all properties with serialize?
+        if ($this->hasAllPropertiesWithSerialize($class)) {
+            $this->valueObjectStatusByClassName[$className] = true;
+            return true;
+        }
+
+        // probably not a value object
+        $this->valueObjectStatusByClassName[$className] = false;
+        return false;
     }
 }

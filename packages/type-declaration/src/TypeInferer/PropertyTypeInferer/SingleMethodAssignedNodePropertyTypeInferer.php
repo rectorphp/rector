@@ -33,7 +33,7 @@ final class SingleMethodAssignedNodePropertyTypeInferer extends AbstractTypeInfe
             return new MixedType();
         }
 
-        $propertyName = $this->nameResolver->getName($property);
+        $propertyName = $this->nodeNameResolver->getName($property);
 
         $assignedNode = $this->resolveAssignedNodeToProperty($classMethod, $propertyName);
         if ($assignedNode === null) {
@@ -59,7 +59,7 @@ final class SingleMethodAssignedNodePropertyTypeInferer extends AbstractTypeInfe
                 return null;
             }
 
-            if (! $this->nameResolver->isName($node->var, $propertyName)) {
+            if (! $this->nodeNameResolver->isName($node->var, $propertyName)) {
                 return null;
             }
 
