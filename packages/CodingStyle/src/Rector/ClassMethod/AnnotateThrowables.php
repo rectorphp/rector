@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
-use Nette\Utils\Strings;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Throw_;
 use Rector\Rector\AbstractRector;
@@ -22,7 +20,7 @@ final class AnnotateThrowables extends AbstractRector
     /**
      * @return string[]
      */
-    public function getNodeTypes(): array
+    public function getNodeTypes() : array
     {
         return [Throw_::class];
     }
@@ -32,38 +30,32 @@ final class AnnotateThrowables extends AbstractRector
      *
      * @return Node|null
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node) : ?Node
     {
-        // Try to get the method in which this throw statement is
-        $method = $node->getAttribute('methodNode');
-
-        if ($this->isThrowableAnnotated($method, $node->expr->class->parts)) {
+        if ($this->isThrowableAnnotated($node)) {
             return null;
         }
 
-        throw new \RuntimeException('We dont know what to do with the node.');
-        // return $node if you modified it
-        return $node;
+        return $this->annotateMethod($node);
     }
 
     /**
-     * @param ClassMethod $method
-     * @param array       $throwableParts
+     * @param Throw_ $node
      *
      * @return bool
      */
-    private function isThrowableAnnotated(ClassMethod $method, array $throwableParts):bool
+    private function isThrowableAnnotated(Throw_ $node) : bool
     {
-        if (null === $method->getDocComment() && empty($method->getComments())) {
+        $method = $node->getAttribute('methodNode');
+        $throwableParts = $node->expr->class->parts;
+        $docComment = $method->getDocComment();
+        $comments = $method->getComments();
+
+        if (null === $docComment && empty($comments)) {
             return false;
         }
 
-        $fullyQualifiedNamespace = '\\' . implode('\\', $throwableParts);
-        $pattern = sprintf('@throws %s', $fullyQualifiedNamespace);
-        //$match = strpos($method->getDocComment()->getText(), $pattern);
-
-        //dd($method->getDocComment()->getText(), $fullyQualifiedNamespace, $pattern, $match);
-        if (false !== strpos($method->getDocComment()->getText(), $pattern)) {
+        if ($this->isFQNAnnotated($docComment, $comments, $throwableParts)) {
             return true;
         }
 
@@ -72,19 +64,131 @@ final class AnnotateThrowables extends AbstractRector
     }
 
     /**
+     * @param Doc $docComment
+     * @param array<Doc> $comments
+     * @param array<string> $throwableParts
+     *
+     * @return bool
+     */
+    private function isFQNAnnotated(Doc $docComment, array $comments, array $throwableParts):bool
+    {
+        $FQN = $this->buildFQN($throwableParts);
+        $pattern = $this->buildThrowsDocComment($FQN);
+
+        if ($this->isDocCommentAlreadyPresent($docComment, $pattern)) {
+            return  true;
+        }
+
+        foreach ($comments as $comment) {
+            if ($this->isDocCommentAlreadyPresent($comment, $pattern)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Doc $docComment
+     * @param string                 $pattern
+     *
+     * @return bool
+     */
+    private function isDocCommentAlreadyPresent(Doc $docComment, string $pattern):bool
+    {
+        return false !== strpos($docComment->getText(), $pattern);
+    }
+
+    /**
+     * @param string $FQNOrThrowableName
+     *
+     * @return string
+     */
+    private function buildThrowsDocComment(string $FQNOrThrowableName):string
+    {
+        return sprintf('@throws %s', $FQNOrThrowableName);
+    }
+
+    /**
+     * @param array $throwableParts
+     *
+     * @return string
+     */
+    private function buildFQN(array $throwableParts):string
+    {
+        return '\\' . implode('\\', $throwableParts);
+    }
+
+    /**
+     * @param Throw_ $node
+     *
+     * @return Throw_
+     */
+    private function annotateMethod(Throw_ $node):Throw_
+    {
+        $method = $node->getAttribute('methodNode');
+        $throwableParts = $node->expr->class->parts;
+        $FQN = $this->buildFQN($throwableParts);
+        $parsedDocComment = $this->parseMethodDocComment($method);
+        $parsedDocComment[] = $this->buildThrowsDocComment($FQN);
+        $rebuiltDocComment = $this->rebuildDocComment($parsedDocComment);
+
+        $method->setAttribute('comments', null);
+        $method->setDocComment(new Doc($rebuiltDocComment));
+
+        $node->setAttribute('methodNode', $method);
+
+        return $node;
+    }
+
+    /**
+     * @param ClassMethod $method
+     *
+     * @return array
+     */
+    private function parseMethodDocComment(ClassMethod $method):array
+    {
+        $parsedDocComment = [];
+        if (null !== $method->getDocComment()) {
+            throw new \RuntimeException('Implement doc comment parsing');
+        }
+
+        return $parsedDocComment;
+    }
+
+    /**
+     * @param array $docComment
+     *
+     * @return string
+     */
+    private function rebuildDocComment(array $docComment):string
+    {
+        $docComment = array_map(static function($value) {
+            return sprintf(" * %s\n", $value);
+        }, $docComment);
+        $imploded = implode('', $docComment);
+
+        return <<<"PHP"
+/**
+$imploded
+ */
+PHP;
+    }
+
+    /**
      * From this method documentation is generated.
      */
-    public function getDefinition(): RectorDefinition
+    public function getDefinition() : RectorDefinition
     {
         return new RectorDefinition(
-            'Change method calls from set* to change*.', [
-                                                           new CodeSample(
-                                                           // code before
-                                                               '$user->setPassword("123456");',
-                                                               // code after
-                                                               '$user->changePassword("123456");'
-                                                           ),
-                                                       ]
+            'Adds @throws DocBlock comments to methods that thrwo \Throwables.', [
+                                                                                   new CodeSample(
+                                                                                   // code before
+                                                                                       '$user->setPassword("123456");',
+                                                                                       // code after
+                                                                                       '$user->changePassword("123456");'
+                                                                                   ),
+                                                                               ]
         );
     }
 }

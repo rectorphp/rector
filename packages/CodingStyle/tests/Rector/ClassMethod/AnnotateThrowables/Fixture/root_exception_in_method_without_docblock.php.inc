@@ -2,7 +2,7 @@
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Fixture;
 
-class RootException
+class RootExceptionInMethodWithoutDocblock
 {
     public function throwRootException()
     {
@@ -16,7 +16,7 @@ class RootException
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Fixture;
 
-class RootException
+class RootExceptionInMethodWithoutDocblock
 {
     /**
      * @throws \RuntimeException
@@ -28,4 +28,3 @@ class RootException
 }
 
 ?>
-
