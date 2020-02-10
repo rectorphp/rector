@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PhpDocParser;
+namespace Rector\StaticTypeMapper\PhpDocParser;
 
 use PhpParser\Node;
 use PHPStan\Analyser\NameScope;
@@ -16,11 +16,11 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\Type\AttributeAwareIdentifierTypeNode;
 use Rector\BetterPhpDocParser\Type\PreSlashStringType;
-use Rector\NodeTypeResolver\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\TypeMapper\ScalarStringToTypeMapper;
 use Rector\PHPStan\Type\ParentStaticType;
 use Rector\PHPStan\Type\SelfObjectType;
+use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
+use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
 final class IdentifierTypeMapper implements PhpDocTypeMapperInterface

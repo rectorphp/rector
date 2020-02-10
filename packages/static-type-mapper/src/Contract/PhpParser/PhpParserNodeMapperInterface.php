@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Contract\PhpParser;
+namespace Rector\StaticTypeMapper\Contract\PhpParser;
 
 use PhpParser\Node;
 use PHPStan\Type\Type;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\TypeMapper;
+namespace Rector\StaticTypeMapper\Mapper;
 
 use Nette\Utils\Strings;
 use PHPStan\Type\ArrayType;
@@ -20,23 +20,26 @@ use PHPStan\Type\VoidType;
 
 final class ScalarStringToTypeMapper
 {
+    /**
+     * @var string[][]
+     */
+    private const SCALAR_NAME_BY_TYPE = [
+        StringType::class => ['string'],
+        FloatType::class => ['float', 'real', 'double'],
+        IntegerType::class => ['int', 'integer'],
+        BooleanType::class => ['false', 'true', 'bool', 'boolean'],
+        NullType::class => ['null'],
+        VoidType::class => ['void'],
+        ResourceType::class => ['resource'],
+        CallableType::class => ['callback', 'callable'],
+        ObjectWithoutClassType::class => ['object'],
+    ];
+
     public function mapScalarStringToType(string $scalarName): Type
     {
         $loweredScalarName = Strings::lower($scalarName);
 
-        $scalarNameByType = [
-            StringType::class => ['string'],
-            FloatType::class => ['float', 'real', 'double'],
-            IntegerType::class => ['int', 'integer'],
-            BooleanType::class => ['false', 'true', 'bool', 'boolean'],
-            NullType::class => ['null'],
-            VoidType::class => ['void'],
-            ResourceType::class => ['resource'],
-            CallableType::class => ['callback', 'callable'],
-            ObjectWithoutClassType::class => ['object'],
-        ];
-
-        foreach ($scalarNameByType as $objectType => $scalarNames) {
+        foreach (self::SCALAR_NAME_BY_TYPE as $objectType => $scalarNames) {
             if (! in_array($loweredScalarName, $scalarNames, true)) {
                 continue;
             }

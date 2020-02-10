@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Contract\PhpDocParser;
+namespace Rector\StaticTypeMapper\Contract\PhpDocParser;
 
 use PhpParser\Node;
 use PHPStan\Analyser\NameScope;
