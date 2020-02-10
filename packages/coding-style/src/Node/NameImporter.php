@@ -15,8 +15,8 @@ use Rector\CodingStyle\Imports\ImportSkipper;
 use Rector\Core\Configuration\Option;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\StaticTypeMapper;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 final class NameImporter

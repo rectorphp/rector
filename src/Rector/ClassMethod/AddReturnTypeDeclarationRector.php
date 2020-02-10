@@ -111,10 +111,6 @@ PHP
         }
 
         $returnTypeNode = $this->staticTypeMapper->mapStringToPhpParserNode($newType);
-        if ($returnTypeNode === null) {
-            return;
-        }
-
         $classMethod->returnType = $returnTypeNode;
     }
 }

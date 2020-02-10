@@ -8,7 +8,7 @@ use PhpParser\Node\Param;
 use PHPStan\Type\Type;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\StaticTypeMapper;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class ParamPhpDocNodeFactory
 {

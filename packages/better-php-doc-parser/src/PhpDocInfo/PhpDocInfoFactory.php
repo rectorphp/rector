@@ -16,7 +16,7 @@ use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
-use Rector\NodeTypeResolver\StaticTypeMapper;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class PhpDocInfoFactory
 {

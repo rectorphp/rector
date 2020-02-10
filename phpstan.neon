@@ -221,7 +221,7 @@ parameters:
 
         - '#Property PhpParser\\Node\\Stmt\\Expression\:\:\$expr \(PhpParser\\Node\\Expr\) does not accept PhpParser\\Node\\Expr\|null#'
         - '#Call to an undefined method PHPStan\\Type\\Type\:\:getClassName\(\)#'
-        - '#Parameter \#1 \$typeNode of method Rector\\NodeTypeResolver\\StaticTypeMapper\:\:mapPHPStanPhpDocTypeNodeToPHPStanType\(\) expects PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode, PHPStan\\PhpDocParser\\Ast\\Node given#'
+        - '#Parameter \#1 \$typeNode of method Rector\\StaticTypeMapper\\StaticTypeMapper\:\:mapPHPStanPhpDocTypeNodeToPHPStanType\(\) expects PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode, PHPStan\\PhpDocParser\\Ast\\Node given#'
         - '#Parameter \#1 \$str of function preg_quote expects string, int\|string given#'
 
         - '#Parameter \#1 \$node of method Rector\\Core\\PhpParser\\Node\\Commander\\NodeAddingCommander\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'

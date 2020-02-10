@@ -7,7 +7,7 @@ namespace Rector\TypeDeclaration;
 use PhpParser\Node\FunctionLike;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\StaticTypeMapper;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class TypeDeclarationToStringConverter
 {
