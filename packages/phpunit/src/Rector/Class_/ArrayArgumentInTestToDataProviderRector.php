@@ -21,6 +21,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractPHPUnitRector;
@@ -263,7 +264,9 @@ PHP
 
     private function createDataProviderTagNode(string $dataProviderMethodName): PhpDocTagNode
     {
-        return new PhpDocTagNode('@dataProvider', new GenericTagValueNode($dataProviderMethodName . '()'));
+        return new AttributeAwarePhpDocTagNode('@dataProvider', new GenericTagValueNode(
+            $dataProviderMethodName . '()'
+        ));
     }
 
     /**
