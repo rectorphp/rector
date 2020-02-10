@@ -62,12 +62,7 @@ abstract class AbstractNodeVendorLockResolver
         $interfaceNames = $this->classManipulator->getClassLikeNodeParentInterfaceNames($classLike);
 
         foreach ($interfaceNames as $interfaceName) {
-            if (! interface_exists($interfaceName)) {
-                continue;
-            }
-
-            $interfaceMethods = get_class_methods($interfaceName);
-            if (! in_array($methodName, $interfaceMethods, true)) {
+            if (! $this->hasInterfaceMethod($methodName, $interfaceName)) {
                 continue;
             }
 
@@ -75,5 +70,16 @@ abstract class AbstractNodeVendorLockResolver
         }
 
         return false;
+    }
+
+    private function hasInterfaceMethod(string $methodName, string $interfaceName): bool
+    {
+        if (! interface_exists($interfaceName)) {
+            return false;
+        }
+
+        $interfaceMethods = get_class_methods($interfaceName);
+
+        return in_array($methodName, $interfaceMethods, true);
     }
 }

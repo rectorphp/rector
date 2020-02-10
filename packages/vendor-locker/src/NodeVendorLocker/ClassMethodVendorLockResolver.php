@@ -6,7 +6,7 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Exception\ShouldNotHappenException;
+use PhpParser\Node\Stmt\Interface_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
 
@@ -22,12 +22,10 @@ final class ClassMethodVendorLockResolver extends AbstractNodeVendorLockResolver
      */
     public function isRemovalVendorLocked(ClassMethod $classMethod): bool
     {
+        /** @var string $classMethodName */
         $classMethodName = $this->nodeNameResolver->getName($classMethod);
-        if (! is_string($classMethodName)) {
-            throw new ShouldNotHappenException();
-        }
 
-        /** @var Class_|null $class */
+        /** @var Class_|Interface_|null $class */
         $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
         if ($class === null) {
             return false;

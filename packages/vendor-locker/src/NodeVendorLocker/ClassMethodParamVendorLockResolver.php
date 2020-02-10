@@ -7,7 +7,6 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockResolver
@@ -24,10 +23,8 @@ final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockRes
             return false;
         }
 
+        /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        if (! is_string($methodName)) {
-            throw new ShouldNotHappenException();
-        }
 
         // @todo extract to some "inherited parent method" service
         /** @var string|null $parentClassName */
@@ -45,8 +42,7 @@ final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockRes
             return false;
         }
 
-        $interfaceNames = $this->classManipulator->getClassLikeNodeParentInterfaceNames($classNode);
-        return $this->isInterfaceParamVendorLockin($interfaceNames, $methodName);
+        return $this->isMethodVendorLockedByInterface($classNode, $methodName);
     }
 
     private function isParentClassVendorLocking(int $paramPosition, string $parentClassName, string $methodName): ?bool
@@ -73,25 +69,5 @@ final class ClassMethodParamVendorLockResolver extends AbstractNodeVendorLockRes
         }
 
         return null;
-    }
-
-    private function isInterfaceParamVendorLockin(array $interfaceNames, string $methodName): bool
-    {
-        foreach ($interfaceNames as $interfaceName) {
-            $interface = $this->parsedNodeCollector->findInterface($interfaceName);
-            // parent class method in local scope → it's ok
-            // @todo validate type is conflicting
-            if ($interface !== null && $interface->getMethod($methodName) !== null) {
-                return false;
-            }
-
-            if (method_exists($interfaceName, $methodName)) {
-                // parent class method in external scope → it's not ok
-                // @todo validate type is conflicting
-                return true;
-            }
-        }
-
-        return false;
     }
 }
