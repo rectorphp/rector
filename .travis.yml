@@ -19,7 +19,7 @@ jobs:
             script:
                 - cd compiler
                 - composer install
-                - travis_retry bin/compile
+                - bin/compile
                 - ../tmp/rector.phar
 
                 - cd ..
