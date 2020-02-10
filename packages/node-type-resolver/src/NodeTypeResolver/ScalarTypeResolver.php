@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
+namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Scalar;
@@ -17,9 +17,9 @@ use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedException;
-use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 
-final class ScalarTypeResolver implements PerNodeTypeResolverInterface
+final class ScalarTypeResolver implements NodeTypeResolverInterface
 {
     public function getNodeClasses(): array
     {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
+namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
@@ -10,11 +10,11 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
-final class StaticCallTypeResolver implements PerNodeTypeResolverInterface
+final class StaticCallTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @var NodeTypeResolver

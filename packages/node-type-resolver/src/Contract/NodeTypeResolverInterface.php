@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\Contract\PerNodeTypeResolver;
+namespace Rector\NodeTypeResolver\Contract;
 
 use PhpParser\Node;
 use PHPStan\Type\Type;
 
-interface PerNodeTypeResolverInterface
+interface NodeTypeResolverInterface
 {
     /**
      * @return string[]

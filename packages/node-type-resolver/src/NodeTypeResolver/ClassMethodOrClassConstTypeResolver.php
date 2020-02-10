@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
+namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
@@ -10,11 +10,11 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
-final class ClassMethodOrClassConstTypeResolver implements PerNodeTypeResolverInterface
+final class ClassMethodOrClassConstTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @var NodeTypeResolver

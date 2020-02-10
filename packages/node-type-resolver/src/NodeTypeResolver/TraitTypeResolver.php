@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
+namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Trait_;
@@ -10,13 +10,13 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use ReflectionClass;
 
 /**
  * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\TraitTypeResolverTest
  */
-final class TraitTypeResolver implements PerNodeTypeResolverInterface
+final class TraitTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @return string[]

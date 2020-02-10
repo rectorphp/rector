@@ -15,7 +15,7 @@ use Rector\NodeTypeResolver\Tests\Source\AnotherClass;
 use Rector\PHPStan\TypeFactoryStaticHelper;
 
 /**
- * @see \Rector\NodeTypeResolver\PerNodeTypeResolver\VariableTypeResolver
+ * @see \Rector\NodeTypeResolver\NodeTypeResolver\VariableTypeResolver
  */
 final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
 {

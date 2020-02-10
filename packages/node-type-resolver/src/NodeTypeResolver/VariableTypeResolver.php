@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
+namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
@@ -13,7 +13,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
@@ -21,7 +21,7 @@ use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 /**
  * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\VariableTypeResolver\VariableTypeResolverTest
  */
-final class VariableTypeResolver implements PerNodeTypeResolverInterface
+final class VariableTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @var NodeNameResolver

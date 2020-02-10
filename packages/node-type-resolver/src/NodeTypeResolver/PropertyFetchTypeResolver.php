@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
+namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Builder\Property;
 use PhpParser\Node;
@@ -16,7 +16,7 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\StaticTypeMapper;
@@ -25,7 +25,7 @@ use ReflectionProperty;
 /**
  * @see \Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\NameTypeResolver\NameTypeResolverTest
  */
-final class PropertyFetchTypeResolver implements PerNodeTypeResolverInterface
+final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @var ParsedNodeCollector

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PerNodeTypeResolver;
+namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
-final class ClassConstFetchTypeResolver implements PerNodeTypeResolverInterface
+final class ClassConstFetchTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @var NodeTypeResolver

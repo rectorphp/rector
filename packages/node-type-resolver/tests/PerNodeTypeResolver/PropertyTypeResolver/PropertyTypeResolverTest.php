@@ -17,7 +17,7 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\PropertyTypeResolver\Sourc
 use Rector\PHPStan\TypeFactoryStaticHelper;
 
 /**
- * @see \Rector\NodeTypeResolver\PerNodeTypeResolver\PropertyTypeResolver
+ * @see \Rector\NodeTypeResolver\NodeTypeResolver\PropertyTypeResolver
  */
 final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
 {
