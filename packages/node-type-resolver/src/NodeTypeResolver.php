@@ -10,13 +10,10 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Nop;
 use PHPStan\Analyser\Scope;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\FloatType;
@@ -29,9 +26,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -39,7 +34,6 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
-use ReflectionProperty;
 
 final class NodeTypeResolver
 {
@@ -74,21 +68,6 @@ final class NodeTypeResolver
     private $objectTypeSpecifier;
 
     /**
-     * @var ParsedNodeCollector
-     */
-    private $parsedNodeCollector;
-
-    /**
-     * @var BetterPhpDocParser
-     */
-    private $betterPhpDocParser;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    /**
      * @var ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;
@@ -97,13 +76,10 @@ final class NodeTypeResolver
      * @param PerNodeTypeResolverInterface[] $perNodeTypeResolvers
      */
     public function __construct(
-        BetterPhpDocParser $betterPhpDocParser,
         NodeNameResolver $nodeNameResolver,
-        ParsedNodeCollector $parsedNodeCollector,
         ClassReflectionTypesResolver $classReflectionTypesResolver,
         ReflectionProvider $reflectionProvider,
         TypeFactory $typeFactory,
-        StaticTypeMapper $staticTypeMapper,
         ObjectTypeSpecifier $objectTypeSpecifier,
         array $perNodeTypeResolvers
     ) {
@@ -117,9 +93,6 @@ final class NodeTypeResolver
         $this->reflectionProvider = $reflectionProvider;
         $this->typeFactory = $typeFactory;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
-        $this->parsedNodeCollector = $parsedNodeCollector;
-        $this->betterPhpDocParser = $betterPhpDocParser;
-        $this->staticTypeMapper = $staticTypeMapper;
     }
 
     /**
@@ -216,10 +189,6 @@ final class NodeTypeResolver
         $staticType = $nodeScope->getType($node);
         if (! $staticType instanceof ObjectType) {
             return $staticType;
-        }
-
-        if ($node instanceof PropertyFetch) {
-            return $this->resolvePropertyFetchType($node);
         }
 
         return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAlaisedObjectType($node, $staticType);
@@ -401,48 +370,6 @@ final class NodeTypeResolver
         return $className === null || Strings::contains($className, 'AnonymousClass');
     }
 
-    private function getVendorPropertyFetchType(PropertyFetch $propertyFetch): ?Type
-    {
-        $varObjectType = $this->resolve($propertyFetch->var);
-        if (! $varObjectType instanceof TypeWithClassName) {
-            return null;
-        }
-
-        if ($this->parsedNodeCollector->findClass($varObjectType->getClassName()) !== null) {
-            return null;
-        }
-
-        // 3rd party code
-        $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
-        if ($propertyName === null) {
-            return null;
-        }
-
-        if (! property_exists($varObjectType->getClassName(), $propertyName)) {
-            return null;
-        }
-
-        // property is used
-        $propertyReflection = new ReflectionProperty($varObjectType->getClassName(), $propertyName);
-        if (! $propertyReflection->getDocComment()) {
-            return null;
-        }
-
-        $phpDocNode = $this->betterPhpDocParser->parseString((string) $propertyReflection->getDocComment());
-        $varTagValues = $phpDocNode->getVarTagValues();
-
-        if (! isset($varTagValues[0])) {
-            return null;
-        }
-
-        $typeNode = $varTagValues[0]->type;
-        if (! $typeNode instanceof TypeNode) {
-            return null;
-        }
-
-        return $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($typeNode, new Nop());
-    }
-
     /**
      * @return string[]
      */
@@ -469,16 +396,5 @@ final class NodeTypeResolver
         }
 
         return false;
-    }
-
-    private function resolvePropertyFetchType(PropertyFetch $propertyFetch)
-    {
-        // compensate 3rd party non-analysed property reflection
-        $vendorPropertyType = $this->getVendorPropertyFetchType($propertyFetch);
-        if ($vendorPropertyType !== null) {
-            return $vendorPropertyType;
-        }
-
-        return new MixedType();
     }
 }
