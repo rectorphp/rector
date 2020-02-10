@@ -14,6 +14,9 @@ use Rector\Rector\AbstractRector;
 use Rector\RectorDefinition\CodeSample;
 use Rector\RectorDefinition\RectorDefinition;
 
+/**
+ * Adds "throws" DocBlock to methods.
+ */
 final class AnnotateThrowables extends AbstractRector
 {
     /**
@@ -21,53 +24,51 @@ final class AnnotateThrowables extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        // what node types we look for?
-        // pick any node from https://github.com/rectorphp/rector/blob/master/docs/NodesOverview.md
         return [Throw_::class];
     }
 
     /**
-     * @param Throw_ $node - we can add "MethodCall" type here, because only this node is in "getNodeTypes()"
+     * @param Node|Throw_ $node
      *
      * @return Node|null
      */
     public function refactor(Node $node): ?Node
     {
-        /*
         // Try to get the method in which this throw statement is
         $method = $node->getAttribute('methodNode');
-        dump($this->isThrowAnnotated($method, $node->expr->class->parts));
-        dd('fine');
 
-        /*
-        // we only care about "set*" method names
-        if (! $this->isName($node->name, 'set*')) {
-            // return null to skip it
+        if ($this->isThrowableAnnotated($method, $node->expr->class->parts)) {
             return null;
         }
 
-        $methodCallName = $this->getName($node);
-        $newMethodCallName = Strings::replace($methodCallName, '#^set#', 'change');
-
-        $node->name = new Identifier($newMethodCallName);
-
+        throw new \RuntimeException('We dont know what to do with the node.');
         // return $node if you modified it
-        return $node;
-        */
-
         return $node;
     }
 
     /**
      * @param ClassMethod $method
-     * @param array       $throwParts
+     * @param array       $throwableParts
      *
      * @return bool
      */
-    private function isThrowAnnotated(ClassMethod $method, array $throwParts):bool
+    private function isThrowableAnnotated(ClassMethod $method, array $throwableParts):bool
     {
-        dump($method->getDocComment(), get_class($method));
-        return false;
+        if (null === $method->getDocComment() && empty($method->getComments())) {
+            return false;
+        }
+
+        $fullyQualifiedNamespace = '\\' . implode('\\', $throwableParts);
+        $pattern = sprintf('@throws %s', $fullyQualifiedNamespace);
+        //$match = strpos($method->getDocComment()->getText(), $pattern);
+
+        //dd($method->getDocComment()->getText(), $fullyQualifiedNamespace, $pattern, $match);
+        if (false !== strpos($method->getDocComment()->getText(), $pattern)) {
+            return true;
+        }
+
+        // No matching condition
+        throw new \RuntimeException('This should never happen as all possible conditions should have been predicted.');
     }
 
     /**
