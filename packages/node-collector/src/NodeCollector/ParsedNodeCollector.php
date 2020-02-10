@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\NodeContainer\NodeCollector;
+namespace Rector\NodeCollector\NodeCollector;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;

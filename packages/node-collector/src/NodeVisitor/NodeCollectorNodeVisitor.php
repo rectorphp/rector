@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\NodeVisitor;
+namespace Rector\NodeCollector\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
-use Rector\Core\NodeContainer\NodeCollector\ParsedFunctionLikeNodeCollector;
-use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
+use Rector\NodeCollector\NodeCollector\ParsedFunctionLikeNodeCollector;
+use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 
 final class NodeCollectorNodeVisitor extends NodeVisitorAbstract
 {

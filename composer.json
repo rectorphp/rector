@@ -70,6 +70,8 @@
             "Rector\\NetteTesterToPHPUnit\\": "packages/nette-tester-to-phpunit/src",
             "Rector\\NetteToSymfony\\": "packages/nette-to-symfony/src",
             "Rector\\Nette\\": "packages/nette/src",
+            "Rector\\NodeTypeMapper\\": "packages/node-type-mapper/src",
+            "Rector\\NodeCollector\\": "packages/node-collector/src",
             "Rector\\NodeTypeResolver\\": "packages/node-type-resolver/src",
             "Rector\\NodeNameResolver\\": "packages/node-name-resolver/src",
             "Rector\\PHPStan\\": "packages/phpstan/src",
