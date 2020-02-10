@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\SOLID\NodeFinder;
 
 use PhpParser\Node\Stmt\ClassConst;
-use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
+use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ParentClassConstantNodeFinder

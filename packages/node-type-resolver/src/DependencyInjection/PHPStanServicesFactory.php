@@ -41,10 +41,10 @@ final class PHPStanServicesFactory
         $additionalConfigFiles = [];
 
         // possible path collision for Docker
-        $phpstanPhpunitExtensionConfig = $currentWorkingDirectory . '/vendor/phpstan/phpstan-phpunit/extension.neon';
-        if (file_exists($phpstanPhpunitExtensionConfig) && class_exists('PHPUnit\\Framework\\TestCase')) {
-            $additionalConfigFiles[] = $phpstanPhpunitExtensionConfig;
-        }
+        $additionalConfigFiles = $this->appendPhpstanPHPUnitExtensionIfExists(
+            $currentWorkingDirectory,
+            $additionalConfigFiles
+        );
 
         $temporaryPhpstanNeon = null;
 
@@ -110,5 +110,16 @@ final class PHPStanServicesFactory
     public function createTypeNodeResolver(): TypeNodeResolver
     {
         return $this->container->getByType(TypeNodeResolver::class);
+    }
+
+    private function appendPhpstanPHPUnitExtensionIfExists(
+        string $currentWorkingDirectory,
+        array $additionalConfigFiles
+    ): array {
+        $phpstanPhpunitExtensionConfig = $currentWorkingDirectory . '/vendor/phpstan/phpstan-phpunit/extension.neon';
+        if (file_exists($phpstanPhpunitExtensionConfig) && class_exists('PHPUnit\\Framework\\TestCase')) {
+            $additionalConfigFiles[] = $phpstanPhpunitExtensionConfig;
+        }
+        return $additionalConfigFiles;
     }
 }

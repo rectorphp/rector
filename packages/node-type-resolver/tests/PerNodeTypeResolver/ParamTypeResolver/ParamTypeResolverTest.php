@@ -12,7 +12,7 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\AbstractNodeTypeResolverTe
 use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ParamTypeResolver\Source\Html;
 
 /**
- * @see \Rector\NodeTypeResolver\PerNodeTypeResolver\ParamTypeResolver
+ * @see \Rector\NodeTypeResolver\NodeTypeResolver\ParamTypeResolver
  */
 final class ParamTypeResolverTest extends AbstractNodeTypeResolverTest
 {

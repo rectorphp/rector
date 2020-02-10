@@ -28,7 +28,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
@@ -38,9 +38,9 @@ use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 final class NodeTypeResolver
 {
     /**
-     * @var PerNodeTypeResolverInterface[]
+     * @var NodeTypeResolverInterface[]
      */
-    private $perNodeTypeResolvers = [];
+    private $nodeTypeResolvers = [];
 
     /**
      * @var NodeNameResolver
@@ -73,7 +73,7 @@ final class NodeTypeResolver
     private $arrayTypeAnalyzer;
 
     /**
-     * @param PerNodeTypeResolverInterface[] $perNodeTypeResolvers
+     * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
     public function __construct(
         NodeNameResolver $nodeNameResolver,
@@ -81,12 +81,12 @@ final class NodeTypeResolver
         ReflectionProvider $reflectionProvider,
         TypeFactory $typeFactory,
         ObjectTypeSpecifier $objectTypeSpecifier,
-        array $perNodeTypeResolvers
+        array $nodeTypeResolvers
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
 
-        foreach ($perNodeTypeResolvers as $perNodeTypeResolver) {
-            $this->addPerNodeTypeResolver($perNodeTypeResolver);
+        foreach ($nodeTypeResolvers as $nodeTypeResolver) {
+            $this->addNodeTypeResolver($nodeTypeResolver);
         }
 
         $this->classReflectionTypesResolver = $classReflectionTypesResolver;
@@ -238,10 +238,10 @@ final class NodeTypeResolver
         return is_a($this->resolve($node), $staticTypeClass);
     }
 
-    private function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
+    private function addNodeTypeResolver(NodeTypeResolverInterface $nodeTypeResolver): void
     {
-        foreach ($perNodeTypeResolver->getNodeClasses() as $nodeClass) {
-            $this->perNodeTypeResolvers[$nodeClass] = $perNodeTypeResolver;
+        foreach ($nodeTypeResolver->getNodeClasses() as $nodeClass) {
+            $this->nodeTypeResolvers[$nodeClass] = $nodeTypeResolver;
         }
     }
 
@@ -283,13 +283,13 @@ final class NodeTypeResolver
 
     private function resolveFirstType(Node $node): Type
     {
-        foreach ($this->perNodeTypeResolvers as $perNodeTypeResolver) {
-            foreach ($perNodeTypeResolver->getNodeClasses() as $nodeClass) {
+        foreach ($this->nodeTypeResolvers as $nodeTypeResolver) {
+            foreach ($nodeTypeResolver->getNodeClasses() as $nodeClass) {
                 if (! is_a($node, $nodeClass)) {
                     continue;
                 }
 
-                return $perNodeTypeResolver->resolve($node);
+                return $nodeTypeResolver->resolve($node);
             }
         }
 
