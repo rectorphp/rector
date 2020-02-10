@@ -158,10 +158,6 @@ final class NodeTypeResolver
             return true;
         }
 
-        if ($this->isUnionNullTypeOfRequiredType($requiredType, $resolvedType)) {
-            return true;
-        }
-
         return $this->isMatchingUnionType($requiredType, $resolvedType);
     }
 
@@ -231,7 +227,8 @@ final class NodeTypeResolver
 
     public function isNullableObjectType(Node $node): bool
     {
-        $nodeType = $this->getStaticType($node);
+        $nodeType = $this->resolve($node);
+
         if (! $nodeType instanceof UnionType) {
             return false;
         }
@@ -310,34 +307,6 @@ final class NodeTypeResolver
             }
 
             return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Matches:
-     * - Type|null
-     */
-    private function isUnionNullTypeOfRequiredType(ObjectType $objectType, Type $resolvedType): bool
-    {
-        if (! $resolvedType instanceof UnionType) {
-            return false;
-        }
-
-        if (count($resolvedType->getTypes()) !== 2) {
-            return false;
-        }
-
-        $firstType = $resolvedType->getTypes()[0];
-        $secondType = $resolvedType->getTypes()[1];
-
-        if ($firstType instanceof NullType && $secondType instanceof ObjectType) {
-            return $objectType->equals($firstType);
-        }
-
-        if ($secondType instanceof NullType && $firstType instanceof ObjectType) {
-            return $objectType->equals($secondType);
         }
 
         return false;
@@ -490,10 +459,12 @@ final class NodeTypeResolver
         if (! $resolvedType instanceof UnionType) {
             return false;
         }
+
         foreach ($resolvedType->getTypes() as $unionedType) {
             if (! $unionedType->equals($requiredType)) {
                 continue;
             }
+
             return true;
         }
 
