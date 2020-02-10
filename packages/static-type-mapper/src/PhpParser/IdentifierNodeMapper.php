@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PhpParser;
+namespace Rector\StaticTypeMapper\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\Contract\PhpParser\PhpParserNodeMapperInterface;
-use Rector\NodeTypeResolver\TypeMapper\ScalarStringToTypeMapper;
+use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
+use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
 
 final class IdentifierNodeMapper implements PhpParserNodeMapperInterface
 {

@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PhpDocParser;
+namespace Rector\StaticTypeMapper\PhpDocParser;
 
 use PhpParser\Node;
 use PHPStan\Analyser\NameScope;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\Contract\PhpDocParser\PhpDocTypeMapperInterface;
-use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeMapper;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
+use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 
-final class UnionTypeMapper implements PhpDocTypeMapperInterface
+final class IntersectionTypeMapper implements PhpDocTypeMapperInterface
 {
     /**
      * @var PhpDocTypeMapper
@@ -32,19 +32,19 @@ final class UnionTypeMapper implements PhpDocTypeMapperInterface
 
     public function getNodeType(): string
     {
-        return UnionTypeNode::class;
+        return IntersectionTypeNode::class;
     }
 
     /**
      * @required
      */
-    public function autowireUnionTypeMapper(PhpDocTypeMapper $phpDocTypeMapper): void
+    public function autowireIntersectionTypeMapper(PhpDocTypeMapper $phpDocTypeMapper): void
     {
         $this->phpDocTypeMapper = $phpDocTypeMapper;
     }
 
     /**
-     * @param UnionTypeNode $typeNode
+     * @param IntersectionTypeNode $typeNode
      */
     public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope): Type
     {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PhpDoc;
+namespace Rector\StaticTypeMapper\PhpDoc;
 
 use PhpParser\Node;
 use PHPStan\Analyser\NameScope;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedException;
-use Rector\NodeTypeResolver\Contract\PhpDocParser\PhpDocTypeMapperInterface;
+use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 
 final class PhpDocTypeMapper
 {

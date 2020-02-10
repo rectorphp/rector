@@ -16,10 +16,10 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedException;
-use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeMapper;
-use Rector\NodeTypeResolver\TypeMapper\PhpParserNodeMapper;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
 use Rector\StaticTypeMapper\Mapper\StringTypeToPhpParserNodeMapper;
+use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 use Rector\StaticTypeMapper\PHPStan\NameScopeFactory;
 
 /**

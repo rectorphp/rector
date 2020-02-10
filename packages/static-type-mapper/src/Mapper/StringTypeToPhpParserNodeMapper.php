@@ -15,24 +15,21 @@ use Rector\Core\Exception\NotImplementedException;
 final class StringTypeToPhpParserNodeMapper
 {
     /**
+     * @var string[]
+     */
+    private const SAME_NAMED_IDENTIFIERS = ['string', 'int', 'float', 'array', 'void'];
+
+    /**
      * @return Identifier|Name|NullableType
      */
     public function map(string $type): Node
     {
-        if ($type === 'string') {
-            return new Identifier('string');
-        }
+        foreach (self::SAME_NAMED_IDENTIFIERS as $sameNamedIdentifier) {
+            if ($type !== $sameNamedIdentifier) {
+                continue;
+            }
 
-        if ($type === 'int') {
-            return new Identifier('int');
-        }
-
-        if ($type === 'array') {
-            return new Identifier('array');
-        }
-
-        if ($type === 'float') {
-            return new Identifier('float');
+            return new Identifier($sameNamedIdentifier);
         }
 
         if (Strings::contains($type, '\\') || ctype_upper($type[0])) {
@@ -46,10 +43,6 @@ final class StringTypeToPhpParserNodeMapper
             $nameNode = $this->map($nullableType);
 
             return new NullableType($nameNode);
-        }
-
-        if ($type === 'void') {
-            return new Identifier('void');
         }
 
         throw new NotImplementedException(sprintf('%s for "%s"', __METHOD__, $type));

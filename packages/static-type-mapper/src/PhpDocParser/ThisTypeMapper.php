@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PhpDocParser;
+namespace Rector\StaticTypeMapper\PhpDocParser;
 
 use PhpParser\Node;
 use PHPStan\Analyser\NameScope;
@@ -11,8 +11,8 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 
 final class ThisTypeMapper implements PhpDocTypeMapperInterface
 {

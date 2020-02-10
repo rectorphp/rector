@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\PhpParser;
+namespace Rector\StaticTypeMapper\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 
 final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
 {

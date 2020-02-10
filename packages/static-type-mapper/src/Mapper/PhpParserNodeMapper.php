@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\NodeTypeResolver\TypeMapper;
+namespace Rector\StaticTypeMapper\Mapper;
 
 use PhpParser\Node;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedException;
-use Rector\NodeTypeResolver\Contract\PhpParser\PhpParserNodeMapperInterface;
+use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 
 final class PhpParserNodeMapper
 {
