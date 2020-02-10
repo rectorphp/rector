@@ -145,7 +145,6 @@ PHP
         }
 
         $objectType = $this->getObjectType($objectExpr);
-
         if ($objectType instanceof ObjectType) {
             $class = $this->classLikeParsedNodesFinder->findClass($objectType->getClassName());
 
