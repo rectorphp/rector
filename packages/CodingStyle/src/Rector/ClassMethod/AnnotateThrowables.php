@@ -55,12 +55,7 @@ final class AnnotateThrowables extends AbstractRector
             return false;
         }
 
-        if ($this->isFQNAnnotated($docComment, $comments, $throwableParts)) {
-            return true;
-        }
-
-        // No matching condition
-        throw new \RuntimeException('This should never happen as all possible conditions should have been predicted.');
+        return $this->isFQNAnnotated($docComment, $comments, $throwableParts);
     }
 
     /**
@@ -148,9 +143,18 @@ final class AnnotateThrowables extends AbstractRector
      */
     private function parseMethodDocComment(ClassMethod $method):array
     {
+        $docComment = $method->getDocComment();
         $parsedDocComment = [];
-        if (null !== $method->getDocComment()) {
-            throw new \RuntimeException('Implement doc comment parsing');
+        if (null !== $docComment) {
+            $docComment = $docComment->getText();
+            $docComment = str_replace(['/**', '*/', "\n"], '', $docComment);
+            $explodedDocComment = explode('*', $docComment);
+            $explodedDocComment = array_map(static function($value) {
+                return trim($value);
+            }, $explodedDocComment);
+            $parsedDocComment = array_filter($explodedDocComment, static function($value) {
+                return false === empty($value);
+            });
         }
 
         return $parsedDocComment;
