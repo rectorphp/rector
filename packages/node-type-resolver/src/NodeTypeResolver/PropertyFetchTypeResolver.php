@@ -19,7 +19,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\StaticTypeMapper;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use ReflectionProperty;
 
 /**

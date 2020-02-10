@@ -103,10 +103,6 @@ PHP
             // single value → can we add it?
             if (count($parameterData) === 1) {
                 $typeNode = $this->staticTypeMapper->mapStringToPhpParserNode($parameterData[0]);
-                if ($typeNode === null) {
-                    continue;
-                }
-
                 $param->type = $typeNode;
             }
         }

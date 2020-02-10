@@ -31,7 +31,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
-use Rector\NodeTypeResolver\StaticTypeMapper;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfo\PhpDocInfoTest

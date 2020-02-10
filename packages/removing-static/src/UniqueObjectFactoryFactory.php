@@ -24,7 +24,7 @@ use Rector\Core\Naming\PropertyNaming;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\StaticTypeMapper;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class UniqueObjectFactoryFactory
 {

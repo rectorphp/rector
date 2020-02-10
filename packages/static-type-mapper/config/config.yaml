@@ -3,5 +3,5 @@ services:
         public: true
         autowire: true
 
-    Rector\NodeTypeMapper\:
+    Rector\StaticTypeMapper\:
         resource: '../src'
