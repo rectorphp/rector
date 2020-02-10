@@ -115,11 +115,6 @@ final class AnnotateThrowables extends AbstractRector
         return '\\' . implode('\\', $throwableParts);
     }
 
-    /**
-     * @param Throw_ $node
-     *
-     * @return Throw_
-     */
     private function annotateMethod(Throw_ $node):Throw_
     {
         /** @var ClassMethod $method */
