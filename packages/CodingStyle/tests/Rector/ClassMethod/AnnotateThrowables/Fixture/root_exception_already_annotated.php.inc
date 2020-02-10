@@ -7,9 +7,9 @@ class RootExceptionAlreadyAnnotated
     /**
      * @throws \RuntimeException
      */
-    public function throwRootException()
+    public function throwException()
     {
-        throw new \RuntimeException('This is a root exeception');
+        throw new \RuntimeException();
     }
 }
 
@@ -24,9 +24,9 @@ class RootExceptionAlreadyAnnotated
     /**
      * @throws \RuntimeException
      */
-    public function throwRootException()
+    public function throwException()
     {
-        throw new \RuntimeException('This is a root exeception');
+        throw new \RuntimeException();
     }
 }
 

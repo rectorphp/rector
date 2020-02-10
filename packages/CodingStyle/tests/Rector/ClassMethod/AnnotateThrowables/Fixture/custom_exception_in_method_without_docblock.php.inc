@@ -2,11 +2,11 @@
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Fixture;
 
-class CustomExceptionInMethodWithoutDocBlock
+class CustomExceptionInMethodWithoutDocblock
 {
-    public function throwRootException()
+    public function throwException()
     {
-        throw new \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException('This is a root exeception');
+        throw new \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException();
     }
 }
 
@@ -16,14 +16,14 @@ class CustomExceptionInMethodWithoutDocBlock
 
 namespace Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Fixture;
 
-class CustomExceptionInMethodWithoutDocBlock
+class CustomExceptionInMethodWithoutDocblock
 {
     /**
      * @throws \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException
      */
-    public function throwRootException()
+    public function throwException()
     {
-        throw new \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException('This is a root exeception');
+        throw new \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException();
     }
 }
 

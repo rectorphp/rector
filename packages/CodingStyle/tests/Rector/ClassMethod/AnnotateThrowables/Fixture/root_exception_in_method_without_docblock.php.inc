@@ -4,9 +4,9 @@ namespace Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Fixture
 
 class RootExceptionInMethodWithoutDocblock
 {
-    public function throwRootException()
+    public function throwException()
     {
-        throw new \RuntimeException('This is a root exeception');
+        throw new \RuntimeException();
     }
 }
 
@@ -21,9 +21,9 @@ class RootExceptionInMethodWithoutDocblock
     /**
      * @throws \RuntimeException
      */
-    public function throwRootException()
+    public function throwException()
     {
-        throw new \RuntimeException('This is a root exeception');
+        throw new \RuntimeException();
     }
 }
 

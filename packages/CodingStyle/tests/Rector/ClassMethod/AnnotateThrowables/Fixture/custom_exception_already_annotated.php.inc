@@ -7,9 +7,9 @@ class CustomExceptionAlreadyAnnotated
     /**
      * @throws \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException
      */
-    public function throwRootException()
+    public function throwException()
     {
-        throw new \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException('This is a root exeception');
+        throw new \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException();
     }
 }
 
@@ -24,9 +24,9 @@ class CustomExceptionAlreadyAnnotated
     /**
      * @throws \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException
      */
-    public function throwRootException()
+    public function throwException()
     {
-        throw new \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException('This is a root exeception');
+        throw new \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException();
     }
 }
 

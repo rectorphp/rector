@@ -9,9 +9,9 @@ class RootExceptionInMethodWithDocblock
      *
      * @param int $code
      */
-    public function throwRootException(int $code)
+    public function throwException(int $code)
     {
-        throw new \RuntimeException('This is a root exeception', $code);
+        throw new \RuntimeException('', $code);
     }
 }
 
@@ -28,9 +28,9 @@ class RootExceptionInMethodWithDocblock
      * @param int $code
      * @throws \RuntimeException
      */
-    public function throwRootException(int $code)
+    public function throwException(int $code)
     {
-        throw new \RuntimeException('This is a root exeception', $code);
+        throw new \RuntimeException('', $code);
     }
 }
 

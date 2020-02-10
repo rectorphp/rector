@@ -9,9 +9,9 @@ class CustomExceptionInMethodWithDocblock
      *
      * @param int $code
      */
-    public function throwRootException(int $code)
+    public function throwException(int $code)
     {
-        throw new \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException('This is a custom exeception', $code);
+        throw new \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException('', $code);
     }
 }
 
@@ -28,9 +28,9 @@ class CustomExceptionInMethodWithDocblock
      * @param int $code
      * @throws \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException
      */
-    public function throwRootException(int $code)
+    public function throwException(int $code)
     {
-        throw new \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException('This is a custom exeception', $code);
+        throw new \Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException('', $code);
     }
 }
 
