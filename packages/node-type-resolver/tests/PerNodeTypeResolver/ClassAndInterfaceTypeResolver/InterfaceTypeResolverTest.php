@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\ClassAndInterfaceTypeResol
 use Rector\PHPStan\TypeFactoryStaticHelper;
 
 /**
- * @covers \Rector\NodeTypeResolver\PerNodeTypeResolver\ClassAndInterfaceTypeResolver
+ * @covers \Rector\NodeTypeResolver\NodeTypeResolver\ClassAndInterfaceTypeResolver
  */
 final class InterfaceTypeResolverTest extends AbstractNodeTypeResolverTest
 {

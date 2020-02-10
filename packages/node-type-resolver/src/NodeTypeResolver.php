@@ -28,7 +28,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Contract\PerNodeTypeResolver\PerNodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
@@ -38,7 +38,7 @@ use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 final class NodeTypeResolver
 {
     /**
-     * @var PerNodeTypeResolverInterface[]
+     * @var NodeTypeResolverInterface[]
      */
     private $perNodeTypeResolvers = [];
 
@@ -73,7 +73,7 @@ final class NodeTypeResolver
     private $arrayTypeAnalyzer;
 
     /**
-     * @param PerNodeTypeResolverInterface[] $perNodeTypeResolvers
+     * @param NodeTypeResolverInterface[] $perNodeTypeResolvers
      */
     public function __construct(
         NodeNameResolver $nodeNameResolver,
@@ -238,7 +238,7 @@ final class NodeTypeResolver
         return is_a($this->resolve($node), $staticTypeClass);
     }
 
-    private function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
+    private function addPerNodeTypeResolver(NodeTypeResolverInterface $perNodeTypeResolver): void
     {
         foreach ($perNodeTypeResolver->getNodeClasses() as $nodeClass) {
             $this->perNodeTypeResolvers[$nodeClass] = $perNodeTypeResolver;

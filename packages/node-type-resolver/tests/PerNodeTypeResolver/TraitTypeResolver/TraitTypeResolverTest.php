@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Tests\PerNodeTypeResolver\TraitTypeResolver\Source\T
 use Rector\PHPStan\TypeFactoryStaticHelper;
 
 /**
- * @see \Rector\NodeTypeResolver\PerNodeTypeResolver\TraitTypeResolver
+ * @see \Rector\NodeTypeResolver\NodeTypeResolver\TraitTypeResolver
  */
 final class TraitTypeResolverTest extends AbstractNodeTypeResolverTest
 {
