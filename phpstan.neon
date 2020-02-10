@@ -123,7 +123,6 @@ parameters:
         - '#Cannot cast array<string\>\|bool\|string\|null to string#'
         - '#Method Rector\\Legacy\\Rector\\ClassMethod\\ChangeSingletonToServiceRector\:\:matchStaticPropertyFetchAndGetSingletonMethodName\(\) should return array<string\>\|null but returns array<int, string\|null\>#'
 
-        - '#Method Rector\\Core\\Rector\\AbstractRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
         - '#Parameter \#2 \$currentNode of method Rector\\CodingStyle\\Rector\\String_\\ManualJsonStringToJsonEncodeArrayRector\:\:matchNextExpressionAssignConcatToSameVariable\(\) expects PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Expr\\AssignOp\\Concat, PhpParser\\Node given#'
 
         # array is callable
@@ -195,7 +194,6 @@ parameters:
 
         - '#Parameter \#1 \$expected of method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) expects class\-string<object\>, string given#'
         - '#Unable to resolve the template type ExpectedType in call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\)#'
-        - '#Right side of \|\| is always false#'
 
         # fix Symplify 7.2 later
         - '#Method (.*?) returns bool type, so the name should start with is/has/was#'
@@ -225,19 +223,12 @@ parameters:
         - '#Parameter \#1 \$str of function preg_quote expects string, int\|string given#'
 
         - '#Parameter \#1 \$node of method Rector\\Core\\PhpParser\\Node\\Commander\\NodeAddingCommander\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
-        - '#Method Rector\\Core\\NodeContainer\\NodeCollector\\ParsedNodesByType\:\:findTrait\(\) should return PhpParser\\Node\\Stmt\\Trait_\|null but returns PhpParser\\Node\|null#'
-        - '#Method Rector\\Core\\NodeContainer\\NodeCollector\\ParsedNodesByType\:\:findInterface\(\) should return PhpParser\\Node\\Stmt\\Interface_\|null but returns PhpParser\\Node\|null#'
-        - '#Method Rector\\Core\\NodeContainer\\NodeCollector\\ParsedNodesByType\:\:findFunction\(\) should return PhpParser\\Node\\Stmt\\Function_\|null but returns PhpParser\\Node\|null#'
         - '#Parameter \#2 \$propertyName of method Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\SingleMethodAssignedNodePropertyTypeInferer\:\:resolveAssignedNodeToProperty\(\) expects string, string\|null given#'
         - '#Parameter \#1 \$sprintfFuncCall of method Rector\\Core\\PhpParser\\NodeTransformer\:\:transformSprintfToArray\(\) expects PhpParser\\Node\\Expr\\FuncCall, PhpParser\\Node given#'
         - '#Parameter \#1 \$nodes of method Rector\\CodeQuality\\Rector\\Array_\\CallableThisArrayToAnonymousFunctionRector\:\:hasClassMethodReturn\(\) expects array<PhpParser\\Node\\Stmt\\Return_\>, array<PhpParser\\Node\> given#'
         - '#Parameter \#1 \$nodes of method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:find\(\) expects array<PhpParser\\Node\>\|PhpParser\\Node, array<PhpParser\\Node\\Stmt\>\|null given#'
         - '#PHPDoc tag @return with type iterable<object\> is not subtype of native type array#'
         - '#Method Rector\\BetterPhpDocParser\\AnnotationReader\\NodeAnnotationReader\:\:createClassReflectionFromNode\(\) return type with generic class ReflectionClass does not specify its types\: T#'
-        - '#Method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
-        - '#Method Rector\\SOLID\\Rector\\ClassConst\\PrivatizeLocalClassConstantRector\:\:resolveParentClassConstantReflection\(\) should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
-        - '#PHPDoc tag @var for variable \$parentClass contains generic class ReflectionClass but does not specify its types\: T#'
         - '#Method Rector\\SOLID\\Reflection\\ParentConstantReflectionResolver\:\:(.*?)\(\) should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
-
-        - '#Method Rector\\Core\\NodeContainer\\NodeCollector\\ParsedFunctionLikeNodesByType\:\:findFunction\(\) should return PhpParser\\Node\\Stmt\\Function_\|null but returns PhpParser\\Node\|null#'
         - '#Parameter \#1 \$firstStmt of method Rector\\Core\\Rector\\MethodBody\\NormalToFluentRector\:\:isBothMethodCallMatch\(\) expects PhpParser\\Node\\Stmt\\Expression, PhpParser\\Node\\Stmt given#'
+        - '#Method Rector\\Core\\Rector\\AbstractRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
