@@ -176,7 +176,7 @@ final class NodeTypeResolver
      */
     public function isNullableType(Node $node): bool
     {
-        $nodeType = $this->getStaticType($node);
+        $nodeType = $this->resolve($node);
         if (! $nodeType instanceof UnionType) {
             return false;
         }
@@ -266,7 +266,7 @@ final class NodeTypeResolver
             ));
         }
 
-        return is_a($this->getStaticType($node), $staticTypeClass);
+        return is_a($this->resolve($node), $staticTypeClass);
     }
 
     private function addPerNodeTypeResolver(PerNodeTypeResolverInterface $perNodeTypeResolver): void
@@ -403,7 +403,7 @@ final class NodeTypeResolver
 
     private function getVendorPropertyFetchType(PropertyFetch $propertyFetch): ?Type
     {
-        $varObjectType = $this->getStaticType($propertyFetch->var);
+        $varObjectType = $this->resolve($propertyFetch->var);
         if (! $varObjectType instanceof TypeWithClassName) {
             return null;
         }
