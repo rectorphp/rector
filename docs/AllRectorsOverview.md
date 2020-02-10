@@ -1,4 +1,4 @@
-# All 447 Rectors Overview
+# All 448 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -1625,6 +1625,30 @@ Adds array default value to property to prevent foreach over null error
      {
 -        return $this->values === null;
 +        return $this->values === [];
+     }
+ }
+```
+
+<br>
+
+### `AnnotateThrowablesRector`
+
+- class: `Rector\CodingStyle\Rector\ClassMethod\AnnotateThrowablesRector`
+
+Adds @throws DocBlock comments to methods that thrwo \Throwables.
+
+```diff
+ class RootExceptionInMethodWithDocblock
+ {
+     /**
+      * This is a comment.
+      *
+      * @param int $code
++     * @throws \RuntimeException
+      */
+     public function throwException(int $code)
+     {
+         throw new \RuntimeException('', $code);
      }
  }
 ```
