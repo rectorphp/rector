@@ -9,15 +9,9 @@ use Rector\Core\DependencyInjection\Collector\RectorServiceArgumentCollector;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symplify\PackageBuilder\Yaml\FileLoader\AbstractParameterMergingYamlFileLoader;
-use Symplify\PackageBuilder\Yaml\ParameterInImportResolver;
 
 final class TolerantRectorYamlFileLoader extends AbstractParameterMergingYamlFileLoader
 {
-    /**
-     * @var ParameterInImportResolver
-     */
-    private $parameterInImportResolver;
-
     /**
      * @var ClassExistenceValidator
      */
@@ -33,7 +27,6 @@ final class TolerantRectorYamlFileLoader extends AbstractParameterMergingYamlFil
         FileLocatorInterface $fileLocator,
         RectorServiceArgumentCollector $rectorServiceArgumentCollector
     ) {
-        $this->parameterInImportResolver = new ParameterInImportResolver();
         $this->classExistenceValidator = new ClassExistenceValidator();
         $this->rectorServiceArgumentCollector = $rectorServiceArgumentCollector;
 
@@ -56,7 +49,7 @@ final class TolerantRectorYamlFileLoader extends AbstractParameterMergingYamlFil
 
         $this->classExistenceValidator->ensureClassesAreValid($configuration, $file);
 
-        return $this->parameterInImportResolver->process($configuration);
+        return $configuration;
     }
 
     private function collectRectorServiceArguments(array $configuration): void
