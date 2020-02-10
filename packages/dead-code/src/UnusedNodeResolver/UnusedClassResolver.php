@@ -13,8 +13,8 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Exception\NotImplementedException;
-use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
 use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
+use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class UnusedClassResolver

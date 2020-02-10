@@ -17,11 +17,11 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
-use Rector\Core\NodeContainer\NodeFinder\FunctionLikeParsedNodesFinder;
 use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyManipulator;
 use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
+use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
+use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**

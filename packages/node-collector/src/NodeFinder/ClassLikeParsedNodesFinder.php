@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\NodeContainer\NodeFinder;
+namespace Rector\NodeCollector\NodeFinder;
 
 use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
-use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
+use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 

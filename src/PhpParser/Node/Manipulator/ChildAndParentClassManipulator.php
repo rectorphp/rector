@@ -7,9 +7,9 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\NodeContainer\NodeCollector\ParsedNodeCollector;
-use Rector\Core\NodeContainer\NodeFinder\ClassLikeParsedNodesFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
+use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
