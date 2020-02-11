@@ -73,19 +73,19 @@ final class PhpDocInfoTest extends AbstractKernelTestCase
             new PreSlashStringType(),
         ]);
 
-        $this->assertEquals($expectedUnionType, $paramType);
+        $this->assertSame($expectedUnionType, $paramType);
     }
 
     public function testGetVarType(): void
     {
         $expectedObjectType = new ObjectType('SomeType');
-        $this->assertEquals($expectedObjectType, $this->phpDocInfo->getVarType());
+        $this->assertSame($expectedObjectType, $this->phpDocInfo->getVarType());
     }
 
     public function testGetReturnType(): void
     {
         $expectedObjectType = new ObjectType('SomeType');
-        $this->assertEquals($expectedObjectType, $this->phpDocInfo->getReturnType());
+        $this->assertSame($expectedObjectType, $this->phpDocInfo->getReturnType());
     }
 
     public function testReplaceTagByAnother(): void
