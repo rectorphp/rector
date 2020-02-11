@@ -5,18 +5,23 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\UnionType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 
 /**
  * @see \Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\ParamTypeDeclarationRectorTest
@@ -114,70 +119,7 @@ PHP
             return null;
         }
 
-        foreach ($node->params as $position => $paramNode) {
-            // skip variadics
-            if ($paramNode->variadic) {
-                continue;
-            }
-
-            // already set → skip
-            $hasNewType = false;
-            if ($paramNode->type !== null) {
-                $hasNewType = $paramNode->type->getAttribute(self::HAS_NEW_INHERITED_TYPE, false);
-                if (! $hasNewType) {
-                    continue;
-                }
-            }
-
-            $paramNodeName = '$' . $this->getName($paramNode->var);
-
-            // no info about it
-            if (! isset($paramWithTypes[$paramNodeName])) {
-                continue;
-            }
-
-            $paramType = $paramWithTypes[$paramNodeName];
-            $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, 'param');
-            if ($paramTypeNode === null) {
-                continue;
-            }
-
-            $position = (int) $position;
-            if ($node instanceof ClassMethod && $this->vendorLockResolver->isParamChangeVendorLockedIn(
-                $node,
-                $position
-            )) {
-                continue;
-            }
-
-            if ($hasNewType) {
-                // should override - is it subtype?
-                $possibleOverrideNewReturnType = $paramTypeNode;
-                if ($possibleOverrideNewReturnType !== null) {
-                    if ($paramNode->type === null) {
-                        $paramNode->type = $paramTypeNode;
-                    } elseif ($this->phpParserTypeAnalyzer->isSubtypeOf(
-                        $possibleOverrideNewReturnType,
-                        $paramNode->type
-                    )) {
-                        // allow override
-                        $paramNode->type = $paramTypeNode;
-                    }
-                }
-            } else {
-                $paramNode->type = $paramTypeNode;
-
-                $paramNodeType = $paramNode->type instanceof NullableType ? $paramNode->type->type : $paramNode->type;
-                // "resource" is valid phpdoc type, but it's not implemented in PHP
-                if ($paramNodeType instanceof Name && reset($paramNodeType->parts) === 'resource') {
-                    $paramNode->type = null;
-
-                    continue;
-                }
-            }
-
-            $this->populateChildren($node, $position, $paramType);
-        }
+        $this->refactorParams($node, $paramWithTypes);
 
         return $node;
     }
@@ -249,5 +191,112 @@ PHP
         $paramNode->type->setAttribute(self::HAS_NEW_INHERITED_TYPE, true);
 
         $this->notifyNodeChangeFileInfo($paramNode);
+    }
+
+    /**
+     * @param ClassMethod|Function_ $functionLike
+     * @param Type[] $paramWithTypes
+     */
+    private function refactorParams(FunctionLike $functionLike, array $paramWithTypes): void
+    {
+        foreach ($functionLike->params as $position => $param) {
+            // to be sure
+            $position = (int) $position;
+
+            if ($this->shouldSkipParam($param)) {
+                continue;
+            }
+
+            $hasNewType = false;
+
+            $docParamType = $this->matchParamNodeFromDoc($paramWithTypes, $param);
+            if ($docParamType === null) {
+                continue;
+            }
+
+            $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
+                $docParamType,
+                PHPStanStaticTypeMapper::KIND_PARAM
+            );
+
+            if ($paramTypeNode === null) {
+                continue;
+            }
+
+            if ($functionLike instanceof ClassMethod && $this->vendorLockResolver->isParamChangeVendorLockedIn(
+                    $functionLike,
+                    $position
+                )) {
+                continue;
+            }
+
+            $this->changeParamNodeType($hasNewType, $paramTypeNode, $param);
+
+            $this->populateChildren($functionLike, $position, $docParamType);
+        }
+    }
+
+    private function isResourceType(Node $node): bool
+    {
+        if ($this->isName($node, 'resource')) {
+            return true;
+        }
+
+        if ($node instanceof NullableType) {
+            return $this->isResourceType($node->type);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Identifier|Name|NullableType|UnionType $paramTypeNode
+     */
+    private function changeParamNodeType(bool $hasNewType, Node $paramTypeNode, Param $param): void
+    {
+        if ($hasNewType) {
+            // should override - is it subtype?
+            if ($param->type === null) {
+                $param->type = $paramTypeNode;
+            } elseif ($this->phpParserTypeAnalyzer->isSubtypeOf($paramTypeNode, $param->type)) {
+                // allow override
+                $param->type = $paramTypeNode;
+            }
+
+            return;
+        }
+
+        if ($this->isResourceType($paramTypeNode)) {
+            // "resource" is valid phpdoc type, but it's not implemented in PHP
+            $param->type = null;
+        } else {
+            $param->type = $paramTypeNode;
+        }
+    }
+
+    /**
+     * @param Type[] $paramWithTypes
+     */
+    private function matchParamNodeFromDoc(array $paramWithTypes, Param $param): ?Type
+    {
+        $paramNodeName = '$' . $this->getName($param->var);
+
+        return $paramWithTypes[$paramNodeName] ?? null;
+    }
+
+    private function shouldSkipParam(Param $param): bool
+    {
+        if ($param->variadic) {
+            return true;
+        }
+
+        // already set → skip
+        if ($param->type === null) {
+            return false;
+        }
+
+        $hasNewType = $param->type->getAttribute(self::HAS_NEW_INHERITED_TYPE, false);
+
+        return ! $hasNewType;
     }
 }

@@ -15,6 +15,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
 
@@ -95,7 +96,10 @@ PHP
             return null;
         }
 
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, 'property');
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
+            $varType,
+            PHPStanStaticTypeMapper::KIND_PROPERTY
+        );
         if ($propertyTypeNode === null) {
             return null;
         }

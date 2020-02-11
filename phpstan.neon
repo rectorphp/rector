@@ -16,7 +16,9 @@ parameters:
         - compiler/src
 
     paths:
+        - bin
         - src
+        - rules
         - packages
         - tests
         - compiler/src
@@ -232,3 +234,7 @@ parameters:
         - '#Method Rector\\SOLID\\Reflection\\ParentConstantReflectionResolver\:\:(.*?)\(\) should return ReflectionClassConstant\|null but returns ReflectionClassConstant\|false#'
         - '#Parameter \#1 \$firstStmt of method Rector\\Core\\Rector\\MethodBody\\NormalToFluentRector\:\:isBothMethodCallMatch\(\) expects PhpParser\\Node\\Stmt\\Expression, PhpParser\\Node\\Stmt given#'
         - '#Method Rector\\Core\\Rector\\AbstractRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
+        - '#Property PhpParser\\Node\\Stmt\\ClassMethod\:\:\$returnType \(PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\|null\) does not accept PhpParser\\Node#'
+
+        - '#Parameter \#1 \$possibleSubtype of method Rector\\TypeDeclaration\\PhpParserTypeAnalyzer\:\:isSubtypeOf\(\) expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType, PhpParser\\Node given#'
+        - '#Parameter \#2 \$inferredReturnNode of method Rector\\TypeDeclaration\\Rector\\FunctionLike\\ReturnTypeDeclarationRector\:\:addReturnType\(\) expects PhpParser\\Node, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\|null given#'
