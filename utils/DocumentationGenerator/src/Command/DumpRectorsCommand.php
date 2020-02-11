@@ -51,7 +51,11 @@ final class DumpRectorsCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $packageRectors = $this->rectorsFinder->findInDirectory(__DIR__ . '/../../../../packages');
+        $rulesRectors = $this->rectorsFinder->findInDirectories([
+            __DIR__ . '/../../../../rules',
+            __DIR__ . '/../../../../packages',
+        ]);
+
         $generalRectors = $this->rectorsFinder->findInDirectory(__DIR__ . '/../../../../src');
 
         foreach ($this->dumpRectorsOutputFormatterInterfaces as $outputFormatter) {
@@ -59,7 +63,7 @@ final class DumpRectorsCommand extends AbstractCommand
                 continue;
             }
 
-            $outputFormatter->format($generalRectors, $packageRectors);
+            $outputFormatter->format($generalRectors, $rulesRectors);
         }
 
         return Shell::CODE_SUCCESS;

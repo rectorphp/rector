@@ -20,13 +20,21 @@ services:
             - 'NodeVisitorAbstract'
 
 parameters:
+    paths:
+        - "bin"
+        - "src"
+        - "packages"
+        - "rules"
+        - "tests"
+        - "utils"
+
     sets:
-      - 'psr12'
-      - 'php70'
-      - 'php71'
-      - 'symplify'
-      - 'common'
-      - 'clean-code'
+      - "psr12"
+      - "php70"
+      - "php71"
+      - "symplify"
+      - "common"
+      - "clean-code"
 
     exclude_files:
         - '*tests/**Source/*.php'
@@ -35,7 +43,6 @@ parameters:
         - '*tests/*/Expected/*'
         - '*utils/ContributorTools/templates/*'
         - 'stubs/*'
-        - '*/Expected/*'
         # exclude
         - 'src/Rector/AbstractRector.php'
         - 'src/PhpParser/BetterNodeDumper.php'
@@ -54,7 +61,7 @@ parameters:
         Symplify\CodingStandard\Fixer\Order\PrivateMethodOrderByUseFixer: null
 
         PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer:
-            - 'packages/php-74/src/Rector/Double/RealToFloatTypeCastRector.php'
+            - 'rules/php-74/src/Rector/Double/RealToFloatTypeCastRector.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\ForbiddenReferenceSniff: null
 
@@ -78,19 +85,19 @@ parameters:
             - "packages/node-type-resolver/src/NodeTypeResolver.php"
             - "packages/better-php-doc-parser/src/Printer/OriginalSpacingRestorer.php"
             # @todo split to multiple rectors
-            - "packages/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php"
+            - "rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php"
 
             - "packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/ColumnTagValueNode.php"
             - "packages/better-php-doc-parser/src/PhpDocNode/Doctrine/Property_/JoinColumnTagValueNode.php"
-            - "packages/coding-style/src/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php"
+            - "rules/coding-style/src/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php"
 
             # per node logic
             - 'utils/DocumentationGenerator/src/Command/DumpNodesCommand.php'
             # copied 3rd party logic
-            - 'packages/php-70/src/EregToPcreTransformer.php'
+            - 'rules/php-70/src/EregToPcreTransformer.php'
             # dev
             - 'packages/type-declaration/src/Rector/FunctionLike/*TypeDeclarationRector.php'
-            - 'packages/php-70/src/Rector/If_/IfToSpaceshipRector.php'
+            - 'rules/php-70/src/Rector/If_/IfToSpaceshipRector.php'
 
         Symplify\CodingStandard\Sniffs\ControlStructure\SprintfOverContactSniff:
             # respects inherited pattern for better comparing
@@ -111,10 +118,10 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff.Found:
             # notes
-            - 'packages/php-72/src/Rector/Each/ListEachRector.php'
-            - 'packages/dead-code/src/Rector/ClassMethod/RemoveOverriddenValuesRector.php'
-            - 'packages/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php'
-            - 'packages/cakephp-to-symfony/tests/Rector/Class_/CakePHPModelToDoctrineRepositoryRector/CakePHPModelToDoctrineRepositoryRectorTest.php'
+            - 'rules/php-72/src/Rector/Each/ListEachRector.php'
+            - 'rules/dead-code/src/Rector/ClassMethod/RemoveOverriddenValuesRector.php'
+            - 'rules/php-spec-to-phpunit/src/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php'
+            - 'rules/cakephp-to-symfony/tests/Rector/Class_/CakePHPModelToDoctrineRepositoryRector/CakePHPModelToDoctrineRepositoryRectorTest.php'
 
         PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer:
             - 'packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php'
@@ -135,7 +142,7 @@ parameters:
             - 'packages/polyfill/src/ConditionEvaluator.php'
 
         SlevomatCodingStandard\Sniffs\Namespaces\ReferenceUsedNamesOnlySniff.PartialUse:
-            - "packages/dead-code/src/Rector/Plus/RemoveDeadZeroAndOneOperationRector.php"
-            - "packages/php-56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php"
+            - "rules/dead-code/src/Rector/Plus/RemoveDeadZeroAndOneOperationRector.php"
+            - "rules/php-56/src/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php"
 
     line_ending: "\n"

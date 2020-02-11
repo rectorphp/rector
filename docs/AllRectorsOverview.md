@@ -4485,7 +4485,9 @@ Add @see annotation test of the class for faster jump to test. Make it FQN, so i
  {
  }
 
- class SomeServiceTest extends \PHPUnit\Framework\TestCase
+ use PHPUnit\Framework\TestCase;
+
+ class SomeServiceTest extends TestCase
  {
  }
 ```

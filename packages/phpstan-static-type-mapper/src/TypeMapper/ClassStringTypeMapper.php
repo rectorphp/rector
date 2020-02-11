@@ -35,6 +35,9 @@ final class ClassStringTypeMapper implements TypeMapperInterface
         return null;
     }
 
+    /**
+     * @param ClassStringType $type
+     */
     public function mapToDocString(Type $type, ?Type $parentType = null): string
     {
         return $type->describe(VerbosityLevel::typeOnly());

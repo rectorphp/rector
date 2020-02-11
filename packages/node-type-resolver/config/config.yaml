@@ -15,7 +15,8 @@ services:
     Rector\Core\PhpParser\Printer\BetterStandardPrinter: null
     Rector\Core\PhpParser\Node\BetterNodeFinder: null
 
-    # PHPStan
+    # PHPStan - this is the cleanest way to include another container
+    # without injecting full container to Rector Symfony Continaer scope
     PHPStan\Reflection\ReflectionProvider:
         factory: ['@Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory', 'createReflectionProvider']
 
