@@ -8,6 +8,7 @@ use Nette\Loaders\RobotLoader;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
@@ -49,7 +50,9 @@ class SomeService
 {
 }
 
-class SomeServiceTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class SomeServiceTest extends TestCase
 {
 }
 PHP
@@ -62,7 +65,9 @@ class SomeService
 {
 }
 
-class SomeServiceTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class SomeServiceTest extends TestCase
 {
 }
 PHP
@@ -84,20 +89,17 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkipClass($node)) {
+        $testCaseClassName = $this->resolveTestCaseClassName($node);
+        if ($testCaseClassName === null) {
+            return null;
+        }
+
+        if ($this->shouldSkipClass($node, $testCaseClassName)) {
             return null;
         }
 
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-        /** @var string $className */
-        $className = $this->getName($node);
-
-        $testCaseClassName = $this->resolveTestCaseClassName($className);
-        if ($testCaseClassName === null) {
-            return null;
-        }
 
         $seeTagNode = $this->createSeePhpDocTagNode($testCaseClassName);
         $phpDocInfo->addPhpDocTagNode($seeTagNode);
@@ -105,32 +107,26 @@ PHP
         return $node;
     }
 
-    private function shouldSkipClass(Class_ $class): bool
+    private function shouldSkipClass(Class_ $class, string $testCaseClassName): bool
     {
-        if ($class->isAnonymous()) {
+        // we are in the test case
+        if ($this->isName($class, '*Test')) {
             return true;
         }
 
-        $className = $this->getName($class);
-        if ($className === null) {
-            return true;
-        }
+        /** @var PhpDocInfo $phpDocInfo */
+        $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        // is a test case
-        if (Strings::endsWith($className, 'Test')) {
-            return true;
-        }
+        $seeTags = $phpDocInfo->getTagsByName('see');
 
         // is the @see annotation already added
-        if ($class->getDocComment() !== null) {
-            /** @var string $docCommentText */
-            $docCommentText = $class->getDocComment()->getText();
+        foreach ($seeTags as $seeTag) {
+            if (! $seeTag->value instanceof GenericTagValueNode) {
+                continue;
+            }
 
-            /** @var string $shortClassName */
-            $shortClassName = Strings::after($className, '\\', -1);
-            $seeClassPattern = '#@see (.*?)' . preg_quote($shortClassName, '#') . 'Test#m';
-
-            if (Strings::match($docCommentText, $seeClassPattern)) {
+            $seeTagClass = ltrim($seeTag->value->value, '\\');
+            if ($seeTagClass === $testCaseClassName) {
                 return true;
             }
         }
@@ -138,8 +134,18 @@ PHP
         return false;
     }
 
-    private function resolveTestCaseClassName(string $className): ?string
+    private function resolveTestCaseClassName(Class_ $class): ?string
     {
+        if ($this->isAnonymousClass($class)) {
+            return null;
+        }
+
+        $className = $this->getName($class);
+        if ($className === null) {
+            return null;
+        }
+
+        // fallback for unit tests that only have extra "Test" suffix
         if (class_exists($className . 'Test')) {
             return $className . 'Test';
         }
@@ -182,6 +188,7 @@ PHP
     private function createRobotLoadForDirectories(): RobotLoader
     {
         $robotLoader = new RobotLoader();
+        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/tests_add_see_rector_tests');
 
         $directories = $this->composerAutoloadedDirectoryProvider->provide();
         foreach ($directories as $directory) {

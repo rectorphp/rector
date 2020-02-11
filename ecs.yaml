@@ -124,7 +124,7 @@ parameters:
             - 'rules/cakephp-to-symfony/tests/Rector/Class_/CakePHPModelToDoctrineRepositoryRector/CakePHPModelToDoctrineRepositoryRectorTest.php'
 
         PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer:
-            - 'rules/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php'
+            - 'packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php'
             # intentional "assertEquals()"
             - 'tests/PhpParser/Node/NodeFactoryTest.php'
             - '*TypeResolverTest.php'
