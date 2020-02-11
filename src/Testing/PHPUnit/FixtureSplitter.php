@@ -13,7 +13,7 @@ final class FixtureSplitter
     /**
      * @var string
      */
-    public const SPLIT_LINE = '#-----\n#';
+    public const SPLIT_LINE = '#-----' . PHP_EOL . '#';
 
     /**
      * @var string
