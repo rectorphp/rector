@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\Use_;
@@ -13,6 +14,7 @@ use PhpParser\Node\Stmt\UseUse;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -93,14 +95,10 @@ PHP
 
     private function isThrowableAnnotated(Throw_ $node): bool
     {
-        $method = $node->getAttribute(AttributeKey::METHOD_NODE);
-
-        if ($method === null) {
-            throw new RuntimeException('This should not happen and is probably a bug. Please report it.');
-        }
+        $stmt = $this->getStmt($node);
 
         /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $method->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $stmt->getAttribute(AttributeKey::PHP_DOC_INFO);
         $throwTags = $phpDocInfo->getTagsByName('throws');
         $FQN = $this->buildFQN($node);
 
@@ -110,14 +108,14 @@ PHP
 
         /** @var AttributeAwarePhpDocTagNode $throwTag */
         foreach ($throwTags as $throwTag) {
-            $throwClassName = $throwTag->value->type->name;
-            if ($throwClassName === $FQN) {
+            $thrownClassName = $throwTag->value->type->name;
+            if ($thrownClassName === $FQN) {
                 return true;
             }
 
             if (
-                ! Strings::contains($throwClassName, '\\') &&
-                Strings::contains($FQN, $throwClassName) &&
+                ! Strings::contains($thrownClassName, '\\') &&
+                Strings::contains($FQN, $thrownClassName) &&
                 $this->isThrowableImported($node)
             ) {
                 return true;
@@ -151,13 +149,13 @@ PHP
 
     private function annotateMethod(Throw_ $node): void
     {
-        /** @var ClassMethod $method */
-        $method = $node->getAttribute(AttributeKey::METHOD_NODE);
-        $FQN = $this->buildFQN($node);
-        $docComment = $this->buildThrowsDocComment($FQN);
+        /** @var ClassMethod|Stmt\Function_ $stmt */
+        $stmt = $this->getStmt($node);
+        $throwClass = $this->buildFQN($node);
+        $docComment = $this->buildThrowsDocComment($throwClass);
 
         /** @var PhpDocInfo $methodPhpDocInfo */
-        $methodPhpDocInfo = $method->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $methodPhpDocInfo = $stmt->getAttribute(AttributeKey::PHP_DOC_INFO);
         $methodPhpDocInfo->addPhpDocTagNode($docComment);
     }
 
@@ -170,5 +168,25 @@ PHP
     private function buildFQN(Throw_ $node): string
     {
         return '\\' . $this->getName($node->expr->class);
+    }
+
+    /**
+     * @param Throw_ $node
+     *
+     * @return ClassMethod|Stmt\Function_
+     *
+     * @throws ShouldNotHappenException
+     */
+    private function getStmt(Throw_ $node):Stmt
+    {
+        $method = $node->getAttribute(AttributeKey::METHOD_NODE);
+        $function = $node->getAttribute(AttributeKey::FUNCTION_NODE);
+        $stmt = $method ?? $function ?? null;
+
+        if ($stmt === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $stmt;
     }
 }
