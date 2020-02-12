@@ -1,4 +1,4 @@
-# All 447 Rectors Overview
+# All 448 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -3133,6 +3133,40 @@ Remove temporary *Uuid relation properties
 <br>
 
 ## DoctrineCodeQuality
+
+### `ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector`
+
+- class: `Rector\DoctrineCodeQuality\Rector\Class_\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector`
+
+Change array to ArrayCollection in setParameters method of query builder
+
+```diff
+
+-use Doctrine\ORM\EntityRepository;
++use Doctrine\Common\Collections\ArrayCollection;use Doctrine\ORM\EntityRepository;use Doctrine\ORM\Query\Parameter;
+
+ class SomeRepository extends EntityRepository
+ {
+     public function getSomething()
+     {
+         return $this
+             ->createQueryBuilder('sm')
+             ->select('sm')
+             ->where('sm.foo = :bar')
+-            ->setParameters([
+-                'bar' => 'baz'
+-            ])
++            ->setParameters(new ArrayCollection([
++                new  Parameter('bar', 'baz'),
++            ]))
+             ->getQuery()
+             ->getResult()
+         ;
+     }
+ }
+```
+
+<br>
 
 ### `InitializeDefaultEntityCollectionRector`
 
