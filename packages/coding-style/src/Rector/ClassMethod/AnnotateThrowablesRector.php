@@ -99,23 +99,23 @@ PHP
 
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $stmt->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $throwTags = $phpDocInfo->getTagsByName('throws');
-        $FQN = $this->buildFQN($node);
+        $alreadyAnnotatedThrowTags = $phpDocInfo->getTagsByName('throws');
+        $checkingThrowableClassName = $this->buildFQN($node);
 
-        if (empty($throwTags)) {
+        if (empty($alreadyAnnotatedThrowTags)) {
             return false;
         }
 
-        /** @var AttributeAwarePhpDocTagNode $throwTag */
-        foreach ($throwTags as $throwTag) {
-            $thrownClassName = $throwTag->value->type->name;
-            if ($thrownClassName === $FQN) {
+        /** @var AttributeAwarePhpDocTagNode $alreadyAnnotatedThrowTag */
+        foreach ($alreadyAnnotatedThrowTags as $alreadyAnnotatedThrowTag) {
+            $alreadyAnnotatedThrowTagClassName = $alreadyAnnotatedThrowTag->value->type->name;
+            if ($alreadyAnnotatedThrowTagClassName === $checkingThrowableClassName) {
                 return true;
             }
 
             if (
-                ! Strings::contains($thrownClassName, '\\') &&
-                Strings::contains($FQN, $thrownClassName) &&
+                ! Strings::contains($alreadyAnnotatedThrowTagClassName, '\\') &&
+                Strings::contains($checkingThrowableClassName, $alreadyAnnotatedThrowTagClassName) &&
                 $this->isThrowableImported($node)
             ) {
                 return true;
