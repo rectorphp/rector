@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
@@ -19,7 +20,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RuntimeException;
 
 /**
  * Adds "throws" DocBlock to methods.
@@ -149,7 +149,7 @@ PHP
 
     private function annotateMethod(Throw_ $node): void
     {
-        /** @var ClassMethod|Stmt\Function_ $stmt */
+        /** @var ClassMethod|Function_ $stmt */
         $stmt = $this->getStmt($node);
         $throwClass = $this->buildFQN($node);
         $docComment = $this->buildThrowsDocComment($throwClass);
@@ -171,13 +171,11 @@ PHP
     }
 
     /**
-     * @param Throw_ $node
-     *
-     * @return ClassMethod|Stmt\Function_
+     * @return ClassMethod|Function_
      *
      * @throws ShouldNotHappenException
      */
-    private function getStmt(Throw_ $node):Stmt
+    private function getStmt(Throw_ $node): Stmt
     {
         $method = $node->getAttribute(AttributeKey::METHOD_NODE);
         $function = $node->getAttribute(AttributeKey::FUNCTION_NODE);
