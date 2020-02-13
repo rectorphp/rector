@@ -144,6 +144,7 @@
             "Rector\\Nette\\Tests\\": "packages/nette/tests",
             "Rector\\NodeTypeResolver\\Tests\\": "packages/node-type-resolver/tests",
             "Rector\\PHPStanExtensions\\": "utils/phpstan-extensions/src",
+            "Rector\\PHPStanExtensions\\Tests\\": "utils/phpstan-extensions/tests",
             "Rector\\PHPStan\\Tests\\": "rules/phpstan/tests",
             "Rector\\PHPUnitSymfony\\Tests\\": "rules/phpunit-symfony/tests",
             "Rector\\PHPUnit\\Tests\\": "rules/phpunit/tests",
