@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Compiler\Console;
 
+use Rector\Compiler\Composer\ComposerJsonManipulator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
@@ -42,7 +42,6 @@ final class CompileCommand extends Command
     {
         parent::__construct();
 
-        $this->filesystem = new Filesystem();
         $this->composerJsonManipulator = $composerJsonManipulator;
 
         $this->dataDir = $dataDir;

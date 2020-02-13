@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Compiler\Console;
+namespace Rector\Compiler\Composer;
 
 use Nette\Utils\FileSystem as NetteFileSystem;
 use Nette\Utils\Json;

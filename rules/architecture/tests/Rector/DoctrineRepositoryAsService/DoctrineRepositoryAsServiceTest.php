@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService;
+namespace Rector\Architecture\Tests\Rector\DoctrineRepositoryAsService;
 
 use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 /**
- * @covers \Rector\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector
- * @covers \Rector\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector
- * @covers \Rector\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector
+ * @covers \Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector
+ * @covers \Rector\Architecture\Rector\Class_\MoveRepositoryFromParentToConstructorRector
+ * @covers \Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector
  */
 final class DoctrineRepositoryAsServiceTest extends AbstractRectorTestCase
 {

@@ -4,7 +4,8 @@ parameters:
 
 services:
     # order matters, this needs to be first to correctly detect parent repository
-    Rector\Core\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector: null
-    Rector\Core\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector: null
-    Rector\Core\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector: null
+    Rector\Architecture\Rector\Class_\MoveRepositoryFromParentToConstructorRector: null
+    Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector: null
+    Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector: null
+
     Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector: null

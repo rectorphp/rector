@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Rector\Architecture\RepositoryAsService;
+namespace Rector\Architecture\Rector\MethodCall;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
@@ -21,6 +21,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Doctrine\Contract\Mapper\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
+/**
+ * @see \Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
+ */
 final class ServiceLocatorToDIRector extends AbstractRector
 {
     /**
