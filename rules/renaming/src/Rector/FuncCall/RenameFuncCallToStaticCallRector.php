@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**
@@ -30,7 +30,7 @@ final class RenameFuncCallToStaticCallRector extends AbstractRector
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Rename func call to static call', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'PHP'
 class SomeClass
 {
@@ -46,12 +46,16 @@ class SomeClass
 {
     public function run()
     {
-        \Strings::strPee('...');
+        \Strings::strPaa('...');
     }
 }
 PHP
 
-            ),
+                , [
+                    '$functionsToStaticCalls' => [
+                        'strPee' => ['Strings', 'strPaa'],
+                    ],
+                ]),
         ]);
     }
 
