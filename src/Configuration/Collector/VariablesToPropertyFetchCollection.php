@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Configuration\Rector\Architecture\DependencyInjection;
+namespace Rector\Core\Configuration\Collector;
 
 use PHPStan\Type\Type;
 

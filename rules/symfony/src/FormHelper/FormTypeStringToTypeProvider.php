@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Symfony\Rector\Form\Helper;
+namespace Rector\Symfony\FormHelper;
 
 use Nette\Utils\Strings;
 

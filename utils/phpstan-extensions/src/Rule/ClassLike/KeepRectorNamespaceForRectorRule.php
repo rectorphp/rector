@@ -49,7 +49,7 @@ final class KeepRectorNamespaceForRectorRule implements Rule
             return true;
         }
 
-        if (! Strings::endsWith($namespace, 'Rector') && ! Strings::match($namespace, '#\\\\Rector\\\\#')) {
+        if (! Strings::endsWith($namespace, '\\Rector') && ! Strings::match($namespace, '#\\\\Rector\\\\#')) {
             return true;
         }
 

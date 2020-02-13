@@ -12,7 +12,7 @@ use PhpParser\NodeTraverser;
 use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\NodeVisitorFactory\NodeRemovingNodeVisitorFactory;
-use Rector\Core\Rector\AffectedFilesCollector;
+use Rector\Core\Report\AffectedFilesCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
