@@ -3,8 +3,8 @@
 
 declare(strict_types = 1);
 
+use Rector\Compiler\Composer\ComposerJsonManipulator;
 use Rector\Compiler\Console\CompileCommand;
-use Rector\Compiler\Console\ComposerJsonManipulator;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Filesystem\Filesystem;
 

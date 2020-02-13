@@ -7,12 +7,10 @@ namespace Rector\RectorGenerator\Configuration;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Set\Set;
+use Rector\RectorGenerator\ConfigResolver;
 use Rector\RectorGenerator\Guard\RecipeGuard;
 use Rector\RectorGenerator\Node\NodeClassProvider;
 use Rector\RectorGenerator\ValueObject\Configuration;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 final class ConfigurationFactory
 {
@@ -26,10 +24,19 @@ final class ConfigurationFactory
      */
     private $recipeGuard;
 
-    public function __construct(NodeClassProvider $nodeClassProvider, RecipeGuard $recipeGuard)
-    {
+    /**
+     * @var ConfigResolver
+     */
+    private $configResolver;
+
+    public function __construct(
+        NodeClassProvider $nodeClassProvider,
+        RecipeGuard $recipeGuard,
+        ConfigResolver $configResolver
+    ) {
         $this->nodeClassProvider = $nodeClassProvider;
         $this->recipeGuard = $recipeGuard;
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -53,7 +60,7 @@ final class ConfigurationFactory
             $this->normalizeCode($rectorRecipe['extra_file_content'] ?? ''),
             $rectorRecipe['extra_file_name'],
             array_filter((array) $rectorRecipe['source']),
-            $this->resolveSetConfig($rectorRecipe['set']),
+            $this->configResolver->resolveSetConfig($rectorRecipe['set']),
             $this->detectPhpSnippet($rectorRecipe['code_before'])
         );
     }
@@ -101,35 +108,6 @@ final class ConfigurationFactory
         }
 
         return trim($code);
-    }
-
-    private function resolveSetConfig(string $set): ?string
-    {
-        if ($set === '') {
-            return null;
-        }
-
-        $fileSet = sprintf('#^%s(\.yaml)?$#', $set);
-        $finder = Finder::create()->files()
-            ->in(Set::SET_DIRECTORY)
-            ->name($fileSet);
-
-        /** @var SplFileInfo[] $fileInfos */
-        $fileInfos = iterator_to_array($finder->getIterator());
-        if (count($fileInfos) === 0) {
-            // assume new one is created
-            $match = Strings::match($set, '#\/(?<name>[a-zA-Z_-]+])#');
-            if (isset($match['name'])) {
-                return Set::SET_DIRECTORY . '/' . $match['name'] . '/' . $set;
-            }
-
-            return null;
-        }
-
-        /** @var SplFileInfo $foundSetConfigFileInfo */
-        $foundSetConfigFileInfo = array_pop($fileInfos);
-
-        return $foundSetConfigFileInfo->getRealPath();
     }
 
     private function detectPhpSnippet(string $code): bool
