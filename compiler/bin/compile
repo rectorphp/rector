@@ -4,11 +4,16 @@
 declare(strict_types = 1);
 
 use Rector\Compiler\Console\CompileCommand;
+use Rector\Compiler\Console\ComposerJsonManipulator;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Filesystem\Filesystem;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$compileCommand = new CompileCommand(__DIR__ . '/../build', __DIR__ . '/../..');
+// dependency injection for poor people
+$filesystem = new Filesystem();
+$composerJsonManipulator = new ComposerJsonManipulator($filesystem);
+$compileCommand = new CompileCommand(__DIR__ . '/../build', __DIR__ . '/../..', $composerJsonManipulator);
 
 /** @var Application $application */
 

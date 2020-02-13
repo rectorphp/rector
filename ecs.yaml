@@ -27,6 +27,7 @@ parameters:
         - "rules"
         - "tests"
         - "utils"
+        - "compiler"
 
     sets:
       - "psr12"
