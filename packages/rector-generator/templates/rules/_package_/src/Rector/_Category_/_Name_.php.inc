@@ -6,7 +6,7 @@ namespace Rector\_Package_\Rector\_Category_;
 
 use PhpParser\Node;
 use Rector\Core\Rector\AbstractRector;
-use Rector\RectorDefinition\CodeSample;
+use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
 /**

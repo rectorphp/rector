@@ -154,12 +154,12 @@ final class CreateRectorCommand extends Command
 
     private function addOneMoreRectorNesting(string $content): string
     {
-        $content = Strings::replace($content, '#Rector\\\\Rector\\\\#ms', 'Rector\\');
+        $content = Strings::replace($content, '#Rector\\\\Rector\\\\#ms', 'Rector\\Core\\');
 
         return Strings::replace(
             $content,
             '#use Rector\\\\AbstractRector;#',
-            'use Rector\\Rector\\AbstractRector;'
+            'use Rector\\Core\\Rector\\AbstractRector;'
         );
     }
 
@@ -201,7 +201,7 @@ final class CreateRectorCommand extends Command
         $this->symfonyStyle->listing($this->generatedFiles);
 
         $this->symfonyStyle->success(sprintf(
-            'Now make these tests green:%svendor/bin/phpunit %s',
+            'Make tests green again:%svendor/bin/phpunit %s',
             PHP_EOL . PHP_EOL,
             $this->testCasePath
         ));

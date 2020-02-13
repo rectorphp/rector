@@ -4,6 +4,8 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
 use Symfony\Component\Yaml\Yaml;
 
+// @todo change to command
+
 require __DIR__ . '/../vendor/autoload.php';
 
 ### CONFIGURE INPUT HERE

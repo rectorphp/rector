@@ -31,6 +31,7 @@ final class TemplateVariablesFactory
     {
         $data = [
             '_Package_' => $configuration->getPackage(),
+            '_package_' => strtolower($configuration->getPackage()),
             '_Category_' => $configuration->getCategory(),
             '_Description_' => $configuration->getDescription(),
             '_Name_' => $configuration->getName(),
