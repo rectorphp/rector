@@ -1,5 +1,6 @@
 services:
     - { class: Rector\PHPStanExtensions\Rule\ClassMethod\PreventParentMethodVisibilityOverrideRule, tags: [phpstan.rules.rule] }
+    - { class: Rector\PHPStanExtensions\Rule\ClassLike\KeepRectorNamespaceForRectorRule, tags: [phpstan.rules.rule] }
 
     - Rector\PHPStanExtensions\Utils\PHPStanValueResolver
 
