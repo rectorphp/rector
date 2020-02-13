@@ -12,9 +12,15 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
+use Rector\NodeNameResolver\Regex\RegexPatternDetector;
 
 final class NodeNameResolver
 {
+    /**
+     * @var RegexPatternDetector
+     */
+    private $regexPatternDetector;
+
     /**
      * @var NodeNameResolverInterface[]
      */
@@ -23,8 +29,9 @@ final class NodeNameResolver
     /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
-    public function __construct(array $nodeNameResolvers = [])
+    public function __construct(RegexPatternDetector $regexPatternDetector, array $nodeNameResolvers = [])
     {
+        $this->regexPatternDetector = $regexPatternDetector;
         $this->nodeNameResolvers = $nodeNameResolvers;
     }
 
@@ -59,7 +66,7 @@ final class NodeNameResolver
         }
 
         // is probably regex pattern
-        if ($this->isRegexPattern($name)) {
+        if ($this->regexPatternDetector->isRegexPattern($name)) {
             return (bool) Strings::match($resolvedName, $name);
         }
 
@@ -106,24 +113,6 @@ final class NodeNameResolver
     public function areNamesEqual(Node $firstNode, Node $secondNode): bool
     {
         return $this->getName($firstNode) === $this->getName($secondNode);
-    }
-
-    private function isRegexPattern(string $name): bool
-    {
-        if (Strings::length($name) <= 2) {
-            return false;
-        }
-
-        $firstChar = $name[0];
-        $lastChar = $name[strlen($name) - 1];
-        if ($firstChar !== $lastChar) {
-            return false;
-        }
-
-        // this prevents miss matching like "aMethoda"
-        $possibleDelimiters = ['#', '~', '/'];
-
-        return in_array($firstChar, $possibleDelimiters, true);
     }
 
     /**

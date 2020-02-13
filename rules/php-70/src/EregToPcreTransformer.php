@@ -79,7 +79,8 @@ final class EregToPcreTransformer
                     $r[$rr] .= '()';
                     ++$i;
                 } else {
-                    [$t, $ii] = $this->_ere2pcre($s, $i + 1);
+                    $position = (int) $i + 1;
+                    [$t, $ii] = $this->_ere2pcre($s, $position);
                     if ($ii >= $l || $s[$ii] !== ')') {
                         throw new InvalidEregException('"(" does not have a matching ")"');
                     }
@@ -100,11 +101,15 @@ final class EregToPcreTransformer
                 do {
                     if ($s[$i] === '[' &&
                         $i + 1 < $l && Strings::contains('.=:', $s[$i + 1])) {
-                        $ii = strpos($s, ']', $i);
+                        $offset = (int) $i;
+                        $ii = strpos($s, ']', $offset);
                         if ($ii === false) {
                             throw new InvalidEregException('"[" does not have a matching "]"');
                         }
-                        $ccls = Strings::substring($s, $i + 1, $ii - ($i + 1));
+
+                        $start = (int) $i + 1;
+                        $length = (int) ($ii - ($i + 1));
+                        $ccls = Strings::substring($s, $start, $length);
                         $cclsmap = [
                             ':alnum:' => '[:alnum:]',
                             ':alpha:' => '[:alpha:]',
@@ -195,11 +200,15 @@ final class EregToPcreTransformer
                 $r[$rr] .= $c;
                 ++$i;
             } elseif ($c === '{') {
+                $i = (int) $i;
                 $ii = strpos($s, '}', $i);
                 if ($ii === false) {
                     throw new InvalidEregException('"{" does not have a matching "}"');
                 }
-                $bound = Strings::substring($s, $i + 1, $ii - ($i + 1));
+
+                $start = (int) $i + 1;
+                $length = (int) $ii - ($i + 1);
+                $bound = Strings::substring($s, $start, $length);
 
                 $m = Strings::match($bound, '/^(\d|[1-9]\d|1\d\d|
                                 2[0-4]\d|25[0-5])
