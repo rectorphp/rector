@@ -88,17 +88,14 @@ PHP
             return null;
         }
 
-        $this->annotateMethod($node);
+        $this->annotateThrowable($node);
 
         return $node;
     }
 
     private function isThrowableAnnotated(Throw_ $node): bool
     {
-        $stmt = $this->getStmt($node);
-
-        /** @var PhpDocInfo $phpDocInfo */
-        $phpDocInfo = $stmt->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->getThrowingStmtDocblock($node);
         $alreadyAnnotatedThrowTags = $phpDocInfo->getTagsByName('throws');
         $checkingThrowableClassName = $this->buildFQN($node);
 
@@ -147,16 +144,13 @@ PHP
         return false;
     }
 
-    private function annotateMethod(Throw_ $node): void
+    private function annotateThrowable(Throw_ $node): void
     {
-        /** @var ClassMethod|Function_ $stmt */
-        $stmt = $this->getStmt($node);
         $throwClass = $this->buildFQN($node);
         $docComment = $this->buildThrowsDocComment($throwClass);
 
-        /** @var PhpDocInfo $methodPhpDocInfo */
-        $methodPhpDocInfo = $stmt->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $methodPhpDocInfo->addPhpDocTagNode($docComment);
+        $throwingStmtDocblock = $this->getThrowingStmtDocblock($node);
+        $throwingStmtDocblock->addPhpDocTagNode($docComment);
     }
 
     private function buildThrowsDocComment(string $FQNOrThrowableName): AttributeAwarePhpDocTagNode
@@ -170,12 +164,20 @@ PHP
         return '\\' . $this->getName($node->expr->class);
     }
 
+    private function getThrowingStmtDocblock(Throw_ $node):PhpDocInfo
+    {
+        $stmt = $this->getThrowingStmt($node);
+
+        /** @var PhpDocInfo $phpDocInfo */
+        return $stmt->getAttribute(AttributeKey::PHP_DOC_INFO);
+    }
+
     /**
      * @return ClassMethod|Function_
      *
      * @throws ShouldNotHappenException
      */
-    private function getStmt(Throw_ $node): Stmt
+    private function getThrowingStmt(Throw_ $node): Stmt
     {
         $method = $node->getAttribute(AttributeKey::METHOD_NODE);
         $function = $node->getAttribute(AttributeKey::FUNCTION_NODE);
