@@ -10,7 +10,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider;
+use Rector\Symfony\FormHelper\FormTypeStringToTypeProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\AbstractTypeExtension;
 

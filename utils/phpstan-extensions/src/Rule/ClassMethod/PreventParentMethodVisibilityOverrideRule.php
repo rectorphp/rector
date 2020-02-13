@@ -9,8 +9,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
-use PHPStan\Rules\RuleErrors\RuleErrorWithMessageAndLineAndFile;
-use Rector\Exception\NotImplementedException;
+use PHPStan\Rules\RuleErrorBuilder;
+use Rector\Core\Exception\NotImplementedException;
 use ReflectionMethod;
 
 final class PreventParentMethodVisibilityOverrideRule implements Rule
@@ -49,16 +49,7 @@ final class PreventParentMethodVisibilityOverrideRule implements Rule
 
             $methodVisibility = $this->resolveReflectionMethodVisibilityAsStrings($parentReflectionMethod);
 
-            $ruleError = new RuleErrorWithMessageAndLineAndFile(
-                sprintf(
-                    'Change "%s()" method visibility to "%s" to respect parent method visibility.',
-                    $methodName,
-                    $methodVisibility
-                ),
-                $node->getLine(),
-                $scope->getFile()
-            );
-
+            $ruleError = $this->createRuleError($node, $scope, $methodName, $methodVisibility);
             return [$ruleError];
         }
 
@@ -99,5 +90,20 @@ final class PreventParentMethodVisibilityOverrideRule implements Rule
         }
 
         throw new NotImplementedException();
+    }
+
+    private function createRuleError(Node $node, Scope $scope, string $methodName, string $methodVisibility): RuleError
+    {
+        $message = sprintf(
+            'Change "%s()" method visibility to "%s" to respect parent method visibility.',
+            $methodName,
+            $methodVisibility
+        );
+
+        $ruleErrorBuilder = RuleErrorBuilder::message($message);
+        $ruleErrorBuilder->line($node->getLine());
+        $ruleErrorBuilder->file($scope->getFile());
+
+        return $ruleErrorBuilder->build();
     }
 }

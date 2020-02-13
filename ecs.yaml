@@ -93,7 +93,7 @@ parameters:
             - "rules/coding-style/src/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php"
 
             # per node logic
-            - 'utils/DocumentationGenerator/src/Command/DumpNodesCommand.php'
+            - 'utils/documentation-generator/src/Command/DumpNodesCommand.php'
             # copied 3rd party logic
             - 'rules/php-70/src/EregToPcreTransformer.php'
             # dev

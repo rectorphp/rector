@@ -13,7 +13,6 @@ create-rector.yaml
 
 # tests - travis
 /laravel-dir
-/utils
 
 # compiler
 /compiler/composer.lock
