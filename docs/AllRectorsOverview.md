@@ -1,4 +1,4 @@
-# All 448 Rectors Overview
+# All 449 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -7362,6 +7362,25 @@ Replace constant by new ones
      {
 -        return MYSQL_ASSOC;
 +        return MYSQLI_ASSOC;
+     }
+ }
+```
+
+<br>
+
+### `RenameFuncCallToStaticCallRector`
+
+- class: `Rector\Renaming\Rector\FuncCall\RenameFuncCallToStaticCallRector`
+
+Rename func call to static call
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        strPee('...');
++        \Strings::strPee('...');
      }
  }
 ```
