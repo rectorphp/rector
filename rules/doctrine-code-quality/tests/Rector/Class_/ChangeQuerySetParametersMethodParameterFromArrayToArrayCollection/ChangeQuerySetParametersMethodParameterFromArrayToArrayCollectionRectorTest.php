@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 use Rector\DoctrineCodeQuality\Rector\Class_\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector;
 
-final class ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionTest extends AbstractRectorTestCase
+final class ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

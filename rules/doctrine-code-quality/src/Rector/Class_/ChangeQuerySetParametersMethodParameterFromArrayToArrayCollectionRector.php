@@ -21,7 +21,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see https://github.com/doctrine/orm/blob/2.7/UPGRADE.md#query-querybuilder-and-nativequery-parameters-bc-break
  *
- * @see \Rector\DoctrineCodeQuality\Tests\Rector\Class_\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollection\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionTest
+ * @see \Rector\DoctrineCodeQuality\Tests\Rector\Class_\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollection\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRectorTest
  */
 class ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector extends AbstractRector
 {
