@@ -98,7 +98,7 @@ final class ComposerJsonManipulator
     private function addAllowDevPackages(array $json): array
     {
         $json['minimum-stability'] = 'dev';
-        $json['prefer-stable'] = '*';
+        $json['prefer-stable'] = true;
 
         return $json;
     }
