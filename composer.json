@@ -36,7 +36,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
-        "jetbrains/phpstorm-stubs": "^2019.2",
+        "jetbrains/phpstorm-stubs": "^2019.3",
         "ocramius/package-versions": "^1.4|^1.5",
         "phpunit/phpunit": "^8.4|^9.0",
         "symplify/changelog-linker": "^7.2",
@@ -258,7 +258,5 @@
         "branch-alias": {
             "dev-master": "0.6-dev"
         }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
