@@ -218,11 +218,15 @@
     "scripts": {
         "complete-check": [
             "@check-cs",
+            "@check-fixtures",
+            "@check-services",
             "phpunit",
             "@phpstan",
             "@docs"
         ],
         "check-cs": "vendor/bin/ecs check --ansi",
+        "check-fixtures": "php ci/check_keep_fixtures.php",
+        "check-services": "php ci/check_services_in_yaml_configs.php",
         "fix-cs": [
             "vendor/bin/ecs check --fix --ansi",
             "ci/clean_trailing_spaces.sh"

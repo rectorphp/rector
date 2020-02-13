@@ -16,4 +16,4 @@ jobs:
                     php-version: 7.2
                     coverage: none # disable xdebug, pcov
             -   run: composer install --no-progress
-            -   run: php ci/check_services_in_yaml_configs.php
+            -   run: composer check-services
