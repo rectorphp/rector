@@ -7374,13 +7374,24 @@ Replace constant by new ones
 
 Rename func call to static call
 
+```yaml
+services:
+    Rector\Renaming\Rector\FuncCall\RenameFuncCallToStaticCallRector:
+        $functionsToStaticCalls:
+            strPee:
+                - Strings
+                - strPaa
+```
+
+↓
+
 ```diff
  class SomeClass
  {
      public function run()
      {
 -        strPee('...');
-+        \Strings::strPee('...');
++        \Strings::strPaa('...');
      }
  }
 ```

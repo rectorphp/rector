@@ -8,8 +8,8 @@ use Nette\Utils\DateTime;
 use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\RectorDefinition\ConfiguredCodeSample;
 use Rector\Utils\DocumentationGenerator\Contract\OutputFormatter\DumpRectorsOutputFormatterInterface;
 use Rector\Utils\DocumentationGenerator\RectorMetadataResolver;
 
