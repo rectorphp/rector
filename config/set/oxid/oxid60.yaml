@@ -2,3 +2,4 @@ services:
     Rector\Renaming\Rector\FuncCall\RenameFuncCallToStaticCallRector:
         $functionsToStaticCalls:
             getStr: ['OxidEsales\Eshop\Core\Str', 'getStr']
+    Rector\Oxid\Rector\FuncCall\OxidReplaceBackwardsCompatabilityClassRector: null
