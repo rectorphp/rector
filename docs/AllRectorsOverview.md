@@ -93,6 +93,87 @@
 
 <br>
 
+### `MoveRepositoryFromParentToConstructorRector`
+
+- class: `Rector\Architecture\Rector\Class_\MoveRepositoryFromParentToConstructorRector`
+
+Turns parent EntityRepository class to constructor dependency
+
+```diff
+ namespace App\Repository;
+
++use App\Entity\Post;
+ use Doctrine\ORM\EntityRepository;
+
+-final class PostRepository extends EntityRepository
++final class PostRepository
+ {
++    /**
++     * @var \Doctrine\ORM\EntityRepository
++     */
++    private $repository;
++    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
++    {
++        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
++    }
+ }
+```
+
+<br>
+
+### `ReplaceParentRepositoryCallsByRepositoryPropertyRector`
+
+- class: `Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector`
+
+Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.
+
+```diff
+ <?php
+
+ use Doctrine\ORM\EntityRepository;
+
+ class SomeRepository extends EntityRepository
+ {
+     public function someMethod()
+     {
+-        return $this->findAll();
++        return $this->repository->findAll();
+     }
+ }
+```
+
+<br>
+
+### `ServiceLocatorToDIRector`
+
+- class: `Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector`
+
+Turns "$this->getRepository()" in Symfony Controller to constructor injection and private property access.
+
+```diff
+ class ProductController extends Controller
+ {
++    /**
++     * @var ProductRepository
++     */
++    private $productRepository;
++
++    public function __construct(ProductRepository $productRepository)
++    {
++        $this->productRepository = $productRepository;
++    }
++
+     public function someAction()
+     {
+         $entityManager = $this->getDoctrine()->getManager();
+-        $entityManager->getRepository('SomethingBundle:Product')->findSomething(...);
++        $this->productRepository->findSomething(...);
+     }
+ }
+```
+
+<br>
+
 ## Autodiscovery
 
 ### `MoveEntitiesToEntityDirectoryRector`
@@ -9407,34 +9488,6 @@ services:
 
 <br>
 
-### `MoveRepositoryFromParentToConstructorRector`
-
-- class: `Rector\Core\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector`
-
-Turns parent EntityRepository class to constructor dependency
-
-```diff
- namespace App\Repository;
-
-+use App\Entity\Post;
- use Doctrine\ORM\EntityRepository;
-
--final class PostRepository extends EntityRepository
-+final class PostRepository
- {
-+    /**
-+     * @var \Doctrine\ORM\EntityRepository
-+     */
-+    private $repository;
-+    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
-+    {
-+        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
-+    }
- }
-```
-
-<br>
-
 ### `MultipleClassFileToPsr4ClassesRector`
 
 - class: `Rector\Core\Rector\Psr4\MultipleClassFileToPsr4ClassesRector`
@@ -9760,29 +9813,6 @@ services:
 
 <br>
 
-### `ReplaceParentRepositoryCallsByRepositoryPropertyRector`
-
-- class: `Rector\Core\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector`
-
-Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.
-
-```diff
- <?php
-
- use Doctrine\ORM\EntityRepository;
-
- class SomeRepository extends EntityRepository
- {
-     public function someMethod()
-     {
--        return $this->findAll();
-+        return $this->repository->findAll();
-     }
- }
-```
-
-<br>
-
 ### `ReplaceVariableByPropertyFetchRector`
 
 - class: `Rector\Core\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector`
@@ -9900,36 +9930,6 @@ services:
 -         return $this->anotherService;
 +        $anotherService = $this->anotherService;
 +        $anotherService->run();
-     }
- }
-```
-
-<br>
-
-### `ServiceLocatorToDIRector`
-
-- class: `Rector\Core\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector`
-
-Turns "$this->getRepository()" in Symfony Controller to constructor injection and private property access.
-
-```diff
- class ProductController extends Controller
- {
-+    /**
-+     * @var ProductRepository
-+     */
-+    private $productRepository;
-+
-+    public function __construct(ProductRepository $productRepository)
-+    {
-+        $this->productRepository = $productRepository;
-+    }
-+
-     public function someAction()
-     {
-         $entityManager = $this->getDoctrine()->getManager();
--        $entityManager->getRepository('SomethingBundle:Product')->findSomething(...);
-+        $this->productRepository->findSomething(...);
      }
  }
 ```

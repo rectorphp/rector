@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\Rector\Architecture\RepositoryAsService;
+namespace Rector\Architecture\Rector\MethodCall;
 
 use Doctrine\ORM\EntityRepository;
 use PhpParser\Node;
@@ -12,6 +12,9 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 
+/**
+ * @see \Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
+ */
 final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends AbstractRector
 {
     /**
