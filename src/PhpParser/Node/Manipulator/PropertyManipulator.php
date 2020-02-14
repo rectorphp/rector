@@ -107,10 +107,20 @@ final class PropertyManipulator
         return $propertyFetches;
     }
 
+    public function isReadyOnlyProperty(PropertyProperty $propertyProperty): bool
+    {
+        foreach ($this->getAllPropertyFetch($propertyProperty) as $propertyFetch) {
+            if (! $this->isReadContext($propertyFetch)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function isPropertyUsedInReadContext(PropertyProperty $propertyProperty): bool
     {
         $property = $this->getProperty($propertyProperty);
-
         if ($this->isDoctrineProperty($property)) {
             return true;
         }
