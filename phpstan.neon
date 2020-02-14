@@ -239,3 +239,4 @@ parameters:
         - '#Parameter \#1 \$possibleSubtype of method Rector\\TypeDeclaration\\PhpParserTypeAnalyzer\:\:isSubtypeOf\(\) expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType, PhpParser\\Node given#'
         - '#Parameter \#2 \$inferredReturnNode of method Rector\\TypeDeclaration\\Rector\\FunctionLike\\ReturnTypeDeclarationRector\:\:addReturnType\(\) expects PhpParser\\Node, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType\|null given#'
         - '#Method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
+        - '#Strict comparison using \=\=\= between mixed and null will always evaluate to false#'

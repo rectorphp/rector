@@ -120,10 +120,12 @@ PHP
                 }
 
                 $this->refactorArgument($node->args[$position]);
+
+                return $node;
             }
         }
 
-        return $node;
+        return null;
     }
 
     private function refactorFuncCall(FuncCall $funcCall): FuncCall

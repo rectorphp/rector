@@ -36,11 +36,6 @@ final class BetterNodeDumper extends NodeDumper
     private $nodeIds = 0;
 
     /**
-     * @var bool
-     */
-    private $skipEmpty = true;
-
-    /**
      * @var string[]
      */
     private $filterAttributes = [];
@@ -127,7 +122,7 @@ final class BetterNodeDumper extends NodeDumper
         foreach ($node->getSubNodeNames() as $key) {
             $value = $node->{$key};
 
-            if ($this->skipEmpty && ($value === null || $value === [])) {
+            if (($value === null || $value === [])) {
                 continue;
             }
 

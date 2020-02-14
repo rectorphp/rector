@@ -26,7 +26,7 @@ final class IdentifierManipulator
     /**
      * @var string[]
      */
-    private $nodeClassesWithIdentifier = [
+    private const NODE_CLASSES_WITH_IDENTIFIER = [
         ClassConstFetch::class, MethodCall::class, PropertyFetch::class, StaticCall::class, ClassMethod::class,
     ];
 
@@ -74,7 +74,7 @@ final class IdentifierManipulator
 
     private function ensureNodeHasIdentifier(Node $node): void
     {
-        if (in_array(get_class($node), $this->nodeClassesWithIdentifier, true)) {
+        if (in_array(get_class($node), self::NODE_CLASSES_WITH_IDENTIFIER, true)) {
             return;
         }
 
@@ -82,7 +82,7 @@ final class IdentifierManipulator
             'Node "%s" does not contain a "$name" property with "%s". Pass only one of "%s".',
             get_class($node),
             Identifier::class,
-            implode('", "', $this->nodeClassesWithIdentifier)
+            implode('", "', self::NODE_CLASSES_WITH_IDENTIFIER)
         ));
     }
 }

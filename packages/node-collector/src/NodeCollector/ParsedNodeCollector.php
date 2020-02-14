@@ -29,9 +29,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ParsedNodeCollector
 {
     /**
-     * @var string[]
+     * @var class-string[]
      */
-    private $collectableNodeTypes = [
+    private const COLLECTABLE_NODE_TYPES = [
         Class_::class,
         Interface_::class,
         ClassConst::class,
@@ -163,7 +163,7 @@ final class ParsedNodeCollector
 
     public function isCollectableNode(Node $node): bool
     {
-        foreach ($this->collectableNodeTypes as $collectableNodeType) {
+        foreach (self::COLLECTABLE_NODE_TYPES as $collectableNodeType) {
             if (is_a($node, $collectableNodeType, true)) {
                 return true;
             }

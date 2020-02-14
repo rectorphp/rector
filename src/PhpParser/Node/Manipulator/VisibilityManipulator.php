@@ -16,7 +16,7 @@ final class VisibilityManipulator
     /**
      * @var string[]
      */
-    private $allowedNodeTypes = [ClassMethod::class, Property::class, ClassConst::class, Class_::class];
+    private const ALLOWED_NODE_TYPES = [ClassMethod::class, Property::class, ClassConst::class, Class_::class];
 
     /**
      * @param ClassMethod|Property|ClassConst $node
@@ -117,7 +117,7 @@ final class VisibilityManipulator
 
     private function ensureIsClassMethodOrProperty(Node $node, string $location): void
     {
-        foreach ($this->allowedNodeTypes as $allowedNodeType) {
+        foreach (self::ALLOWED_NODE_TYPES as $allowedNodeType) {
             if (is_a($node, $allowedNodeType, true)) {
                 return;
             }
@@ -126,7 +126,7 @@ final class VisibilityManipulator
         throw new InvalidNodeTypeException(sprintf(
             '"%s" only accepts "%s" types. "%s" given.',
             $location,
-            implode('", "', $this->allowedNodeTypes),
+            implode('", "', self::ALLOWED_NODE_TYPES),
             get_class($node)
         ));
     }
