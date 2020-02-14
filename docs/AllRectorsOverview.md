@@ -1,4 +1,4 @@
-# All 449 Rectors Overview
+# All 450 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -2460,6 +2460,30 @@ Removes dead code statements
 -$value = 5;
 -$value;
 +$value = 5;
+```
+
+<br>
+
+### `RemoveDeadTryCatchRector`
+
+- class: `Rector\DeadCode\Rector\TryCatch\RemoveDeadTryCatchRector`
+
+Remove dead try/catch
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        try {
+-            // some code
+-        }
+-        catch (Throwable $throwable) {
+-            throw $throwable;
+-        }
++        // some code
+     }
+ }
 ```
 
 <br>
