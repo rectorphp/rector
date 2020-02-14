@@ -17,9 +17,6 @@ services:
             - '../src/ValueObject/*'
             - '../src/functions/*'
 
-    # extra services
-    Rector\Symfony\Rector\Form\Helper\FormTypeStringToTypeProvider: null
-
     Symfony\Component\Console\Application:
         alias: 'Rector\Core\Console\Application'
 

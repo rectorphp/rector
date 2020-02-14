@@ -17,6 +17,16 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 final class PHPStanStaticTypeMapper
 {
     /**
+     * @var string
+     */
+    public const KIND_PARAM = 'param';
+
+    /**
+     * @var string
+     */
+    public const KIND_PROPERTY = 'property';
+
+    /**
      * @var TypeMapperInterface[]
      */
     private $typeMappers = [];

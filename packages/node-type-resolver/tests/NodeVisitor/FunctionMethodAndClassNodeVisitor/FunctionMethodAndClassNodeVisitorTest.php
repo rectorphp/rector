@@ -11,6 +11,7 @@ use PhpParser\NodeVisitor\NameResolver;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Testing\PHPUnit\AbstractNodeVisitorTestCase;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeNameResolver\Regex\RegexPatternDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 
@@ -36,7 +37,9 @@ final class FunctionMethodAndClassNodeVisitorTest extends AbstractNodeVisitorTes
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver());
-        $nodeTraverser->addVisitor(new FunctionMethodAndClassNodeVisitor(new ClassNaming(new NodeNameResolver())));
+        $nodeTraverser->addVisitor(
+            new FunctionMethodAndClassNodeVisitor(new ClassNaming(new NodeNameResolver(new RegexPatternDetector())))
+        );
         $nodeTraverser->traverse($nodes);
     }
 

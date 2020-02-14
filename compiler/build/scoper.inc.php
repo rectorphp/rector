@@ -10,7 +10,10 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Isolated\Symfony\Component\Finder\Finder;
 use Nette\Neon\Neon;
 
-$stubs = [];
+$stubs = [
+    // @see https://github.com/rectorphp/rector/issues/2852#issuecomment-586315588
+    '../../vendor/hoa/consistency/Prelude.php',
+];
 
 $stubFinder = Finder::create();
 $stubFinder->files()->name('*.php')

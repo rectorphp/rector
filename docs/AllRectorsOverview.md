@@ -1,4 +1,4 @@
-# All 448 Rectors Overview
+# All 451 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -87,6 +87,87 @@
 -    {
 -        $products = $this->productRepository->fetchAll();
 +        $products = $productRepository->fetchAll();
+     }
+ }
+```
+
+<br>
+
+### `MoveRepositoryFromParentToConstructorRector`
+
+- class: `Rector\Architecture\Rector\Class_\MoveRepositoryFromParentToConstructorRector`
+
+Turns parent EntityRepository class to constructor dependency
+
+```diff
+ namespace App\Repository;
+
++use App\Entity\Post;
+ use Doctrine\ORM\EntityRepository;
+
+-final class PostRepository extends EntityRepository
++final class PostRepository
+ {
++    /**
++     * @var \Doctrine\ORM\EntityRepository
++     */
++    private $repository;
++    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
++    {
++        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
++    }
+ }
+```
+
+<br>
+
+### `ReplaceParentRepositoryCallsByRepositoryPropertyRector`
+
+- class: `Rector\Architecture\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector`
+
+Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.
+
+```diff
+ <?php
+
+ use Doctrine\ORM\EntityRepository;
+
+ class SomeRepository extends EntityRepository
+ {
+     public function someMethod()
+     {
+-        return $this->findAll();
++        return $this->repository->findAll();
+     }
+ }
+```
+
+<br>
+
+### `ServiceLocatorToDIRector`
+
+- class: `Rector\Architecture\Rector\MethodCall\ServiceLocatorToDIRector`
+
+Turns "$this->getRepository()" in Symfony Controller to constructor injection and private property access.
+
+```diff
+ class ProductController extends Controller
+ {
++    /**
++     * @var ProductRepository
++     */
++    private $productRepository;
++
++    public function __construct(ProductRepository $productRepository)
++    {
++        $this->productRepository = $productRepository;
++    }
++
+     public function someAction()
+     {
+         $entityManager = $this->getDoctrine()->getManager();
+-        $entityManager->getRepository('SomethingBundle:Product')->findSomething(...);
++        $this->productRepository->findSomething(...);
      }
  }
 ```
@@ -2407,6 +2488,30 @@ Removes dead code statements
 
 <br>
 
+### `RemoveDeadTryCatchRector`
+
+- class: `Rector\DeadCode\Rector\TryCatch\RemoveDeadTryCatchRector`
+
+Remove dead try/catch
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        try {
+-            // some code
+-        }
+-        catch (Throwable $throwable) {
+-            throw $throwable;
+-        }
++        // some code
+     }
+ }
+```
+
+<br>
+
 ### `RemoveDeadZeroAndOneOperationRector`
 
 - class: `Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector`
@@ -3157,6 +3262,40 @@ Remove temporary *Uuid relation properties
 <br>
 
 ## DoctrineCodeQuality
+
+### `ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector`
+
+- class: `Rector\DoctrineCodeQuality\Rector\Class_\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector`
+
+Change array to ArrayCollection in setParameters method of query builder
+
+```diff
+
+-use Doctrine\ORM\EntityRepository;
++use Doctrine\Common\Collections\ArrayCollection;use Doctrine\ORM\EntityRepository;use Doctrine\ORM\Query\Parameter;
+
+ class SomeRepository extends EntityRepository
+ {
+     public function getSomething()
+     {
+         return $this
+             ->createQueryBuilder('sm')
+             ->select('sm')
+             ->where('sm.foo = :bar')
+-            ->setParameters([
+-                'bar' => 'baz'
+-            ])
++            ->setParameters(new ArrayCollection([
++                new  Parameter('bar', 'baz'),
++            ]))
+             ->getQuery()
+             ->getResult()
+         ;
+     }
+ }
+```
+
+<br>
 
 ### `InitializeDefaultEntityCollectionRector`
 
@@ -4509,7 +4648,9 @@ Add @see annotation test of the class for faster jump to test. Make it FQN, so i
  {
  }
 
- class SomeServiceTest extends \PHPUnit\Framework\TestCase
+ use PHPUnit\Framework\TestCase;
+
+ class SomeServiceTest extends TestCase
  {
  }
 ```
@@ -7275,6 +7416,36 @@ Replace constant by new ones
 
 <br>
 
+### `RenameFuncCallToStaticCallRector`
+
+- class: `Rector\Renaming\Rector\FuncCall\RenameFuncCallToStaticCallRector`
+
+Rename func call to static call
+
+```yaml
+services:
+    Rector\Renaming\Rector\FuncCall\RenameFuncCallToStaticCallRector:
+        $functionsToStaticCalls:
+            strPee:
+                - Strings
+                - strPaa
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        strPee('...');
++        \Strings::strPaa('...');
+     }
+ }
+```
+
+<br>
+
 ### `RenameFunctionRector`
 
 - class: `Rector\Renaming\Rector\Function_\RenameFunctionRector`
@@ -7509,6 +7680,36 @@ Change nested ifs to early return
          }
 
          return 'no';
+     }
+ }
+```
+
+<br>
+
+### `ChangeReadOnlyPropertyWithDefaultValueToConstantRector`
+
+- class: `Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector`
+
+Change property with read only status with default value to constant
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @var string[]
+      */
+-    private $magicMethods = [
++    private const MAGIC_METHODS = [
+         '__toString',
+         '__wakeup',
+     ];
+
+     public function run()
+     {
+-        foreach ($this->magicMethods as $magicMethod) {
++        foreach (self::MAGIC_METHODS as $magicMethod) {
+             echo $magicMethod;
+         }
      }
  }
 ```
@@ -9395,34 +9596,6 @@ services:
 
 <br>
 
-### `MoveRepositoryFromParentToConstructorRector`
-
-- class: `Rector\Core\Rector\Architecture\RepositoryAsService\MoveRepositoryFromParentToConstructorRector`
-
-Turns parent EntityRepository class to constructor dependency
-
-```diff
- namespace App\Repository;
-
-+use App\Entity\Post;
- use Doctrine\ORM\EntityRepository;
-
--final class PostRepository extends EntityRepository
-+final class PostRepository
- {
-+    /**
-+     * @var \Doctrine\ORM\EntityRepository
-+     */
-+    private $repository;
-+    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
-+    {
-+        $this->repository = $entityManager->getRepository(\App\Entity\Post::class);
-+    }
- }
-```
-
-<br>
-
 ### `MultipleClassFileToPsr4ClassesRector`
 
 - class: `Rector\Core\Rector\Psr4\MultipleClassFileToPsr4ClassesRector`
@@ -9748,29 +9921,6 @@ services:
 
 <br>
 
-### `ReplaceParentRepositoryCallsByRepositoryPropertyRector`
-
-- class: `Rector\Core\Rector\Architecture\RepositoryAsService\ReplaceParentRepositoryCallsByRepositoryPropertyRector`
-
-Handles method calls in child of Doctrine EntityRepository and moves them to "$this->repository" property.
-
-```diff
- <?php
-
- use Doctrine\ORM\EntityRepository;
-
- class SomeRepository extends EntityRepository
- {
-     public function someMethod()
-     {
--        return $this->findAll();
-+        return $this->repository->findAll();
-     }
- }
-```
-
-<br>
-
 ### `ReplaceVariableByPropertyFetchRector`
 
 - class: `Rector\Core\Rector\Architecture\DependencyInjection\ReplaceVariableByPropertyFetchRector`
@@ -9888,36 +10038,6 @@ services:
 -         return $this->anotherService;
 +        $anotherService = $this->anotherService;
 +        $anotherService->run();
-     }
- }
-```
-
-<br>
-
-### `ServiceLocatorToDIRector`
-
-- class: `Rector\Core\Rector\Architecture\RepositoryAsService\ServiceLocatorToDIRector`
-
-Turns "$this->getRepository()" in Symfony Controller to constructor injection and private property access.
-
-```diff
- class ProductController extends Controller
- {
-+    /**
-+     * @var ProductRepository
-+     */
-+    private $productRepository;
-+
-+    public function __construct(ProductRepository $productRepository)
-+    {
-+        $this->productRepository = $productRepository;
-+    }
-+
-     public function someAction()
-     {
-         $entityManager = $this->getDoctrine()->getManager();
--        $entityManager->getRepository('SomethingBundle:Product')->findSomething(...);
-+        $this->productRepository->findSomething(...);
      }
  }
 ```

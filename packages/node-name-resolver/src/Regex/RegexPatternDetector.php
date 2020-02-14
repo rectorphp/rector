@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\NodeNameResolver\Regex;
+
+use Nette\Utils\Strings;
+
+final class RegexPatternDetector
+{
+    public function isRegexPattern(string $name): bool
+    {
+        if (Strings::length($name) <= 2) {
+            return false;
+        }
+
+        $firstChar = $name[0];
+        $lastChar = $name[strlen($name) - 1];
+        if ($firstChar !== $lastChar) {
+            return false;
+        }
+
+        // this prevents miss matching like "aMethoda"
+        $possibleDelimiters = ['#', '~', '/'];
+
+        return in_array($firstChar, $possibleDelimiters, true);
+    }
+}

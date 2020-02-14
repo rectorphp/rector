@@ -14,11 +14,20 @@ use ReflectionClass;
 final class RectorsFinder
 {
     /**
+     * @var string[]
+     */
+    private const RECTOR_PATHS = [
+        __DIR__ . '/../../../rules',
+        __DIR__ . '/../../../packages',
+        __DIR__ . '/../../../src',
+    ];
+
+    /**
      * @return string[]
      */
     public function findCoreRectorClasses(): array
     {
-        $allRectors = $this->findInDirectories([__DIR__ . '/../../../packages', __DIR__ . '/../../../src']);
+        $allRectors = $this->findInDirectories(self::RECTOR_PATHS);
 
         return array_map(function (RectorInterface $rector): string {
             return get_class($rector);

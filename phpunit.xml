@@ -10,6 +10,7 @@
     </php>
     <testsuites>
         <testsuite name="main">
+            <directory>rules/*/tests</directory>
             <directory>packages/*/tests</directory>
             <directory>tests</directory>
         </testsuite>
@@ -17,6 +18,7 @@
 
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="false">
+            <directory suffix=".php">rules/*/src</directory>
             <directory suffix=".php">packages/*/src</directory>
             <directory>src</directory>
         </whitelist>

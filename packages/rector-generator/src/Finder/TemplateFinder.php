@@ -43,14 +43,14 @@ final class TemplateFinder
 
         if ($configuration->getExtraFileContent()) {
             $smartFileInfos[] = new SmartFileInfo(
-                __DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/Source/extra_file.php.inc'
+                __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/Source/extra_file.php.inc'
             );
             $smartFileInfos[] = new SmartFileInfo(
-                __DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/_Name_ExtraTest.php.inc'
+                __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/_Name_ExtraTest.php.inc'
             );
         } else {
             $smartFileInfos[] = new SmartFileInfo(
-                __DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/_Name_Test.php.inc'
+                __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/_Name_Test.php.inc'
             );
         }
 
@@ -61,13 +61,13 @@ final class TemplateFinder
     {
         if ($isPhpSnippet) {
             return new SmartFileInfo(
-                __DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/Fixture/fixture.php.inc'
+                __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/Fixture/fixture.php.inc'
             );
         }
 
         // is html snippet
         return new SmartFileInfo(
-            __DIR__ . '/../../templates/packages/_Package_/tests/Rector/_Category_/_Name_/Fixture/html_fixture.php.inc'
+            __DIR__ . '/../../templates/rules/_package_/tests/Rector/_Category_/_Name_/Fixture/html_fixture.php.inc'
         );
     }
 }

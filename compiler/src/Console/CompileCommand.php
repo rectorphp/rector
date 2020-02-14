@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\Compiler\Console;
 
-use Nette\Utils\FileSystem as NetteFileSystem;
-use Nette\Utils\Json;
+use Rector\Compiler\Composer\ComposerJsonManipulator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
@@ -31,24 +29,21 @@ final class CompileCommand extends Command
     private $dataDir;
 
     /**
-     * @var string
-     */
-    private $originalComposerJsonFileContent;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
 
-    public function __construct(string $dataDir, string $buildDir)
+    /**
+     * @var ComposerJsonManipulator
+     */
+    private $composerJsonManipulator;
+
+    public function __construct(string $dataDir, string $buildDir, ComposerJsonManipulator $composerJsonManipulator)
     {
         parent::__construct();
-        $this->filesystem = new Filesystem();
+
+        $this->composerJsonManipulator = $composerJsonManipulator;
+
         $this->dataDir = $dataDir;
         $this->buildDir = $buildDir;
 
@@ -68,7 +63,7 @@ final class CompileCommand extends Command
 
         $this->symfonyStyle->note('Loading ' . $composerJsonFile);
 
-        $this->fixComposerJson($composerJsonFile);
+        $this->composerJsonManipulator->fixComposerJson($composerJsonFile);
 
         // @see https://github.com/dotherightthing/wpdtrt-plugin-boilerplate/issues/52
         $process = new Process([
@@ -79,6 +74,7 @@ final class CompileCommand extends Command
             '--no-interaction',
             '--classmap-authoritative',
         ], $this->buildDir, null, null, null);
+
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });
@@ -86,79 +82,13 @@ final class CompileCommand extends Command
         // the '--no-parallel' is needed, so "scoper.php.inc" can "require __DIR__ ./vendor/autoload.php"
         // and "Nette\Neon\Neon" class can be used there
         $process = new Process(['php', 'box.phar', 'compile', '--no-parallel'], $this->dataDir, null, null, null);
+
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });
 
-        $this->restoreComposerJson($composerJsonFile);
+        $this->composerJsonManipulator->restoreComposerJson($composerJsonFile);
 
         return ShellCode::SUCCESS;
-    }
-
-    private function fixComposerJson(string $composerJsonFile): void
-    {
-        $fileContent = NetteFileSystem::read($composerJsonFile);
-        $this->originalComposerJsonFileContent = $fileContent;
-
-        $json = Json::decode($fileContent, Json::FORCE_ARRAY);
-
-        $json = $this->removeDevKeys($json);
-
-        $json = $this->replacePHPStanWithPHPStanSrc($json);
-        $json = $this->addReplace($json);
-
-        $encodedJson = Json::encode($json, Json::PRETTY);
-
-        $this->filesystem->dumpFile($composerJsonFile, $encodedJson);
-    }
-
-    /**
-     * This prevent root composer.json constant override
-     */
-    private function restoreComposerJson(string $composerJsonFile): void
-    {
-        $this->filesystem->dumpFile($composerJsonFile, $this->originalComposerJsonFileContent);
-
-        // re-run @todo composer update on root
-    }
-
-    private function removeDevKeys(array $json): array
-    {
-        $keysToRemove = ['require-dev', 'autoload-dev', 'replace'];
-
-        foreach ($keysToRemove as $keyToRemove) {
-            unset($json[$keyToRemove]);
-        }
-
-        return $json;
-    }
-
-    /**
-     * Use phpstan/phpstan-src, because the phpstan.phar cannot be packed into rector.phar
-     */
-    private function replacePHPStanWithPHPStanSrc(array $json): array
-    {
-        $phpstanVersion = $json['require']['phpstan/phpstan'];
-        $json['require']['phpstan/phpstan-src'] = $phpstanVersion;
-        unset($json['require']['phpstan/phpstan']);
-
-        $json['repositories'][] = [
-            'type' => 'vcs',
-            'url' => 'https://github.com/phpstan/phpstan-src.git',
-        ];
-
-        return $json;
-    }
-
-    /**
-     * This prevent installing packages, that are not needed here.
-     */
-    private function addReplace(array $json): array
-    {
-        $json['replace'] = [
-            'symfony/var-dumper' => '*',
-        ];
-
-        return $json;
     }
 }
