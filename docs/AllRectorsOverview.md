@@ -1712,6 +1712,30 @@ Adds array default value to property to prevent foreach over null error
 
 <br>
 
+### `AnnotateThrowablesRector`
+
+- class: `Rector\CodingStyle\Rector\Throw_\AnnotateThrowablesRector`
+
+Adds @throws DocBlock comments to methods that thrwo \Throwables.
+
+```diff
+ class RootExceptionInMethodWithDocblock
+ {
+     /**
+      * This is a comment.
+      *
+      * @param int $code
++     * @throws \RuntimeException
+      */
+     public function throwException(int $code)
+     {
+         throw new \RuntimeException('', $code);
+     }
+ }
+```
+
+<br>
+
 ### `BinarySwitchToIfElseRector`
 
 - class: `Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector`
