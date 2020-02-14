@@ -15,6 +15,7 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  * Covers:
  * - https://github.com/symfony/symfony/pull/22441/files
  * - https://github.com/symfony/symfony/blob/master/UPGRADE-3.3.md#console
+ *
  * @see \Rector\Symfony\Tests\Rector\Console\ConsoleExceptionToErrorEventConstantRector\ConsoleExceptionToErrorEventConstantRectorTest
  */
 final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector

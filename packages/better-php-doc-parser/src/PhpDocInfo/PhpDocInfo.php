@@ -12,6 +12,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -186,6 +187,29 @@ final class PhpDocInfo
         }
 
         return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($paramTagValue, $this->node);
+    }
+
+    /**
+     * @return Type[]
+     */
+    public function getThrowsTypes(): array
+    {
+        $throwsPhpDocNodes = $this->getTagsByName('throws');
+
+        $throwsTypes = [];
+
+        foreach ($throwsPhpDocNodes as $throwsPhpDocNode) {
+            if (! $throwsPhpDocNode->value instanceof ThrowsTagValueNode) {
+                continue;
+            }
+
+            $throwsTypes[] = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType(
+                $throwsPhpDocNode->value,
+                $this->node
+            );
+        }
+
+        return $throwsTypes;
     }
 
     /**

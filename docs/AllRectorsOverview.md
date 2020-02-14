@@ -1,4 +1,4 @@
-# All 451 Rectors Overview
+# All 452 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)

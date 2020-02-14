@@ -7,7 +7,6 @@ namespace Rector\StaticTypeMapper\PhpParser;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
@@ -34,10 +33,6 @@ final class IdentifierNodeMapper implements PhpParserNodeMapperInterface
      */
     public function mapToPHPStan(Node $node): Type
     {
-        if ($node->name === 'string') {
-            return new StringType();
-        }
-
         $type = $this->scalarStringToTypeMapper->mapScalarStringToType($node->name);
         if ($type !== null) {
             return $type;

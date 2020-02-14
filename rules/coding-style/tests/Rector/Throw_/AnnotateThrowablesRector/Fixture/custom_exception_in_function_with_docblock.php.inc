@@ -9,7 +9,7 @@ namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Fixture;
  */
 function throwCustomExceptionInFunctionWithDockblock(int $code)
 {
-    throw new \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source\TheException('', $code);
+    throw new \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheException('', $code);
 }
 
 ?>
@@ -22,11 +22,11 @@ namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Fixture;
  * This is a comment.
  *
  * @param int $code
- * @throws \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source\TheException
+ * @throws \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheException
  */
 function throwCustomExceptionInFunctionWithDockblock(int $code)
 {
-    throw new \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source\TheException('', $code);
+    throw new \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheException('', $code);
 }
 
 ?>

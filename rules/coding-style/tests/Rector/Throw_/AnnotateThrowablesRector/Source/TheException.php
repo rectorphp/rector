@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source;
+namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source;
 
-class TheException extends \RuntimeException {}
+class TheException extends \RuntimeException {
+}

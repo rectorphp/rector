@@ -2,9 +2,9 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source\TheException;
-use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source\TheExceptionTheSecond;
-use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source\TheExceptionTheThird;
+use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheException;
+use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheExceptionTheSecond;
+use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheExceptionTheThird;
 
 class ExceptionsFactoryStaticMethodNothingAnnotated
 {
@@ -34,9 +34,9 @@ function throwWithFactoryStaticMethodNotAnnotated()
 
 namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source\TheException;
-use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source\TheExceptionTheSecond;
-use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source\TheExceptionTheThird;
+use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheException;
+use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheExceptionTheSecond;
+use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheExceptionTheThird;
 
 class ExceptionsFactoryStaticMethodNothingAnnotated
 {

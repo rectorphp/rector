@@ -11,7 +11,7 @@ class CustomExceptionInMethodWithDocblock
      */
     public function throwException(int $code)
     {
-        throw new \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source\TheException('', $code);
+        throw new \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheException('', $code);
     }
 }
 
@@ -27,11 +27,11 @@ class CustomExceptionInMethodWithDocblock
      * This is a comment.
      *
      * @param int $code
-     * @throws \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source\TheException
+     * @throws \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheException
      */
     public function throwException(int $code)
     {
-        throw new \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source\TheException('', $code);
+        throw new \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheException('', $code);
     }
 }
 
