@@ -8,7 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Throw_;
@@ -101,7 +101,7 @@ PHP
         $phpDocInfo = $this->getThrowingStmtDocblock($node);
         $alreadyAnnotatedThrowTags = $phpDocInfo->getTagsByName('throws');
 
-        if (empty($alreadyAnnotatedThrowTags)) {
+        if ($alreadyAnnotatedThrowTags === []) {
             return false;
         }
 
@@ -113,6 +113,7 @@ PHP
         );
 
         $notAnnotatedThrowables = [];
+
         foreach ($identifiedThrownThrowables as $identifiedThrownThrowable) {
             if ($this->isIdentifiedThrownThrowableInAlreadyAnnotatedOnes(
                 $node,
@@ -203,24 +204,25 @@ PHP
         return new AttributeAwarePhpDocTagNode('@throws', $value);
     }
 
-    private function buildFQN(Throw_ $node): string
+    private function buildFQN(Throw_ $throw): ?string
     {
-        return '\\' . $this->getName($node->expr->class);
+        if (! $throw->expr instanceof New_) {
+            return null;
+        }
+
+        return $this->getName($throw->expr->class);
     }
 
-    private function getThrowingStmtDocblock(Throw_ $node): PhpDocInfo
+    private function getThrowingStmtDocblock(Throw_ $throw): PhpDocInfo
     {
-        $stmt = $this->getThrowingStmt($node);
-
+        $stmt = $this->getThrowingStmt($throw);
         return $stmt->getAttribute(AttributeKey::PHP_DOC_INFO);
     }
 
     /**
      * @return ClassMethod|Function_
-     *
-     * @throws ShouldNotHappenException
      */
-    private function getThrowingStmt(Throw_ $node): Stmt
+    private function getThrowingStmt(Throw_ $node): FunctionLike
     {
         $method = $node->getAttribute(AttributeKey::METHOD_NODE);
         $function = $node->getAttribute(AttributeKey::FUNCTION_NODE);
