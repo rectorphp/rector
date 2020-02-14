@@ -1,4 +1,4 @@
-# All 450 Rectors Overview
+# All 451 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -7656,6 +7656,36 @@ Change nested ifs to early return
          }
 
          return 'no';
+     }
+ }
+```
+
+<br>
+
+### `ChangeReadOnlyPropertyWithDefaultValueToConstantRector`
+
+- class: `Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector`
+
+Change property with read only status with default value to constant
+
+```diff
+ class SomeClass
+ {
+     /**
+      * @var string[]
+      */
+-    private $magicMethods = [
++    private const MAGIC_METHODS = [
+         '__toString',
+         '__wakeup',
+     ];
+
+     public function run()
+     {
+-        foreach ($this->magicMethods as $magicMethod) {
++        foreach (self::MAGIC_METHODS as $magicMethod) {
+             echo $magicMethod;
+         }
      }
  }
 ```
