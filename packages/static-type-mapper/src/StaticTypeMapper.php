@@ -12,6 +12,7 @@ use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
@@ -93,7 +94,8 @@ final class StaticTypeMapper
     {
         if ($phpDocTagValueNode instanceof ReturnTagValueNode ||
             $phpDocTagValueNode instanceof ParamTagValueNode ||
-            $phpDocTagValueNode instanceof VarTagValueNode
+            $phpDocTagValueNode instanceof VarTagValueNode ||
+            $phpDocTagValueNode instanceof ThrowsTagValueNode
         ) {
             return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
         }
