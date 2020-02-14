@@ -21,6 +21,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\ShortenedObjectType;
 
+/**
+ * @see \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\AnnotateThrowablesRectorTest
+ */
 final class AnnotateThrowablesRector extends AbstractRector
 {
     /**
