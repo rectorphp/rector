@@ -15,6 +15,7 @@ $finder->files();
 $finder->name('*.php.inc');
 $finder->in(__DIR__ . '/../tests');
 $finder->in(__DIR__ . '/../packages/*/tests');
+$finder->in(__DIR__ . '/../rules/*/tests');
 
 $finderSanitizer = new FinderSanitizer();
 $smartFileInfos = $finderSanitizer->sanitize($finder);

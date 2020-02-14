@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixture;
 
 class RootExceptionInMethodWithDocblock
 {
@@ -19,7 +19,7 @@ class RootExceptionInMethodWithDocblock
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixture;
 
 class RootExceptionInMethodWithDocblock
 {

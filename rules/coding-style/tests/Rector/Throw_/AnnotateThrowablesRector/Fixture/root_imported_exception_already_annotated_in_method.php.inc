@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixture;
 
 use \RuntimeException;
 
@@ -14,24 +14,3 @@ class RootImportedExceptionAlreadyAnnotatedInMethod
         throw new RuntimeException();
     }
 }
-
-?>
------
-<?php
-
-namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Fixture;
-
-use \RuntimeException;
-
-class RootImportedExceptionAlreadyAnnotatedInMethod
-{
-    /**
-     * @throws RuntimeException
-     */
-    public function throwException()
-    {
-        throw new RuntimeException();
-    }
-}
-
-?>

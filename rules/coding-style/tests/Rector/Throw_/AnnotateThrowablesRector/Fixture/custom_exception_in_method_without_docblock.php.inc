@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixture;
 
 class CustomExceptionInMethodWithoutDocblock
 {
@@ -14,7 +14,7 @@ class CustomExceptionInMethodWithoutDocblock
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixture;
 
 class CustomExceptionInMethodWithoutDocblock
 {
