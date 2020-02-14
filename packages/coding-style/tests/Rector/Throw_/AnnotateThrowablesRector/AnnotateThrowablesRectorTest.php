@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowablesRector;
+namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector;
 
 use Iterator;
-use Rector\CodingStyle\Rector\ClassMethod\AnnotateThrowablesRector;
+use Rector\CodingStyle\Rector\Throw_\AnnotateThrowablesRector;
 use Rector\Core\Testing\PHPUnit\AbstractRectorTestCase;
 
 final class AnnotateThrowablesRectorTest extends AbstractRectorTestCase

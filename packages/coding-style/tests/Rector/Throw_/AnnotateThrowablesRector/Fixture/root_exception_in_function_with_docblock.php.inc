@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Fixture;
 
 /**
  * This is a comment.
@@ -16,7 +16,7 @@ function throwRootExceptionInFunctionWithDocblock(int $code)
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Fixture;
 
 /**
  * This is a comment.

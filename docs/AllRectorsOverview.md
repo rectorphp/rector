@@ -1633,7 +1633,7 @@ Adds array default value to property to prevent foreach over null error
 
 ### `AnnotateThrowablesRector`
 
-- class: `Rector\CodingStyle\Rector\ClassMethod\AnnotateThrowablesRector`
+- class: `Rector\CodingStyle\Rector\Throw_\AnnotateThrowablesRector`
 
 Adds @throws DocBlock comments to methods that thrwo \Throwables.
 

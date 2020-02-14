@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Rector\CodingStyle\Rector\ClassMethod;
+namespace Rector\CodingStyle\Rector\Throw_;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -95,24 +97,48 @@ PHP
 
     private function isThrowableAnnotated(Throw_ $node): bool
     {
+        $identifiedThrownThrowables = $this->identifyThrownThrowables($node);
         $phpDocInfo = $this->getThrowingStmtDocblock($node);
         $alreadyAnnotatedThrowTags = $phpDocInfo->getTagsByName('throws');
-        $checkingThrowableClassName = $this->buildFQN($node);
 
         if (empty($alreadyAnnotatedThrowTags)) {
             return false;
         }
 
-        /** @var AttributeAwarePhpDocTagNode $alreadyAnnotatedThrowTag */
-        foreach ($alreadyAnnotatedThrowTags as $alreadyAnnotatedThrowTag) {
-            $alreadyAnnotatedThrowTagClassName = $alreadyAnnotatedThrowTag->value->type->name;
-            if ($alreadyAnnotatedThrowTagClassName === $checkingThrowableClassName) {
+        $alreadyAnnotatedThrowClassNames = array_map(
+            static function (AttributeAwarePhpDocTagNode $alreadyAnnotatedThrowTag): string {
+                return $alreadyAnnotatedThrowTag->value->type->name;
+            },
+            $alreadyAnnotatedThrowTags
+        );
+
+        $notAnnotatedThrowables = [];
+        foreach ($identifiedThrownThrowables as $identifiedThrownThrowable) {
+            if ($this->isIdentifiedThrownThrowableInAlreadyAnnotatedOnes(
+                $node,
+                $alreadyAnnotatedThrowClassNames,
+                $identifiedThrownThrowable
+            ) === false) {
+                $notAnnotatedThrowables[] = $identifiedThrownThrowable;
+            }
+        }
+
+        return empty($notAnnotatedThrowables);
+    }
+
+    private function isIdentifiedThrownThrowableInAlreadyAnnotatedOnes(
+        Throw_ $node,
+        array $alreadyAnnotatedThrowClassNames,
+        string $identifiedThrownThrowable
+    ): bool {
+        foreach ($alreadyAnnotatedThrowClassNames as $alreadyAnnotatedThrowClassName) {
+            if ($alreadyAnnotatedThrowClassName === $identifiedThrownThrowable) {
                 return true;
             }
 
             if (
-                ! Strings::contains($alreadyAnnotatedThrowTagClassName, '\\') &&
-                Strings::contains($checkingThrowableClassName, $alreadyAnnotatedThrowTagClassName) &&
+                ! Strings::contains($alreadyAnnotatedThrowClassName, '\\') &&
+                Strings::contains($identifiedThrownThrowable, $alreadyAnnotatedThrowClassName) &&
                 $this->isThrowableImported($node)
             ) {
                 return true;
@@ -120,6 +146,24 @@ PHP
         }
 
         return false;
+    }
+
+    private function identifyThrownThrowables(Throw_ $node): array
+    {
+        switch (get_class($node->expr)) {
+            case New_::class:
+                return [$this->buildFQN($node)];
+            case StaticCall::class:
+                return $this->identifyThrownThrowablesInStaticCall($node);
+            default:
+                // throw new ShouldNotHappenException(sprintf('The \Throwable %s is not supported. Please, open an issue.', get_class($node->expr)));
+                return [];
+        }
+    }
+
+    private function identifyThrownThrowablesInStaticCall(Throw_ $node): array
+    {
+        return [];
     }
 
     private function isThrowableImported(Throw_ $node): bool
@@ -164,11 +208,10 @@ PHP
         return '\\' . $this->getName($node->expr->class);
     }
 
-    private function getThrowingStmtDocblock(Throw_ $node):PhpDocInfo
+    private function getThrowingStmtDocblock(Throw_ $node): PhpDocInfo
     {
         $stmt = $this->getThrowingStmt($node);
 
-        /** @var PhpDocInfo $phpDocInfo */
         return $stmt->getAttribute(AttributeKey::PHP_DOC_INFO);
     }
 

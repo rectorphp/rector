@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException;
+use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source\TheException;
 
 class CustomImportedExceptionAlreadyAnnotatedInMethod
 {
@@ -19,9 +19,9 @@ class CustomImportedExceptionAlreadyAnnotatedInMethod
 -----
 <?php
 
-namespace Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Fixture;
+namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\ClassMethod\AnnotateThrowables\Source\TheException;
+use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowables\Source\TheException;
 
 class CustomImportedExceptionAlreadyAnnotatedInMethod
 {
