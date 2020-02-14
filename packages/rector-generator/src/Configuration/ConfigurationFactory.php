@@ -57,8 +57,10 @@ final class ConfigurationFactory
             $rectorRecipe['description'],
             $this->normalizeCode($rectorRecipe['code_before']),
             $this->normalizeCode($rectorRecipe['code_after']),
-            $this->normalizeCode($rectorRecipe['extra_file_content'] ?? ''),
-            $rectorRecipe['extra_file_name'],
+            isset($rectorRecipe['extra_file_content']) ? $this->normalizeCode(
+                $rectorRecipe['extra_file_content']
+            ) : null,
+            $rectorRecipe['extra_file_name'] ?? null,
             array_filter((array) $rectorRecipe['source']),
             $this->configResolver->resolveSetConfig($rectorRecipe['set']),
             $this->detectPhpSnippet($rectorRecipe['code_before'])
