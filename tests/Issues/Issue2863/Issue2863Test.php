@@ -15,6 +15,6 @@ final class Issue2863Test extends AbstractRectorTestCase
 
     protected function provideConfig(): string
     {
-        return __DIR__ . '/../../../config/config.yaml';
+        return __DIR__ . '/config2863.yaml';
     }
 }
