@@ -1,0 +1,1 @@
+/** @var callable(array<mixed>):array<mixed>|null */
