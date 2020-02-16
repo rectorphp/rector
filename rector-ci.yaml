@@ -1,3 +1,6 @@
+services:
+    Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector: null
+
 parameters:
     sets:
         - 'coding-style'

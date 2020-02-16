@@ -45,7 +45,7 @@ final class AssignAndBinaryMap
     /**
      * @var string[]
      */
-    private $binaryOpToInverseClasses = [
+    private const BINARY_OP_TO_INVERSE_CLASSES = [
         Identical::class => NotIdentical::class,
         NotIdentical::class => Identical::class,
         Equal::class => NotEqual::class,
@@ -57,9 +57,9 @@ final class AssignAndBinaryMap
     ];
 
     /**
-     * @var string[]
+     * @var class-string[]
      */
-    private $assignOpToBinaryOpClasses = [
+    private const ASSIGN_OP_TO_BINARY_OP_CLASSES = [
         AssignBitwiseOr::class => BitwiseOr::class,
         AssignBitwiseAnd::class => BitwiseAnd::class,
         AssignBitwiseXor::class => BitwiseXor::class,
@@ -81,7 +81,7 @@ final class AssignAndBinaryMap
 
     public function __construct()
     {
-        $this->binaryOpToAssignClasses = array_flip($this->assignOpToBinaryOpClasses);
+        $this->binaryOpToAssignClasses = array_flip(self::ASSIGN_OP_TO_BINARY_OP_CLASSES);
     }
 
     public function getAlternative(Node $node): ?string
@@ -89,7 +89,7 @@ final class AssignAndBinaryMap
         $nodeClass = get_class($node);
 
         if ($node instanceof AssignOp) {
-            return $this->assignOpToBinaryOpClasses[$nodeClass] ?? null;
+            return self::ASSIGN_OP_TO_BINARY_OP_CLASSES[$nodeClass] ?? null;
         }
 
         if ($node instanceof BinaryOp) {
@@ -103,6 +103,6 @@ final class AssignAndBinaryMap
     {
         $nodeClass = get_class($binaryOp);
 
-        return $this->binaryOpToInverseClasses[$nodeClass] ?? null;
+        return self::BINARY_OP_TO_INVERSE_CLASSES[$nodeClass] ?? null;
     }
 }

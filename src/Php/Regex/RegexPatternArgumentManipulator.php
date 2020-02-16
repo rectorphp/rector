@@ -25,7 +25,7 @@ final class RegexPatternArgumentManipulator
     /**
      * @var int[]
      */
-    private $functionsWithPatternsToArgumentPosition = [
+    private const FUNCTIONS_WITH_PATTERNS_TO_ARGUMENT_POSITION = [
         'preg_match' => 0,
         'preg_replace_callback_array' => 0,
         'preg_replace_callback' => 0,
@@ -38,7 +38,7 @@ final class RegexPatternArgumentManipulator
     /**
      * @var int[][]
      */
-    private $staticMethodsWithPatternsToArgumentPosition = [
+    private const STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION = [
         Strings::class => [
             'match' => 1,
             'matchAll' => 1,
@@ -107,7 +107,7 @@ final class RegexPatternArgumentManipulator
      */
     private function processFuncCall(FuncCall $funcCall): array
     {
-        foreach ($this->functionsWithPatternsToArgumentPosition as $functionName => $argumentPosition) {
+        foreach (self::FUNCTIONS_WITH_PATTERNS_TO_ARGUMENT_POSITION as $functionName => $argumentPosition) {
             if (! $this->nodeNameResolver->isName($funcCall, $functionName)) {
                 continue;
             }
@@ -127,7 +127,7 @@ final class RegexPatternArgumentManipulator
      */
     private function processStaticCall(StaticCall $staticCall): array
     {
-        foreach ($this->staticMethodsWithPatternsToArgumentPosition as $type => $methodNamesToArgumentPosition) {
+        foreach (self::STATIC_METHODS_WITH_PATTERNS_TO_ARGUMENT_POSITION as $type => $methodNamesToArgumentPosition) {
             if (! $this->nodeTypeResolver->isObjectType($staticCall->class, $type)) {
                 continue;
             }

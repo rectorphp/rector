@@ -118,6 +118,7 @@ PHP
             return null;
         }
 
+        $haveNodeChanged = false;
         foreach ((array) $node->stmts as $key => $stmt) {
             if ($stmt instanceof Expression) {
                 $stmt = $stmt->expr;
@@ -133,11 +134,16 @@ PHP
                 continue;
             }
 
+            $haveNodeChanged = true;
             // move all nodes one level up
             array_splice($node->stmts, $key, count($stmt->stmts) - 1, $stmt->stmts);
         }
 
-        return $node;
+        if ($haveNodeChanged) {
+            return $node;
+        }
+
+        return null;
     }
 
     private function isAlwaysTruableNode(Node $node): bool

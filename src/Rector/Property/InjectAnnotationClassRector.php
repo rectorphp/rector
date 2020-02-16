@@ -37,7 +37,7 @@ final class InjectAnnotationClassRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $annotationToTagClass = [
+    private const ANNOTATION_TO_TAG_CLASS = [
         PHPDIInject::class => PHPDIInjectTagValueNode::class,
         JMSInject::class => JMSInjectTagValueNode::class,
     ];
@@ -134,7 +134,7 @@ PHP
         foreach ($this->annotationClasses as $annotationClass) {
             $this->ensureAnnotationClassIsSupported($annotationClass);
 
-            $tagClass = $this->annotationToTagClass[$annotationClass];
+            $tagClass = self::ANNOTATION_TO_TAG_CLASS[$annotationClass];
 
             $injectTagValueNode = $phpDocInfo->getByType($tagClass);
             if ($injectTagValueNode === null) {
@@ -155,14 +155,14 @@ PHP
 
     private function ensureAnnotationClassIsSupported(string $annotationClass): void
     {
-        if (isset($this->annotationToTagClass[$annotationClass])) {
+        if (isset(self::ANNOTATION_TO_TAG_CLASS[$annotationClass])) {
             return;
         }
 
         throw new NotImplementedException(sprintf(
             'Annotation class "%s" is not implemented yet. Use one of "%s" or add custom tag for it to Rector.',
             $annotationClass,
-            implode('", "', array_keys($this->annotationToTagClass))
+            implode('", "', array_keys(self::ANNOTATION_TO_TAG_CLASS))
         ));
     }
 
