@@ -11,5 +11,3 @@ final class SkipParentDefinition implements SomeInterface
         return ['test', 'test2'];
     }
 }
-
-?>

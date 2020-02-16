@@ -92,6 +92,7 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
     private function resolveTypesFromScope(Variable $variable, string $variableName): Type
     {
         $nodeScope = $this->resolveNodeScope($variable);
+
         if ($nodeScope === null) {
             return new MixedType();
         }
@@ -118,6 +119,7 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
             /** @var string $traitName */
             $traitName = $variable->getAttribute(AttributeKey::CLASS_NAME);
             $traitNodeScope = $this->traitNodeScopeCollector->getScopeForTraitAndNode($traitName, $variable);
+
             if ($traitNodeScope !== null) {
                 return $traitNodeScope;
             }
