@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\NullType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -111,6 +112,13 @@ PHP
             return true;
         }
 
-        return ! isset($funcCall->args[0]);
+        if (! isset($funcCall->args[0])) {
+            return true;
+        }
+
+        // skip node in trait, as impossible to analyse
+        $classNode = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
+
+        return $classNode instanceof Trait_;
     }
 }
