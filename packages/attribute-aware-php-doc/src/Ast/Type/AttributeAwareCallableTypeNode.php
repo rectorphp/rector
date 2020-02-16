@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\AttributeAwarePhpDoc\Ast\Type;
 
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\AttributeTrait;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
@@ -25,6 +26,14 @@ final class AttributeAwareCallableTypeNode extends CallableTypeNode implements A
 
     private function isExplicitCallable(): bool
     {
+        if ($this->returnType instanceof GenericTypeNode) {
+            return true;
+        }
+
+        if (! $this->returnType instanceof IdentifierTypeNode) {
+            return false;
+        }
+
         if (! $this->returnType instanceof IdentifierTypeNode) {
             return false;
         }
@@ -34,9 +43,23 @@ final class AttributeAwareCallableTypeNode extends CallableTypeNode implements A
 
     private function createExplicitCallable(): string
     {
-        /** @var IdentifierTypeNode $returnType */
+        /** @var IdentifierTypeNode|GenericTypeNode $returnType */
         $returnType = $this->returnType;
 
-        return $this->identifier->name . '():' . $returnType->name;
+        $parameterTypeString = $this->createParameterTypeString();
+
+        return sprintf('%s(%s):%s', $this->identifier->name, $parameterTypeString, (string) $returnType);
+    }
+
+    private function createParameterTypeString(): string
+    {
+        $parameterTypeStrings = [];
+        foreach ($this->parameters as $parameter) {
+            $parameterTypeStrings[] = (string) $parameter;
+        }
+
+        $parameterTypeString = implode(',', $parameterTypeStrings);
+
+        return trim($parameterTypeString);
     }
 }
