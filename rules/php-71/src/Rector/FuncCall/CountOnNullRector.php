@@ -118,10 +118,7 @@ PHP
 
         // skip node in trait, as impossible to analyse
         $classNode = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classNode instanceof Trait_) {
-            return true;
-        }
 
-        return false;
+        return $classNode instanceof Trait_;
     }
 }
