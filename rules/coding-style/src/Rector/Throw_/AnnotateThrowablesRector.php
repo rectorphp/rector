@@ -13,7 +13,6 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectType;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -42,7 +41,7 @@ final class AnnotateThrowablesRector extends AbstractRector
         return new RectorDefinition(
             'Adds @throws DocBlock comments to methods that thrwo \Throwables.', [
                 new CodeSample(
-                     // code before
+                // code before
                     <<<'PHP'
 class RootExceptionInMethodWithDocblock
 {
@@ -129,10 +128,7 @@ PHP
             return $this->identifyThrownThrowablesInStaticCall($throw);
         }
 
-        throw new NotImplementedException(sprintf(
-            'The \Throwable "%s" is not supported yet. Please, open an issue.',
-            get_class($throw->expr)
-        ));
+        return [];
     }
 
     private function identifyThrownThrowablesInStaticCall(Throw_ $node): array
@@ -144,7 +140,7 @@ PHP
     {
         $throwClass = $this->buildFQN($node);
         if ($throwClass === null) {
-            throw new ShouldNotHappenException();
+            return;
         }
 
         $docComment = $this->buildThrowsDocComment($throwClass);
