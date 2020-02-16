@@ -78,21 +78,20 @@ final class PhpDocInfoFactory
         return $phpDocInfo;
     }
 
-    public function createFromNode(Node $node): PhpDocInfo
+    public function createFromNode(Node $node): ?PhpDocInfo
     {
         /** needed for @see PhpDocNodeFactoryInterface */
         $this->currentNodeProvider->setNode($node);
 
         if ($node->getDocComment() === null) {
             if ($node->getComments() !== []) {
-                $content = $this->createCommentsString($node);
-                $tokens = $this->lexer->tokenize($content);
-                $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
-            } else {
-                $content = '';
-                $tokens = [];
-                $phpDocNode = new AttributeAwarePhpDocNode([]);
+                return null;
             }
+
+            // create empty node
+            $content = '';
+            $tokens = [];
+            $phpDocNode = new AttributeAwarePhpDocNode([]);
         } else {
             $content = $node->getDocComment()->getText();
             $tokens = $this->lexer->tokenize($content);
@@ -132,11 +131,6 @@ final class PhpDocInfoFactory
         if ($startEndValueObject !== null) {
             $attributeAwarePhpDocNode->setAttribute(Attribute::LAST_TOKEN_POSITION, $startEndValueObject->getEnd());
         }
-    }
-
-    private function createCommentsString(Node $node): string
-    {
-        return implode('', $node->getComments());
     }
 
     private function parseTokensToPhpDocNode(array $tokens): AttributeAwarePhpDocNode

@@ -95,7 +95,7 @@ final class DocBlockManipulator
 
         $phpDoc = $this->printPhpDocInfoToString($phpDocInfo);
         if ($phpDoc === '') {
-            // no comments, null
+            // no comments → null
             $node->setAttribute('comments', null);
             return;
         }
@@ -106,8 +106,7 @@ final class DocBlockManipulator
             return;
         }
 
-        // this is needed to remove duplicated // comments
-        $node->setAttribute('comments', null);
+        // this is needed to remove duplicated // commentsAsText
         $node->setDocComment(new Doc($phpDoc));
     }
 
@@ -127,7 +126,7 @@ final class DocBlockManipulator
     private function printPhpDocInfoToString(PhpDocInfo $phpDocInfo): string
     {
         // new node, needs to be reparsed
-        if ($phpDocInfo->getPhpDocNode()->children !== [] && $phpDocInfo->getTokens() === []) {
+        if ($phpDocInfo->isNewNode()) {
             return (string) $phpDocInfo->getPhpDocNode();
         }
 

@@ -82,7 +82,7 @@ final class PhpDocInfoPrinter
     public function printFormatPreserving(PhpDocInfo $phpDocInfo): string
     {
         if ($phpDocInfo->getTokens() === []) {
-            // completely new noe, just print string version of it
+            // completely new one, just print string version of it
             if ($phpDocInfo->getPhpDocNode()->children === []) {
                 return '';
             }
@@ -91,6 +91,7 @@ final class PhpDocInfoPrinter
         }
 
         $this->attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
+
         $this->tokens = $phpDocInfo->getTokens();
 
         $this->tokenCount = count($phpDocInfo->getTokens());

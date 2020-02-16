@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\PHPUnit\Rector\ClassMethod;
 
+use Nette\Utils\Strings;
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -19,11 +21,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class EnsureDataProviderInDocBlockRector extends AbstractPHPUnitRector
 {
-    /**
-     * @var string
-     */
-    private const DOC_BLOCK_OPENING = '/**';
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Data provider annotation must be in doc block', [
@@ -75,17 +72,26 @@ PHP
             return null;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo->hasByName('@dataProvider')) {
+        if ($phpDocInfo !== null) {
             return null;
         }
 
-        if ($phpDocInfo->getOpeningTokenValue() === self::DOC_BLOCK_OPENING) {
+        $comments = $node->getComments();
+        if ($comments === []) {
             return null;
         }
 
-        $phpDocInfo->changeOpeningTokenValue(self::DOC_BLOCK_OPENING);
+        $singleComment = $comments[0];
+        if (! Strings::match($singleComment->getText(), '#@dataProvider(\b|s)#')) {
+            return null;
+        }
+
+        $newCommentText = Strings::replace($singleComment->getText(), '#^\/\*(\s|b)#', '/**$1');
+        $comments[0] = new Comment($newCommentText);
+
+        $node->setAttribute('comments', $comments);
 
         return $node;
     }

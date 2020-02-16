@@ -7,6 +7,7 @@ namespace Rector\BetterPhpDocParser\Tests\PhpDocParser\OrmTagParser;
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FileSystemRector\Parser\FileInfoParser;
@@ -56,6 +57,9 @@ abstract class AbstractPhpDocInfoTest extends AbstractKernelTestCase
     protected function createPhpDocInfoFromNodeAndPrintBackToString(Node $node): string
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if ($phpDocInfo === null) {
+            throw new ShouldNotHappenException();
+        }
 
         return $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
     }

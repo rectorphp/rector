@@ -19,8 +19,6 @@ use Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector;
 use Rector\Core\Commander\CommanderCollector;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
-use Rector\NodeCollector\NodeFinder\ClassLikeParsedNodesFinder;
-use Rector\NodeCollector\NodeFinder\FunctionLikeParsedNodesFinder;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockManipulator;
@@ -325,14 +323,18 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
-     * @param Node\Stmt[] $stmts
+     * @param Stmt[] $stmts
      */
     protected function unwrapStmts(array $stmts, Node $node): void
     {
         foreach ($stmts as $key => $ifStmt) {
             if ($key === 0) {
-                // move comment from if to first element to keep it
-                $ifStmt->setAttribute(AttributeKey::PHP_DOC_INFO, $node->getAttribute(AttributeKey::PHP_DOC_INFO));
+                // move /* */ doc block from if to first element to keep it
+                $currentPhpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+                $ifStmt->setAttribute(AttributeKey::PHP_DOC_INFO, $currentPhpDocInfo);
+
+                // move // comments
+                $ifStmt->setAttribute('comments', $node->getComments());
             }
 
             $this->addNodeAfterNode($ifStmt, $node);
