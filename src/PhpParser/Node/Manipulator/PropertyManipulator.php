@@ -125,9 +125,9 @@ final class PropertyManipulator
             return true;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo->hasByType(SerializerTypeTagValueNode::class)) {
+        if ($phpDocInfo !== null && $phpDocInfo->hasByType(SerializerTypeTagValueNode::class)) {
             return true;
         }
 
