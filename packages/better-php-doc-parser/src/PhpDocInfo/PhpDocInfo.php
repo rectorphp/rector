@@ -384,22 +384,6 @@ final class PhpDocInfo
         }
     }
 
-    public function getOpeningTokenValue(): ?string
-    {
-        if (! isset($this->tokens[0])) {
-            return null;
-        }
-
-        $openingToken = $this->tokens[0];
-
-        return $openingToken[0];
-    }
-
-    public function changeOpeningTokenValue(string $value): void
-    {
-        $this->tokens[0][0] = $value;
-    }
-
     public function addBareTag(string $tag): void
     {
         $tag = '@' . ltrim($tag, '@');
@@ -427,6 +411,15 @@ final class PhpDocInfo
 
         $phpDocTagNode = new AttributeAwarePhpDocTagNode($name, $phpDocTagValueNode);
         $this->addPhpDocTagNode($phpDocTagNode);
+    }
+
+    public function isNewNode(): bool
+    {
+        if ($this->phpDocNode->children === []) {
+            return false;
+        }
+
+        return $this->tokens === [];
     }
 
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode

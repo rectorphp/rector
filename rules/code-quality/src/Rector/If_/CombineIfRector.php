@@ -4,30 +4,19 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\Rector\If_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Stmt\If_;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\CodeQuality\Tests\Rector\If_\CombineIfRector\CombineIfRectorTest
  */
 final class CombineIfRector extends AbstractRector
 {
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition('Merges nested if statements', [
@@ -108,26 +97,19 @@ PHP
         if ($node->stmts[0]->else !== null) {
             return true;
         }
+
         return (bool) $node->stmts[0]->elseifs;
     }
 
     private function combineComments(Node $firstNode, Node $secondNode): void
     {
+        // merge comments
         $comments = array_merge($firstNode->getComments(), $secondNode->getComments());
         if ($comments === []) {
             return;
         }
 
-        $content = '';
-        foreach ($comments as $comment) {
-            if (Strings::startsWith($comment->getText(), '/*')) {
-                $content .= $comment->getText() . PHP_EOL;
-            } else {
-                $content .= $comment->getText();
-            }
-        }
-
-        // update original node php doc info object
-        $this->phpDocInfoFactory->createFromString($firstNode, $content);
+        $firstNode->setAttribute('comments', $comments);
+        $firstNode->setAttribute(AttributeKey::PHP_DOC_INFO, null);
     }
 }

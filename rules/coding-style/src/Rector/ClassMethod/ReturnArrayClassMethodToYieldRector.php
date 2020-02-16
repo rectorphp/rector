@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use Iterator;
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Name\FullyQualified;
@@ -22,6 +23,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see https://medium.com/tech-tajawal/use-memory-gently-with-yield-in-php-7e62e2480b8d
  * @see https://3v4l.org/5PJid
+ *
  * @see \Rector\CodingStyle\Tests\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\ReturnArrayClassMethodToYieldRectorTest
  */
 final class ReturnArrayClassMethodToYieldRector extends AbstractRector
@@ -40,6 +42,11 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector
      * @var PhpDocInfo|null
      */
     private $returnPhpDocInfo;
+
+    /**
+     * @var Comment[]
+     */
+    private $returnComments = [];
 
     /**
      * @param string[][] $methodsByType
@@ -131,6 +138,7 @@ PHP
                 }
 
                 $this->returnPhpDocInfo = $statement->getAttribute(AttributeKey::PHP_DOC_INFO);
+                $this->returnComments = $statement->getComments();
 
                 return $statement->expr;
             }
@@ -163,10 +171,11 @@ PHP
 
     private function completeComments(ClassMethod $classMethod): void
     {
-        if ($this->returnPhpDocInfo === null) {
+        if ($this->returnPhpDocInfo === null && $this->returnComments === []) {
             return;
         }
 
         $classMethod->setAttribute(AttributeKey::PHP_DOC_INFO, $this->returnPhpDocInfo);
+        $classMethod->setAttribute('comments', $this->returnComments);
     }
 }
