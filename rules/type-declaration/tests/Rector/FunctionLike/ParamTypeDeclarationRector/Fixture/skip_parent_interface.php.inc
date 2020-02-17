@@ -2,13 +2,7 @@
 
 namespace Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
 
-interface ParentInterface
-{
-    /**
-     * @param mixed $value
-     */
-    public function __construct($value);
-}
+use Rector\TypeDeclaration\Tests\Rector\FunctionLike\ParamTypeDeclarationRector\Source\ParentInterface;
 
 class ImplementingClass implements ParentInterface
 {
