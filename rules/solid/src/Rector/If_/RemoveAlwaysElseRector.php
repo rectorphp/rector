@@ -73,14 +73,18 @@ PHP
         if ($this->lastStatementBreaksFlow($node)) {
             return null;
         }
+
         if ($node->elseifs !== []) {
             $newNode = new If_($node->cond);
             $newNode->stmts = $node->stmts;
+
             $this->addNodeBeforeNode($newNode, $node);
+
             /** @var ElseIf_ $firstElseIf */
             $firstElseIf = array_shift($node->elseifs);
             $node->cond = $firstElseIf->cond;
             $node->stmts = $firstElseIf->stmts;
+
             return $node;
         }
 
