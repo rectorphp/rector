@@ -2,3 +2,5 @@ services:
     Rector\Renaming\Rector\Class_\RenameClassRector:
         $oldToNewClasses:
             Kdyby\Translation\Translator: 'Nette\Localization\ITranslator'
+            Kdyby\Translation\DI\ITranslationProvider: 'Contributte\Translation\DI\TranslationProviderInterface'
+            Kdyby\Translation\Phrase: 'Contributte\Translation\Wrappers\Message'
