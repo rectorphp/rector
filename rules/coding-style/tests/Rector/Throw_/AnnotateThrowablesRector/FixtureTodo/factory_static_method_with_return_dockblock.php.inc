@@ -4,7 +4,7 @@ namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixtur
 
 use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\ExceptionsFactoryStaticMethodWithReturnDocblock;
 
-function throwWithFactoryStaticMethodWithReturnDockblock()
+function throwWithFactoryStaticMethodWithReturnDocblock()
 {
     throw ExceptionsFactoryStaticMethodWithReturnDocblock::createExceptionEccolo(1);
 }
@@ -26,7 +26,7 @@ use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Excep
  * @throws TheExceptionTheThird
  * @throws \RuntimeException
  */
-function throwWithFactoryStaticMethodWithReturnDockblock()
+function throwWithFactoryStaticMethodWithReturnDocblock()
 {
     throw ExceptionsFactoryStaticMethodWithReturnDocblock::createExceptionEccolo(1);
 }

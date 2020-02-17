@@ -7,7 +7,7 @@ namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixtur
  *
  * @param int $code
  */
-function throwCustomExceptionInFunctionWithDockblock(int $code)
+function throwCustomExceptionInFunctionWithDocblock(int $code)
 {
     throw new \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheException('', $code);
 }
@@ -24,7 +24,7 @@ namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixtur
  * @param int $code
  * @throws \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheException
  */
-function throwCustomExceptionInFunctionWithDockblock(int $code)
+function throwCustomExceptionInFunctionWithDocblock(int $code)
 {
     throw new \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheException('', $code);
 }
