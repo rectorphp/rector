@@ -33,7 +33,6 @@ class FunctionForeachContinue
                 if ($flag && empty($key)) {
                     continue;
                 }
-                
                 if (empty($val)) {
                     $val = $key;
                 }

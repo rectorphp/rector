@@ -8,12 +8,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * This class collects all to-be-added expresssions (= 1 line in code)
@@ -94,9 +94,7 @@ final class NodeAddingCommander implements CommanderInterface
         }
 
         // special case for "If_"
-        $parentNode = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-
-        if ($parentNode === null) {
+        if ($node instanceof If_) {
             return spl_object_hash($node);
         }
 
