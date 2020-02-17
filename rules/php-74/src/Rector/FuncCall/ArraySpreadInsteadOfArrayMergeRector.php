@@ -100,8 +100,12 @@ PHP
         $array = new Array_();
 
         foreach ($funcCall->args as $arg) {
-            $value = $arg->value;
+            // cannot handle unpacked arguments
+            if ($arg->unpack) {
+                return null;
+            }
 
+            $value = $arg->value;
             if ($this->shouldSkipArrayForInvalidTypeOrKeys($value)) {
                 return null;
             }
