@@ -110,6 +110,7 @@ PHP
         if (! $this->isTraitMatch($class)) {
             return true;
         }
+
         return $this->classManipulator->hasPropertyName($class, 'id');
     }
 

@@ -11,6 +11,11 @@ use Symfony\Component\Process\Process;
 final class ErrorScanner
 {
     /**
+     * @var string
+     */
+    private const COMMAND_LINE = 'include "vendor/autoload.php";';
+
+    /**
      * @var string[]
      */
     private $errors = [];
@@ -41,10 +46,8 @@ final class ErrorScanner
 
         $fileInfos = $this->filesFinder->findInDirectoriesAndFiles($source, ['php']);
 
-        $commandLine = 'include "vendor/autoload.php";';
-
         foreach ($fileInfos as $fileInfo) {
-            $currentCommandLine = $commandLine . PHP_EOL;
+            $currentCommandLine = self::COMMAND_LINE . PHP_EOL;
             $currentCommandLine .= sprintf('include "%s";', $fileInfo->getRelativeFilePathFromCwd());
 
             $currentCommandLine = sprintf("php -r '%s'", $currentCommandLine);

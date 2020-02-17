@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 use Nette\Utils\Strings;
 use Rector\Core\Testing\PHPUnit\FixtureSplitter;
+use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$finder = new Symfony\Component\Finder\Finder();
+$finder = new Finder();
 $finder->files();
 $finder->name('*.php.inc');
 $finder->in(__DIR__ . '/../tests');
@@ -25,9 +27,9 @@ $symfonyStyle = $symfonyStyleFactory->create();
 
 $errors = [];
 
-/** @var \Symfony\Component\Finder\SplFileInfo $smartFileInfo */
+/** @var SmartFileInfo $smartFileInfo */
 foreach ($smartFileInfos as $smartFileInfo) {
-    if (!Strings::match($smartFileInfo->getContents(), FixtureSplitter::SPLIT_LINE)) {
+    if (! Strings::match($smartFileInfo->getContents(), FixtureSplitter::SPLIT_LINE)) {
         continue;
     }
 

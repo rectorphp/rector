@@ -1,4 +1,4 @@
-# All 453 Rectors Overview
+# All 454 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -7725,6 +7725,36 @@ Change property with read only status with default value to constant
 -        foreach ($this->magicMethods as $magicMethod) {
 +        foreach (self::MAGIC_METHODS as $magicMethod) {
              echo $magicMethod;
+         }
+     }
+ }
+```
+
+<br>
+
+### `ChangeReadOnlyVariableWithDefaultValueToConstantRector`
+
+- class: `Rector\SOLID\Rector\ClassMethod\ChangeReadOnlyVariableWithDefaultValueToConstantRector`
+
+Change variable with read only status with default value to constant
+
+```diff
+ class SomeClass
+ {
++    private const REPLACEMENTS = [
++        'PHPUnit\Framework\TestCase\Notice' => 'expectNotice',
++        'PHPUnit\Framework\TestCase\Deprecated' => 'expectDeprecation',
++    ];
++
+     public function run()
+     {
+-        $replacements = [
+-            'PHPUnit\Framework\TestCase\Notice' => 'expectNotice',
+-            'PHPUnit\Framework\TestCase\Deprecated' => 'expectDeprecation',
+-        ];
+-
+-        foreach ($replacements as $class => $method) {
++        foreach (self::REPLACEMENTS as $class => $method) {
          }
      }
  }

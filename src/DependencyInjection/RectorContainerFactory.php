@@ -14,6 +14,12 @@ use Symplify\SetConfigResolver\SetResolver;
 final class RectorContainerFactory
 {
     /**
+     * @var string[]
+     * local config has priority
+     */
+    private const LOCAL_CONFIGS = ['rector.yml', 'rector.yaml'];
+
+    /**
      * @var SetResolver
      */
     private $setResolver;
@@ -72,10 +78,7 @@ final class RectorContainerFactory
     private function resolveLocalConfigs(): array
     {
         $configs = [];
-
-        // local config has priority
-        $localConfigs = ['rector.yml', 'rector.yaml'];
-        foreach ($localConfigs as $localConfig) {
+        foreach (self::LOCAL_CONFIGS as $localConfig) {
             $configRealPath = getcwd() . DIRECTORY_SEPARATOR . $localConfig;
             if (! file_exists($configRealPath)) {
                 continue;

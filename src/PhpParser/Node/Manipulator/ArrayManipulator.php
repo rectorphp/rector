@@ -6,10 +6,32 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\String_;
 
 final class ArrayManipulator
 {
+    public function isArrayOnlyScalarValues(Array_ $array): bool
+    {
+        foreach ($array->items as $arrayItem) {
+            if ($arrayItem->value instanceof Array_) {
+                if (! $this->isArrayOnlyScalarValues($arrayItem->value)) {
+                    return false;
+                }
+
+                continue;
+            }
+
+            if ($arrayItem->value instanceof Scalar) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
     public function addItemToArrayUnderKey(Array_ $arrayNode, ArrayItem $newArrayItem, string $key): void
     {
         foreach ($arrayNode->items as $item) {

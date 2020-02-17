@@ -43,7 +43,6 @@ final class AddArgumentTypeWithProbeDataRectorTest extends AbstractRectorTestCas
         // clear cache
         ProbeStaticStorage::clear();
 
-        $value = 'hey';
-        TypeStaticProbe::recordArgumentType($value, self::METHOD_REFERENCE, 0);
+        TypeStaticProbe::recordArgumentType('hey', self::METHOD_REFERENCE, 0);
     }
 }

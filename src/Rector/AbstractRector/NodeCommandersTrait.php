@@ -7,6 +7,7 @@ namespace Rector\Core\Rector\AbstractRector;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -101,11 +102,18 @@ trait NodeCommandersTrait
         $this->notifyNodeChangeFileInfo($positionNode);
     }
 
-    protected function addPropertyToClass(Class_ $classNode, ?Type $propertyType, string $propertyName): void
+    protected function addPropertyToClass(Class_ $class, ?Type $propertyType, string $propertyName): void
     {
-        $this->propertyAddingCommander->addPropertyToClass($propertyName, $propertyType, $classNode);
+        $this->propertyAddingCommander->addPropertyToClass($propertyName, $propertyType, $class);
 
-        $this->notifyNodeChangeFileInfo($classNode);
+        $this->notifyNodeChangeFileInfo($class);
+    }
+
+    protected function addConstantToClass(Class_ $class, ClassConst $classConst): void
+    {
+        $this->propertyAddingCommander->addConstantToClass($class, $classConst);
+
+        $this->notifyNodeChangeFileInfo($class);
     }
 
     protected function addPropertyWithoutConstructorToClass(

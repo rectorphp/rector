@@ -373,7 +373,13 @@ final class BetterStandardPrinter extends Standard
 
     private function removeComments(string $printerNode): string
     {
+        // remove /** ... */
         $printerNode = Strings::replace($printerNode, '#\/*\*(.*?)\*\/#');
+
+        // remove # ...
+        $printerNode = Strings::replace($printerNode, '#\#(.*?)$#m');
+
+        // remove // ...
         return Strings::replace($printerNode, '#\/\/(.*?)$#m');
     }
 

@@ -101,13 +101,14 @@ final class PropertyManipulator
             if (! $this->nodeNameResolver->areNamesEqual($node, $propertyProperty)) {
                 return false;
             }
+
             return in_array($node->getAttribute(AttributeKey::CLASS_NODE), $nodesToSearch, true);
         });
 
         return $propertyFetches;
     }
 
-    public function isReadyOnlyProperty(PropertyProperty $propertyProperty): bool
+    public function isReadOnlyProperty(PropertyProperty $propertyProperty): bool
     {
         foreach ($this->getAllPropertyFetch($propertyProperty) as $propertyFetch) {
             if (! $this->isReadContext($propertyFetch)) {

@@ -1,5 +1,6 @@
 services:
     Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector: null
+    Rector\SOLID\Rector\ClassMethod\ChangeReadOnlyVariableWithDefaultValueToConstantRector: null
 
 parameters:
     sets:
@@ -9,6 +10,7 @@ parameters:
         - 'nette-utils-code-quality'
 
     paths:
+        - 'ci'
         - 'src'
         - 'packages'
         - 'tests'

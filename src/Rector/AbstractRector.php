@@ -77,6 +77,22 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var StaticTypeMapper
      */
     protected $staticTypeMapper;
+    /**
+     * @var string[]
+     */
+    private const ATTRIBUTES_TO_MIRROR = [
+        AttributeKey::PARENT_NODE,
+        AttributeKey::CLASS_NODE,
+        AttributeKey::CLASS_NAME,
+        AttributeKey::FILE_INFO,
+        AttributeKey::METHOD_NODE,
+        AttributeKey::USE_NODES,
+        AttributeKey::SCOPE,
+        AttributeKey::METHOD_NAME,
+        AttributeKey::NAMESPACE_NAME,
+        AttributeKey::NAMESPACE_NODE,
+        AttributeKey::RESOLVED_NAME,
+    ];
 
     /**
      * Run once in the every end of one processed file
@@ -249,22 +265,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     private function mirrorAttributes(Node $oldNode, Node $newNode): void
     {
-        $attributesToMirror = [
-            AttributeKey::PARENT_NODE,
-            AttributeKey::CLASS_NODE,
-            AttributeKey::CLASS_NAME,
-            AttributeKey::FILE_INFO,
-            AttributeKey::METHOD_NODE,
-            AttributeKey::USE_NODES,
-            AttributeKey::SCOPE,
-            AttributeKey::METHOD_NAME,
-            AttributeKey::NAMESPACE_NAME,
-            AttributeKey::NAMESPACE_NODE,
-            AttributeKey::RESOLVED_NAME,
-        ];
-
         foreach ($oldNode->getAttributes() as $attributeName => $oldNodeAttributeValue) {
-            if (! in_array($attributeName, $attributesToMirror, true)) {
+            if (! in_array($attributeName, self::ATTRIBUTES_TO_MIRROR, true)) {
                 continue;
             }
 
@@ -320,6 +322,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         return $countedValueName;
+    }
+
+    protected function mirrorComments(Node $newNode, Node $oldNode): void
+    {
+        $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $oldNode->getAttribute(AttributeKey::PHP_DOC_INFO));
+        $newNode->setAttribute('comments', $oldNode->getAttribute('comments'));
     }
 
     /**

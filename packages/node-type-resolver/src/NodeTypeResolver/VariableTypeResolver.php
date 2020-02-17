@@ -24,6 +24,11 @@ use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 final class VariableTypeResolver implements NodeTypeResolverInterface
 {
     /**
+     * @var string[]
+     */
+    private const PARENT_NODE_ATTRIBUTES = [AttributeKey::PARENT_NODE, AttributeKey::METHOD_NODE];
+
+    /**
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
@@ -130,9 +135,7 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
 
     private function resolveFromParentNodes(Variable $variable): ?Scope
     {
-        $parentNodeAttributes = [AttributeKey::PARENT_NODE, AttributeKey::METHOD_NODE];
-
-        foreach ($parentNodeAttributes as $parentNodeAttribute) {
+        foreach (self::PARENT_NODE_ATTRIBUTES as $parentNodeAttribute) {
             $parentNode = $variable->getAttribute($parentNodeAttribute);
             if (! $parentNode instanceof Node) {
                 continue;
@@ -145,7 +148,6 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
 
             return $parentNodeScope;
         }
-
         return null;
     }
 }

@@ -4,3 +4,4 @@ services:
     Rector\SOLID\Rector\ClassConst\PrivatizeLocalClassConstantRector: null
     Rector\SOLID\Rector\Class_\MakeUnusedClassesWithChildrenAbstractRector: null
     Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector: null
+    Rector\SOLID\Rector\ClassMethod\ChangeReadOnlyVariableWithDefaultValueToConstantRector: null

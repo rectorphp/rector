@@ -9,7 +9,9 @@ use PhpParser\Node\Const_ as ConstConst;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
@@ -114,7 +116,7 @@ PHP
         }
 
         // is property read only?
-        if (! $this->propertyManipulator->isReadyOnlyProperty($onlyProperty)) {
+        if (! $this->propertyManipulator->isReadOnlyProperty($onlyProperty)) {
             return null;
         }
 
@@ -132,7 +134,8 @@ PHP
         $constant = new ConstConst($constantName, $defaultValue);
 
         $classConst = new ClassConst([$constant]);
-        $classConst->flags = $property->flags;
+        $classConst->flags = $property->flags & ~ Class_::MODIFIER_STATIC;
+
         $classConst->setAttribute(AttributeKey::PHP_DOC_INFO, $property->getAttribute(AttributeKey::PHP_DOC_INFO));
 
         return $classConst;
@@ -157,11 +160,7 @@ PHP
         $constantName = $this->createConstantNameFromProperty($propertyProperty);
 
         $this->traverseNodesWithCallable($classNode, function (Node $node) use ($propertyName, $constantName) {
-            if (! $node instanceof PropertyFetch) {
-                return null;
-            }
-
-            if (! $this->isName($node->var, 'this')) {
+            if (! $this->isLocalPropertyFetch($node)) {
                 return null;
             }
 
@@ -172,5 +171,18 @@ PHP
             // replace with constant fetch
             return new ClassConstFetch(new Name('self'), $constantName);
         });
+    }
+
+    private function isLocalPropertyFetch(Node $node): bool
+    {
+        if ($node instanceof PropertyFetch) {
+            return $this->isName($node->var, 'this');
+        }
+
+        if ($node instanceof StaticPropertyFetch) {
+            return $this->isName($node->class, 'self');
+        }
+
+        return false;
     }
 }

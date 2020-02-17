@@ -27,6 +27,23 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ArgumentAdderRector extends AbstractRector
 {
     /**
+     * @var string[][][][][]
+     */
+    private const CONFIGURATION = [
+        '$positionWithDefaultValueByMethodNamesByClassTypes' => [
+            'SomeExampleClass' => [
+                'someMethod' => [
+                    0 => [
+                        'name' => 'someArgument',
+                        'default_value' => 'true',
+                        'type' => 'SomeType',
+                    ],
+                ],
+            ],
+        ],
+    ];
+
+    /**
      * @var mixed[]
      */
     private $positionWithDefaultValueByMethodNamesByClassTypes = [];
@@ -41,20 +58,6 @@ final class ArgumentAdderRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        $configuration = [
-            '$positionWithDefaultValueByMethodNamesByClassTypes' => [
-                'SomeExampleClass' => [
-                    'someMethod' => [
-                        0 => [
-                            'name' => 'someArgument',
-                            'default_value' => 'true',
-                            'type' => 'SomeType',
-                        ],
-                    ],
-                ],
-            ],
-        ];
-
         return new RectorDefinition(
             'This Rector adds new default arguments in calls of defined methods and class types.',
             [
@@ -69,7 +72,7 @@ $someObject = new SomeExampleClass;
 $someObject->someMethod(true);
 PHP
                     ,
-                    $configuration
+                    self::CONFIGURATION
                 ),
                 new ConfiguredCodeSample(
                     <<<'PHP'
@@ -90,7 +93,7 @@ class MyCustomClass extends SomeExampleClass
 }
 PHP
                     ,
-                    $configuration
+                    self::CONFIGURATION
                 ),
             ]
         );
