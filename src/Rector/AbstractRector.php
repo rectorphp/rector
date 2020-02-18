@@ -77,6 +77,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var StaticTypeMapper
      */
     protected $staticTypeMapper;
+
     /**
      * @var string[]
      */

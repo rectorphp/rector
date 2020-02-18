@@ -17,7 +17,6 @@ parameters:
 
     autoload_files:
         - ci/check_services_in_yaml_configs.php
-        - ci/check_services_in_yaml_configs.php
 
     paths:
         - ci

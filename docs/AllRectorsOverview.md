@@ -7741,6 +7741,9 @@ Change variable with read only status with default value to constant
 ```diff
  class SomeClass
  {
++    /**
++     * @var string[]
++     */
 +    private const REPLACEMENTS = [
 +        'PHPUnit\Framework\TestCase\Notice' => 'expectNotice',
 +        'PHPUnit\Framework\TestCase\Deprecated' => 'expectDeprecation',
