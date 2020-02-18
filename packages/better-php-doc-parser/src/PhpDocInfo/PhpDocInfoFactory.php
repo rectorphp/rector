@@ -9,6 +9,7 @@ use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNodeFactoryInterface;
@@ -45,24 +46,33 @@ final class PhpDocInfoFactory
      */
     private $typeComparator;
 
+    /**
+     * @var AttributeAwareNodeFactory
+     */
+    private $attributeAwareNodeFactory;
+
     public function __construct(
         PhpDocParser $phpDocParser,
         Lexer $lexer,
         CurrentNodeProvider $currentNodeProvider,
         StaticTypeMapper $staticTypeMapper,
-        TypeComparator $typeComparator
+        TypeComparator $typeComparator,
+        AttributeAwareNodeFactory $attributeAwareNodeFactory
     ) {
         $this->phpDocParser = $phpDocParser;
         $this->lexer = $lexer;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->typeComparator = $typeComparator;
+        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
     }
 
     public function createFromString(Node $node, string $content): PhpDocInfo
     {
         $tokens = $this->lexer->tokenize($content);
         $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
+
+        $phpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode);
 
         $phpDocInfo = new PhpDocInfo(
             $phpDocNode,
@@ -98,6 +108,8 @@ final class PhpDocInfoFactory
             $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
             $this->setPositionOfLastToken($phpDocNode);
         }
+
+        $phpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode);
 
         $phpDocInfo = new PhpDocInfo(
             $phpDocNode,

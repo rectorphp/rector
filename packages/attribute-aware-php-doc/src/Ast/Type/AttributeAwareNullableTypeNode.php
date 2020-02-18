@@ -14,6 +14,6 @@ final class AttributeAwareNullableTypeNode extends NullableTypeNode implements A
 
     public function __toString(): string
     {
-        return $this->type . '|null';
+        return '?' . $this->type;
     }
 }
