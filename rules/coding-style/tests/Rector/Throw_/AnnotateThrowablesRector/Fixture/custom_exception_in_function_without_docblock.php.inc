@@ -2,9 +2,9 @@
 
 namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixture;
 
-function throwCustomExceptionInFunctionWithoutDockblock()
+function throwCustomExceptionInFunctionWithoutDocblock()
 {
-    throw new \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheException();
+    throw new \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheException();
 }
 
 ?>
@@ -14,11 +14,11 @@ function throwCustomExceptionInFunctionWithoutDockblock()
 namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixture;
 
 /**
- * @throws \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheException
+ * @throws \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheException
  */
-function throwCustomExceptionInFunctionWithoutDockblock()
+function throwCustomExceptionInFunctionWithoutDocblock()
 {
-    throw new \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\TheException();
+    throw new \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheException();
 }
 
 ?>
