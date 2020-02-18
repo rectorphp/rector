@@ -1,22 +1,58 @@
 <?php
 
-namespace Rector\Zend2Rocket\Tests\Rector\ClassMethod\RenderZendViewRector\Fixture;
+class someController {
+    public function TestFunction()
+    {
+        // do something
+        $this->setNoRender();
+        // do something
+    }
 
-class SomeController {
+    public function TestAction()
+    {
+        // do something
+        $this->setNoRender();
+        // do something
+    }
+
+    public function getArticleInfoFunction()
+    {
+        // do something
+    }
+
     public function getArticleInfoAction()
     {
+        // do something
     }
 }
 
 ?>
------
+    -----
 <?php
 
-namespace Rector\Zend2Rocket\Tests\Rector\ClassMethod\RenderZendViewRector\Fixture;
+class someController {
+    public function TestFunction()
+    {
+        // do something
+        $this->setNoRender();
+        // do something
+    }
 
-class SomeController {
+    public function TestAction()
+    {
+        // do something
+        $this->setNoRender();
+        // do something
+    }
+
+    public function getArticleInfoFunction()
+    {
+        // do something
+    }
+
     public function getArticleInfoAction()
     {
+        // do something
         return $this->currentZendViewResult();
     }
 }
