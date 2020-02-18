@@ -84,6 +84,10 @@ PHP
 
         $nestedTernary = $ternary->else;
 
+        if (! $nestedTernary->cond instanceof BinaryOp) {
+            return true;
+        }
+
         // $a X $b ? . : ($a X $b ? . : .)
         if (! $this->areNodesEqual($ternary->cond->left, $nestedTernary->cond->left)) {
             return true;

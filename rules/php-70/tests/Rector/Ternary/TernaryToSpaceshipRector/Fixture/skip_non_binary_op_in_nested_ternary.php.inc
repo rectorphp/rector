@@ -1,6 +1,6 @@
 <?php
 
-function foo($foo, $baz)
+function foo($foo, $bar)
 {
-    return $foo == 'bar' ? 'it is bar' : (isset($baz) ? 'baz' : 'bizz');
+    return $foo == 'foo' ? 'it is foo' : (isset($bar) ? 'bar' : 'baz');
 }
