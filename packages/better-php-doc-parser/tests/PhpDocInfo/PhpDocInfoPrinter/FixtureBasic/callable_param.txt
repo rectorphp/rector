@@ -1,0 +1,1 @@
+/** @param callable(array<mixed>):mixed $hitCallback */

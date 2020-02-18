@@ -1,0 +1,1 @@
+/** @param callable(TValue, TKey):(Map<TKey, TMappedValue>|TMappedValue) $callback */
