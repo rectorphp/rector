@@ -31,7 +31,7 @@ final class VersionCompareFuncCallToConstantRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $operatorToComparison = [
+    private const OPERATOR_TO_COMPARISON = [
         '=' => Identical::class,
         '==' => Identical::class,
         'eq' => Identical::class,
@@ -107,9 +107,9 @@ EOS
 
         /** @var String_ $operator */
         $operator = $node->args[2]->value;
-        $comparison = $this->operatorToComparison[$operator->value];
+        $comparisonClass = self::OPERATOR_TO_COMPARISON[$operator->value];
 
-        return new $comparison($left, $right);
+        return new $comparisonClass($left, $right);
     }
 
     private function isPhpVersionConstant(Expr $expr): bool

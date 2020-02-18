@@ -22,7 +22,7 @@ final class SimpleArrayCallableToStringRector extends AbstractRector
     /**
      * @var int[]
      */
-    private $functionsWithCallableArgumentPosition = [
+    private const FUNCTIONS_WITH_CALLABLE_ARGUMENT_POSITION = [
         'array_filter' => 1,
         'array_map' => 0,
         'array_walk' => 1,
@@ -61,7 +61,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->functionsWithCallableArgumentPosition as $function => $callablePosition) {
+        foreach (self::FUNCTIONS_WITH_CALLABLE_ARGUMENT_POSITION as $function => $callablePosition) {
             if (! $this->isName($node, $function)) {
                 continue;
             }

@@ -15,6 +15,9 @@ parameters:
         - 'packages'
         - 'tests'
 
+    autoload_paths:
+        - 'ci/check_services_in_yaml_configs.php'
+
     exclude_paths:
         - '/Fixture/'
         - '/Source/'

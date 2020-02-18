@@ -20,7 +20,7 @@ final class Redirect301ToPermanentRedirectRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $routeTypes = ['Illuminate\Support\Facades\Route', 'Illuminate\Routing\Route'];
+    private const ROUTE_TYPES = ['Illuminate\Support\Facades\Route', 'Illuminate\Routing\Route'];
 
     public function getDefinition(): RectorDefinition
     {
@@ -62,7 +62,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isObjectTypes($node, $this->routeTypes)) {
+        if (! $this->isObjectTypes($node, self::ROUTE_TYPES)) {
             return null;
         }
 

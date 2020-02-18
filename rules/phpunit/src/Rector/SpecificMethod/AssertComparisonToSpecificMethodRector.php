@@ -34,7 +34,7 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
     /**
      * @var string[][]
      */
-    private $defaultOldToNewMethods = [
+    private const DEFAULT_OLD_TO_NEW_METHODS = [
         Identical::class => ['assertSame', 'assertNotSame'],
         NotIdentical::class => ['assertNotSame', 'assertSame'],
         Equal::class => ['assertEquals', 'assertNotEquals'],
@@ -127,11 +127,11 @@ final class AssertComparisonToSpecificMethodRector extends AbstractPHPUnitRector
     {
         $binaryOpClass = get_class($binaryOp);
 
-        if (! isset($this->defaultOldToNewMethods[$binaryOpClass])) {
+        if (! isset(self::DEFAULT_OLD_TO_NEW_METHODS[$binaryOpClass])) {
             return null;
         }
 
-        [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$binaryOpClass];
+        [$trueMethodName, $falseMethodName] = self::DEFAULT_OLD_TO_NEW_METHODS[$binaryOpClass];
         $this->identifierManipulator->renameNodeWithMap($node, [
             'assertTrue' => $trueMethodName,
             'assertFalse' => $falseMethodName,

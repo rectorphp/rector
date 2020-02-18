@@ -19,7 +19,7 @@ final class CallUserMethodRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $oldToNewFunctions = [
+    private const OLD_TO_NEW_FUNCTIONS = [
         'call_user_method' => 'call_user_func',
         'call_user_method_array' => 'call_user_func_array',
     ];
@@ -48,11 +48,11 @@ final class CallUserMethodRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isNames($node, array_keys($this->oldToNewFunctions))) {
+        if (! $this->isNames($node, array_keys(self::OLD_TO_NEW_FUNCTIONS))) {
             return null;
         }
 
-        $newName = $this->oldToNewFunctions[$this->getName($node)];
+        $newName = self::OLD_TO_NEW_FUNCTIONS[$this->getName($node)];
         $node->name = new Name($newName);
 
         $argNodes = $node->args;

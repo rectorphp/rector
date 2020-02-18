@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\SOLID\Rector\Property;
 
 use PhpParser\Node;
-use PhpParser\Node\Const_ as ConstConst;
+use PhpParser\Node\Const_;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -131,7 +131,7 @@ PHP
 
         /** @var Expr $defaultValue */
         $defaultValue = $propertyProperty->default;
-        $constant = new ConstConst($constantName, $defaultValue);
+        $constant = new Const_($constantName, $defaultValue);
 
         $classConst = new ClassConst([$constant]);
         $classConst->flags = $property->flags & ~ Class_::MODIFIER_STATIC;

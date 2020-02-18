@@ -20,18 +20,18 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string
-     */
-    private $constantName;
-
-    /**
      * @var string[][]
      */
-    private $constValueToNewMethodNames = [
+    private const CONST_VALUE_TO_NEW_METHOD_NAMES = [
         'null' => ['assertNull', 'assertNotNull'],
         'true' => ['assertTrue', 'assertNotTrue'],
         'false' => ['assertFalse', 'assertNotFalse'],
     ];
+
+    /**
+     * @var string
+     */
+    private $constantName;
 
     /**
      * @var IdentifierManipulator
@@ -77,7 +77,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
         /** @var Identifier $constatName */
         $constatName = $firstArgumentValue->name;
         $this->constantName = $constatName->toLowerString();
-        if (! isset($this->constValueToNewMethodNames[$this->constantName])) {
+        if (! isset(self::CONST_VALUE_TO_NEW_METHOD_NAMES[$this->constantName])) {
             return null;
         }
         $this->renameMethod($node);
@@ -91,7 +91,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractPHPUnitRect
      */
     private function renameMethod(Node $node): void
     {
-        [$sameMethodName, $notSameMethodName] = $this->constValueToNewMethodNames[$this->constantName];
+        [$sameMethodName, $notSameMethodName] = self::CONST_VALUE_TO_NEW_METHOD_NAMES[$this->constantName];
 
         $this->identifierManipulator->renameNodeWithMap($node, [
             'assertSame' => $sameMethodName,

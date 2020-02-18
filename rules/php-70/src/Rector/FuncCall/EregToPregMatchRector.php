@@ -33,7 +33,7 @@ final class EregToPregMatchRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $oldNamesToNewOnes = [
+    private const OLD_NAMES_TO_NEW_ONES = [
         'ereg' => 'preg_match',
         'eregi' => 'preg_match',
         'ereg_replace' => 'preg_replace',
@@ -78,7 +78,7 @@ final class EregToPregMatchRector extends AbstractRector
             return null;
         }
 
-        if (! isset($this->oldNamesToNewOnes[$functionName])) {
+        if (! isset(self::OLD_NAMES_TO_NEW_ONES[$functionName])) {
             return null;
         }
 
@@ -91,7 +91,7 @@ final class EregToPregMatchRector extends AbstractRector
 
         $this->processSplitLimitArgument($node, $functionName);
 
-        $node->name = new Name($this->oldNamesToNewOnes[$functionName]);
+        $node->name = new Name(self::OLD_NAMES_TO_NEW_ONES[$functionName]);
 
         // ereg|eregi 3rd argument return value fix
         if (in_array($functionName, ['ereg', 'eregi'], true) && isset($node->args[2])) {

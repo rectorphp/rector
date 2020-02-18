@@ -32,7 +32,7 @@ final class MysqlAssignToMysqliRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $fieldToFieldDirect = [
+    private const FIELD_TO_FIELD_DIRECT = [
         'mysql_field_len' => 'length',
         'mysql_field_name' => 'name',
         'mysql_field_table' => 'table',
@@ -167,7 +167,7 @@ PHP
 
     private function processFieldToFieldDirect(Assign $assign, FuncCall $funcCall): ?Assign
     {
-        foreach ($this->fieldToFieldDirect as $funcName => $property) {
+        foreach (self::FIELD_TO_FIELD_DIRECT as $funcName => $property) {
             if ($this->isName($funcCall, $funcName)) {
                 $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
                 if ($parentNode instanceof PropertyFetch || $parentNode instanceof StaticPropertyFetch) {

@@ -7,6 +7,7 @@ namespace Rector\SOLID\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -62,6 +63,9 @@ PHP
                 <<<'PHP'
 class SomeClass
 {
+    /**
+     * @var string[]
+     */
     private const REPLACEMENTS = [
         'PHPUnit\Framework\TestCase\Notice' => 'expectNotice',
         'PHPUnit\Framework\TestCase\Deprecated' => 'expectDeprecation',
@@ -84,39 +88,29 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
 
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof Class_) {
-            return null;
-        }
+        $readOnlyVariableAssigns = $this->collectReadOnlyVariableAssigns($node);
+        $readOnlyVariableAssigns = $this->filterOutUniqueNames($readOnlyVariableAssigns);
 
-        $readOnlyVariableAssignScalarVariables = $this->classMethodAssignManipulator->collectReadyOnlyAssignScalarVariables(
-            $node
-        );
-
-        foreach ($readOnlyVariableAssignScalarVariables as $readOnlyVariableAssign) {
-            $this->removeNode($readOnlyVariableAssign);
-
-            /** @var Variable $variable */
-            $variable = $readOnlyVariableAssign->var;
-            $classConst = $this->createClassConst($variable, $readOnlyVariableAssign->expr);
-
-            // replace $variable usage in the code with constant
-            $this->addConstantToClass($class, $classConst);
-
-            $variableName = $this->getName($variable);
-            if ($variableName === null) {
+        foreach ($readOnlyVariableAssigns as $readOnlyVariable) {
+            $methodName = $readOnlyVariable->getAttribute(AttributeKey::METHOD_NAME);
+            if (! is_string($methodName)) {
                 throw new ShouldNotHappenException();
             }
 
-            $this->replaceVariableWithClassConstFetch($node, $variableName, $classConst);
+            $classMethod = $node->getMethod($methodName);
+            if ($classMethod === null) {
+                throw new ShouldNotHappenException();
+            }
+
+            $this->refactorClassMethod($classMethod, $node, $readOnlyVariableAssigns);
         }
 
         return $node;
@@ -194,5 +188,73 @@ PHP
         }
 
         $phpDocInfo->changeVarType($constStaticType);
+    }
+
+    /**
+     * @return Assign[]
+     */
+    private function collectReadOnlyVariableAssigns(Class_ $class): array
+    {
+        $readOnlyVariables = [];
+
+        foreach ($class->getMethods() as $classMethod) {
+            $readOnlyVariableAssignScalarVariables = $this->classMethodAssignManipulator->collectReadyOnlyAssignScalarVariables(
+                $classMethod
+            );
+
+            $readOnlyVariables = array_merge($readOnlyVariables, $readOnlyVariableAssignScalarVariables);
+        }
+
+        return $readOnlyVariables;
+    }
+
+    /**
+     * @param Assign[] $readOnlyVariableAssigns
+     */
+    private function refactorClassMethod(ClassMethod $classMethod, Class_ $class, array $readOnlyVariableAssigns): void
+    {
+        foreach ($readOnlyVariableAssigns as $readOnlyVariableAssign) {
+            $this->removeNode($readOnlyVariableAssign);
+
+            /** @var Variable $variable */
+            $variable = $readOnlyVariableAssign->var;
+            $classConst = $this->createClassConst($variable, $readOnlyVariableAssign->expr);
+
+            // replace $variable usage in the code with constant
+            $this->addConstantToClass($class, $classConst);
+
+            $variableName = $this->getName($variable);
+            if ($variableName === null) {
+                throw new ShouldNotHappenException();
+            }
+
+            $this->replaceVariableWithClassConstFetch($classMethod, $variableName, $classConst);
+        }
+    }
+
+    /**
+     * @param Assign[] $assigns
+     * @return Assign[]
+     */
+    private function filterOutUniqueNames(array $assigns): array
+    {
+        $assignsByName = [];
+        foreach ($assigns as $assign) {
+            /** @var string $variableName */
+            $variableName = $this->getName($assign->var);
+
+            $assignsByName[$variableName][] = $assign;
+        }
+
+        $assignsWithUniqueName = [];
+        foreach ($assignsByName as $assigns) {
+            if (count($assigns) > 1) {
+                continue;
+            }
+
+            $assignsWithUniqueName = array_merge($assignsWithUniqueName, $assigns);
+        }
+
+        return $assignsWithUniqueName;
     }
 }

@@ -34,7 +34,7 @@ final class AssertManipulator
      * @see https://github.com/sebastianbergmann/phpunit/blob/master/src/Framework/Assert.php
      * @var string[]
      */
-    private $assertMethodsRemap = [
+    private const ASSERT_METHODS_REMAP = [
         'same' => 'assertSame',
         'notSame' => 'assertNotSame',
         'equal' => 'assertEqual',
@@ -47,6 +47,23 @@ final class AssertManipulator
         'match' => 'assertStringMatchesFormat',
         'matchFile' => 'assertStringMatchesFormatFile',
         'nan' => 'assertIsNumeric',
+    ];
+
+    /**
+     * @var string[]
+     */
+    private const TYPE_TO_METHOD = [
+        'list' => 'assertIsArray',
+        'array' => 'assertIsArray',
+        'bool' => 'assertIsBool',
+        'callable' => 'assertIsCallable',
+        'float' => 'assertIsFloat',
+        'int' => 'assertIsInt',
+        'integer' => 'assertIsInt',
+        'object' => 'assertIsObject',
+        'resource' => 'assertIsResource',
+        'string' => 'assertIsString',
+        'scalar' => 'assertIsScalar',
     ];
 
     /**
@@ -183,22 +200,8 @@ final class AssertManipulator
     {
         $value = $this->valueResolver->getValue($staticCall->args[0]->value);
 
-        $typeToMethod = [
-            'list' => 'assertIsArray',
-            'array' => 'assertIsArray',
-            'bool' => 'assertIsBool',
-            'callable' => 'assertIsCallable',
-            'float' => 'assertIsFloat',
-            'int' => 'assertIsInt',
-            'integer' => 'assertIsInt',
-            'object' => 'assertIsObject',
-            'resource' => 'assertIsResource',
-            'string' => 'assertIsString',
-            'scalar' => 'assertIsScalar',
-        ];
-
-        if (isset($typeToMethod[$value])) {
-            $staticCall->name = new Identifier($typeToMethod[$value]);
+        if (isset(self::TYPE_TO_METHOD[$value])) {
+            $staticCall->name = new Identifier(self::TYPE_TO_METHOD[$value]);
             unset($staticCall->args[0]);
             $staticCall->args = array_values($staticCall->args);
         } elseif ($value === 'null') {
@@ -292,7 +295,7 @@ final class AssertManipulator
 
     private function renameAssertMethod(StaticCall $staticCall): void
     {
-        foreach ($this->assertMethodsRemap as $oldMethod => $newMethod) {
+        foreach (self::ASSERT_METHODS_REMAP as $oldMethod => $newMethod) {
             if (! $this->nodeNameResolver->isName($staticCall, $oldMethod)) {
                 continue;
             }

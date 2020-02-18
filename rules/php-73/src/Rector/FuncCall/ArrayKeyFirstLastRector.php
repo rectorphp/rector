@@ -34,7 +34,7 @@ final class ArrayKeyFirstLastRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $previousToNewFunctions = [
+    private const PREVIOUS_TO_NEW_FUNCTIONS = [
         'reset' => self::ARRAY_KEY_FIRST,
         'end' => self::ARRAY_KEY_LAST,
     ];
@@ -112,7 +112,7 @@ PHP
             return null;
         }
 
-        $newName = $this->previousToNewFunctions[$this->getName($node)];
+        $newName = self::PREVIOUS_TO_NEW_FUNCTIONS[$this->getName($node)];
         $keyFuncCall->name = new Name($newName);
 
         $this->removeNode($node);

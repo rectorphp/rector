@@ -18,6 +18,16 @@ use Rector\Core\RectorDefinition\RectorDefinition;
  */
 final class ExplicitPhpErrorApiRector extends AbstractPHPUnitRector
 {
+    /**
+     * @var string[]
+     */
+    private const REPLACEMENTS = [
+        'PHPUnit\Framework\TestCase\Notice' => 'expectNotice',
+        'PHPUnit\Framework\TestCase\Deprecated' => 'expectDeprecation',
+        'PHPUnit\Framework\TestCase\Error' => 'expectError',
+        'PHPUnit\Framework\TestCase\Warning' => 'expectWarning',
+    ];
+
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -71,14 +81,7 @@ PHP
             return null;
         }
 
-        $replacements = [
-            'PHPUnit\Framework\TestCase\Notice' => 'expectNotice',
-            'PHPUnit\Framework\TestCase\Deprecated' => 'expectDeprecation',
-            'PHPUnit\Framework\TestCase\Error' => 'expectError',
-            'PHPUnit\Framework\TestCase\Warning' => 'expectWarning',
-        ];
-
-        foreach ($replacements as $class => $method) {
+        foreach (self::REPLACEMENTS as $class => $method) {
             $this->replaceExceptionWith($node, $class, $method);
         }
 

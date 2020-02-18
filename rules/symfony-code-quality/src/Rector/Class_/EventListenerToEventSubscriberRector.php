@@ -50,14 +50,9 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     private const CONSOLE_EVENTS_CLASS = 'Symfony\Component\Console\ConsoleEvents';
 
     /**
-     * @var bool
-     */
-    private $areListenerClassesLoaded = false;
-
-    /**
      * @var string[][]
      */
-    private $eventNamesToClassConstants = [
+    private const EVENT_NAMES_TO_CLASS_CONSTANTS = [
         // kernel events
         'kernel.request' => [self::KERNEL_EVENTS_CLASS, 'REQUEST'],
         'kernel.exception' => [self::KERNEL_EVENTS_CLASS, 'EXCEPTION'],
@@ -72,6 +67,11 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
         'console.terminate' => [self::CONSOLE_EVENTS_CLASS, 'TERMINATE'],
         'console.error' => [self::CONSOLE_EVENTS_CLASS, 'ERROR'],
     ];
+
+    /**
+     * @var bool
+     */
+    private $areListenerClassesLoaded = false;
 
     /**
      * @var ServiceDefinition[][][]
@@ -283,8 +283,8 @@ PHP
         }
 
         // is string a that could be caught in constant, e.g. KernelEvents?
-        if (isset($this->eventNamesToClassConstants[$eventName])) {
-            [$class, $constant] = $this->eventNamesToClassConstants[$eventName];
+        if (isset(self::EVENT_NAMES_TO_CLASS_CONSTANTS[$eventName])) {
+            [$class, $constant] = self::EVENT_NAMES_TO_CLASS_CONSTANTS[$eventName];
 
             return $this->createClassConstant($class, $constant);
         }

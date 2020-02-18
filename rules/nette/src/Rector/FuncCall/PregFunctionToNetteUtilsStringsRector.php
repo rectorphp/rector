@@ -34,7 +34,7 @@ final class PregFunctionToNetteUtilsStringsRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $functionNameToMethodName = [
+    private const FUNCTION_NAME_TO_METHOD_NAME = [
         'preg_match' => 'match',
         'preg_match_all' => 'matchAll',
         'preg_split' => 'split',
@@ -119,11 +119,11 @@ PHP
      */
     private function refactorFuncCall(FuncCall $funcCall): ?Expr
     {
-        if (! $this->isNames($funcCall, array_keys($this->functionNameToMethodName))) {
+        if (! $this->isNames($funcCall, array_keys(self::FUNCTION_NAME_TO_METHOD_NAME))) {
             return null;
         }
 
-        $methodName = $this->functionNameToMethodName[$this->getName($funcCall)];
+        $methodName = self::FUNCTION_NAME_TO_METHOD_NAME[$this->getName($funcCall)];
         $matchStaticCall = $this->createMatchStaticCall($funcCall, $methodName);
 
         // skip assigns, might be used with different return value

@@ -20,7 +20,7 @@ final class DelegateExceptionArgumentsRector extends AbstractPHPUnitRector
     /**
      * @var string[]
      */
-    private $oldToNewMethod = [
+    private const OLD_TO_NEW_METHOD = [
         'setExpectedException' => 'expectExceptionMessage',
         'setExpectedExceptionRegExp' => 'expectExceptionMessageRegExp',
     ];
@@ -55,7 +55,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, array_keys($this->oldToNewMethod))) {
+        if (! $this->isPHPUnitMethodNames($node, array_keys(self::OLD_TO_NEW_METHOD))) {
             return null;
         }
 
@@ -64,7 +64,7 @@ PHP
             $identifierNode = $node->name;
             $oldMethodName = $identifierNode->name;
 
-            $call = $this->createPHPUnitCallWithName($node, $this->oldToNewMethod[$oldMethodName]);
+            $call = $this->createPHPUnitCallWithName($node, self::OLD_TO_NEW_METHOD[$oldMethodName]);
             $call->args[] = $node->args[1];
             $this->addNodeAfterNode($call, $node);
 

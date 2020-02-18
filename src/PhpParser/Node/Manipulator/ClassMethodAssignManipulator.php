@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\ClosureUse;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ClassMethodAssignManipulator
 {
@@ -56,7 +60,18 @@ final class ClassMethodAssignManipulator
             $classMethod
         );
 
+        $readOnlyVariableAssigns = $this->filterOutReferencedVariables($readOnlyVariableAssigns, $classMethod);
+
         return $this->variableManipulator->filterOutReadOnlyVariables($readOnlyVariableAssigns, $classMethod);
+    }
+
+    public function isExplicitlyReferenced(Node $node): bool
+    {
+        if ($node instanceof Arg || $node instanceof ClosureUse || $node instanceof Param) {
+            return $node->byRef;
+        }
+
+        return false;
     }
 
     /**
@@ -91,6 +106,55 @@ final class ClassMethodAssignManipulator
 
         return array_filter($variableAssigns, function (Assign $assign) use ($arrayDestructionCreatedVariables) {
             return ! $this->nodeNameResolver->isNames($assign->var, $arrayDestructionCreatedVariables);
+        });
+    }
+
+    /**
+     * @param Assign[] $variableAssigns
+     * @return Assign[]
+     */
+    private function filterOutReferencedVariables(array $variableAssigns, ClassMethod $classMethod): array
+    {
+        $referencedVariables = [];
+
+        $this->callableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
+            &$referencedVariables
+        ) {
+            if (! $node instanceof Variable) {
+                return null;
+            }
+
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+            if ($parentNode !== null && $this->isExplicitlyReferenced($parentNode)) {
+                /** @var string $variableName */
+                $variableName = $this->nodeNameResolver->getName($node);
+                $referencedVariables[] = $variableName;
+                return null;
+            }
+
+            if ($parentNode instanceof Arg) {
+                $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+            }
+
+            // @todo improve, possibly extract to own services
+            if (! $parentNode instanceof FuncCall) {
+                return null;
+            }
+
+            if (! $this->nodeNameResolver->isNames($parentNode, ['array_shift', '*sort'])) {
+                return null;
+            }
+
+            if ($parentNode->args[0]->value === $node) {
+                /** @var string $variableName */
+                $variableName = $this->nodeNameResolver->getName($node);
+                $referencedVariables[] = $variableName;
+            }
+        });
+
+        return array_filter($variableAssigns, function (Assign $assign) use ($referencedVariables) {
+            return ! $this->nodeNameResolver->isNames($assign->var, $referencedVariables);
         });
     }
 }

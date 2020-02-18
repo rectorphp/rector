@@ -246,3 +246,6 @@ parameters:
         - '#Method Rector\\FileSystemRector\\Rector\\AbstractFileSystemRector\:\:wrapToArg\(\) should return array<PhpParser\\Node\\Arg\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Expr\>#'
         - '#Strict comparison using \=\=\= between mixed and null will always evaluate to false#'
         - '#Cannot call method (.*?)\(\) on Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\|null#'
+
+        - '#Right side of && is always true#'
+        - '#Parameter \#(.*?) (.*?) of class PhpParser\\Node\\Expr\\BinaryOp\\(.*?) constructor expects PhpParser\\Node\\Expr, PhpParser\\Node given#'

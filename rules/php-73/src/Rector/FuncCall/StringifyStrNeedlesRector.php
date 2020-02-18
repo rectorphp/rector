@@ -21,7 +21,7 @@ final class StringifyStrNeedlesRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $needleStringSensitiveFunctions = [
+    private const NEEDLE_STRING_SENSITIVE_FUNCTIONS = [
         'strpos',
         'strrpos',
         'stripos',
@@ -64,7 +64,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isNames($node, $this->needleStringSensitiveFunctions)) {
+        if (! $this->isNames($node, self::NEEDLE_STRING_SENSITIVE_FUNCTIONS)) {
             return null;
         }
 

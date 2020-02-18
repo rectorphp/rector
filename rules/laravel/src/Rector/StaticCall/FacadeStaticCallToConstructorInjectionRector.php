@@ -28,7 +28,7 @@ final class FacadeStaticCallToConstructorInjectionRector extends AbstractRector
      * @see https://laravel.com/docs/5.7/facades#facades-vs-dependency-injection
      * @var string[]
      */
-    private $facadeToServiceMap = [
+    private const FACADE_TO_SERVICE_MAP = [
         'Illuminate\Support\Facades\App' => 'Illuminate\Foundation\Application',
         'Illuminate\Support\Facades\Artisan' => 'Illuminate\Contracts\Console\Kernel',
         'Illuminate\Support\Facades\Auth' => 'Illuminate\Auth\AuthManager',
@@ -132,7 +132,7 @@ PHP
             return null;
         }
 
-        foreach ($this->facadeToServiceMap as $facadeClass => $serviceClass) {
+        foreach (self::FACADE_TO_SERVICE_MAP as $facadeClass => $serviceClass) {
             $facadeObjectType = new ObjectType($facadeClass);
             if (! $this->isObjectType($node->class, $facadeObjectType)) {
                 continue;

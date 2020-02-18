@@ -20,9 +20,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[][]|false[][]
+     * @var string[][]
      */
-    private $defaultOldToNewMethods = [
+    private const DEFAULT_OLD_TO_NEW_METHODS = [
         'count' => ['assertCount', 'assertNotCount'],
         'sizeof' => ['assertCount', 'assertNotCount'],
         'iterator_count' => ['assertCount', 'assertNotCount'],
@@ -93,7 +93,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
             return null;
         }
 
-        if (! isset($this->defaultOldToNewMethods[$name])) {
+        if (! isset(self::DEFAULT_OLD_TO_NEW_METHODS[$name])) {
             return null;
         }
 
@@ -111,7 +111,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
         /** @var string $oldMethodName */
         $oldMethodName = $this->getName($node);
 
-        [$trueMethodName, $falseMethodName] = $this->defaultOldToNewMethods[$funcName];
+        [$trueMethodName, $falseMethodName] = self::DEFAULT_OLD_TO_NEW_METHODS[$funcName];
 
         if (in_array($oldMethodName, ['assertSame', 'assertEquals'], true) && $trueMethodName) {
             $node->name = new Identifier($trueMethodName);

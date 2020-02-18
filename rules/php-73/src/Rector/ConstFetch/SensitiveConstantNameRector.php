@@ -21,7 +21,7 @@ final class SensitiveConstantNameRector extends AbstractRector
      * @see http://php.net/manual/en/reserved.constants.php
      * @var string[]
      */
-    private $phpReservedConstants = [
+    private const PHP_RESERVED_CONSTANTS = [
         'PHP_VERSION',
         'PHP_MAJOR_VERSION',
         'PHP_MINOR_VERSION',
@@ -123,7 +123,7 @@ PHP
         $uppercasedConstantName = strtoupper($constantName);
 
         // is system constant?
-        if (in_array($uppercasedConstantName, $this->phpReservedConstants, true)) {
+        if (in_array($uppercasedConstantName, self::PHP_RESERVED_CONSTANTS, true)) {
             return null;
         }
 

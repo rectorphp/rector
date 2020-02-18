@@ -29,7 +29,7 @@ final class ExceptionAnnotationRector extends AbstractPHPUnitRector
      *
      * @var string[]
      */
-    private $annotationToMethod = [
+    private const ANNOTATION_TO_METHOD = [
         'expectedExceptionMessageRegExp' => 'expectExceptionMessageRegExp',
         'expectedExceptionMessage' => 'expectExceptionMessage',
         'expectedExceptionCode' => 'expectExceptionCode',
@@ -86,7 +86,7 @@ PHP
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
-        foreach ($this->annotationToMethod as $annotation => $method) {
+        foreach (self::ANNOTATION_TO_METHOD as $annotation => $method) {
             if (! $phpDocInfo->hasByName($annotation)) {
                 continue;
             }

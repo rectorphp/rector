@@ -32,4 +32,4 @@ jobs:
                     # do not intall doctrine/orm phpstan, it conflicts with Retor's one
                     composer install -d orm --no-dev
 
-            -   run: bin/rector process orm/lib --config ci/config/rector-doctrine.yaml --autoload-file orm/vendor/autoload.php --debug
+            -   run: bin/rector process orm/lib --config ci/config/rector-doctrine.yaml --autoload-file orm/vendor/autoload.php

@@ -26,7 +26,7 @@ final class TestListenerToHooksRector extends AbstractRector
     /**
      * @var string[][]
      */
-    private $listenerMethodToHookInterfaces = [
+    private const LISTENER_METHOD_TO_HOOK_INTERFACES = [
         'addIncompleteTest' => ['PHPUnit\Runner\AfterIncompleteTestHook', 'executeAfterIncompleteTest'],
         'addRiskyTest' => ['PHPUnit\Runner\AfterRiskyTestHook', 'executeAfterRiskyTest'],
         'addSkippedTest' => ['PHPUnit\Runner\AfterSkippedTestHook', 'executeAfterSkippedTest'],
@@ -150,7 +150,7 @@ PHP
 
     private function processClassMethod(Class_ $class, ClassMethod $classMethod): void
     {
-        foreach ($this->listenerMethodToHookInterfaces as $methodName => $hookClassAndMethod) {
+        foreach (self::LISTENER_METHOD_TO_HOOK_INTERFACES as $methodName => $hookClassAndMethod) {
             /** @var string $methodName */
             if (! $this->isName($classMethod, $methodName)) {
                 continue;

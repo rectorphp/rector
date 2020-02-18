@@ -13,6 +13,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class FormatPerservingPrinterTest extends AbstractKernelTestCase
 {
     /**
+     * @var int
+     */
+    private const EXPECTED_FILEMOD = 0755;
+
+    /**
      * @var FormatPerservingPrinter
      */
     private $formatPerservingPrinter;
@@ -32,13 +37,13 @@ final class FormatPerservingPrinterTest extends AbstractKernelTestCase
     {
         mkdir(__DIR__ . '/Fixture');
         touch(__DIR__ . '/Fixture/file.php');
-        $expectedFilemod = 0755;
-        chmod(__DIR__ . '/Fixture/file.php', $expectedFilemod);
+
+        chmod(__DIR__ . '/Fixture/file.php', self::EXPECTED_FILEMOD);
 
         $fileInfo = new SmartFileInfo(__DIR__ . '/Fixture/file.php');
 
         $this->formatPerservingPrinter->printToFile($fileInfo, [], [], []);
 
-        $this->assertSame($expectedFilemod, fileperms(__DIR__ . '/Fixture/file.php') & 0777);
+        $this->assertSame(self::EXPECTED_FILEMOD, fileperms(__DIR__ . '/Fixture/file.php') & 0777);
     }
 }

@@ -54,6 +54,7 @@ final class FilesFinderTest extends AbstractKernelTestCase
         foreach ($foundFiles as $foundFile) {
             $foundFileNames[] = $foundFile->getFilename();
         }
+
         $expectedFoundFileNames = ['some_config.yml', 'other_config.yaml'];
 
         sort($foundFileNames);

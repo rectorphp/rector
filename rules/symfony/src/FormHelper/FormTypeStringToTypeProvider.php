@@ -11,7 +11,7 @@ final class FormTypeStringToTypeProvider
     /**
      * @var string[]
      */
-    private static $nameToTypeMap = [
+    private const NAME_TO_TYPE_MAP = [
         'form' => 'Symfony\Component\Form\Extension\Core\Type\FormType',
         'birthday' => 'Symfony\Component\Form\Extension\Core\Type\BirthdayType',
         'checkbox' => 'Symfony\Component\Form\Extension\Core\Type\CheckboxType',
@@ -51,10 +51,10 @@ final class FormTypeStringToTypeProvider
             $name = Strings::substring($name, strlen('form.type.'));
         }
 
-        if (! isset(self::$nameToTypeMap[$name])) {
+        if (! isset(self::NAME_TO_TYPE_MAP[$name])) {
             return null;
         }
 
-        return self::$nameToTypeMap[$name];
+        return self::NAME_TO_TYPE_MAP[$name];
     }
 }

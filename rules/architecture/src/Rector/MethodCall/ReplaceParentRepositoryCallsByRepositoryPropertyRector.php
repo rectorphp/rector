@@ -20,7 +20,7 @@ final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends Abstr
     /**
      * @var string[]
      */
-    private $entityRepositoryPublicMethods = [
+    private const ENTITY_REPOSITORY_PUBLIC_METHODS = [
         'createQueryBuilder',
         'createResultSetMappingBuilder',
         'clear',
@@ -92,7 +92,7 @@ PHP
             return null;
         }
 
-        if (! $this->isNames($node->name, $this->entityRepositoryPublicMethods)) {
+        if (! $this->isNames($node->name, self::ENTITY_REPOSITORY_PUBLIC_METHODS)) {
             return null;
         }
 

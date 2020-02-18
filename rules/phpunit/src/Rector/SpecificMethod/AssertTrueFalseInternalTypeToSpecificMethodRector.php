@@ -23,7 +23,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
     /**
      * @var string[]
      */
-    private $oldFunctionsToTypes = [
+    private const OLD_FUNCTIONS_TO_TYPES = [
         'is_array' => 'array',
         'is_bool' => 'bool',
         'is_callable' => 'callable',
@@ -43,7 +43,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
     /**
      * @var string[]
      */
-    private $renameMethodsMap = [
+    private const RENAME_METHODS_MAP = [
         'assertTrue' => 'assertInternalType',
         'assertFalse' => 'assertNotInternalType',
     ];
@@ -88,7 +88,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, array_keys($this->renameMethodsMap))) {
+        if (! $this->isPHPUnitMethodNames($node, array_keys(self::RENAME_METHODS_MAP))) {
             return null;
         }
 
@@ -96,10 +96,10 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         $firstArgumentValue = $node->args[0]->value;
 
         $functionName = $this->getName($firstArgumentValue);
-        if (! isset($this->oldFunctionsToTypes[$functionName])) {
+        if (! isset(self::OLD_FUNCTIONS_TO_TYPES[$functionName])) {
             return null;
         }
-        $this->identifierManipulator->renameNodeWithMap($node, $this->renameMethodsMap);
+        $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
         $this->moveFunctionArgumentsUp($node);
 
         return $node;
@@ -120,7 +120,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
         unset($oldArguments[0]);
 
         $node->args = array_merge([
-            new Arg(new String_($this->oldFunctionsToTypes[$isFunctionName])),
+            new Arg(new String_(self::OLD_FUNCTIONS_TO_TYPES[$isFunctionName])),
             $argument,
         ], $oldArguments);
     }

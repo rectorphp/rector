@@ -21,7 +21,7 @@ final class OptionNameRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $oldToNewOption = [
+    private const OLD_TO_NEW_OPTION = [
         'precision' => 'scale',
         'virtual' => 'inherit_data',
     ];
@@ -88,6 +88,6 @@ PHP
     {
         $currentOptionName = $stringKeyNode->value;
 
-        $stringKeyNode->value = $this->oldToNewOption[$currentOptionName] ?? $stringKeyNode->value;
+        $stringKeyNode->value = self::OLD_TO_NEW_OPTION[$currentOptionName] ?? $stringKeyNode->value;
     }
 }
