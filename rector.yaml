@@ -23,3 +23,35 @@ parameters:
 
     # so Rector code is still PHP 7.2 compatible
     php_version_features: '7.2'
+    rector_recipe:
+        # run "bin/rector create" to create a new Rector + tests from this config
+        package: "Zend2Rocket"
+        name: "RenderZendView"
+        node_types:
+            # put main node first, it is used to create namespace
+            - "ClassMethod"
+        description: "call 'currentZendViewResult' in all Action-methods that do not call 'setNoRender'"
+        code_before: >
+            <?php
+
+            class SomeController
+            {
+                public function getArticleInfoAction()
+                {
+                }
+            }
+
+        code_after: >
+            <?php
+
+            class SomeController
+            {
+                public function getArticleInfoAction()
+                {
+                    return $this->currentZendViewResult();
+                }
+            }
+
+        source: # e.g. link to RFC or headline in upgrade guide, 1 or more in the list
+            - ""
+        set: "Zend2Rocket" # e.g. symfony30, target config to append this rector to

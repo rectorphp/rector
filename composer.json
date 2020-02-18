@@ -115,7 +115,8 @@
             "Rector\\DoctrineGedmoToKnplabs\\": "rules/doctrine-gedmo-to-knplabs/src",
             "Rector\\MinimalScope\\": "rules/minimal-scope/src",
             "Rector\\Polyfill\\": "packages/polyfill/src",
-            "Rector\\CakePHPToSymfony\\": "rules/cakephp-to-symfony/src"
+            "Rector\\CakePHPToSymfony\\": "rules/cakephp-to-symfony/src",
+            "Rector\\Zend2Rocket\\": "packages/Zend2Rocket/src"
         },
         "files": [
             "src/functions/rector_dump_function.php"
@@ -185,7 +186,8 @@
             "Rector\\DoctrineGedmoToKnplabs\\Tests\\": "rules/doctrine-gedmo-to-knplabs/tests",
             "Rector\\MinimalScope\\Tests\\": "rules/minimal-scope/tests",
             "Rector\\Polyfill\\Tests\\": "packages/polyfill/tests",
-            "Rector\\CakePHPToSymfony\\Tests\\": "rules/cakephp-to-symfony/tests"
+            "Rector\\CakePHPToSymfony\\Tests\\": "rules/cakephp-to-symfony/tests",
+            "Rector\\Zend2Rocket\\Tests\\": "packages/Zend2Rocket/tests"
         },
         "classmap": [
             "tests/Source",
