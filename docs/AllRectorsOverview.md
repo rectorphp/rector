@@ -1,4 +1,4 @@
-# All 452 Rectors Overview
+# All 453 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -27,6 +27,7 @@
 - [Nette](#nette)
 - [NetteTesterToPHPUnit](#nettetestertophpunit)
 - [NetteToSymfony](#nettetosymfony)
+- [Oxid](#oxid)
 - [PHPStan](#phpstan)
 - [PHPUnit](#phpunit)
 - [PHPUnitSymfony](#phpunitsymfony)
@@ -4553,6 +4554,21 @@ Adds %% to placeholder name of trans() method if missing
          );
      }
  }
+```
+
+<br>
+
+## Oxid
+
+### `OxidReplaceBackwardsCompatabilityClassRector`
+
+- class: `Rector\Oxid\Rector\FuncCall\OxidReplaceBackwardsCompatabilityClassRector`
+
+Replaces deprecated backwards compatability classes with namespaces ones in oxNew
+
+```diff
+-oxNew("oxcmp_basket");
++oxNew(\OxidEsales\Eshop\Application\Component\BasketComponent::class);
 ```
 
 <br>
