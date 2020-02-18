@@ -8,6 +8,7 @@ use PhpParser\Node;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
 
@@ -53,8 +54,28 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        // change the node
+        // identify if classmethod is an Actionmethod
+        if (! $this->controllerMethodAnalyzer->isAction($node)) {
+            return $node;
+        }
 
-        return $node;
+        // check if classmethod calls setNoRender
+        $subnodes = $node->getSubNodeNames();
+        if ( in_array('setNoRender', $subnodes)) {
+            return $node;
+        }
+
+        // serve Zendview
+        return $this->refactorZendViewRender($node);
+    }
+
+    private function refactorZendViewRender(Node $node)
+    {
+        // build AST of 'return $this->currentZendViewResult();'
+        $methodcall = $this->createMethodCall('this', 'currentZendViewResult', []);
+        $return = new Return_($methodcall);
+        $node->setAttribute(AttributeKey::PARENT_NODE, $return);
+
+        return $return;
     }
 }
