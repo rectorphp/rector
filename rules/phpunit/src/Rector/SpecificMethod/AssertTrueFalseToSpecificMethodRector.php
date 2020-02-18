@@ -21,9 +21,9 @@ use Rector\Core\RectorDefinition\RectorDefinition;
 final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
 {
     /**
-     * @var string[][]|false[][]
+     * @var string[][]|bool[][]
      */
-    private $oldToNewMethods = [
+    private const OLD_TO_NEW_METHODS = [
         'is_readable' => ['assertIsReadable', 'assertNotIsReadable'],
         'array_key_exists' => ['assertArrayHasKey', 'assertArrayNotHasKey'],
         'array_search' => ['assertContains', 'assertNotContains'],
@@ -73,7 +73,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         }
 
         $firstArgumentValue = $node->args[0]->value;
-        if (! $this->isNames($firstArgumentValue, array_keys($this->oldToNewMethods))) {
+        if (! $this->isNames($firstArgumentValue, array_keys(self::OLD_TO_NEW_METHODS))) {
             return null;
         }
 
@@ -94,7 +94,7 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         $identifierNode = $methodCall->name;
         $oldMethodName = $identifierNode->toString();
 
-        [$trueMethodName, $falseMethodName] = $this->oldToNewMethods[$funcName];
+        [$trueMethodName, $falseMethodName] = self::OLD_TO_NEW_METHODS[$funcName];
 
         if ($trueMethodName && in_array($oldMethodName, ['assertTrue', 'assertNotFalse'], true)) {
             $methodCall->name = new Identifier($trueMethodName);

@@ -349,13 +349,8 @@ PHP
         if ($this->isVoidDueToThrow($functionLike, $inferredReturnNode)) {
             return true;
         }
-
         // already overridden by previous populateChild() method run
-        if ($functionLike->returnType && $functionLike->returnType->getAttribute(self::DO_NOT_CHANGE)) {
-            return true;
-        }
-
-        return false;
+        return $functionLike->returnType && $functionLike->returnType->getAttribute(self::DO_NOT_CHANGE);
     }
 
     private function shouldSkipExistingReturnType(Node $node, Type $inferedType): bool
@@ -369,12 +364,7 @@ PHP
         if ($this->isCurrentObjectTypeSubType($currentType, $inferedType)) {
             return true;
         }
-
-        if ($this->isNullableTypeSubType($currentType, $inferedType)) {
-            return true;
-        }
-
-        return false;
+        return $this->isNullableTypeSubType($currentType, $inferedType);
     }
 
     /**
@@ -382,7 +372,7 @@ PHP
      */
     private function addReturnType(FunctionLike $functionLike, Node $inferredReturnNode): void
     {
-        if ($functionLike->returnType) {
+        if ($functionLike->returnType !== null) {
             $isSubtype = $this->phpParserTypeAnalyzer->isSubtypeOf($inferredReturnNode, $functionLike->returnType);
             if ($this->isAtLeastPhpVersion(PhpVersionFeature::COVARIANT_RETURN) && $isSubtype) {
                 $functionLike->returnType = $inferredReturnNode;

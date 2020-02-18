@@ -24,7 +24,7 @@ final class SpecificAssertInternalTypeRector extends AbstractPHPUnitRector
     /**
      * @var string[][]
      */
-    private $typeToMethod = [
+    private const TYPE_TO_METHOD = [
         'array' => ['assertIsArray', 'assertIsNotArray'],
         'bool' => ['assertIsBool', 'assertIsNotBool'],
         'float' => ['assertIsFloat', 'assertIsNotFloat'],
@@ -106,14 +106,14 @@ PHP
         }
 
         $type = $this->typeAnalyzer->normalizeType($typeNode->value);
-        if (! isset($this->typeToMethod[$type])) {
+        if (! isset(self::TYPE_TO_METHOD[$type])) {
             return null;
         }
 
         array_shift($node->args);
 
         $position = $this->isName($node->name, 'assertInternalType') ? 0 : 1;
-        $methodName = $this->typeToMethod[$type][$position];
+        $methodName = self::TYPE_TO_METHOD[$type][$position];
 
         $node->name = new Identifier($methodName);
 

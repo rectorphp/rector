@@ -24,7 +24,7 @@ final class RemoveUnusedParameterRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $magicMethods = [
+    private const MAGIC_METHODS = [
         '__call',
         '__callStatic',
         '__clone',
@@ -108,7 +108,7 @@ PHP
             return null;
         }
 
-        if ($this->isNames($node, $this->magicMethods)) {
+        if ($this->isNames($node, self::MAGIC_METHODS)) {
             return null;
         }
 

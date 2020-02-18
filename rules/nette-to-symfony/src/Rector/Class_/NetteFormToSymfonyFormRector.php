@@ -34,7 +34,7 @@ final class NetteFormToSymfonyFormRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $addMethodToFormType = [
+    private const ADD_METHOD_TO_FORM_TYPE = [
         'addText' => 'Symfony\Component\Form\Extension\Core\Type\TextType',
         'addPassword' => 'Symfony\Component\Form\Extension\Core\Type\PasswordType',
         'addTextArea' => 'Symfony\Component\Form\Extension\Core\Type\TextareaType',
@@ -132,7 +132,7 @@ PHP
             return null;
         }
 
-        foreach ($this->addMethodToFormType as $method => $classType) {
+        foreach (self::ADD_METHOD_TO_FORM_TYPE as $method => $classType) {
             if (! $this->isName($node->name, $method)) {
                 continue;
             }

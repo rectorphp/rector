@@ -22,7 +22,7 @@ final class SpecificAssertContainsRector extends AbstractPHPUnitRector
     /**
      * @var string[][]
      */
-    private $oldMethodsNamesToNewNames = [
+    private const OLD_METHODS_NAMES_TO_NEW_NAMES = [
         'string' => [
             'assertContains' => 'assertStringContainsString',
             'assertNotContains' => 'assertStringNotContainsString',
@@ -86,7 +86,7 @@ PHP
             return null;
         }
 
-        $node->name = new Identifier($this->oldMethodsNamesToNewNames['string'][$this->getName($node)]);
+        $node->name = new Identifier(self::OLD_METHODS_NAMES_TO_NEW_NAMES['string'][$this->getName($node)]);
 
         return $node;
     }

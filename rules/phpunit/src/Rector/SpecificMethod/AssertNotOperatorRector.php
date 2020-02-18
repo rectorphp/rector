@@ -22,7 +22,7 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
     /**
      * @var string[]
      */
-    private $renameMethodsMap = [
+    private const RENAME_METHODS_MAP = [
         'assertTrue' => 'assertFalse',
         'assertFalse' => 'assertTrue',
     ];
@@ -61,7 +61,7 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isPHPUnitMethodNames($node, array_keys($this->renameMethodsMap))) {
+        if (! $this->isPHPUnitMethodNames($node, array_keys(self::RENAME_METHODS_MAP))) {
             return null;
         }
 
@@ -70,7 +70,7 @@ final class AssertNotOperatorRector extends AbstractPHPUnitRector
             return null;
         }
 
-        $this->identifierManipulator->renameNodeWithMap($node, $this->renameMethodsMap);
+        $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
 
         $oldArguments = $node->args;
         /** @var BooleanNot $negation */

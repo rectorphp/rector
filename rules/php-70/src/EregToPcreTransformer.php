@@ -15,6 +15,24 @@ use Rector\Php70\Exception\InvalidEregException;
 final class EregToPcreTransformer
 {
     /**
+     * @var string[]
+     */
+    private const CCLSMAP = [
+        ':alnum:' => '[:alnum:]',
+        ':alpha:' => '[:alpha:]',
+        ':blank:' => '[:blank:]',
+        ':cntrl:' => '[:cntrl:]',
+        ':digit:' => '\d',
+        ':graph:' => '[:graph:]',
+        ':lower:' => '[:lower:]',
+        ':print:' => '[:print:]',
+        ':punct:' => '[:punct:]',
+        ':space:' => '\013\s', // should include VT
+        ':upper:' => '[:upper:]',
+        ':xdigit:' => '[:xdigit:]',
+    ];
+
+    /**
      * @var string
      */
     private $pcreDelimiter;
@@ -110,26 +128,12 @@ final class EregToPcreTransformer
                         $start = (int) $i + 1;
                         $length = (int) ($ii - ($i + 1));
                         $ccls = Strings::substring($s, $start, $length);
-                        $cclsmap = [
-                            ':alnum:' => '[:alnum:]',
-                            ':alpha:' => '[:alpha:]',
-                            ':blank:' => '[:blank:]',
-                            ':cntrl:' => '[:cntrl:]',
-                            ':digit:' => '\d',
-                            ':graph:' => '[:graph:]',
-                            ':lower:' => '[:lower:]',
-                            ':print:' => '[:print:]',
-                            ':punct:' => '[:punct:]',
-                            ':space:' => '\013\s', // should include VT
-                            ':upper:' => '[:upper:]',
-                            ':xdigit:' => '[:xdigit:]',
-                        ];
-                        if (! isset($cclsmap[$ccls])) {
+                        if (! isset(self::CCLSMAP[$ccls])) {
                             throw new InvalidEregException(
                                 'an invalid or unsupported character class [' . $ccls . ']'
                             );
                         }
-                        $cls .= $cclsmap[$ccls];
+                        $cls .= self::CCLSMAP[$ccls];
                         $i = $ii + 1;
                     } else {
                         $a = $s[$i++];

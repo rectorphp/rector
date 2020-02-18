@@ -22,7 +22,7 @@ final class UseSpecificWillMethodRector extends AbstractPHPUnitRector
     /**
      * @var string[]
      */
-    private $nestedMethodToRenameMap = [
+    private const NESTED_METHOD_TO_RENAME_MAP = [
         'returnArgument' => 'willReturnArgument',
         'returnCallback' => 'willReturnCallback',
         'returnSelf' => 'willReturnSelf',
@@ -133,7 +133,7 @@ PHP
 
         $nestedMethodCall = $node->args[0]->value;
 
-        foreach ($this->nestedMethodToRenameMap as $oldMethodName => $newParentMethodName) {
+        foreach (self::NESTED_METHOD_TO_RENAME_MAP as $oldMethodName => $newParentMethodName) {
             if (! $this->isName($nestedMethodCall->name, $oldMethodName)) {
                 continue;
             }

@@ -24,7 +24,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
     /**
      * @var string[]
      */
-    private $renameMethodsWithObjectMap = [
+    private const RENAME_METHODS_WITH_OBJECT_MAP = [
         'assertTrue' => 'assertObjectHasAttribute',
         'assertFalse' => 'assertObjectNotHasAttribute',
     ];
@@ -32,7 +32,7 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
     /**
      * @var string[]
      */
-    private $renameMethodsWithClassMap = [
+    private const RENAME_METHODS_WITH_CLASS_MAP = [
         'assertTrue' => 'assertClassHasAttribute',
         'assertFalse' => 'assertClassNotHasAttribute',
     ];
@@ -97,10 +97,10 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
 
         if ($firstArgument->value instanceof Variable) {
             $secondArg = new Variable($firstArgument->value->name);
-            $map = $this->renameMethodsWithObjectMap;
+            $map = self::RENAME_METHODS_WITH_OBJECT_MAP;
         } elseif ($firstArgument->value instanceof New_) {
             $secondArg = $this->getName($firstArgument->value->class);
-            $map = $this->renameMethodsWithClassMap;
+            $map = self::RENAME_METHODS_WITH_CLASS_MAP;
         } else {
             return null;
         }

@@ -8,6 +8,13 @@ use Nette\Utils\Strings;
 
 final class RegexPatternDetector
 {
+    /**
+     * @var string[]
+     *
+     * This prevents miss matching like "aMethoda"
+     */
+    private const POSSIBLE_DELIMITERS = ['#', '~', '/'];
+
     public function isRegexPattern(string $name): bool
     {
         if (Strings::length($name) <= 2) {
@@ -20,9 +27,6 @@ final class RegexPatternDetector
             return false;
         }
 
-        // this prevents miss matching like "aMethoda"
-        $possibleDelimiters = ['#', '~', '/'];
-
-        return in_array($firstChar, $possibleDelimiters, true);
+        return in_array($firstChar, self::POSSIBLE_DELIMITERS, true);
     }
 }

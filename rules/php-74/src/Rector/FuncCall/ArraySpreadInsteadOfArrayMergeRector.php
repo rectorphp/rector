@@ -111,7 +111,6 @@ PHP
             }
 
             $value = $this->resolveValue($value);
-
             $array->items[] = $this->createUnpackedArrayItem($value);
         }
 

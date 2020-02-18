@@ -22,7 +22,7 @@ final class RandomFunctionRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $oldToNewFunctionNames = [
+    private const OLD_TO_NEW_FUNCTION_NAMES = [
         'getrandmax' => 'mt_getrandmax',
         'srand' => 'mt_srand',
         'mt_rand' => 'random_int',
@@ -54,7 +54,7 @@ final class RandomFunctionRector extends AbstractRector
             return null;
         }
 
-        foreach ($this->oldToNewFunctionNames as $oldFunctionName => $newFunctionName) {
+        foreach (self::OLD_TO_NEW_FUNCTION_NAMES as $oldFunctionName => $newFunctionName) {
             if ($this->isName($node, $oldFunctionName)) {
                 $node->name = new Name($newFunctionName);
 

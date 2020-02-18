@@ -23,7 +23,7 @@ final class SimplifyRegexPatternRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $complexPatternToSimple = [
+    private const COMPLEX_PATTERN_TO_SIMPLE = [
         '[0-9]' => '\d',
         '[a-zA-Z0-9_]' => '\w',
         '[A-Za-z0-9_]' => '\w',
@@ -85,7 +85,7 @@ PHP
         $patterns = $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern($node);
 
         foreach ($patterns as $pattern) {
-            foreach ($this->complexPatternToSimple as $complexPattern => $simple) {
+            foreach (self::COMPLEX_PATTERN_TO_SIMPLE as $complexPattern => $simple) {
                 $pattern->value = Strings::replace(
                     $pattern->value,
                     '#' . preg_quote($complexPattern, '#') . '#',

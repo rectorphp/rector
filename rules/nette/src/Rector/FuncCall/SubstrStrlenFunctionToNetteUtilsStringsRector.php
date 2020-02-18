@@ -19,7 +19,7 @@ final class SubstrStrlenFunctionToNetteUtilsStringsRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $functionToStaticMethod = [
+    private const FUNCTION_TO_STATIC_METHOD = [
         'substr' => 'substring',
     ];
 
@@ -63,7 +63,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->functionToStaticMethod as $function => $staticMethod) {
+        foreach (self::FUNCTION_TO_STATIC_METHOD as $function => $staticMethod) {
             if (! $this->isName($node, $function)) {
                 continue;
             }

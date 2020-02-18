@@ -8,13 +8,29 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
+use PhpParser\Node\Expr\PostDec;
+use PhpParser\Node\Expr\PostInc;
+use PhpParser\Node\Expr\PreDec;
+use PhpParser\Node\Expr\PreInc;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class AssignManipulator
 {
+    /**
+     * @var string[]
+     */
+    private const MODIFYING_NODES = [
+        AssignOp::class,
+        PreDec::class,
+        PostDec::class,
+        PreInc::class,
+        PostInc::class,
+    ];
+
     /**
      * @var NodeNameResolver
      */
@@ -105,6 +121,10 @@ final class AssignManipulator
             return true;
         }
 
+        if ($parentNode !== null && $this->isValueModifyingNode($parentNode)) {
+            return true;
+        }
+
         // traverse up to array dim fetches
         if ($parentNode instanceof ArrayDimFetch) {
             $previousParentNode = $parentNode;
@@ -116,6 +136,19 @@ final class AssignManipulator
             if ($parentNode instanceof Assign) {
                 return $parentNode->var === $previousParentNode;
             }
+        }
+
+        return false;
+    }
+
+    private function isValueModifyingNode(Node $node): bool
+    {
+        foreach (self::MODIFYING_NODES as $modifyingNode) {
+            if (! is_a($node, $modifyingNode)) {
+                continue;
+            }
+
+            return true;
         }
 
         return false;

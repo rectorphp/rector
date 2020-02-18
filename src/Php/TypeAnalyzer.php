@@ -12,6 +12,11 @@ final class TypeAnalyzer
     /**
      * @var string[]
      */
+    private const EXTRA_TYPES = ['object'];
+
+    /**
+     * @var string[]
+     */
     private $phpSupportedTypes = [
         'string',
         'bool',
@@ -42,12 +47,11 @@ final class TypeAnalyzer
 
         foreach ($types as $singleType) {
             $singleType = strtolower($singleType);
-            $extraTypes = ['object'];
 
             // remove [] from arrays
             $singleType = Strings::replace($singleType, '#(\[\])+$#');
 
-            if (in_array($singleType, array_merge($this->phpSupportedTypes, $extraTypes), true)) {
+            if (in_array($singleType, array_merge($this->phpSupportedTypes, self::EXTRA_TYPES), true)) {
                 return true;
             }
         }

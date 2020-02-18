@@ -1,5 +1,6 @@
 services:
     Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector: null
+    Rector\SOLID\Rector\ClassMethod\ChangeReadOnlyVariableWithDefaultValueToConstantRector: null
 
 parameters:
     sets:
@@ -9,9 +10,13 @@ parameters:
         - 'nette-utils-code-quality'
 
     paths:
+        - 'ci'
         - 'src'
         - 'packages'
         - 'tests'
+
+    autoload_paths:
+        - 'ci/check_services_in_yaml_configs.php'
 
     exclude_paths:
         - '/Fixture/'

@@ -31,7 +31,7 @@ final class RecastingRemovalRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $castClassToNodeType = [
+    private const CAST_CLASS_TO_NODE_TYPE = [
         String_::class => StringType::class,
         Bool_::class => BooleanType::class,
         Array_::class => ArrayType::class,
@@ -77,7 +77,7 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $nodeClass = get_class($node);
-        if (! isset($this->castClassToNodeType[$nodeClass])) {
+        if (! isset(self::CAST_CLASS_TO_NODE_TYPE[$nodeClass])) {
             return null;
         }
 
@@ -86,7 +86,7 @@ PHP
             return null;
         }
 
-        $sameNodeType = $this->castClassToNodeType[$nodeClass];
+        $sameNodeType = self::CAST_CLASS_TO_NODE_TYPE[$nodeClass];
         if (! is_a($nodeType, $sameNodeType, true)) {
             return null;
         }

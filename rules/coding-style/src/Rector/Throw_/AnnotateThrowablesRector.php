@@ -125,13 +125,13 @@ PHP
         }
 
         if ($throw->expr instanceof StaticCall) {
-            return $this->identifyThrownThrowablesInStaticCall($throw);
+            return $this->identifyThrownThrowablesInStaticCall();
         }
 
         return [];
     }
 
-    private function identifyThrownThrowablesInStaticCall(Throw_ $node): array
+    private function identifyThrownThrowablesInStaticCall(): array
     {
         return [];
     }

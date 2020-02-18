@@ -14,6 +14,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -98,7 +99,7 @@ final class ClassManipulator
     }
 
     /**
-     * @param ClassMethod|Property|ClassMethod $stmt
+     * @param ClassMethod|Property|ClassConst|ClassMethod $stmt
      */
     public function addAsFirstMethod(Class_ $class, Stmt $stmt): void
     {
@@ -141,14 +142,23 @@ final class ClassManipulator
         return $nodes;
     }
 
-    public function addPropertyToClass(Class_ $classNode, string $name, ?Type $type): void
+    public function addConstantToClass(Class_ $class, string $constantName, ClassConst $classConst): void
     {
-        if ($this->hasClassProperty($classNode, $name)) {
+        if ($this->hasClassConstant($class, $constantName)) {
+            return;
+        }
+
+        $this->addAsFirstMethod($class, $classConst);
+    }
+
+    public function addPropertyToClass(Class_ $class, string $name, ?Type $type): void
+    {
+        if ($this->hasClassProperty($class, $name)) {
             return;
         }
 
         $propertyNode = $this->nodeFactory->createPrivatePropertyFromNameAndType($name, $type);
-        $this->addAsFirstMethod($classNode, $propertyNode);
+        $this->addAsFirstMethod($class, $propertyNode);
     }
 
     public function addSimplePropertyAssignToClass(Class_ $classNode, string $name, ?Type $type): void
@@ -391,6 +401,19 @@ final class ClassManipulator
         return $implementedInterfaceNames;
     }
 
+    public function hasInterface(Class_ $class, string $desiredInterface): bool
+    {
+        foreach ($class->implements as $implement) {
+            if (! $this->nodeNameResolver->isName($implement, $desiredInterface)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     public function hasPropertyName(Class_ $node, string $name): bool
     {
         foreach ($node->getProperties() as $property) {
@@ -450,19 +473,6 @@ final class ClassManipulator
         }
 
         return [];
-    }
-
-    public function hasInterface(Class_ $class, string $desiredInterface): bool
-    {
-        foreach ($class->implements as $implement) {
-            if (! $this->nodeNameResolver->isName($implement, $desiredInterface)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
     }
 
     public function removeInterface(Class_ $class, string $desiredInterface): void
@@ -675,6 +685,17 @@ final class ClassManipulator
     {
         foreach ($classMethod->params as $constructorParameter) {
             if ($this->nodeNameResolver->isName($constructorParameter->var, $name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function hasClassConstant(Class_ $class, string $constantName)
+    {
+        foreach ($class->getConstants() as $classConst) {
+            if ($this->nodeNameResolver->isName($classConst, $constantName)) {
                 return true;
             }
         }

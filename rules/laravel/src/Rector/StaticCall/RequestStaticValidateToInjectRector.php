@@ -26,7 +26,7 @@ final class RequestStaticValidateToInjectRector extends AbstractRector
     /**
      * @var string[]
      */
-    private $requestTypes = ['Illuminate\Http\Request', 'Request'];
+    private const REQUEST_TYPES = ['Illuminate\Http\Request', 'Request'];
 
     /**
      * @var ClassMethodManipulator
@@ -116,7 +116,7 @@ PHP
     private function shouldSkip(Node $node): bool
     {
         if ($node instanceof StaticCall) {
-            return ! $this->isObjectTypes($node, $this->requestTypes);
+            return ! $this->isObjectTypes($node, self::REQUEST_TYPES);
         }
 
         $class = $node->getAttribute(AttributeKey::CLASS_NODE);

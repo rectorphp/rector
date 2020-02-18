@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Nette\Utils\Strings;
-use Rector\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\ClassExistenceStaticHelper;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -61,9 +61,6 @@ class YamlConfigFileProvider
 
 class ServiceConfigurationValidator
 {
-    /**
-     * @param mixed $configuration
-     */
     public function validate(string $serviceClass, $configuration, SplFileInfo $configFileInfo): void
     {
         if (! is_array($configuration)) {
@@ -91,9 +88,6 @@ class ServiceConfigurationValidator
         }
     }
 
-    /**
-     * @param mixed $key
-     */
     private function isArgumentName($key): bool
     {
         if (! is_string($key)) {

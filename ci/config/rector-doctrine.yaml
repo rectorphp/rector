@@ -2,3 +2,7 @@ parameters:
     auto_import_names: false
     sets:
         - "dead-code"
+
+    exclude_paths:
+        - orm/lib/Doctrine/ORM/Query/ResultSetMappingBuilder.php
+        - orm/lib/Doctrine/ORM/Query/SqlWalker.php
