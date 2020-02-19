@@ -25,10 +25,10 @@ jobs:
                     # use rector-prefixed v0.6.13
                     composer require rector/rector-prefixed:0.6.13 --dev
 
-            -   run: vendor/bin/rector process web/core/modules/aggregator/src/Plugin/views/row/Rss.php --set deadcode --dry-run --config ci/config/rector-drupal.yaml
+            -   run: bin/rector process web/core/modules/aggregator/src/Plugin/views/row/Rss.php --set deadcode --dry-run --config ci/config/rector-drupal.yaml
 
             -   run: |
                     # use rector-prefixed v0.7
                     composer require rector/rector-prefixed:0.7 --dev
 
-            -   run: vendor/bin/rector process web/core/modules/aggregator/src/Plugin/views/row/Rss.php --set deadcode --dry-run --config ci/config/rector-drupal.yaml
+            -   run: bin/rector process web/core/modules/aggregator/src/Plugin/views/row/Rss.php --set deadcode --dry-run --config ci/config/rector-drupal.yaml
