@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\AttributeAwarePhpDoc\Ast\Type;
 
+use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -17,28 +18,7 @@ final class AttributeAwareCallableTypeNode extends CallableTypeNode implements A
     public function __toString(): string
     {
         // keep original (Psalm?) format, see https://github.com/rectorphp/rector/issues/2841
-        if ($this->isExplicitCallable()) {
-            return $this->createExplicitCallable();
-        }
-
-        return 'callable';
-    }
-
-    private function isExplicitCallable(): bool
-    {
-        if ($this->returnType instanceof GenericTypeNode) {
-            return true;
-        }
-
-        if (! $this->returnType instanceof IdentifierTypeNode) {
-            return false;
-        }
-
-        if (! $this->returnType instanceof IdentifierTypeNode) {
-            return false;
-        }
-
-        return $this->returnType->name !== 'mixed';
+        return $this->createExplicitCallable();
     }
 
     private function createExplicitCallable(): string
@@ -48,18 +28,48 @@ final class AttributeAwareCallableTypeNode extends CallableTypeNode implements A
 
         $parameterTypeString = $this->createParameterTypeString();
 
-        return sprintf('%s(%s):%s', $this->identifier->name, $parameterTypeString, (string) $returnType);
+        $returnTypeAsString = (string) $returnType;
+        if (Strings::contains($returnTypeAsString, '|')) {
+            $returnTypeAsString = '(' . $returnTypeAsString . ')';
+        }
+
+        $parameterTypeString = $this->normalizeParameterType($parameterTypeString, $returnTypeAsString);
+        $returnTypeAsString = $this->normalizeReturnType($returnTypeAsString);
+
+        return sprintf('%s%s%s', $this->identifier->name, $parameterTypeString, $returnTypeAsString);
     }
 
     private function createParameterTypeString(): string
     {
         $parameterTypeStrings = [];
         foreach ($this->parameters as $parameter) {
-            $parameterTypeStrings[] = (string) $parameter;
+            $parameterTypeStrings[] = trim((string) $parameter);
         }
 
-        $parameterTypeString = implode(',', $parameterTypeStrings);
+        $parameterTypeString = implode(', ', $parameterTypeStrings);
 
         return trim($parameterTypeString);
+    }
+
+    private function normalizeReturnType(string $returnTypeAsString): string
+    {
+        if ($returnTypeAsString === 'mixed') {
+            return '';
+        }
+
+        return ':' . $returnTypeAsString;
+    }
+
+    private function normalizeParameterType(string $parameterTypeString, string $returnTypeAsString): string
+    {
+        if ($parameterTypeString !== '') {
+            return '(' . $parameterTypeString . ')';
+        }
+
+        if ($returnTypeAsString !== 'mixed' && $returnTypeAsString !== '') {
+            return '()';
+        }
+
+        return $parameterTypeString;
     }
 }

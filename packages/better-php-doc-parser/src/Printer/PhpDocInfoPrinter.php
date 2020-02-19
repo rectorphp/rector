@@ -100,7 +100,10 @@ final class PhpDocInfoPrinter
         $this->currentTokenPosition = 0;
         $this->removedNodePositions = [];
 
-        return $this->printPhpDocNode($this->attributeAwarePhpDocNode);
+        $phpDocString = $this->printPhpDocNode($this->attributeAwarePhpDocNode);
+
+        // hotfix of extra space with callable ()
+        return Strings::replace($phpDocString, '#callable(\s+)\(#', 'callable(');
     }
 
     private function printPhpDocNode(AttributeAwarePhpDocNode $attributeAwarePhpDocNode): string
