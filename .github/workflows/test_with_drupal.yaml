@@ -18,6 +18,9 @@ jobs:
 
             -   name: Install Drupal project
                 run: |
+                    # bring rector dependencies
+                    composer install --no-progress --no-dev
+
                     # Install latest Drupal version
                     composer create-project drupal/recommended-project drupal
                     cd drupal
