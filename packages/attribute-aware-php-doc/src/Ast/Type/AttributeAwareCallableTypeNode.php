@@ -33,7 +33,10 @@ final class AttributeAwareCallableTypeNode extends CallableTypeNode implements A
             $returnTypeAsString = '(' . $returnTypeAsString . ')';
         }
 
-        return sprintf('%s(%s):%s', $this->identifier->name, $parameterTypeString, $returnTypeAsString);
+        $parameterTypeString = $this->normalizeParameterType($parameterTypeString, $returnTypeAsString);
+        $returnTypeAsString = $this->normalizeReturnType($returnTypeAsString);
+
+        return sprintf('%s%s%s', $this->identifier->name, $parameterTypeString, $returnTypeAsString);
     }
 
     private function createParameterTypeString(): string
@@ -46,5 +49,27 @@ final class AttributeAwareCallableTypeNode extends CallableTypeNode implements A
         $parameterTypeString = implode(', ', $parameterTypeStrings);
 
         return trim($parameterTypeString);
+    }
+
+    private function normalizeReturnType(string $returnTypeAsString): string
+    {
+        if ($returnTypeAsString === 'mixed') {
+            return '';
+        }
+
+        return ':' . $returnTypeAsString;
+    }
+
+    private function normalizeParameterType(string $parameterTypeString, string $returnTypeAsString): string
+    {
+        if ($parameterTypeString !== '') {
+            return '(' . $parameterTypeString . ')';
+        }
+
+        if ($returnTypeAsString !== 'mixed' && $returnTypeAsString !== '') {
+            return '()';
+        }
+
+        return $parameterTypeString;
     }
 }

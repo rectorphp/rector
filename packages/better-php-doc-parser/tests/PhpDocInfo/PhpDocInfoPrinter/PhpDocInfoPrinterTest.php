@@ -12,6 +12,7 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
 {
     /**
      * @dataProvider provideData()
+     * @dataProvider provideDataCallable()
      */
     public function test(string $docFilePath): void
     {
@@ -24,6 +25,11 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureBasic', '*.txt');
+    }
+
+    public function provideDataCallable(): Iterator
+    {
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureCallable', '*.txt');
     }
 
     /**

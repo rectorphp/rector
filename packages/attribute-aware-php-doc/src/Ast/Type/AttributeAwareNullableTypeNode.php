@@ -11,9 +11,4 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 final class AttributeAwareNullableTypeNode extends NullableTypeNode implements AttributeAwareNodeInterface
 {
     use AttributeTrait;
-
-    public function __toString(): string
-    {
-        return '?' . $this->type;
-    }
 }
