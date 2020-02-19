@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpParser\Node\Manipulator;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
@@ -13,6 +14,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class VariableManipulator
@@ -42,18 +44,25 @@ final class VariableManipulator
      */
     private $arrayManipulator;
 
+    /**
+     * @var NodeNameResolver
+     */
+    private $nodeNameResolver;
+
     public function __construct(
         CallableNodeTraverser $callableNodeTraverser,
         AssignManipulator $assignManipulator,
         BetterStandardPrinter $betterStandardPrinter,
         BetterNodeFinder $betterNodeFinder,
-        ArrayManipulator $arrayManipulator
+        ArrayManipulator $arrayManipulator,
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->assignManipulator = $assignManipulator;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->arrayManipulator = $arrayManipulator;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     /**
@@ -79,6 +88,10 @@ final class VariableManipulator
             }
 
             if ($node->expr instanceof Array_ && ! $this->arrayManipulator->isArrayOnlyScalarValues($node->expr)) {
+                return null;
+            }
+
+            if ($this->isTestCaseExpectedVariable($node->var)) {
                 return null;
             }
 
@@ -134,5 +147,16 @@ final class VariableManipulator
         }
 
         return true;
+    }
+
+    private function isTestCaseExpectedVariable(Variable $variable): bool
+    {
+        /** @var string $className */
+        $className = $variable->getAttribute(AttributeKey::CLASS_NAME);
+        if (! Strings::endsWith($className, 'Test')) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isName($variable, 'expect*');
     }
 }
