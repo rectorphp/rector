@@ -216,7 +216,7 @@ PHP
         foreach ($readOnlyVariableAssigns as $readOnlyVariableAssign) {
             $this->removeNode($readOnlyVariableAssign);
 
-            /** @var Variable $variable */
+            /** @var Variable|ClassConstFetch $variable */
             $variable = $readOnlyVariableAssign->var;
             // already overriden
             if (! $variable instanceof Variable) {
