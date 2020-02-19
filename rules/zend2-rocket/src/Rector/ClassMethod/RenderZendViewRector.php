@@ -69,7 +69,7 @@ PHP
         return $this->refactorZendViewRender($node);
     }
 
-    private function refactorZendViewRender(Node $node)
+    private function refactorZendViewRender(ClassMethod $node)
     {
         // build AST of 'return $this->currentZendViewResult();'
         $methodcall = $this->createMethodCall('this', 'currentZendViewResult', []);
