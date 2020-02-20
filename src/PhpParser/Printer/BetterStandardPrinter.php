@@ -362,12 +362,9 @@ final class BetterStandardPrinter extends Standard
                 continue;
             }
 
-            $whitespacesChars = Strings::matchAll($fileInfo->getContents(), '#^( |\t)#m');
-            foreach ($whitespacesChars as $whitespacesChar) {
-                // let the first win
-                $this->tabOrSpaceIndentCharacter = $whitespacesChar[0];
-                break;
-            }
+            // tab vs space
+            $tabIndentChars = Strings::match($fileInfo->getContents(), '#^\t#m');
+            $this->tabOrSpaceIndentCharacter = $tabIndentChars[0] ?? ' ';
         }
     }
 

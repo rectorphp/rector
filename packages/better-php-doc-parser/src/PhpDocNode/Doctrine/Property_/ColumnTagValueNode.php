@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_;
 
+use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 
 final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
@@ -59,6 +60,11 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
     private $options;
 
     /**
+     * @var bool
+     */
+    private $isNullableUppercase = false;
+
+    /**
      * @param mixed[] $options
      * @param mixed|null $length
      */
@@ -86,6 +92,11 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
 
         if ($originalContent !== null) {
             $this->resolveOriginalContentSpacingAndOrder($originalContent);
+
+            $matchIsNullable = Strings::match($originalContent, '#nullable(\s+)?=(\s+)?(?<value>false|true)#si');
+            if ($matchIsNullable) {
+                $this->isNullableUppercase = ctype_upper($matchIsNullable['value']);
+            }
         }
     }
 
@@ -126,7 +137,12 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
         }
 
         if ($this->nullable !== null) {
-            $contentItems['nullable'] = sprintf('nullable=%s', $this->nullable ? 'true' : 'false');
+            $nullableValue = $this->nullable ? 'true' : 'false';
+            if ($this->isNullableUppercase) {
+                $nullableValue = strtoupper($nullableValue);
+            }
+
+            $contentItems['nullable'] = sprintf('nullable=%s', $nullableValue);
         }
 
         return $this->printContentItems($contentItems);
