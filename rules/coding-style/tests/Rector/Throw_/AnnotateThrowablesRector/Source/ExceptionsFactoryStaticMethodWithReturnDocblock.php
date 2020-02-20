@@ -9,11 +9,13 @@ use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Excep
 class ExceptionsFactoryStaticMethodWithReturnDocblock
 {
     /**
+     * This is the DocComment of createException().
+     *
      * @param int $code
      *
      * @return TheException|TheExceptionTheSecond|TheExceptionTheThird|\RuntimeException
      */
-    public static function createExceptionEccolo(int $code)
+    public static function createException(int $code)
     {
         switch ($code) {
             case 1:

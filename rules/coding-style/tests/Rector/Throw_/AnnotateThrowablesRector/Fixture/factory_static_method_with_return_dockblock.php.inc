@@ -6,7 +6,7 @@ use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Excep
 
 function throwWithFactoryStaticMethodWithReturnDocblock()
 {
-    throw ExceptionsFactoryStaticMethodWithReturnDocblock::createExceptionEccolo(1);
+    throw ExceptionsFactoryStaticMethodWithReturnDocblock::createException(1);
 }
 
 ?>
@@ -15,20 +15,17 @@ function throwWithFactoryStaticMethodWithReturnDocblock()
 
 namespace Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Fixture;
 
-use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheException;
-use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheExceptionTheSecond;
-use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheExceptionTheThird;
 use Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\ExceptionsFactoryStaticMethodWithReturnDocblock;
 
 /**
- * @throws TheException
- * @throws TheExceptionTheSecond
- * @throws TheExceptionTheThird
+ * @throws \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheException
+ * @throws \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheExceptionTheSecond
+ * @throws \Rector\CodingStyle\Tests\Rector\Throw_\AnnotateThrowablesRector\Source\Exceptions\TheExceptionTheThird
  * @throws \RuntimeException
  */
 function throwWithFactoryStaticMethodWithReturnDocblock()
 {
-    throw ExceptionsFactoryStaticMethodWithReturnDocblock::createExceptionEccolo(1);
+    throw ExceptionsFactoryStaticMethodWithReturnDocblock::createException(1);
 }
 
 ?>
