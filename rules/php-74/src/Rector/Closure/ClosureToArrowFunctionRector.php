@@ -17,6 +17,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 
 /**
  * @see https://wiki.php.net/rfc/arrow_functions_v2
+ *
  * @see \Rector\Php74\Tests\Rector\Closure\ClosureToArrowFunctionRector\ClosureToArrowFunctionRectorTest
  */
 final class ClosureToArrowFunctionRector extends AbstractRector
@@ -91,6 +92,10 @@ PHP
         $arrowFunction->byRef = $node->byRef;
 
         $arrowFunction->expr = $return->expr;
+
+        if ($node->static === true) {
+            $arrowFunction->static = true;
+        }
 
         return $arrowFunction;
     }
