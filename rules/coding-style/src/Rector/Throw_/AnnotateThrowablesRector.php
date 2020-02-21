@@ -7,6 +7,7 @@ namespace Rector\CodingStyle\Rector\Throw_;
 use Nette\Utils\Reflection;
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
@@ -140,23 +141,47 @@ PHP
             return $this->identifyThrownThrowablesInStaticCall($throw->expr);
         }
 
+        if ($throw->expr instanceof MethodCall) {
+            return $this->identifyThrownThrowablesInMethodCall($throw->expr);
+        }
+
         return [];
+    }
+
+    private function identifyThrownThrowablesInMethodCall(MethodCall $methodCall): array
+    {
+        $thrownClass = $methodCall->var
+            ->getAttribute(AttributeKey::FUNCTION_NODE)->name
+            ->getAttribute('nextNode')->expr->var
+            ->getAttribute('nextNode')->class;
+
+        if (! $thrownClass instanceof FullyQualified) {
+            throw new ShouldNotHappenException();
+        }
+
+        $classFqn = implode('\\', $thrownClass->parts);
+        $methodNode = $methodCall->var->getAttribute('nextNode');
+        $methodName = $methodNode->name;
+
+        return $this->extractMethodReturnsFromDocblock($classFqn, $methodName);
     }
 
     private function identifyThrownThrowablesInStaticCall(StaticCall $staticCall): array
     {
-        return $this->extractMethodReturnsFromDocblock($staticCall);
-    }
-
-    private function extractMethodReturnsFromDocblock(StaticCall $staticCall): array
-    {
         $thrownClass = $staticCall->class;
+
         if (! $thrownClass instanceof FullyQualified) {
             throw new ShouldNotHappenException();
         }
         $classFqn = implode('\\', $thrownClass->parts);
         $methodNode = $thrownClass->getAttribute('nextNode');
         $methodName = $methodNode->name;
+
+        return $this->extractMethodReturnsFromDocblock($classFqn, $methodName);
+    }
+
+    private function extractMethodReturnsFromDocblock(string $classFqn, string $methodName): array
+    {
         $reflectedMethod = new ReflectionMethod($classFqn, $methodName);
         $methodDocblock = $reflectedMethod->getDocComment();
 
