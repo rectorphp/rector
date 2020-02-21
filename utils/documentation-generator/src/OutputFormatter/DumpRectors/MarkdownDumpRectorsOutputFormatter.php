@@ -9,10 +9,13 @@ use Rector\ConsoleDiffer\MarkdownDifferAndFormatter;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Contract\RectorDefinition\CodeSampleInterface;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
+use Rector\PHPUnit\TestClassResolver\TestClassResolver;
 use Rector\Utils\DocumentationGenerator\Contract\OutputFormatter\DumpRectorsOutputFormatterInterface;
 use Rector\Utils\DocumentationGenerator\RectorMetadataResolver;
+use ReflectionClass;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Yaml;
+use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class MarkdownDumpRectorsOutputFormatter implements DumpRectorsOutputFormatterInterface
 {
@@ -31,14 +34,21 @@ final class MarkdownDumpRectorsOutputFormatter implements DumpRectorsOutputForma
      */
     private $rectorMetadataResolver;
 
+    /**
+     * @var TestClassResolver
+     */
+    private $testClassResolver;
+
     public function __construct(
         SymfonyStyle $symfonyStyle,
         MarkdownDifferAndFormatter $markdownDifferAndFormatter,
-        RectorMetadataResolver $rectorMetadataResolver
+        RectorMetadataResolver $rectorMetadataResolver,
+        TestClassResolver $testClassResolver
     ) {
         $this->symfonyStyle = $symfonyStyle;
         $this->markdownDifferAndFormatter = $markdownDifferAndFormatter;
         $this->rectorMetadataResolver = $rectorMetadataResolver;
+        $this->testClassResolver = $testClassResolver;
     }
 
     public function getName(): string
@@ -130,8 +140,22 @@ final class MarkdownDumpRectorsOutputFormatter implements DumpRectorsOutputForma
         $headline = $this->getRectorClassWithoutNamespace($rector);
         $this->symfonyStyle->writeln(sprintf('### `%s`', $headline));
 
+        $rectorClass = get_class($rector);
+
         $this->symfonyStyle->newLine();
-        $this->symfonyStyle->writeln(sprintf('- class: `%s`', get_class($rector)));
+        $this->symfonyStyle->writeln(sprintf(
+            '- class: [`%s`](%s)',
+            get_class($rector),
+            $this->resolveClassFilePathOnGitHub($rectorClass)
+        ));
+
+        $rectorTestClass = $this->testClassResolver->resolveFromClassName($rectorClass);
+        if ($rectorTestClass !== null) {
+            $fixtureDirectoryPath = $this->resolveFixtureDirectoryPathOnGitHub($rectorTestClass);
+            if ($fixtureDirectoryPath !== null) {
+                $this->symfonyStyle->writeln(sprintf('- [test fixtures](%s)', $fixtureDirectoryPath));
+            }
+        }
 
         $rectorDefinition = $rector->getDefinition();
         if ($rectorDefinition->getDescription() !== '') {
@@ -192,5 +216,31 @@ final class MarkdownDumpRectorsOutputFormatter implements DumpRectorsOutputForma
     private function printCodeWrapped(string $content, string $format): void
     {
         $this->symfonyStyle->writeln(sprintf('```%s%s%s%s```', $format, PHP_EOL, rtrim($content), PHP_EOL));
+    }
+
+    private function resolveClassFilePathOnGitHub(string $className): string
+    {
+        $classRelativePath = $this->getClassRelativePath($className);
+        return '/../master/' . $classRelativePath;
+    }
+
+    private function resolveFixtureDirectoryPathOnGitHub(string $className): ?string
+    {
+        $classRelativePath = $this->getClassRelativePath($className);
+
+        $fixtureDirectory = dirname($classRelativePath) . '/Fixture';
+        if (is_dir($fixtureDirectory)) {
+            return '/../master/' . $fixtureDirectory;
+        }
+
+        return null;
+    }
+
+    private function getClassRelativePath(string $className): string
+    {
+        $rectorReflectionClass = new ReflectionClass($className);
+        $rectorSmartFileInfo = new SmartFileInfo($rectorReflectionClass->getFileName());
+
+        return $rectorSmartFileInfo->getRelativeFilePathFromCwd();
     }
 }

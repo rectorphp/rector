@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\PHPUnit\Rector\Class_;
 
-use Nette\Loaders\RobotLoader;
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
@@ -17,7 +15,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPUnit\Composer\ComposerAutoloadedDirectoryProvider;
+use Rector\PHPUnit\TestClassResolver\TestClassResolver;
 
 /**
  * @see \Rector\PHPUnit\Tests\Rector\Class_\AddSeeTestAnnotationRector\AddSeeTestAnnotationRectorTest
@@ -25,18 +23,13 @@ use Rector\PHPUnit\Composer\ComposerAutoloadedDirectoryProvider;
 final class AddSeeTestAnnotationRector extends AbstractRector
 {
     /**
-     * @var string[]
+     * @var TestClassResolver
      */
-    private $phpUnitTestCaseClasses = [];
+    private $testClassResolver;
 
-    /**
-     * @var ComposerAutoloadedDirectoryProvider
-     */
-    private $composerAutoloadedDirectoryProvider;
-
-    public function __construct(ComposerAutoloadedDirectoryProvider $composerAutoloadedDirectoryProvider)
+    public function __construct(TestClassResolver $testClassResolver)
     {
-        $this->composerAutoloadedDirectoryProvider = $composerAutoloadedDirectoryProvider;
+        $this->testClassResolver = $testClassResolver;
     }
 
     public function getDefinition(): RectorDefinition
@@ -89,7 +82,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $testCaseClassName = $this->resolveTestCaseClassName($node);
+        $testCaseClassName = $this->testClassResolver->resolveFromClass($node);
         if ($testCaseClassName === null) {
             return null;
         }
@@ -134,71 +127,8 @@ PHP
         return false;
     }
 
-    private function resolveTestCaseClassName(Class_ $class): ?string
-    {
-        if ($this->isAnonymousClass($class)) {
-            return null;
-        }
-
-        $className = $this->getName($class);
-        if ($className === null) {
-            return null;
-        }
-
-        // fallback for unit tests that only have extra "Test" suffix
-        if (class_exists($className . 'Test')) {
-            return $className . 'Test';
-        }
-
-        $shortClassName = Strings::after($className, '\\', -1);
-        $testShortClassName = $shortClassName . 'Test';
-
-        $phpUnitTestCaseClasses = $this->getPhpUnitTestCaseClasses();
-        foreach ($phpUnitTestCaseClasses as $declaredClass) {
-            if (Strings::endsWith($declaredClass, '\\' . $testShortClassName)) {
-                return $declaredClass;
-            }
-        }
-
-        return null;
-    }
-
     private function createSeePhpDocTagNode(string $className): PhpDocTagNode
     {
         return new AttributeAwarePhpDocTagNode('@see', new AttributeAwareGenericTagValueNode('\\' . $className));
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getPhpUnitTestCaseClasses(): array
-    {
-        if ($this->phpUnitTestCaseClasses !== []) {
-            return $this->phpUnitTestCaseClasses;
-        }
-
-        $robotLoader = $this->createRobotLoadForDirectories();
-        $robotLoader->rebuild();
-
-        $this->phpUnitTestCaseClasses = array_keys($robotLoader->getIndexedClasses());
-
-        return $this->phpUnitTestCaseClasses;
-    }
-
-    private function createRobotLoadForDirectories(): RobotLoader
-    {
-        $robotLoader = new RobotLoader();
-        $robotLoader->setTempDirectory(sys_get_temp_dir() . '/tests_add_see_rector_tests');
-
-        $directories = $this->composerAutoloadedDirectoryProvider->provide();
-        foreach ($directories as $directory) {
-            $robotLoader->addDirectory($directory);
-        }
-
-        $robotLoader->acceptFiles = ['*Test.php'];
-        $robotLoader->ignoreDirs[] = '*Expected*';
-        $robotLoader->ignoreDirs[] = '*Fixture*';
-
-        return $robotLoader;
     }
 }
