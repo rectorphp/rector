@@ -3,6 +3,8 @@ name: Bug Report
 about: Report errors and problems
 ---
 
+# Bug Report
+
 <!-- First, thank you for reporting a bug. That takes time and we appreciate that! -->
 
 | Subject        | Details                                                               |

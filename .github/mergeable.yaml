@@ -1,0 +1,20 @@
+version: 2
+mergeable:
+    - when: issues.opened
+      validate:
+          - do: description
+            or:
+                - and:
+                      - must_include:
+                            regex: '^# Bug Report'
+                      - must_include:
+                            regex: 'https:\/\/getrector\.org\/demo\/'
+                - must_exclude:
+                      regex: '^# Bug Report'
+      fail:
+          - do: comment
+            payload:
+                body: >
+                    This bug report is missing a link to reproduction on [getrector.org/demo](https://getrector.org/demo).
+
+                    It will most likely be closed after manual review.
