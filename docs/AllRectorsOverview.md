@@ -1,4 +1,4 @@
-# All 454 Rectors Overview
+# All 455 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -1775,6 +1775,24 @@ Replace call_user_func_call with variadic
 +        some_function(...$items);
      }
  }
+```
+
+<br>
+
+### `CamelCaseFunctionNamingToUnderscoreRector`
+
+- class: `Rector\CodingStyle\Rector\Function_\CamelCaseFunctionNamingToUnderscoreRector`
+
+Change CamelCase naming of functions to under_score naming
+
+```diff
+-function someCamelCaseFunction()
++function some_camel_case_function()
+ {
+ }
+
+-someCamelCaseFunction();
++some_camel_case_function();
 ```
 
 <br>
