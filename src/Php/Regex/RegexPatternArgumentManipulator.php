@@ -133,7 +133,7 @@ final class RegexPatternArgumentManipulator
             }
 
             foreach ($methodNamesToArgumentPosition as $methodName => $argumentPosition) {
-                if (! $this->nodeNameResolver->isName($staticCall, $methodName)) {
+                if (! $this->nodeNameResolver->isName($staticCall->name, $methodName)) {
                     continue;
                 }
 

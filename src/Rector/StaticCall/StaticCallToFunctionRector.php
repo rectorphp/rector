@@ -66,7 +66,7 @@ final class StaticCallToFunctionRector extends AbstractRector
             }
 
             foreach ($methodNamesToFunctions as $methodName => $function) {
-                if (! $this->isName($node, $methodName)) {
+                if (! $this->isName($node->name, $methodName)) {
                     continue;
                 }
 

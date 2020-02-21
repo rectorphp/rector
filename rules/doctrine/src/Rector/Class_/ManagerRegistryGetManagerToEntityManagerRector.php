@@ -147,7 +147,7 @@ PHP
                 return null;
             }
 
-            $name = $this->getName($node);
+            $name = $this->getName($node->name);
             if ($name === null) {
                 return null;
             }

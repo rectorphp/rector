@@ -178,7 +178,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             return new Clone_($this->testedObjectPropertyFetch);
         }
 
-        $methodName = $this->getName($node);
+        $methodName = $this->getName($node->name);
         if ($methodName === null) {
             return null;
         }

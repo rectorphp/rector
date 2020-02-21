@@ -133,7 +133,7 @@ PHP
     private function resolveDefaultValuesFromCall(Node $node): array
     {
         /** @var string|null $nodeName */
-        $nodeName = $this->getName($node);
+        $nodeName = $this->getName($node->name);
         if ($nodeName === null) {
             return [];
         }

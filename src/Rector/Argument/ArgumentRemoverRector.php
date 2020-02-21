@@ -80,7 +80,7 @@ PHP
             }
 
             foreach ($positionByMethodName as $methodName => $positions) {
-                if (! $this->isName($node, $methodName)) {
+                if (! $this->isName($node->name, $methodName)) {
                     continue;
                 }
 

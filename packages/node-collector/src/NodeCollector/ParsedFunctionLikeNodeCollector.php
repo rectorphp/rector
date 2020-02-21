@@ -205,7 +205,7 @@ final class ParsedFunctionLikeNodeCollector
         // one node can be of multiple-class types
         $classType = $this->resolveClassType($node);
 
-        $methodName = $this->nodeNameResolver->getName($node);
+        $methodName = $this->nodeNameResolver->getName($node->name);
         if ($classType instanceof MixedType) { // anonymous
             return;
         }

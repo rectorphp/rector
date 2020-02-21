@@ -7,6 +7,8 @@ namespace Rector\CodeQuality\Rector\For_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\For_;
 use PHPStan\Analyser\Scope;
@@ -89,7 +91,8 @@ PHP
             }
 
             $countInCond = $node;
-            $valueName = $this->getName($node->args[0]->value);
+
+            $valueName = $this->resolveValueName($node);
             $countedValueName = $this->createCountedValueName($valueName, $for->getAttribute(AttributeKey::SCOPE));
 
             return new Variable($countedValueName);
@@ -110,5 +113,15 @@ PHP
         $countedValueName = $valueName === null ? self::DEFAULT_VARIABLE_COUNT_NAME : $valueName . 'Count';
 
         return parent::createCountedValueName($countedValueName, $scope);
+    }
+
+    private function resolveValueName(FuncCall $funcCall): ?string
+    {
+        $argumentValue = $funcCall->args[0]->value;
+        if ($argumentValue instanceof MethodCall || $argumentValue instanceof StaticCall) {
+            return $this->getName($argumentValue->name);
+        }
+
+        return $this->getName($argumentValue);
     }
 }

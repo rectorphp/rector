@@ -170,6 +170,8 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
     {
         if ($expr instanceof New_ && $expr->class instanceof Name) {
             $name = $this->getShortName($expr->class);
+        } elseif ($expr instanceof MethodCall || $expr instanceof StaticCall) {
+            $name = $this->getName($expr->name);
         } else {
             $name = $this->getName($expr);
         }

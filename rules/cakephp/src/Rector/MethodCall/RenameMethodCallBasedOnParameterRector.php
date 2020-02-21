@@ -106,7 +106,7 @@ PHP
                 continue;
             }
 
-            $currentMethodName = $this->getName($methodCall);
+            $currentMethodName = $this->getName($methodCall->name);
             if ($currentMethodName === null) {
                 continue;
             }

@@ -59,7 +59,7 @@ PHP
             return null;
         }
 
-        if (! $this->isName($node, 'export')) {
+        if (! $this->isName($node->name, 'export')) {
             return null;
         }
 

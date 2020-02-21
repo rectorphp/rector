@@ -117,17 +117,17 @@ final class AssertManipulator
      */
     public function processStaticCall(StaticCall $staticCall): Node
     {
-        if ($this->nodeNameResolver->isNames($staticCall, ['truthy', 'falsey'])) {
+        if ($this->nodeNameResolver->isNames($staticCall->name, ['truthy', 'falsey'])) {
             return $this->processTruthyOrFalseyCall($staticCall);
         }
 
-        if ($this->nodeNameResolver->isNames($staticCall, ['contains', 'notContains'])) {
+        if ($this->nodeNameResolver->isNames($staticCall->name, ['contains', 'notContains'])) {
             $this->processContainsCall($staticCall);
-        } elseif ($this->nodeNameResolver->isNames($staticCall, ['exception', 'throws'])) {
+        } elseif ($this->nodeNameResolver->isNames($staticCall->name, ['exception', 'throws'])) {
             $this->processExceptionCall($staticCall);
-        } elseif ($this->nodeNameResolver->isName($staticCall, 'type')) {
+        } elseif ($this->nodeNameResolver->isName($staticCall->name, 'type')) {
             $this->processTypeCall($staticCall);
-        } elseif ($this->nodeNameResolver->isName($staticCall, 'noError')) {
+        } elseif ($this->nodeNameResolver->isName($staticCall->name, 'noError')) {
             $this->processNoErrorCall($staticCall);
         } else {
             $this->renameAssertMethod($staticCall);
@@ -153,11 +153,14 @@ final class AssertManipulator
     {
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($staticCall->args[1]->value)) {
             $name = $this->nodeNameResolver->isName(
-                $staticCall,
+                $staticCall->name,
                 'contains'
             ) ? 'assertStringContainsString' : 'assertStringNotContainsString';
         } else {
-            $name = $this->nodeNameResolver->isName($staticCall, 'contains') ? 'assertContains' : 'assertNotContains';
+            $name = $this->nodeNameResolver->isName(
+                $staticCall->name,
+                'contains'
+            ) ? 'assertContains' : 'assertNotContains';
         }
 
         $staticCall->name = new Identifier($name);
@@ -240,7 +243,7 @@ final class AssertManipulator
      */
     private function processTruthyOrFalseyCall(StaticCall $staticCall): Expr
     {
-        $method = $this->nodeNameResolver->isName($staticCall, 'truthy') ? 'assertTrue' : 'assertFalse';
+        $method = $this->nodeNameResolver->isName($staticCall->name, 'truthy') ? 'assertTrue' : 'assertFalse';
 
         if (! $this->sholdBeStaticCall($staticCall)) {
             $call = new MethodCall(new Variable('this'), $method);
@@ -296,7 +299,7 @@ final class AssertManipulator
     private function renameAssertMethod(StaticCall $staticCall): void
     {
         foreach (self::ASSERT_METHODS_REMAP as $oldMethod => $newMethod) {
-            if (! $this->nodeNameResolver->isName($staticCall, $oldMethod)) {
+            if (! $this->nodeNameResolver->isName($staticCall->name, $oldMethod)) {
                 continue;
             }
 

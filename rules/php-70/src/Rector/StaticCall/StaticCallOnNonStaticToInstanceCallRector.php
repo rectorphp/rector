@@ -90,7 +90,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $methodName = $this->getName($node);
+        $methodName = $this->getName($node->name);
 
         $className = $this->resolveStaticCallClassName($node);
         if ($methodName === null || $className === null) {

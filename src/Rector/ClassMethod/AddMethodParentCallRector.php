@@ -146,7 +146,7 @@ PHP
                 return false;
             }
 
-            return $this->isName($node, $method);
+            return $this->isName($node->name, $method);
         });
     }
 }

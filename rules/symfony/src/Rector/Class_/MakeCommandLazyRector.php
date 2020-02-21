@@ -105,7 +105,7 @@ PHP
             return null;
         }
 
-        if (! $this->isName($expr, '__construct')) {
+        if (! $this->isName($expr->name, '__construct')) {
             return null;
         }
 
