@@ -64,7 +64,7 @@ abstract class AbstractPhpDocNodeFactory implements ClassAwarePhpDocNodeFactoryI
         $match = Strings::match($annotationContent, '#^\{(?<openingSpace>\s+)#');
         $openingSpace = $match['openingSpace'] ?? '';
 
-        $match = Strings::match($annotationContent, '#^(?<closingSpace>\s+)\}$#');
+        $match = Strings::match($annotationContent, '#(?<closingSpace>\s+)\}$#');
         $closingSpace = $match['closingSpace'] ?? '';
 
         return [$openingSpace, $closingSpace];

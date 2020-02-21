@@ -55,6 +55,7 @@ abstract class AbstractIndexTagValueNode extends AbstractDoctrineTagValueNode im
         if ($originalContent !== null) {
             $this->resolveOriginalContentSpacingAndOrder($originalContent);
         }
+
         $this->tag = $originalTag;
     }
 

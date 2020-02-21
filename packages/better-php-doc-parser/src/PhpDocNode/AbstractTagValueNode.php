@@ -142,7 +142,8 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
 
         $this->originalContent = $originalContent;
         $this->orderedVisibleItems = ArrayItemStaticHelper::resolveAnnotationItemsOrder($originalContent);
-        $this->hasNewlineAfterOpening = (bool) Strings::match($originalContent, '#^\(\s+#m');
-        $this->hasNewlineBeforeClosing = (bool) Strings::match($originalContent, '#\s+\)$#m');
+
+        $this->hasNewlineAfterOpening = (bool) Strings::match($originalContent, '#^(\(\s+|\n)#m');
+        $this->hasNewlineBeforeClosing = (bool) Strings::match($originalContent, '#(\s+\)|\n(\s+)?)$#m');
     }
 }

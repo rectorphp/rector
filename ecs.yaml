@@ -84,6 +84,7 @@ parameters:
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # todo
+            - "packages/better-php-doc-parser/src/Printer/WhitespaceDetector.php"
             - "packages/node-type-resolver/src/NodeTypeResolver.php"
             - "packages/better-php-doc-parser/src/Printer/OriginalSpacingRestorer.php"
             # @todo split to multiple rectors
