@@ -99,6 +99,10 @@ PHP
         $readOnlyVariableAssigns = $this->collectReadOnlyVariableAssigns($node);
         $readOnlyVariableAssigns = $this->filterOutUniqueNames($readOnlyVariableAssigns);
 
+        if ($readOnlyVariableAssigns === []) {
+            return null;
+        }
+
         foreach ($readOnlyVariableAssigns as $readOnlyVariable) {
             $methodName = $readOnlyVariable->getAttribute(AttributeKey::METHOD_NAME);
             if (! is_string($methodName)) {

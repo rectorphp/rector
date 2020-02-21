@@ -25,6 +25,7 @@ final class ParserClassTest extends AbstractPhpDocInfoTest
     public function provideData(): Iterator
     {
         yield [__DIR__ . '/Fixture/SomeEntity.php', __DIR__ . '/Fixture/expected_some_entity.txt', Class_::class];
+
         yield [
             __DIR__ . '/Fixture/SkipNonDoctrineEntity.php',
             __DIR__ . '/Fixture/expected_skip_non_doctrine_entity.txt',
@@ -34,6 +35,12 @@ final class ParserClassTest extends AbstractPhpDocInfoTest
         yield [
             __DIR__ . '/Fixture/TableWithIndexes.php',
             __DIR__ . '/Fixture/expected_table_with_indexes.txt',
+            Class_::class,
+        ];
+
+        yield [
+            __DIR__ . '/Fixture/FormattingDoctrineEntity.php',
+            __DIR__ . '/Fixture/expected_formatting.txt',
             Class_::class,
         ];
     }

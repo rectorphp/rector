@@ -1,0 +1,14 @@
+/**
+ * @ORM\Table(
+ *     name="my_entity",
+ *     indexes={
+ *         @ORM\Index(
+ *             name="my_entity_idx", columns={"x", "xx", "xxx", "xxxx"}
+ *         ),
+ *         @ORM\Index(
+ *             name="my_entity_xxx_idx", columns={"xxx"}
+ *         )
+ *     }
+ * )
+ * @ORM\Entity(repositoryClass="App\Repository\MyEntityRepository")
+ */
