@@ -6,6 +6,7 @@ namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -38,6 +39,12 @@ final class ArrayDimFetchTypeResolver implements NodeTypeResolverInterface
      */
     public function resolve(Node $node): Type
     {
-        return $this->nodeTypeResolver->resolve($node->var);
+        $arrayDimFetchType = $this->nodeTypeResolver->resolve($node->var);
+
+        if ($arrayDimFetchType instanceof ArrayType) {
+            return $arrayDimFetchType->getItemType();
+        }
+
+        return $arrayDimFetchType;
     }
 }
