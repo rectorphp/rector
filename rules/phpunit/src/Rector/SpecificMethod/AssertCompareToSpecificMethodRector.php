@@ -109,7 +109,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractPHPUnitRector
     private function renameMethod(Node $node, string $funcName): void
     {
         /** @var string $oldMethodName */
-        $oldMethodName = $this->getName($node);
+        $oldMethodName = $this->getName($node->name);
 
         [$trueMethodName, $falseMethodName] = self::DEFAULT_OLD_TO_NEW_METHODS[$funcName];
 

@@ -160,7 +160,7 @@ PHP
             return false;
         }
 
-        if (! $this->areNamesEqual($staticCall, $classMethod)) {
+        if (! $this->areNamesEqual($staticCall->name, $classMethod->name)) {
             return false;
         }
 
@@ -222,7 +222,8 @@ PHP
         }
 
         /** @var string $methodName */
-        $methodName = $this->getName($staticCall);
+        $methodName = $this->getName($staticCall->name);
+
         $parentClassMethod = $this->functionLikeParsedNodesFinder->findMethod($methodName, $parentClassName);
         if ($parentClassMethod !== null && $parentClassMethod->isProtected() && $classMethod->isPublic()) {
             return true;

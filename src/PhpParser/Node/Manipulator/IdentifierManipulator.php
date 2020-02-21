@@ -48,7 +48,7 @@ final class IdentifierManipulator
     {
         $this->ensureNodeHasIdentifier($node);
 
-        $oldNodeMethodName = $this->nodeNameResolver->getName($node);
+        $oldNodeMethodName = $this->resolveOldMethodName($node);
         if ($oldNodeMethodName === null) {
             return;
         }
@@ -84,5 +84,15 @@ final class IdentifierManipulator
             Identifier::class,
             implode('", "', self::NODE_CLASSES_WITH_IDENTIFIER)
         ));
+    }
+
+    private function resolveOldMethodName(Node $node)
+    {
+        if ($node instanceof StaticCall || $node instanceof MethodCall) {
+            $oldNodeMethodName = $this->nodeNameResolver->getName($node->name);
+        } else {
+            $oldNodeMethodName = $this->nodeNameResolver->getName($node);
+        }
+        return $oldNodeMethodName;
     }
 }

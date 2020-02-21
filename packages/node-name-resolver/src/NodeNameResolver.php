@@ -8,9 +8,11 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\Regex\RegexPatternDetector;
 
@@ -85,6 +87,14 @@ final class NodeNameResolver
 
     public function getName(Node $node): ?string
     {
+        if ($node instanceof MethodCall || $node instanceof StaticCall) {
+            if ($node->name instanceof MethodCall || $node->name instanceof StaticCall) {
+                return null;
+            }
+
+            throw new ShouldNotHappenException(sprintf('Pick more specific node than "%s"', get_class($node)));
+        }
+
         foreach ($this->nodeNameResolvers as $nodeNameResolver) {
             if (! is_a($node, $nodeNameResolver->getNode(), true)) {
                 continue;

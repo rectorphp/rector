@@ -58,12 +58,12 @@ final class RouteInfoFactory
                 return null;
             }
 
-            if (! $this->nodeNameResolver->isNames($node, ['get', 'head', 'post', 'put', 'patch', 'delete'])) {
+            if (! $this->nodeNameResolver->isNames($node->name, ['get', 'head', 'post', 'put', 'patch', 'delete'])) {
                 return null;
             }
 
             /** @var string $methodName */
-            $methodName = $this->nodeNameResolver->getName($node);
+            $methodName = $this->nodeNameResolver->getName($node->name);
             $uppercasedMethodName = strtoupper($methodName);
 
             $methods = [];

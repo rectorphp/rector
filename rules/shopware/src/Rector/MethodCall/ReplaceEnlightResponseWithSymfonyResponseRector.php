@@ -67,7 +67,8 @@ PHP
             return null;
         }
 
-        $name = $this->getName($node);
+        $name = $this->getName($node->name);
+
         switch ($name) {
             case 'setHeader':
                 return $this->modifySetHeader($node);

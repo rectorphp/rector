@@ -42,7 +42,7 @@ final class ParseFileRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isName($node, 'parse')) {
+        if (! $this->isName($node->name, 'parse')) {
             return null;
         }
 

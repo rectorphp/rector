@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\Stmt;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -131,6 +132,14 @@ PHP
     {
         return (bool) $this->betterNodeFinder->findFirstPrevious($node, function (Node $node): bool {
             if (! $node instanceof MethodCall) {
+                return false;
+            }
+
+            if ($node->name instanceof MethodCall) {
+                return false;
+            }
+
+            if ($node->name instanceof StaticCall) {
                 return false;
             }
 

@@ -86,7 +86,9 @@ PHP
             return null;
         }
 
-        $node->name = new Identifier(self::OLD_METHODS_NAMES_TO_NEW_NAMES['string'][$this->getName($node)]);
+        $methodName = $this->getName($node->name);
+
+        $node->name = new Identifier(self::OLD_METHODS_NAMES_TO_NEW_NAMES['string'][$methodName]);
 
         return $node;
     }

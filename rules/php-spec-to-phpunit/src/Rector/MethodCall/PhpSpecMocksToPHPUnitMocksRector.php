@@ -107,7 +107,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
                 throw new ShouldNotHappenException();
             }
 
-            $mockMethodName = $this->getName($methodCall->var);
+            $mockMethodName = $this->getName($methodCall->var->name);
             if ($mockMethodName === null) {
                 throw new ShouldNotHappenException();
             }

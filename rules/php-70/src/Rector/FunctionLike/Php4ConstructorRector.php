@@ -196,7 +196,7 @@ PHP
         }
 
         // it's not a parent PHP 4 constructor call
-        if (! $this->isName($node, $parentClassName)) {
+        if (! $this->isName($node->name, $parentClassName)) {
             return;
         }
 
