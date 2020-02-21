@@ -82,8 +82,11 @@ final class RectorStrings
 
     private static function camelCaseToGlue(string $input, string $glue): string
     {
-        $matches = Strings::matchAll($input, '#([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)#');
+        if ($input === strtolower($input)) {
+            return $input;
+        }
 
+        $matches = Strings::matchAll($input, '#([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)#');
         $parts = [];
         foreach ($matches as $match) {
             $parts[] = $match[0] === strtoupper($match[0]) ? strtolower($match[0]) : lcfirst($match[0]);
