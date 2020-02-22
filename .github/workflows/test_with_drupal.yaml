@@ -35,9 +35,7 @@ jobs:
                     # composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir --no-progress
                     # composer dump-autoload --no-dev -d symfony-demo-dir
 
-                    # 2. run an another project
-                    rector-dir/vendor/bin/rector
+                    # 2. run rector
 
                     cd drupal-dir
-                    ls -lat ../../
                     ../rector-dir/vendor/bin/rector process web/core/modules/aggregator/src/Plugin/views/row/Rss.php --set deadcode --dry-run --config ../../ci/config/rector-drupal.yaml
