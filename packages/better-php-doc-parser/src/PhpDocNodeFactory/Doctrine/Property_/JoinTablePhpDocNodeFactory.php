@@ -20,7 +20,7 @@ final class JoinTablePhpDocNodeFactory extends AbstractPhpDocNodeFactory
     /**
      * @var string
      */
-    public const INVERSE_JOIN_COLUMNS = 'inverseJoinColumns';
+    private const INVERSE_JOIN_COLUMNS = 'inverseJoinColumns';
 
     /**
      * @var string

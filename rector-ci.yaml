@@ -1,22 +1,26 @@
-services:
-    Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector: null
-    Rector\SOLID\Rector\ClassMethod\ChangeReadOnlyVariableWithDefaultValueToConstantRector: null
+#services:
+#    Rector\SOLID\Rector\ClassConst\PrivatizeLocalClassConstantRector: null
+#    Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector: null
+#    Rector\SOLID\Rector\ClassMethod\ChangeReadOnlyVariableWithDefaultValueToConstantRector: null
 
 parameters:
     sets:
-        - 'coding-style'
-        - 'code-quality'
-        - 'dead-code'
-        - 'nette-utils-code-quality'
+#        - 'coding-style'
+#        - 'code-quality'
+#        - 'dead-code'
+#        - 'nette-utils-code-quality'
+        - 'solid'
 
     paths:
-        - 'ci'
         - 'src'
+        - 'rules'
         - 'packages'
         - 'tests'
 
     autoload_paths:
-        - 'ci/check_services_in_yaml_configs.php'
+        # needed for FixtureSplitter::SPLIT_LINE public use
+        - 'ci/check_keep_fixtures.php'
+#        - 'ci/check_services_in_yaml_configs.php'
 
     exclude_paths:
         - '/Fixture/'
