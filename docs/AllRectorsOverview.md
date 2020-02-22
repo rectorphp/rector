@@ -1,4 +1,4 @@
-# All 455 Rectors Overview
+# All 456 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -1186,6 +1186,30 @@ Simplify `in_array` and `array_keys` functions combination into `array_key_exist
 ```diff
 -in_array("key", array_keys($array), true);
 +array_key_exists("key", $array);
+```
+
+<br>
+
+### `InlineIfToExplicitIfRector`
+
+- class: [`Rector\CodeQuality\Rector\BinaryOp\InlineIfToExplicitIfRector`](/../master/rules/code-quality/src/Rector/BinaryOp/InlineIfToExplicitIfRector.php)
+- [test fixtures](/../master/rules/code-quality/tests/Rector/BinaryOp/InlineIfToExplicitIfRector/Fixture)
+
+Change inline if to explicit if
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $userId = null;
+
+-        is_null($userId) && $userId = 5;
++        if (is_null($userId)) {
++            $userId = 5;
++        }
+     }
+ }
 ```
 
 <br>
