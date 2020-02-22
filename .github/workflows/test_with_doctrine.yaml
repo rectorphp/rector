@@ -33,6 +33,4 @@ jobs:
                     composer install -d orm --no-dev
 
             -   run: |
-                    # bin/rector process orm/lib --config ci/config/rector-doctrine.yaml --autoload-file orm/vendor/autoload.php
-                    bin/rector process orm/lib/Doctrine/ORM/Persisters/Entity/SingleTablePersister.php --config ci/config/rector-doctrine.yaml --autoload-file orm/vendor/autoload.php --debug
-                    bin/rector process orm/lib/Doctrine/ORM/Tools/SchemaTool.php --config ci/config/rector-doctrine.yaml --autoload-file orm/vendor/autoload.php --debug
+                    bin/rector process orm/lib --config ci/config/rector-doctrine.yaml --autoload-file orm/vendor/autoload.php
