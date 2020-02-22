@@ -1,4 +1,4 @@
-# All 456 Rectors Overview
+# All 457 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -8028,6 +8028,40 @@ Change if/else value to early return
 -
 -        return $docToken;
 +        return null;
+     }
+ }
+```
+
+<br>
+
+### `ChangeNestedForeachIfsToEarlyContinueRector`
+
+- class: [`Rector\SOLID\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector`](/../master/rules/solid/src/Rector/Foreach_/ChangeNestedForeachIfsToEarlyContinueRector.php)
+- [test fixtures](/../master/rules/solid/tests/Rector/Foreach_/ChangeNestedForeachIfsToEarlyContinueRector/Fixture)
+
+Change nested ifs to foreach with continue
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $items = [];
+
+         foreach ($values as $value) {
+-            if ($value === 5) {
+-                if ($value2 === 10) {
+-                    $items[] = 'maybe';
+-                }
++            if ($value !== 5) {
++                continue;
+             }
++            if ($value2 !== 10) {
++                continue;
++            }
++
++            $items[] = 'maybe';
+         }
      }
  }
 ```

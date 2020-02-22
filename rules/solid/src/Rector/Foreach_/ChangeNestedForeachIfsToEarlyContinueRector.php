@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Rector\SOLID\Rector\If_;
+namespace Rector\SOLID\Rector\Foreach_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Stmt\Continue_;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\SOLID\NodeTransformer\ConditionInverter;
 
 /**
- * @see \Rector\SOLID\Tests\Rector\If_\ChangeNestedIfsToEarlyReturnRector\ChangeNestedIfsToEarlyReturnRectorTest
+ * @see \Rector\SOLID\Tests\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector\ChangeNestedForeachIfsToEarlyContinueRectorTest
  */
-final class ChangeNestedIfsToEarlyReturnRector extends AbstractRector
+final class ChangeNestedForeachIfsToEarlyContinueRector extends AbstractRector
 {
     /**
      * @var IfManipulator
@@ -39,20 +39,22 @@ final class ChangeNestedIfsToEarlyReturnRector extends AbstractRector
 
     public function getDefinition(): RectorDefinition
     {
-        return new RectorDefinition('Change nested ifs to early return', [
+        return new RectorDefinition('Change nested ifs to foreach with continue', [
             new CodeSample(
                 <<<'PHP'
 class SomeClass
 {
     public function run()
     {
-        if ($value === 5) {
-            if ($value2 === 10) {
-                return 'yes';
+        $items = [];
+
+        foreach ($values as $value) {
+            if ($value === 5) {
+                if ($value2 === 10) {
+                    $items[] = 'maybe';
+                }
             }
         }
-
-        return 'no';
     }
 }
 PHP
@@ -62,15 +64,18 @@ class SomeClass
 {
     public function run()
     {
-        if ($value !== 5) {
-            return 'no';
-        }
+        $items = [];
 
-        if ($value2 === 10) {
-            return 'yes';
-        }
+        foreach ($values as $value) {
+            if ($value !== 5) {
+                continue;
+            }
+            if ($value2 !== 10) {
+                continue;
+            }
 
-        return 'no';
+            $items[] = 'maybe';
+        }
     }
 }
 PHP
@@ -84,70 +89,67 @@ PHP
      */
     public function getNodeTypes(): array
     {
-        return [If_::class];
+        return [Foreach_::class];
     }
 
     /**
-     * @param If_ $node
+     * @param Foreach_ $node
      */
     public function refactor(Node $node): ?Node
     {
-        // A. next node is return
-        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $nextNode instanceof Return_) {
+        $nestedIfsWithOnlyNonReturn = $this->ifManipulator->collectNestedIfsWithNonBreaking($node);
+        if ($nestedIfsWithOnlyNonReturn === []) {
             return null;
         }
 
-        $nestedIfsWithOnlyReturn = $this->ifManipulator->collectNestedIfsWithOnlyReturn($node);
-        if ($nestedIfsWithOnlyReturn === []) {
-            return null;
-        }
+        $this->processNestedIfsWithNonBreaking($node, $nestedIfsWithOnlyNonReturn);
 
-        $this->processNestedIfsWithOnlyReturn($node, $nestedIfsWithOnlyReturn, $nextNode);
-        $this->removeNode($node);
-
-        return null;
+        return $node;
     }
 
     /**
      * @param If_[] $nestedIfsWithOnlyReturn
      */
-    private function processNestedIfsWithOnlyReturn(If_ $if, array $nestedIfsWithOnlyReturn, Return_ $nextReturn): void
+    private function processNestedIfsWithNonBreaking(Foreach_ $foreach, array $nestedIfsWithOnlyReturn): void
     {
         // add nested if openly after this
         $nestedIfsWithOnlyReturnCount = count($nestedIfsWithOnlyReturn);
 
-        /** @var int $key */
+        // clear
+        $foreach->stmts = [];
+
         foreach ($nestedIfsWithOnlyReturn as $key => $nestedIfWithOnlyReturn) {
             // last item → the return node
             if ($nestedIfsWithOnlyReturnCount === $key + 1) {
-                $this->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
+                $finalReturn = clone $nestedIfWithOnlyReturn;
+
+                $this->addInvertedIfStmtWithContinue($nestedIfWithOnlyReturn, $foreach);
+
+                $foreach->stmts = array_merge($foreach->stmts, $finalReturn->stmts);
             } else {
-                $this->addStandaloneIfsWithReturn($nestedIfWithOnlyReturn, $if, $nextReturn);
+                $this->addInvertedIfStmtWithContinue($nestedIfWithOnlyReturn, $foreach);
             }
         }
     }
 
-    private function addStandaloneIfsWithReturn(If_ $nestedIfWithOnlyReturn, If_ $if, Return_ $return): void
+    private function addInvertedIfStmtWithContinue(If_ $nestedIfWithOnlyReturn, Foreach_ $foreach): void
     {
-        $return = clone $return;
-
         $invertedCondition = $this->conditionInverter->createInvertedCondition($nestedIfWithOnlyReturn->cond);
 
         // special case
         if ($invertedCondition instanceof BooleanNot && $invertedCondition->expr instanceof BooleanAnd) {
             $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->left));
-            $booleanNotPartIf->stmts = [clone $return];
-            $this->addNodeAfterNode($booleanNotPartIf, $if);
+            $foreach->stmts[] = $booleanNotPartIf;
+
             $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->right));
-            $booleanNotPartIf->stmts = [clone $return];
-            $this->addNodeAfterNode($booleanNotPartIf, $if);
+            $foreach->stmts[] = $booleanNotPartIf;
+
             return;
         }
 
         $nestedIfWithOnlyReturn->cond = $invertedCondition;
-        $nestedIfWithOnlyReturn->stmts = [clone $return];
+        $nestedIfWithOnlyReturn->stmts = [new Continue_()];
 
-        $this->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
+        $foreach->stmts[] = $nestedIfWithOnlyReturn;
     }
 }
