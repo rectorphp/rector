@@ -9,10 +9,13 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 
@@ -38,16 +41,23 @@ final class IfManipulator
      */
     private $nodeNameResolver;
 
+    /**
+     * @var BetterNodeFinder
+     */
+    private $betterNodeFinder;
+
     public function __construct(
         BetterStandardPrinter $betterStandardPrinter,
         ConstFetchManipulator $constFetchManipulator,
         StmtsManipulator $stmtsManipulator,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        BetterNodeFinder $betterNodeFinder
     ) {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->constFetchManipulator = $constFetchManipulator;
         $this->stmtsManipulator = $stmtsManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     /**
@@ -214,6 +224,43 @@ final class IfManipulator
             return false;
         }
         return $this->nodeNameResolver->isName($if->cond, $functionName);
+    }
+
+    /**
+     * @return If_[]
+     */
+    public function collectNestedIfsWithNonBreaking(Foreach_ $foreach): array
+    {
+        if (count((array) $foreach->stmts) !== 1) {
+            return [];
+        }
+
+        $onlyForeachStmt = $foreach->stmts[0];
+        if (! $onlyForeachStmt instanceof If_) {
+            return [];
+        }
+
+        $ifs = [];
+
+        $currentIf = $onlyForeachStmt;
+        while ($this->isIfWithOnlyStmtIf($currentIf)) {
+            $ifs[] = $currentIf;
+
+            $currentIf = $currentIf->stmts[0];
+        }
+
+        if ($this->betterNodeFinder->findInstanceOf($currentIf->stmts, Return_::class) !== []) {
+            return [];
+        }
+
+        if ($this->betterNodeFinder->findInstanceOf($currentIf->stmts, Exit_::class) !== []) {
+            return [];
+        }
+
+        // last node is with the expression
+        $ifs[] = $currentIf;
+
+        return $ifs;
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $returnNode): ?Expr
