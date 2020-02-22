@@ -40,4 +40,4 @@ jobs:
 
                     cd drupal-dir
                     ls -lat ../../
-                    ../rector-dir/vendor/bin/rector process web/core/modules/aggregator/src/Plugin/views/row/Rss.php --set deadcode --dry-run --config ../ci/config/rector-drupal.yaml
+                    ../rector-dir/vendor/bin/rector process web/core/modules/aggregator/src/Plugin/views/row/Rss.php --set deadcode --dry-run --config ../../ci/config/rector-drupal.yaml
