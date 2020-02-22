@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Rector\ClassMethod;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
@@ -14,6 +13,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Rector\AbstractRector;
@@ -176,13 +176,13 @@ PHP
 
     private function hasRequiredAnnotation(Node $node): bool
     {
-        if ($node->getDocComment() === null) {
+        /** @var PhpDocInfo|null $phpDocInfo */
+        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
             return false;
         }
 
-        $docCommentText = $node->getDocComment()->getText();
-
-        return (bool) Strings::match($docCommentText, '#\s\@required\s#si');
+        return (bool) $phpDocInfo->hasByName('required');
     }
 
     /**
@@ -201,7 +201,8 @@ PHP
             }
 
             $param = $params[$key];
-            if (! $this->areNamesEqual($param->var, $arg->value)) {
+
+            if (! $this->areNodesWithoutCommentsEqual($param->var, $arg->value)) {
                 return false;
             }
         }
