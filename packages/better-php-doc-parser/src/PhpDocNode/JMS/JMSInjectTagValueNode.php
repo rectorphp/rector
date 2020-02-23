@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNode\JMS;
 
 use JMS\DiExtraBundle\Annotation\Inject;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
-final class JMSInjectTagValueNode extends AbstractTagValueNode
+final class JMSInjectTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
-    /**
-     * @var string
-     */
-    public const SHORT_NAME = '@DI\Inject';
-
     /**
      * @var string
      */
@@ -68,5 +64,10 @@ final class JMSInjectTagValueNode extends AbstractTagValueNode
     public function getServiceName(): ?string
     {
         return $this->serviceName;
+    }
+
+    public function getShortName(): string
+    {
+        return '@DI\Inject';
     }
 }

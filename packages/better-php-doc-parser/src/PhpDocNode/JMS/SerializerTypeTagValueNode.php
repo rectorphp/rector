@@ -6,16 +6,12 @@ namespace Rector\BetterPhpDocParser\PhpDocNode\JMS;
 
 use JMS\Serializer\Annotation\Type;
 use Nette\Utils\Strings;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
-final class SerializerTypeTagValueNode extends AbstractTagValueNode implements TypeAwareTagValueNodeInterface
+final class SerializerTypeTagValueNode extends AbstractTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface
 {
-    /**
-     * @var string
-     */
-    public const SHORT_NAME = '@Serializer\Type';
-
     /**
      * @var string
      */
@@ -58,5 +54,10 @@ final class SerializerTypeTagValueNode extends AbstractTagValueNode implements T
         }
 
         return false;
+    }
+
+    public function getShortName(): string
+    {
+        return '@Serializer\Type';
     }
 }

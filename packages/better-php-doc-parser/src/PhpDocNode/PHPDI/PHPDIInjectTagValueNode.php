@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNode\PHPDI;
 
 use DI\Annotation\Inject;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
-final class PHPDIInjectTagValueNode extends AbstractTagValueNode
+final class PHPDIInjectTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
-    /**
-     * @var string
-     */
-    public const SHORT_NAME = '@Inject';
-
     /**
      * @var string
      */
@@ -36,5 +32,10 @@ final class PHPDIInjectTagValueNode extends AbstractTagValueNode
         }
 
         return '(' . $this->value . ')';
+    }
+
+    public function getShortName(): string
+    {
+        return '@Inject';
     }
 }
