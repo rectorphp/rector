@@ -98,7 +98,7 @@ PHP
     public function refactor(Node $node): ?Node
     {
         $nestedIfsWithOnlyNonReturn = $this->ifManipulator->collectNestedIfsWithNonBreaking($node);
-        if ($nestedIfsWithOnlyNonReturn === []) {
+        if (count($nestedIfsWithOnlyNonReturn) < 2) {
             return null;
         }
 

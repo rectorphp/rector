@@ -23,7 +23,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  *
  * @see \Rector\DoctrineCodeQuality\Tests\Rector\Class_\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollection\ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRectorTest
  */
-class ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector extends AbstractRector
+final class ChangeQuerySetParametersMethodParameterFromArrayToArrayCollectionRector extends AbstractRector
 {
     public function getNodeTypes(): array
     {

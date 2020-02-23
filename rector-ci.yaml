@@ -1,14 +1,9 @@
-#services:
-#    Rector\SOLID\Rector\ClassConst\PrivatizeLocalClassConstantRector: null
-#    Rector\SOLID\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector: null
-#    Rector\SOLID\Rector\ClassMethod\ChangeReadOnlyVariableWithDefaultValueToConstantRector: null
-
 parameters:
     sets:
-#        - 'coding-style'
-#        - 'code-quality'
-#        - 'dead-code'
-#        - 'nette-utils-code-quality'
+        - 'coding-style'
+        - 'code-quality'
+        - 'dead-code'
+        - 'nette-utils-code-quality'
         - 'solid'
 
     paths:
