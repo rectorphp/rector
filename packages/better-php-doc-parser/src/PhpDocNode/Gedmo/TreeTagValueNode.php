@@ -4,16 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Gedmo;
 
-use Gedmo\Mapping\Annotation\Tree;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class TreeTagValueNode extends AbstractTagValueNode
 {
-    /**
-     * @var string
-     */
-    public const CLASS_NAME = Tree::class;
-
     /**
      * @var string
      */

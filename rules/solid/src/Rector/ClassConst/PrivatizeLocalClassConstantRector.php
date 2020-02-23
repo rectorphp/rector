@@ -188,7 +188,7 @@ PHP
         ?ConstantVisibility $constantVisibility,
         string $class
     ): void {
-        // 1. is actually never used (@todo use in "dead-code" set)
+        // 1. is actually never used
         if ($directUseClasses === []) {
             if ($indirectUseClasses !== [] && $constantVisibility !== null) {
                 $this->makePrivateOrWeaker($classConst, $constantVisibility);

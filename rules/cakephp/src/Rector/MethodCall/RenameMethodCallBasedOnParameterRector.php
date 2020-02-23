@@ -53,13 +53,15 @@ $object = $object->withAttribute('paging', ['a value']);
 PHP
                     ,
                     [
-                        'getParam' => [
-                            'match_parameter' => 'paging',
-                            'replace_with' => 'getAttribute',
-                        ],
-                        'withParam' => [
-                            'match_parameter' => 'paging',
-                            'replace_with' => 'withAttribute',
+                        '$methodNamesByTypes' => [
+                            'getParam' => [
+                                'match_parameter' => 'paging',
+                                'replace_with' => 'getAttribute',
+                            ],
+                            'withParam' => [
+                                'match_parameter' => 'paging',
+                                'replace_with' => 'withAttribute',
+                            ],
                         ],
                     ]
                 ),

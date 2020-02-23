@@ -1,4 +1,4 @@
-# All 460 Rectors Overview
+# All 461 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -351,12 +351,13 @@ Changes method calls based on matching the first parameter value.
 ```yaml
 services:
     Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector:
-        getParam:
-            match_parameter: paging
-            replace_with: getAttribute
-        withParam:
-            match_parameter: paging
-            replace_with: withAttribute
+        $methodNamesByTypes:
+            getParam:
+                match_parameter: paging
+                replace_with: getAttribute
+            withParam:
+                match_parameter: paging
+                replace_with: withAttribute
 ```
 
 ↓
@@ -2930,6 +2931,26 @@ Remove unreachable statements
          return 5;
 -
 -        $removeMe = 10;
+     }
+ }
+```
+
+<br>
+
+### `RemoveUnusedClassConstantRector`
+
+- class: [`Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector`](/../master/rules/dead-code/src/Rector/ClassConst/RemoveUnusedClassConstantRector.php)
+- [test fixtures](/../master/rules/dead-code/tests/Rector/ClassConst/RemoveUnusedClassConstantRector/Fixture)
+
+Remove unused class constants
+
+```diff
+ class SomeClass
+ {
+-    private const SOME_CONST = 'dead';
+-
+     public function run()
+     {
      }
  }
 ```
