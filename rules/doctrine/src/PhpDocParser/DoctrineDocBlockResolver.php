@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineRelationTagValueNodeInterface;
+use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EmbeddableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\ColumnTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Property_\IdTagValueNode;
@@ -37,28 +38,11 @@ final class DoctrineDocBlockResolver
     public function isDoctrineEntityClass($class): bool
     {
         if ($class instanceof Class_) {
-            $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
-            if ($phpDocInfo === null) {
-                return false;
-            }
-
-            return $phpDocInfo->hasByType(EntityTagValueNode::class);
+            return $this->isDoctrineEntityClassNode($class);
         }
 
         if (is_string($class)) {
-            if (ClassExistenceStaticHelper::doesClassLikeExist($class)) {
-                $classNode = $this->parsedNodeCollector->findClass($class);
-                if ($classNode !== null) {
-                    return $this->isDoctrineEntityClass($classNode);
-                }
-
-                $reflectionClass = new ReflectionClass($class);
-
-                // dummy check of 3rd party code without running it
-                return Strings::contains((string) $reflectionClass->getDocComment(), '@ORM\Entity');
-            }
-
-            return false;
+            return $this->isStringClassEntity($class);
         }
 
         throw new ShouldNotHappenException();
@@ -136,5 +120,42 @@ final class DoctrineDocBlockResolver
         }
 
         return $this->isDoctrineEntityClass($classNode);
+    }
+
+    private function isDoctrineEntityClassNode(Class_ $class): bool
+    {
+        $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return false;
+        }
+
+        if ($phpDocInfo->hasByType(EntityTagValueNode::class)) {
+            return true;
+        }
+
+        return $phpDocInfo->hasByType(EmbeddableTagValueNode::class);
+    }
+
+    private function isStringClassEntity(string $class): bool
+    {
+        if (! ClassExistenceStaticHelper::doesClassLikeExist($class)) {
+            return false;
+        }
+
+        $classNode = $this->parsedNodeCollector->findClass($class);
+        if ($classNode !== null) {
+            return $this->isDoctrineEntityClass($classNode);
+        }
+
+        $reflectionClass = new ReflectionClass($class);
+
+        // dummy check of 3rd party code without running it
+        $docCommentContent = (string) $reflectionClass->getDocComment();
+
+        if (Strings::contains($docCommentContent, '@ORM\Entity')) {
+            return true;
+        }
+
+        return Strings::contains($docCommentContent, '@ORM\Embeddable');
     }
 }
