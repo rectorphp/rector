@@ -1,4 +1,4 @@
-# All 459 Rectors Overview
+# All 460 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -5801,6 +5801,27 @@ Add $_SERVER REQUEST_URI to method call
          $application = new \Phalcon\Mvc\Application();
 -        $response = $application->handle();
 +        $response = $application->handle($_SERVER["REQUEST_URI"]);
+     }
+ }
+```
+
+<br>
+
+### `DecoupleSaveMethodCallWithArgumentToAssignRector`
+
+- class: [`Rector\Phalcon\Rector\MethodCall\DecoupleSaveMethodCallWithArgumentToAssignRector`](/../master/rules/phalcon/src/Rector/MethodCall/DecoupleSaveMethodCallWithArgumentToAssignRector.php)
+- [test fixtures](/../master/rules/phalcon/tests/Rector/MethodCall/DecoupleSaveMethodCallWithArgumentToAssignRector/Fixture)
+
+Decouple Phalcon\Mvc\Model::save() with argument to assign()
+
+```diff
+ class SomeClass
+ {
+     public function run(\Phalcon\Mvc\Model $model, $data)
+     {
+-        $model->save($data);
++        $model->save();
++        $model->assign($data);
      }
  }
 ```
