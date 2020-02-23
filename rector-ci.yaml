@@ -17,11 +17,6 @@ parameters:
         - 'packages'
         - 'tests'
 
-    autoload_paths:
-        # needed for FixtureSplitter::SPLIT_LINE public use
-        - 'ci/check_keep_fixtures.php'
-#        - 'ci/check_services_in_yaml_configs.php'
-
     exclude_paths:
         - '/Fixture/'
         - '/Source/'

@@ -27,8 +27,8 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
-use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
@@ -104,9 +104,9 @@ final class PhpDocInfo
         $this->phpDocNode->children[] = $phpDocChildNode;
     }
 
-    public function addTagValueNodeWithShortName(AbstractTagValueNode $tagValueNode): void
+    public function addTagValueNodeWithShortName(ShortNameAwareTagInterface $shortNameAwareTag): void
     {
-        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode($tagValueNode::SHORT_NAME, $tagValueNode);
+        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode($shortNameAwareTag->getShortName(), $shortNameAwareTag);
         $this->addPhpDocTagNode($spacelessPhpDocTagNode);
     }
 

@@ -10,11 +10,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implements TagAwareNodeInterface
 {
     /**
-     * @var string
-     */
-    public const SHORT_NAME = '@ORM\JoinColumn';
-
-    /**
      * @var bool|null
      */
     private $nullable;
@@ -126,11 +121,16 @@ final class JoinColumnTagValueNode extends AbstractDoctrineTagValueNode implemen
 
     public function getTag(): ?string
     {
-        return $this->tag ?: self::SHORT_NAME;
+        return $this->tag ?: $this->getShortName();
     }
 
     public function getUnique(): ?bool
     {
         return $this->unique;
+    }
+
+    public function getShortName(): string
+    {
+        return '@ORM\JoinColumn';
     }
 }

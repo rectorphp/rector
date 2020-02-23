@@ -9,11 +9,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 final class InheritanceTypeTagValueNode extends AbstractDoctrineTagValueNode
 {
     /**
-     * @var string
-     */
-    public const SHORT_NAME = '@ORM\InheritanceType';
-
-    /**
      * @var string|null
      */
     private $value;
@@ -35,5 +30,10 @@ final class InheritanceTypeTagValueNode extends AbstractDoctrineTagValueNode
         }
 
         return '(value="' . $this->value . '")';
+    }
+
+    public function getShortName(): string
+    {
+        return '@ORM\InheritanceType';
     }
 }

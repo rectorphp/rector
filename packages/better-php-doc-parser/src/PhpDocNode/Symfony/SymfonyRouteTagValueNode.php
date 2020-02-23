@@ -5,16 +5,12 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocNode\Symfony;
 
 use Nette\Utils\Strings;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class SymfonyRouteTagValueNode extends AbstractTagValueNode
+final class SymfonyRouteTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
-    /**
-     * @var string
-     */
-    public const SHORT_NAME = '@Route';
-
     /**
      * @var string
      */
@@ -126,6 +122,11 @@ final class SymfonyRouteTagValueNode extends AbstractTagValueNode
     {
         $this->orderedVisibleItems[] = 'methods';
         $this->methods = $methods;
+    }
+
+    public function getShortName(): string
+    {
+        return '@Route';
     }
 
     private function createPath(): string
