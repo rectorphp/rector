@@ -246,8 +246,7 @@ parameters:
         - '#Right side of && is always true#'
         - '#Parameter \#(.*?) (.*?) of class PhpParser\\Node\\Expr\\BinaryOp\\(.*?) constructor expects PhpParser\\Node\\Expr, PhpParser\\Node given#'
 
-        - '#Method Rector\\BetterPhpDocParser\\PhpDocNode\\JMS\\JMSInjectParamsTagValueNode\:\:__toString\(\) should return string but returns string\|null#'
-        - '#Method Rector\\BetterPhpDocParser\\PhpDocNode\\JMS\\JMSServiceValueNode\:\:__toString\(\) should return string but returns string\|null#'
+        - '#Method Rector\\(.*?)\:\:__toString\(\) should return string but returns string\|null#'
 
         - '#Strict comparison using \=\=\= between mixed and (.*?) will always evaluate to false#'
         - '#Parameter \#1 \$c of method Rector\\Php70\\EregToPcreTransformer\:\:_ere2pcre_escape\(\) expects string, mixed given#'
