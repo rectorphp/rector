@@ -13,12 +13,46 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 ### Added
 
+- [#2906] [CodeQuality] Add InlineIfToExplicitIfRector
+- [#2898] [CodingStyle] Add CamelCaseFunctionNamingToUnderscoreRector
+- [#2919] [DeadCode] Add RemoveUnusedVariableAssignRector
+- [#2918] [DeadCode] Add RemoveUnusedClassConstantRector
+- [#2914] [JMS] Add RemoveJmsInjectParamsAnnotationRector and RemoveJmsServiceAnnotationRector
+- [#2920] [MysqlToMysqli] Add MysqlQueryMysqlErrorWithLinkRector
+- [#2917] [Phalcon] Add DecoupleSaveMethodCallWithArgumentToAssignRector
+- [#2907] [SOLID] Add ChangeNestedForeachIfsToEarlyContinueRector
+- [#2873] [SOLID] Add ChangeReadOnlyVariableWithDefaultValueToConstantRector
+- [#2901] add links to each rule to docs
+- [#2902] add mergeable
+- [#2862] Adding failing test for RemoveAlwaysElseRector, Thanks to [@escopecz]
+- [#2867] Add failing test for issue [#2863], Thanks to [@fsok]
 - [#2853] [DeadCode] Add RemoveDeadTryCatchRector
 - [#2856] [SOLID] Add ChangeReadOnlyPropertyWithDefaultValueToConstantRector
 - [#2848] add first OXID rector, Thanks to [@alfredbez]
 
 ### Changed
 
+- [#2883] [OXID] replace backwards-compatability classes in oxNew, Thanks to [@alfredbez]
+- [#2886] skip test fixtures
+- [#2872] Skip unpackaged args in ArraySpreadInsteadOfArrayMergeRector
+- [#2871] Make ParamTypeDeclaration test pass with parent interface
+- [#2874] Update set for transforming Kdyby\Translation to Contributte\Translation, Thanks to [@Ivorius]
+- [#2869] Keep comments
+- [#2868] update CHANGELOG
+- [#2875] disable coverage on pr, secret does not work
+- [#2876] `AnnotateThrowablesRector`: Improve organization of tests., Thanks to [@Aerendir]
+- [#2881] Callable type falling tests, Thanks to [@snapshotpl]
+- [#2884] Callable type
+- [#2922] skip used property
+- [#2890] Support throw of static methods, Thanks to [@Aerendir]
+- [#2904] Support throw from the method of an instantiated class., Thanks to [@Aerendir]
+- [#2916] improve complexity
+- [#2915] improve EregToPcreTransformer complexity
+- [#2913] replace SHORT_NAME with short name interface
+- [#2909] Rector CI: enable SOLID set
+- [#2905] Fixup
+- [#2903] prevent getName() on StaticCall or MethodCall
+- [#2896] keep array function static
 - [#2631] [AddArrayReturnDocTypeRector] sets a less specific type in child method (mixed[]) than is defined in parent method (SomeObject[]), Thanks to [@gnutix]
 - [#2650] [CountOnNullRector] Should understand array/countable variable in trait method, Thanks to [@gnutix]
 - [#2860] Make `AnnotateThrowablesRector` continue on unhandled node types., Thanks to [@Aerendir]
@@ -31,6 +65,14 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 - [#2865] fix callable print [closes [#2841]]
 - [#2866] Skip CountOnNullRector on trait + fix return type mixed override
+- [#2885] Fix already constant
+- [#2900] Fix incorrect regexes to preserve doc tags spacing
+- [#2899] fix duplicate switch without break
+- [#2880] Fix PHP notice in ternary to spaceship rector, Thanks to [@fsok]
+- [#2870] fix remove alwasy else for anonymous function jump
+- [#2921] Fix FinalizeClassesWithoutChildrenRector for embedable
+- [#2893] fix tab indent
+- [#2897] fix nested array dim fetch resolving type
 
 ## [v0.7.0] - 2020-02-14
 
@@ -2303,7 +2345,6 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#2841]: https://github.com/rectorphp/rector/pull/2841
 [#2840]: https://github.com/rectorphp/rector/pull/2840
 [#2838]: https://github.com/rectorphp/rector/pull/2838
-[#2833]: https://github.com/rectorphp/rector/pull/2833
 [#2831]: https://github.com/rectorphp/rector/pull/2831
 [#2830]: https://github.com/rectorphp/rector/pull/2830
 [#2829]: https://github.com/rectorphp/rector/pull/2829
@@ -2402,3 +2443,48 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [@vladyslavstartsev]: https://github.com/vladyslavstartsev
 [@ikvasnica]: https://github.com/ikvasnica
 [@alfredbez]: https://github.com/alfredbez
+[#2922]: https://github.com/rectorphp/rector/pull/2922
+[#2921]: https://github.com/rectorphp/rector/pull/2921
+[#2920]: https://github.com/rectorphp/rector/pull/2920
+[#2919]: https://github.com/rectorphp/rector/pull/2919
+[#2918]: https://github.com/rectorphp/rector/pull/2918
+[#2917]: https://github.com/rectorphp/rector/pull/2917
+[#2916]: https://github.com/rectorphp/rector/pull/2916
+[#2915]: https://github.com/rectorphp/rector/pull/2915
+[#2914]: https://github.com/rectorphp/rector/pull/2914
+[#2913]: https://github.com/rectorphp/rector/pull/2913
+[#2909]: https://github.com/rectorphp/rector/pull/2909
+[#2907]: https://github.com/rectorphp/rector/pull/2907
+[#2906]: https://github.com/rectorphp/rector/pull/2906
+[#2905]: https://github.com/rectorphp/rector/pull/2905
+[#2904]: https://github.com/rectorphp/rector/pull/2904
+[#2903]: https://github.com/rectorphp/rector/pull/2903
+[#2902]: https://github.com/rectorphp/rector/pull/2902
+[#2901]: https://github.com/rectorphp/rector/pull/2901
+[#2900]: https://github.com/rectorphp/rector/pull/2900
+[#2899]: https://github.com/rectorphp/rector/pull/2899
+[#2898]: https://github.com/rectorphp/rector/pull/2898
+[#2897]: https://github.com/rectorphp/rector/pull/2897
+[#2896]: https://github.com/rectorphp/rector/pull/2896
+[#2893]: https://github.com/rectorphp/rector/pull/2893
+[#2890]: https://github.com/rectorphp/rector/pull/2890
+[#2886]: https://github.com/rectorphp/rector/pull/2886
+[#2885]: https://github.com/rectorphp/rector/pull/2885
+[#2884]: https://github.com/rectorphp/rector/pull/2884
+[#2883]: https://github.com/rectorphp/rector/pull/2883
+[#2881]: https://github.com/rectorphp/rector/pull/2881
+[#2880]: https://github.com/rectorphp/rector/pull/2880
+[#2876]: https://github.com/rectorphp/rector/pull/2876
+[#2875]: https://github.com/rectorphp/rector/pull/2875
+[#2874]: https://github.com/rectorphp/rector/pull/2874
+[#2873]: https://github.com/rectorphp/rector/pull/2873
+[#2872]: https://github.com/rectorphp/rector/pull/2872
+[#2871]: https://github.com/rectorphp/rector/pull/2871
+[#2870]: https://github.com/rectorphp/rector/pull/2870
+[#2869]: https://github.com/rectorphp/rector/pull/2869
+[#2868]: https://github.com/rectorphp/rector/pull/2868
+[#2867]: https://github.com/rectorphp/rector/pull/2867
+[#2863]: https://github.com/rectorphp/rector/pull/2863
+[#2862]: https://github.com/rectorphp/rector/pull/2862
+[@escopecz]: https://github.com/escopecz
+[@Ivorius]: https://github.com/Ivorius
