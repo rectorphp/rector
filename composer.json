@@ -253,9 +253,6 @@
         "rector-ci": "bin/rector process --config rector-ci.yaml --dry-run --ansi --no-progress-bar",
         "rector": "bin/rector process --config rector-ci.yaml --ansi"
     },
-    "scripts-descriptions": {
-        "docs": "Regenerate descriptions of all Rectors to docs/AllRectorsOverview.md file"
-    },
     "config": {
         "sort-packages": true
     },
