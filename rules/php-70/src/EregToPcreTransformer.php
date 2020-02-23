@@ -10,7 +10,8 @@ use Rector\Php70\Exception\InvalidEregException;
 /**
  * @author Kang Seonghoon <public+ere2pcre@mearie.org>
  * @source https://gist.github.com/lifthrasiir/704754/7e486f43e62fd1c9d3669330c251f8ca4a59a3f8
- * @see \Rector\Php\Tests\EregToPcreTransformerTest
+ *
+ * @see \Rector\Php70\Tests\EregToPcreTransformerTest
  */
 final class EregToPcreTransformer
 {
@@ -116,48 +117,10 @@ final class EregToPcreTransformer
                     throw new InvalidEregException('"[" does not have a matching "]"');
                 }
                 $start = true;
-                do {
-                    if ($s[$i] === '[' &&
-                        $i + 1 < $l && Strings::contains('.=:', $s[$i + 1])) {
-                        $offset = (int) $i;
-                        $ii = strpos($s, ']', $offset);
-                        if ($ii === false) {
-                            throw new InvalidEregException('"[" does not have a matching "]"');
-                        }
 
-                        $start = (int) $i + 1;
-                        $length = (int) ($ii - ($i + 1));
-                        $ccls = Strings::substring($s, $start, $length);
-                        if (! isset(self::CCLSMAP[$ccls])) {
-                            throw new InvalidEregException(
-                                'an invalid or unsupported character class [' . $ccls . ']'
-                            );
-                        }
-                        $cls .= self::CCLSMAP[$ccls];
-                        $i = $ii + 1;
-                    } else {
-                        $a = $s[$i++];
-                        if ($a === '-' && ! $start && ! ($i < $l && $s[$i] === ']')) {
-                            throw new InvalidEregException(
-                                '"-" is invalid for the start character in the brackets'
-                            );
-                        }
-                        if ($i < $l && $s[$i] === '-') {
-                            ++$i;
-                            $b = $s[$i++];
-                            if ($b === ']') {
-                                $cls .= $this->_ere2pcre_escape($a) . '\-';
-                                break;
-                            } elseif (ord($a) > ord($b)) {
-                                throw new InvalidEregException(sprintf('an invalid character range %d-%d"', $a, $b));
-                            }
-                            $cls .= $this->_ere2pcre_escape($a) . '-' . $this->_ere2pcre_escape($b);
-                        } else {
-                            $cls .= $this->_ere2pcre_escape($a);
-                        }
-                    }
-                    $start = false;
-                } while ($i < $l && $s[$i] !== ']');
+                $i = (int) $i;
+                [$cls, $i] = $this->processSquareBracket($s, $i, $l, $cls, $start);
+
                 if ($i >= $l) {
                     throw new InvalidEregException('"[" does not have a matching "]"');
                 }
@@ -205,35 +168,8 @@ final class EregToPcreTransformer
                 ++$i;
             } elseif ($c === '{') {
                 $i = (int) $i;
-                $ii = strpos($s, '}', $i);
-                if ($ii === false) {
-                    throw new InvalidEregException('"{" does not have a matching "}"');
-                }
 
-                $start = (int) $i + 1;
-                $length = (int) $ii - ($i + 1);
-                $bound = Strings::substring($s, $start, $length);
-
-                $m = Strings::match($bound, '/^(\d|[1-9]\d|1\d\d|
-                                2[0-4]\d|25[0-5])
-                               (,(\d|[1-9]\d|1\d\d|
-                                  2[0-4]\d|25[0-5])?)?$/x');
-
-                if (! $m) {
-                    throw new InvalidEregException('an invalid bound');
-                }
-
-                if (isset($m[3])) {
-                    if ($m[1] > $m[3]) {
-                        throw new InvalidEregException('an invalid bound');
-                    }
-                    $r[$rr] .= '{' . $m[1] . ',' . $m[3] . '}';
-                } elseif (isset($m[2])) {
-                    $r[$rr] .= '{' . $m[1] . ',}';
-                } else {
-                    $r[$rr] .= '{' . $m[1] . '}';
-                }
-                $i = $ii + 1;
+                [$start, $i] = $this->processCurlyBracket($s, $i, $r, $rr);
             }
         }
         if ($r[$rr] === '') {
@@ -252,5 +188,83 @@ final class EregToPcreTransformer
         }
 
         return $c;
+    }
+
+    private function processSquareBracket(string &$s, int &$i, int &$l, string &$cls, bool &$start): array
+    {
+        do {
+            if ($s[$i] === '[' &&
+                $i + 1 < $l && Strings::contains('.=:', $s[$i + 1])) {
+                $offset = (int) $i;
+                $ii = strpos($s, ']', $offset);
+                if ($ii === false) {
+                    throw new InvalidEregException('"[" does not have a matching "]"');
+                }
+
+                $start = (int) $i + 1;
+                $length = (int) ($ii - ($i + 1));
+                $ccls = Strings::substring($s, $start, $length);
+                if (! isset(self::CCLSMAP[$ccls])) {
+                    throw new InvalidEregException('an invalid or unsupported character class [' . $ccls . ']');
+                }
+                $cls .= self::CCLSMAP[$ccls];
+                $i = $ii + 1;
+            } else {
+                $a = $s[$i++];
+                if ($a === '-' && ! $start && ! ($i < $l && $s[$i] === ']')) {
+                    throw new InvalidEregException('"-" is invalid for the start character in the brackets');
+                }
+                if ($i < $l && $s[$i] === '-') {
+                    ++$i;
+                    $b = $s[$i++];
+                    if ($b === ']') {
+                        $cls .= $this->_ere2pcre_escape($a) . '\-';
+                        break;
+                    } elseif (ord($a) > ord($b)) {
+                        throw new InvalidEregException(sprintf('an invalid character range %d-%d"', $a, $b));
+                    }
+                    $cls .= $this->_ere2pcre_escape($a) . '-' . $this->_ere2pcre_escape($b);
+                } else {
+                    $cls .= $this->_ere2pcre_escape($a);
+                }
+            }
+            $start = false;
+        } while ($i < $l && $s[$i] !== ']');
+
+        return [$cls, $i];
+    }
+
+    private function processCurlyBracket(string $s, int $i, array &$r, int $rr): array
+    {
+        $ii = strpos($s, '}', $i);
+        if ($ii === false) {
+            throw new InvalidEregException('"{" does not have a matching "}"');
+        }
+
+        $start = (int) $i + 1;
+        $length = (int) $ii - ($i + 1);
+        $bound = Strings::substring($s, $start, $length);
+
+        $m = Strings::match($bound, '/^(\d|[1-9]\d|1\d\d|
+                                2[0-4]\d|25[0-5])
+                               (,(\d|[1-9]\d|1\d\d|
+                                  2[0-4]\d|25[0-5])?)?$/x');
+        if (! $m) {
+            throw new InvalidEregException('an invalid bound');
+        }
+
+        if (isset($m[3])) {
+            if ($m[1] > $m[3]) {
+                throw new InvalidEregException('an invalid bound');
+            }
+            $r[$rr] .= '{' . $m[1] . ',' . $m[3] . '}';
+        } elseif (isset($m[2])) {
+            $r[$rr] .= '{' . $m[1] . ',}';
+        } else {
+            $r[$rr] .= '{' . $m[1] . '}';
+        }
+        $i = $ii + 1;
+
+        return [$start, $i];
     }
 }
