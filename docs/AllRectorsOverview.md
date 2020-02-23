@@ -1,4 +1,4 @@
-# All 457 Rectors Overview
+# All 459 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -20,6 +20,7 @@
 - [ElasticSearchDSL](#elasticsearchdsl)
 - [FileSystemRector](#filesystemrector)
 - [Guzzle](#guzzle)
+- [JMS](#jms)
 - [Laravel](#laravel)
 - [Legacy](#legacy)
 - [MinimalScope](#minimalscope)
@@ -3981,6 +3982,55 @@ Changes getMessage(..., true) to getMessageAsArray()
  /** @var GuzzleHttp\Message\MessageInterface */
 -$value = $message->getMessage('key', true);
 +$value = $message->getMessageAsArray('key');
+```
+
+<br>
+
+## JMS
+
+### `RemoveJmsInjectParamsAnnotationRector`
+
+- class: [`Rector\JMS\Rector\ClassMethod\RemoveJmsInjectParamsAnnotationRector`](/../master/rules/jms/src/Rector/ClassMethod/RemoveJmsInjectParamsAnnotationRector.php)
+- [test fixtures](/../master/rules/jms/tests/Rector/ClassMethod/RemoveJmsInjectParamsAnnotationRector/Fixture)
+
+Removes JMS\DiExtraBundle\Annotation\InjectParams annotation
+
+```diff
+ use JMS\DiExtraBundle\Annotation as DI;
+
+ class SomeClass
+ {
+-    /**
+-     * @DI\InjectParams({
+-     *     "subscribeService" = @DI\Inject("app.email.service.subscribe"),
+-     *     "ipService" = @DI\Inject("app.util.service.ip")
+-     * })
+-     */
+     public function __construct()
+     {
+     }
+-}
++}
+```
+
+<br>
+
+### `RemoveJmsInjectServiceAnnotationRector`
+
+- class: [`Rector\JMS\Rector\Class_\RemoveJmsInjectServiceAnnotationRector`](/../master/rules/jms/src/Rector/Class_/RemoveJmsInjectServiceAnnotationRector.php)
+- [test fixtures](/../master/rules/jms/tests/Rector/Class_/RemoveJmsInjectServiceAnnotationRector/Fixture)
+
+Removes JMS\DiExtraBundle\Annotation\Services annotation
+
+```diff
+ use JMS\DiExtraBundle\Annotation as DI;
+
+-/**
+- * @DI\Service("email.web.services.subscribe_token", public=true)
+- */
+ class SomeClass
+ {
+ }
 ```
 
 <br>

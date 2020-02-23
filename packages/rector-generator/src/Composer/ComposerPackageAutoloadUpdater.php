@@ -76,8 +76,8 @@ final class ComposerPackageAutoloadUpdater
         return new Package(
             'Rector\\' . $configuration->getPackage() . '\\',
             'Rector\\' . $configuration->getPackage() . '\\Tests\\',
-            'packages/' . $configuration->getPackage() . '/src',
-            'packages/' . $configuration->getPackage() . '/tests'
+            'rules/' . $configuration->getPackageDirectory() . '/src',
+            'rules/' . $configuration->getPackageDirectory() . '/tests'
         );
     }
 
