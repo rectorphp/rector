@@ -15,9 +15,6 @@ parameters:
         - stubs
         - compiler/src
 
-    autoload_files:
-        - ci/check_services_in_yaml_configs.php
-
     paths:
         - ci
         - bin
@@ -28,6 +25,7 @@ parameters:
         - compiler/src
 
     excludes_analyse:
+        - ci/check_services_in_yaml_configs.php
         - "*/Expected/*"
         # complex printer
         - "packages/ContributorTools/src/Command/DumpNodesCommand.php"
@@ -247,3 +245,6 @@ parameters:
 
         - '#Right side of && is always true#'
         - '#Parameter \#(.*?) (.*?) of class PhpParser\\Node\\Expr\\BinaryOp\\(.*?) constructor expects PhpParser\\Node\\Expr, PhpParser\\Node given#'
+
+        - '#Method Rector\\BetterPhpDocParser\\PhpDocNode\\JMS\\JMSInjectParamsTagValueNode\:\:__toString\(\) should return string but returns string\|null#'
+        - '#Method Rector\\BetterPhpDocParser\\PhpDocNode\\JMS\\JMSServiceValueNode\:\:__toString\(\) should return string but returns string\|null#'

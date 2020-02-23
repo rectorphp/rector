@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\RectorGenerator\ValueObject;
 
 use Nette\Utils\Strings;
+use Rector\Core\Util\RectorStrings;
 
 final class Configuration
 {
@@ -108,6 +109,11 @@ final class Configuration
     public function getPackage(): string
     {
         return $this->package;
+    }
+
+    public function getPackageDirectory(): string
+    {
+        return RectorStrings::camelCaseToDashes($this->package);
     }
 
     public function getName(): string
