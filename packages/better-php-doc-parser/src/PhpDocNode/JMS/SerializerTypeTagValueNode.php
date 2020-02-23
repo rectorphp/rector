@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\JMS;
 
-use JMS\Serializer\Annotation\Type;
 use Nette\Utils\Strings;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
@@ -12,11 +11,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class SerializerTypeTagValueNode extends AbstractTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface
 {
-    /**
-     * @var string
-     */
-    public const CLASS_NAME = Type::class;
-
     /**
      * @var string
      */

@@ -4,17 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\JMS;
 
-use JMS\DiExtraBundle\Annotation\Inject;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class JMSInjectTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
-    /**
-     * @var string
-     */
-    public const CLASS_NAME = Inject::class;
-
     /**
      * @var string|null
      */

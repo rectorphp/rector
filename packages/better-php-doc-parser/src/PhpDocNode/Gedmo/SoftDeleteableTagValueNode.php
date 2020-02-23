@@ -4,17 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Gedmo;
 
-use Gedmo\Mapping\Annotation\SoftDeleteable;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
 final class SoftDeleteableTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
-    /**
-     * @var string
-     */
-    public const CLASS_NAME = SoftDeleteable::class;
-
     /**
      * @var string
      */
