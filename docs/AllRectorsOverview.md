@@ -1,4 +1,4 @@
-# All 462 Rectors Overview
+# All 463 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -4331,6 +4331,32 @@ Replace mysql_pconnect() with mysqli_connect() with host p: prefix
      {
 -        return mysql_pconnect($host, $username, $password);
 +        return mysqli_connect('p:' . $host, $username, $password);
+     }
+ }
+```
+
+<br>
+
+### `MysqlQueryMysqlErrorWithLinkRector`
+
+- class: [`Rector\MysqlToMysqli\Rector\FuncCall\MysqlQueryMysqlErrorWithLinkRector`](/../master/rules/mysql-to-mysqli/src/Rector/FuncCall/MysqlQueryMysqlErrorWithLinkRector.php)
+- [test fixtures](/../master/rules/mysql-to-mysqli/tests/Rector/FuncCall/MysqlQueryMysqlErrorWithLinkRector/Fixture)
+
+Add mysql_query and mysql_error with connection
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $conn = mysqli_connect('host', 'user', 'pass');
+
+-        mysql_error();
++        mysqli_error($conn);
+         $sql = 'SELECT';
+
+-        return mysql_query($sql);
++        return mysqli_query($conn, $sql);
      }
  }
 ```
