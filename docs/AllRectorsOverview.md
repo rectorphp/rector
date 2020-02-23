@@ -1,4 +1,4 @@
-# All 461 Rectors Overview
+# All 462 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -3110,6 +3110,25 @@ Remove unused private properties
  class SomeClass
  {
 -    private $property;
+ }
+```
+
+<br>
+
+### `RemoveUnusedVariableAssignRector`
+
+- class: [`Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector`](/../master/rules/dead-code/src/Rector/Assign/RemoveUnusedVariableAssignRector.php)
+- [test fixtures](/../master/rules/dead-code/tests/Rector/Assign/RemoveUnusedVariableAssignRector/Fixture)
+
+Remove unused assigns to variables
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = 5;
+     }
  }
 ```
 
