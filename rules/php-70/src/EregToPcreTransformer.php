@@ -86,7 +86,7 @@ final class EregToPcreTransformer
             return $this->icache[$content] = '#' . $r . '#mi';
         }
 
-        return $cache[$content] = '#' . $r . '#m';
+        return $this->cache[$content] = '#' . $r . '#m';
     }
 
     /**
@@ -249,9 +249,8 @@ final class EregToPcreTransformer
         } else {
             $r[$rr] .= '{' . $matches[1] . '}';
         }
-        $i = $ii + 1;
 
-        return $i;
+        return $ii + 1;
     }
 
     private function processBracket(string $content, int $i, int $l, array &$r, int $rr)
