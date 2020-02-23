@@ -14,11 +14,6 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
     /**
      * @var string
      */
-    public const SHORT_NAME = '@ORM\ManyToMany';
-
-    /**
-     * @var string
-     */
     private $targetEntity;
 
     /**
@@ -147,5 +142,10 @@ final class ManyToManyTagValueNode extends AbstractDoctrineTagValueNode implemen
     public function changeTargetEntity(string $targetEntity): void
     {
         $this->targetEntity = $targetEntity;
+    }
+
+    public function getShortName(): string
+    {
+        return '@ORM\ManyToMany';
     }
 }

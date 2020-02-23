@@ -11,40 +11,63 @@ use Symfony\Component\Yaml\Yaml;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$yamlConfigFileProvider = new YamlConfigFileProvider();
-$serviceConfigurationValidator = new ServiceConfigurationValidator();
+$serviceExistenceConfigChecker = new ServiceExistenceConfigChecker();
+$serviceExistenceConfigChecker->check();
 
-foreach ($yamlConfigFileProvider->provider() as $configFileInfo) {
-    $yamlContent = Yaml::parseFile($configFileInfo->getRealPath());
-    if (! isset($yamlContent['services'])) {
-        continue;
+final class ServiceExistenceConfigChecker
+{
+    /**
+     * @var YamlConfigFileProvider
+     */
+    private $yamlConfigFileProvider;
+
+    /**
+     * @var ServiceConfigurationValidator
+     */
+    private $serviceConfigurationValidator;
+
+    public function __construct()
+    {
+        $this->yamlConfigFileProvider = new YamlConfigFileProvider();
+        $this->serviceConfigurationValidator = new ServiceConfigurationValidator();
     }
 
-    foreach ($yamlContent['services'] as $service => $serviceConfiguration) {
-        // configuration → skip
-        if (Strings::startsWith($service, '_')) {
-            continue;
+    public function check(): void
+    {
+        foreach ($this->yamlConfigFileProvider->provider() as $configFileInfo) {
+            $yamlContent = Yaml::parseFile($configFileInfo->getRealPath());
+            if (! isset($yamlContent['services'])) {
+                continue;
+            }
+
+            foreach ($yamlContent['services'] as $service => $serviceConfiguration) {
+                // configuration → skip
+                if (Strings::startsWith($service, '_')) {
+                    continue;
+                }
+
+                // autodiscovery → skip
+                if (Strings::endsWith($service, '\\')) {
+                    continue;
+                }
+
+                if (! ClassExistenceStaticHelper::doesClassLikeExist($service)) {
+                    throw new ShouldNotHappenException(sprintf(
+                        'Service "%s" from config "%s" was not found. Check if it really exists or is even autoload, please',
+                        $service,
+                        $configFileInfo->getRealPath()
+                    ));
+                }
+
+                $this->serviceConfigurationValidator->validate($service, $serviceConfiguration, $configFileInfo);
+            }
         }
 
-        // autodiscovery → skip
-        if (Strings::endsWith($service, '\\')) {
-            continue;
-        }
-
-        if (! ClassExistenceStaticHelper::doesClassLikeExist($service)) {
-            throw new ShouldNotHappenException(sprintf(
-                'Service "%s" from config "%s" was not found. Check if it really exists or is even autoload, please',
-                $service,
-                $configFileInfo->getRealPath()
-            ));
-        }
-
-        $serviceConfigurationValidator->validate($service, $serviceConfiguration, $configFileInfo);
+        echo 'All configs have existing services - good job!' . PHP_EOL;
     }
 }
 
-
-class YamlConfigFileProvider
+final class YamlConfigFileProvider
 {
     /**
      * @return SplFileInfo[]
@@ -59,7 +82,7 @@ class YamlConfigFileProvider
     }
 }
 
-class ServiceConfigurationValidator
+final class ServiceConfigurationValidator
 {
     public function validate(string $serviceClass, $configuration, SplFileInfo $configFileInfo): void
     {
@@ -119,5 +142,3 @@ class ServiceConfigurationValidator
         return $constructorParameterNames;
     }
 }
-
-echo 'All configs have existing services - good job!' . PHP_EOL;

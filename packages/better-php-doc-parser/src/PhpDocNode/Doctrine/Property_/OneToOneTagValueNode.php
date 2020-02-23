@@ -14,11 +14,6 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
     /**
      * @var string
      */
-    public const SHORT_NAME = '@ORM\OneToOne';
-
-    /**
-     * @var string
-     */
     private $targetEntity;
 
     /**
@@ -137,5 +132,10 @@ final class OneToOneTagValueNode extends AbstractDoctrineTagValueNode implements
     public function changeTargetEntity(string $targetEntity): void
     {
         $this->targetEntity = $targetEntity;
+    }
+
+    public function getShortName(): string
+    {
+        return '@ORM\OneToOne';
     }
 }

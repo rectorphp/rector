@@ -9,11 +9,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 final class EntityTagValueNode extends AbstractDoctrineTagValueNode
 {
     /**
-     * @var string
-     */
-    public const SHORT_NAME = '@ORM\Entity';
-
-    /**
      * @var string|null
      */
     private $repositoryClass;
@@ -52,5 +47,10 @@ final class EntityTagValueNode extends AbstractDoctrineTagValueNode
     public function removeRepositoryClass(): void
     {
         $this->repositoryClass = null;
+    }
+
+    public function getShortName(): string
+    {
+        return '@ORM\Entity';
     }
 }

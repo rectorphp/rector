@@ -8,13 +8,13 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 
 final class IdTagValueNode extends AbstractDoctrineTagValueNode
 {
-    /**
-     * @var string
-     */
-    public const SHORT_NAME = '@ORM\Id';
-
     public function __toString(): string
     {
         return '';
+    }
+
+    public function getShortName(): string
+    {
+        return '@ORM\Id';
     }
 }

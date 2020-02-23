@@ -9,11 +9,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 final class TableTagValueNode extends AbstractDoctrineTagValueNode
 {
     /**
-     * @var string
-     */
-    public const SHORT_NAME = '@ORM\Table';
-
-    /**
      * @var string|null
      */
     private $name;
@@ -151,5 +146,10 @@ final class TableTagValueNode extends AbstractDoctrineTagValueNode
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    public function getShortName(): string
+    {
+        return '@ORM\Table';
     }
 }

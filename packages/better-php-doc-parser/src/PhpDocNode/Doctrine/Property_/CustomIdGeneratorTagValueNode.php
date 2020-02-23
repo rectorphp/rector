@@ -11,11 +11,6 @@ final class CustomIdGeneratorTagValueNode extends AbstractDoctrineTagValueNode
     /**
      * @var string
      */
-    public const SHORT_NAME = '@ORM\CustomIdGenerator';
-
-    /**
-     * @var string
-     */
     private $class;
 
     public function __construct(string $class, ?string $originalContent = null)
@@ -27,5 +22,10 @@ final class CustomIdGeneratorTagValueNode extends AbstractDoctrineTagValueNode
     public function __toString(): string
     {
         return sprintf('(class="%s")', $this->class);
+    }
+
+    public function getShortName(): string
+    {
+        return '@ORM\CustomIdGenerator';
     }
 }

@@ -11,11 +11,6 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
     /**
      * @var string
      */
-    public const SHORT_NAME = '@ORM\JoinTable';
-
-    /**
-     * @var string
-     */
     private $name;
 
     /**
@@ -110,5 +105,10 @@ final class JoinTableTagValueNode extends AbstractDoctrineTagValueNode
         }
 
         return $this->printContentItems($contentItems);
+    }
+
+    public function getShortName(): string
+    {
+        return '@ORM\JoinTable';
     }
 }

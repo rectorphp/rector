@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Nette\Utils\Strings;
 use Rector\Core\Testing\PHPUnit\FixtureSplitter;
+use Rector\Core\Testing\ValueObject\SplitLine;
 use Symfony\Component\Finder\Finder;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
@@ -29,12 +30,12 @@ $errors = [];
 
 /** @var SmartFileInfo $smartFileInfo */
 foreach ($smartFileInfos as $smartFileInfo) {
-    if (! Strings::match($smartFileInfo->getContents(), FixtureSplitter::SPLIT_LINE)) {
+    if (! Strings::match($smartFileInfo->getContents(), SplitLine::SPLIT_LINE)) {
         continue;
     }
 
     // original → expected
-    [$originalContent, $expectedContent] = Strings::split($smartFileInfo->getContents(), FixtureSplitter::SPLIT_LINE);
+    [$originalContent, $expectedContent] = Strings::split($smartFileInfo->getContents(), SplitLine::SPLIT_LINE);
     if ($originalContent !== $expectedContent) {
         continue;
     }
@@ -48,8 +49,8 @@ if ($errors === []) {
 
 $symfonyStyle->warning(sprintf(
     'These files have same content before "%s" and after it. Remove the content after "%s"',
-    FixtureSplitter::SPLIT_LINE,
-    FixtureSplitter::SPLIT_LINE
+    SplitLine::SPLIT_LINE,
+    SplitLine::SPLIT_LINE
 ));
 
 $symfonyStyle->listing($errors);

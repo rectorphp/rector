@@ -11,11 +11,6 @@ final class GeneratedValueTagValueNode extends AbstractDoctrineTagValueNode
     /**
      * @var string
      */
-    public const SHORT_NAME = '@ORM\GeneratedValue';
-
-    /**
-     * @var string
-     */
     private $strategy;
 
     public function __construct(string $strategy)
@@ -26,5 +21,10 @@ final class GeneratedValueTagValueNode extends AbstractDoctrineTagValueNode
     public function __toString(): string
     {
         return sprintf('(strategy="%s")', $this->strategy);
+    }
+
+    public function getShortName(): string
+    {
+        return '@ORM\GeneratedValue';
     }
 }

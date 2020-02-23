@@ -67,7 +67,6 @@ parameters:
         - '#Call to function in_array\(\) with arguments string, (.*?) and true will always evaluate to false#'
 
         # known values
-        - '#Access to an undefined property PhpParser\\Node\\Expr::\$left#'
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$right#'
 
         - '#Access to an undefined property PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Stmt\\ClassMethod::\$params#'

@@ -10,11 +10,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
 {
     /**
-     * @var string
-     */
-    public const SHORT_NAME = '@ORM\Column';
-
-    /**
      * @var string|null
      */
     private $name;
@@ -166,5 +161,10 @@ final class ColumnTagValueNode extends AbstractDoctrineTagValueNode
     public function isNullable(): ?bool
     {
         return $this->nullable;
+    }
+
+    public function getShortName(): string
+    {
+        return '@ORM\Column';
     }
 }
