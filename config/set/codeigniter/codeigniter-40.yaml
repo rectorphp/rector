@@ -1,0 +1,5 @@
+services:
+    Rector\Renaming\Rector\Class_\RenameClassRector:
+        $oldToNewClasses:
+            CI_Controller: 'CodeIgniter\Controller'
+            CI_Model: 'CodeIgniter\Model'
