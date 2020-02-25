@@ -94,6 +94,10 @@ PHP
         );
 
         $nodesToRemove = $this->resolveNodesToRemove($assignedVariableNames, $nodesByTypeAndPosition);
+        if ($nodesToRemove === []) {
+            return null;
+        }
+
         $this->removeNodes($nodesToRemove);
 
         return $node;

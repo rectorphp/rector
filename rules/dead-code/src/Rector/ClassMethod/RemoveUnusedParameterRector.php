@@ -21,6 +21,7 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
  * @see https://www.php.net/manual/en/function.compact.php
  *
  * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\RemoveUnusedParameterRectorTest
+ * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\OpenSourceRectorTest
  */
 final class RemoveUnusedParameterRector extends AbstractRector
 {
@@ -127,6 +128,10 @@ PHP
         $childrenOfClass = $this->classLikeParsedNodesFinder->findChildrenOfClass($className);
         $unusedParameters = $this->getUnusedParameters($node, $methodName, $childrenOfClass);
 
+        if ($unusedParameters === []) {
+            return null;
+        }
+
         foreach ($childrenOfClass as $childClassNode) {
             $methodOfChild = $childClassNode->getMethod($methodName);
             if ($methodOfChild !== null) {
@@ -211,19 +216,35 @@ PHP
             return true;
         }
 
-        // skip as possible contract for 3rd party
-        $projetType = $this->parameterProvider->provideParameter(Option::PROJECT_TYPE);
-        if ($classMethod->isAbstract() && $projetType === Option::PROJECT_TYPE_OPEN_SOURCE) {
-            return true;
-        }
-
         $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-
         // skip interfaces and traits
         if (! $class instanceof Class_) {
             return true;
         }
 
+        if ($this->shouldSkipOpenSourceAbstract($classMethod, $class)) {
+            return true;
+        }
+
         return $this->isAnonymousClass($class);
+    }
+
+    private function shouldSkipOpenSourceAbstract(ClassMethod $classMethod, Class_ $class): bool
+    {
+        // skip as possible contract for 3rd party
+        $projectType = $this->parameterProvider->provideParameter(Option::PROJECT_TYPE);
+        if ($projectType !== Option::PROJECT_TYPE_OPEN_SOURCE) {
+            return false;
+        }
+
+        if ($classMethod->isAbstract()) {
+            return true;
+        }
+
+        if (! $class->isAbstract()) {
+            return false;
+        }
+
+        return $classMethod->isPublic();
     }
 }
