@@ -75,4 +75,14 @@ final class Option
      * @var string
      */
     public const OPTION_OUTPUT_FILE = 'output-file';
+
+    /**
+     * @var string
+     */
+    public const PROJECT_TYPE = 'project_type';
+
+    /**
+     * @var string
+     */
+    public const PROJECT_TYPE_OPEN_SOURCE = 'open-source';
 }

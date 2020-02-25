@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\Fixture;
+namespace Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\FixtureOpenSource;
 
 abstract class SkipAbstract
 {
