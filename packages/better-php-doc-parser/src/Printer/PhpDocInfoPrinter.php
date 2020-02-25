@@ -245,8 +245,11 @@ final class PhpDocInfoPrinter
     ): string {
         $output .= $phpDocTagNode->name;
         $nodeOutput = $this->printNode($phpDocTagNode->value, $startEndValueObject);
-        if ($nodeOutput && $this->isTagSeparatedBySpace($nodeOutput, $phpDocTagNode)) {
-            $output .= ' ';
+
+        $tagSpaceSeparator = $this->resolveTagSpaceSeparator($phpDocTagNode);
+
+        if ($nodeOutput && $tagSpaceSeparator !== '') {
+            $output .= $tagSpaceSeparator;
         }
 
         if ($phpDocTagNode->getAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES) && (property_exists(
@@ -327,13 +330,13 @@ final class PhpDocInfoPrinter
      * - "@Route("/", name="homepage")",
      * - "@customAnnotation(value)"
      */
-    private function isTagSeparatedBySpace(string $nodeOutput, PhpDocTagNode $phpDocTagNode): bool
+    private function resolveTagSpaceSeparator(PhpDocTagNode $phpDocTagNode): string
     {
-        $contentWithoutSpace = $phpDocTagNode->name . Strings::substring($nodeOutput, 0, 1);
-        if (Strings::contains($this->phpDocInfo->getOriginalContent(), $contentWithoutSpace)) {
-            return false;
-        }
+        $originalContent = $this->phpDocInfo->getOriginalContent();
 
-        return Strings::contains($this->phpDocInfo->getOriginalContent(), $phpDocTagNode->name . ' ');
+        $spacePattern = '#' . preg_quote($phpDocTagNode->name, '#') . '(?<space>\s+)#';
+        $matches = Strings::match($originalContent, $spacePattern);
+
+        return $matches['space'] ?? '';
     }
 }

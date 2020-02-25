@@ -27,6 +27,12 @@ final class ParserClassTest extends AbstractPhpDocInfoTest
         yield [__DIR__ . '/Fixture/SomeEntity.php', __DIR__ . '/Fixture/expected_some_entity.txt', Class_::class];
 
         yield [
+            __DIR__ . '/Fixture/SomeEntitySimple.php',
+            __DIR__ . '/Fixture/expected_some_entity_simple.txt',
+            Class_::class,
+        ];
+
+        yield [
             __DIR__ . '/Fixture/SkipNonDoctrineEntity.php',
             __DIR__ . '/Fixture/expected_skip_non_doctrine_entity.txt',
             ClassMethod::class,
