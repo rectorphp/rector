@@ -55,8 +55,14 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
      */
     private $nodeScopeResolver;
 
+    /**
+     * @var mixed[]
+     */
+    private $oldParameterValues = [];
+
     protected function setUp(): void
     {
+        $this->oldParameterValues = [];
         $this->fixtureSplitter = new FixtureSplitter($this->getTempPath());
 
         if ($this->provideConfig() !== '') {
@@ -117,6 +123,8 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         if ($this->getAutoImportNames() !== null) {
             $this->setParameter(Option::AUTO_IMPORT_NAMES, false);
         }
+
+        $this->restoreOldParameterValues();
     }
 
     protected function doTestFileWithoutAutoload(string $file): void
@@ -163,6 +171,12 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
     protected function setParameter(string $name, $value): void
     {
         $parameterProvider = self::$container->get(ParameterProvider::class);
+
+        if (! in_array($name, [Option::PHP_VERSION_FEATURES, Option::AUTO_IMPORT_NAMES], true)) {
+            $oldParameterValue = $parameterProvider->provideParameter($name);
+            $this->oldParameterValues[$name] = $oldParameterValue;
+        }
+
         $parameterProvider->changeParameter($name, $value);
     }
 
@@ -280,6 +294,19 @@ abstract class AbstractRectorTestCase extends AbstractGenericRectorTestCase
         } catch (ExpectationFailedException $expectationFailedException) {
             $expectedFileContent = FileSystem::read($expectedFile);
             $this->assertStringMatchesFormat($expectedFileContent, $changedContent, 'Caused by ' . $fixtureFile);
+        }
+    }
+
+    private function restoreOldParameterValues(): void
+    {
+        if ($this->oldParameterValues === []) {
+            return;
+        }
+
+        $parameterProvider = self::$container->get(ParameterProvider::class);
+
+        foreach ($this->oldParameterValues as $name => $oldParameterValue) {
+            $parameterProvider->changeParameter($name, $oldParameterValue);
         }
     }
 }
