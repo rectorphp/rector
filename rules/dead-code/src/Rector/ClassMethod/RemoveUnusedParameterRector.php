@@ -17,6 +17,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see https://www.php.net/manual/en/function.compact.php
+ *
  * @see \Rector\DeadCode\Tests\Rector\ClassMethod\RemoveUnusedParameterRector\RemoveUnusedParameterRectorTest
  */
 final class RemoveUnusedParameterRector extends AbstractRector
@@ -99,30 +100,22 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classNode instanceof Class_ || $this->isAnonymousClass($classNode)) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
-        if ($node->params === []) {
-            return null;
-        }
-
-        if ($this->isNames($node, self::MAGIC_METHODS)) {
-            return null;
-        }
-
-        $class = $this->getName($classNode);
-        if ($class === null) {
+        /** @var string|null $className */
+        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        if ($className === null) {
             return null;
         }
 
         $methodName = $this->getName($node);
-        if ($this->classManipulator->hasParentMethodOrInterface($class, $methodName)) {
+        if ($this->classManipulator->hasParentMethodOrInterface($className, $methodName)) {
             return null;
         }
 
-        $childrenOfClass = $this->classLikeParsedNodesFinder->findChildrenOfClass($class);
+        $childrenOfClass = $this->classLikeParsedNodesFinder->findChildrenOfClass($className);
         $unusedParameters = $this->getUnusedParameters($node, $methodName, $childrenOfClass);
 
         foreach ($childrenOfClass as $childClassNode) {
@@ -197,5 +190,30 @@ PHP
         }
 
         return $unusedParameters;
+    }
+
+    private function shouldSkip(ClassMethod $classMethod): bool
+    {
+        if ($classMethod->params === []) {
+            return true;
+        }
+
+        if ($this->isNames($classMethod, self::MAGIC_METHODS)) {
+            return true;
+        }
+
+        // skip as possible contract for 3rd party
+        if ($classMethod->isAbstract()) {
+            return true;
+        }
+
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+
+        // skip interfaces and traits
+        if (! $class instanceof Class_) {
+            return true;
+        }
+
+        return $this->isAnonymousClass($class);
     }
 }
