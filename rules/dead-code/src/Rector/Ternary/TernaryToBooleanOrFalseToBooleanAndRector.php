@@ -76,6 +76,10 @@ PHP
             return null;
         }
 
+        if ($this->isTrue($node->if)) {
+            return null;
+        }
+
         $ifType = $this->getStaticType($node->if);
         if (! $ifType instanceof BooleanType) {
             return null;
