@@ -72,9 +72,6 @@ final class CompileCommand extends Command
         $this->symfonyStyle->note('Loading and updating ' . $composerJsonFile);
         $this->composerJsonManipulator->fixComposerJson($composerJsonFile);
 
-        $this->symfonyStyle->note('Renaming PHPStorm stubs from "*.php" to ".stub"');
-        $this->jetbrainsStubsRenamer->renamePhpStormStubs($this->buildDir);
-
         $this->symfonyStyle->note('Updating root rector/rector dependencies, without require-dev');
 
         // @see https://github.com/dotherightthing/wpdtrt-plugin-boilerplate/issues/52
@@ -86,6 +83,9 @@ final class CompileCommand extends Command
             '--no-interaction',
             '--classmap-authoritative',
         ], $this->buildDir, null, null, null);
+
+        $this->symfonyStyle->note('Renaming PHPStorm stubs from "*.php" to ".stub"');
+        $this->jetbrainsStubsRenamer->renamePhpStormStubs($this->buildDir);
 
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
