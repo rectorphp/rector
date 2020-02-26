@@ -27,8 +27,8 @@ final class JetbrainsStubsRenamer
     {
         $directory = $buildDir . '/vendor/jetbrains/phpstorm-stubs';
 
-        $this->renameFilesSuffixesInPhpStormStubsMapFile($directory);
         $this->renameStubFileSuffixes($directory);
+        $this->renameFilesSuffixesInPhpStormStubsMapFile($directory);
     }
 
     private function renameStubFileSuffixes(string $directory): void
