@@ -34,6 +34,7 @@ final class JetbrainsStubsRenamer
     private function renameStubFileSuffixes(string $directory): void
     {
         $stubFileInfos = $this->getStubFileInfos($directory);
+
         foreach ($stubFileInfos as $stubFileInfo) {
             $path = $stubFileInfo->getPathname();
 
@@ -64,7 +65,10 @@ final class JetbrainsStubsRenamer
     private function getStubFileInfos(string $phpStormStubsDirectory): array
     {
         if (! is_dir($phpStormStubsDirectory)) {
-            return [];
+            throw new CompilerShouldNotHappenException(sprintf(
+                'Directory "%s" was not found',
+                $phpStormStubsDirectory
+            ));
         }
 
         $stubFinder = Finder::create()
