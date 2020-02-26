@@ -127,7 +127,7 @@ final class CompileCommand extends Command
             ->files()
             ->name('*.php')
             ->in($phpStormStubsDirectory)
-            ->notName('*PhpStormStubsMap.php');
+            ->notName('#PhpStormStubsMap\.php$#');
 
         return iterator_to_array($stubFinder->getIterator());
     }
