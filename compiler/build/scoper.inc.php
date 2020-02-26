@@ -10,29 +10,40 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Isolated\Symfony\Component\Finder\Finder;
 use Nette\Neon\Neon;
 
-$stubs = [
-    // @see https://github.com/rectorphp/rector/issues/2852#issuecomment-586315588
-    '../../vendor/hoa/consistency/Prelude.php',
-];
+final class WhitelistedStubsProvider
+{
+    /**
+     * @return string[]
+     */
+    public function provide(): array
+    {
+        $stubs = [
+            // @see https://github.com/rectorphp/rector/issues/2852#issuecomment-586315588
+            '../../vendor/hoa/consistency/Prelude.php',
+        ];
 
-$stubFinder = Finder::create();
-$stubFinder->files()->name('*.php')
-    ->in(__DIR__ . '/../../vendor/jetbrains/phpstorm-stubs');
+        // mirrors https://github.com/phpstan/phpstan-src/commit/04f777bc4445725d17dac65c989400485454b145
+        $stubFinder = Finder::create()
+            ->files()
+            ->name('*.php')
+            ->in(__DIR__ . '/../../vendor/jetbrains/phpstorm-stubs')
+            ->notName('#PhpStormStubsMap\.php$#');
 
-foreach ($stubFinder->getIterator() as $fileInfo) {
-    // mirrors https://github.com/phpstan/phpstan-src/commit/04f777bc4445725d17dac65c989400485454b145
-    if ($fileInfo->getPathName() === '../../vendor/jetbrains/phpstorm-stubs/PhpStormStubsMap.php') {
-        continue;
+        foreach ($stubFinder->getIterator() as $fileInfo) {
+            /** @var SplFileInfo $fileInfo */
+            $stubs[] = $fileInfo->getPathName();
+        }
+
+        return $stubs;
     }
-
-    /** @var SplFileInfo $fileInfo */
-    $stubs[] = $fileInfo->getPathName();
 }
+
+$whitelistedStubsProvider = new WhitelistedStubsProvider();
 
 return [
     'prefix' => null,
     'finders' => [],
-    'files-whitelist' => $stubs,
+    'files-whitelist' => $whitelistedStubsProvider->provide(),
     'patchers' => [
         function (string $filePath, string $prefix, string $content): string {
             if ($filePath !== 'bin/rector') {
