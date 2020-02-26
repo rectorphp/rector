@@ -25,7 +25,8 @@ jobs:
 
                     # Install latest Rector
                     mkdir rector-dir
-                    composer require rector/rector:@dev -d rector-dir --no-progress
+                    # composer require rector/rector:@dev -d rector-dir --no-progress
+                    composer require rector/rector:0.6.13 -d rector-dir --no-progress
 
                     # Install Drupal
                     mkdir drupal-dir
