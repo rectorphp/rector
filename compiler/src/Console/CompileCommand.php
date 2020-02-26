@@ -125,7 +125,7 @@ final class CompileCommand extends Command
 
         $stubFinder = Finder::create()
             ->files()
-            ->name('*.php')
+            ->name('*\.php')
             ->in($phpStormStubsDirectory)
             ->notName('#PhpStormStubsMap\.php$#');
 
@@ -137,7 +137,7 @@ final class CompileCommand extends Command
         $stubsMapPath = $phpStormStubsDirectory . '/PhpStormStubsMap.php';
 
         $stubsMapContents = FileSystem::read($stubsMapPath);
-        $stubsMapContents = Strings::replace($stubsMapContents, '.php\',', '.stub\',');
+        $stubsMapContents = Strings::replace($stubsMapContents, '#\.php\',#', '.stub\',');
 
         FileSystem::write($stubsMapPath, $stubsMapContents);
     }

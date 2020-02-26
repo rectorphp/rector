@@ -71,6 +71,11 @@ final class ComposerJsonManipulator
      */
     private function replacePHPStanWithPHPStanSrc(array $json): array
     {
+        // already replaced
+        if (! isset($json['require']['phpstan/phpstan'])) {
+            return $json;
+        }
+
         $phpstanVersion = $json['require']['phpstan/phpstan'];
         $json['require']['phpstan/phpstan-src'] = $phpstanVersion;
         unset($json['require']['phpstan/phpstan']);
