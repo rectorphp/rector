@@ -14,24 +14,29 @@ jobs:
             -   uses: shivammathur/setup-php@v1
                 with:
                     php-version: 7.3
-                    coverage: none
+                    coverage: none # disable xdebug, pcov
+                    extensions: "intl"
 
-            -   name: Install Drupal project
-                run: |
-                    # bring rector dependencies
-                    composer install --no-progress
-
-                    # Install latest Drupal version
-                    composer create-project drupal/recommended-project drupal
-                    cd drupal
-
-                    # use rector-prefixed v0.6.13
-                    composer require rector/rector-prefixed:0.6.13 --dev
-
-            -   run: bin/rector process web/core/modules/aggregator/src/Plugin/views/row/Rss.php --set deadcode --dry-run --config ci/config/rector-drupal.yaml
-
+            # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
             -   run: |
-                    # use rector-prefixed v0.7
-                    composer require rector/rector-prefixed:0.7 --dev
+                    # 1. install locally
+                    mkdir test-paths
+                    cd test-paths
 
-            -   run: bin/rector process web/core/modules/aggregator/src/Plugin/views/row/Rss.php --set deadcode --dry-run --config ci/config/rector-drupal.yaml
+                    # Install latest Rector
+                    mkdir rector-dir
+                    # composer require rector/rector:@dev -d rector-dir --no-progress
+                    composer require rector/rector:0.6.13 -d rector-dir --no-progress
+
+                    # Install Drupal
+                    mkdir drupal-dir
+                    composer create-project drupal/recommended-project drupal-dir --dev --no-progress
+
+                    # missing for some reason
+                    # composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir --no-progress
+                    # composer dump-autoload --no-dev -d symfony-demo-dir
+
+                    # 2. run rector
+
+                    cd drupal-dir
+                    ../rector-dir/vendor/bin/rector process web/core/modules/aggregator/src/Plugin/views/row/Rss.php --set deadcode --dry-run --config ../../ci/config/rector-drupal.yaml
