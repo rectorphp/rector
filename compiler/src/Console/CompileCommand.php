@@ -69,11 +69,13 @@ final class CompileCommand extends Command
     {
         $composerJsonFile = $this->buildDir . '/composer.json';
 
-        $this->symfonyStyle->note('Loading ' . $composerJsonFile);
-
+        $this->symfonyStyle->note('Loading and updating ' . $composerJsonFile);
         $this->composerJsonManipulator->fixComposerJson($composerJsonFile);
 
+        $this->symfonyStyle->note('Renaming PHPStorm stubs from "*.php" to ".stub"');
         $this->jetbrainsStubsRenamer->renamePhpStormStubs($this->buildDir);
+
+        $this->symfonyStyle->note('Updating root rector/rector dependencies, without require-dev');
 
         // @see https://github.com/dotherightthing/wpdtrt-plugin-boilerplate/issues/52
         $process = new Process([

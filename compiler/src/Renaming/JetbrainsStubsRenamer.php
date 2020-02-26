@@ -32,8 +32,6 @@ final class JetbrainsStubsRenamer
 
     private function renameStubFileSuffixes(string $directory): void
     {
-        $this->symfonyStyle->section('Renaming jetbrains/phpstorm-stubs from "*.php" to "*.stub"');
-
         $stubFileInfos = $this->getStubFileInfos($directory);
         foreach ($stubFileInfos as $stubFileInfo) {
             $path = $stubFileInfo->getPathname();
