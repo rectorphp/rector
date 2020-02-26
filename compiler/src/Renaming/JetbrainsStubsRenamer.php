@@ -6,6 +6,7 @@ namespace Rector\Compiler\Renaming;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -46,6 +47,10 @@ final class JetbrainsStubsRenamer
     private function renameFilesSuffixesInPhpStormStubsMapFile(string $phpStormStubsDirectory): void
     {
         $stubsMapPath = $phpStormStubsDirectory . '/PhpStormStubsMap.php';
+
+        if (! file_exists($stubsMapPath)) {
+            throw new ShouldNotHappenException('File "%s" was not found', $stubsMapPath);
+        }
 
         $stubsMapContents = FileSystem::read($stubsMapPath);
         $stubsMapContents = Strings::replace($stubsMapContents, '#\.php\',#m', '.stub\',');
