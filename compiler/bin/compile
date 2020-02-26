@@ -15,8 +15,6 @@ $filesystem = new Filesystem();
 $composerJsonManipulator = new ComposerJsonManipulator($filesystem);
 $compileCommand = new CompileCommand(__DIR__ . '/../build', __DIR__ . '/../..', $composerJsonManipulator);
 
-/** @var Application $application */
-
 $application = new Application();
 $application->add($compileCommand);
 $application->setDefaultCommand($compileCommand->getName(), true);
