@@ -21,8 +21,6 @@ $stubFinder->files()->name('*.php')
 
 foreach ($stubFinder->getIterator() as $fileInfo) {
     // mirrors https://github.com/phpstan/phpstan-src/commit/04f777bc4445725d17dac65c989400485454b145
-    var_dump($fileInfo->getPathName());
-
     if ($fileInfo->getPathName() === '../../vendor/jetbrains/phpstorm-stubs/PhpStormStubsMap.php') {
         continue;
     }

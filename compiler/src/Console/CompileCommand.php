@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\Compiler\Console;
 
+use Nette\Utils\FileSystem;
+use Nette\Utils\Strings;
 use Rector\Compiler\Composer\ComposerJsonManipulator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
@@ -65,6 +69,8 @@ final class CompileCommand extends Command
 
         $this->composerJsonManipulator->fixComposerJson($composerJsonFile);
 
+        $this->renamePhpStormStubs();
+
         // @see https://github.com/dotherightthing/wpdtrt-plugin-boilerplate/issues/52
         $process = new Process([
             'composer',
@@ -90,5 +96,50 @@ final class CompileCommand extends Command
         $this->composerJsonManipulator->restoreComposerJson($composerJsonFile);
 
         return ShellCode::SUCCESS;
+    }
+
+    private function renamePhpStormStubs(): void
+    {
+        $directory = $this->buildDir . '/vendor/jetbrains/phpstorm-stubs';
+        $stubsMapPath = $directory . '/PhpStormStubsMap.php';
+
+        $stubFileInfos = $this->getStubFileInfos($directory);
+
+        foreach ($stubFileInfos as $stubFileInfo) {
+            $path = $stubFileInfo->getPathname();
+            if ($path === $stubsMapPath) {
+                continue;
+            }
+
+            $filenameWithStubSuffix = dirname($path) . '/' . $stubFileInfo->getBasename('.php') . '.stub';
+            FileSystem::rename($path, $filenameWithStubSuffix);
+        }
+
+        $this->renameFilesInStubsMap($stubsMapPath);
+    }
+
+    /**
+     * @return SplFileInfo[]
+     */
+    private function getStubFileInfos(string $phpStormStubsDirectory): array
+    {
+        if (! is_dir($phpStormStubsDirectory)) {
+            return [];
+        }
+
+        $stubFinder = Finder::create()
+            ->files()
+            ->name('*.php')
+            ->in($phpStormStubsDirectory);
+
+        return iterator_to_array($stubFinder->getIterator());
+    }
+
+    private function renameFilesInStubsMap(string $stubsMapPath): void
+    {
+        $stubsMapContents = FileSystem::read($stubsMapPath);
+        $stubsMapContents = Strings::replace($stubsMapContents, '.php\',', '.stub\',');
+
+        FileSystem::write($stubsMapPath, $stubsMapContents);
     }
 }
