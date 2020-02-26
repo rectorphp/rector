@@ -101,21 +101,17 @@ final class CompileCommand extends Command
     private function renamePhpStormStubs(): void
     {
         $directory = $this->buildDir . '/vendor/jetbrains/phpstorm-stubs';
-        $stubsMapPath = $directory . '/PhpStormStubsMap.php';
 
         $stubFileInfos = $this->getStubFileInfos($directory);
 
         foreach ($stubFileInfos as $stubFileInfo) {
             $path = $stubFileInfo->getPathname();
-            if ($path === $stubsMapPath) {
-                continue;
-            }
 
             $filenameWithStubSuffix = dirname($path) . '/' . $stubFileInfo->getBasename('.php') . '.stub';
             FileSystem::rename($path, $filenameWithStubSuffix);
         }
 
-        $this->renameFilesInStubsMap($stubsMapPath);
+        $this->renameFilesInStubsMap($directory);
     }
 
     /**
@@ -130,13 +126,16 @@ final class CompileCommand extends Command
         $stubFinder = Finder::create()
             ->files()
             ->name('*.php')
-            ->in($phpStormStubsDirectory);
+            ->in($phpStormStubsDirectory)
+            ->notName('*PhpStormStubsMap.php');
 
         return iterator_to_array($stubFinder->getIterator());
     }
 
-    private function renameFilesInStubsMap(string $stubsMapPath): void
+    private function renameFilesInStubsMap(string $phpStormStubsDirectory): void
     {
+        $stubsMapPath = $phpStormStubsDirectory . '/PhpStormStubsMap.php';
+
         $stubsMapContents = FileSystem::read($stubsMapPath);
         $stubsMapContents = Strings::replace($stubsMapContents, '.php\',', '.stub\',');
 
