@@ -50,7 +50,7 @@ final class JetbrainsStubsRenamer
         $stubsMapPath = $phpStormStubsDirectory . '/PhpStormStubsMap.php';
 
         if (! file_exists($stubsMapPath)) {
-            throw new CompilerShouldNotHappenException('File "%s" was not found', $stubsMapPath);
+            throw new CompilerShouldNotHappenException(sprintf('File "%s" was not found', $stubsMapPath));
         }
 
         $stubsMapContents = FileSystem::read($stubsMapPath);
