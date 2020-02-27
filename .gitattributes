@@ -24,3 +24,6 @@ utils export-ignore
 stubs export-ignore
 
 .travis.yml export-ignore
+
+# testing Windows spaces - https://help.github.com/en/github/using-git/configuring-git-to-handle-line-endings
+packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/FixtureBasic/with_spac.txt text eol=crlf
