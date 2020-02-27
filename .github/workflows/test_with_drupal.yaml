@@ -27,7 +27,7 @@ jobs:
                     mkdir rector-dir
                     # composer require rector/rector:@dev -d rector-dir --no-progress
                     # composer require rector/rector:0.6.13 -d rector-dir --no-progress
-                    composer require palantirnet/drupal-rector:rector-0.7 -d rector-dir --no-progress
+                    composer require palantirnet/drupal-rector:dev-rector-0.7 -d rector-dir --no-progress
 
                     # Install Drupal
                     mkdir drupal-dir
