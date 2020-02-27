@@ -84,6 +84,12 @@ final class CompileCommand extends Command
             '--classmap-authoritative',
         ], $this->buildDir, null, null, null);
 
+        // debug
+        $process = new Process(['ls', '-l', 'vendor'], $this->buildDir);
+        $process->mustRun(static function (string $type, string $buffer) use ($output): void {
+            $output->write($buffer);
+        });
+
         $this->symfonyStyle->note('Renaming PHPStorm stubs from "*.php" to ".stub"');
         $this->jetbrainsStubsRenamer->renamePhpStormStubs($this->buildDir);
 
