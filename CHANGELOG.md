@@ -9,6 +9,31 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+## [v0.7.2] - 2020-02-27
+
+### Added
+
+- [#2924] [CodeIgniter] Add 4.0 set
+- [#2941] Make compiler own kernel app + add more debug info
+- [#2940] add Windows print test
+- [#2933] add project_type
+- [#2931] add has lifecycle callbacks
+- [#2925] add docs space test
+
+### Changed
+
+- [#2926] [DeadCode] Skip abstract methods in RemoveUnusedParameterRector as 3rd contract
+
+### Fixed
+
+- [#2935] Fix double boolean
+- [#2934] fix [@method] union return type annotation
+- [#2932] Fix prophecy mocking arg
+
+### Removed
+
+- [#2937] skip open source class in remove unused param in open-source
+
 ## [v0.7.1] - 2020-02-23
 
 ### Added
@@ -2488,3 +2513,16 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#2862]: https://github.com/rectorphp/rector/pull/2862
 [@escopecz]: https://github.com/escopecz
 [@Ivorius]: https://github.com/Ivorius
+[#2941]: https://github.com/rectorphp/rector/pull/2941
+[#2940]: https://github.com/rectorphp/rector/pull/2940
+[#2937]: https://github.com/rectorphp/rector/pull/2937
+[#2935]: https://github.com/rectorphp/rector/pull/2935
+[#2934]: https://github.com/rectorphp/rector/pull/2934
+[#2933]: https://github.com/rectorphp/rector/pull/2933
+[#2932]: https://github.com/rectorphp/rector/pull/2932
+[#2931]: https://github.com/rectorphp/rector/pull/2931
+[#2926]: https://github.com/rectorphp/rector/pull/2926
+[#2925]: https://github.com/rectorphp/rector/pull/2925
+[#2924]: https://github.com/rectorphp/rector/pull/2924
+[v0.7.1]: https://github.com/rectorphp/rector/compare/v0.7.0...v0.7.1
+[@method]: https://github.com/method
