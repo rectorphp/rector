@@ -1,5 +1,5 @@
 /**
- * Run
- *
- * @param $param
+ * Test.
+ * 
+ * @param string $param
  */
