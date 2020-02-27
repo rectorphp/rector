@@ -1,4 +1,4 @@
-# All 463 Rectors Overview
+# All 464 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -2785,6 +2785,33 @@ Remove duplicated key in defined arrays.
               case '...':
                   return 5;
          }
+     }
+ }
+```
+
+<br>
+
+### `RemoveDuplicatedIfReturnRector`
+
+- class: [`Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector`](/../master/rules/dead-code/src/Rector/FunctionLike/RemoveDuplicatedIfReturnRector.php)
+- [test fixtures](/../master/rules/dead-code/tests/Rector/FunctionLike/RemoveDuplicatedIfReturnRector/Fixture)
+
+Remove duplicated if stmt with return in function/method body
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+         if ($value) {
+             return true;
+         }
+
+         $value2 = 100;
+-
+-        if ($value) {
+-            return true;
+-        }
      }
  }
 ```

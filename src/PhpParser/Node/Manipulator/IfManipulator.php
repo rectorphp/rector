@@ -263,6 +263,19 @@ final class IfManipulator
         return $ifs;
     }
 
+    public function isIfWithOnlyReturn(Node $node): bool
+    {
+        if (! $node instanceof If_) {
+            return false;
+        }
+
+        if (! $this->isIfWithoutElseAndElseIfs($node)) {
+            return false;
+        }
+
+        return $this->hasOnlyStmtOfType($node, Return_::class);
+    }
+
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $returnNode): ?Expr
     {
         if ($this->betterStandardPrinter->areNodesEqual(

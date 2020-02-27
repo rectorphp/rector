@@ -376,7 +376,7 @@ final class BetterStandardPrinter extends Standard
         $printerNode = Strings::replace($printerNode, '#\/*\*(.*?)\*\/#');
 
         // remove # ...
-        $printerNode = Strings::replace($printerNode, '#\#(.*?)$#m');
+        $printerNode = Strings::replace($printerNode, '#^(\s+)?\#(.*?)$#m');
 
         // remove // ...
         return Strings::replace($printerNode, '#\/\/(.*?)$#m');
