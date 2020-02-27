@@ -362,8 +362,8 @@ final class BetterStandardPrinter extends Standard
                 continue;
             }
 
-            $whitespaces = (int)preg_match_all('/^ {4}/m', $fileInfo->getContents());
-            $tabs = (int)preg_match_all('/^\t/m', $fileInfo->getContents());
+            $whitespaces = count(Strings::matchAll($fileInfo->getContents(), '#^ {4}#m'));
+            $tabs = count(Strings::matchAll($fileInfo->getContents(), '#^\t#m'));
 
             // tab vs space
             $this->tabOrSpaceIndentCharacter = ($whitespaces <=> $tabs) >= 0 ? ' ' : "\t";
