@@ -86,13 +86,9 @@ final class PropertyFetchManipulator
         return false;
     }
 
-    public function isMagicOnType(Node $node, Type $type): bool
+    public function isMagicOnType(PropertyFetch $propertyFetch, Type $type): bool
     {
-        if (! $node instanceof PropertyFetch) {
-            return false;
-        }
-
-        $varNodeType = $this->nodeTypeResolver->resolve($node);
+        $varNodeType = $this->nodeTypeResolver->resolve($propertyFetch);
 
         if ($varNodeType instanceof ErrorType) {
             return true;
@@ -106,12 +102,12 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        $nodeName = $this->nodeNameResolver->getName($node);
+        $nodeName = $this->nodeNameResolver->getName($propertyFetch);
         if ($nodeName === null) {
             return false;
         }
 
-        return ! $this->hasPublicProperty($node, $nodeName);
+        return ! $this->hasPublicProperty($propertyFetch, $nodeName);
     }
 
     /**
