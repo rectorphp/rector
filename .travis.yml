@@ -14,7 +14,7 @@ jobs:
         # "Deploy to https://github.com/rectorphp/rector-prefixed"
         -
             name: Compile and Release rector.phar
-#            if: (branch = master OR tag IS present) && type = push
+            if: (branch = master OR tag IS present) && type = push
             php: 7.2
             script:
                 - cd compiler
