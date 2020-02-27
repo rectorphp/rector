@@ -26,7 +26,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
- * Read-only utils for PropertyFetch Node:
+ * Utils for PropertyFetch Node:
  * "$this->property"
  */
 final class PropertyFetchManipulator
@@ -75,14 +75,12 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        if (! $this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
-            return false;
-        }
-
         foreach ($class->getProperties() as $property) {
-            if ($this->nodeNameResolver->areNamesEqual($property->props[0], $propertyFetch)) {
-                return true;
+            if (! $this->nodeNameResolver->areNamesEqual($property->props[0], $propertyFetch)) {
+                continue;
             }
+
+            return true;
         }
 
         return false;
