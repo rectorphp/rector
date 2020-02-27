@@ -25,8 +25,9 @@ jobs:
 
                     # Install latest Rector
                     mkdir rector-dir
-                    composer require rector/rector:@dev -d rector-dir --no-progress
+                    # composer require rector/rector:@dev -d rector-dir --no-progress
                     # composer require rector/rector:0.6.13 -d rector-dir --no-progress
+                    composer require palantirnet/rector:rector-0.7 -d rector-dir --no-progress
 
                     # Install Drupal
                     mkdir drupal-dir
@@ -39,4 +40,4 @@ jobs:
                     # 2. run rector
 
                     cd drupal-dir
-                    ../rector-dir/vendor/bin/rector process web/core/modules/aggregator/src/Plugin/views/row/Rss.php --set deadcode --dry-run --config ../../ci/config/rector-drupal.yaml
+                    ../rector-dir/vendor/bin/rector process web/core/modules/aggregator/src/Plugin/views/row/Rss.php --dry-run --config ../../ci/config/rector-drupal.yaml
