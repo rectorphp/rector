@@ -20,7 +20,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassMethodPropertyFetchManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStan\Type\AliasedObjectType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
@@ -30,13 +30,13 @@ use Rector\TypeDeclaration\TypeInferer\AbstractTypeInferer;
 final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implements PropertyTypeInfererInterface
 {
     /**
-     * @var PropertyFetchManipulator
+     * @var ClassMethodPropertyFetchManipulator
      */
-    private $propertyFetchManipulator;
+    private $classMethodPropertyFetchManipulator;
 
-    public function __construct(PropertyFetchManipulator $propertyFetchManipulator)
+    public function __construct(ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator)
     {
-        $this->propertyFetchManipulator = $propertyFetchManipulator;
+        $this->classMethodPropertyFetchManipulator = $classMethodPropertyFetchManipulator;
     }
 
     public function inferProperty(Property $property): Type
@@ -58,7 +58,7 @@ final class ConstructorPropertyTypeInferer extends AbstractTypeInferer implement
             throw new ShouldNotHappenException();
         }
 
-        $param = $this->propertyFetchManipulator->resolveParamForPropertyFetch($classMethod, $propertyName);
+        $param = $this->classMethodPropertyFetchManipulator->resolveParamForPropertyFetch($classMethod, $propertyName);
         if ($param === null) {
             return new MixedType();
         }

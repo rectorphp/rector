@@ -12,13 +12,11 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -86,13 +84,9 @@ final class PropertyFetchManipulator
         return false;
     }
 
-    public function isMagicOnType(Node $node, Type $type): bool
+    public function isMagicOnType(PropertyFetch $propertyFetch, Type $type): bool
     {
-        if (! $node instanceof PropertyFetch) {
-            return false;
-        }
-
-        $varNodeType = $this->nodeTypeResolver->resolve($node);
+        $varNodeType = $this->nodeTypeResolver->resolve($propertyFetch);
 
         if ($varNodeType instanceof ErrorType) {
             return true;
@@ -106,12 +100,12 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        $nodeName = $this->nodeNameResolver->getName($node);
+        $nodeName = $this->nodeNameResolver->getName($propertyFetch);
         if ($nodeName === null) {
             return false;
         }
 
-        return ! $this->hasPublicProperty($node, $nodeName);
+        return ! $this->hasPublicProperty($propertyFetch, $nodeName);
     }
 
     /**
@@ -162,6 +156,7 @@ final class PropertyFetchManipulator
         if (! $node->var instanceof PropertyFetch) {
             return false;
         }
+
         // must be local property
         return $this->nodeNameResolver->isName($node->var->var, 'this');
     }
@@ -186,53 +181,6 @@ final class PropertyFetchManipulator
         }
 
         return $this->nodeNameResolver->isName($node->var, 'this');
-    }
-
-    /**
-     * In case the property name is different to param name:
-     *
-     * E.g.:
-     * (SomeType $anotherValue)
-     * $this->value = $anotherValue;
-     * ↓
-     * (SomeType $anotherValue)
-     */
-    public function resolveParamForPropertyFetch(ClassMethod $classMethod, string $propertyName): ?Param
-    {
-        $assignedParamName = null;
-
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            $propertyName,
-            &$assignedParamName
-        ): ?int {
-            if (! $node instanceof Assign) {
-                return null;
-            }
-
-            if (! $this->nodeNameResolver->isName($node->var, $propertyName)) {
-                return null;
-            }
-
-            $assignedParamName = $this->nodeNameResolver->getName($node->expr);
-
-            return NodeTraverser::STOP_TRAVERSAL;
-        });
-
-        /** @var string|null $assignedParamName */
-        if ($assignedParamName === null) {
-            return null;
-        }
-
-        /** @var Param $param */
-        foreach ((array) $classMethod->params as $param) {
-            if (! $this->nodeNameResolver->isName($param, $assignedParamName)) {
-                continue;
-            }
-
-            return $param;
-        }
-
-        return null;
     }
 
     /**
@@ -290,14 +238,11 @@ final class PropertyFetchManipulator
         }
 
         $propertyFetchType = $nodeScope->getType($propertyFetch->var);
-        if ($propertyFetchType instanceof ObjectType) {
-            $propertyFetchType = $propertyFetchType->getClassName();
-        }
-
-        if (! is_string($propertyFetchType)) {
+        if (! $propertyFetchType instanceof TypeWithClassName) {
             return false;
         }
 
+        $propertyFetchType = $propertyFetchType->getClassName();
         if (! $this->reflectionProvider->hasClass($propertyFetchType)) {
             return false;
         }
