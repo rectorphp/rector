@@ -3,19 +3,27 @@
 
 declare(strict_types = 1);
 
-use Rector\Compiler\Composer\ComposerJsonManipulator;
-use Rector\Compiler\Console\CompileCommand;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Filesystem\Filesystem;
+use Psr\Container\ContainerInterface;
+use Rector\Compiler\Console\RectorCompilerConsoleApplication;
+use Rector\Compiler\HttpKernel\RectorCompilerKernel;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// dependency injection for poor people
-$filesystem = new Filesystem();
-$composerJsonManipulator = new ComposerJsonManipulator($filesystem);
-$compileCommand = new CompileCommand(__DIR__ . '/../build', __DIR__ . '/../..', $composerJsonManipulator);
+final class ContainerFactory
+{
+    public function create(): ContainerInterface
+    {
+        $environment = 'prod' . random_int(1, 10000000);
+        $rectorCompilerKernel = new RectorCompilerKernel($environment, true);
+        $rectorCompilerKernel->boot();
 
-$application = new Application();
-$application->add($compileCommand);
-$application->setDefaultCommand($compileCommand->getName(), true);
-$application->run();
+        return $rectorCompilerKernel->getContainer();
+    }
+}
+
+$containerFactory = new ContainerFactory();
+$container = $containerFactory->create();
+
+/** @var RectorCompilerConsoleApplication $application */
+$application = $container->get(RectorCompilerConsoleApplication::class);
+exit($application->run());
