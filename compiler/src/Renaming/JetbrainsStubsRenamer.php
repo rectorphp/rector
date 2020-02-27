@@ -38,10 +38,10 @@ final class JetbrainsStubsRenamer
         foreach ($stubFileInfos as $stubFileInfo) {
             $path = $stubFileInfo->getPathname();
 
+            $this->symfonyStyle->note(sprintf('Renaming "%s"', $stubFileInfo->getRelativePathname()));
+
             $filenameWithStubSuffix = dirname($path) . '/' . $stubFileInfo->getBasename('.php') . '.stub';
             FileSystem::rename($path, $filenameWithStubSuffix);
-
-            $this->symfonyStyle->note(sprintf('Renaming "%s"', $stubFileInfo->getRealPath()));
         }
     }
 

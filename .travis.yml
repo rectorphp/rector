@@ -14,12 +14,17 @@ jobs:
         # "Deploy to https://github.com/rectorphp/rector-prefixed"
         -
             name: Compile and Release rector.phar
-            if: (branch = master OR tag IS present) && type = push
+#            if: (branch = master OR tag IS present) && type = push
             php: 7.2
             script:
                 - cd compiler
+
+                # see https://gist.github.com/jeffersonmartin/d0d4a8dfec90d224d14f250b36c74d2f
+                # see https://www.previousnext.com.au/blog/managing-composer-github-access-personal-access-tokens
+                - composer config -g github-oauth.github.com $GITHUB_TOKEN
+
                 - composer install
-                - bin/compile
+                - bin/compile --ansi
                 - ../tmp/rector.phar
 
                 - cd ..

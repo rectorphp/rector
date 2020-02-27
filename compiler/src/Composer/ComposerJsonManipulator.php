@@ -6,6 +6,7 @@ namespace Rector\Compiler\Composer;
 
 use Nette\Utils\FileSystem as NetteFileSystem;
 use Nette\Utils\Json;
+use Rector\Compiler\Differ\ConsoleDiffer;
 use Symfony\Component\Filesystem\Filesystem;
 
 final class ComposerJsonManipulator
@@ -20,9 +21,15 @@ final class ComposerJsonManipulator
      */
     private $originalComposerJsonFileContent;
 
-    public function __construct(Filesystem $filesystem)
+    /**
+     * @var ConsoleDiffer
+     */
+    private $consoleDiffer;
+
+    public function __construct(Filesystem $filesystem, ConsoleDiffer $consoleDiffer)
     {
         $this->filesystem = $filesystem;
+        $this->consoleDiffer = $consoleDiffer;
     }
 
     public function fixComposerJson(string $composerJsonFile): void
@@ -41,6 +48,9 @@ final class ComposerJsonManipulator
         $json = $this->addAllowDevPackages($json);
 
         $encodedJson = Json::encode($json, Json::PRETTY);
+
+        // show diff
+        $this->consoleDiffer->diff($this->originalComposerJsonFileContent, $encodedJson);
 
         $this->filesystem->dumpFile($composerJsonFile, $encodedJson);
     }
