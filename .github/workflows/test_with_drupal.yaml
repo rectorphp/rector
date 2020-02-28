@@ -1,0 +1,54 @@
+name: Test With Drupal
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    test_with_drupal:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.3
+                    coverage: none # disable xdebug, pcov
+                    extensions: "intl"
+
+            # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
+            -   run: |
+                    # 1. install locally
+                    mkdir test-paths
+                    cd test-paths
+
+                    # Install latest Rector
+                    # mkdir rector-0613-dir
+                    # composer require rector/rector:@dev -d rector-dir --no-progress
+                    # composer require rector/rector:0.6.13 -d rector-dir --no-progress
+                    # composer require palantirnet/drupal-rector:dev-rector-0.7 -d rector-dir --no-progress
+
+                    # Install Drupal with Rector 0.6.13
+                    mkdir drupal-rector0613
+                    composer create-project drupal/recommended-project drupal-rector0613 --dev --no-progress
+                    cd drupal-rector0613
+                    composer require drupal/mailjet palantirnet/drupal-rector
+                    vendor/bin/rector process web/modules/contrib/mailjet --dry-run -e
+
+                    # Install Drupal with Rector 0.7.2
+                    mkdir drupal-rector072
+                    composer create-project drupal/recommended-project drupal-rector072 --dev --no-progress
+                    cd drupal-rector072
+                    composer require drupal/mailjet palantirnet/drupal-rector:dev-rector-0.7
+                    vendor/bin/rector process web/modules/contrib/mailjet --dry-run -e
+
+
+                    # missing for some reason
+                    # composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir --no-progress
+                    # composer dump-autoload --no-dev -d symfony-demo-dir
+
+                    # 2. run rector
+
+                    #cd drupal-dir
+                    #../rector-dir/vendor/bin/rector process web/core/modules/aggregator/src/Plugin/views/row/Rss.php --dry-run #--config ../../ci/config/rector-drupal.yaml
