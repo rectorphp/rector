@@ -23,12 +23,6 @@ jobs:
                     mkdir test-paths
                     cd test-paths
 
-                    # Install latest Rector
-                    # mkdir rector-0613-dir
-                    # composer require rector/rector:@dev -d rector-dir --no-progress
-                    # composer require rector/rector:0.6.13 -d rector-dir --no-progress
-                    # composer require palantirnet/drupal-rector:dev-rector-0.7 -d rector-dir --no-progress
-
                     # Install Drupal with Rector 0.6.13
                     #mkdir drupal-rector0613
                     #composer create-project drupal/recommended-project drupal-rector0613 --dev --no-progress
