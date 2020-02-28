@@ -34,14 +34,16 @@ jobs:
                     composer create-project drupal/recommended-project drupal-rector0613 --dev --no-progress
                     cd drupal-rector0613
                     composer require drupal/mailjet palantirnet/drupal-rector
-                    vendor/bin/rector process web/modules/contrib/mailjet --config=vendor/palantirnet/drupal-rector/rector.yml --dry-run -e
+                    cp vendor/palantirnet/drupal-rector/rector.yml .
+                    vendor/bin/rector process web/modules/contrib/mailjet --dry-run -e
 
                     # Install Drupal with Rector 0.7.2
                     mkdir drupal-rector072
                     composer create-project drupal/recommended-project drupal-rector072 --dev --no-progress
                     cd drupal-rector072
                     composer require drupal/mailjet palantirnet/drupal-rector:dev-rector-0.7
-                    vendor/bin/rector process web/modules/contrib/mailjet --config=vendor/palantirnet/drupal-rector/rector.yml --dry-run -e
+                    cp vendor/palantirnet/drupal-rector/rector.yml .
+                    vendor/bin/rector process web/modules/contrib/mailjet --dry-run -e
 
                     # missing for some reason
                     # composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir --no-progress
