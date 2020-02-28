@@ -1,4 +1,4 @@
-name: Test With Drupal
+name: Rector 0.7.2 and Drupal
 
 on:
     pull_request: null
