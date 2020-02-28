@@ -1,0 +1,32 @@
+name: Test With Drupal
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    test_with_drupal:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.3
+                    coverage: none # disable xdebug, pcov
+                    extensions: "intl"
+
+            # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
+            -   run: |
+                    # 1. install locally
+                    mkdir test-paths
+                    cd test-paths
+
+                    # Install Drupal with Rector 0.6.13
+                    mkdir drupal-rector0613
+                    composer create-project drupal/recommended-project drupal-rector0613 --dev --no-progress
+                    cd drupal-rector0613
+                    composer require drupal/mailjet palantirnet/drupal-rector
+                    cp vendor/palantirnet/drupal-rector/rector.yml .
+                    vendor/bin/rector process web/modules/contrib/mailjet/lib/mailjet-api-php/src/mailjet.api.inc --dry-run -e
