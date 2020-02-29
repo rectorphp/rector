@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
-use Iterator;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
@@ -12,10 +11,6 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Throw_;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\Generic\GenericObjectType;
-use PHPStan\Type\IntersectionType;
-use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -25,6 +20,7 @@ use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInferer;
 
@@ -55,10 +51,19 @@ final class ReturnTypeDeclarationRector extends AbstractTypeDeclarationRector
      */
     private $returnTypeInferer;
 
-    public function __construct(ReturnTypeInferer $returnTypeInferer, bool $overrideExistingReturnTypes = true)
-    {
+    /**
+     * @var ReturnTypeAlreadyAddedChecker
+     */
+    private $returnTypeAlreadyAddedChecker;
+
+    public function __construct(
+        ReturnTypeInferer $returnTypeInferer,
+        ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker,
+        bool $overrideExistingReturnTypes = true
+    ) {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->overrideExistingReturnTypes = $overrideExistingReturnTypes;
+        $this->returnTypeAlreadyAddedChecker = $returnTypeAlreadyAddedChecker;
     }
 
     public function getDefinition(): RectorDefinition
@@ -117,7 +122,7 @@ PHP
             return null;
         }
 
-        if ($this->isReturnTypeAlreadyAdded($node, $inferedType)) {
+        if ($this->returnTypeAlreadyAddedChecker->isReturnTypeAlreadyAdded($node, $inferedType)) {
             return null;
         }
 
@@ -158,42 +163,6 @@ PHP
         }
 
         return $this->isNames($functionLike, self::EXCLUDED_METHOD_NAMES);
-    }
-
-    /**
-     * @param ClassMethod|Function_ $node
-     */
-    private function isReturnTypeAlreadyAdded(Node $node, Type $returnType): bool
-    {
-        $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType);
-
-        if ($node->returnType === null) {
-            return false;
-        }
-
-        if ($this->areNodesEqual($node->returnType, $returnNode)) {
-            return true;
-        }
-
-        // is array <=> iterable <=> Iterator co-type? → skip
-        if ($this->isArrayIterableIteratorCoType($node, $returnType)) {
-            return true;
-        }
-
-        // is class-string<T> type? → skip
-        if ($returnType instanceof GenericObjectType && $returnType->getClassName() === 'class-string') {
-            return true;
-        }
-
-        // prevent overriding self with itself
-        if ($this->print($node->returnType) === 'self') {
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-            if (ltrim($this->print($returnNode), '\\') === $className) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private function isVoidDueToThrow(Node $node, $inferredReturnNode): bool
@@ -269,15 +238,6 @@ PHP
         }
     }
 
-    private function isArrayIterableIteratorCoType(Node $node, Type $returnType): bool
-    {
-        if (! $this->isNames($node->returnType, ['iterable', 'Iterator', 'Traversable', 'array'])) {
-            return false;
-        }
-
-        return $this->isStaticTypeIterable($returnType);
-    }
-
     private function addReturnTypeToChildMethod(
         ClassLike $classLike,
         ClassMethod $classMethod,
@@ -301,38 +261,6 @@ PHP
         $currentClassMethod->returnType->setAttribute(self::DO_NOT_CHANGE, true);
 
         $this->notifyNodeChangeFileInfo($currentClassMethod);
-    }
-
-    private function isStaticTypeIterable(Type $type): bool
-    {
-        if ($this->isArrayIterableOrIteratorType($type)) {
-            return true;
-        }
-
-        if ($type instanceof UnionType || $type instanceof IntersectionType) {
-            foreach ($type->getTypes() as $joinedType) {
-                if (! $this->isStaticTypeIterable($joinedType)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private function isArrayIterableOrIteratorType(Type $type): bool
-    {
-        if ($type instanceof ArrayType) {
-            return true;
-        }
-
-        if ($type instanceof IterableType) {
-            return true;
-        }
-
-        return $type instanceof ObjectType && $type->getClassName() === Iterator::class;
     }
 
     /**

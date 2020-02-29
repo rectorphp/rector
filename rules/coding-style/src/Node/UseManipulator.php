@@ -87,7 +87,7 @@ final class UseManipulator
                 continue;
             }
 
-            $name = $this->nodeNameResolver->getName($classLike->name);
+            $name = $this->nodeNameResolver->getName($classLikeName);
             if ($name === null) {
                 continue;
             }
