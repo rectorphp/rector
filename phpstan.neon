@@ -250,3 +250,4 @@ parameters:
 
         - '#Strict comparison using \=\=\= between mixed and (.*?) will always evaluate to false#'
         - '#Parameter \#1 \$c of method Rector\\Php70\\EregToPcreTransformer\:\:_ere2pcre_escape\(\) expects string, mixed given#'
+        - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$description#'

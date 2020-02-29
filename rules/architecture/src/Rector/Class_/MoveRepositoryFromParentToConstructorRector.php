@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\Bridge\RectorProviderException;
+use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -35,12 +36,19 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
      */
     private $classManipulator;
 
+    /**
+     * @var ClassDependencyManipulator
+     */
+    private $classDependencyManipulator;
+
     public function __construct(
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
-        ClassManipulator $classManipulator
+        ClassManipulator $classManipulator,
+        ClassDependencyManipulator $classDependencyManipulator
     ) {
         $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
         $this->classManipulator = $classManipulator;
+        $this->classDependencyManipulator = $classDependencyManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -121,7 +129,7 @@ PHP
         $this->classManipulator->addPropertyToClass($node, 'repository', new ObjectType(EntityRepository::class));
 
         // add $entityManager and assign to constuctor
-        $this->classManipulator->addConstructorDependencyWithCustomAssign(
+        $this->classDependencyManipulator->addConstructorDependencyWithCustomAssign(
             $node,
             'entityManager',
             new ObjectType(EntityManager::class),

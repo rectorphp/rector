@@ -44,7 +44,7 @@ final class PhpDocTypeRenamer
         $phpDocNode = $phpDocInfo->getPhpDocNode();
         $phpParserNode = $node;
 
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, function (PhpDocParserNode $node) use (
+        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (PhpDocParserNode $node) use (
             $namespacePrefix,
             $excludedClasses,
             $phpParserNode

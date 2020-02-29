@@ -1,4 +1,7 @@
 services:
+    Symplify\CodingStandard\Sniffs\CleanCode\ClassCognitiveComplexitySniff:
+        max_class_cognitive_complexity: 110
+
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
         max_cognitive_complexity: 9
 
@@ -80,6 +83,10 @@ parameters:
         Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
             # hidden API
             - 'src/Rector/AbstractRector.php'
+
+        Symplify\CodingStandard\Sniffs\CleanCode\ClassCognitiveComplexitySniff:
+            # node printing
+            - 'utils/documentation-generator/src/Command/DumpNodesCommand.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # todo

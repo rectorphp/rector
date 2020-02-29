@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
+use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
@@ -14,28 +16,28 @@ use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
 final class MultilineSpaceFormatPreserver
 {
-    public function resolveCurrentPhpDocNodeText(AttributeAwareNodeInterface $attributeAwareNode): ?string
+    public function resolveCurrentPhpDocNodeText(Node $node): ?string
     {
-        if ($attributeAwareNode instanceof PhpDocTagNode &&
-            property_exists($attributeAwareNode->value, 'description')
+        if ($node instanceof PhpDocTagNode &&
+            property_exists($node->value, 'description')
         ) {
-            return $attributeAwareNode->value->description;
+            return $node->value->description;
         }
 
-        if ($attributeAwareNode instanceof PhpDocTextNode) {
-            return $attributeAwareNode->text;
+        if ($node instanceof PhpDocTextNode) {
+            return $node->text;
         }
 
-        if (! $attributeAwareNode instanceof AttributeAwarePhpDocTagNode) {
+        if (! $node instanceof PhpDocTagNode) {
             return null;
         }
 
-        if (! $attributeAwareNode->value instanceof AttributeAwareGenericTagValueNode) {
+        if (! $node->value instanceof GenericTagValueNode) {
             return null;
         }
 
-        if (substr_count($attributeAwareNode->value->value, "\n") > 0) {
-            return $attributeAwareNode->value->value;
+        if (substr_count($node->value->value, "\n") > 0) {
+            return $node->value->value;
         }
 
         return null;

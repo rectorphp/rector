@@ -15,6 +15,7 @@ use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
+use Rector\Core\Exception\ShouldNotHappenException;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\PhpDocInfoPrinterTest
@@ -247,7 +248,13 @@ final class PhpDocInfoPrinter
         string $output
     ): string {
         $output .= $phpDocTagNode->name;
-        $nodeOutput = $this->printNode($phpDocTagNode->value, $startEndValueObject);
+
+        $phpDocTagNodeValue = $phpDocTagNode->value;
+        if (! $phpDocTagNodeValue instanceof AttributeAwareNodeInterface) {
+            throw new ShouldNotHappenException();
+        }
+
+        $nodeOutput = $this->printNode($phpDocTagNodeValue, $startEndValueObject);
 
         $tagSpaceSeparator = $this->resolveTagSpaceSeparator($phpDocTagNode);
 
@@ -257,10 +264,7 @@ final class PhpDocInfoPrinter
             $output .= $tagSpaceSeparator;
         }
 
-        if ($phpDocTagNode->getAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES) && (property_exists(
-            $phpDocTagNode->value,
-            'description'
-        ) && $phpDocTagNode->value->description)) {
+        if ($this->hasDescription($phpDocTagNode)) {
             $quotedDescription = preg_quote($phpDocTagNode->value->description, '#');
             $pattern = Strings::replace($quotedDescription, '#[\s]+#', '\s+');
             $nodeOutput = Strings::replace($nodeOutput, '#' . $pattern . '#', $phpDocTagNode->value->description);
@@ -343,5 +347,13 @@ final class PhpDocInfoPrinter
         $matches = Strings::match($originalContent, $spacePattern);
 
         return $matches['space'] ?? '';
+    }
+
+    private function hasDescription(PhpDocTagNode $phpDocTagNode): bool
+    {
+        return $phpDocTagNode->getAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES) && (property_exists(
+                    $phpDocTagNode->value,
+                    'description'
+                ) && $phpDocTagNode->value->description);
     }
 }

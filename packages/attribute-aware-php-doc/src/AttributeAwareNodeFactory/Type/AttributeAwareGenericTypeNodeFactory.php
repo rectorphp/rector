@@ -32,12 +32,12 @@ final class AttributeAwareGenericTypeNodeFactory implements AttributeNodeAwareFa
     /**
      * @param GenericTypeNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
-        $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type);
+        $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type, $docContent);
 
         foreach ($node->genericTypes as $key => $genericType) {
-            $node->genericTypes[$key] = $this->attributeAwareNodeFactory->createFromNode($genericType);
+            $node->genericTypes[$key] = $this->attributeAwareNodeFactory->createFromNode($genericType, $docContent);
         }
 
         return new AttributeAwareGenericTypeNode($node->type, $node->genericTypes);

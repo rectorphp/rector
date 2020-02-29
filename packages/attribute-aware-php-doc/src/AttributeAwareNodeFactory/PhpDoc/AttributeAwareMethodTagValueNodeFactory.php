@@ -33,9 +33,9 @@ final class AttributeAwareMethodTagValueNodeFactory implements AttributeNodeAwar
     /**
      * @param MethodTagValueNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
-        $returnType = $this->createAttributeAwareReturnType($node);
+        $returnType = $this->createAttributeAwareReturnType($node, $docContent);
 
         return new AttributeAwareMethodTagValueNode(
             $node->isStatic,
@@ -54,10 +54,10 @@ final class AttributeAwareMethodTagValueNodeFactory implements AttributeNodeAwar
     /**
      * @return TypeNode&AttributeAwareNodeInterface
      */
-    private function createAttributeAwareReturnType(MethodTagValueNode $methodTagValueNode)
+    private function createAttributeAwareReturnType(MethodTagValueNode $methodTagValueNode, string $docContent)
     {
         if ($methodTagValueNode->returnType !== null) {
-            return $this->attributeAwareNodeFactory->createFromNode($methodTagValueNode->returnType);
+            return $this->attributeAwareNodeFactory->createFromNode($methodTagValueNode->returnType, $docContent);
         }
 
         return $methodTagValueNode->returnType;

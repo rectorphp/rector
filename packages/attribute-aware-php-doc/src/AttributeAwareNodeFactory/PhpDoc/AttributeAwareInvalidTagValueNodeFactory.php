@@ -25,7 +25,7 @@ final class AttributeAwareInvalidTagValueNodeFactory implements AttributeNodeAwa
     /**
      * @param InvalidTagValueNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
         return new AttributeAwareInvalidTagValueNode($node->value, $node->exception);
     }

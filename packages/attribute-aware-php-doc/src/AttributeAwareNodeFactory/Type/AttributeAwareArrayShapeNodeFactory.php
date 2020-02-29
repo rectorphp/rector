@@ -25,7 +25,7 @@ final class AttributeAwareArrayShapeNodeFactory implements AttributeNodeAwareFac
     /**
      * @param ArrayShapeNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
         return new AttributeAwareArrayShapeNode($node->items);
     }

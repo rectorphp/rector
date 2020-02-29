@@ -32,9 +32,9 @@ final class AttributeAwareExtendsTagValueNodeFactory implements AttributeNodeAwa
     /**
      * @param ExtendsTagValueNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
-        $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type);
+        $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type, $docContent);
 
         return new AttributeAwareExtendsTagValueNode($node->type, $node->description);
     }

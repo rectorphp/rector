@@ -25,7 +25,7 @@ final class AttributeAwareGenericTagValueNodeFactory implements AttributeNodeAwa
     /**
      * @param GenericTagValueNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
         return new AttributeAwareGenericTagValueNode($node->value);
     }

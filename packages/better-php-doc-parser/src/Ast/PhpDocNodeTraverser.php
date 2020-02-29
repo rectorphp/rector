@@ -20,7 +20,7 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 
 final class PhpDocNodeTraverser
 {
-    public function traverseWithCallable(PhpDocNode $phpDocNode, callable $callable): void
+    public function traverseWithCallable(PhpDocNode $phpDocNode, string $docContent, callable $callable): void
     {
         foreach ($phpDocNode->children as $key => $phpDocChildNode) {
             $phpDocChildNode = $callable($phpDocChildNode);
@@ -34,13 +34,13 @@ final class PhpDocNodeTraverser
                 continue;
             }
 
-            $phpDocChildNode->value = $callable($phpDocChildNode->value);
+            $phpDocChildNode->value = $callable($phpDocChildNode->value, $docContent);
 
             if ($this->isValueNodeWithType($phpDocChildNode->value)) {
                 /** @var ParamTagValueNode|VarTagValueNode|ReturnTagValueNode $valueNode */
                 $valueNode = $phpDocChildNode->value;
 
-                $valueNode->type = $this->traverseTypeNode($valueNode->type, $callable);
+                $valueNode->type = $this->traverseTypeNode($valueNode->type, $docContent, $callable);
             }
         }
     }
@@ -53,17 +53,17 @@ final class PhpDocNodeTraverser
             $phpDocTagValueNode instanceof ThrowsTagValueNode;
     }
 
-    private function traverseTypeNode(TypeNode $typeNode, callable $callable): TypeNode
+    private function traverseTypeNode(TypeNode $typeNode, string $docContent, callable $callable): TypeNode
     {
-        $typeNode = $callable($typeNode);
+        $typeNode = $callable($typeNode, $docContent);
 
         if ($typeNode instanceof ArrayTypeNode || $typeNode instanceof NullableTypeNode) {
-            $typeNode->type = $this->traverseTypeNode($typeNode->type, $callable);
+            $typeNode->type = $this->traverseTypeNode($typeNode->type, $docContent, $callable);
         }
 
         if ($typeNode instanceof UnionTypeNode || $typeNode instanceof IntersectionTypeNode) {
             foreach ($typeNode->types as $key => $subTypeNode) {
-                $typeNode->types[$key] = $this->traverseTypeNode($subTypeNode, $callable);
+                $typeNode->types[$key] = $this->traverseTypeNode($subTypeNode, $docContent, $callable);
             }
         }
 

@@ -32,10 +32,10 @@ final class AttributeAwareMethodTagValueParameterNodeFactory implements Attribut
     /**
      * @param MethodTagValueParameterNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
         if ($node->type !== null) {
-            $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type);
+            $node->type = $this->attributeAwareNodeFactory->createFromNode($node->type, $docContent);
         }
 
         return new AttributeAwareMethodTagValueParameterNode(

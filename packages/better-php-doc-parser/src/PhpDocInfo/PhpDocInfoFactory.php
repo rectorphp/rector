@@ -71,8 +71,7 @@ final class PhpDocInfoFactory
     {
         $tokens = $this->lexer->tokenize($content);
         $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
-
-        $phpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode);
+        $phpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $content);
 
         $phpDocInfo = new PhpDocInfo(
             $phpDocNode,
@@ -109,7 +108,7 @@ final class PhpDocInfoFactory
             $this->setPositionOfLastToken($phpDocNode);
         }
 
-        $phpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode);
+        $phpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $content);
 
         $phpDocInfo = new PhpDocInfo(
             $phpDocNode,

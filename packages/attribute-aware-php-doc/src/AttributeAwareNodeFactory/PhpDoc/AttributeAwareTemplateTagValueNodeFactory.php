@@ -25,7 +25,7 @@ final class AttributeAwareTemplateTagValueNodeFactory implements AttributeNodeAw
     /**
      * @param TemplateTagValueNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
         return new AttributeAwareTemplateTagValueNode($node->name, $node->bound, $node->description);
     }

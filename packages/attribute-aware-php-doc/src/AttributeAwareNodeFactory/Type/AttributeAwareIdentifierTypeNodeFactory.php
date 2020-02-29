@@ -25,7 +25,7 @@ final class AttributeAwareIdentifierTypeNodeFactory implements AttributeNodeAwar
     /**
      * @param IdentifierTypeNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
         return new AttributeAwareIdentifierTypeNode($node->name);
     }
