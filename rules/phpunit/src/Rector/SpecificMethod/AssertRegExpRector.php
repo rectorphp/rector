@@ -55,8 +55,12 @@ final class AssertRegExpRector extends AbstractPHPUnitRector
             return null;
         }
 
-        /** @var FuncCall $secondArgumentValue */
+        /** @var FuncCall|Node $secondArgumentValue */
         $secondArgumentValue = $node->args[1]->value;
+
+        if (! $secondArgumentValue instanceof FuncCall) {
+            return null;
+        }
 
         if (! $this->isName($secondArgumentValue, 'preg_match')) {
             return null;
