@@ -127,7 +127,7 @@ final class NodeNameResolver
     }
 
     /**
-     * @param Name[] $nodes
+     * @param Name[]|Node[] $nodes
      */
     public function getNames(array $nodes): array
     {
@@ -142,6 +142,22 @@ final class NodeNameResolver
         }
 
         return $names;
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    public function haveName(array $nodes, string $name): bool
+    {
+        foreach ($nodes as $node) {
+            if (! $this->isName($node, $name)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

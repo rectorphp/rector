@@ -43,12 +43,7 @@ final class DocAliasResolver
             $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
 
             if ($phpDocInfo->getVarType()) {
-                $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getVarType(), $possibleDocAliases);
-                $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getReturnType(), $possibleDocAliases);
-
-                foreach ($phpDocInfo->getParamTypes() as $paramType) {
-                    $possibleDocAliases = $this->appendPossibleAliases($paramType, $possibleDocAliases);
-                }
+                $possibleDocAliases = $this->collectVarType($phpDocInfo, $possibleDocAliases);
             }
 
             // e.g. "use Dotrine\ORM\Mapping as ORM" etc.
@@ -74,6 +69,22 @@ final class DocAliasResolver
             foreach ($varType->getTypes() as $type) {
                 $possibleDocAliases = $this->appendPossibleAliases($type, $possibleDocAliases);
             }
+        }
+
+        return $possibleDocAliases;
+    }
+
+    /**
+     * @param string[] $possibleDocAliases
+     * @return string[]
+     */
+    private function collectVarType(PhpDocInfo $phpDocInfo, array $possibleDocAliases): array
+    {
+        $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getVarType(), $possibleDocAliases);
+        $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getReturnType(), $possibleDocAliases);
+
+        foreach ($phpDocInfo->getParamTypes() as $paramType) {
+            $possibleDocAliases = $this->appendPossibleAliases($paramType, $possibleDocAliases);
         }
 
         return $possibleDocAliases;
