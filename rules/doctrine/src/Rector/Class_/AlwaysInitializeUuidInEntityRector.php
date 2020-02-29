@@ -11,7 +11,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Doctrine\NodeFactory\EntityUuidNodeFactory;
@@ -30,14 +30,16 @@ final class AlwaysInitializeUuidInEntityRector extends AbstractRector
     private $entityUuidNodeFactory;
 
     /**
-     * @var ClassManipulator
+     * @var ClassDependencyManipulator
      */
-    private $classManipulator;
+    private $classDependencyManipulator;
 
-    public function __construct(EntityUuidNodeFactory $entityUuidNodeFactory, ClassManipulator $classManipulator)
-    {
+    public function __construct(
+        EntityUuidNodeFactory $entityUuidNodeFactory,
+        ClassDependencyManipulator $classDependencyManipulator
+    ) {
         $this->entityUuidNodeFactory = $entityUuidNodeFactory;
-        $this->classManipulator = $classManipulator;
+        $this->classDependencyManipulator = $classDependencyManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -75,7 +77,7 @@ final class AlwaysInitializeUuidInEntityRector extends AbstractRector
         $stmts = [];
         $stmts[] = $this->entityUuidNodeFactory->createUuidPropertyDefaultValueAssign($uuidPropertyName);
 
-        $this->classManipulator->addStmtsToClassMethodIfNotThereYet($node, '__construct', $stmts);
+        $this->classDependencyManipulator->addStmtsToClassMethodIfNotThereYet($node, $stmts);
 
         return $node;
     }

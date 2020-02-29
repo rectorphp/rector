@@ -6,7 +6,6 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -16,7 +15,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
@@ -27,9 +25,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class ClassManipulator
@@ -55,11 +51,6 @@ final class ClassManipulator
     private $nodeRemovingCommander;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
@@ -69,14 +60,12 @@ final class ClassManipulator
         NodeFactory $nodeFactory,
         CallableNodeTraverser $callableNodeTraverser,
         NodeRemovingCommander $nodeRemovingCommander,
-        BetterStandardPrinter $betterStandardPrinter,
         NodeTypeResolver $nodeTypeResolver
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeRemovingCommander = $nodeRemovingCommander;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
 
@@ -270,37 +259,6 @@ final class ClassManipulator
 
             $this->nodeRemovingCommander->addNode($node);
         });
-    }
-
-    /**
-     * @param Stmt[] $stmts
-     */
-    public function addStmtsToClassMethodIfNotThereYet(Class_ $class, string $methodName, array $stmts): void
-    {
-        $classMethod = $class->getMethod($methodName);
-
-        if ($classMethod === null) {
-            $classMethod = $this->nodeFactory->createPublicMethod($methodName);
-
-            // keep parent constructor call
-            if ($this->hasClassParentClassMethod($class, $methodName)) {
-                $classMethod->stmts[] = $this->createParentClassMethodCall($methodName);
-            }
-
-            $classMethod->stmts = array_merge((array) $classMethod->stmts, $stmts);
-
-            $class->stmts = array_merge((array) $class->stmts, [$classMethod]);
-            return;
-        }
-
-        $stmts = $this->filterOutExistingStmts($classMethod, $stmts);
-
-        // all stmts are already there → skip
-        if ($stmts === []) {
-            return;
-        }
-
-        $classMethod->stmts = array_merge($stmts, (array) $classMethod->stmts);
     }
 
     public function findPropertyByType(Class_ $class, string $serviceType): ?Property
@@ -522,46 +480,6 @@ final class ClassManipulator
         }
 
         return false;
-    }
-
-    private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
-    {
-        $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName === null) {
-            return false;
-        }
-
-        return method_exists($parentClassName, $methodName);
-    }
-
-    private function createParentClassMethodCall(string $methodName): Expression
-    {
-        $staticCall = new StaticCall(new Name('parent'), $methodName);
-
-        return new Expression($staticCall);
-    }
-
-    /**
-     * @param Stmt[] $stmts
-     * @return Stmt[]
-     */
-    private function filterOutExistingStmts(ClassMethod $classMethod, array $stmts): array
-    {
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            &$stmts
-        ) {
-            foreach ($stmts as $key => $assign) {
-                if (! $this->betterStandardPrinter->areNodesEqual($node, $assign)) {
-                    continue;
-                }
-
-                unset($stmts[$key]);
-            }
-
-            return null;
-        });
-
-        return $stmts;
     }
 
     /**

@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\BetterPhpDocParser\Contract\Doctrine\ToManyTagNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -27,13 +27,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class InitializeDefaultEntityCollectionRector extends AbstractRector
 {
     /**
-     * @var ClassManipulator
+     * @var ClassDependencyManipulator
      */
-    private $classManipulator;
+    private $classDependencyManipulator;
 
-    public function __construct(ClassManipulator $classManipulator)
+    public function __construct(ClassDependencyManipulator $classDependencyManipulator)
     {
-        $this->classManipulator = $classManipulator;
+        $this->classDependencyManipulator = $classDependencyManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -107,7 +107,7 @@ PHP
 
         $assigns = $this->createAssignsOfArrayCollectionsForPropertyNames($toManyPropertyNames);
 
-        $this->classManipulator->addStmtsToClassMethodIfNotThereYet($node, '__construct', $assigns);
+        $this->classDependencyManipulator->addStmtsToClassMethodIfNotThereYet($node, $assigns);
 
         return $node;
     }
