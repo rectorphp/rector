@@ -344,14 +344,15 @@ final class NodeTypeResolver
         return $node instanceof Expr && $this->arrayTypeAnalyzer->isArrayType($node);
     }
 
-    private function resolveArrayType(Expr $expr): ArrayType
+    private function resolveArrayType(Expr $expr): Type
     {
         /** @var Scope|null $scope */
         $scope = $expr->getAttribute(AttributeKey::SCOPE);
 
         if ($scope instanceof Scope) {
             $arrayType = $scope->getType($expr);
-            if ($arrayType instanceof ArrayType) {
+
+            if ($arrayType !== null) {
                 return $arrayType;
             }
         }
