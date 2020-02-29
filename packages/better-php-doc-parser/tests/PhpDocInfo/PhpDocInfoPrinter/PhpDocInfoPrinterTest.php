@@ -22,6 +22,18 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
         $this->assertSame($docComment, $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo));
     }
 
+    public function testRemoveSpace(): void
+    {
+        $docComment = FileSystem::read(__DIR__ . '/FixtureChanged/with_space.txt');
+        $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, new Nop());
+
+        $expectedDocComment = FileSystem::read(__DIR__ . '/FixtureChanged/with_space_expected.txt.inc');
+
+        $printedDocComment = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
+
+        $this->assertSame($expectedDocComment, $printedDocComment);
+    }
+
     public function provideData(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureBasic', '*.txt');

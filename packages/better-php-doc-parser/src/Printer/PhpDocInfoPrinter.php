@@ -102,6 +102,9 @@ final class PhpDocInfoPrinter
 
         $phpDocString = $this->printPhpDocNode($this->attributeAwarePhpDocNode);
 
+        // replace extra space after *
+        $phpDocString = Strings::replace($phpDocString, '#([^*])\*[ \t]+$#sm', '$1*');
+
         // hotfix of extra space with callable ()
         return Strings::replace($phpDocString, '#callable(\s+)\(#', 'callable(');
     }
