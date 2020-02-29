@@ -17,6 +17,7 @@ use PHPStan\Analyser\Scope;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector;
 use Rector\Core\Commander\CommanderCollector;
+use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
@@ -27,6 +28,7 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector\AbstractRectorTrait;
 use Rector\Core\Rector\AbstractRector\NodeCommandersTrait;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
@@ -37,6 +39,11 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var BuilderFactory
      */
     protected $builderFactory;
+
+    /**
+     * @var ParameterProvider
+     */
+    protected $parameterProvider;
 
     /**
      * @var SymfonyStyle
@@ -114,7 +121,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         CurrentFileInfoProvider $currentFileInfoProvider,
         PhpDocInfoPrinter $phpDocInfoPrinter,
         DocBlockManipulator $docBlockManipulator,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        ParameterProvider $parameterProvider
     ): void {
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
@@ -125,6 +133,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->phpDocInfoPrinter = $phpDocInfoPrinter;
         $this->docBlockManipulator = $docBlockManipulator;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->parameterProvider = $parameterProvider;
     }
 
     /**
@@ -362,5 +371,16 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         // names are the same
         return $this->areNodesEqual($originalNode->getAttribute('originalName'), $node);
+    }
+
+    protected function isOpenSourceProjectType(): bool
+    {
+        $projectType = $this->parameterProvider->provideParameter(Option::PROJECT_TYPE);
+
+        return in_array(
+            $projectType,
+            [Option::PROJECT_TYPE_OPEN_SOURCE, Option::PROJECT_TYPE_OPEN_SOURCE_UNDESCORED],
+            true
+        );
     }
 }

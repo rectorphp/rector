@@ -68,7 +68,7 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        if (count($node->consts) !== 1) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -97,5 +97,18 @@ PHP
         $this->removeNode($node);
 
         return null;
+    }
+
+    private function shouldSkip(Node $node): bool
+    {
+        if ($this->isOpenSourceProjectType()) {
+            return true;
+        }
+
+        if (count($node->consts) !== 1) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -8,14 +8,12 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\PackageBuilder\Parameter\ParameterProvider;
 
 /**
  * @see https://www.php.net/manual/en/function.compact.php
@@ -55,19 +53,12 @@ final class RemoveUnusedParameterRector extends AbstractRector
      */
     private $classMethodManipulator;
 
-    /**
-     * @var ParameterProvider
-     */
-    private $parameterProvider;
-
     public function __construct(
         ClassManipulator $classManipulator,
-        ClassMethodManipulator $classMethodManipulator,
-        ParameterProvider $parameterProvider
+        ClassMethodManipulator $classMethodManipulator
     ) {
         $this->classManipulator = $classManipulator;
         $this->classMethodManipulator = $classMethodManipulator;
-        $this->parameterProvider = $parameterProvider;
     }
 
     public function getDefinition(): RectorDefinition
@@ -245,16 +236,5 @@ PHP
         }
 
         return $classMethod->isPublic();
-    }
-
-    private function isOpenSourceProjectType(): bool
-    {
-        $projectType = $this->parameterProvider->provideParameter(Option::PROJECT_TYPE);
-
-        return in_array(
-            $projectType,
-            [Option::PROJECT_TYPE_OPEN_SOURCE, Option::PROJECT_TYPE_OPEN_SOURCE_UNDESCORED],
-            true
-        );
     }
 }
