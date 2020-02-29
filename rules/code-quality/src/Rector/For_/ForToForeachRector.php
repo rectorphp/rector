@@ -16,10 +16,10 @@ use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -44,6 +44,16 @@ final class ForToForeachRector extends AbstractRector
      * @var Expr|null
      */
     private $iteratedExpr;
+
+    /**
+     * @var AssignManipulator
+     */
+    private $assignManipulator;
+
+    public function __construct(AssignManipulator $assignManipulator)
+    {
+        $this->assignManipulator = $assignManipulator;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -123,15 +133,7 @@ PHP
         }
 
         $iteratedVariableSingle = Inflector::singularize($iteratedVariable);
-
-        $foreach = new Foreach_($this->iteratedExpr, new Variable($iteratedVariableSingle));
-        $foreach->stmts = $node->stmts;
-
-        if ($this->keyValueName === null) {
-            return null;
-        }
-
-        $foreach->keyVar = new Variable($this->keyValueName);
+        $foreach = $this->createForeach($node, $iteratedVariableSingle);
 
         $this->useForeachVariableInStmts($foreach->valueVar, $foreach->stmts);
 
@@ -151,15 +153,17 @@ PHP
     private function matchInit(array $initExprs): void
     {
         foreach ($initExprs as $initExpr) {
-            if ($initExpr instanceof Assign) {
-                if ($this->isValue($initExpr->expr, 0)) {
-                    $this->keyValueName = $this->getName($initExpr->var);
-                }
+            if (! $initExpr instanceof Assign) {
+                continue;
+            }
 
-                if ($initExpr->expr instanceof FuncCall && $this->isName($initExpr->expr, 'count')) {
-                    $this->countValueName = $this->getName($initExpr->var);
-                    $this->iteratedExpr = $initExpr->expr->args[0]->value;
-                }
+            if ($this->isValue($initExpr->expr, 0)) {
+                $this->keyValueName = $this->getName($initExpr->var);
+            }
+
+            if ($this->isFuncCallName($initExpr->expr, 'count')) {
+                $this->countValueName = $this->getName($initExpr->var);
+                $this->iteratedExpr = $initExpr->expr->args[0]->value;
             }
         }
     }
@@ -182,7 +186,7 @@ PHP
         }
 
         // count($values)
-        if ($condExprs[0]->right instanceof FuncCall && $this->isName($condExprs[0]->right, 'count')) {
+        if ($this->isFuncCallName($condExprs[0]->right, 'count')) {
             /** @var FuncCall $countFuncCall */
             $countFuncCall = $condExprs[0]->right;
             $this->iteratedExpr = $countFuncCall->args[0]->value;
@@ -232,8 +236,7 @@ PHP
             }
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-            if ($this->isPartOfAssign($parentNode)) {
+            if ($this->assignManipulator->isNodePartOfAssign($parentNode)) {
                 return null;
             }
 
@@ -275,24 +278,20 @@ PHP
         return false;
     }
 
-    private function isPartOfAssign(?Node $node): bool
+    private function createForeach(For_ $for, string $iteratedVariableName): Foreach_
     {
-        if ($node === null) {
-            return false;
+        if ($this->iteratedExpr === null) {
+            throw new ShouldNotHappenException();
         }
 
-        $previousNode = $node;
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-        while ($parentNode !== null && ! $parentNode instanceof Expression) {
-            if ($parentNode instanceof Assign && $this->areNodesEqual($parentNode->var, $previousNode)) {
-                return true;
-            }
-
-            $previousNode = $parentNode;
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        if ($this->keyValueName === null) {
+            throw new ShouldNotHappenException();
         }
 
-        return false;
+        $foreach = new Foreach_($this->iteratedExpr, new Variable($iteratedVariableName));
+        $foreach->stmts = $for->stmts;
+        $foreach->keyVar = new Variable($this->keyValueName);
+
+        return $foreach;
     }
 }

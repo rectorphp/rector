@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Empty_;
-use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\PhpParser\Node\Manipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -57,7 +56,7 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
             $node,
             // is_array(...)
             function (Node $node): bool {
-                return $node instanceof FuncCall && $this->isName($node, 'is_array');
+                return $this->isFuncCallName($node, 'is_array');
             },
             Empty_::class
         );

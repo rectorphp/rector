@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Rector\AbstractRector;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\CodingStyle\Naming\ClassNaming;
@@ -64,5 +65,14 @@ trait NameResolverTrait
     protected function getShortName($name): string
     {
         return $this->classNaming->getShortName($name);
+    }
+
+    protected function isFuncCallName(Node $node, string $name): bool
+    {
+        if (! $node instanceof FuncCall) {
+            return false;
+        }
+
+        return $this->isName($node, $name);
     }
 }

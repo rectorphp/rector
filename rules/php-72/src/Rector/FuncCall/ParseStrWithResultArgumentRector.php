@@ -74,7 +74,7 @@ PHP
         }
 
         $this->traverseNodesWithCallable($nextExpression, function (Node $node) use ($resultVariable): ?Variable {
-            if ($node instanceof FuncCall && $this->isName($node, 'get_defined_vars')) {
+            if ($this->isFuncCallName($node, 'get_defined_vars')) {
                 return $resultVariable;
             }
 
