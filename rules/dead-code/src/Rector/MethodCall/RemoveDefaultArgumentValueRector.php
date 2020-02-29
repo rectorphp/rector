@@ -11,6 +11,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -109,6 +111,10 @@ PHP
 
         if (! $node instanceof FuncCall) {
             return false;
+        }
+
+        if (! $node->name instanceof Identifier && ! $node->name instanceof Name) {
+            return true;
         }
 
         $functionName = $this->getName($node->name);

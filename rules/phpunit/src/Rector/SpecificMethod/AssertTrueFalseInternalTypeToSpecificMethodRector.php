@@ -92,8 +92,12 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractPH
             return null;
         }
 
-        /** @var FuncCall $firstArgumentValue */
+        /** @var FuncCall|Node $firstArgumentValue */
         $firstArgumentValue = $node->args[0]->value;
+
+        if (! $firstArgumentValue instanceof FuncCall) {
+            return null;
+        }
 
         $functionName = $this->getName($firstArgumentValue);
         if (! isset(self::OLD_FUNCTIONS_TO_TYPES[$functionName])) {
