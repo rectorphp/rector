@@ -251,6 +251,8 @@ final class PhpDocInfoPrinter
 
         $tagSpaceSeparator = $this->resolveTagSpaceSeparator($phpDocTagNode);
 
+        // space is handled by $tagSpaceSeparator
+        $nodeOutput = ltrim($nodeOutput);
         if ($nodeOutput && $tagSpaceSeparator !== '') {
             $output .= $tagSpaceSeparator;
         }
