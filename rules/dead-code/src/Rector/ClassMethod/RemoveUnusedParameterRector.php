@@ -232,8 +232,7 @@ PHP
     private function shouldSkipOpenSourceAbstract(ClassMethod $classMethod, Class_ $class): bool
     {
         // skip as possible contract for 3rd party
-        $projectType = $this->parameterProvider->provideParameter(Option::PROJECT_TYPE);
-        if ($projectType !== Option::PROJECT_TYPE_OPEN_SOURCE) {
+        if (! $this->isOpenSourceProjectType()) {
             return false;
         }
 
@@ -246,5 +245,16 @@ PHP
         }
 
         return $classMethod->isPublic();
+    }
+
+    private function isOpenSourceProjectType(): bool
+    {
+        $projectType = $this->parameterProvider->provideParameter(Option::PROJECT_TYPE);
+
+        return in_array(
+            $projectType,
+            [Option::PROJECT_TYPE_OPEN_SOURCE, Option::PROJECT_TYPE_OPEN_SOURCE_UNDESCORED],
+            true
+        );
     }
 }
