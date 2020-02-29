@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -113,7 +112,7 @@ PHP
             return false;
         }
 
-        if (! $node->name instanceof Identifier && ! $node->name instanceof Name) {
+        if (! $node->name instanceof Name) {
             return true;
         }
 
