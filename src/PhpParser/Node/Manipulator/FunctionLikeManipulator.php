@@ -56,7 +56,7 @@ final class FunctionLikeManipulator
                 return null;
             }
 
-            if (! $this->propertyFetchManipulator->isLocalProperty($node->expr)) {
+            if (! $this->propertyFetchManipulator->isLocalPropertyFetch($node->expr)) {
                 return null;
             }
 

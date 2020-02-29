@@ -117,12 +117,7 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        if (! $node->var instanceof PropertyFetch) {
-            return false;
-        }
-
-        // must be local property
-        return $this->nodeNameResolver->isName($node->var->var, 'this');
+        return $this->isLocalPropertyFetch($node->var);
     }
 
     /**
@@ -130,7 +125,7 @@ final class PropertyFetchManipulator
      */
     public function isLocalPropertyOfNames(Node $node, array $propertyNames): bool
     {
-        if (! $this->isLocalProperty($node)) {
+        if (! $this->isLocalPropertyFetch($node)) {
             return false;
         }
 
@@ -138,7 +133,7 @@ final class PropertyFetchManipulator
         return $this->nodeNameResolver->isNames($node->name, $propertyNames);
     }
 
-    public function isLocalProperty(Node $node): bool
+    public function isLocalPropertyFetch(Node $node): bool
     {
         if (! $node instanceof PropertyFetch) {
             return false;
@@ -161,13 +156,7 @@ final class PropertyFetchManipulator
         }
 
         if ($node instanceof ArrayDimFetch) {
-            $nestedNode = $node->var;
-
-            while ($nestedNode instanceof ArrayDimFetch) {
-                $nestedNode = $nestedNode->var;
-            }
-
-            return $this->matchPropertyFetch($nestedNode);
+            return $this->matchPropertyFetch($node->var);
         }
 
         return null;
@@ -183,15 +172,14 @@ final class PropertyFetchManipulator
             return false;
         }
 
-        if (! $node->var instanceof PropertyFetch) {
+        if (! $this->isLocalPropertyFetch($node->var)) {
             return false;
         }
 
-        if (! $this->nodeNameResolver->isName($node->var->var, 'this')) {
-            return false;
-        }
+        /** @var PropertyFetch $propertyFetch */
+        $propertyFetch = $node->var;
 
-        return $this->nodeNameResolver->isName($node->var->name, $propertyName);
+        return $this->nodeNameResolver->isName($propertyFetch->name, $propertyName);
     }
 
     private function hasPublicProperty(PropertyFetch $propertyFetch, string $propertyName): bool
