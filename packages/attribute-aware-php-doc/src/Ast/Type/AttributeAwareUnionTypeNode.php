@@ -17,6 +17,10 @@ final class AttributeAwareUnionTypeNode extends UnionTypeNode implements Attribu
      */
     public function __toString(): string
     {
+        // @todo keep original format
+        dump(parent::__toString());
+        die;
+
         return implode('|', $this->types);
     }
 }

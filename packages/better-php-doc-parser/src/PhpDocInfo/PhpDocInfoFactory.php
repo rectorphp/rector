@@ -109,7 +109,11 @@ final class PhpDocInfoFactory
             $this->setPositionOfLastToken($phpDocNode);
         }
 
-        $phpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode);
+        dump($content);
+        dump($phpDocNode);
+        die;
+
+        $phpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $content);
 
         $phpDocInfo = new PhpDocInfo(
             $phpDocNode,

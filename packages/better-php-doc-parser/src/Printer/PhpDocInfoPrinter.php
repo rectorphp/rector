@@ -15,6 +15,7 @@ use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
+use Rector\Core\Exception\ShouldNotHappenException;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\PhpDocInfoPrinterTest
@@ -247,7 +248,13 @@ final class PhpDocInfoPrinter
         string $output
     ): string {
         $output .= $phpDocTagNode->name;
-        $nodeOutput = $this->printNode($phpDocTagNode->value, $startEndValueObject);
+
+        $phpDocTagNodeValue = $phpDocTagNode->value;
+        if (! $phpDocTagNodeValue instanceof AttributeAwareNodeInterface) {
+            throw new ShouldNotHappenException();
+        }
+
+        $nodeOutput = $this->printNode($phpDocTagNodeValue, $startEndValueObject);
 
         $tagSpaceSeparator = $this->resolveTagSpaceSeparator($phpDocTagNode);
 
