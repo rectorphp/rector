@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
@@ -123,6 +124,24 @@ final class NodeNameResolver
     public function areNamesEqual(Node $firstNode, Node $secondNode): bool
     {
         return $this->getName($firstNode) === $this->getName($secondNode);
+    }
+
+    /**
+     * @param Name[] $nodes
+     */
+    public function getNames(array $nodes): array
+    {
+        $names = [];
+        foreach ($nodes as $node) {
+            $name = $this->getName($node);
+            if (! is_string($name)) {
+                throw new ShouldNotHappenException();
+            }
+
+            $names[] = $name;
+        }
+
+        return $names;
     }
 
     /**

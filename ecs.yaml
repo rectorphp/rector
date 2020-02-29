@@ -1,6 +1,6 @@
 services:
     Symplify\CodingStandard\Sniffs\CleanCode\ClassCognitiveComplexitySniff:
-        max_class_cognitive_complexity: 110
+        max_class_cognitive_complexity: 60
 
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
         max_cognitive_complexity: 9
@@ -87,6 +87,8 @@ parameters:
         Symplify\CodingStandard\Sniffs\CleanCode\ClassCognitiveComplexitySniff:
             # node printing
             - 'utils/documentation-generator/src/Command/DumpNodesCommand.php'
+            # 3rd party code
+            - 'rules/php-70/src/EregToPcreTransformer.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # todo

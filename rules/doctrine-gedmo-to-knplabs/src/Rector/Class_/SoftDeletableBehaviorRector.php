@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\SoftDeleteableTagValueNode;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -23,13 +23,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class SoftDeletableBehaviorRector extends AbstractRector
 {
     /**
-     * @var ClassManipulator
+     * @var ClassInsertManipulator
      */
-    private $classManipulator;
+    private $classInsertManipulator;
 
-    public function __construct(ClassManipulator $classManipulator)
+    public function __construct(ClassInsertManipulator $classInsertManipulator)
     {
-        $this->classManipulator = $classManipulator;
+        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -106,7 +106,10 @@ PHP
         $fieldName = $softDeleteableTagValueNode->getFieldName();
         $this->removePropertyAndClassMethods($node, $fieldName);
 
-        $this->classManipulator->addAsFirstTrait($node, 'Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait');
+        $this->classInsertManipulator->addAsFirstTrait(
+            $node,
+            'Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait'
+        );
 
         $node->implements[] = new FullyQualified('Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface');
 

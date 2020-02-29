@@ -5018,7 +5018,7 @@ Tests without assertion will have @doesNotPerformAssertion
  class SomeClass extends PHPUnit\Framework\TestCase
  {
 +    /**
-+     * @doesNotPerformAssertion
++     * @doesNotPerformAssertions
 +     */
      public function test()
      {

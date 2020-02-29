@@ -6,30 +6,19 @@ namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\Node\Stmt\TraitUse;
-use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Commander\NodeRemovingCommander;
-use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class ClassManipulator
@@ -38,11 +27,6 @@ final class ClassManipulator
      * @var NodeNameResolver
      */
     private $nodeNameResolver;
-
-    /**
-     * @var NodeFactory
-     */
-    private $nodeFactory;
 
     /**
      * @var CallableNodeTraverser
@@ -55,81 +39,20 @@ final class ClassManipulator
     private $nodeRemovingCommander;
 
     /**
-     * @var BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-
-    /**
      * @var NodeTypeResolver
      */
     private $nodeTypeResolver;
 
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        NodeFactory $nodeFactory,
         CallableNodeTraverser $callableNodeTraverser,
         NodeRemovingCommander $nodeRemovingCommander,
-        BetterStandardPrinter $betterStandardPrinter,
         NodeTypeResolver $nodeTypeResolver
     ) {
-        $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeRemovingCommander = $nodeRemovingCommander;
-        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeTypeResolver = $nodeTypeResolver;
-    }
-
-    /**
-     * @param ClassMethod|Property|ClassConst|ClassMethod $stmt
-     */
-    public function addAsFirstMethod(Class_ $class, Stmt $stmt): void
-    {
-        if ($this->tryInsertBeforeFirstMethod($class, $stmt)) {
-            return;
-        }
-
-        if ($this->tryInsertAfterLastProperty($class, $stmt)) {
-            return;
-        }
-
-        $class->stmts[] = $stmt;
-    }
-
-    public function addAsFirstTrait(Class_ $class, string $traitName): void
-    {
-        $trait = new TraitUse([new FullyQualified($traitName)]);
-
-        $this->addStatementToClassBeforeTypes($class, $trait, TraitUse::class, Property::class);
-    }
-
-    /**
-     * @param Stmt[] $nodes
-     * @return Stmt[]
-     */
-    public function insertBeforeAndFollowWithNewline(array $nodes, Stmt $stmt, int $key): array
-    {
-        $nodes = $this->insertBefore($nodes, $stmt, $key);
-        return $this->insertBefore($nodes, new Nop(), $key);
-    }
-
-    public function addConstantToClass(Class_ $class, string $constantName, ClassConst $classConst): void
-    {
-        if ($this->hasClassConstant($class, $constantName)) {
-            return;
-        }
-
-        $this->addAsFirstMethod($class, $classConst);
-    }
-
-    public function addPropertyToClass(Class_ $class, string $name, ?Type $type): void
-    {
-        if ($this->hasClassProperty($class, $name)) {
-            return;
-        }
-
-        $propertyNode = $this->nodeFactory->createPrivatePropertyFromNameAndType($name, $type);
-        $this->addAsFirstMethod($class, $propertyNode);
     }
 
     /**
@@ -141,10 +64,9 @@ final class ClassManipulator
         $usedTraits = [];
         foreach ($classLike->getTraitUses() as $stmt) {
             foreach ($stmt->traits as $trait) {
+                /** @var string $traitName */
                 $traitName = $this->nodeNameResolver->getName($trait);
-                if ($traitName !== null) {
-                    $usedTraits[$traitName] = $trait;
-                }
+                $usedTraits[$traitName] = $trait;
             }
         }
 
@@ -199,30 +121,17 @@ final class ClassManipulator
         $this->removeProperties($class, [$propertyName]);
     }
 
-    public function findMethodParamByName(ClassMethod $classMethod, string $name): ?Param
-    {
-        foreach ($classMethod->params as $param) {
-            if (! $this->nodeNameResolver->isName($param, $name)) {
-                continue;
-            }
-
-            return $param;
-        }
-
-        return null;
-    }
-
     /**
      * @return string[]
      */
     public function getPrivatePropertyNames(Class_ $class): array
     {
-        $privatePropertyNames = [];
-        foreach ($class->getProperties() as $property) {
-            if (! $property->isPrivate()) {
-                continue;
-            }
+        $privateProperties = array_filter($class->getProperties(), function (Property $property) {
+            return $property->isPrivate();
+        });
 
+        $privatePropertyNames = [];
+        foreach ($privateProperties as $property) {
             /** @var string $propertyName */
             $propertyName = $this->nodeNameResolver->getName($property);
             $privatePropertyNames[] = $propertyName;
@@ -252,55 +161,6 @@ final class ClassManipulator
         }
 
         return $publicMethodNames;
-    }
-
-    /**
-     * @param string[] $propertyNames
-     */
-    public function removeProperties(Class_ $class, array $propertyNames): void
-    {
-        $this->callableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use ($propertyNames) {
-            if (! $node instanceof Property) {
-                return null;
-            }
-
-            if (! $this->nodeNameResolver->isNames($node, $propertyNames)) {
-                return null;
-            }
-
-            $this->nodeRemovingCommander->addNode($node);
-        });
-    }
-
-    /**
-     * @param Stmt[] $stmts
-     */
-    public function addStmtsToClassMethodIfNotThereYet(Class_ $class, string $methodName, array $stmts): void
-    {
-        $classMethod = $class->getMethod($methodName);
-
-        if ($classMethod === null) {
-            $classMethod = $this->nodeFactory->createPublicMethod($methodName);
-
-            // keep parent constructor call
-            if ($this->hasClassParentClassMethod($class, $methodName)) {
-                $classMethod->stmts[] = $this->createParentClassMethodCall($methodName);
-            }
-
-            $classMethod->stmts = array_merge((array) $classMethod->stmts, $stmts);
-
-            $class->stmts = array_merge((array) $class->stmts, [$classMethod]);
-            return;
-        }
-
-        $stmts = $this->filterOutExistingStmts($classMethod, $stmts);
-
-        // all stmts are already there → skip
-        if ($stmts === []) {
-            return;
-        }
-
-        $classMethod->stmts = array_merge($stmts, (array) $classMethod->stmts);
     }
 
     public function findPropertyByType(Class_ $class, string $serviceType): ?Property
@@ -403,11 +263,11 @@ final class ClassManipulator
     public function getClassLikeNodeParentInterfaceNames(ClassLike $classLike)
     {
         if ($classLike instanceof Class_) {
-            return $this->getClassImplementedInterfaceNames($classLike);
+            return $this->nodeNameResolver->getNames($classLike->implements);
         }
 
         if ($classLike instanceof Interface_) {
-            return $this->getInterfaceExtendedInterfacesNames($classLike);
+            return $this->nodeNameResolver->getNames($classLike->extends);
         }
 
         return [];
@@ -453,163 +313,20 @@ final class ClassManipulator
     }
 
     /**
-     * @param Stmt[] $nodes
-     * @return Stmt[]
+     * @param string[] $propertyNames
      */
-    private function insertBefore(array $nodes, Stmt $stmt, int $key): array
+    private function removeProperties(Class_ $class, array $propertyNames): void
     {
-        array_splice($nodes, $key, 0, [$stmt]);
-
-        return $nodes;
-    }
-
-    private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
-    {
-        foreach ($classNode->stmts as $key => $classStmt) {
-            if ($classStmt instanceof ClassMethod) {
-                $classNode->stmts = $this->insertBefore($classNode->stmts, $stmt, $key);
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function tryInsertAfterLastProperty(Class_ $classNode, Stmt $stmt): bool
-    {
-        $previousElement = null;
-        foreach ($classNode->stmts as $key => $classStmt) {
-            if ($previousElement instanceof Property && ! $classStmt instanceof Property) {
-                $classNode->stmts = $this->insertBefore($classNode->stmts, $stmt, $key);
-
-                return true;
+        $this->callableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use ($propertyNames) {
+            if (! $node instanceof Property) {
+                return null;
             }
 
-            $previousElement = $classStmt;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param string[] ...$types
-     */
-    private function addStatementToClassBeforeTypes(Class_ $classNode, Stmt $stmt, string ...$types): void
-    {
-        foreach ($types as $type) {
-            foreach ($classNode->stmts as $key => $classStmt) {
-                if ($classStmt instanceof $type) {
-                    $classNode->stmts = $this->insertBefore($classNode->stmts, $stmt, $key);
-
-                    return;
-                }
-            }
-        }
-
-        $classNode->stmts[] = $stmt;
-    }
-
-    /**
-     * @todo simplify
-     * Waits on https://github.com/nikic/PHP-Parser/pull/646
-     */
-    private function hasClassProperty(Class_ $classNode, string $name): bool
-    {
-        foreach ($classNode->getProperties() as $property) {
-            if ($this->nodeNameResolver->isName($property, $name)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
-    {
-        $parentClassName = $class->getAttribute(AttributeKey::PARENT_CLASS_NAME);
-        if ($parentClassName === null) {
-            return false;
-        }
-
-        return method_exists($parentClassName, $methodName);
-    }
-
-    private function createParentClassMethodCall(string $methodName): Expression
-    {
-        $staticCall = new StaticCall(new Name('parent'), $methodName);
-
-        return new Expression($staticCall);
-    }
-
-    /**
-     * @param Stmt[] $stmts
-     * @return Stmt[]
-     */
-    private function filterOutExistingStmts(ClassMethod $classMethod, array $stmts): array
-    {
-        $this->callableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use (
-            &$stmts
-        ) {
-            foreach ($stmts as $key => $assign) {
-                if (! $this->betterStandardPrinter->areNodesEqual($node, $assign)) {
-                    continue;
-                }
-
-                unset($stmts[$key]);
+            if (! $this->nodeNameResolver->isNames($node, $propertyNames)) {
+                return null;
             }
 
-            return null;
+            $this->nodeRemovingCommander->addNode($node);
         });
-
-        return $stmts;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getClassImplementedInterfaceNames(Class_ $class): array
-    {
-        $interfaceNames = [];
-
-        foreach ($class->implements as $implementNode) {
-            $interfaceName = $this->nodeNameResolver->getName($implementNode);
-            if ($interfaceName === null) {
-                continue;
-            }
-
-            $interfaceNames[] = $interfaceName;
-        }
-
-        return $interfaceNames;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getInterfaceExtendedInterfacesNames(Interface_ $interface): array
-    {
-        $interfaceNames = [];
-
-        foreach ($interface->extends as $extendNode) {
-            $interfaceName = $this->nodeNameResolver->getName($extendNode);
-            if ($interfaceName === null) {
-                continue;
-            }
-
-            $interfaceNames[] = $interfaceName;
-        }
-
-        return $interfaceNames;
-    }
-
-    private function hasClassConstant(Class_ $class, string $constantName)
-    {
-        foreach ($class->getConstants() as $classConst) {
-            if ($this->nodeNameResolver->isName($classConst, $constantName)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

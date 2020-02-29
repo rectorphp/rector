@@ -14,7 +14,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\SlugTagValueNode;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -29,19 +29,21 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class SluggableBehaviorRector extends AbstractRector
 {
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
      * @var PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
 
-    public function __construct(ClassManipulator $classManipulator, PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->classManipulator = $classManipulator;
+    /**
+     * @var ClassInsertManipulator
+     */
+    private $classInsertManipulator;
+
+    public function __construct(
+        PhpDocInfoFactory $phpDocInfoFactory,
+        ClassInsertManipulator $classInsertManipulator
+    ) {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -115,6 +117,7 @@ PHP
                 continue;
             }
 
+            /** @var SlugTagValueNode|null $slugTagValueNode */
             $slugTagValueNode = $propertyPhpDocInfo->getByType(SlugTagValueNode::class);
             if ($slugTagValueNode === null) {
                 continue;
@@ -140,7 +143,7 @@ PHP
             $this->removeNode($classMethod);
         }
 
-        $this->classManipulator->addAsFirstTrait($node, 'Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait');
+        $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait');
 
         $node->implements[] = new FullyQualified('Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface');
 
@@ -165,6 +168,6 @@ PHP
         $phpDocInfo->changeReturnType($returnType);
 //        $this->docBlockManipulator->addReturnTag($classMethod, new ArrayType(new MixedType(), new StringType()));
 
-        $this->classManipulator->addAsFirstMethod($class, $classMethod);
+        $this->classInsertManipulator->addAsFirstMethod($class, $classMethod);
     }
 }

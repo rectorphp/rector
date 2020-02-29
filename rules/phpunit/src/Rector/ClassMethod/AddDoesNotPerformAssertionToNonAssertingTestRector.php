@@ -75,7 +75,7 @@ PHP
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     /**
-     * @doesNotPerformAssertion
+     * @doesNotPerformAssertions
      */
     public function test()
     {
@@ -104,7 +104,7 @@ PHP
             return null;
         }
 
-        $this->addDoesNotPerformAssertion($node);
+        $this->addDoesNotPerformAssertions($node);
 
         return $node;
     }
@@ -128,11 +128,11 @@ PHP
         return $this->containsAssertCall($classMethod);
     }
 
-    private function addDoesNotPerformAssertion(ClassMethod $classMethod): void
+    private function addDoesNotPerformAssertions(ClassMethod $classMethod): void
     {
         /** @var PhpDocInfo $phpDocInfo */
         $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $phpDocInfo->addBareTag('@doesNotPerformAssertion');
+        $phpDocInfo->addBareTag('@doesNotPerformAssertions');
     }
 
     private function containsAssertCall(ClassMethod $classMethod): bool
