@@ -122,11 +122,7 @@ PHP
             return true;
         }
 
-        if ($this->isNotIdenticalToNull($funcCall, $parentNode)) {
-            return true;
-        }
-
-        return false;
+        return $this->isNotIdenticalToNull($funcCall, $parentNode);
     }
 
     /**
