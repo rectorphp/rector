@@ -1,4 +1,6 @@
 services:
+    ClassCognitive:
+
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
         max_cognitive_complexity: 9
 
