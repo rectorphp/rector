@@ -16,10 +16,10 @@ use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Manipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -44,6 +44,16 @@ final class ForToForeachRector extends AbstractRector
      * @var Expr|null
      */
     private $iteratedExpr;
+
+    /**
+     * @var AssignManipulator
+     */
+    private $assignManipulator;
+
+    public function __construct(AssignManipulator $assignManipulator)
+    {
+        $this->assignManipulator = $assignManipulator;
+    }
 
     public function getDefinition(): RectorDefinition
     {
@@ -151,15 +161,17 @@ PHP
     private function matchInit(array $initExprs): void
     {
         foreach ($initExprs as $initExpr) {
-            if ($initExpr instanceof Assign) {
-                if ($this->isValue($initExpr->expr, 0)) {
-                    $this->keyValueName = $this->getName($initExpr->var);
-                }
+            if (! $initExpr instanceof Assign) {
+                continue;
+            }
 
-                if ($initExpr->expr instanceof FuncCall && $this->isName($initExpr->expr, 'count')) {
-                    $this->countValueName = $this->getName($initExpr->var);
-                    $this->iteratedExpr = $initExpr->expr->args[0]->value;
-                }
+            if ($this->isValue($initExpr->expr, 0)) {
+                $this->keyValueName = $this->getName($initExpr->var);
+            }
+
+            if ($initExpr->expr instanceof FuncCall && $this->isName($initExpr->expr, 'count')) {
+                $this->countValueName = $this->getName($initExpr->var);
+                $this->iteratedExpr = $initExpr->expr->args[0]->value;
             }
         }
     }
@@ -232,7 +244,6 @@ PHP
             }
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
             if ($this->isPartOfAssign($parentNode)) {
                 return null;
             }
@@ -281,18 +292,6 @@ PHP
             return false;
         }
 
-        $previousNode = $node;
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-        while ($parentNode !== null && ! $parentNode instanceof Expression) {
-            if ($parentNode instanceof Assign && $this->areNodesEqual($parentNode->var, $previousNode)) {
-                return true;
-            }
-
-            $previousNode = $parentNode;
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        }
-
-        return false;
+        return $this->assignManipulator->isNodePartOfAssign($node);
     }
 }
