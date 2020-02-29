@@ -104,11 +104,6 @@ PHP
         if ($this->isOpenSourceProjectType()) {
             return true;
         }
-
-        if (count($node->consts) !== 1) {
-            return true;
-        }
-
-        return false;
+        return count($node->consts) !== 1;
     }
 }

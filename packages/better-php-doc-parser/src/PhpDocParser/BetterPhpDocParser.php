@@ -219,9 +219,11 @@ final class BetterPhpDocParser extends PhpDocParser
         $tokenEnd = $this->getTokenIteratorIndex($tokenIterator);
 
         $tokenEnd = $this->adjustTokenEndToFitClassAnnotation($tokenIterator, $tokenEnd);
+
         $startEndValueObject = new StartEndValueObject($tokenStart, $tokenEnd);
 
         $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $docContent);
+
         $attributeAwareNode->setAttribute(Attribute::START_END, $startEndValueObject);
 
         $possibleMultilineText = $this->multilineSpaceFormatPreserver->resolveCurrentPhpDocNodeText(
