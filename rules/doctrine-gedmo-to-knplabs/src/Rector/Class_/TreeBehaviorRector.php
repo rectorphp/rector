@@ -14,7 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TreeParentTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TreeRightTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TreeRootTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TreeTagValueNode;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -29,13 +29,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class TreeBehaviorRector extends AbstractRector
 {
     /**
-     * @var ClassManipulator
+     * @var ClassInsertManipulator
      */
-    private $classManipulator;
+    private $classInsertManipulator;
 
-    public function __construct(ClassManipulator $classManipulator)
+    public function __construct(ClassInsertManipulator $classInsertManipulator)
     {
-        $this->classManipulator = $classManipulator;
+        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -151,7 +151,7 @@ PHP
         $classPhpDocInfo->removeByType(TreeTagValueNode::class);
 
         $node->implements[] = new FullyQualified('Knp\DoctrineBehaviors\Contract\Entity\TreeNodeInterface');
-        $this->classManipulator->addAsFirstTrait($node, 'Knp\DoctrineBehaviors\Model\Tree\TreeNodeTrait');
+        $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\DoctrineBehaviors\Model\Tree\TreeNodeTrait');
 
         // remove all tree-related properties and their getters and setters - it's handled by behavior trait
 

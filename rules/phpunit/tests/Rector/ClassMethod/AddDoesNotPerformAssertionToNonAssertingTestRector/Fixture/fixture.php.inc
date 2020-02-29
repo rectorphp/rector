@@ -19,7 +19,7 @@ namespace Rector\PHPUnit\Tests\Rector\ClassMethod\AddDoesNotPerformAssertionToNo
 class SomeClass extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @doesNotPerformAssertion
+     * @doesNotPerformAssertions
      */
     public function test()
     {

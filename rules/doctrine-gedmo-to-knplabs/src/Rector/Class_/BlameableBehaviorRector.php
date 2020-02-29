@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\BlameableTagValueNode;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -23,13 +23,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class BlameableBehaviorRector extends AbstractRector
 {
     /**
-     * @var ClassManipulator
+     * @var ClassInsertManipulator
      */
-    private $classManipulator;
+    private $classInsertManipulator;
 
-    public function __construct(ClassManipulator $classManipulator)
+    public function __construct(ClassInsertManipulator $classInsertManipulator)
     {
-        $this->classManipulator = $classManipulator;
+        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -114,7 +114,7 @@ PHP
 
         $this->removeBlameablePropertiesAndMethods($node);
 
-        $this->classManipulator->addAsFirstTrait($node, 'Knp\DoctrineBehaviors\Model\Blameable\BlameableTrait');
+        $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\DoctrineBehaviors\Model\Blameable\BlameableTrait');
 
         $node->implements[] = new FullyQualified('Knp\DoctrineBehaviors\Contract\Entity\BlameableInterface');
 

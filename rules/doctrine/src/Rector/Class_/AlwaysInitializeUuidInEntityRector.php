@@ -77,7 +77,7 @@ final class AlwaysInitializeUuidInEntityRector extends AbstractRector
         $stmts = [];
         $stmts[] = $this->entityUuidNodeFactory->createUuidPropertyDefaultValueAssign($uuidPropertyName);
 
-        $this->classDependencyManipulator->addStmtsToClassMethodIfNotThereYet($node, $stmts);
+        $this->classDependencyManipulator->addStmtsToConstructorIfNotThereYet($node, $stmts);
 
         return $node;
     }

@@ -9,7 +9,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\LoggableTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\VersionedTagValueNode;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -24,13 +24,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class LoggableBehaviorRector extends AbstractRector
 {
     /**
-     * @var ClassManipulator
+     * @var ClassInsertManipulator
      */
-    private $classManipulator;
+    private $classInsertManipulator;
 
-    public function __construct(ClassManipulator $classManipulator)
+    public function __construct(ClassInsertManipulator $classInsertManipulator)
     {
-        $this->classManipulator = $classManipulator;
+        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -106,7 +106,7 @@ PHP
         // remove tag from properties
         $this->removeVersionedTagFromProperties($node);
 
-        $this->classManipulator->addAsFirstTrait($node, 'Knp\DoctrineBehaviors\Model\Loggable\LoggableTrait');
+        $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\DoctrineBehaviors\Model\Loggable\LoggableTrait');
 
         $node->implements[] = new FullyQualified('Knp\DoctrineBehaviors\Contract\Entity\LoggableInterface');
 

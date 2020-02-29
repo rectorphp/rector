@@ -107,7 +107,7 @@ PHP
 
         $assigns = $this->createAssignsOfArrayCollectionsForPropertyNames($toManyPropertyNames);
 
-        $this->classDependencyManipulator->addStmtsToClassMethodIfNotThereYet($node, $assigns);
+        $this->classDependencyManipulator->addStmtsToConstructorIfNotThereYet($node, $assigns);
 
         return $node;
     }

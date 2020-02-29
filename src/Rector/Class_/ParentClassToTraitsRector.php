@@ -6,7 +6,7 @@ namespace Rector\Core\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -25,17 +25,17 @@ final class ParentClassToTraitsRector extends AbstractRector
     private $parentClassToTraits = [];
 
     /**
-     * @var ClassManipulator
+     * @var ClassInsertManipulator
      */
-    private $classManipulator;
+    private $classInsertManipulator;
 
     /**
      * @param string[][] $parentClassToTraits { parent class => [ traits ] }
      */
-    public function __construct(ClassManipulator $classManipulator, array $parentClassToTraits = [])
+    public function __construct(ClassInsertManipulator $classInsertManipulator, array $parentClassToTraits = [])
     {
-        $this->classManipulator = $classManipulator;
         $this->parentClassToTraits = $parentClassToTraits;
+        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -90,7 +90,7 @@ PHP
         $traitNames = array_reverse($traitNames);
 
         foreach ($traitNames as $traitName) {
-            $this->classManipulator->addAsFirstTrait($node, $traitName);
+            $this->classInsertManipulator->addAsFirstTrait($node, $traitName);
         }
 
         $this->removeParentClass($node);

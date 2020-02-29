@@ -195,6 +195,19 @@ final class ClassMethodManipulator
         }
     }
 
+    public function findMethodParamByName(ClassMethod $classMethod, string $name): ?Param
+    {
+        foreach ($classMethod->params as $param) {
+            if (! $this->nodeNameResolver->isName($param, $name)) {
+                continue;
+            }
+
+            return $param;
+        }
+
+        return null;
+    }
+
     /**
      * @param FuncCall[] $compactFuncCalls
      * @return string[]

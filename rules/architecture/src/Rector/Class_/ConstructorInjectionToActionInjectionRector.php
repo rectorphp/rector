@@ -176,7 +176,7 @@ PHP
 
             [$propertyFetchName, $variableName] = $propertyToVariable;
 
-            $param = $this->classManipulator->findMethodParamByName($classMethod, $variableName);
+            $param = $this->classMethodManipulator->findMethodParamByName($classMethod, $variableName);
             if ($param === null) {
                 continue;
             }

@@ -6,6 +6,7 @@ namespace Rector\Doctrine\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
@@ -33,16 +34,23 @@ final class AddEntityIdByConditionRector extends AbstractRector
     private $entityIdNodeFactory;
 
     /**
+     * @var ClassInsertManipulator
+     */
+    private $classInsertManipulator;
+
+    /**
      * @param string[] $detectedTraits
      */
     public function __construct(
         ClassManipulator $classManipulator,
         EntityIdNodeFactory $entityIdNodeFactory,
+        ClassInsertManipulator $classInsertManipulator,
         array $detectedTraits = []
     ) {
         $this->detectedTraits = $detectedTraits;
         $this->classManipulator = $classManipulator;
         $this->entityIdNodeFactory = $entityIdNodeFactory;
+        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -96,7 +104,7 @@ PHP
         }
 
         $idProperty = $this->entityIdNodeFactory->createIdProperty();
-        $this->classManipulator->addAsFirstMethod($node, $idProperty);
+        $this->classInsertManipulator->addAsFirstMethod($node, $idProperty);
 
         return $node;
     }

@@ -23,7 +23,7 @@ class TestInAnnotatoin extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
-     * @doesNotPerformAssertion
+     * @doesNotPerformAssertions
      */
     public function thisIsTest()
     {
