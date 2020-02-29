@@ -133,15 +133,7 @@ PHP
         }
 
         $iteratedVariableSingle = Inflector::singularize($iteratedVariable);
-
-        $foreach = new Foreach_($this->iteratedExpr, new Variable($iteratedVariableSingle));
-        $foreach->stmts = $node->stmts;
-
-        if ($this->keyValueName === null) {
-            return null;
-        }
-
-        $foreach->keyVar = new Variable($this->keyValueName);
+        $foreach = $this->createForeach($node, $iteratedVariableSingle);
 
         $this->useForeachVariableInStmts($foreach->valueVar, $foreach->stmts);
 
@@ -169,7 +161,7 @@ PHP
                 $this->keyValueName = $this->getName($initExpr->var);
             }
 
-            if ($initExpr->expr instanceof FuncCall && $this->isName($initExpr->expr, 'count')) {
+            if ($this->isFuncCallName($initExpr->expr, 'count')) {
                 $this->countValueName = $this->getName($initExpr->var);
                 $this->iteratedExpr = $initExpr->expr->args[0]->value;
             }
@@ -194,7 +186,7 @@ PHP
         }
 
         // count($values)
-        if ($condExprs[0]->right instanceof FuncCall && $this->isName($condExprs[0]->right, 'count')) {
+        if ($this->isFuncCallName($condExprs[0]->right, 'count')) {
             /** @var FuncCall $countFuncCall */
             $countFuncCall = $condExprs[0]->right;
             $this->iteratedExpr = $countFuncCall->args[0]->value;
@@ -244,7 +236,7 @@ PHP
             }
 
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($this->isPartOfAssign($parentNode)) {
+            if ($this->assignManipulator->isNodePartOfAssign($parentNode)) {
                 return null;
             }
 
@@ -286,12 +278,29 @@ PHP
         return false;
     }
 
-    private function isPartOfAssign(?Node $node): bool
+    private function isFuncCallName(Expr $expr, string $name): bool
     {
-        if ($node === null) {
+        if (! $expr instanceof FuncCall) {
             return false;
         }
 
-        return $this->assignManipulator->isNodePartOfAssign($node);
+        return $this->isName($expr, $name);
+    }
+
+    private function createForeach(For_ $for, string $iteratedVariableName): Foreach_
+    {
+        if ($this->iteratedExpr === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        if ($this->keyValueName === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $foreach = new Foreach_($this->iteratedExpr, new Variable($iteratedVariableName));
+        $foreach->stmts = $for->stmts;
+        $foreach->keyVar = new Variable($this->keyValueName);
+
+        return $foreach;
     }
 }

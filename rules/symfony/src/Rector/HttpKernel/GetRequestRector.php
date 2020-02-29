@@ -139,7 +139,7 @@ PHP
         }
 
         // must be $this->getRequest() in controller
-        if (! $this->isName($node->var, 'this')) {
+        if (! $this->isThisVariable($node->var)) {
             return false;
         }
 
@@ -220,15 +220,20 @@ PHP
                 return false;
             }
 
-            if (! $node->var instanceof Variable) {
-                return false;
-            }
-
-            if (! $this->isName($node->var, 'this')) {
+            if (! $this->isThisVariable($node->var)) {
                 return false;
             }
 
             return $this->isName($node->name, 'getRequest');
         });
+    }
+
+    private function isThisVariable(Node $node): bool
+    {
+        if (! $node instanceof Variable) {
+            return false;
+        }
+
+        return $this->isName($node, 'this');
     }
 }

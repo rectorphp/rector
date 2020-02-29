@@ -152,8 +152,12 @@ final class AssignManipulator
         return false;
     }
 
-    public function isNodePartOfAssign(Node $node): bool
+    public function isNodePartOfAssign(?Node $node): bool
     {
+        if ($node === null) {
+            return false;
+        }
+
         $previousNode = $node;
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
