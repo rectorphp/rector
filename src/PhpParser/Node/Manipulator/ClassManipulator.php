@@ -123,23 +123,12 @@ final class ClassManipulator
 
     /**
      * @param Stmt[] $nodes
-     * @return Stmt[] $nodes
+     * @return Stmt[]
      */
     public function insertBeforeAndFollowWithNewline(array $nodes, Stmt $stmt, int $key): array
     {
         $nodes = $this->insertBefore($nodes, $stmt, $key);
         return $this->insertBefore($nodes, new Nop(), $key);
-    }
-
-    /**
-     * @param Stmt[] $nodes
-     * @return Stmt[] $nodes
-     */
-    public function insertBefore(array $nodes, Stmt $stmt, int $key): array
-    {
-        array_splice($nodes, $key, 0, [$stmt]);
-
-        return $nodes;
     }
 
     public function addConstantToClass(Class_ $class, string $constantName, ClassConst $classConst): void
@@ -251,13 +240,6 @@ final class ClassManipulator
         }
 
         return false;
-    }
-
-    public function hasClassMethod(Class_ $classNode, string $methodName): bool
-    {
-        $methodNames = $this->getClassMethodNames($classNode);
-
-        return in_array($methodName, $methodNames, true);
     }
 
     public function removeProperty(Class_ $class, string $propertyName): void
@@ -514,6 +496,17 @@ final class ClassManipulator
         });
     }
 
+    /**
+     * @param Stmt[] $nodes
+     * @return Stmt[]
+     */
+    private function insertBefore(array $nodes, Stmt $stmt, int $key): array
+    {
+        array_splice($nodes, $key, 0, [$stmt]);
+
+        return $nodes;
+    }
+
     private function tryInsertBeforeFirstMethod(Class_ $classNode, Stmt $stmt): bool
     {
         foreach ($classNode->stmts as $key => $classStmt) {
@@ -583,24 +576,6 @@ final class ClassManipulator
 
         $classMethod->params[] = $this->nodeFactory->createParamFromNameAndType($name, $type);
         $classMethod->stmts[] = new Expression($assign);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getClassMethodNames(Class_ $classNode): array
-    {
-        $classMethodNames = [];
-        foreach ($classNode->getMethods() as $classMethod) {
-            $methodName = $this->nodeNameResolver->getName($classMethod);
-            if (! is_string($methodName)) {
-                throw new ShouldNotHappenException();
-            }
-
-            $classMethodNames[] = $methodName;
-        }
-
-        return $classMethodNames;
     }
 
     private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
