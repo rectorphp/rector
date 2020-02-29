@@ -168,5 +168,7 @@ return [
         'PhpParser\*',
         // mimics https://github.com/phpstan/phpstan-src/commit/23d5ca04ab6213f53a0e6c2e77857b23a73aa41d
         'Hoa\*',
+        // @see https://github.com/rectorphp/rector/issues/2955
+        'OxidEsales\*',
     ],
 ];
