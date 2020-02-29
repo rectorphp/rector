@@ -45,6 +45,9 @@
         "symplify/phpstan-extensions": "^7.2",
         "thecodingmachine/phpstan-strict-rules": "^0.12"
     },
+    "replace": {
+        "rector/rector-prefixed": "self.version"
+    },
     "autoload": {
         "psr-4": {
             "Rector\\Core\\": "src",
