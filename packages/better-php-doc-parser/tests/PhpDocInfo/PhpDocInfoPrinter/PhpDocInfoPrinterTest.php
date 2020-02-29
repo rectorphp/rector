@@ -16,22 +16,15 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
      */
     public function test(string $docFilePath): void
     {
-        $docComment = FileSystem::read($docFilePath);
-        $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, new Nop());
-
-        $this->assertSame($docComment, $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo));
+        $this->doComparePrintedFileEquals($docFilePath, $docFilePath);
     }
 
     public function testRemoveSpace(): void
     {
-        $docComment = FileSystem::read(__DIR__ . '/FixtureChanged/with_space.txt');
-        $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, new Nop());
-
-        $expectedDocComment = FileSystem::read(__DIR__ . '/FixtureChanged/with_space_expected.txt.inc');
-
-        $printedDocComment = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
-
-        $this->assertSame($expectedDocComment, $printedDocComment);
+        $this->doComparePrintedFileEquals(
+            __DIR__ . '/FixtureChanged/with_space.txt',
+            __DIR__ . '/FixtureChanged/with_space_expected.txt.inc'
+        );
     }
 
     public function provideData(): Iterator
@@ -58,5 +51,16 @@ final class PhpDocInfoPrinterTest extends AbstractPhpDocInfoPrinterTest
     public function provideDataEmpty(): Iterator
     {
         return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureEmpty', '*.txt');
+    }
+
+    private function doComparePrintedFileEquals(string $inputDocFile, string $expectedOutputDocFile): void
+    {
+        $docComment = FileSystem::read($inputDocFile);
+        $phpDocInfo = $this->createPhpDocInfoFromDocCommentAndNode($docComment, new Nop());
+
+        $printedDocComment = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
+
+        $expectedDocComment = FileSystem::read($expectedOutputDocFile);
+        $this->assertSame($expectedDocComment, $printedDocComment);
     }
 }

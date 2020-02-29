@@ -257,10 +257,7 @@ final class PhpDocInfoPrinter
             $output .= $tagSpaceSeparator;
         }
 
-        if ($phpDocTagNode->getAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES) && (property_exists(
-            $phpDocTagNode->value,
-            'description'
-        ) && $phpDocTagNode->value->description)) {
+        if ($this->hasDescription($phpDocTagNode)) {
             $quotedDescription = preg_quote($phpDocTagNode->value->description, '#');
             $pattern = Strings::replace($quotedDescription, '#[\s]+#', '\s+');
             $nodeOutput = Strings::replace($nodeOutput, '#' . $pattern . '#', $phpDocTagNode->value->description);
@@ -343,5 +340,13 @@ final class PhpDocInfoPrinter
         $matches = Strings::match($originalContent, $spacePattern);
 
         return $matches['space'] ?? '';
+    }
+
+    private function hasDescription(PhpDocTagNode $phpDocTagNode): bool
+    {
+        return $phpDocTagNode->getAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES) && (property_exists(
+                    $phpDocTagNode->value,
+                    'description'
+                ) && $phpDocTagNode->value->description);
     }
 }
