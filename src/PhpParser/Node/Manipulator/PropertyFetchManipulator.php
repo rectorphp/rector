@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ErrorType;
@@ -18,7 +17,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -44,21 +42,14 @@ final class PropertyFetchManipulator
      */
     private $nodeNameResolver;
 
-    /**
-     * @var CallableNodeTraverser
-     */
-    private $callableNodeTraverser;
-
     public function __construct(
         NodeTypeResolver $nodeTypeResolver,
         ReflectionProvider $reflectionProvider,
-        NodeNameResolver $nodeNameResolver,
-        CallableNodeTraverser $callableNodeTraverser
+        NodeNameResolver $nodeNameResolver
     ) {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->callableNodeTraverser = $callableNodeTraverser;
     }
 
     public function isPropertyToSelf(PropertyFetch $propertyFetch): bool
@@ -106,33 +97,6 @@ final class PropertyFetchManipulator
         }
 
         return ! $this->hasPublicProperty($propertyFetch, $nodeName);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getPropertyNamesOfAssignOfVariable(Node $node, string $paramName): array
-    {
-        $propertyNames = [];
-
-        $this->callableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
-            $paramName,
-            &$propertyNames
-        ) {
-            if (! $this->isVariableAssignToThisPropertyFetch($node, $paramName)) {
-                return null;
-            }
-
-            /** @var Assign $node */
-            $propertyName = $this->nodeNameResolver->getName($node->expr);
-            if ($propertyName) {
-                $propertyNames[] = $propertyName;
-            }
-
-            return null;
-        });
-
-        return $propertyNames;
     }
 
     /**
