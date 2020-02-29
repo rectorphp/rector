@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
@@ -46,11 +45,6 @@ final class ClassManipulator
     private $nodeFactory;
 
     /**
-     * @var ChildAndParentClassManipulator
-     */
-    private $childAndParentClassManipulator;
-
-    /**
      * @var CallableNodeTraverser
      */
     private $callableNodeTraverser;
@@ -73,7 +67,6 @@ final class ClassManipulator
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         NodeFactory $nodeFactory,
-        ChildAndParentClassManipulator $childAndParentClassManipulator,
         CallableNodeTraverser $callableNodeTraverser,
         NodeRemovingCommander $nodeRemovingCommander,
         BetterStandardPrinter $betterStandardPrinter,
@@ -81,21 +74,10 @@ final class ClassManipulator
     ) {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->childAndParentClassManipulator = $childAndParentClassManipulator;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeTypeResolver = $nodeTypeResolver;
-    }
-
-    public function addConstructorDependency(Class_ $classNode, string $name, ?Type $type): void
-    {
-        // add property
-        // @todo should be factory
-        $this->addPropertyToClass($classNode, $name, $type);
-
-        // pass via constructor
-        $this->addSimplePropertyAssignToClass($classNode, $name, $type);
     }
 
     /**
@@ -148,36 +130,6 @@ final class ClassManipulator
 
         $propertyNode = $this->nodeFactory->createPrivatePropertyFromNameAndType($name, $type);
         $this->addAsFirstMethod($class, $propertyNode);
-    }
-
-    public function addSimplePropertyAssignToClass(Class_ $classNode, string $name, ?Type $type): void
-    {
-        $propertyAssignNode = $this->nodeFactory->createPropertyAssignment($name);
-        $this->addConstructorDependencyWithCustomAssign($classNode, $name, $type, $propertyAssignNode);
-    }
-
-    public function addConstructorDependencyWithCustomAssign(
-        Class_ $classNode,
-        string $name,
-        ?Type $type,
-        Assign $assign
-    ): void {
-        $constructorMethod = $classNode->getMethod('__construct');
-        /** @var ClassMethod $constructorMethod */
-        if ($constructorMethod !== null) {
-            $this->addParameterAndAssignToMethod($constructorMethod, $name, $type, $assign);
-            return;
-        }
-
-        $constructorMethod = $this->nodeFactory->createPublicMethod('__construct');
-
-        $this->addParameterAndAssignToMethod($constructorMethod, $name, $type, $assign);
-
-        $this->childAndParentClassManipulator->completeParentConstructor($classNode, $constructorMethod);
-
-        $this->addAsFirstMethod($classNode, $constructorMethod);
-
-        $this->childAndParentClassManipulator->completeChildConstructors($classNode, $constructorMethod);
     }
 
     /**
@@ -396,6 +348,10 @@ final class ClassManipulator
         return false;
     }
 
+    /**
+     * @todo simplify
+     * Waits on https://github.com/nikic/PHP-Parser/pull/646
+     */
     public function hasPropertyName(Class_ $node, string $name): bool
     {
         foreach ($node->getProperties() as $property) {
@@ -553,6 +509,10 @@ final class ClassManipulator
         $classNode->stmts[] = $stmt;
     }
 
+    /**
+     * @todo simplify
+     * Waits on https://github.com/nikic/PHP-Parser/pull/646
+     */
     private function hasClassProperty(Class_ $classNode, string $name): bool
     {
         foreach ($classNode->getProperties() as $property) {
@@ -562,20 +522,6 @@ final class ClassManipulator
         }
 
         return false;
-    }
-
-    private function addParameterAndAssignToMethod(
-        ClassMethod $classMethod,
-        string $name,
-        ?Type $type,
-        Assign $assign
-    ): void {
-        if ($this->hasMethodParameter($classMethod, $name)) {
-            return;
-        }
-
-        $classMethod->params[] = $this->nodeFactory->createParamFromNameAndType($name, $type);
-        $classMethod->stmts[] = new Expression($assign);
     }
 
     private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
@@ -654,17 +600,6 @@ final class ClassManipulator
         }
 
         return $interfaceNames;
-    }
-
-    private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
-    {
-        foreach ($classMethod->params as $constructorParameter) {
-            if ($this->nodeNameResolver->isName($constructorParameter->var, $name)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private function hasClassConstant(Class_ $class, string $constantName)

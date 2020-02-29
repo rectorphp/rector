@@ -14,6 +14,9 @@ use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\Type;
+use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\NodeTraverser\CallableNodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -35,14 +38,21 @@ final class ClassMethodAssignManipulator
      */
     private $nodeNameResolver;
 
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
     public function __construct(
         VariableManipulator $variableManipulator,
         CallableNodeTraverser $callableNodeTraverser,
-        NodeNameResolver $nodeNameResolver
+        NodeNameResolver $nodeNameResolver,
+        NodeFactory $nodeFactory
     ) {
         $this->variableManipulator = $variableManipulator;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeFactory = $nodeFactory;
     }
 
     /**
@@ -72,6 +82,20 @@ final class ClassMethodAssignManipulator
         }
 
         return false;
+    }
+
+    public function addParameterAndAssignToMethod(
+        ClassMethod $classMethod,
+        string $name,
+        ?Type $type,
+        Assign $assign
+    ): void {
+        if ($this->hasMethodParameter($classMethod, $name)) {
+            return;
+        }
+
+        $classMethod->params[] = $this->nodeFactory->createParamFromNameAndType($name, $type);
+        $classMethod->stmts[] = new Expression($assign);
     }
 
     /**
@@ -156,5 +180,16 @@ final class ClassMethodAssignManipulator
         return array_filter($variableAssigns, function (Assign $assign) use ($referencedVariables) {
             return ! $this->nodeNameResolver->isNames($assign->var, $referencedVariables);
         });
+    }
+
+    private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
+    {
+        foreach ($classMethod->params as $constructorParameter) {
+            if ($this->nodeNameResolver->isName($constructorParameter->var, $name)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
