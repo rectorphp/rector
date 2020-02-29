@@ -7,7 +7,6 @@ namespace Rector\CakePHPToSymfony\Rector\Echo_;
 use Nette\Utils\Html;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Echo_;
@@ -81,7 +80,7 @@ PHP
 
         # e.g. |trans https://symfony.com/doc/current/translation/templates.html#using-twig-filters
         $labelFilters = [];
-        if ($label instanceof FuncCall && $this->isName($label, '__')) {
+        if ($this->isFuncCallName($label, '__')) {
             $labelFilters[] = 'trans';
             $label = $label->args[0]->value;
         }

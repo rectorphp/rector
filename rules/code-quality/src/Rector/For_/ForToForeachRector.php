@@ -278,15 +278,6 @@ PHP
         return false;
     }
 
-    private function isFuncCallName(Expr $expr, string $name): bool
-    {
-        if (! $expr instanceof FuncCall) {
-            return false;
-        }
-
-        return $this->isName($expr, $name);
-    }
-
     private function createForeach(For_ $for, string $iteratedVariableName): Foreach_
     {
         if ($this->iteratedExpr === null) {
