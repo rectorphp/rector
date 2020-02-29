@@ -82,6 +82,11 @@ final class BetterPhpDocParser extends PhpDocParser
     private $lexer;
 
     /**
+     * @var AnnotationContentResolver
+     */
+    private $annotationContentResolver;
+
+    /**
      * @param PhpDocNodeFactoryInterface[] $phpDocNodeFactories
      */
     public function __construct(
@@ -92,6 +97,7 @@ final class BetterPhpDocParser extends PhpDocParser
         CurrentNodeProvider $currentNodeProvider,
         ClassAnnotationMatcher $classAnnotationMatcher,
         Lexer $lexer,
+        AnnotationContentResolver $annotationContentResolver,
         array $phpDocNodeFactories = []
     ) {
         parent::__construct($typeParser, $constExprParser);
@@ -104,6 +110,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $this->currentNodeProvider = $currentNodeProvider;
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->lexer = $lexer;
+        $this->annotationContentResolver = $annotationContentResolver;
     }
 
     public function parseString(string $docBlock): PhpDocNode
@@ -119,6 +126,8 @@ final class BetterPhpDocParser extends PhpDocParser
      */
     public function parse(TokenIterator $tokenIterator): PhpDocNode
     {
+        $originalTokenIterator = clone $tokenIterator;
+
         $this->isComment = false;
 
         try {
@@ -148,7 +157,9 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $phpDocNode = new PhpDocNode(array_values($children));
 
-        return $this->attributeAwareNodeFactory->createFromNode($phpDocNode);
+        $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
+
+        return $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $docContent);
     }
 
     public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
@@ -187,25 +198,30 @@ final class BetterPhpDocParser extends PhpDocParser
             }
         }
 
+        $originalTokenIterator = clone $tokenIterator;
+        $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
+
         // fallback to original parser
         if ($tagValueNode === null) {
             $tagValueNode = parent::parseTagValue($tokenIterator, $tag);
         }
 
-        return $this->attributeAwareNodeFactory->createFromNode($tagValueNode);
+        return $this->attributeAwareNodeFactory->createFromNode($tagValueNode, $docContent);
     }
 
     private function parseChildAndStoreItsPositions(TokenIterator $tokenIterator): Node
     {
+        $originalTokenIterator = clone $tokenIterator;
+        $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
+
         $tokenStart = $this->getTokenIteratorIndex($tokenIterator);
         $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', $tokenIterator);
         $tokenEnd = $this->getTokenIteratorIndex($tokenIterator);
 
         $tokenEnd = $this->adjustTokenEndToFitClassAnnotation($tokenIterator, $tokenEnd);
-
         $startEndValueObject = new StartEndValueObject($tokenStart, $tokenEnd);
 
-        $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode);
+        $attributeAwareNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $docContent);
         $attributeAwareNode->setAttribute(Attribute::START_END, $startEndValueObject);
 
         $possibleMultilineText = $this->multilineSpaceFormatPreserver->resolveCurrentPhpDocNodeText(

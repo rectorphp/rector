@@ -25,7 +25,7 @@ final class AttributeAwareUsesTagValueNodeFactory implements AttributeNodeAwareF
     /**
      * @param UsesTagValueNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
         return new AttributeAwareUsesTagValueNode($node->type, $node->description);
     }

@@ -25,7 +25,7 @@ final class AttributeAwareCallableTypeParameterNodeFactory implements AttributeN
     /**
      * @param CallableTypeParameterNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
         return new AttributeAwareCallableTypeParameterNode(
             $node->type,

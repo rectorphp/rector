@@ -25,7 +25,7 @@ final class AttributeAwareThisTypeNodeFactory implements AttributeNodeAwareFacto
     /**
      * @param ThisTypeNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
         return new AttributeAwareThisTypeNode();
     }

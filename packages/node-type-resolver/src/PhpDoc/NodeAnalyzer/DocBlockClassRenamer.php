@@ -43,6 +43,7 @@ final class DocBlockClassRenamer
     ): bool {
         $this->phpDocNodeTraverser->traverseWithCallable(
             $phpDocNode,
+            '',
             function (PhpDocParserNode $node) use ($phpParserNode, $oldType, $newType): PhpDocParserNode {
                 if (! $node instanceof IdentifierTypeNode) {
                     return $node;

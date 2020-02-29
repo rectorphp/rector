@@ -32,15 +32,15 @@ final class AttributeAwareCallableTypeNodeFactory implements AttributeNodeAwareF
     /**
      * @param CallableTypeNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
-        $identifier = $this->attributeAwareNodeFactory->createFromNode($node->identifier);
+        $identifier = $this->attributeAwareNodeFactory->createFromNode($node->identifier, $docContent);
 
         foreach ($node->parameters as $key => $parameter) {
-            $node->parameters[$key] = $this->attributeAwareNodeFactory->createFromNode($parameter);
+            $node->parameters[$key] = $this->attributeAwareNodeFactory->createFromNode($parameter, $docContent);
         }
 
-        $returnType = $this->attributeAwareNodeFactory->createFromNode($node->returnType);
+        $returnType = $this->attributeAwareNodeFactory->createFromNode($node->returnType, $docContent);
 
         return new AttributeAwareCallableTypeNode($identifier, $node->parameters, $returnType);
     }

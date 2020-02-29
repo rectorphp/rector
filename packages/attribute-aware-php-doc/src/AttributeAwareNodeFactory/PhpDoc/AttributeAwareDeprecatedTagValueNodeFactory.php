@@ -25,7 +25,7 @@ final class AttributeAwareDeprecatedTagValueNodeFactory implements AttributeNode
     /**
      * @param DeprecatedTagValueNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
         return new AttributeAwareDeprecatedTagValueNode($node->description);
     }

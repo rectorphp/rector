@@ -37,7 +37,7 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
     {
         $phpDocNode = $this->createSomeTextDocNode();
 
-        $attributeAwarePhpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode);
+        $attributeAwarePhpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, '');
         $this->assertInstanceOf(PhpDocNode::class, $attributeAwarePhpDocNode);
         $this->assertInstanceOf(AttributeAwarePhpDocNode::class, $attributeAwarePhpDocNode);
 
@@ -50,7 +50,7 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
     {
         $phpDocNode = $this->createPropertyDocNode();
 
-        $attributeAwarePhpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode);
+        $attributeAwarePhpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, '');
 
         $childNode = $attributeAwarePhpDocNode->children[0];
         $this->assertInstanceOf(PhpDocTagNode::class, $childNode);
@@ -78,7 +78,7 @@ final class AttributeAwareNodeFactoryTest extends AbstractKernelTestCase
     public function testAlreadyAttributeAware(): void
     {
         $attributeAwarePhpDocNode = new AttributeAwarePhpDocNode([]);
-        $returnedNode = $this->attributeAwareNodeFactory->createFromNode($attributeAwarePhpDocNode);
+        $returnedNode = $this->attributeAwareNodeFactory->createFromNode($attributeAwarePhpDocNode, '');
 
         $this->assertSame($returnedNode, $attributeAwarePhpDocNode);
     }

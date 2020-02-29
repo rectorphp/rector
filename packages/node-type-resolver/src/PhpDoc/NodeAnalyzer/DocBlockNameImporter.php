@@ -94,7 +94,7 @@ final class DocBlockNameImporter
 
         $this->hasPhpDocChanged = false;
 
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, function (PhpDocParserNode $docNode) use (
+        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (PhpDocParserNode $docNode) use (
             $phpParserNode
         ): PhpDocParserNode {
             if (! $docNode instanceof IdentifierTypeNode) {
