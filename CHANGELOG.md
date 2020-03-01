@@ -9,6 +9,47 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 
 <!-- changelog-linker -->
 
+## [v0.7.3]
+
+### Added
+
+- [#2948] [DeadCode] Add RemoveDuplicatedIfReturnRector
+- [#2950] [GetClassOnNullRector] Add failing test in trait., Thanks to [@gnutix]
+- [#2953] AssertRegExpRectorTest: add broken test on static method call, Thanks to [@gnutix]
+- [#2956] AssertTrueFalseInternalTypeToSpecificMethodRector: add broken test method call, Thanks to [@gnutix]
+- [#2952] ReturnTypeDeclarationRector: add broken test on array indexes (?), Thanks to [@gnutix]
+- [#2951] AddSeeTestAnnotationRectorTest: add broken test for simple comment., Thanks to [@gnutix]
+- [#2943] add failing test case for [#2939], Thanks to [@fsok]
+- [#2954] RemoveDefaultArgumentValueRector: add broken test on static method call., Thanks to [@gnutix]
+- [#2968] Class Cognitive complexity improvements + add docContent as first step to format preserving of doc nodes
+
+### Changed
+
+- [#2974] [DX] Improve ForToForeachRector
+- [#2966] make open-source parameter typo-proof
+- [#2969] decopule class dependency manipulator methods
+- [#2949] Improve PropertyFetchManipulator
+- [#2972] Simplify PropertyFetchManipulator
+- [#2962] cleanup extra space in doc print
+- [#2975] Decrease class complexity <=50
+- [#2947] Let amount of usages decide whether whitespaces or tabs are used, Thanks to [@alexanderschnitzler]
+
+### Fixed
+
+- [#2978] [DeadCode] Fix shifted value
+- [#2979] fix spacing for array shape item
+- [#2959] fix return dim array fetch
+- [#2960] fix naming of non-func call
+- [#2963] fix get class on trait
+- [#2964] fix complexity
+- [#2965] fix extra space in phpdoc
+- [#2977] fix array shape type
+- [#2961] various fixes
+
+### Removed
+
+- [#2946] remove dead code
+
 ## [v0.7.2] - 2020-02-27
 
 ### Added
@@ -2526,3 +2567,34 @@ PRs and issues are linked, so you can find more about it. Thanks to [ChangelogLi
 [#2924]: https://github.com/rectorphp/rector/pull/2924
 [v0.7.1]: https://github.com/rectorphp/rector/compare/v0.7.0...v0.7.1
 [@method]: https://github.com/method
+[#2979]: https://github.com/rectorphp/rector/pull/2979
+[#2978]: https://github.com/rectorphp/rector/pull/2978
+[#2977]: https://github.com/rectorphp/rector/pull/2977
+[#2975]: https://github.com/rectorphp/rector/pull/2975
+[#2974]: https://github.com/rectorphp/rector/pull/2974
+[#2972]: https://github.com/rectorphp/rector/pull/2972
+[#2969]: https://github.com/rectorphp/rector/pull/2969
+[#2968]: https://github.com/rectorphp/rector/pull/2968
+[#2966]: https://github.com/rectorphp/rector/pull/2966
+[#2965]: https://github.com/rectorphp/rector/pull/2965
+[#2964]: https://github.com/rectorphp/rector/pull/2964
+[#2963]: https://github.com/rectorphp/rector/pull/2963
+[#2962]: https://github.com/rectorphp/rector/pull/2962
+[#2961]: https://github.com/rectorphp/rector/pull/2961
+[#2960]: https://github.com/rectorphp/rector/pull/2960
+[#2959]: https://github.com/rectorphp/rector/pull/2959
+[#2956]: https://github.com/rectorphp/rector/pull/2956
+[#2954]: https://github.com/rectorphp/rector/pull/2954
+[#2953]: https://github.com/rectorphp/rector/pull/2953
+[#2952]: https://github.com/rectorphp/rector/pull/2952
+[#2951]: https://github.com/rectorphp/rector/pull/2951
+[#2950]: https://github.com/rectorphp/rector/pull/2950
+[#2949]: https://github.com/rectorphp/rector/pull/2949
+[#2948]: https://github.com/rectorphp/rector/pull/2948
+[#2947]: https://github.com/rectorphp/rector/pull/2947
+[#2946]: https://github.com/rectorphp/rector/pull/2946
+[#2943]: https://github.com/rectorphp/rector/pull/2943
+[#2939]: https://github.com/rectorphp/rector/pull/2939
+[v0.7.3]: https://github.com/rectorphp/rector/compare/v0.7.2...v0.7.3
+[v0.7.2]: https://github.com/rectorphp/rector/compare/v0.7.1...v0.7.2
+[@alexanderschnitzler]: https://github.com/alexanderschnitzler
