@@ -13,6 +13,7 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\DeadCode\NodeManipulator\MagicMethodDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -24,26 +25,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RemoveUnusedParameterRector extends AbstractRector
 {
     /**
-     * @var string[]
-     */
-    private const MAGIC_METHODS = [
-        '__call',
-        '__callStatic',
-        '__clone',
-        '__debugInfo',
-        '__destruct',
-        '__get',
-        '__invoke',
-        '__isset',
-        '__set',
-        '__set_state',
-        '__sleep',
-        '__toString',
-        '__unset',
-        '__wakeup',
-    ];
-
-    /**
      * @var ClassManipulator
      */
     private $classManipulator;
@@ -53,12 +34,19 @@ final class RemoveUnusedParameterRector extends AbstractRector
      */
     private $classMethodManipulator;
 
+    /**
+     * @var MagicMethodDetector
+     */
+    private $magicMethodDetector;
+
     public function __construct(
         ClassManipulator $classManipulator,
-        ClassMethodManipulator $classMethodManipulator
+        ClassMethodManipulator $classMethodManipulator,
+        MagicMethodDetector $magicMethodDetector
     ) {
         $this->classManipulator = $classManipulator;
         $this->classMethodManipulator = $classMethodManipulator;
+        $this->magicMethodDetector = $magicMethodDetector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -203,7 +191,7 @@ PHP
             return true;
         }
 
-        if ($this->isNames($classMethod, self::MAGIC_METHODS)) {
+        if ($this->magicMethodDetector->isMagicMethod($classMethod)) {
             return true;
         }
 
