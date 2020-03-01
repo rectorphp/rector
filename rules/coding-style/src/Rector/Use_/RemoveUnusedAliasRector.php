@@ -4,30 +4,25 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\Use_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
-use PhpParser\NodeVisitor\NameResolver;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\CodingStyle\Imports\ShortNameResolver;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\CodingStyle\Node\DocAliasResolver;
+use Rector\CodingStyle\Node\UseManipulator;
+use Rector\CodingStyle\Node\UseNameAliasToNameResolver;
+use Rector\CodingStyle\ValueObject\NameAndParentValueObject;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStan\Type\AliasedObjectType;
 
 /**
  * @see \Rector\CodingStyle\Tests\Rector\Use_\RemoveUnusedAliasRector\RemoveUnusedAliasRectorTest
@@ -35,9 +30,19 @@ use Rector\PHPStan\Type\AliasedObjectType;
 final class RemoveUnusedAliasRector extends AbstractRector
 {
     /**
-     * @var Node[][][]
+     * @var NameAndParentValueObject[][]
      */
     private $resolvedNodeNames = [];
+
+    /**
+     * @var string[][]
+     */
+    private $useNamesAliasToName = [];
+
+    /**
+     * @var DocAliasResolver
+     */
+    private $docAliasResolver;
 
     /**
      * @var string[]
@@ -45,18 +50,23 @@ final class RemoveUnusedAliasRector extends AbstractRector
     private $resolvedDocPossibleAliases = [];
 
     /**
-     * @var ShortNameResolver
+     * @var UseNameAliasToNameResolver
      */
-    private $shortNameResolver;
+    private $useNameAliasToNameResolver;
 
     /**
-     * @var string[][]
+     * @var UseManipulator
      */
-    private $useNamesAliasToName = [];
+    private $useManipulator;
 
-    public function __construct(ShortNameResolver $shortNameResolver)
-    {
-        $this->shortNameResolver = $shortNameResolver;
+    public function __construct(
+        DocAliasResolver $docAliasResolver,
+        UseNameAliasToNameResolver $useNameAliasToNameResolver,
+        UseManipulator $useManipulator
+    ) {
+        $this->docAliasResolver = $docAliasResolver;
+        $this->useNameAliasToNameResolver = $useNameAliasToNameResolver;
+        $this->useManipulator = $useManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -98,10 +108,15 @@ PHP
      */
     public function refactor(Node $node): ?Node
     {
-        $this->resolvedNodeNames = [];
-        $this->resolveUsedNameNodes($node);
+        $searchNode = $this->resolveSearchNode($node);
+        if ($searchNode === null) {
+            return null;
+        }
 
-        $this->collectUseNamesAliasToName($node);
+        $this->resolvedNodeNames = $this->useManipulator->resolveUsedNameNodes($searchNode);
+        $this->resolvedDocPossibleAliases = $this->docAliasResolver->resolve($searchNode);
+
+        $this->useNamesAliasToName = $this->useNameAliasToNameResolver->resolve($node);
 
         foreach ($node->uses as $use) {
             if ($use->alias === null) {
@@ -129,35 +144,6 @@ PHP
         return $node;
     }
 
-    private function resolveUsedNameNodes(Use_ $node): void
-    {
-        $searchNode = $this->resolveSearchNode($node);
-        if ($searchNode === null) {
-            return;
-        }
-
-        $this->resolveUsedNames($searchNode);
-        $this->resolveUsedClassNames($searchNode);
-        $this->resolveTraitUseNames($searchNode);
-
-        $this->resolvedDocPossibleAliases = $this->resolveDocPossibleAliases($searchNode);
-    }
-
-    private function collectUseNamesAliasToName(Use_ $use): void
-    {
-        $this->useNamesAliasToName = [];
-
-        $shortNames = $this->shortNameResolver->resolveForNode($use);
-        foreach ($shortNames as $alias => $useImport) {
-            $shortName = $this->getShortName($useImport);
-            if ($shortName === $alias) {
-                continue;
-            }
-
-            $this->useNamesAliasToName[$shortName][] = $alias;
-        }
-    }
-
     private function shouldSkip(string $lastName, string $aliasName): bool
     {
         // both are used → nothing to remove
@@ -170,13 +156,16 @@ PHP
     }
 
     /**
-     * @param Node[][] $usedNameNodes
+     * @param NameAndParentValueObject[] $usedNameNodes
      */
     private function renameNameNode(array $usedNameNodes, string $lastName): void
     {
         /** @var Identifier|Name $usedName */
         // @todo value objects
-        foreach ($usedNameNodes as [$usedName, $parentNode]) {
+        foreach ($usedNameNodes as $nameAndParent) {
+            $parentNode = $nameAndParent->getParentNode();
+            $usedName = $nameAndParent->getNameNode();
+
             if ($parentNode instanceof TraitUse) {
                 $this->renameTraitUse($lastName, $parentNode, $usedName);
             }
@@ -211,103 +200,6 @@ PHP
         }
 
         return $use->getAttribute(AttributeKey::NEXT_NODE);
-    }
-
-    private function resolveUsedNames(Node $searchNode): void
-    {
-        /** @var Name[] $namedNodes */
-        $namedNodes = $this->betterNodeFinder->findInstanceOf($searchNode, Name::class);
-
-        foreach ($namedNodes as $nameNode) {
-            /** node name before becoming FQN - attribute from @see NameResolver */
-            $originalName = $nameNode->getAttribute('originalName');
-            if (! $originalName instanceof Name) {
-                continue;
-            }
-
-            $parentNode = $nameNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode === null) {
-                throw new ShouldNotHappenException();
-            }
-
-            $this->resolvedNodeNames[$originalName->toString()][] = [$nameNode, $parentNode];
-        }
-    }
-
-    private function resolveUsedClassNames(Node $searchNode): void
-    {
-        /** @var ClassLike[] $classLikes */
-        $classLikes = $this->betterNodeFinder->findClassLikes([$searchNode]);
-
-        foreach ($classLikes as $classLikeNode) {
-            $name = $this->getName($classLikeNode->name);
-            $this->resolvedNodeNames[$name][] = [$classLikeNode->name, $classLikeNode];
-        }
-    }
-
-    private function resolveTraitUseNames(Node $searchNode): void
-    {
-        /** @var Identifier[] $identifierNodes */
-        $identifierNodes = $this->betterNodeFinder->findInstanceOf($searchNode, Identifier::class);
-
-        foreach ($identifierNodes as $identifierNode) {
-            $parentNode = $identifierNode->getAttribute(AttributeKey::PARENT_NODE);
-            if (! $parentNode instanceof UseUse) {
-                continue;
-            }
-
-            $this->resolvedNodeNames[$identifierNode->name][] = [$identifierNode, $parentNode];
-        }
-    }
-
-    /**
-     * @return string[]
-     */
-    private function resolveDocPossibleAliases(Node $searchNode): array
-    {
-        $possibleDocAliases = [];
-
-        $this->traverseNodesWithCallable($searchNode, function (Node $node) use (&$possibleDocAliases): void {
-            if ($node->getDocComment() === null) {
-                return;
-            }
-
-            /** @var PhpDocInfo $phpDocInfo */
-            $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-
-            if ($phpDocInfo->getVarType()) {
-                $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getVarType(), $possibleDocAliases);
-                $possibleDocAliases = $this->appendPossibleAliases($phpDocInfo->getReturnType(), $possibleDocAliases);
-
-                foreach ($phpDocInfo->getParamTypes() as $paramType) {
-                    $possibleDocAliases = $this->appendPossibleAliases($paramType, $possibleDocAliases);
-                }
-            }
-
-            // e.g. "use Dotrine\ORM\Mapping as ORM" etc.
-            $matches = Strings::matchAll($node->getDocComment()->getText(), '#\@(?<possible_alias>\w+)(\\\\)?#s');
-            foreach ($matches as $match) {
-                $possibleDocAliases[] = $match['possible_alias'];
-            }
-        });
-
-        return array_unique($possibleDocAliases);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function appendPossibleAliases(Type $varType, array $possibleDocAliases): array
-    {
-        if ($varType instanceof AliasedObjectType) {
-            $possibleDocAliases[] = $varType->getClassName();
-        }
-        if ($varType instanceof UnionType) {
-            foreach ($varType->getTypes() as $type) {
-                $possibleDocAliases = $this->appendPossibleAliases($type, $possibleDocAliases);
-            }
-        }
-        return $possibleDocAliases;
     }
 
     private function renameClass(string $lastName, Class_ $class, $usedName): void

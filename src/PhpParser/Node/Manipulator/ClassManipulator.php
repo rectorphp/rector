@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser\Node\Manipulator;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
@@ -43,16 +42,23 @@ final class ClassManipulator
      */
     private $nodeTypeResolver;
 
+    /**
+     * @var PropertyFetchManipulator
+     */
+    private $propertyFetchManipulator;
+
     public function __construct(
         NodeNameResolver $nodeNameResolver,
         CallableNodeTraverser $callableNodeTraverser,
         NodeRemovingCommander $nodeRemovingCommander,
-        NodeTypeResolver $nodeTypeResolver
+        NodeTypeResolver $nodeTypeResolver,
+        PropertyFetchManipulator $propertyFetchManipulator
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callableNodeTraverser = $callableNodeTraverser;
         $this->nodeRemovingCommander = $nodeRemovingCommander;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->propertyFetchManipulator = $propertyFetchManipulator;
     }
 
     /**
@@ -130,14 +136,7 @@ final class ClassManipulator
             return $property->isPrivate();
         });
 
-        $privatePropertyNames = [];
-        foreach ($privateProperties as $property) {
-            /** @var string $propertyName */
-            $propertyName = $this->nodeNameResolver->getName($property);
-            $privatePropertyNames[] = $propertyName;
-        }
-
-        return $privatePropertyNames;
+        return $this->nodeNameResolver->getNames($privateProperties);
     }
 
     /**
@@ -145,22 +144,15 @@ final class ClassManipulator
      */
     public function getPublicMethodNames(Class_ $class): array
     {
-        $publicMethodNames = [];
-        foreach ($class->getMethods() as $method) {
-            if ($method->isAbstract()) {
-                continue;
+        $publicMethods = array_filter($class->getMethods(), function (ClassMethod $classMethod) {
+            if ($classMethod->isAbstract()) {
+                return false;
             }
 
-            if (! $method->isPublic()) {
-                continue;
-            }
+            return $classMethod->isPublic();
+        });
 
-            /** @var string $methodName */
-            $methodName = $this->nodeNameResolver->getName($method);
-            $publicMethodNames[] = $methodName;
-        }
-
-        return $publicMethodNames;
+        return $this->nodeNameResolver->getNames($publicMethods);
     }
 
     public function findPropertyByType(Class_ $class, string $serviceType): ?Property
@@ -181,31 +173,12 @@ final class ClassManipulator
      */
     public function getImplementedInterfaceNames(Class_ $class): array
     {
-        $implementedInterfaceNames = [];
-
-        foreach ($class->implements as $implement) {
-            $interfaceName = $this->nodeNameResolver->getName($implement);
-            if (! is_string($interfaceName)) {
-                throw new ShouldNotHappenException();
-            }
-
-            $implementedInterfaceNames[] = $interfaceName;
-        }
-
-        return $implementedInterfaceNames;
+        return $this->nodeNameResolver->getNames($class->implements);
     }
 
     public function hasInterface(Class_ $class, string $desiredInterface): bool
     {
-        foreach ($class->implements as $implement) {
-            if (! $this->nodeNameResolver->isName($implement, $desiredInterface)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
+        return $this->nodeNameResolver->haveName($class->implements, $desiredInterface);
     }
 
     /**
@@ -215,11 +188,7 @@ final class ClassManipulator
     public function hasPropertyName(Class_ $node, string $name): bool
     {
         foreach ($node->getProperties() as $property) {
-            foreach ($property->props as $propertyProperty) {
-                if (! $this->nodeNameResolver->isName($propertyProperty, $name)) {
-                    continue;
-                }
-
+            if ($this->nodeNameResolver->haveName($property->props, $name)) {
                 return true;
             }
         }
@@ -230,13 +199,11 @@ final class ClassManipulator
     public function hasClassTrait(Class_ $class, string $desiredTrait): bool
     {
         foreach ($class->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $traitTrait) {
-                if (! $this->nodeNameResolver->isName($traitTrait, $desiredTrait)) {
-                    continue;
-                }
-
-                return true;
+            if (! $this->nodeNameResolver->haveName($traitUse->traits, $desiredTrait)) {
+                continue;
             }
+
+            return true;
         }
 
         return false;
@@ -292,11 +259,7 @@ final class ClassManipulator
         $this->callableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use (
             $oldToNewPropertyNames
         ) {
-            if (! $node instanceof PropertyFetch) {
-                return null;
-            }
-
-            if (! $this->nodeNameResolver->isName($node->var, 'this')) {
+            if (! $this->propertyFetchManipulator->isLocalPropertyFetch($node)) {
                 return null;
             }
 

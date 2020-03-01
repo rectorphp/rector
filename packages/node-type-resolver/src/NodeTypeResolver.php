@@ -14,7 +14,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -30,8 +29,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\NodeTypeResolver\Reflection\ClassReflectionTypesResolver;
+use Rector\NodeTypeResolver\NodeTypeCorrector\ParentClassesInterfacesAndUsedTraitsCorrector;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
@@ -48,21 +46,6 @@ final class NodeTypeResolver
     private $nodeNameResolver;
 
     /**
-     * @var ClassReflectionTypesResolver
-     */
-    private $classReflectionTypesResolver;
-
-    /**
-     * @var ReflectionProvider
-     */
-    private $reflectionProvider;
-
-    /**
-     * @var TypeFactory
-     */
-    private $typeFactory;
-
-    /**
      * @var ObjectTypeSpecifier
      */
     private $objectTypeSpecifier;
@@ -73,14 +56,17 @@ final class NodeTypeResolver
     private $arrayTypeAnalyzer;
 
     /**
+     * @var ParentClassesInterfacesAndUsedTraitsCorrector
+     */
+    private $parentClassesInterfacesAndUsedTraitsCorrector;
+
+    /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
     public function __construct(
         NodeNameResolver $nodeNameResolver,
-        ClassReflectionTypesResolver $classReflectionTypesResolver,
-        ReflectionProvider $reflectionProvider,
-        TypeFactory $typeFactory,
         ObjectTypeSpecifier $objectTypeSpecifier,
+        ParentClassesInterfacesAndUsedTraitsCorrector $parentClassesInterfacesAndUsedTraitsCorrector,
         array $nodeTypeResolvers
     ) {
         $this->nodeNameResolver = $nodeNameResolver;
@@ -89,10 +75,8 @@ final class NodeTypeResolver
             $this->addNodeTypeResolver($nodeTypeResolver);
         }
 
-        $this->classReflectionTypesResolver = $classReflectionTypesResolver;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->typeFactory = $typeFactory;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
+        $this->parentClassesInterfacesAndUsedTraitsCorrector = $parentClassesInterfacesAndUsedTraitsCorrector;
     }
 
     /**
@@ -141,7 +125,7 @@ final class NodeTypeResolver
             return $type;
         }
 
-        return $this->unionWithParentClassesInterfacesAndUsedTraits($type);
+        return $this->parentClassesInterfacesAndUsedTraitsCorrector->correct($type);
     }
 
     /**
@@ -314,31 +298,6 @@ final class NodeTypeResolver
         return $type;
     }
 
-    private function unionWithParentClassesInterfacesAndUsedTraits(Type $type): Type
-    {
-        if ($type instanceof TypeWithClassName) {
-            if (! ClassExistenceStaticHelper::doesClassLikeExist($type->getClassName())) {
-                return $type;
-            }
-
-            $allTypes = $this->getClassLikeTypesByClassName($type->getClassName());
-            return $this->typeFactory->createObjectTypeOrUnionType($allTypes);
-        }
-
-        $classNames = TypeUtils::getDirectClassNames($type);
-
-        $allTypes = [];
-        foreach ($classNames as $className) {
-            if (! ClassExistenceStaticHelper::doesClassLikeExist($className)) {
-                continue;
-            }
-
-            $allTypes = array_merge($allTypes, $this->getClassLikeTypesByClassName($className));
-        }
-
-        return $this->typeFactory->createObjectTypeOrUnionType($allTypes);
-    }
-
     private function isArrayExpr(Node $node): bool
     {
         return $node instanceof Expr && $this->arrayTypeAnalyzer->isArrayType($node);
@@ -369,17 +328,6 @@ final class NodeTypeResolver
         $className = $this->nodeNameResolver->getName($node);
 
         return $className === null || Strings::contains($className, 'AnonymousClass');
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getClassLikeTypesByClassName(string $className): array
-    {
-        $classReflection = $this->reflectionProvider->getClass($className);
-        $classLikeTypes = $this->classReflectionTypesResolver->resolve($classReflection);
-
-        return array_unique($classLikeTypes);
     }
 
     private function isMatchingUnionType(Type $requiredType, Type $resolvedType): bool
