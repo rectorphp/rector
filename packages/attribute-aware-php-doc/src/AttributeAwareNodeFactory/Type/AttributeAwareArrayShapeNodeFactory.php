@@ -36,8 +36,7 @@ final class AttributeAwareArrayShapeNodeFactory implements AttributeNodeAwareFac
     {
         $items = [];
         foreach ($node->items as $item) {
-            $item->valueType = $this->attributeAwareNodeFactory->createFromNode($item->valueType, $docContent);
-            $items[] = $item;
+            $items[] = $this->attributeAwareNodeFactory->createFromNode($item, $docContent);
         }
 
         return new AttributeAwareArrayShapeNode($items);
