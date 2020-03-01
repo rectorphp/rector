@@ -227,6 +227,10 @@ PHP
             return true;
         }
 
+        if ($this->shouldSkipOpenSourceProtectedMethod($classMethod)) {
+            return true;
+        }
+
         return $this->isAnonymousClass($class);
     }
 
@@ -256,5 +260,37 @@ PHP
         }
 
         return empty($classMethod->getStmts());
+    }
+
+    private function shouldSkipOpenSourceProtectedMethod(ClassMethod $classMethod): bool
+    {
+        // skip as possible contract for 3rd party
+        if (! $this->isOpenSourceProjectType()) {
+            return false;
+        }
+
+        if ($classMethod->isPublic()) {
+            return true;
+        }
+
+        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof Class_) {
+            return false;
+        }
+
+        if ($class->isFinal()) {
+            return false;
+        }
+
+        // can be opened
+        if ($classMethod->isProtected()) {
+            return true;
+        }
+
+        if ($classMethod->isPublic()) {
+            return true;
+        }
+
+        return false;
     }
 }
