@@ -223,6 +223,10 @@ PHP
             return true;
         }
 
+        if ($this->shouldSkipOpenSourceEmpty($classMethod)) {
+            return true;
+        }
+
         return $this->isAnonymousClass($class);
     }
 
@@ -242,5 +246,15 @@ PHP
         }
 
         return $classMethod->isPublic();
+    }
+
+    private function shouldSkipOpenSourceEmpty(ClassMethod $classMethod): bool
+    {
+        // skip as possible contract for 3rd party
+        if (! $this->isOpenSourceProjectType()) {
+            return false;
+        }
+
+        return empty($classMethod->getStmts());
     }
 }
