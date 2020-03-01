@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\If_;
@@ -14,6 +13,7 @@ use Rector\Core\PhpParser\Node\Manipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\DeadCode\NodeCollector\ModifiedVariableNamesCollector;
 
 /**
  * @see https://github.com/rectorphp/rector/issues/2945
@@ -27,9 +27,17 @@ final class RemoveDuplicatedIfReturnRector extends AbstractRector
      */
     private $ifManipulator;
 
-    public function __construct(IfManipulator $ifManipulator)
-    {
+    /**
+     * @var ModifiedVariableNamesCollector
+     */
+    private $modifiedVariableNamesCollector;
+
+    public function __construct(
+        IfManipulator $ifManipulator,
+        ModifiedVariableNamesCollector $modifiedVariableNamesCollector
+    ) {
         $this->ifManipulator = $ifManipulator;
+        $this->modifiedVariableNamesCollector = $modifiedVariableNamesCollector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -113,7 +121,7 @@ PHP
         foreach ((array) $functionLike->getStmts() as $stmt) {
             if (! $this->ifManipulator->isIfWithOnlyReturn($stmt)) {
                 // variable modification
-                $modifiedVariableNames += $this->collectModifiedVariableNames($stmt);
+                $modifiedVariableNames += $this->modifiedVariableNamesCollector->collectModifiedVariableNames($stmt);
 
                 continue;
             }
@@ -139,33 +147,6 @@ PHP
         return array_filter($ifWithOnlyReturnsByHash, function (array $stmts) {
             return count($stmts) >= 2;
         });
-    }
-
-    /**
-     * @return string[]
-     */
-    private function collectModifiedVariableNames(Node $node): array
-    {
-        $modifiedVariableNames = [];
-
-        $this->traverseNodesWithCallable($node, function (Node $node) use (&$modifiedVariableNames) {
-            if (! $node instanceof Assign) {
-                return null;
-            }
-
-            if (! $node->var instanceof Variable) {
-                return null;
-            }
-
-            $variableName = $this->getName($node->var);
-            if ($variableName === null) {
-                return null;
-            }
-
-            $modifiedVariableNames[] = $variableName;
-        });
-
-        return $modifiedVariableNames;
     }
 
     /**

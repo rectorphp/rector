@@ -13,6 +13,8 @@ use Rector\Core\PhpParser\Node\Manipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
+use Rector\DeadCode\NodeManipulator\MagicMethodDetector;
+use Rector\DeadCode\NodeManipulator\VariadicFunctionLikeDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
@@ -24,26 +26,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RemoveUnusedParameterRector extends AbstractRector
 {
     /**
-     * @var string[]
-     */
-    private const MAGIC_METHODS = [
-        '__call',
-        '__callStatic',
-        '__clone',
-        '__debugInfo',
-        '__destruct',
-        '__get',
-        '__invoke',
-        '__isset',
-        '__set',
-        '__set_state',
-        '__sleep',
-        '__toString',
-        '__unset',
-        '__wakeup',
-    ];
-
-    /**
      * @var ClassManipulator
      */
     private $classManipulator;
@@ -53,12 +35,26 @@ final class RemoveUnusedParameterRector extends AbstractRector
      */
     private $classMethodManipulator;
 
+    /**
+     * @var MagicMethodDetector
+     */
+    private $magicMethodDetector;
+
+    /**
+     * @var VariadicFunctionLikeDetector
+     */
+    private $variadicFunctionLikeDetector;
+
     public function __construct(
         ClassManipulator $classManipulator,
-        ClassMethodManipulator $classMethodManipulator
+        ClassMethodManipulator $classMethodManipulator,
+        MagicMethodDetector $magicMethodDetector,
+        VariadicFunctionLikeDetector $variadicFunctionLikeDetector
     ) {
         $this->classManipulator = $classManipulator;
         $this->classMethodManipulator = $classMethodManipulator;
+        $this->magicMethodDetector = $magicMethodDetector;
+        $this->variadicFunctionLikeDetector = $variadicFunctionLikeDetector;
     }
 
     public function getDefinition(): RectorDefinition
@@ -125,9 +121,12 @@ PHP
 
         foreach ($childrenOfClass as $childClassNode) {
             $methodOfChild = $childClassNode->getMethod($methodName);
-            if ($methodOfChild !== null) {
-                $this->removeNodes($this->getParameterOverlap($methodOfChild->params, $unusedParameters));
+            if ($methodOfChild === null) {
+                continue;
             }
+
+            $overlappingParameters = $this->getParameterOverlap($methodOfChild->params, $unusedParameters);
+            $this->removeNodes($overlappingParameters);
         }
 
         $this->removeNodes($unusedParameters);
@@ -136,7 +135,7 @@ PHP
     }
 
     /**
-     * @param Class_[]    $childrenOfClass
+     * @param Class_[] $childrenOfClass
      * @return Param[]
      */
     private function getUnusedParameters(ClassMethod $classMethod, string $methodName, array $childrenOfClass): array
@@ -148,13 +147,16 @@ PHP
 
         foreach ($childrenOfClass as $childClassNode) {
             $methodOfChild = $childClassNode->getMethod($methodName);
-            if ($methodOfChild !== null) {
-                $unusedParameters = $this->getParameterOverlap(
-                    $unusedParameters,
-                    $this->resolveUnusedParameters($methodOfChild)
-                );
+            if ($methodOfChild === null) {
+                continue;
             }
+
+            $unusedParameters = $this->getParameterOverlap(
+                $unusedParameters,
+                $this->resolveUnusedParameters($methodOfChild)
+            );
         }
+
         return $unusedParameters;
     }
 
@@ -168,8 +170,8 @@ PHP
         return array_uintersect(
             $parameters1,
             $parameters2,
-            function (Param $a, Param $b): int {
-                return $this->areNodesEqual($a, $b) ? 0 : 1;
+            function (Param $firstParam, Param $secondParam): int {
+                return $this->areNodesWithoutCommentsEqual($firstParam, $secondParam) ? 0 : 1;
             }
         );
     }
@@ -203,7 +205,11 @@ PHP
             return true;
         }
 
-        if ($this->isNames($classMethod, self::MAGIC_METHODS)) {
+        if ($this->magicMethodDetector->isMagicMethod($classMethod)) {
+            return true;
+        }
+
+        if ($this->variadicFunctionLikeDetector->isVariadic($classMethod)) {
             return true;
         }
 
