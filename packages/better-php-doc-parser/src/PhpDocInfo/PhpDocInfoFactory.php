@@ -18,6 +18,7 @@ use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
 
 final class PhpDocInfoFactory
 {
@@ -51,13 +52,19 @@ final class PhpDocInfoFactory
      */
     private $attributeAwareNodeFactory;
 
+    /**
+     * @var ParamPhpDocNodeFactory
+     */
+    private $paramPhpDocNodeFactory;
+
     public function __construct(
         PhpDocParser $phpDocParser,
         Lexer $lexer,
         CurrentNodeProvider $currentNodeProvider,
         StaticTypeMapper $staticTypeMapper,
         TypeComparator $typeComparator,
-        AttributeAwareNodeFactory $attributeAwareNodeFactory
+        AttributeAwareNodeFactory $attributeAwareNodeFactory,
+        ParamPhpDocNodeFactory $paramPhpDocNodeFactory
     ) {
         $this->phpDocParser = $phpDocParser;
         $this->lexer = $lexer;
@@ -65,12 +72,15 @@ final class PhpDocInfoFactory
         $this->staticTypeMapper = $staticTypeMapper;
         $this->typeComparator = $typeComparator;
         $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
+        $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
     }
 
     public function createFromString(Node $node, string $content): PhpDocInfo
     {
         $tokens = $this->lexer->tokenize($content);
         $phpDocNode = $this->parseTokensToPhpDocNode($tokens);
+
+        /** @var AttributeAwarePhpDocNode $phpDocNode */
         $phpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $content);
 
         $phpDocInfo = new PhpDocInfo(
@@ -79,7 +89,8 @@ final class PhpDocInfoFactory
             $content,
             $this->staticTypeMapper,
             $node,
-            $this->typeComparator
+            $this->typeComparator,
+            $this->paramPhpDocNodeFactory
         );
 
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
@@ -108,6 +119,7 @@ final class PhpDocInfoFactory
             $this->setPositionOfLastToken($phpDocNode);
         }
 
+        /** @var AttributeAwarePhpDocNode $phpDocNode */
         $phpDocNode = $this->attributeAwareNodeFactory->createFromNode($phpDocNode, $content);
 
         $phpDocInfo = new PhpDocInfo(
@@ -116,7 +128,8 @@ final class PhpDocInfoFactory
             $content,
             $this->staticTypeMapper,
             $node,
-            $this->typeComparator
+            $this->typeComparator,
+            $this->paramPhpDocNodeFactory
         );
         $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
 

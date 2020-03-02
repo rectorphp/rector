@@ -15,7 +15,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
 /**
@@ -26,20 +25,12 @@ use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 final class AddArrayParamDocTypeRector extends AbstractRector
 {
     /**
-     * @var ParamPhpDocNodeFactory
-     */
-    private $paramPhpDocNodeFactory;
-
-    /**
      * @var ParamTypeInferer
      */
     private $paramTypeInferer;
 
-    public function __construct(
-        ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
-        ParamTypeInferer $paramTypeInferer
-    ) {
-        $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
+    public function __construct(ParamTypeInferer $paramTypeInferer)
+    {
         $this->paramTypeInferer = $paramTypeInferer;
     }
 
@@ -113,8 +104,8 @@ PHP
                 return null;
             }
 
-            $paramTagValueNode = $this->paramPhpDocNodeFactory->create($type, $param);
-            $phpDocInfo->addTagValueNode($paramTagValueNode);
+            $paramName = $this->getName($param);
+            $phpDocInfo->changeParamType($type, $param, $paramName);
         }
 
         return $node;
