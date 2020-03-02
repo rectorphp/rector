@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -130,7 +131,6 @@ final class PhpDocInfoPrinter
 
         $output = $this->printEnd($output);
 
-        // @see
         // fix missing start
         if (! Strings::match($output, '#^(\/\/|\/\*\*|\/\*|\#)#') && $output) {
             $output = '/**' . $output;
@@ -264,10 +264,16 @@ final class PhpDocInfoPrinter
             $output .= $tagSpaceSeparator;
         }
 
+        /** @var AttributeAwarePhpDocTagNode $phpDocTagNode */
         if ($this->hasDescription($phpDocTagNode)) {
             $quotedDescription = preg_quote($phpDocTagNode->value->description, '#');
             $pattern = Strings::replace($quotedDescription, '#[\s]+#', '\s+');
-            $nodeOutput = Strings::replace($nodeOutput, '#' . $pattern . '#', $phpDocTagNode->value->description);
+            $nodeOutput = Strings::replace($nodeOutput, '#' . $pattern . '#', function (array $matched) use (
+                $phpDocTagNode
+            ) {
+                return $phpDocTagNode->value->description;
+            });
+
             if (substr_count($nodeOutput, "\n") !== 0) {
                 $nodeOutput = Strings::replace($nodeOutput, "#\n#", PHP_EOL . '  * ');
             }
@@ -349,11 +355,16 @@ final class PhpDocInfoPrinter
         return $matches['space'] ?? '';
     }
 
-    private function hasDescription(PhpDocTagNode $phpDocTagNode): bool
+    private function hasDescription(AttributeAwarePhpDocTagNode $attributeAwarePhpDocTagNode): bool
     {
-        return $phpDocTagNode->getAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES) && (property_exists(
-                    $phpDocTagNode->value,
-                    'description'
-                ) && $phpDocTagNode->value->description);
+        if (! $attributeAwarePhpDocTagNode->getAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES)) {
+            return false;
+        }
+
+        if (! property_exists($attributeAwarePhpDocTagNode->value, 'description')) {
+            return false;
+        }
+
+        return (bool) $attributeAwarePhpDocTagNode->value->description;
     }
 }
