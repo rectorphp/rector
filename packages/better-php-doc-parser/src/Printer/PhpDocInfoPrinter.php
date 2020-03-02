@@ -63,12 +63,19 @@ final class PhpDocInfoPrinter
      */
     private $multilineSpaceFormatPreserver;
 
+    /**
+     * @var PatternFactory
+     */
+    private $patternFactory;
+
     public function __construct(
         OriginalSpacingRestorer $originalSpacingRestorer,
-        MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver
+        MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
+        PatternFactory $patternFactory
     ) {
         $this->originalSpacingRestorer = $originalSpacingRestorer;
         $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
+        $this->patternFactory = $patternFactory;
     }
 
     /**
@@ -172,6 +179,7 @@ final class PhpDocInfoPrinter
 
         if ($startEndValueObject !== null) {
             $isLastToken = ($nodeCount === $i);
+
             $output = $this->addTokensFromTo(
                 $output,
                 $this->currentTokenPosition,
@@ -268,9 +276,8 @@ final class PhpDocInfoPrinter
         if ($this->hasDescription($phpDocTagNode)) {
             $quotedDescription = preg_quote($phpDocTagNode->value->description, '#');
             $pattern = Strings::replace($quotedDescription, '#[\s]+#', '\s+');
-            $nodeOutput = Strings::replace($nodeOutput, '#' . $pattern . '#', function (array $matched) use (
-                $phpDocTagNode
-            ) {
+            $nodeOutput = Strings::replace($nodeOutput, '#' . $pattern . '#', function () use ($phpDocTagNode) {
+                // warning: classic string replace() breaks double "\\" slashes to "\"
                 return $phpDocTagNode->value->description;
             });
 
@@ -306,6 +313,7 @@ final class PhpDocInfoPrinter
         );
 
         foreach ($removedNodes as $removedNode) {
+            /** @var StartEndValueObject $removedPhpDocNodeInfo */
             $removedPhpDocNodeInfo = $removedNode->getAttribute(Attribute::START_END);
 
             // change start position to start of the line, so the whole line is removed
@@ -348,8 +356,8 @@ final class PhpDocInfoPrinter
     private function resolveTagSpaceSeparator(PhpDocTagNode $phpDocTagNode): string
     {
         $originalContent = $this->phpDocInfo->getOriginalContent();
+        $spacePattern = $this->patternFactory->createSpacePattern($phpDocTagNode);
 
-        $spacePattern = '#' . preg_quote($phpDocTagNode->name, '#') . '(?<space>\s+)#';
         $matches = Strings::match($originalContent, $spacePattern);
 
         return $matches['space'] ?? '';
