@@ -13,8 +13,10 @@ use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareParamTagValueNode;
+use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Contract\NameAwarePhpDocNodeFactoryInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocParserAwareInterface;
+use Rector\BetterPhpDocParser\PhpDocParser\AnnotationContentResolver;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
@@ -35,10 +37,26 @@ final class ParamPhpDocNodeFactory implements NameAwarePhpDocNodeFactoryInterfac
      */
     private $phpDocParser;
 
-    public function __construct(PrivatesAccessor $privatesAccessor, PrivatesCaller $privatesCaller)
-    {
+    /**
+     * @var AttributeAwareNodeFactory
+     */
+    private $attributeAwareNodeFactory;
+
+    /**
+     * @var AnnotationContentResolver
+     */
+    private $annotationContentResolver;
+
+    public function __construct(
+        PrivatesAccessor $privatesAccessor,
+        PrivatesCaller $privatesCaller,
+        AttributeAwareNodeFactory $attributeAwareNodeFactory,
+        AnnotationContentResolver $annotationContentResolver
+    ) {
         $this->privatesAccessor = $privatesAccessor;
         $this->privatesCaller = $privatesCaller;
+        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
+        $this->annotationContentResolver = $annotationContentResolver;
     }
 
     public function getName(): string
@@ -76,6 +94,9 @@ final class ParamPhpDocNodeFactory implements NameAwarePhpDocNodeFactoryInterfac
      */
     private function parseParamTagValue(TokenIterator $tokenIterator): ParamTagValueNode
     {
+        $originalTokenIterator = clone $tokenIterator;
+        $annotationContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
+
         $typeParser = $this->privatesAccessor->getPrivateProperty($this->phpDocParser, 'typeParser');
 
         $type = $typeParser->parse($tokenIterator);
@@ -95,6 +116,8 @@ final class ParamPhpDocNodeFactory implements NameAwarePhpDocNodeFactoryInterfac
             'parseOptionalDescription',
             $tokenIterator
         );
+
+        $type = $this->attributeAwareNodeFactory->createFromNode($type, $annotationContent);
 
         return new AttributeAwareParamTagValueNode($type, $isVariadic, $parameterName, $description, $isReference);
     }
