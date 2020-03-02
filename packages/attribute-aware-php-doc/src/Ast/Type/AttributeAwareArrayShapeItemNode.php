@@ -28,7 +28,9 @@ final class AttributeAwareArrayShapeItemNode extends ArrayShapeItemNode implemen
     {
         parent::__construct($keyName, $optional, $typeNode);
 
-        $this->hasSpaceAfterDoubleColon = (bool) Strings::match($docComment, '#\:\s+#');
+        // spaces after double colon
+        $keyWithSpacePattern = $this->createKeyWithSpacePattern($keyName, $optional);
+        $this->hasSpaceAfterDoubleColon = (bool) Strings::matchAll($docComment, $keyWithSpacePattern);
     }
 
     public function __toString(): string
@@ -44,5 +46,20 @@ final class AttributeAwareArrayShapeItemNode extends ArrayShapeItemNode implemen
             $this->hasSpaceAfterDoubleColon ? ' ' : '',
             (string) $this->valueType
         );
+    }
+
+    /**
+     * @param ConstExprIntegerNode|IdentifierTypeNode|null $keyName
+     */
+    private function createKeyWithSpacePattern($keyName, bool $optional): string
+    {
+        $keyNameString = (string) $keyName;
+        if ($optional) {
+            $keyNameString .= '?';
+        }
+
+        $keyNameStringPregQuoted = preg_quote($keyNameString);
+
+        return sprintf('#%s\:\s+#', $keyNameStringPregQuoted);
     }
 }

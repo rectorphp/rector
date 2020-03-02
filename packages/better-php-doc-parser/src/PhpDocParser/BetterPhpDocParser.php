@@ -214,6 +214,9 @@ final class BetterPhpDocParser extends PhpDocParser
         $originalTokenIterator = clone $tokenIterator;
         $docContent = $this->annotationContentResolver->resolveFromTokenIterator($originalTokenIterator);
 
+        // @todo here space is missing, probably skipped in resolveFromTokenIterator(), or in PHPStan doc parser
+        // we need evne more original content :)
+
         $tokenStart = $this->getTokenIteratorIndex($tokenIterator);
         $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', $tokenIterator);
         $tokenEnd = $this->getTokenIteratorIndex($tokenIterator);
