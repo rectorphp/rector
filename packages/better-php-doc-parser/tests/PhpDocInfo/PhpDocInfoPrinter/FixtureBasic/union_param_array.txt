@@ -1,0 +1,3 @@
+/**
+ * @param (string|int) $cookies
+ */

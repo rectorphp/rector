@@ -69,9 +69,6 @@ final class AnnotationContentResolver
             $tokenIterator->next();
         }
 
-        // remove appended first space
-//        $annotationContent = ltrim($annotationContent);
-
         return $this->cleanMultilineAnnotationContent($annotationContent);
     }
 
