@@ -37,7 +37,6 @@ final class AnnotationContentResolver
         $annotationContent = '';
         $unclosedOpenedBracketCount = 0;
 
-        // keep spaces?
         while (true) {
             if ($tokenIterator->currentTokenType() === Lexer::TOKEN_OPEN_PARENTHESES) {
                 ++$unclosedOpenedBracketCount;
