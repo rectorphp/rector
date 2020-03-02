@@ -283,14 +283,6 @@ PHP
         }
 
         // can be opened
-        if ($classMethod->isProtected()) {
-            return true;
-        }
-
-        if ($classMethod->isPublic()) {
-            return true;
-        }
-
-        return false;
+        return $classMethod->isProtected();
     }
 }
