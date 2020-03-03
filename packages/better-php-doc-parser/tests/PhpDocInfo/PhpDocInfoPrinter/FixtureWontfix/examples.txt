@@ -1,0 +1,11 @@
+/**
+ * ```
+ *     SomeClass::someMethod('default'
+ * );
+ * ```
+ *
+ * ```
+ * SomeClass::someMethod(
+ * );
+ * ```
+ */
