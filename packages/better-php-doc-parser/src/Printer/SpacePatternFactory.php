@@ -21,8 +21,10 @@ final class SpacePatternFactory
 
         // we have to match exact @param space, in case of multiple @param s
         if ($phpDocTagNode->value instanceof AttributeAwareParamTagValueNode) {
-            $spacePattern = $this->createSpacePatternForParamTagValueNode($phpDocTagNode->value, $spacePattern);
-        } elseif ($phpDocTagNode->value instanceof AttributeAwareGenericTagValueNode) {
+            return $this->createSpacePatternForParamTagValueNode($phpDocTagNode->value, $spacePattern);
+        }
+
+        if ($phpDocTagNode->value instanceof AttributeAwareGenericTagValueNode) {
             $originalValue = $phpDocTagNode->value->getAttribute('original_value') ?? $phpDocTagNode->value->value;
 
             // break by line break, to prevent false content positive
@@ -56,6 +58,7 @@ final class SpacePatternFactory
 
             $spacePattern .= preg_quote($attributeAwareParamTagValueNode->parameterName, '#');
         }
-        return $spacePattern;
+
+        return '#' . $spacePattern . '#';
     }
 }

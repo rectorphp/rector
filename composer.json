@@ -121,10 +121,7 @@
             "Rector\\TypeDeclaration\\": "rules/type-declaration/src",
             "Rector\\VendorLocker\\": "packages/vendor-locker/src",
             "Rector\\ZendToSymfony\\": "rules/zend-to-symfony/src"
-        },
-        "files": [
-            "src/functions/rector_dump_function.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {

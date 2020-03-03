@@ -115,9 +115,7 @@ final class PhpDocInfoPrinter
         $this->removedNodePositions = [];
 
         $phpDocString = $this->printPhpDocNode($this->attributeAwarePhpDocNode);
-
-        // replace extra space after *
-        $phpDocString = Strings::replace($phpDocString, '#([^*])\*[ \t]+$#sm', '$1*');
+        $phpDocString = $this->removeExtraSpacesAfterAsterisk($phpDocString);
 
         // hotfix of extra space with callable ()
         return Strings::replace($phpDocString, '#callable(\s+)\(#', 'callable(');
@@ -297,9 +295,8 @@ final class PhpDocInfoPrinter
     private function printAttributeWithAsterisk(AttributeAwareNodeInterface $attributeAwareNode): string
     {
         $content = (string) $attributeAwareNode;
-        $content = explode(PHP_EOL, $content);
 
-        return implode(self::NEWLINE_ASTERISK, $content);
+        return $this->explodeAndImplode($content, PHP_EOL, self::NEWLINE_ASTERISK);
     }
 
     /**
@@ -379,5 +376,21 @@ final class PhpDocInfoPrinter
         }
 
         return (bool) $attributeAwarePhpDocTagNode->value->description;
+    }
+
+    private function explodeAndImplode(string $content, string $explodeChar, string $implodeChar): string
+    {
+        $content = explode($explodeChar, $content);
+
+        if (! is_array($content)) {
+            throw new ShouldNotHappenException();
+        }
+
+        return implode($implodeChar, $content);
+    }
+
+    private function removeExtraSpacesAfterAsterisk(string $phpDocString): string
+    {
+        return Strings::replace($phpDocString, '#([^*])\*[ \t]+$#sm', '$1*');
     }
 }
