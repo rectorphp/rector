@@ -2,7 +2,7 @@
 
 namespace Rector\PHPUnit\Tests\Rector\SpecificMethod\AssertTrueFalseToSpecificMethodRector\Fixture;
 
-final class Fixture3Test extends \PHPUnit\Framework\TestCase
+final class SkipStaticCall extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
