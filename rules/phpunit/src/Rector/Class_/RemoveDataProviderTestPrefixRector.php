@@ -10,6 +10,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareGenericTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractPHPUnitRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -120,7 +121,13 @@ PHP
                 }
 
                 $newMethodName = $this->createNewMethodName($oldMethodName);
-                $dataProviderTag->value->value = $newMethodName;
+
+                // @todo create @dataProvider custom tag!
+                /** @var AttributeAwareGenericTagValueNode $genericTagValueNode */
+                $genericTagValueNode = $dataProviderTag->value;
+                // change value - keep original for format preserving
+                $genericTagValueNode->setAttribute('original_value', $genericTagValueNode->value);
+                $genericTagValueNode->value = $newMethodName;
 
                 $oldMethodName = trim($oldMethodName, '()');
                 $newMethodName = trim($newMethodName, '()');
