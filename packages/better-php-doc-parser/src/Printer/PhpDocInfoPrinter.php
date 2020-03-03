@@ -24,6 +24,11 @@ use Rector\Core\Exception\ShouldNotHappenException;
 final class PhpDocInfoPrinter
 {
     /**
+     * @var string
+     */
+    private const NEWLINE_ASTERISK = PHP_EOL . ' * ';
+
+    /**
      * @var int
      */
     private $tokenCount;
@@ -195,7 +200,7 @@ final class PhpDocInfoPrinter
                 return $this->printPhpDocTagNode($attributeAwareNode, $startEndValueObject, $output);
             }
 
-            return $output . PHP_EOL . ' * ' . $this->printAttributeWithAsterisk($attributeAwareNode);
+            return $output . self::NEWLINE_ASTERISK . $this->printAttributeWithAsterisk($attributeAwareNode);
         }
 
         if (! $attributeAwareNode instanceof PhpDocTextNode && ! $attributeAwareNode instanceof GenericTagValueNode && $startEndValueObject) {
@@ -282,7 +287,7 @@ final class PhpDocInfoPrinter
             });
 
             if (substr_count($nodeOutput, "\n") !== 0) {
-                $nodeOutput = Strings::replace($nodeOutput, "#\n#", PHP_EOL . '  * ');
+                $nodeOutput = Strings::replace($nodeOutput, "#\n#", self::NEWLINE_ASTERISK);
             }
         }
 
@@ -294,7 +299,7 @@ final class PhpDocInfoPrinter
         $content = (string) $attributeAwareNode;
         $content = explode(PHP_EOL, $content);
 
-        return implode(PHP_EOL . ' * ', $content);
+        return implode(self::NEWLINE_ASTERISK, $content);
     }
 
     /**

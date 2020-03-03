@@ -1,0 +1,4 @@
+/**
+ * @param callable $loader A callback function or callable class responsible for
+ *   constructing a translations package instance.
+ */
