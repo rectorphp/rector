@@ -81,9 +81,10 @@ final class AssertPropertyExistsRector extends AbstractPHPUnitRector
             return null;
         }
 
-        /** @var FuncCall $firstArgumentValue */
         $firstArgumentValue = $node->args[0]->value;
-
+        if ($firstArgumentValue instanceof StaticCall) {
+            return null;
+        }
         if (! $this->isName($firstArgumentValue, 'property_exists')) {
             return null;
         }

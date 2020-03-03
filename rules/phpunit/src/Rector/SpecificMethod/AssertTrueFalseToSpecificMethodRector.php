@@ -73,9 +73,10 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractPHPUnitRector
         }
 
         $firstArgumentValue = $node->args[0]->value;
-        if ($firstArgumentValue instanceof StaticCall ||
-            ! $this->isNames($firstArgumentValue, array_keys(self::OLD_TO_NEW_METHODS))
-        ) {
+        if ($firstArgumentValue instanceof StaticCall) {
+            return null;
+        }
+        if (! $this->isNames($firstArgumentValue, array_keys(self::OLD_TO_NEW_METHODS))) {
             return null;
         }
 
