@@ -1,0 +1,4 @@
+/**
+ * @param AttributeAwareIdentifierTypeNode&IdentifierTypeNode $typeNode
+ * @param string[] ...$types
+ */
