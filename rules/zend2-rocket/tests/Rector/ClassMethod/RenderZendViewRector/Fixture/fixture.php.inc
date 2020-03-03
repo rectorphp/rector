@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Zend2Rocket\Tests\Rector\ClassMethod\RenderZendViewRector;
+
 class someController {
     public function TestFunction()
     {
@@ -29,6 +31,8 @@ class someController {
 ?>
     -----
 <?php
+
+namespace Rector\Zend2Rocket\Tests\Rector\ClassMethod\RenderZendViewRector;
 
 class someController {
     public function TestFunction()
