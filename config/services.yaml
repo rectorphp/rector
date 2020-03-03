@@ -15,7 +15,6 @@ services:
             - '../src/DependencyInjection/Loader/*'
             - '../src/HttpKernel/*'
             - '../src/ValueObject/*'
-            - '../src/functions/*'
 
     Symfony\Component\Console\Application:
         alias: 'Rector\Core\Console\Application'
