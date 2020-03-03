@@ -14,6 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\Class_\EntityTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\LocaleTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Gedmo\TranslatableTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
@@ -41,10 +42,19 @@ final class TranslationBehaviorRector extends AbstractRector
      */
     private $phpDocInfoFactory;
 
-    public function __construct(ClassManipulator $classManipulator, PhpDocInfoFactory $phpDocInfoFactory)
-    {
+    /**
+     * @var ClassInsertManipulator
+     */
+    private $classInsertManipulator;
+
+    public function __construct(
+        ClassManipulator $classManipulator,
+        PhpDocInfoFactory $phpDocInfoFactory,
+        ClassInsertManipulator $classInsertManipulator
+    ) {
         $this->classManipulator = $classManipulator;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -161,7 +171,10 @@ PHP
         $this->classManipulator->removeInterface($node, 'Gedmo\Translatable\Translatable');
 
         // 1. replace trait
-        $this->classManipulator->addAsFirstTrait($node, 'Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait');
+        $this->classInsertManipulator->addAsFirstTrait(
+            $node,
+            'Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait'
+        );
 
         // 2. add interface
         $node->implements[] = new FullyQualified('Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface');
@@ -255,7 +268,10 @@ PHP
 
         $class = new Class_($classShortName);
         $class->implements[] = new FullyQualified('Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface');
-        $this->classManipulator->addAsFirstTrait($class, 'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait');
+        $this->classInsertManipulator->addAsFirstTrait(
+            $class,
+            'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait'
+        );
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($class);
         $phpDocInfo->addTagValueNodeWithShortName(new EntityTagValueNode());

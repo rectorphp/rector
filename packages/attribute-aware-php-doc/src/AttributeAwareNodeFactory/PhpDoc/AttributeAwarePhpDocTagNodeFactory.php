@@ -25,7 +25,7 @@ final class AttributeAwarePhpDocTagNodeFactory implements AttributeNodeAwareFact
     /**
      * @param PhpDocTagNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
         return new AttributeAwarePhpDocTagNode($node->name, $node->value);
     }

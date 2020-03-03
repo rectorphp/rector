@@ -1,4 +1,4 @@
-# All 457 Rectors Overview
+# All 464 Rectors Overview
 
 - [Projects](#projects)
 - [General](#general)
@@ -20,6 +20,7 @@
 - [ElasticSearchDSL](#elasticsearchdsl)
 - [FileSystemRector](#filesystemrector)
 - [Guzzle](#guzzle)
+- [JMS](#jms)
 - [Laravel](#laravel)
 - [Legacy](#legacy)
 - [MinimalScope](#minimalscope)
@@ -350,12 +351,13 @@ Changes method calls based on matching the first parameter value.
 ```yaml
 services:
     Rector\CakePHP\Rector\MethodCall\RenameMethodCallBasedOnParameterRector:
-        getParam:
-            match_parameter: paging
-            replace_with: getAttribute
-        withParam:
-            match_parameter: paging
-            replace_with: withAttribute
+        $methodNamesByTypes:
+            getParam:
+                match_parameter: paging
+                replace_with: getAttribute
+            withParam:
+                match_parameter: paging
+                replace_with: withAttribute
 ```
 
 ↓
@@ -2789,6 +2791,33 @@ Remove duplicated key in defined arrays.
 
 <br>
 
+### `RemoveDuplicatedIfReturnRector`
+
+- class: [`Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector`](/../master/rules/dead-code/src/Rector/FunctionLike/RemoveDuplicatedIfReturnRector.php)
+- [test fixtures](/../master/rules/dead-code/tests/Rector/FunctionLike/RemoveDuplicatedIfReturnRector/Fixture)
+
+Remove duplicated if stmt with return in function/method body
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+         if ($value) {
+             return true;
+         }
+
+         $value2 = 100;
+-
+-        if ($value) {
+-            return true;
+-        }
+     }
+ }
+```
+
+<br>
+
 ### `RemoveDuplicatedInstanceOfRector`
 
 - class: [`Rector\DeadCode\Rector\Instanceof_\RemoveDuplicatedInstanceOfRector`](/../master/rules/dead-code/src/Rector/Instanceof_/RemoveDuplicatedInstanceOfRector.php)
@@ -2929,6 +2958,26 @@ Remove unreachable statements
          return 5;
 -
 -        $removeMe = 10;
+     }
+ }
+```
+
+<br>
+
+### `RemoveUnusedClassConstantRector`
+
+- class: [`Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector`](/../master/rules/dead-code/src/Rector/ClassConst/RemoveUnusedClassConstantRector.php)
+- [test fixtures](/../master/rules/dead-code/tests/Rector/ClassConst/RemoveUnusedClassConstantRector/Fixture)
+
+Remove unused class constants
+
+```diff
+ class SomeClass
+ {
+-    private const SOME_CONST = 'dead';
+-
+     public function run()
+     {
      }
  }
 ```
@@ -3088,6 +3137,25 @@ Remove unused private properties
  class SomeClass
  {
 -    private $property;
+ }
+```
+
+<br>
+
+### `RemoveUnusedVariableAssignRector`
+
+- class: [`Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector`](/../master/rules/dead-code/src/Rector/Assign/RemoveUnusedVariableAssignRector.php)
+- [test fixtures](/../master/rules/dead-code/tests/Rector/Assign/RemoveUnusedVariableAssignRector/Fixture)
+
+Remove unused assigns to variables
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        $value = 5;
+     }
  }
 ```
 
@@ -3985,6 +4053,55 @@ Changes getMessage(..., true) to getMessageAsArray()
 
 <br>
 
+## JMS
+
+### `RemoveJmsInjectParamsAnnotationRector`
+
+- class: [`Rector\JMS\Rector\ClassMethod\RemoveJmsInjectParamsAnnotationRector`](/../master/rules/jms/src/Rector/ClassMethod/RemoveJmsInjectParamsAnnotationRector.php)
+- [test fixtures](/../master/rules/jms/tests/Rector/ClassMethod/RemoveJmsInjectParamsAnnotationRector/Fixture)
+
+Removes JMS\DiExtraBundle\Annotation\InjectParams annotation
+
+```diff
+ use JMS\DiExtraBundle\Annotation as DI;
+
+ class SomeClass
+ {
+-    /**
+-     * @DI\InjectParams({
+-     *     "subscribeService" = @DI\Inject("app.email.service.subscribe"),
+-     *     "ipService" = @DI\Inject("app.util.service.ip")
+-     * })
+-     */
+     public function __construct()
+     {
+     }
+-}
++}
+```
+
+<br>
+
+### `RemoveJmsInjectServiceAnnotationRector`
+
+- class: [`Rector\JMS\Rector\Class_\RemoveJmsInjectServiceAnnotationRector`](/../master/rules/jms/src/Rector/Class_/RemoveJmsInjectServiceAnnotationRector.php)
+- [test fixtures](/../master/rules/jms/tests/Rector/Class_/RemoveJmsInjectServiceAnnotationRector/Fixture)
+
+Removes JMS\DiExtraBundle\Annotation\Services annotation
+
+```diff
+ use JMS\DiExtraBundle\Annotation as DI;
+
+-/**
+- * @DI\Service("email.web.services.subscribe_token", public=true)
+- */
+ class SomeClass
+ {
+ }
+```
+
+<br>
+
 ## Laravel
 
 ### `FacadeStaticCallToConstructorInjectionRector`
@@ -4241,6 +4358,32 @@ Replace mysql_pconnect() with mysqli_connect() with host p: prefix
      {
 -        return mysql_pconnect($host, $username, $password);
 +        return mysqli_connect('p:' . $host, $username, $password);
+     }
+ }
+```
+
+<br>
+
+### `MysqlQueryMysqlErrorWithLinkRector`
+
+- class: [`Rector\MysqlToMysqli\Rector\FuncCall\MysqlQueryMysqlErrorWithLinkRector`](/../master/rules/mysql-to-mysqli/src/Rector/FuncCall/MysqlQueryMysqlErrorWithLinkRector.php)
+- [test fixtures](/../master/rules/mysql-to-mysqli/tests/Rector/FuncCall/MysqlQueryMysqlErrorWithLinkRector/Fixture)
+
+Add mysql_query and mysql_error with connection
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $conn = mysqli_connect('host', 'user', 'pass');
+
+-        mysql_error();
++        mysqli_error($conn);
+         $sql = 'SELECT';
+
+-        return mysql_query($sql);
++        return mysqli_query($conn, $sql);
      }
  }
 ```
@@ -4875,7 +5018,7 @@ Tests without assertion will have @doesNotPerformAssertion
  class SomeClass extends PHPUnit\Framework\TestCase
  {
 +    /**
-+     * @doesNotPerformAssertion
++     * @doesNotPerformAssertions
 +     */
      public function test()
      {
@@ -5751,6 +5894,27 @@ Add $_SERVER REQUEST_URI to method call
          $application = new \Phalcon\Mvc\Application();
 -        $response = $application->handle();
 +        $response = $application->handle($_SERVER["REQUEST_URI"]);
+     }
+ }
+```
+
+<br>
+
+### `DecoupleSaveMethodCallWithArgumentToAssignRector`
+
+- class: [`Rector\Phalcon\Rector\MethodCall\DecoupleSaveMethodCallWithArgumentToAssignRector`](/../master/rules/phalcon/src/Rector/MethodCall/DecoupleSaveMethodCallWithArgumentToAssignRector.php)
+- [test fixtures](/../master/rules/phalcon/tests/Rector/MethodCall/DecoupleSaveMethodCallWithArgumentToAssignRector/Fixture)
+
+Decouple Phalcon\Mvc\Model::save() with argument to assign()
+
+```diff
+ class SomeClass
+ {
+     public function run(\Phalcon\Mvc\Model $model, $data)
+     {
+-        $model->save($data);
++        $model->save();
++        $model->assign($data);
      }
  }
 ```

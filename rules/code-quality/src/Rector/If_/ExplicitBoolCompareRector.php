@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
@@ -113,7 +112,7 @@ PHP
     private function resolveNewConditionNode(Expr $expr, bool $isNegated): ?BinaryOp
     {
         // various cases
-        if ($expr instanceof FuncCall && $this->isName($expr, 'count')) {
+        if ($this->isFuncCallName($expr, 'count')) {
             return $this->resolveCount($isNegated, $expr);
         }
 

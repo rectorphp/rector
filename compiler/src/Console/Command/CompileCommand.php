@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Rector\Compiler\Console;
+namespace Rector\Compiler\Console\Command;
 
 use Rector\Compiler\Composer\ComposerJsonManipulator;
+use Rector\Compiler\Debug\FileLister;
+use Rector\Compiler\Renaming\JetbrainsStubsRenamer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\ShellCode;
-use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 
 /**
  * Inspired by @see https://github.com/phpstan/phpstan-src/blob/f939d23155627b5c2ec6eef36d976dddea22c0c5/compiler/src/Console/CompileCommand.php
@@ -38,33 +39,50 @@ final class CompileCommand extends Command
      */
     private $composerJsonManipulator;
 
-    public function __construct(string $dataDir, string $buildDir, ComposerJsonManipulator $composerJsonManipulator)
-    {
-        parent::__construct();
+    /**
+     * @var JetbrainsStubsRenamer
+     */
+    private $jetbrainsStubsRenamer;
 
-        $this->composerJsonManipulator = $composerJsonManipulator;
+    /**
+     * @var FileLister
+     */
+    private $fileLister;
 
+    public function __construct(
+        string $dataDir,
+        string $buildDir,
+        ComposerJsonManipulator $composerJsonManipulator,
+        SymfonyStyle $symfonyStyle,
+        JetbrainsStubsRenamer $jetbrainsStubsRenamer,
+        FileLister $fileLister
+    ) {
         $this->dataDir = $dataDir;
         $this->buildDir = $buildDir;
 
-        $symfonyStyleFactory = new SymfonyStyleFactory();
-        $this->symfonyStyle = $symfonyStyleFactory->create();
+        $this->composerJsonManipulator = $composerJsonManipulator;
+        $this->jetbrainsStubsRenamer = $jetbrainsStubsRenamer;
+        $this->fileLister = $fileLister;
+        $this->symfonyStyle = $symfonyStyle;
+
+        parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this->setName('rector:compile');
+        $this->setName(self::class);
         $this->setDescription('Compile prefixed rector.phar');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // 1.
         $composerJsonFile = $this->buildDir . '/composer.json';
-
-        $this->symfonyStyle->note('Loading ' . $composerJsonFile);
-
+        $this->symfonyStyle->section('Loading and updating ' . $composerJsonFile);
         $this->composerJsonManipulator->fixComposerJson($composerJsonFile);
 
+        // 2.
+        $this->symfonyStyle->section('Updating root rector/rector dependencies, without require-dev');
         // @see https://github.com/dotherightthing/wpdtrt-plugin-boilerplate/issues/52
         $process = new Process([
             'composer',
@@ -74,19 +92,29 @@ final class CompileCommand extends Command
             '--no-interaction',
             '--classmap-authoritative',
         ], $this->buildDir, null, null, null);
-
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });
 
+        // debug
+        $this->fileLister->listFilesInDirectory($this->buildDir . '/vendor/jetbrains');
+
+        // 3.
+        $this->symfonyStyle->section('Renaming PHPStorm stubs from "*.php" to ".stub"');
+        $this->jetbrainsStubsRenamer->renamePhpStormStubs($this->buildDir);
+
+        // 4.
         // the '--no-parallel' is needed, so "scoper.php.inc" can "require __DIR__ ./vendor/autoload.php"
         // and "Nette\Neon\Neon" class can be used there
+        $this->symfonyStyle->section('Packing and prefixing rector.phar with Box and PHP Scoper');
         $process = new Process(['php', 'box.phar', 'compile', '--no-parallel'], $this->dataDir, null, null, null);
-
         $process->mustRun(static function (string $type, string $buffer) use ($output): void {
             $output->write($buffer);
         });
 
+        // 5.
+        $this->symfonyStyle->section('Restoring root composer.json with "require-dev"');
+        $this->symfonyStyle->note('You still need to run "composer update" to install those dependencies');
         $this->composerJsonManipulator->restoreComposerJson($composerJsonFile);
 
         return ShellCode::SUCCESS;

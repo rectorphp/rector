@@ -11,10 +11,12 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocTagNode;
 use Rector\BetterPhpDocParser\Attributes\Attribute\Attribute;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\StartEndValueObject;
+use Rector\Core\Exception\ShouldNotHappenException;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfoPrinter\PhpDocInfoPrinterTest
@@ -61,12 +63,19 @@ final class PhpDocInfoPrinter
      */
     private $multilineSpaceFormatPreserver;
 
+    /**
+     * @var SpacePatternFactory
+     */
+    private $spacePatternFactory;
+
     public function __construct(
         OriginalSpacingRestorer $originalSpacingRestorer,
-        MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver
+        MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
+        SpacePatternFactory $spacePatternFactory
     ) {
         $this->originalSpacingRestorer = $originalSpacingRestorer;
         $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
+        $this->spacePatternFactory = $spacePatternFactory;
     }
 
     /**
@@ -102,6 +111,9 @@ final class PhpDocInfoPrinter
 
         $phpDocString = $this->printPhpDocNode($this->attributeAwarePhpDocNode);
 
+        // replace extra space after *
+        $phpDocString = Strings::replace($phpDocString, '#([^*])\*[ \t]+$#sm', '$1*');
+
         // hotfix of extra space with callable ()
         return Strings::replace($phpDocString, '#callable(\s+)\(#', 'callable(');
     }
@@ -126,7 +138,6 @@ final class PhpDocInfoPrinter
 
         $output = $this->printEnd($output);
 
-        // @see
         // fix missing start
         if (! Strings::match($output, '#^(\/\/|\/\*\*|\/\*|\#)#') && $output) {
             $output = '/**' . $output;
@@ -168,6 +179,7 @@ final class PhpDocInfoPrinter
 
         if ($startEndValueObject !== null) {
             $isLastToken = ($nodeCount === $i);
+
             $output = $this->addTokensFromTo(
                 $output,
                 $this->currentTokenPosition,
@@ -244,18 +256,31 @@ final class PhpDocInfoPrinter
         string $output
     ): string {
         $output .= $phpDocTagNode->name;
-        $nodeOutput = $this->printNode($phpDocTagNode->value, $startEndValueObject);
-        if ($nodeOutput && $this->isTagSeparatedBySpace($nodeOutput, $phpDocTagNode)) {
-            $output .= ' ';
+
+        $phpDocTagNodeValue = $phpDocTagNode->value;
+        if (! $phpDocTagNodeValue instanceof AttributeAwareNodeInterface) {
+            throw new ShouldNotHappenException();
         }
 
-        if ($phpDocTagNode->getAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES) && (property_exists(
-            $phpDocTagNode->value,
-            'description'
-        ) && $phpDocTagNode->value->description)) {
+        $nodeOutput = $this->printNode($phpDocTagNodeValue, $startEndValueObject);
+
+        $tagSpaceSeparator = $this->resolveTagSpaceSeparator($phpDocTagNode);
+
+        // space is handled by $tagSpaceSeparator
+        $nodeOutput = ltrim($nodeOutput);
+        if ($nodeOutput && $tagSpaceSeparator !== '') {
+            $output .= $tagSpaceSeparator;
+        }
+
+        /** @var AttributeAwarePhpDocTagNode $phpDocTagNode */
+        if ($this->hasDescription($phpDocTagNode)) {
             $quotedDescription = preg_quote($phpDocTagNode->value->description, '#');
             $pattern = Strings::replace($quotedDescription, '#[\s]+#', '\s+');
-            $nodeOutput = Strings::replace($nodeOutput, '#' . $pattern . '#', $phpDocTagNode->value->description);
+            $nodeOutput = Strings::replace($nodeOutput, '#' . $pattern . '#', function () use ($phpDocTagNode) {
+                // warning: classic string replace() breaks double "\\" slashes to "\"
+                return $phpDocTagNode->value->description;
+            });
+
             if (substr_count($nodeOutput, "\n") !== 0) {
                 $nodeOutput = Strings::replace($nodeOutput, "#\n#", PHP_EOL . '  * ');
             }
@@ -288,6 +313,7 @@ final class PhpDocInfoPrinter
         );
 
         foreach ($removedNodes as $removedNode) {
+            /** @var StartEndValueObject $removedPhpDocNodeInfo */
             $removedPhpDocNodeInfo = $removedNode->getAttribute(Attribute::START_END);
 
             // change start position to start of the line, so the whole line is removed
@@ -327,13 +353,26 @@ final class PhpDocInfoPrinter
      * - "@Route("/", name="homepage")",
      * - "@customAnnotation(value)"
      */
-    private function isTagSeparatedBySpace(string $nodeOutput, PhpDocTagNode $phpDocTagNode): bool
+    private function resolveTagSpaceSeparator(PhpDocTagNode $phpDocTagNode): string
     {
-        $contentWithoutSpace = $phpDocTagNode->name . Strings::substring($nodeOutput, 0, 1);
-        if (Strings::contains($this->phpDocInfo->getOriginalContent(), $contentWithoutSpace)) {
+        $originalContent = $this->phpDocInfo->getOriginalContent();
+        $spacePattern = $this->spacePatternFactory->createSpacePattern($phpDocTagNode);
+
+        $matches = Strings::match($originalContent, $spacePattern);
+
+        return $matches['space'] ?? '';
+    }
+
+    private function hasDescription(AttributeAwarePhpDocTagNode $attributeAwarePhpDocTagNode): bool
+    {
+        if (! $attributeAwarePhpDocTagNode->getAttribute(Attribute::HAS_DESCRIPTION_WITH_ORIGINAL_SPACES)) {
             return false;
         }
 
-        return Strings::contains($this->phpDocInfo->getOriginalContent(), $phpDocTagNode->name . ' ');
+        if (! property_exists($attributeAwarePhpDocTagNode->value, 'description')) {
+            return false;
+        }
+
+        return (bool) $attributeAwarePhpDocTagNode->value->description;
     }
 }

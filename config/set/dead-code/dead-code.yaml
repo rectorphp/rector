@@ -32,4 +32,6 @@ services:
     Rector\DeadCode\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector: null
     Rector\PHPUnit\Rector\ClassMethod\RemoveEmptyTestMethodRector: null
     Rector\DeadCode\Rector\TryCatch\RemoveDeadTryCatchRector: null
-
+    Rector\DeadCode\Rector\ClassConst\RemoveUnusedClassConstantRector: null
+    Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector: null
+    Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector: null

@@ -1,0 +1,3 @@
+/**
+ * @return string Set of slashes ("\\" or "/")
+ */

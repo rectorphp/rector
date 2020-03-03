@@ -25,7 +25,7 @@ final class AttributeAwarePhpDocTextNodeFactory implements AttributeNodeAwareFac
     /**
      * @param PhpDocTextNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
         return new AttributeAwarePhpDocTextNode($node->text);
     }

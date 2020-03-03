@@ -4,21 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Sensio;
 
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
-final class SensioMethodTagValueNode extends AbstractTagValueNode
+final class SensioMethodTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
-    /**
-     * @var string
-     */
-    public const SHORT_NAME = '@Method';
-
-    /**
-     * @var string
-     */
-    public const CLASS_NAME = Method::class;
-
     /**
      * @var string[]
      */
@@ -43,5 +33,10 @@ final class SensioMethodTagValueNode extends AbstractTagValueNode
     public function getMethods(): array
     {
         return $this->methods;
+    }
+
+    public function getShortName(): string
+    {
+        return '@Method';
     }
 }

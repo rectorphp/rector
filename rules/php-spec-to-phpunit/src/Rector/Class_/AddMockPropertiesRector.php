@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpSpecToPHPUnit\PhpSpecMockCollector;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
@@ -19,19 +19,21 @@ use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 final class AddMockPropertiesRector extends AbstractPhpSpecToPHPUnitRector
 {
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
      * @var PhpSpecMockCollector
      */
     private $phpSpecMockCollector;
 
-    public function __construct(ClassManipulator $classManipulator, PhpSpecMockCollector $phpSpecMockCollector)
-    {
-        $this->classManipulator = $classManipulator;
+    /**
+     * @var ClassInsertManipulator
+     */
+    private $classInsertManipulator;
+
+    public function __construct(
+        PhpSpecMockCollector $phpSpecMockCollector,
+        ClassInsertManipulator $classInsertManipulator
+    ) {
         $this->phpSpecMockCollector = $phpSpecMockCollector;
+        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     /**
@@ -75,7 +77,7 @@ final class AddMockPropertiesRector extends AbstractPhpSpecToPHPUnitRector
                 new ObjectType('PHPUnit\Framework\MockObject\MockObject'),
             ]);
 
-            $this->classManipulator->addPropertyToClass($node, $name, $unionType);
+            $this->classInsertManipulator->addPropertyToClass($node, $name, $unionType);
         }
 
         return null;

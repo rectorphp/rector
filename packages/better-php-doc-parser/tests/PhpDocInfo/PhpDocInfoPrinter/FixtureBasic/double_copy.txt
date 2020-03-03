@@ -1,0 +1,7 @@
+/**
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
+ *
+ * @copyright Copyright (c) 2015-2016 Zend Technologies USA Inc. (https://www.zend.com/)
+ * @license   https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md New BSD License
+ */

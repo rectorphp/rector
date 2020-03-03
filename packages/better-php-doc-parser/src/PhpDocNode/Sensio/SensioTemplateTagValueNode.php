@@ -4,21 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Sensio;
 
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-final class SensioTemplateTagValueNode extends AbstractTagValueNode
+final class SensioTemplateTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
-    /**
-     * @var string
-     */
-    public const SHORT_NAME = '@Template';
-
-    /**
-     * @var string
-     */
-    public const CLASS_NAME = Template::class;
-
     /**
      * @var string|null
      */
@@ -71,5 +61,10 @@ final class SensioTemplateTagValueNode extends AbstractTagValueNode
     public function getTemplate(): ?string
     {
         return $this->template;
+    }
+
+    public function getShortName(): string
+    {
+        return '@Template';
     }
 }

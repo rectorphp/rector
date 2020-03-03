@@ -122,7 +122,7 @@ PHP
             return null;
         }
 
-        // 2,5 - add @inject to existing properties of that type, to prevent re-adding them
+        // 2. - add @inject to existing properties of that type, to prevent re-adding them
         foreach ($serviceTypes as $key => $serviceType) {
             $existingProperty = $this->classManipulator->findPropertyByType($node, $serviceType);
             if ($existingProperty !== null) {
@@ -131,12 +131,12 @@ PHP
             }
         }
 
-        // 2. create private properties with this types
+        // 3. create private properties with this types
         $privateProperties = $this->kernelTestCaseNodeFactory->createPrivatePropertiesFromTypes($node, $serviceTypes);
         $this->addInjectAnnotationToProperties($privateProperties);
         $node->stmts = array_merge($privateProperties, $node->stmts);
 
-        // 3. remove old in-method $property assigns
+        // 4. remove old in-method $property assigns
         $formerVariablesByMethods = $this->onContainerGetCallManipulator->removeAndCollectFormerAssignedVariables(
             $node,
             false

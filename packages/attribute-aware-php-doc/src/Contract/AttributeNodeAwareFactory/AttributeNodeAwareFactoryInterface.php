@@ -13,5 +13,5 @@ interface AttributeNodeAwareFactoryInterface
 
     public function isMatch(Node $node): bool;
 
-    public function create(Node $node): AttributeAwareNodeInterface;
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface;
 }

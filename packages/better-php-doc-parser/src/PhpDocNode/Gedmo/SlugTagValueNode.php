@@ -4,21 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Gedmo;
 
-use Gedmo\Mapping\Annotation\Slug;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
 
-final class SlugTagValueNode extends AbstractTagValueNode
+final class SlugTagValueNode extends AbstractTagValueNode implements ShortNameAwareTagInterface
 {
-    /**
-     * @var string
-     */
-    public const SHORT_NAME = '@Gedmo\Slug';
-
-    /**
-     * @var string
-     */
-    public const CLASS_NAME = Slug::class;
-
     /**
      * @var mixed[]
      */
@@ -37,5 +27,10 @@ final class SlugTagValueNode extends AbstractTagValueNode
     public function getFields(): array
     {
         return $this->fields;
+    }
+
+    public function getShortName(): string
+    {
+        return '@Gedmo\Slug';
     }
 }

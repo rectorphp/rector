@@ -5,7 +5,7 @@ namespace Rector\PHPUnit\Tests\Rector\ClassMethod\AddDoesNotPerformAssertionToNo
 class SkipExistingAnnotation extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @doesNotPerformAssertion
+     * @doesNotPerformAssertions
      */
     public function testSomething(): void
     {

@@ -31,7 +31,7 @@ final class AttributeAwareNodeFactory
     /**
      * @return PhpDocNode|PhpDocChildNode|PhpDocTagValueNode|AttributeAwareNodeInterface
      */
-    public function createFromNode(Node $node): AttributeAwareNodeInterface
+    public function createFromNode(Node $node, string $docContent): AttributeAwareNodeInterface
     {
         if ($node instanceof AttributeAwareNodeInterface) {
             return $node;
@@ -47,7 +47,7 @@ final class AttributeAwareNodeFactory
                 $attributeNodeAwareFactory->setAttributeAwareNodeFactory($this);
             }
 
-            return $attributeNodeAwareFactory->create($node);
+            return $attributeNodeAwareFactory->create($node, $docContent);
         }
 
         throw new ShouldNotHappenException(sprintf(

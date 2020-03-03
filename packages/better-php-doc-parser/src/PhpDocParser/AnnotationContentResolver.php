@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 final class AnnotationContentResolver
 {
@@ -16,9 +17,15 @@ final class AnnotationContentResolver
      */
     private $tokenIteratorFactory;
 
-    public function __construct(TokenIteratorFactory $tokenIteratorFactory)
+    /**
+     * @var PrivatesAccessor
+     */
+    private $privatesAccessor;
+
+    public function __construct(TokenIteratorFactory $tokenIteratorFactory, PrivatesAccessor $privatesAccessor)
     {
         $this->tokenIteratorFactory = $tokenIteratorFactory;
+        $this->privatesAccessor = $privatesAccessor;
     }
 
     /**
@@ -44,6 +51,8 @@ final class AnnotationContentResolver
             }
 
             // remove new line "*"
+            $annotationContent = $this->appendPreviousWhitespace($tokenIterator, $annotationContent);
+
             if (Strings::contains($tokenIterator->currentTokenValue(), '*')) {
                 $tokenValueWithoutAsterisk = Strings::replace($tokenIterator->currentTokenValue(), '#\*#');
                 $annotationContent .= $tokenValueWithoutAsterisk;
@@ -126,5 +135,30 @@ final class AnnotationContentResolver
         }
 
         return false;
+    }
+
+    private function appendPreviousWhitespace(TokenIterator $tokenIterator, string $annotationContent): string
+    {
+        // is space?
+        if (! $tokenIterator->isPrecededByHorizontalWhitespace()) {
+            return $annotationContent;
+        }
+
+        $tokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
+        $currentIndex = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'index');
+
+        if (! isset($tokens[$currentIndex - 1])) {
+            return $annotationContent;
+        }
+
+        $previousWhitespaceToken = $tokens[$currentIndex - 1];
+
+        // do not prepend whitespace without any content
+        if ($annotationContent === '') {
+            return $annotationContent;
+        }
+
+        // get the space
+        return $annotationContent . $previousWhitespaceToken[0];
     }
 }

@@ -15,6 +15,8 @@ use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
 use PhpParser\Node\Expr\PreInc;
+use PhpParser\Node\Stmt\Expression;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -41,10 +43,19 @@ final class AssignManipulator
      */
     private $propertyFetchManipulator;
 
-    public function __construct(NodeNameResolver $nodeNameResolver, PropertyFetchManipulator $propertyFetchManipulator)
-    {
+    /**
+     * @var BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        PropertyFetchManipulator $propertyFetchManipulator,
+        BetterStandardPrinter $betterStandardPrinter
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyFetchManipulator = $propertyFetchManipulator;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
 
     /**
@@ -136,6 +147,30 @@ final class AssignManipulator
             if ($parentNode instanceof Assign) {
                 return $parentNode->var === $previousParentNode;
             }
+        }
+
+        return false;
+    }
+
+    public function isNodePartOfAssign(?Node $node): bool
+    {
+        if ($node === null) {
+            return false;
+        }
+
+        $previousNode = $node;
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        while ($parentNode !== null && ! $parentNode instanceof Expression) {
+            if ($parentNode instanceof Assign && $this->betterStandardPrinter->areNodesEqual(
+                $parentNode->var,
+                $previousNode
+            )) {
+                return true;
+            }
+
+            $previousNode = $parentNode;
+            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
         }
 
         return false;

@@ -35,6 +35,7 @@ final class ReturnedNodesReturnTypeInferer extends AbstractTypeInferer implement
         }
 
         $localReturnNodes = $this->collectReturns($functionLike);
+
         if ($localReturnNodes === []) {
             // void type
             if ($functionLike instanceof ClassMethod && ! $functionLike->isAbstract()) {

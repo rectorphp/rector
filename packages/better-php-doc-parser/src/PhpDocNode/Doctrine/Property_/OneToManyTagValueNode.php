@@ -12,11 +12,6 @@ use Rector\BetterPhpDocParser\PhpDocNode\Doctrine\AbstractDoctrineTagValueNode;
 final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implements ToManyTagNodeInterface, MappedByNodeInterface, TypeAwareTagValueNodeInterface
 {
     /**
-     * @var string
-     */
-    public const SHORT_NAME = '@ORM\OneToMany';
-
-    /**
      * @var string|null
      */
     private $mappedBy;
@@ -123,5 +118,10 @@ final class OneToManyTagValueNode extends AbstractDoctrineTagValueNode implement
     public function changeTargetEntity(string $targetEntity): void
     {
         $this->targetEntity = $targetEntity;
+    }
+
+    public function getShortName(): string
+    {
+        return '@ORM\OneToMany';
     }
 }

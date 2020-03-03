@@ -173,7 +173,7 @@ PHP
 
     private function isIteratorToArrayFuncCall(Expr $expr): bool
     {
-        return $expr instanceof FuncCall && $this->isName($expr, 'iterator_to_array');
+        return $this->isFuncCallName($expr, 'iterator_to_array');
     }
 
     private function isConstantArrayTypeWithStringKeyType(Type $type): bool

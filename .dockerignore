@@ -2,11 +2,8 @@
 .idea/
 
 .env
-.gitlab-ci.yml
 .editorconfig
 .phpstorm.meta.php
-
-.coveralls.yml
 
 phpstan.neon
 rector.yaml
@@ -30,7 +27,5 @@ docker-compose.dist.yml
 
 /vendor
 /docs
-/sample
-/var
 
 .travis.yml export-ignore

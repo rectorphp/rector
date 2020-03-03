@@ -1,0 +1,3 @@
+/**
+ * @psalm-param array{cache:string, callbacks?: mixed, plugin?:mixed} $options
+ */

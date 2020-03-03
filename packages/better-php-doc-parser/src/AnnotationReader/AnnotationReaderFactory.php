@@ -10,6 +10,34 @@ use Doctrine\Common\Annotations\Reader;
 
 final class AnnotationReaderFactory
 {
+    /**
+     * @var string[]
+     */
+    private const IGNORED_NAMES = [
+        'ORM\GeneratedValue',
+        'GeneratedValue',
+        'ORM\InheritanceType',
+        'InheritanceType',
+        'ORM\OrderBy',
+        'OrderBy',
+        'ORM\DiscriminatorMap',
+        'DiscriminatorMap',
+        'ORM\UniqueEntity',
+        'UniqueEntity',
+        'Gedmo\SoftDeleteable',
+        'SoftDeleteable',
+        'Gedmo\Slug',
+        'Slug',
+        'Gedmo\SoftDeleteable',
+        'SoftDeleteable',
+        'Gedmo\Blameable',
+        'Blameable',
+        'Gedmo\Versioned',
+        'Versioned',
+        // nette @inject dummy annotation
+        'inject',
+    ];
+
     public function create(): Reader
     {
         AnnotationRegistry::registerLoader('class_exists');
@@ -19,38 +47,9 @@ final class AnnotationReaderFactory
         // without this the reader will try to resolve them and fails with an exception
         // don't forget to add it to "stubs/Doctrine/Empty" directory, because the class needs to exists
         // and run "composer dump-autoload", because the directory is loaded by classmap
-        $annotationReader::addGlobalIgnoredName('ORM\GeneratedValue');
-        $annotationReader::addGlobalIgnoredName('GeneratedValue');
-
-        $annotationReader::addGlobalIgnoredName('ORM\InheritanceType');
-        $annotationReader::addGlobalIgnoredName('InheritanceType');
-
-        $annotationReader::addGlobalIgnoredName('ORM\OrderBy');
-        $annotationReader::addGlobalIgnoredName('OrderBy');
-
-        $annotationReader::addGlobalIgnoredName('ORM\DiscriminatorMap');
-        $annotationReader::addGlobalIgnoredName('DiscriminatorMap');
-
-        $annotationReader::addGlobalIgnoredName('ORM\UniqueEntity');
-        $annotationReader::addGlobalIgnoredName('UniqueEntity');
-
-        $annotationReader::addGlobalIgnoredName('Gedmo\SoftDeleteable');
-        $annotationReader::addGlobalIgnoredName('SoftDeleteable');
-
-        $annotationReader::addGlobalIgnoredName('Gedmo\Slug');
-        $annotationReader::addGlobalIgnoredName('Slug');
-
-        $annotationReader::addGlobalIgnoredName('Gedmo\SoftDeleteable');
-        $annotationReader::addGlobalIgnoredName('SoftDeleteable');
-
-        $annotationReader::addGlobalIgnoredName('Gedmo\Blameable');
-        $annotationReader::addGlobalIgnoredName('Blameable');
-
-        $annotationReader::addGlobalIgnoredName('Gedmo\Versioned');
-        $annotationReader::addGlobalIgnoredName('Versioned');
-
-        // nette @inject dummy annotation
-        $annotationReader::addGlobalIgnoredName('inject');
+        foreach (self::IGNORED_NAMES as $ignoredName) {
+            $annotationReader::addGlobalIgnoredName($ignoredName);
+        }
 
         // warning: nested tags must be parse-able, e.g. @ORM\Table must include @ORM\UniqueConstraint!
 

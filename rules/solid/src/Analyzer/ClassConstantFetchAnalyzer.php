@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
+use PHPStan\Type\UnionType;
 use Rector\Core\Testing\PHPUnit\PHPUnitEnvironment;
 use Rector\NodeCollector\NodeCollector\ParsedNodeCollector;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -75,7 +76,7 @@ final class ClassConstantFetchAnalyzer
 
         $resolvedClassType = $this->nodeTypeResolver->resolve($classConstFetch->class);
 
-        $className = $this->matchClassTypeThatContainsConstant($resolvedClassType, $constantName);
+        $className = $this->resolveClassTypeThatContainsConstantOrFirstUnioned($resolvedClassType, $constantName);
         if ($className === null) {
             return;
         }
@@ -108,6 +109,29 @@ final class ClassConstantFetchAnalyzer
                 if ($this->nodeNameResolver->isName($classConstant, $constant)) {
                     return $className;
                 }
+            }
+        }
+
+        return null;
+    }
+
+    private function resolveClassTypeThatContainsConstantOrFirstUnioned(
+        Type $resolvedClassType,
+        string $constantName
+    ): ?string {
+        $className = $this->matchClassTypeThatContainsConstant($resolvedClassType, $constantName);
+        if ($className !== null) {
+            return $className;
+        }
+
+        // we need at least one original user class
+        if ($resolvedClassType instanceof UnionType) {
+            foreach ($resolvedClassType->getTypes() as $unionedType) {
+                if (! $unionedType instanceof ObjectType) {
+                    continue;
+                }
+
+                return $unionedType->getClassName();
             }
         }
 

@@ -1,0 +1,5 @@
+/**
+ *   normal view template will be rendered.
+ *
+ * @var array{serialize:string|bool|null}
+ */

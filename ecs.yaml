@@ -1,4 +1,7 @@
 services:
+    Symplify\CodingStandard\Sniffs\CleanCode\ClassCognitiveComplexitySniff:
+        max_class_cognitive_complexity: 50
+
     Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
         max_cognitive_complexity: 9
 
@@ -21,7 +24,6 @@ services:
 
 parameters:
     paths:
-        - "ci"
         - "bin"
         - "src"
         - "packages"
@@ -81,6 +83,12 @@ parameters:
         Symplify\CodingStandard\Sniffs\Naming\ClassNameSuffixByParentSniff:
             # hidden API
             - 'src/Rector/AbstractRector.php'
+
+        Symplify\CodingStandard\Sniffs\CleanCode\ClassCognitiveComplexitySniff:
+            # node printing
+            - 'utils/documentation-generator/src/Command/DumpNodesCommand.php'
+            # 3rd party code
+            - 'rules/php-70/src/EregToPcreTransformer.php'
 
         Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
             # todo

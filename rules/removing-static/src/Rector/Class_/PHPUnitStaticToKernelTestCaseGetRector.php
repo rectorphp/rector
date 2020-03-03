@@ -22,7 +22,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Naming\PropertyNaming;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\ConfiguredCodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -52,28 +52,28 @@ final class PHPUnitStaticToKernelTestCaseGetRector extends AbstractRector
     private $propertyNaming;
 
     /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    /**
      * @var PHPUnitTypeDeclarationDecorator
      */
     private $phpUnitTypeDeclarationDecorator;
+
+    /**
+     * @var ClassInsertManipulator
+     */
+    private $classInsertManipulator;
 
     /**
      * @param string[] $staticClassTypes
      */
     public function __construct(
         PropertyNaming $propertyNaming,
-        ClassManipulator $classManipulator,
+        ClassInsertManipulator $classInsertManipulator,
         PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
         array $staticClassTypes = []
     ) {
         $this->staticClassTypes = $staticClassTypes;
         $this->propertyNaming = $propertyNaming;
-        $this->classManipulator = $classManipulator;
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
+        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -215,7 +215,7 @@ PHP
                 $this->updateSetUpMethod($setupClassMethod, $parentSetupStaticCall, $assign);
             } else {
                 $setUpMethod = $this->createSetUpMethod($parentSetupStaticCall, $assign);
-                $this->classManipulator->addAsFirstMethod($class, $setUpMethod);
+                $this->classInsertManipulator->addAsFirstMethod($class, $setUpMethod);
             }
         }
 

@@ -21,7 +21,6 @@ services:
             mysql_close: 'mysqli_close'
             mysql_data_seek: 'mysqli_data_seek'
             mysql_errno: 'mysqli_errno'
-            mysql_error: 'mysqli_error'
             mysql_fetch_array: 'mysqli_fetch_array'
             mysql_fetch_assoc: 'mysqli_fetch_assoc'
             mysql_fetch_lengths: 'mysqli_fetch_lengths'
@@ -37,7 +36,6 @@ services:
             mysql_insert_id: 'mysqli_insert_id'
             mysql_num_rows: 'mysqli_num_rows'
             mysql_ping: 'mysqli_ping'
-            mysql_query: 'mysqli_query'
             mysql_real_escape_string: 'mysqli_real_escape_string'
             mysql_select_db: 'mysqli_select_db'
             mysql_set_charset: 'mysqli_set_charset'
@@ -63,3 +61,4 @@ services:
             MYSQL_CLIENT_INTERACTIVE: 'MYSQLI_CLIENT_INTERACTIVE'
             MYSQL_CLIENT_SSL: 'MYSQLI_CLIENT_SSL'
             MYSQL_PRIMARY_KEY_FLAG: 'MYSQLI_PRI_KEY_FLAG'
+    Rector\MysqlToMysqli\Rector\FuncCall\MysqlQueryMysqlErrorWithLinkRector: null

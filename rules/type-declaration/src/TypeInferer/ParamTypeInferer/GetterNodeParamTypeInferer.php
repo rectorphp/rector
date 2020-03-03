@@ -13,6 +13,7 @@ use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchAssignManipulator;
 use Rector\Core\PhpParser\Node\Manipulator\PropertyFetchManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
@@ -25,9 +26,17 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
      */
     private $propertyFetchManipulator;
 
-    public function __construct(PropertyFetchManipulator $propertyFetchManipulator)
-    {
+    /**
+     * @var PropertyFetchAssignManipulator
+     */
+    private $propertyFetchAssignManipulator;
+
+    public function __construct(
+        PropertyFetchManipulator $propertyFetchManipulator,
+        PropertyFetchAssignManipulator $propertyFetchAssignManipulator
+    ) {
         $this->propertyFetchManipulator = $propertyFetchManipulator;
+        $this->propertyFetchAssignManipulator = $propertyFetchAssignManipulator;
     }
 
     public function inferParam(Param $param): Type
@@ -44,7 +53,10 @@ final class GetterNodeParamTypeInferer extends AbstractTypeInferer implements Pa
         /** @var string $paramName */
         $paramName = $this->nodeNameResolver->getName($param);
 
-        $propertyNames = $this->propertyFetchManipulator->getPropertyNamesOfAssignOfVariable($classMethod, $paramName);
+        $propertyNames = $this->propertyFetchAssignManipulator->getPropertyNamesOfAssignOfVariable(
+            $classMethod,
+            $paramName
+        );
         if ($propertyNames === []) {
             return new MixedType();
         }

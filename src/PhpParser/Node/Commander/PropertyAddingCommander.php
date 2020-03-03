@@ -12,7 +12,8 @@ use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Type\Type;
 use Rector\Core\Contract\PhpParser\Node\CommanderInterface;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 /**
@@ -41,14 +42,23 @@ final class PropertyAddingCommander implements CommanderInterface
     private $nodeNameResolver;
 
     /**
-     * @var ClassManipulator
+     * @var ClassDependencyManipulator
      */
-    private $classManipulator;
+    private $classDependencyManipulator;
 
-    public function __construct(ClassManipulator $classManipulator, NodeNameResolver $nodeNameResolver)
-    {
-        $this->classManipulator = $classManipulator;
+    /**
+     * @var ClassInsertManipulator
+     */
+    private $classInsertManipulator;
+
+    public function __construct(
+        NodeNameResolver $nodeNameResolver,
+        ClassDependencyManipulator $classDependencyManipulator,
+        ClassInsertManipulator $classInsertManipulator
+    ) {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->classDependencyManipulator = $classDependencyManipulator;
+        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     public function addPropertyToClass(string $propertyName, ?Type $propertyType, Class_ $classNode): void
@@ -100,7 +110,7 @@ final class PropertyAddingCommander implements CommanderInterface
 
     private function createNodeVisitor(): NodeVisitor
     {
-        return new class($this->classManipulator, $this->propertiesByClass, $this->propertiesWithoutConstructorByClass, $this->constantsByClass) extends NodeVisitorAbstract {
+        return new class($this->classInsertManipulator, $this->classDependencyManipulator, $this->propertiesByClass, $this->propertiesWithoutConstructorByClass, $this->constantsByClass) extends NodeVisitorAbstract {
             /**
              * @var Type[][]|null[][]
              */
@@ -112,9 +122,9 @@ final class PropertyAddingCommander implements CommanderInterface
             private $propertiesWithoutConstructorByClass = [];
 
             /**
-             * @var ClassManipulator
+             * @var ClassInsertManipulator
              */
-            private $classManipulator;
+            private $classInsertManipulator;
 
             /**
              * @var ClassConst[][]
@@ -122,17 +132,24 @@ final class PropertyAddingCommander implements CommanderInterface
             private $constantsByClass = [];
 
             /**
+             * @var ClassDependencyManipulator
+             */
+            private $classDependencyManipulator;
+
+            /**
              * @param Type[][]|null[][] $propertiesByClass
              * @param Type[][]|null[][] $propertiesWithoutConstructorByClass
              * @param ClassConst[][] $constantsByClass
              */
             public function __construct(
-                ClassManipulator $classManipulator,
+                ClassInsertManipulator $classInsertManipulator,
+                ClassDependencyManipulator $classDependencyManipulator,
                 array $propertiesByClass,
                 array $propertiesWithoutConstructorByClass,
                 array $constantsByClass
             ) {
-                $this->classManipulator = $classManipulator;
+                $this->classInsertManipulator = $classInsertManipulator;
+                $this->classDependencyManipulator = $classDependencyManipulator;
                 $this->propertiesByClass = $propertiesByClass;
                 $this->propertiesWithoutConstructorByClass = $propertiesWithoutConstructorByClass;
                 $this->constantsByClass = $constantsByClass;
@@ -153,17 +170,17 @@ final class PropertyAddingCommander implements CommanderInterface
 
                 $classConstants = $this->constantsByClass[$classHash] ?? [];
                 foreach ($classConstants as $constantName => $classConst) {
-                    $this->classManipulator->addConstantToClass($class, $constantName, $classConst);
+                    $this->classInsertManipulator->addConstantToClass($class, $constantName, $classConst);
                 }
 
                 $classProperties = $this->propertiesByClass[$classHash] ?? [];
                 foreach ($classProperties as $propertyName => $propertyType) {
-                    $this->classManipulator->addConstructorDependency($class, $propertyName, $propertyType);
+                    $this->classDependencyManipulator->addConstructorDependency($class, $propertyName, $propertyType);
                 }
 
                 $classPropertiesWithoutConstructor = $this->propertiesWithoutConstructorByClass[$classHash] ?? [];
                 foreach ($classPropertiesWithoutConstructor as $propertyName => $propertyType) {
-                    $this->classManipulator->addPropertyToClass($class, $propertyName, $propertyType);
+                    $this->classInsertManipulator->addPropertyToClass($class, $propertyName, $propertyType);
                 }
 
                 return $class;

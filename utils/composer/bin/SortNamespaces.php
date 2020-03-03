@@ -14,17 +14,17 @@ $composerContent = FileSystem::read($composerJson);
 $jsonContent = Json::decode($composerContent, Json::FORCE_ARRAY);
 
 // 1. unset primary here
-unset($jsonContent['autoload']['psr-4']['Rector\\']);
-unset($jsonContent['autoload-dev']['psr-4']['Rector\\Tests\\']);
+unset($jsonContent['autoload']['psr-4']['Rector\\Core\\']);
+unset($jsonContent['autoload-dev']['psr-4']['Rector\\Core\\Tests\\']);
 
 // 2. sort by namespaces
 ksort($jsonContent['autoload']['psr-4']);
 ksort($jsonContent['autoload-dev']['psr-4']);
 
 // 3. make core first
-$jsonContent['autoload']['psr-4'] = array_merge(['Rector\\' => 'src'], $jsonContent['autoload']['psr-4']);
+$jsonContent['autoload']['psr-4'] = array_merge(['Rector\\Core\\' => 'src'], $jsonContent['autoload']['psr-4']);
 $jsonContent['autoload-dev']['psr-4'] = array_merge(
-    ['Rector\\Tests\\' => 'tests'],
+    ['Rector\\Core\\Tests\\' => 'tests'],
     $jsonContent['autoload-dev']['psr-4']
 );
 

@@ -15,6 +15,8 @@ class ChildClass extends AbstractClass
         return null;
     }
 }
+
+?>
 -----
 <?php
 
@@ -33,3 +35,5 @@ class ChildClass extends AbstractClass
         return null;
     }
 }
+
+?>

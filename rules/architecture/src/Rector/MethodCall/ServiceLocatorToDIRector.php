@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
@@ -22,7 +23,7 @@ use Rector\Doctrine\Contract\Mapper\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
+ * @see \Rector\Architecture\Tests\Rector\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
  */
 final class ServiceLocatorToDIRector extends AbstractRector
 {
@@ -100,6 +101,12 @@ PHP
     public function refactor(Node $node): ?Node
     {
         if (! $this->isName($node->name, 'getRepository')) {
+            return null;
+        }
+
+        $firstArgumentValue = $node->args[0]->value;
+        // possible mocking → skip
+        if ($firstArgumentValue instanceof StaticCall) {
             return null;
         }
 

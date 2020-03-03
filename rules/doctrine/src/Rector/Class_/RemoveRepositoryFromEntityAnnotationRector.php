@@ -65,6 +65,7 @@ PHP
             return null;
         }
 
+        /** @var EntityTagValueNode|null $doctrineEntityTag */
         $doctrineEntityTag = $phpDocInfo->getByType(EntityTagValueNode::class);
         if ($doctrineEntityTag === null) {
             return null;

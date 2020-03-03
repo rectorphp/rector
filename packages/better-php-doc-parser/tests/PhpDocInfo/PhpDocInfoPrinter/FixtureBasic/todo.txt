@@ -1,0 +1,4 @@
+/**
+ * @todo decouple to NodeAnalyzer
+ * Matches array like...
+ */

@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -27,12 +28,14 @@ use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareVarTagValueNode;
 use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
-use Rector\BetterPhpDocParser\PhpDocNode\AbstractTagValueNode;
+
 use Rector\Core\Exception\NotImplementedException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
 
 /**
  * @see \Rector\BetterPhpDocParser\Tests\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
@@ -75,6 +78,11 @@ final class PhpDocInfo
     private $typeComparator;
 
     /**
+     * @var ParamPhpDocNodeFactory
+     */
+    private $paramPhpDocNodeFactory;
+
+    /**
      * @param mixed[] $tokens
      */
     public function __construct(
@@ -83,7 +91,8 @@ final class PhpDocInfo
         string $originalContent,
         StaticTypeMapper $staticTypeMapper,
         Node $node,
-        TypeComparator $typeComparator
+        TypeComparator $typeComparator,
+        ParamPhpDocNodeFactory $paramPhpDocNodeFactory
     ) {
         $this->phpDocNode = $attributeAwarePhpDocNode;
         $this->tokens = $tokens;
@@ -92,6 +101,7 @@ final class PhpDocInfo
         $this->staticTypeMapper = $staticTypeMapper;
         $this->node = $node;
         $this->typeComparator = $typeComparator;
+        $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
     }
 
     public function getOriginalContent(): string
@@ -104,9 +114,9 @@ final class PhpDocInfo
         $this->phpDocNode->children[] = $phpDocChildNode;
     }
 
-    public function addTagValueNodeWithShortName(AbstractTagValueNode $tagValueNode): void
+    public function addTagValueNodeWithShortName(ShortNameAwareTagInterface $shortNameAwareTag): void
     {
-        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode($tagValueNode::SHORT_NAME, $tagValueNode);
+        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode($shortNameAwareTag->getShortName(), $shortNameAwareTag);
         $this->addPhpDocTagNode($spacelessPhpDocTagNode);
     }
 
@@ -399,15 +409,7 @@ final class PhpDocInfo
 
     public function addTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): void
     {
-        if ($phpDocTagValueNode instanceof ReturnTagValueNode) {
-            $name = '@return';
-        } elseif ($phpDocTagValueNode instanceof ParamTagValueNode) {
-            $name = '@param';
-        } elseif ($phpDocTagValueNode instanceof VarTagValueNode) {
-            $name = '@var';
-        } else {
-            throw new NotImplementedException();
-        }
+        $name = $this->resolveNameForPhpDocTagValueNode($phpDocTagValueNode);
 
         $phpDocTagNode = new AttributeAwarePhpDocTagNode($name, $phpDocTagValueNode);
         $this->addPhpDocTagNode($phpDocTagNode);
@@ -420,6 +422,22 @@ final class PhpDocInfo
         }
 
         return $this->tokens === [];
+    }
+
+    public function changeParamType(Type $type, Param $param, string $paramName): void
+    {
+        $paramTagValueNode = $this->getParamTagValueByName($paramName);
+
+        $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($type);
+
+        // override existing type
+        if ($paramTagValueNode !== null) {
+            $paramTagValueNode->type = $phpDocType;
+            return;
+        }
+
+        $paramTagValueNode = $this->paramPhpDocNodeFactory->create($type, $param);
+        $this->addTagValueNode($paramTagValueNode);
     }
 
     private function getParamTagValueByName(string $name): ?AttributeAwareParamTagValueNode
@@ -460,5 +478,22 @@ final class PhpDocInfo
         $secondAnnotationName = trim($secondAnnotationName, '@');
 
         return $firstAnnotationName === $secondAnnotationName;
+    }
+
+    private function resolveNameForPhpDocTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): string
+    {
+        if ($phpDocTagValueNode instanceof ReturnTagValueNode) {
+            return '@return';
+        }
+
+        if ($phpDocTagValueNode instanceof ParamTagValueNode) {
+            return '@param';
+        }
+
+        if ($phpDocTagValueNode instanceof VarTagValueNode) {
+            return '@var';
+        }
+
+        throw new NotImplementedException();
     }
 }

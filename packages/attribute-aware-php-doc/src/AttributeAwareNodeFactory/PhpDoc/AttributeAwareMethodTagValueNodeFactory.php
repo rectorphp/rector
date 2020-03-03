@@ -6,12 +6,20 @@ namespace Rector\AttributeAwarePhpDoc\AttributeAwareNodeFactory\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwareMethodTagValueNode;
+use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeAwareNodeFactoryAwareInterface;
 use Rector\AttributeAwarePhpDoc\Contract\AttributeNodeAwareFactory\AttributeNodeAwareFactoryInterface;
+use Rector\BetterPhpDocParser\Attributes\Ast\AttributeAwareNodeFactory;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 
-final class AttributeAwareMethodTagValueNodeFactory implements AttributeNodeAwareFactoryInterface
+final class AttributeAwareMethodTagValueNodeFactory implements AttributeNodeAwareFactoryInterface, AttributeAwareNodeFactoryAwareInterface
 {
+    /**
+     * @var AttributeAwareNodeFactory
+     */
+    private $attributeAwareNodeFactory;
+
     public function getOriginalNodeClass(): string
     {
         return MethodTagValueNode::class;
@@ -25,14 +33,37 @@ final class AttributeAwareMethodTagValueNodeFactory implements AttributeNodeAwar
     /**
      * @param MethodTagValueNode $node
      */
-    public function create(Node $node): AttributeAwareNodeInterface
+    public function create(Node $node, string $docContent): AttributeAwareNodeInterface
     {
+        $returnType = $this->createAttributeAwareReturnType($node, $docContent);
+
+        foreach ($node->parameters as $key => $parameter) {
+            $node->parameters[$key] = $this->attributeAwareNodeFactory->createFromNode($parameter, $docContent);
+        }
+
         return new AttributeAwareMethodTagValueNode(
             $node->isStatic,
-            $node->returnType,
+            $returnType,
             $node->methodName,
             $node->parameters,
             $node->description
         );
+    }
+
+    public function setAttributeAwareNodeFactory(AttributeAwareNodeFactory $attributeAwareNodeFactory): void
+    {
+        $this->attributeAwareNodeFactory = $attributeAwareNodeFactory;
+    }
+
+    /**
+     * @return TypeNode&AttributeAwareNodeInterface
+     */
+    private function createAttributeAwareReturnType(MethodTagValueNode $methodTagValueNode, string $docContent)
+    {
+        if ($methodTagValueNode->returnType !== null) {
+            return $this->attributeAwareNodeFactory->createFromNode($methodTagValueNode->returnType, $docContent);
+        }
+
+        return $methodTagValueNode->returnType;
     }
 }

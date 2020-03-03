@@ -17,7 +17,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\PhpSpecToPHPUnit\LetManipulator;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
@@ -28,11 +28,6 @@ use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
  */
 final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRector
 {
-    /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
     /**
      * @var ObjectType
      */
@@ -53,16 +48,21 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
      */
     private $letManipulator;
 
+    /**
+     * @var ClassInsertManipulator
+     */
+    private $classInsertManipulator;
+
     public function __construct(
-        ClassManipulator $classManipulator,
         PhpSpecRenaming $phpSpecRenaming,
         PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
+        ClassInsertManipulator $classInsertManipulator,
         LetManipulator $letManipulator
     ) {
-        $this->classManipulator = $classManipulator;
         $this->phpSpecRenaming = $phpSpecRenaming;
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
         $this->letManipulator = $letManipulator;
+        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     /**
@@ -93,7 +93,7 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
         $testedClass = $this->phpSpecRenaming->resolveTestedClass($node);
 
         $this->testedObjectType = new ObjectType($testedClass);
-        $this->classManipulator->addPropertyToClass($node, $propertyName, $this->testedObjectType);
+        $this->classInsertManipulator->addPropertyToClass($node, $propertyName, $this->testedObjectType);
 
         // add let if missing
         if ($node->getMethod('let') === null) {
@@ -102,7 +102,7 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
             }
 
             $letClassMethod = $this->createLetClassMethod($propertyName);
-            $this->classManipulator->addAsFirstMethod($node, $letClassMethod);
+            $this->classInsertManipulator->addAsFirstMethod($node, $letClassMethod);
         }
 
         return $this->removeSelfTypeMethod($node);

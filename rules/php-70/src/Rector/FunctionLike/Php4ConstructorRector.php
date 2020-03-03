@@ -13,7 +13,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -25,16 +24,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class Php4ConstructorRector extends AbstractRector
 {
-    /**
-     * @var ClassManipulator
-     */
-    private $classManipulator;
-
-    public function __construct(ClassManipulator $classManipulator)
-    {
-        $this->classManipulator = $classManipulator;
-    }
-
     public function getDefinition(): RectorDefinition
     {
         return new RectorDefinition(
@@ -94,7 +83,7 @@ PHP
         }
 
         // does it already have a __construct method?
-        if (! $this->classManipulator->hasClassMethod($classNode, '__construct')) {
+        if ($classNode->getMethod('__construct') === null) {
             $node->name = new Identifier('__construct');
         }
 

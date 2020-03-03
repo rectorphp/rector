@@ -15,9 +15,6 @@ parameters:
         - stubs
         - compiler/src
 
-    autoload_files:
-        - ci/check_services_in_yaml_configs.php
-
     paths:
         - ci
         - bin
@@ -28,6 +25,7 @@ parameters:
         - compiler/src
 
     excludes_analyse:
+        - ci/check_services_in_yaml_configs.php
         - "*/Expected/*"
         # complex printer
         - "packages/ContributorTools/src/Command/DumpNodesCommand.php"
@@ -67,7 +65,6 @@ parameters:
         - '#Call to function in_array\(\) with arguments string, (.*?) and true will always evaluate to false#'
 
         # known values
-        - '#Access to an undefined property PhpParser\\Node\\Expr::\$left#'
         - '#Access to an undefined property PhpParser\\Node\\Expr::\$right#'
 
         - '#Access to an undefined property PhpParser\\Node\\Expr\\MethodCall\|PhpParser\\Node\\Stmt\\ClassMethod::\$params#'
@@ -248,3 +245,9 @@ parameters:
 
         - '#Right side of && is always true#'
         - '#Parameter \#(.*?) (.*?) of class PhpParser\\Node\\Expr\\BinaryOp\\(.*?) constructor expects PhpParser\\Node\\Expr, PhpParser\\Node given#'
+
+        - '#Method Rector\\(.*?)\:\:__toString\(\) should return string but returns string\|null#'
+
+        - '#Strict comparison using \=\=\= between mixed and (.*?) will always evaluate to false#'
+        - '#Parameter \#1 \$c of method Rector\\Php70\\EregToPcreTransformer\:\:_ere2pcre_escape\(\) expects string, mixed given#'
+        - '#Access to an undefined property PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\:\:\$description#'

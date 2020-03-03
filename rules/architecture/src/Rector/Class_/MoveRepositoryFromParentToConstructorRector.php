@@ -13,7 +13,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\Bridge\RectorProviderException;
-use Rector\Core\PhpParser\Node\Manipulator\ClassManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassDependencyManipulator;
+use Rector\Core\PhpParser\Node\Manipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
@@ -21,7 +22,7 @@ use Rector\Doctrine\Contract\Mapper\DoctrineEntityAndRepositoryMapperInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
- * @see \Rector\Core\Tests\Rector\Architecture\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
+ * @see \Rector\Architecture\Tests\Rector\DoctrineRepositoryAsService\DoctrineRepositoryAsServiceTest
  */
 final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
 {
@@ -31,16 +32,23 @@ final class MoveRepositoryFromParentToConstructorRector extends AbstractRector
     private $doctrineEntityAndRepositoryMapper;
 
     /**
-     * @var ClassManipulator
+     * @var ClassDependencyManipulator
      */
-    private $classManipulator;
+    private $classDependencyManipulator;
+
+    /**
+     * @var ClassInsertManipulator
+     */
+    private $classInsertManipulator;
 
     public function __construct(
         DoctrineEntityAndRepositoryMapperInterface $doctrineEntityAndRepositoryMapper,
-        ClassManipulator $classManipulator
+        ClassInsertManipulator $classInsertManipulator,
+        ClassDependencyManipulator $classDependencyManipulator
     ) {
         $this->doctrineEntityAndRepositoryMapper = $doctrineEntityAndRepositoryMapper;
-        $this->classManipulator = $classManipulator;
+        $this->classDependencyManipulator = $classDependencyManipulator;
+        $this->classInsertManipulator = $classInsertManipulator;
     }
 
     public function getDefinition(): RectorDefinition
@@ -118,10 +126,10 @@ PHP
         $node->extends = null;
 
         // add $repository property
-        $this->classManipulator->addPropertyToClass($node, 'repository', new ObjectType(EntityRepository::class));
+        $this->classInsertManipulator->addPropertyToClass($node, 'repository', new ObjectType(EntityRepository::class));
 
         // add $entityManager and assign to constuctor
-        $this->classManipulator->addConstructorDependencyWithCustomAssign(
+        $this->classDependencyManipulator->addConstructorDependencyWithCustomAssign(
             $node,
             'entityManager',
             new ObjectType(EntityManager::class),

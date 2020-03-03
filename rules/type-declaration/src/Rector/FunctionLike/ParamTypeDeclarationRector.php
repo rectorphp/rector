@@ -227,9 +227,9 @@ PHP
             }
 
             if ($functionLike instanceof ClassMethod && $this->vendorLockResolver->isParamChangeVendorLockedIn(
-                    $functionLike,
-                    $position
-                )) {
+                $functionLike,
+                $position
+            )) {
                 continue;
             }
 

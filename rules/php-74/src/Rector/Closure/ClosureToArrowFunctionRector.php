@@ -93,7 +93,7 @@ PHP
 
         $arrowFunction->expr = $return->expr;
 
-        if ($node->static === true) {
+        if ($node->static) {
             $arrowFunction->static = true;
         }
 

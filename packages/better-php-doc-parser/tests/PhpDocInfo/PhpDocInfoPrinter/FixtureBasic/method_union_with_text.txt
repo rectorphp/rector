@@ -1,0 +1,3 @@
+/**
+ * @method \Cake\Collection\CollectionInterface groupBy(string|callable $field) In-memory group all results by the value of a column.
+ */

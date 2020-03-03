@@ -107,8 +107,11 @@ PHP
             return true;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return true;
+        }
 
         $seeTags = $phpDocInfo->getTagsByName('see');
 

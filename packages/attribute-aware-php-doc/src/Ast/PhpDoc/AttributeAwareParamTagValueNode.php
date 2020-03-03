@@ -43,4 +43,9 @@ final class AttributeAwareParamTagValueNode extends ParamTagValueNode implements
             sprintf('%s %s%s%s %s', $this->type, $variadic, $reference, $this->parameterName, $this->description)
         );
     }
+
+    public function isReference(): bool
+    {
+        return $this->isReference;
+    }
 }

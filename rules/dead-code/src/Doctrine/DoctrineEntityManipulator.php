@@ -84,8 +84,11 @@ final class DoctrineEntityManipulator
             return false;
         }
 
-        /** @var PhpDocInfo $phpDocInfo */
+        /** @var PhpDocInfo|null $phpDocInfo */
         $phpDocInfo = $class->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if ($phpDocInfo === null) {
+            return false;
+        }
 
         // is parent entity
         if ($phpDocInfo->hasByType(InheritanceTypeTagValueNode::class)) {

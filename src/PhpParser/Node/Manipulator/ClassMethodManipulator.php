@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -42,22 +41,22 @@ final class ClassMethodManipulator
     private $nodeNameResolver;
 
     /**
-     * @var ValueResolver
+     * @var FuncCallManipulator
      */
-    private $valueResolver;
+    private $funcCallManipulator;
 
     public function __construct(
         BetterNodeFinder $betterNodeFinder,
         BetterStandardPrinter $betterStandardPrinter,
         NodeTypeResolver $nodeTypeResolver,
         NodeNameResolver $nodeNameResolver,
-        ValueResolver $valueResolver
+        FuncCallManipulator $funcCallManipulator
     ) {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->valueResolver = $valueResolver;
+        $this->funcCallManipulator = $funcCallManipulator;
     }
 
     public function isParameterUsedMethod(Param $param, ClassMethod $classMethod): bool
@@ -81,7 +80,7 @@ final class ClassMethodManipulator
             return $this->nodeNameResolver->isName($node, 'compact');
         });
 
-        $arguments = $this->extractArgumentsFromCompactFuncCalls($compactFuncCalls);
+        $arguments = $this->funcCallManipulator->extractArgumentsFromCompactFuncCalls($compactFuncCalls);
 
         return $this->nodeNameResolver->isNames($param, $arguments);
     }
@@ -195,24 +194,17 @@ final class ClassMethodManipulator
         }
     }
 
-    /**
-     * @param FuncCall[] $compactFuncCalls
-     * @return string[]
-     */
-    private function extractArgumentsFromCompactFuncCalls(array $compactFuncCalls): array
+    public function findMethodParamByName(ClassMethod $classMethod, string $name): ?Param
     {
-        $arguments = [];
-        foreach ($compactFuncCalls as $compactFuncCall) {
-            foreach ($compactFuncCall->args as $arg) {
-                $value = $this->valueResolver->getValue($arg->value);
-
-                if ($value) {
-                    $arguments[] = $value;
-                }
+        foreach ($classMethod->params as $param) {
+            if (! $this->nodeNameResolver->isName($param, $name)) {
+                continue;
             }
+
+            return $param;
         }
 
-        return $arguments;
+        return null;
     }
 
     private function isMethodInParent(string $class, string $method): bool

@@ -10,8 +10,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\RectorDefinition\CodeSample;
 use Rector\Core\RectorDefinition\RectorDefinition;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeCollector\NodeFinder\ClassConstParsedNodesFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\SOLID\Analyzer\ClassConstantFetchAnalyzer;
 use Rector\SOLID\NodeFinder\ParentClassConstantNodeFinder;
 use Rector\SOLID\Reflection\ParentConstantReflectionResolver;
 use Rector\SOLID\ValueObject\ConstantVisibility;
@@ -24,12 +24,7 @@ final class PrivatizeLocalClassConstantRector extends AbstractRector
     /**
      * @var string
      */
-    public const HAS_NEW_ACCESS_LEVEL = 'has_new_access_level';
-
-    /**
-     * @var ClassConstantFetchAnalyzer
-     */
-    private $classConstantFetchAnalyzer;
+    private const HAS_NEW_ACCESS_LEVEL = 'has_new_access_level';
 
     /**
      * @var ParentConstantReflectionResolver
@@ -41,14 +36,19 @@ final class PrivatizeLocalClassConstantRector extends AbstractRector
      */
     private $parentClassConstantNodeFinder;
 
+    /**
+     * @var ClassConstParsedNodesFinder
+     */
+    private $classConstParsedNodesFinder;
+
     public function __construct(
-        ClassConstantFetchAnalyzer $classConstantFetchAnalyzer,
         ParentConstantReflectionResolver $parentConstantReflectionResolver,
-        ParentClassConstantNodeFinder $parentClassConstantNodeFinder
+        ParentClassConstantNodeFinder $parentClassConstantNodeFinder,
+        ClassConstParsedNodesFinder $classConstParsedNodesFinder
     ) {
-        $this->classConstantFetchAnalyzer = $classConstantFetchAnalyzer;
         $this->parentConstantReflectionResolver = $parentConstantReflectionResolver;
         $this->parentClassConstantNodeFinder = $parentClassConstantNodeFinder;
+        $this->classConstParsedNodesFinder = $classConstParsedNodesFinder;
     }
 
     public function getDefinition(): RectorDefinition
@@ -122,9 +122,18 @@ PHP
             return $node;
         }
 
-        $useClasses = $this->findClassConstantFetches($class, $constant);
+        $directUseClasses = $this->classConstParsedNodesFinder->findDirectClassConstantFetches($class, $constant);
+        $indirectUseClasses = $this->classConstParsedNodesFinder->findIndirectClassConstantFetches($class, $constant);
 
-        return $this->changeConstantVisibility($node, $useClasses, $parentClassConstantVisibility, $class);
+        $this->changeConstantVisibility(
+            $node,
+            $directUseClasses,
+            $indirectUseClasses,
+            $parentClassConstantVisibility,
+            $class
+        );
+
+        return $node;
     }
 
     private function shouldSkip(ClassConst $classConst): bool
@@ -168,42 +177,41 @@ PHP
         );
     }
 
-    private function findClassConstantFetches(string $className, string $constantName): ?array
-    {
-        $classConstantFetchByClassAndName = $this->classConstantFetchAnalyzer->provideClassConstantFetchByClassAndName();
-
-        return $classConstantFetchByClassAndName[$className][$constantName] ?? null;
-    }
-
     /**
-     * @param string[]|null $useClasses
+     * @param string[] $directUseClasses
+     * @param string[] $indirectUseClasses
      */
     private function changeConstantVisibility(
         ClassConst $classConst,
-        ?array $useClasses,
+        array $directUseClasses,
+        array $indirectUseClasses,
         ?ConstantVisibility $constantVisibility,
         string $class
-    ): Node {
-        // 1. is actually never used (@todo use in "dead-code" set)
-        if ($useClasses === null) {
-            $this->makePrivateOrWeaker($classConst, $constantVisibility);
-            return $classConst;
+    ): void {
+        // 1. is actually never used
+        if ($directUseClasses === []) {
+            if ($indirectUseClasses !== [] && $constantVisibility !== null) {
+                $this->makePrivateOrWeaker($classConst, $constantVisibility);
+            }
+
+            return;
         }
 
         // 2. is only local use? → private
-        if ($useClasses === [$class]) {
-            $this->makePrivateOrWeaker($classConst, $constantVisibility);
-            return $classConst;
+        if ($directUseClasses === [$class]) {
+            if ($indirectUseClasses === []) {
+                $this->makePrivateOrWeaker($classConst, $constantVisibility);
+            }
+
+            return;
         }
 
         // 3. used by children → protected
-        if ($this->isUsedByChildrenOnly($useClasses, $class)) {
+        if ($this->isUsedByChildrenOnly($directUseClasses, $class)) {
             $this->makeProtected($classConst);
         } else {
             $this->makePublic($classConst);
         }
-
-        return $classConst;
     }
 
     private function makePrivateOrWeaker(ClassConst $classConst, ?ConstantVisibility $parentConstantVisibility): void

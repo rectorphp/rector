@@ -4,22 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocNode\Symfony\Validator\Constraints;
 
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\ShortNameAwareTagInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\TypeAwareTagValueNodeInterface;
 use Rector\Symfony\PhpDocParser\Ast\PhpDoc\AbstractConstraintTagValueNode;
-use Symfony\Component\Validator\Constraints\Choice;
 
-final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode implements TypeAwareTagValueNodeInterface
+final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode implements TypeAwareTagValueNodeInterface, ShortNameAwareTagInterface
 {
-    /**
-     * @var string
-     */
-    public const SHORT_NAME = '@Assert\Choice';
-
-    /**
-     * @var string
-     */
-    public const CLASS_NAME = Choice::class;
-
     /**
      * @var mixed[]|string|null
      */
@@ -75,5 +65,10 @@ final class AssertChoiceTagValueNode extends AbstractConstraintTagValueNode impl
     public function changeCallbackClass(string $newClass): void
     {
         $this->callback[0] = $newClass;
+    }
+
+    public function getShortName(): string
+    {
+        return '@Assert\Choice';
     }
 }

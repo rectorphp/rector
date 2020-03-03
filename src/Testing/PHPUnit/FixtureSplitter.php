@@ -6,15 +6,11 @@ namespace Rector\Core\Testing\PHPUnit;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
+use Rector\Core\Testing\ValueObject\SplitLine;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class FixtureSplitter
 {
-    /**
-     * @var string
-     */
-    public const SPLIT_LINE = '#-----' . PHP_EOL . '#';
-
     /**
      * @var string
      */
@@ -32,9 +28,9 @@ final class FixtureSplitter
         SmartFileInfo $smartFileInfo,
         bool $autoloadTestFixture
     ): array {
-        if (Strings::match($smartFileInfo->getContents(), self::SPLIT_LINE)) {
+        if (Strings::match($smartFileInfo->getContents(), SplitLine::SPLIT_LINE)) {
             // original → expected
-            [$originalContent, $expectedContent] = Strings::split($smartFileInfo->getContents(), self::SPLIT_LINE);
+            [$originalContent, $expectedContent] = Strings::split($smartFileInfo->getContents(), SplitLine::SPLIT_LINE);
         } else {
             // no changes
             $originalContent = $smartFileInfo->getContents();

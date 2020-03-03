@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\NullType;
 use Rector\Core\Rector\AbstractRector;
@@ -107,6 +108,11 @@ PHP
 
     private function shouldSkip(FuncCall $funcCall): bool
     {
+        $class = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
+        if ($class instanceof Trait_) {
+            return true;
+        }
+
         $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof Ternary) {
             return false;
@@ -115,6 +121,7 @@ PHP
         if ($this->isIdenticalToNotNull($funcCall, $parentNode)) {
             return true;
         }
+
         return $this->isNotIdenticalToNull($funcCall, $parentNode);
     }
 

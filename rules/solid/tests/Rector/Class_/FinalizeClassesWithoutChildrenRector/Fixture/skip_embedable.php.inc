@@ -5,8 +5,8 @@ namespace Rector\SOLID\Tests\Rector\Class_\FinalizeClassesWithoutChildrenRector\
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Embeddable
  */
-class Product
+class SkipEmbedable
 {
 }
