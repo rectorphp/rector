@@ -64,18 +64,18 @@ final class PhpDocInfoPrinter
     private $multilineSpaceFormatPreserver;
 
     /**
-     * @var PatternFactory
+     * @var SpacePatternFactory
      */
-    private $patternFactory;
+    private $spacePatternFactory;
 
     public function __construct(
         OriginalSpacingRestorer $originalSpacingRestorer,
         MultilineSpaceFormatPreserver $multilineSpaceFormatPreserver,
-        PatternFactory $patternFactory
+        SpacePatternFactory $spacePatternFactory
     ) {
         $this->originalSpacingRestorer = $originalSpacingRestorer;
         $this->multilineSpaceFormatPreserver = $multilineSpaceFormatPreserver;
-        $this->patternFactory = $patternFactory;
+        $this->spacePatternFactory = $spacePatternFactory;
     }
 
     /**
@@ -356,7 +356,7 @@ final class PhpDocInfoPrinter
     private function resolveTagSpaceSeparator(PhpDocTagNode $phpDocTagNode): string
     {
         $originalContent = $this->phpDocInfo->getOriginalContent();
-        $spacePattern = $this->patternFactory->createSpacePattern($phpDocTagNode);
+        $spacePattern = $this->spacePatternFactory->createSpacePattern($phpDocTagNode);
 
         $matches = Strings::match($originalContent, $spacePattern);
 
