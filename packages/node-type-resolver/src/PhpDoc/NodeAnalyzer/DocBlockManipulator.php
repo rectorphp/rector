@@ -95,8 +95,11 @@ final class DocBlockManipulator
 
         $phpDoc = $this->printPhpDocInfoToString($phpDocInfo);
         if ($phpDoc === '') {
-            // no comments → null
-            $node->setAttribute('comments', null);
+            if ($phpDocInfo->getOriginalPhpDocNode()->children !== []) {
+                // all comments were removed → null
+                $node->setAttribute('comments', null);
+            }
+
             return;
         }
 
