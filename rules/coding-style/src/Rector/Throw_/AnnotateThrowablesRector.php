@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Throw_;
@@ -429,8 +430,29 @@ PHP
 
     private function getClassFromMethodCall(MethodCall $methodCall):?FullyQualified
     {
-        // $variable = new Class()
-        $class = $methodCall->getAttribute('previousExpression')->expr->expr->class;
+        $class = null;
+        $previousExpression = $methodCall->getAttribute('previousExpression');
+
+        // [PhpParser\Node\Expr\Assign] $variable = new Class()
+        if ($previousExpression instanceof Expression) {
+            $class = $previousExpression->expr->expr->class;
+        }
+
+        /*
+         * method(Param $param)
+         * {
+         *     $param->method();
+         * }
+         */
+        if ($previousExpression instanceof ClassMethod) {
+            $params = $previousExpression->params;
+            foreach($params as $param) {
+                if ($param->var->name === $methodCall->var->name) {
+                    $class = $param->type;
+                    break;
+                }
+            }
+        }
 
         return $class instanceof FullyQualified ? $class : null;
     }
