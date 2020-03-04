@@ -1,0 +1,32 @@
+name: drupal-metatag-without-console
+
+on:
+    pull_request: null
+    push:
+        branches:
+            - master
+
+jobs:
+    test_with_drupal:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.3
+                    coverage: none # disable xdebug, pcov
+                    extensions: "intl"
+
+            # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
+            -   run: |
+                    # 1. install locally
+                    mkdir test-paths
+                    cd test-paths
+
+                    # Install Drupal with Rector 0.7.3
+                    mkdir drupal-rector073
+                    composer create-project drupal/recommended-project drupal-rector073 --dev --no-progress
+                    cd drupal-rector073
+                    composer require drupal/metatag palantirnet/drupal-rector:dev-rector-0.7
+                    cp vendor/palantirnet/drupal-rector/rector.yml .
+                    vendor/bin/rector process web/modules/contrib/metatag/src/Generator --dry-run
