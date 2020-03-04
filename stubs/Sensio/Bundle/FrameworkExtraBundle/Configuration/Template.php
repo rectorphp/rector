@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 
-use RuntimeException;
-
 if (class_exists('Sensio\Bundle\FrameworkExtraBundle\Configuration\Template')) {
     return;
 }
@@ -13,9 +11,12 @@ if (class_exists('Sensio\Bundle\FrameworkExtraBundle\Configuration\Template')) {
 // mimics https://github.com/sensiolabs/SensioFrameworkExtraBundle/blob/master/Configuration/Template.php, is missing localy
 
 /**
+ * The Template class handles the Template annotation parts.
+ *
+ * @author Fabien Potencier <fabien@symfony.com>
  * @Annotation
  */
-class Template
+class Template extends ConfigurationAnnotation
 {
     /**
      * The template.
@@ -45,16 +46,6 @@ class Template
      */
     private $owner = [];
 
-    public function __construct(array $values)
-    {
-        foreach ($values as $k => $v) {
-            if (! method_exists($this, $name = 'set' . $k)) {
-                throw new RuntimeException(sprintf('Unknown key "%s" for annotation "@%s".', $k, static::class));
-            }
-            $this->{$name}($v);
-        }
-    }
-
     /**
      * Returns the array of templates variables.
      *
@@ -68,7 +59,7 @@ class Template
     /**
      * @param bool $streamable
      */
-    public function setIsStreamable($streamable): void
+    public function setIsStreamable($streamable)
     {
         $this->streamable = $streamable;
     }
@@ -86,7 +77,7 @@ class Template
      *
      * @param array $vars The template variables
      */
-    public function setVars($vars): void
+    public function setVars($vars)
     {
         $this->vars = $vars;
     }
@@ -96,7 +87,7 @@ class Template
      *
      * @param string $template The template logic name
      */
-    public function setValue($template): void
+    public function setValue($template)
     {
         $this->setTemplate($template);
     }
@@ -116,7 +107,7 @@ class Template
      *
      * @param string $template The template
      */
-    public function setTemplate($template): void
+    public function setTemplate($template)
     {
         $this->template = $template;
     }
@@ -145,10 +136,7 @@ class Template
         return false;
     }
 
-    /**
-     * @param array $owner
-     */
-    public function setOwner(array $owner): void
+    public function setOwner(array $owner)
     {
         $this->owner = $owner;
     }
