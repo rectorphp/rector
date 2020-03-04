@@ -21,6 +21,8 @@ final class MergeMethodAnnotationToRouteAnnotationRectorTest extends AbstractRec
     public function provideDataForTest(): Iterator
     {
         yield [__DIR__ . '/Fixture/fixture.php.inc'];
+        yield [__DIR__ . '/Fixture/fixture_with_template_annotation.php.inc'];
+        yield [__DIR__ . '/Fixture/fixture_with_template_annotation2.php.inc'];
     }
 
     protected function getRectorClass(): string
