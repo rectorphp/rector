@@ -130,10 +130,6 @@ final class BetterPhpDocParser extends PhpDocParser
 
         $this->isComment = false;
 
-        // here are all 3 annotations
-//        dump($tokenIterator);
-
-        // @todo test later, this might be removed
         try {
             $tokenIterator->consumeTokenType(Lexer::TOKEN_OPEN_PHPDOC);
         } catch (ParserException $parserException) {
@@ -155,7 +151,6 @@ final class BetterPhpDocParser extends PhpDocParser
             }
         }
 
-        // here should be 3 children too
         if (! $this->isComment) {
             // might be in the middle of annotations
             $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_CLOSE_PHPDOC);
