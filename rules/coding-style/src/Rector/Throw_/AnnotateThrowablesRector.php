@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -69,7 +70,7 @@ final class AnnotateThrowablesRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [Throw_::class, FuncCall::class];
+        return [Throw_::class, FuncCall::class, MethodCall::class];
     }
 
     /**
@@ -138,6 +139,10 @@ PHP
             $this->analyzeStmtFuncCall($node);
         }
 
+        if ($node instanceof MethodCall) {
+            $this->analyzeStmtMethodCall($node);
+        }
+
         return count($this->throwablesToAnnotate) > 0;
     }
 
@@ -190,32 +195,50 @@ PHP
         $this->compareThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
     }
 
+    private function analyzeStmtMethodCall(MethodCall $methodCall): void
+    {
+        $foundThrownThrowables = $this->identifyThrownThrowablesInMethodCall($methodCall);
+        $alreadyAnnotatedThrowables = $this->extractAlreadyAnnotatedThrowables($methodCall);
+        $this->compareThrowables($foundThrownThrowables, $alreadyAnnotatedThrowables);
+    }
+
     private function identifyThrownThrowablesInMethodCall(MethodCall $methodCall): array
     {
-        $thrownClass = $methodCall->var
-            ->getAttribute(AttributeKey::FUNCTION_NODE)->name
-            ->getAttribute('nextNode')->expr->var
-            ->getAttribute('nextNode')->class;
+        $methodClass = $methodCall->getAttribute('previousExpression')->expr->expr->class;
+        $methodName = $methodCall->name;
 
-        if (! $thrownClass instanceof FullyQualified) {
+        if (! $methodClass instanceof FullyQualified) {
             throw new ShouldNotHappenException();
         }
 
-        return $this->extractMethodReturns($thrownClass, $methodCall->var->getAttribute('nextNode'));
+        return $methodCall->getAttribute('parentNode') instanceof Throw_
+            ? $this->extractMethodReturns($methodClass, $methodName)
+            : $this->extractMethodThrows($methodClass, $methodName);
     }
 
     private function identifyThrownThrowablesInStaticCall(StaticCall $staticCall): array
     {
         $thrownClass = $staticCall->class;
+        $methodName = $thrownClass->getAttribute('nextNode');
 
         if (! $thrownClass instanceof FullyQualified) {
             throw new ShouldNotHappenException();
         }
 
-        return $this->extractMethodReturns($thrownClass, $thrownClass->getAttribute('nextNode'));
+        return $this->extractMethodReturns($thrownClass, $methodName);
     }
 
-    private function extractMethodReturns(FullyQualified $fullyQualified, $methodNode): array
+    private function extractMethodReturns(FullyQualified $fullyQualified, Identifier $methodNode): array
+    {
+        return $this->extractTagsFromMethodDockblock($fullyQualified, $methodNode, '@return');
+    }
+
+    private function extractMethodThrows(FullyQualified $fullyQualified, Identifier $methodNode):array
+    {
+        return $this->extractTagsFromMethodDockblock($fullyQualified, $methodNode, '@throws');
+    }
+
+    private function extractTagsFromMethodDockblock(FullyQualified $fullyQualified, Identifier $methodNode, string $tagName):array
     {
         $classFqn = implode('\\', $fullyQualified->parts);
         $methodName = $methodNode->name;
@@ -226,7 +249,7 @@ PHP
             return [];
         }
 
-        $returnTags = $this->extractTagFromStringedDocblock($methodDocblock, '@return');
+        $returnTags = $this->extractTagFromStringedDocblock($methodDocblock, $tagName);
 
         $returnClasses = [];
         foreach ($returnTags as $returnTag) {
