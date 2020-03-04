@@ -204,11 +204,11 @@ PHP
 
     private function identifyThrownThrowablesInMethodCall(MethodCall $methodCall): array
     {
-        $methodClass = $methodCall->getAttribute('previousExpression')->expr->expr->class;
+        $methodClass = $this->getClassFromMethodCall($methodCall);
         $methodName = $methodCall->name;
 
         if (! $methodClass instanceof FullyQualified) {
-            throw new ShouldNotHappenException();
+            return [];
         }
 
         return $methodCall->getAttribute('parentNode') instanceof Throw_
@@ -242,7 +242,13 @@ PHP
     {
         $classFqn = implode('\\', $fullyQualified->parts);
         $methodName = $methodNode->name;
-        $reflectedMethod = new ReflectionMethod($classFqn, $methodName);
+
+        try {
+            $reflectedMethod = new ReflectionMethod($classFqn, $methodName);
+        } catch (\Throwable $throwable) {
+            return [];
+        }
+
         $methodDocblock = $reflectedMethod->getDocComment();
 
         if (! is_string($methodDocblock)) {
@@ -419,6 +425,14 @@ PHP
         }
 
         return $ast;
+    }
+
+    private function getClassFromMethodCall(MethodCall $methodCall):?FullyQualified
+    {
+        // $variable = new Class()
+        $class = $methodCall->getAttribute('previousExpression')->expr->expr->class;
+
+        return $class instanceof FullyQualified ? $class : null;
     }
 
     private function getUses(Namespace_ $node): array
